@@ -57,12 +57,11 @@ def subscriptify(s=None, fmt=None, **kwargs):
     return ''.join([utf8_subscript_dictionary.get(c, c) for c in s])
 
 
-
 class Axiom:
     def __init__(self, text=None, citation=None):
         self.counter = self._get_counter()
         self.ref = f'axiom-{self.counter}'
-        self.sym = f'𝒶{subscriptify(self.counter)}'
+        self.sym = f'𝒜{subscriptify(self.counter)}'
         self.text = text
         self.citation = citation
         if Axiom.echo_init:
@@ -93,12 +92,13 @@ class Axiom:
 
 
 class Objct:
-    def __init__(self, nam=None, alt_nam_dic=None, uid=None, parent_formula_default_str_fun=None):
+    def __init__(self, sym, dashed_name, uid=None, parent_formula_default_str_fun=None):
         self.uid = uuid.uuid4() if uid is None else uid
-        self.nam = "o" if nam is None else nam
-        self.alt_nam_dic = {} if alt_nam_dic is None else alt_nam_dic
+        self.sym = sym
+        self.dashed_name = dashed_name
         self.parent_formula_default_str_fun = parent_formula_default_str_fun
-        """The default str function to be applied to the parent formula when this objct is the first component of that formula."""
+        """The default str function to be applied to the parent formula when this objct is the first component of 
+        that formula."""
 
     def __repr__(self):
         return f'object {self.str()} ({self.uid})'
@@ -132,7 +132,7 @@ class Objct:
         return y.is_variable or x.is_antivariable_equal_to(y)
 
     def str(self, **kwargs):
-        return self.nam
+        return self.sym
 
 
 class Variable:
@@ -350,12 +350,11 @@ class Theory(Objct):
     """The content of a theory is enriched by proofs. This is a key difference with formula whose content is
     immutable."""
 
-    def __init__(self, dashed_name=None):
-        super().__init__(dashed_name)
+    def __init__(self, sym=None, dashed_name=None):
         self.counter = Theory.get_counter()
-        self.dashed_name = dashed_name
-        self.ref = f'theory-{self.counter}'
-        self.sym = f'𝒯{subscriptify(self.counter)}'
+        sym = f'𝒯{subscriptify(self.counter)}' if sym is None else sym
+        dashed_name = f'theory-{self.counter}' if dashed_name is None else dashed_name
+        super().__init__(sym=sym, dashed_name=dashed_name)
         self._statement_counter = 0
         self.statements = []
         if Theory.echo:
@@ -364,7 +363,7 @@ class Theory(Objct):
     def __repr__(self):
         return f'theory {self}'
 
-    def add_statement(self, statement_content, justification):
+    def append_statement(self, statement_content, justification):
         """Elaborate the theory by appending a new statement to it."""
         assert isinstance(statement_content, Formula) or isinstance(statement_content, Axiom)
         # TODO: Check proof consistency / validity
@@ -393,7 +392,7 @@ class Theory(Objct):
         self._statement_counter = self._statement_counter + 1
         return self._statement_counter
 
-    def str(self, by_dashed_name=True, by_ref=False, by_sym=False, **kwargs):
+    def str(self, by_dashed_name=False, by_ref=False, by_sym=True, **kwargs):
         if by_dashed_name:
             return self.dashed_name
         if by_ref:
@@ -404,26 +403,25 @@ class Theory(Objct):
             return f'Let {self.dashed_name}, also denoted as {self.ref} and {self.sym}, be a theory.'
 
 
-is_of_class = Objct('is-of-class', alt_nam_dic={'long name': 'is of class'},
-                    parent_formula_default_str_fun=FormulaStringFunctions.infix)
+class_membership = Objct(sym='is-a', dashed_name='class-membership', parent_formula_default_str_fun=FormulaStringFunctions.infix)
 """
 The class membership operator
 
 Makes it possible to express membership to classes, such as natural numbers, truth values, etc.
 """
 
-class_class = Objct('class')
+class_nature = Objct(sym='class', dashed_name='class')
 """
-The class of classes
+The nature of being a class.
 """
 
-proves = Objct('⊢', alt_nam_dic={'long name': 'proves'},
-               parent_formula_default_str_fun=FormulaStringFunctions.infix)
+proves = Objct(sym='⊢', dashed_name='proof-operator', parent_formula_default_str_fun=FormulaStringFunctions.infix)
 """
 The proves operator
 """
 
 Axiom.echo_init = True
-axiom_truth = Axiom(text='If 𝕿 is a theory, if 𝖆 is an axiom, and if 𝕿 ⊢ 𝖆 is a statement in 𝕿, then 𝖆 is taken to be true in 𝕿.')
+axiom_truth = Axiom(
+    text='If 𝕿 is a theory, if 𝖆 is an axiom, and if 𝕿 ⊢ 𝖆 is a statement in 𝕿, then 𝖆 is taken to be true in 𝕿.')
 core_theory = Theory(dashed_name='core-theory')
-core_theory.add_statement(axiom_truth, Justification(is_axiom))
+core_theory.append_statement(axiom_truth, Justification(is_axiom))

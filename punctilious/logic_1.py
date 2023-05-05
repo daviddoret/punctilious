@@ -1,15 +1,28 @@
 import core
-core.Formula.echo = True
+core.Formula.echo = False
+core.Theory.echo_statement = True
+theory = core.Theory(dashed_name='propositional-logic-theory')
 
-proposition = core.Objct('proposition')
+truth_is_true_axiom = core.Axiom('Truth is true')
+s_01 = theory.append_statement(statement_content=truth_is_true_axiom, justification=core.Justification(method=core.is_axiom))
+
 ltrue = core.Objct('true')
+phi_02 = core.Formula((ltrue))
+theory.append_statement(statement_content=phi_02, justification=core.Justification(method=core.statement_derivation, justifying_statement=s_01))
+
+proposition_class = core.Objct('proposition-class')
+phi_01 = core.Formula((core.class_membership, proposition_class, core.class_nature))
+
+
+
 lfalse = core.Objct('false')
-leq = core.Objct('=', alt_nam_dic={'long name': 'logical equality'}, parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
-lneq = core.Objct('≠', parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
-lnot = core.Objct('¬', parent_formula_default_str_fun=core.FormulaStringFunctions.function)
-liif = core.Objct('⟺', parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
-lor = core.Objct('∨', parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
-land = core.Objct('∧', parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+leq = core.Objct(sym='=', dashed_name='equality-connective', parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+lneq = core.Objct(sym='≠', dashed_name='inequality-connective', parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+lnot = core.Objct(sym='¬', dashed_name='negation-connective', parent_formula_default_str_fun=core.FormulaStringFunctions.function)
+limplies = core.Objct(sym='→', dashed_name='material-implication-connective', parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+liif = core.Objct(sym='⟺', dashed_name='biconditional-connective', parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+lor = core.Objct(sym='∨', dashed_name='disjunction-connective', parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+land = core.Objct(sym='∧', dashed_name='conjunction-connective', parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
 
 f1 = core.Formula((leq, ltrue, ltrue))
 f2 = core.Formula((leq, lfalse, lfalse))
@@ -21,7 +34,7 @@ f7 = core.Formula((leq, f5, lfalse))
 f8 = core.Formula((leq, f6, ltrue))
 
 vp = core.Variable('p')
-f9 = core.Formula((core.is_of_class, vp, proposition))
+f9 = core.Formula((core.class_membership, vp, proposition_class))
 f10 = core.Formula((leq, vp, ltrue))
 f11 = core.Formula((leq, vp, lfalse))
 f12 = core.Formula((lor, f10, f11))
