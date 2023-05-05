@@ -1,5 +1,5 @@
 import core
-core.Theory.echo_axiom = True
+core.Axiom.echo_init = True
 core.Theory.echo_statement = True
 
 theory_1 = core.Theory(dashed_name='natural-numbers-theory')

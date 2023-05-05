@@ -57,15 +57,39 @@ def subscriptify(s=None, fmt=None, **kwargs):
     return ''.join([utf8_subscript_dictionary.get(c, c) for c in s])
 
 
+class RepMode:
+    def __init__(self, val):
+        self.val = val
+
+    def __str__(self):
+        return self.val
+
+
+class RepModes:
+
+    symbol = RepMode('sym')
+    """Symbolic representation to be used in formula."""
+
+    reference = RepMode('ref')
+    """Referential representation to be used as theory internal links."""
+
+    dashed_name = RepMode('dashed_name')
+    """Dashed name that must be unambiguous within the related theory."""
+
+    definition = RepMode('def')
+    """Formal definition."""
+
+
 class Axiom:
-    def __init__(self, text=None, citation=None):
+    def __init__(self, sym=None, ref=None, dashed_name=None, text=None, citation=None):
         self.counter = self._get_counter()
-        self.ref = f'axiom-{self.counter}'
-        self.sym = f'𝒜{subscriptify(self.counter)}'
+        self.sym = f'𝒜{subscriptify(self.counter)}' if sym is None else sym
+        self.ref = f'axiom-{self.counter}' if ref is None else ref
+        self.dashed_name = dashed_name
         self.text = text
         self.citation = citation
         if Axiom.echo_init:
-            print(self.str(by_ref=False))
+            print(self.str(mod=RepModes.definition))
 
     def __repr__(self):
         return f'axiom {self.str()} ({self.uid})'
@@ -81,18 +105,23 @@ class Axiom:
         Axiom._counter = Axiom._counter + 1
         return Axiom._counter
 
-    def str(self, by_ref=True, by_sym=False, **kwargs):
-        if by_ref:
-            return self.ref
-        if by_sym:
-            return self.sym
-        else:
-            citation = '' if self.citation is None else f' [{self.citation}]'
-            return f'{self.str(by_ref=True)}: {self.text}{citation}'
+    def str(self, mod=None, **kwargs):
+        mod = RepModes.symbol if mod is None else mod
+        assert isinstance(mod, RepMode)
+        match mod:
+            case RepModes.symbol:
+                return self.sym
+            case RepModes.reference:
+                return self.ref
+            case RepModes.dashed_name:
+                return self.dashed_name
+            case RepModes.definition:
+                citation = '' if self.citation is None else f' [{self.citation}]'
+                return f'{self.str(by_ref=True)}: {self.text}{citation}'
 
 
 class Objct:
-    def __init__(self, sym, dashed_name, uid=None, parent_formula_default_str_fun=None):
+    def __init__(self, sym=None, dashed_name=None, uid=None, parent_formula_default_str_fun=None):
         self.uid = uuid.uuid4() if uid is None else uid
         self.sym = sym
         self.dashed_name = dashed_name
@@ -179,13 +208,13 @@ class FormulaStringFunctions:
     def infix(formula, sub=False, **kwargs):
         """[relation, x, y] --> x relation y"""
         assert formula.first_level_cardinality == 3
-        return f'{"(" if sub else ""}{formula.formula_tup[1].str(sub=True)} {formula.formula_tup[0].str(sub=True)} {formula.formula_tup[2].str(sub=True)}{")" if sub else ""}'
+        return f'{"(" if sub else ""}{formula.formula_tup[1].str(sub=True, mod=RepModes.symbol)} {formula.formula_tup[0].str(sub=True, mod=RepModes.symbol)} {formula.formula_tup[2].str(sub=True, mod=RepModes.symbol)}{")" if sub else ""}'
 
     @staticmethod
     def condensed_unary_postfix(formula, sub=False, **kwargs):
         """[relation, x] --> xrelation"""
         assert formula.first_level_cardinality == 2
-        return f'{"(" if sub else ""}{formula.formula_tup[1].str(sub=True)}{formula.formula_tup[0].str(sub=True)}{")" if sub else ""}'
+        return f'{"(" if sub else ""}{formula.formula_tup[1].str(sub=True, mod=RepModes.symbol)}{formula.formula_tup[0].str(sub=True, mod=RepModes.symbol)}{")" if sub else ""}'
 
     @staticmethod
     def function(formula, **kwargs):
@@ -252,10 +281,10 @@ class Formula:
         :return: A string representation of the formula.
         """
         if len(self.formula_tup) == 1 and self.formula_tup[0].is_formula_atomic_component:
-            return self.formula_tup[0].str(**kwargs)
+            return self.formula_tup[0].str(sym=True, **kwargs)
         elif len(self.formula_tup) > 1 and self.formula_tup[0].is_object \
                 and self.formula_tup[0].parent_formula_default_str_fun is not None:
-            return self.formula_tup[0].parent_formula_default_str_fun(self, sub=sub, **kwargs)
+            return self.formula_tup[0].parent_formula_default_str_fun(self, sub=sub, sym=True, **kwargs)
         else:
             raise Exception("Oops, no str_fun was found to convert this formula to string.")
 
@@ -339,11 +368,18 @@ class Statement:
         Statement._counter = Statement._counter + 1
         return Statement._counter
 
-    def str(self, ref_only=True):
-        if ref_only:
-            return self.ref
-        else:
-            return f'{self.ref}: {self.content}      | {self.justification}'
+    def str(self, mod=None, **kwargs):
+        mod = RepModes.reference if mod is None else mod
+        assert isinstance(mod, RepMode)
+        match mod:
+            case RepModes.symbol:
+                raise Exception('The symbol representation mode is not supported for statements.')
+            case RepModes.reference:
+                return self.ref
+            case RepModes.dashed_name:
+                raise Exception('The dashed-name representation mode is not supported for statements.')
+            case RepModes.definition:
+                return f'{self.ref}: {self.content} | {self.justification}'
 
 
 class Theory(Objct):
@@ -357,8 +393,8 @@ class Theory(Objct):
         super().__init__(sym=sym, dashed_name=dashed_name)
         self._statement_counter = 0
         self.statements = []
-        if Theory.echo:
-            print(self.str(let_definition=True))
+        if Axiom.echo_init:
+            print(self.str(mod=RepModes.definition))
 
     def __repr__(self):
         return f'theory {self}'
@@ -372,14 +408,12 @@ class Theory(Objct):
         statement = Statement(self, statement_counter, statement_formula, justification)
         self.statements.append(statement)
         if Theory.echo_statement:
-            print(statement.str(ref_only=False))
+            print(statement.str(mod=RepModes.definition))
         return statement
 
     _counter = 0
 
-    echo_axiom = False
-
-    echo = True
+    echo_init = True
 
     echo_statement = False
 
@@ -392,18 +426,23 @@ class Theory(Objct):
         self._statement_counter = self._statement_counter + 1
         return self._statement_counter
 
-    def str(self, by_dashed_name=False, by_ref=False, by_sym=True, **kwargs):
-        if by_dashed_name:
-            return self.dashed_name
-        if by_ref:
-            return self.ref
-        if by_sym:
-            return self.sym
-        else:
-            return f'Let {self.dashed_name}, also denoted as {self.ref} and {self.sym}, be a theory.'
+    def str(self, mod=None, **kwargs):
+        mod = RepModes.symbol if mod is None else mod
+        assert isinstance(mod, RepMode)
+        match mod:
+            case RepModes.symbol:
+                return self.sym
+            case RepModes.reference:
+                raise Exception('The reference representation mode is not supported for theories.')
+                #return self.ref
+            case RepModes.dashed_name:
+                return self.dashed_name
+            case RepModes.definition:
+                return f'Let {self.dashed_name}, also denoted {self.sym}, be a theory.'
 
 
-class_membership = Objct(sym='is-a', dashed_name='class-membership', parent_formula_default_str_fun=FormulaStringFunctions.infix)
+class_membership = Objct(sym='is-a', dashed_name='class-membership',
+                         parent_formula_default_str_fun=FormulaStringFunctions.infix)
 """
 The class membership operator
 
