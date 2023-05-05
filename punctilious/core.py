@@ -365,6 +365,7 @@ class Theory(Objct):
         return f'theory {self}'
 
     def add_statement(self, statement_content, justification):
+        """Elaborate the theory by appending a new statement to it."""
         assert isinstance(statement_content, Formula) or isinstance(statement_content, Axiom)
         # TODO: Check proof consistency / validity
         statement_formula = Formula((proves, self, statement_content))
