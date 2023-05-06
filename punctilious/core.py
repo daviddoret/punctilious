@@ -81,7 +81,7 @@ class cats:
     axiom = Cat(nam='axiom', ref_prefix='axiom', sym_prefix='𝒜')
     """."""
 
-    decl = Cat('decl')
+    objct = Cat(nam='objct', ref_prefix='objct', sym_prefix='ℴ')
     """An object declaration statement."""
 
     definition = Cat('definition')
@@ -192,7 +192,25 @@ class Axiom(Statement):
                 return super().str(mod=mod, **kwargs)
 
 
-class Objct:
+class Objct(Statement):
+    def __init__(self, theory, counter, ref=None, sym=None, dashed_name=None):
+        cat = cats.objct
+        super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym, dashed_name=dashed_name)
+
+    def __str__(self):
+        return self.str()
+
+    def str(self, mod=None, **kwargs):
+        mod = rep_modes.ref if mod is None else mod
+        assert isinstance(mod, RepMode)
+        assert mod in (rep_modes.ref, rep_modes.sym, rep_modes.dashed_name, rep_modes.definition)
+        match mod:
+            case rep_modes.definition:
+                return f'Let {self.dashed_name} by an object denoted as ⌜ {self.dashed_name} ⌝, ⌜ {self.sym} ⌝, and ⌜ {self.ref} ⌝.'
+            case _:
+                return super().str(mod=mod, **kwargs)
+
+class ObjctObsolete:
     def __init__(self, sym=None, dashed_name=None, uid=None, parent_formula_default_str_fun=None):
         self.uid = uuid.uuid4() if uid is None else uid
         self.sym = sym
@@ -457,7 +475,7 @@ class StatementObsolete:
                     return f'{self.ref}: {self.content} | {self.justification}'
 
 
-class Theory(Objct):
+class Theory(ObjctObsolete):
     """The content of a theory is enriched by proofs. This is a key difference with formula whose content is
     immutable."""
 
@@ -516,6 +534,14 @@ class Theory(Objct):
             print(axiom.str(mod=rep_modes.definition))
         return axiom
 
+    def append_objct(self, sym=None, dashed_name=None):
+        counter = self._get_statement_counter()
+        objct = Objct(theory=self, counter=counter, sym=sym, dashed_name=dashed_name)
+        self.statements.append(objct)
+        if Theory.echo_statement:
+            print(objct.str(mod=rep_modes.definition))
+        return objct
+
     _counter = 0
 
     echo_init = True
@@ -546,20 +572,20 @@ class Theory(Objct):
                 return f'Let {self.dashed_name}, also denoted {self.sym}, be a theory.'
 
 
-class_membership = Objct(sym='is-a', dashed_name='class-membership',
-                         parent_formula_default_str_fun=FormulaStringFunctions.infix)
+class_membership = ObjctObsolete(sym='is-a', dashed_name='class-membership',
+                                 parent_formula_default_str_fun=FormulaStringFunctions.infix)
 """
 The class membership operator
 
 Makes it possible to express membership to classes, such as natural numbers, truth values, etc.
 """
 
-class_nature = Objct(sym='class', dashed_name='class')
+class_nature = ObjctObsolete(sym='class', dashed_name='class')
 """
 The nature of being a class.
 """
 
-proves = Objct(sym='⊢', dashed_name='proof-operator', parent_formula_default_str_fun=FormulaStringFunctions.infix)
+proves = ObjctObsolete(sym='⊢', dashed_name='proof-operator', parent_formula_default_str_fun=FormulaStringFunctions.infix)
 """
 The proves operator
 """

@@ -4,16 +4,16 @@ import core
 
 class TestObjct(TestCase):
     def test_is_antivariable_equal_to(self):
-        o = core.Objct('o')
-        p = core.Objct('p')
+        o = core.ObjctObsolete('o')
+        p = core.ObjctObsolete('p')
         x = core.Variable('x')
         self.assertTrue(o.is_antivariable_equal_to(o))
         self.assertFalse(o.is_antivariable_equal_to(p))
         self.assertFalse(o.is_antivariable_equal_to(x))
 
     def test_is_variable_equal_to(self):
-        o = core.Objct('o')
-        p = core.Objct('p')
+        o = core.ObjctObsolete('o')
+        p = core.ObjctObsolete('p')
         x = core.Variable('x')
         self.assertTrue(o.is_variable_equal_to(o))
         self.assertFalse(o.is_variable_equal_to(p))
@@ -26,7 +26,7 @@ class TestVariable(TestCase):
         self.assertFalse(x.is_antivariable_equal_to(x))
         y = core.Variable('y')
         self.assertFalse(x.is_antivariable_equal_to(y))
-        o = core.Objct('o')
+        o = core.ObjctObsolete('o')
         self.assertFalse(x.is_antivariable_equal_to(o))
 
     def test_is_variable_equal_to(self):
@@ -34,15 +34,15 @@ class TestVariable(TestCase):
         self.assertTrue(x.is_variable_equal_to(x))
         y = core.Variable('y')
         self.assertTrue(x.is_variable_equal_to(y))
-        o = core.Objct('o')
+        o = core.ObjctObsolete('o')
         self.assertTrue(x.is_variable_equal_to(o))
 
 
 class TestFormula(TestCase):
     def test_is_antivariable_equal_to(self):
-        f = core.Objct('𝑓')
-        o1 = core.Objct('o₁')
-        o2 = core.Objct('o₂')
+        f = core.ObjctObsolete('𝑓')
+        o1 = core.ObjctObsolete('o₁')
+        o2 = core.ObjctObsolete('o₂')
         x = core.Variable('x')
         y = core.Variable('y')
         phi1 = core.Formula((f, o1, o2))
@@ -59,9 +59,9 @@ class TestFormula(TestCase):
         self.assertFalse(phi1.is_antivariable_equal_to(phi6))
 
     def test_is_variable_equal_to(self):
-        f = core.Objct('𝑓')
-        o1 = core.Objct('o₁')
-        o2 = core.Objct('o₂')
+        f = core.ObjctObsolete('𝑓')
+        o1 = core.ObjctObsolete('o₁')
+        o2 = core.ObjctObsolete('o₂')
         x = core.Variable('x')
         y = core.Variable('y')
         phi1 = core.Formula((f, o1, o2))
@@ -100,3 +100,12 @@ class TestTheory(TestCase):
         self.assertTrue(axiom_1.text == axiom_1_text)
         axiom_2 = theory.append_axiom(text=axiom_2_text, citation=axiom_2_citation)
         self.assertTrue(axiom_2.text == axiom_2_text)
+
+    def test_append_objct(self):
+        theory = core.Theory(dashed_name='test-objct-theory')
+        object_1_dashed_name = 'some-object'
+        object_1 = theory.append_objct(dashed_name=object_1_dashed_name)
+        self.assertTrue(object_1.dashed_name == object_1_dashed_name)
+        object_2_dashed_name = 'some-object'
+        object_2 = theory.append_objct(dashed_name=object_2_dashed_name)
+        self.assertTrue(object_2.dashed_name == object_2_dashed_name)

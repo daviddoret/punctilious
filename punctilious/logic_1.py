@@ -6,29 +6,29 @@ theory = core.Theory(dashed_name='propositional-logic-theory')
 
 axiom_1 = theory.append_axiom(text='Truth is true')
 
-ltrue = core.Objct(sym='𝚃', dashed_name='truth')
+ltrue = core.ObjctObsolete(sym='𝚃', dashed_name='truth')
 phi_02 = core.Formula((ltrue))
 theory.append_formula_statement(formula=phi_02,
                                 justification=core.Justification(method=core.statement_derivation, justifying_statement=axiom_1))
 
-proposition_class = core.Objct(sym='proposition-class', dashed_name='proposition-class')
+proposition_class = core.ObjctObsolete(sym='proposition-class', dashed_name='proposition-class')
 phi_01 = core.Formula((core.class_membership, proposition_class, core.class_nature))
 
-lfalse = core.Objct(sym='𝙵', dashed_name='falsum')
-leq = core.Objct(sym='=', dashed_name='equality-connective',
-                 parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
-lneq = core.Objct(sym='≠', dashed_name='inequality-connective',
-                  parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
-lnot = core.Objct(sym='¬', dashed_name='negation-connective',
-                  parent_formula_default_str_fun=core.FormulaStringFunctions.function)
-limplies = core.Objct(sym='→', dashed_name='material-implication-connective',
-                      parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
-liif = core.Objct(sym='⟺', dashed_name='biconditional-connective',
-                  parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
-lor = core.Objct(sym='∨', dashed_name='disjunction-connective',
-                 parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
-land = core.Objct(sym='∧', dashed_name='conjunction-connective',
-                  parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+lfalse = core.ObjctObsolete(sym='𝙵', dashed_name='falsum')
+leq = core.ObjctObsolete(sym='=', dashed_name='equality-connective',
+                         parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+lneq = core.ObjctObsolete(sym='≠', dashed_name='inequality-connective',
+                          parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+lnot = core.ObjctObsolete(sym='¬', dashed_name='negation-connective',
+                          parent_formula_default_str_fun=core.FormulaStringFunctions.function)
+limplies = core.ObjctObsolete(sym='→', dashed_name='material-implication-connective',
+                              parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+liif = core.ObjctObsolete(sym='⟺', dashed_name='biconditional-connective',
+                          parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+lor = core.ObjctObsolete(sym='∨', dashed_name='disjunction-connective',
+                         parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+land = core.ObjctObsolete(sym='∧', dashed_name='conjunction-connective',
+                          parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
 
 f1 = core.Formula((leq, ltrue, ltrue))
 f2 = core.Formula((leq, lfalse, lfalse))
