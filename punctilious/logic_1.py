@@ -5,13 +5,13 @@ core.Theory.echo_statement = True
 theory = core.Theory(dashed_name='propositional-logic-theory')
 
 truth_is_true_axiom = core.Axiom('Truth is true')
-s_01 = theory.append_statement(statement_content=truth_is_true_axiom,
-                               justification=core.Justification(method=core.is_axiom))
+s_01 = theory.append_axiom_statement(statement_content=truth_is_true_axiom,
+                                     justification=core.Justification(method=core.is_axiom))
 
 ltrue = core.Objct(sym='𝚃', dashed_name='truth')
 phi_02 = core.Formula((ltrue))
-theory.append_statement(statement_content=phi_02,
-                        justification=core.Justification(method=core.statement_derivation, justifying_statement=s_01))
+theory.append_formula_statement(formula=phi_02,
+                              justification=core.Justification(method=core.statement_derivation, justifying_statement=s_01))
 
 proposition_class = core.Objct(sym='proposition-class', dashed_name='proposition-class')
 phi_01 = core.Formula((core.class_membership, proposition_class, core.class_nature))

@@ -78,3 +78,14 @@ class TestFormula(TestCase):
         self.assertTrue(phi1.is_variable_equal_to(phi6))
         phi7 = core.Formula((f, o1, y))
         self.assertTrue(phi1.is_variable_equal_to(phi7))
+
+
+class TestTheory(TestCase):
+    def test_append_note(self):
+        theory = core.Theory(dashed_name='test-note-theory')
+        note_1_text = 'This is a note.'
+        note_2_text = 'This is another note.'
+        s1 = theory.append_note(text=note_1_text)
+        self.assertTrue(s1.content.text == note_1_text)
+        s2 = theory.append_note(text=note_2_text)
+        self.assertTrue(s2.content.text == note_2_text)
