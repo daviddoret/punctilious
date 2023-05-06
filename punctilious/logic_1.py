@@ -8,8 +8,8 @@ axiom_1 = theory.append_axiom(text='Truth is true')
 
 ltrue = core.ObjctObsolete(sym='𝚃', dashed_name='truth')
 phi_02 = core.Formula((ltrue))
-theory.append_formula_statement(formula=phi_02,
-                                justification=core.Justification(method=core.statement_derivation, justifying_statement=axiom_1))
+theory.append_formula(tup=phi_02,
+                      justification=core.Justification(method=core.justification_methods.statement_derivation, justifying_statement=axiom_1))
 
 proposition_class = core.ObjctObsolete(sym='proposition-class', dashed_name='proposition-class')
 phi_01 = core.Formula((core.class_membership, proposition_class, core.class_nature))
@@ -54,8 +54,8 @@ f14 = core.Formula((leq, vq, lfalse))
 
 theory = []
 print(f14)
-print(f13.formula_tup[2])
-if f14.is_variable_equal_to(f13.formula_tup[1]):
+print(f13.content[2])
+if f14.is_variable_equal_to(f13.content[1]):
     print('variable equal')
     print('add implication to theory if it is not already there')
     # variable_mapping

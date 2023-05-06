@@ -81,6 +81,10 @@ class TestFormula(TestCase):
 
 
 class TestTheory(TestCase):
+
+    def test__init(self):
+        theory_1 = core.Theory(dashed_name='some-theory')
+
     def test_append_note(self):
         theory = core.Theory(dashed_name='test-note-theory')
         note_1_text = 'This is a note.'
@@ -109,3 +113,5 @@ class TestTheory(TestCase):
         object_2_dashed_name = 'some-object'
         object_2 = theory.append_objct(dashed_name=object_2_dashed_name)
         self.assertTrue(object_2.dashed_name == object_2_dashed_name)
+
+

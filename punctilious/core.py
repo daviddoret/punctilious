@@ -58,39 +58,42 @@ def subscriptify(s=None, fmt=None, **kwargs):
 
 
 class Cat:
-    def __init__(self, nam, sym_prefix=None, ref_prefix=None):
-        self.nam = nam
+    def __init__(self, cod, sym_prefix=None, ref_prefix=None):
+        self.cod = cod
         self.sym_prefix = sym_prefix
         self.ref_prefix = ref_prefix
 
     def __str__(self):
-        return self.nam
+        return self.cod
 
 
 class RepMode:
-    def __init__(self, val):
-        self.val = val
+    def __init__(self, cod):
+        self.cod = cod
 
     def __str__(self):
-        return self.val
+        return self.cod
 
 
 class cats:
     """The list of theory-objcts categories."""
 
-    axiom = Cat(nam='axiom', ref_prefix='axiom', sym_prefix='𝒜')
+    axiom = Cat(cod='axiom', ref_prefix='axiom', sym_prefix='𝒜')
     """."""
 
     definition = Cat('definition')
     """."""
 
+    formula = Cat(cod='formula', ref_prefix='formula', sym_prefix='𝜑')
+    """A formula statement."""
+
     lemma = Cat('lemma')
     """."""
 
-    objct = Cat(nam='objct', ref_prefix='objct', sym_prefix='ℴ')
+    objct = Cat(cod='objct', ref_prefix='objct', sym_prefix='ℴ')
     """An object declaration statement."""
 
-    note = Cat(nam='note', ref_prefix='note', sym_prefix='𝒩')
+    note = Cat(cod='note', ref_prefix='note', sym_prefix='𝒩')
     """A textual note that is not formally part of the theory but may shed light on the theory for human readers."""
 
     proposition = Cat('proposition')
@@ -99,7 +102,7 @@ class cats:
     theorem = Cat('theorem')
     """."""
 
-    theory = Cat(nam='theory', ref_prefix='theory', sym_prefix='𝔗')
+    theory = Cat(cod='theory', ref_prefix='theory', sym_prefix='𝔗')
     """A theory."""
 
 
@@ -127,12 +130,19 @@ class Statement:
     """A Statement is an abstract object that has a position in a theory."""
 
     def __init__(self, theory, cat, counter, ref=None, sym=None, dashed_name=None):
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, Theory) or theory is None  # The only object for which no theory linkage is
+        # justified is the universe-of-discourse theory.
         assert isinstance(cat, Cat)
         self.theory = theory
         self.cat = cat
         self.counter = counter
-        self.ref = f'{self.cat.ref_prefix}-{self.theory.counter}-{self.counter}' if ref is None else ref
+        if cat == cats.theory:
+            # Theories have a simplified reference scheme: theory-n where n is the theory counter.
+            self.ref = f'{self.cat.ref_prefix}-{self.counter}' if ref is None else ref
+        else:
+            # Non-theories have a reference scheme linked to their parent theory: theory-n-i where n is the theory
+            # counter and i is the statement counter.
+            self.ref = f'{self.cat.ref_prefix}-{self.theory.counter}-{self.counter}' if ref is None else ref
         self.sym = f'{self.cat.sym_prefix}{subscriptify(self.counter)}' if sym is None else sym
         self.dashed_name = dashed_name
 
@@ -173,6 +183,7 @@ class Note(Statement):
             case _:
                 return super().str(mod=mod, **kwargs)
 
+
 class Axiom(Statement):
     def __init__(self, theory, counter, ref=None, sym=None, text=None, citation=None):
         cat = cats.axiom
@@ -212,6 +223,7 @@ class Objct(Statement):
                 return f'Let {self.dashed_name} by an object denoted as ⌜ {self.dashed_name} ⌝, ⌜ {self.sym} ⌝, and ⌜ {self.ref} ⌝.'
             case _:
                 return super().str(mod=mod, **kwargs)
+
 
 class ObjctObsolete:
     def __init__(self, sym=None, dashed_name=None, uid=None, parent_formula_default_str_fun=None):
@@ -301,45 +313,60 @@ class FormulaStringFunctions:
     def infix(formula, sub=False, **kwargs):
         """[relation, x, y] --> x relation y"""
         assert formula.first_level_cardinality == 3
-        return f'{"(" if sub else ""}{formula.formula_tup[1].str(sub=True, mod=rep_modes.sym)} {formula.formula_tup[0].str(sub=True, mod=rep_modes.sym)} {formula.formula_tup[2].str(sub=True, mod=rep_modes.sym)}{")" if sub else ""}'
+        return f'{"(" if sub else ""}{formula.content[1].str(sub=True, mod=rep_modes.sym)} {formula.content[0].str(sub=True, mod=rep_modes.sym)} {formula.content[2].str(sub=True, mod=rep_modes.sym)}{")" if sub else ""}'
 
     @staticmethod
     def condensed_unary_postfix(formula, sub=False, **kwargs):
         """[relation, x] --> xrelation"""
         assert formula.first_level_cardinality == 2
-        return f'{"(" if sub else ""}{formula.formula_tup[1].str(sub=True, mod=rep_modes.sym)}{formula.formula_tup[0].str(sub=True, mod=rep_modes.sym)}{")" if sub else ""}'
+        return f'{"(" if sub else ""}{formula.content[1].str(sub=True, mod=rep_modes.sym)}{formula.content[0].str(sub=True, mod=rep_modes.sym)}{")" if sub else ""}'
 
     @staticmethod
     def function(formula, **kwargs):
         """[relation, x, y, ...] --> relation(x, y, ...)"""
         assert formula.first_level_cardinality > 0
-        relation = formula.formula_tup[0]
-        arguments = ", ".join(argument.str(sub=True) for argument in formula.formula_tup[1:])
+        relation = formula.content[0]
+        arguments = ", ".join(argument.str(sub=True) for argument in formula.content[1:])
         return f'{relation}({arguments})'
 
 
-class Formula:
+class Formula(Statement):
     """The content of a formula is immutable. This is a key difference with theories."""
 
-    def __init__(self, formula_tup):
-        self.formula_tup = tuple() if formula_tup is None else \
-            (tuple([formula_tup]) if not isinstance(formula_tup, tuple) else formula_tup)
-        if Formula.echo:
-            print(self.str())
-
-    def __repr__(self):
-        return f'formula {self.str()}'
+    def __init__(self, theory, counter, ref=None, sym=None, content=None, justif=None):
+        cat = cats.formula
+        super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym)
+        assert content is not None
+        assert isinstance(content, (tuple, Objct, Variable))
+        if isinstance(content, tuple) and len(content) == 1:
+            # If a leaf formula was passed as a python tuple,
+            # unpack it and assure it contains either an objct, or a variable.
+            content = content[0]
+            assert isinstance(content, (Objct, Variable))
+        if isinstance(content, Objct):
+            # Every object o may constitute the leaf-formula (o)
+            self.is_leaf = True
+        elif isinstance(content, Variable):
+            # Every variable x may constitute the leaf-formula (x)
+            self.is_leaf = True
+        elif isinstance(content, tuple):
+            self.is_leaf = False
+            # TODO: Loop through sub-formulas.
+            # If sub-formula is a formula, it is ok.
+            # If sub-formula is an objct, it is ok.
+            # If sub-formula is a variable, it is ok.
+            # If sub-formula is a tuple, convert it to formula and substitute.
+        self.content = content
+        self.justif = justif
 
     def __str__(self):
         return self.str()
-
-    echo = False
 
     @property
     def first_level_cardinality(self):
         """The first-level-cardinality of a formula is the number
         of first-level components in the formula."""
-        return len(self.formula_tup)
+        return len(self.content)
 
     def is_antivariable_equal_to(self, psi):
         """Two formula phi and psi are antivariable-equal if and only
@@ -347,13 +374,9 @@ class Formula:
         and for i = 1 to first-level-cardinality of phi,
         phi_i is antivariable-equal with psi_i.
         Note: if x and y are antivariable-equal, they are variable-equal."""
-        assert psi.is_formula
+        #assert psi.is_formula
         phi = self
-        return all(phi_i.is_antivariable_equal_to(psi_i) for phi_i, psi_i in zip(phi.formula_tup, psi.formula_tup))
-
-    is_formula = True
-    """phi is a formula if and only if phi is a finite and ordered collection
-    of formula and/or formula-atomic-components."""
+        return all(phi_i.is_antivariable_equal_to(psi_i) for phi_i, psi_i in zip(phi.content, psi.content))
 
     def is_variable_equal_to(self, psi):
         """Two formula phi and psi are variable-equal if and only if
@@ -361,37 +384,45 @@ class Formula:
         and for i = 1 to first-level-cardinality of phi,
         phi_i is variable-equal with psi_i.
         Note: if x and y are antivariable-equal, they are variable-equal."""
-        assert psi.is_formula
+        #assert psi.is_formula
         phi = self
-        return all(phi_i.is_variable_equal_to(psi_i) for phi_i, psi_i in zip(phi.formula_tup, psi.formula_tup))
+        return all(phi_i.is_variable_equal_to(psi_i) for phi_i, psi_i in zip(phi.content, psi.content))
 
-    def str(self, sub=False, **kwargs):
+    def str(self, mod=None, sub=False, **kwargs):
         """
         Returns a string representation of the formula.
 
+        :param mod:
         :param sub: True if formula is a sub-formula embedded in a parent formula. Depending on preferences,
         this may result in the sub-formula being enclosed in parentheses to avoid ambiguity.
         :return: A string representation of the formula.
         """
-        if len(self.formula_tup) == 1 and self.formula_tup[0].is_formula_atomic_component:
-            return self.formula_tup[0].str(sym=True, **kwargs)
-        elif len(self.formula_tup) > 1 and self.formula_tup[0].is_object \
-                and self.formula_tup[0].parent_formula_default_str_fun is not None:
-            return self.formula_tup[0].parent_formula_default_str_fun(self, sub=sub, sym=True, **kwargs)
-        else:
-            raise Exception("Oops, no str_fun was found to convert this formula to string.")
+        mod = rep_modes.ref if mod is None else mod
+        assert isinstance(mod, RepMode)
+        match mod:
+            case rep_modes.definition:
+                if len(self.content) == 1 and self.content[0].is_formula_atomic_component:
+                    return self.content[0].str(sym=True, **kwargs)
+                elif len(self.content) > 1 and self.content[0].is_object \
+                        and self.content[0].parent_formula_default_str_fun is not None:
+                    return self.content[0].parent_formula_default_str_fun(self, sub=sub, sym=True, **kwargs)
+                else:
+                    raise Exception("Oops, no str_fun was found to convert this formula to string.")
+            case _:
+                return super().str(mod=mod, **kwargs)
 
 
 class JustificationMethod:
+    """Known methods to justify theory statements."""
 
-    def __init__(self, nam, template):
-        self.nam = nam
+    def __init__(self, cod, template):
+        self.cod = cod
         if isinstance(template, str):
             template = Template(template)
         self.template = template
 
     def str(self):
-        return self.nam
+        return self.cod
 
     def __repr__(self):
         return f'justification method: {self.str()}'
@@ -399,18 +430,18 @@ class JustificationMethod:
     def __str__(self):
         return self.str()
 
-
-is_axiom = JustificationMethod('axiom', 'By axiomatic choice.')
-axiom_encoding = JustificationMethod('axiom-encoding', 'By encoding of $justifying_statement.')
-statement_derivation = JustificationMethod('statement-derivation', 'By derivation from $justifying_statement.')
+class justification_methods:
+    is_axiom = JustificationMethod('axiom', 'By axiomatic choice.')
+    axiom_encoding = JustificationMethod('axiom-encoding', 'By encoding of $justifying_statement.')
+    statement_derivation = JustificationMethod('statement-derivation', 'By derivation from $justifying_statement.')
 
 
 class Justification:
     def __init__(self, method, justifying_statement=None):
         assert isinstance(method, JustificationMethod)
-        assert not (method == is_axiom and justifying_statement is not None)
-        assert not (method == axiom_encoding and justifying_statement is None)
-        assert not (method == statement_derivation and justifying_statement is None)
+        assert not (method == justification_methods.is_axiom and justifying_statement is not None)
+        assert not (method == justification_methods.axiom_encoding and justifying_statement is None)
+        assert not (method == justification_methods.statement_derivation and justifying_statement is None)
         self.method = method
         self.justifying_statement = justifying_statement
 
@@ -441,8 +472,8 @@ class StatementObsolete:
     def __init__(self, theory, counter, content, justification, cat=None):
         assert isinstance(theory, Theory)
         assert isinstance(counter, int)
-        #assert isinstance(content, (Axiom, Formula))
-        #assert isinstance(justification, Justification)
+        # assert isinstance(content, (Axiom, Formula))
+        # assert isinstance(justification, Justification)
         self.cat = cat
         self.theory = theory
         self.counter = counter
@@ -478,20 +509,31 @@ class StatementObsolete:
                     return f'{self.ref}: {self.content} | {self.justification}'
 
 
-class Theory(ObjctObsolete):
+class Theory(Statement):
     """The content of a theory is enriched by proofs. This is a key difference with formula whose content is
     immutable."""
 
-    def __init__(self, sym=None, dashed_name=None):
-        self.counter = Theory.get_counter()
-        sym = f'𝒯{subscriptify(self.counter)}' if sym is None else sym
-        dashed_name = f'theory-{self.counter}' if dashed_name is None else dashed_name
-        super().__init__(sym=sym, dashed_name=dashed_name)
-        self._statement_counter = 0
+    def __init__(self, theory=None, counter=None, ref=None, sym=None, dashed_name=None):
+        cat = cats.theory
+        counter = Theory._get_counter() if counter is None else counter
+        super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym, dashed_name=dashed_name)
+        self._statement_counter = 0  # TODO: replace this with the computation of max + 1 from statements list.
         self.statements = []
+        if theory is None:
+            # This theory is not linked to a parent theory,
+            # in consequence it will not be output as part of the append_theory method,
+            # thus we output the theory definition here.
+            print(self.str(mod=rep_modes.definition))
 
-    def __repr__(self):
-        return f'theory {self}'
+    _counter = 0
+
+    def append_axiom(self, text, citation=None):
+        counter = self._get_statement_counter()
+        axiom = Axiom(theory=self, counter=counter, text=text)
+        self.statements.append(axiom)
+        if Theory.echo_statement:
+            print(axiom.str(mod=rep_modes.definition))
+        return axiom
 
     def append_axiom_statement(self, statement_content, justification):
         """Elaborate the theory by appending a new statement to it."""
@@ -505,11 +547,11 @@ class Theory(ObjctObsolete):
             print(statement.str(mod=rep_modes.definition))
         return statement
 
-    def append_formula_statement(self, formula, justification):
+    def append_formula(self, tup, justification):
         """Elaborate the theory by appending a new formula-statement to it."""
-        assert isinstance(formula, Formula)
+        assert isinstance(tup, Formula)
         # TODO: Check proof consistency / validity
-        statement_formula = Formula((proves, self, formula))
+        statement_formula = Formula((proves, self, tup))
         statement_counter = self._get_statement_counter()
         statement = StatementObsolete(self, statement_counter, statement_formula, justification)
         self.statements.append(statement)
@@ -525,13 +567,6 @@ class Theory(ObjctObsolete):
             print(note.str(mod=rep_modes.definition))
         return note
 
-    def append_axiom(self, text, citation=None):
-        counter = self._get_statement_counter()
-        axiom = Axiom(theory=self, counter=counter, text=text)
-        self.statements.append(axiom)
-        if Theory.echo_statement:
-            print(axiom.str(mod=rep_modes.definition))
-        return axiom
 
     def append_objct(self, sym=None, dashed_name=None):
         counter = self._get_statement_counter()
@@ -541,14 +576,20 @@ class Theory(ObjctObsolete):
             print(objct.str(mod=rep_modes.definition))
         return objct
 
-    _counter = 0
+    def append_theory(self, dashed_name=None):
+        counter = self._get_statement_counter()
+        theory = Theory(theory=self, counter=counter, dashed_name=dashed_name)
+        self.statements.append(theory)
+        if Theory.echo_statement:
+            print(theory.str(mod=rep_modes.definition))
+        return theory
 
     echo_init = True
 
     echo_statement = True
 
     @staticmethod
-    def get_counter():
+    def _get_counter():
         Theory._counter = Theory._counter + 1
         return Theory._counter
 
@@ -557,19 +598,16 @@ class Theory(ObjctObsolete):
         return self._statement_counter
 
     def str(self, mod=None, **kwargs):
-        mod = rep_modes.sym if mod is None else mod
+        mod = rep_modes.ref if mod is None else mod
         assert isinstance(mod, RepMode)
+        assert mod in (rep_modes.ref, rep_modes.sym, rep_modes.dashed_name, rep_modes.definition)
         match mod:
-            case rep_modes.sym:
-                return self.sym
-            case rep_modes.ref:
-                raise Exception('The reference representation mode is not supported for theories.')
-                # return self.ref
-            case rep_modes.dashed_name:
-                return self.dashed_name
             case rep_modes.definition:
-                return f'Let {self.dashed_name}, also denoted {self.sym}, be a theory.'
+                return f'Let {self.dashed_name} by a theory denoted as ⌜ {self.dashed_name} ⌝, ⌜ {self.sym} ⌝, and ⌜ {self.ref} ⌝.'
+            case _:
+                return super().str(mod=mod, **kwargs)
 
+universe_of_discourse = Theory(sym='𝒰', dashed_name='universe-of-discourse')
 
 class_membership = ObjctObsolete(sym='is-a', dashed_name='class-membership',
                                  parent_formula_default_str_fun=FormulaStringFunctions.infix)
@@ -584,12 +622,12 @@ class_nature = ObjctObsolete(sym='class', dashed_name='class')
 The nature of being a class.
 """
 
-proves = ObjctObsolete(sym='⊢', dashed_name='proof-operator', parent_formula_default_str_fun=FormulaStringFunctions.infix)
+proves = ObjctObsolete(sym='⊢', dashed_name='proof-operator',
+                       parent_formula_default_str_fun=FormulaStringFunctions.infix)
 """
 The proves operator
 """
 
-core_theory = Theory(dashed_name='core-theory')
-axiom_truth = core_theory.append_axiom(
+axiom_truth = universe_of_discourse.append_axiom(
     text='If 𝕿 is a theory, if 𝖆 is an axiom, and if 𝕿 ⊢ 𝖆 is a statement in 𝕿, then 𝖆 is taken to be true in 𝕿.')
-core_theory.append_axiom(axiom_truth)
+universe_of_discourse.append_axiom(axiom_truth)
