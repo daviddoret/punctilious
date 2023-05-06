@@ -7,12 +7,12 @@ theory_1 = core.Theory(dashed_name='natural-numbers-theory')
 axiom_1 = theory_1.append_axiom(text='0 is a natural number.', citation='Tao, 2006, p. 19')
 
 natural_numbers = core.ObjctObsolete(sym='ℕ', dashed_name='natural-numbers')
-phi_02 = core.Formula((core.class_membership, natural_numbers, core.class_nature))
-s_02 = theory_1.append_formula(phi_02, core.Justification(core.justification_methods.axiom_encoding, axiom_1))
+phi_02 = core.FormulaStatement((core.class_membership, natural_numbers, core.class_nature))
+s_02 = theory_1.append_formula_statement(phi_02, core.Justification(core.justification_methods.axiom_encoding, axiom_1))
 
 zero = core.ObjctObsolete(sym='0', dashed_name='zero')
-phi_03 = core.Formula((core.class_membership, zero, natural_numbers))
-s_03 = theory_1.append_formula(phi_03, core.Justification(core.justification_methods.axiom_encoding, axiom_1))
+phi_03 = core.FormulaStatement((core.class_membership, zero, natural_numbers))
+s_03 = theory_1.append_formula_statement(phi_03, core.Justification(core.justification_methods.axiom_encoding, axiom_1))
 
 n = core.Variable('n')
 m = core.Variable('m')

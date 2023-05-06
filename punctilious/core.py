@@ -84,8 +84,11 @@ class cats:
     definition = Cat('definition')
     """."""
 
-    formula = Cat(cod='formula', ref_prefix='formula', sym_prefix='𝜑')
-    """A formula statement."""
+    formula_statement = Cat(cod='formula-statement', ref_prefix='formula-statement', sym_prefix='𝜑')
+    """A formula-statement."""
+
+    free_formula = Cat(cod='free-formula', ref_prefix='free-formula', sym_prefix='𝜓')
+    """A free-formula."""
 
     lemma = Cat('lemma')
     """."""
@@ -330,43 +333,37 @@ class FormulaStringFunctions:
         return f'{relation}({arguments})'
 
 
-class Formula(Statement):
-    """The content of a formula is immutable. This is a key difference with theories."""
+class FreeFormula:
+    """A free-formula 𝜑 is a formula linked to a theory but not stated as a statement.
 
-    def __init__(self, theory, counter, ref=None, sym=None, content=None, justif=None):
-        cat = cats.formula
-        super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym)
-        assert content is not None
-        assert isinstance(content, (tuple, Objct, Variable))
-        if isinstance(content, tuple) and len(content) == 1:
-            # If a leaf formula was passed as a python tuple,
-            # unpack it and assure it contains either an objct, or a variable.
-            content = content[0]
-            assert isinstance(content, (Objct, Variable))
-        if isinstance(content, Objct):
-            # Every object o may constitute the leaf-formula (o)
-            self.is_leaf = True
-        elif isinstance(content, Variable):
-            # Every variable x may constitute the leaf-formula (x)
-            self.is_leaf = True
-        elif isinstance(content, tuple):
-            self.is_leaf = False
-            # TODO: Loop through sub-formulas.
-            # If sub-formula is a formula, it is ok.
-            # If sub-formula is an objct, it is ok.
-            # If sub-formula is a variable, it is ok.
-            # If sub-formula is a tuple, convert it to formula and substitute.
-        self.content = content
-        self.justif = justif
+    Data structure:
+    A free-formula 𝜑 is a container for a python tuple,
+    which is either of the form (o) where o is an object,
+    of the form (x) where x is a variable,
+    or of the form (a, b, c, ...) where a, b, c, ... are free-formulas.
+    """
 
-    def __str__(self):
-        return self.str()
+    def __init__(self, tup):
+        if isinstance(tup, (Objct, Variable)):
+            # If a leaf formula was passed as an instance of Objct or Variable,
+            # pack it in a tuple for data structure consistency.
+            tup = tuple([tup])
+        assert tup is not None and isinstance(tup, tuple) and len(tup) > 0
+        self.is_leaf = True if len(tup) == 1 else False
+        if len(tup) == 1:
+            assert isinstance(tup, (Objct, Variable))
+            self.tup = tup
+        else:
+            tup = (
+                subformula if isinstance(subformula, FreeFormula)
+                else FreeFormula(subformula) for subformula in tup)
+            self.tup = tup
 
     @property
     def first_level_cardinality(self):
         """The first-level-cardinality of a formula is the number
         of first-level components in the formula."""
-        return len(self.content)
+        return len(self.tup)
 
     def is_antivariable_equal_to(self, psi):
         """Two formula phi and psi are antivariable-equal if and only
@@ -374,9 +371,18 @@ class Formula(Statement):
         and for i = 1 to first-level-cardinality of phi,
         phi_i is antivariable-equal with psi_i.
         Note: if x and y are antivariable-equal, they are variable-equal."""
-        #assert psi.is_formula
+        assert psi is not None and isinstance(psi, FreeFormula)
         phi = self
-        return all(phi_i.is_antivariable_equal_to(psi_i) for phi_i, psi_i in zip(phi.content, psi.content))
+        if phi.first_level_cardinality != psi.first_level_cardinality:
+            return False
+        elif phi.is_leaf:
+            # We assume that objcts and variables are theory-singletons,
+            # i.e. they are not instanciated multiple times in the theory,
+            # and thus we may rely on the python is operator to check equality.
+            return phi.tup[0] is psi.tup[0]
+        else:
+            XXXXX RESUME HERE XXXXX
+            return all(phi_i.is_antivariable_equal_to(psi_i) for phi_i, psi_i in zip(phi.tup, psi.tup))
 
     def is_variable_equal_to(self, psi):
         """Two formula phi and psi are variable-equal if and only if
@@ -384,9 +390,31 @@ class Formula(Statement):
         and for i = 1 to first-level-cardinality of phi,
         phi_i is variable-equal with psi_i.
         Note: if x and y are antivariable-equal, they are variable-equal."""
-        #assert psi.is_formula
+        assert psi is not None and isinstance(psi, FreeFormula)
         phi = self
-        return all(phi_i.is_variable_equal_to(psi_i) for phi_i, psi_i in zip(phi.content, psi.content))
+        return all(phi_i.is_variable_equal_to(psi_i) for phi_i, psi_i in zip(phi.tup, psi.tup))
+
+
+class FormulaStatement(Statement):
+    """The content of a formula is immutable. This is a key difference with theories."""
+
+    def __init__(self, theory, counter, ref=None, sym=None, free_formula=None, justif=None):
+        cat = cats.formula_statement
+        super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym)
+        assert free_formula is not None
+        assert isinstance(free_formula, tuple)
+        self.is_leaf = True if len(free_formula) == 1 else False
+        free_formula = (component for component in free_formula)
+        # TODO: Loop through sub-formulas.
+        # If sub-formula is a formula, it is ok.
+        # If sub-formula is an objct, it is ok.
+        # If sub-formula is a variable, it is ok.
+        # If sub-formula is a tuple, convert it to formula and substitute.
+        self.content = free_formula
+        self.justif = justif
+
+    def __str__(self):
+        return self.str()
 
     def str(self, mod=None, sub=False, **kwargs):
         """
@@ -429,6 +457,7 @@ class JustificationMethod:
 
     def __str__(self):
         return self.str()
+
 
 class justification_methods:
     is_axiom = JustificationMethod('axiom', 'By axiomatic choice.')
@@ -519,6 +548,7 @@ class Theory(Statement):
         super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym, dashed_name=dashed_name)
         self._statement_counter = 0  # TODO: replace this with the computation of max + 1 from statements list.
         self.statements = []
+        self.free_formulas = []
         if theory is None:
             # This theory is not linked to a parent theory,
             # in consequence it will not be output as part of the append_theory method,
@@ -539,7 +569,7 @@ class Theory(Statement):
         """Elaborate the theory by appending a new statement to it."""
         assert isinstance(statement_content, Axiom)
         # TODO: Check proof consistency / validity
-        statement_formula = Formula((proves, self, statement_content))
+        statement_formula = FormulaStatement((proves, self, statement_content))
         statement_counter = self._get_statement_counter()
         statement = StatementObsolete(self, statement_counter, statement_formula, justification)
         self.statements.append(statement)
@@ -547,11 +577,14 @@ class Theory(Statement):
             print(statement.str(mod=rep_modes.definition))
         return statement
 
-    def append_formula(self, tup, justification):
+    def assure_free_formula(self, tup):
+        pass
+
+    def append_formula_statement(self, tup, justification):
         """Elaborate the theory by appending a new formula-statement to it."""
-        assert isinstance(tup, Formula)
+        assert isinstance(tup, FormulaStatement)
         # TODO: Check proof consistency / validity
-        statement_formula = Formula((proves, self, tup))
+        statement_formula = FormulaStatement((proves, self, tup))
         statement_counter = self._get_statement_counter()
         statement = StatementObsolete(self, statement_counter, statement_formula, justification)
         self.statements.append(statement)
@@ -566,7 +599,6 @@ class Theory(Statement):
         if Theory.echo_statement:
             print(note.str(mod=rep_modes.definition))
         return note
-
 
     def append_objct(self, sym=None, dashed_name=None):
         counter = self._get_statement_counter()
@@ -606,6 +638,7 @@ class Theory(Statement):
                 return f'Let {self.dashed_name} by a theory denoted as ⌜ {self.dashed_name} ⌝, ⌜ {self.sym} ⌝, and ⌜ {self.ref} ⌝.'
             case _:
                 return super().str(mod=mod, **kwargs)
+
 
 universe_of_discourse = Theory(sym='𝒰', dashed_name='universe-of-discourse')
 

@@ -45,17 +45,17 @@ class TestFormula(TestCase):
         o2 = core.ObjctObsolete('o₂')
         x = core.Variable('x')
         y = core.Variable('y')
-        phi1 = core.Formula((f, o1, o2))
+        phi1 = core.FormulaStatement((f, o1, o2))
         self.assertTrue(phi1.is_antivariable_equal_to(phi1))
-        phi2 = core.Formula((f, o1, o2))
+        phi2 = core.FormulaStatement((f, o1, o2))
         self.assertTrue(phi1.is_antivariable_equal_to(phi2))
-        phi3 = core.Formula((f, o1, o1))
+        phi3 = core.FormulaStatement((f, o1, o1))
         self.assertFalse(phi1.is_antivariable_equal_to(phi3))
-        phi4 = core.Formula((f, o1, x))
+        phi4 = core.FormulaStatement((f, o1, x))
         self.assertFalse(phi1.is_antivariable_equal_to(phi4))
-        phi5 = core.Formula((f, x, x))
+        phi5 = core.FormulaStatement((f, x, x))
         self.assertFalse(phi1.is_antivariable_equal_to(phi5))
-        phi6 = core.Formula((f, x, y))
+        phi6 = core.FormulaStatement((f, x, y))
         self.assertFalse(phi1.is_antivariable_equal_to(phi6))
 
     def test_is_variable_equal_to(self):
@@ -64,19 +64,19 @@ class TestFormula(TestCase):
         o2 = core.ObjctObsolete('o₂')
         x = core.Variable('x')
         y = core.Variable('y')
-        phi1 = core.Formula((f, o1, o2))
+        phi1 = core.FormulaStatement((f, o1, o2))
         self.assertTrue(phi1.is_variable_equal_to(phi1))
-        phi2 = core.Formula((f, o1, o2))
+        phi2 = core.FormulaStatement((f, o1, o2))
         self.assertTrue(phi1.is_variable_equal_to(phi2))
-        phi3 = core.Formula((f, o1, o1))
+        phi3 = core.FormulaStatement((f, o1, o1))
         self.assertFalse(phi1.is_variable_equal_to(phi3))
-        phi4 = core.Formula((f, o1, x))
+        phi4 = core.FormulaStatement((f, o1, x))
         self.assertTrue(phi1.is_variable_equal_to(phi4))
-        phi5 = core.Formula((f, x, x))
+        phi5 = core.FormulaStatement((f, x, x))
         self.assertTrue(phi1.is_variable_equal_to(phi5))
-        phi6 = core.Formula((f, x, y))
+        phi6 = core.FormulaStatement((f, x, y))
         self.assertTrue(phi1.is_variable_equal_to(phi6))
-        phi7 = core.Formula((f, o1, y))
+        phi7 = core.FormulaStatement((f, o1, y))
         self.assertTrue(phi1.is_variable_equal_to(phi7))
 
 
@@ -115,3 +115,15 @@ class TestTheory(TestCase):
         self.assertTrue(object_2.dashed_name == object_2_dashed_name)
 
 
+class TestFreeFormula(TestCase):
+
+    def test__init(self):
+        
+    def test_first_level_cardinality(self):
+        self.fail()
+
+    def test_is_antivariable_equal_to(self):
+        self.fail()
+
+    def test_is_variable_equal_to(self):
+        self.fail()
