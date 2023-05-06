@@ -114,6 +114,16 @@ class TestTheory(TestCase):
         object_2 = theory.append_objct(dashed_name=object_2_dashed_name)
         self.assertTrue(object_2.dashed_name == object_2_dashed_name)
 
+    def test_append_relation(self):
+        theory = core.Theory(dashed_name='test-relation-theory')
+        relation_1_dashed_name = 'some-relation'
+        relation_1 = theory.append_relation(dashed_name=relation_1_dashed_name)
+        self.assertTrue(relation_1.dashed_name == relation_1_dashed_name)
+        relation_2_dashed_name = 'another-relation'
+        relation_2 = theory.append_relation(dashed_name=relation_2_dashed_name)
+        self.assertTrue(relation_2.dashed_name == relation_2_dashed_name)
+
+
     def test_append_variable(self):
         theory = core.Theory(dashed_name='test-variable-theory')
         variable_1_dashed_name = 'some-variable'
@@ -123,10 +133,17 @@ class TestTheory(TestCase):
         variable_2 = theory.append_variable(dashed_name=variable_2_dashed_name)
         self.assertTrue(variable_2.dashed_name == variable_2_dashed_name)
 
+
 class TestFreeFormula(TestCase):
 
     def test__init(self):
-        self.fail()
+        theory = core.Theory(dashed_name='test-free-formula-theory')
+        o1 = theory.append_objct()
+        o2 = theory.append_objct()
+        x1 = theory.append_variable()
+        x2 = theory.append_variable()
+        f1 = core.FreeFormula((o1))
+        #self.assertTrue(variable_1.dashed_name == variable_1_dashed_name)
 
     def test_first_level_cardinality(self):
         self.fail()
@@ -136,6 +153,4 @@ class TestFreeFormula(TestCase):
 
     def test_is_variable_equal_to(self):
         self.fail()
-
-
 

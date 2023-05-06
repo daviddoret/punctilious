@@ -102,6 +102,10 @@ class cats:
     proposition = Cat('proposition')
     """."""
 
+    relation = Cat(cod='relation', ref_prefix='relation', sym_prefix='◇')
+    """A relation is a specialized objct which is used semantically to denote a relation.
+    By convention, the relation in a formula is positioned at the first position."""
+
     theorem = Cat('theorem')
     """."""
 
@@ -226,7 +230,7 @@ class Objct(Statement):
         assert mod in (rep_modes.ref, rep_modes.sym, rep_modes.dashed_name, rep_modes.definition)
         match mod:
             case rep_modes.definition:
-                return f'Let {self.dashed_name} by an object denoted as long name ⌜ {self.dashed_name} ⌝, symbol ⌜ {self.sym} ⌝, and reference ⌜ {self.ref} ⌝.'
+                return f'Let {self.dashed_name} be an object denoted as long-name ⌜ {self.dashed_name} ⌝, symbol ⌜ {self.sym} ⌝, and reference ⌜ {self.ref} ⌝.'
             case _:
                 return super().str(mod=mod, **kwargs)
 
@@ -275,6 +279,25 @@ class ObjctObsolete:
         return self.sym
 
 
+class Relation(Statement):
+    def __init__(self, theory, counter, ref=None, sym=None, dashed_name=None):
+        cat = cats.relation
+        super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym, dashed_name=dashed_name)
+
+    def __str__(self):
+        return self.str()
+
+    def str(self, mod=None, **kwargs):
+        mod = rep_modes.ref if mod is None else mod
+        assert isinstance(mod, RepMode)
+        assert mod in (rep_modes.ref, rep_modes.sym, rep_modes.dashed_name, rep_modes.definition)
+        match mod:
+            case rep_modes.definition:
+                return f'Let {self.dashed_name} be a relation denoted as long-name ⌜ {self.dashed_name} ⌝, symbol ⌜ {self.sym} ⌝, and reference ⌜ {self.ref} ⌝.'
+            case _:
+                return super().str(mod=mod, **kwargs)
+
+
 class Variable(Statement):
     def __init__(self, theory, counter, ref=None, sym=None, dashed_name=None):
         cat = cats.variable
@@ -289,7 +312,7 @@ class Variable(Statement):
         assert mod in (rep_modes.ref, rep_modes.sym, rep_modes.dashed_name, rep_modes.definition)
         match mod:
             case rep_modes.definition:
-                return f'Let {self.dashed_name} by a variable denoted as long name ⌜ {self.dashed_name} ⌝, symbol ⌜ {self.sym} ⌝, and reference ⌜ {self.ref} ⌝.'
+                return f'Let {self.dashed_name} be a variable denoted as long-name ⌜ {self.dashed_name} ⌝, symbol ⌜ {self.sym} ⌝, and reference ⌜ {self.ref} ⌝.'
             case _:
                 return super().str(mod=mod, **kwargs)
 
@@ -365,7 +388,7 @@ class FreeFormula:
             # and thus we may rely on the python is operator to check equality.
             return phi.tup[0] is psi.tup[0]
         else:
-            pass # TODO: XXXXX RESUME HERE XXXXX
+            pass  # TODO: XXXXX RESUME HERE XXXXX
             return all(phi_i.is_antivariable_equal_to(psi_i) for phi_i, psi_i in zip(phi.tup, psi.tup))
 
     def is_variable_equal_to(self, psi):
@@ -592,6 +615,14 @@ class Theory(Statement):
             print(objct.str(mod=rep_modes.definition))
         return objct
 
+    def append_relation(self, sym=None, dashed_name=None):
+        counter = self._get_statement_counter()
+        relation = Relation(theory=self, counter=counter, sym=sym, dashed_name=dashed_name)
+        self.statements.append(relation)
+        if Theory.echo_statement:
+            print(relation.str(mod=rep_modes.definition))
+        return relation
+
     def append_theory(self, dashed_name=None):
         counter = self._get_statement_counter()
         theory = Theory(theory=self, counter=counter, dashed_name=dashed_name)
@@ -627,7 +658,7 @@ class Theory(Statement):
         assert mod in (rep_modes.ref, rep_modes.sym, rep_modes.dashed_name, rep_modes.definition)
         match mod:
             case rep_modes.definition:
-                return f'Let {self.dashed_name} by a theory denoted as ⌜ {self.dashed_name} ⌝, ⌜ {self.sym} ⌝, and ⌜ {self.ref} ⌝.'
+                return f'Let {self.dashed_name} be a theory denoted as long-name ⌜ {self.dashed_name} ⌝, symbol ⌜ {self.sym} ⌝, and reference ⌜ {self.ref} ⌝.'
             case _:
                 return super().str(mod=mod, **kwargs)
 
