@@ -81,14 +81,14 @@ class cats:
     axiom = Cat(nam='axiom', ref_prefix='axiom', sym_prefix='𝒜')
     """."""
 
-    objct = Cat(nam='objct', ref_prefix='objct', sym_prefix='ℴ')
-    """An object declaration statement."""
-
     definition = Cat('definition')
     """."""
 
     lemma = Cat('lemma')
     """."""
+
+    objct = Cat(nam='objct', ref_prefix='objct', sym_prefix='ℴ')
+    """An object declaration statement."""
 
     note = Cat(nam='note', ref_prefix='note', sym_prefix='𝒩')
     """A textual note that is not formally part of the theory but may shed light on the theory for human readers."""
@@ -98,6 +98,9 @@ class cats:
 
     theorem = Cat('theorem')
     """."""
+
+    theory = Cat(nam='theory', ref_prefix='theory', sym_prefix='𝔗')
+    """A theory."""
 
 
 class rep_modes:
@@ -513,10 +516,6 @@ class Theory(ObjctObsolete):
         if Theory.echo_statement:
             print(statement.str(mod=rep_modes.definition))
         return statement
-
-    def append_object(self):
-        """TODO: a theory-object is an object embedded or used by a theory."""
-        pass
 
     def append_note(self, text):
         counter = self._get_statement_counter()
