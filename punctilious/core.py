@@ -120,8 +120,8 @@ def listify(*args):
     return ', '.join([str(x) for x in args if x is not None])
 
 
-class TheoryObjct:
-    """A TheoryObjct is an abstract object that is a component of a theory."""
+class Statement:
+    """A Statement is an abstract object that has a position in a theory."""
 
     def __init__(self, theory, cat, counter, ref=None, sym=None, dashed_name=None):
         assert isinstance(theory, Theory)
@@ -151,7 +151,7 @@ class TheoryObjct:
                 return self.dashed_name
 
 
-class Note(TheoryObjct):
+class Note(Statement):
     def __init__(self, theory, counter, ref=None, text=None):
         cat = cats.note
         super().__init__(theory=theory, cat=cat, counter=counter, ref=ref)
@@ -170,7 +170,7 @@ class Note(TheoryObjct):
             case _:
                 return super().str(mod=mod, **kwargs)
 
-class Axiom(TheoryObjct):
+class Axiom(Statement):
     def __init__(self, theory, counter, ref=None, sym=None, text=None, citation=None):
         cat = cats.axiom
         super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym)
@@ -387,7 +387,6 @@ statement_derivation = JustificationMethod('statement-derivation', 'By derivatio
 class Justification:
     def __init__(self, method, justifying_statement=None):
         assert isinstance(method, JustificationMethod)
-        assert justifying_statement is None or isinstance(justifying_statement, Statement)
         assert not (method == is_axiom and justifying_statement is not None)
         assert not (method == axiom_encoding and justifying_statement is None)
         assert not (method == statement_derivation and justifying_statement is None)
@@ -405,7 +404,7 @@ class Justification:
         return self.str()
 
 
-class Statement:
+class StatementObsolete:
     """A statement is tuple (t, ⊢, phi) where:
     t is a theory,
     ⊢ is the prove object,
@@ -438,8 +437,8 @@ class Statement:
 
     @staticmethod
     def get_counter():
-        Statement._counter = Statement._counter + 1
-        return Statement._counter
+        StatementObsolete._counter = StatementObsolete._counter + 1
+        return StatementObsolete._counter
 
     def str(self, mod=None, **kwargs):
         mod = rep_modes.ref if mod is None else mod
@@ -479,7 +478,7 @@ class Theory(Objct):
         # TODO: Check proof consistency / validity
         statement_formula = Formula((proves, self, statement_content))
         statement_counter = self._get_statement_counter()
-        statement = Statement(self, statement_counter, statement_formula, justification)
+        statement = StatementObsolete(self, statement_counter, statement_formula, justification)
         self.statements.append(statement)
         if Theory.echo_statement:
             print(statement.str(mod=rep_modes.definition))
@@ -491,7 +490,7 @@ class Theory(Objct):
         # TODO: Check proof consistency / validity
         statement_formula = Formula((proves, self, formula))
         statement_counter = self._get_statement_counter()
-        statement = Statement(self, statement_counter, statement_formula, justification)
+        statement = StatementObsolete(self, statement_counter, statement_formula, justification)
         self.statements.append(statement)
         if Theory.echo_statement:
             print(statement.str(mod=rep_modes.definition))
@@ -504,20 +503,18 @@ class Theory(Objct):
     def append_note(self, text):
         counter = self._get_statement_counter()
         note = Note(theory=self, counter=counter, text=text)
-        statement = Statement(theory=self, counter=counter, cat=note.cat, content=note, justification=None)
-        self.statements.append(statement)
+        self.statements.append(note)
         if Theory.echo_statement:
-            print(statement.str(mod=rep_modes.definition))
-        return statement
+            print(note.str(mod=rep_modes.definition))
+        return note
 
     def append_axiom(self, text, citation=None):
         counter = self._get_statement_counter()
         axiom = Axiom(theory=self, counter=counter, text=text)
-        statement = Statement(theory=self, counter=counter, cat=axiom.cat, content=axiom, justification=Justification(method=is_axiom))
-        self.statements.append(statement)
+        self.statements.append(axiom)
         if Theory.echo_statement:
-            print(statement.str(mod=rep_modes.definition))
-        return statement
+            print(axiom.str(mod=rep_modes.definition))
+        return axiom
 
     _counter = 0
 

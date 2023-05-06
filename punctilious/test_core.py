@@ -85,7 +85,18 @@ class TestTheory(TestCase):
         theory = core.Theory(dashed_name='test-note-theory')
         note_1_text = 'This is a note.'
         note_2_text = 'This is another note.'
-        s1 = theory.append_note(text=note_1_text)
-        self.assertTrue(s1.content.text == note_1_text)
-        s2 = theory.append_note(text=note_2_text)
-        self.assertTrue(s2.content.text == note_2_text)
+        note_1 = theory.append_note(text=note_1_text)
+        self.assertTrue(note_1.text == note_1_text)
+        note_2 = theory.append_note(text=note_2_text)
+        self.assertTrue(note_2.text == note_2_text)
+
+    def test_append_axiom(self):
+        theory = core.Theory(dashed_name='test-axiom-theory')
+        axiom_1_text = 'This is a text describing an axiomatic truth.'
+        axiom_1_citation = 'Some reference'
+        axiom_2_text = 'This is another text describing another axiomatic truth.'
+        axiom_2_citation = None
+        axiom_1 = theory.append_axiom(text=axiom_1_text, citation=axiom_1_citation)
+        self.assertTrue(axiom_1.text == axiom_1_text)
+        axiom_2 = theory.append_axiom(text=axiom_2_text, citation=axiom_2_citation)
+        self.assertTrue(axiom_2.text == axiom_2_text)
