@@ -58,11 +58,13 @@ def subscriptify(s=None, fmt=None, **kwargs):
 
 
 class Cat:
-    def __init__(self, val):
-        self.val = val
+    def __init__(self, nam, sym_prefix=None, ref_prefix=None):
+        self.nam = nam
+        self.sym_prefix = sym_prefix
+        self.ref_prefix = ref_prefix
 
     def __str__(self):
-        return self.val
+        return self.nam
 
 
 class RepMode:
@@ -76,26 +78,29 @@ class RepMode:
 class cats:
     """The list of theory-objcts categories."""
 
-    axiom = RepMode('axiom')
+    axiom = Cat(nam='axiom', ref_prefix='axiom', sym_prefix='𝒜')
     """."""
 
-    definition = RepMode('definition')
+    decl = Cat('decl')
+    """An object declaration statement."""
+
+    definition = Cat('definition')
     """."""
 
-    lemma = RepMode('lemma')
+    lemma = Cat('lemma')
     """."""
 
-    note = Cat('note')
+    note = Cat(nam='note', ref_prefix='note', sym_prefix='𝒩')
     """A textual note that is not formally part of the theory but may shed light on the theory for human readers."""
 
-    proposition = RepMode('proposition')
+    proposition = Cat('proposition')
     """."""
 
-    theorem = RepMode('theorem')
+    theorem = Cat('theorem')
     """."""
 
 
-class RepModes:
+class rep_modes:
     """The list of representation modes for objcts."""
 
     sym = RepMode('sym')
@@ -118,14 +123,14 @@ def listify(*args):
 class TheoryObjct:
     """A TheoryObjct is an abstract object that is a component of a theory."""
 
-    def __init__(self, theory, cat, counter, sym=None, ref=None, dashed_name=None):
+    def __init__(self, theory, cat, counter, ref=None, sym=None, dashed_name=None):
         assert isinstance(theory, Theory)
         assert isinstance(cat, Cat)
         self.theory = theory
         self.cat = cat
         self.counter = counter
-        self.sym = sym
-        self.ref = f'{self.cat}-{self.theory.counter}-{self.counter}' if ref is None else ref
+        self.ref = f'{self.cat.ref_prefix}-{self.theory.counter}-{self.counter}' if ref is None else ref
+        self.sym = f'{self.cat.sym_prefix}{subscriptify(self.counter)}' if sym is None else sym
         self.dashed_name = dashed_name
 
     def __repr__(self):
@@ -135,14 +140,14 @@ class TheoryObjct:
         return self.str()
 
     def str(self, mod=None, **kwargs):
-        mod = RepModes.sym if mod is None else mod
+        mod = rep_modes.sym if mod is None else mod
         assert isinstance(mod, RepMode)
         match mod:
-            case RepModes.sym:
+            case rep_modes.sym:
                 return self.sym
-            case RepModes.ref:
+            case rep_modes.ref:
                 return self.ref
-            case RepModes.dashed_name:
+            case rep_modes.dashed_name:
                 return self.dashed_name
 
 
@@ -156,54 +161,35 @@ class Note(TheoryObjct):
         return self.str()
 
     def str(self, mod=None, **kwargs):
-        mod = RepModes.ref if mod is None else mod
+        mod = rep_modes.ref if mod is None else mod
         assert isinstance(mod, RepMode)
-        assert mod in (RepModes.ref, RepModes.definition)
+        assert mod in (rep_modes.ref, rep_modes.definition)
         match mod:
-            case RepModes.definition:
+            case rep_modes.definition:
                 return f'{self.ref}: {self.text}'
             case _:
                 return super().str(mod=mod, **kwargs)
 
-
-class Axiom:
-    def __init__(self, sym=None, ref=None, dashed_name=None, text=None, citation=None):
-        self.counter = self._get_counter()
-        self.sym = f'𝒜{subscriptify(self.counter)}' if sym is None else sym
-        self.ref = f'axiom-{self.counter}' if ref is None else ref
-        self.dashed_name = dashed_name
+class Axiom(TheoryObjct):
+    def __init__(self, theory, counter, ref=None, sym=None, text=None, citation=None):
+        cat = cats.axiom
+        super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym)
         self.text = text
         self.citation = citation
-        if Axiom.echo_init:
-            print(self.str(mod=RepModes.definition))
-
-    def __repr__(self):
-        return f'axiom {self.str()}'
 
     def __str__(self):
         return self.str()
 
-    _counter = 0
-
-    echo_init = False
-
-    def _get_counter(self):
-        Axiom._counter = Axiom._counter + 1
-        return Axiom._counter
-
     def str(self, mod=None, **kwargs):
-        mod = RepModes.sym if mod is None else mod
+        mod = rep_modes.ref if mod is None else mod
         assert isinstance(mod, RepMode)
+        assert mod in (rep_modes.ref, rep_modes.definition)
         match mod:
-            case RepModes.sym:
-                return self.sym
-            case RepModes.ref:
-                return self.ref
-            case RepModes.dashed_name:
-                return self.dashed_name
-            case RepModes.definition:
+            case rep_modes.definition:
                 citation = '' if self.citation is None else f' [{self.citation}]'
                 return f'{self.str(by_ref=True)}: {self.text}{citation}'
+            case _:
+                return super().str(mod=mod, **kwargs)
 
 
 class Objct:
@@ -294,13 +280,13 @@ class FormulaStringFunctions:
     def infix(formula, sub=False, **kwargs):
         """[relation, x, y] --> x relation y"""
         assert formula.first_level_cardinality == 3
-        return f'{"(" if sub else ""}{formula.formula_tup[1].str(sub=True, mod=RepModes.sym)} {formula.formula_tup[0].str(sub=True, mod=RepModes.sym)} {formula.formula_tup[2].str(sub=True, mod=RepModes.sym)}{")" if sub else ""}'
+        return f'{"(" if sub else ""}{formula.formula_tup[1].str(sub=True, mod=rep_modes.sym)} {formula.formula_tup[0].str(sub=True, mod=rep_modes.sym)} {formula.formula_tup[2].str(sub=True, mod=rep_modes.sym)}{")" if sub else ""}'
 
     @staticmethod
     def condensed_unary_postfix(formula, sub=False, **kwargs):
         """[relation, x] --> xrelation"""
         assert formula.first_level_cardinality == 2
-        return f'{"(" if sub else ""}{formula.formula_tup[1].str(sub=True, mod=RepModes.sym)}{formula.formula_tup[0].str(sub=True, mod=RepModes.sym)}{")" if sub else ""}'
+        return f'{"(" if sub else ""}{formula.formula_tup[1].str(sub=True, mod=rep_modes.sym)}{formula.formula_tup[0].str(sub=True, mod=rep_modes.sym)}{")" if sub else ""}'
 
     @staticmethod
     def function(formula, **kwargs):
@@ -456,18 +442,18 @@ class Statement:
         return Statement._counter
 
     def str(self, mod=None, **kwargs):
-        mod = RepModes.ref if mod is None else mod
+        mod = rep_modes.ref if mod is None else mod
         assert isinstance(mod, RepMode)
         match mod:
-            case RepModes.sym:
+            case rep_modes.sym:
                 raise Exception('The symbol representation mode is not supported for statements.')
-            case RepModes.ref:
+            case rep_modes.ref:
                 return self.ref
-            case RepModes.dashed_name:
+            case rep_modes.dashed_name:
                 raise Exception('The dashed-name representation mode is not supported for statements.')
-            case RepModes.definition:
+            case rep_modes.definition:
                 if self.cat == cats.note:
-                    return self.content.str(mod=RepModes.definition)
+                    return self.content.str(mod=rep_modes.definition)
                 else:
                     return f'{self.ref}: {self.content} | {self.justification}'
 
@@ -483,8 +469,6 @@ class Theory(Objct):
         super().__init__(sym=sym, dashed_name=dashed_name)
         self._statement_counter = 0
         self.statements = []
-        if Axiom.echo_init:
-            print(self.str(mod=RepModes.definition))
 
     def __repr__(self):
         return f'theory {self}'
@@ -498,7 +482,7 @@ class Theory(Objct):
         statement = Statement(self, statement_counter, statement_formula, justification)
         self.statements.append(statement)
         if Theory.echo_statement:
-            print(statement.str(mod=RepModes.definition))
+            print(statement.str(mod=rep_modes.definition))
         return statement
 
     def append_formula_statement(self, formula, justification):
@@ -510,7 +494,7 @@ class Theory(Objct):
         statement = Statement(self, statement_counter, statement_formula, justification)
         self.statements.append(statement)
         if Theory.echo_statement:
-            print(statement.str(mod=RepModes.definition))
+            print(statement.str(mod=rep_modes.definition))
         return statement
 
     def append_object(self):
@@ -523,7 +507,16 @@ class Theory(Objct):
         statement = Statement(theory=self, counter=counter, cat=note.cat, content=note, justification=None)
         self.statements.append(statement)
         if Theory.echo_statement:
-            print(statement.str(mod=RepModes.definition))
+            print(statement.str(mod=rep_modes.definition))
+        return statement
+
+    def append_axiom(self, text, citation=None):
+        counter = self._get_statement_counter()
+        axiom = Axiom(theory=self, counter=counter, text=text)
+        statement = Statement(theory=self, counter=counter, cat=axiom.cat, content=axiom, justification=Justification(method=is_axiom))
+        self.statements.append(statement)
+        if Theory.echo_statement:
+            print(statement.str(mod=rep_modes.definition))
         return statement
 
     _counter = 0
@@ -542,17 +535,17 @@ class Theory(Objct):
         return self._statement_counter
 
     def str(self, mod=None, **kwargs):
-        mod = RepModes.sym if mod is None else mod
+        mod = rep_modes.sym if mod is None else mod
         assert isinstance(mod, RepMode)
         match mod:
-            case RepModes.sym:
+            case rep_modes.sym:
                 return self.sym
-            case RepModes.ref:
+            case rep_modes.ref:
                 raise Exception('The reference representation mode is not supported for theories.')
                 # return self.ref
-            case RepModes.dashed_name:
+            case rep_modes.dashed_name:
                 return self.dashed_name
-            case RepModes.definition:
+            case rep_modes.definition:
                 return f'Let {self.dashed_name}, also denoted {self.sym}, be a theory.'
 
 
@@ -574,8 +567,7 @@ proves = Objct(sym='⊢', dashed_name='proof-operator', parent_formula_default_s
 The proves operator
 """
 
-Axiom.echo_init = True
-axiom_truth = Axiom(
-    text='If 𝕿 is a theory, if 𝖆 is an axiom, and if 𝕿 ⊢ 𝖆 is a statement in 𝕿, then 𝖆 is taken to be true in 𝕿.')
 core_theory = Theory(dashed_name='core-theory')
-core_theory.append_axiom_statement(axiom_truth, Justification(is_axiom))
+axiom_truth = core_theory.append_axiom(
+    text='If 𝕿 is a theory, if 𝖆 is an axiom, and if 𝕿 ⊢ 𝖆 is a statement in 𝕿, then 𝖆 is taken to be true in 𝕿.')
+core_theory.append_axiom(axiom_truth)
