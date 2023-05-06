@@ -110,15 +110,24 @@ class TestTheory(TestCase):
         object_1_dashed_name = 'some-object'
         object_1 = theory.append_objct(dashed_name=object_1_dashed_name)
         self.assertTrue(object_1.dashed_name == object_1_dashed_name)
-        object_2_dashed_name = 'some-object'
+        object_2_dashed_name = 'another-object'
         object_2 = theory.append_objct(dashed_name=object_2_dashed_name)
         self.assertTrue(object_2.dashed_name == object_2_dashed_name)
 
+    def test_append_variable(self):
+        theory = core.Theory(dashed_name='test-variable-theory')
+        variable_1_dashed_name = 'some-variable'
+        variable_1 = theory.append_variable(dashed_name=variable_1_dashed_name)
+        self.assertTrue(variable_1.dashed_name == variable_1_dashed_name)
+        variable_2_dashed_name = 'another-variable'
+        variable_2 = theory.append_variable(dashed_name=variable_2_dashed_name)
+        self.assertTrue(variable_2.dashed_name == variable_2_dashed_name)
 
 class TestFreeFormula(TestCase):
 
     def test__init(self):
-        
+        self.fail()
+
     def test_first_level_cardinality(self):
         self.fail()
 
@@ -127,3 +136,6 @@ class TestFreeFormula(TestCase):
 
     def test_is_variable_equal_to(self):
         self.fail()
+
+
+
