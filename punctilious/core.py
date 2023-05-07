@@ -416,7 +416,7 @@ class FreeFormula:
             self.tup = tup
 
     def __repr__(self):
-        return self.str(str_fun=formula_str_funs.formal())
+        return self.str(str_fun=formula_str_funs.formal)
     def __str__(self):
         return self.str()
 

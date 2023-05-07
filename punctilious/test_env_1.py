@@ -55,13 +55,30 @@ class TestPunctilious(TestCase):
         self.assertTrue(variable_2.cat == core.cats.variable)
 
         phi_1 = theory.assure_free_formula(phi=object_1)
-        self.assertTrue(phi_1.str() == '(▼)')
+        self.assertTrue(phi_1.str(str_fun=core.formula_str_funs.formal) == '(▼)')
         phi_1b = theory.assure_free_formula(phi=(object_1))
         self.assertTrue(phi_1 is phi_1b, msg='unicity of leaf free-formula')
 
         phi_2 = theory.assure_free_formula(phi=(relation_1, object_1, object_2))
-        self.assertTrue(phi_2.str() == '((⬨), (▼), (●))')
+        self.assertTrue(phi_2.str(str_fun=core.formula_str_funs.formal) == '((⬨), (▼), (●))')
         phi_3 = theory.assure_free_formula(phi=(relation_2, object_2, object_1))
         phi_4 = theory.assure_free_formula(phi=(relation_3, phi_2, phi_3))
         phi_4b = theory.assure_free_formula(phi=(relation_3, (relation_1, object_1, object_2), (relation_2, object_2, object_1)))
         self.assertTrue(phi_4 is phi_4b, msg='unicity of non-leaf free-formula')
+
+        self.assertTrue(core.anti_variable_equal_to(
+            phi=(object_1),
+            psi=(object_1)),
+            msg='anti-variable-equality of leaf free-formula')
+        self.assertFalse(core.anti_variable_equal_to(
+            phi=(object_1),
+            psi=(object_2)),
+            msg='anti-variable-inequality of leaf free-formula')
+        self.assertTrue(core.anti_variable_equal_to(
+            phi=(relation_1, (relation_2, object_1, object_2), (relation_3, object_2, object_1)),
+            psi=(relation_1, (relation_2, object_1, object_2), (relation_3, object_2, object_1))),
+            msg='anti-variable-equality of non-leaf free-formula')
+        self.assertFalse(core.anti_variable_equal_to(
+            phi=(relation_1, (relation_2, object_1, object_2), (relation_3, object_2, object_1)),
+            psi=(relation_1, (relation_2, object_1, object_2), (relation_3, object_1, object_2))),
+            msg='anti-variable-inequality of non-leaf free-formula')
