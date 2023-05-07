@@ -324,31 +324,32 @@ class Variable(Statement):
 class formula_str_funs:
 
     @staticmethod
-    def infix(formula, sub=False, **kwargs):
+    def infix(formula, is_subformula=False, **kwargs):
         """[relation, x, y] --> x relation y"""
         assert formula.first_level_cardinality == 3
-        return f'{"(" if sub else ""}{formula.content[1].str(sub=True, mod=rep_modes.sym)} {formula.content[0].str(sub=True, mod=rep_modes.sym)} {formula.content[2].str(sub=True, mod=rep_modes.sym)}{")" if sub else ""}'
+        return f'{"(" if is_subformula else ""}{formula.content[1].str(is_subformula=True, mod=rep_modes.sym)} {formula.content[0].str(is_subformula=True, mod=rep_modes.sym)} {formula.content[2].str(is_subformula=True, mod=rep_modes.sym)}{")" if is_subformula else ""}'
 
     @staticmethod
-    def condensed_unary_postfix(formula, sub=False, **kwargs):
+    def condensed_unary_postfix(formula, is_subformula=False, **kwargs):
         """[relation, x] --> xrelation"""
         assert formula.first_level_cardinality == 2
-        return f'{"(" if sub else ""}{formula.content[1].str(sub=True, mod=rep_modes.sym)}{formula.content[0].str(sub=True, mod=rep_modes.sym)}{")" if sub else ""}'
+        return f'{"(" if is_subformula else ""}{formula.content[1].str(is_subformula=True, mod=rep_modes.sym)}{formula.content[0].str(is_subformula=True, mod=rep_modes.sym)}{")" if is_subformula else ""}'
 
     @staticmethod
     def function(formula, **kwargs):
         """[relation, x, y, ...] --> relation(x, y, ...)"""
         assert formula.first_level_cardinality > 0
         relation = formula.content[0]
-        arguments = ", ".join(argument.str(sub=True) for argument in formula.content[1:])
+        arguments = ", ".join(argument.str(is_subformula=True) for argument in formula.content[1:])
         return f'{relation}({arguments})'
 
     @staticmethod
     def formal(formula, **kwargs):
         """[relation, x, y, ...] --> (relation, x, y, ...)"""
         assert formula.first_level_cardinality > 0
-        components = ", ".join(argument.str(sub=True) for argument in formula.content)
+        components = ", ".join(argument.str(is_subformula=True) for argument in formula.tup)
         return f'({components})'
+
 
 def anti_variable_equal_to(phi, psi):
     """Two free-formula phi and psi are antivariable-equal if and only
@@ -380,6 +381,10 @@ def anti_variable_equal_to(phi, psi):
         return all(anti_variable_equal_to(phi_i, psi_i) for phi_i, psi_i in zip(phi_tup, psi_tup))
 
 
+leaf_classes = (Objct, Relation, Variable)
+leaf_cats = (cats.objct, cats.relation, cats.variable)
+
+
 class FreeFormula:
     """A free-formula 𝜑 is a formula linked to a theory but not stated as a true statement.
 
@@ -393,20 +398,27 @@ class FreeFormula:
     def __init__(self, theory, tup):
         assert theory is not None and isinstance(theory, Theory)
         self.theory = theory
-        if isinstance(tup, (Objct, Relation, Variable)): XXXX MAKE THIS TUPLE A LEAF_TUPLE GLOBAL CONSTANT
+        if isinstance(tup, leaf_classes):
             # If a leaf formula was passed as an instance of Objct or Variable,
             # pack it in a tuple for data structure consistency.
             tup = tuple([tup])
         assert tup is not None and isinstance(tup, tuple) and len(tup) > 0
         self.is_leaf = True if len(tup) == 1 else False
-        if len(tup) == 1:
-            assert isinstance(tup[0], (Objct, Relation, Variable))
-            self.tup = tup XXX REPRENDRE ICI XXX
-        else:
-            tup = (
-                subformula if isinstance(subformula, FreeFormula)
-                else FreeFormula(subformula) for subformula in tup)
+        if self.is_leaf:
+            # This is free-leaf-formula.
+            assert isinstance(tup[0], leaf_classes)
             self.tup = tup
+        else:
+            # This is not a free-leaf-formula.
+            # We must thus assure that all subformula are properly
+            # registered in the theory free-formula set.
+            tup = tuple(theory.assure_free_formula(subformula) for subformula in tup)
+            self.tup = tup
+
+    def __repr__(self):
+        return self.str(str_fun=formula_str_funs.formal())
+    def __str__(self):
+        return self.str()
 
     @property
     def first_level_cardinality(self):
@@ -437,8 +449,10 @@ class FreeFormula:
         then the free-relation is a free-relation-formula."""
         return self.tup[0].cat == cats.relation
 
-    def str(self, str_fun=None, **kwargs):
-        if str_fun is None and self.is_relation:
+    def str(self, str_fun=None, is_subformula=False, **kwargs):
+        if self.is_leaf:
+            return f'({self.tup[0].sym})'
+        if str_fun is None and isinstance(self.tup[0], Relation):
             # If str_fun is not expressly passed as a parameter,
             # and if this free-formula is a free-relation-formula,
             # then the default representation of the free-formula
@@ -448,7 +462,7 @@ class FreeFormula:
             # We fall back on the formal representation approach,
             # because we have the assurance that it will always work.
             str_fun = formula_str_funs.formal
-        return str_fun(**kwargs)
+        return str_fun(self, **kwargs)
 
 
 class FormulaStatement(Statement):
@@ -472,12 +486,12 @@ class FormulaStatement(Statement):
     def __str__(self):
         return self.str()
 
-    def str(self, mod=None, sub=False, **kwargs):
+    def str(self, mod=None, is_subformula=False, **kwargs):
         """
         Returns a string representation of the formula.
 
         :param mod:
-        :param sub: True if formula is a sub-formula embedded in a parent formula. Depending on preferences,
+        :param is_subformula: True if formula is a sub-formula embedded in a parent formula. Depending on preferences,
         this may result in the sub-formula being enclosed in parentheses to avoid ambiguity.
         :return: A string representation of the formula.
         """
@@ -489,7 +503,7 @@ class FormulaStatement(Statement):
                     return self.content[0].str(sym=True, **kwargs)
                 elif len(self.content) > 1 and self.content[0].is_object \
                         and self.content[0].parent_formula_default_str_fun is not None:
-                    return self.content[0].parent_formula_default_str_fun(self, sub=sub, sym=True, **kwargs)
+                    return self.content[0].parent_formula_default_str_fun(self, sub=is_subformula, sym=True, **kwargs)
                 else:
                     raise Exception("Oops, no str_fun was found to convert this formula to string.")
             case _:
@@ -654,19 +668,19 @@ class Theory(Statement):
             # embed it in a tuple for data structure consistency.
             phi = tuple([phi])
 
-        phi = next((psi for psi in self.free_formulas if psi.is_anti_variable_equal_to(phi)), None)
-        if phi is not None:
+        free_formula = next((psi for psi in self.free_formulas if psi.is_anti_variable_equal_to(phi)), None)
+        if free_formula is not None:
             # The free-formula is already present in the theory free-formula set.
             # Return the existing formula to prevent formula duplicates in the theory.
-            return phi
+            return free_formula
 
         # The free-formula is not already present in the theory free-formula set,
         # we thus must append it in the set.
-
-        if len(phi) == 1:
-            phi = FreeFormula(theory=self, tup=phi)
-
-        self.free_formulas.append(phi)
+        # Note that FreeFormula.__init__ will assure that subformula are
+        # properly registered in the theory free-formula set.
+        free_formula = FreeFormula(theory=self, tup=phi)
+        self.free_formulas.append(free_formula)
+        return free_formula
 
     def append_formula_statement(self, tup, justification):
         """Elaborate the theory by appending a new formula-statement to it."""
@@ -698,7 +712,8 @@ class Theory(Statement):
 
     def append_relation(self, sym=None, dashed_name=None, formula_str_fun=None):
         counter = self._get_statement_counter()
-        relation = Relation(theory=self, counter=counter, sym=sym, dashed_name=dashed_name, formula_str_fun=formula_str_fun)
+        relation = Relation(theory=self, counter=counter, sym=sym, dashed_name=dashed_name,
+                            formula_str_fun=formula_str_fun)
         self.statements.append(relation)
         if Theory.echo_statement:
             print(relation.str(mod=rep_modes.definition))
