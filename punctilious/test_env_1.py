@@ -66,6 +66,8 @@ class TestPunctilious(TestCase):
         phi_4b = theory.assure_free_formula(phi=(relation_3, (relation_1, object_1, object_2), (relation_2, object_2, object_1)))
         self.assertTrue(phi_4 is phi_4b, msg='unicity of non-leaf free-formula')
 
+        # Anti-variable equality and anti-variable inequality of free-formula
+
         self.assertTrue(core.anti_variable_equal_to(
             phi=(object_1),
             psi=(object_1)),
@@ -82,3 +84,5 @@ class TestPunctilious(TestCase):
             phi=(relation_1, (relation_2, object_1, object_2), (relation_3, object_2, object_1)),
             psi=(relation_1, (relation_2, object_1, object_2), (relation_3, object_1, object_2))),
             msg='anti-variable-inequality of non-leaf free-formula')
+
+        pass

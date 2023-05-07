@@ -139,21 +139,21 @@ def listify(*args):
 class Statement:
     """A Statement is an abstract object that has a position in a theory."""
 
-    def __init__(self, theory, cat, counter, ref=None, sym=None, dashed_name=None):
+    def __init__(self, theory, cat, position, ref=None, sym=None, dashed_name=None):
         assert isinstance(theory, Theory) or theory is None  # The only object for which no theory linkage is
         # justified is the universe-of-discourse theory.
         assert isinstance(cat, Cat)
         self.theory = theory
         self.cat = cat
-        self.counter = counter
+        self.position = position
         if cat == cats.theory:
             # Theories have a simplified reference scheme: theory-n where n is the theory counter.
-            self.ref = f'{self.cat.ref_prefix}-{self.counter}' if ref is None else ref
+            self.ref = f'{self.cat.ref_prefix}-{self.position}' if ref is None else ref
         else:
             # Non-theories have a reference scheme linked to their parent theory: theory-n-i where n is the theory
             # counter and i is the statement counter.
-            self.ref = f'{self.cat.ref_prefix}-{self.theory.counter}-{self.counter}' if ref is None else ref
-        self.sym = f'{self.cat.sym_prefix}{subscriptify(self.counter)}' if sym is None else sym
+            self.ref = f'{self.cat.ref_prefix}-{self.theory.position}-{self.position}' if ref is None else ref
+        self.sym = f'{self.cat.sym_prefix}{subscriptify(self.position)}' if sym is None else sym
         self.dashed_name = dashed_name
 
     def __repr__(self):
@@ -175,9 +175,9 @@ class Statement:
 
 
 class Note(Statement):
-    def __init__(self, theory, counter, ref=None, text=None):
+    def __init__(self, theory, position, ref=None, text=None):
         cat = cats.note
-        super().__init__(theory=theory, cat=cat, counter=counter, ref=ref)
+        super().__init__(theory=theory, cat=cat, position=position, ref=ref)
         self.text = text
 
     def __str__(self):
@@ -195,9 +195,9 @@ class Note(Statement):
 
 
 class Axiom(Statement):
-    def __init__(self, theory, counter, ref=None, sym=None, text=None, citation=None):
+    def __init__(self, theory, position, ref=None, sym=None, text=None, citation=None):
         cat = cats.axiom
-        super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym)
+        super().__init__(theory=theory, cat=cat, position=position, ref=ref, sym=sym)
         self.text = text
         self.citation = citation
 
@@ -217,9 +217,9 @@ class Axiom(Statement):
 
 
 class Objct(Statement):
-    def __init__(self, theory, counter, ref=None, sym=None, dashed_name=None):
+    def __init__(self, theory, position, ref=None, sym=None, dashed_name=None):
         cat = cats.objct
-        super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym, dashed_name=dashed_name)
+        super().__init__(theory=theory, cat=cat, position=position, ref=ref, sym=sym, dashed_name=dashed_name)
 
     def __str__(self):
         return self.str()
@@ -280,12 +280,12 @@ class ObjctObsolete:
 
 
 class Relation(Statement):
-    def __init__(self, theory, counter, ref=None, sym=None, dashed_name=None, formula_str_fun=None):
+    def __init__(self, theory, position, ref=None, sym=None, dashed_name=None, formula_str_fun=None):
         cat = cats.relation
         # If formula_str_fun is not expressly defined,
         # we fallback on the function representation method.
         formula_str_fun = formula_str_funs.function if formula_str_fun is None else formula_str_fun
-        super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym, dashed_name=dashed_name)
+        super().__init__(theory=theory, cat=cat, position=position, ref=ref, sym=sym, dashed_name=dashed_name)
         self.formula_str_fun = formula_str_fun
 
     def __str__(self):
@@ -303,9 +303,9 @@ class Relation(Statement):
 
 
 class Variable(Statement):
-    def __init__(self, theory, counter, ref=None, sym=None, dashed_name=None):
+    def __init__(self, theory, position, ref=None, sym=None, dashed_name=None):
         cat = cats.variable
-        super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym, dashed_name=dashed_name)
+        super().__init__(theory=theory, cat=cat, position=position, ref=ref, sym=sym, dashed_name=dashed_name)
 
     def __str__(self):
         return self.str()
@@ -408,12 +408,20 @@ class FreeFormula:
             # This is free-leaf-formula.
             assert isinstance(tup[0], leaf_classes)
             self.tup = tup
+            self.relation_set = frozenset([tup[0]]) if isinstance(tup[0], Relation) else frozenset()
+            self.objct_set = frozenset([tup[0]]) if isinstance(tup[0], Objct) else frozenset()
+            self.variable_set = frozenset([tup[0]]) if isinstance(tup[0], Variable) else frozenset()
         else:
             # This is not a free-leaf-formula.
             # We must thus assure that all subformula are properly
             # registered in the theory free-formula set.
             tup = tuple(theory.assure_free_formula(subformula) for subformula in tup)
             self.tup = tup
+            # The relation-set, objct-set, and variable-set
+            # are built as the union of the child sets.
+            self.relation_set = frozenset.union(*[subformula.relation_set for subformula in tup])
+            self.objct_set = frozenset.union(*[subformula.objct_set for subformula in tup])
+            self.variable_set = frozenset.union(*[subformula.variable_set for subformula in tup])
 
     def __repr__(self):
         return self.str(str_fun=formula_str_funs.formal)
@@ -468,9 +476,9 @@ class FreeFormula:
 class FormulaStatement(Statement):
     """The content of a formula is immutable. This is a key difference with theories."""
 
-    def __init__(self, theory, counter, ref=None, sym=None, free_formula=None, justif=None):
+    def __init__(self, theory, position, ref=None, sym=None, free_formula=None, justif=None):
         cat = cats.formula_statement
-        super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym)
+        super().__init__(theory=theory, cat=cat, position=position, ref=ref, sym=sym)
         assert free_formula is not None
         assert isinstance(free_formula, tuple)
         self.is_leaf = True if len(free_formula) == 1 else False
@@ -576,7 +584,7 @@ class StatementObsolete:
         self.cat = cat
         self.theory = theory
         self.counter = counter
-        self.ref = f'statement-{self.theory.counter}-{self.counter}'
+        self.ref = f'statement-{self.theory.position}-{self.counter}'
         self.content = content
         self.justification = justification
 
@@ -612,11 +620,11 @@ class Theory(Statement):
     """The content of a theory is enriched by proofs. This is a key difference with formula whose content is
     immutable."""
 
-    def __init__(self, theory=None, counter=None, ref=None, sym=None, dashed_name=None):
+    def __init__(self, theory=None, position=None, ref=None, sym=None, dashed_name=None):
         cat = cats.theory
-        counter = Theory._get_counter() if counter is None else counter
-        super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym, dashed_name=dashed_name)
-        self._statement_counter = 0  # TODO: replace this with the computation of max + 1 from statements list.
+        position = Theory._get_counter() if position is None else position
+        super().__init__(theory=theory, cat=cat, position=position, ref=ref, sym=sym, dashed_name=dashed_name)
+        self._statement_max_position = 0  # TODO: replace this with the computation of max + 1 from statements list.
         self.statements = []
         self.free_formulas = []
         if theory is None:
@@ -625,11 +633,11 @@ class Theory(Statement):
             # thus we output the theory definition here.
             print(self.str(mod=rep_modes.definition))
 
-    _counter = 0
+    position = 0
 
     def append_axiom(self, text, citation=None):
         counter = self._get_statement_counter()
-        axiom = Axiom(theory=self, counter=counter, text=text)
+        axiom = Axiom(theory=self, position=counter, text=text)
         self.statements.append(axiom)
         if Theory.echo_statement:
             print(axiom.str(mod=rep_modes.definition))
@@ -696,7 +704,7 @@ class Theory(Statement):
 
     def append_note(self, text):
         counter = self._get_statement_counter()
-        note = Note(theory=self, counter=counter, text=text)
+        note = Note(theory=self, position=counter, text=text)
         self.statements.append(note)
         if Theory.echo_statement:
             print(note.str(mod=rep_modes.definition))
@@ -704,7 +712,7 @@ class Theory(Statement):
 
     def append_objct(self, sym=None, dashed_name=None):
         counter = self._get_statement_counter()
-        objct = Objct(theory=self, counter=counter, sym=sym, dashed_name=dashed_name)
+        objct = Objct(theory=self, position=counter, sym=sym, dashed_name=dashed_name)
         self.statements.append(objct)
         if Theory.echo_statement:
             print(objct.str(mod=rep_modes.definition))
@@ -712,7 +720,7 @@ class Theory(Statement):
 
     def append_relation(self, sym=None, dashed_name=None, formula_str_fun=None):
         counter = self._get_statement_counter()
-        relation = Relation(theory=self, counter=counter, sym=sym, dashed_name=dashed_name,
+        relation = Relation(theory=self, position=counter, sym=sym, dashed_name=dashed_name,
                             formula_str_fun=formula_str_fun)
         self.statements.append(relation)
         if Theory.echo_statement:
@@ -721,7 +729,7 @@ class Theory(Statement):
 
     def append_theory(self, dashed_name=None):
         counter = self._get_statement_counter()
-        theory = Theory(theory=self, counter=counter, dashed_name=dashed_name)
+        theory = Theory(theory=self, position=counter, dashed_name=dashed_name)
         self.statements.append(theory)
         if Theory.echo_statement:
             print(theory.str(mod=rep_modes.definition))
@@ -729,7 +737,7 @@ class Theory(Statement):
 
     def append_variable(self, sym=None, dashed_name=None):
         counter = self._get_statement_counter()
-        variable = Variable(theory=self, counter=counter, sym=sym, dashed_name=dashed_name)
+        variable = Variable(theory=self, position=counter, sym=sym, dashed_name=dashed_name)
         self.statements.append(variable)
         if Theory.echo_statement:
             print(variable.str(mod=rep_modes.definition))
@@ -741,12 +749,12 @@ class Theory(Statement):
 
     @staticmethod
     def _get_counter():
-        Theory._counter = Theory._counter + 1
-        return Theory._counter
+        Theory.position = Theory.position + 1
+        return Theory.position
 
     def _get_statement_counter(self):
-        self._statement_counter = self._statement_counter + 1
-        return self._statement_counter
+        self._statement_max_position = self._statement_max_position + 1
+        return self._statement_max_position
 
     def str(self, mod=None, **kwargs):
         mod = rep_modes.ref if mod is None else mod
