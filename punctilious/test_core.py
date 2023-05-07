@@ -136,9 +136,11 @@ class TestTheory(TestCase):
         variable_1_dashed_name = 'some-variable'
         variable_1 = theory.append_variable(dashed_name=variable_1_dashed_name)
         self.assertTrue(variable_1.dashed_name == variable_1_dashed_name)
+        self.assertTrue(variable_1.cat == core.cats.variable)
         variable_2_dashed_name = 'another-variable'
         variable_2 = theory.append_variable(dashed_name=variable_2_dashed_name)
         self.assertTrue(variable_2.dashed_name == variable_2_dashed_name)
+        self.assertTrue(variable_2.cat == core.cats.variable)
 
 
 class TestFreeFormula(TestCase):
