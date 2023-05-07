@@ -17,8 +17,8 @@ s_03 = theory.append_formula_statement(phi_03, core.Justification(core.justifica
 n = core.Variable('n')
 m = core.Variable('m')
 
-equal = core.ObjctObsolete(sym='=', dashed_name='equality-operator', parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
-successor = core.ObjctObsolete(sym='++', dashed_name='successor-operator', parent_formula_default_str_fun=core.FormulaStringFunctions.condensed_unary_postfix)
+equal = core.ObjctObsolete(sym='=', dashed_name='equality-operator', parent_formula_default_str_fun=core.formula_str_funs.infix)
+successor = core.ObjctObsolete(sym='++', dashed_name='successor-operator', parent_formula_default_str_fun=core.formula_str_funs.condensed_unary_postfix)
 #add = core.Objct('+', parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
 #less_or_equal = core.Objct('≤', parent_formula_default_str_fun=core.FormulaStringFunctions.infix, alt_nam_dic={'long name': 'less or equal to'})
 

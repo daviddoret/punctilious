@@ -16,19 +16,19 @@ phi_01 = core.FormulaStatement((core.class_membership, proposition_class, core.c
 
 lfalse = core.ObjctObsolete(sym='𝙵', dashed_name='falsum')
 leq = core.ObjctObsolete(sym='=', dashed_name='equality-connective',
-                         parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+                         parent_formula_default_str_fun=core.formula_str_funs.infix)
 lneq = core.ObjctObsolete(sym='≠', dashed_name='inequality-connective',
-                          parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+                          parent_formula_default_str_fun=core.formula_str_funs.infix)
 lnot = core.ObjctObsolete(sym='¬', dashed_name='negation-connective',
-                          parent_formula_default_str_fun=core.FormulaStringFunctions.function)
+                          parent_formula_default_str_fun=core.formula_str_funs.function)
 limplies = core.ObjctObsolete(sym='→', dashed_name='material-implication-connective',
-                              parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+                              parent_formula_default_str_fun=core.formula_str_funs.infix)
 liif = core.ObjctObsolete(sym='⟺', dashed_name='biconditional-connective',
-                          parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+                          parent_formula_default_str_fun=core.formula_str_funs.infix)
 lor = core.ObjctObsolete(sym='∨', dashed_name='disjunction-connective',
-                         parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+                         parent_formula_default_str_fun=core.formula_str_funs.infix)
 land = core.ObjctObsolete(sym='∧', dashed_name='conjunction-connective',
-                          parent_formula_default_str_fun=core.FormulaStringFunctions.infix)
+                          parent_formula_default_str_fun=core.formula_str_funs.infix)
 
 f1 = core.FormulaStatement((leq, ltrue, ltrue))
 f2 = core.FormulaStatement((leq, lfalse, lfalse))

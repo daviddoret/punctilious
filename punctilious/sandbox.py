@@ -1,6 +1,8 @@
 
-#tup = ('a', 'b', 'c')
-lis = ['a', 'b', 'c']
-tup = tuple(lis)
-print(tup)
 
+def my_name_space():
+
+    def zoo = 35
+
+
+print(my_name_space.zoo)

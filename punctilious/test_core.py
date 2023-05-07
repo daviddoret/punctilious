@@ -1,5 +1,6 @@
 from unittest import TestCase
 import core
+import test_env_1
 
 
 class TestObjct(TestCase):
@@ -110,26 +111,20 @@ class TestTheory(TestCase):
         self.assertTrue(axiom_2.cat == core.cats.axiom)
 
     def test_append_objct(self):
-        theory = core.Theory(dashed_name='test-objct-theory')
-        object_1_dashed_name = 'some-object'
-        object_1 = theory.append_objct(dashed_name=object_1_dashed_name)
-        self.assertTrue(object_1.dashed_name == object_1_dashed_name)
-        self.assertTrue(object_1.cat == core.cats.objct)
-        object_2_dashed_name = 'another-object'
-        object_2 = theory.append_objct(dashed_name=object_2_dashed_name)
-        self.assertTrue(object_2.dashed_name == object_2_dashed_name)
-        self.assertTrue(object_2.cat == core.cats.objct)
+        self.assertTrue(test_env_1.object_1.sym == test_env_1.object_1_sym)
+        self.assertTrue(test_env_1.object_1.dashed_name == test_env_1.object_1_dashed_name)
+        self.assertTrue(test_env_1.object_1.cat == core.cats.objct)
+        self.assertTrue(test_env_1.object_2.sym == test_env_1.object_2_sym)
+        self.assertTrue(test_env_1.object_2.dashed_name == test_env_1.object_2_dashed_name)
+        self.assertTrue(test_env_1.object_2.cat == core.cats.objct)
 
     def test_append_relation(self):
-        theory = core.Theory(dashed_name='test-relation-theory')
-        relation_1_dashed_name = 'some-relation'
-        relation_1 = theory.append_relation(dashed_name=relation_1_dashed_name)
-        self.assertTrue(relation_1.dashed_name == relation_1_dashed_name)
-        self.assertTrue(relation_1.cat == core.cats.relation)
-        relation_2_dashed_name = 'another-relation'
-        relation_2 = theory.append_relation(dashed_name=relation_2_dashed_name)
-        self.assertTrue(relation_2.dashed_name == relation_2_dashed_name)
-        self.assertTrue(relation_2.cat == core.cats.relation)
+        self.assertTrue(test_env_1.relation_1.sym == test_env_1.relation_1_sym)
+        self.assertTrue(test_env_1.relation_1.dashed_name == test_env_1.relation_1_dashed_name)
+        self.assertTrue(test_env_1.relation_1.cat == core.cats.relation)
+        self.assertTrue(test_env_1.relation_2.sym == test_env_1.relation_2_sym)
+        self.assertTrue(test_env_1.relation_2.dashed_name == test_env_1.relation_2_dashed_name)
+        self.assertTrue(test_env_1.relation_2.cat == core.cats.relation)
 
     def test_append_variable(self):
         theory = core.Theory(dashed_name='test-variable-theory')

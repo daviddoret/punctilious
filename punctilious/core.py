@@ -280,9 +280,13 @@ class ObjctObsolete:
 
 
 class Relation(Statement):
-    def __init__(self, theory, counter, ref=None, sym=None, dashed_name=None):
+    def __init__(self, theory, counter, ref=None, sym=None, dashed_name=None, formula_str_fun=None):
         cat = cats.relation
+        # If formula_str_fun is not expressly defined,
+        # we fallback on the function representation method.
+        formula_str_fun = formula_str_funs.function if formula_str_fun is None else formula_str_fun
         super().__init__(theory=theory, cat=cat, counter=counter, ref=ref, sym=sym, dashed_name=dashed_name)
+        self.formula_str_fun = formula_str_fun
 
     def __str__(self):
         return self.str()
@@ -317,7 +321,7 @@ class Variable(Statement):
                 return super().str(mod=mod, **kwargs)
 
 
-class FormulaStringFunctions:
+class formula_str_funs:
 
     @staticmethod
     def infix(formula, sub=False, **kwargs):
@@ -339,9 +343,45 @@ class FormulaStringFunctions:
         arguments = ", ".join(argument.str(sub=True) for argument in formula.content[1:])
         return f'{relation}({arguments})'
 
+    @staticmethod
+    def formal(formula, **kwargs):
+        """[relation, x, y, ...] --> (relation, x, y, ...)"""
+        assert formula.first_level_cardinality > 0
+        components = ", ".join(argument.str(sub=True) for argument in formula.content)
+        return f'({components})'
+
+def anti_variable_equal_to(phi, psi):
+    """Two free-formula phi and psi are antivariable-equal if and only
+    the first-level-cardinality of x and y are equal,
+    and for i = 1 to first-level-cardinality of phi,
+    phi_i is antivariable-equal with psi_i.
+    TODO: Reword the above precisely to account for leaf objects
+    Note: if x and y are antivariable-equal, they are variable-equal."""
+    assert phi is not None
+    # Retrieve phi's tuple if it is a FreeFormula
+    phi_tup = phi.tup if isinstance(phi, FreeFormula) else phi
+    # Embed phi in a tuple if it is a valid leaf object
+    phi_tup = tuple([phi]) if isinstance(phi, (Objct, Relation, Variable)) else phi_tup
+    assert isinstance(phi_tup, tuple)
+    assert psi is not None
+    # Retrieve psi's tuple if it is a FreeFormula
+    psi_tup = psi.tup if isinstance(psi, FreeFormula) else psi
+    # Embed psi in a tuple if it is a valid leaf object
+    psi_tup = tuple([psi]) if isinstance(psi, (Objct, Relation, Variable)) else psi_tup
+    assert isinstance(psi_tup, tuple)
+    if len(phi_tup) != len(psi_tup):
+        return False
+    elif len(phi_tup) == 1:
+        # We assume that leaf components (objcts, relations and variables) are theory-singletons,
+        # i.e. they are not instanciated multiple times in the theory,
+        # and thus we may rely on the python is operator to check equality.
+        return phi_tup[0] is psi_tup[0]
+    else:
+        return all(anti_variable_equal_to(phi_i, psi_i) for phi_i, psi_i in zip(phi_tup, psi_tup))
+
 
 class FreeFormula:
-    """A free-formula 𝜑 is a formula linked to a theory but not stated as a statement.
+    """A free-formula 𝜑 is a formula linked to a theory but not stated as a true statement.
 
     Data structure:
     A free-formula 𝜑 is a container for a python tuple,
@@ -350,16 +390,18 @@ class FreeFormula:
     or of the form (a, b, c, ...) where a, b, c, ... are free-formulas.
     """
 
-    def __init__(self, tup):
-        if isinstance(tup, (Objct, Variable)):
+    def __init__(self, theory, tup):
+        assert theory is not None and isinstance(theory, Theory)
+        self.theory = theory
+        if isinstance(tup, (Objct, Relation, Variable)):
             # If a leaf formula was passed as an instance of Objct or Variable,
             # pack it in a tuple for data structure consistency.
             tup = tuple([tup])
         assert tup is not None and isinstance(tup, tuple) and len(tup) > 0
         self.is_leaf = True if len(tup) == 1 else False
         if len(tup) == 1:
-            assert isinstance(tup, (Objct, Variable))
-            self.tup = tup
+            assert isinstance(tup[0], (Objct, Relation, Variable))
+            self.tup = tup XXX REPRENDRE ICI XXX
         else:
             tup = (
                 subformula if isinstance(subformula, FreeFormula)
@@ -372,24 +414,13 @@ class FreeFormula:
         of first-level components in the formula."""
         return len(self.tup)
 
-    def is_antivariable_equal_to(self, psi):
+    def is_anti_variable_equal_to(self, psi):
         """Two formula phi and psi are antivariable-equal if and only
         the first-level-cardinality of x and y are equal,
         and for i = 1 to first-level-cardinality of phi,
         phi_i is antivariable-equal with psi_i.
         Note: if x and y are antivariable-equal, they are variable-equal."""
-        assert psi is not None and isinstance(psi, FreeFormula)
-        phi = self
-        if phi.first_level_cardinality != psi.first_level_cardinality:
-            return False
-        elif phi.is_leaf:
-            # We assume that objcts and variables are theory-singletons,
-            # i.e. they are not instanciated multiple times in the theory,
-            # and thus we may rely on the python is operator to check equality.
-            return phi.tup[0] is psi.tup[0]
-        else:
-            pass  # TODO: XXXXX RESUME HERE XXXXX
-            return all(phi_i.is_antivariable_equal_to(psi_i) for phi_i, psi_i in zip(phi.tup, psi.tup))
+        return anti_variable_equal_to(self, psi)
 
     def is_variable_equal_to(self, psi):
         """Two formula phi and psi are variable-equal if and only if
@@ -400,6 +431,24 @@ class FreeFormula:
         assert psi is not None and isinstance(psi, FreeFormula)
         phi = self
         return all(phi_i.is_variable_equal_to(psi_i) for phi_i, psi_i in zip(phi.tup, psi.tup))
+
+    def is_relation(self):
+        """By convention, if the first component of a free-formula is a relation,
+        then the free-relation is a free-relation-formula."""
+        return self.tup[0].cat == cats.relation
+
+    def str(self, str_fun=None, **kwargs):
+        if str_fun is None and self.is_relation:
+            # If str_fun is not expressly passed as a parameter,
+            # and if this free-formula is a free-relation-formula,
+            # then the default representation of the free-formula
+            # is determined by the formula_str_fun attribute of the relation.
+            str_fun = self.tup[0].formula_str_fun
+        if str_fun is None:
+            # We fall back on the formal representation approach,
+            # because we have the assurance that it will always work.
+            str_fun = formula_str_funs.formal
+        return str_fun(**kwargs)
 
 
 class FormulaStatement(Statement):
@@ -584,8 +633,40 @@ class Theory(Statement):
             print(statement.str(mod=rep_modes.definition))
         return statement
 
-    def assure_free_formula(self, tup):
-        pass
+    def assure_free_formula(self, phi):
+        """A free-formula is not appended to a theory because we assure the
+        unicity of formula in theories. Thus it is 'assured'."""
+
+        assert phi is not None
+
+        if isinstance(phi, FreeFormula):
+            # If a free-formula was passed as the argument,
+            # return it directly after checking it is
+            # an element of this theory free-formula set.
+            # This condition is a bit superfluous
+            # but it makes it possible to call this method in a loose manner.
+            assert phi.theory == self
+            return phi
+
+        assert isinstance(phi, (tuple, Objct, Relation, Variable))
+        if isinstance(phi, (Objct, Relation, Variable)):
+            # If phi is a leaf object,
+            # embed it in a tuple for data structure consistency.
+            phi = tuple([phi])
+
+        phi = next((psi for psi in self.free_formulas if psi.is_anti_variable_equal_to(phi)), None)
+        if phi is not None:
+            # The free-formula is already present in the theory free-formula set.
+            # Return the existing formula to prevent formula duplicates in the theory.
+            return phi
+
+        # The free-formula is not already present in the theory free-formula set,
+        # we thus must append it in the set.
+
+        if len(phi) == 1:
+            phi = FreeFormula(theory=self, tup=phi)
+
+        self.free_formulas.append(phi)
 
     def append_formula_statement(self, tup, justification):
         """Elaborate the theory by appending a new formula-statement to it."""
@@ -615,9 +696,9 @@ class Theory(Statement):
             print(objct.str(mod=rep_modes.definition))
         return objct
 
-    def append_relation(self, sym=None, dashed_name=None):
+    def append_relation(self, sym=None, dashed_name=None, formula_str_fun=None):
         counter = self._get_statement_counter()
-        relation = Relation(theory=self, counter=counter, sym=sym, dashed_name=dashed_name)
+        relation = Relation(theory=self, counter=counter, sym=sym, dashed_name=dashed_name, formula_str_fun=formula_str_fun)
         self.statements.append(relation)
         if Theory.echo_statement:
             print(relation.str(mod=rep_modes.definition))
@@ -666,7 +747,7 @@ class Theory(Statement):
 universe_of_discourse = Theory(sym='𝒰', dashed_name='universe-of-discourse')
 
 class_membership = ObjctObsolete(sym='is-a', dashed_name='class-membership',
-                                 parent_formula_default_str_fun=FormulaStringFunctions.infix)
+                                 parent_formula_default_str_fun=formula_str_funs.infix)
 """
 The class membership operator
 
@@ -679,7 +760,7 @@ The nature of being a class.
 """
 
 proves = ObjctObsolete(sym='⊢', dashed_name='proof-operator',
-                       parent_formula_default_str_fun=FormulaStringFunctions.infix)
+                       parent_formula_default_str_fun=formula_str_funs.infix)
 """
 The proves operator
 """
