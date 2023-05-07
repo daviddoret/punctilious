@@ -93,7 +93,7 @@ class cats:
     lemma = Cat('lemma')
     """."""
 
-    objct = Cat(cod='objct', ref_prefix='objct', sym_prefix='ℴ')
+    objct_decl = Cat(cod='objct', ref_prefix='objct', sym_prefix='ℴ')
     """An object declaration statement."""
 
     note = Cat(cod='note', ref_prefix='note', sym_prefix='𝒩')
@@ -102,7 +102,7 @@ class cats:
     proposition = Cat('proposition')
     """."""
 
-    relation = Cat(cod='relation', ref_prefix='relation', sym_prefix='◇')
+    rel_decl = Cat(cod='rel', ref_prefix='rel', sym_prefix='◇')
     """A relation is a specialized objct which is used semantically to denote a relation.
     By convention, the relation in a formula is positioned at the first position."""
 
@@ -112,7 +112,7 @@ class cats:
     theory = Cat(cod='theory', ref_prefix='theory', sym_prefix='𝔗')
     """A theory."""
 
-    variable = Cat(cod='variable', ref_prefix='variable', sym_prefix='𝒙')
+    var_decl = Cat(cod='var', ref_prefix='var', sym_prefix='𝒙')
     """A variable declaration statement."""
 
 
@@ -138,6 +138,18 @@ def listify(*args):
 
 class Statement:
     """A Statement is an abstract object that has a position in a theory."""
+
+    """A statement is tuple (t, ⊢, phi) where:
+    t is a theory,
+    ⊢ is the prove object,
+    phi is a formula-variable."""
+
+    """A formula A is a syntactic consequence within some formal system FS of a set Γ of formulas 
+    if there is a formal proof in FS of A from the set Γ. This is denoted Γ ⊢FS A.
+    Source: https://en.wikipedia.org/wiki/Logical_consequence"""
+
+    """Does not prove symbol: ⊬.
+    Prove symbol: ⊢."""
 
     def __init__(self, theory, cat, position, ref=None, sym=None, dashed_name=None):
         assert isinstance(theory, Theory) or theory is None  # The only object for which no theory linkage is
@@ -216,9 +228,9 @@ class Axiom(Statement):
                 return super().str(mod=mod, **kwargs)
 
 
-class Objct(Statement):
+class ObjctDecl(Statement):
     def __init__(self, theory, position, ref=None, sym=None, dashed_name=None):
-        cat = cats.objct
+        cat = cats.objct_decl
         super().__init__(theory=theory, cat=cat, position=position, ref=ref, sym=sym, dashed_name=dashed_name)
 
     def __str__(self):
@@ -236,11 +248,11 @@ class Objct(Statement):
 
 
 class ObjctObsolete:
-    def __init__(self, sym=None, dashed_name=None, uid=None, parent_formula_default_str_fun=None):
+    def __init__(self, sym=None, dashed_name=None, uid=None, formula_str_fun=None):
         self.uid = uuid.uuid4() if uid is None else uid
         self.sym = sym
         self.dashed_name = dashed_name
-        self.parent_formula_default_str_fun = parent_formula_default_str_fun
+        self.formula_str_fun = formula_str_fun
         """The default str function to be applied to the parent formula when this objct is the first component of 
         that formula."""
 
@@ -279,9 +291,11 @@ class ObjctObsolete:
         return self.sym
 
 
-class Relation(Statement):
+class RelDecl(Statement):
+    """A relation-declaration."""
+
     def __init__(self, theory, position, ref=None, sym=None, dashed_name=None, formula_str_fun=None):
-        cat = cats.relation
+        cat = cats.rel_decl
         # If formula_str_fun is not expressly defined,
         # we fallback on the function representation method.
         formula_str_fun = formula_str_funs.function if formula_str_fun is None else formula_str_fun
@@ -302,9 +316,9 @@ class Relation(Statement):
                 return super().str(mod=mod, **kwargs)
 
 
-class Variable(Statement):
+class VarDecl(Statement):
     def __init__(self, theory, position, ref=None, sym=None, dashed_name=None):
-        cat = cats.variable
+        cat = cats.var_decl
         super().__init__(theory=theory, cat=cat, position=position, ref=ref, sym=sym, dashed_name=dashed_name)
 
     def __str__(self):
@@ -362,13 +376,13 @@ def anti_variable_equal_to(phi, psi):
     # Retrieve phi's tuple if it is a FreeFormula
     phi_tup = phi.tup if isinstance(phi, FreeFormula) else phi
     # Embed phi in a tuple if it is a valid leaf object
-    phi_tup = tuple([phi]) if isinstance(phi, (Objct, Relation, Variable)) else phi_tup
+    phi_tup = tuple([phi]) if isinstance(phi, (ObjctDecl, RelDecl, VarDecl)) else phi_tup
     assert isinstance(phi_tup, tuple)
     assert psi is not None
     # Retrieve psi's tuple if it is a FreeFormula
     psi_tup = psi.tup if isinstance(psi, FreeFormula) else psi
     # Embed psi in a tuple if it is a valid leaf object
-    psi_tup = tuple([psi]) if isinstance(psi, (Objct, Relation, Variable)) else psi_tup
+    psi_tup = tuple([psi]) if isinstance(psi, (ObjctDecl, RelDecl, VarDecl)) else psi_tup
     assert isinstance(psi_tup, tuple)
     if len(phi_tup) != len(psi_tup):
         return False
@@ -381,8 +395,14 @@ def anti_variable_equal_to(phi, psi):
         return all(anti_variable_equal_to(phi_i, psi_i) for phi_i, psi_i in zip(phi_tup, psi_tup))
 
 
-leaf_classes = (Objct, Relation, Variable)
-leaf_cats = (cats.objct, cats.relation, cats.variable)
+def variable_equal_to(phi, psi):
+    # TODO: Implement this.
+    pass
+
+
+
+leaf_classes = (ObjctDecl, RelDecl, VarDecl)
+leaf_cats = (cats.objct_decl, cats.rel_decl, cats.var_decl)
 
 
 class FreeFormula:
@@ -408,9 +428,9 @@ class FreeFormula:
             # This is free-leaf-formula.
             assert isinstance(tup[0], leaf_classes)
             self.tup = tup
-            self.relation_set = frozenset([tup[0]]) if isinstance(tup[0], Relation) else frozenset()
-            self.objct_set = frozenset([tup[0]]) if isinstance(tup[0], Objct) else frozenset()
-            self.variable_set = frozenset([tup[0]]) if isinstance(tup[0], Variable) else frozenset()
+            self.relation_set = frozenset([tup[0]]) if isinstance(tup[0], RelDecl) else frozenset()
+            self.objct_set = frozenset([tup[0]]) if isinstance(tup[0], ObjctDecl) else frozenset()
+            self.variable_set = frozenset([tup[0]]) if isinstance(tup[0], VarDecl) else frozenset()
         else:
             # This is not a free-leaf-formula.
             # We must thus assure that all subformula are properly
@@ -425,6 +445,7 @@ class FreeFormula:
 
     def __repr__(self):
         return self.str(str_fun=formula_str_funs.formal)
+
     def __str__(self):
         return self.str()
 
@@ -455,12 +476,12 @@ class FreeFormula:
     def is_relation(self):
         """By convention, if the first component of a free-formula is a relation,
         then the free-relation is a free-relation-formula."""
-        return self.tup[0].cat == cats.relation
+        return self.tup[0].cat == cats.rel_decl
 
     def str(self, str_fun=None, is_subformula=False, **kwargs):
         if self.is_leaf:
             return f'({self.tup[0].sym})'
-        if str_fun is None and isinstance(self.tup[0], Relation):
+        if str_fun is None and isinstance(self.tup[0], RelDecl):
             # If str_fun is not expressly passed as a parameter,
             # and if this free-formula is a free-relation-formula,
             # then the default representation of the free-formula
@@ -510,8 +531,8 @@ class FormulaStatement(Statement):
                 if len(self.content) == 1 and self.content[0].is_formula_atomic_component:
                     return self.content[0].str(sym=True, **kwargs)
                 elif len(self.content) > 1 and self.content[0].is_object \
-                        and self.content[0].parent_formula_default_str_fun is not None:
-                    return self.content[0].parent_formula_default_str_fun(self, sub=is_subformula, sym=True, **kwargs)
+                        and self.content[0].formula_str_fun is not None:
+                    return self.content[0].formula_str_fun(self, sub=is_subformula, sym=True, **kwargs)
                 else:
                     raise Exception("Oops, no str_fun was found to convert this formula to string.")
             case _:
@@ -561,59 +582,6 @@ class Justification:
 
     def __str__(self):
         return self.str()
-
-
-class StatementObsolete:
-    """A statement is tuple (t, ⊢, phi) where:
-    t is a theory,
-    ⊢ is the prove object,
-    phi is a formula-variable."""
-
-    """A formula A is a syntactic consequence within some formal system FS of a set Γ of formulas 
-    if there is a formal proof in FS of A from the set Γ. This is denoted Γ ⊢FS A.
-    Source: https://en.wikipedia.org/wiki/Logical_consequence"""
-
-    """Does not prove symbol: ⊬.
-    Prove symbol: ⊢."""
-
-    def __init__(self, theory, counter, content, justification, cat=None):
-        assert isinstance(theory, Theory)
-        assert isinstance(counter, int)
-        # assert isinstance(content, (Axiom, Formula))
-        # assert isinstance(justification, Justification)
-        self.cat = cat
-        self.theory = theory
-        self.counter = counter
-        self.ref = f'statement-{self.theory.position}-{self.counter}'
-        self.content = content
-        self.justification = justification
-
-    def __str__(self):
-        return self.str()
-
-    def __repr__(self):
-        return f'statement: {self.str()}'
-
-    @staticmethod
-    def get_counter():
-        StatementObsolete._counter = StatementObsolete._counter + 1
-        return StatementObsolete._counter
-
-    def str(self, mod=None, **kwargs):
-        mod = rep_modes.ref if mod is None else mod
-        assert isinstance(mod, RepMode)
-        match mod:
-            case rep_modes.sym:
-                raise Exception('The symbol representation mode is not supported for statements.')
-            case rep_modes.ref:
-                return self.ref
-            case rep_modes.dashed_name:
-                raise Exception('The dashed-name representation mode is not supported for statements.')
-            case rep_modes.definition:
-                if self.cat == cats.note:
-                    return self.content.str(mod=rep_modes.definition)
-                else:
-                    return f'{self.ref}: {self.content} | {self.justification}'
 
 
 class Theory(Statement):
@@ -670,8 +638,8 @@ class Theory(Statement):
             assert phi.theory == self
             return phi
 
-        assert isinstance(phi, (tuple, Objct, Relation, Variable))
-        if isinstance(phi, (Objct, Relation, Variable)):
+        assert isinstance(phi, (tuple, ObjctDecl, RelDecl, VarDecl))
+        if isinstance(phi, (ObjctDecl, RelDecl, VarDecl)):
             # If phi is a leaf object,
             # embed it in a tuple for data structure consistency.
             phi = tuple([phi])
@@ -712,7 +680,7 @@ class Theory(Statement):
 
     def append_objct(self, sym=None, dashed_name=None):
         counter = self._get_statement_counter()
-        objct = Objct(theory=self, position=counter, sym=sym, dashed_name=dashed_name)
+        objct = ObjctDecl(theory=self, position=counter, sym=sym, dashed_name=dashed_name)
         self.statements.append(objct)
         if Theory.echo_statement:
             print(objct.str(mod=rep_modes.definition))
@@ -720,8 +688,8 @@ class Theory(Statement):
 
     def append_relation(self, sym=None, dashed_name=None, formula_str_fun=None):
         counter = self._get_statement_counter()
-        relation = Relation(theory=self, position=counter, sym=sym, dashed_name=dashed_name,
-                            formula_str_fun=formula_str_fun)
+        relation = RelDecl(theory=self, position=counter, sym=sym, dashed_name=dashed_name,
+                           formula_str_fun=formula_str_fun)
         self.statements.append(relation)
         if Theory.echo_statement:
             print(relation.str(mod=rep_modes.definition))
@@ -737,7 +705,7 @@ class Theory(Statement):
 
     def append_variable(self, sym=None, dashed_name=None):
         counter = self._get_statement_counter()
-        variable = Variable(theory=self, position=counter, sym=sym, dashed_name=dashed_name)
+        variable = VarDecl(theory=self, position=counter, sym=sym, dashed_name=dashed_name)
         self.statements.append(variable)
         if Theory.echo_statement:
             print(variable.str(mod=rep_modes.definition))
@@ -768,22 +736,23 @@ class Theory(Statement):
 
 
 universe_of_discourse = Theory(sym='𝒰', dashed_name='universe-of-discourse')
+uod = universe_of_discourse
 
-class_membership = ObjctObsolete(sym='is-a', dashed_name='class-membership',
-                                 parent_formula_default_str_fun=formula_str_funs.infix)
+class_membership = uod.append_relation(sym='is-a', dashed_name='class-membership',
+                                       formula_str_fun=formula_str_funs.infix)
 """
 The class membership operator
 
 Makes it possible to express membership to classes, such as natural numbers, truth values, etc.
 """
 
-class_nature = ObjctObsolete(sym='class', dashed_name='class')
+class_nature = uod.append_objct(sym='class', dashed_name='class')
 """
 The nature of being a class.
 """
 
-proves = ObjctObsolete(sym='⊢', dashed_name='proof-operator',
-                       parent_formula_default_str_fun=formula_str_funs.infix)
+proves = uod.append_relation(sym='⊢', dashed_name='proof-operator',
+                             formula_str_fun=formula_str_funs.infix)
 """
 The proves operator
 """

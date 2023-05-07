@@ -12,14 +12,14 @@ class TestPunctilious(TestCase):
         object_1 = theory.append_objct(sym=object_1_sym, dashed_name=object_1_dashed_name)
         self.assertTrue(object_1.sym == object_1_sym)
         self.assertTrue(object_1.dashed_name == object_1_dashed_name)
-        self.assertTrue(object_1.cat == core.cats.objct)
+        self.assertTrue(object_1.cat == core.cats.objct_decl)
 
         object_2_dashed_name = 'filled-circle'
         object_2_sym = '●'
         object_2 = theory.append_objct(sym=object_2_sym, dashed_name=object_2_dashed_name)
         self.assertTrue(object_2.sym == object_2_sym)
         self.assertTrue(object_2.dashed_name == object_2_dashed_name)
-        self.assertTrue(object_2.cat == core.cats.objct)
+        self.assertTrue(object_2.cat == core.cats.objct_decl)
 
         relation_1_sym = '⬨'
         relation_1_dashed_name = 'empty-lozenge'
@@ -27,7 +27,7 @@ class TestPunctilious(TestCase):
                                             formula_str_fun=core.formula_str_funs.infix)
         self.assertTrue(relation_1.sym == relation_1_sym)
         self.assertTrue(relation_1.dashed_name == relation_1_dashed_name)
-        self.assertTrue(relation_1.cat == core.cats.relation)
+        self.assertTrue(relation_1.cat == core.cats.rel_decl)
 
         relation_2_sym = '⬭'
         relation_2_dashed_name = 'empty-horizontal-ellipse'
@@ -35,7 +35,7 @@ class TestPunctilious(TestCase):
                                             formula_str_fun=core.formula_str_funs.function)
         self.assertTrue(relation_2.sym == relation_2_sym)
         self.assertTrue(relation_2.dashed_name == relation_2_dashed_name)
-        self.assertTrue(relation_2.cat == core.cats.relation)
+        self.assertTrue(relation_2.cat == core.cats.rel_decl)
 
         relation_3 = theory.append_relation(sym='▱', dashed_name='empty-parallelogram', formula_str_fun=core.formula_str_funs.infix)
         relation_4 = theory.append_relation(sym='◻', dashed_name='empty-square', formula_str_fun=core.formula_str_funs.infix)
@@ -45,14 +45,14 @@ class TestPunctilious(TestCase):
         variable_1 = theory.append_variable(sym=variable_1_sym, dashed_name=variable_1_dashed_name)
         self.assertTrue(variable_1.sym == variable_1_sym)
         self.assertTrue(variable_1.dashed_name == variable_1_dashed_name)
-        self.assertTrue(variable_1.cat == core.cats.variable)
+        self.assertTrue(variable_1.cat == core.cats.var_decl)
 
         variable_2_sym = '𝓨'
         variable_2_dashed_name = 'big-y'
         variable_2 = theory.append_variable(sym=variable_2_sym, dashed_name=variable_2_dashed_name)
         self.assertTrue(variable_2.sym == variable_2_sym)
         self.assertTrue(variable_2.dashed_name == variable_2_dashed_name)
-        self.assertTrue(variable_2.cat == core.cats.variable)
+        self.assertTrue(variable_2.cat == core.cats.var_decl)
 
         phi_1 = theory.assure_free_formula(phi=object_1)
         self.assertTrue(phi_1.str(str_fun=core.formula_str_funs.formal) == '(▼)')
