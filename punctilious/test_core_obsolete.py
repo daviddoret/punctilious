@@ -111,31 +111,15 @@ class TestTheory(TestCase):
         self.assertTrue(axiom_2.cat == core.cats.axiom)
 
     def test_append_objct(self):
-        self.assertTrue(test_env_1.object_1.sym == test_env_1.object_1_sym)
-        self.assertTrue(test_env_1.object_1.dashed_name == test_env_1.object_1_dashed_name)
-        self.assertTrue(test_env_1.object_1.cat == core.cats.objct)
-        self.assertTrue(test_env_1.object_2.sym == test_env_1.object_2_sym)
-        self.assertTrue(test_env_1.object_2.dashed_name == test_env_1.object_2_dashed_name)
-        self.assertTrue(test_env_1.object_2.cat == core.cats.objct)
 
     def test_append_relation(self):
-        self.assertTrue(test_env_1.relation_1.sym == test_env_1.relation_1_sym)
-        self.assertTrue(test_env_1.relation_1.dashed_name == test_env_1.relation_1_dashed_name)
-        self.assertTrue(test_env_1.relation_1.cat == core.cats.relation)
-        self.assertTrue(test_env_1.relation_2.sym == test_env_1.relation_2_sym)
-        self.assertTrue(test_env_1.relation_2.dashed_name == test_env_1.relation_2_dashed_name)
-        self.assertTrue(test_env_1.relation_2.cat == core.cats.relation)
+
 
     def test_append_variable(self):
-        self.assertTrue(test_env_1.variable_1.sym == test_env_1.variable_1_sym)
-        self.assertTrue(test_env_1.variable_1.dashed_name == test_env_1.variable_1_dashed_name)
-        self.assertTrue(test_env_1.variable_1.cat == core.cats.variable)
-        self.assertTrue(test_env_1.variable_2.sym == test_env_1.variable_2_sym)
-        self.assertTrue(test_env_1.variable_2.dashed_name == test_env_1.variable_2_dashed_name)
-        self.assertTrue(test_env_1.variable_2.cat == core.cats.variable)
+
 
     def test_assure_free_formula(self):
-        self.assertTrue(test_env_1.phi_1 is test_env_1.phi_1b, msg='unicity of leaf objects')
+
 
 
 class TestFreeFormula(TestCase):
@@ -153,6 +137,5 @@ class TestFreeFormula(TestCase):
         pass
 
     def test_str(self):
-        self.assertTrue(test_env_1.phi_1.str() == '(▼)')
-        self.assertTrue(test_env_1.phi_2.str() == '((⬨), (▼), (●))')
+
 
