@@ -91,8 +91,10 @@ class TestTheory(TestCase):
         note_2_text = 'This is another note.'
         note_1 = theory.append_note(text=note_1_text)
         self.assertTrue(note_1.text == note_1_text)
+        self.assertTrue(note_1.cat == core.cats.note)
         note_2 = theory.append_note(text=note_2_text)
         self.assertTrue(note_2.text == note_2_text)
+        self.assertTrue(note_2.cat == core.cats.note)
 
     def test_append_axiom(self):
         theory = core.Theory(dashed_name='test-axiom-theory')
@@ -102,27 +104,32 @@ class TestTheory(TestCase):
         axiom_2_citation = None
         axiom_1 = theory.append_axiom(text=axiom_1_text, citation=axiom_1_citation)
         self.assertTrue(axiom_1.text == axiom_1_text)
+        self.assertTrue(axiom_1.cat == core.cats.axiom)
         axiom_2 = theory.append_axiom(text=axiom_2_text, citation=axiom_2_citation)
         self.assertTrue(axiom_2.text == axiom_2_text)
+        self.assertTrue(axiom_2.cat == core.cats.axiom)
 
     def test_append_objct(self):
         theory = core.Theory(dashed_name='test-objct-theory')
         object_1_dashed_name = 'some-object'
         object_1 = theory.append_objct(dashed_name=object_1_dashed_name)
         self.assertTrue(object_1.dashed_name == object_1_dashed_name)
+        self.assertTrue(object_1.cat == core.cats.objct)
         object_2_dashed_name = 'another-object'
         object_2 = theory.append_objct(dashed_name=object_2_dashed_name)
         self.assertTrue(object_2.dashed_name == object_2_dashed_name)
+        self.assertTrue(object_2.cat == core.cats.objct)
 
     def test_append_relation(self):
         theory = core.Theory(dashed_name='test-relation-theory')
         relation_1_dashed_name = 'some-relation'
         relation_1 = theory.append_relation(dashed_name=relation_1_dashed_name)
         self.assertTrue(relation_1.dashed_name == relation_1_dashed_name)
+        self.assertTrue(relation_1.cat == core.cats.relation)
         relation_2_dashed_name = 'another-relation'
         relation_2 = theory.append_relation(dashed_name=relation_2_dashed_name)
         self.assertTrue(relation_2.dashed_name == relation_2_dashed_name)
-
+        self.assertTrue(relation_2.cat == core.cats.relation)
 
     def test_append_variable(self):
         theory = core.Theory(dashed_name='test-variable-theory')
