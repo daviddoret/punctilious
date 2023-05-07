@@ -393,7 +393,7 @@ class FreeFormula:
     def __init__(self, theory, tup):
         assert theory is not None and isinstance(theory, Theory)
         self.theory = theory
-        if isinstance(tup, (Objct, Relation, Variable)):
+        if isinstance(tup, (Objct, Relation, Variable)): XXXX MAKE THIS TUPLE A LEAF_TUPLE GLOBAL CONSTANT
             # If a leaf formula was passed as an instance of Objct or Variable,
             # pack it in a tuple for data structure consistency.
             tup = tuple([tup])
