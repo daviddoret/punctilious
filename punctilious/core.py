@@ -365,7 +365,7 @@ class formula_str_funs:
         return f'({components})'
 
 
-def anti_variable_equal_to(phi, psi):
+def formula_equality_by_variable_symbols(phi, psi):
     """Two free-formula phi and psi are antivariable-equal if and only
     the first-level-cardinality of x and y are equal,
     and for i = 1 to first-level-cardinality of phi,
@@ -392,13 +392,67 @@ def anti_variable_equal_to(phi, psi):
         # and thus we may rely on the python is operator to check equality.
         return phi_tup[0] is psi_tup[0]
     else:
-        return all(anti_variable_equal_to(phi_i, psi_i) for phi_i, psi_i in zip(phi_tup, psi_tup))
+        return all(formula_equality_by_variable_symbols(phi_i, psi_i) for phi_i, psi_i in zip(phi_tup, psi_tup))
 
 
-def variable_equal_to(phi, psi):
-    # TODO: Implement this.
-    pass
+def traverse_two_formula_trees(phi, psi, _var_list_1=None, _var_list_2=None):
+    """This function traverses simultaneously two formula-trees,
+    and returns False as soon as it identifies any inequality between them,
+    considering that Variables are not compared on names but on positions.
+    It eventually returns True if traversal is completed and no inequality were found.
+    """
+    assert phi is not None and psi is not None
+    _var_list_1 = list() if _var_list_1 is None else _var_list_1
+    _var_list_2 = list() if _var_list_2 is None else _var_list_2
+    assert isinstance(_var_list_1, list) and isinstance(_var_list_2, list)
+    # If phi or psi are FreeFormula, unpack their internal tuple-trees.
+    phi = phi.tup if isinstance(phi, FreeFormula) else phi
+    psi = psi.tup if isinstance(psi, FreeFormula) else psi
+    if type(phi) != type(psi):
+        # After FreeFormula unpacking, if the types of phi and psi
+        # are distinct, it follows that the two formula are unequal.
+        return False, _var_list_1, _var_list_2
+    if isinstance(phi, tuple) and isinstance(psi, tuple):
+        if len(phi) != len(psi):
+            return False, _var_list_1, _var_list_2
+        for component_1, component_2 in zip(phi, psi):
+            equality, _var_list_1, _var_list_2 = traverse_two_formula_trees(
+                component_1, component_2, _var_list_1, _var_list_2)
+            if not equality:
+                return False, _var_list_1, _var_list_2
+    else:
+        if isinstance(phi, (ObjctDecl, RelDecl)):
+            return phi is psi, _var_list_1, _var_list_2
+        elif isinstance(phi, VarDecl):
+            if phi not in _var_list_1:
+                _var_list_1.append(phi)
+            idx_1 = _var_list_1.index(phi)
+            if psi not in _var_list_2:
+                _var_list_2.append(psi)
+            idx_2 = _var_list_2.index(psi)
+            return idx_1 == idx_2, _var_list_1, _var_list_2
+        else:
+            raise TypeError()
 
+
+def formula_equality_by_variable_position(phi, psi, phi_positions=None, psi_positions=None):
+    """When comparing two formula, the names assigned to variables are not significant, i.e. if x = y, the (x + 3) = (y + 3).
+    Thus we are more interested in variable relative positions in the formula,
+    rather than their names."""
+    # RESUME WORK HERE.
+    assert phi is not None
+    # Retrieve phi's tuple if it is a FreeFormula
+    phi_tup = phi.tup if isinstance(phi, FreeFormula) else phi
+    # Embed phi in a tuple if it is a valid leaf object
+    phi_tup = tuple([phi]) if isinstance(phi, (ObjctDecl, RelDecl, VarDecl)) else phi_tup
+    assert isinstance(phi_tup, tuple)
+    assert psi is not None
+    # Retrieve psi's tuple if it is a FreeFormula
+    psi_tup = psi.tup if isinstance(psi, FreeFormula) else psi
+    # Embed psi in a tuple if it is a valid leaf object
+    psi_tup = tuple([psi]) if isinstance(psi, (ObjctDecl, RelDecl, VarDecl)) else psi_tup
+    assert isinstance(psi_tup, tuple)
+    return traverse_two_formula_trees(phi_tup, psi_tup)
 
 
 leaf_classes = (ObjctDecl, RelDecl, VarDecl)
@@ -461,7 +515,7 @@ class FreeFormula:
         and for i = 1 to first-level-cardinality of phi,
         phi_i is antivariable-equal with psi_i.
         Note: if x and y are antivariable-equal, they are variable-equal."""
-        return anti_variable_equal_to(self, psi)
+        return formula_equality_by_variable_symbols(self, psi)
 
     def is_variable_equal_to(self, psi):
         """Two formula phi and psi are variable-equal if and only if

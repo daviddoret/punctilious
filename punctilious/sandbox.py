@@ -1,15 +1,18 @@
 
+def traverse_two_tuple_trees(tree_1, tree_2):
+    if isinstance(tree_1, tuple) and isinstance(tree_2, tuple):
+        for component_1, component_2 in zip(tree_1, tree_2):
+            for sub_component_1, sub_component_2 in traverse_two_tuple_trees(component_1, component_2):
+                yield sub_component_1, sub_component_2
+    else:
+        yield tree_1, tree_2
 
-class subformula:
-    def __init__(self, internal_set):
-        self.internal_set = internal_set
+t1 = (1, 2, 3, (5, 6, 7), 4, 2, 2)
+t2 = (1, 2, 3, (5, 6, 7), 4, 1, 2)
 
-s1 = subformula(frozenset(['a','b','c']))
-s2 = subformula(frozenset(['a','c','f']))
-s3 = subformula(frozenset(['g','h']))
-super_1 = tuple([s1, s2, s3])
-super_set = frozenset().union(*[sub.internal_set for sub in super_1])
-print(super_set)
+for x, y in traverse_two_tuple_trees(t1, t2):
+    print([x, y])
 
-
-
+l1 = list([1,2,3])
+l1.append(5)
+print(l1)
