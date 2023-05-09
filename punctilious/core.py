@@ -477,7 +477,19 @@ def formula_variable_equivalence(phi, psi):
 
 
 def formula_variable_mapping(phi, mask, variable_set):
-    """"""
+    """This function extract variable values from a formula phi.
+
+    The function receives an input formula phi.
+    a formula mask that is identical to phi except for some unique variables
+    provided in the variable-set.
+
+    The function finds in phi the formula components
+    corresponding to the variables in mask.
+
+    It returns a pair bool, dict. The bool indicating if the
+    formula were compatible. And the variables with their values
+    in the dictionary.
+    """
 
     # Precondition: the set of variables contains only variables.
     assert all(isinstance(item, VarDecl) for item in variable_set)
@@ -501,10 +513,6 @@ def formula_variable_mapping(phi, mask, variable_set):
         # If _phi or _mask are FreeFormula, unpack their internal tuple-trees.
         _phi = _phi.tup if isinstance(_phi, FreeFormula) else _phi
         _mask = _mask.tup if isinstance(_mask, FreeFormula) else _mask
-        if type(_phi) != type(_mask):
-            # After FreeFormula unpacking, if the types of _phi and _psi
-            # are distinct, it follows that the two formula are unequal.
-            return False, _var_values
         if isinstance(_phi, tuple) and isinstance(_mask, tuple):
             if len(_phi) != len(_mask):
                 # If two tuples have distinct lengths,
@@ -522,15 +530,15 @@ def formula_variable_mapping(phi, mask, variable_set):
             # Remind that this tuple may only be a sub-formula nested in a larger formula.
             return True, _var_values
         else:
-            if isinstance(_phi, (ObjctDecl, RelDecl)):
+            if isinstance(_mask, (ObjctDecl, RelDecl)):
                 # We assume that objcts and relations are singletons,
                 # we may thus use the python is operator to check equality.
                 return _phi is _mask, _var_values
-            elif isinstance(_phi, VarDecl):
+            elif isinstance(_mask, VarDecl):
                 # Determine the relative-position of both variables.
-                if _phi in variable_set:
+                if _mask in variable_set:
                     # This is a variable for which we want to retrieve the value.
-                    _var_values[_phi] = _mask
+                    _var_values[_mask] = _phi
                     return True, _var_values
                 else:
                     # This is not a variable of interest, consider it
