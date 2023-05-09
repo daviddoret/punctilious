@@ -66,13 +66,18 @@ class TestPunctilious(TestCase):
         self.assertTrue(phi_1.str(str_fun=core.formula_str_funs.formal) == '(▼)')
         phi_1b = theory.assure_free_formula(phi=(object_1))
         self.assertTrue(phi_1 is phi_1b, msg='unicity of leaf free-formula')
+        self.assertTrue(core.formula_variable_equivalence(phi_1, phi_1), msg='formula variable-equivalence')
+        self.assertTrue(core.formula_variable_equivalence(phi_1, phi_1b), msg='formula variable-equivalence')
 
         phi_2 = theory.assure_free_formula(phi=(relation_1, object_1, object_2))
         self.assertTrue(phi_2.str(str_fun=core.formula_str_funs.formal) == '((⬨), (▼), (●))')
+        self.assertFalse(core.formula_variable_equivalence(phi_1, phi_2), msg='formula variable-equivalence')
+
         phi_3 = theory.assure_free_formula(phi=(relation_2, object_2, object_1))
         phi_4 = theory.assure_free_formula(phi=(relation_3, phi_2, phi_3))
         phi_4b = theory.assure_free_formula(phi=(relation_3, (relation_1, object_1, object_2), (relation_2, object_2, object_1)))
         self.assertTrue(phi_4 is phi_4b, msg='unicity of non-leaf free-formula')
+        self.assertTrue(core.formula_variable_equivalence(phi_4, phi_4b), msg='formula variable-equivalence')
 
         # Anti-variable equality and anti-variable inequality of free-formula
 
