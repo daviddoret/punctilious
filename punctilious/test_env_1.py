@@ -97,11 +97,13 @@ class TestPunctilious(TestCase):
         phi_10 = theory.assure_free_formula((relation_1, variable_big_x, object_1))
         phi_11 = theory.assure_free_formula((relation_1, variable_big_y, object_1))
         phi_12 = theory.assure_free_formula((relation_1, object_1, variable_big_y))
-        self.assertTrue(core.traverse_two_formula_trees(phi_10.tup, phi_11.tup))
-        self.assertFalse(core.traverse_two_formula_trees(phi_10.tup, phi_12.tup))
+        self.assertTrue(core.formula_variable_equivalence(phi_10, phi_11))
+        self.assertFalse(core.formula_variable_equivalence(phi_10, phi_12))
 
         phi_20_tup = (relation_1, variable_big_x, (relation_1, variable_big_x, variable_big_y))
         phi_21_tup = (relation_1, variable_big_b, (relation_1, variable_big_b, variable_big_a))
+        self.assertTrue(core.formula_variable_equivalence(phi_20_tup, phi_20_tup))
+        self.assertFalse(core.formula_variable_equivalence(phi_20_tup, phi_11))
 
 
         pass

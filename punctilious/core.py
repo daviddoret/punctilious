@@ -395,45 +395,78 @@ def formula_equality_by_variable_symbols(phi, psi):
         return all(formula_equality_by_variable_symbols(phi_i, psi_i) for phi_i, psi_i in zip(phi_tup, psi_tup))
 
 
-def traverse_two_formula_trees(phi, psi, _var_list_1=None, _var_list_2=None):
+def formula_variable_equivalence(phi, psi):
     """This function traverses simultaneously two formula-trees,
     and returns False as soon as it identifies any inequality between them,
     considering that Variables are not compared on names but on positions.
     It eventually returns True if traversal is completed and no inequality were found.
     """
-    assert phi is not None and psi is not None
-    _var_list_1 = list() if _var_list_1 is None else _var_list_1
-    _var_list_2 = list() if _var_list_2 is None else _var_list_2
-    assert isinstance(_var_list_1, list) and isinstance(_var_list_2, list)
-    # If phi or psi are FreeFormula, unpack their internal tuple-trees.
-    phi = phi.tup if isinstance(phi, FreeFormula) else phi
-    psi = psi.tup if isinstance(psi, FreeFormula) else psi
-    if type(phi) != type(psi):
-        # After FreeFormula unpacking, if the types of phi and psi
-        # are distinct, it follows that the two formula are unequal.
-        return False, _var_list_1, _var_list_2
-    if isinstance(phi, tuple) and isinstance(psi, tuple):
-        if len(phi) != len(psi):
+    def _recursion(_phi, _psi, _var_list_1=None, _var_list_2=None):
+        """To compute formula variable-equivalence,
+        we use a "private" recursive function that maintains
+        the list of variable relative-positions."""
+        assert _phi is not None and _psi is not None
+        # The variable lists "private" arguments used to capture
+        # the relative positions of variables, and thus enable
+        # the computation of whether two formula are variable-equivalent.
+        _var_list_1 = list() if _var_list_1 is None else _var_list_1
+        _var_list_2 = list() if _var_list_2 is None else _var_list_2
+        assert isinstance(_var_list_1, list) and isinstance(_var_list_2, list)
+        # If _phi or _psi are FreeFormula, unpack their internal tuple-trees.
+        _phi = _phi.tup if isinstance(_phi, FreeFormula) else _phi
+        _psi = _psi.tup if isinstance(_psi, FreeFormula) else _psi
+        if type(_phi) != type(_psi):
+            # After FreeFormula unpacking, if the types of _phi and _psi
+            # are distinct, it follows that the two formula are unequal.
             return False, _var_list_1, _var_list_2
-        for component_1, component_2 in zip(phi, psi):
-            equality, _var_list_1, _var_list_2 = traverse_two_formula_trees(
-                component_1, component_2, _var_list_1, _var_list_2)
-            if not equality:
+        if isinstance(_phi, tuple) and isinstance(_psi, tuple):
+            if len(_phi) != len(_psi):
+                # If two tuples have distinct lengths,
+                # it follows that the two formula are structurally unequal.
                 return False, _var_list_1, _var_list_2
-    else:
-        if isinstance(phi, (ObjctDecl, RelDecl)):
-            return phi is psi, _var_list_1, _var_list_2
-        elif isinstance(phi, VarDecl):
-            if phi not in _var_list_1:
-                _var_list_1.append(phi)
-            idx_1 = _var_list_1.index(phi)
-            if psi not in _var_list_2:
-                _var_list_2.append(psi)
-            idx_2 = _var_list_2.index(psi)
-            return idx_1 == idx_2, _var_list_1, _var_list_2
+            for component_1, component_2 in zip(_phi, _psi):
+                # Recursively call this function,
+                # and enrich the lists that store variable relative-positions.
+                equality, _var_list_1, _var_list_2 = _recursion(
+                    component_1, component_2, _var_list_1, _var_list_2)
+                if not equality:
+                    return False, _var_list_1, _var_list_2
+            # If we arrive here, it follows that all tuple components
+            # were pair-wise equal.
+            # Remind that this tuple may only be a sub-formula nested in a larger formula.
+            return True, _var_list_1, _var_list_2
         else:
-            raise TypeError()
+            if isinstance(_phi, (ObjctDecl, RelDecl)):
+                # We assume that objcts and relations are singletons,
+                # we may thus use the python is operator to check equality.
+                return _phi is _psi, _var_list_1, _var_list_2
+            elif isinstance(_phi, VarDecl):
+                # Variables are not compared directly for equality.
+                # In effect, an "x" or "y" variable is just a name and
+                # that name is not "semantically" part of the formula.
+                # In consequence, we must compare variables by their
+                # relative positions in the formula, to assure that,
+                # for example, ((x + 5) - (y * x)) ≅ ((r + 5) - (s * r)).
+                # To compute this we define several concepts:
+                # variable-list: given a formula _phi, its variable list is
+                #   the list of unique variables contained in _phi,
+                #   by order of appearance when doing formula-tree traversal.
+                # relative-position: given a variable x in a formula _phi,
+                #   its relative-position is its position in the variable-list of _phi.
+                if _phi not in _var_list_1:
+                    _var_list_1.append(_phi)
+                idx_1 = _var_list_1.index(_phi)
+                if _psi not in _var_list_2:
+                    _var_list_2.append(_psi)
+                idx_2 = _var_list_2.index(_psi)
+                # Now that we have determined the relative-position of the two
+                # variables, we may compare them.
+                return idx_1 == idx_2, _var_list_1, _var_list_2
+            else:
+                raise TypeError()
 
+    equality, var_list_1, var_list_2 = _recursion(phi, psi)
+    return equality
 
 def formula_equality_by_variable_position(phi, psi, phi_positions=None, psi_positions=None):
     """When comparing two formula, the names assigned to variables are not significant, i.e. if x = y, the (x + 3) = (y + 3).
@@ -452,7 +485,7 @@ def formula_equality_by_variable_position(phi, psi, phi_positions=None, psi_posi
     # Embed psi in a tuple if it is a valid leaf object
     psi_tup = tuple([psi]) if isinstance(psi, (ObjctDecl, RelDecl, VarDecl)) else psi_tup
     assert isinstance(psi_tup, tuple)
-    return traverse_two_formula_trees(phi_tup, psi_tup)
+    return formula_variable_equivalence(phi_tup, psi_tup)
 
 
 leaf_classes = (ObjctDecl, RelDecl, VarDecl)
