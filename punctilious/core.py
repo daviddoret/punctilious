@@ -397,9 +397,9 @@ def formula_equality_by_variable_symbols(phi, psi):
 
 def formula_variable_equivalence(phi, psi):
     """This function traverses simultaneously two formula-trees,
-    and returns False as soon as it identifies any inequality between them,
-    considering that Variables are not compared on names but on positions.
-    It eventually returns True if traversal is completed and no inequality were found.
+    and returns False as soon as it proves that phi and psi
+    are not variable-equivalent.
+    It eventually returns True if traversal is completed variable-equivalence is proven.
 
     Definitions:
 
@@ -537,14 +537,8 @@ class FreeFormula:
         return formula_equality_by_variable_symbols(self, psi)
 
     def is_variable_equal_to(self, psi):
-        """Two formula phi and psi are variable-equal if and only if
-        the first-level-cardinality of x and y are equal,
-        and for i = 1 to first-level-cardinality of phi,
-        phi_i is variable-equal with psi_i.
-        Note: if x and y are antivariable-equal, they are variable-equal."""
-        assert psi is not None and isinstance(psi, FreeFormula)
-        phi = self
-        return all(phi_i.is_variable_equal_to(psi_i) for phi_i, psi_i in zip(phi.tup, psi.tup))
+        """Returns true if this FreeFormula instance is variable-equivalent to psi."""
+        return formula_variable_equivalence(phi=self, psi=psi)
 
     def is_relation(self):
         """By convention, if the first component of a free-formula is a relation,
