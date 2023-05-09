@@ -106,9 +106,29 @@ class TestPunctilious(TestCase):
         self.assertFalse(core.formula_variable_equivalence(phi_10, phi_12))
 
         phi_20_tup = (relation_1, variable_big_x, (relation_1, variable_big_x, variable_big_y))
+        self.assertEqual(str(core.formula_component_count(phi_20_tup)), '{⬨: 2, 𝓧: 2, 𝓨: 1}')
         phi_21_tup = (relation_1, variable_big_b, (relation_1, variable_big_b, variable_big_a))
+        self.assertEqual(str(core.formula_component_count(phi_21_tup)), '{⬨: 2, 𝓑: 2, 𝓐: 1}')
         self.assertTrue(core.formula_variable_equivalence(phi_20_tup, phi_20_tup))
         self.assertFalse(core.formula_variable_equivalence(phi_20_tup, phi_11))
+
+        # FORMULA-TRANSFORMATION
+        phi_30_input = theory.assure_free_formula((relation_1, object_1, object_2))
+        self.assertEqual(str(core.formula_component_count(phi_30_input)), '{⬨: 1, ▼: 1, ●: 1}')
+        phi_30_mask = theory.assure_free_formula((relation_1, variable_big_x, variable_big_y))
+        phi_30_variable_set = frozenset([variable_big_x, variable_big_y])
+        phi_30_template = theory.assure_free_formula((relation_2, variable_big_y, variable_big_x))
+
+        # Requirement: variables in the set can only be used once in the mask,
+        #   because this will be used to retrieve variable values.
+
+        # Step 1: confirm compatibility of the mask with the input,
+        #   considering a set of variables V.
+
+        # Step 2: retrieve that variable values from the input
+
+        # Step 3: create a new formula as a copy of the template,
+        #   where variables are replaced by their values.
 
 
         pass

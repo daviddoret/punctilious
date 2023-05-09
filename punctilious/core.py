@@ -169,7 +169,8 @@ class Statement:
         self.dashed_name = dashed_name
 
     def __repr__(self):
-        return f'{self.ref} [{listify(self.sym, self.dashed_name)}]'
+        return self.ref if (self.dashed_name is None and self.sym is None) else\
+            (self.dashed_name if self.sym is None else self.sym)
 
     def __str__(self):
         return self.str()
@@ -473,6 +474,40 @@ def formula_variable_equivalence(phi, psi):
     equality, var_list_1, var_list_2 = _recursion(phi, psi)
     return equality
 
+def formula_component_count(phi):
+    """This function traverses a formula-tree,
+    and returns a dictionary of leaf components,
+    with the number of times every component appears in the formula.
+    """
+    def _recursion(_phi, _component_count=None):
+        """To compute formula variable-equivalence,
+        we use a "private" recursive function that maintains
+        the dictionary of component occurrences."""
+        assert _phi is not None
+        _component_count = dict() if _component_count is None else _component_count
+        assert isinstance(_component_count, dict)
+        # If _phi is a FreeFormula, unpack its internal tuple-trees.
+        _phi = _phi.tup if isinstance(_phi, FreeFormula) else _phi
+        if isinstance(_phi, tuple):
+            for component in _phi:
+                # Recursively call this function,
+                # and enrich the dictionary that store component occurrences.
+                _component_count = _recursion(component, _component_count)
+            # Remind that this tuple may only be a sub-formula nested in a larger formula.
+            return _component_count
+        else:
+            if isinstance(_phi, (ObjctDecl, RelDecl, VarDecl)):
+                # We assume that objcts, relations, and variables are singletons.
+                if _phi not in _component_count:
+                    _component_count[_phi] = 1
+                else:
+                    _component_count[_phi] = _component_count[_phi] + 1
+                return _component_count
+            else:
+                raise TypeError()
+
+    component_count = _recursion(_phi=phi, _component_count=None)
+    return component_count
 
 leaf_classes = (ObjctDecl, RelDecl, VarDecl)
 leaf_cats = (cats.objct_decl, cats.rel_decl, cats.var_decl)
