@@ -113,17 +113,19 @@ class TestPunctilious(TestCase):
         self.assertFalse(core.formula_variable_equivalence(phi_20_tup, phi_11))
 
         # FORMULA-TRANSFORMATION
-        phi_30_input = theory.assure_free_formula((relation_1, object_1, object_2))
-        self.assertEqual(str(core.formula_component_count(phi_30_input)), '{⬨: 1, ▼: 1, ●: 1}')
-        phi_30_mask = theory.assure_free_formula((relation_1, variable_big_x, variable_big_y))
-        phi_30_variable_set = frozenset([variable_big_x, variable_big_y])
+        phi_30_input = theory.assure_free_formula((relation_1, object_1))  # , object_2, variable_big_z))
+        self.assertEqual(str(core.formula_component_count(phi_30_input)), '{⬨: 1, ▼: 1}')  # , ●: 1, 𝓩: 1}')
+        phi_30_mask = theory.assure_free_formula((relation_1, variable_big_x))  # , variable_big_y, variable_big_z))
+        self.assertEqual(str(core.formula_component_count(phi_30_mask)), '{⬨: 1, 𝓧: 1}')  # , ●: 1, 𝓩: 1}')
+        phi_30_map_variable_set = frozenset([variable_big_x])  # , variable_big_y])
         phi_30_template = theory.assure_free_formula((relation_2, variable_big_y, variable_big_x))
 
-        # Requirement: variables in the set can only be used once in the mask,
-        #   because this will be used to retrieve variable values.
-
         # Step 1: confirm compatibility of the mask with the input,
-        #   considering a set of variables V.
+        #   considering a set of variables V. And retrieve the variable values.
+        compatibility, var_values = core.formula_variable_mapping(phi=phi_30_input, mask=phi_30_mask, variable_set=phi_30_map_variable_set)
+        self.assertTrue(compatibility, msg='compatibility of mask with input formula')
+        print(var_values)
+        pass
 
         # Step 2: retrieve that variable values from the input
 

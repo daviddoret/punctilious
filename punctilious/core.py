@@ -169,7 +169,7 @@ class Statement:
         self.dashed_name = dashed_name
 
     def __repr__(self):
-        return self.ref if (self.dashed_name is None and self.sym is None) else\
+        return self.ref if (self.dashed_name is None and self.sym is None) else \
             (self.dashed_name if self.sym is None else self.sym)
 
     def __str__(self):
@@ -418,6 +418,7 @@ def formula_variable_equivalence(phi, psi):
         and all their variable leafs relative-positions are pair-wise equal.
 
     """
+
     def _recursion(_phi, _psi, _var_list_1=None, _var_list_2=None):
         """To compute formula variable-equivalence,
         we use a "private" recursive function that maintains
@@ -444,9 +445,9 @@ def formula_variable_equivalence(phi, psi):
             for component_1, component_2 in zip(_phi, _psi):
                 # Recursively call this function,
                 # and enrich the lists that store variable relative-positions.
-                equality, _var_list_1, _var_list_2 = _recursion(
+                _equality, _var_list_1, _var_list_2 = _recursion(
                     component_1, component_2, _var_list_1, _var_list_2)
-                if not equality:
+                if not _equality:
                     return False, _var_list_1, _var_list_2
             # If we arrive here, it follows that all tuple components
             # were pair-wise equal.
@@ -474,11 +475,80 @@ def formula_variable_equivalence(phi, psi):
     equality, var_list_1, var_list_2 = _recursion(phi, psi)
     return equality
 
+
+def formula_variable_mapping(phi, mask, variable_set):
+    """"""
+
+    # Precondition: the set of variables contains only variables.
+    assert all(isinstance(item, VarDecl) for item in variable_set)
+
+    # Precondition: variables in the set can only be used once in the mask,
+    #   because they will be used to retrieve variable unique values.
+    mask_component_count = formula_component_count(mask)
+    assert all(value == 1 for key, value in mask_component_count.items()
+               if key in variable_set)
+
+    # Precondition: variables in the set are not present in the input formula.
+    #   I do not feel 100% confident that this is a necessary precondition.
+    input_component_count = formula_component_count(phi)
+    assert all(value not in input_component_count.keys() for value in variable_set)
+
+    def _recursion(_phi, _mask, _variable_set, _var_values=None):
+        """"""
+        assert _phi is not None and _mask is not None
+        _var_values = dict() if _var_values is None else _var_values
+        assert isinstance(_var_values, dict)
+        # If _phi or _mask are FreeFormula, unpack their internal tuple-trees.
+        _phi = _phi.tup if isinstance(_phi, FreeFormula) else _phi
+        _mask = _mask.tup if isinstance(_mask, FreeFormula) else _mask
+        if type(_phi) != type(_mask):
+            # After FreeFormula unpacking, if the types of _phi and _psi
+            # are distinct, it follows that the two formula are unequal.
+            return False, _var_values
+        if isinstance(_phi, tuple) and isinstance(_mask, tuple):
+            if len(_phi) != len(_mask):
+                # If two tuples have distinct lengths,
+                # it follows that the two formula are structurally unequal.
+                return False, _var_values
+            for component_1, component_2 in zip(_phi, _mask):
+                # Recursively call this function,
+                # and enrich the dictionary of variable values.
+                _compatibility, _var_values = _recursion(
+                    component_1, component_2, variable_set, _var_values)
+                if not _compatibility:
+                    return False, _var_values
+            # If we arrive here, it follows that all tuple components
+            # were pair-wise equal.
+            # Remind that this tuple may only be a sub-formula nested in a larger formula.
+            return True, _var_values
+        else:
+            if isinstance(_phi, (ObjctDecl, RelDecl)):
+                # We assume that objcts and relations are singletons,
+                # we may thus use the python is operator to check equality.
+                return _phi is _mask, _var_values
+            elif isinstance(_phi, VarDecl):
+                # Determine the relative-position of both variables.
+                if _phi in variable_set:
+                    # This is a variable for which we want to retrieve the value.
+                    _var_values[_phi] = _mask
+                    return True, _var_values
+                else:
+                    # This is not a variable of interest, consider it
+                    # as a normal object.
+                    return _phi is _mask, _var_values
+            else:
+                raise TypeError()
+
+    compatibility, var_values = _recursion(phi, mask, variable_set)
+    return compatibility, var_values
+
+
 def formula_component_count(phi):
     """This function traverses a formula-tree,
     and returns a dictionary of leaf components,
     with the number of times every component appears in the formula.
     """
+
     def _recursion(_phi, _component_count=None):
         """To compute formula variable-equivalence,
         we use a "private" recursive function that maintains
@@ -508,6 +578,7 @@ def formula_component_count(phi):
 
     component_count = _recursion(_phi=phi, _component_count=None)
     return component_count
+
 
 leaf_classes = (ObjctDecl, RelDecl, VarDecl)
 leaf_cats = (cats.objct_decl, cats.rel_decl, cats.var_decl)
