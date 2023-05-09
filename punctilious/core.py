@@ -476,7 +476,7 @@ def formula_variable_equivalence(phi, psi):
     return equality
 
 
-def formula_variable_mapping(phi, mask, variable_set):
+def extract_variable_values_from_formula(phi, mask, variable_set):
     """This function extract variable values from a formula phi.
 
     The function receives an input formula phi.
@@ -549,6 +549,44 @@ def formula_variable_mapping(phi, mask, variable_set):
 
     compatibility, var_values = _recursion(phi, mask, variable_set)
     return compatibility, var_values
+
+
+def substitute_formula_components(phi, substitutions):
+    phi = phi.tup if isinstance(phi, FreeFormula) else phi
+    assert isinstance(phi, tuple)
+    assert isinstance(substitutions, dict)
+
+    def _recursion(_phi, _substitutions):
+        assert _phi is not None
+        # If _phi is a FreeFormula, unpack its internal tuple-trees.
+        _phi = _phi.tup if isinstance(_phi, FreeFormula) else _phi
+        if isinstance(_phi, tuple):
+            # Substitute components in that list.
+            _psi = tuple(substitutions[component]
+                         if (component in substitutions)
+                         else component
+                         for component in _phi)
+            # Recursively call the function on sub-tuples.
+            _psi = tuple(_recursion(_phi=component, _substitutions=_substitutions)
+                         if (isinstance(component, tuple))
+                         else component
+                         for component in _phi)
+            return _psi
+        else:
+            if isinstance(_phi, (ObjctDecl, RelDecl, VarDecl)):
+                return substitutions[_phi] if _phi in substitutions else _phi
+            else:
+                raise TypeError()
+
+    psi = _recursion(_phi=phi, _substitutions=substitutions)
+    return psi
+
+
+def transform_formula(phi, mask, variable_set, template):
+    compatibility, variable_values = extract_variable_values_from_formula(phi=phi, mask=mask, variable_set=variable_set)
+    assert compatibility
+
+    return compatibility, None
 
 
 def formula_component_count(phi):
