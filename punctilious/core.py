@@ -400,6 +400,22 @@ def formula_variable_equivalence(phi, psi):
     and returns False as soon as it identifies any inequality between them,
     considering that Variables are not compared on names but on positions.
     It eventually returns True if traversal is completed and no inequality were found.
+
+    Definitions:
+
+    variable-ordered-set: given a formula phi, its variable-ordered-set is
+        the ordered-set of variables contained in phi (including nesting),
+        by order of appearance when doing a formula-tree traversal,
+        that is depth-first and follows the sequence of formula components.
+
+    variable-relative-position: given a variable x in a formula phi,
+        its variable-relative-position is its position in the variable-ordered-set of phi.
+
+    formula-variable-equivalence: two free-formula phi and psi are variable-equivalent,
+        if and only if their formula-trees are structurally-equivalent,
+        and all their objct and relation leafs are pair-wise equal,
+        and all their variable leafs relative-positions are pair-wise equal.
+
     """
     def _recursion(_phi, _psi, _var_list_1=None, _var_list_2=None):
         """To compute formula variable-equivalence,
@@ -441,18 +457,7 @@ def formula_variable_equivalence(phi, psi):
                 # we may thus use the python is operator to check equality.
                 return _phi is _psi, _var_list_1, _var_list_2
             elif isinstance(_phi, VarDecl):
-                # Variables are not compared directly for equality.
-                # In effect, an "x" or "y" variable is just a name and
-                # that name is not "semantically" part of the formula.
-                # In consequence, we must compare variables by their
-                # relative positions in the formula, to assure that,
-                # for example, ((x + 5) - (y * x)) ≅ ((r + 5) - (s * r)).
-                # To compute this we define several concepts:
-                # variable-list: given a formula _phi, its variable list is
-                #   the list of unique variables contained in _phi,
-                #   by order of appearance when doing formula-tree traversal.
-                # relative-position: given a variable x in a formula _phi,
-                #   its relative-position is its position in the variable-list of _phi.
+                # Determine the relative-position of both variables.
                 if _phi not in _var_list_1:
                     _var_list_1.append(_phi)
                 idx_1 = _var_list_1.index(_phi)
@@ -467,25 +472,6 @@ def formula_variable_equivalence(phi, psi):
 
     equality, var_list_1, var_list_2 = _recursion(phi, psi)
     return equality
-
-def formula_equality_by_variable_position(phi, psi, phi_positions=None, psi_positions=None):
-    """When comparing two formula, the names assigned to variables are not significant, i.e. if x = y, the (x + 3) = (y + 3).
-    Thus we are more interested in variable relative positions in the formula,
-    rather than their names."""
-    # RESUME WORK HERE.
-    assert phi is not None
-    # Retrieve phi's tuple if it is a FreeFormula
-    phi_tup = phi.tup if isinstance(phi, FreeFormula) else phi
-    # Embed phi in a tuple if it is a valid leaf object
-    phi_tup = tuple([phi]) if isinstance(phi, (ObjctDecl, RelDecl, VarDecl)) else phi_tup
-    assert isinstance(phi_tup, tuple)
-    assert psi is not None
-    # Retrieve psi's tuple if it is a FreeFormula
-    psi_tup = psi.tup if isinstance(psi, FreeFormula) else psi
-    # Embed psi in a tuple if it is a valid leaf object
-    psi_tup = tuple([psi]) if isinstance(psi, (ObjctDecl, RelDecl, VarDecl)) else psi_tup
-    assert isinstance(psi_tup, tuple)
-    return formula_variable_equivalence(phi_tup, psi_tup)
 
 
 leaf_classes = (ObjctDecl, RelDecl, VarDecl)

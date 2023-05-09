@@ -63,7 +63,7 @@ class TestPunctilious(TestCase):
 
 
         phi_1 = theory.assure_free_formula(phi=object_1)
-        self.assertTrue(phi_1.str(str_fun=core.formula_str_funs.formal) == '(▼)')
+        self.assertTrue(phi_1.str(str_fun=core.formula_str_funs.formal) == '(▼)', msg='formal representation of leaf free-formula')
         phi_1b = theory.assure_free_formula(phi=(object_1))
         self.assertTrue(phi_1 is phi_1b, msg='unicity of leaf free-formula')
         self.assertTrue(core.formula_variable_equivalence(phi_1, phi_1), msg='formula variable-equivalence')
