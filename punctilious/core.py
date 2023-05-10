@@ -490,6 +490,11 @@ def extract_variable_values_from_formula(phi, mask, variable_set):
     formula were compatible. And the variables with their values
     in the dictionary.
     """
+    phi = phi.tup if isinstance(phi, FreeFormula) else phi
+    assert isinstance(phi, tuple)
+    mask = mask.tup if isinstance(mask, FreeFormula) else mask
+    assert isinstance(mask, tuple)
+    assert isinstance(variable_set, frozenset)
 
     # Precondition: the set of variables contains only variables.
     assert all(isinstance(item, VarDecl) for item in variable_set)
@@ -568,16 +573,6 @@ def substitute_formula_components(phi, substitutions):
         # If _phi is a FreeFormula, unpack its internal tuple-trees.
         _phi = _phi.tup if isinstance(_phi, FreeFormula) else _phi
         if isinstance(_phi, tuple):
-            # Substitute components in that list.
-            #_psi = tuple(substitutions[component]
-            #             if (component in substitutions)
-            #             else component
-            #             for component in _phi)
-            # Recursively call the function on sub-tuples.
-            #_psi = tuple(_recursion(_phi=component, _substitutions=_substitutions)
-            #             if (isinstance(component, tuple))
-            #             else component
-            #             for component in _psi)
             _psi = tuple(_recursion(_phi=component, _substitutions=_substitutions) for component in _phi)
             return _psi
         else:

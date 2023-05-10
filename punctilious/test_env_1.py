@@ -126,34 +126,28 @@ class TestPunctilious(TestCase):
         self.assertTrue(core.formula_variable_equivalence(phi_20_tup, phi_20_tup))
         self.assertFalse(core.formula_variable_equivalence(phi_20_tup, phi_11))
 
-        print('phi-30: variable extraction')
+        print('phi-30')
 
         phi_30_input = theory.assure_free_formula((relation_1, object_1))  # , object_2, variable_big_z))
         self.assertEqual(str(core.formula_component_count(phi_30_input)), '{⬨: 1, ▼: 1}')  # , ●: 1, 𝓩: 1}')
         phi_30_mask = theory.assure_free_formula((relation_1, variable_big_x))  # , variable_big_y, variable_big_z))
         self.assertEqual(str(core.formula_component_count(phi_30_mask)), '{⬨: 1, 𝓧: 1}')  # , ●: 1, 𝓩: 1}')
         phi_30_map_variable_set = frozenset([variable_big_x])  # , variable_big_y])
-
-        # Step 1: confirm compatibility of the mask with the input,
-        #   considering a set of variables V. And retrieve the variable values.
-        compatibility, var_values = core.extract_variable_values_from_formula(phi=phi_30_input, mask=phi_30_mask,
-                                                                              variable_set=phi_30_map_variable_set)
+        compatibility, var_values = core.extract_variable_values_from_formula(phi=phi_30_input, mask=phi_30_mask, variable_set=phi_30_map_variable_set)
         self.assertTrue(compatibility, msg='extract_variable_values_from_formula(): compatibility')
         self.assertEqual('{𝓧: ▼}', str(var_values), msg='extract_variable_values_from_formula(): values')
-
-        # Step 2: create a new formula as a copy of the template,
-        #   where variables are replaced by their values.
         phi_30_template = theory.assure_free_formula((relation_2, variable_big_y, variable_big_x))
         compatibility, phi_30_output = core.transform_formula(phi=phi_30_input, mask=phi_30_mask,
                                                               variable_set=phi_30_map_variable_set,
                                                               template=phi_30_template)
+        self.assertTrue(compatibility, msg='transform_formula()')
+        print(phi_30_output) # COMPLETE HERE
 
-        print('phi-40: component substitutions')
+        print('phi-40')
 
         phi_40_a = theory.assure_free_formula((relation_1, object_1, variable_big_x, object_2, relation_2, object_1,
                                                variable_big_x, variable_big_y, variable_big_z))
         self.assertEqual('((⬨), (▼), (𝓧), (●), (⬭), (▼), (𝓧), (𝓨), (𝓩))', phi_40_a.str())
         phi_40_b = core.substitute_formula_components(phi=phi_40_a, substitutions={object_1: object_2})
-        #######REPRENDRE ICI LE MECANISME DE SUBSTITUTION SIMPLE
-        print(phi_40_b)
+        self.assertEqual('((⬨), (●), (𝓧), (●), (⬭), (●), (𝓧), (𝓨), (𝓩))', phi_40_b.str(), msg='substitute_formula_components()')
         pass
