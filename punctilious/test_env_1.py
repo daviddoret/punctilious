@@ -88,7 +88,7 @@ class TestPunctilious(TestCase):
         self.assertTrue(phi_4 is phi_4b, msg='unicity of non-leaf free-formula')
         self.assertTrue(core.formula_variable_equivalence(phi_4, phi_4b), msg='formula_variable_equivalence()')
         phi_4c = core.substitute_formula_components(phi=phi_4b, substitutions={relation_1: relation_4, object_2: object_1, object_1: object_2})
-        self.assertEqual('((▱), ((◻), (●), (▼)), ((⬭), (▼), (●)))', phi_4c.str(str_fun=core.formula_str_funs.formal), msg='FreeFormula.str()')
+        self.assertEqual('((▱), ((◻), (●), (▼)), ((⬭), (▼), (●)))', phi_4c.str(str_fun=core.formula_str_funs.formal), msg='substitute_formula_components()')
         #self.assertEqual('((◻), (▼), (▼))', phi_2a.str(str_fun=core.formula_str_funs.formal), msg='substitute_formula_components')
 
         # Anti-variable equality and anti-variable inequality of free-formula
@@ -138,8 +138,8 @@ class TestPunctilious(TestCase):
         #   considering a set of variables V. And retrieve the variable values.
         compatibility, var_values = core.extract_variable_values_from_formula(phi=phi_30_input, mask=phi_30_mask,
                                                                               variable_set=phi_30_map_variable_set)
-        self.assertTrue(compatibility, msg='compatibility of mask with input formula')
-        print(var_values)
+        self.assertTrue(compatibility, msg='extract_variable_values_from_formula(): compatibility')
+        self.assertEqual('{𝓧: ▼}', str(var_values), msg='extract_variable_values_from_formula(): values')
 
         # Step 2: create a new formula as a copy of the template,
         #   where variables are replaced by their values.
