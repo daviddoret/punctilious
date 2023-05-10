@@ -552,6 +552,13 @@ def extract_variable_values_from_formula(phi, mask, variable_set):
 
 
 def substitute_formula_components(phi, substitutions):
+    """This functions receives a free-formula 𝛷 and a dictionary of substitution pairs (𝜑, 𝜓),
+    where 𝜑 are unique.
+    It generates a new free-formula 𝛹 that is an exact copy of 𝛷,
+    except that every component 𝜑 in 𝛷 is substituted by the component 𝜓
+    if there is a pair (𝜑, 𝜓) in the dictionary."""
+    return_free_formula_type = True if isinstance(phi, FreeFormula) else False
+    theory = phi.theory if isinstance(phi, FreeFormula) else None
     phi = phi.tup if isinstance(phi, FreeFormula) else phi
     assert isinstance(phi, tuple)
     assert isinstance(substitutions, dict)
@@ -562,15 +569,16 @@ def substitute_formula_components(phi, substitutions):
         _phi = _phi.tup if isinstance(_phi, FreeFormula) else _phi
         if isinstance(_phi, tuple):
             # Substitute components in that list.
-            _psi = tuple(substitutions[component]
-                         if (component in substitutions)
-                         else component
-                         for component in _phi)
+            #_psi = tuple(substitutions[component]
+            #             if (component in substitutions)
+            #             else component
+            #             for component in _phi)
             # Recursively call the function on sub-tuples.
-            _psi = tuple(_recursion(_phi=component, _substitutions=_substitutions)
-                         if (isinstance(component, tuple))
-                         else component
-                         for component in _phi)
+            #_psi = tuple(_recursion(_phi=component, _substitutions=_substitutions)
+            #             if (isinstance(component, tuple))
+            #             else component
+            #             for component in _psi)
+            _psi = tuple(_recursion(_phi=component, _substitutions=_substitutions) for component in _phi)
             return _psi
         else:
             if isinstance(_phi, (ObjctDecl, RelDecl, VarDecl)):
@@ -579,6 +587,14 @@ def substitute_formula_components(phi, substitutions):
                 raise TypeError()
 
     psi = _recursion(_phi=phi, _substitutions=substitutions)
+
+    if return_free_formula_type:
+        # If a FreeFormula was received as input,
+        # return a FreeFormula as output.
+        # Conversely, if a tuple was received as input,
+        # a tuple is returned as output.
+        psi = theory.assure_free_formula(psi)
+
     return psi
 
 
