@@ -594,10 +594,24 @@ def substitute_formula_components(phi, substitutions):
 
 
 def transform_formula(phi, mask, variable_set, template):
-    compatibility, variable_values = extract_variable_values_from_formula(phi=phi, mask=mask, variable_set=variable_set)
-    assert compatibility
+    """This function receives a free-formula 𝛷.
+    It extracts variable values from 𝛷 using a mask formula, and a variable-set.
+    It then returns a new formula 𝛹 that is an exact copy of the template formula,
+    except that its components that are elements of the variable-set
+    are substituted by the variable values.
 
-    return compatibility, None
+    Sample:
+    𝛷 = (5 + 4) / (3 * 9)
+    mask = (5 + x) / y
+    variable-set = {x, y}
+    template = (y / x) + 1
+    extraction of x: 4
+    extraction of y: (3 * 9)
+    output = ((3 * 9) / 4) + 1
+    """
+    compatibility, variable_values = extract_variable_values_from_formula(phi=phi, mask=mask, variable_set=variable_set)
+    psi = substitute_formula_components(phi=template, substitutions=variable_values) if compatibility else None
+    return compatibility, psi
 
 
 def formula_component_count(phi):

@@ -128,20 +128,20 @@ class TestPunctilious(TestCase):
 
         print('phi-30')
 
-        phi_30_input = theory.assure_free_formula((relation_1, object_1))  # , object_2, variable_big_z))
-        self.assertEqual(str(core.formula_component_count(phi_30_input)), '{⬨: 1, ▼: 1}')  # , ●: 1, 𝓩: 1}')
-        phi_30_mask = theory.assure_free_formula((relation_1, variable_big_x))  # , variable_big_y, variable_big_z))
-        self.assertEqual(str(core.formula_component_count(phi_30_mask)), '{⬨: 1, 𝓧: 1}')  # , ●: 1, 𝓩: 1}')
-        phi_30_map_variable_set = frozenset([variable_big_x])  # , variable_big_y])
-        compatibility, var_values = core.extract_variable_values_from_formula(phi=phi_30_input, mask=phi_30_mask, variable_set=phi_30_map_variable_set)
-        self.assertTrue(compatibility, msg='extract_variable_values_from_formula(): compatibility')
+        phi_30_input = theory.assure_free_formula((relation_1, object_1))
+        self.assertEqual(str(core.formula_component_count(phi_30_input)), '{⬨: 1, ▼: 1}')
+        phi_30_mask = theory.assure_free_formula((relation_1, variable_big_x))
+        self.assertEqual(str(core.formula_component_count(phi_30_mask)), '{⬨: 1, 𝓧: 1}')
+        phi_30_map_variable_set = frozenset([variable_big_x])
+        phi_30_compatibility, var_values = core.extract_variable_values_from_formula(phi=phi_30_input, mask=phi_30_mask, variable_set=phi_30_map_variable_set)
+        self.assertTrue(phi_30_compatibility, msg='extract_variable_values_from_formula(): compatibility')
         self.assertEqual('{𝓧: ▼}', str(var_values), msg='extract_variable_values_from_formula(): values')
         phi_30_template = theory.assure_free_formula((relation_2, variable_big_y, variable_big_x))
-        compatibility, phi_30_output = core.transform_formula(phi=phi_30_input, mask=phi_30_mask,
+        phi_30_compatibility, phi_30_transformed = core.transform_formula(phi=phi_30_input, mask=phi_30_mask,
                                                               variable_set=phi_30_map_variable_set,
                                                               template=phi_30_template)
-        self.assertTrue(compatibility, msg='transform_formula()')
-        print(phi_30_output) # COMPLETE HERE
+        self.assertTrue(phi_30_compatibility, msg='transform_formula()')
+        self.assertEqual('((⬭), (𝓨), (▼))', str(phi_30_transformed), msg='transform_formula()')
 
         print('phi-40')
 
