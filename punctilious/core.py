@@ -366,7 +366,7 @@ class formula_str_funs:
         return f'({components})'
 
 
-def formula_equality_by_variable_symbols(phi, psi):
+def name_equivalence(phi, psi):
     """Two free-formula phi and psi are antivariable-equal if and only
     the first-level-cardinality of x and y are equal,
     and for i = 1 to first-level-cardinality of phi,
@@ -393,10 +393,10 @@ def formula_equality_by_variable_symbols(phi, psi):
         # and thus we may rely on the python is operator to check equality.
         return phi_tup[0] is psi_tup[0]
     else:
-        return all(formula_equality_by_variable_symbols(phi_i, psi_i) for phi_i, psi_i in zip(phi_tup, psi_tup))
+        return all(name_equivalence(phi_i, psi_i) for phi_i, psi_i in zip(phi_tup, psi_tup))
 
 
-def formula_variable_equivalence(phi, psi):
+def variable_equivalence(phi, psi):
     """This function traverses simultaneously two formula-trees,
     and returns False as soon as it proves that phi and psi
     are not variable-equivalent.
@@ -711,11 +711,11 @@ class FreeFormula:
         and for i = 1 to first-level-cardinality of phi,
         phi_i is antivariable-equal with psi_i.
         Note: if x and y are antivariable-equal, they are variable-equal."""
-        return formula_equality_by_variable_symbols(self, psi)
+        return name_equivalence(self, psi)
 
     def is_variable_equal_to(self, psi):
         """Returns true if this FreeFormula instance is variable-equivalent to psi."""
-        return formula_variable_equivalence(phi=self, psi=psi)
+        return variable_equivalence(phi=self, psi=psi)
 
     def is_relation(self):
         """By convention, if the first component of a free-formula is a relation,

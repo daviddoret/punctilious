@@ -69,14 +69,14 @@ class TestPunctilious(TestCase):
                          msg='FreeFormula.str()')
         phi_1b = theory.assure_free_formula(phi=(object_1))
         self.assertIs(phi_1, phi_1b, msg='unicity of leaf free-formula')
-        self.assertTrue(core.formula_variable_equivalence(phi_1, phi_1), msg='formula_variable_equivalence()')
-        self.assertTrue(core.formula_variable_equivalence(phi_1, phi_1b), msg='formula_variable_equivalence()')
+        self.assertTrue(core.variable_equivalence(phi_1, phi_1), msg='formula_variable_equivalence()')
+        self.assertTrue(core.variable_equivalence(phi_1, phi_1b), msg='formula_variable_equivalence()')
         phi_1c = core.substitute_subformula(phi=phi_1, substitutions={object_1: object_2})
         self.assertEqual('(●)', phi_1c.str(str_fun=core.formula_str_funs.formal), msg='substitute_formula_components()')
 
         phi_2 = theory.assure_free_formula(phi=(relation_1, object_1, object_2))
         self.assertEqual('((⬨), (▼), (●))', phi_2.str(str_fun=core.formula_str_funs.formal), msg='FreeFormula.str()')
-        self.assertFalse(core.formula_variable_equivalence(phi_1, phi_2), msg='formula_variable_equivalence()')
+        self.assertFalse(core.variable_equivalence(phi_1, phi_2), msg='formula_variable_equivalence()')
         phi_2a = core.substitute_subformula(phi=phi_2, substitutions={relation_1: relation_4, object_2: object_1})
         self.assertEqual('((◻), (▼), (▼))', phi_2a.str(str_fun=core.formula_str_funs.formal), msg='substitute_formula_components()')
 
@@ -86,26 +86,26 @@ class TestPunctilious(TestCase):
             phi=(relation_3, (relation_1, object_1, object_2), (relation_2, object_2, object_1)))
         self.assertEqual('((▱), ((⬨), (▼), (●)), ((⬭), (●), (▼)))', phi_4b.str(str_fun=core.formula_str_funs.formal), msg='FreeFormula.str()')
         self.assertTrue(phi_4 is phi_4b, msg='unicity of non-leaf free-formula')
-        self.assertTrue(core.formula_variable_equivalence(phi_4, phi_4b), msg='formula_variable_equivalence()')
+        self.assertTrue(core.variable_equivalence(phi_4, phi_4b), msg='formula_variable_equivalence()')
         phi_4c = core.substitute_subformula(phi=phi_4b, substitutions={relation_1: relation_4, object_2: object_1, object_1: object_2})
         self.assertEqual('((▱), ((◻), (●), (▼)), ((⬭), (▼), (●)))', phi_4c.str(str_fun=core.formula_str_funs.formal), msg='substitute_formula_components()')
         #self.assertEqual('((◻), (▼), (▼))', phi_2a.str(str_fun=core.formula_str_funs.formal), msg='substitute_formula_components')
 
         # Anti-variable equality and anti-variable inequality of free-formula
 
-        self.assertTrue(core.formula_equality_by_variable_symbols(
+        self.assertTrue(core.name_equivalence(
             phi=(object_1),
             psi=(object_1)),
             msg='anti-variable-equality of leaf free-formula')
-        self.assertFalse(core.formula_equality_by_variable_symbols(
+        self.assertFalse(core.name_equivalence(
             phi=(object_1),
             psi=(object_2)),
             msg='anti-variable-inequality of leaf free-formula')
-        self.assertTrue(core.formula_equality_by_variable_symbols(
+        self.assertTrue(core.name_equivalence(
             phi=(relation_1, (relation_2, object_1, object_2), (relation_3, object_2, object_1)),
             psi=(relation_1, (relation_2, object_1, object_2), (relation_3, object_2, object_1))),
             msg='anti-variable-equality of non-leaf free-formula')
-        self.assertFalse(core.formula_equality_by_variable_symbols(
+        self.assertFalse(core.name_equivalence(
             phi=(relation_1, (relation_2, object_1, object_2), (relation_3, object_2, object_1)),
             psi=(relation_1, (relation_2, object_1, object_2), (relation_3, object_1, object_2))),
             msg='anti-variable-inequality of non-leaf free-formula')
@@ -114,8 +114,8 @@ class TestPunctilious(TestCase):
         phi_10 = theory.assure_free_formula((relation_1, variable_big_x, object_1))
         phi_11 = theory.assure_free_formula((relation_1, variable_big_y, object_1))
         phi_12 = theory.assure_free_formula((relation_1, object_1, variable_big_y))
-        self.assertTrue(core.formula_variable_equivalence(phi_10, phi_11))
-        self.assertFalse(core.formula_variable_equivalence(phi_10, phi_12))
+        self.assertTrue(core.variable_equivalence(phi_10, phi_11))
+        self.assertFalse(core.variable_equivalence(phi_10, phi_12))
 
         print('phi-20: formula-variable-equivalence')
 
@@ -123,8 +123,8 @@ class TestPunctilious(TestCase):
         self.assertEqual(str(core.count_leafs(phi_20_tup)), '{⬨: 2, 𝓧: 2, 𝓨: 1}')
         phi_21_tup = (relation_1, variable_big_b, (relation_1, variable_big_b, variable_big_a))
         self.assertEqual(str(core.count_leafs(phi_21_tup)), '{⬨: 2, 𝓑: 2, 𝓐: 1}')
-        self.assertTrue(core.formula_variable_equivalence(phi_20_tup, phi_20_tup))
-        self.assertFalse(core.formula_variable_equivalence(phi_20_tup, phi_11))
+        self.assertTrue(core.variable_equivalence(phi_20_tup, phi_20_tup))
+        self.assertFalse(core.variable_equivalence(phi_20_tup, phi_11))
 
         print('phi-30')
 
