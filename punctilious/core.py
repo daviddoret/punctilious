@@ -476,7 +476,7 @@ def formula_variable_equivalence(phi, psi):
     return equality
 
 
-def extract_variable_values_from_formula(phi, mask, variable_set):
+def extract_variable_values(phi, mask, variable_set):
     """This function extract variable values from a formula phi.
 
     The function receives an input formula phi.
@@ -501,13 +501,13 @@ def extract_variable_values_from_formula(phi, mask, variable_set):
 
     # Precondition: variables in the set can only be used once in the mask,
     #   because they will be used to retrieve variable unique values.
-    mask_component_count = formula_component_count(mask)
+    mask_component_count = count_leafs(mask)
     assert all(value == 1 for key, value in mask_component_count.items()
                if key in variable_set)
 
     # Precondition: variables in the set are not present in the input formula.
     #   I do not feel 100% confident that this is a necessary precondition.
-    input_component_count = formula_component_count(phi)
+    input_component_count = count_leafs(phi)
     assert all(value not in input_component_count.keys() for value in variable_set)
 
     def _recursion(_phi, _mask, _variable_set, _var_values=None):
@@ -556,7 +556,7 @@ def extract_variable_values_from_formula(phi, mask, variable_set):
     return compatibility, var_values
 
 
-def substitute_formula_components(phi, substitutions):
+def substitute_subformula(phi, substitutions):
     """This functions receives a free-formula 𝛷 and a dictionary of substitution pairs (𝜑, 𝜓),
     where 𝜑 are unique.
     It generates a new free-formula 𝛹 that is an exact copy of 𝛷,
@@ -609,12 +609,12 @@ def transform_formula(phi, mask, variable_set, template):
     extraction of y: (3 * 9)
     output = ((3 * 9) / 4) + 1
     """
-    compatibility, variable_values = extract_variable_values_from_formula(phi=phi, mask=mask, variable_set=variable_set)
-    psi = substitute_formula_components(phi=template, substitutions=variable_values) if compatibility else None
+    compatibility, variable_values = extract_variable_values(phi=phi, mask=mask, variable_set=variable_set)
+    psi = substitute_subformula(phi=template, substitutions=variable_values) if compatibility else None
     return compatibility, psi
 
 
-def formula_component_count(phi):
+def count_leafs(phi):
     """This function traverses a formula-tree,
     and returns a dictionary of leaf components,
     with the number of times every component appears in the formula.

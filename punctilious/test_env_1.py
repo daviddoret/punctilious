@@ -71,13 +71,13 @@ class TestPunctilious(TestCase):
         self.assertIs(phi_1, phi_1b, msg='unicity of leaf free-formula')
         self.assertTrue(core.formula_variable_equivalence(phi_1, phi_1), msg='formula_variable_equivalence()')
         self.assertTrue(core.formula_variable_equivalence(phi_1, phi_1b), msg='formula_variable_equivalence()')
-        phi_1c = core.substitute_formula_components(phi=phi_1, substitutions={object_1: object_2})
+        phi_1c = core.substitute_subformula(phi=phi_1, substitutions={object_1: object_2})
         self.assertEqual('(●)', phi_1c.str(str_fun=core.formula_str_funs.formal), msg='substitute_formula_components()')
 
         phi_2 = theory.assure_free_formula(phi=(relation_1, object_1, object_2))
         self.assertEqual('((⬨), (▼), (●))', phi_2.str(str_fun=core.formula_str_funs.formal), msg='FreeFormula.str()')
         self.assertFalse(core.formula_variable_equivalence(phi_1, phi_2), msg='formula_variable_equivalence()')
-        phi_2a = core.substitute_formula_components(phi=phi_2, substitutions={relation_1: relation_4, object_2: object_1})
+        phi_2a = core.substitute_subformula(phi=phi_2, substitutions={relation_1: relation_4, object_2: object_1})
         self.assertEqual('((◻), (▼), (▼))', phi_2a.str(str_fun=core.formula_str_funs.formal), msg='substitute_formula_components()')
 
         phi_3 = theory.assure_free_formula(phi=(relation_2, object_2, object_1))
@@ -87,7 +87,7 @@ class TestPunctilious(TestCase):
         self.assertEqual('((▱), ((⬨), (▼), (●)), ((⬭), (●), (▼)))', phi_4b.str(str_fun=core.formula_str_funs.formal), msg='FreeFormula.str()')
         self.assertTrue(phi_4 is phi_4b, msg='unicity of non-leaf free-formula')
         self.assertTrue(core.formula_variable_equivalence(phi_4, phi_4b), msg='formula_variable_equivalence()')
-        phi_4c = core.substitute_formula_components(phi=phi_4b, substitutions={relation_1: relation_4, object_2: object_1, object_1: object_2})
+        phi_4c = core.substitute_subformula(phi=phi_4b, substitutions={relation_1: relation_4, object_2: object_1, object_1: object_2})
         self.assertEqual('((▱), ((◻), (●), (▼)), ((⬭), (▼), (●)))', phi_4c.str(str_fun=core.formula_str_funs.formal), msg='substitute_formula_components()')
         #self.assertEqual('((◻), (▼), (▼))', phi_2a.str(str_fun=core.formula_str_funs.formal), msg='substitute_formula_components')
 
@@ -120,20 +120,20 @@ class TestPunctilious(TestCase):
         print('phi-20: formula-variable-equivalence')
 
         phi_20_tup = (relation_1, variable_big_x, (relation_1, variable_big_x, variable_big_y))
-        self.assertEqual(str(core.formula_component_count(phi_20_tup)), '{⬨: 2, 𝓧: 2, 𝓨: 1}')
+        self.assertEqual(str(core.count_leafs(phi_20_tup)), '{⬨: 2, 𝓧: 2, 𝓨: 1}')
         phi_21_tup = (relation_1, variable_big_b, (relation_1, variable_big_b, variable_big_a))
-        self.assertEqual(str(core.formula_component_count(phi_21_tup)), '{⬨: 2, 𝓑: 2, 𝓐: 1}')
+        self.assertEqual(str(core.count_leafs(phi_21_tup)), '{⬨: 2, 𝓑: 2, 𝓐: 1}')
         self.assertTrue(core.formula_variable_equivalence(phi_20_tup, phi_20_tup))
         self.assertFalse(core.formula_variable_equivalence(phi_20_tup, phi_11))
 
         print('phi-30')
 
         phi_30_input = theory.assure_free_formula((relation_1, object_1))
-        self.assertEqual(str(core.formula_component_count(phi_30_input)), '{⬨: 1, ▼: 1}')
+        self.assertEqual(str(core.count_leafs(phi_30_input)), '{⬨: 1, ▼: 1}')
         phi_30_mask = theory.assure_free_formula((relation_1, variable_big_x))
-        self.assertEqual(str(core.formula_component_count(phi_30_mask)), '{⬨: 1, 𝓧: 1}')
+        self.assertEqual(str(core.count_leafs(phi_30_mask)), '{⬨: 1, 𝓧: 1}')
         phi_30_map_variable_set = frozenset([variable_big_x])
-        phi_30_compatibility, var_values = core.extract_variable_values_from_formula(phi=phi_30_input, mask=phi_30_mask, variable_set=phi_30_map_variable_set)
+        phi_30_compatibility, var_values = core.extract_variable_values(phi=phi_30_input, mask=phi_30_mask, variable_set=phi_30_map_variable_set)
         self.assertTrue(phi_30_compatibility, msg='extract_variable_values_from_formula(): compatibility')
         self.assertEqual('{𝓧: ▼}', str(var_values), msg='extract_variable_values_from_formula(): values')
         phi_30_template = theory.assure_free_formula((relation_2, variable_big_y, variable_big_x))
@@ -148,6 +148,6 @@ class TestPunctilious(TestCase):
         phi_40_a = theory.assure_free_formula((relation_1, object_1, variable_big_x, object_2, relation_2, object_1,
                                                variable_big_x, variable_big_y, variable_big_z))
         self.assertEqual('((⬨), (▼), (𝓧), (●), (⬭), (▼), (𝓧), (𝓨), (𝓩))', phi_40_a.str())
-        phi_40_b = core.substitute_formula_components(phi=phi_40_a, substitutions={object_1: object_2})
+        phi_40_b = core.substitute_subformula(phi=phi_40_a, substitutions={object_1: object_2})
         self.assertEqual('((⬨), (●), (𝓧), (●), (⬭), (●), (𝓧), (𝓨), (𝓩))', phi_40_b.str(), msg='substitute_formula_components()')
         pass
