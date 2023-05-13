@@ -7,7 +7,7 @@ class TestObjct(TestCase):
     def test_is_antivariable_equal_to(self):
         o = core.ObjctObsolete('o')
         p = core.ObjctObsolete('p')
-        x = core.VarDecl('x')
+        x = core.Var('x')
         self.assertTrue(o.is_antivariable_equal_to(o))
         self.assertFalse(o.is_antivariable_equal_to(p))
         self.assertFalse(o.is_antivariable_equal_to(x))
@@ -15,7 +15,7 @@ class TestObjct(TestCase):
     def test_is_variable_equal_to(self):
         o = core.ObjctObsolete('o')
         p = core.ObjctObsolete('p')
-        x = core.VarDecl('x')
+        x = core.Var('x')
         self.assertTrue(o.is_variable_equal_to(o))
         self.assertFalse(o.is_variable_equal_to(p))
         self.assertTrue(o.is_variable_equal_to(x))
@@ -23,17 +23,17 @@ class TestObjct(TestCase):
 
 class TestVariable(TestCase):
     def test_is_antivariable_equal_to(self):
-        x = core.VarDecl('x')
+        x = core.Var('x')
         self.assertFalse(x.is_antivariable_equal_to(x))
-        y = core.VarDecl('y')
+        y = core.Var('y')
         self.assertFalse(x.is_antivariable_equal_to(y))
         o = core.ObjctObsolete('o')
         self.assertFalse(x.is_antivariable_equal_to(o))
 
     def test_is_variable_equal_to(self):
-        x = core.VarDecl('x')
+        x = core.Var('x')
         self.assertTrue(x.is_variable_equal_to(x))
-        y = core.VarDecl('y')
+        y = core.Var('y')
         self.assertTrue(x.is_variable_equal_to(y))
         o = core.ObjctObsolete('o')
         self.assertTrue(x.is_variable_equal_to(o))
@@ -44,8 +44,8 @@ class TestFormula(TestCase):
         f = core.ObjctObsolete('𝑓')
         o1 = core.ObjctObsolete('o₁')
         o2 = core.ObjctObsolete('o₂')
-        x = core.VarDecl('x')
-        y = core.VarDecl('y')
+        x = core.Var('x')
+        y = core.Var('y')
         phi1 = core.FormulaStatement((f, o1, o2))
         self.assertTrue(phi1.is_antivariable_equal_to(phi1))
         phi2 = core.FormulaStatement((f, o1, o2))
@@ -63,8 +63,8 @@ class TestFormula(TestCase):
         f = core.ObjctObsolete('𝑓')
         o1 = core.ObjctObsolete('o₁')
         o2 = core.ObjctObsolete('o₂')
-        x = core.VarDecl('x')
-        y = core.VarDecl('y')
+        x = core.Var('x')
+        y = core.Var('y')
         phi1 = core.FormulaStatement((f, o1, o2))
         self.assertTrue(phi1.is_variable_equal_to(phi1))
         phi2 = core.FormulaStatement((f, o1, o2))

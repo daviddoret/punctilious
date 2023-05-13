@@ -136,37 +136,42 @@ def listify(*args):
     return ', '.join([str(x) for x in args if x is not None])
 
 
-class Statement:
-    """A Statement is an abstract object that has a position in a theory."""
+class FormulaLeafComponent:
+    """
+    A formula-leaf-component 𝔁 is an object that may be expressed as the component
+    of a structurally-well-formed leaf free-formula ⟨𝔁⟩.
 
-    """A statement is tuple (t, ⊢, phi) where:
-    t is a theory,
-    ⊢ is the prove object,
-    phi is a formula-variable."""
+    The following are supported classes of formula-leaf-components:
+    * axiom
+    * lemma
+    * proposition
+    * relation
+    * simple-object
+    * theorem
+    * theory
+    * variable
 
-    """A formula A is a syntactic consequence within some formal system FS of a set Γ of formulas 
-    if there is a formal proof in FS of A from the set Γ. This is denoted Γ ⊢FS A.
-    Source: https://en.wikipedia.org/wiki/Logical_consequence"""
+    TODO: QUESTION: What would be the meaning of allowing free-formula to be formula-leaf-components?
+    """
 
-    """Does not prove symbol: ⊬.
-    Prove symbol: ⊢."""
-
-    def __init__(self, theory, cat, position, ref=None, sym=None, dashed_name=None):
+    def __init__(self, theory, position, ref=None, sym=None, dashed_name=None, pyn=None):
         assert isinstance(theory, Theory) or theory is None  # The only object for which no theory linkage is
         # justified is the universe-of-discourse theory.
-        assert isinstance(cat, Cat)
         self.theory = theory
-        self.cat = cat
         self.position = position
-        if cat == cats.theory:
+        if isinstance(self, Theory):
             # Theories have a simplified reference scheme: theory-n where n is the theory counter.
-            self.ref = f'{self.cat.ref_prefix}-{self.position}' if ref is None else ref
+            self.ref = f'{self.__class__.ref_prefix}-{self.position}' if ref is None else ref
         else:
             # Non-theories have a reference scheme linked to their parent theory: theory-n-i where n is the theory
             # counter and i is the statement counter.
-            self.ref = f'{self.cat.ref_prefix}-{self.theory.position}-{self.position}' if ref is None else ref
-        self.sym = f'{self.cat.sym_prefix}{subscriptify(self.position)}' if sym is None else sym
+            self.ref = f'{self.__class__.ref_prefix}-{self.theory.position}-{self.position}' if ref is None else ref
+        self.sym = f'{self.__class__.sym_prefix}{subscriptify(self.position)}' if sym is None else sym
         self.dashed_name = dashed_name
+        self.pyn = pyn
+        if pyn is not None:
+            assert not hasattr(self.theory, pyn)
+            setattr(self.theory, pyn, self)
 
     def __repr__(self):
         return self.ref if (self.dashed_name is None and self.sym is None) else \
@@ -187,7 +192,7 @@ class Statement:
                 return self.dashed_name
 
 
-class Note(Statement):
+class Note(FormulaLeafComponent):
     def __init__(self, theory, position, ref=None, text=None):
         cat = cats.note
         super().__init__(theory=theory, cat=cat, position=position, ref=ref)
@@ -207,15 +212,19 @@ class Note(Statement):
                 return super().str(mod=mod, **kwargs)
 
 
-class Axiom(Statement):
+class Axiom(FormulaLeafComponent):
     def __init__(self, theory, position, ref=None, sym=None, text=None, citation=None):
         cat = cats.axiom
-        super().__init__(theory=theory, cat=cat, position=position, ref=ref, sym=sym)
+        super().__init__(theory=theory, position=position, ref=ref, sym=sym)
         self.text = text
         self.citation = citation
 
     def __str__(self):
         return self.str()
+
+    pyn_prefix = 'A'
+
+    ref_prefix = 'axiom'
 
     def str(self, mod=None, **kwargs):
         mod = rep_modes.ref if mod is None else mod
@@ -228,14 +237,23 @@ class Axiom(Statement):
             case _:
                 return super().str(mod=mod, **kwargs)
 
+    sym_prefix = '𝒜'
 
-class ObjctDecl(Statement):
-    def __init__(self, theory, position, ref=None, sym=None, dashed_name=None):
+class SimpleObjct(FormulaLeafComponent):
+    """
+    A simple-object is a formula-leaf-component that is neither a variable, nor a relation.
+    """
+
+    def __init__(self, theory, position, ref=None, sym=None, dashed_name=None, pyn=None):
         cat = cats.objct_decl
-        super().__init__(theory=theory, cat=cat, position=position, ref=ref, sym=sym, dashed_name=dashed_name)
+        super().__init__(theory=theory, position=position, ref=ref, sym=sym, dashed_name=dashed_name, pyn=pyn)
 
     def __str__(self):
         return self.str()
+
+    pyn_prefix = 'o'
+
+    ref_prefix = 'simple-object'
 
     def str(self, mod=None, **kwargs):
         mod = rep_modes.ref if mod is None else mod
@@ -243,10 +261,11 @@ class ObjctDecl(Statement):
         assert mod in (rep_modes.ref, rep_modes.sym, rep_modes.dashed_name, rep_modes.definition)
         match mod:
             case rep_modes.definition:
-                return f'Let {self.dashed_name} be an object denoted as long-name ⌜ {self.dashed_name} ⌝, symbol ⌜ {self.sym} ⌝, and reference ⌜ {self.ref} ⌝.'
+                return f'Let {self.dashed_name} be a simple-object denoted as long-name ⌜ {self.dashed_name} ⌝, symbol ⌜ {self.sym} ⌝, theory-reference ⌜ {self.ref} ⌝, and pythonic-name ⌜ {self.pyn} ⌝.'
             case _:
                 return super().str(mod=mod, **kwargs)
 
+    sym_prefix = 'ℴ'
 
 class ObjctObsolete:
     def __init__(self, sym=None, dashed_name=None, uid=None, formula_str_fun=None):
@@ -292,35 +311,45 @@ class ObjctObsolete:
         return self.sym
 
 
-class RelDecl(Statement):
+class Relation(FormulaLeafComponent):
     """A relation-declaration."""
 
-    def __init__(self, theory, position, ref=None, sym=None, dashed_name=None, formula_str_fun=None):
+    def __init__(self, theory, position, ref=None, sym=None, dashed_name=None, formula_str_fun=None, pyn=None):
         cat = cats.rel_decl
         # If formula_str_fun is not expressly defined,
         # we fallback on the function representation method.
         formula_str_fun = formula_str_funs.function if formula_str_fun is None else formula_str_fun
-        super().__init__(theory=theory, cat=cat, position=position, ref=ref, sym=sym, dashed_name=dashed_name)
+        super().__init__(theory=theory, position=position, ref=ref, sym=sym, dashed_name=dashed_name, pyn=pyn)
         self.formula_str_fun = formula_str_fun
 
     def __str__(self):
         return self.str()
 
+    pyn_prefix = 'r'
+
+    ref_prefix = 'relation'
+
     def str(self, mod=None, **kwargs):
         mod = rep_modes.ref if mod is None else mod
         assert isinstance(mod, RepMode)
         assert mod in (rep_modes.ref, rep_modes.sym, rep_modes.dashed_name, rep_modes.definition)
         match mod:
             case rep_modes.definition:
-                return f'Let {self.dashed_name} be a relation denoted as long-name ⌜ {self.dashed_name} ⌝, symbol ⌜ {self.sym} ⌝, and reference ⌜ {self.ref} ⌝.'
+                return f'Let {self.dashed_name} be a relation denoted as long-name ⌜ {self.dashed_name} ⌝, symbol ⌜ {self.sym} ⌝, theory-reference ⌜ {self.ref} ⌝, and pythonic-name ⌜ {self.pyn} ⌝.'
             case _:
                 return super().str(mod=mod, **kwargs)
 
+    sym_prefix = '○'
 
-class VarDecl(Statement):
-    def __init__(self, theory, position, ref=None, sym=None, dashed_name=None):
-        cat = cats.var_decl
-        super().__init__(theory=theory, cat=cat, position=position, ref=ref, sym=sym, dashed_name=dashed_name)
+class Var(FormulaLeafComponent):
+    def __init__(self, theory, position, pyn=None, sym=None, dashed_name=None, ref=None):
+        assert theory is not None and isinstance(theory, Theory)
+        assert position is not None and isinstance(position, int)
+        pyn = f'x{position}' if pyn is None else pyn
+        sym = f'𝔁{subscriptify(position)}' if sym is None else sym
+        ref = f'variable-{position}' if ref is None else ref
+        dashed_name = ref if dashed_name is None else dashed_name
+        super().__init__(theory=theory, position=position, pyn=pyn, sym=sym, dashed_name=dashed_name, ref=ref)
 
     def __str__(self):
         return self.str()
@@ -331,9 +360,11 @@ class VarDecl(Statement):
         assert mod in (rep_modes.ref, rep_modes.sym, rep_modes.dashed_name, rep_modes.definition)
         match mod:
             case rep_modes.definition:
-                return f'Let {self.dashed_name} be a variable denoted as long-name ⌜ {self.dashed_name} ⌝, symbol ⌜ {self.sym} ⌝, and reference ⌜ {self.ref} ⌝.'
+                return f'Let {self.dashed_name} be a variable denoted as long-name ⌜ {self.dashed_name} ⌝, symbol ⌜ {self.sym} ⌝, theory-reference ⌜ {self.ref} ⌝, and pythonic-name ⌜ {self.pyn} ⌝.'
             case _:
                 return super().str(mod=mod, **kwargs)
+
+
 
 
 class formula_str_funs:
@@ -377,13 +408,13 @@ def name_equivalence(phi, psi):
     # Retrieve phi's tuple if it is a FreeFormula
     phi_tup = phi.tup if isinstance(phi, FreeFormula) else phi
     # Embed phi in a tuple if it is a valid leaf object
-    phi_tup = tuple([phi]) if isinstance(phi, (ObjctDecl, RelDecl, VarDecl)) else phi_tup
+    phi_tup = tuple([phi]) if isinstance(phi, (SimpleObjct, Relation, Var)) else phi_tup
     assert isinstance(phi_tup, tuple)
     assert psi is not None
     # Retrieve psi's tuple if it is a FreeFormula
     psi_tup = psi.tup if isinstance(psi, FreeFormula) else psi
     # Embed psi in a tuple if it is a valid leaf object
-    psi_tup = tuple([psi]) if isinstance(psi, (ObjctDecl, RelDecl, VarDecl)) else psi_tup
+    psi_tup = tuple([psi]) if isinstance(psi, (SimpleObjct, Relation, Var)) else psi_tup
     assert isinstance(psi_tup, tuple)
     if len(phi_tup) != len(psi_tup):
         return False
@@ -454,11 +485,11 @@ def variable_equivalence(phi, psi):
             # Remind that this tuple may only be a sub-formula nested in a larger formula.
             return True, _var_list_1, _var_list_2
         else:
-            if isinstance(_phi, (ObjctDecl, RelDecl)):
+            if isinstance(_phi, (SimpleObjct, Relation)):
                 # We assume that objcts and relations are singletons,
                 # we may thus use the python is operator to check equality.
                 return _phi is _psi, _var_list_1, _var_list_2
-            elif isinstance(_phi, VarDecl):
+            elif isinstance(_phi, Var):
                 # Determine the relative-position of both variables.
                 if _phi not in _var_list_1:
                     _var_list_1.append(_phi)
@@ -474,6 +505,57 @@ def variable_equivalence(phi, psi):
 
     equality, var_list_1, var_list_2 = _recursion(phi, psi)
     return equality
+
+
+def unpack(phi):
+    """Returns the nested python tuples version of the formula.
+
+    Several data structures are used to express formula, e.g.:
+    nested python tuples, FreeFormula, etc.
+    This function receives a formula in any supported data structure,
+    and returns its nested python tuples form for easier manipulation.
+
+    :param phi: A formula in any supported data structure.
+    :return: A formula in nested python tuples form.
+    """
+    phi = phi.tup if isinstance(phi, FreeFormula) else phi
+    assert phi is not None and isinstance(phi, tuple)
+    return phi
+
+
+def extract_subformula_by_flat_index(phi, n):
+    """Extracts a subformula 𝛹 from a formula 𝛷, given its flat-index n in the formula tree-structure.
+
+    :param phi: A formula in any supported data structure.
+    :param n: An integer > 0.
+    :return: a boolean stating if the subformula 𝛹 exists in 𝛷, and the subformula 𝛹 in nested-tuples form.
+    """
+
+    def _recursion(_phi, _n, _running_index):
+        _running_index = _running_index + 1
+        _phi = unpack(_phi)
+        if _running_index == _n:
+            return True, _phi, _running_index
+        elif isinstance(_phi, tuple):
+            for _psi in _phi:
+                _existence, _psi, _running_index = _recursion(_phi=_psi, _n=_n, _running_index=_running_index)
+                if _existence:
+                    return _existence, _psi, _running_index
+            return False, None, _running_index, _running_index
+        else:
+            return False, None, _running_index, _running_index
+
+    assert n is not None and isinstance(n, int) and n > 0
+    existence, psi, running_index = _recursion(_phi=phi, _n=n, _running_index=0)
+    return existence, psi
+
+
+def extract_subformula(phi, flat_index=None, children_index=None, formula_counter=None):
+    phi = phi.tup if isinstance(phi, FreeFormula) else phi
+    assert isinstance(phi, tuple)
+
+    if flat_index is not None:
+        return extract_subformula_by_flat_index(phi=phi, n=flat_index)
 
 
 def extract_variable_values(phi, mask, variable_set):
@@ -497,7 +579,7 @@ def extract_variable_values(phi, mask, variable_set):
     assert isinstance(variable_set, frozenset)
 
     # Precondition: the set of variables contains only variables.
-    assert all(isinstance(item, VarDecl) for item in variable_set)
+    assert all(isinstance(item, Var) for item in variable_set)
 
     # Precondition: variables in the set can only be used once in the mask,
     #   because they will be used to retrieve variable unique values.
@@ -535,11 +617,11 @@ def extract_variable_values(phi, mask, variable_set):
             # Remind that this tuple may only be a sub-formula nested in a larger formula.
             return True, _var_values
         else:
-            if isinstance(_mask, (ObjctDecl, RelDecl)):
+            if isinstance(_mask, (SimpleObjct, Relation)):
                 # We assume that objcts and relations are singletons,
                 # we may thus use the python is operator to check equality.
                 return _phi is _mask, _var_values
-            elif isinstance(_mask, VarDecl):
+            elif isinstance(_mask, Var):
                 # Determine the relative-position of both variables.
                 if _mask in variable_set:
                     # This is a variable for which we want to retrieve the value.
@@ -576,7 +658,7 @@ def substitute_subformula(phi, substitutions):
             _psi = tuple(_recursion(_phi=component, _substitutions=_substitutions) for component in _phi)
             return _psi
         else:
-            if isinstance(_phi, (ObjctDecl, RelDecl, VarDecl)):
+            if isinstance(_phi, (SimpleObjct, Relation, Var)):
                 return substitutions[_phi] if _phi in substitutions else _phi
             else:
                 raise TypeError()
@@ -637,7 +719,7 @@ def count_leafs(phi):
             # Remind that this tuple may only be a sub-formula nested in a larger formula.
             return _component_count
         else:
-            if isinstance(_phi, (ObjctDecl, RelDecl, VarDecl)):
+            if isinstance(_phi, (SimpleObjct, Relation, Var)):
                 # We assume that objcts, relations, and variables are singletons.
                 if _phi not in _component_count:
                     _component_count[_phi] = 1
@@ -651,24 +733,32 @@ def count_leafs(phi):
     return component_count
 
 
-leaf_classes = (ObjctDecl, RelDecl, VarDecl)
+leaf_atom = (SimpleObjct, Relation, Var)
 leaf_cats = (cats.objct_decl, cats.rel_decl, cats.var_decl)
 
 
 class FreeFormula:
-    """A free-formula 𝜑 is a formula linked to a theory but not stated as a true statement.
+    """
+    A free-formula 𝜑.
 
-    Data structure:
-    A free-formula 𝜑 is a container for a python tuple,
-    which is either of the form (o) where o is an object,
-    of the form (x) where x is a variable,
-    or of the form (a, b, c, ...) where a, b, c, ... are free-formulas.
+    A free-formula 𝜑 is a structurally-well-formed formula,
+    linked to a theory 𝒯,
+    that may but is **not** necessarily:
+    * true if it is a Boolean formula,
+    * semantically-well-formed,
+    * consistent with 𝒯.
+
+    Free-formula axioms:
+    * If 𝒙 is a leaf-atom, then ⟨𝒙⟩ is a structurally-well-formed free-formula.
+    * If ⟨𝒙⟩ and ⟨𝒚⟩ are free-formula, then ⟨⟨𝒙⟩, ⟨𝒚⟩⟩ is a structurally-well-formed free-formula.
+    * If ⟨𝒙⟩, ⟨𝒚⟩, and ⟨𝒛⟩ are free-formula, then ⟨⟨𝒙⟩, ⟨𝒚⟩, ⟨𝒛⟩⟩ is a structurally-well-formed free-formula.
+    * QUESTION: We could but should we expand formula to arbitrarily large but finite tuples?
     """
 
     def __init__(self, theory, tup):
         assert theory is not None and isinstance(theory, Theory)
         self.theory = theory
-        if isinstance(tup, leaf_classes):
+        if isinstance(tup, leaf_atom):
             # If a leaf formula was passed as an instance of Objct or Variable,
             # pack it in a tuple for data structure consistency.
             tup = tuple([tup])
@@ -676,11 +766,11 @@ class FreeFormula:
         self.is_leaf = True if len(tup) == 1 else False
         if self.is_leaf:
             # This is free-leaf-formula.
-            assert isinstance(tup[0], leaf_classes)
+            assert isinstance(tup[0], leaf_atom)
             self.tup = tup
-            self.relation_set = frozenset([tup[0]]) if isinstance(tup[0], RelDecl) else frozenset()
-            self.objct_set = frozenset([tup[0]]) if isinstance(tup[0], ObjctDecl) else frozenset()
-            self.variable_set = frozenset([tup[0]]) if isinstance(tup[0], VarDecl) else frozenset()
+            self.relation_set = frozenset([tup[0]]) if isinstance(tup[0], Relation) else frozenset()
+            self.objct_set = frozenset([tup[0]]) if isinstance(tup[0], SimpleObjct) else frozenset()
+            self.variable_set = frozenset([tup[0]]) if isinstance(tup[0], Var) else frozenset()
         else:
             # This is not a free-leaf-formula.
             # We must thus assure that all subformula are properly
@@ -692,6 +782,7 @@ class FreeFormula:
             self.relation_set = frozenset.union(*[subformula.relation_set for subformula in tup])
             self.objct_set = frozenset.union(*[subformula.objct_set for subformula in tup])
             self.variable_set = frozenset.union(*[subformula.variable_set for subformula in tup])
+        self.contains_variables = False if len(self.variable_set) == 0 else True
 
     def __repr__(self):
         return self.str(str_fun=formula_str_funs.formal)
@@ -725,7 +816,7 @@ class FreeFormula:
     def str(self, str_fun=None, is_subformula=False, **kwargs):
         if self.is_leaf:
             return f'({self.tup[0].sym})'
-        if str_fun is None and isinstance(self.tup[0], RelDecl):
+        if str_fun is None and isinstance(self.tup[0], Relation):
             # If str_fun is not expressly passed as a parameter,
             # and if this free-formula is a free-relation-formula,
             # then the default representation of the free-formula
@@ -738,7 +829,7 @@ class FreeFormula:
         return str_fun(self, **kwargs)
 
 
-class FormulaStatement(Statement):
+class FormulaStatement(FormulaLeafComponent):
     """The content of a formula is immutable. This is a key difference with theories."""
 
     def __init__(self, theory, position, ref=None, sym=None, free_formula=None, justif=None):
@@ -828,14 +919,14 @@ class Justification:
         return self.str()
 
 
-class Theory(Statement):
+class Theory(FormulaLeafComponent):
     """The content of a theory is enriched by proofs. This is a key difference with formula whose content is
     immutable."""
 
-    def __init__(self, theory=None, position=None, ref=None, sym=None, dashed_name=None):
+    def __init__(self, theory=None, position=None, ref=None, sym=None, dashed_name=None, pyn=None):
         cat = cats.theory
         position = Theory._get_counter() if position is None else position
-        super().__init__(theory=theory, cat=cat, position=position, ref=ref, sym=sym, dashed_name=dashed_name)
+        super().__init__(theory=theory, position=position, ref=ref, sym=sym, dashed_name=dashed_name, pyn=pyn)
         self._statement_max_position = 0  # TODO: replace this with the computation of max + 1 from statements list.
         self.statements = []
         self.free_formulas = []
@@ -845,7 +936,14 @@ class Theory(Statement):
             # thus we output the theory definition here.
             print(self.str(mod=rep_modes.definition))
 
-    position = 0
+    @staticmethod
+    def _get_counter():
+        Theory.position = Theory.position + 1
+        return Theory.position
+
+    def _get_statement_counter(self):
+        self._statement_max_position = self._statement_max_position + 1
+        return self._statement_max_position
 
     def append_axiom(self, text, citation=None):
         counter = self._get_statement_counter()
@@ -882,8 +980,8 @@ class Theory(Statement):
             assert phi.theory == self
             return phi
 
-        assert isinstance(phi, (tuple, ObjctDecl, RelDecl, VarDecl))
-        if isinstance(phi, (ObjctDecl, RelDecl, VarDecl)):
+        assert isinstance(phi, (tuple, SimpleObjct, Relation, Var))
+        if isinstance(phi, (SimpleObjct, Relation, Var)):
             # If phi is a leaf object,
             # embed it in a tuple for data structure consistency.
             phi = tuple([phi])
@@ -922,18 +1020,18 @@ class Theory(Statement):
             print(note.str(mod=rep_modes.definition))
         return note
 
-    def append_objct(self, sym=None, dashed_name=None):
+    def append_objct(self, sym=None, dashed_name=None, pyn=None):
         counter = self._get_statement_counter()
-        objct = ObjctDecl(theory=self, position=counter, sym=sym, dashed_name=dashed_name)
+        objct = SimpleObjct(theory=self, position=counter, sym=sym, dashed_name=dashed_name, pyn=pyn)
         self.statements.append(objct)
         if Theory.echo_statement:
             print(objct.str(mod=rep_modes.definition))
         return objct
 
-    def append_relation(self, sym=None, dashed_name=None, formula_str_fun=None):
+    def append_relation(self, sym=None, dashed_name=None, formula_str_fun=None, pyn=None):
         counter = self._get_statement_counter()
-        relation = RelDecl(theory=self, position=counter, sym=sym, dashed_name=dashed_name,
-                           formula_str_fun=formula_str_fun)
+        relation = Relation(theory=self, position=counter, sym=sym, dashed_name=dashed_name,
+                            formula_str_fun=formula_str_fun, pyn=pyn)
         self.statements.append(relation)
         if Theory.echo_statement:
             print(relation.str(mod=rep_modes.definition))
@@ -947,9 +1045,9 @@ class Theory(Statement):
             print(theory.str(mod=rep_modes.definition))
         return theory
 
-    def append_variable(self, sym=None, dashed_name=None):
+    def append_variable(self, sym=None, dashed_name=None, pyn=None):
         counter = self._get_statement_counter()
-        variable = VarDecl(theory=self, position=counter, sym=sym, dashed_name=dashed_name)
+        variable = Var(theory=self, position=counter, sym=sym, dashed_name=dashed_name, pyn=pyn)
         self.statements.append(variable)
         if Theory.echo_statement:
             print(variable.str(mod=rep_modes.definition))
@@ -959,14 +1057,11 @@ class Theory(Statement):
 
     echo_statement = True
 
-    @staticmethod
-    def _get_counter():
-        Theory.position = Theory.position + 1
-        return Theory.position
+    position = 0
 
-    def _get_statement_counter(self):
-        self._statement_max_position = self._statement_max_position + 1
-        return self._statement_max_position
+    pyn_prefix = 'T'
+
+    ref_prefix = 'theory'
 
     def str(self, mod=None, **kwargs):
         mod = rep_modes.ref if mod is None else mod
@@ -978,6 +1073,7 @@ class Theory(Statement):
             case _:
                 return super().str(mod=mod, **kwargs)
 
+    sym_prefix = '𝒯'
 
 universe_of_discourse = Theory(sym='𝒰', dashed_name='universe-of-discourse')
 uod = universe_of_discourse

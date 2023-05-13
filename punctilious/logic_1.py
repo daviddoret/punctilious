@@ -34,7 +34,7 @@ f6 = core.FormulaStatement((lnot, lfalse))
 f7 = core.FormulaStatement((leq, f5, lfalse))
 f8 = core.FormulaStatement((leq, f6, ltrue))
 
-vp = core.VarDecl('p')
+vp = core.Var('p')
 f9 = core.FormulaStatement((core.class_membership, vp, proposition_class))
 f10 = core.FormulaStatement((leq, vp, ltrue))
 f11 = core.FormulaStatement((leq, vp, lfalse))
@@ -44,7 +44,7 @@ f13 = core.FormulaStatement((liif, f9, f12))
 
 # statement: q = false
 # from f13, it follows that q is a proposition
-vq = core.VarDecl('q')
+vq = core.Var('q')
 f14 = core.FormulaStatement((leq, vq, lfalse))
 
 theory = []
