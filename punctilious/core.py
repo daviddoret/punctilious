@@ -136,7 +136,7 @@ def listify(*args):
     return ', '.join([str(x) for x in args if x is not None])
 
 
-class FormulaLeafComponent:
+class FormulaComponent:
     """
     A formula-leaf-component 𝔁 is an object that may be expressed as the component
     of a structurally-well-formed leaf free-formula ⟨𝔁⟩.
@@ -192,7 +192,7 @@ class FormulaLeafComponent:
                 return self.dashed_name
 
 
-class Note(FormulaLeafComponent):
+class Note(FormulaComponent):
     def __init__(self, theory, position, ref=None, text=None):
         cat = cats.note
         super().__init__(theory=theory, cat=cat, position=position, ref=ref)
@@ -212,7 +212,7 @@ class Note(FormulaLeafComponent):
                 return super().str(mod=mod, **kwargs)
 
 
-class Axiom(FormulaLeafComponent):
+class Axiom(FormulaComponent):
     def __init__(self, theory, position, ref=None, sym=None, text=None, citation=None):
         cat = cats.axiom
         super().__init__(theory=theory, position=position, ref=ref, sym=sym)
@@ -239,7 +239,7 @@ class Axiom(FormulaLeafComponent):
 
     sym_prefix = '𝒜'
 
-class SimpleObjct(FormulaLeafComponent):
+class SimpleObjct(FormulaComponent):
     """
     A simple-object is a formula-leaf-component that is neither a variable, nor a relation.
     """
@@ -311,7 +311,7 @@ class ObjctObsolete:
         return self.sym
 
 
-class Relation(FormulaLeafComponent):
+class Relation(FormulaComponent):
     """A relation-declaration."""
 
     def __init__(self, theory, position, ref=None, sym=None, dashed_name=None, formula_str_fun=None, pyn=None):
@@ -341,7 +341,7 @@ class Relation(FormulaLeafComponent):
 
     sym_prefix = '○'
 
-class Var(FormulaLeafComponent):
+class Var(FormulaComponent):
     def __init__(self, theory, position, pyn=None, sym=None, dashed_name=None, ref=None):
         assert theory is not None and isinstance(theory, Theory)
         assert position is not None and isinstance(position, int)
@@ -521,6 +521,26 @@ def unpack(phi):
     phi = phi.tup if isinstance(phi, FreeFormula) else phi
     assert phi is not None and isinstance(phi, tuple)
     return phi
+
+
+class FormulaIterator:
+    def __init__(self, phi, root=None, intermediary=None, leaf=None, components=None):
+        self.root = True if root is None else root
+        self.intermediary = True if intermediary is None else intermediary
+        self.leaf = True if leaf is None else leaf
+        self.components = False if components is None else components
+    def __iter__(self):
+        return self
+    def __next__(self):
+        if self._current_index < self._class_size:
+            if self._current_index < len(self._lect):
+                member = self._lect[self._current_index]
+            else:
+                member = self._stud[
+                    self._current_index - len(self._lect)]
+            self._current_index += 1
+            return member
+        raise StopIteration
 
 
 def extract_subformula_by_flat_index(phi, n):
@@ -829,7 +849,7 @@ class FreeFormula:
         return str_fun(self, **kwargs)
 
 
-class FormulaStatement(FormulaLeafComponent):
+class FormulaStatement(FormulaComponent):
     """The content of a formula is immutable. This is a key difference with theories."""
 
     def __init__(self, theory, position, ref=None, sym=None, free_formula=None, justif=None):
@@ -919,7 +939,7 @@ class Justification:
         return self.str()
 
 
-class Theory(FormulaLeafComponent):
+class Theory(FormulaComponent):
     """The content of a theory is enriched by proofs. This is a key difference with formula whose content is
     immutable."""
 
