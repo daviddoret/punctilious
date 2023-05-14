@@ -46,6 +46,19 @@ class SymbolicObjct:
         self.dashed = dashed
         self.symbol = symbol
 
+    def __repr__(self):
+        pass
+
+    def __str__(self):
+        pass
+
+    def str(self, scheme):
+        assert scheme is not None and isinstance(scheme, SymbolicScheme)
+        if hasattr(self, scheme.python):
+            return getattr(self, scheme.python)
+        else:
+            return getattr(self, schemes.python.python)
+
 
 class FormulaComponent(SymbolicObjct):
     """
@@ -70,8 +83,10 @@ class FormulaComponent(SymbolicObjct):
 
 
 class Formula(FormulaComponent):
-    def __init__(self, **kwargs):
+    def __init__(self, subformula, **kwargs):
         super().__init__(**kwargs)
+        assert subformula is not None and isinstance(subformula, tuple) and len(subformula) > 0
+        self.subformula = subformula
 
 
 class TheoreticalStatement:
@@ -99,6 +114,15 @@ class TheoreticalStatement:
 
 
 class AtheoreticalStatement:
+    """
+    Definition
+    ----------
+    A theoretical-statement 𝒮 is a tuple (𝒯, n, …) where:
+    * 𝒯 is a theory
+    * n is a natural number representing the unique position of 𝒮 in 𝒯
+    * … is any number of decorative attributes informally related to 𝒮 for human explanatory purposes
+    """
+
     def __init__(self, theory, position):
         assert isinstance(theory, Theory)
         assert isinstance(position, int) and position > 0
@@ -106,14 +130,29 @@ class AtheoreticalStatement:
         self.position = position
 
 
+class Note(AtheoreticalStatement):
+    def __init__(self, text, **kwargs):
+        super().__init__(**kwargs)
+        self.text = text
+
+
 class Theory(FormulaComponent):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.statements = list()
 
+    def _get_next_position(self):
+        # TODO: Make _get_next_position robust against concurrency issues
+        return len(self.statements) + 1
+
     def append_statement(self, statement):
-        # TODO: Validate statement
+        # TODO: Validate statement in append_statement
         self.statements.append(statement)
+
+    def append_theoretical_statement(self, phi, proof):
+        position = self._get_next_position()
+        statement = TheoreticalStatement(theory=self, position=position, phi=phi, proof=proof)
+        self.append_statement(statement=statement)
 
 
 class Proof:
@@ -166,3 +205,5 @@ theoretical_relations = SimpleNamespace(
     theory_declaration=_theory_declaration,
     theory_extension=_theory_extension,
     variable_declaration=_variable_declaration)
+
+universe_of_discourse = Theory(python='U', dashed='universe-of-discourse', symbol='𝒰')
