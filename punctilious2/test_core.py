@@ -58,10 +58,17 @@ class TestRelationDeclarationFormula(TestCase):
         self.assertIs(r1, rdf1.subformulae[1])
 
 
-class TestSimpleObjctComponent(TestCase):
+class TestSimpleObjct(TestCase):
     def test_init(self):
-        t1 = core.Theory(dashed='test-theory-1')
-        o1 = core.SimpleObjct(dashed='test-object-1')
+        t1 = core.Theory()
+        o11 = core.SimpleObjct(theory=t1)
+        o12 = core.SimpleObjct(theory=t1)
+        o13 = core.SimpleObjct(theory=t1)
+        t2 = core.Theory()
+        o21 = core.SimpleObjct(theory=t2)
+        o22 = core.SimpleObjct(theory=t2)
+        o23 = core.SimpleObjct(theory=t2)
+        pass
 
 
 class TestTheory(TestCase):

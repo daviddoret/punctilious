@@ -93,10 +93,13 @@ class SymbolicObjct:
     """
     Definition
     ----------
-    A symbolic-objct is a python object instance that is assigned symbolic names.
+    A symbolic-objct is a python object instance that is assigned symbolic names,
+    but that is linked to a theory but that is not necessarily constitutive of the theory.
     """
 
-    def __init__(self, python=None, dashed=None, symbol=None):
+    def __init__(self, theory, python, dashed, symbol):
+        assert theory is not None and isinstance(theory, Theory)
+        self.theory = theory
         self.python = python
         self.dashed = dashed
         self.symbol = symbol
@@ -120,7 +123,7 @@ class TheoreticalObjct(SymbolicObjct):
     Definition
     ----------
     Given a theory 𝒯, a theoretical-object 𝔁 is an object
-    that may be referenced in 𝒯 formulae.
+    that is constitutive of 𝒯 and that may be referenced in 𝒯 formulae.
 
     The following are supported classes of theoretical-objects:
     * axiom
@@ -135,8 +138,7 @@ class TheoreticalObjct(SymbolicObjct):
     """
 
     def __init__(self, theory, python, dashed, symbol):
-        super().__init__(python=python, dashed=dashed, symbol=symbol)
-        self.theory = theory
+        super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
 
 
 class Formula(TheoreticalObjct):
@@ -352,6 +354,9 @@ class SimpleObjct(TheoreticalObjct):
     def __init__(self, theory, python=None, dashed=None, symbol=None):
         assert theory is not None and isinstance(theory, Theory)
         if python is None or dashed is None or symbol is None:
+            # Force the theory attribute
+            # because get_symbolic_object_1_index() needs it.
+            self.theory = theory
             formula_index = theory.get_symbolic_object_1_index(self)
             python = f'o{formula_index}' if python is None else python
             dashed = f'object-{formula_index}' if dashed is None else dashed
