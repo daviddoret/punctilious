@@ -83,10 +83,15 @@ class FormulaComponent(SymbolicObjct):
 
 
 class Formula(FormulaComponent):
-    def __init__(self, subformula, **kwargs):
+    def __init__(self, component, subformula=None, **kwargs):
         super().__init__(**kwargs)
-        assert subformula is not None and isinstance(subformula, tuple) and len(subformula) > 0
+        assert component is not None and isinstance(component, FormulaComponent)
+        self.is_relation = isinstance(component, Relation)
+        self.is_leaf = not self.is_relation
+        assert self.is_leaf or subformula is not None and isinstance(subformula, tuple) and len(subformula) > 0
         self.subformula = subformula
+        self.component = component
+        self.cardinality = len(subformula) if self.is_relation else None
 
 
 class TheoreticalStatement:
@@ -105,7 +110,7 @@ class TheoreticalStatement:
     def __init__(self, theory, position, phi, proof):
         assert isinstance(theory, Theory)
         assert isinstance(position, int) and position > 0
-        assert isinstance(phi, Formula)
+        assert phi is not None and isinstance(phi, Formula)
         assert isinstance(proof, Proof)
         self.theory = theory
         self.position = position
