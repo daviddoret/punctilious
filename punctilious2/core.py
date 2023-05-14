@@ -264,7 +264,7 @@ class Theory(TheoreticalObjct):
             theory = universe_of_discourse
             # Force the initialization of the theory attribute,
             # because theory.get_symbolic_object_1_index()
-            # must be called before super.
+            # must be called before super().
             self.theory = theory
         assert theory is not None and isinstance(theory, Theory)
         assert theory is not None and isinstance(theory, Theory)
