@@ -24,7 +24,6 @@ class TestFormula(TestCase):
         self.assertEqual('𝒯₁', t1.symbol)
 
 
-
 class TestSymbolicObjct(TestCase):
     def test_python(self):
         test_data = generate_test_data_1()
@@ -47,3 +46,34 @@ class TestSymbolicObjct(TestCase):
 
 class TestNote(TestCase):
     pass
+
+
+class TestRelationDeclarationFormula(TestCase):
+    def test_init(self):
+        t1 = core.Theory(dashed='test-theory-1')
+        r1 = core.Relation(arity=2, dashed='test-relation-1')
+        rdf1 = core.RelationDeclarationFormula(theory=t1, relation=r1)
+        self.assertIs(core.theoretical_relations.relation_declaration, rdf1.component)
+        self.assertIs(t1, rdf1.subformulae[0])
+        self.assertIs(r1, rdf1.subformulae[1])
+
+
+class TestSimpleObjctComponent(TestCase):
+    def test_init(self):
+        t1 = core.Theory(dashed='test-theory-1')
+        o1 = core.SimpleObjct(dashed='test-object-1')
+
+
+class TestTheory(TestCase):
+    def test__get_next_position(self):
+        t1 = core.Theory(dashed='test-theory-1')
+        pass
+
+    def test_append_statement(self):
+        pass
+
+    def test_append_theoretical_statement(self):
+        pass
+
+    def test_declare_relation(self):
+        pass
