@@ -138,6 +138,7 @@ class TheoreticalObjct(SymbolicObjct):
     """
 
     def __init__(self, theory, python, dashed, symbol):
+
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
 
 
@@ -153,12 +154,11 @@ class Formula(TheoreticalObjct):
     """
 
     def __init__(self, theory, relation, parameters, python=None, dashed=None, symbol=None):
-        assert theory is not None and isinstance(theory, Theory)
-        if python is None or dashed is None or symbol is None:
-            formula_index = theory.get_symbolic_object_1_index(self)
-            python = f'f{formula_index}' if python is None else python
-            dashed = f'formula-{formula_index}' if dashed is None else dashed
-            symbol = f'𝜑{subscriptify(formula_index)}' if symbol is None else symbol
+        assert isinstance(theory, Theory)
+        self.formula_index = theory.link_formula(self)
+        python = f'f{self.formula_index + 1}' if python is None else python
+        dashed = f'formula-{self.formula_index + 1}' if dashed is None else dashed
+        symbol = f'𝜑{subscriptify(self.formula_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
         assert relation is not None and isinstance(relation, Relation)
         self.relation = relation
@@ -256,6 +256,12 @@ class Note(AtheoreticalStatement):
 class Theory(TheoreticalObjct):
     def __init__(self, theory=None, is_universe_of_discourse=None, python=None, dashed=None, symbol=None):
         global universe_of_discourse
+        self.formulae = tuple()
+        self.relations = tuple()
+        self.simple_objcts = tuple()
+        self.statements = tuple()
+        self.symbolic_objcts = tuple()
+        self.theories = tuple()
         is_universe_of_discourse = False if is_universe_of_discourse is None else is_universe_of_discourse
         if is_universe_of_discourse:
             assert theory is None
@@ -270,14 +276,12 @@ class Theory(TheoreticalObjct):
             self.theory = theory
         assert theory is not None and isinstance(theory, Theory)
         assert theory is not None and isinstance(theory, Theory)
-        self.symbolic_objects = tuple()
-        if python is None or dashed is None or symbol is None:
-            formula_index = theory.get_symbolic_object_1_index(self)
-            python = f't{formula_index}' if python is None else python
-            dashed = f'theory-{formula_index}' if dashed is None else dashed
-            symbol = f'𝒯{subscriptify(formula_index)}' if symbol is None else symbol
+        assert isinstance(theory, Theory)
+        self.theory_index = theory.link_theory(self)
+        python = f't{self.theory_index + 1}' if python is None else python
+        dashed = f'theory-{self.theory_index + 1}' if dashed is None else dashed
+        symbol = f'𝒯{subscriptify(self.theory_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
-        self.statements = ()
 
     def append_formula_component(self, formula_component):
         assert formula_component is not None \
@@ -311,13 +315,60 @@ class Theory(TheoreticalObjct):
         statement = PropositionStatement(theory=self, position=position, phi=phi)
         self.append_statement(statement=statement)
 
-    def get_symbolic_object_1_index(self, o):
-        assert o is not None and isinstance(o, SymbolicObjct)
-        assert not isinstance(o, TheoreticalObjct) or o.theory is self
-        if o not in self.symbolic_objects:
-            self.symbolic_objects = self.symbolic_objects + tuple([o])
-        return self.symbolic_objects.index(o) + 1
+    def link_symbolic_objct(self, s):
+        """During construction, cross-link a symbolic_objct 𝓈
+        with its parent theory if it is not already cross-linked,
+        and return its 0-based index in Theory.symbolic_objcts."""
+        assert isinstance(s, SymbolicObjct)
+        o.theory = o.theory if hasattr(o, 'theory') else self
+        assert o.theory is self
+        if o not in self.symbolic_objcts:
+            self.symbolic_objcts = self.symbolic_objcts + tuple([o])
+        return self.symbolic_objcts.index(o)
 
+    def link_formula(self, phi):
+        """During construction, cross-link a formula phi
+        with its parent theory if it is not already cross-linked,
+        and return its 0-based index in Theory.formulae."""
+        assert isinstance(phi, Formula)
+        phi.theory = phi.theory if hasattr(phi, 'theory') else self
+        assert phi.theory is self
+        if phi not in self.formulae:
+            self.formulae = self.formulae + tuple([phi])
+        return self.formulae.index(phi)
+
+    def link_simple_objct(self, o):
+        """During construction, cross-link a simple-objct ℴ
+        with its parent theory if it is not already cross-linked,
+        and return its 0-based index in Theory.simple_objcts."""
+        assert isinstance(o, SimpleObjct)
+        o.theory = o.theory if hasattr(o, 'theory') else self
+        assert o.theory is self
+        if o not in self.simple_objcts:
+            self.simple_objcts = self.simple_objcts + tuple([o])
+        return self.simple_objcts.index(o)
+
+    def link_theory(self, t):
+        """During construction, cross-link a theory 𝒯
+        with its parent theory if it is not already cross-linked,
+        and return its 0-based index in Theory.theories."""
+        assert isinstance(t, Theory)
+        t.theory = t.theory if hasattr(t, 'theory') else self
+        assert t.theory is self
+        if t not in self.theories:
+            self.theories = self.theories + tuple([t])
+        return self.theories.index(t)
+
+    def link_relation(self, r):
+        """During construction, cross-link a relation r
+        with its parent theory if it is not already cross-linked,
+        and return the 0-based index of the formula in Theory.symbolic_objcts."""
+        assert isinstance(r, Relation)
+        r.theory = r.theory if hasattr(r, 'theory') else self
+        assert r.theory is self
+        if r not in self.relations:
+            self.relations = self.relations + tuple([r])
+        return self.relations.index(r)
 
 class Proof:
     """TODO: Define the proof class"""
@@ -337,7 +388,11 @@ class Relation(TheoreticalObjct):
     """
 
     def __init__(self, theory, arity, python=None, dashed=None, symbol=None):
-        assert theory is not None and isinstance(theory, Theory)
+        assert isinstance(theory, Theory)
+        self.relation_index = theory.link_relation(self)
+        python = f'f{self.relation_index + 1}' if python is None else python
+        dashed = f'formula-{self.relation_index + 1}' if dashed is None else dashed
+        symbol = f'𝜑{subscriptify(self.relation_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
@@ -352,12 +407,17 @@ class SimpleObjct(TheoreticalObjct):
     """
 
     def __init__(self, theory, python=None, dashed=None, symbol=None):
-        assert theory is not None and isinstance(theory, Theory)
+        assert isinstance(theory, Theory)
+        self.simple_objct_index = theory.link_simple_objct(self)
+        if python is None or dashed is None or symbol is None:
+            python = f'o{self.simple_objct_index + 1}' if python is None else python
+            dashed = f'simple-objct-{self.simple_objct_index + 1}' if dashed is None else dashed
+            symbol = f'ℴ{subscriptify(self.simple_objct_index + 1)}' if symbol is None else symbol
         if python is None or dashed is None or symbol is None:
             # Force the theory attribute
             # because get_symbolic_object_1_index() needs it.
             self.theory = theory
-            formula_index = theory.get_symbolic_object_1_index(self)
+            formula_index = theory.link_symbolic_objct(self)
             python = f'o{formula_index}' if python is None else python
             dashed = f'object-{formula_index}' if dashed is None else dashed
             symbol = f'ℴ{subscriptify(formula_index)}' if symbol is None else symbol
