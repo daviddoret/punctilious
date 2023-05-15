@@ -41,39 +41,6 @@ utf8_subscript_dictionary = {'0': u'₀',
                              }
 
 
-def represent_formula_by_function_call(phi, **kwargs):
-    assert isinstance(phi, Formula)
-    return f'{phi.relation.symbol}({", ".join([p.str(**kwargs) for p in phi.parameters])})'
-
-
-def represent_formula_by_infix_operator(phi, **kwargs):
-    assert isinstance(phi, Formula) and phi.relation.arity == 2
-    return f'({phi.parameters[0].str(**kwargs)} {phi.relation.symbol} {phi.parameters[1].str(**kwargs)})'
-
-
-def represent_formula_by_suffix_operator(phi, **kwargs):
-    assert isinstance(phi, Formula) and phi.relation.arity == 1
-    return f'({phi.parameters[0].str(**kwargs)}){phi.relation.symbol}'
-
-
-def represent_formula_by_prefix_operator(phi, **kwargs):
-    assert isinstance(phi, Formula) and phi.relation.arity == 1
-    return f'{phi.relation.symbol}({phi.parameters[0].str(**kwargs)})'
-
-
-def represent_formula_by_symbol(phi, **kwargs):
-    assert isinstance(phi, Formula)
-    return f'{phi.symbol}'
-
-
-formula_formats = SimpleNamespace(
-    function_call=represent_formula_by_function_call,
-    infix_operator=represent_formula_by_infix_operator,
-    suffix_operator=represent_formula_by_suffix_operator,
-    prefix_operator=represent_formula_by_prefix_operator,
-    symbol=represent_formula_by_symbol)
-
-
 def subscriptify(s=None, fmt=None, **kwargs):
     """Converts to unicode-subscript the string s.
 
@@ -143,13 +110,25 @@ class SymbolicObjct:
     def __str__(self):
         return self.symbol
 
-    def str(self, scheme=None):
-        scheme = schemes.symbol if scheme is None else scheme
-        assert isinstance(scheme, SymbolicScheme)
-        if hasattr(self, scheme.python):
-            return getattr(self, scheme.python)
-        else:
-            return getattr(self, schemes.python.python)
+
+    def represent_as_dashed_name(self, **kwargs):
+        return f'{self.dashed}'
+
+    def represent_as_python_variable(self, **kwargs):
+        return f'{self.python}'
+
+    def represent_as_symbol(self, **kwargs):
+        return f'{self.symbol}'
+
+    frmts = SimpleNamespace(
+        dashed_name=represent_as_dashed_name,
+        python_variable=represent_as_python_variable,
+        symbol=represent_as_symbol)
+
+    def str(self, frmt=None, **kwargs):
+        frmt = SymbolicObjct.frmts.symbol if frmt is None else frmt
+        return frmt(self, **kwargs)
+
 
 
 class TheoreticalObjct(SymbolicObjct):
@@ -188,7 +167,7 @@ class Formula(TheoreticalObjct):
 
     def __init__(self, theory, relation, parameters, python=None, dashed=None, symbol=None):
         assert isinstance(theory, Theory)
-        self.formula_index = theory.link_formula(self)
+        self.formula_index = theory.crossreference_formula(self)
         python = f'f{self.formula_index + 1}' if python is None else python
         dashed = f'formula-{self.formula_index + 1}' if dashed is None else dashed
         symbol = f'𝜑{subscriptify(self.formula_index + 1)}' if symbol is None else symbol
@@ -205,10 +184,37 @@ class Formula(TheoreticalObjct):
     def __str__(self):
         return self.str()
 
+    def represent_as_function_call(self, **kwargs):
+        return f'{self.relation.symbol}({", ".join([p.str(**kwargs) for p in self.parameters])})'
+
+    def represent_as_infix_operator(self, **kwargs):
+        assert self.relation.arity == 2
+        return f'({self.parameters[0].str(**kwargs)} {self.relation.symbol} {self.parameters[1].str(**kwargs)})'
+
+    def represent_as_suffix_operator(self, **kwargs):
+        assert self.relation.arity == 1
+        return f'({self.parameters[0].str(**kwargs)}){self.relation.symbol}'
+
+    def represent_as_prefix_operator(self, **kwargs):
+        assert self.relation.arity == 1
+        return f'{self.relation.symbol}({self.parameters[0].str(**kwargs)})'
+
+    def represent_formula_by_symbol(self, **kwargs):
+        return f'{self.symbol}'
+
     def str(self, frmt=None, **kwargs):
+        # Use the frmt attached to the formula relation as the default frmt.
         frmt = self.relation.formula_frmt if frmt is None else frmt
         return frmt(self, **kwargs)
 
+    frmts = SimpleNamespace(
+        dashed_name=SymbolicObjct.represent_as_dashed_name,
+        python_variable=SymbolicObjct.represent_as_python_variable,
+        symbol=SymbolicObjct.represent_as_symbol,
+        function_call=represent_as_function_call,
+        infix_operator=represent_as_infix_operator,
+        prefix_operator=represent_as_prefix_operator,
+        suffix_operator=represent_as_suffix_operator)
 
 class RelationDeclarationFormula(Formula):
     def __init__(self, theory, relation, python, dashed, symbol):
@@ -291,6 +297,48 @@ class AtheoreticalStatement:
         self.position = position
 
 
+class Axiom(TheoreticalObjct):
+    """
+
+    Definition
+    ----------
+    A formula 𝜑 is a tuple (◆, 𝒳) where:
+    * ◆ is a relation.
+    * 𝒳 is a finite tuple of parameters
+      whose elements are theoretical-objects, possibly formulae.
+    """
+
+    def __init__(self, theory, text, python=None, dashed=None, symbol=None):
+        assert isinstance(theory, Theory)
+        self.axiom_index = theory.crossreference_axiom(self)
+        python = f'a{self.axiom_index + 1}' if python is None else python
+        dashed = f'{self.theory.represent_as_dashed_name()}-axiom-{self.axiom_index + 1}' if dashed is None else dashed
+        symbol = f'𝒜{subscriptify(self.axiom_index + 1)}' if symbol is None else symbol
+        super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
+        assert text is not None and isinstance(text, str)
+        self.text = text
+        print(self.represent_as_statement())
+
+    def __repr__(self):
+        return self.str()
+
+    def __str__(self):
+        return self.str()
+
+    def represent_as_statement(self, **kwargs):
+        return f'{self.represent_as_dashed_name(**kwargs)}: {self.text}'
+
+    frmts = SimpleNamespace(
+        dashed_name=SymbolicObjct.represent_as_dashed_name,
+        python_variable=SymbolicObjct.represent_as_python_variable,
+        symbol=SymbolicObjct.represent_as_symbol,
+        statement=represent_as_statement)
+
+    def str(self, frmt=None, **kwargs):
+        # Use the frmt attached to the formula relation as the default frmt.
+        frmt = Axiom.frmts.symbol if frmt is None else frmt
+        return frmt(self, **kwargs)
+
 class Note(AtheoreticalStatement):
     def __init__(self, text, **kwargs):
         super().__init__(**kwargs)
@@ -300,6 +348,7 @@ class Note(AtheoreticalStatement):
 class Theory(TheoreticalObjct):
     def __init__(self, theory=None, is_universe_of_discourse=None, python=None, dashed=None, symbol=None):
         global universe_of_discourse
+        self.axioms = tuple()
         self.formulae = tuple()
         self.relations = tuple()
         self.simple_objcts = tuple()
@@ -321,15 +370,15 @@ class Theory(TheoreticalObjct):
         assert theory is not None and isinstance(theory, Theory)
         assert theory is not None and isinstance(theory, Theory)
         assert isinstance(theory, Theory)
-        self.theory_index = theory.link_theory(self)
+        self.theory_index = theory.crossreference_theory(self)
         python = f't{self.theory_index + 1}' if python is None else python
         dashed = f'theory-{self.theory_index + 1}' if dashed is None else dashed
         symbol = f'𝒯{subscriptify(self.theory_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
 
-    def link_symbolic_objct(self, s):
-        """During construction, cross-link a symbolic_objct 𝓈
-        with its parent theory if it is not already cross-linked,
+    def crossreference_symbolic_objct(self, s):
+        """During construction, cross-reference a symbolic_objct 𝓈
+        with its parent theory if it is not already cross-referenceed,
         and return its 0-based index in Theory.symbolic_objcts."""
         assert isinstance(s, SymbolicObjct)
         o.theory = o.theory if hasattr(o, 'theory') else self
@@ -338,9 +387,20 @@ class Theory(TheoreticalObjct):
             self.symbolic_objcts = self.symbolic_objcts + tuple([o])
         return self.symbolic_objcts.index(o)
 
-    def link_formula(self, phi):
-        """During construction, cross-link a formula phi
-        with its parent theory if it is not already cross-linked,
+    def crossreference_axiom(self, a):
+        """During construction, cross-reference an axiom 𝒜
+        with its parent theory if it is not already cross-referenceed,
+        and return its 0-based index in Theory.axioms."""
+        assert isinstance(a, Axiom)
+        a.theory = a.theory if hasattr(a, 'theory') else self
+        assert a.theory is self
+        if a not in self.axioms:
+            self.axioms = self.axioms + tuple([a])
+        return self.axioms.index(a)
+
+    def crossreference_formula(self, phi):
+        """During construction, cross-reference a formula phi
+        with its parent theory if it is not already cross-referenceed,
         and return its 0-based index in Theory.formulae."""
         assert isinstance(phi, Formula)
         phi.theory = phi.theory if hasattr(phi, 'theory') else self
@@ -349,9 +409,9 @@ class Theory(TheoreticalObjct):
             self.formulae = self.formulae + tuple([phi])
         return self.formulae.index(phi)
 
-    def link_simple_objct(self, o):
-        """During construction, cross-link a simple-objct ℴ
-        with its parent theory if it is not already cross-linked,
+    def crossreference_simple_objct(self, o):
+        """During construction, cross-reference a simple-objct ℴ
+        with its parent theory if it is not already cross-referenceed,
         and return its 0-based index in Theory.simple_objcts."""
         assert isinstance(o, SimpleObjct)
         o.theory = o.theory if hasattr(o, 'theory') else self
@@ -366,9 +426,9 @@ class Theory(TheoreticalObjct):
 
         return self.simple_objcts.index(o)
 
-    def link_theory(self, t):
-        """During construction, cross-link a theory 𝒯
-        with its parent theory if it is not already cross-linked,
+    def crossreference_theory(self, t):
+        """During construction, cross-reference a theory 𝒯
+        with its parent theory if it is not already cross-referenceed,
         and return its 0-based index in Theory.theories."""
         assert isinstance(t, Theory)
         t.theory = t.theory if hasattr(t, 'theory') else self
@@ -377,9 +437,9 @@ class Theory(TheoreticalObjct):
             self.theories = self.theories + tuple([t])
         return self.theories.index(t)
 
-    def link_relation(self, r):
-        """During construction, cross-link a relation r
-        with its parent theory if it is not already cross-linked,
+    def crossreference_relation(self, r):
+        """During construction, cross-reference a relation r
+        with its parent theory if it is not already cross-referenceed,
         and return the 0-based index of the formula in Theory.symbolic_objcts."""
         assert isinstance(r, Relation)
         r.theory = r.theory if hasattr(r, 'theory') else self
@@ -408,8 +468,8 @@ class Relation(TheoreticalObjct):
 
     def __init__(self, theory, arity, formula_frmt=None, python=None, dashed=None, symbol=None):
         assert isinstance(theory, Theory)
-        self.formula_frmt = formula_formats.function_call if formula_frmt is None else formula_frmt
-        self.relation_index = theory.link_relation(self)
+        self.formula_frmt = Formula.frmts.function_call if formula_frmt is None else formula_frmt
+        self.relation_index = theory.crossreference_relation(self)
         python = f'r{self.relation_index + 1}' if python is None else python
         dashed = f'relation-{self.relation_index + 1}' if dashed is None else dashed
         symbol = f'◆{subscriptify(self.relation_index + 1)}' if symbol is None else symbol
@@ -428,7 +488,7 @@ class SimpleObjct(TheoreticalObjct):
 
     def __init__(self, theory, python=None, dashed=None, symbol=None):
         assert isinstance(theory, Theory)
-        self.simple_objct_index = theory.link_simple_objct(self)
+        self.simple_objct_index = theory.crossreference_simple_objct(self)
         if python is None or dashed is None or symbol is None:
             python = f'o{self.simple_objct_index + 1}' if python is None else python
             dashed = f'simple-objct-{self.simple_objct_index + 1}' if dashed is None else dashed
@@ -437,7 +497,7 @@ class SimpleObjct(TheoreticalObjct):
             # Force the theory attribute
             # because get_symbolic_object_1_index() needs it.
             self.theory = theory
-            formula_index = theory.link_symbolic_objct(self)
+            formula_index = theory.crossreference_symbolic_objct(self)
             python = f'o{formula_index}' if python is None else python
             dashed = f'object-{formula_index}' if dashed is None else dashed
             symbol = f'ℴ{subscriptify(formula_index)}' if symbol is None else symbol

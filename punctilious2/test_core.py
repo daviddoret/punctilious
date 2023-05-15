@@ -15,25 +15,40 @@ def generate_test_data_2():
     return t1
 
 
+class TestAxiom(TestCase):
+
+    def test_init(self):
+        t1 = core.Theory()
+        a1 = core.Axiom(theory=t1, text='If something is red, then it is neither green, nor blue.')
+        a2 = core.Axiom(theory=t1, text='If something is green, then it is neither red, nor blue.')
+        a3 = core.Axiom(theory=t1, text='If something is blue, then it is neither red, nor green.')
+
+        self.assertIs(t1, a1.theory)
+        self.assertIs(t1, a2.theory)
+        self.assertIs(t1, a3.theory)
+
+    def test_str(self):
+        self.fail()
+
 class TestFormula(TestCase):
 
     def test_init(self):
         t1 = core.Theory()
         o11 = core.SimpleObjct(theory=t1)
         o12 = core.SimpleObjct(theory=t1)
-        
+
         r_unary = core.Relation(theory=t1, arity=1)
         phi_unary = core.Formula(theory=t1, relation=r_unary, parameters=tuple([o11]))
-        self.assertEqual('◆₁(ℴ₁)', phi_unary.str(frmt=core.formula_formats.prefix_operator))
-        self.assertEqual('(ℴ₁)◆₁', phi_unary.str(frmt=core.formula_formats.suffix_operator))
-        self.assertEqual('◆₁(ℴ₁)', phi_unary.str(frmt=core.formula_formats.function_call))
-        self.assertEqual('𝜑₁', phi_unary.str(frmt=core.formula_formats.symbol))
+        self.assertEqual('◆₁(ℴ₁)', phi_unary.str(frmt=core.Formula.frmts.prefix_operator))
+        self.assertEqual('(ℴ₁)◆₁', phi_unary.str(frmt=core.Formula.frmts.suffix_operator))
+        self.assertEqual('◆₁(ℴ₁)', phi_unary.str(frmt=core.Formula.frmts.function_call))
+        self.assertEqual('𝜑₁', phi_unary.str(frmt=core.Formula.frmts.symbol))
 
         r_binary = core.Relation(theory=t1, arity=2)
         phi_binary = core.Formula(theory=t1, relation=r_binary, parameters=tuple([o11, o12]))
-        self.assertEqual('◆₂(ℴ₁, ℴ₂)', phi_binary.str(frmt=core.formula_formats.function_call))
-        self.assertEqual('(ℴ₁ ◆₂ ℴ₂)', phi_binary.str(frmt=core.formula_formats.infix_operator))
-        self.assertEqual('𝜑₂', phi_binary.str(frmt=core.formula_formats.symbol))
+        self.assertEqual('◆₂(ℴ₁, ℴ₂)', phi_binary.str(frmt=core.Formula.frmts.function_call))
+        self.assertEqual('(ℴ₁ ◆₂ ℴ₂)', phi_binary.str(frmt=core.Formula.frmts.infix_operator))
+        self.assertEqual('𝜑₂', phi_binary.str(frmt=core.Formula.frmts.symbol))
 
     def test_str(self):
         self.fail()
