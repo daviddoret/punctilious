@@ -18,10 +18,25 @@ def generate_test_data_2():
 class TestFormula(TestCase):
 
     def test_init(self):
-        t1 = core.Theory(python='T1', dashed='theory-1', symbol='𝒯₁')
-        self.assertEqual('T1', t1.python)
-        self.assertEqual('theory-1', t1.dashed)
-        self.assertEqual('𝒯₁', t1.symbol)
+        t1 = core.Theory()
+        o11 = core.SimpleObjct(theory=t1)
+        o12 = core.SimpleObjct(theory=t1)
+        
+        r_unary = core.Relation(theory=t1, arity=1)
+        phi_unary = core.Formula(theory=t1, relation=r_unary, parameters=tuple([o11]))
+        self.assertEqual('◆₁(ℴ₁)', phi_unary.str(frmt=core.formula_formats.prefix_operator))
+        self.assertEqual('(ℴ₁)◆₁', phi_unary.str(frmt=core.formula_formats.suffix_operator))
+        self.assertEqual('◆₁(ℴ₁)', phi_unary.str(frmt=core.formula_formats.function_call))
+        self.assertEqual('𝜑₁', phi_unary.str(frmt=core.formula_formats.symbol))
+
+        r_binary = core.Relation(theory=t1, arity=2)
+        phi_binary = core.Formula(theory=t1, relation=r_binary, parameters=tuple([o11, o12]))
+        self.assertEqual('◆₂(ℴ₁, ℴ₂)', phi_binary.str(frmt=core.formula_formats.function_call))
+        self.assertEqual('(ℴ₁ ◆₂ ℴ₂)', phi_binary.str(frmt=core.formula_formats.infix_operator))
+        self.assertEqual('𝜑₂', phi_binary.str(frmt=core.formula_formats.symbol))
+
+    def test_str(self):
+        self.fail()
 
 
 class TestSymbolicObjct(TestCase):
@@ -48,14 +63,29 @@ class TestNote(TestCase):
     pass
 
 
-class TestRelationDeclarationFormula(TestCase):
+class TestRelation(TestCase):
     def test_init(self):
-        t1 = core.Theory(dashed='test-theory-1')
-        r1 = core.Relation(arity=2, dashed='test-relation-1')
-        rdf1 = core.RelationDeclarationFormula(theory=t1, relation=r1)
-        self.assertIs(core.theoretical_relations.relation_declaration, rdf1.component)
-        self.assertIs(t1, rdf1.subformulae[0])
-        self.assertIs(r1, rdf1.subformulae[1])
+        t1 = core.Theory()
+        r11 = core.Relation(theory=t1, arity=1)
+        self.assertIs(t1, r11.theory)
+        self.assertEqual(1, r11.arity)
+        r12 = core.Relation(theory=t1, arity=2)
+        self.assertIs(t1, r12.theory)
+        self.assertEqual(2, r12.arity)
+        r13 = core.Relation(theory=t1, arity=2)
+        self.assertIs(t1, r13.theory)
+        self.assertEqual(2, r13.arity)
+        t2 = core.Theory()
+        r21 = core.Relation(theory=t2, arity=2)
+        self.assertIs(t2, r21.theory)
+        self.assertEqual(2, r21.arity)
+        r22 = core.Relation(theory=t2, arity=1)
+        self.assertIs(t2, r22.theory)
+        self.assertEqual(1, r22.arity)
+        r23 = core.Relation(theory=t2, arity=1)
+        self.assertIs(t2, r23.theory)
+        self.assertEqual(1, r23.arity)
+        pass
 
 
 class TestSimpleObjct(TestCase):
@@ -84,3 +114,6 @@ class TestTheory(TestCase):
 
     def test_declare_relation(self):
         pass
+
+
+

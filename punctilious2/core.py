@@ -41,6 +41,39 @@ utf8_subscript_dictionary = {'0': u'₀',
                              }
 
 
+def represent_formula_by_function_call(phi, **kwargs):
+    assert isinstance(phi, Formula)
+    return f'{phi.relation.symbol}({", ".join([p.str(**kwargs) for p in phi.parameters])})'
+
+
+def represent_formula_by_infix_operator(phi, **kwargs):
+    assert isinstance(phi, Formula) and phi.relation.arity == 2
+    return f'({phi.parameters[0].str(**kwargs)} {phi.relation.symbol} {phi.parameters[1].str(**kwargs)})'
+
+
+def represent_formula_by_suffix_operator(phi, **kwargs):
+    assert isinstance(phi, Formula) and phi.relation.arity == 1
+    return f'({phi.parameters[0].str(**kwargs)}){phi.relation.symbol}'
+
+
+def represent_formula_by_prefix_operator(phi, **kwargs):
+    assert isinstance(phi, Formula) and phi.relation.arity == 1
+    return f'{phi.relation.symbol}({phi.parameters[0].str(**kwargs)})'
+
+
+def represent_formula_by_symbol(phi, **kwargs):
+    assert isinstance(phi, Formula)
+    return f'{phi.symbol}'
+
+
+formula_formats = SimpleNamespace(
+    function_call=represent_formula_by_function_call,
+    infix_operator=represent_formula_by_infix_operator,
+    suffix_operator=represent_formula_by_suffix_operator,
+    prefix_operator=represent_formula_by_prefix_operator,
+    symbol=represent_formula_by_symbol)
+
+
 def subscriptify(s=None, fmt=None, **kwargs):
     """Converts to unicode-subscript the string s.
 
@@ -110,8 +143,9 @@ class SymbolicObjct:
     def __str__(self):
         return self.symbol
 
-    def str(self, scheme):
-        assert scheme is not None and isinstance(scheme, SymbolicScheme)
+    def str(self, scheme=None):
+        scheme = schemes.symbol if scheme is None else scheme
+        assert isinstance(scheme, SymbolicScheme)
         if hasattr(self, scheme.python):
             return getattr(self, scheme.python)
         else:
@@ -138,7 +172,6 @@ class TheoreticalObjct(SymbolicObjct):
     """
 
     def __init__(self, theory, python, dashed, symbol):
-
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
 
 
@@ -162,8 +195,19 @@ class Formula(TheoreticalObjct):
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
         assert relation is not None and isinstance(relation, Relation)
         self.relation = relation
-        assert parameters is not None and isinstance(parameters, tuple) and len(parameters) > 0
+        parameters = parameters if isinstance(parameters, tuple) else tuple([parameters])
+        assert len(parameters) > 0
         self.parameters = parameters
+
+    def __repr__(self):
+        return self.str()
+
+    def __str__(self):
+        return self.str()
+
+    def str(self, frmt=None, **kwargs):
+        frmt = self.relation.formula_frmt if frmt is None else frmt
+        return frmt(self, **kwargs)
 
 
 class RelationDeclarationFormula(Formula):
@@ -283,38 +327,6 @@ class Theory(TheoreticalObjct):
         symbol = f'𝒯{subscriptify(self.theory_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
 
-    def append_formula_component(self, formula_component):
-        assert formula_component is not None \
-               and isinstance(formula_component, TheoreticalObjct) \
-               and formula_component.theory is self
-        formula_components = self.formula_components
-        index = len(formula_components) + 1
-        self.formula_components = formula_components + tuple([formula_component])
-        return index
-
-    def append_statement(self, statement):
-        # TODO: Validate statement in append_statement
-        self.statements.append(statement)
-
-    def append_theoretical_statement(self, phi, proof):
-        position = self._get_next_position()
-        statement = PropositionStatement(theory=self, position=position, phi=phi, proof=proof)
-        self.append_statement(statement=statement)
-
-    def declare_simple_objct(self, python=None, dashed=None, symbol=None):
-        simple_objct = SimpleObjct(theory=self, python=python, dashed=dashed, symbol=symbol)
-        phi = SimpleObjctDeclarationFormula(theory=self, simple_objct=simple_objct)
-        position = self._get_next_position()
-        statement = PropositionStatement(theory=self, position=position, phi=phi)
-        self.append_statement(statement=statement)
-
-    def declare_relation(self, python=None, dashed=None, symbol=None, arity=None):
-        relation = Relation(arity=arity, python=python, dashed=dashed, symbol=symbol)
-        phi = RelationDeclarationFormula(theory=self, relation=relation)
-        position = self._get_next_position()
-        statement = PropositionStatement(theory=self, position=position, phi=phi)
-        self.append_statement(statement=statement)
-
     def link_symbolic_objct(self, s):
         """During construction, cross-link a symbolic_objct 𝓈
         with its parent theory if it is not already cross-linked,
@@ -346,6 +358,12 @@ class Theory(TheoreticalObjct):
         assert o.theory is self
         if o not in self.simple_objcts:
             self.simple_objcts = self.simple_objcts + tuple([o])
+
+        # phi = SimpleObjctDeclarationFormula(theory=self, simple_objct=simple_objct)
+        # position = self._get_next_position()
+        # statement = PropositionStatement(theory=self, position=position, phi=phi)
+        # self.append_statement(statement=statement)
+
         return self.simple_objcts.index(o)
 
     def link_theory(self, t):
@@ -370,6 +388,7 @@ class Theory(TheoreticalObjct):
             self.relations = self.relations + tuple([r])
         return self.relations.index(r)
 
+
 class Proof:
     """TODO: Define the proof class"""
 
@@ -387,12 +406,13 @@ class Relation(TheoreticalObjct):
     A relation ◆ has a fixed arity.
     """
 
-    def __init__(self, theory, arity, python=None, dashed=None, symbol=None):
+    def __init__(self, theory, arity, formula_frmt=None, python=None, dashed=None, symbol=None):
         assert isinstance(theory, Theory)
+        self.formula_frmt = formula_formats.function_call if formula_frmt is None else formula_frmt
         self.relation_index = theory.link_relation(self)
-        python = f'f{self.relation_index + 1}' if python is None else python
-        dashed = f'formula-{self.relation_index + 1}' if dashed is None else dashed
-        symbol = f'𝜑{subscriptify(self.relation_index + 1)}' if symbol is None else symbol
+        python = f'r{self.relation_index + 1}' if python is None else python
+        dashed = f'relation-{self.relation_index + 1}' if dashed is None else dashed
+        symbol = f'◆{subscriptify(self.relation_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
@@ -439,14 +459,20 @@ class TheoreticalRelation(Relation):
         super().__init__(theory=theory, arity=arity, python=python, dashed=dashed, symbol=symbol)
 
 
-universe_of_discourse = Theory(theory=None, is_universe_of_discourse=True, python='U', dashed='universe-of-discourse', symbol='𝒰')
+universe_of_discourse = Theory(theory=None, is_universe_of_discourse=True, python='U', dashed='universe-of-discourse',
+                               symbol='𝒰')
 u = universe_of_discourse
 
-_relation_declaration = TheoreticalRelation(theory=u, arity=2, python='relation_declaration', dashed='relation-declaration', symbol='relation-declaration')
-_simple_objct_declaration = TheoreticalRelation(theory=u, arity=2, python='simple_objct_declaration', dashed='simple-objct-declaration', symbol='simple-objct-declaration')
-_theory_declaration = TheoreticalRelation(theory=u, arity=2, python='theory_declaration', dashed='theory-declaration', symbol='theory-declaration')
-_theory_extension = TheoreticalRelation(theory=u, arity=2, python='theory_extension', dashed='theory-extension', symbol='theory-extension')
-_variable_declaration = TheoreticalRelation(theory=u, arity=2, python='variable_declaration', dashed='variable-declaration', symbol='variable-declaration')
+_relation_declaration = TheoreticalRelation(theory=u, arity=2, python='relation_declaration',
+                                            dashed='relation-declaration', symbol='relation-declaration')
+_simple_objct_declaration = TheoreticalRelation(theory=u, arity=2, python='simple_objct_declaration',
+                                                dashed='simple-objct-declaration', symbol='simple-objct-declaration')
+_theory_declaration = TheoreticalRelation(theory=u, arity=2, python='theory_declaration', dashed='theory-declaration',
+                                          symbol='theory-declaration')
+_theory_extension = TheoreticalRelation(theory=u, arity=2, python='theory_extension', dashed='theory-extension',
+                                        symbol='theory-extension')
+_variable_declaration = TheoreticalRelation(theory=u, arity=2, python='variable_declaration',
+                                            dashed='variable-declaration', symbol='variable-declaration')
 
 theoretical_relations = SimpleNamespace(
     relation_declaration=_relation_declaration,
