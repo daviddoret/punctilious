@@ -110,9 +110,11 @@ class SymbolicObjct:
     def __str__(self):
         return self.symbol
 
-
     def represent_as_dashed_name(self, **kwargs):
         return f'{self.dashed}'
+
+    def represent_as_declaration(self, **kwargs):
+        return f'Let {self.represent_as_dashed_name(**kwargs)} be a symbolic-objct denoted as dashed-name ⌜ {self.represent_as_dashed_name(**kwargs)} ⌝, symbol ⌜ {self.represent_as_symbol(**kwargs)} ⌝, and pythonic-name ⌜ {self.represent_as_python_variable(**kwargs)} ⌝.'
 
     def represent_as_python_variable(self, **kwargs):
         return f'{self.python}'
@@ -122,6 +124,7 @@ class SymbolicObjct:
 
     frmts = SimpleNamespace(
         dashed_name=represent_as_dashed_name,
+        declaration=represent_as_declaration,
         python_variable=represent_as_python_variable,
         symbol=represent_as_symbol)
 
@@ -502,6 +505,10 @@ class SimpleObjct(TheoreticalObjct):
             dashed = f'object-{formula_index}' if dashed is None else dashed
             symbol = f'ℴ{subscriptify(formula_index)}' if symbol is None else symbol
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
+        print(self.represent_as_declaration())
+
+    def represent_as_declaration(self, **kwargs):
+        return f'Let {self.represent_as_dashed_name(**kwargs)} be a symbolic-objct denoted as dashed-name ⌜ {self.represent_as_dashed_name(**kwargs)} ⌝, symbol ⌜ {self.represent_as_symbol(**kwargs)} ⌝, and pythonic-name ⌜ {self.represent_as_python_variable(**kwargs)} ⌝.'
 
 
 class TheoreticalRelation(Relation):
