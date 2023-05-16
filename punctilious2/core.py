@@ -1,7 +1,9 @@
 from types import SimpleNamespace
-import rich
-import rich.console
-import rich.markdown
+import prnt
+#import rich
+#import rich.console
+#import rich.markdown
+#import rich.table
 
 utf8_subscript_dictionary = {'0': u'₀',
                              '1': u'₁',
@@ -287,7 +289,54 @@ class Statement(TheoreticalObjct):
 
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement."""
-        return f'## {self.repr_as_dashed_name()}\n{self.truth_object.repr_as_statement_content()}'
+        return f'{prnt.serif_bold(self.repr_as_dashed_name())}\n{self.truth_object.repr_as_statement_content()}'
+
+class AxiomStatement(Statement):
+    """
+
+    Definition:
+    -----------
+    An axiom-statement is a statement that expresses an axion.
+
+    """
+
+    def __init__(self, theory, axiom, python=None, dashed=None, symbol=None):
+        assert isinstance(axiom, Axiom)
+        self.axiom = axiom
+        super().__init__(theory=theory, truth_object=axiom, python=python, dashed=dashed, symbol=symbol)
+
+    def repr_as_statement(self):
+        """Return a representation that expresses and justifies the statement."""
+        output = f'## {self.repr_as_dashed_name()}\n'
+        output = output + '\n' + self.truth_object.repr_as_statement_content() + \
+                 ' | ' + f'Axiom.\n'
+        return output
+
+
+class AxiomFormalization(Statement):
+    """
+
+    Definition:
+    -----------
+    An axiom-formalization-statement is a statement that follows directly from an axion.
+
+    """
+
+    def __init__(self, theory, axiom, truth_object, python=None, dashed=None, symbol=None):
+        assert isinstance(axiom, Axiom)
+        self.axiom = axiom
+        super().__init__(theory=theory, truth_object=truth_object, python=python, dashed=dashed, symbol=symbol)
+
+    def repr_as_statement(self):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'## {self.repr_as_dashed_name()}'
+        output = output + '\n' + self.truth_object.repr_as_statement_content() + \
+                 ' | ' + f'Follows directly from {self.axiom.repr_as_dashed_name()}.'
+        return output
 
 
 class PropositionStatement:
@@ -363,7 +412,7 @@ class Axiom(TheoreticalObjct):
 
         :return:
         """
-        return f'{self.repr_as_dashed_name()}: {self.text}'
+        return f'{prnt.serif_bold(self.repr_as_dashed_name())}: {self.text}'
 
     frmts = SimpleNamespace(
         dashed_name=SymbolicObjct.repr_as_dashed_name,
@@ -499,11 +548,12 @@ class Theory(TheoreticalObjct):
 
     def repr_as_theory(self):
         """Return a representation that expresses and justifies the theory."""
-        return f' \n# {self.repr_as_dashed_name()} \n' + \
-            '\n'.join(s.repr_as_statement() for s in self.statements)
+        output = f'# {self.repr_as_dashed_name()}'
+        output = output + '\n' + ''.join(s.repr_as_statement() for s in self.statements)
+        return output
 
     def prnt(self):
-        prnt(self.repr_as_theory())
+        prnt.prnt(self.repr_as_theory())
 
 
 class Proof:
@@ -602,10 +652,7 @@ theoretical_relations = SimpleNamespace(
     theory_extension=_theory_extension,
     variable_declaration=_variable_declaration)
 
-console = rich.console.Console()
+#console = rich.console.Console()
 
 
-def prnt(s):
-    md = rich.markdown.Markdown(s)
-    console.log(md)
 
