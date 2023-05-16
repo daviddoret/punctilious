@@ -32,7 +32,7 @@ class Test(TestCase):
     def test_extract_subformula_by_flat_index(self):
         t = generate_test_theory()
         phi = t.assure_free_formula((t.r3, (t.r1, t.o1, t.o2), t.Y, (t.r2, t.o3, (t.r3, t.Z), t.X, t.Z), t.Y, t.o1))
-        print(phi.str(str_fun=core.formula_str_funs.formal))
+        print(phi.repr(str_fun=core.formula_str_funs.formal))
         print(core.extract_subformula_by_flat_index(phi=phi, n=4))
 
 

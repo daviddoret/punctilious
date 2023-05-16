@@ -373,27 +373,27 @@ class formula_str_funs:
     def infix(formula, is_subformula=False, **kwargs):
         """[relation, x, y] --> x relation y"""
         assert formula.first_level_cardinality == 3
-        return f'{"(" if is_subformula else ""}{formula.content[1].str(is_subformula=True, mod=rep_modes.sym)} {formula.content[0].str(is_subformula=True, mod=rep_modes.sym)} {formula.content[2].str(is_subformula=True, mod=rep_modes.sym)}{")" if is_subformula else ""}'
+        return f'{"(" if is_subformula else ""}{formula.content[1].repr(is_subformula=True, mod=rep_modes.sym)} {formula.content[0].repr(is_subformula=True, mod=rep_modes.sym)} {formula.content[2].repr(is_subformula=True, mod=rep_modes.sym)}{")" if is_subformula else ""}'
 
     @staticmethod
     def condensed_unary_postfix(formula, is_subformula=False, **kwargs):
         """[relation, x] --> xrelation"""
         assert formula.first_level_cardinality == 2
-        return f'{"(" if is_subformula else ""}{formula.content[1].str(is_subformula=True, mod=rep_modes.sym)}{formula.content[0].str(is_subformula=True, mod=rep_modes.sym)}{")" if is_subformula else ""}'
+        return f'{"(" if is_subformula else ""}{formula.content[1].repr(is_subformula=True, mod=rep_modes.sym)}{formula.content[0].repr(is_subformula=True, mod=rep_modes.sym)}{")" if is_subformula else ""}'
 
     @staticmethod
     def function(formula, **kwargs):
         """[relation, x, y, ...] --> relation(x, y, ...)"""
         assert formula.first_level_cardinality > 0
         relation = formula.content[0]
-        arguments = ", ".join(argument.str(is_subformula=True) for argument in formula.content[1:])
+        arguments = ", ".join(argument.repr(is_subformula=True) for argument in formula.content[1:])
         return f'{relation}({arguments})'
 
     @staticmethod
     def formal(formula, **kwargs):
         """[relation, x, y, ...] --> (relation, x, y, ...)"""
         assert formula.first_level_cardinality > 0
-        components = ", ".join(argument.str(is_subformula=True) for argument in formula.tup)
+        components = ", ".join(argument.repr(is_subformula=True) for argument in formula.tup)
         return f'({components})'
 
 
@@ -884,7 +884,7 @@ class FormulaStatement(FormulaComponent):
         match mod:
             case rep_modes.definition:
                 if len(self.content) == 1 and self.content[0].is_formula_atomic_component:
-                    return self.content[0].str(sym=True, **kwargs)
+                    return self.content[0].repr(sym=True, **kwargs)
                 elif len(self.content) > 1 and self.content[0].is_object \
                         and self.content[0].formula_str_fun is not None:
                     return self.content[0].formula_str_fun(self, sub=is_subformula, sym=True, **kwargs)
@@ -982,7 +982,7 @@ class Theory(FormulaComponent):
         statement = StatementObsolete(self, statement_counter, statement_formula, justification)
         self.statements.append(statement)
         if Theory.echo_statement:
-            print(statement.str(mod=rep_modes.definition))
+            print(statement.repr(mod=rep_modes.definition))
         return statement
 
     def assure_free_formula(self, phi):
@@ -1029,7 +1029,7 @@ class Theory(FormulaComponent):
         statement = StatementObsolete(self, statement_counter, statement_formula, justification)
         self.statements.append(statement)
         if Theory.echo_statement:
-            print(statement.str(mod=rep_modes.definition))
+            print(statement.repr(mod=rep_modes.definition))
         return statement
 
     def append_note(self, text):

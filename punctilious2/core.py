@@ -29,7 +29,7 @@ utf8_subscript_dictionary = {'0': u'₀',
                              '(': u'₍',
                              ')': u'₎',
                              'j': u'ⱼ',
-                             'i': u'ᵢ',  # Alternative from the Unicde Phonetic Extensions block: ᵢ
+                             'i': u'ᵢ',  # Alternative from the Unicode Phonetic Extensions block: ᵢ
                              'r': u'ᵣ',  # Source: Unicode Phonetic Extensions block.
                              'u': u'ᵤ',  # Source: Unicode Phonetic Extensions block.
                              'v': u'ᵥ',  # Source: Unicode Phonetic Extensions block.
@@ -41,7 +41,7 @@ utf8_subscript_dictionary = {'0': u'₀',
                              }
 
 
-def subscriptify(s=None, fmt=None, **kwargs):
+def subscriptify(s=None):
     """Converts to unicode-subscript the string s.
 
     References:
@@ -110,36 +110,37 @@ class SymbolicObjct:
     def __str__(self):
         return self.symbol
 
-    def represent_as_dashed_name(self, **kwargs):
+    def repr_as_dashed_name(self):
         return f'{self.dashed}'
 
-    def represent_as_declaration(self, **kwargs):
-        return f'Let {self.represent_as_dashed_name(**kwargs)} be a symbolic-objct denoted as dashed-name ⌜ {self.represent_as_dashed_name(**kwargs)} ⌝, symbol ⌜ {self.represent_as_symbol(**kwargs)} ⌝, and pythonic-name ⌜ {self.represent_as_python_variable(**kwargs)} ⌝.'
+    def repr_as_declaration(self, **kwargs):
+        return f'Let {self.repr_as_dashed_name()} be a symbolic-objct denoted as dashed-name ⌜ {self.repr_as_dashed_name()} ⌝, symbol ⌜ {self.repr_as_symbol()} ⌝, and pythonic-name ⌜ {self.repr_as_python_variable()} ⌝.'
 
-    def represent_as_python_variable(self, **kwargs):
+    def repr_as_python_variable(self):
         return f'{self.python}'
 
-    def represent_as_symbol(self, **kwargs):
+    def repr_as_symbol(self):
         return f'{self.symbol}'
 
     frmts = SimpleNamespace(
-        dashed_name=represent_as_dashed_name,
-        declaration=represent_as_declaration,
-        python_variable=represent_as_python_variable,
-        symbol=represent_as_symbol)
+        dashed_name=repr_as_dashed_name,
+        declaration=repr_as_declaration,
+        python_variable=repr_as_python_variable,
+        symbol=repr_as_symbol)
 
-    def str(self, frmt=None, **kwargs):
+    def repr(self, frmt=None, **kwargs):
         frmt = SymbolicObjct.frmts.symbol if frmt is None else frmt
         return frmt(self, **kwargs)
-
 
 
 class TheoreticalObjct(SymbolicObjct):
     """
     Definition
     ----------
-    Given a theory 𝒯, a theoretical-object 𝔁 is an object
-    that is constitutive of 𝒯 and that may be referenced in 𝒯 formulae.
+    Given a theory 𝒯, a theoretical-object ℴ is an object that:
+     * is constitutive of 𝒯,
+     * may be referenced in 𝒯 formulae (i.e. 𝒯 may "talk about" ℴ),
+     * that may be but is not necessarily a statement in 𝒯 (e.g. it may be an invalid or inconsistent formula).
 
     The following are supported classes of theoretical-objects:
     * axiom
@@ -182,42 +183,43 @@ class Formula(TheoreticalObjct):
         self.parameters = parameters
 
     def __repr__(self):
-        return self.str()
+        return self.repr()
 
     def __str__(self):
-        return self.str()
+        return self.repr()
 
-    def represent_as_function_call(self, **kwargs):
-        return f'{self.relation.symbol}({", ".join([p.str(**kwargs) for p in self.parameters])})'
+    def repr_as_function_call(self, **kwargs):
+        return f'{self.relation.symbol}({", ".join([p.repr(**kwargs) for p in self.parameters])})'
 
-    def represent_as_infix_operator(self, **kwargs):
+    def repr_as_infix_operator(self, **kwargs):
         assert self.relation.arity == 2
-        return f'({self.parameters[0].str(**kwargs)} {self.relation.symbol} {self.parameters[1].str(**kwargs)})'
+        return f'({self.parameters[0].repr(**kwargs)} {self.relation.symbol} {self.parameters[1].repr(**kwargs)})'
 
-    def represent_as_suffix_operator(self, **kwargs):
+    def repr_as_suffix_operator(self, **kwargs):
         assert self.relation.arity == 1
-        return f'({self.parameters[0].str(**kwargs)}){self.relation.symbol}'
+        return f'({self.parameters[0].repr(**kwargs)}){self.relation.symbol}'
 
-    def represent_as_prefix_operator(self, **kwargs):
+    def repr_as_prefix_operator(self, **kwargs):
         assert self.relation.arity == 1
-        return f'{self.relation.symbol}({self.parameters[0].str(**kwargs)})'
+        return f'{self.relation.symbol}({self.parameters[0].repr(**kwargs)})'
 
-    def represent_formula_by_symbol(self, **kwargs):
+    def repr_formula_by_symbol(self):
         return f'{self.symbol}'
 
-    def str(self, frmt=None, **kwargs):
+    def repr(self, frmt=None, **kwargs):
         # Use the frmt attached to the formula relation as the default frmt.
         frmt = self.relation.formula_frmt if frmt is None else frmt
         return frmt(self, **kwargs)
 
     frmts = SimpleNamespace(
-        dashed_name=SymbolicObjct.represent_as_dashed_name,
-        python_variable=SymbolicObjct.represent_as_python_variable,
-        symbol=SymbolicObjct.represent_as_symbol,
-        function_call=represent_as_function_call,
-        infix_operator=represent_as_infix_operator,
-        prefix_operator=represent_as_prefix_operator,
-        suffix_operator=represent_as_suffix_operator)
+        dashed_name=SymbolicObjct.repr_as_dashed_name,
+        python_variable=SymbolicObjct.repr_as_python_variable,
+        symbol=SymbolicObjct.repr_as_symbol,
+        function_call=repr_as_function_call,
+        infix_operator=repr_as_infix_operator,
+        prefix_operator=repr_as_prefix_operator,
+        suffix_operator=repr_as_suffix_operator)
+
 
 class RelationDeclarationFormula(Formula):
     def __init__(self, theory, relation, python, dashed, symbol):
@@ -247,10 +249,28 @@ class SimpleObjctDeclarationFormula(Formula):
                          dashed=dashed, symbol=symbol)
 
 
-class TheoryStatement:
-    def __init__(self, theory, position):
-        self.theory = theory
-        self.position = position
+class Statement(TheoreticalObjct):
+    """
+
+    Definition
+    ----------
+    Given a theory 𝒯, a statement 𝒮 is a theoretical-object that:
+     * announces some truth in 𝒯.
+
+    For 𝒯 to be valid, all statements in 𝒯 must be valid.
+    For 𝒯 to be consistent, all statements in 𝒯 must be consistent.
+    etc.
+    """
+
+    def __init__(self, theory, truth_object, python=None, dashed=None, symbol=None):
+        assert isinstance(truth_object, TheoreticalObjct)
+        self.truth_object = truth_object
+        assert isinstance(theory, Theory)
+        self.statement_index = theory.crossreference_statement(self)
+        python = f's{self.statement_index + 1}' if python is None else python
+        dashed = f'statement-{self.statement_index + 1}' if dashed is None else dashed
+        symbol = f'𝒮{subscriptify(self.statement_index + 1)}' if symbol is None else symbol
+        super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
 
 
 class PropositionStatement:
@@ -275,12 +295,6 @@ class PropositionStatement:
         self.position = position
         self.phi = phi
         self.proof = proof
-
-
-class SimpleObjctDeclarationStatement(TheoryStatement):
-    def __init__(self, theory, position, simple_objct_component):
-        phi = SimpleObjctDeclarationFormula(theory=theory, simple_objct=simple_objct_component)
-        super().__init__(theory, position)
 
 
 class AtheoreticalStatement:
@@ -315,32 +329,32 @@ class Axiom(TheoreticalObjct):
         assert isinstance(theory, Theory)
         self.axiom_index = theory.crossreference_axiom(self)
         python = f'a{self.axiom_index + 1}' if python is None else python
-        dashed = f'{self.theory.represent_as_dashed_name()}-axiom-{self.axiom_index + 1}' if dashed is None else dashed
+        dashed = f'{self.theory.repr_as_dashed_name()}-axiom-{self.axiom_index + 1}' if dashed is None else dashed
         symbol = f'𝒜{subscriptify(self.axiom_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
         assert text is not None and isinstance(text, str)
         self.text = text
-        print(self.represent_as_statement())
 
     def __repr__(self):
-        return self.str()
+        return self.repr()
 
     def __str__(self):
-        return self.str()
+        return self.repr()
 
-    def represent_as_statement(self, **kwargs):
-        return f'{self.represent_as_dashed_name(**kwargs)}: {self.text}'
+    def repr_as_statement_content(self, **kwargs):
+        return f'{self.repr_as_dashed_name()}: {self.text}'
 
     frmts = SimpleNamespace(
-        dashed_name=SymbolicObjct.represent_as_dashed_name,
-        python_variable=SymbolicObjct.represent_as_python_variable,
-        symbol=SymbolicObjct.represent_as_symbol,
-        statement=represent_as_statement)
+        dashed_name=SymbolicObjct.repr_as_dashed_name,
+        python_variable=SymbolicObjct.repr_as_python_variable,
+        symbol=SymbolicObjct.repr_as_symbol,
+        statement=repr_as_statement_content)
 
-    def str(self, frmt=None, **kwargs):
+    def repr(self, frmt=None, **kwargs):
         # Use the frmt attached to the formula relation as the default frmt.
         frmt = Axiom.frmts.symbol if frmt is None else frmt
         return frmt(self, **kwargs)
+
 
 class Note(AtheoreticalStatement):
     def __init__(self, text, **kwargs):
@@ -381,18 +395,18 @@ class Theory(TheoreticalObjct):
 
     def crossreference_symbolic_objct(self, s):
         """During construction, cross-reference a symbolic_objct 𝓈
-        with its parent theory if it is not already cross-referenceed,
+        with its parent theory if it is not already cross-referenced,
         and return its 0-based index in Theory.symbolic_objcts."""
         assert isinstance(s, SymbolicObjct)
-        o.theory = o.theory if hasattr(o, 'theory') else self
-        assert o.theory is self
-        if o not in self.symbolic_objcts:
-            self.symbolic_objcts = self.symbolic_objcts + tuple([o])
-        return self.symbolic_objcts.index(o)
+        s.theory = s.theory if hasattr(s, 'theory') else self
+        assert s.theory is self
+        if s not in self.symbolic_objcts:
+            self.symbolic_objcts = self.symbolic_objcts + tuple([s])
+        return self.symbolic_objcts.index(s)
 
     def crossreference_axiom(self, a):
         """During construction, cross-reference an axiom 𝒜
-        with its parent theory if it is not already cross-referenceed,
+        with its parent theory if it is not already cross-referenced,
         and return its 0-based index in Theory.axioms."""
         assert isinstance(a, Axiom)
         a.theory = a.theory if hasattr(a, 'theory') else self
@@ -403,7 +417,7 @@ class Theory(TheoreticalObjct):
 
     def crossreference_formula(self, phi):
         """During construction, cross-reference a formula phi
-        with its parent theory if it is not already cross-referenceed,
+        with its parent theory if it is not already cross-referenced,
         and return its 0-based index in Theory.formulae."""
         assert isinstance(phi, Formula)
         phi.theory = phi.theory if hasattr(phi, 'theory') else self
@@ -414,7 +428,7 @@ class Theory(TheoreticalObjct):
 
     def crossreference_simple_objct(self, o):
         """During construction, cross-reference a simple-objct ℴ
-        with its parent theory if it is not already cross-referenceed,
+        with its parent theory if it is not already cross-referenced,
         and return its 0-based index in Theory.simple_objcts."""
         assert isinstance(o, SimpleObjct)
         o.theory = o.theory if hasattr(o, 'theory') else self
@@ -429,9 +443,20 @@ class Theory(TheoreticalObjct):
 
         return self.simple_objcts.index(o)
 
+    def crossreference_statement(self, s):
+        """During construction, cross-reference a statement 𝒮
+        with its parent theory if it is not already cross-referenced,
+        and return its 0-based index in Theory.statements."""
+        assert isinstance(s, Statement)
+        s.theory = s.theory if hasattr(s, 'theory') else self
+        assert s.theory is self
+        if s not in self.statements:
+            self.statements = self.statements + tuple([s])
+        return self.statements.index(s)
+
     def crossreference_theory(self, t):
         """During construction, cross-reference a theory 𝒯
-        with its parent theory if it is not already cross-referenceed,
+        with its parent theory if it is not already cross-referenced,
         and return its 0-based index in Theory.theories."""
         assert isinstance(t, Theory)
         t.theory = t.theory if hasattr(t, 'theory') else self
@@ -442,7 +467,7 @@ class Theory(TheoreticalObjct):
 
     def crossreference_relation(self, r):
         """During construction, cross-reference a relation r
-        with its parent theory if it is not already cross-referenceed,
+        with its parent theory if it is not already cross-referenced,
         and return the 0-based index of the formula in Theory.symbolic_objcts."""
         assert isinstance(r, Relation)
         r.theory = r.theory if hasattr(r, 'theory') else self
@@ -505,10 +530,10 @@ class SimpleObjct(TheoreticalObjct):
             dashed = f'object-{formula_index}' if dashed is None else dashed
             symbol = f'ℴ{subscriptify(formula_index)}' if symbol is None else symbol
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
-        print(self.represent_as_declaration())
+        print(self.repr_as_declaration())
 
-    def represent_as_declaration(self, **kwargs):
-        return f'Let {self.represent_as_dashed_name(**kwargs)} be a symbolic-objct denoted as dashed-name ⌜ {self.represent_as_dashed_name(**kwargs)} ⌝, symbol ⌜ {self.represent_as_symbol(**kwargs)} ⌝, and pythonic-name ⌜ {self.represent_as_python_variable(**kwargs)} ⌝.'
+    def repr_as_declaration(self, **kwargs):
+        return f'Let {self.repr_as_dashed_name()} be a symbolic-objct denoted as dashed-name ⌜ {self.repr_as_dashed_name()} ⌝, symbol ⌜ {self.repr_as_symbol()} ⌝, and pythonic-name ⌜ {self.repr_as_python_variable()} ⌝.'
 
 
 class TheoreticalRelation(Relation):
