@@ -126,15 +126,9 @@ class TestSimpleObjct(TestCase):
 
 
 class TestTheory(TestCase):
-    def test__get_next_position(self):
+    def test___init__(self):
         t1 = core.Theory(dashed='test-theory-1')
-        pass
+        a1 = core.Axiom(theory=t1, text='If a filooboo is wala, then it is sholo.')
+        s1 = core.Statement(theory=t1, truth_object=a1)
+        t1.print()
 
-    def test_append_statement(self):
-        pass
-
-    def test_append_theoretical_statement(self):
-        pass
-
-    def test_declare_relation(self):
-        pass

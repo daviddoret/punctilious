@@ -1,4 +1,7 @@
 from types import SimpleNamespace
+import rich
+import rich.console
+import rich.markdown
 
 utf8_subscript_dictionary = {'0': u'₀',
                              '1': u'₁',
@@ -157,6 +160,13 @@ class TheoreticalObjct(SymbolicObjct):
     def __init__(self, theory, python, dashed, symbol):
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
 
+    def repr_as_statement_content(self):
+        """Returns a representation that may be embedded in a statement.
+
+        :return:
+        """
+        return self.repr()
+
 
 class Formula(TheoreticalObjct):
     """
@@ -272,6 +282,13 @@ class Statement(TheoreticalObjct):
         symbol = f'𝒮{subscriptify(self.statement_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
 
+    def repr(self):
+        pass
+
+    def repr_as_statement(self):
+        """Return a representation that expresses and justifies the statement."""
+        return f'## {self.repr_as_dashed_name()}\n{self.truth_object.repr_as_statement_content()}'
+
 
 class PropositionStatement:
     """
@@ -329,7 +346,7 @@ class Axiom(TheoreticalObjct):
         assert isinstance(theory, Theory)
         self.axiom_index = theory.crossreference_axiom(self)
         python = f'a{self.axiom_index + 1}' if python is None else python
-        dashed = f'{self.theory.repr_as_dashed_name()}-axiom-{self.axiom_index + 1}' if dashed is None else dashed
+        dashed = f'axiom-{self.axiom_index + 1}' if dashed is None else dashed
         symbol = f'𝒜{subscriptify(self.axiom_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
         assert text is not None and isinstance(text, str)
@@ -341,7 +358,11 @@ class Axiom(TheoreticalObjct):
     def __str__(self):
         return self.repr()
 
-    def repr_as_statement_content(self, **kwargs):
+    def repr_as_statement_content(self):
+        """Returns a representation that may be embedded in a statement.
+
+        :return:
+        """
         return f'{self.repr_as_dashed_name()}: {self.text}'
 
     frmts = SimpleNamespace(
@@ -476,6 +497,14 @@ class Theory(TheoreticalObjct):
             self.relations = self.relations + tuple([r])
         return self.relations.index(r)
 
+    def repr_as_theory(self):
+        """Return a representation that expresses and justifies the theory."""
+        return f' \n# {self.repr_as_dashed_name()} \n' + \
+            '\n'.join(s.repr_as_statement() for s in self.statements)
+
+    def prnt(self):
+        prnt(self.repr_as_theory())
+
 
 class Proof:
     """TODO: Define the proof class"""
@@ -572,3 +601,11 @@ theoretical_relations = SimpleNamespace(
     theory_declaration=_theory_declaration,
     theory_extension=_theory_extension,
     variable_declaration=_variable_declaration)
+
+console = rich.console.Console()
+
+
+def prnt(s):
+    md = rich.markdown.Markdown(s)
+    console.log(md)
+
