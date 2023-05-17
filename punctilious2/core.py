@@ -243,13 +243,21 @@ class Statement(TheoreticalObjct):
     etc.
     """
 
-    def __init__(self, theory, truth_object, symbol=None, capitalizable=False):
+    reps = SimpleNamespace(
+        proposition=Representation('proposition'),
+        corollary=Representation('corollary'),
+        lemma=Representation('lemma'),
+        theorem=Representation('theorem')
+    )
+
+    def __init__(self, theory, truth_object, symbol=None, capitalizable=False, category=None):
         assert isinstance(truth_object, TheoreticalObjct)
         self.truth_object = truth_object
         assert isinstance(theory, Theory)
         self.statement_index = theory.crossreference_statement(self)
+        category = Statement.reps.proposition if category is None else category
         capitalizable = True if symbol is None else capitalizable
-        symbol = f'statement-{self.statement_index + 1}' if symbol is None else symbol
+        symbol = f'{category}-{self.statement_index + 1}' if symbol is None else symbol
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
     def repr(self):
@@ -280,12 +288,12 @@ class AxiomStatement(Statement):
         return output
 
 
-class AxiomFormalization(Statement):
+class DirectAxiomInferenceStatement(Statement):
     """
 
     Definition:
     -----------
-    An axiom-formalization-statement is a statement that follows directly from an axion.
+    A direct-axiom-inference-statement is a statement that follows directly from an axion.
 
     """
 
@@ -502,7 +510,7 @@ class Theory(TheoreticalObjct):
 
     def repr_as_theory(self):
         """Return a representation that expresses and justifies the theory."""
-        output = f'\n\n{prnt.serif_bold(self.repr_as_symbol())}'
+        output = f'\n\n{prnt.serif_bold(self.repr_as_symbol(capitalized=True))}'
         output = output + f'\n\n{prnt.serif_bold("Simple-objcts:")}'
         output = output + '\n' + '\n'.join(o.repr_as_declaration() for o in self.simple_objcts)
         output = output + f'\n\n{prnt.serif_bold("Relations:")}'
@@ -541,6 +549,9 @@ class Relation(TheoreticalObjct):
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
+
+    def repr_as_declaration(self):
+        return f'Let {self.repr_as_symbol()} be a relation denoted as ⌜ {self.repr_as_symbol()} ⌝.'
 
 
 class SimpleObjct(TheoreticalObjct):
