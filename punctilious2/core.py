@@ -1,9 +1,22 @@
 from types import SimpleNamespace
 import prnt
-#import rich
-#import rich.console
-#import rich.markdown
-#import rich.table
+
+
+# import rich
+# import rich.console
+# import rich.markdown
+# import rich.table
+
+class Representation:
+    def __init__(self, s):
+        self.s = s
+
+    def __repr__(self):
+        return self.s
+
+    def __str__(self):
+        return self.s
+
 
 utf8_subscript_dictionary = {'0': u'₀',
                              '1': u'₁',
@@ -61,39 +74,6 @@ def subscriptify(s=None):
     return ''.join([utf8_subscript_dictionary.get(c, c) for c in s])
 
 
-class SymbolicScheme:
-    """
-    Definition
-    ----------
-    A symbolic-scheme is a conventional method used to assign symbolic-names to objects.
-    """
-
-    def __init__(self, python, dashed, symbol):
-        self.python = python
-        self.dashed = dashed
-        self.symbol = symbol
-
-    def __repr__(self):
-        return self.python
-
-    def __str__(self):
-        return self.python
-
-    def str(self, scheme=None):
-        assert isinstance(scheme, SymbolicScheme)
-        return getattr(self, scheme.python)
-
-
-_dashed = SymbolicScheme(python='dashed', dashed='dashed', symbol='dashed')
-_python = SymbolicScheme(python='python', dashed='python', symbol='python')
-_symbol = SymbolicScheme(python='symbol', dashed='symbol', symbol='symbol')
-
-schemes = SimpleNamespace(
-    dashed=_dashed,
-    python=_python,
-    symbol=_symbol)
-
-
 class SymbolicObjct:
     """
     Definition
@@ -104,6 +84,9 @@ class SymbolicObjct:
 
     def __init__(self, theory, python, dashed, symbol):
         assert theory is not None and isinstance(theory, Theory)
+        assert isinstance(python, str) and len(python) > 0
+        assert isinstance(dashed, str) and len(dashed) > 0
+        assert isinstance(symbol, str) and len(symbol) > 0
         self.theory = theory
         self.python = python
         self.dashed = dashed
@@ -127,15 +110,8 @@ class SymbolicObjct:
     def repr_as_symbol(self):
         return f'{self.symbol}'
 
-    frmts = SimpleNamespace(
-        dashed_name=repr_as_dashed_name,
-        declaration=repr_as_declaration,
-        python_variable=repr_as_python_variable,
-        symbol=repr_as_symbol)
-
-    def repr(self, frmt=None, **kwargs):
-        frmt = SymbolicObjct.frmts.symbol if frmt is None else frmt
-        return frmt(self, **kwargs)
+    def repr(self):
+        return self.repr_as_symbol()
 
 
 class TheoreticalObjct(SymbolicObjct):
@@ -181,6 +157,13 @@ class Formula(TheoreticalObjct):
       whose elements are theoretical-objects, possibly formulae.
     """
 
+    reps = SimpleNamespace(
+        function_call=Representation('function_call'),
+        infix_operator=Representation('infix_operator'),
+        prefix_operator=Representation('prefix_operator'),
+        suffix_operator=Representation('prefix_operator')
+    )
+
     def __init__(self, theory, relation, parameters, python=None, dashed=None, symbol=None):
         assert isinstance(theory, Theory)
         self.formula_index = theory.crossreference_formula(self)
@@ -200,37 +183,32 @@ class Formula(TheoreticalObjct):
     def __str__(self):
         return self.repr()
 
-    def repr_as_function_call(self, **kwargs):
-        return f'{self.relation.symbol}({", ".join([p.repr(**kwargs) for p in self.parameters])})'
+    def repr_as_function_call(self):
+        return f'{self.relation.symbol}({", ".join([p.repr() for p in self.parameters])})'
 
-    def repr_as_infix_operator(self, **kwargs):
+    def repr_as_infix_operator(self):
         assert self.relation.arity == 2
-        return f'({self.parameters[0].repr(**kwargs)} {self.relation.symbol} {self.parameters[1].repr(**kwargs)})'
+        return f'({self.parameters[0].repr()} {self.relation.symbol} {self.parameters[1].repr()})'
 
-    def repr_as_suffix_operator(self, **kwargs):
+    def repr_as_suffix_operator(self):
         assert self.relation.arity == 1
-        return f'({self.parameters[0].repr(**kwargs)}){self.relation.symbol}'
+        return f'({self.parameters[0].repr()}){self.relation.symbol}'
 
-    def repr_as_prefix_operator(self, **kwargs):
+    def repr_as_prefix_operator(self):
         assert self.relation.arity == 1
-        return f'{self.relation.symbol}({self.parameters[0].repr(**kwargs)})'
+        return f'{self.relation.symbol}({self.parameters[0].repr()})'
 
-    def repr_formula_by_symbol(self):
-        return f'{self.symbol}'
-
-    def repr(self, frmt=None, **kwargs):
-        # Use the frmt attached to the formula relation as the default frmt.
-        frmt = self.relation.formula_frmt if frmt is None else frmt
-        return frmt(self, **kwargs)
-
-    frmts = SimpleNamespace(
-        dashed_name=SymbolicObjct.repr_as_dashed_name,
-        python_variable=SymbolicObjct.repr_as_python_variable,
-        symbol=SymbolicObjct.repr_as_symbol,
-        function_call=repr_as_function_call,
-        infix_operator=repr_as_infix_operator,
-        prefix_operator=repr_as_prefix_operator,
-        suffix_operator=repr_as_suffix_operator)
+    def repr_as_formula(self):
+        match self.relation.formula_rep:
+            case Formula.reps.function_call:
+                return self.repr_as_function_call()
+            case Formula.reps.infix_operator:
+                return self.repr_as_infix_operator()
+            case Formula.reps.prefix_operator:
+                return self.repr_as_prefix_operator()
+            case Formula.reps.suffix_operator:
+                return self.repr_as_suffix_operator()
+        assert 1 == 2
 
 
 class RelationDeclarationFormula(Formula):
@@ -291,6 +269,7 @@ class Statement(TheoreticalObjct):
         """Return a representation that expresses and justifies the statement."""
         return f'{prnt.serif_bold(self.repr_as_dashed_name())}\n{self.truth_object.repr_as_statement_content()}'
 
+
 class AxiomStatement(Statement):
     """
 
@@ -307,9 +286,7 @@ class AxiomStatement(Statement):
 
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement."""
-        output = f'## {self.repr_as_dashed_name()}\n'
-        output = output + '\n' + self.truth_object.repr_as_statement_content() + \
-                 ' | ' + f'Axiom.\n'
+        output = '\n\n' + self.truth_object.repr_as_statement_content()
         return output
 
 
@@ -324,6 +301,7 @@ class AxiomFormalization(Statement):
 
     def __init__(self, theory, axiom, truth_object, python=None, dashed=None, symbol=None):
         assert isinstance(axiom, Axiom)
+        assert isinstance(truth_object, Formula)
         self.axiom = axiom
         super().__init__(theory=theory, truth_object=truth_object, python=python, dashed=dashed, symbol=symbol)
 
@@ -333,9 +311,8 @@ class AxiomFormalization(Statement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'## {self.repr_as_dashed_name()}'
-        output = output + '\n' + self.truth_object.repr_as_statement_content() + \
-                 ' | ' + f'Follows directly from {self.axiom.repr_as_dashed_name()}.'
+        output = f'\n\n{prnt.serif_bold(self.repr_as_dashed_name())}: {self.truth_object.repr_as_formula()}'
+        output = output + f'\n{prnt.serif_bold("Proof:")} Follows directly from {prnt.serif_bold(self.axiom.repr_as_dashed_name())}.'
         return output
 
 
@@ -413,17 +390,6 @@ class Axiom(TheoreticalObjct):
         :return:
         """
         return f'{prnt.serif_bold(self.repr_as_dashed_name())}: {self.text}'
-
-    frmts = SimpleNamespace(
-        dashed_name=SymbolicObjct.repr_as_dashed_name,
-        python_variable=SymbolicObjct.repr_as_python_variable,
-        symbol=SymbolicObjct.repr_as_symbol,
-        statement=repr_as_statement_content)
-
-    def repr(self, frmt=None, **kwargs):
-        # Use the frmt attached to the formula relation as the default frmt.
-        frmt = Axiom.frmts.symbol if frmt is None else frmt
-        return frmt(self, **kwargs)
 
 
 class Note(AtheoreticalStatement):
@@ -548,8 +514,13 @@ class Theory(TheoreticalObjct):
 
     def repr_as_theory(self):
         """Return a representation that expresses and justifies the theory."""
-        output = f'# {self.repr_as_dashed_name()}'
-        output = output + '\n' + ''.join(s.repr_as_statement() for s in self.statements)
+        output = f'\n\n{prnt.serif_bold(self.repr_as_dashed_name())}'
+        output = output + f'\n\n{prnt.serif_bold("Simple-objcts:")}'
+        output = output + '\n' + '\n'.join(o.repr_as_declaration() for o in self.simple_objcts)
+        output = output + f'\n\n{prnt.serif_bold("Relations:")}'
+        output = output + '\n' + '\n'.join(r.repr_as_declaration() for r in self.relations)
+        output = output + f'\n\n{prnt.serif_bold("Theory elaboration:")}'
+        output = output + ''.join(s.repr_as_statement() for s in self.statements)
         return output
 
     def prnt(self):
@@ -573,9 +544,9 @@ class Relation(TheoreticalObjct):
     A relation ◆ has a fixed arity.
     """
 
-    def __init__(self, theory, arity, formula_frmt=None, python=None, dashed=None, symbol=None):
+    def __init__(self, theory, arity, formula_rep=None, python=None, dashed=None, symbol=None):
         assert isinstance(theory, Theory)
-        self.formula_frmt = Formula.frmts.function_call if formula_frmt is None else formula_frmt
+        self.formula_rep = Formula.reps.function_call if formula_rep is None else formula_rep
         self.relation_index = theory.crossreference_relation(self)
         python = f'r{self.relation_index + 1}' if python is None else python
         dashed = f'relation-{self.relation_index + 1}' if dashed is None else dashed
@@ -609,10 +580,9 @@ class SimpleObjct(TheoreticalObjct):
             dashed = f'object-{formula_index}' if dashed is None else dashed
             symbol = f'ℴ{subscriptify(formula_index)}' if symbol is None else symbol
         super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
-        print(self.repr_as_declaration())
 
     def repr_as_declaration(self, **kwargs):
-        return f'Let {self.repr_as_dashed_name()} be a symbolic-objct denoted as dashed-name ⌜ {self.repr_as_dashed_name()} ⌝, symbol ⌜ {self.repr_as_symbol()} ⌝, and pythonic-name ⌜ {self.repr_as_python_variable()} ⌝.'
+        return f'Let {self.repr_as_dashed_name()} be a simple-objct denoted as dashed-name ⌜ {self.repr_as_dashed_name()} ⌝, symbol ⌜ {self.repr_as_symbol()} ⌝, and pythonic-name ⌜ {self.repr_as_python_variable()} ⌝.'
 
 
 class TheoreticalRelation(Relation):
@@ -652,7 +622,4 @@ theoretical_relations = SimpleNamespace(
     theory_extension=_theory_extension,
     variable_declaration=_variable_declaration)
 
-#console = rich.console.Console()
-
-
-
+# console = rich.console.Console()

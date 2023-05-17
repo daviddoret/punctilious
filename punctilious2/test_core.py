@@ -48,16 +48,16 @@ class TestFormula(TestCase):
 
         r_unary = core.Relation(theory=t1, arity=1)
         phi_unary = core.Formula(theory=t1, relation=r_unary, parameters=tuple([o11]))
-        self.assertEqual('◆₁(ℴ₁)', phi_unary.repr(frmt=core.Formula.frmts.prefix_operator))
-        self.assertEqual('(ℴ₁)◆₁', phi_unary.repr(frmt=core.Formula.frmts.suffix_operator))
-        self.assertEqual('◆₁(ℴ₁)', phi_unary.repr(frmt=core.Formula.frmts.function_call))
-        self.assertEqual('𝜑₁', phi_unary.repr(frmt=core.Formula.frmts.symbol))
+        self.assertEqual('◆₁(ℴ₁)', phi_unary.repr(rep=core.Formula.frmts.prefix_operator))
+        self.assertEqual('(ℴ₁)◆₁', phi_unary.repr(rep=core.Formula.frmts.suffix_operator))
+        self.assertEqual('◆₁(ℴ₁)', phi_unary.repr(rep=core.Formula.frmts.function_call))
+        self.assertEqual('𝜑₁', phi_unary.repr(rep=core.Formula.frmts.symbol))
 
         r_binary = core.Relation(theory=t1, arity=2)
         phi_binary = core.Formula(theory=t1, relation=r_binary, parameters=tuple([o11, o12]))
-        self.assertEqual('◆₂(ℴ₁, ℴ₂)', phi_binary.repr(frmt=core.Formula.frmts.function_call))
-        self.assertEqual('(ℴ₁ ◆₂ ℴ₂)', phi_binary.repr(frmt=core.Formula.frmts.infix_operator))
-        self.assertEqual('𝜑₂', phi_binary.repr(frmt=core.Formula.frmts.symbol))
+        self.assertEqual('◆₂(ℴ₁, ℴ₂)', phi_binary.repr(rep=core.Formula.frmts.function_call))
+        self.assertEqual('(ℴ₁ ◆₂ ℴ₂)', phi_binary.repr(rep=core.Formula.frmts.infix_operator))
+        self.assertEqual('𝜑₂', phi_binary.repr(rep=core.Formula.frmts.symbol))
 
     def test_str(self):
         self.fail()

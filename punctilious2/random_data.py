@@ -13,5 +13,3 @@ def random_word(min_syllable=2, n=3, p=.2):
         (_consonants[random.randint(0, len(_consonants) - 1)] + _vowels[random.randint(0, len(_vowels) - 1)] for i in
          range(random.randint(min_syllable, num_syllables))))
 
-
-print(random_word(min_syllable=3))
