@@ -82,33 +82,25 @@ class SymbolicObjct:
     but that is linked to a theory but that is not necessarily constitutive of the theory.
     """
 
-    def __init__(self, theory, python, dashed, symbol):
+    def __init__(self, theory, symbol, capitalizable=False):
         assert theory is not None and isinstance(theory, Theory)
-        assert isinstance(python, str) and len(python) > 0
-        assert isinstance(dashed, str) and len(dashed) > 0
         assert isinstance(symbol, str) and len(symbol) > 0
+        assert isinstance(capitalizable, bool)
         self.theory = theory
-        self.python = python
-        self.dashed = dashed
         self.symbol = symbol
+        self.capitalizable = capitalizable
 
     def __repr__(self):
-        return self.symbol
+        return self.repr_as_symbol()
 
     def __str__(self):
-        return self.symbol
+        return self.repr_as_symbol()
 
-    def repr_as_dashed_name(self):
-        return f'{self.dashed}'
+    def repr_as_declaration(self):
+        return f'Let {self.repr_as_symbol()} be a symbolic-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
 
-    def repr_as_declaration(self, **kwargs):
-        return f'Let {self.repr_as_dashed_name()} be a symbolic-objct denoted as dashed-name ⌜ {self.repr_as_dashed_name()} ⌝, symbol ⌜ {self.repr_as_symbol()} ⌝, and pythonic-name ⌜ {self.repr_as_python_variable()} ⌝.'
-
-    def repr_as_python_variable(self):
-        return f'{self.python}'
-
-    def repr_as_symbol(self):
-        return f'{self.symbol}'
+    def repr_as_symbol(self, capitalized=False):
+        return self.symbol.capitalize() if (capitalized and self.capitalizable) else self.symbol
 
     def repr(self):
         return self.repr_as_symbol()
@@ -135,8 +127,8 @@ class TheoreticalObjct(SymbolicObjct):
     * variable
     """
 
-    def __init__(self, theory, python, dashed, symbol):
-        super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
+    def __init__(self, theory, symbol, capitalizable):
+        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
     def repr_as_statement_content(self):
         """Returns a representation that may be embedded in a statement.
@@ -164,13 +156,12 @@ class Formula(TheoreticalObjct):
         suffix_operator=Representation('prefix_operator')
     )
 
-    def __init__(self, theory, relation, parameters, python=None, dashed=None, symbol=None):
+    def __init__(self, theory, relation, parameters, symbol=None, capitalizable=False):
         assert isinstance(theory, Theory)
         self.formula_index = theory.crossreference_formula(self)
-        python = f'f{self.formula_index + 1}' if python is None else python
-        dashed = f'formula-{self.formula_index + 1}' if dashed is None else dashed
+        capitalizable = False if symbol is None else capitalizable
         symbol = f'𝜑{subscriptify(self.formula_index + 1)}' if symbol is None else symbol
-        super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
+        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
         assert relation is not None and isinstance(relation, Relation)
         self.relation = relation
         parameters = parameters if isinstance(parameters, tuple) else tuple([parameters])
@@ -212,7 +203,7 @@ class Formula(TheoreticalObjct):
 
 
 class RelationDeclarationFormula(Formula):
-    def __init__(self, theory, relation, python, dashed, symbol):
+    def __init__(self, theory, relation, symbol):
         assert theory is not None, isinstance(theory, Theory)
         assert relation is not None, isinstance(relation, Relation)
         formula_relation = theoretical_relations.relation_declaration
@@ -252,22 +243,21 @@ class Statement(TheoreticalObjct):
     etc.
     """
 
-    def __init__(self, theory, truth_object, python=None, dashed=None, symbol=None):
+    def __init__(self, theory, truth_object, symbol=None, capitalizable=False):
         assert isinstance(truth_object, TheoreticalObjct)
         self.truth_object = truth_object
         assert isinstance(theory, Theory)
         self.statement_index = theory.crossreference_statement(self)
-        python = f's{self.statement_index + 1}' if python is None else python
-        dashed = f'statement-{self.statement_index + 1}' if dashed is None else dashed
-        symbol = f'𝒮{subscriptify(self.statement_index + 1)}' if symbol is None else symbol
-        super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
+        capitalizable = True if symbol is None else capitalizable
+        symbol = f'statement-{self.statement_index + 1}' if symbol is None else symbol
+        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
     def repr(self):
         pass
 
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement."""
-        return f'{prnt.serif_bold(self.repr_as_dashed_name())}\n{self.truth_object.repr_as_statement_content()}'
+        return f'{prnt.serif_bold(self.repr_as_symbol())}\n{self.truth_object.repr_as_statement_content()}'
 
 
 class AxiomStatement(Statement):
@@ -282,7 +272,7 @@ class AxiomStatement(Statement):
     def __init__(self, theory, axiom, python=None, dashed=None, symbol=None):
         assert isinstance(axiom, Axiom)
         self.axiom = axiom
-        super().__init__(theory=theory, truth_object=axiom, python=python, dashed=dashed, symbol=symbol)
+        super().__init__(theory=theory, truth_object=axiom, symbol=symbol)
 
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement."""
@@ -303,7 +293,7 @@ class AxiomFormalization(Statement):
         assert isinstance(axiom, Axiom)
         assert isinstance(truth_object, Formula)
         self.axiom = axiom
-        super().__init__(theory=theory, truth_object=truth_object, python=python, dashed=dashed, symbol=symbol)
+        super().__init__(theory=theory, truth_object=truth_object, symbol=symbol)
 
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement.
@@ -311,8 +301,8 @@ class AxiomFormalization(Statement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'\n\n{prnt.serif_bold(self.repr_as_dashed_name())}: {self.truth_object.repr_as_formula()}'
-        output = output + f'\n{prnt.serif_bold("Proof:")} Follows directly from {prnt.serif_bold(self.axiom.repr_as_dashed_name())}.'
+        output = f'\n\n{prnt.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.truth_object.repr_as_formula()}'
+        output = output + f'\n{prnt.serif_bold("Proof:")} Follows directly from {prnt.serif_bold(self.axiom.repr_as_symbol())}.'
         return output
 
 
@@ -368,13 +358,12 @@ class Axiom(TheoreticalObjct):
       whose elements are theoretical-objects, possibly formulae.
     """
 
-    def __init__(self, theory, text, python=None, dashed=None, symbol=None):
+    def __init__(self, theory, text, symbol=None, capitalizable=False):
         assert isinstance(theory, Theory)
         self.axiom_index = theory.crossreference_axiom(self)
-        python = f'a{self.axiom_index + 1}' if python is None else python
-        dashed = f'axiom-{self.axiom_index + 1}' if dashed is None else dashed
-        symbol = f'𝒜{subscriptify(self.axiom_index + 1)}' if symbol is None else symbol
-        super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
+        capitalizable = True if symbol is None else capitalizable
+        symbol = f'axiom-{self.axiom_index + 1}' if symbol is None else symbol
+        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
         assert text is not None and isinstance(text, str)
         self.text = text
 
@@ -389,7 +378,7 @@ class Axiom(TheoreticalObjct):
 
         :return:
         """
-        return f'{prnt.serif_bold(self.repr_as_dashed_name())}: {self.text}'
+        return f'{prnt.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.text}'
 
 
 class Note(AtheoreticalStatement):
@@ -399,7 +388,7 @@ class Note(AtheoreticalStatement):
 
 
 class Theory(TheoreticalObjct):
-    def __init__(self, theory=None, is_universe_of_discourse=None, python=None, dashed=None, symbol=None):
+    def __init__(self, theory=None, is_universe_of_discourse=None, symbol=None, capitalizable=False):
         global universe_of_discourse
         self.axioms = tuple()
         self.formulae = tuple()
@@ -424,10 +413,9 @@ class Theory(TheoreticalObjct):
         assert theory is not None and isinstance(theory, Theory)
         assert isinstance(theory, Theory)
         self.theory_index = theory.crossreference_theory(self)
-        python = f't{self.theory_index + 1}' if python is None else python
-        dashed = f'theory-{self.theory_index + 1}' if dashed is None else dashed
-        symbol = f'𝒯{subscriptify(self.theory_index + 1)}' if symbol is None else symbol
-        super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
+        capitalizable = True if symbol is None else capitalizable
+        symbol = f'theory-{self.theory_index + 1}' if symbol is None else symbol
+        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
     def crossreference_symbolic_objct(self, s):
         """During construction, cross-reference a symbolic_objct 𝓈
@@ -514,7 +502,7 @@ class Theory(TheoreticalObjct):
 
     def repr_as_theory(self):
         """Return a representation that expresses and justifies the theory."""
-        output = f'\n\n{prnt.serif_bold(self.repr_as_dashed_name())}'
+        output = f'\n\n{prnt.serif_bold(self.repr_as_symbol())}'
         output = output + f'\n\n{prnt.serif_bold("Simple-objcts:")}'
         output = output + '\n' + '\n'.join(o.repr_as_declaration() for o in self.simple_objcts)
         output = output + f'\n\n{prnt.serif_bold("Relations:")}'
@@ -544,14 +532,13 @@ class Relation(TheoreticalObjct):
     A relation ◆ has a fixed arity.
     """
 
-    def __init__(self, theory, arity, formula_rep=None, python=None, dashed=None, symbol=None):
+    def __init__(self, theory, arity, formula_rep=None, symbol=None, capitalizable=False):
         assert isinstance(theory, Theory)
         self.formula_rep = Formula.reps.function_call if formula_rep is None else formula_rep
         self.relation_index = theory.crossreference_relation(self)
-        python = f'r{self.relation_index + 1}' if python is None else python
-        dashed = f'relation-{self.relation_index + 1}' if dashed is None else dashed
+        capitalizable = False if symbol is None else capitalizable
         symbol = f'◆{subscriptify(self.relation_index + 1)}' if symbol is None else symbol
-        super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
+        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
 
@@ -564,25 +551,15 @@ class SimpleObjct(TheoreticalObjct):
     and whose sole function is to provide the meaning of being itself.
     """
 
-    def __init__(self, theory, python=None, dashed=None, symbol=None):
+    def __init__(self, theory, symbol=None, capitalizable=False):
         assert isinstance(theory, Theory)
         self.simple_objct_index = theory.crossreference_simple_objct(self)
-        if python is None or dashed is None or symbol is None:
-            python = f'o{self.simple_objct_index + 1}' if python is None else python
-            dashed = f'simple-objct-{self.simple_objct_index + 1}' if dashed is None else dashed
-            symbol = f'ℴ{subscriptify(self.simple_objct_index + 1)}' if symbol is None else symbol
-        if python is None or dashed is None or symbol is None:
-            # Force the theory attribute
-            # because get_symbolic_object_1_index() needs it.
-            self.theory = theory
-            formula_index = theory.crossreference_symbolic_objct(self)
-            python = f'o{formula_index}' if python is None else python
-            dashed = f'object-{formula_index}' if dashed is None else dashed
-            symbol = f'ℴ{subscriptify(formula_index)}' if symbol is None else symbol
-        super().__init__(theory=theory, python=python, dashed=dashed, symbol=symbol)
+        capitalizable = False if symbol is None else capitalizable
+        symbol = f'ℴ{subscriptify(self.simple_objct_index + 1)}' if symbol is None else symbol
+        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
     def repr_as_declaration(self, **kwargs):
-        return f'Let {self.repr_as_dashed_name()} be a simple-objct denoted as dashed-name ⌜ {self.repr_as_dashed_name()} ⌝, symbol ⌜ {self.repr_as_symbol()} ⌝, and pythonic-name ⌜ {self.repr_as_python_variable()} ⌝.'
+        return f'Let {self.repr_as_symbol()} be a simple-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
 
 
 class TheoreticalRelation(Relation):
@@ -596,24 +573,18 @@ class TheoreticalRelation(Relation):
 
     """
 
-    def __init__(self, theory, arity, python, dashed, symbol):
-        super().__init__(theory=theory, arity=arity, python=python, dashed=dashed, symbol=symbol)
+    def __init__(self, theory, arity, symbol):
+        super().__init__(theory=theory, arity=arity, symbol=symbol)
 
 
-universe_of_discourse = Theory(theory=None, is_universe_of_discourse=True, python='U', dashed='universe-of-discourse',
-                               symbol='𝒰')
+universe_of_discourse = Theory(theory=None, is_universe_of_discourse=True, symbol='universe-of-discourse', capitalizable=True)
 u = universe_of_discourse
 
-_relation_declaration = TheoreticalRelation(theory=u, arity=2, python='relation_declaration',
-                                            dashed='relation-declaration', symbol='relation-declaration')
-_simple_objct_declaration = TheoreticalRelation(theory=u, arity=2, python='simple_objct_declaration',
-                                                dashed='simple-objct-declaration', symbol='simple-objct-declaration')
-_theory_declaration = TheoreticalRelation(theory=u, arity=2, python='theory_declaration', dashed='theory-declaration',
-                                          symbol='theory-declaration')
-_theory_extension = TheoreticalRelation(theory=u, arity=2, python='theory_extension', dashed='theory-extension',
-                                        symbol='theory-extension')
-_variable_declaration = TheoreticalRelation(theory=u, arity=2, python='variable_declaration',
-                                            dashed='variable-declaration', symbol='variable-declaration')
+_relation_declaration = TheoreticalRelation(theory=u, arity=2, symbol='relation-declaration')
+_simple_objct_declaration = TheoreticalRelation(theory=u, arity=2, symbol='simple-objct-declaration')
+_theory_declaration = TheoreticalRelation(theory=u, arity=2, symbol='theory-declaration')
+_theory_extension = TheoreticalRelation(theory=u, arity=2, symbol='theory-extension')
+_variable_declaration = TheoreticalRelation(theory=u, arity=2, symbol='variable-declaration')
 
 theoretical_relations = SimpleNamespace(
     relation_declaration=_relation_declaration,
