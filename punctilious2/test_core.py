@@ -33,7 +33,7 @@ class TestStatement(TestCase):
     def test_init(self):
         t1 = core.Theory()
         a1 = core.Axiom(theory=t1, text='If something is red, then it is neither green, nor blue.')
-        s1 = core.Statement(theory=t1, truth_object=a1)
+        s1 = core.Statement(theory=t1, valid_proposition=a1)
 
         self.assertIs(t1, s1.theory)
         print(s1)
@@ -129,6 +129,6 @@ class TestTheory(TestCase):
     def test___init__(self):
         t1 = core.Theory(dashed='test-theory-1')
         a1 = core.Axiom(theory=t1, text='If a filooboo is wala, then it is sholo.')
-        s1 = core.Statement(theory=t1, truth_object=a1)
+        s1 = core.Statement(theory=t1, valid_proposition=a1)
         t1.print()
 

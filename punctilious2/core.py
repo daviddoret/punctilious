@@ -130,13 +130,6 @@ class TheoreticalObjct(SymbolicObjct):
     def __init__(self, theory, symbol, capitalizable):
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
-    def repr_as_statement_content(self):
-        """Returns a representation that may be embedded in a statement.
-
-        :return:
-        """
-        return self.repr()
-
 
 class Formula(TheoreticalObjct):
     """
@@ -250,22 +243,10 @@ class Statement(TheoreticalObjct):
         theorem=Representation('theorem')
     )
 
-    def __init__(self, theory, truth_object, symbol=None, capitalizable=False, category=None):
-        assert isinstance(truth_object, TheoreticalObjct)
-        self.truth_object = truth_object
+    def __init__(self, theory, symbol=None, capitalizable=False):
         assert isinstance(theory, Theory)
         self.statement_index = theory.crossreference_statement(self)
-        category = Statement.reps.proposition if category is None else category
-        capitalizable = True if symbol is None else capitalizable
-        symbol = f'{category}-{self.statement_index + 1}' if symbol is None else symbol
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
-
-    def repr(self):
-        pass
-
-    def repr_as_statement(self):
-        """Return a representation that expresses and justifies the statement."""
-        return f'{prnt.serif_bold(self.repr_as_symbol())}\n{self.truth_object.repr_as_statement_content()}'
 
 
 class AxiomStatement(Statement):
@@ -277,31 +258,52 @@ class AxiomStatement(Statement):
 
     """
 
-    def __init__(self, theory, axiom, python=None, dashed=None, symbol=None):
+    def __init__(self, theory, axiom):
         assert isinstance(axiom, Axiom)
         self.axiom = axiom
-        super().__init__(theory=theory, truth_object=axiom, symbol=symbol)
+        super().__init__(theory=theory, symbol=axiom.symbol, capitalizable=axiom.capitalizable)
 
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement."""
-        output = '\n\n' + self.truth_object.repr_as_statement_content()
+        output = self.axiom.repr_as_statement()
         return output
 
 
-class DirectAxiomInferenceStatement(Statement):
+class FormulaStatement(Statement):
+    """
+    TODO: MAKE IT AN ABSTRACT CLASS
+
+    Definition:
+    -----------
+    An formula-statement is a statement that expresses the validity of a formula in the parent theory.
+
+    """
+
+    def __init__(self, theory, valid_proposition, category=None):
+        assert isinstance(theory, Theory)
+        assert isinstance(valid_proposition, Formula)
+        self.valid_proposition = valid_proposition
+        # TODO: Implement distinct counters per category
+        self.statement_index = theory.crossreference_statement(self)
+        category = Statement.reps.proposition if category is None else category
+        capitalizable = True
+        symbol = f'{category}-{self.statement_index + 1}'
+        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
+
+
+class DirectAxiomInferenceStatement(FormulaStatement):
     """
 
     Definition:
     -----------
-    A direct-axiom-inference-statement is a statement that follows directly from an axion.
+    A direct-axiom-inference-statement is a proposition that follows directly from an axion.
 
     """
 
-    def __init__(self, theory, axiom, truth_object, python=None, dashed=None, symbol=None):
+    def __init__(self, theory, axiom, valid_proposition, category=None):
         assert isinstance(axiom, Axiom)
-        assert isinstance(truth_object, Formula)
         self.axiom = axiom
-        super().__init__(theory=theory, truth_object=truth_object, symbol=symbol)
+        super().__init__(theory=theory, valid_proposition=valid_proposition, category=category)
 
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement.
@@ -309,7 +311,7 @@ class DirectAxiomInferenceStatement(Statement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'\n\n{prnt.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.truth_object.repr_as_formula()}'
+        output = f'{prnt.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula()}'
         output = output + f'\n{prnt.serif_bold("Proof:")} Follows directly from {prnt.serif_bold(self.axiom.repr_as_symbol())}.'
         return output
 
@@ -381,7 +383,7 @@ class Axiom(TheoreticalObjct):
     def __str__(self):
         return self.repr()
 
-    def repr_as_statement_content(self):
+    def repr_as_statement(self):
         """Returns a representation that may be embedded in a statement.
 
         :return:
@@ -516,7 +518,7 @@ class Theory(TheoreticalObjct):
         output = output + f'\n\n{prnt.serif_bold("Relations:")}'
         output = output + '\n' + '\n'.join(r.repr_as_declaration() for r in self.relations)
         output = output + f'\n\n{prnt.serif_bold("Theory elaboration:")}'
-        output = output + ''.join(s.repr_as_statement() for s in self.statements)
+        output = output + '\n\n' + '\n\n'.join(s.repr_as_statement() for s in self.statements)
         return output
 
     def prnt(self):
@@ -551,8 +553,18 @@ class Relation(TheoreticalObjct):
         self.arity = arity
 
     def repr_as_declaration(self):
-        return f'Let {self.repr_as_symbol()} be a relation denoted as ⌜ {self.repr_as_symbol()} ⌝.'
+        return f'Let {self.repr_as_symbol()} be a {self.repr_arity_as_text()} relation denoted as ⌜ {self.repr_as_symbol()} ⌝.'
 
+    def repr_arity_as_text(self):
+        match self.arity:
+            case 1:
+                return 'unary'
+            case 2:
+                return 'binary'
+            case 3:
+                return 'ternary'
+            case _:
+                return f'{self.arity}-ary'
 
 class SimpleObjct(TheoreticalObjct):
     """
@@ -588,7 +600,8 @@ class TheoreticalRelation(Relation):
         super().__init__(theory=theory, arity=arity, symbol=symbol)
 
 
-universe_of_discourse = Theory(theory=None, is_universe_of_discourse=True, symbol='universe-of-discourse', capitalizable=True)
+universe_of_discourse = Theory(theory=None, is_universe_of_discourse=True, symbol='universe-of-discourse',
+                               capitalizable=True)
 u = universe_of_discourse
 
 _relation_declaration = TheoreticalRelation(theory=u, arity=2, symbol='relation-declaration')
@@ -605,3 +618,35 @@ theoretical_relations = SimpleNamespace(
     variable_declaration=_variable_declaration)
 
 # console = rich.console.Console()
+_implies = Relation(theory=universe_of_discourse, symbol='implies', arity=2, formula_rep=Formula.reps.infix_operator)
+
+
+class ModusPonensStatement(Statement):
+    """
+
+    Definition:
+    -----------
+    A modus-ponens-statement is a valid propositional-logic argument that,
+    given a proposition (P implies Q)
+    given a proposition (P is True)
+    infers the proposition (Q is True)
+    """
+
+    def __init__(self, theory, p_implies_q, p_is_true, category=None):
+        assert isinstance(p_implies_q, Statement)
+        assert isinstance(p_is_true, Statement)
+        assert p_implies_q.valid_proposition.relation is _implies
+
+        p = XXX
+        q_is_true = Formula(theory=theory, relation=_is, parameters=(p, _true))
+        super().__init__(theory=theory, valid_proposition=q_is_true, category=category)
+
+    def repr_as_statement(self):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'\n\n{prnt.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.truth_object.repr_as_formula()}'
+        output = output + f'\n{prnt.serif_bold("Proof:")} Follows directly from {prnt.serif_bold(self.axiom.repr_as_symbol())}.'
+        return output
