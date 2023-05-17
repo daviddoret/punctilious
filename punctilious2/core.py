@@ -131,6 +131,34 @@ class TheoreticalObjct(SymbolicObjct):
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
 
+class FreeVariablePlaceholder:
+    """
+
+    Definition:
+    -----------
+    A free-variable-placeholder is a transitory object used during formula construction.
+    It makes it possible to build formula with variable-parameters.
+    Then, during the final step of formula construction, these placeholders
+    are replaced by definitive free-variable objects.
+    The reason why this approach was necessary are:
+     * When building a formula as a single python statement, we cannot reference the formula:
+        e.g. phi = Formula(t1, r1, (Variable('x', formula=???))
+     * When building a formula as a single python statement, we cannot call multiple times the constructor:
+        e.g. phi = Formula(t1, r1, (Variable('x'), Variable('x'))
+        This second issue could be solved by complex static constructors but the approach
+        of late cross-referencing variables at the end of the construction process seemed
+        much simpler.
+    """
+
+    def __init__(self, symbol):
+        assert isinstance(symbol, str)
+        self.symbol = symbol
+        # Late-binding with the parent formula will be used
+        # to populate the following properties.
+        self.formula = None
+        self.free_variable = None
+
+
 class Formula(TheoreticalObjct):
     """
 
@@ -151,6 +179,7 @@ class Formula(TheoreticalObjct):
 
     def __init__(self, theory, relation, parameters, symbol=None, capitalizable=False):
         assert isinstance(theory, Theory)
+        self.free_variables = dict()  # TODO: Check how to make dict immutable after construction.
         self.formula_index = theory.crossreference_formula(self)
         capitalizable = False if symbol is None else capitalizable
         symbol = f'𝜑{subscriptify(self.formula_index + 1)}' if symbol is None else symbol
@@ -160,12 +189,28 @@ class Formula(TheoreticalObjct):
         parameters = parameters if isinstance(parameters, tuple) else tuple([parameters])
         assert len(parameters) > 0
         self.parameters = parameters
+        self.cross_reference_variables()
 
     def __repr__(self):
         return self.repr()
 
     def __str__(self):
         return self.repr()
+
+    def crossreference_variable(self, x):
+        """During construction, cross-reference a free-variable 𝓍
+        with its parent formula if it is not already cross-referenced,
+        and return its 0-based index in Formula.free_variables."""
+        assert isinstance(x, FreeVariablePlaceholder)
+        x.formula = self if x.formula is None else x.formula
+        assert x.formula is self
+        if x not in self.free_variables:
+            self.free_variables = self.free_variables + tuple([x])
+        return self.free_variables.index(x)
+
+    def cross_reference_variables(self):
+        # TODO: Iterate through formula filtering on variable placeholders.
+        # TODO: Call cross_reference_variable on every variable placeholder.
 
     def repr_as_function_call(self):
         return f'{self.relation.symbol}({", ".join([p.repr() for p in self.parameters])})'
@@ -254,7 +299,7 @@ class Axiom(Statement):
 
     Definition:
     -----------
-    An axiom-statement is a statement that expresses an axion.
+    An axiom is a theory-statement that expresses an axiom in free textual form.
 
     """
 
@@ -311,6 +356,7 @@ class DirectAxiomInferenceStatement(FormulaStatement):
         assert isinstance(valid_proposition, Formula)
         self.axiom = axiom
         super().__init__(theory=theory, valid_proposition=valid_proposition, category=category)
+        assert axiom.statement_index < self.statement_index
 
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement.
@@ -539,6 +585,7 @@ class Relation(TheoreticalObjct):
             case _:
                 return f'{self.arity}-ary'
 
+
 class SimpleObjct(TheoreticalObjct):
     """
     Definition
@@ -592,9 +639,11 @@ theoretical_relations = SimpleNamespace(
 
 # console = rich.console.Console()
 _implies = Relation(theory=universe_of_discourse, symbol='implies', arity=2, formula_rep=Formula.reps.infix_operator)
+_is = Relation(theory=universe_of_discourse, symbol='is', arity=2, formula_rep=Formula.reps.infix_operator)
+_true = SimpleObjct(theory=universe_of_discourse, symbol='true', capitalizable=True)
 
 
-class ModusPonensStatement(Statement):
+class ModusPonensStatement(FormulaStatement):
     """
 
     Definition:
@@ -606,12 +655,21 @@ class ModusPonensStatement(Statement):
     """
 
     def __init__(self, theory, p_implies_q, p_is_true, category=None):
-        assert isinstance(p_implies_q, Statement)
-        assert isinstance(p_is_true, Statement)
-        #assert p_implies_q.valid_proposition.relation is _implies
-        #p = XXX
-        #q_is_true = Formula(theory=theory, relation=_is, parameters=(p, _true))
-        #super().__init__(theory=theory, valid_proposition=q_is_true, category=category)
+        # Check p_implies_q consistency
+        assert isinstance(p_implies_q, FormulaStatement)
+        assert p_implies_q.valid_proposition.relation is _implies
+        p = p_implies_q.valid_proposition.parameters[0]
+        q = p_implies_q.valid_proposition.parameters[1]
+        # Check p_is_true consistency
+        assert isinstance(p_is_true, FormulaStatement)
+        assert p_is_true.valid_proposition.relation is _is
+        assert p is p_is_true.valid_proposition.parameters[0]
+        assert p_is_true.valid_proposition.parameters[1] is _true
+        # State q_is_true
+        q_is_true = Formula(theory=theory, relation=_is, parameters=(p, _true))
+        super().__init__(theory=theory, valid_proposition=q_is_true, category=category)
+        assert p_implies_q.statement_index < self.statement_index
+        assert p_is_true.statement_index < self.statement_index
 
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement.
