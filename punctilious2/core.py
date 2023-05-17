@@ -249,7 +249,7 @@ class Statement(TheoreticalObjct):
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
 
-class AxiomStatement(Statement):
+class Axiom(Statement):
     """
 
     Definition:
@@ -258,15 +258,20 @@ class AxiomStatement(Statement):
 
     """
 
-    def __init__(self, theory, axiom):
-        assert isinstance(axiom, Axiom)
-        self.axiom = axiom
-        super().__init__(theory=theory, symbol=axiom.symbol, capitalizable=axiom.capitalizable)
+    def __init__(self, theory, axiom_text, symbol=None, capitalizable=False):
+        assert isinstance(theory, Theory)
+        assert isinstance(axiom_text, str)
+        self.axiom_text = axiom_text
+        capitalizable = True if symbol is None else capitalizable
+        assert isinstance(capitalizable, bool)
+        self.axiom_index = theory.crossreference_axiom(self)
+        symbol = f'axiom-{self.axiom_index + 1}' if symbol is None else symbol
+        assert isinstance(symbol, str)
+        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement."""
-        output = self.axiom.repr_as_statement()
-        return output
+        return f'{prnt.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.axiom_text}'
 
 
 class FormulaStatement(Statement):
@@ -301,7 +306,9 @@ class DirectAxiomInferenceStatement(FormulaStatement):
     """
 
     def __init__(self, theory, axiom, valid_proposition, category=None):
+        assert isinstance(theory, Theory)
         assert isinstance(axiom, Axiom)
+        assert isinstance(valid_proposition, Formula)
         self.axiom = axiom
         super().__init__(theory=theory, valid_proposition=valid_proposition, category=category)
 
@@ -355,40 +362,6 @@ class AtheoreticalStatement:
         assert isinstance(position, int) and position > 0
         self.theory = theory
         self.position = position
-
-
-class Axiom(TheoreticalObjct):
-    """
-
-    Definition
-    ----------
-    A formula 𝜑 is a tuple (◆, 𝒳) where:
-    * ◆ is a relation.
-    * 𝒳 is a finite tuple of parameters
-      whose elements are theoretical-objects, possibly formulae.
-    """
-
-    def __init__(self, theory, text, symbol=None, capitalizable=False):
-        assert isinstance(theory, Theory)
-        self.axiom_index = theory.crossreference_axiom(self)
-        capitalizable = True if symbol is None else capitalizable
-        symbol = f'axiom-{self.axiom_index + 1}' if symbol is None else symbol
-        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
-        assert text is not None and isinstance(text, str)
-        self.text = text
-
-    def __repr__(self):
-        return self.repr()
-
-    def __str__(self):
-        return self.repr()
-
-    def repr_as_statement(self):
-        """Returns a representation that may be embedded in a statement.
-
-        :return:
-        """
-        return f'{prnt.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.text}'
 
 
 class Note(AtheoreticalStatement):
@@ -626,7 +599,7 @@ class ModusPonensStatement(Statement):
 
     Definition:
     -----------
-    A modus-ponens-statement is a valid propositional-logic argument that,
+    A modus-ponens-statement is a valid rule-of-inference propositional-logic argument that,
     given a proposition (P implies Q)
     given a proposition (P is True)
     infers the proposition (Q is True)
@@ -635,11 +608,10 @@ class ModusPonensStatement(Statement):
     def __init__(self, theory, p_implies_q, p_is_true, category=None):
         assert isinstance(p_implies_q, Statement)
         assert isinstance(p_is_true, Statement)
-        assert p_implies_q.valid_proposition.relation is _implies
-
-        p = XXX
-        q_is_true = Formula(theory=theory, relation=_is, parameters=(p, _true))
-        super().__init__(theory=theory, valid_proposition=q_is_true, category=category)
+        #assert p_implies_q.valid_proposition.relation is _implies
+        #p = XXX
+        #q_is_true = Formula(theory=theory, relation=_is, parameters=(p, _true))
+        #super().__init__(theory=theory, valid_proposition=q_is_true, category=category)
 
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement.
