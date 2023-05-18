@@ -1,10 +1,29 @@
 from types import SimpleNamespace
 import repm
+
+
+class Tuple(tuple):
+    """Tuple subclasses the native tuple class.
+    The resulting supports setattr, getattr, hasattr,
+    which are convenient to create friendly programmatic shortcuts."""
+    pass
+
+
+def set_attr(o, a, v):
+    """A wrapper function for the naive setattr function.
+    It set attributes on Tuple instances in a prudent manner.
+    """
+    assert isinstance(a, str)
+    if not hasattr(o, a):
+        setattr(o, a, v)
+    else:
+        assert getattr(o, a) is v
+
+
 # import rich
 # import rich.console
 # import rich.markdown
 # import rich.table
-
 
 
 class SymbolicObjct:
@@ -145,7 +164,7 @@ class Formula(TheoreticalObjct):
         # TODO: Iterate through formula filtering on variable placeholders.
         # TODO: Call cross_reference_variable on every variable placeholder.
         pass
-        #assert False
+        # assert False
 
     def repr_as_function_call(self):
         return f'{self.relation.symbol}({", ".join([p.repr() for p in self.parameters])})'
@@ -356,8 +375,8 @@ class Theory(TheoreticalObjct):
         global universe_of_discourse
         self.axioms = tuple()
         self.formulae = tuple()
-        self.relations = tuple()
-        self.simple_objcts = tuple()
+        self.relations = Tuple()
+        self.simple_objcts = Tuple()
         self.statements = tuple()
         self.symbolic_objcts = tuple()
         self.theories = tuple()
@@ -422,13 +441,13 @@ class Theory(TheoreticalObjct):
         o.theory = o.theory if hasattr(o, 'theory') else self
         assert o.theory is self
         if o not in self.simple_objcts:
-            self.simple_objcts = self.simple_objcts + tuple([o])
-
-        # phi = SimpleObjctDeclarationFormula(theory=self, simple_objct=simple_objct)
-        # position = self._get_next_position()
-        # statement = PropositionStatement(theory=self, position=position, phi=phi)
-        # self.append_statement(statement=statement)
-
+            self.simple_objcts = Tuple(self.simple_objcts + tuple([o]))
+            # The new Tuple instance does not hold the attributes
+            # of its predecessor. We must thus reset all attributes.
+            # TODO: Implement Tuple.append to improe this.
+            for o in self.simple_objcts:
+                if o.python_name is not None:
+                    set_attr(self.simple_objcts, o.python_name, o)
         return self.simple_objcts.index(o)
 
     def crossreference_statement(self, s):
@@ -460,8 +479,14 @@ class Theory(TheoreticalObjct):
         assert isinstance(r, Relation)
         r.theory = r.theory if hasattr(r, 'theory') else self
         assert r.theory is self
+        # The new Tuple instance does not hold the attributes
+        # of its predecessor. We must thus reset all attributes.
+        # TODO: Implement Tuple.append to improe this.
         if r not in self.relations:
-            self.relations = self.relations + tuple([r])
+            self.relations = Tuple(self.relations + tuple([r]))
+            for r in self.relations:
+                if r.python_name is not None:
+                    set_attr(self.relations, r.python_name, r)
         return self.relations.index(r)
 
     def repr_as_theory(self):
@@ -496,15 +521,16 @@ class Relation(TheoreticalObjct):
     A relation ◆ has a fixed arity.
     """
 
-    def __init__(self, theory, arity, formula_rep=None, symbol=None, capitalizable=False):
+    def __init__(self, theory, arity, formula_rep=None, symbol=None, capitalizable=False, python_name=None):
         assert isinstance(theory, Theory)
         self.formula_rep = Formula.reps.function_call if formula_rep is None else formula_rep
-        self.relation_index = theory.crossreference_relation(self)
+        self.python_name = python_name
         capitalizable = False if symbol is None else capitalizable
         symbol = f'◆{repm.subscriptify(self.relation_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
+        self.relation_index = theory.crossreference_relation(self)
 
     def repr_as_declaration(self):
         return f'Let {self.repr_as_symbol()} be a {self.repr_arity_as_text()} relation denoted as ⌜ {self.repr_as_symbol()} ⌝.'
@@ -529,8 +555,9 @@ class SimpleObjct(TheoreticalObjct):
     and whose sole function is to provide the meaning of being itself.
     """
 
-    def __init__(self, theory, symbol=None, capitalizable=False):
+    def __init__(self, theory, symbol=None, capitalizable=False, python_name=None):
         assert isinstance(theory, Theory)
+        self.python_name = python_name
         self.simple_objct_index = theory.crossreference_simple_objct(self)
         capitalizable = False if symbol is None else capitalizable
         symbol = f'ℴ{repm.subscriptify(self.simple_objct_index + 1)}' if symbol is None else symbol
@@ -572,10 +599,8 @@ theoretical_relations = SimpleNamespace(
     theory_extension=_theory_extension,
     variable_declaration=_variable_declaration)
 
+
 # console = rich.console.Console()
-_implies = Relation(theory=universe_of_discourse, symbol='implies', arity=2, formula_rep=Formula.reps.infix_operator)
-_is = Relation(theory=universe_of_discourse, symbol='is', arity=2, formula_rep=Formula.reps.infix_operator)
-_true = SimpleObjct(theory=universe_of_discourse, symbol='true', capitalizable=True)
 
 
 class ModusPonensStatement(FormulaStatement):
@@ -592,16 +617,16 @@ class ModusPonensStatement(FormulaStatement):
     def __init__(self, theory, p_implies_q, p_is_true, category=None):
         # Check p_implies_q consistency
         assert isinstance(p_implies_q, FormulaStatement)
-        assert p_implies_q.valid_proposition.relation is _implies
+        assert p_implies_q.valid_proposition.relation is propositional_logic.relations.implies
         p = p_implies_q.valid_proposition.parameters[0]
         q = p_implies_q.valid_proposition.parameters[1]
         # Check p_is_true consistency
         assert isinstance(p_is_true, FormulaStatement)
-        assert p_is_true.valid_proposition.relation is _is
+        assert p_is_true.valid_proposition.relation is propositional_logic.relations.equal
         assert p is p_is_true.valid_proposition.parameters[0]
-        assert p_is_true.valid_proposition.parameters[1] is _true
+        assert p_is_true.valid_proposition.parameters[1] is propositional_logic.simple_objcts.true
         # State q_is_true
-        q_is_true = Formula(theory=theory, relation=_is, parameters=(p, _true))
+        q_is_true = Formula(theory=theory, relation=_is, parameters=(p, propositional_logic.simple_objcts.true))
         super().__init__(theory=theory, valid_proposition=q_is_true, category=category)
         assert p_implies_q.statement_index < self.statement_index
         assert p_is_true.statement_index < self.statement_index
@@ -615,3 +640,14 @@ class ModusPonensStatement(FormulaStatement):
         output = f'\n\n{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.truth_object.repr_as_formula()}'
         output = output + f'\n{repm.serif_bold("Proof:")} Follows directly from {repm.serif_bold(self.axiom.repr_as_symbol())}.'
         return output
+
+
+propositional_logic = Theory(theory=universe_of_discourse)
+SimpleObjct(theory=propositional_logic, symbol='true', capitalizable=True, python_name='true')
+SimpleObjct(theory=propositional_logic, symbol='false', capitalizable=True, python_name='false')
+Relation(theory=propositional_logic, symbol='implies', arity=2, formula_rep=Formula.reps.infix_operator,
+         python_name='implies')
+Relation(theory=propositional_logic, symbol='=', arity=2, formula_rep=Formula.reps.infix_operator,
+         python_name='equal')
+
+pass
