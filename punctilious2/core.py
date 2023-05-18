@@ -166,6 +166,14 @@ class Formula(TheoreticalObjct):
         pass
         # assert False
 
+    @property
+    def is_proposition(self):
+        """Tell if the formula is a logic-proposition.
+
+        This property is directly inherited from the formula-is-proposition
+        attribute of the formula's relation."""
+        return self.relation.formula_is_proposition
+
     def repr_as_function_call(self):
         return f'{self.relation.symbol}({", ".join([p.repr() for p in self.parameters])})'
 
@@ -286,6 +294,8 @@ class FormulaStatement(Statement):
     def __init__(self, theory, valid_proposition, category=None):
         assert isinstance(theory, Theory)
         assert isinstance(valid_proposition, Formula)
+        # Theory statements must be logical propositions.
+        assert valid_proposition.is_proposition
         self.valid_proposition = valid_proposition
         # TODO: Implement distinct counters per category
         self.statement_index = theory.crossreference_statement(self)
@@ -300,8 +310,7 @@ class DirectAxiomInferenceStatement(FormulaStatement):
 
     Definition:
     -----------
-    A direct-axiom-inference-statement is a proposition that follows directly from an axion.
-
+    A direct-axiom-inference-statement is a valid-proposition that follows directly from an axion.
     """
 
     def __init__(self, theory, axiom, valid_proposition, category=None):
@@ -519,12 +528,22 @@ class Relation(TheoreticalObjct):
     It assigns the following meaning to its composite formula 𝜑:
     𝜑 establishes a relation between its parameters.
     A relation ◆ has a fixed arity.
+
+    Attributes
+    ----------
+    formula_is_proposition : bool
+        True if formula based on this relation are logical-propositions,
+        i.e. the relation is a function whose domain is the set of truth values {True, False}.
+        False otherwise.
+        When True, the formula may be used as a theory-statement.
     """
 
-    def __init__(self, theory, arity, formula_rep=None, symbol=None, capitalizable=False, python_name=None):
+    def __init__(self, theory, arity, formula_rep=None, symbol=None, capitalizable=False, python_name=None, formula_is_proposition=False):
         assert isinstance(theory, Theory)
+        assert isinstance(formula_is_proposition, bool)
         self.formula_rep = Formula.reps.function_call if formula_rep is None else formula_rep
         self.python_name = python_name
+        self.formula_is_proposition = formula_is_proposition
         capitalizable = False if symbol is None else capitalizable
         symbol = f'◆{repm.subscriptify(self.relation_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
@@ -614,22 +633,23 @@ class ModusPonensStatement(FormulaStatement):
     infers the proposition (Q is True)
     """
 
-    def __init__(self, theory, p_implies_q, p_is_true, category=None):
+    def __init__(self, theory, p_implies_q, p, category=None):
         # Check p_implies_q consistency
         assert isinstance(p_implies_q, FormulaStatement)
+        assert p_implies_q.theory is theory  # TODO: Extend this to parent theories
         assert p_implies_q.valid_proposition.relation is propositional_logic.relations.implies
         p = p_implies_q.valid_proposition.parameters[0]
         q = p_implies_q.valid_proposition.parameters[1]
-        # Check p_is_true consistency
-        assert isinstance(p_is_true, FormulaStatement)
-        assert p_is_true.valid_proposition.relation is propositional_logic.relations.equal
-        assert p is p_is_true.valid_proposition.parameters[0]
-        assert p_is_true.valid_proposition.parameters[1] is propositional_logic.simple_objcts.true
-        # State q_is_true
-        q_is_true = Formula(theory=theory, relation=_is, parameters=(p, propositional_logic.simple_objcts.true))
-        super().__init__(theory=theory, valid_proposition=q_is_true, category=category)
+        # Check p consistency
+        # If the p statement is present in the theory,
+        # it necessarily mean that p is true,
+        # because every statement in the theory is a valid proposition.
+        assert isinstance(p, FormulaStatement)
+        assert p.theory is theory  # TODO: Extend this to parent theories
+        # State q
+        super().__init__(theory=theory, valid_proposition=q, category=category)
         assert p_implies_q.statement_index < self.statement_index
-        assert p_is_true.statement_index < self.statement_index
+        assert p.statement_index < self.statement_index
 
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement.
@@ -646,8 +666,9 @@ propositional_logic = Theory(theory=universe_of_discourse)
 SimpleObjct(theory=propositional_logic, symbol='true', capitalizable=True, python_name='true')
 SimpleObjct(theory=propositional_logic, symbol='false', capitalizable=True, python_name='false')
 Relation(theory=propositional_logic, symbol='implies', arity=2, formula_rep=Formula.reps.infix_operator,
-         python_name='implies')
-Relation(theory=propositional_logic, symbol='=', arity=2, formula_rep=Formula.reps.infix_operator,
-         python_name='equal')
+         python_name='implies', formula_is_proposition=True)
+Relation(
+    theory=propositional_logic, symbol='=', arity=2, formula_rep=Formula.reps.infix_operator,
+         python_name='equal', formula_is_proposition=True)
 
 pass
