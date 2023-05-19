@@ -302,31 +302,46 @@ class Formula(TheoreticalObjct):
                 return False
         return True
 
-    def is_variable_masking_similar_to(self, o2, variable_mask):
-        """Returns true if this formula and o2 are variable-masking-similar.
+    def is_masked_formula_similar_to(self, o2, mask):
+        """Returns true if this formula and o2 are masked-formula-similar.
 
         Definition
         ----------
-        A formula φ and a symbolic-object o₂ are variable-masking-similar if and only if:
+        A formula φ and a symbolic-object o₂ are masked-formula-similar
+        with regard to a finite set of variables M,
+        whose elements may be present in φ,
+        but are not present in o₂ if o₂ is a formula,
+        if and only if:
          1. φ and o₂ are formula-equivalent.
-         2. Except for formula relations and/or parameters that are present in the variable-mask.
+         2. Except for formula components* that are present in M.
+            When they are present in M, the following rules apply:
+         3. For every variable x in M, all corresponding formula components* in o₂
+            are symbolic-equivalent.
+
+        *. Formula component: formula relations and/or parameters.
 
         Note
         ----
-        variable-masking-similitude is not a well-defined equivalence-class.
+        masked-formula-similitude is not a well-defined equivalence-class.
         In effect, equivalence-classes are reflexive, symmetric, and transitive.
         An obvious counterexample: (x + 1) ~ (5 + x).
         This is why it is called similitude and not equivalence.
 
         """
+
+        TODO: RESUME WORK HERE. WE MUST STORE A PRIVATE DICTIONARY WITH VARIABLE VALUES.
+
         assert isinstance(o2, SymbolicObjct)
+        if isinstance(o2, FreeVariable):
+            if o2 in mask:
+                return True
         if not isinstance(o2, Formula):
             return False
-        if not self.relation.is_variable_masking_similar_to(o2=o2, variable_mask=variable_mask):
+        if not self.relation.is_masked_formula_similar_to(o2=o2, variable_mask=mask):
             return False
         # Arities are necessarily equal.
         for i in range(len(self.parameters)):
-            if not self.parameters[i].is_variable_masking_similar_to(o2=o2.parameters[i], variable_mask=variable_mask):
+            if not self.parameters[i].is_masked_formula_similar_to(o2=o2.parameters[i], mask=mask):
                 return False
         return True
 
