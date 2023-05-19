@@ -49,26 +49,26 @@ class SymbolicObjct:
     def __str__(self):
         return self.repr_as_symbol()
 
-    def is_defining_property_equivalent_to(self, o2):
-        """Returns true if this simple_objct and o2 are defining-property-equivalent.
+    def is_formula_equivalent_to(self, o2):
+        """Returns true if this simple_objct and o2 are formula-equivalent.
 
         Parameters:
         -----------
         o2 : SymbolicObject
-            The symbolic-object with which to verify defining-property-equivalence.
+            The symbolic-object with which to verify formula-equivalence.
 
         Definition:
         -----------
-        A simple-objct o and a symbolic-object o₂ are defining-property-equivalent if and only if:
+        A simple-objct o and a symbolic-object o₂ are formula-equivalent if and only if:
         Necessary conditions:
          1. r and o₂ are symbolic-equivalent.
         Unnecessary but valid conditions:
          2. o₂ is a simple-objct.
-         3. r and o₂ are linked to defining-property-equivalent theories.
+         3. r and o₂ are linked to formula-equivalent theories.
 
         Note:
         If two simple-objcts are defined with exactly the same theoretical constraints,
-        but are defined with distinct symbols, they are not defining-property-equivalent.
+        but are defined with distinct symbols, they are not formula-equivalent.
         """
         return self.is_symbol_equivalent(o2)
 
@@ -98,7 +98,7 @@ class SymbolicObjct:
             # this condition avoids an infinite loop
             # while testing 1-equivalence in the next condition.
             return True
-        if not self.theory.is_1_equivalent(o2.theory):
+        if not self.theory.is_symbol_equivalent(o2.theory):
             return False
         if self.symbol != o2.symbol:
             return False
@@ -157,25 +157,25 @@ class FreeVariable(TheoreticalObjct):
         symbol = f'𝐱{repm.subscriptify(self.variable_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, symbol=symbol, capitalizable=False)
 
-    def is_defining_property_equivalent_to(self, o2, skip_formula_verification=False):
-        """Returns true if this free-variable and o2 are defining-property-equivalent.
+    def is_formula_equivalent_to(self, o2, skip_formula_verification=False):
+        """Returns true if this free-variable and o2 are formula-equivalent.
 
         Parameters:
         -----------
         o2 : SymbolicObject
-            The symbolic-object with which to verify defining-property-equivalence.
+            The symbolic-object with which to verify formula-equivalence.
         skip_formula_verification : bool
-            True if this function is called from Formula.is_defining_property_equivalent_to()
+            True if this function is called from Formula.is_formula_equivalent_to()
             to avoid infinite loops.
 
         Definition:
         -----------
-        A free-variable 𝐱 and a symbolic-object o₂ are defining-property-equivalent if and only if:
+        A free-variable 𝐱 and a symbolic-object o₂ are formula-equivalent if and only if:
          1. o₂ is free-variable.
-         2. 𝐱 and o₂ are linked to otherwiseᵃ defining-property-equivalent formulae.
+         2. 𝐱 and o₂ are linked to otherwiseᵃ formula-equivalent formulae.
          3. 𝐱 and o₂ have equal variable-position with respect to their parent formulae.
 
-        ᵃ. That is, they satisfy all conditions required by defining-property-equivalent
+        ᵃ. That is, they satisfy all conditions required by formula-equivalent
            except for those conditions applying to this free-variable, a necessary
            condition to avoid circular definition.
 
@@ -184,7 +184,7 @@ class FreeVariable(TheoreticalObjct):
         if not isinstance(o2, FreeVariable):
             return False
         if not skip_formula_verification:
-            if not self.formula.is_defining_property_equivalent_to(o2.formula):
+            if not self.formula.is_formula_equivalent_to(o2.formula):
                 return False
         if self.formula_index != o2.formula_index:
             return False
@@ -207,6 +207,14 @@ class Formula(TheoreticalObjct):
      * Being a formula.
      * A relation r.
      * A finite tuple of parameters.
+
+     To do list
+     ----------
+     - TODO: Question: supporting relation as subformula, where the subformula
+        would be a function whose domain would be the class of relations,
+        could be an interesting approach to extend the expressiveness of
+        Punctilious as a formal language. Consider this in later developments.
+
     """
 
     reps = SimpleNamespace(
@@ -261,36 +269,36 @@ class Formula(TheoreticalObjct):
         attribute of the formula's relation."""
         return self.relation.formula_is_proposition
 
-    def is_defining_property_equivalent_to(self, o2):
-        """Returns true if this formula and o2 are defining-property-equivalent.
+    def is_formula_equivalent_to(self, o2):
+        """Returns true if this formula and o2 are formula-equivalent.
 
         Definition:
         -----------
-        A formula φ and a symbolic-object o₂ are defining-property-equivalent if and only if:
+        A formula φ and a symbolic-object o₂ are formula-equivalent if and only if:
          1. o₂ is a formula.
-         2. The relations of φ and o₂ are defining-property-equivalent.
-         3. The parameter ordered tuples of φ and o₂ are pair-wise defining-property-equivalent.ᵃ
+         2. The relations of φ and o₂ are formula-equivalent.
+         3. The parameter ordered tuples of φ and o₂ are pair-wise formula-equivalent.ᵃ
 
-        ᵃ. See the special case of variables defining-property-equivalence.
+        ᵃ. See the special case of variables formula-equivalence.
 
         Note:
         -----
-        Intuitively, defining-property-equivalence state that two formula express the
+        Intuitively, formula-equivalence state that two formula express the
         same thing, in the same way.
-        For instance, formula (¬(True)) and (False) are not defining-property-equivalent,
+        For instance, formula (¬(True)) and (False) are not formula-equivalent,
         because the former expresses the negation of truth (which is equal to false),
         and the latter expresses falsehood "directly".
-        It follows that two formula may yield equal values and not be defining-property-equivalent.
-        But two formula that are defining-property-equivalent necessarily yield the same value.
+        It follows that two formula may yield equal values and not be formula-equivalent.
+        But two formula that are formula-equivalent necessarily yield the same value.
         """
         assert isinstance(o2, SymbolicObjct)
         if not isinstance(o2, Formula):
             return False
-        if not self.relation.is_defining_property_equivalent(o2):
+        if not self.relation.is_formula_equivalent_to(o2.relation):
             return False
         # Arities are necessarily equal.
         for i in range(len(self.parameters)):
-            if not self.parameters[i].is_defining_property_equivalent_to(o2.parameters[i]):
+            if not self.parameters[i].is_formula_equivalent_to(o2.parameters[i]):
                 return False
         return True
 
@@ -300,7 +308,7 @@ class Formula(TheoreticalObjct):
         Definition
         ----------
         A formula φ and a symbolic-object o₂ are variable-masking-similar if and only if:
-         1. φ and o₂ are defining-property-equivalent.
+         1. φ and o₂ are formula-equivalent.
          2. Except for formula relations and/or parameters that are present in the variable-mask.
 
         Note
@@ -449,11 +457,14 @@ class Axiom(Statement):
 
 class FormulaStatement(Statement):
     """
-    TODO: MAKE IT AN ABSTRACT CLASS
 
     Definition:
     -----------
     An formula-statement is a statement that expresses the validity of a formula in the parent theory.
+
+    To do list
+    ----------
+    - TODO: Make FormulaStatement an abstract class
 
     """
 
@@ -732,33 +743,33 @@ class Relation(TheoreticalObjct):
         self.python_name = python_name
         self.formula_is_proposition = formula_is_proposition
         capitalizable = False if symbol is None else capitalizable
+        self.relation_index = theory.crossreference_relation(self)
         symbol = f'◆{repm.subscriptify(self.relation_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
-        self.relation_index = theory.crossreference_relation(self)
 
-    def is_defining_property_equivalent_to(self, o2):
-        """Returns true if this relation and o2 are defining-property-equivalent.
+    def is_formula_equivalent_to(self, o2):
+        """Returns true if this relation and o2 are formula-equivalent.
 
         Parameters:
         -----------
         o2 : SymbolicObject
-            The symbolic-object with which to verify defining-property-equivalence.
+            The symbolic-object with which to verify formula-equivalence.
 
         Definition:
         -----------
-        A relation r and a symbolic-object o₂ are defining-property-equivalent if and only if:
+        A relation r and a symbolic-object o₂ are formula-equivalent if and only if:
         Necessary conditions:
          1. r and o₂ are symbolic-equivalent.
         Unnecessary but valid conditions:
          2. o₂ is a relation.
-         3. r and o₂ are linked to defining-property-equivalent theories.
+         3. r and o₂ are linked to formula-equivalent theories.
          4. r and o₂ have equal arity.
 
         Note:
         If two relations are defined with exactly the same theoretical constraints,
-        but are defined with distinct symbols, they are not defining-property-equivalent.
+        but are defined with distinct symbols, they are not formula-equivalent.
         """
         return self.is_symbol_equivalent(o2)
 

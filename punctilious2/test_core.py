@@ -132,3 +132,35 @@ class TestTheory(TestCase):
         s1 = core.Statement(theory=t1, valid_proposition=a1)
         t1.print()
 
+
+class TestFormula(TestCase):
+    def test_is_formula_equivalent_to(self):
+        t1 = core.Theory()
+        o1 = core.SimpleObjct(theory=t1)
+        o2 = core.SimpleObjct(theory=t1)
+        o3 = core.SimpleObjct(theory=t1)
+        o4 = core.SimpleObjct(theory=t1)
+        r1 = core.Relation(theory=t1, arity=1)
+        r2 = core.Relation(theory=t1, arity=1)
+        r3 = core.Relation(theory=t1, arity=2)
+        r4 = core.Relation(theory=t1, arity=2)
+        # Test with unary relation.
+        phi1 = core.Formula(theory=t1, relation=r1, parameters=tuple([o1]))
+        self.assertTrue(phi1.is_formula_equivalent_to(phi1))
+        phi2 = core.Formula(theory=t1, relation=r1, parameters=tuple([o1]))
+        self.assertTrue(phi1.is_formula_equivalent_to(phi2))
+        phi3 = core.Formula(theory=t1, relation=r2, parameters=tuple([o1]))
+        self.assertFalse(phi1.is_formula_equivalent_to(phi3))
+        phi4 = core.Formula(theory=t1, relation=r1, parameters=tuple([o2]))
+        self.assertFalse(phi1.is_formula_equivalent_to(phi4))
+        # Test with binary relation.
+        phi5 = core.Formula(theory=t1, relation=r3, parameters=tuple([o1, o2]))
+        self.assertTrue(phi5.is_formula_equivalent_to(phi5))
+        phi6 = core.Formula(theory=t1, relation=r3, parameters=tuple([o1, o2]))
+        self.assertTrue(phi5.is_formula_equivalent_to(phi6))
+        phi7 = core.Formula(theory=t1, relation=r4, parameters=tuple([o1, o2]))
+        self.assertFalse(phi5.is_formula_equivalent_to(phi7))
+        phi8 = core.Formula(theory=t1, relation=r3, parameters=tuple([o2, o1]))
+        self.assertFalse(phi5.is_formula_equivalent_to(phi8))
+
+
