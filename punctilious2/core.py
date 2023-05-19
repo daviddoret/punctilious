@@ -31,7 +31,7 @@ class SymbolicObjct:
     Definition
     ----------
     A symbolic-objct is a python object instance that is assigned symbolic names,
-    but that is linked to a theory but that is not necessarily constitutive of the theory.
+    that is linked to a theory, but that is not necessarily constitutive of the theory.
     """
 
     def __init__(self, theory, symbol, capitalizable=False):
@@ -48,6 +48,29 @@ class SymbolicObjct:
 
     def __str__(self):
         return self.repr_as_symbol()
+
+    def is_defining_property_equivalent_to(self, o2):
+        """Returns true if this simple_objct and o2 are defining-property-equivalent.
+
+        Parameters:
+        -----------
+        o2 : SymbolicObject
+            The symbolic-object with which to verify defining-property-equivalence.
+
+        Definition:
+        -----------
+        A simple-objct o and a symbolic-object o₂ are defining-property-equivalent if and only if:
+        Necessary conditions:
+         1. r and o₂ are symbolic-equivalent.
+        Unnecessary but valid conditions:
+         2. o₂ is a simple-objct.
+         3. r and o₂ are linked to defining-property-equivalent theories.
+
+        Note:
+        If two simple-objcts are defined with exactly the same theoretical constraints,
+        but are defined with distinct symbols, they are not defining-property-equivalent.
+        """
+        return self.is_symbol_equivalent(o2)
 
     def is_symbol_equivalent(self, o2):
         """Returns true if this object and o2 are symbol-equivalent.
@@ -297,6 +320,27 @@ class Formula(TheoreticalObjct):
             if not self.parameters[i].is_defining_property_equivalent_to(o2.parameters[i]):
                 return False
         return True
+
+    def is_variable_masking_similar_to(self, o2, variable_mask):
+        """Returns true if this formula and o2 are variable-masking-similar.
+
+        Definition
+        ----------
+        A formula φ and a symbolic-object o₂ are variable-masking-similar if and only if:
+         1. φ and o₂ are defining-property-equivalent.
+         2. Except for formula relations and/or parameters that are present in the variable-mask.
+
+        Note
+        ----
+        variable-masking-similitude is not a well-defined equivalence-class.
+        In effect, equivalence-classes are reflexive, symmetric, and transitive.
+        An obvious counterexample: (x + 1) ~ (5 + x).
+        This is why it is called similitude and not equivalence.
+
+        """
+        pass
+        # TODO: Implement variable-masking-similitude.
+
 
     def repr_as_function_call(self):
         return f'{self.relation.symbol}({", ".join([p.repr() for p in self.parameters])})'
@@ -656,6 +700,11 @@ class Relation(TheoreticalObjct):
     𝜑 establishes a relation between its parameters.
     A relation ◆ has a fixed arity.
 
+    Defining properties
+    -------------------
+     - Arity
+     - Symbol
+
     Attributes
     ----------
     formula_is_proposition : bool
@@ -691,7 +740,7 @@ class Relation(TheoreticalObjct):
         -----------
         A relation r and a symbolic-object o₂ are defining-property-equivalent if and only if:
         Necessary conditions:
-         1. r and o₂ symbolic-equivalent.
+         1. r and o₂ are symbolic-equivalent.
         Unnecessary but valid conditions:
          2. o₂ is a relation.
          3. r and o₂ are linked to defining-property-equivalent theories.
