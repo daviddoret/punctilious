@@ -110,7 +110,7 @@ class SymbolicObjct:
     def repr_as_symbol(self, capitalized=False):
         return self.symbol.capitalize() if (capitalized and self.capitalizable) else self.symbol
 
-    def repr(self):
+    def repr(self, expanded=None):
         return self.repr_as_symbol()
 
 
@@ -139,7 +139,7 @@ class TheoreticalObjct(SymbolicObjct):
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
 
-class FreeVariable:
+class FreeVariable(TheoreticalObjct):
     """
 
 
@@ -151,10 +151,11 @@ class FreeVariable:
      * The index-position of the free-variable in its scope-formula
     """
 
-    def __init__(self, formula):
-        assert isinstance(formula, Formula)
-        formula_index = None  # TODO: Implement FreeVariable.formula_index
-        formula = formula
+    def __init__(self, theory, symbol=None):
+        assert isinstance(theory, Theory)
+        self.variable_index = theory.crossreference_variable(self)
+        symbol = f'𝐱{repm.subscriptify(self.variable_index + 1)}' if symbol is None else symbol
+        super().__init__(theory=theory, symbol=symbol, capitalizable=False)
 
     def is_defining_property_equivalent_to(self, o2, skip_formula_verification=False):
         """Returns true if this free-variable and o2 are defining-property-equivalent.
@@ -188,34 +189,6 @@ class FreeVariable:
         if self.formula_index != o2.formula_index:
             return False
         return True
-
-
-class FreeVariablePlaceholder:
-    """
-
-    Definition:
-    -----------
-    A free-variable-placeholder is a transitory object used during formula construction.
-    It makes it possible to build formula with variable-parameters.
-    Then, during the final step of formula construction, these placeholders
-    are replaced by definitive free-variable objects.
-    The reason why this approach was necessary are:
-     * When building a formula as a single python statement, we cannot reference the formula:
-        e.g. phi = Formula(t1, r1, (Variable('x', formula=???))
-     * When building a formula as a single python statement, we cannot call multiple times the constructor:
-        e.g. phi = Formula(t1, r1, (Variable('x'), Variable('x'))
-        This second issue could be solved by complex static constructors but the approach
-        of late cross-referencing variables at the end of the construction process seemed
-        much simpler.
-    """
-
-    def __init__(self, symbol):
-        assert isinstance(symbol, str)
-        self.symbol = symbol
-        # Late-binding with the parent formula will be used
-        # to populate the following properties.
-        self.formula = None
-        self.free_variable = None
 
 
 class Formula(TheoreticalObjct):
@@ -267,7 +240,7 @@ class Formula(TheoreticalObjct):
         """During construction, cross-reference a free-variable 𝓍
         with its parent formula if it is not already cross-referenced,
         and return its 0-based index in Formula.free_variables."""
-        assert isinstance(x, FreeVariablePlaceholder)
+        assert isinstance(x, FreeVariable)
         x.formula = self if x.formula is None else x.formula
         assert x.formula is self
         if x not in self.free_variables:
@@ -338,35 +311,60 @@ class Formula(TheoreticalObjct):
         This is why it is called similitude and not equivalence.
 
         """
-        pass
-        # TODO: Implement variable-masking-similitude.
+        assert isinstance(o2, SymbolicObjct)
+        if not isinstance(o2, Formula):
+            return False
+        if not self.relation.is_variable_masking_similar_to(o2=o2, variable_mask=variable_mask):
+            return False
+        # Arities are necessarily equal.
+        for i in range(len(self.parameters)):
+            if not self.parameters[i].is_variable_masking_similar_to(o2=o2.parameters[i], variable_mask=variable_mask):
+                return False
+        return True
 
+    def repr(self, expanded=None):
+        expanded = True if expanded is None else expanded
+        assert isinstance(expanded, bool)
+        if expanded:
+            return self.repr_as_formula(expanded=expanded)
+        else:
+            return super().repr(expanded=expanded)
 
-    def repr_as_function_call(self):
-        return f'{self.relation.symbol}({", ".join([p.repr() for p in self.parameters])})'
+    def repr_as_function_call(self, expanded=None):
+        expanded = True if expanded is None else expanded
+        assert isinstance(expanded, bool)
+        return f'{self.relation.symbol}({", ".join([p.repr(expanded=expanded) for p in self.parameters])})'
 
-    def repr_as_infix_operator(self):
+    def repr_as_infix_operator(self, expanded=None):
+        expanded = True if expanded is None else expanded
+        assert isinstance(expanded, bool)
         assert self.relation.arity == 2
-        return f'({self.parameters[0].repr()} {self.relation.symbol} {self.parameters[1].repr()})'
+        return f'({self.parameters[0].repr(expanded=expanded)} {self.relation.symbol} {self.parameters[1].repr(expanded=expanded)})'
 
-    def repr_as_suffix_operator(self):
+    def repr_as_suffix_operator(self, expanded=None):
+        expanded = True if expanded is None else expanded
+        assert isinstance(expanded, bool)
         assert self.relation.arity == 1
-        return f'({self.parameters[0].repr()}){self.relation.symbol}'
+        return f'({self.parameters[0].repr(expanded=expanded)}){self.relation.symbol}'
 
-    def repr_as_prefix_operator(self):
+    def repr_as_prefix_operator(self, expanded=None):
+        expanded = True if expanded is None else expanded
+        assert isinstance(expanded, bool)
         assert self.relation.arity == 1
-        return f'{self.relation.symbol}({self.parameters[0].repr()})'
+        return f'{self.relation.symbol}({self.parameters[0].repr(expanded=expanded)})'
 
-    def repr_as_formula(self):
+    def repr_as_formula(self, expanded=None):
+        expanded = True if expanded is None else expanded
+        assert isinstance(expanded, bool)
         match self.relation.formula_rep:
             case Formula.reps.function_call:
-                return self.repr_as_function_call()
+                return self.repr_as_function_call(expanded=expanded)
             case Formula.reps.infix_operator:
-                return self.repr_as_infix_operator()
+                return self.repr_as_infix_operator(expanded=expanded)
             case Formula.reps.prefix_operator:
-                return self.repr_as_prefix_operator()
+                return self.repr_as_prefix_operator(expanded=expanded)
             case Formula.reps.suffix_operator:
-                return self.repr_as_suffix_operator()
+                return self.repr_as_suffix_operator(expanded=expanded)
         assert 1 == 2
 
 
@@ -558,6 +556,7 @@ class Theory(TheoreticalObjct):
         self.statements = tuple()
         self.symbolic_objcts = dict()
         self.theories = tuple()
+        self.variables = tuple()
         is_universe_of_discourse = False if is_universe_of_discourse is None else is_universe_of_discourse
         if is_universe_of_discourse:
             assert theory is None
@@ -668,6 +667,17 @@ class Theory(TheoreticalObjct):
                 if r.python_name is not None:
                     set_attr(self.relations, r.python_name, r)
         return self.relations.index(r)
+
+    def crossreference_variable(self, x):
+        """During construction, cross-reference a variable x
+        with its parent theory if it is not already cross-referenced,
+        and return its 0-based index in Theory.variables."""
+        assert isinstance(x, FreeVariable)
+        x.theory = x.theory if hasattr(x, 'theory') else self
+        assert x.theory is self
+        if x not in self.variables:
+            self.variables = self.variables + tuple([x])
+        return self.variables.index(x)
 
     def repr_as_theory(self):
         """Return a representation that expresses and justifies the theory."""
