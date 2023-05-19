@@ -4,8 +4,6 @@ import random_data
 mira_name = 'Mira'  # random_data.random_word()
 dog_name = 'dog'  # random_data.random_word()
 mammal_name = 'mammal'  # random_data.random_word()
-#n4 = random_data.random_word()
-#n5 = random_data.random_word()
 
 t1 = core.Theory(symbol=f'{mira_name}-theory', capitalizable=True)
 mira = core.SimpleObjct(theory=t1, symbol=mira_name, capitalizable=True)
@@ -23,7 +21,7 @@ if_x_is_a_dog_then_x_is_a_mammal_formula = core.Formula(theory=t1, relation=core
 if_x_is_a_dog_then_x_is_a_mammal = core.DirectAxiomInferenceStatement(theory=t1, axiom=a1, valid_proposition=if_x_is_a_dog_then_x_is_a_mammal_formula)
 # mira_is_a_mammal_formula = core.Formula(theory=t1, relation=is_a, parameters=(mira, mammal))
 
-mira_is_a_mammal = core.ModusPonensStatement(theory=t1, p_implies_q=if_x_is_a_dog_then_x_is_a_mammal, p=mira_is_a_dog)
+#mira_is_a_mammal = core.ModusPonensStatement(theory=t1, p_implies_q=if_x_is_a_dog_then_x_is_a_mammal, p=mira_is_a_dog)
 
 t1.prnt()
 

@@ -1,10 +1,13 @@
 
-class SuperTuple(tuple):
+class Parent:
     pass
 
-x = SuperTuple()
+class Child(Parent):
+    pass
 
-print(x)
+x = Child()
 
-setattr(x, 'test', 17)
-print(getattr(x, 'test'))
+print(isinstance(x, Parent))
+
+print(type(x))
+

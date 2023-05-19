@@ -41,12 +41,45 @@ class SymbolicObjct:
         self.theory = theory
         self.symbol = symbol
         self.capitalizable = capitalizable
+        self.theory.crossreference_symbolic_objct(s=self)
 
     def __repr__(self):
         return self.repr_as_symbol()
 
     def __str__(self):
         return self.repr_as_symbol()
+
+    def is_symbol_equivalent(self, o2):
+        """Returns true if this object and o2 are symbol-equivalent.
+
+        Definition:
+        -----------
+        Two symbolic-objects o₁ and o₂ are symbol-equivalent if and only if:
+         1. o₁ and o₂ have symbol-equivalent theories.¹
+         2. o₁ and o₂ have equal symbols.²
+
+        ¹. Theories are symbolic-objects. This recursive condition
+           yields a complete path between the objects and the universe-of-discourse.
+        ². Remember that every symbolic-object has a unique symbol in its parent theory.
+
+        Note:
+        -----
+        The symbol-equivalence relation allows to compare any pair of symbolic-objcts, including:
+         * Both theoretical and atheoretical objects.
+         * Symbolic-objcts linked to distinct theories.
+        """
+        # A theoretical-object can only be compared with a theoretical-object
+        assert isinstance(o2, SymbolicObjct)
+        if self is universe_of_discourse and o2 is universe_of_discourse:
+            # A universe-of-discourse is a root theory,
+            # this condition avoids an infinite loop
+            # while testing 1-equivalence in the next condition.
+            return True
+        if not self.theory.is_1_equivalent(o2.theory):
+            return False
+        if self.symbol != o2.symbol:
+            return False
+        return True
 
     def repr_as_declaration(self):
         return f'Let {self.repr_as_symbol()} be a symbolic-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
@@ -83,6 +116,57 @@ class TheoreticalObjct(SymbolicObjct):
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
 
+class FreeVariable:
+    """
+
+
+    Defining properties:
+    --------------------
+    The defining-properties of a free-variable are:
+     * Being a free-variable
+     * The scope-formula of the free-variable
+     * The index-position of the free-variable in its scope-formula
+    """
+
+    def __init__(self, formula):
+        assert isinstance(formula, Formula)
+        formula_index = None  # TODO: Implement FreeVariable.formula_index
+        formula = formula
+
+    def is_defining_property_equivalent_to(self, o2, skip_formula_verification=False):
+        """Returns true if this free-variable and o2 are defining-property-equivalent.
+
+        Parameters:
+        -----------
+        o2 : SymbolicObject
+            The symbolic-object with which to verify defining-property-equivalence.
+        skip_formula_verification : bool
+            True if this function is called from Formula.is_defining_property_equivalent_to()
+            to avoid infinite loops.
+
+        Definition:
+        -----------
+        A free-variable 𝐱 and a symbolic-object o₂ are defining-property-equivalent if and only if:
+         1. o₂ is free-variable.
+         2. 𝐱 and o₂ are linked to otherwiseᵃ defining-property-equivalent formulae.
+         3. 𝐱 and o₂ have equal variable-position with respect to their parent formulae.
+
+        ᵃ. That is, they satisfy all conditions required by defining-property-equivalent
+           except for those conditions applying to this free-variable, a necessary
+           condition to avoid circular definition.
+
+        """
+        assert isinstance(o2, SymbolicObjct)
+        if not isinstance(o2, FreeVariable):
+            return False
+        if not skip_formula_verification:
+            if not self.formula.is_defining_property_equivalent_to(o2.formula):
+                return False
+        if self.formula_index != o2.formula_index:
+            return False
+        return True
+
+
 class FreeVariablePlaceholder:
     """
 
@@ -117,9 +201,16 @@ class Formula(TheoreticalObjct):
     Definition
     ----------
     A formula 𝜑 is a tuple (◆, 𝒳) where:
-    * ◆ is a relation.
-    * 𝒳 is a finite tuple of parameters
-      whose elements are theoretical-objects, possibly formulae.
+     * ◆ is a relation.
+     * 𝒳 is a finite tuple of parameters
+       whose elements are theoretical-objects, possibly formulae.
+
+    Defining properties:
+    --------------------
+    The defining-properties of a formula are:
+     * Being a formula.
+     * A relation r.
+     * A finite tuple of parameters.
     """
 
     reps = SimpleNamespace(
@@ -173,6 +264,39 @@ class Formula(TheoreticalObjct):
         This property is directly inherited from the formula-is-proposition
         attribute of the formula's relation."""
         return self.relation.formula_is_proposition
+
+    def is_defining_property_equivalent_to(self, o2):
+        """Returns true if this formula and o2 are defining-property-equivalent.
+
+        Definition:
+        -----------
+        A formula φ and a symbolic-object o₂ are defining-property-equivalent if and only if:
+         1. o₂ is a formula.
+         2. The relations of φ and o₂ are defining-property-equivalent.
+         3. The parameter ordered tuples of φ and o₂ are pair-wise defining-property-equivalent.ᵃ
+
+        ᵃ. See the special case of variables defining-property-equivalence.
+
+        Note:
+        -----
+        Intuitively, defining-property-equivalence state that two formula express the
+        same thing, in the same way.
+        For instance, formula (¬(True)) and (False) are not defining-property-equivalent,
+        because the former expresses the negation of truth (which is equal to false),
+        and the latter expresses falsehood "directly".
+        It follows that two formula may yield equal values and not be defining-property-equivalent.
+        But two formula that are defining-property-equivalent necessarily yield the same value.
+        """
+        assert isinstance(o2, SymbolicObjct)
+        if not isinstance(o2, Formula):
+            return False
+        if not self.relation.is_defining_property_equivalent(o2):
+            return False
+        # Arities are necessarily equal.
+        for i in range(len(self.parameters)):
+            if not self.parameters[i].is_defining_property_equivalent_to(o2.parameters[i]):
+                return False
+        return True
 
     def repr_as_function_call(self):
         return f'{self.relation.symbol}({", ".join([p.repr() for p in self.parameters])})'
@@ -382,12 +506,13 @@ class Note(AtheoreticalStatement):
 class Theory(TheoreticalObjct):
     def __init__(self, theory=None, is_universe_of_discourse=None, symbol=None, capitalizable=False):
         global universe_of_discourse
+        self.symbols = dict()
         self.axioms = tuple()
         self.formulae = tuple()
         self.relations = Tuple()
         self.simple_objcts = Tuple()
         self.statements = tuple()
-        self.symbolic_objcts = tuple()
+        self.symbolic_objcts = dict()
         self.theories = tuple()
         is_universe_of_discourse = False if is_universe_of_discourse is None else is_universe_of_discourse
         if is_universe_of_discourse:
@@ -412,13 +537,15 @@ class Theory(TheoreticalObjct):
     def crossreference_symbolic_objct(self, s):
         """During construction, cross-reference a symbolic_objct 𝓈
         with its parent theory if it is not already cross-referenced,
-        and return its 0-based index in Theory.symbolic_objcts."""
+        assuring symbol uniqueness."""
         assert isinstance(s, SymbolicObjct)
         s.theory = s.theory if hasattr(s, 'theory') else self
         assert s.theory is self
-        if s not in self.symbolic_objcts:
-            self.symbolic_objcts = self.symbolic_objcts + tuple([s])
-        return self.symbolic_objcts.index(s)
+        if s.symbol in self.symbolic_objcts:
+            # Within a theory, every symbol must be unique.
+            assert s is self.symbolic_objcts[s.symbol]
+        else:
+            self.symbolic_objcts[s.symbol] = s
 
     def crossreference_axiom(self, a):
         """During construction, cross-reference an axiom 𝒜
@@ -484,7 +611,7 @@ class Theory(TheoreticalObjct):
     def crossreference_relation(self, r):
         """During construction, cross-reference a relation r
         with its parent theory if it is not already cross-referenced,
-        and return the 0-based index of the formula in Theory.symbolic_objcts."""
+        and return the 0-based index of the formula in Theory.relations."""
         assert isinstance(r, Relation)
         r.theory = r.theory if hasattr(r, 'theory') else self
         assert r.theory is self
@@ -538,7 +665,8 @@ class Relation(TheoreticalObjct):
         When True, the formula may be used as a theory-statement.
     """
 
-    def __init__(self, theory, arity, formula_rep=None, symbol=None, capitalizable=False, python_name=None, formula_is_proposition=False):
+    def __init__(self, theory, arity, formula_rep=None, symbol=None, capitalizable=False, python_name=None,
+                 formula_is_proposition=False):
         assert isinstance(theory, Theory)
         assert isinstance(formula_is_proposition, bool)
         self.formula_rep = Formula.reps.function_call if formula_rep is None else formula_rep
@@ -550,6 +678,30 @@ class Relation(TheoreticalObjct):
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
         self.relation_index = theory.crossreference_relation(self)
+
+    def is_defining_property_equivalent_to(self, o2):
+        """Returns true if this relation and o2 are defining-property-equivalent.
+
+        Parameters:
+        -----------
+        o2 : SymbolicObject
+            The symbolic-object with which to verify defining-property-equivalence.
+
+        Definition:
+        -----------
+        A relation r and a symbolic-object o₂ are defining-property-equivalent if and only if:
+        Necessary conditions:
+         1. r and o₂ symbolic-equivalent.
+        Unnecessary but valid conditions:
+         2. o₂ is a relation.
+         3. r and o₂ are linked to defining-property-equivalent theories.
+         4. r and o₂ have equal arity.
+
+        Note:
+        If two relations are defined with exactly the same theoretical constraints,
+        but are defined with distinct symbols, they are not defining-property-equivalent.
+        """
+        return self.is_symbol_equivalent(o2)
 
     def repr_as_declaration(self):
         return f'Let {self.repr_as_symbol()} be a {self.repr_arity_as_text()} relation denoted as ⌜ {self.repr_as_symbol()} ⌝.'
@@ -638,7 +790,7 @@ class ModusPonensStatement(FormulaStatement):
         assert isinstance(p_implies_q, FormulaStatement)
         assert p_implies_q.theory is theory  # TODO: Extend this to parent theories
         assert p_implies_q.valid_proposition.relation is propositional_logic.relations.implies
-        p = p_implies_q.valid_proposition.parameters[0]
+        p_prime = p_implies_q.valid_proposition.parameters[0]
         q = p_implies_q.valid_proposition.parameters[1]
         # Check p consistency
         # If the p statement is present in the theory,
@@ -646,10 +798,11 @@ class ModusPonensStatement(FormulaStatement):
         # because every statement in the theory is a valid proposition.
         assert isinstance(p, FormulaStatement)
         assert p.theory is theory  # TODO: Extend this to parent theories
+        assert p.is_variable_equivalent_to(p_prime)
         # State q
         super().__init__(theory=theory, valid_proposition=q, category=category)
-        assert p_implies_q.statement_index < self.statement_index
-        assert p.statement_index < self.statement_index
+        # assert p_implies_q.statement_index < self.statement_index
+        # assert p.statement_index < self.statement_index
 
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement.
@@ -669,6 +822,6 @@ Relation(theory=propositional_logic, symbol='implies', arity=2, formula_rep=Form
          python_name='implies', formula_is_proposition=True)
 Relation(
     theory=propositional_logic, symbol='=', arity=2, formula_rep=Formula.reps.infix_operator,
-         python_name='equal', formula_is_proposition=True)
+    python_name='equal', formula_is_proposition=True)
 
 pass
