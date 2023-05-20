@@ -16,6 +16,7 @@ def serif_bold(s=None):
         return ''
     return ''.join([_serif_bold_dict.get(c, c) for c in s])
 
+
 class Representation:
     def __init__(self, s):
         self.s = s
@@ -81,6 +82,7 @@ def subscriptify(s=None):
     if s is None or s == '':
         return ''
     return ''.join([utf8_subscript_dictionary.get(c, c) for c in s])
+
 
 def prnt(s):
     print(s)

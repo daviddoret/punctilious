@@ -14,7 +14,7 @@ is_a = core.Relation(theory=t1, arity=2, formula_rep=core.Formula.reps.infix_ope
 a1 = core.Axiom(theory=t1, axiom_text=f'{mira_name.capitalize()} is a {dog_name}.', capitalizable=True)
 mira_is_a_dog = core.DirectAxiomInferenceStatement(theory=t1, axiom=a1, valid_proposition=core.Formula(theory=t1, relation=is_a, parameters=(mira, dog)))
 
-a2 = core.Axiom(theory=t1, axiom_text=f'If a 𝒙 is a {dog_name}, then 𝒙 is a {mammal_name}.', capitalizable=True)
+a2 = core.Axiom(theory=t1, axiom_text=f'If 𝒙 is a {dog_name}, then 𝒙 is a {mammal_name}.', capitalizable=True)
 x = core.FreeVariable(theory=t1)
 x_is_a_dog = core.Formula(theory=t1, relation=is_a, parameters=(x, dog))
 x_is_a_mammal = core.Formula(theory=t1, relation=is_a, parameters=(x, mammal))

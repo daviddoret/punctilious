@@ -306,7 +306,7 @@ class TheoreticalObjct(SymbolicObjct):
             assert isinstance(value, TheoreticalObjct)
             # A relation could not be replaced by a simple-objct, etc.
             # to prevent the creation of an ill-formed theoretical-objct.
-            assert type(key) == type(value) or isinstance(value, FreeVariable)
+            assert type(key) == type(value) or isinstance(value, FreeVariable) or isinstance(key, FreeVariable)
             # If these are formula, their arity must be equal
             # to prevent the creation of an ill-formed formula.
             assert not isinstance(key, Formula) or key.arity == value.arity
@@ -1072,7 +1072,8 @@ class ModusPonens(FormulaStatement):
         self.p_implies_q = p_implies_q
         self.p = p
         # Build q by variable substitution
-        q = q_prime.substitute(map=_values)  # TODO: IMPLEMENT METHOD
+        substitution_map = dict((v, k) for k, v in _values.items())
+        q = q_prime.substitute(substitution_map=substitution_map)
         super().__init__(theory=theory, valid_proposition=q, category=category)
         # assert p_implies_q.statement_index < self.statement_index
         # assert p.statement_index < self.statement_index
@@ -1084,9 +1085,11 @@ class ModusPonens(FormulaStatement):
         - The formula that is being stated,
         - The justification for the formula."""
         output = f'\n\n{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula()}'
-        output = output + f'\n{repm.serif_bold("Proof:")}'
+        output = output + f'\n{repm.serif_bold("Proof by modus ponens")}'
         output = output + f'\n{self.p_implies_q.repr_as_formula(expanded=True)} | Follows from {repm.serif_bold(self.p_implies_q.repr_as_symbol())}.'
         output = output + f'\n{self.p.repr_as_formula(expanded=True)} | Follows from {repm.serif_bold(self.p.repr_as_symbol())}.'
+        output = output + f'\n__________________________________________'
+        output = output + f'\n{self.valid_proposition.repr_as_formula(expanded=True)} | ∎'
         return output
 
 
