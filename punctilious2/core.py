@@ -49,29 +49,6 @@ class SymbolicObjct:
     def __str__(self):
         return self.repr_as_symbol()
 
-    def is_formula_equivalent_to(self, o2):
-        """Returns true if this simple_objct and o2 are formula-equivalent.
-
-        Parameters:
-        -----------
-        o2 : SymbolicObject
-            The symbolic-object with which to verify formula-equivalence.
-
-        Definition:
-        -----------
-        A simple-objct o and a symbolic-object o₂ are formula-equivalent if and only if:
-        Necessary conditions:
-         1. r and o₂ are symbolic-equivalent.
-        Unnecessary but valid conditions:
-         2. o₂ is a simple-objct.
-         3. r and o₂ are linked to formula-equivalent theories.
-
-        Note:
-        If two simple-objcts are defined with exactly the same theoretical constraints,
-        but are defined with distinct symbols, they are not formula-equivalent.
-        """
-        return self.is_symbol_equivalent(o2)
-
     def is_symbol_equivalent(self, o2):
         """Returns true if this object and o2 are symbol-equivalent.
 
@@ -138,6 +115,36 @@ class TheoreticalObjct(SymbolicObjct):
     def __init__(self, theory, symbol, capitalizable):
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
+    def is_formula_equivalent_to(self, o2):
+        """Returns true if this theoretical-obct and theoretical-obct o2 are formula-equivalent.
+
+        Parameters:
+        -----------
+        o2 : TheoreticalObject
+            The theoretical-object with which to verify formula-equivalence.
+
+        Definition:
+        -----------
+        Two theoretical-obcts o1 and o₂ that are not both formulae,
+        are formula-equivalent if and only if:
+        Necessary conditions:
+         1. o1 and o₂ are symbolic-equivalent.
+        Unnecessary but valid conditions:
+         2. o1 and o₂ are of the same theory class (simple-objct, relation, etc.)
+         3. o1 and o₂ are constitutive of symbolic-equivalent theories.
+         4. o1 and o₂ have equal defining-properties (e.g. arity for a relation).
+
+        For the special case when o1 and o₂ are both formulae,
+        cf. the overridden method Formula.is_formula_equivalent_to.
+
+        Note:
+        -----
+        o1 and o₂ may be subject to identical theoretical constraints,
+        that is to say they are theoretically-equivalent,
+        but if they are defined with distinct symbols, they are not formula-equivalent.
+        """
+        return self.is_symbol_equivalent(o2)
+
 
 class FreeVariable(TheoreticalObjct):
     """
@@ -157,38 +164,35 @@ class FreeVariable(TheoreticalObjct):
         symbol = f'𝐱{repm.subscriptify(self.variable_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, symbol=symbol, capitalizable=False)
 
-    def is_formula_equivalent_to(self, o2, skip_formula_verification=False):
-        """Returns true if this free-variable and o2 are formula-equivalent.
-
-        Parameters:
-        -----------
-        o2 : SymbolicObject
-            The symbolic-object with which to verify formula-equivalence.
-        skip_formula_verification : bool
-            True if this function is called from Formula.is_formula_equivalent_to()
-            to avoid infinite loops.
-
-        Definition:
-        -----------
-        A free-variable 𝐱 and a symbolic-object o₂ are formula-equivalent if and only if:
-         1. o₂ is free-variable.
-         2. 𝐱 and o₂ are linked to otherwiseᵃ formula-equivalent formulae.
-         3. 𝐱 and o₂ have equal variable-position with respect to their parent formulae.
-
-        ᵃ. That is, they satisfy all conditions required by formula-equivalent
-           except for those conditions applying to this free-variable, a necessary
-           condition to avoid circular definition.
-
-        """
-        assert isinstance(o2, SymbolicObjct)
-        if not isinstance(o2, FreeVariable):
-            return False
-        if not skip_formula_verification:
-            if not self.formula.is_formula_equivalent_to(o2.formula):
-                return False
-        if self.formula_index != o2.formula_index:
-            return False
-        return True
+    def is_masked_formula_similar_to(self, o2, mask, _values):
+        # TODO: Re-implement this
+        assert isinstance(o2, TheoreticalObjct)
+        if isinstance(o2, FreeVariable):
+            if o2 in mask:
+                # o2 is a variable, and it is present in the mask.
+                # first, we must check if it is already in the dictionary of values.
+                if o2 in _values:
+                    # the value is already present in the dictionary.
+                    known_value = _values[o2]
+                    if known_value is self:
+                        # the existing value matches the newly observed value.
+                        # until there, masked-formula-similitude is preserved.
+                        return True, _values
+                    else:
+                        # the existing value does not match the newly observed value.
+                        # masked-formula-similitude is no longer preserved.
+                        return False, _values
+                else:
+                    # the value is not present in the dictionary.
+                    # until there, masked-formula-similitude is preserved.
+                    _values[o2] = self
+                    return True, _values
+        if not isinstance(o2, SimpleObjct):
+            # o1 (self) is a simple-objct, and o2 is something else.
+            # in consequence, masked-formula-similitude is no longer preserved.
+            return False, _values
+        # o2 is not a variable.
+        return self.is_formula_equivalent_to(o2), _values
 
 
 class Formula(TheoreticalObjct):
@@ -274,7 +278,7 @@ class Formula(TheoreticalObjct):
 
         Definition:
         -----------
-        A formula φ and a symbolic-object o₂ are formula-equivalent if and only if:
+        A formula φ and a theoretical-object o₂ are formula-equivalent if and only if:
          1. o₂ is a formula.
          2. The relations of φ and o₂ are formula-equivalent.
          3. The parameter ordered tuples of φ and o₂ are pair-wise formula-equivalent.ᵃ
@@ -284,14 +288,29 @@ class Formula(TheoreticalObjct):
         Note:
         -----
         Intuitively, formula-equivalence state that two formula express the
-        same thing, in the same way.
+        same thing with the same symbols.
         For instance, formula (¬(True)) and (False) are not formula-equivalent,
         because the former expresses the negation of truth (which is equal to false),
-        and the latter expresses falsehood "directly".
+        and the latter expresses falsehood "directly". Both formulae yield
+        the same value, but are formulated in a different manned.
         It follows that two formula may yield equal values and not be formula-equivalent.
         But two formula that are formula-equivalent necessarily yield the same value.
+        Finally, two formula may not be symbolically-equivalent while
+        being formula-equivalent. Because formulae are theoretical-objects.
+        and theoretical-objects are symbolic-objcts, formulae have unique symbols.
+
+        To do list
+        ----------
+        We would not need the concept of formula-equivalence if we would
+        forbid the instantiation of "duplicate" formulae in theories.
+        TODO: Consider the pros and cons of forbiding "duplicate" formulae in theories
+            and removing formula-equivalence as a concept from Punctilious.
+
         """
-        assert isinstance(o2, SymbolicObjct)
+        if self is o2:
+            # Trivial case.
+            return True
+        assert isinstance(o2, TheoreticalObjct)
         if not isinstance(o2, Formula):
             return False
         if not self.relation.is_formula_equivalent_to(o2.relation):
@@ -302,23 +321,23 @@ class Formula(TheoreticalObjct):
                 return False
         return True
 
-    def is_masked_formula_similar_to(self, o2, mask):
+    def is_masked_formula_similar_to(self, o2, mask, _values=None):
         """Returns true if this formula and o2 are masked-formula-similar.
 
         Definition
         ----------
-        A formula φ and a symbolic-object o₂ are masked-formula-similar
-        with regard to a finite set of variables M,
+        A formula φ and a theoretical-object o₂ are masked-formula-similar
+        with regard to a finite set of variables 𝐌,
         whose elements may be present in φ,
         but are not present in o₂ if o₂ is a formula,
         if and only if:
-         1. φ and o₂ are formula-equivalent.
-         2. Except for formula components* that are present in M.
-            When they are present in M, the following rules apply:
-         3. For every variable x in M, all corresponding formula components* in o₂
-            are symbolic-equivalent.
+         1. φ and o₂ are formula-equivalent,
+         2. or, for formula-components¹ (including φ and o₂) 𝐱 that are present in 𝐌,
+            the set of all corresponding² formula-components in φ and o₂,
+            are either 𝐱 itself and/or a unique formula component.
 
-        *. Formula component: formula relations and/or parameters.
+        ¹. Formula-component: formula relations and/or parameters.
+        ². corresponding: the formula-component that has the same position in the other formula.
 
         Note
         ----
@@ -327,23 +346,63 @@ class Formula(TheoreticalObjct):
         An obvious counterexample: (x + 1) ~ (5 + x).
         This is why it is called similitude and not equivalence.
 
+        Parameters
+        ----------
+        o2 : TheoreticalObjct
+            A theoretical-object with which to verify masked-formula-similitude.
+
+        mask: set
+            Set of FreeVariable elements
+
+        _values:
+            Internal dict of FreeVariable values used to keep track
+            of variable values consistency.
+
         """
-
-        TODO: RESUME WORK HERE. WE MUST STORE A PRIVATE DICTIONARY WITH VARIABLE VALUES.
-
-        assert isinstance(o2, SymbolicObjct)
+        _values = dict() if _values is None else _values
+        assert isinstance(o2, TheoreticalObjct)
+        assert isinstance(_values, dict)
         if isinstance(o2, FreeVariable):
             if o2 in mask:
-                return True
+                # o2 is a variable, and it is present in the mask.
+                # first, we must check if it is already in the dictionary of values.
+                if o2 in _values:
+                    # the value is already present in the dictionary.
+                    known_value = _values[o2]
+                    if known_value is self:
+                        # the existing value matches the newly observed value.
+                        # until there, masked-formula-similitude is preserved.
+                        return True, _values
+                    else:
+                        # the existing value does not match the newly observed value.
+                        # masked-formula-similitude is no longer preserved.
+                        return False, _values
+                else:
+                    # the value is not present in the dictionary.
+                    # until there, masked-formula-similitude is preserved.
+                    _values[o2] = self
+                    return True, _values
+            else:
+                # o2 is a variable, but it is not present in the mask.
+                # in consequence, it must be considered as a normal theoretical-object.
+                # but o1 (self) is not a variable, it is a formula.
+                # in consequence, masked-formula-similitude is no longer preserved.
+                return False, _values
         if not isinstance(o2, Formula):
-            return False
-        if not self.relation.is_masked_formula_similar_to(o2=o2, variable_mask=mask):
-            return False
+            # but o1 (self) is a formula, and o2 is something else.
+            # in consequence, masked-formula-similitude is no longer preserved.
+            return False, _values
+        relation_output, _values = self.relation.is_masked_formula_similar_to(o2=o2.relation, mask=mask,
+                                                                              _values=_values)
+        if not relation_output:
+            return False, _values
         # Arities are necessarily equal.
         for i in range(len(self.parameters)):
-            if not self.parameters[i].is_masked_formula_similar_to(o2=o2.parameters[i], mask=mask):
-                return False
-        return True
+            parameter_output, _values = self.parameters[i].is_masked_formula_similar_to(o2=o2.parameters[i], mask=mask,
+                                                                                        _values=_values)
+            if not parameter_output:
+                return False, _values
+        return True, _values
 
     def repr(self, expanded=None):
         expanded = True if expanded is None else expanded
@@ -764,29 +823,34 @@ class Relation(TheoreticalObjct):
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
 
-    def is_formula_equivalent_to(self, o2):
-        """Returns true if this relation and o2 are formula-equivalent.
-
-        Parameters:
-        -----------
-        o2 : SymbolicObject
-            The symbolic-object with which to verify formula-equivalence.
-
-        Definition:
-        -----------
-        A relation r and a symbolic-object o₂ are formula-equivalent if and only if:
-        Necessary conditions:
-         1. r and o₂ are symbolic-equivalent.
-        Unnecessary but valid conditions:
-         2. o₂ is a relation.
-         3. r and o₂ are linked to formula-equivalent theories.
-         4. r and o₂ have equal arity.
-
-        Note:
-        If two relations are defined with exactly the same theoretical constraints,
-        but are defined with distinct symbols, they are not formula-equivalent.
-        """
-        return self.is_symbol_equivalent(o2)
+    def is_masked_formula_similar_to(self, o2, mask, _values):
+        assert isinstance(o2, TheoreticalObjct)
+        if isinstance(o2, FreeVariable):
+            if o2 in mask:
+                # o2 is a variable, and it is present in the mask.
+                # first, we must check if it is already in the dictionary of values.
+                if o2 in _values:
+                    # the value is already present in the dictionary.
+                    known_value = _values[o2]
+                    if known_value is self:
+                        # the existing value matches the newly observed value.
+                        # until there, masked-formula-similitude is preserved.
+                        return True, _values
+                    else:
+                        # the existing value does not match the newly observed value.
+                        # masked-formula-similitude is no longer preserved.
+                        return False, _values
+                else:
+                    # the value is not present in the dictionary.
+                    # until there, masked-formula-similitude is preserved.
+                    _values[o2] = self
+                    return True, _values
+        if not isinstance(o2, Relation):
+            # o1 (self) is a relation, and o2 is something else.
+            # in consequence, masked-formula-similitude is no longer preserved.
+            return False, _values
+        # o2 is not a variable.
+        return self.is_formula_equivalent_to(o2), _values
 
     def repr_as_declaration(self):
         return f'Let {self.repr_as_symbol()} be a {self.repr_arity_as_text()} relation denoted as ⌜ {self.repr_as_symbol()} ⌝.'
@@ -818,6 +882,35 @@ class SimpleObjct(TheoreticalObjct):
         capitalizable = False if symbol is None else capitalizable
         symbol = f'ℴ{repm.subscriptify(self.simple_objct_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
+
+    def is_masked_formula_similar_to(self, o2, mask, _values):
+        assert isinstance(o2, TheoreticalObjct)
+        if isinstance(o2, FreeVariable):
+            if o2 in mask:
+                # o2 is a variable, and it is present in the mask.
+                # first, we must check if it is already in the dictionary of values.
+                if o2 in _values:
+                    # the value is already present in the dictionary.
+                    known_value = _values[o2]
+                    if known_value is self:
+                        # the existing value matches the newly observed value.
+                        # until there, masked-formula-similitude is preserved.
+                        return True, _values
+                    else:
+                        # the existing value does not match the newly observed value.
+                        # masked-formula-similitude is no longer preserved.
+                        return False, _values
+                else:
+                    # the value is not present in the dictionary.
+                    # until there, masked-formula-similitude is preserved.
+                    _values[o2] = self
+                    return True, _values
+        if not isinstance(o2, SimpleObjct):
+            # o1 (self) is a simple-objct, and o2 is something else.
+            # in consequence, masked-formula-similitude is no longer preserved.
+            return False, _values
+        # o2 is not a variable.
+        return self.is_formula_equivalent_to(o2), _values
 
     def repr_as_declaration(self, **kwargs):
         return f'Let {self.repr_as_symbol()} be a simple-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
