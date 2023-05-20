@@ -211,3 +211,26 @@ class TestTheoreticalObject(TestCase):
         self.assertTrue(phi5.is_masked_formula_similar_to(o2=phi32, mask={x1}))
         self.assertFalse(phi5.is_masked_formula_similar_to(o2=phi32, mask={x2}))
 
+    def test_substitute(self):
+        t1 = core.Theory()
+        o1 = core.SimpleObjct(theory=t1)
+        o2 = core.SimpleObjct(theory=t1)
+        o3 = core.SimpleObjct(theory=t1)
+        r1 = core.Relation(theory=t1, arity=2)
+        r2 = core.Relation(theory=t1, arity=2)
+        x1 = core.FreeVariable(theory=t1)
+        x2 = core.FreeVariable(theory=t1)
+        # Test with unary relation.
+        phi1 = core.Formula(theory=t1, relation=r1, parameters=tuple([o1, o2]))
+        # Substitute a parameter
+        phi2 = phi1.substitute({o1: o3})
+        phi2_expected = core.Formula(theory=t1, relation=r1, parameters=tuple([o3, o2]))
+        self.assertTrue(phi2_expected.is_formula_equivalent_to(phi2))
+        # Substitute a relation
+        phi3 = phi1.substitute({r1: r2})
+        phi3_expected = core.Formula(theory=t1, relation=r2, parameters=tuple([o1, o2]))
+        self.assertTrue(phi3_expected.is_formula_equivalent_to(phi3))
+        # Substitute with variables
+        phi4 = phi1.substitute({r1: x1, o1: x2})
+        phi4_expected = core.Formula(theory=t1, relation=x1, parameters=tuple([x2, o2]))
+        self.assertTrue(phi4_expected.is_formula_equivalent_to(phi4))

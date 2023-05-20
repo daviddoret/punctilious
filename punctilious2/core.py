@@ -277,6 +277,49 @@ class TheoreticalObjct(SymbolicObjct):
                 _values[variable] = newly_observed_value
         return True, _values
 
+    def substitute(self, substitution_map):
+        """Given a theoretical-objct o₁ (self),
+        and a substitution map 𝐌,
+        return a theoretical-objct o₂
+        where all components, including o₂ itself,
+        have been substituted if present in 𝐌.
+
+        Note
+        ----
+        The result of substitution depends on the order
+        of traversal of o₁. The substitution() method
+        uses the canonical-traversal-method which is:
+        top-down, depth-first, relation-before-parameters.
+
+        Parameters
+        ----------
+        substitution_map : dict
+            A dictionary of theoretical-objct pairs (o, o'),
+            where o is the original theoretical-objct in o₁,
+            and o' is the substitute theoretical-objct in o₂.
+
+        """
+        substitution_map = dict() if substitution_map is None else substitution_map
+        assert isinstance(substitution_map, dict)
+        for key, value in substitution_map.items():
+            assert isinstance(key, TheoreticalObjct)
+            assert isinstance(value, TheoreticalObjct)
+            # A relation could not be replaced by a simple-objct, etc.
+            # to prevent the creation of an ill-formed theoretical-objct.
+            assert type(key) == type(value) or isinstance(value, FreeVariable)
+            # If these are formula, their arity must be equal
+            # to prevent the creation of an ill-formed formula.
+            assert not isinstance(key, Formula) or key.arity == value.arity
+        if self in substitution_map:
+            return substitution_map[self]
+        elif isinstance(self, Formula):
+            # A formula is a special case that must be decomposed into its components.
+            relation = self.relation.substitute(substitution_map=substitution_map)
+            parameters = tuple(p.substitute(substitution_map=substitution_map) for p in self.parameters)
+            return Formula(theory=self.theory, relation=relation, parameters=parameters)
+        else:
+            return self
+
 
 class FreeVariable(TheoreticalObjct):
     """
@@ -375,6 +418,10 @@ class Formula(TheoreticalObjct):
         self.relation = relation
         parameters = parameters if isinstance(parameters, tuple) else tuple([parameters])
         assert len(parameters) > 0
+        # TODO: The following verification shed light on a difficulty: if
+        #   we substitute relations, the resulting formula has variable-relations,
+        #   but variable-relations do not have an arity attribute...
+        assert isinstance(relation, FreeVariable) or len(parameters) == relation.arity
         self.parameters = parameters
         self.cross_reference_variables()
 
@@ -1025,7 +1072,7 @@ class ModusPonens(FormulaStatement):
         self.p_implies_q = p_implies_q
         self.p = p
         # Build q by variable substitution
-        q = q_prime.substitute_variable_values(_values)  # TODO: IMPLEMENT METHOD
+        q = q_prime.substitute(map=_values)  # TODO: IMPLEMENT METHOD
         super().__init__(theory=theory, valid_proposition=q, category=category)
         # assert p_implies_q.statement_index < self.statement_index
         # assert p.statement_index < self.statement_index
