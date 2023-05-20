@@ -404,7 +404,7 @@ class Formula(TheoreticalObjct):
         function_call=repm.Representation('function_call'),
         infix_operator=repm.Representation('infix_operator'),
         prefix_operator=repm.Representation('prefix_operator'),
-        suffix_operator=repm.Representation('prefix_operator')
+        postfix_operator=repm.Representation('prefix_operator')
     )
 
     def __init__(self, theory, relation, parameters, symbol=None, capitalizable=False):
@@ -523,7 +523,7 @@ class Formula(TheoreticalObjct):
         assert self.relation.arity == 2
         return f'({self.parameters[0].repr(expanded=expanded)} {self.relation.symbol} {self.parameters[1].repr(expanded=expanded)})'
 
-    def repr_as_suffix_operator(self, expanded=None):
+    def repr_as_postfix_operator(self, expanded=None):
         expanded = True if expanded is None else expanded
         assert isinstance(expanded, bool)
         assert self.relation.arity == 1
@@ -545,8 +545,8 @@ class Formula(TheoreticalObjct):
                 return self.repr_as_infix_operator(expanded=expanded)
             case Formula.reps.prefix_operator:
                 return self.repr_as_prefix_operator(expanded=expanded)
-            case Formula.reps.suffix_operator:
-                return self.repr_as_suffix_operator(expanded=expanded)
+            case Formula.reps.postfix_operator:
+                return self.repr_as_postfix_operator(expanded=expanded)
         assert 1 == 2
 
 
@@ -627,6 +627,31 @@ class Axiom(Statement):
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement."""
         return f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.axiom_text}'
+
+class Definition(Statement):
+    """
+
+    Definition:
+    -----------
+    A definition is a theory-statement that introduces some new context in
+     the theory but does not extend the theory.
+
+    """
+
+    def __init__(self, theory, text, symbol=None, capitalizable=False):
+        assert isinstance(theory, Theory)
+        assert isinstance(text, str)
+        self.text = text
+        capitalizable = True if symbol is None else capitalizable
+        assert isinstance(capitalizable, bool)
+        self.definition_index = theory.crossreference_definition(self)
+        symbol = f'definition-{self.definition_index + 1}' if symbol is None else symbol
+        assert isinstance(symbol, str)
+        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
+
+    def repr_as_statement(self):
+        """Return a representation that expresses and justifies the statement."""
+        return f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.text}'
 
 
 class FormulaStatement(Statement):
@@ -737,6 +762,7 @@ class Theory(TheoreticalObjct):
         global universe_of_discourse
         self.symbols = dict()
         self.axioms = tuple()
+        self.definitions = tuple()
         self.formulae = tuple()
         self.relations = Tuple()
         self.simple_objcts = Tuple()
@@ -787,6 +813,18 @@ class Theory(TheoreticalObjct):
         if a not in self.axioms:
             self.axioms = self.axioms + tuple([a])
         return self.axioms.index(a)
+
+    def crossreference_definition(self, d):
+        """During construction, cross-reference a definition 𝒟
+        with its parent theory if it is not already cross-referenced,
+        and return its 0-based index in Theory.axioms."""
+        assert isinstance(d, Definition)
+        d.theory = d.theory if hasattr(d, 'theory') else self
+        assert d.theory is self
+        if d not in self.definitions:
+            self.definitions = self.definitions + tuple([d])
+        return self.definitions.index(d)
+
 
     def crossreference_formula(self, phi):
         """During construction, cross-reference a formula phi
@@ -868,7 +906,7 @@ class Theory(TheoreticalObjct):
 
     def repr_as_theory(self):
         """Return a representation that expresses and justifies the theory."""
-        output = f'\n\n{repm.serif_bold(self.repr_as_symbol(capitalized=True))}'
+        output = f'\n{repm.serif_bold(self.repr_as_symbol(capitalized=True))}'
         output = output + f'\n\n{repm.serif_bold("Simple-objcts:")}'
         output = output + '\n' + '\n'.join(o.repr_as_declaration() for o in self.simple_objcts)
         output = output + f'\n\n{repm.serif_bold("Relations:")}'
@@ -1084,12 +1122,12 @@ class ModusPonens(FormulaStatement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'\n\n{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula()}'
-        output = output + f'\n{repm.serif_bold("Proof by modus ponens")}'
-        output = output + f'\n{self.p_implies_q.repr_as_formula(expanded=True)} | Follows from {repm.serif_bold(self.p_implies_q.repr_as_symbol())}.'
-        output = output + f'\n{self.p.repr_as_formula(expanded=True)} | Follows from {repm.serif_bold(self.p.repr_as_symbol())}.'
-        output = output + f'\n__________________________________________'
-        output = output + f'\n{self.valid_proposition.repr_as_formula(expanded=True)} | ∎'
+        output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula()}'
+        output = output + f'\n\t{repm.serif_bold("Proof by modus ponens")}'
+        output = output + f'\n\t{self.p_implies_q.repr_as_formula(expanded=True):<70} | Follows from {repm.serif_bold(self.p_implies_q.repr_as_symbol())}.'
+        output = output + f'\n\t{self.p.repr_as_formula(expanded=True):<70} | Follows from {repm.serif_bold(self.p.repr_as_symbol())}.'
+        output = output + f'\n\t{"_" * 70}'
+        output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} | ∎'
         return output
 
 
@@ -1101,5 +1139,6 @@ Relation(theory=propositional_logic, symbol='implies', arity=2, formula_rep=Form
 Relation(
     theory=propositional_logic, symbol='=', arity=2, formula_rep=Formula.reps.infix_operator,
     python_name='equal', formula_is_proposition=True)
+
 
 pass

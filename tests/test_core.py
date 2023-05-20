@@ -19,10 +19,9 @@ class TestAxiom(TestCase):
 
     def test_init(self):
         t1 = core.Theory()
-        a1 = core.Axiom(theory=t1, text='If something is red, then it is neither green, nor blue.')
-        a2 = core.Axiom(theory=t1, text='If something is green, then it is neither red, nor blue.')
-        a3 = core.Axiom(theory=t1, text='If something is blue, then it is neither red, nor green.')
-
+        a1 = core.Axiom(theory=t1, axiom_text='If something is red, then it is neither green, nor blue.')
+        a2 = core.Axiom(theory=t1, axiom_text='If something is green, then it is neither red, nor blue.')
+        a3 = core.Axiom(theory=t1, axiom_text='If something is blue, then it is neither red, nor green.')
         self.assertIs(t1, a1.theory)
         self.assertIs(t1, a2.theory)
         self.assertIs(t1, a3.theory)

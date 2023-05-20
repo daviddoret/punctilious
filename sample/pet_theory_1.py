@@ -5,7 +5,7 @@ mira_name = 'Mira'  # random_data.random_word()
 dog_name = 'dog'  # random_data.random_word()
 mammal_name = 'mammal'  # random_data.random_word()
 
-t1 = core.Theory(symbol=f'{mira_name}-theory', capitalizable=True)
+t1 = core.Theory(symbol=f'pet-theory-1', capitalizable=True)
 mira = core.SimpleObjct(theory=t1, symbol=mira_name, capitalizable=True)
 dog = core.SimpleObjct(theory=t1, symbol=dog_name, capitalizable=True)
 mammal = core.SimpleObjct(theory=t1, symbol=mammal_name, capitalizable=True)
