@@ -133,13 +133,11 @@ class TestTheory(TestCase):
         t1.print()
 
 
-class TestFormula(TestCase):
+class TestTheoreticalObject(TestCase):
     def test_is_formula_equivalent_to(self):
         t1 = core.Theory()
         o1 = core.SimpleObjct(theory=t1)
         o2 = core.SimpleObjct(theory=t1)
-        o3 = core.SimpleObjct(theory=t1)
-        o4 = core.SimpleObjct(theory=t1)
         r1 = core.Relation(theory=t1, arity=1)
         r2 = core.Relation(theory=t1, arity=1)
         r3 = core.Relation(theory=t1, arity=2)
@@ -163,4 +161,53 @@ class TestFormula(TestCase):
         phi8 = core.Formula(theory=t1, relation=r3, parameters=tuple([o2, o1]))
         self.assertFalse(phi5.is_formula_equivalent_to(phi8))
 
+    def test_is_masked_variable_similar_to(self):
+        t1 = core.Theory()
+        o1 = core.SimpleObjct(theory=t1)
+        o2 = core.SimpleObjct(theory=t1)
+        r1 = core.Relation(theory=t1, arity=1)
+        r2 = core.Relation(theory=t1, arity=1)
+        r3 = core.Relation(theory=t1, arity=2)
+        r4 = core.Relation(theory=t1, arity=2)
+        x1 = core.FreeVariable(theory=t1)
+        x2 = core.FreeVariable(theory=t1)
+        # Test with unary relation.
+        phi1 = core.Formula(theory=t1, relation=r1, parameters=tuple([o1]))
+        self.assertTrue(phi1.is_masked_formula_similar_to(o2=phi1))
+        self.assertTrue(phi1.is_masked_formula_similar_to(o2=phi1, mask={x1, x2}))
+        phi2 = core.Formula(theory=t1, relation=r1, parameters=tuple([o1]))
+        self.assertTrue(phi1.is_masked_formula_similar_to(o2=phi2))
+        self.assertTrue(phi1.is_masked_formula_similar_to(o2=phi2, mask={x1, x2}))
+        phi3 = core.Formula(theory=t1, relation=r2, parameters=tuple([o1]))
+        self.assertFalse(phi1.is_masked_formula_similar_to(o2=phi3))
+        self.assertFalse(phi1.is_masked_formula_similar_to(o2=phi3, mask={x1, x2}))
+        phi4 = core.Formula(theory=t1, relation=r1, parameters=tuple([o2]))
+        self.assertFalse(phi1.is_masked_formula_similar_to(phi4))
+        self.assertFalse(phi1.is_masked_formula_similar_to(phi4, mask={x1, x2}))
+        phi21 = core.Formula(theory=t1, relation=x1, parameters=tuple([o1]))
+        self.assertTrue(phi1.is_masked_formula_similar_to(o2=phi21, mask={x1}))
+        self.assertFalse(phi1.is_masked_formula_similar_to(o2=phi21, mask={x2}))
+        phi22 = core.Formula(theory=t1, relation=r1, parameters=tuple([x1]))
+        self.assertTrue(phi1.is_masked_formula_similar_to(o2=phi22, mask={x1}))
+        self.assertFalse(phi1.is_masked_formula_similar_to(o2=phi22, mask={x2}))
+
+        # Test with binary relation.
+        phi5 = core.Formula(theory=t1, relation=r3, parameters=tuple([o1, o2]))
+        self.assertTrue(phi5.is_masked_formula_similar_to(o2=phi5))
+        self.assertTrue(phi5.is_masked_formula_similar_to(o2=phi5, mask={x1, x2}))
+        phi6 = core.Formula(theory=t1, relation=r3, parameters=tuple([o1, o2]))
+        self.assertTrue(phi5.is_masked_formula_similar_to(o2=phi6))
+        self.assertTrue(phi5.is_masked_formula_similar_to(o2=phi6, mask={x1, x2}))
+        phi7 = core.Formula(theory=t1, relation=r4, parameters=tuple([o1, o2]))
+        self.assertFalse(phi5.is_masked_formula_similar_to(o2=phi7))
+        self.assertFalse(phi5.is_masked_formula_similar_to(o2=phi7, mask={x1, x2}))
+        phi8 = core.Formula(theory=t1, relation=r3, parameters=tuple([o2, o1]))
+        self.assertFalse(phi5.is_masked_formula_similar_to(o2=phi8))
+        self.assertFalse(phi5.is_masked_formula_similar_to(o2=phi8, mask={x1, x2}))
+        phi31 = core.Formula(theory=t1, relation=x1, parameters=tuple([o1, o2]))
+        self.assertTrue(phi5.is_masked_formula_similar_to(o2=phi31, mask={x1}))
+        self.assertFalse(phi5.is_masked_formula_similar_to(o2=phi31, mask={x2}))
+        phi32 = core.Formula(theory=t1, relation=r3, parameters=tuple([x1, o2]))
+        self.assertTrue(phi5.is_masked_formula_similar_to(o2=phi32, mask={x1}))
+        self.assertFalse(phi5.is_masked_formula_similar_to(o2=phi32, mask={x2}))
 

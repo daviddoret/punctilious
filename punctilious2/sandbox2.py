@@ -1,13 +1,4 @@
 
-class Parent:
-    pass
 
-class Child(Parent):
-    pass
-
-x = Child()
-
-print(isinstance(x, Parent))
-
-print(type(x))
-
+x = set([1,2,3])
+print(x)
