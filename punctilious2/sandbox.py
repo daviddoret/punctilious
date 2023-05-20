@@ -22,7 +22,9 @@ if_x_is_a_dog_then_x_is_a_mammal_formula = core.Formula(theory=t1, relation=core
 if_x_is_a_dog_then_x_is_a_mammal = core.DirectAxiomInferenceStatement(theory=t1, axiom=a2, valid_proposition=if_x_is_a_dog_then_x_is_a_mammal_formula)
 # mira_is_a_mammal_formula = core.Formula(theory=t1, relation=is_a, parameters=(mira, mammal))
 
-#mira_is_a_mammal = core.ModusPonensStatement(theory=t1, p_implies_q=if_x_is_a_dog_then_x_is_a_mammal, p=mira_is_a_dog)
+x = mira_is_a_dog.valid_proposition.is_masked_formula_similar_to(x_is_a_dog, mask={x})
+
+mira_is_a_mammal = core.ModusPonens(theory=t1, p_implies_q=if_x_is_a_dog_then_x_is_a_mammal, p=mira_is_a_dog)
 
 t1.prnt()
 

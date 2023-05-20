@@ -123,6 +123,26 @@ class TheoreticalObjct(SymbolicObjct):
     def __init__(self, theory, symbol, capitalizable):
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
+    def get_variable_set(self):
+        """Return the set of variables contained in o (self), including o itself.
+
+        This function recursively traverse formula components (relation + parameters)
+        to compile the set of variables contained in o."""
+        return self._get_variable_set()
+
+    def _get_variable_set(self, _variable_set=None):
+        _variable_set = set() if _variable_set is None else _variable_set
+        if isinstance(self, Formula):
+            _variable_set = _variable_set.union(self.relation._get_variable_set(_variable_set=_variable_set))
+            for p in self.parameters:
+                _variable_set = _variable_set.union(p._get_variable_set(_variable_set=_variable_set))
+            return _variable_set
+        elif isinstance(self, FreeVariable):
+            return _variable_set.union({self})
+        else:
+            return _variable_set
+
+
     def is_formula_equivalent_to(self, o2):
         """Returns true if this theoretical-obct and theoretical-obct o2 are formula-equivalent.
 
@@ -588,6 +608,8 @@ class FormulaStatement(Statement):
         symbol = f'{category}-{self.statement_index + 1}'
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
+    def repr_as_formula(self, expanded=None):
+        return self.valid_proposition.repr_as_formula(expanded=expanded)
 
 class DirectAxiomInferenceStatement(FormulaStatement):
     """
@@ -971,13 +993,13 @@ class InferenceRule:
         self.conclusion = conclusion
 
 
-class ModusPonensStatement(FormulaStatement):
+class ModusPonens(FormulaStatement):
     """
     TODO: Make ModusPonens a subclass of InferenceRule.
 
     Definition:
     -----------
-    A modus-ponens-statement is a valid rule-of-inference propositional-logic argument that,
+    A modus-ponens is a valid rule-of-inference propositional-logic argument that,
     given a proposition (P implies Q)
     given a proposition (P is True)
     infers the proposition (Q is True)
@@ -989,15 +1011,21 @@ class ModusPonensStatement(FormulaStatement):
         assert p_implies_q.theory is theory  # TODO: Extend this to parent theories
         assert p_implies_q.valid_proposition.relation is propositional_logic.relations.implies
         p_prime = p_implies_q.valid_proposition.parameters[0]
-        q = p_implies_q.valid_proposition.parameters[1]
+        q_prime = p_implies_q.valid_proposition.parameters[1]
+        mask = p_prime.get_variable_set()
         # Check p consistency
         # If the p statement is present in the theory,
         # it necessarily mean that p is true,
         # because every statement in the theory is a valid proposition.
         assert isinstance(p, FormulaStatement)
         assert p.theory is theory  # TODO: Extend this to parent theories
-        assert p.is_masked_formula_similar_to(p_prime)
+        similitude, _values = p.valid_proposition._is_masked_formula_similar_to(o2=p_prime, mask=mask)
+        assert p.valid_proposition.is_masked_formula_similar_to(o2=p_prime, mask=mask)
         # State q
+        self.p_implies_q = p_implies_q
+        self.p = p
+        # Build q by variable substitution
+        q = q_prime.substitute_variable_values(_values)  # TODO: IMPLEMENT METHOD
         super().__init__(theory=theory, valid_proposition=q, category=category)
         # assert p_implies_q.statement_index < self.statement_index
         # assert p.statement_index < self.statement_index
@@ -1008,8 +1036,10 @@ class ModusPonensStatement(FormulaStatement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'\n\n{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.truth_object.repr_as_formula()}'
-        output = output + f'\n{repm.serif_bold("Proof:")} Follows directly from {repm.serif_bold(self.axiom.repr_as_symbol())}.'
+        output = f'\n\n{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula()}'
+        output = output + f'\n{repm.serif_bold("Proof:")}'
+        output = output + f'\n{self.p_implies_q.repr_as_formula(expanded=True)} | Follows from {repm.serif_bold(self.p_implies_q.repr_as_symbol())}.'
+        output = output + f'\n{self.p.repr_as_formula(expanded=True)} | Follows from {repm.serif_bold(self.p.repr_as_symbol())}.'
         return output
 
 
