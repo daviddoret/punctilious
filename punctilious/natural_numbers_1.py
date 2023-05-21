@@ -31,7 +31,7 @@ p2 = core.ModusPonens(theory=t1, p_implies_q=if_n_is_a_nat_then_n_suc_is_a_nat, 
 
 p3 = core.ModusPonens(theory=t1, p_implies_q=if_n_is_a_nat_then_n_suc_is_a_nat, p=p2)
 
-d_2_1_3 = core.Definition(theory=t1, symbol='definition 2.1.3', text='We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that xis defined to equal y.)')
+d_2_1_3 = core.Definition(theory=t1, symbol='definition 2.1.3', text='We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that xis defined to equal y.)', capitalizable=True)
 
 
 t1.prnt()

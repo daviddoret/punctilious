@@ -1,5 +1,13 @@
+import textwrap
 from types import SimpleNamespace
 import repm
+
+configuration = SimpleNamespace(
+    text_output_indent=2,
+    text_output_statement_column_width=70,
+    text_output_justification_column_width=40,
+    text_output_total_width=122
+)
 
 
 class Tuple(tuple):
@@ -401,11 +409,12 @@ class Formula(TheoreticalObjct):
     """
 
     reps = SimpleNamespace(
-        function_call=repm.Representation('function_call'),
-        infix_operator=repm.Representation('infix_operator'),
-        prefix_operator=repm.Representation('prefix_operator'),
-        postfix_operator=repm.Representation('prefix_operator')
+        function_call=repm.Representation(name='function-call', sample='◆(𝐱₁, 𝐱₂ ,… ,𝐱ₙ)'),
+        infix_operator=repm.Representation(name='infix-operator', sample='𝐱₁ ◆ 𝐱₂'),
+        prefix_operator=repm.Representation(name='prefix-operator', sample='◆𝐱'),
+        postfix_operator=repm.Representation(name='postfix-operator', sample='𝐱◆')
     )
+
 
     def __init__(self, theory, relation, parameters, symbol=None, capitalizable=False):
         assert isinstance(theory, Theory)
@@ -651,7 +660,12 @@ class Definition(Statement):
 
     def repr_as_statement(self):
         """Return a representation that expresses and justifies the statement."""
-        return f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.text}'
+        text = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.text}'
+        return '\n'.join(textwrap.wrap(text=text, width=70,
+                            subsequent_indent=f'\t',
+                            break_on_hyphens=False,
+                            expand_tabs=True,
+                            tabsize=4))
 
 
 class FormulaStatement(Statement):
@@ -965,7 +979,9 @@ class Relation(TheoreticalObjct):
         self.arity = arity
 
     def repr_as_declaration(self):
-        return f'Let {self.repr_as_symbol()} be a {self.repr_arity_as_text()} relation denoted as ⌜ {self.repr_as_symbol()} ⌝.'
+        output = f'Let {self.repr_as_symbol()} be a {self.repr_arity_as_text()} relation denoted as ⌜ {self.repr_as_symbol()} ⌝'
+        output = output + f', that signals well-formed formulae in {self.formula_rep} syntax (e.g.: ⌜ {self.formula_rep.sample.replace("◆",self.symbol)} ⌝).'
+        return output
 
     def repr_arity_as_text(self):
         match self.arity:

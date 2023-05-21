@@ -18,14 +18,15 @@ def serif_bold(s=None):
 
 
 class Representation:
-    def __init__(self, s):
-        self.s = s
+    def __init__(self, name, sample=None):
+        self.name = name
+        self.sample = sample
 
     def __repr__(self):
-        return self.s
+        return self.name
 
     def __str__(self):
-        return self.s
+        return self.name
 
 
 utf8_subscript_dictionary = {'0': u'₀',
