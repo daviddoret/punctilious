@@ -705,8 +705,9 @@ class DirectAxiomInferenceStatement(FormulaStatement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula()}'
-        output = output + f'\n{repm.serif_bold("Proof:")} Follows directly from {repm.serif_bold(self.axiom.repr_as_symbol())}.'
+        output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula(expanded=True)}'
+        output = output + f'\n\t{repm.serif_bold("Proof by direct axiom inference")}'
+        output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.axiom.repr_as_symbol())}.'
         return output
 
 
@@ -907,9 +908,9 @@ class Theory(TheoreticalObjct):
     def repr_as_theory(self):
         """Return a representation that expresses and justifies the theory."""
         output = f'\n{repm.serif_bold(self.repr_as_symbol(capitalized=True))}'
-        output = output + f'\n\n{repm.serif_bold("Simple-objcts:")}'
+        output = output + f'\n\n{repm.serif_bold("Simple-objct declarations:")}'
         output = output + '\n' + '\n'.join(o.repr_as_declaration() for o in self.simple_objcts)
-        output = output + f'\n\n{repm.serif_bold("Relations:")}'
+        output = output + f'\n\n{repm.serif_bold("Relation declarations:")}'
         output = output + '\n' + '\n'.join(r.repr_as_declaration() for r in self.relations)
         output = output + f'\n\n{repm.serif_bold("Theory elaboration:")}'
         output = output + '\n\n' + '\n\n'.join(s.repr_as_statement() for s in self.statements)
@@ -1124,10 +1125,10 @@ class ModusPonens(FormulaStatement):
         - The justification for the formula."""
         output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula()}'
         output = output + f'\n\t{repm.serif_bold("Proof by modus ponens")}'
-        output = output + f'\n\t{self.p_implies_q.repr_as_formula(expanded=True):<70} | Follows from {repm.serif_bold(self.p_implies_q.repr_as_symbol())}.'
-        output = output + f'\n\t{self.p.repr_as_formula(expanded=True):<70} | Follows from {repm.serif_bold(self.p.repr_as_symbol())}.'
-        output = output + f'\n\t{"_" * 70}'
-        output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} | ∎'
+        output = output + f'\n\t{self.p_implies_q.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p_implies_q.repr_as_symbol())}.'
+        output = output + f'\n\t{self.p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p.repr_as_symbol())}.'
+        output = output + f'\n\t{"─" * 71}┤'
+        output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
         return output
 
 

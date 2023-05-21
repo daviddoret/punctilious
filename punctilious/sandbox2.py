@@ -1,5 +1,10 @@
 
 
-x = {'a': '1', 'b': '2', 'c': '3'}
+x = {'a': '1', 'A': '2', 'c': '3'}
 
-print('a' in x)
+print(x.get('a'))
+print(x.get('A'))
+
+import repm
+
+print(repm.serif_bold('aPpA'))
