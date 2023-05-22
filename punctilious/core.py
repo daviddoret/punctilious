@@ -180,7 +180,6 @@ class TheoreticalObjct(SymbolicObjct):
         """
         return self.is_symbol_equivalent(o2)
 
-
     def is_masked_formula_similar_to(self, o2, mask=None):
         """Given two theoretical-objects o₁ (self) and o₂,
         and a finite set of variables 𝐌,
@@ -771,6 +770,7 @@ class FormalDefinition(FormulaStatement):
     TODO: QUESTION: Should we create a base "Alias" object that is distinct from simple-objct???
     XXXXXXX
     """
+
     def __init__(self, theory, free_text_definition, valid_proposition, category=None):
         assert isinstance(theory, Theory)
         assert isinstance(free_text_definition, FreeTextDefinition)
@@ -994,14 +994,14 @@ class Theory(TheoreticalObjct):
         output = output + '\n' + '\n'.join(r.repr_as_declaration() for r in self.relations)
         output = output + f'\n\n{repm.serif_bold("Theory elaboration:")}'
         output = output + '\n\n' + '\n\n'.join(s.repr_as_statement() for s in self.statements)
-        return output
+        return str(output)
 
     def prnt(self):
         repm.prnt(self.repr_as_theory())
 
     def export_to_text(self, file_path):
         """Export this theory to a Unicode textfile."""
-        text_file = open(file_path, 'w')
+        text_file = open(file_path, 'w', encoding='utf-8')
         n = text_file.write(self.repr_as_theory())
         text_file.close()
 
@@ -1136,19 +1136,20 @@ universe_of_discourse = Theory(theory=None, is_universe_of_discourse=True, symbo
 u = universe_of_discourse
 
 meta_theory = Theory(theory=universe_of_discourse, symbol='meta-theory', capitalizable=True)
+
+
 def generate_meta_theory():
     global meta_theory
     # TODO: re-organize foundation theories
 
-generate_meta_theory()
 
+generate_meta_theory()
 
 _relation_declaration = TheoreticalRelation(theory=meta_theory, arity=2, symbol='relation-declaration')
 _simple_objct_declaration = TheoreticalRelation(theory=meta_theory, arity=2, symbol='simple-objct-declaration')
 _theory_declaration = TheoreticalRelation(theory=meta_theory, arity=2, symbol='theory-declaration')
 _theory_extension = TheoreticalRelation(theory=meta_theory, arity=2, symbol='theory-extension')
 _variable_declaration = TheoreticalRelation(theory=meta_theory, arity=2, symbol='variable-declaration')
-
 
 theoretical_relations = SimpleNamespace(
     relation_declaration=_relation_declaration,
@@ -1237,17 +1238,22 @@ commutativity_of_equality = None
 implication = None
 equality = None
 
+
 def generate_propositional_logic():
     global commutativity_of_equality
     global foundation_theory
     global implication
     global equality
 
-    implication = Relation(theory=foundation_theory, symbol='implies', arity=2, formula_rep=Formula.infix_operator_representation,
-             python_name='implies', formula_is_proposition=True)
+    implication = Relation(theory=foundation_theory, symbol='implies', arity=2,
+                           formula_rep=Formula.infix_operator_representation,
+                           python_name='implies', formula_is_proposition=True)
 
-    axiom_1 = FreeTextAxiom(theory=foundation_theory, axiom_text='= is a binary relation such that, given any two theoretical-objcts x and y, if x=y then y=x, and for every statement including x or y, the same statement is valid with the other. ')
-    equality = Relation(theory=foundation_theory, symbol='=', arity=2, formula_rep=Formula.infix_operator_representation, python_name='equal_operator', formula_is_proposition=True)
+    axiom_1 = FreeTextAxiom(theory=foundation_theory,
+                            axiom_text='= is a binary relation such that, given any two theoretical-objcts x and y, if x=y then y=x, and for every statement including x or y, the same statement is valid with the other. ')
+    equality = Relation(theory=foundation_theory, symbol='=', arity=2,
+                        formula_rep=Formula.infix_operator_representation, python_name='equal_operator',
+                        formula_is_proposition=True)
     # TODO: Complete the formalization of axiom_1
     x1 = FreeVariable(theory=foundation_theory)
     x2 = FreeVariable(theory=foundation_theory)
@@ -1255,11 +1261,11 @@ def generate_propositional_logic():
     x2_equal_x1 = Formula(theory=foundation_theory, relation=equality, parameters=(x2, x1))
     commutativity_of_equality = FormalAxiom(theory=foundation_theory, axiom=axiom_1,
                                             valid_proposition=Formula(theory=foundation_theory, relation=implication,
-                     parameters=(x1_equal_x2, x2_equal_x1)))
-
+                                                                      parameters=(x1_equal_x2, x2_equal_x1)))
 
     SimpleObjct(theory=foundation_theory, symbol='true', capitalizable=True, python_name='true')
     SimpleObjct(theory=foundation_theory, symbol='false', capitalizable=True, python_name='false')
+
 
 generate_propositional_logic()
 
