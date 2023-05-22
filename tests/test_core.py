@@ -17,14 +17,14 @@ def generate_test_data_2():
 class TestEquality(TestCase):
     def test_equality(self):
         t1 = core.Theory(symbol='equality-test-theory', extended_theories={core.foundation_theory})
-        a1 = core.Axiom(theory=t1, axiom_text='Whatever I wish to be true is true.')
+        a1 = core.FreeTextAxiom(theory=t1, axiom_text='Whatever I wish to be true is true.')
         mira = core.SimpleObjct(theory=t1, symbol='Mira', capitalizable=False)
         cat = core.SimpleObjct(theory=t1, symbol='cat', capitalizable=True)
         growls_at = core.Relation(theory=t1, symbol='growls-at', arity=2)
         snarls_at = core.Relation(theory=t1, symbol='snarls-at', arity=2)
         grows_equal_snarls_formula = core.Formula(theory=t1, relation=core.equality, parameters=(growls_at, snarls_at))
-        grows_equal_snarls = core.DirectAxiomInferenceStatement(theory=t1, axiom=a1,
-            valid_proposition=grows_equal_snarls_formula)
+        grows_equal_snarls = core.FormalAxiom(theory=t1, axiom=a1,
+                                              valid_proposition=grows_equal_snarls_formula)
         # snarls_equal_growls_formula = core.Formula(theory=t1, relation=core.foundation_theory.equal, parameters=(snarls_at, growls_at))
         p1 = core.ModusPonens(theory=t1, p_implies_q=core.commutativity_of_equality, p=grows_equal_snarls)
         #Mira_growls_at_cat = core.DirectAxiomInferenceStatement(theory=t1, axiom=a1,
@@ -35,9 +35,9 @@ class TestAxiom(TestCase):
 
     def test_init(self):
         t1 = core.Theory()
-        a1 = core.Axiom(theory=t1, axiom_text='If something is red, then it is neither green, nor blue.')
-        a2 = core.Axiom(theory=t1, axiom_text='If something is green, then it is neither red, nor blue.')
-        a3 = core.Axiom(theory=t1, axiom_text='If something is blue, then it is neither red, nor green.')
+        a1 = core.FreeTextAxiom(theory=t1, axiom_text='If something is red, then it is neither green, nor blue.')
+        a2 = core.FreeTextAxiom(theory=t1, axiom_text='If something is green, then it is neither red, nor blue.')
+        a3 = core.FreeTextAxiom(theory=t1, axiom_text='If something is blue, then it is neither red, nor green.')
         self.assertIs(t1, a1.theory)
         self.assertIs(t1, a2.theory)
         self.assertIs(t1, a3.theory)
@@ -47,7 +47,7 @@ class TestStatement(TestCase):
 
     def test_init(self):
         t1 = core.Theory()
-        a1 = core.Axiom(theory=t1, text='If something is red, then it is neither green, nor blue.')
+        a1 = core.FreeTextAxiom(theory=t1, text='If something is red, then it is neither green, nor blue.')
         s1 = core.Statement(theory=t1, valid_proposition=a1)
 
         self.assertIs(t1, s1.theory)
@@ -143,7 +143,7 @@ class TestSimpleObjct(TestCase):
 class TestTheory(TestCase):
     def test___init__(self):
         t1 = core.Theory(dashed='test-theory-1')
-        a1 = core.Axiom(theory=t1, text='If a filooboo is wala, then it is sholo.')
+        a1 = core.FreeTextAxiom(theory=t1, text='If a filooboo is wala, then it is sholo.')
         s1 = core.Statement(theory=t1, valid_proposition=a1)
         t1.print()
 

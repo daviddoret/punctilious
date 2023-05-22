@@ -610,12 +610,12 @@ class Statement(TheoreticalObjct):
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
 
-class Axiom(Statement):
+class FreeTextAxiom(Statement):
     """
 
     Definition:
     -----------
-    An axiom is a theory-statement that expresses an axiom in free textual form.
+    An free-text-axiom is a theory-statement that expresses an axiom in free textual form.
 
     """
 
@@ -697,17 +697,18 @@ class FormulaStatement(Statement):
         return self.valid_proposition.repr_as_formula(expanded=expanded)
 
 
-class DirectAxiomInferenceStatement(FormulaStatement):
+class FormalAxiom(FormulaStatement):
     """
 
     Definition:
     -----------
-    A direct-axiom-inference-statement is a valid-proposition that follows directly from an axion.
+    A formal-axiom is a valid-proposition directly inferred from a free-text-axiom.
+
     """
 
     def __init__(self, theory, axiom, valid_proposition, category=None):
         assert isinstance(theory, Theory)
-        assert isinstance(axiom, Axiom)
+        assert isinstance(axiom, FreeTextAxiom)
         assert isinstance(valid_proposition, Formula)
         self.axiom = axiom
         super().__init__(theory=theory, valid_proposition=valid_proposition, category=category)
@@ -763,9 +764,21 @@ class FormalDefinition(FormulaStatement):
         assert isinstance(theory, Theory)
         assert isinstance(free_text_definition, FreeTextDefinition)
         assert isinstance(valid_proposition, Formula)
+        assert theory.has_objct_in_hierarchy(valid_proposition)
         self.free_text_definition = free_text_definition
         super().__init__(theory=theory, valid_proposition=valid_proposition, category=category)
         assert free_text_definition.statement_index < self.statement_index
+
+    def repr_as_statement(self):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula(expanded=True)}'
+        output = output + f'\n\t{repm.serif_bold("Proof by direct definition inference")}'
+        output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.free_text_definition.repr_as_symbol())}.'
+        return output
 
 
 class AtheoreticalStatement:
@@ -848,7 +861,7 @@ class Theory(TheoreticalObjct):
         """During construction, cross-reference an axiom 𝒜
         with its parent theory if it is not already cross-referenced,
         and return its 0-based index in Theory.axioms."""
-        assert isinstance(a, Axiom)
+        assert isinstance(a, FreeTextAxiom)
         a.theory = a.theory if hasattr(a, 'theory') else self
         assert a.theory is self
         if a not in self.axioms:
@@ -1212,15 +1225,15 @@ def generate_propositional_logic():
     implication = Relation(theory=foundation_theory, symbol='implies', arity=2, formula_rep=Formula.infix_operator_representation,
              python_name='implies', formula_is_proposition=True)
 
-    axiom_1 = Axiom(theory=foundation_theory, axiom_text='= is a binary relation such that, given any two theoretical-objcts x and y, if x=y then y=x, and for every statement including x or y, the same statement is valid with the other. ')
+    axiom_1 = FreeTextAxiom(theory=foundation_theory, axiom_text='= is a binary relation such that, given any two theoretical-objcts x and y, if x=y then y=x, and for every statement including x or y, the same statement is valid with the other. ')
     equality = Relation(theory=foundation_theory, symbol='=', arity=2, formula_rep=Formula.infix_operator_representation, python_name='equal_operator', formula_is_proposition=True)
     # TODO: Complete the formalization of axiom_1
     x1 = FreeVariable(theory=foundation_theory)
     x2 = FreeVariable(theory=foundation_theory)
     x1_equal_x2 = Formula(theory=foundation_theory, relation=equality, parameters=(x1, x2))
     x2_equal_x1 = Formula(theory=foundation_theory, relation=equality, parameters=(x2, x1))
-    commutativity_of_equality = DirectAxiomInferenceStatement(theory=foundation_theory,axiom=axiom_1,
-        valid_proposition=Formula(theory=foundation_theory, relation=implication,
+    commutativity_of_equality = FormalAxiom(theory=foundation_theory, axiom=axiom_1,
+                                            valid_proposition=Formula(theory=foundation_theory, relation=implication,
                      parameters=(x1_equal_x2, x2_equal_x1)))
 
 
