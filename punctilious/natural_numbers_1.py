@@ -1,7 +1,7 @@
 import core
 import random_data
 
-t1 = core.Theory(symbol=f'2.1. The Peano axioms', capitalizable=False)
+t1 = core.Theory(symbol=f'2.1. The Peano axioms', capitalizable=False, extended_theories={core.foundation_theory})
 
 axiom_2_1 = core.FreeTextAxiom(theory=t1, symbol='axiom 2.1', axiom_text=f'0 is a natural number.', capitalizable=True)
 zero = core.SimpleObjct(theory=t1, symbol='0', capitalizable=True)

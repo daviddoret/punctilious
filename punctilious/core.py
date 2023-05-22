@@ -973,6 +973,9 @@ class Theory(TheoreticalObjct):
     def repr_as_theory(self):
         """Return a representation that expresses and justifies the theory."""
         output = f'\n{repm.serif_bold(self.repr_as_symbol(capitalized=True))}'
+        output = output + f'\n{repm.serif_bold("Extended theories:")}'
+        output = output + f'\nThe following theories are extended by {repm.serif_bold(self.repr_as_symbol())}.'
+        output = output + ''.join('\n\t ⁃ ' + t.repr_as_symbol() for t in self.extended_theories)
         output = output + f'\n\n{repm.serif_bold("Simple-objct declarations:")}'
         output = output + '\n' + '\n'.join(o.repr_as_declaration() for o in self.simple_objcts)
         output = output + f'\n\n{repm.serif_bold("Relation declarations:")}'
