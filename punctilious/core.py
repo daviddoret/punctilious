@@ -420,10 +420,14 @@ class Formula(TheoreticalObjct):
         capitalizable = False if symbol is None else capitalizable
         symbol = f'𝜑{repm.subscriptify(self.formula_index + 1)}' if symbol is None else symbol
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
-        assert relation is not None and isinstance(relation, (Relation, FreeVariable))
+        assert isinstance(relation, (Relation, FreeVariable))
+        assert theory.has_objct_in_hierarchy(relation)
         self.relation = relation
         parameters = parameters if isinstance(parameters, tuple) else tuple([parameters])
         assert len(parameters) > 0
+        for p in parameters:
+            assert isinstance(p, TheoreticalObjct)
+            assert theory.has_objct_in_hierarchy(p)
         # TODO: The following verification shed light on a difficulty: if
         #   we substitute relations, the resulting formula has variable-relations,
         #   but variable-relations do not have an arity attribute...
@@ -558,8 +562,9 @@ class Formula(TheoreticalObjct):
 
 class RelationDeclarationFormula(Formula):
     def __init__(self, theory, relation, symbol):
-        assert theory is not None, isinstance(theory, Theory)
-        assert relation is not None, isinstance(relation, Relation)
+        assert isinstance(theory, Theory)
+        assert isinstance(relation, Relation)
+        assert theory.has_objct_in_hierarchy(relation)
         formula_relation = theoretical_relations.relation_declaration
         super().__init__(theory=theory, relation=formula_relation, parameters=(theory, relation), python=python,
                          dashed=dashed, symbol=symbol)
@@ -577,8 +582,9 @@ class SimpleObjctDeclarationFormula(Formula):
     """
 
     def __init__(self, theory, simple_objct, python=None, dashed=None, symbol=None):
-        assert theory is not None and isinstance(theory, Theory)
-        assert simple_objct is not None, isinstance(simple_objct, SimpleObjct)
+        assert isinstance(theory, Theory)
+        assert isinstance(simple_objct, SimpleObjct)
+        assert theory.has_objct_in_hierarchy(simple_objct)
         relation = theoretical_relations.simple_objct_declaration
         super().__init__(theory=theory, relation=relation, parameters=(theory, simple_objct), python=python,
                          dashed=dashed, symbol=symbol)
@@ -683,6 +689,7 @@ class FormulaStatement(Statement):
     def __init__(self, theory, valid_proposition, category=None):
         assert isinstance(theory, Theory)
         assert isinstance(valid_proposition, Formula)
+        assert theory.has_objct_in_hierarchy(valid_proposition)
         # Theory statements must be logical propositions.
         assert valid_proposition.is_proposition
         self.valid_proposition = valid_proposition
@@ -709,7 +716,9 @@ class FormalAxiom(FormulaStatement):
     def __init__(self, theory, axiom, valid_proposition, category=None):
         assert isinstance(theory, Theory)
         assert isinstance(axiom, FreeTextAxiom)
+        assert theory.has_objct_in_hierarchy(axiom)
         assert isinstance(valid_proposition, Formula)
+        assert theory.has_objct_in_hierarchy(valid_proposition)
         self.axiom = axiom
         super().__init__(theory=theory, valid_proposition=valid_proposition, category=category)
         assert axiom.statement_index < self.statement_index
@@ -742,8 +751,10 @@ class PropositionStatement:
     def __init__(self, theory, position, phi, proof):
         assert isinstance(theory, Theory)
         assert isinstance(position, int) and position > 0
-        assert phi is not None and isinstance(phi, Formula)
+        assert isinstance(phi, Formula)
+        assert theory.has_objct_in_hierarchy(phi)
         assert isinstance(proof, Proof)
+        assert theory.has_objct_in_hierarchy(proof)
         self.theory = theory
         self.position = position
         self.phi = phi
@@ -763,6 +774,7 @@ class FormalDefinition(FormulaStatement):
     def __init__(self, theory, free_text_definition, valid_proposition, category=None):
         assert isinstance(theory, Theory)
         assert isinstance(free_text_definition, FreeTextDefinition)
+        assert theory.has_objct_in_hierarchy(free_text_definition)
         assert isinstance(valid_proposition, Formula)
         assert theory.has_objct_in_hierarchy(valid_proposition)
         self.free_text_definition = free_text_definition
@@ -986,6 +998,11 @@ class Theory(TheoreticalObjct):
 
     def prnt(self):
         repm.prnt(self.repr_as_theory())
+
+    def export_to_text(self, file_path):
+        text_file = open(file_path, 'w')
+        n = text_file.write(self.repr_as_theory())
+        text_file.close()
 
 
 class Proof:
