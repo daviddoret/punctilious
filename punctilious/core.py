@@ -1000,6 +1000,7 @@ class Theory(TheoreticalObjct):
         repm.prnt(self.repr_as_theory())
 
     def export_to_text(self, file_path):
+        """Export this theory to a Unicode textfile."""
         text_file = open(file_path, 'w')
         n = text_file.write(self.repr_as_theory())
         text_file.close()
