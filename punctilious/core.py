@@ -131,13 +131,6 @@ class TheoreticalObjct(SymbolicObjct):
     def __init__(self, theory, symbol, capitalizable):
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
-    def get_theory_hierarchy(self):
-        theory_hierarchy = tuple()
-        t = self.theory
-        while t not in theory_hierarchy:
-            theory_hierarchy = theory_hierarchy + tuple([t.theory])
-        return theory_hierarchy
-
     def get_variable_set(self):
         """Return the set of variables contained in o (self), including o itself.
 
@@ -186,6 +179,7 @@ class TheoreticalObjct(SymbolicObjct):
         but if they are defined with distinct symbols, they are not formula-equivalent.
         """
         return self.is_symbol_equivalent(o2)
+
 
     def is_masked_formula_similar_to(self, o2, mask=None):
         """Given two theoretical-objects o₁ (self) and o₂,
@@ -798,7 +792,9 @@ class Note(AtheoreticalStatement):
 
 
 class Theory(TheoreticalObjct):
-    def __init__(self, theory=None, is_universe_of_discourse=None, symbol=None, capitalizable=False):
+    def __init__(
+            self, theory=None, is_universe_of_discourse=None,
+            symbol=None, capitalizable=False, extended_theories=None):
         global universe_of_discourse
         self.symbols = dict()
         self.axioms = tuple()
@@ -810,6 +806,11 @@ class Theory(TheoreticalObjct):
         self.symbolic_objcts = dict()
         self.theories = tuple()
         self.variables = tuple()
+        extended_theories = set() if extended_theories is None else extended_theories
+        assert isinstance(extended_theories, set)
+        for extended_theory in extended_theories:
+            assert isinstance(extended_theory, Theory)
+        self.extended_theories = extended_theories
         is_universe_of_discourse = False if is_universe_of_discourse is None else is_universe_of_discourse
         if is_universe_of_discourse:
             assert theory is None
@@ -942,6 +943,19 @@ class Theory(TheoreticalObjct):
         if x not in self.variables:
             self.variables = self.variables + tuple([x])
         return self.variables.index(x)
+
+    def get_theory_extension(self):
+        """Return the set of all theories that includes this theory and all the theories it extends recursively."""
+        theory_extension = {self}
+        for t in self.extended_theories:
+            if t not in theory_extension:
+                theory_extension = theory_extension.union(t.get_theory_extension())
+        return theory_extension
+
+    def has_objct_in_hierarchy(self, o):
+        """Return True if o is in this theory's hierarchy, False otherwise."""
+        assert isinstance(o, TheoreticalObjct)
+        return o.theory in self.get_theory_extension()
 
     def repr_as_theory(self):
         """Return a representation that expresses and justifies the theory."""
@@ -1144,8 +1158,9 @@ class ModusPonens(FormulaStatement):
     def __init__(self, theory, p_implies_q, p, category=None):
         # Check p_implies_q consistency
         assert isinstance(p_implies_q, FormulaStatement)
-        th = theory.get_theory_hierarchy()
-        assert p_implies_q.theory in theory.get_theory_hierarchy()
+        th = theory.get_theory_extension()
+        assert theory.has_objct_in_hierarchy(p_implies_q)
+        assert theory.has_objct_in_hierarchy(p)
         assert p_implies_q.valid_proposition.relation is implication
         p_prime = p_implies_q.valid_proposition.parameters[0]
         q_prime = p_implies_q.valid_proposition.parameters[1]
@@ -1183,7 +1198,7 @@ class ModusPonens(FormulaStatement):
         return output
 
 
-foundation_theory = Theory(theory=universe_of_discourse)
+foundation_theory = Theory(theory=universe_of_discourse, symbol='foundation-theory')
 commutativity_of_equality = None
 implication = None
 equality = None

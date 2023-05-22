@@ -16,7 +16,7 @@ def generate_test_data_2():
 
 class TestEquality(TestCase):
     def test_equality(self):
-        t1 = core.Theory()
+        t1 = core.Theory(symbol='equality-test-theory', extended_theories={core.foundation_theory})
         a1 = core.Axiom(theory=t1, axiom_text='Whatever I wish to be true is true.')
         mira = core.SimpleObjct(theory=t1, symbol='Mira', capitalizable=False)
         cat = core.SimpleObjct(theory=t1, symbol='cat', capitalizable=True)
