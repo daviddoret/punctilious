@@ -131,6 +131,13 @@ class TheoreticalObjct(SymbolicObjct):
     def __init__(self, theory, symbol, capitalizable):
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
+    def get_theory_hierarchy(self):
+        theory_hierarchy = tuple()
+        t = self.theory
+        while t not in theory_hierarchy:
+            theory_hierarchy = theory_hierarchy + tuple([t.theory])
+        return theory_hierarchy
+
     def get_variable_set(self):
         """Return the set of variables contained in o (self), including o itself.
 
@@ -149,7 +156,6 @@ class TheoreticalObjct(SymbolicObjct):
             return _variable_set.union({self})
         else:
             return _variable_set
-
 
     def is_formula_equivalent_to(self, o2):
         """Returns true if this theoretical-obct and theoretical-obct o2 are formula-equivalent.
@@ -408,13 +414,10 @@ class Formula(TheoreticalObjct):
 
     """
 
-    reps = SimpleNamespace(
-        function_call=repm.Representation(name='function-call', sample='◆(𝐱₁, 𝐱₂ ,… ,𝐱ₙ)'),
-        infix_operator=repm.Representation(name='infix-operator', sample='𝐱₁ ◆ 𝐱₂'),
-        prefix_operator=repm.Representation(name='prefix-operator', sample='◆𝐱'),
-        postfix_operator=repm.Representation(name='postfix-operator', sample='𝐱◆')
-    )
-
+    function_call_representation = repm.Representation(name='function-call', sample='◆(𝐱₁, 𝐱₂ ,… ,𝐱ₙ)')
+    infix_operator_representation = repm.Representation(name='infix-operator', sample='𝐱₁ ◆ 𝐱₂')
+    prefix_operator_representation = repm.Representation(name='prefix-operator', sample='◆𝐱')
+    postfix_operator_representation = repm.Representation(name='postfix-operator', sample='𝐱◆')
 
     def __init__(self, theory, relation, parameters, symbol=None, capitalizable=False):
         assert isinstance(theory, Theory)
@@ -548,13 +551,13 @@ class Formula(TheoreticalObjct):
         expanded = True if expanded is None else expanded
         assert isinstance(expanded, bool)
         match self.relation.formula_rep:
-            case Formula.reps.function_call:
+            case Formula.function_call_representation:
                 return self.repr_as_function_call(expanded=expanded)
-            case Formula.reps.infix_operator:
+            case Formula.infix_operator_representation:
                 return self.repr_as_infix_operator(expanded=expanded)
-            case Formula.reps.prefix_operator:
+            case Formula.prefix_operator_representation:
                 return self.repr_as_prefix_operator(expanded=expanded)
-            case Formula.reps.postfix_operator:
+            case Formula.postfix_operator_representation:
                 return self.repr_as_postfix_operator(expanded=expanded)
         assert 1 == 2
 
@@ -637,13 +640,15 @@ class Axiom(Statement):
         """Return a representation that expresses and justifies the statement."""
         return f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.axiom_text}'
 
-class Definition(Statement):
+
+class FreeTextDefinition(Statement):
     """
 
     Definition:
     -----------
-    A definition is a theory-statement that introduces some new context in
-     the theory but does not extend the theory.
+    A definition is a free-text theory-statement that introduces some new context in
+     the theory but does not extend the theory. To be formalized, it must be
+     formalized as definition-formal.
 
     """
 
@@ -662,10 +667,10 @@ class Definition(Statement):
         """Return a representation that expresses and justifies the statement."""
         text = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.text}'
         return '\n'.join(textwrap.wrap(text=text, width=70,
-                            subsequent_indent=f'\t',
-                            break_on_hyphens=False,
-                            expand_tabs=True,
-                            tabsize=4))
+                                       subsequent_indent=f'\t',
+                                       break_on_hyphens=False,
+                                       expand_tabs=True,
+                                       tabsize=4))
 
 
 class FormulaStatement(Statement):
@@ -696,6 +701,7 @@ class FormulaStatement(Statement):
 
     def repr_as_formula(self, expanded=None):
         return self.valid_proposition.repr_as_formula(expanded=expanded)
+
 
 class DirectAxiomInferenceStatement(FormulaStatement):
     """
@@ -747,6 +753,25 @@ class PropositionStatement:
         self.position = position
         self.phi = phi
         self.proof = proof
+
+
+class FormalDefinition(FormulaStatement):
+    """
+
+    Definition:
+    A theoretical-statement that states that x = some other theoretical-object.
+    When an object is defined like this, it means that for every formula
+    where x is present, the same formula with the substitution of x by x' can be substituted in all theories.
+    TODO: QUESTION: Should we create a base "Alias" object that is distinct from simple-objct???
+    XXXXXXX
+    """
+    def __init__(self, theory, free_text_definition, valid_proposition, category=None):
+        assert isinstance(theory, Theory)
+        assert isinstance(free_text_definition, FreeTextDefinition)
+        assert isinstance(valid_proposition, Formula)
+        self.free_text_definition = free_text_definition
+        super().__init__(theory=theory, valid_proposition=valid_proposition, category=category)
+        assert free_text_definition.statement_index < self.statement_index
 
 
 class AtheoreticalStatement:
@@ -833,13 +858,12 @@ class Theory(TheoreticalObjct):
         """During construction, cross-reference a definition 𝒟
         with its parent theory if it is not already cross-referenced,
         and return its 0-based index in Theory.axioms."""
-        assert isinstance(d, Definition)
+        assert isinstance(d, FreeTextDefinition)
         d.theory = d.theory if hasattr(d, 'theory') else self
         assert d.theory is self
         if d not in self.definitions:
             self.definitions = self.definitions + tuple([d])
         return self.definitions.index(d)
-
 
     def crossreference_formula(self, phi):
         """During construction, cross-reference a formula phi
@@ -968,7 +992,7 @@ class Relation(TheoreticalObjct):
                  formula_is_proposition=False):
         assert isinstance(theory, Theory)
         assert isinstance(formula_is_proposition, bool)
-        self.formula_rep = Formula.reps.function_call if formula_rep is None else formula_rep
+        self.formula_rep = Formula.function_call_representation if formula_rep is None else formula_rep
         self.python_name = python_name
         self.formula_is_proposition = formula_is_proposition
         capitalizable = False if symbol is None else capitalizable
@@ -980,7 +1004,7 @@ class Relation(TheoreticalObjct):
 
     def repr_as_declaration(self):
         output = f'Let {self.repr_as_symbol()} be a {self.repr_arity_as_text()} relation denoted as ⌜ {self.repr_as_symbol()} ⌝'
-        output = output + f', that signals well-formed formulae in {self.formula_rep} syntax (e.g.: ⌜ {self.formula_rep.sample.replace("◆",self.symbol)} ⌝).'
+        output = output + f', that signals well-formed formulae in {self.formula_rep} syntax (e.g.: ⌜ {self.formula_rep.sample.replace("◆", self.symbol)} ⌝).'
         return output
 
     def repr_arity_as_text(self):
@@ -1063,11 +1087,20 @@ universe_of_discourse = Theory(theory=None, is_universe_of_discourse=True, symbo
                                capitalizable=True)
 u = universe_of_discourse
 
-_relation_declaration = TheoreticalRelation(theory=u, arity=2, symbol='relation-declaration')
-_simple_objct_declaration = TheoreticalRelation(theory=u, arity=2, symbol='simple-objct-declaration')
-_theory_declaration = TheoreticalRelation(theory=u, arity=2, symbol='theory-declaration')
-_theory_extension = TheoreticalRelation(theory=u, arity=2, symbol='theory-extension')
-_variable_declaration = TheoreticalRelation(theory=u, arity=2, symbol='variable-declaration')
+meta_theory = Theory(theory=universe_of_discourse, symbol='meta-theory', capitalizable=True)
+def generate_meta_theory():
+    global meta_theory
+    # TODO: re-organize foundation theories
+
+generate_meta_theory()
+
+
+_relation_declaration = TheoreticalRelation(theory=meta_theory, arity=2, symbol='relation-declaration')
+_simple_objct_declaration = TheoreticalRelation(theory=meta_theory, arity=2, symbol='simple-objct-declaration')
+_theory_declaration = TheoreticalRelation(theory=meta_theory, arity=2, symbol='theory-declaration')
+_theory_extension = TheoreticalRelation(theory=meta_theory, arity=2, symbol='theory-extension')
+_variable_declaration = TheoreticalRelation(theory=meta_theory, arity=2, symbol='variable-declaration')
+
 
 theoretical_relations = SimpleNamespace(
     relation_declaration=_relation_declaration,
@@ -1090,6 +1123,7 @@ class InferenceRule:
         conclusion: Formula
             The conclusion to be derived from the premises if they are true.
     """
+
     def __init__(self, premises, conclusion):
         self.premises = premises
         self.conclusion = conclusion
@@ -1110,8 +1144,9 @@ class ModusPonens(FormulaStatement):
     def __init__(self, theory, p_implies_q, p, category=None):
         # Check p_implies_q consistency
         assert isinstance(p_implies_q, FormulaStatement)
-        assert p_implies_q.theory is theory  # TODO: Extend this to parent theories
-        assert p_implies_q.valid_proposition.relation is propositional_logic.relations.implies
+        th = theory.get_theory_hierarchy()
+        assert p_implies_q.theory in theory.get_theory_hierarchy()
+        assert p_implies_q.valid_proposition.relation is implication
         p_prime = p_implies_q.valid_proposition.parameters[0]
         q_prime = p_implies_q.valid_proposition.parameters[1]
         mask = p_prime.get_variable_set()
@@ -1148,14 +1183,35 @@ class ModusPonens(FormulaStatement):
         return output
 
 
-propositional_logic = Theory(theory=universe_of_discourse)
-SimpleObjct(theory=propositional_logic, symbol='true', capitalizable=True, python_name='true')
-SimpleObjct(theory=propositional_logic, symbol='false', capitalizable=True, python_name='false')
-Relation(theory=propositional_logic, symbol='implies', arity=2, formula_rep=Formula.reps.infix_operator,
-         python_name='implies', formula_is_proposition=True)
-Relation(
-    theory=propositional_logic, symbol='=', arity=2, formula_rep=Formula.reps.infix_operator,
-    python_name='equal', formula_is_proposition=True)
+foundation_theory = Theory(theory=universe_of_discourse)
+commutativity_of_equality = None
+implication = None
+equality = None
 
+def generate_propositional_logic():
+    global commutativity_of_equality
+    global foundation_theory
+    global implication
+    global equality
+
+    implication = Relation(theory=foundation_theory, symbol='implies', arity=2, formula_rep=Formula.infix_operator_representation,
+             python_name='implies', formula_is_proposition=True)
+
+    axiom_1 = Axiom(theory=foundation_theory, axiom_text='= is a binary relation such that, given any two theoretical-objcts x and y, if x=y then y=x, and for every statement including x or y, the same statement is valid with the other. ')
+    equality = Relation(theory=foundation_theory, symbol='=', arity=2, formula_rep=Formula.infix_operator_representation, python_name='equal_operator', formula_is_proposition=True)
+    # TODO: Complete the formalization of axiom_1
+    x1 = FreeVariable(theory=foundation_theory)
+    x2 = FreeVariable(theory=foundation_theory)
+    x1_equal_x2 = Formula(theory=foundation_theory, relation=equality, parameters=(x1, x2))
+    x2_equal_x1 = Formula(theory=foundation_theory, relation=equality, parameters=(x2, x1))
+    commutativity_of_equality = DirectAxiomInferenceStatement(theory=foundation_theory,axiom=axiom_1,
+        valid_proposition=Formula(theory=foundation_theory, relation=implication,
+                     parameters=(x1_equal_x2, x2_equal_x1)))
+
+
+    SimpleObjct(theory=foundation_theory, symbol='true', capitalizable=True, python_name='true')
+    SimpleObjct(theory=foundation_theory, symbol='false', capitalizable=True, python_name='false')
+
+generate_propositional_logic()
 
 pass

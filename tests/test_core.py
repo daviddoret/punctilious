@@ -14,6 +14,22 @@ def generate_test_data_2():
     t1 = core.Theory(python='T1', dashed='theory-1', symbol='𝒯₁')
     return t1
 
+class TestEquality(TestCase):
+    def test_equality(self):
+        t1 = core.Theory()
+        a1 = core.Axiom(theory=t1, axiom_text='Whatever I wish to be true is true.')
+        mira = core.SimpleObjct(theory=t1, symbol='Mira', capitalizable=False)
+        cat = core.SimpleObjct(theory=t1, symbol='cat', capitalizable=True)
+        growls_at = core.Relation(theory=t1, symbol='growls-at', arity=2)
+        snarls_at = core.Relation(theory=t1, symbol='snarls-at', arity=2)
+        grows_equal_snarls_formula = core.Formula(theory=t1, relation=core.equality, parameters=(growls_at, snarls_at))
+        grows_equal_snarls = core.DirectAxiomInferenceStatement(theory=t1, axiom=a1,
+            valid_proposition=grows_equal_snarls_formula)
+        # snarls_equal_growls_formula = core.Formula(theory=t1, relation=core.foundation_theory.equal, parameters=(snarls_at, growls_at))
+        p1 = core.ModusPonens(theory=t1, p_implies_q=core.commutativity_of_equality, p=grows_equal_snarls)
+        #Mira_growls_at_cat = core.DirectAxiomInferenceStatement(theory=t1, axiom=a1,
+        #    valid_proposition=core.Formula(theory=t1, relation=growls_at, parameters=(mira, cat)))
+        t1.prnt()
 
 class TestAxiom(TestCase):
 
