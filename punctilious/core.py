@@ -779,6 +779,7 @@ class FormalDefinition(FormulaStatement):
         assert theory.has_objct_in_hierarchy(free_text_definition)
         assert isinstance(valid_proposition, Formula)
         assert theory.has_objct_in_hierarchy(valid_proposition)
+        assert valid_proposition.relation is equality
         self.free_text_definition = free_text_definition
         super().__init__(theory=theory, valid_proposition=valid_proposition, category=category)
         assert free_text_definition.statement_index < self.statement_index
