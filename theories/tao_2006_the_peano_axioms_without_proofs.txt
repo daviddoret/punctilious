@@ -1,0 +1,43 @@
+
+𝐓𝐡𝐞𝐨𝐫𝐲 𝟐.𝟏: 𝐭𝐡𝐞 𝐏𝐞𝐚𝐧𝐨 𝐚𝐱𝐢𝐨𝐦𝐬
+𝐄𝐱𝐭𝐞𝐧𝐝𝐞𝐝 𝐭𝐡𝐞𝐨𝐫𝐢𝐞𝐬:
+The following theories are extended by 𝐭𝐡𝐞𝐨𝐫𝐲 𝟐.𝟏: 𝐭𝐡𝐞 𝐏𝐞𝐚𝐧𝐨 𝐚𝐱𝐢𝐨𝐦𝐬.
+	 ⁃ foundation-theory
+
+𝐒𝐢𝐦𝐩𝐥𝐞-𝐨𝐛𝐣𝐜𝐭 𝐝𝐞𝐜𝐥𝐚𝐫𝐚𝐭𝐢𝐨𝐧𝐬:
+Let 0 be a simple-objct denoted as ⌜ 0 ⌝.
+Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
+Let 1 be a simple-objct denoted as ⌜ 1 ⌝.
+Let 2 be a simple-objct denoted as ⌜ 2 ⌝.
+Let 3 be a simple-objct denoted as ⌜ 3 ⌝.
+
+𝐑𝐞𝐥𝐚𝐭𝐢𝐨𝐧 𝐝𝐞𝐜𝐥𝐚𝐫𝐚𝐭𝐢𝐨𝐧𝐬:
+Let is-a be a binary relation denoted as ⌜ is-a ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ is-a 𝐱₂ ⌝).
+Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formulae in postfix-operator syntax (e.g.: ⌜ 𝐱++ ⌝).
+
+𝐓𝐡𝐞𝐨𝐫𝐲 𝐞𝐥𝐚𝐛𝐨𝐫𝐚𝐭𝐢𝐨𝐧:
+
+𝐀𝐱𝐢𝐨𝐦 𝟐.𝟏: 0 is a natural number.
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧-𝟐: (0 is-a natural-number)
+
+𝐀𝐱𝐢𝐨𝐦 𝟐.𝟐: If 𝐧 is a natural number, then 𝐧++ is a natural number.
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧-𝟒: ((𝐧 is-a natural-number) implies ((𝐧)++ is-a natural-number))
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧-𝟓: ((0)++ is-a natural-number)
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧-𝟔: (((0)++)++ is-a natural-number)
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧-𝟕: ((((0)++)++)++ is-a natural-number)
+
+𝐃𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑: We define 1 to be the number 0++, 2 to be the number
+	(0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 :=
+	0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote
+	the statement that xis defined to equal y.)
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧-𝟗: (1 = (0)++)
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧-𝟏𝟎: (2 = (1)++)
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧-𝟏𝟏: (3 = (2)++)

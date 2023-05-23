@@ -1,0 +1,20 @@
+
+𝐟𝐨𝐮𝐧𝐝𝐚𝐭𝐢𝐨𝐧-𝐭𝐡𝐞𝐨𝐫𝐲
+𝐄𝐱𝐭𝐞𝐧𝐝𝐞𝐝 𝐭𝐡𝐞𝐨𝐫𝐢𝐞𝐬:
+The following theories are extended by 𝐟𝐨𝐮𝐧𝐝𝐚𝐭𝐢𝐨𝐧-𝐭𝐡𝐞𝐨𝐫𝐲.
+
+𝐒𝐢𝐦𝐩𝐥𝐞-𝐨𝐛𝐣𝐜𝐭 𝐝𝐞𝐜𝐥𝐚𝐫𝐚𝐭𝐢𝐨𝐧𝐬:
+Let true be a simple-objct denoted as ⌜ true ⌝.
+Let false be a simple-objct denoted as ⌜ false ⌝.
+
+𝐑𝐞𝐥𝐚𝐭𝐢𝐨𝐧 𝐝𝐞𝐜𝐥𝐚𝐫𝐚𝐭𝐢𝐨𝐧𝐬:
+Let implies be a binary relation denoted as ⌜ implies ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ implies 𝐱₂ ⌝).
+Let = be a binary relation denoted as ⌜ = ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ = 𝐱₂ ⌝).
+
+𝐓𝐡𝐞𝐨𝐫𝐲 𝐞𝐥𝐚𝐛𝐨𝐫𝐚𝐭𝐢𝐨𝐧:
+
+𝐀𝐱𝐢𝐨𝐦-𝟏: = is a binary relation such that, given any two theoretical-objcts x and y, if x=y then y=x, and for every statement including x or y, the same statement is valid with the other. 
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧-𝟐: ((𝐱₁ = 𝐱₂) implies (𝐱₂ = 𝐱₁))
+	𝐏𝐫𝐨𝐨𝐟 𝐛𝐲 𝐝𝐢𝐫𝐞𝐜𝐭 𝐚𝐱𝐢𝐨𝐦 𝐢𝐧𝐟𝐞𝐫𝐞𝐧𝐜𝐞
+	((𝐱₁ = 𝐱₂) implies (𝐱₂ = 𝐱₁))                                          │ Follows from 𝐚𝐱𝐢𝐨𝐦-𝟏.

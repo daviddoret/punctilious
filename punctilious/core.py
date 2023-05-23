@@ -101,7 +101,8 @@ class SymbolicObjct:
         return f'Let {self.repr_as_symbol()} be a symbolic-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
 
     def repr_as_symbol(self, capitalized=False):
-        return self.symbol.capitalize() if (capitalized and self.capitalizable) else self.symbol
+        return f'{self.symbol[0].capitalize()}{self.symbol[1:]}' if (
+                capitalized and self.capitalizable) else self.symbol
 
     def repr(self, expanded=None):
         return self.repr_as_symbol()
@@ -635,7 +636,7 @@ class FreeTextAxiom(Statement):
         assert isinstance(symbol, str)
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
-    def repr_as_statement(self):
+    def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
         return f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.axiom_text}'
 
@@ -662,7 +663,7 @@ class FreeTextDefinition(Statement):
         assert isinstance(symbol, str)
         super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
-    def repr_as_statement(self):
+    def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
         text = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.text}'
         return '\n'.join(textwrap.wrap(text=text, width=70,
@@ -722,15 +723,16 @@ class FormalAxiom(FormulaStatement):
         super().__init__(theory=theory, valid_proposition=valid_proposition, category=category)
         assert axiom.statement_index < self.statement_index
 
-    def repr_as_statement(self):
+    def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
 
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
         output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula(expanded=True)}'
-        output = output + f'\n\t{repm.serif_bold("Proof by direct axiom inference")}'
-        output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.axiom.repr_as_symbol())}.'
+        if output_proofs:
+            output = output + f'\n\t{repm.serif_bold("Proof by direct axiom inference")}'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.axiom.repr_as_symbol())}.'
         return output
 
 
@@ -781,15 +783,16 @@ class FormalDefinition(FormulaStatement):
         super().__init__(theory=theory, valid_proposition=valid_proposition, category=category)
         assert free_text_definition.statement_index < self.statement_index
 
-    def repr_as_statement(self):
+    def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
 
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
         output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula(expanded=True)}'
-        output = output + f'\n\t{repm.serif_bold("Proof by direct definition inference")}'
-        output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.free_text_definition.repr_as_symbol())}.'
+        if output_proofs:
+            output = output + f'\n\t{repm.serif_bold("Proof by direct definition inference")}'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.free_text_definition.repr_as_symbol())}.'
         return output
 
 
@@ -982,7 +985,7 @@ class Theory(TheoreticalObjct):
         assert isinstance(o, TheoreticalObjct)
         return o.theory in self.get_theory_extension()
 
-    def repr_as_theory(self):
+    def repr_as_theory(self, output_proofs=True):
         """Return a representation that expresses and justifies the theory."""
         output = f'\n{repm.serif_bold(self.repr_as_symbol(capitalized=True))}'
         output = output + f'\n{repm.serif_bold("Extended theories:")}'
@@ -993,16 +996,17 @@ class Theory(TheoreticalObjct):
         output = output + f'\n\n{repm.serif_bold("Relation declarations:")}'
         output = output + '\n' + '\n'.join(r.repr_as_declaration() for r in self.relations)
         output = output + f'\n\n{repm.serif_bold("Theory elaboration:")}'
-        output = output + '\n\n' + '\n\n'.join(s.repr_as_statement() for s in self.statements)
+        output = output + '\n\n' + '\n\n'.join(
+            s.repr_as_statement(output_proofs=output_proofs) for s in self.statements)
         return str(output)
 
     def prnt(self):
         repm.prnt(self.repr_as_theory())
 
-    def export_to_text(self, file_path):
+    def export_to_text(self, file_path, output_proofs=True):
         """Export this theory to a Unicode textfile."""
         text_file = open(file_path, 'w', encoding='utf-8')
-        n = text_file.write(self.repr_as_theory())
+        n = text_file.write(self.repr_as_theory(output_proofs=output_proofs))
         text_file.close()
 
 
@@ -1218,18 +1222,19 @@ class ModusPonens(FormulaStatement):
         # assert p_implies_q.statement_index < self.statement_index
         # assert p.statement_index < self.statement_index
 
-    def repr_as_statement(self):
+    def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
 
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
         output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula()}'
-        output = output + f'\n\t{repm.serif_bold("Proof by modus ponens")}'
-        output = output + f'\n\t{self.p_implies_q.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p_implies_q.repr_as_symbol())}.'
-        output = output + f'\n\t{self.p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p.repr_as_symbol())}.'
-        output = output + f'\n\t{"─" * 71}┤'
-        output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+        if output_proofs:
+            output = output + f'\n\t{repm.serif_bold("Proof by modus ponens")}'
+            output = output + f'\n\t{self.p_implies_q.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p_implies_q.repr_as_symbol())}.'
+            output = output + f'\n\t{self.p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p.repr_as_symbol())}.'
+            output = output + f'\n\t{"─" * 71}┤'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
         return output
 
 
