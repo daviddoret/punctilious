@@ -3,11 +3,27 @@ from types import SimpleNamespace
 import repm
 
 configuration = SimpleNamespace(
+    raise_exception_on_verification_failure=True,
     text_output_indent=2,
     text_output_statement_column_width=70,
     text_output_justification_column_width=40,
     text_output_total_width=122
 )
+
+
+class FailedVerificationException(Exception):
+    """Python custom exception raised whenever a verification fails if setting raise_exception_on_verification_failure = True."""
+
+    def __init__(self, msg, **kwargs):
+        self.msg = msg
+        self.kwargs = kwargs
+
+
+def verify(assertion, msg, **kwargs):
+    if not assertion:
+        repm.prnt(msg)
+        if configuration.raise_exception_on_verification_failure:
+            raise FailedVerificationException(msg=msg, **kwargs)
 
 
 class Tuple(tuple):
@@ -43,8 +59,9 @@ class SymbolicObjct:
     """
 
     def __init__(self, theory, symbol, capitalizable=False):
-        assert theory is not None and isinstance(theory, Theory)
-        assert isinstance(symbol, str) and len(symbol) > 0
+        assert isinstance(theory, Theory)
+        assert isinstance(symbol, str)
+        verify(len(symbol) > 0, 'The symbol of a symbolic-objct must be an non-empty string.', symbol=symbol)
         assert isinstance(capitalizable, bool)
         self.theory = theory
         self.symbol = symbol

@@ -14,6 +14,14 @@ def generate_test_data_2():
     t1 = core.Theory(python='T1', dashed='theory-1', symbol='𝒯₁')
     return t1
 
+
+class TestSymbolicObjct(TestCase):
+    def test__init__(self):
+        t1 = core.Theory(extended_theories={core.foundation_theory})
+        with self.assertRaises(core.FailedVerificationException):
+            core.SymbolicObjct(theory=t1, symbol='')
+
+
 class TestEquality(TestCase):
     def test_equality(self):
         t1 = core.Theory(symbol='equality-test-theory', extended_theories={core.foundation_theory})
@@ -27,9 +35,10 @@ class TestEquality(TestCase):
                                               valid_proposition=grows_equal_snarls_formula)
         # snarls_equal_growls_formula = core.Formula(theory=t1, relation=core.foundation_theory.equal, parameters=(snarls_at, growls_at))
         p1 = core.ModusPonens(theory=t1, p_implies_q=core.commutativity_of_equality, p=grows_equal_snarls)
-        #Mira_growls_at_cat = core.DirectAxiomInferenceStatement(theory=t1, axiom=a1,
+        # Mira_growls_at_cat = core.DirectAxiomInferenceStatement(theory=t1, axiom=a1,
         #    valid_proposition=core.Formula(theory=t1, relation=growls_at, parameters=(mira, cat)))
         t1.prnt()
+
 
 class TestAxiom(TestCase):
 
@@ -76,26 +85,6 @@ class TestFormula(TestCase):
 
     def test_str(self):
         self.fail()
-
-
-class TestSymbolicObjct(TestCase):
-    def test_python(self):
-        test_data = generate_test_data_1()
-        self.assertEqual('o1', test_data.o1.python)
-        self.assertEqual('o2', test_data.o2.python)
-        self.assertEqual('o3', test_data.o3.python)
-
-    def test_dashed(self):
-        test_data = generate_test_data_1()
-        self.assertEqual('object-1', test_data.o1.dashed)
-        self.assertEqual('object-2', test_data.o2.dashed)
-        self.assertEqual('object-3', test_data.o3.dashed)
-
-    def test_symbol(self):
-        test_data = generate_test_data_1()
-        self.assertEqual('o₁', test_data.o1.symbol)
-        self.assertEqual('o₂', test_data.o2.symbol)
-        self.assertEqual('o₃', test_data.o3.symbol)
 
 
 class TestNote(TestCase):
