@@ -1,18 +1,7 @@
 from unittest import TestCase
 import core
 from types import SimpleNamespace
-
-
-def generate_test_data_1():
-    o1 = core.SymbolicObjct(python='o1', dashed='object-1', symbol='o₁')
-    o2 = core.SymbolicObjct(python='o2', dashed='object-2', symbol='o₂')
-    o3 = core.SymbolicObjct(python='o3', dashed='object-3', symbol='o₃')
-    return SimpleNamespace(o1=o1, o2=o2, o3=o3)
-
-
-def generate_test_data_2():
-    t1 = core.Theory(python='T1', dashed='theory-1', symbol='𝒯₁')
-    return t1
+import random_data
 
 
 class TestSymbolicObjct(TestCase):
@@ -20,12 +9,20 @@ class TestSymbolicObjct(TestCase):
         t1 = core.Theory(extended_theories={core.foundation_theory})
         with self.assertRaises(core.FailedVerificationException):
             core.SymbolicObjct(theory=t1, symbol='')
+        o1_symbol = random_data.random_word(3)
+        o1 = core.SymbolicObjct(theory=t1, symbol=o1_symbol)
+        self.assertEqual(o1_symbol, o1.repr_as_symbol())
+        self.assertIs(t1, o1.theory)
+        o2_symbol = random_data.random_word(3)
+        o2 = core.SymbolicObjct(theory=t1, symbol=o2_symbol)
+        self.assertEqual(o2_symbol, o2.repr_as_symbol())
+        self.assertIs(t1, o2.theory)
 
 
 class TestEquality(TestCase):
     def test_equality(self):
         t1 = core.Theory(symbol='equality-test-theory', extended_theories={core.foundation_theory})
-        a1 = core.FreeTextAxiom(theory=t1, axiom_text='Whatever I wish to be true is true.')
+        a1 = core.NaturalLanguageAxiom(theory=t1, natural_language='Whatever I wish to be true is true.')
         mira = core.SimpleObjct(theory=t1, symbol='Mira', capitalizable=False)
         cat = core.SimpleObjct(theory=t1, symbol='cat', capitalizable=True)
         growls_at = core.Relation(theory=t1, symbol='growls-at', arity=2)
@@ -44,9 +41,12 @@ class TestAxiom(TestCase):
 
     def test_init(self):
         t1 = core.Theory()
-        a1 = core.FreeTextAxiom(theory=t1, axiom_text='If something is red, then it is neither green, nor blue.')
-        a2 = core.FreeTextAxiom(theory=t1, axiom_text='If something is green, then it is neither red, nor blue.')
-        a3 = core.FreeTextAxiom(theory=t1, axiom_text='If something is blue, then it is neither red, nor green.')
+        a1 = core.NaturalLanguageAxiom(theory=t1,
+                                       natural_language='If something is red, then it is neither green, nor blue.')
+        a2 = core.NaturalLanguageAxiom(theory=t1,
+                                       natural_language='If something is green, then it is neither red, nor blue.')
+        a3 = core.NaturalLanguageAxiom(theory=t1,
+                                       natural_language='If something is blue, then it is neither red, nor green.')
         self.assertIs(t1, a1.theory)
         self.assertIs(t1, a2.theory)
         self.assertIs(t1, a3.theory)
@@ -56,7 +56,7 @@ class TestStatement(TestCase):
 
     def test_init(self):
         t1 = core.Theory()
-        a1 = core.FreeTextAxiom(theory=t1, text='If something is red, then it is neither green, nor blue.')
+        a1 = core.NaturalLanguageAxiom(theory=t1, text='If something is red, then it is neither green, nor blue.')
         s1 = core.Statement(theory=t1, valid_proposition=a1)
 
         self.assertIs(t1, s1.theory)
@@ -132,7 +132,7 @@ class TestSimpleObjct(TestCase):
 class TestTheory(TestCase):
     def test___init__(self):
         t1 = core.Theory(dashed='test-theory-1')
-        a1 = core.FreeTextAxiom(theory=t1, text='If a filooboo is wala, then it is sholo.')
+        a1 = core.NaturalLanguageAxiom(theory=t1, text='If a filooboo is wala, then it is sholo.')
         s1 = core.Statement(theory=t1, valid_proposition=a1)
         t1.print()
 
