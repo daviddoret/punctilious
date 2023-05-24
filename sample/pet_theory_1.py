@@ -10,7 +10,7 @@ mira = core.SimpleObjct(theory=t1, symbol=mira_name, capitalizable=True)
 dog = core.SimpleObjct(theory=t1, symbol=dog_name, capitalizable=True)
 mammal = core.SimpleObjct(theory=t1, symbol=mammal_name, capitalizable=True)
 is_a = core.Relation(theory=t1, arity=2, formula_rep=core.Formula.infix_operator_representation, symbol='is-a',
-                     python_name='is_a', formula_is_proposition=True)
+                     python_name='is_a', signal_proposition=True)
 
 a1 = core.NaturalLanguageAxiom(theory=t1, natural_language=f'{mira_name.capitalize()} is a {dog_name}.',
                                capitalizable=True)

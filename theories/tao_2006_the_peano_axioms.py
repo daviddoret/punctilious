@@ -12,7 +12,7 @@ nat = t.o('natural-number', capitalizable=True)
 
 # relation declarations
 is_a = t.r(2, 'is-a', core.Formula.infix_operator_representation,
-           python_name='is_a', formula_is_proposition=True)
+           python_name='is_a', signal_proposition=True)
 
 nla_2_1 = t.nla(f'0 is a natural number.', symbol='2.1')
 fa_2_1_a = t.fa(t.f(is_a, zero, nat), nla_2_1, symbol='2.1.a')

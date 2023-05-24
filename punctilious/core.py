@@ -500,7 +500,7 @@ class Formula(TheoreticalObjct):
 
         This property is directly inherited from the formula-is-proposition
         attribute of the formula's relation."""
-        return self.relation.formula_is_proposition
+        return self.relation.signal_proposition
 
     def is_formula_equivalent_to(self, o2):
         """Returns true if this formula and o2 are formula-equivalent.
@@ -1223,7 +1223,7 @@ class Relation(TheoreticalObjct):
 
     Attributes
     ----------
-    formula_is_proposition : bool
+    signal_proposition : bool
         True if the relation instance signals that formulae based on this relation are logical-propositions,
         i.e. the relation is a function whose domain is the set of truth values {True, False}.
         False otherwise.
@@ -1237,14 +1237,14 @@ class Relation(TheoreticalObjct):
     """
 
     def __init__(self, arity, symbol=None, formula_rep=None, capitalizable=False, python_name=None,
-                 formula_is_proposition=False, formula_is_theoretical_morphism=False,
+                 signal_proposition=False, signal_theoretical_morphism=False,
                  implementation=None, theory=None):
         assert isinstance(theory, Theory)
-        assert isinstance(formula_is_proposition, bool)
+        assert isinstance(signal_proposition, bool)
         self.formula_rep = Formula.function_call_representation if formula_rep is None else formula_rep
         self.python_name = python_name
-        self.formula_is_proposition = formula_is_proposition
-        self.formula_is_theoretical_morphism = formula_is_theoretical_morphism
+        self.signal_proposition = signal_proposition
+        self.formula_is_theoretical_morphism = signal_theoretical_morphism
         self.implementation = implementation
         capitalizable = False if symbol is None else capitalizable
         self.relation_index = theory.crossreference_relation(self)
@@ -1461,14 +1461,14 @@ def elaborate_foundation_theory():
 
     implies = ft.r(2, 'implies',
                    formula_rep=Formula.infix_operator_representation,
-                   python_name='implies', formula_is_proposition=True)
+                   python_name='implies', signal_proposition=True)
 
     nla_1 = ft.nla(
         '= is a binary relation such that, given any two theoretical-objcts x and y, '
         'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.')
     equality = ft.r(2, '=',
                     formula_rep=Formula.infix_operator_representation, python_name='equal_operator',
-                    formula_is_proposition=True)
+                    signal_proposition=True)
 
     def elaborate_commutativity_of_equality():
         global commutativity_of_equality
@@ -1498,7 +1498,7 @@ def elaborate_foundation_theory():
             natural_language='substitution is the process that consists in taking 3 theoretical-object o, p and q, that may be a composed-object such as a formula, and replacing in there all occurences of p by q.')
         axiom2 = ft.nla('If x = y, o = subst(o, x, y) where o, x, and y are theoretical-objcts.')
         subst = ft.r(arity=3, symbol='subst',
-                     formula_is_theoretical_morphism=True, implementation=substitute_xy)
+                     signal_theoretical_morphism=True, implementation=substitute_xy)
         # if x = y, implies subst(o, x, y)
         x = ft.v()
         y = ft.v()
