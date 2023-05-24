@@ -1054,12 +1054,15 @@ class Theory(TheoreticalObjct):
             self.variables = self.variables + tuple([x])
         return self.variables.index(x)
 
-    def declare_formula(self, relation, *args, **kwargs):
-        """A shortcut function for Formula(theory=t, ...)
+    def declare_formula(self, relation, *parameters, **kwargs):
+        """Declare a new :term:`formula` in this theory.
 
-        A formula is **declared** in a theory because it is not a statement.
+        This method is a shortcut for Formula(theory=t, ...).
+
+        A formula is *declared* in a theory, and not *stated*, because it is not a statement,
+        i.e. it is not necessarily true in this theory.
         """
-        return Formula(relation=relation, parameters=args, theory=self, **kwargs)
+        return Formula(relation=relation, parameters=parameters, theory=self, **kwargs)
 
     def declare_free_variable(self, symbol=None):
         """A shortcut function for FreeVariable(theory=t, ...)
@@ -1206,7 +1209,7 @@ class Relation(TheoreticalObjct):
         If the relation has an implementation, a reference to the python function.
     """
 
-    def __init__(self, arity, formula_rep=None, symbol=None, capitalizable=False, python_name=None,
+    def __init__(self, arity, symbol=None, formula_rep=None, capitalizable=False, python_name=None,
                  formula_is_proposition=False, formula_is_theoretical_morphism=False,
                  implementation=None, theory=None):
         assert isinstance(theory, Theory)

@@ -3,13 +3,13 @@ import core
 t = core.Theory(symbol=f'theory 2.1: the Peano axioms', capitalizable=True,
                 extended_theories={core.foundation_theory})
 
-nla_2_1_1 = t.nla(f'0 is a natural number.', symbol='2.1.1')
+nla_2_1 = t.nla(f'0 is a natural number.', symbol='2.1')
 zero = t.o('0')
-is_a = core.Relation(theory=t, symbol='is-a', arity=2, formula_rep=core.Formula.infix_operator_representation,
-                     python_name='is_a', formula_is_proposition=True)
+is_a = t.r(2, 'is-a', core.Formula.infix_operator_representation,
+           python_name='is_a', formula_is_proposition=True)
 nat = t.o('natural-number', capitalizable=True)
-fa_2_1_2 = core.FormalAxiom(
-    theory=t, natural_language_axiom=nla_2_1_1, symbol='2.1.2',
+fa_2_1_a = core.FormalAxiom(
+    theory=t, natural_language_axiom=nla_2_1, symbol='2.1.a',
     valid_proposition=core.Formula(theory=t, relation=is_a, parameters=(zero, nat)))
 
 nla_2_2_1 = core.NaturalLanguageAxiom(
@@ -20,14 +20,12 @@ suc = core.Relation(theory=t, symbol='++', arity=1, formula_rep=core.Formula.pos
 n_is_a_nat = core.Formula(theory=t, relation=is_a, parameters=(n, nat))
 n_suc = core.Formula(theory=t, relation=suc, parameters=tuple([n]))
 n_suc_is_a_nat = core.Formula(theory=t, relation=is_a, parameters=tuple([n_suc, nat]))
-fa_2_2_1_formula = t.f(
-    relation=core.implies,
-    parameters=(n_is_a_nat, n_suc_is_a_nat))
+fa_2_2_1_formula = t.f(core.implies, n_is_a_nat, n_suc_is_a_nat)
 fa_2_2_2 = core.FormalAxiom(
     theory=t, symbol='2.2.2', natural_language_axiom=nla_2_2_1,
     valid_proposition=fa_2_2_1_formula)
 
-p_2_2_3 = core.ModusPonens(theory=t, symbol='2.2.3', p_implies_q=fa_2_2_2, p=fa_2_1_2)
+p_2_2_3 = core.ModusPonens(theory=t, symbol='2.2.3', p_implies_q=fa_2_2_2, p=fa_2_1_a)
 p_2_2_4 = core.ModusPonens(theory=t, symbol='2.2.4', p_implies_q=fa_2_2_2, p=p_2_2_3)
 p_2_2_5 = core.ModusPonens(theory=t, symbol='2.2.5', p_implies_q=fa_2_2_2, p=p_2_2_4)
 
