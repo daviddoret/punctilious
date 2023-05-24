@@ -689,7 +689,12 @@ class NaturalLanguageAxiom(Statement):
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
-        return f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: “{self.natural_language}”'
+        text = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: “{self.natural_language}”'
+        return '\n'.join(textwrap.wrap(text=text, width=70,
+                                       subsequent_indent=f'\t',
+                                       break_on_hyphens=False,
+                                       expand_tabs=True,
+                                       tabsize=4))
 
 
 class NaturalLanguageDefinition(Statement):
@@ -1408,64 +1413,82 @@ class ModusPonens(FormulaStatement):
         return output
 
 
-foundation_theory = Theory(theory=universe_of_discourse, symbol='foundation-theory')
+foundation_theory = None
+ft = None
 commutativity_of_equality = None
 implies = None
 equality = None
+tru = None
+fls = None
 
 
-def generate_foundation_theory():
+def elaborate_foundation_theory():
     global commutativity_of_equality
-    global foundation_theory
-    global implies
     global equality
+    global fls
+    global foundation_theory
+    global ft
+    global implies
+    global tru
 
-    t = foundation_theory
-    t.o('true', capitalizable=True, python_name='true')
-    t.o('false', capitalizable=True, python_name='true')
+    foundation_theory = Theory(theory=universe_of_discourse, symbol='foundation-theory')
+    ft = foundation_theory
 
-    implies = Relation(theory=foundation_theory, symbol='implies', arity=2,
-                       formula_rep=Formula.infix_operator_representation,
-                       python_name='implies', formula_is_proposition=True)
+    tru = ft.o('true', capitalizable=True, python_name='tru')
+    fls = ft.o('false', capitalizable=True, python_name='fls')
 
-    axiom_1 = NaturalLanguageAxiom(theory=foundation_theory,
-                                   natural_language='= is a binary relation such that, given any two theoretical-objcts x and y, if x=y then y=x, and for every statement including x or y, the same statement is valid with the other. ')
-    equality = Relation(theory=foundation_theory, symbol='=', arity=2,
-                        formula_rep=Formula.infix_operator_representation, python_name='equal_operator',
-                        formula_is_proposition=True)
+    implies = ft.r(2, 'implies',
+                   formula_rep=Formula.infix_operator_representation,
+                   python_name='implies', formula_is_proposition=True)
+
+    nla_1 = ft.nla(
+        '= is a binary relation such that, given any two theoretical-objcts x and y, '
+        'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.')
+    equality = ft.r(2, '=',
+                    formula_rep=Formula.infix_operator_representation, python_name='equal_operator',
+                    formula_is_proposition=True)
 
     def elaborate_commutativity_of_equality():
         global commutativity_of_equality
-        x1 = FreeVariable(theory=foundation_theory)
-        x2 = FreeVariable(theory=foundation_theory)
-        x1_equal_x2 = Formula(theory=foundation_theory, relation=equality, parameters=(x1, x2))
-        x2_equal_x1 = Formula(theory=foundation_theory, relation=equality, parameters=(x2, x1))
-        commutativity_of_equality = FormalAxiom(
-            theory=foundation_theory, natural_language_axiom=axiom_1,
-            valid_proposition=Formula(
-                theory=foundation_theory, relation=implies,
-                parameters=(x1_equal_x2, x2_equal_x1)))
+        global equality
+        global fls
+        global foundation_theory
+        global ft
+        global implies
+        global tru
+        x1 = ft.v()
+        x2 = ft.v()
+        x1_equal_x2 = ft.f(equality, x1, x2)
+        x2_equal_x1 = ft.f(equality, x2, x1)
+        commutativity_of_equality = ft.fa(
+            natural_language_axiom=nla_1,
+            valid_proposition=ft.f(implies, x1_equal_x2, x2_equal_x1))
 
     elaborate_commutativity_of_equality()
 
     def gen1():
+        global commutativity_of_equality
+        global equality
+        global fls
         global foundation_theory
-        t = foundation_theory
-        def1 = t.nld(
+        global ft
+        global implies
+        global tru
+        def1 = ft.nld(
             natural_language='substitution is the process that consists in taking 3 theoretical-object o, p and q, that may be a composed-object such as a formula, and replacing in there all occurences of p by q.')
-        axiom2 = t.nla('If x = y, o = subst(o, x, y) where o, x, and y are theoretical-objcts.')
-        subst = t.r(arity=3, symbol='subst',
-                    formula_is_theoretical_morphism=True, implementation=substitute_xy)
+        axiom2 = ft.nla('If x = y, o = subst(o, x, y) where o, x, and y are theoretical-objcts.')
+        subst = ft.r(arity=3, symbol='subst',
+                     formula_is_theoretical_morphism=True, implementation=substitute_xy)
         # if x = y, implies subst(o, x, y)
-        x = t.v()
-        y = t.v()
-        o = t.v()
-        r1x1 = t.f(implies, t.f(equality, x, y), t.f(subst, o, x, y))
-        equality_substitution = t.fa(natural_language_axiom=axiom2, valid_proposition=r1x1)
+        x = ft.v()
+        y = ft.v()
+        o = ft.v()
+        r1x1 = ft.f(implies, ft.f(equality, x, y), ft.f(subst, o, x, y))
+        equality_substitution = ft.fa(natural_language_axiom=axiom2, valid_proposition=r1x1)
 
     gen1()
 
 
-generate_foundation_theory()
+elaborate_foundation_theory()
 
 pass
