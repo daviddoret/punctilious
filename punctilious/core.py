@@ -58,10 +58,11 @@ class SymbolicObjct:
     that is linked to a theory, but that is not necessarily constitutive of the theory.
     """
 
-    def __init__(self, theory, symbol, capitalizable=False, python_name=None):
+    def __init__(self, theory, symbol, capitalizable=None, python_name=None):
         assert isinstance(theory, Theory)
         assert isinstance(symbol, str)
         verify(len(symbol) > 0, 'The symbol of a symbolic-objct must be an non-empty string.', symbol=symbol)
+        capitalizable = False if capitalizable is None else capitalizable
         assert isinstance(capitalizable, bool)
         self.theory = theory
         self.symbol = symbol
@@ -778,6 +779,13 @@ class FormulaStatement(Statement):
                 symbol = f'{category.name} {symbol}'
         super().__init__(
             theory=theory, symbol=symbol, capitalizable=capitalizable)
+        # manage theoretical-morphisms
+        self.morphism_output = None
+        if self.valid_proposition.relation.signal_theoretical_morphism:
+            # this formula-statement is a theoretical-morphism.
+            # it follows that this statement "yields" new statements in the theory.
+            assert self.valid_proposition.relation.implementation is not None
+            self.morphism_output = Morphism(theory=theory, source_statement=self)
 
     def repr_as_formula(self, expanded=None):
         return self.valid_proposition.repr_as_formula(expanded=expanded)
@@ -816,6 +824,50 @@ class FormalAxiom(FormulaStatement):
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Derivation from natural language axiom")}'
             output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.natural_language_axiom.repr_as_symbol())}.'
+        return output
+
+
+class Morphism(FormulaStatement):
+    """
+
+    Definition:
+    -----------
+    A theoretical-morphism-statement, or morphism for short, aka syntactic-operation is a valid-proposition produced by a valid-morphism-formula.
+
+    """
+
+    def __init__(self, source_statement, symbol=None, theory=None, capitalizable=None, category=None):
+        assert isinstance(theory, Theory)
+        assert isinstance(source_statement, FormulaStatement)
+        assert theory.has_objct_in_hierarchy(source_statement)
+        self.source_statement = source_statement
+        assert source_statement.valid_proposition.relation.signal_theoretical_morphism
+        self.morphism_implementation = source_statement.valid_proposition.relation.implementation
+        valid_proposition = self.morphism_implementation(self.source_statement.valid_proposition)
+        super().__init__(
+            theory=theory, valid_proposition=valid_proposition,
+            symbol=symbol, category=category)
+
+    def repr_as_statement(self, output_proofs=True):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula(expanded=True)}'
+        if output_proofs:
+            output = output + self.repr_as_sub_statement()
+        return output
+
+    def repr_as_sub_statement(self):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'\n\t{repm.serif_bold("Derivation by theoretical-morphism / syntactic-operation")}'
+        output = output + f'\n\t{self.source_statement.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.source_statement.repr_as_symbol())}.'
+        output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Output of {repm.serif_bold(self.source_statement.valid_proposition.relation.repr_as_symbol())} morphism.'
         return output
 
 
@@ -1078,12 +1130,22 @@ class Theory(TheoreticalObjct):
         """
         return FreeVariable(theory=self, symbol=symbol)
 
-    def declare_relation(self, *args, **kwargs):
+    def declare_relation(self, arity, symbol=None, formula_rep=None,
+                         capitalizable=None, python_name=None,
+                         signal_proposition=None,
+                         signal_theoretical_morphism=None,
+                         implementation=None):
         """A shortcut function for Relation(theory=t, ...)
 
         A relation is **declared** in a theory because it is not a statement.
         """
-        return Relation(*args, theory=self, **kwargs)
+        return Relation(
+            arity=arity, symbol=symbol, formula_rep=formula_rep,
+            capitalizable=capitalizable, python_name=python_name,
+            signal_proposition=signal_proposition,
+            signal_theoretical_morphism=signal_theoretical_morphism,
+            implementation=implementation,
+            theory=self)
 
     def declare_simple_objct(self, *args, **kwargs):
         """Shortcut for SimpleObjct(theory=t, ...)"""
@@ -1092,12 +1154,9 @@ class Theory(TheoreticalObjct):
         kwargs['theory'] = self
         return SimpleObjct(*args, **kwargs)
 
-    def elaborate_formal_axiom(self, *args, **kwargs):
-        """Shortcut for FormalAxiom(theory=t, ...)"""
-        verify('theory' not in kwargs or kwargs['theory'] is self,
-               msg='Inconsistent "theory" parameter.')
-        kwargs['theory'] = self
-        return FormalAxiom(*args, **kwargs)
+    def elaborate_formal_axiom(self, valid_proposition, nla, symbol=None):
+        """Elaborate a new formal-axiom in the theory. Shortcut for FormalAxiom(theory=t, ...)"""
+        return FormalAxiom(valid_proposition=valid_proposition, nla=nla, symbol=symbol, theory=self)
 
     def elaborate_formal_definition(self, *args, **kwargs):
         """Shortcut for FormalDefinition(theory=t, ...)"""
@@ -1113,9 +1172,9 @@ class Theory(TheoreticalObjct):
         kwargs['theory'] = self
         return ModusPonens(*args, **kwargs)
 
-    def elaborate_natural_language_axiom(self, *args, **kwargs):
+    def elaborate_natural_language_axiom(self, natural_language, symbol=None):
         """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
-        return NaturalLanguageAxiom(*args, theory=self, **kwargs)
+        return NaturalLanguageAxiom(natural_language=natural_language, symbol=symbol, theory=self)
 
     def elaborate_natural_language_definition(self, *args, **kwargs):
         """Shortcut for NaturalLanguageDefinition(theory=t, ...)"""
@@ -1125,9 +1184,9 @@ class Theory(TheoreticalObjct):
         """Shortcut for Theory.elaborate_formula(...)."""
         return self.declare_formula(*args, **kwargs)
 
-    def fa(self, *args, **kwargs):
-        """Elaborate a new formal-axiom. Shortcut for Theory.elaborate_formal_axiom(...)."""
-        return self.elaborate_formal_axiom(*args, **kwargs)
+    def fa(self, valid_proposition, nla, symbol=None):
+        """Elaborate a new formal-axiom in the theory. Shortcut for Theory.elaborate_formal_axiom(...)."""
+        return self.elaborate_formal_axiom(valid_proposition=valid_proposition, nla=nla, symbol=symbol)
 
     def fd(self, *args, **kwargs):
         """Elaborate a new formal-definition. Shortcut for Theory.elaborate_formal_definition(...)."""
@@ -1150,9 +1209,10 @@ class Theory(TheoreticalObjct):
         """Elaborate a new modus-ponens statement. Shortcut for Theory.elaborate_modus_ponens(...)."""
         return self.elaborate_modus_ponens(*args, **kwargs)
 
-    def nla(self, *args, **kwargs):
-        """Elaborate a new natural-language-axiom statement. Shortcut function for Theory.elaborate_natural_language_axiom(...)."""
-        return self.elaborate_natural_language_axiom(*args, **kwargs)
+    def nla(self, natural_language, symbol=None):
+        """Elaborate a new natural-language-axiom statement. Shortcut function for
+        Theory.elaborate_natural_language_axiom(...)."""
+        return self.elaborate_natural_language_axiom(natural_language=natural_language, symbol=symbol)
 
     def nld(self, *args, **kwargs):
         """Shortcut function for Theory.elaborate_natural_language_definition(...)."""
@@ -1162,11 +1222,20 @@ class Theory(TheoreticalObjct):
         """Shortcut for Theory.elaborate_simple_objct(...)."""
         return self.declare_simple_objct(*args, **kwargs)
 
-    def r(self, *args, **kwargs):
+    def r(self, arity, symbol=None, formula_rep=None,
+          capitalizable=None, python_name=None,
+          signal_proposition=None,
+          signal_theoretical_morphism=None,
+          implementation=None):
         """Declare a new relation r in the theory.
 
         Shortcut for Theory.declare_relation(...)."""
-        return self.declare_relation(*args, **kwargs)
+        return self.declare_relation(
+            arity=arity, symbol=symbol, formula_rep=formula_rep,
+            capitalizable=capitalizable, python_name=python_name,
+            signal_proposition=signal_proposition,
+            signal_theoretical_morphism=signal_theoretical_morphism,
+            implementation=implementation)
 
     def repr_as_theory(self, output_proofs=True):
         """Return a representation that expresses and justifies the theory."""
@@ -1229,7 +1298,7 @@ class Relation(TheoreticalObjct):
         False otherwise.
         When True, the formula may be used as a theory-statement.
 
-    formula_is_theoretical_morphism : bool
+    signal_theoretical_morphism : bool
         True if the relation instance signals that formulae based on this relation are theoretical-morphisms.
 
     implementation : bool
@@ -1237,21 +1306,24 @@ class Relation(TheoreticalObjct):
     """
 
     def __init__(self, arity, symbol=None, formula_rep=None, capitalizable=False, python_name=None,
-                 signal_proposition=False, signal_theoretical_morphism=False,
+                 signal_proposition=None, signal_theoretical_morphism=None,
                  implementation=None, theory=None):
         assert isinstance(theory, Theory)
+        signal_proposition = False if signal_proposition is None else signal_proposition
+        signal_theoretical_morphism = False if signal_theoretical_morphism is None else signal_theoretical_morphism
         assert isinstance(signal_proposition, bool)
+        assert isinstance(signal_theoretical_morphism, bool)
         self.formula_rep = Formula.function_call_representation if formula_rep is None else formula_rep
         self.python_name = python_name
         self.signal_proposition = signal_proposition
-        self.formula_is_theoretical_morphism = signal_theoretical_morphism
+        self.signal_theoretical_morphism = signal_theoretical_morphism
         self.implementation = implementation
         capitalizable = False if symbol is None else capitalizable
         self.relation_index = theory.crossreference_relation(self)
         symbol = f'◆{repm.subscriptify(self.relation_index + 1)}' if symbol is None else symbol
-        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
+        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
 
     def repr_as_declaration(self):
         output = f'Let {self.repr_as_symbol()} be a {self.repr_arity_as_text()} relation denoted as ⌜ {self.repr_as_symbol()} ⌝'
@@ -1415,9 +1487,9 @@ class ModusPonens(FormulaStatement):
         # Build q by variable substitution
         substitution_map = dict((v, k) for k, v in _values.items())
         q = q_prime.substitute(substitution_map=substitution_map)
-        super().__init__(theory=theory, valid_proposition=q, category=category, symbol=symbol)
         # assert p_implies_q.statement_index < self.statement_index
         # assert p.statement_index < self.statement_index
+        super().__init__(theory=theory, valid_proposition=q, category=category, symbol=symbol)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
