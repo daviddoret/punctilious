@@ -713,7 +713,7 @@ class NaturalLanguageDefinition(Statement):
 
     prefix = f'natural language definition'
 
-    def __init__(self, theory, natural_language, symbol=None, capitalizable=True):
+    def __init__(self, natural_language, symbol=None, capitalizable=True, theory=None):
         assert isinstance(theory, Theory)
         assert isinstance(natural_language, str)
         self.natural_language = natural_language
@@ -792,19 +792,19 @@ class FormalAxiom(FormulaStatement):
 
     """
 
-    def __init__(self, theory, natural_language_axiom, valid_proposition, symbol=None):
+    def __init__(self, valid_proposition, nla, symbol=None, theory=None):
         assert isinstance(theory, Theory)
-        assert isinstance(natural_language_axiom, NaturalLanguageAxiom)
-        assert theory.has_objct_in_hierarchy(natural_language_axiom)
+        assert isinstance(nla, NaturalLanguageAxiom)
+        assert theory.has_objct_in_hierarchy(nla)
         assert isinstance(valid_proposition, Formula)
         assert theory.has_objct_in_hierarchy(valid_proposition)
         capitalizable = True
-        self.natural_language_axiom = natural_language_axiom
+        self.natural_language_axiom = nla
         category = Statement.reps.formal_axiom
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             symbol=symbol, category=category)
-        assert natural_language_axiom.statement_index < self.statement_index
+        assert nla.statement_index < self.statement_index
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
@@ -856,19 +856,19 @@ class FormalDefinition(FormulaStatement):
     XXXXXXX
     """
 
-    def __init__(self, theory, natural_language_definition, valid_proposition, symbol=None):
+    def __init__(self, valid_proposition, nld, symbol=None, theory=None):
         assert isinstance(theory, Theory)
-        assert isinstance(natural_language_definition, NaturalLanguageDefinition)
-        assert theory.has_objct_in_hierarchy(natural_language_definition)
+        assert isinstance(nld, NaturalLanguageDefinition)
+        assert theory.has_objct_in_hierarchy(nld)
         assert isinstance(valid_proposition, Formula)
         assert theory.has_objct_in_hierarchy(valid_proposition)
         assert valid_proposition.relation is equality
-        self.natural_language_definition = natural_language_definition
+        self.natural_language_definition = nld
         category = Statement.reps.formal_definition
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             symbol=symbol, category=category)
-        assert natural_language_definition.statement_index < self.statement_index
+        assert nld.statement_index < self.statement_index
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
@@ -1099,6 +1099,20 @@ class Theory(TheoreticalObjct):
         kwargs['theory'] = self
         return FormalAxiom(*args, **kwargs)
 
+    def elaborate_formal_definition(self, *args, **kwargs):
+        """Shortcut for FormalDefinition(theory=t, ...)"""
+        verify('theory' not in kwargs or kwargs['theory'] is self,
+               msg='Inconsistent "theory" parameter.')
+        kwargs['theory'] = self
+        return FormalDefinition(*args, **kwargs)
+
+    def elaborate_modus_ponens(self, *args, **kwargs):
+        """Shortcut for ModusPonens(theory=t, ...)"""
+        verify('theory' not in kwargs or kwargs['theory'] is self,
+               msg='Inconsistent "theory" parameter.')
+        kwargs['theory'] = self
+        return ModusPonens(*args, **kwargs)
+
     def elaborate_natural_language_axiom(self, *args, **kwargs):
         """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
         return NaturalLanguageAxiom(*args, theory=self, **kwargs)
@@ -1112,8 +1126,12 @@ class Theory(TheoreticalObjct):
         return self.declare_formula(*args, **kwargs)
 
     def fa(self, *args, **kwargs):
-        """Shortcut for Theory.elaborate_formal_axiom(...)."""
+        """Elaborate a new formal-axiom. Shortcut for Theory.elaborate_formal_axiom(...)."""
         return self.elaborate_formal_axiom(*args, **kwargs)
+
+    def fd(self, *args, **kwargs):
+        """Elaborate a new formal-definition. Shortcut for Theory.elaborate_formal_definition(...)."""
+        return self.elaborate_formal_definition(*args, **kwargs)
 
     def get_theory_extension(self):
         """Return the set of all theories that includes this theory and all the theories it extends recursively."""
@@ -1128,8 +1146,12 @@ class Theory(TheoreticalObjct):
         assert isinstance(o, TheoreticalObjct)
         return o.theory in self.get_theory_extension()
 
+    def mp(self, *args, **kwargs):
+        """Elaborate a new modus-ponens statement. Shortcut for Theory.elaborate_modus_ponens(...)."""
+        return self.elaborate_modus_ponens(*args, **kwargs)
+
     def nla(self, *args, **kwargs):
-        """Shortcut function for Theory.elaborate_natural_language_axiom(...)."""
+        """Elaborate a new natural-language-axiom statement. Shortcut function for Theory.elaborate_natural_language_axiom(...)."""
         return self.elaborate_natural_language_axiom(*args, **kwargs)
 
     def nld(self, *args, **kwargs):
@@ -1371,25 +1393,25 @@ class ModusPonens(FormulaStatement):
     infers the proposition (Q is True)
     """
 
-    def __init__(self, theory, p_implies_q, p, symbol=None, category=None):
+    def __init__(self, conditional, antecedent, symbol=None, category=None, theory=None):
         # Check p_implies_q consistency
-        assert isinstance(p_implies_q, FormulaStatement)
-        assert theory.has_objct_in_hierarchy(p_implies_q)
-        assert theory.has_objct_in_hierarchy(p)
-        assert p_implies_q.valid_proposition.relation is implies
-        p_prime = p_implies_q.valid_proposition.parameters[0]
-        q_prime = p_implies_q.valid_proposition.parameters[1]
+        assert isinstance(conditional, FormulaStatement)
+        assert theory.has_objct_in_hierarchy(conditional)
+        assert theory.has_objct_in_hierarchy(antecedent)
+        assert conditional.valid_proposition.relation is implies
+        p_prime = conditional.valid_proposition.parameters[0]
+        q_prime = conditional.valid_proposition.parameters[1]
         mask = p_prime.get_variable_set()
         # Check p consistency
         # If the p statement is present in the theory,
         # it necessarily mean that p is true,
         # because every statement in the theory is a valid proposition.
-        assert isinstance(p, FormulaStatement)
-        similitude, _values = p.valid_proposition._is_masked_formula_similar_to(o2=p_prime, mask=mask)
-        assert p.valid_proposition.is_masked_formula_similar_to(o2=p_prime, mask=mask)
+        assert isinstance(antecedent, FormulaStatement)
+        similitude, _values = antecedent.valid_proposition._is_masked_formula_similar_to(o2=p_prime, mask=mask)
+        assert antecedent.valid_proposition.is_masked_formula_similar_to(o2=p_prime, mask=mask)
         # State q
-        self.p_implies_q = p_implies_q
-        self.p = p
+        self.p_implies_q = conditional
+        self.p = antecedent
         # Build q by variable substitution
         substitution_map = dict((v, k) for k, v in _values.items())
         q = q_prime.substitute(substitution_map=substitution_map)
@@ -1460,9 +1482,7 @@ def elaborate_foundation_theory():
         x2 = ft.v()
         x1_equal_x2 = ft.f(equality, x1, x2)
         x2_equal_x1 = ft.f(equality, x2, x1)
-        commutativity_of_equality = ft.fa(
-            natural_language_axiom=nla_1,
-            valid_proposition=ft.f(implies, x1_equal_x2, x2_equal_x1))
+        commutativity_of_equality = ft.fa(ft.f(implies, x1_equal_x2, x2_equal_x1), nla_1)
 
     elaborate_commutativity_of_equality()
 
@@ -1484,7 +1504,7 @@ def elaborate_foundation_theory():
         y = ft.v()
         o = ft.v()
         r1x1 = ft.f(implies, ft.f(equality, x, y), ft.f(subst, o, x, y))
-        equality_substitution = ft.fa(natural_language_axiom=axiom2, valid_proposition=r1x1)
+        equality_substitution = ft.fa(r1x1, axiom2)
 
     gen1()
 

@@ -14,7 +14,7 @@ is_a = core.Relation(theory=t1, arity=2, formula_rep=core.Formula.infix_operator
 
 a1 = core.NaturalLanguageAxiom(theory=t1, natural_language=f'{mira_name.capitalize()} is a {dog_name}.',
                                capitalizable=True)
-mira_is_a_dog = core.FormalAxiom(theory=t1, natural_language_axiom=a1,
+mira_is_a_dog = core.FormalAxiom(theory=t1, nla=a1,
                                  valid_proposition=core.Formula(theory=t1, relation=is_a, parameters=(mira, dog)))
 
 a2 = core.NaturalLanguageAxiom(theory=t1, natural_language=f'If 𝒙 is a {dog_name}, then 𝒙 is a {mammal_name}.',
@@ -24,12 +24,12 @@ x_is_a_dog = core.Formula(theory=t1, relation=is_a, parameters=(x, dog))
 x_is_a_mammal = core.Formula(theory=t1, relation=is_a, parameters=(x, mammal))
 if_x_is_a_dog_then_x_is_a_mammal_formula = core.Formula(theory=t1, relation=core.foundation_theory.relations.implies,
                                                         parameters=(x_is_a_dog, x_is_a_mammal))
-if_x_is_a_dog_then_x_is_a_mammal = core.FormalAxiom(theory=t1, natural_language_axiom=a2,
+if_x_is_a_dog_then_x_is_a_mammal = core.FormalAxiom(theory=t1, nla=a2,
                                                     valid_proposition=if_x_is_a_dog_then_x_is_a_mammal_formula)
 # mira_is_a_mammal_formula = core.Formula(theory=t1, relation=is_a, parameters=(mira, mammal))
 
 x = mira_is_a_dog.valid_proposition.is_masked_formula_similar_to(x_is_a_dog, mask={x})
 
-mira_is_a_mammal = core.ModusPonens(theory=t1, p_implies_q=if_x_is_a_dog_then_x_is_a_mammal, p=mira_is_a_dog)
+mira_is_a_mammal = core.ModusPonens(theory=t1, conditional=if_x_is_a_dog_then_x_is_a_mammal, antecedent=mira_is_a_dog)
 
 t1.prnt()

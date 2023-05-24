@@ -3,62 +3,39 @@ import core
 t = core.Theory(symbol=f'theory 2.1: the Peano axioms', capitalizable=True,
                 extended_theories={core.foundation_theory})
 
-nla_2_1 = t.nla(f'0 is a natural number.', symbol='2.1')
+# simple-objct declarations
 zero = t.o('0')
+one = t.o('1')
+two = t.o('2')
+three = t.o('3')
+nat = t.o('natural-number', capitalizable=True)
+
+# relation declarations
 is_a = t.r(2, 'is-a', core.Formula.infix_operator_representation,
            python_name='is_a', formula_is_proposition=True)
-nat = t.o('natural-number', capitalizable=True)
-fa_2_1_a = core.FormalAxiom(
-    theory=t, natural_language_axiom=nla_2_1, symbol='2.1.a',
-    valid_proposition=core.Formula(theory=t, relation=is_a, parameters=(zero, nat)))
 
-nla_2_2_1 = core.NaturalLanguageAxiom(
-    theory=t, symbol='2.2.1',
-    natural_language=f'If 𝐧 is a natural number, then 𝐧++ is a natural number.')
-n = core.FreeVariable(theory=t, symbol='𝐧')
-suc = core.Relation(theory=t, symbol='++', arity=1, formula_rep=core.Formula.postfix_operator_representation)
-n_is_a_nat = core.Formula(theory=t, relation=is_a, parameters=(n, nat))
-n_suc = core.Formula(theory=t, relation=suc, parameters=tuple([n]))
-n_suc_is_a_nat = core.Formula(theory=t, relation=is_a, parameters=tuple([n_suc, nat]))
-fa_2_2_1_formula = t.f(core.implies, n_is_a_nat, n_suc_is_a_nat)
-fa_2_2_2 = core.FormalAxiom(
-    theory=t, symbol='2.2.2', natural_language_axiom=nla_2_2_1,
-    valid_proposition=fa_2_2_1_formula)
+nla_2_1 = t.nla(f'0 is a natural number.', symbol='2.1')
+fa_2_1_a = t.fa(t.f(is_a, zero, nat), nla_2_1, symbol='2.1.a')
 
-p_2_2_3 = core.ModusPonens(theory=t, symbol='2.2.3', p_implies_q=fa_2_2_2, p=fa_2_1_a)
-p_2_2_4 = core.ModusPonens(theory=t, symbol='2.2.4', p_implies_q=fa_2_2_2, p=p_2_2_3)
-p_2_2_5 = core.ModusPonens(theory=t, symbol='2.2.5', p_implies_q=fa_2_2_2, p=p_2_2_4)
+nla_2_2_1 = t.nla('If 𝐧 is a natural number, then 𝐧++ is a natural number.', symbol='2.2.1')
+n = t.v('𝐧')
+suc = t.r(1, '++', formula_rep=core.Formula.postfix_operator_representation)
+fa_2_2_2 = t.fa(t.f(core.implies, t.f(is_a, n, nat), t.f(is_a, t.f(suc, n), nat)), nla_2_2_1, symbol='2.2.2')
 
-d_2_1_3 = core.NaturalLanguageDefinition(
-    theory=t, symbol='2.1.3',
-    natural_language='We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that x is defined to equal y.)')
+p_2_2_3 = t.mp(fa_2_2_2, fa_2_1_a, symbol='2.2.3')
+p_2_2_4 = t.mp(fa_2_2_2, p_2_2_3, symbol='2.2.4')
+p_2_2_5 = t.mp(fa_2_2_2, p_2_2_4, symbol='2.2.5')
 
-one = core.SimpleObjct(theory=t, symbol='1')
-core.FormalDefinition(
-    theory=t, symbol='2.1.3.1', natural_language_definition=d_2_1_3,
-    valid_proposition=core.Formula(
-        theory=t, relation=core.equality,
-        parameters=(one, core.Formula(
-            theory=t, relation=suc, parameters=(zero)))))
+d_2_1_3 = t.nld(
+    'We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number '
+    '((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text '
+    'I use "x := y" to denote the statement that x is defined to equal y.)', symbol='2.1.3')
 
-two = core.SimpleObjct(theory=t, symbol='2')
-core.FormalDefinition(theory=t, symbol='2.1.3.2', natural_language_definition=d_2_1_3,
-                      valid_proposition=core.Formula(theory=t, relation=core.equality, parameters=(two,
-                                                                                                   core.Formula(
-                                                                                                       theory=t,
-                                                                                                       relation=suc,
-                                                                                                       parameters=(
-                                                                                                           one)))))
+t.fd(t.f(core.equality, one, t.f(suc, zero)), d_2_1_3, symbol='2.1.3.a')
+t.fd(t.f(core.equality, two, t.f(suc, one)), d_2_1_3, symbol='2.1.3.b')
+t.fd(t.f(core.equality, three, t.f(suc, two)), d_2_1_3, symbol='2.1.3.c')
 
-three = core.SimpleObjct(theory=t, symbol='3')
-core.FormalDefinition(
-    theory=t, symbol='2.1.3.3', natural_language_definition=d_2_1_3,
-    valid_proposition=core.Formula(
-        theory=t, relation=core.equality,
-        parameters=(three,
-                    core.Formula(theory=t, relation=suc, parameters=(two)))))
-
-three_is_nat = core.Formula(theory=t, relation=is_a, parameters=(three, nat))
+three_is_nat = t.f(is_a, three, nat)
 #####core.ModusPonens(theory=t1, symbol='2.1.4', p_implies_q=,
 
 
