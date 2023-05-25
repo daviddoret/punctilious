@@ -11,6 +11,23 @@ configuration = SimpleNamespace(
 )
 
 
+class AtheoreticalStatement:
+    """
+    Definition
+    ----------
+    A theoretical-statement 𝒮 is a tuple (𝒯, n, …) where:
+    * 𝒯 is a theory
+    * n is a natural number representing the unique position of 𝒮 in 𝒯
+    * … is any number of decorative attributes informally related to 𝒮 for human explanatory purposes
+    """
+
+    def __init__(self, theory, position):
+        assert isinstance(theory, Theory)
+        assert isinstance(position, int) and position > 0
+        self.theory = theory
+        self.position = position
+
+
 class FailedVerificationException(Exception):
     """Python custom exception raised whenever a verification fails if setting raise_exception_on_verification_failure = True."""
 
@@ -21,16 +38,9 @@ class FailedVerificationException(Exception):
 
 def verify(assertion, msg, **kwargs):
     if not assertion:
-        repm.prnt(msg)
+        repm.prnt(f'{msg}. {str(kwargs)}')
         if configuration.raise_exception_on_verification_failure:
             raise FailedVerificationException(msg=msg, **kwargs)
-
-
-class Tuple(tuple):
-    """Tuple subclasses the native tuple class.
-    The resulting supports setattr, getattr, hasattr,
-    which are convenient to create friendly programmatic shortcuts."""
-    pass
 
 
 def set_attr(o, a, v):
@@ -61,7 +71,10 @@ class SymbolicObjct:
     def __init__(self, theory, symbol, capitalizable=None, python_name=None):
         assert isinstance(theory, Theory)
         assert isinstance(symbol, str)
-        verify(len(symbol) > 0, 'The symbol of a symbolic-objct must be an non-empty string.', symbol=symbol)
+        verify(
+            len(symbol) > 0,
+            'The symbol of a symbolic-objct must be an non-empty string.',
+            symbol=symbol)
         capitalizable = False if capitalizable is None else capitalizable
         assert isinstance(capitalizable, bool)
         self.theory = theory
@@ -76,7 +89,8 @@ class SymbolicObjct:
         # With a special case for the root theory (universe-of-discourse),
         # where the theory is its own circular theory,
         # and hash of the symbol is sufficient.
-        return hash(self.symbol) if self is self.theory else hash((self.theory, self.symbol))
+        return hash(self.symbol) if self is self.theory else hash(
+            (self.theory, self.symbol))
 
     def __repr__(self):
         return self.repr_as_symbol()
@@ -121,7 +135,7 @@ class SymbolicObjct:
 
     def repr_as_symbol(self, capitalized=False):
         return f'{self.symbol[0].capitalize()}{self.symbol[1:]}' if (
-                capitalized and self.capitalizable) else self.symbol
+            capitalized and self.capitalizable) else self.symbol
 
     def repr(self, expanded=None):
         return self.repr_as_symbol()
@@ -149,7 +163,9 @@ class TheoreticalObjct(SymbolicObjct):
     """
 
     def __init__(self, theory, symbol, capitalizable, python_name=None):
-        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable, python_name=python_name)
+        super().__init__(
+            theory=theory, symbol=symbol, capitalizable=capitalizable,
+            python_name=python_name)
 
     def get_variable_set(self):
         """Return the set of variables contained in o (self), including o itself.
@@ -161,9 +177,11 @@ class TheoreticalObjct(SymbolicObjct):
     def _get_variable_set(self, _variable_set=None):
         _variable_set = set() if _variable_set is None else _variable_set
         if isinstance(self, Formula):
-            _variable_set = _variable_set.union(self.relation._get_variable_set(_variable_set=_variable_set))
+            _variable_set = _variable_set.union(
+                self.relation._get_variable_set(_variable_set=_variable_set))
             for p in self.parameters:
-                _variable_set = _variable_set.union(p._get_variable_set(_variable_set=_variable_set))
+                _variable_set = _variable_set.union(
+                    p._get_variable_set(_variable_set=_variable_set))
             return _variable_set
         elif isinstance(self, FreeVariable):
             return _variable_set.union({self})
@@ -275,7 +293,8 @@ class TheoreticalObjct(SymbolicObjct):
                 return False, _values
             # Arities are necessarily equal.
             for i in range(len(self.parameters)):
-                parameter_output, _values = self.parameters[i]._is_masked_formula_similar_to(
+                parameter_output, _values = self.parameters[
+                    i]._is_masked_formula_similar_to(
                     o2=o2.parameters[i], mask=mask, _values=_values)
                 if not parameter_output:
                     return False, _values
@@ -289,7 +308,8 @@ class TheoreticalObjct(SymbolicObjct):
             newly_observed_value = self
             if variable in _values:
                 already_observed_value = _values[variable]
-                if not newly_observed_value.is_formula_equivalent_to(already_observed_value):
+                if not newly_observed_value.is_formula_equivalent_to(
+                    already_observed_value):
                     return False, _values
             else:
                 _values[variable] = newly_observed_value
@@ -298,7 +318,8 @@ class TheoreticalObjct(SymbolicObjct):
             newly_observed_value = o2
             if variable in _values:
                 already_observed_value = _values[variable]
-                if not newly_observed_value.is_formula_equivalent_to(already_observed_value):
+                if not newly_observed_value.is_formula_equivalent_to(
+                    already_observed_value):
                     return False, _values
             else:
                 _values[variable] = newly_observed_value
@@ -333,7 +354,9 @@ class TheoreticalObjct(SymbolicObjct):
             assert isinstance(value, TheoreticalObjct)
             # A relation could not be replaced by a simple-objct, etc.
             # to prevent the creation of an ill-formed theoretical-objct.
-            assert type(key) == type(value) or isinstance(value, FreeVariable) or isinstance(key, FreeVariable)
+            assert type(key) == type(value) or isinstance(
+                value, FreeVariable) or isinstance(
+                key, FreeVariable)
             # If these are formula, their arity must be equal
             # to prevent the creation of an ill-formed formula.
             assert not isinstance(key, Formula) or key.arity == value.arity
@@ -341,9 +364,13 @@ class TheoreticalObjct(SymbolicObjct):
             return substitution_map[self]
         elif isinstance(self, Formula):
             # A formula is a special case that must be decomposed into its components.
-            relation = self.relation.substitute(substitution_map=substitution_map)
-            parameters = tuple(p.substitute(substitution_map=substitution_map) for p in self.parameters)
-            return Formula(theory=self.theory, relation=relation, parameters=parameters)
+            relation = self.relation.substitute(
+                substitution_map=substitution_map)
+            parameters = tuple(
+                p.substitute(substitution_map=substitution_map) for p in
+                self.parameters)
+            return Formula(
+                theory=self.theory, relation=relation, parameters=parameters)
         else:
             return self
 
@@ -368,12 +395,15 @@ class FreeVariable(TheoreticalObjct):
      * The index-position of the free-variable in its scope-formula
     """
 
-    def __init__(self, symbol=None, capitalizable=None, python_name=None, theory=None):
+    def __init__(
+        self, symbol=None, capitalizable=None, python_name=None, theory=None):
         capitalizable = False if capitalizable is None else capitalizable
         assert isinstance(theory, Theory)
         self.variable_index = theory.crossreference_variable(self)
         symbol = f'𝐱{repm.subscriptify(self.variable_index + 1)}' if symbol is None else symbol
-        super().__init__(theory=theory, symbol=symbol, capitalizable=False, python_name=python_name)
+        super().__init__(
+            theory=theory, symbol=symbol, capitalizable=False,
+            python_name=python_name)
 
     def is_masked_formula_similar_to(self, o2, mask, _values):
         # TODO: Re-implement this
@@ -436,12 +466,18 @@ class Formula(TheoreticalObjct):
 
     """
 
-    function_call_representation = repm.Representation(name='function-call', sample='◆(𝐱₁, 𝐱₂ ,… ,𝐱ₙ)')
-    infix_operator_representation = repm.Representation(name='infix-operator', sample='𝐱₁ ◆ 𝐱₂')
-    prefix_operator_representation = repm.Representation(name='prefix-operator', sample='◆𝐱')
-    postfix_operator_representation = repm.Representation(name='postfix-operator', sample='𝐱◆')
+    function_call_representation = repm.Representation(
+        name='function-call', sample='◆(𝐱₁, 𝐱₂ ,… ,𝐱ₙ)')
+    infix_operator_representation = repm.Representation(
+        name='infix-operator', sample='𝐱₁ ◆ 𝐱₂')
+    prefix_operator_representation = repm.Representation(
+        name='prefix-operator', sample='◆𝐱')
+    postfix_operator_representation = repm.Representation(
+        name='postfix-operator', sample='𝐱◆')
 
-    def __init__(self, relation, parameters, symbol=None, capitalizable=False, theory=None):
+    def __init__(
+        self, relation, parameters, symbol=None, capitalizable=False,
+        theory=None):
         """
 
         :param theory:
@@ -456,21 +492,29 @@ class Formula(TheoreticalObjct):
         self.formula_index = theory.crossreference_formula(self)
         capitalizable = False if symbol is None else capitalizable
         symbol = f'𝜑{repm.subscriptify(self.formula_index + 1)}' if symbol is None else symbol
-        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
+        super().__init__(
+            theory=theory, symbol=symbol, capitalizable=capitalizable)
         assert isinstance(relation, (Relation, FreeVariable))
         assert theory.has_objct_in_hierarchy(relation)
         self.relation = relation
-        parameters = parameters if isinstance(parameters, tuple) else tuple([parameters])
+        parameters = parameters if isinstance(parameters, tuple) else tuple(
+            [parameters])
         assert len(parameters) > 0
         arity = len(parameters)
         if isinstance(relation, Relation):
             assert self.relation.arity == arity
         self.arity = arity
-        for p in parameters:
-            assert isinstance(p, TheoreticalObjct)
-            assert theory.has_objct_in_hierarchy(p)
         self.parameters = parameters
         self.cross_reference_variables()
+        for p in parameters:
+            verify(
+                isinstance(p, TheoreticalObjct),
+                'Formula parameters must be instances of TheoreticalObjct.',
+                p=p)
+            verify(
+                theory.has_objct_in_hierarchy(p),
+                'Formula parameters must be elements of the theory extension.',
+                f=self.symbol, ft=self.theory, p=p, pt=p.theory)
 
     def __repr__(self):
         return self.repr()
@@ -547,7 +591,8 @@ class Formula(TheoreticalObjct):
             return False
         # Arities are necessarily equal.
         for i in range(len(self.parameters)):
-            if not self.parameters[i].is_formula_equivalent_to(o2.parameters[i]):
+            if not self.parameters[i].is_formula_equivalent_to(
+                o2.parameters[i]):
                 return False
         return True
 
@@ -603,8 +648,11 @@ class RelationDeclarationFormula(Formula):
         assert isinstance(relation, Relation)
         assert theory.has_objct_in_hierarchy(relation)
         formula_relation = theoretical_relations.relation_declaration
-        super().__init__(theory=theory, relation=formula_relation, parameters=(theory, relation), python=python,
-                         dashed=dashed, symbol=symbol)
+        super().__init__(
+            theory=theory, relation=formula_relation,
+            parameters=(theory, relation),
+            python=python,
+            dashed=dashed, symbol=symbol)
 
 
 class SimpleObjctDeclarationFormula(Formula):
@@ -618,13 +666,16 @@ class SimpleObjctDeclarationFormula(Formula):
     * ℴ is a simple-objct-component.
     """
 
-    def __init__(self, theory, simple_objct, python=None, dashed=None, symbol=None):
+    def __init__(
+        self, theory, simple_objct, python=None, dashed=None, symbol=None):
         assert isinstance(theory, Theory)
         assert isinstance(simple_objct, SimpleObjct)
         assert theory.has_objct_in_hierarchy(simple_objct)
         relation = theoretical_relations.simple_objct_declaration
-        super().__init__(theory=theory, relation=relation, parameters=(theory, simple_objct), python=python,
-                         dashed=dashed, symbol=symbol)
+        super().__init__(
+            theory=theory, relation=relation, parameters=(theory, simple_objct),
+            python=python,
+            dashed=dashed, symbol=symbol)
 
 
 class Statement(TheoreticalObjct):
@@ -646,7 +697,8 @@ class Statement(TheoreticalObjct):
         formal_definition=repm.Representation('formal definition'),
         lemma=repm.Representation('lemma'),
         natural_language_axiom=repm.Representation('natural language axiom'),
-        natural_language_definition=repm.Representation('natural language definition'),
+        natural_language_definition=repm.Representation(
+            'natural language definition'),
         proposition=repm.Representation('proposition'),
         theorem=repm.Representation('theorem')
     )
@@ -654,7 +706,8 @@ class Statement(TheoreticalObjct):
     def __init__(self, theory, symbol=None, capitalizable=True):
         assert isinstance(theory, Theory)
         self.statement_index = theory.crossreference_statement(self)
-        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
+        super().__init__(
+            theory=theory, symbol=symbol, capitalizable=capitalizable)
 
 
 class NaturalLanguageAxiom(Statement):
@@ -683,19 +736,22 @@ class NaturalLanguageAxiom(Statement):
             symbol = f'{NaturalLanguageAxiom.prefix} {statement_index + 1}'
         else:
             if len(symbol) < len(NaturalLanguageAxiom.prefix) or \
-                    symbol[:len(NaturalLanguageAxiom.prefix)] != FormalAxiom.prefix:
+                symbol[:len(NaturalLanguageAxiom.prefix)] != FormalAxiom.prefix:
                 symbol = f'{NaturalLanguageAxiom.prefix} {symbol}'
         assert isinstance(symbol, str)
-        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
+        super().__init__(
+            theory=theory, symbol=symbol, capitalizable=capitalizable)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
         text = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: “{self.natural_language}”'
-        return '\n'.join(textwrap.wrap(text=text, width=70,
-                                       subsequent_indent=f'\t',
-                                       break_on_hyphens=False,
-                                       expand_tabs=True,
-                                       tabsize=4))
+        return '\n'.join(
+            textwrap.wrap(
+                text=text, width=70,
+                subsequent_indent=f'\t',
+                break_on_hyphens=False,
+                expand_tabs=True,
+                tabsize=4))
 
 
 class NaturalLanguageDefinition(Statement):
@@ -714,7 +770,8 @@ class NaturalLanguageDefinition(Statement):
 
     prefix = f'natural language definition'
 
-    def __init__(self, natural_language, symbol=None, capitalizable=True, theory=None):
+    def __init__(
+        self, natural_language, symbol=None, capitalizable=True, theory=None):
         assert isinstance(theory, Theory)
         assert isinstance(natural_language, str)
         self.natural_language = natural_language
@@ -729,19 +786,23 @@ class NaturalLanguageDefinition(Statement):
             symbol = f'{NaturalLanguageDefinition.prefix} {statement_index + 1}'
         else:
             if len(symbol) < len(NaturalLanguageDefinition.prefix) or \
-                    symbol[:len(NaturalLanguageDefinition.prefix)] != FormalAxiom.prefix:
+                symbol[
+                :len(NaturalLanguageDefinition.prefix)] != FormalAxiom.prefix:
                 symbol = f'{NaturalLanguageDefinition.prefix} {symbol}'
         assert isinstance(symbol, str)
-        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
+        super().__init__(
+            theory=theory, symbol=symbol, capitalizable=capitalizable)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
         text = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: “{self.natural_language}”'
-        return '\n'.join(textwrap.wrap(text=text, width=70,
-                                       subsequent_indent=f'\t',
-                                       break_on_hyphens=False,
-                                       expand_tabs=True,
-                                       tabsize=4))
+        return '\n'.join(
+            textwrap.wrap(
+                text=text, width=70,
+                subsequent_indent=f'\t',
+                break_on_hyphens=False,
+                expand_tabs=True,
+                tabsize=4))
 
 
 class FormulaStatement(Statement):
@@ -775,7 +836,8 @@ class FormulaStatement(Statement):
             statement_index = theory.crossreference_statement(self)
             symbol = f'{category.name} {statement_index + 1}'
         else:
-            if len(symbol) < len(category.name) or symbol[:len(category.name)] != category.name:
+            if len(symbol) < len(category.name) or symbol[:len(
+                category.name)] != category.name:
                 symbol = f'{category.name} {symbol}'
         super().__init__(
             theory=theory, symbol=symbol, capitalizable=capitalizable)
@@ -785,7 +847,8 @@ class FormulaStatement(Statement):
             # this formula-statement is a theoretical-morphism.
             # it follows that this statement "yields" new statements in the theory.
             assert self.valid_proposition.relation.implementation is not None
-            self.morphism_output = Morphism(theory=theory, source_statement=self)
+            self.morphism_output = Morphism(
+                theory=theory, source_statement=self)
 
     def repr_as_formula(self, expanded=None):
         return self.valid_proposition.repr_as_formula(expanded=expanded)
@@ -827,6 +890,67 @@ class FormalAxiom(FormulaStatement):
         return output
 
 
+class ModusPonens(FormulaStatement):
+    """
+    TODO: Make ModusPonens a subclass of InferenceRule.
+
+    Definition:
+    -----------
+    A modus-ponens is a valid rule-of-inference propositional-logic argument that,
+    given a proposition (P implies Q)
+    given a proposition (P is True)
+    infers the proposition (Q is True)
+    """
+
+    def __init__(
+        self, conditional, antecedent, symbol=None, category=None, theory=None):
+        # Check p_implies_q consistency
+        assert isinstance(conditional, FormulaStatement)
+        assert theory.has_objct_in_hierarchy(conditional)
+        assert theory.has_objct_in_hierarchy(antecedent)
+        assert conditional.valid_proposition.relation is implies
+        p_prime = conditional.valid_proposition.parameters[0]
+        q_prime = conditional.valid_proposition.parameters[1]
+        mask = p_prime.get_variable_set()
+        # Check p consistency
+        # If the p statement is present in the theory,
+        # it necessarily mean that p is true,
+        # because every statement in the theory is a valid proposition.
+        assert isinstance(antecedent, FormulaStatement)
+        similitude, _values = antecedent.valid_proposition._is_masked_formula_similar_to(
+            o2=p_prime, mask=mask)
+        assert antecedent.valid_proposition.is_masked_formula_similar_to(
+            o2=p_prime, mask=mask)
+        # State q
+        self.p_implies_q = conditional
+        self.p = antecedent
+        # Build q by variable substitution
+        substitution_map = dict((v, k) for k, v in _values.items())
+        valid_proposition = q_prime.substitute(
+            substitution_map=substitution_map)
+        # assert p_implies_q.statement_index < self.statement_index
+        # assert p.statement_index < self.statement_index
+        super().__init__(
+            theory=theory, valid_proposition=valid_proposition,
+            category=category,
+            symbol=symbol)
+
+    def repr_as_statement(self, output_proofs=True):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula()}'
+        if output_proofs:
+            output = output + f'\n\t{repm.serif_bold("Proof by modus ponens")}'
+            output = output + f'\n\t{self.p_implies_q.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p_implies_q.repr_as_symbol())}.'
+            output = output + f'\n\t{self.p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p.repr_as_symbol())}.'
+            output = output + f'\n\t{"─" * 71}┤'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+        return output
+
+
 class Morphism(FormulaStatement):
     """
 
@@ -836,14 +960,17 @@ class Morphism(FormulaStatement):
 
     """
 
-    def __init__(self, source_statement, symbol=None, theory=None, capitalizable=None, category=None):
+    def __init__(
+        self, source_statement, symbol=None, theory=None, capitalizable=None,
+        category=None):
         assert isinstance(theory, Theory)
         assert isinstance(source_statement, FormulaStatement)
         assert theory.has_objct_in_hierarchy(source_statement)
         self.source_statement = source_statement
         assert source_statement.valid_proposition.relation.signal_theoretical_morphism
         self.morphism_implementation = source_statement.valid_proposition.relation.implementation
-        valid_proposition = self.morphism_implementation(self.source_statement.valid_proposition)
+        valid_proposition = self.morphism_implementation(
+            self.source_statement.valid_proposition)
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             symbol=symbol, category=category)
@@ -935,21 +1062,22 @@ class FormalDefinition(FormulaStatement):
         return output
 
 
-class AtheoreticalStatement:
+class InferenceRule:
     """
-    Definition
-    ----------
-    A theoretical-statement 𝒮 is a tuple (𝒯, n, …) where:
-    * 𝒯 is a theory
-    * n is a natural number representing the unique position of 𝒮 in 𝒯
-    * … is any number of decorative attributes informally related to 𝒮 for human explanatory purposes
+    TODO: Complete the implementation of InferenceRule, and make ModusPonens a subclass of it.
+    TODO: Make InferenceRule itself a Formula with the Sequent operator ⊢.
+
+    Attributes:
+    -----------
+        premises : tuple
+            A tuple of formulae.
+        conclusion: Formula
+            The conclusion to be derived from the premises if they are true.
     """
 
-    def __init__(self, theory, position):
-        assert isinstance(theory, Theory)
-        assert isinstance(position, int) and position > 0
-        self.theory = theory
-        self.position = position
+    def __init__(self, premises, conclusion):
+        self.premises = premises
+        self.conclusion = conclusion
 
 
 class Note(AtheoreticalStatement):
@@ -960,8 +1088,8 @@ class Note(AtheoreticalStatement):
 
 class Theory(TheoreticalObjct):
     def __init__(
-            self, theory=None, is_universe_of_discourse=None,
-            symbol=None, capitalizable=False, extended_theories=None):
+        self, theory=None, is_universe_of_discourse=None,
+        symbol=None, capitalizable=False, extended_theories=None):
         global universe_of_discourse
         self.symbols = dict()
         self.natural_language_axioms = tuple()
@@ -996,7 +1124,8 @@ class Theory(TheoreticalObjct):
         self.theory_index = theory.crossreference_theory(self)
         capitalizable = True if symbol is None else capitalizable
         symbol = f'theory-{self.theory_index + 1}' if symbol is None else symbol
-        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
+        super().__init__(
+            theory=theory, symbol=symbol, capitalizable=capitalizable)
 
     def crossreference_symbolic_objct(self, s):
         """During construction, cross-reference a symbolic_objct 𝓈
@@ -1019,7 +1148,8 @@ class Theory(TheoreticalObjct):
         a.theory = a.theory if hasattr(a, 'theory') else self
         assert a.theory is self
         if a not in self.natural_language_axioms:
-            self.natural_language_axioms = self.natural_language_axioms + tuple([a])
+            self.natural_language_axioms = self.natural_language_axioms + tuple(
+                [a])
         return self.natural_language_axioms.index(a)
 
     def crossreference_definition(self, d):
@@ -1030,7 +1160,8 @@ class Theory(TheoreticalObjct):
         d.theory = d.theory if hasattr(d, 'theory') else self
         assert d.theory is self
         if d not in self.natural_language_definitions:
-            self.natural_language_definitions = self.natural_language_definitions + tuple([d])
+            self.natural_language_definitions = self.natural_language_definitions + tuple(
+                [d])
         return self.natural_language_definitions.index(d)
 
     def crossreference_formula(self, phi):
@@ -1119,7 +1250,8 @@ class Theory(TheoreticalObjct):
         A formula is *declared* in a theory, and not *stated*, because it is not a statement,
         i.e. it is not necessarily true in this theory.
         """
-        return Formula(relation=relation, parameters=parameters, theory=self, **kwargs)
+        return Formula(
+            relation=relation, parameters=parameters, theory=self, **kwargs)
 
     def declare_free_variable(self, symbol=None):
         """A shortcut function for FreeVariable(theory=t, ...)
@@ -1130,11 +1262,12 @@ class Theory(TheoreticalObjct):
         """
         return FreeVariable(theory=self, symbol=symbol)
 
-    def declare_relation(self, arity, symbol=None, formula_rep=None,
-                         capitalizable=None, python_name=None,
-                         signal_proposition=None,
-                         signal_theoretical_morphism=None,
-                         implementation=None):
+    def declare_relation(
+        self, arity, symbol=None, formula_rep=None,
+        capitalizable=None, python_name=None,
+        signal_proposition=None,
+        signal_theoretical_morphism=None,
+        implementation=None):
         """A shortcut function for Relation(theory=t, ...)
 
         A relation is **declared** in a theory because it is not a statement.
@@ -1149,36 +1282,52 @@ class Theory(TheoreticalObjct):
 
     def declare_simple_objct(self, *args, **kwargs):
         """Shortcut for SimpleObjct(theory=t, ...)"""
-        verify('theory' not in kwargs or kwargs['theory'] is self,
-               msg='Inconsistent "theory" parameter.')
+        verify(
+            'theory' not in kwargs or kwargs['theory'] is self,
+            msg='Inconsistent "theory" parameter.')
         kwargs['theory'] = self
         return SimpleObjct(*args, **kwargs)
 
     def elaborate_formal_axiom(self, valid_proposition, nla, symbol=None):
         """Elaborate a new formal-axiom in the theory. Shortcut for FormalAxiom(theory=t, ...)"""
-        return FormalAxiom(valid_proposition=valid_proposition, nla=nla, symbol=symbol, theory=self)
+        return FormalAxiom(
+            valid_proposition=valid_proposition, nla=nla, symbol=symbol,
+            theory=self)
 
     def elaborate_formal_definition(self, *args, **kwargs):
         """Shortcut for FormalDefinition(theory=t, ...)"""
-        verify('theory' not in kwargs or kwargs['theory'] is self,
-               msg='Inconsistent "theory" parameter.')
+        verify(
+            'theory' not in kwargs or kwargs['theory'] is self,
+            msg='Inconsistent "theory" parameter.')
         kwargs['theory'] = self
         return FormalDefinition(*args, **kwargs)
 
-    def elaborate_modus_ponens(self, *args, **kwargs):
-        """Shortcut for ModusPonens(theory=t, ...)"""
-        verify('theory' not in kwargs or kwargs['theory'] is self,
-               msg='Inconsistent "theory" parameter.')
-        kwargs['theory'] = self
-        return ModusPonens(*args, **kwargs)
+    def elaborate_modus_ponens(
+        self, conditional, antecedent, symbol=None, category=None):
+        """Elaborate a new modus-ponens statement in the theory. Shortcut for
+        ModusPonens(theory=t, ...)"""
+        return ModusPonens(
+            conditional=conditional, antecedent=antecedent, symbol=symbol,
+            category=category, theory=self)
 
     def elaborate_natural_language_axiom(self, natural_language, symbol=None):
         """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
-        return NaturalLanguageAxiom(natural_language=natural_language, symbol=symbol, theory=self)
+        return NaturalLanguageAxiom(
+            natural_language=natural_language, symbol=symbol, theory=self)
 
     def elaborate_natural_language_definition(self, *args, **kwargs):
         """Shortcut for NaturalLanguageDefinition(theory=t, ...)"""
         return NaturalLanguageDefinition(*args, theory=self, **kwargs)
+
+    def elaborate_substitution_of_equal_terms(
+        self, original_expression, equality_statement, symbol=None,
+        category=None):
+        """Elaborate a new modus-ponens statement in the theory. Shortcut for
+        ModusPonens(theory=t, ...)"""
+        return SubstitutionOfEqualTerms(
+            original_expression=original_expression,
+            equality_statement=equality_statement, symbol=symbol,
+            category=category, theory=self)
 
     def f(self, *args, **kwargs):
         """Shortcut for Theory.elaborate_formula(...)."""
@@ -1186,18 +1335,25 @@ class Theory(TheoreticalObjct):
 
     def fa(self, valid_proposition, nla, symbol=None):
         """Elaborate a new formal-axiom in the theory. Shortcut for Theory.elaborate_formal_axiom(...)."""
-        return self.elaborate_formal_axiom(valid_proposition=valid_proposition, nla=nla, symbol=symbol)
+        return self.elaborate_formal_axiom(
+            valid_proposition=valid_proposition, nla=nla, symbol=symbol)
 
     def fd(self, *args, **kwargs):
         """Elaborate a new formal-definition. Shortcut for Theory.elaborate_formal_definition(...)."""
         return self.elaborate_formal_definition(*args, **kwargs)
 
     def get_theory_extension(self):
-        """Return the set of all theories that includes this theory and all the theories it extends recursively."""
-        theory_extension = {self}
+        """Return the set of all theories that includes this theory and all the
+        theories it extends recursively."""
+        return self._get_theory_extension(theory_extension={self})
+
+    def _get_theory_extension(self, theory_extension):
         for t in self.extended_theories:
             if t not in theory_extension:
-                theory_extension = theory_extension.union(t.get_theory_extension())
+                theory_extension = theory_extension.union({t})
+                # TODO: Optimize this code by adding a private function and pass the current list to it.
+                theory_extension = theory_extension.union(
+                    t._get_theory_extension(theory_extension))
         return theory_extension
 
     def has_objct_in_hierarchy(self, o):
@@ -1205,14 +1361,19 @@ class Theory(TheoreticalObjct):
         assert isinstance(o, TheoreticalObjct)
         return o.theory in self.get_theory_extension()
 
-    def mp(self, *args, **kwargs):
-        """Elaborate a new modus-ponens statement. Shortcut for Theory.elaborate_modus_ponens(...)."""
-        return self.elaborate_modus_ponens(*args, **kwargs)
+    def mp(
+        self, conditional, antecedent, symbol=None, category=None):
+        """Elaborate a new modus-ponens statement in the theory. Shortcut for
+        ModusPonens(theory=t, ...)"""
+        return self.elaborate_modus_ponens(
+            conditional=conditional, antecedent=antecedent, symbol=symbol,
+            category=category)
 
     def nla(self, natural_language, symbol=None):
         """Elaborate a new natural-language-axiom statement. Shortcut function for
         Theory.elaborate_natural_language_axiom(...)."""
-        return self.elaborate_natural_language_axiom(natural_language=natural_language, symbol=symbol)
+        return self.elaborate_natural_language_axiom(
+            natural_language=natural_language, symbol=symbol)
 
     def nld(self, *args, **kwargs):
         """Shortcut function for Theory.elaborate_natural_language_definition(...)."""
@@ -1222,11 +1383,12 @@ class Theory(TheoreticalObjct):
         """Shortcut for Theory.elaborate_simple_objct(...)."""
         return self.declare_simple_objct(*args, **kwargs)
 
-    def r(self, arity, symbol=None, formula_rep=None,
-          capitalizable=None, python_name=None,
-          signal_proposition=None,
-          signal_theoretical_morphism=None,
-          implementation=None):
+    def r(
+        self, arity, symbol=None, formula_rep=None,
+        capitalizable=None, python_name=None,
+        signal_proposition=None,
+        signal_theoretical_morphism=None,
+        implementation=None):
         """Declare a new relation r in the theory.
 
         Shortcut for Theory.declare_relation(...)."""
@@ -1242,15 +1404,29 @@ class Theory(TheoreticalObjct):
         output = f'\n{repm.serif_bold(self.repr_as_symbol(capitalized=True))}'
         output = output + f'\n{repm.serif_bold("Extended theories:")}'
         output = output + f'\nThe following theories are extended by {repm.serif_bold(self.repr_as_symbol())}.'
-        output = output + ''.join('\n\t ⁃ ' + t.repr_as_symbol() for t in self.extended_theories)
+        output = output + ''.join(
+            '\n\t ⁃ ' + t.repr_as_symbol() for t in self.extended_theories)
         output = output + f'\n\n{repm.serif_bold("Simple-objct declarations:")}'
-        output = output + '\n' + '\n'.join(o.repr_as_declaration() for o in self.simple_objcts)
+        output = output + '\n' + '\n'.join(
+            o.repr_as_declaration() for o in self.simple_objcts)
         output = output + f'\n\n{repm.serif_bold("Relation declarations:")}'
-        output = output + '\n' + '\n'.join(r.repr_as_declaration() for r in self.relations)
+        output = output + '\n' + '\n'.join(
+            r.repr_as_declaration() for r in self.relations)
         output = output + f'\n\n{repm.serif_bold("Theory elaboration:")}'
         output = output + '\n\n' + '\n\n'.join(
-            s.repr_as_statement(output_proofs=output_proofs) for s in self.statements)
+            s.repr_as_statement(output_proofs=output_proofs) for s in
+            self.statements)
         return str(output)
+
+    def soet(
+        self, original_expression, equality_statement, symbol=None,
+        category=None):
+        """Elaborate a new modus-ponens statement in the theory. Shortcut for
+        ModusPonens(theory=t, ...)"""
+        return self.elaborate_substitution_of_equal_terms(
+            original_expression=original_expression,
+            equality_statement=equality_statement, symbol=symbol,
+            category=category)
 
     def v(self, symbol=None):
         """A shortcut function for Theory.elaborate_free_variable(...).
@@ -1305,9 +1481,11 @@ class Relation(TheoreticalObjct):
         If the relation has an implementation, a reference to the python function.
     """
 
-    def __init__(self, arity, symbol=None, formula_rep=None, capitalizable=False, python_name=None,
-                 signal_proposition=None, signal_theoretical_morphism=None,
-                 implementation=None, theory=None):
+    def __init__(
+        self, arity, symbol=None, formula_rep=None, capitalizable=False,
+        python_name=None,
+        signal_proposition=None, signal_theoretical_morphism=None,
+        implementation=None, theory=None):
         assert isinstance(theory, Theory)
         signal_proposition = False if signal_proposition is None else signal_proposition
         signal_theoretical_morphism = False if signal_theoretical_morphism is None else signal_theoretical_morphism
@@ -1323,7 +1501,8 @@ class Relation(TheoreticalObjct):
         symbol = f'◆{repm.subscriptify(self.relation_index + 1)}' if symbol is None else symbol
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
-        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
+        super().__init__(
+            theory=theory, symbol=symbol, capitalizable=capitalizable)
 
     def repr_as_declaration(self):
         output = f'Let {self.repr_as_symbol()} be a {self.repr_arity_as_text()} relation denoted as ⌜ {self.repr_as_symbol()} ⌝'
@@ -1350,13 +1529,15 @@ class SimpleObjct(TheoreticalObjct):
     and whose sole function is to provide the meaning of being itself.
     """
 
-    def __init__(self, symbol=None, capitalizable=False, python_name=None, theory=None):
+    def __init__(
+        self, symbol=None, capitalizable=False, python_name=None, theory=None):
         assert isinstance(theory, Theory)
         self.python_name = python_name
         self.simple_objct_index = theory.crossreference_simple_objct(self)
         capitalizable = False if symbol is None else capitalizable
         symbol = f'ℴ{repm.subscriptify(self.simple_objct_index + 1)}' if symbol is None else symbol
-        super().__init__(theory=theory, symbol=symbol, capitalizable=capitalizable)
+        super().__init__(
+            theory=theory, symbol=symbol, capitalizable=capitalizable)
 
     def is_masked_formula_similar_to(self, o2, mask, _values):
         assert isinstance(o2, TheoreticalObjct)
@@ -1391,6 +1572,58 @@ class SimpleObjct(TheoreticalObjct):
         return f'Let {self.repr_as_symbol()} be a simple-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
 
 
+class SubstitutionOfEqualTerms(FormulaStatement):
+    """
+    TODO: Develop SubstitutionOfEqualTerms
+
+    Definition:
+    -----------
+    A substitution-of-equal-terms is a valid rule-of-inference propositional-logic argument that,
+    given a proposition (phi)
+    given a proposition (x = y)
+    infers the proposition (subst(phi, x, y))
+    """
+
+    def __init__(
+        self, original_expression, equality_statement, symbol=None,
+        category=None,
+        theory=None):
+        # Check p_implies_q consistency
+        assert isinstance(original_expression, FormulaStatement)
+        assert theory.has_objct_in_hierarchy(original_expression)
+        assert isinstance(equality_statement, FormulaStatement)
+        assert theory.has_objct_in_hierarchy(equality_statement)
+        assert equality_statement.valid_proposition.relation is equality
+        left_term = equality_statement.valid_proposition.parameters[0]
+        right_term = equality_statement.valid_proposition.parameters[1]
+        self.original_expression = original_expression
+        self.equality_statement = equality_statement
+        substitution_map = {left_term: right_term}
+        valid_proposition = original_expression.substitute(
+            substitution_map=substitution_map)
+        # Note: valid_proposition will be formula-equivalent to self,
+        #   if there are no occurrences of left_term in original_expression.
+        super().__init__(
+            theory=theory, valid_proposition=valid_proposition,
+            category=category,
+            symbol=symbol)
+
+    def repr_as_statement(self, output_proofs=True):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula()}'
+        if output_proofs:
+            output = output + f'\n\t{repm.serif_bold("Substitution of equal terms")}'
+            output = output + f'\n\t{self.original_expression.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.original_expression.repr_as_symbol())}.'
+            output = output + f'\n\t{self.equality_statement.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.equality_statement.repr_as_symbol())}.'
+            output = output + f'\n\t{"─" * 71}┤'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+        return output
+
+
 class TheoreticalRelation(Relation):
     """
     Definition:
@@ -1406,11 +1639,20 @@ class TheoreticalRelation(Relation):
         super().__init__(theory=theory, arity=arity, symbol=symbol)
 
 
-universe_of_discourse = Theory(theory=None, is_universe_of_discourse=True, symbol='universe-of-discourse',
-                               capitalizable=True)
+class Tuple(tuple):
+    """Tuple subclasses the native tuple class.
+    The resulting supports setattr, getattr, hasattr,
+    which are convenient to create friendly programmatic shortcuts."""
+    pass
+
+
+universe_of_discourse = Theory(
+    theory=None, is_universe_of_discourse=True, symbol='universe-of-discourse',
+    capitalizable=True)
 u = universe_of_discourse
 
-meta_theory = Theory(theory=universe_of_discourse, symbol='meta-theory', capitalizable=True)
+meta_theory = Theory(
+    theory=universe_of_discourse, symbol='meta-theory', capitalizable=True)
 
 
 def generate_meta_theory():
@@ -1420,11 +1662,16 @@ def generate_meta_theory():
 
 generate_meta_theory()
 
-_relation_declaration = TheoreticalRelation(theory=meta_theory, arity=2, symbol='relation-declaration')
-_simple_objct_declaration = TheoreticalRelation(theory=meta_theory, arity=2, symbol='simple-objct-declaration')
-_theory_declaration = TheoreticalRelation(theory=meta_theory, arity=2, symbol='theory-declaration')
-_theory_extension = TheoreticalRelation(theory=meta_theory, arity=2, symbol='theory-extension')
-_variable_declaration = TheoreticalRelation(theory=meta_theory, arity=2, symbol='variable-declaration')
+_relation_declaration = TheoreticalRelation(
+    theory=meta_theory, arity=2, symbol='relation-declaration')
+_simple_objct_declaration = TheoreticalRelation(
+    theory=meta_theory, arity=2, symbol='simple-objct-declaration')
+_theory_declaration = TheoreticalRelation(
+    theory=meta_theory, arity=2, symbol='theory-declaration')
+_theory_extension = TheoreticalRelation(
+    theory=meta_theory, arity=2, symbol='theory-extension')
+_variable_declaration = TheoreticalRelation(
+    theory=meta_theory, arity=2, symbol='variable-declaration')
 
 theoretical_relations = SimpleNamespace(
     relation_declaration=_relation_declaration,
@@ -1433,78 +1680,7 @@ theoretical_relations = SimpleNamespace(
     theory_extension=_theory_extension,
     variable_declaration=_variable_declaration)
 
-
 # console = rich.console.Console()
-class InferenceRule:
-    """
-    TODO: Complete the implementation of InferenceRule, and make ModusPonens a subclass of it.
-    TODO: Make InferenceRule itself a Formula with the Sequent operator ⊢.
-
-    Attributes:
-    -----------
-        premises : tuple
-            A tuple of formulae.
-        conclusion: Formula
-            The conclusion to be derived from the premises if they are true.
-    """
-
-    def __init__(self, premises, conclusion):
-        self.premises = premises
-        self.conclusion = conclusion
-
-
-class ModusPonens(FormulaStatement):
-    """
-    TODO: Make ModusPonens a subclass of InferenceRule.
-
-    Definition:
-    -----------
-    A modus-ponens is a valid rule-of-inference propositional-logic argument that,
-    given a proposition (P implies Q)
-    given a proposition (P is True)
-    infers the proposition (Q is True)
-    """
-
-    def __init__(self, conditional, antecedent, symbol=None, category=None, theory=None):
-        # Check p_implies_q consistency
-        assert isinstance(conditional, FormulaStatement)
-        assert theory.has_objct_in_hierarchy(conditional)
-        assert theory.has_objct_in_hierarchy(antecedent)
-        assert conditional.valid_proposition.relation is implies
-        p_prime = conditional.valid_proposition.parameters[0]
-        q_prime = conditional.valid_proposition.parameters[1]
-        mask = p_prime.get_variable_set()
-        # Check p consistency
-        # If the p statement is present in the theory,
-        # it necessarily mean that p is true,
-        # because every statement in the theory is a valid proposition.
-        assert isinstance(antecedent, FormulaStatement)
-        similitude, _values = antecedent.valid_proposition._is_masked_formula_similar_to(o2=p_prime, mask=mask)
-        assert antecedent.valid_proposition.is_masked_formula_similar_to(o2=p_prime, mask=mask)
-        # State q
-        self.p_implies_q = conditional
-        self.p = antecedent
-        # Build q by variable substitution
-        substitution_map = dict((v, k) for k, v in _values.items())
-        q = q_prime.substitute(substitution_map=substitution_map)
-        # assert p_implies_q.statement_index < self.statement_index
-        # assert p.statement_index < self.statement_index
-        super().__init__(theory=theory, valid_proposition=q, category=category, symbol=symbol)
-
-    def repr_as_statement(self, output_proofs=True):
-        """Return a representation that expresses and justifies the statement.
-
-        The representation is in two parts:
-        - The formula that is being stated,
-        - The justification for the formula."""
-        output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula()}'
-        if output_proofs:
-            output = output + f'\n\t{repm.serif_bold("Proof by modus ponens")}'
-            output = output + f'\n\t{self.p_implies_q.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p_implies_q.repr_as_symbol())}.'
-            output = output + f'\n\t{self.p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p.repr_as_symbol())}.'
-            output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
-        return output
 
 
 foundation_theory = None
@@ -1525,22 +1701,26 @@ def elaborate_foundation_theory():
     global implies
     global tru
 
-    foundation_theory = Theory(theory=universe_of_discourse, symbol='foundation-theory')
+    foundation_theory = Theory(
+        theory=universe_of_discourse, symbol='foundation-theory')
     ft = foundation_theory
 
     tru = ft.o('true', capitalizable=True, python_name='tru')
     fls = ft.o('false', capitalizable=True, python_name='fls')
 
-    implies = ft.r(2, 'implies',
-                   formula_rep=Formula.infix_operator_representation,
-                   python_name='implies', signal_proposition=True)
+    implies = ft.r(
+        2, 'implies',
+        formula_rep=Formula.infix_operator_representation,
+        python_name='implies', signal_proposition=True)
 
     nla_1 = ft.nla(
         '= is a binary relation such that, given any two theoretical-objcts x and y, '
         'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.')
-    equality = ft.r(2, '=',
-                    formula_rep=Formula.infix_operator_representation, python_name='equal_operator',
-                    signal_proposition=True)
+    equality = ft.r(
+        2, '=',
+        formula_rep=Formula.infix_operator_representation,
+        python_name='equal_operator',
+        signal_proposition=True)
 
     def elaborate_commutativity_of_equality():
         global commutativity_of_equality
@@ -1554,7 +1734,8 @@ def elaborate_foundation_theory():
         x2 = ft.v()
         x1_equal_x2 = ft.f(equality, x1, x2)
         x2_equal_x1 = ft.f(equality, x2, x1)
-        commutativity_of_equality = ft.fa(ft.f(implies, x1_equal_x2, x2_equal_x1), nla_1)
+        commutativity_of_equality = ft.fa(
+            ft.f(implies, x1_equal_x2, x2_equal_x1), nla_1)
 
     elaborate_commutativity_of_equality()
 
@@ -1568,9 +1749,11 @@ def elaborate_foundation_theory():
         global tru
         def1 = ft.nld(
             natural_language='substitution is the process that consists in taking 3 theoretical-object o, p and q, that may be a composed-object such as a formula, and replacing in there all occurences of p by q.')
-        axiom2 = ft.nla('If x = y, o = subst(o, x, y) where o, x, and y are theoretical-objcts.')
-        subst = ft.r(arity=3, symbol='subst',
-                     signal_theoretical_morphism=True, implementation=substitute_xy)
+        axiom2 = ft.nla(
+            'If x = y, o = subst(o, x, y) where o, x, and y are theoretical-objcts.')
+        subst = ft.r(
+            arity=3, symbol='subst',
+            signal_theoretical_morphism=True, implementation=substitute_xy)
         # if x = y, implies subst(o, x, y)
         x = ft.v()
         y = ft.v()
