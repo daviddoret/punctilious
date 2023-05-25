@@ -38,7 +38,7 @@ class FailedVerificationException(Exception):
 
 def verify(assertion, msg, **kwargs):
     if not assertion:
-        repm.prnt(f'{msg}. {str(kwargs)}')
+        repm.prnt(f'{msg}\nContextual information:{str(kwargs)}')
         if configuration.raise_exception_on_verification_failure:
             raise FailedVerificationException(msg=msg, **kwargs)
 
@@ -325,7 +325,7 @@ class TheoreticalObjct(SymbolicObjct):
                 _values[variable] = newly_observed_value
         return True, _values
 
-    def substitute(self, substitution_map):
+    def substitute(self, substitution_map, target_theory):
         """Given a theoretical-objct o₁ (self),
         and a substitution map 𝐌,
         return a theoretical-objct o₂
@@ -352,25 +352,38 @@ class TheoreticalObjct(SymbolicObjct):
         for key, value in substitution_map.items():
             assert isinstance(key, TheoreticalObjct)
             assert isinstance(value, TheoreticalObjct)
-            # A relation could not be replaced by a simple-objct, etc.
-            # to prevent the creation of an ill-formed theoretical-objct.
-            assert type(key) == type(value) or isinstance(
-                value, FreeVariable) or isinstance(
-                key, FreeVariable)
+            # A formula relation cannot be replaced by a simple-objct.
+            # But a simple-object could be replaced by a formula,
+            # if that formula "yields" such simple-objects.
+            # TODO: Impelement clever rules here to avoid ill-formed formula,
+            #   or let the formula constructor do the work.
+            # assert type(key) == type(value) or isinstance(
+            #    value, FreeVariable) or isinstance(
+            #    key, FreeVariable)
             # If these are formula, their arity must be equal
             # to prevent the creation of an ill-formed formula.
-            assert not isinstance(key, Formula) or key.arity == value.arity
+            # NO, THIS IS WRONG. TODO: Re-analyze this point.
+            # assert not isinstance(key, Formula) or key.arity == value.arity
         if self in substitution_map:
             return substitution_map[self]
         elif isinstance(self, Formula):
+            # If both key / value are formulae,
+            #   we must check for formula-equivalence,
+            #   and not object-equivalence.
+            for k, v in substitution_map.items():
+                if self.is_formula_equivalent_to(k):
+                    return v
+
             # A formula is a special case that must be decomposed into its components.
             relation = self.relation.substitute(
-                substitution_map=substitution_map)
+                substitution_map=substitution_map, target_theory=target_theory)
             parameters = tuple(
-                p.substitute(substitution_map=substitution_map) for p in
+                p.substitute(
+                    substitution_map=substitution_map,
+                    target_theory=target_theory) for p in
                 self.parameters)
             return Formula(
-                theory=self.theory, relation=relation, parameters=parameters)
+                theory=target_theory, relation=relation, parameters=parameters)
         else:
             return self
 
@@ -905,6 +918,7 @@ class ModusPonens(FormulaStatement):
     def __init__(
         self, conditional, antecedent, symbol=None, category=None, theory=None):
         # Check p_implies_q consistency
+        assert isinstance(theory, Theory)
         assert isinstance(conditional, FormulaStatement)
         assert theory.has_objct_in_hierarchy(conditional)
         assert theory.has_objct_in_hierarchy(antecedent)
@@ -927,7 +941,7 @@ class ModusPonens(FormulaStatement):
         # Build q by variable substitution
         substitution_map = dict((v, k) for k, v in _values.items())
         valid_proposition = q_prime.substitute(
-            substitution_map=substitution_map)
+            substitution_map=substitution_map, target_theory=theory)
         # assert p_implies_q.statement_index < self.statement_index
         # assert p.statement_index < self.statement_index
         super().__init__(
@@ -1586,9 +1600,9 @@ class SubstitutionOfEqualTerms(FormulaStatement):
 
     def __init__(
         self, original_expression, equality_statement, symbol=None,
-        category=None,
-        theory=None):
+        category=None, theory=None):
         # Check p_implies_q consistency
+        assert isinstance(theory, Theory)
         assert isinstance(original_expression, FormulaStatement)
         assert theory.has_objct_in_hierarchy(original_expression)
         assert isinstance(equality_statement, FormulaStatement)
@@ -1599,8 +1613,8 @@ class SubstitutionOfEqualTerms(FormulaStatement):
         self.original_expression = original_expression
         self.equality_statement = equality_statement
         substitution_map = {left_term: right_term}
-        valid_proposition = original_expression.substitute(
-            substitution_map=substitution_map)
+        valid_proposition = original_expression.valid_proposition.substitute(
+            substitution_map=substitution_map, target_theory=theory)
         # Note: valid_proposition will be formula-equivalent to self,
         #   if there are no occurrences of left_term in original_expression.
         super().__init__(
