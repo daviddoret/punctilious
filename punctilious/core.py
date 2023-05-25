@@ -369,12 +369,15 @@ class TheoreticalObjct(SymbolicObjct):
         elif isinstance(self, Formula):
             # If both key / value are formulae,
             #   we must check for formula-equivalence,
-            #   and not object-equivalence.
+            #   rather than python-object-equality.
             for k, v in substitution_map.items():
                 if self.is_formula_equivalent_to(k):
                     return v
 
-            # A formula is a special case that must be decomposed into its components.
+            # If the formula itself is not matched,
+            # the next step consist in decomposing it
+            # into its constituent parts, i.e. relation and parameters,
+            # to apply the substitution operation on these.
             relation = self.relation.substitute(
                 substitution_map=substitution_map, target_theory=target_theory)
             parameters = tuple(
