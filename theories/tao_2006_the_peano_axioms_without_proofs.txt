@@ -6,10 +6,10 @@ The following theories are extended by 𝐭𝐡𝐞𝐨𝐫𝐲 𝟐.𝟏: 𝐭�
 
 𝐒𝐢𝐦𝐩𝐥𝐞-𝐨𝐛𝐣𝐜𝐭 𝐝𝐞𝐜𝐥𝐚𝐫𝐚𝐭𝐢𝐨𝐧𝐬:
 Let 0 be a simple-objct denoted as ⌜ 0 ⌝.
-Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 Let 1 be a simple-objct denoted as ⌜ 1 ⌝.
 Let 2 be a simple-objct denoted as ⌜ 2 ⌝.
 Let 3 be a simple-objct denoted as ⌜ 3 ⌝.
+Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 
 𝐑𝐞𝐥𝐚𝐭𝐢𝐨𝐧 𝐝𝐞𝐜𝐥𝐚𝐫𝐚𝐭𝐢𝐨𝐧𝐬:
 Let is-a be a binary relation denoted as ⌜ is-a ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ is-a 𝐱₂ ⌝).
@@ -37,8 +37,24 @@ Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formu
 	other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x
 	:= y" to denote the statement that x is defined to equal y.)”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟏: (1 = (0)++)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟏.𝐚: (1 = (0)++)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟐: (2 = (1)++)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟏.𝐛: ((0)++ = 1)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑: (3 = (2)++)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟐.𝐚: (2 = ((0)++)++)
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟐.𝐛: (2 = (1)++)
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟐.𝐜: (((0)++)++ = 2)
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟐.𝐝: ((1)++ = 2)
+
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑.𝐚: (3 = (((0)++)++)++)
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑.𝐛: (3 = (2)++)
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑.𝐜: ((((0)++)++)++ = 3)
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑.𝐝: ((2)++ = 3)
+
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟏𝟗: (1 is-a natural-number)

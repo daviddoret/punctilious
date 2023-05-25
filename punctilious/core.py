@@ -21,11 +21,12 @@ class AtheoreticalStatement:
     * … is any number of decorative attributes informally related to 𝒮 for human explanatory purposes
     """
 
-    def __init__(self, theory, position):
+    def __init__(self, theory, position, symbol=None, capitalizable=None):
         assert isinstance(theory, Theory)
         assert isinstance(position, int) and position > 0
         self.theory = theory
         self.position = position
+        super().__init__()
 
 
 class FailedVerificationException(Exception):
@@ -1098,9 +1099,39 @@ class InferenceRule:
 
 
 class Note(AtheoreticalStatement):
-    def __init__(self, text, **kwargs):
-        super().__init__(**kwargs)
-        self.text = text
+    prefix = 'note'
+
+    def __init__(self, natural_language, symbol=None, theory=None):
+        assert isinstance(theory, Theory)
+        assert isinstance(natural_language, str)
+        self.natural_language = natural_language
+        capitalizable = True
+        assert isinstance(capitalizable, bool)
+        self.note_index = theory.crossreference_note(self)
+        if symbol is None:
+            # We must cross-reference this statement
+            # in advance from Statement.__init__
+            # to retrieve its index.
+            statement_index = theory.crossreference_statement(self)
+            symbol = f'{Note.prefix} {statement_index + 1}'
+        else:
+            if len(symbol) < len(Note.prefix) or \
+                symbol[:len(Note.prefix)] != Note.prefix:
+                symbol = f'{Note.prefix} {symbol}'
+        assert isinstance(symbol, str)
+        super().__init__(
+            theory=theory, symbol=symbol, capitalizable=capitalizable)
+
+    def repr_as_statement(self, output_proofs=True):
+        """Return a representation that expresses and justifies the statement."""
+        text = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: “{self.natural_language}”'
+        return '\n'.join(
+            textwrap.wrap(
+                text=text, width=70,
+                subsequent_indent=f'\t',
+                break_on_hyphens=False,
+                expand_tabs=True,
+                tabsize=4))
 
 
 class Theory(TheoreticalObjct):

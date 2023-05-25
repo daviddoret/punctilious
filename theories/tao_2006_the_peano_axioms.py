@@ -42,35 +42,36 @@ d_2_1_3 = t.nld(
 fd_2_1_3_1_a = t.fd(
     t.f(core.equality, one, t.f(suc, zero)), d_2_1_3, symbol='2.1.3.1.a')
 
-fd_2_1_3_1_b = t.mp(
-    core.commutativity_of_equality, fd_2_1_3_a, symbol='2.1.3.1.b')
+p_2_1_3_1_b = t.mp(
+    core.commutativity_of_equality, fd_2_1_3_1_a, symbol='2.1.3.1.b')
 
 # 2
-fd_2_1_3_c = t.fd(
+fd_2_1_3_2_a = t.fd(
     t.f(core.equality, two, t.f(suc, t.f(suc, zero))), d_2_1_3,
-    symbol='2.1.3.c')
-fd_2_1_3_d = t.mp(
-    core.commutativity_of_equality, fd_2_1_3_c, symbol='2.1.3.d')
-fd_2_1_3_e = t.soet(fd_2_1_3_c, fd_2_1_3_b, symbol='2.1.3.e')
-fd_2_1_3_f = t.soet(fd_2_1_3_d, fd_2_1_3_b, symbol='2.1.3.f')
+    symbol='2.1.3.2.a')
+p_2_1_3_2_b = t.soet(fd_2_1_3_2_a, p_2_1_3_1_b, symbol='2.1.3.2.b')
+
+p_2_1_3_2_c = t.mp(
+    core.commutativity_of_equality, fd_2_1_3_2_a, symbol='2.1.3.2.c')
+
+p_2_1_3_2_d = t.soet(p_2_1_3_2_c, p_2_1_3_1_b, symbol='2.1.3.2.d')
 
 # 3
-fd_2_1_3_g = t.fd(
+fd_2_1_3_3_a = t.fd(
     t.f(core.equality, three, t.f(suc, t.f(suc, t.f(suc, zero)))), d_2_1_3,
-    symbol='2.1.3.g')
-fd_2_1_3_h = t.mp(
-    core.commutativity_of_equality, fd_2_1_3_c, symbol='2.1.3.h')
-fd_2_1_3_i = t.soet(fd_2_1_3_g, fd_2_1_3_c, symbol='2.1.3.i')
-fd_2_1_3_j = t.soet(fd_2_1_3_h, fd_2_1_3_d, symbol='2.1.3.j')
+    symbol='2.1.3.3.a')
 
-# fd_2_1_3_d = t.fd(
-#    t.f(core.equality, two, t.f(suc, one)), d_2_1_3, symbol='2.1.3.d')
-# fd_2_1_3_e = t.fd(
-#    t.f(core.equality, three, t.f(suc, two)), d_2_1_3, symbol='2.1.3.e')
+p_2_1_3_3_b = t.soet(fd_2_1_3_3_a, p_2_1_3_2_c, symbol='2.1.3.3.b')
 
-# fd_2_1_3_c = t.mp(
-#    core.commutativity_of_equality, fd_2_1_3_c, symbol='2.1.3.c.2')
+p_2_1_3_3_c = t.mp(
+    core.commutativity_of_equality, fd_2_1_3_3_a, symbol='2.1.3.3.c')
 
-# t.soet(p_2_2_5, fd_2_1_3_c, symbol='2.1.3.c.3')
+p_2_1_3_3_d = t.soet(p_2_1_3_3_c, p_2_1_3_2_c, symbol='2.1.3.3.d')
+
+t.soet(p_2_2_3, p_2_1_3_1_b)
+
+# t.soet(p_2_2_4, p_2_1_3_2_b)
+
+# t.soet(p_2_2_5, p_2_1_3_3_b)
 
 t.prnt()
