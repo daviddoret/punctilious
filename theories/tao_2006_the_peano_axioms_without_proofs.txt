@@ -57,4 +57,4 @@ Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formu
 
 𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑.𝐝: ((2)++ = 3)
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟏𝟗: (1 is-a natural-number)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟒: (3 is-a natural-number)
