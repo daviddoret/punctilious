@@ -69,7 +69,8 @@ class SymbolicObjct:
     that is linked to a theory, but that is not necessarily constitutive of the theory.
     """
 
-    def __init__(self, theory, symbol, capitalizable=None, python_name=None):
+    def __init__(
+        self, theory, symbol, capitalizable=None, python_name=None):
         assert isinstance(theory, Theory)
         assert isinstance(symbol, str)
         verify(
@@ -1708,6 +1709,11 @@ class Tuple(tuple):
     pass
 
 
+class UniverseOfDiscourse(SymbolicObjct):
+    def __init__(self):
+        self.theories = set()
+
+
 universe_of_discourse = Theory(
     theory=None, is_universe_of_discourse=True, symbol='universe-of-discourse',
     capitalizable=True)
@@ -1715,32 +1721,6 @@ u = universe_of_discourse
 
 meta_theory = Theory(
     theory=universe_of_discourse, symbol='meta-theory', capitalizable=True)
-
-
-def generate_meta_theory():
-    global meta_theory
-    # TODO: re-organize foundation theories
-
-
-generate_meta_theory()
-
-_relation_declaration = TheoreticalRelation(
-    theory=meta_theory, arity=2, symbol='relation-declaration')
-_simple_objct_declaration = TheoreticalRelation(
-    theory=meta_theory, arity=2, symbol='simple-objct-declaration')
-_theory_declaration = TheoreticalRelation(
-    theory=meta_theory, arity=2, symbol='theory-declaration')
-_theory_extension = TheoreticalRelation(
-    theory=meta_theory, arity=2, symbol='theory-extension')
-_variable_declaration = TheoreticalRelation(
-    theory=meta_theory, arity=2, symbol='variable-declaration')
-
-theoretical_relations = SimpleNamespace(
-    relation_declaration=_relation_declaration,
-    simple_objct_declaration=_simple_objct_declaration,
-    theory_declaration=_theory_declaration,
-    theory_extension=_theory_extension,
-    variable_declaration=_variable_declaration)
 
 # console = rich.console.Console()
 

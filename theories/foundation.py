@@ -15,7 +15,9 @@ nla_03 = t.nla(
     'The class of classes is the class of all classes defined in the '
     'universe-of-discourse (TODO: Or foundation theory?).')
 class_of_classes = t.o('class-of-classes')
-element_of = t.r(2, 'element-of-class', signal_proposition=True)
+element_of = t.r(
+    2, '∈', formula_rep=core.Formula.infix_operator_representation,
+    signal_proposition=True)
 fa1 = t.fa(t.f(element_of, class_of_classes, class_of_classes), nla=nla_02)
 
 nla_04 = t.nla('The theory-class is the class of all theories')
@@ -76,7 +78,8 @@ nla_20 = t.nla(
     'If P is a proposition, then either the statement P has truth value true,'
     'or the statement P has truth value falsehood.')
 has_truth_value = t.r(
-    2, 'has_truth_value', core.Formula.infix_operator_representation,
+    2, 'is',
+    formula_rep=core.Formula.infix_operator_representation,
     signal_proposition=True)
 t.fa(t.f(has_truth_value, truth, truth), nla=nla_10)
 t.fa(t.f(has_truth_value, falsehood, falsehood), nla=nla_10)
@@ -88,10 +91,37 @@ nla_30 = t.nla(
     'Conversely, if P is a proposition and it has truth-value falsehood, '
     'then ¬P has truth-value true.')
 
+# DOUBLE-NEGATION
+nla_09_50 = t.nla('If P has-truth-value t, ¬(¬(P)) has-truth-value t.')
+p_09_51 = t.v()
+t_09_52 = t.v()
+fa_09_51 = t.fa(
+    t.f(
+        implication,
+        t.f(has_truth_value, p_09_51, t_09_52),
+        t.f(has_truth_value, t.f(negation, t.f(negation, p_09_51)), t_09_52)),
+    nla=nla_09_50)
+
 nla_40 = t.nla(
     'If T is a theory, and both P is valid and ¬P is valid in T, '
     'then this theory is an element of contradictory-theories class.')
-contradictory_theories = t.o()
+contradictory_theories = t.o('contradictory-theories')
+contradictory_statements = t.o('contradictory-statement')
+phi = t.v()
+t.fa(
+    t.f(
+        implication,
+        t.f(
+            conjunction, t.f(has_truth_value, phi, truth),
+            t.f(has_truth_value, phi, falsehood)),
+        t.f(element_of, phi, contradictory_statements)),
+    nla_40)
+
+_relation_declaration = t.r(2, 'relation-declaration')
+_simple_objct_declaration = t.r(2, 'simple-objct-declaration')
+_theory_declaration = t.r(2, 'theory-declaration')
+_theory_extension = t.r(2, 'theory-extension')
+_variable_declaration = t.r(2, 'variable-declaration')
 
 t.prnt()
 
