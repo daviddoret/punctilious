@@ -1137,7 +1137,17 @@ class Note(AtheoreticalStatement):
 class Theory(TheoreticalObjct):
     def __init__(
         self, theory=None, is_universe_of_discourse=None,
-        symbol=None, capitalizable=False, extended_theories=None):
+        symbol=None, capitalizable=False, extended_theories=None
+    ):
+        """
+
+        :param theory:
+        :param is_universe_of_discourse:
+        :param symbol:
+        :param capitalizable:
+        :param extended_theories:
+        :param is_an_element_of_itself:
+        """
         global universe_of_discourse
         self.symbols = dict()
         self.natural_language_axioms = tuple()
@@ -1150,6 +1160,9 @@ class Theory(TheoreticalObjct):
         self.theories = tuple()
         self.variables = tuple()
         extended_theories = set() if extended_theories is None else extended_theories
+        if isinstance(extended_theories, Theory):
+            # A shortcut to pass a single extended theory without casting a set.
+            extended_theories = {extended_theories}
         assert isinstance(extended_theories, set)
         for extended_theory in extended_theories:
             assert isinstance(extended_theory, Theory)
@@ -1328,13 +1341,12 @@ class Theory(TheoreticalObjct):
             implementation=implementation,
             theory=self)
 
-    def declare_simple_objct(self, *args, **kwargs):
+    def declare_simple_objct(
+        self, symbol=None, capitalizable=False, python_name=None):
         """Shortcut for SimpleObjct(theory=t, ...)"""
-        verify(
-            'theory' not in kwargs or kwargs['theory'] is self,
-            msg='Inconsistent "theory" parameter.')
-        kwargs['theory'] = self
-        return SimpleObjct(*args, **kwargs)
+        return SimpleObjct(
+            symbol=symbol, capitalizable=capitalizable, python_name=python_name,
+            theory=self)
 
     def elaborate_formal_axiom(self, valid_proposition, nla, symbol=None):
         """Elaborate a new formal-axiom in the theory. Shortcut for FormalAxiom(theory=t, ...)"""
@@ -1427,9 +1439,11 @@ class Theory(TheoreticalObjct):
         """Shortcut function for Theory.elaborate_natural_language_definition(...)."""
         return self.elaborate_natural_language_definition(*args, **kwargs)
 
-    def o(self, *args, **kwargs):
-        """Shortcut for Theory.elaborate_simple_objct(...)."""
-        return self.declare_simple_objct(*args, **kwargs)
+    def o(
+        self, symbol=None, capitalizable=False, python_name=None):
+        """Shortcut for SimpleObjct(theory=t, ...)"""
+        return self.declare_simple_objct(
+            symbol=symbol, capitalizable=capitalizable, python_name=python_name)
 
     def r(
         self, arity, symbol=None, formula_rep=None,
@@ -1738,6 +1752,8 @@ implies = None
 equality = None
 tru = None
 fls = None
+negation = None
+has_truth_value = None
 
 
 def elaborate_foundation_theory():
@@ -1747,6 +1763,7 @@ def elaborate_foundation_theory():
     global foundation_theory
     global ft
     global implies
+    global neg
     global tru
 
     foundation_theory = Theory(
@@ -1761,15 +1778,6 @@ def elaborate_foundation_theory():
         formula_rep=Formula.infix_operator_representation,
         python_name='implies', signal_proposition=True)
 
-    nla_1 = ft.nla(
-        '= is a binary relation such that, given any two theoretical-objcts x and y, '
-        'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.')
-    equality = ft.r(
-        2, '=',
-        formula_rep=Formula.infix_operator_representation,
-        python_name='equal_operator',
-        signal_proposition=True)
-
     def elaborate_commutativity_of_equality():
         global commutativity_of_equality
         global equality
@@ -1778,6 +1786,16 @@ def elaborate_foundation_theory():
         global ft
         global implies
         global tru
+
+        nla_1 = ft.nla(
+            '= is a binary relation such that, given any two theoretical-objcts x and y, '
+            'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.')
+        equality = ft.r(
+            2, '=',
+            formula_rep=Formula.infix_operator_representation,
+            python_name='equal_operator',
+            signal_proposition=True)
+
         x1 = ft.v()
         x2 = ft.v()
         x1_equal_x2 = ft.f(equality, x1, x2)

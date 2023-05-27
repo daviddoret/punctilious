@@ -1,24 +1,21 @@
-import core
-
-t = core.Theory()
-
-o1 = t.o()
-o2 = t.o()
-o3 = t.o()
-
-
-def morph(phi):
-    global r2
-    assert isinstance(phi, core.Formula)
-    return phi.theory.f(r2, phi.parameters[1], phi.parameters[0])
+def foo(i):
+    if i == 1:
+        return 1
+    if i == 2:
+        return 1, 2
+    if i == 3:
+        return 1, 2, 3
 
 
-r1 = t.r(2, symbol='r1', signal_proposition=True, signal_theoretical_morphism=True, implementation=morph)
-r2 = t.r(2, symbol='r2', signal_proposition=True)
+bar = foo(1)
+print(bar)
 
-f1 = t.f(r1, o1, o2)
+bar = foo(2)
+print(bar)
 
-nla1 = t.nla('blablabla')
-fa1 = t.fa(valid_proposition=f1, nla=nla1)
+bar = foo(3)
+print(bar)
 
-t.prnt()
+bar, tog = foo(2)
+print(bar)
+print(tog)

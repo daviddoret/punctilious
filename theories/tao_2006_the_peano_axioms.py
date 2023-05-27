@@ -70,4 +70,8 @@ p_2_1_3_3_d = t.soet(p_2_1_3_3_c, p_2_1_3_2_c, symbol='2.1.3.3.d')
 
 p_2_1_4 = t.soet(p_2_2_5, p_2_1_3_3_c, symbol='2.1.4')
 
+t.nla(
+    '0 is not the successor of any natural number; i.e., we have n++ f=. 0 for every natural number n',
+    symbol='2.3')
+
 t.prnt()
