@@ -1,8 +1,8 @@
-import core
+import punctilious as pu
 
-t = core.Theory(
+t = pu.Theory(
     symbol=f'theory 2.1: the Peano axioms', capitalizable=True,
-    extended_theories={core.foundation_theory})
+    extended_theories={pu.ft})
 
 # simple-objct declarations
 zero = t.o('0')
