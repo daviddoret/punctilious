@@ -462,8 +462,9 @@ class FreeVariable(TheoreticalObjct):
             index = universe_of_discourse.index_symbol(base=symbol)
             symbol = Symbol(base=symbol, index=index)
         super().__init__(
-            theory=theory, symbol=symbol, capitalizable=False,
-            python_name=python_name)
+            symbol=symbol, capitalizable=False,
+            python_name=python_name,
+            universe_of_discourse=universe_of_discourse)
         self.universe_of_discourse.cross_reference_variable(x=self)
 
     def is_masked_formula_similar_to(self, o2, mask, _values):
@@ -894,28 +895,38 @@ class FormulaStatement(Statement):
     """
 
     def __init__(self, theory, valid_proposition, category=None, symbol=None):
-        assert isinstance(theory, Theory)
-        assert isinstance(valid_proposition, Formula)
-        assert theory.has_objct_in_hierarchy(valid_proposition)
+        verify(
+            isinstance(theory, Theory),
+            'isinstance(theory, Theory)')
+        verify(
+            isinstance(valid_proposition, Formula),
+            'isinstance(valid_proposition, Formula)')
+        verify(
+            theory.universe_of_discourse is valid_proposition.universe_of_discourse,
+            'theory.universe_of_discourse is valid_proposition.universe_of_discourse')
+        universe_of_discourse = theory.universe_of_discourse
         # Theory statements must be logical propositions.
-        assert valid_proposition.is_proposition
+        verify(
+            valid_proposition.is_proposition,
+            'valid_proposition.is_proposition')
         self.valid_proposition = valid_proposition
         # TODO: Implement distinct counters per category
         self.statement_index = theory.crossreference_statement(self)
         category = Statement.reps.proposition if category is None else category
         capitalizable = True
         if symbol is None:
-            # We must cross-reference this statement
-            # in advance from Statement.__init__
-            # to retrieve its index.
-            statement_index = theory.crossreference_statement(self)
-            symbol = f'{category.name} {statement_index + 1}'
-        else:
-            if len(symbol) < len(category.name) or symbol[:len(
-                category.name)] != category.name:
-                symbol = f'{category.name} {symbol}'
+            base = category.name
+            index = universe_of_discourse.index_symbol(base=base)
+            symbol = Symbol(base=base, index=index)
+        elif isinstance(symbol, str):
+            # If symbol was passed as a string,
+            # assume the base was passed without index.
+            # TODO: Analyse the string if it ends with index in subscript characters.
+            index = universe_of_discourse.index_symbol(base=symbol)
+            symbol = Symbol(base=symbol, index=index)
         super().__init__(
-            theory=theory, symbol=symbol, capitalizable=capitalizable)
+            theory=theory, symbol=symbol, capitalizable=capitalizable,
+            universe_of_discourse=universe_of_discourse)
         # manage theoretical-morphisms
         self.morphism_output = None
         if self.valid_proposition.relation.signal_theoretical_morphism:
@@ -943,7 +954,6 @@ class FormalAxiom(FormulaStatement):
         assert isinstance(nla, NaturalLanguageAxiom)
         assert theory.has_objct_in_hierarchy(nla)
         assert isinstance(valid_proposition, Formula)
-        assert theory.has_objct_in_hierarchy(valid_proposition)
         capitalizable = True
         self.natural_language_axiom = nla
         category = Statement.reps.formal_axiom
@@ -1422,13 +1432,6 @@ class Theory(TheoreticalObjct):
             equality_statement=equality_statement, symbol=symbol,
             category=category)
 
-    def v(self, symbol=None):
-        """A shortcut function for Theory.elaborate_free_variable(...).
-
-        :return:
-        """
-        return self.declare_free_variable(symbol=symbol)
-
     def prnt(self):
         repm.prnt(self.repr_as_theory())
 
@@ -1811,7 +1814,9 @@ class UniverseOfDiscourse(SymbolicObjct):
         return phi
 
     def declare_free_variable(self, symbol=None):
-        """A shortcut function for FreeVariable(theory=t, ...)
+        """Declare a free-variable in this universe-of-discourse.
+
+        A shortcut function for FreeVariable(universe_of_discourse=u, ...)
 
         :param symbol:
         :return:
@@ -1948,6 +1953,13 @@ class UniverseOfDiscourse(SymbolicObjct):
             symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
             capitalizable=capitalizable, extended_theories=extended_theories)
+
+    def v(
+        self, symbol=None, capitalizable=False, python_name=None):
+        """Declare a free-variable in this universe-of-discourse.
+
+        Shortcut for self.declare_free_variable(universe_of_discourse=self, ...)"""
+        return self.declare_free_variable(symbol=symbol)
 
 
 # universe_of_discourse = Theory(
