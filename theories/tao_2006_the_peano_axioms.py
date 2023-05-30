@@ -1,30 +1,30 @@
-import punctilious as pu
+from punctilious import Formula, ft, implication, u
 
-t = pu.Theory(
+t = u.t(
     symbol=f'theory 2.1: the Peano axioms', capitalizable=True,
-    extended_theories={pu.ft})
+    extended_theories={ft}, implication=ft.implication)
 
 # simple-objct declarations
-zero = t.o('0')
-one = t.o('1')
-two = t.o('2')
-three = t.o('3')
-nat = t.o('natural-number', capitalizable=True)
+zero = u.o('0')
+one = u.o('1')
+two = u.o('2')
+three = u.o('3')
+nat = u.o('natural-number', capitalizable=True)
 
 # relation declarations
-is_a = t.r(
-    2, 'is-a', core.Formula.infix_operator_representation,
+is_a = u.r(
+    2, 'is-a', Formula.infix_operator_representation,
     python_name='is_a', signal_proposition=True)
 
 nla_2_1 = t.nla(f'0 is a natural number.', symbol='2.1')
-fa_2_1_a = t.fa(t.f(is_a, zero, nat), nla_2_1, symbol='2.1.a')
+fa_2_1_a = t.fa(u.f(is_a, zero, nat), nla_2_1, symbol='2.1.a')
 
 nla_2_2_1 = t.nla(
     'If 𝐧 is a natural number, then 𝐧++ is a natural number.', symbol='2.2.1')
-n = t.v('𝐧')
-suc = t.r(1, '++', formula_rep=core.Formula.postfix_operator_representation)
+n = u.v('𝐧')
+suc = u.r(1, '++', formula_rep=Formula.postfix_operator_representation)
 fa_2_2_2 = t.fa(
-    t.f(core.implies, t.f(is_a, n, nat), t.f(is_a, t.f(suc, n), nat)),
+    u.f(implication, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
     nla_2_2_1,
     symbol='2.2.2')
 
@@ -40,14 +40,14 @@ d_2_1_3 = t.nld(
 
 # 1
 fd_2_1_3_1_a = t.fd(
-    t.f(core.equality, one, t.f(suc, zero)), d_2_1_3, symbol='2.1.3.1.a')
+    u.f(core.equality, one, u.f(suc, zero)), d_2_1_3, symbol='2.1.3.1.a')
 
 p_2_1_3_1_b = t.mp(
     core.commutativity_of_equality, fd_2_1_3_1_a, symbol='2.1.3.1.b')
 
 # 2
 fd_2_1_3_2_a = t.fd(
-    t.f(core.equality, two, t.f(suc, t.f(suc, zero))), d_2_1_3,
+    u.f(core.equality, two, u.f(suc, u.f(suc, zero))), d_2_1_3,
     symbol='2.1.3.2.a')
 p_2_1_3_2_b = t.soet(fd_2_1_3_2_a, p_2_1_3_1_b, symbol='2.1.3.2.b')
 
@@ -58,7 +58,7 @@ p_2_1_3_2_d = t.soet(p_2_1_3_2_c, p_2_1_3_1_b, symbol='2.1.3.2.d')
 
 # 3
 fd_2_1_3_3_a = t.fd(
-    t.f(core.equality, three, t.f(suc, t.f(suc, t.f(suc, zero)))), d_2_1_3,
+    u.f(core.equality, three, u.f(suc, u.f(suc, u.f(suc, zero)))), d_2_1_3,
     symbol='2.1.3.3.a')
 
 p_2_1_3_3_b = t.soet(fd_2_1_3_3_a, p_2_1_3_2_c, symbol='2.1.3.3.b')

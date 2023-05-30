@@ -150,12 +150,13 @@ class SymbolicObjct:
         """
         # A theoretical-object can only be compared with a theoretical-object
         assert isinstance(o2, SymbolicObjct)
-        if self is universe_of_discourse and o2 is universe_of_discourse:
-            # A universe-of-discourse is a root theory,
-            # this condition avoids an infinite loop
-            # while testing 1-equivalence in the next condition.
+        if self is o2:
+            # If the current symbolic-objct is referencing the same
+            # python object instance, by definitions the two python references
+            # are referencing the same object.
             return True
-        if not self.theory.is_symbol_equivalent(o2.theory):
+        if not self.universe_of_discourse.is_symbol_equivalent(
+            o2.universe_of_discourse):
             return False
         if self.symbol != o2.symbol:
             return False
@@ -165,8 +166,9 @@ class SymbolicObjct:
         return f'Let {self.repr_as_symbol()} be a symbolic-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
 
     def repr_as_symbol(self, capitalized=False):
-        return f'{self.symbol[0].capitalize()}{self.symbol[1:]}' if (
-            capitalized and self.capitalizable) else self.symbol
+        s = str(self.symbol)
+        return f'{s[0].capitalize()}{s[1:]}' if (
+            capitalized and self.capitalizable) else s
 
     def repr(self, expanded=None):
         return self.repr_as_symbol()
@@ -985,6 +987,10 @@ class ModusPonens(FormulaStatement):
     given a proposition (P implies Q)
     given a proposition (P is True)
     infers the proposition (Q is True)
+
+    Requirements:
+    -------------
+    The parent theory must expose the implication attribute.
     """
 
     def __init__(
@@ -994,7 +1000,7 @@ class ModusPonens(FormulaStatement):
         assert isinstance(conditional, FormulaStatement)
         assert theory.has_objct_in_hierarchy(conditional)
         assert theory.has_objct_in_hierarchy(antecedent)
-        assert conditional.valid_proposition.relation is implies
+        assert conditional.valid_proposition.relation is theory.implication
         p_prime = conditional.valid_proposition.parameters[0]
         q_prime = conditional.valid_proposition.parameters[1]
         mask = p_prime.get_variable_set()
@@ -1224,7 +1230,7 @@ class Theory(TheoreticalObjct):
     def __init__(
         self, is_theory_foundation_system=None,
         symbol=None, capitalizable=False, extended_theories=None,
-        universe_of_discourse=None
+        universe_of_discourse=None, implication=None
     ):
         """
 
@@ -1244,6 +1250,11 @@ class Theory(TheoreticalObjct):
         for extended_theory in extended_theories:
             assert isinstance(extended_theory, Theory)
         self.extended_theories = extended_theories
+
+        self.implication = implication
+        """The implication attribute of theories is necessary to provide support for modus-ponens.
+        """
+
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
         # if is_theory_foundation_system:
         #    assert theory is None
@@ -1256,11 +1267,18 @@ class Theory(TheoreticalObjct):
         # because theory.get_symbolic_object_1_index()
         # must be called before super().
         # self.theory = theory
-        assert is_theory_foundation_system or isinstance(theory, Theory)
-        self.theory_index = None if is_theory_foundation_system else theory.crossreference_theory(
-            self)
+        # assert is_theory_foundation_system or isinstance(theory, Theory)
         capitalizable = True if symbol is None else capitalizable
-        symbol = f'theory-{self.theory_index + 1}' if symbol is None else symbol
+        if symbol is None:
+            base = '𝒯'
+            index = universe_of_discourse.index_symbol(base=base)
+            symbol = Symbol(base=base, index=index)
+        elif isinstance(symbol, str):
+            # If symbol was passed as a string,
+            # assume the base was passed without index.
+            # TODO: Analyse the string if it ends with index in subscript characters.
+            index = universe_of_discourse.index_symbol(base=symbol)
+            symbol = Symbol(base=symbol, index=index)
         super().__init__(
             symbol=symbol, capitalizable=capitalizable,
             is_theory_foundation_system=is_theory_foundation_system,
@@ -1411,11 +1429,15 @@ class Theory(TheoreticalObjct):
         output = output + ''.join(
             '\n\t ⁃ ' + t.repr_as_symbol() for t in self.extended_theories)
         output = output + f'\n\n{repm.serif_bold("Simple-objct declarations:")}'
+        # TODO: Limit the listed objects to those that are referenced by the theory,
+        #   instead of outputting all objects in the universe-of-discourse.
         output = output + '\n' + '\n'.join(
-            o.repr_as_declaration() for o in self.simple_objcts)
+            o.repr_as_declaration() for o in
+            self.universe_of_discourse.simple_objcts.values())
         output = output + f'\n\n{repm.serif_bold("Relation declarations:")}'
         output = output + '\n' + '\n'.join(
-            r.repr_as_declaration() for r in self.relations)
+            r.repr_as_declaration() for r in
+            self.universe_of_discourse.relations.values())
         output = output + f'\n\n{repm.serif_bold("Theory elaboration:")}'
         output = output + '\n\n' + '\n\n'.join(
             s.repr_as_statement(output_proofs=output_proofs) for s in
@@ -1513,7 +1535,7 @@ class Relation(TheoreticalObjct):
 
     def repr_as_declaration(self):
         output = f'Let {self.repr_as_symbol()} be a {self.repr_arity_as_text()} relation denoted as ⌜ {self.repr_as_symbol()} ⌝'
-        output = output + f', that signals well-formed formulae in {self.formula_rep} syntax (e.g.: ⌜ {self.formula_rep.sample.replace("◆", self.symbol)} ⌝).'
+        output = output + f', that signals well-formed formulae in {self.formula_rep} syntax (e.g.: ⌜ {self.formula_rep.sample.replace("◆", str(self.symbol))} ⌝).'
         return output
 
     def repr_arity_as_text(self):
@@ -1708,7 +1730,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             'Cross-referencing a formula in a universe-of-discourse requires '
             'that it is referenced with a unique symbol.')
         if phi not in self.formulae:
-            self.formulae[phi.symbol] = [phi]
+            self.formulae[phi.symbol] = phi
 
     def cross_reference_relation(self, r: Relation):
         """Cross-references a relation in this universe-of-discourse.
@@ -1725,7 +1747,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             'Cross-referencing a relation in a universe-of-discourse requires '
             'that it is referenced with a unique symbol.')
         if r not in self.relations:
-            self.relations[r.symbol] = [r]
+            self.relations[r.symbol] = r
 
     def cross_reference_simple_objct(self, o: SimpleObjct):
         """Cross-references a simple-objct in this universe-of-discourse.
@@ -1743,7 +1765,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             'Cross-referencing a simple-objct in a universe-of-discourse requires '
             'that it is referenced with a unique symbol.')
         if o not in self.simple_objcts:
-            self.simple_objcts[o.symbol] = [o]
+            self.simple_objcts[o.symbol] = o
 
     def cross_reference_symbolic_objct(self, o: SymbolicObjct):
         """Cross-references a symbolic-objct in this universe-of-discourse.
@@ -1761,7 +1783,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             'Cross-referencing a symbolic-objct in a universe-of-discourse requires '
             'that it is referenced with a unique symbol.')
         if o not in self.symbolic_objcts:
-            self.symbolic_objcts[o.symbol] = [o]
+            self.symbolic_objcts[o.symbol] = o
 
     def cross_reference_theory(self, t: Theory):
         """Cross-references a theory in this universe-of-discourse.
@@ -1778,7 +1800,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             'Cross-referencing a theory in a universe-of-discourse requires '
             'that it is referenced with a unique symbol.')
         if t not in self.theories:
-            self.theories[t.symbol] = [t]
+            self.theories[t.symbol] = t
 
     def cross_reference_variable(self, x: FreeVariable):
         """Cross-references a free-variable in this universe-of-discourse.
@@ -1795,7 +1817,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             'Cross-referencing a free-variable in a universe-of-discourse requires '
             'that it is referenced with a unique symbol.')
         if x not in self.variables:
-            self.variables[x.symbol] = [x]
+            self.variables[x.symbol] = x
 
     def declare_formula(
         self, relation, *parameters, symbol=None, capitalizable=None,
@@ -1857,7 +1879,8 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     def declare_theory(
         self, symbol=None, is_theory_foundation_system=None,
-        capitalizable=False, extended_theories=None):
+        capitalizable=False, extended_theories=None,
+        implication=None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for Theory(universe_of_discourse, ...).
@@ -1872,7 +1895,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             symbol=symbol, capitalizable=capitalizable,
             extended_theories=extended_theories,
             is_theory_foundation_system=is_theory_foundation_system,
-            universe_of_discourse=self)
+            universe_of_discourse=self, implication=implication)
 
     def elaborate_natural_language_axiom(
         self, natural_language, symbol=None, theory=None):
@@ -1938,7 +1961,7 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     def t(
         self, symbol=None, is_theory_foundation_system=None,
-        capitalizable=False, extended_theories=None):
+        capitalizable=False, extended_theories=None, implication=None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for self.declare_theory(...).
@@ -1952,7 +1975,8 @@ class UniverseOfDiscourse(SymbolicObjct):
         return self.declare_theory(
             symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
-            capitalizable=capitalizable, extended_theories=extended_theories)
+            capitalizable=capitalizable, extended_theories=extended_theories,
+            implication=implication)
 
     def v(
         self, symbol=None, capitalizable=False, python_name=None):
@@ -1977,7 +2001,7 @@ class UniverseOfDiscourse(SymbolicObjct):
 foundation_theory = None
 ft = None
 commutativity_of_equality = None
-implies = None
+# implies = None
 equality = None
 tru = None
 fls = None

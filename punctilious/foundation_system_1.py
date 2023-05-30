@@ -4,9 +4,14 @@ import core
 
 u = core.UniverseOfDiscourse('𝒰')
 
+implication = u.r(
+    2, '⟹', core.Formula.infix_operator_representation,
+    signal_proposition=True)
+
 ft = u.t(
     symbol=core.Symbol('foundation-system', 1),
-    is_theory_foundation_system=True)
+    is_theory_foundation_system=True,
+    implication=implication)
 
 nla_01 = ft.nla(
     'A theory is a... (define punctilious data model).')
@@ -57,9 +62,6 @@ conjunction = u.r(
     signal_proposition=True)
 disjunction = u.r(
     2, '∨', core.Formula.infix_operator_representation,
-    signal_proposition=True)
-implication = u.r(
-    2, '⟹', core.Formula.infix_operator_representation,
     signal_proposition=True)
 negation = u.r(
     1, '¬', core.Formula.prefix_operator_representation,
@@ -221,6 +223,8 @@ def elaborate_foundation_theory():
 
     gen1()
 
+
+# ft.prnt()
 
 # elaborate_foundation_theory()
 pass
