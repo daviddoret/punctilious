@@ -4,14 +4,9 @@ import core
 
 u = core.UniverseOfDiscourse('𝒰')
 
-implication = u.r(
-    2, '⟹', core.Formula.infix_operator_representation,
-    signal_proposition=True)
-
 ft = u.t(
     symbol=core.Symbol('foundation-system', 1),
-    is_theory_foundation_system=True,
-    implication=implication)
+    is_theory_foundation_system=True)
 
 nla_01 = ft.nla(
     'A theory is a... (define punctilious data model).')
@@ -57,6 +52,16 @@ propositional_relations_class = u.o('propositional-relations-class')
 ft.fa(
     u.f(element_of, propositional_relations_class, class_of_classes),
     nla=nla_03)
+ft.equality = u.r(
+    2, '=',
+    formula_rep=core.Formula.infix_operator_representation,
+    python_name='equal_operator',
+    signal_proposition=True)
+
+ft.implication = u.r(
+    2, '⟹', core.Formula.infix_operator_representation,
+    signal_proposition=True)
+
 conjunction = u.r(
     2, '∧', core.Formula.infix_operator_representation,
     signal_proposition=True)
@@ -68,8 +73,19 @@ negation = u.r(
     signal_proposition=True)
 ft.fa(u.f(element_of, conjunction, propositional_relations_class), nla=nla_09)
 ft.fa(u.f(element_of, disjunction, propositional_relations_class), nla=nla_09)
-ft.fa(u.f(element_of, implication, propositional_relations_class), nla=nla_09)
+ft.fa(
+    u.f(element_of, ft.implication, propositional_relations_class), nla=nla_09)
 ft.fa(u.f(element_of, negation, propositional_relations_class), nla=nla_09)
+
+nla_01b = ft.nla(
+    '= is a binary relation such that, given any two theoretical-objcts x and y, '
+    'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.')
+x1 = u.v()
+x2 = u.v()
+x1_equal_x2 = u.f(ft.equality, x1, x2)
+x2_equal_x1 = u.f(ft.equality, x2, x1)
+ft.commutativity_of_equality = ft.fa(
+    u.f(ft.implication, x1_equal_x2, x2_equal_x1), nla_01b)
 
 nla_10 = ft.nla(
     'propositions is a class whose elements are '
@@ -104,7 +120,7 @@ p_09_51 = u.v()
 t_09_52 = u.v()
 fa_09_51 = ft.fa(
     u.f(
-        implication,
+        ft.implication,
         u.f(has_truth_value, p_09_51, t_09_52),
         u.f(
             has_truth_value, u.f(negation, u.f(negation, p_09_51)), t_09_52)),
@@ -118,7 +134,7 @@ contradictory_statements = u.o('contradictory-statement')
 phi = u.v()
 ft.fa(
     u.f(
-        implication,
+        ft.implication,
         u.f(
             conjunction, u.f(has_truth_value, phi, truth),
             u.f(has_truth_value, phi, falsehood)),
@@ -151,61 +167,16 @@ IDEAS:
 
 
 def elaborate_foundation_theory():
-    global commutativity_of_equality
-    global equality
     global fls
-    global foundation_theory
-    global ft
-    global implies
     global neg
     global tru
-
-    foundation_theory = core.Theory(
-        theory=universe_of_discourse, symbol='foundation-theory')
-    ft = foundation_theory
 
     tru = u.o('true', capitalizable=True, python_name='tru')
     fls = u.o('false', capitalizable=True, python_name='fls')
 
-    implies = u.r(
-        2, 'implies',
-        formula_rep=Formula.infix_operator_representation,
-        python_name='implies', signal_proposition=True)
-
-    def elaborate_commutativity_of_equality():
-        global commutativity_of_equality
-        global equality
-        global fls
-        global foundation_theory
-        global ft
-        global implies
-        global tru
-
-        nla_1 = ft.nla(
-            '= is a binary relation such that, given any two theoretical-objcts x and y, '
-            'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.')
-        equality = u.r(
-            2, '=',
-            formula_rep=Formula.infix_operator_representation,
-            python_name='equal_operator',
-            signal_proposition=True)
-
-        x1 = u.v()
-        x2 = u.v()
-        x1_equal_x2 = u.f(equality, x1, x2)
-        x2_equal_x1 = u.f(equality, x2, x1)
-        commutativity_of_equality = ft.fa(
-            u.f(implies, x1_equal_x2, x2_equal_x1), nla_1)
-
-    elaborate_commutativity_of_equality()
-
     def gen1():
-        global commutativity_of_equality
-        global equality
         global fls
         global foundation_theory
-        global ft
-        global implies
         global tru
         def1 = ft.nld(
             natural_language='substitution is the process that consists in taking 3 theoretical-object o, p and q, that may be a composed-object such as a formula, and replacing in there all occurences of p by q.')

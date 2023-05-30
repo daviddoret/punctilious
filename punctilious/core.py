@@ -422,8 +422,7 @@ class TheoreticalObjct(SymbolicObjct):
                     substitution_map=substitution_map,
                     target_theory=target_theory) for p in
                 self.parameters)
-            return Formula(
-                theory=target_theory, relation=relation, parameters=parameters)
+            return self.universe_of_discourse.f(relation, *parameters)
         else:
             return self
 
@@ -775,9 +774,9 @@ class Statement(TheoreticalObjct):
     )
 
     def __init__(
-        self, theory, symbol=None, capitalizable=True,
-        universe_of_discourse=None):
+        self, theory, symbol=None, capitalizable=True):
         assert isinstance(theory, Theory)
+        universe_of_discourse = theory.universe_of_discourse
         self.statement_index = theory.crossreference_statement(self)
         self.theory = theory
         super().__init__(
@@ -797,10 +796,10 @@ class NaturalLanguageAxiom(Statement):
     prefix = 'natural language axiom'
 
     def __init__(
-        self, natural_language, symbol=None, theory=None,
-        universe_of_discourse=None):
+        self, natural_language, symbol=None, theory=None):
         assert isinstance(theory, Theory)
         assert isinstance(natural_language, str)
+        universe_of_discourse = theory.universe_of_discourse
         self.natural_language = natural_language
         capitalizable = True
         assert isinstance(capitalizable, bool)
@@ -816,8 +815,7 @@ class NaturalLanguageAxiom(Statement):
             index = universe_of_discourse.index_symbol(base=symbol)
             symbol = Symbol(base=symbol, index=index)
         super().__init__(
-            theory=theory, symbol=symbol, capitalizable=capitalizable,
-            universe_of_discourse=universe_of_discourse)
+            theory=theory, symbol=symbol, capitalizable=capitalizable)
         # TODO: call self.theory.cross_reference_natural_language_axiom(nla=self)
 
     def repr_as_statement(self, output_proofs=True):
@@ -852,22 +850,21 @@ class NaturalLanguageDefinition(Statement):
         self, natural_language, symbol=None, capitalizable=True, theory=None):
         assert isinstance(theory, Theory)
         assert isinstance(natural_language, str)
+        universe_of_discourse = theory.universe_of_discourse
         self.natural_language = natural_language
         capitalizable = True
         assert isinstance(capitalizable, bool)
         self.definition_index = theory.crossreference_definition(self)
         if symbol is None:
-            # We must cross-reference this statement
-            # in advance from Statement.__init__
-            # to retrieve its index.
-            statement_index = theory.crossreference_statement(self)
-            symbol = f'{NaturalLanguageDefinition.prefix} {statement_index + 1}'
-        else:
-            if len(symbol) < len(NaturalLanguageDefinition.prefix) or \
-                symbol[
-                :len(NaturalLanguageDefinition.prefix)] != FormalAxiom.prefix:
-                symbol = f'{NaturalLanguageDefinition.prefix} {symbol}'
-        assert isinstance(symbol, str)
+            base = NaturalLanguageDefinition.prefix
+            index = universe_of_discourse.index_symbol(base=base)
+            symbol = Symbol(base=base, index=index)
+        elif isinstance(symbol, str):
+            # If symbol was passed as a string,
+            # assume the base was passed without index.
+            # TODO: Analyse the string if it ends with index in subscript characters.
+            index = universe_of_discourse.index_symbol(base=symbol)
+            symbol = Symbol(base=symbol, index=index)
         super().__init__(
             theory=theory, symbol=symbol, capitalizable=capitalizable)
 
@@ -927,8 +924,7 @@ class FormulaStatement(Statement):
             index = universe_of_discourse.index_symbol(base=symbol)
             symbol = Symbol(base=symbol, index=index)
         super().__init__(
-            theory=theory, symbol=symbol, capitalizable=capitalizable,
-            universe_of_discourse=universe_of_discourse)
+            theory=theory, symbol=symbol, capitalizable=capitalizable)
         # manage theoretical-morphisms
         self.morphism_output = None
         if self.valid_proposition.relation.signal_theoretical_morphism:
@@ -1000,6 +996,9 @@ class ModusPonens(FormulaStatement):
         assert isinstance(conditional, FormulaStatement)
         assert theory.has_objct_in_hierarchy(conditional)
         assert theory.has_objct_in_hierarchy(antecedent)
+        verify(
+            isinstance(theory.implication, Relation),
+            'The usage of the ModusPonens class in a theory requires the implication attribute in that theory.')
         assert conditional.valid_proposition.relation is theory.implication
         p_prime = conditional.valid_proposition.parameters[0]
         q_prime = conditional.valid_proposition.parameters[1]
@@ -1132,8 +1131,11 @@ class FormalDefinition(FormulaStatement):
         assert isinstance(nld, NaturalLanguageDefinition)
         assert theory.has_objct_in_hierarchy(nld)
         assert isinstance(valid_proposition, Formula)
-        assert theory.has_objct_in_hierarchy(valid_proposition)
-        assert valid_proposition.relation is equality
+        verify(
+            valid_proposition.universe_of_discourse is theory.universe_of_discourse,
+            'The UoD of a formal-definition valid-proposition must be '
+            'consistent with the UoD of its theory.')
+        assert valid_proposition.relation is theory.equality
         self.natural_language_definition = nld
         category = Statement.reps.formal_definition
         super().__init__(
@@ -1230,7 +1232,7 @@ class Theory(TheoreticalObjct):
     def __init__(
         self, is_theory_foundation_system=None,
         symbol=None, capitalizable=False, extended_theories=None,
-        universe_of_discourse=None, implication=None
+        universe_of_discourse=None, theory_foundation_system=None
     ):
         """
 
@@ -1242,18 +1244,22 @@ class Theory(TheoreticalObjct):
         self.natural_language_axioms = tuple()
         self.natural_language_definitions = tuple()
         self.statements = tuple()
+        self._theory_foundation_system = theory_foundation_system
         extended_theories = set() if extended_theories is None else extended_theories
         if isinstance(extended_theories, Theory):
             # A shortcut to pass a single extended theory without casting a set.
             extended_theories = {extended_theories}
         assert isinstance(extended_theories, set)
+        if theory_foundation_system is not None and \
+            theory_foundation_system not in extended_theories:
+            extended_theories = extended_theories.union(
+                {theory_foundation_system})
         for extended_theory in extended_theories:
             assert isinstance(extended_theory, Theory)
         self.extended_theories = extended_theories
-
-        self.implication = implication
-        """The implication attribute of theories is necessary to provide support for modus-ponens.
-        """
+        self._commutativity_of_equality = None
+        self._equality = None
+        self._implication = None
 
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
         # if is_theory_foundation_system:
@@ -1283,6 +1289,29 @@ class Theory(TheoreticalObjct):
             symbol=symbol, capitalizable=capitalizable,
             is_theory_foundation_system=is_theory_foundation_system,
             universe_of_discourse=universe_of_discourse)
+
+    @property
+    def commutativity_of_equality(self):
+        """Commutativity-of-equality is a fundamental theory property that enables
+        support for SoET. None if the property is not equipped on
+        the theory. An instance of FormalAxiom otherwise."""
+        if self._commutativity_of_equality is not None:
+            return self._commutativity_of_equality
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system.commutativity_of_equality
+        else:
+            return None
+
+    @commutativity_of_equality.setter
+    def commutativity_of_equality(self, fa):
+        verify(
+            self._commutativity_of_equality is None,
+            'A theory commutativity-of-equality property can only be set once '
+            'to prevent inconsistency.')
+        verify(
+            isinstance(fa, FormalAxiom),
+            'The commutativity-of-equality property must be a relation.')
+        self._commutativity_of_equality = fa
 
     def crossreference_axiom(self, a):
         """During construction, cross-reference an axiom 𝒜
@@ -1336,13 +1365,14 @@ class Theory(TheoreticalObjct):
             valid_proposition=valid_proposition, nla=nla, symbol=symbol,
             theory=self)
 
-    def elaborate_formal_definition(self, *args, **kwargs):
-        """Shortcut for FormalDefinition(theory=t, ...)"""
-        verify(
-            'theory' not in kwargs or kwargs['theory'] is self,
-            msg='Inconsistent "theory" parameter.')
-        kwargs['theory'] = self
-        return FormalDefinition(*args, **kwargs)
+    def elaborate_formal_definition(
+        self, valid_proposition=None, nld=None, symbol=None):
+        """Elaborate a formal-definition in this theory.
+
+        Shortcut for FormalDefinition(theory=t, ...)"""
+        return FormalDefinition(
+            valid_proposition=valid_proposition, nld=nld, symbol=symbol,
+            theory=self)
 
     def elaborate_modus_ponens(
         self, conditional, antecedent, symbol=None, category=None):
@@ -1371,18 +1401,41 @@ class Theory(TheoreticalObjct):
             equality_statement=equality_statement, symbol=symbol,
             category=category, theory=self)
 
-    # def f(self, *args, **kwargs):
-    #    """Shortcut for Theory.elaborate_formula(...)."""
-    #    return self.declare_formula(*args, **kwargs)
+    @property
+    def equality(self):
+        """(None, Relation) Equality is a fundamental theory property that enables
+        support for SoET. None if the property is not equipped on
+        the theory. An instance of Relation otherwise."""
+        if self._equality is not None:
+            return self._equality
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system.equality
+        else:
+            return None
+
+    @equality.setter
+    def equality(self, r):
+        verify(
+            self._equality is None,
+            'A theory equality property can only be set once to prevent '
+            'inconsistency.')
+        verify(
+            isinstance(r, Relation),
+            'The equality property must be a relation.')
+        self._equality = r
 
     def fa(self, valid_proposition, nla, symbol=None):
-        """Elaborate a new formal-axiom in the theory. Shortcut for Theory.elaborate_formal_axiom(...)."""
+        """Elaborate a new formal-axiom in the theory. Shortcut for
+        Theory.elaborate_formal_axiom(...)."""
         return self.elaborate_formal_axiom(
             valid_proposition=valid_proposition, nla=nla, symbol=symbol)
 
-    def fd(self, *args, **kwargs):
-        """Elaborate a new formal-definition. Shortcut for Theory.elaborate_formal_definition(...)."""
-        return self.elaborate_formal_definition(*args, **kwargs)
+    def fd(self, valid_proposition=None, nld=None, symbol=None):
+        """Elaborate a formal-definition in this theory.
+
+        Shortcut for FormalDefinition(theory=t, ...)"""
+        return self.elaborate_formal_definition(
+            valid_proposition=valid_proposition, nld=nld, symbol=symbol)
 
     def get_theory_extension(self):
         """Return the set of all theories that includes this theory and all the
@@ -1402,6 +1455,29 @@ class Theory(TheoreticalObjct):
         """Return True if o is in this theory's hierarchy, False otherwise."""
         assert isinstance(o, TheoreticalObjct)
         return o.theory in self.get_theory_extension()
+
+    @property
+    def implication(self):
+        """The implication-property is a fundamental property that enables
+        support for modus-ponens. None if the implication-property is not equipped on
+        the theory. An instance of Relation otherwise."""
+        if self._implication is not None:
+            return self._implication
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system.implication
+        else:
+            return None
+
+    @implication.setter
+    def implication(self, r):
+        verify(
+            self._implication is None,
+            'A theory implication property can only be set once to prevent '
+            'inconsistency.')
+        verify(
+            isinstance(r, Relation),
+            'The implication property must be a relation.')
+        self._implication = r
 
     def mp(
         self, conditional, antecedent, symbol=None, category=None):
@@ -1634,7 +1710,7 @@ class SubstitutionOfEqualTerms(FormulaStatement):
         assert theory.has_objct_in_hierarchy(original_expression)
         assert isinstance(equality_statement, FormulaStatement)
         assert theory.has_objct_in_hierarchy(equality_statement)
-        assert equality_statement.valid_proposition.relation is equality
+        assert equality_statement.valid_proposition.relation is theory.equality
         left_term = equality_statement.valid_proposition.parameters[0]
         right_term = equality_statement.valid_proposition.parameters[1]
         self.original_expression = original_expression
@@ -1880,7 +1956,7 @@ class UniverseOfDiscourse(SymbolicObjct):
     def declare_theory(
         self, symbol=None, is_theory_foundation_system=None,
         capitalizable=False, extended_theories=None,
-        implication=None):
+        theory_foundation_system=None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for Theory(universe_of_discourse, ...).
@@ -1895,14 +1971,17 @@ class UniverseOfDiscourse(SymbolicObjct):
             symbol=symbol, capitalizable=capitalizable,
             extended_theories=extended_theories,
             is_theory_foundation_system=is_theory_foundation_system,
-            universe_of_discourse=self, implication=implication)
+            universe_of_discourse=self,
+            theory_foundation_system=theory_foundation_system)
 
     def elaborate_natural_language_axiom(
         self, natural_language, symbol=None, theory=None):
         """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
+        verify(
+            theory.universe_of_discourse is self,
+            'The universe-of-discourse of the theory parameter is distinct from this universe-of-discourse.')
         return NaturalLanguageAxiom(
-            natural_language=natural_language, symbol=symbol, theory=theory,
-            universe_of_discourse=self)
+            natural_language=natural_language, symbol=symbol, theory=theory)
 
     def f(
         self, relation, *parameters, theory=None, symbol=None,
@@ -1961,7 +2040,8 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     def t(
         self, symbol=None, is_theory_foundation_system=None,
-        capitalizable=False, extended_theories=None, implication=None):
+        capitalizable=False, extended_theories=None,
+        theory_foundation_system=None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for self.declare_theory(...).
@@ -1976,7 +2056,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
             capitalizable=capitalizable, extended_theories=extended_theories,
-            implication=implication)
+            theory_foundation_system=theory_foundation_system)
 
     def v(
         self, symbol=None, capitalizable=False, python_name=None):

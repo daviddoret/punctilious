@@ -1,8 +1,8 @@
-from punctilious import Formula, ft, implication, u
+from punctilious import Formula, ft, u
 
 t = u.t(
     symbol=f'theory 2.1: the Peano axioms', capitalizable=True,
-    extended_theories={ft}, implication=ft.implication)
+    extended_theories={ft}, theory_foundation_system=ft)
 
 # simple-objct declarations
 zero = u.o('0')
@@ -24,7 +24,7 @@ nla_2_2_1 = t.nla(
 n = u.v('𝐧')
 suc = u.r(1, '++', formula_rep=Formula.postfix_operator_representation)
 fa_2_2_2 = t.fa(
-    u.f(implication, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
+    u.f(ft.implication, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
     nla_2_2_1,
     symbol='2.2.2')
 
@@ -40,31 +40,31 @@ d_2_1_3 = t.nld(
 
 # 1
 fd_2_1_3_1_a = t.fd(
-    u.f(core.equality, one, u.f(suc, zero)), d_2_1_3, symbol='2.1.3.1.a')
+    u.f(t.equality, one, u.f(suc, zero)), d_2_1_3, symbol='2.1.3.1.a')
 
 p_2_1_3_1_b = t.mp(
-    core.commutativity_of_equality, fd_2_1_3_1_a, symbol='2.1.3.1.b')
+    t.commutativity_of_equality, fd_2_1_3_1_a, symbol='2.1.3.1.b')
 
 # 2
 fd_2_1_3_2_a = t.fd(
-    u.f(core.equality, two, u.f(suc, u.f(suc, zero))), d_2_1_3,
+    u.f(t.equality, two, u.f(suc, u.f(suc, zero))), d_2_1_3,
     symbol='2.1.3.2.a')
 p_2_1_3_2_b = t.soet(fd_2_1_3_2_a, p_2_1_3_1_b, symbol='2.1.3.2.b')
 
 p_2_1_3_2_c = t.mp(
-    core.commutativity_of_equality, fd_2_1_3_2_a, symbol='2.1.3.2.c')
+    t.commutativity_of_equality, fd_2_1_3_2_a, symbol='2.1.3.2.c')
 
 p_2_1_3_2_d = t.soet(p_2_1_3_2_c, p_2_1_3_1_b, symbol='2.1.3.2.d')
 
 # 3
 fd_2_1_3_3_a = t.fd(
-    u.f(core.equality, three, u.f(suc, u.f(suc, u.f(suc, zero)))), d_2_1_3,
+    u.f(t.equality, three, u.f(suc, u.f(suc, u.f(suc, zero)))), d_2_1_3,
     symbol='2.1.3.3.a')
 
 p_2_1_3_3_b = t.soet(fd_2_1_3_3_a, p_2_1_3_2_c, symbol='2.1.3.3.b')
 
 p_2_1_3_3_c = t.mp(
-    core.commutativity_of_equality, fd_2_1_3_3_a, symbol='2.1.3.3.c')
+    t.commutativity_of_equality, fd_2_1_3_3_a, symbol='2.1.3.3.c')
 
 p_2_1_3_3_d = t.soet(p_2_1_3_3_c, p_2_1_3_2_c, symbol='2.1.3.3.d')
 
