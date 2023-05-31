@@ -55,7 +55,6 @@ ft.fa(
 ft.equality = u.r(
     2, '=',
     formula_rep=core.Formula.infix_operator_representation,
-    python_name='equal_operator',
     signal_proposition=True)
 
 ft.implication = u.r(

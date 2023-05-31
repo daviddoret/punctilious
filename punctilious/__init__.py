@@ -3,6 +3,7 @@
 """
 
 print('Punctilious package (punctilious/__init__.py)')
+from repm import monospace, serif_bold
 from core import FailedVerificationException, Formula, FormalAxiom, \
     FormalDefinition, FreeVariable, \
     NaturalLanguageAxiom, NaturalLanguageDefinition, Note, Relation, \

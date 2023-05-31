@@ -22,7 +22,7 @@ class AtheoreticalStatement:
     * … is any number of decorative attributes informally related to 𝒮 for human explanatory purposes
     """
 
-    def __init__(self, theory, position, symbol=None, capitalizable=None):
+    def __init__(self, theory, position, symbol=None):
         assert isinstance(theory, Theory)
         assert isinstance(position, int) and position > 0
         self.theory = theory
@@ -62,7 +62,7 @@ def set_attr(o, a, v):
 # import rich.table
 
 class Symbol:
-    """
+    """A specialized string-like object to represent things in formulae.
 
     """
 
@@ -80,6 +80,34 @@ class Symbol:
         return f'{self.base}{repm.subscriptify(self.index)}'
 
 
+class Title:
+    """A specialized string-like object to represent statement titles.
+
+    """
+
+    def __init__(self, category, reference, title):
+        self.category = category
+        self.reference = reference
+        self.title = title
+
+    def __hash__(self):
+        return hash((self.category, self.reference, self.title))
+
+    def __repr__(self):
+        return self.repr_ref()
+
+    def __str__(self):
+        return self.repr_ref()
+
+    def repr_full(self, cap=False):
+        return repm.serif_bold(
+            f'{str(self.category).capitalize() if cap else self.category} {self.reference}{" - " + self.title if self.title is not None else ""}')
+
+    def repr_ref(self, cap=False):
+        return repm.serif_bold(
+            f'{str(self.category).capitalize() if cap else self.category} {self.reference}')
+
+
 class SymbolicObjct:
     """
     Definition
@@ -89,7 +117,7 @@ class SymbolicObjct:
     """
 
     def __init__(
-        self, symbol, capitalizable=None, python_name=None,
+        self, symbol,
         is_theory_foundation_system=None,
         is_universe_of_discourse=None,
         universe_of_discourse=None):
@@ -103,11 +131,7 @@ class SymbolicObjct:
         verify(
             isinstance(symbol, Symbol),
             'The symbol of a symbolic-objct must be of type Symbol.')
-        capitalizable = False if capitalizable is None else capitalizable
-        assert isinstance(capitalizable, bool)
         self.symbol = symbol
-        self.capitalizable = capitalizable
-        self.python_name = python_name
         self.is_theory_foundation_system = is_theory_foundation_system
         self.is_universe_of_discourse = is_universe_of_discourse
         if not self.is_universe_of_discourse:
@@ -166,10 +190,9 @@ class SymbolicObjct:
     def repr_as_declaration(self):
         return f'Let {self.repr_as_symbol()} be a symbolic-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
 
-    def repr_as_symbol(self, capitalized=False):
+    def repr_as_symbol(self):
         s = str(self.symbol)
-        return f'{s[0].capitalize()}{s[1:]}' if (
-            capitalized and self.capitalizable) else s
+        return s
 
     def repr(self, expanded=None):
         return self.repr_as_symbol()
@@ -197,11 +220,10 @@ class TheoreticalObjct(SymbolicObjct):
     """
 
     def __init__(
-        self, symbol, capitalizable, python_name=None,
+        self, symbol,
         is_theory_foundation_system=None, universe_of_discourse=None):
         super().__init__(
-            symbol=symbol, capitalizable=capitalizable,
-            python_name=python_name,
+            symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
             universe_of_discourse=universe_of_discourse)
 
@@ -455,9 +477,8 @@ class FreeVariable(TheoreticalObjct):
     closed_scope_status = Status('closed_scope_status')
 
     def __init__(
-        self, symbol=None, capitalizable=None, python_name=None,
+        self, symbol=None,
         universe_of_discourse=None, status=None, scope=None):
-        capitalizable = False if capitalizable is None else capitalizable
         status = FreeVariable.scope_initialization_status if status is None else status
         scope = frozenset() if scope is None else scope
         scope = {scope} if isinstance(scope, Formula) else scope
@@ -481,8 +502,7 @@ class FreeVariable(TheoreticalObjct):
             index = universe_of_discourse.index_symbol(base=symbol)
             symbol = Symbol(base=symbol, index=index)
         super().__init__(
-            symbol=symbol, capitalizable=False,
-            python_name=python_name,
+            symbol=symbol,
             universe_of_discourse=universe_of_discourse)
         self.universe_of_discourse.cross_reference_variable(x=self)
 
@@ -587,7 +607,7 @@ class Formula(TheoreticalObjct):
         name='postfix-operator', sample='𝐱◆')
 
     def __init__(
-        self, relation, parameters, symbol=None, capitalizable=False,
+        self, relation, parameters, symbol=None,
         universe_of_discourse=None):
         """
 
@@ -595,19 +615,17 @@ class Formula(TheoreticalObjct):
         :param relation:
         :param parameters:
         :param symbol:
-        :param capitalizable:
         :param arity: Mandatory if relation is a FreeVariable.
         """
         self.free_variables = dict()  # TODO: Check how to make dict immutable after construction.
         # self.formula_index = theory.crossreference_formula(self)
-        capitalizable = False if symbol is None else capitalizable
         if symbol is None:
             symbol_base = '𝜑'
             symbol = Symbol(
                 base=symbol_base, index=universe_of_discourse.index_symbol(
                     base=symbol_base))
         super().__init__(
-            symbol=symbol, capitalizable=capitalizable,
+            symbol=symbol,
             universe_of_discourse=universe_of_discourse)
         universe_of_discourse.cross_reference_formula(self)
         assert isinstance(relation, (Relation, FreeVariable)) and \
@@ -823,14 +841,22 @@ class Statement(TheoreticalObjct):
     )
 
     def __init__(
-        self, theory, symbol=None, capitalizable=True):
+        self, theory, symbol=None,
+        category=None, reference=None, title=None):
         assert isinstance(theory, Theory)
         universe_of_discourse = theory.universe_of_discourse
         self.statement_index = theory.crossreference_statement(self)
         self.theory = theory
+        self.title = Title(category=category, reference=reference, title=title)
         super().__init__(
-            symbol=symbol, capitalizable=capitalizable,
+            symbol=symbol,
             universe_of_discourse=universe_of_discourse)
+
+    def repr_as_title(self, cap=False):
+        return self.title.repr_full(cap=cap)
+
+    def repr_as_ref(self, cap=False):
+        return self.title.repr_ref(cap=cap)
 
 
 class NaturalLanguageAxiom(Statement):
@@ -842,34 +868,30 @@ class NaturalLanguageAxiom(Statement):
 
     """
 
-    prefix = 'natural language axiom'
+    symbol_base = '𝙽𝙻𝙰'
+    category = 'natural language axiom'
 
     def __init__(
-        self, natural_language, symbol=None, theory=None):
+        self, natural_language, symbol=None, theory=None, reference=None,
+        title=None):
         assert isinstance(theory, Theory)
         assert isinstance(natural_language, str)
         universe_of_discourse = theory.universe_of_discourse
         self.natural_language = natural_language
-        capitalizable = True
-        assert isinstance(capitalizable, bool)
-        self.axiom_index = theory.crossreference_axiom(self)
-        if symbol is None:
-            base = NaturalLanguageAxiom.prefix
-            index = universe_of_discourse.index_symbol(base=base)
-            symbol = Symbol(base=base, index=index)
-        elif isinstance(symbol, str):
-            # If symbol was passed as a string,
-            # assume the base was passed without index.
-            # TODO: Analyse the string if it ends with index in subscript characters.
-            index = universe_of_discourse.index_symbol(base=symbol)
-            symbol = Symbol(base=symbol, index=index)
+        theory.crossreference_axiom(self)
+        base = NaturalLanguageAxiom.symbol_base
+        index = universe_of_discourse.index_symbol(base=base)
+        symbol = Symbol(base=base, index=index)
+        reference = index if reference is None else reference
+        category = NaturalLanguageAxiom.category
         super().__init__(
-            theory=theory, symbol=symbol, capitalizable=capitalizable)
+            theory=theory, symbol=symbol, reference=reference,
+            category=category, title=title)
         # TODO: call self.theory.cross_reference_natural_language_axiom(nla=self)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
-        text = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: “{self.natural_language}”'
+        text = f'{self.repr_as_title(cap=True)}: “{self.natural_language}”'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -893,33 +915,29 @@ class NaturalLanguageDefinition(Statement):
 
     """
 
-    prefix = f'natural language definition'
+    symbol_base = '𝙽𝙻𝙳'
+    category = 'natural language definition'
 
     def __init__(
-        self, natural_language, symbol=None, capitalizable=True, theory=None):
+        self, natural_language, symbol=None, theory=None, reference=None,
+        title=None):
         assert isinstance(theory, Theory)
         assert isinstance(natural_language, str)
         universe_of_discourse = theory.universe_of_discourse
         self.natural_language = natural_language
-        capitalizable = True
-        assert isinstance(capitalizable, bool)
-        self.definition_index = theory.crossreference_definition(self)
-        if symbol is None:
-            base = NaturalLanguageDefinition.prefix
-            index = universe_of_discourse.index_symbol(base=base)
-            symbol = Symbol(base=base, index=index)
-        elif isinstance(symbol, str):
-            # If symbol was passed as a string,
-            # assume the base was passed without index.
-            # TODO: Analyse the string if it ends with index in subscript characters.
-            index = universe_of_discourse.index_symbol(base=symbol)
-            symbol = Symbol(base=symbol, index=index)
+        theory.crossreference_definition(self)
+        base = NaturalLanguageAxiom.symbol_base
+        index = universe_of_discourse.index_symbol(base=base)
+        symbol = Symbol(base=base, index=index)
+        reference = index if reference is None else reference
+        category = NaturalLanguageDefinition.category
         super().__init__(
-            theory=theory, symbol=symbol, capitalizable=capitalizable)
+            theory=theory, symbol=symbol, reference=reference,
+            category=category, title=title)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
-        text = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: “{self.natural_language}”'
+        text = f'{self.repr_as_symbol()}: “{self.natural_language}”'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -942,7 +960,10 @@ class FormulaStatement(Statement):
 
     """
 
-    def __init__(self, theory, valid_proposition, category=None, symbol=None):
+    def __init__(
+        self, theory, valid_proposition, symbol=None, category=None,
+        reference=None,
+        title=None):
         verify(
             isinstance(theory, Theory),
             'isinstance(theory, Theory)')
@@ -960,20 +981,9 @@ class FormulaStatement(Statement):
         self.valid_proposition = valid_proposition
         # TODO: Implement distinct counters per category
         self.statement_index = theory.crossreference_statement(self)
-        category = Statement.reps.proposition if category is None else category
-        capitalizable = True
-        if symbol is None:
-            base = category.name
-            index = universe_of_discourse.index_symbol(base=base)
-            symbol = Symbol(base=base, index=index)
-        elif isinstance(symbol, str):
-            # If symbol was passed as a string,
-            # assume the base was passed without index.
-            # TODO: Analyse the string if it ends with index in subscript characters.
-            index = universe_of_discourse.index_symbol(base=symbol)
-            symbol = Symbol(base=symbol, index=index)
         super().__init__(
-            theory=theory, symbol=symbol, capitalizable=capitalizable)
+            theory=theory, symbol=symbol, category=category,
+            reference=reference, title=title)
         # manage theoretical-morphisms
         self.morphism_output = None
         if self.valid_proposition.relation.signal_theoretical_morphism:
@@ -996,17 +1006,25 @@ class FormalAxiom(FormulaStatement):
 
     """
 
-    def __init__(self, valid_proposition, nla, symbol=None, theory=None):
+    symbol_base = '𝙵𝙰'
+    category = 'formal axiom'
+
+    def __init__(
+        self, valid_proposition, nla, symbol=None, theory=None, reference=None,
+        title=None):
         assert isinstance(theory, Theory)
         assert isinstance(nla, NaturalLanguageAxiom)
         assert theory.has_objct_in_hierarchy(nla)
         assert isinstance(valid_proposition, Formula)
-        capitalizable = True
         self.natural_language_axiom = nla
-        category = Statement.reps.formal_axiom
+        base = FormalAxiom.symbol_base
+        index = theory.universe_of_discourse.index_symbol(base=base)
+        symbol = Symbol(base=base, index=index)
+        reference = index if reference is None else reference
+        category = FormalAxiom.category
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
-            symbol=symbol, category=category)
+            symbol=symbol, category=category, reference=reference, title=title)
         assert nla.statement_index < self.statement_index
 
     def repr_as_statement(self, output_proofs=True):
@@ -1015,10 +1033,10 @@ class FormalAxiom(FormulaStatement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula(expanded=True)}'
+        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula(expanded=True)}'
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Derivation from natural language axiom")}'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.natural_language_axiom.repr_as_symbol())}.'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {self.natural_language_axiom.repr_as_ref()}.'
         return output
 
 
@@ -1038,8 +1056,16 @@ class ModusPonens(FormulaStatement):
     The parent theory must expose the implication attribute.
     """
 
+    symbol_base = '𝙼𝙿'
+
     def __init__(
-        self, conditional, antecedent, symbol=None, category=None, theory=None):
+        self, conditional, antecedent, symbol=None, category=None, theory=None,
+        reference=None, title=None):
+        base = ModusPonens.symbol_base
+        index = theory.universe_of_discourse.index_symbol(base=base)
+        symbol = Symbol(base=base, index=index)
+        reference = index if reference is None else reference
+        category = FormalAxiom.category
         # Check p_implies_q consistency
         assert isinstance(theory, Theory)
         assert isinstance(conditional, FormulaStatement)
@@ -1072,7 +1098,7 @@ class ModusPonens(FormulaStatement):
         # assert p.statement_index < self.statement_index
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
-            category=category,
+            category=category, reference=reference, title=title,
             symbol=symbol)
 
     def repr_as_statement(self, output_proofs=True):
@@ -1081,7 +1107,7 @@ class ModusPonens(FormulaStatement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula()}'
+        output = f'{self.repr_as_symbol()}: {self.valid_proposition.repr_as_formula()}'
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Proof by modus ponens")}'
             output = output + f'\n\t{self.p_implies_q.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p_implies_q.repr_as_symbol())}.'
@@ -1101,7 +1127,7 @@ class Morphism(FormulaStatement):
     """
 
     def __init__(
-        self, source_statement, symbol=None, theory=None, capitalizable=None,
+        self, source_statement, symbol=None, theory=None,
         category=None):
         assert isinstance(theory, Theory)
         assert isinstance(source_statement, FormulaStatement)
@@ -1121,7 +1147,7 @@ class Morphism(FormulaStatement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula(expanded=True)}'
+        output = f'{repm.serif_bold(self.repr_as_symbol(cap=True))}: {self.valid_proposition.repr_as_formula(expanded=True)}'
         if output_proofs:
             output = output + self.repr_as_sub_statement()
         return output
@@ -1175,7 +1201,12 @@ class FormalDefinition(FormulaStatement):
     XXXXXXX
     """
 
-    def __init__(self, valid_proposition, nld, symbol=None, theory=None):
+    symbol_base = '𝙵𝙳'
+    category = 'formal definition'
+
+    def __init__(
+        self, valid_proposition, nld, symbol=None, theory=None, reference=None,
+        title=None):
         assert isinstance(theory, Theory)
         assert isinstance(nld, NaturalLanguageDefinition)
         assert theory.has_objct_in_hierarchy(nld)
@@ -1186,10 +1217,14 @@ class FormalDefinition(FormulaStatement):
             'consistent with the UoD of its theory.')
         assert valid_proposition.relation is theory.equality
         self.natural_language_definition = nld
-        category = Statement.reps.formal_definition
+        base = FormalAxiom.symbol_base
+        index = theory.universe_of_discourse.index_symbol(base=base)
+        symbol = Symbol(base=base, index=index)
+        reference = index if reference is None else reference
+        category = FormalDefinition.category
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
-            symbol=symbol, category=category)
+            symbol=symbol, category=category, reference=reference, title=title)
         assert nld.statement_index < self.statement_index
 
     def repr_as_statement(self, output_proofs=True):
@@ -1198,7 +1233,7 @@ class FormalDefinition(FormulaStatement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula(expanded=True)}'
+        output = f'{self.repr_as_title()}: {self.valid_proposition.repr_as_formula(expanded=True)}'
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Derivation from natural language definition")}'
             output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.natural_language_definition.repr_as_symbol())}.'
@@ -1248,8 +1283,6 @@ class Note(AtheoreticalStatement):
         assert isinstance(theory, Theory)
         assert isinstance(natural_language, str)
         self.natural_language = natural_language
-        capitalizable = True
-        assert isinstance(capitalizable, bool)
         self.note_index = theory.crossreference_note(self)
         if symbol is None:
             # We must cross-reference this statement
@@ -1263,7 +1296,7 @@ class Note(AtheoreticalStatement):
                 symbol = f'{Note.prefix} {symbol}'
         assert isinstance(symbol, str)
         super().__init__(
-            theory=theory, symbol=symbol, capitalizable=capitalizable)
+            theory=theory, symbol=symbol)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
@@ -1280,14 +1313,14 @@ class Note(AtheoreticalStatement):
 class Theory(TheoreticalObjct):
     def __init__(
         self, is_theory_foundation_system=None,
-        symbol=None, capitalizable=False, extended_theories=None,
+        symbol=None, extended_theories=None,
         universe_of_discourse=None, theory_foundation_system=None
     ):
         """
 
         :param theory: :param is_foundation_system: True if this theory is
-        the foundation-system, False otherwise. :param symbol: :param
-        capitalizable: :param extended_theories: :param is_an_element_of_itself:
+        the foundation-system, False otherwise. :param symbol:
+         :param extended_theories: :param is_an_element_of_itself:
         """
         # self.symbols = dict()
         self.natural_language_axioms = tuple()
@@ -1323,7 +1356,6 @@ class Theory(TheoreticalObjct):
         # must be called before super().
         # self.theory = theory
         # assert is_theory_foundation_system or isinstance(theory, Theory)
-        capitalizable = True if symbol is None else capitalizable
         if symbol is None:
             base = '𝒯'
             index = universe_of_discourse.index_symbol(base=base)
@@ -1335,7 +1367,7 @@ class Theory(TheoreticalObjct):
             index = universe_of_discourse.index_symbol(base=symbol)
             symbol = Symbol(base=symbol, index=index)
         super().__init__(
-            symbol=symbol, capitalizable=capitalizable,
+            symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
             universe_of_discourse=universe_of_discourse)
 
@@ -1408,37 +1440,45 @@ class Theory(TheoreticalObjct):
     #    return Formula(
     #        relation=relation, parameters=parameters, theory=self, **kwargs)
 
-    def elaborate_formal_axiom(self, valid_proposition, nla, symbol=None):
+    def elaborate_formal_axiom(
+        self, valid_proposition, nla, symbol=None, reference=None, title=None):
         """Elaborate a new formal-axiom in the theory. Shortcut for FormalAxiom(theory=t, ...)"""
         return FormalAxiom(
             valid_proposition=valid_proposition, nla=nla, symbol=symbol,
-            theory=self)
+            theory=self, reference=reference, title=title)
 
     def elaborate_formal_definition(
-        self, valid_proposition=None, nld=None, symbol=None):
+        self, valid_proposition=None, nld=None, symbol=None, reference=None,
+        title=None):
         """Elaborate a formal-definition in this theory.
 
         Shortcut for FormalDefinition(theory=t, ...)"""
         return FormalDefinition(
             valid_proposition=valid_proposition, nld=nld, symbol=symbol,
-            theory=self)
+            theory=self, reference=reference, title=title)
 
     def elaborate_modus_ponens(
-        self, conditional, antecedent, symbol=None, category=None):
+        self, conditional, antecedent, symbol=None, category=None,
+        reference=None, title=None):
         """Elaborate a new modus-ponens statement in the theory. Shortcut for
         ModusPonens(theory=t, ...)"""
         return ModusPonens(
             conditional=conditional, antecedent=antecedent, symbol=symbol,
-            category=category, theory=self)
+            category=category, theory=self, reference=reference, title=title)
 
-    def elaborate_natural_language_axiom(self, natural_language, symbol=None):
+    def elaborate_natural_language_axiom(
+        self, natural_language, symbol=None, reference=None, title=None):
         """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
         return self.universe_of_discourse.elaborate_natural_language_axiom(
-            natural_language=natural_language, symbol=symbol, theory=self)
+            natural_language=natural_language, symbol=symbol, theory=self,
+            reference=reference, title=title)
 
-    def elaborate_natural_language_definition(self, *args, **kwargs):
+    def elaborate_natural_language_definition(
+        self, natural_language, symbol=None, reference=None, title=None):
         """Shortcut for NaturalLanguageDefinition(theory=t, ...)"""
-        return NaturalLanguageDefinition(*args, theory=self, **kwargs)
+        return self.universe_of_discourse.elaborate_natural_language_definition(
+            natural_language=natural_language, symbol=symbol, theory=self,
+            reference=reference, title=title)
 
     def elaborate_substitution_of_equal_terms(
         self, original_expression, equality_statement, symbol=None,
@@ -1473,18 +1513,23 @@ class Theory(TheoreticalObjct):
             'The equality property must be a relation.')
         self._equality = r
 
-    def fa(self, valid_proposition, nla, symbol=None):
+    def fa(
+        self, valid_proposition, nla, symbol=None, reference=None, title=None):
         """Elaborate a new formal-axiom in the theory. Shortcut for
         Theory.elaborate_formal_axiom(...)."""
         return self.elaborate_formal_axiom(
-            valid_proposition=valid_proposition, nla=nla, symbol=symbol)
+            valid_proposition=valid_proposition, nla=nla, symbol=symbol,
+            reference=reference, title=title)
 
-    def fd(self, valid_proposition=None, nld=None, symbol=None):
+    def fd(
+        self, valid_proposition=None, nld=None, symbol=None, reference=None,
+        title=None):
         """Elaborate a formal-definition in this theory.
 
         Shortcut for FormalDefinition(theory=t, ...)"""
         return self.elaborate_formal_definition(
-            valid_proposition=valid_proposition, nld=nld, symbol=symbol)
+            valid_proposition=valid_proposition, nld=nld, symbol=symbol,
+            reference=reference, title=title)
 
     def get_theory_extension(self):
         """Return the set of all theories that includes this theory and all the
@@ -1529,26 +1574,31 @@ class Theory(TheoreticalObjct):
         self._implication = r
 
     def mp(
-        self, conditional, antecedent, symbol=None, category=None):
+        self, conditional, antecedent, symbol=None, category=None,
+        reference=None, title=None):
         """Elaborate a new modus-ponens statement in the theory. Shortcut for
         ModusPonens(theory=t, ...)"""
         return self.elaborate_modus_ponens(
             conditional=conditional, antecedent=antecedent, symbol=symbol,
-            category=category)
+            category=category, reference=reference, title=title)
 
-    def nla(self, natural_language, symbol=None):
+    def nla(self, natural_language, symbol=None, reference=None, title=None):
         """Elaborate a new natural-language-axiom statement. Shortcut function for
         Theory.elaborate_natural_language_axiom(...)."""
         return self.elaborate_natural_language_axiom(
-            natural_language=natural_language, symbol=symbol)
+            natural_language=natural_language, symbol=symbol,
+            reference=reference, title=title)
 
-    def nld(self, *args, **kwargs):
-        """Shortcut function for Theory.elaborate_natural_language_definition(...)."""
-        return self.elaborate_natural_language_definition(*args, **kwargs)
+    def nld(self, natural_language, symbol=None, reference=None, title=None):
+        """Elaborate a new natural-language-definition statement. Shortcut function for
+        Theory.elaborate_natural_language_definition(...)."""
+        return self.elaborate_natural_language_definition(
+            natural_language=natural_language, symbol=symbol,
+            reference=reference, title=title)
 
     def repr_as_theory(self, output_proofs=True):
         """Return a representation that expresses and justifies the theory."""
-        output = f'\n{repm.serif_bold(self.repr_as_symbol(capitalized=True))}'
+        output = f'\n{repm.serif_bold(self.repr_as_symbol())}'
         output = output + f'\n{repm.serif_bold("Extended theories:")}'
         output = output + f'\nThe following theories are extended by {repm.serif_bold(self.repr_as_symbol())}.'
         output = output + ''.join(
@@ -1626,8 +1676,7 @@ class Relation(TheoreticalObjct):
     """
 
     def __init__(
-        self, arity, symbol=None, formula_rep=None, capitalizable=False,
-        python_name=None,
+        self, arity, symbol=None, formula_rep=None,
         signal_proposition=None, signal_theoretical_morphism=None,
         implementation=None, universe_of_discourse=None):
         assert isinstance(universe_of_discourse, UniverseOfDiscourse)
@@ -1636,11 +1685,9 @@ class Relation(TheoreticalObjct):
         assert isinstance(signal_proposition, bool)
         assert isinstance(signal_theoretical_morphism, bool)
         self.formula_rep = Formula.function_call_representation if formula_rep is None else formula_rep
-        self.python_name = python_name
         self.signal_proposition = signal_proposition
         self.signal_theoretical_morphism = signal_theoretical_morphism
         self.implementation = implementation
-        capitalizable = False if symbol is None else capitalizable
         if symbol is None:
             base = '◆'
             index = universe_of_discourse.index_symbol(base=base)
@@ -1654,8 +1701,7 @@ class Relation(TheoreticalObjct):
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
         super().__init__(
-            universe_of_discourse=universe_of_discourse, symbol=symbol,
-            capitalizable=capitalizable)
+            universe_of_discourse=universe_of_discourse, symbol=symbol)
         self.universe_of_discourse.cross_reference_relation(r=self)
 
     def repr_as_declaration(self):
@@ -1684,12 +1730,10 @@ class SimpleObjct(TheoreticalObjct):
     """
 
     def __init__(
-        self, symbol=None, capitalizable=False, python_name=None,
+        self, symbol=None,
         universe_of_discourse=None):
         assert isinstance(universe_of_discourse, UniverseOfDiscourse)
-        self.python_name = python_name
         # self.simple_objct_index = theory.crossreference_simple_objct(self)
-        capitalizable = False if symbol is None else capitalizable
         if symbol is None:
             base = 'ℴ'
             index = universe_of_discourse.index_symbol(base=base)
@@ -1701,8 +1745,7 @@ class SimpleObjct(TheoreticalObjct):
             index = universe_of_discourse.index_symbol(base=symbol)
             symbol = Symbol(base=symbol, index=index)
         super().__init__(
-            universe_of_discourse=universe_of_discourse, symbol=symbol,
-            capitalizable=capitalizable)
+            universe_of_discourse=universe_of_discourse, symbol=symbol)
         self.universe_of_discourse.cross_reference_simple_objct(o=self)
 
     def is_masked_formula_similar_to(self, o2, mask, _values):
@@ -1750,9 +1793,15 @@ class SubstitutionOfEqualTerms(FormulaStatement):
     infers the proposition (subst(phi, x, y))
     """
 
+    symbol_base = '𝚂𝙾𝙴𝚃'
+
     def __init__(
         self, original_expression, equality_statement, symbol=None,
-        category=None, theory=None):
+        category=None, theory=None, reference=None, title=None):
+        base = ModusPonens.symbol_base
+        index = theory.universe_of_discourse.index_symbol(base=base)
+        symbol = Symbol(base=base, index=index)
+        reference = index if reference is None else reference
         # Check p_implies_q consistency
         assert isinstance(theory, Theory)
         assert isinstance(original_expression, FormulaStatement)
@@ -1772,7 +1821,7 @@ class SubstitutionOfEqualTerms(FormulaStatement):
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             category=category,
-            symbol=symbol)
+            symbol=symbol, reference=reference, title=title)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
@@ -1780,7 +1829,7 @@ class SubstitutionOfEqualTerms(FormulaStatement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: {self.valid_proposition.repr_as_formula()}'
+        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Substitution of equal terms")}'
             output = output + f'\n\t{self.original_expression.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.original_expression.repr_as_symbol())}.'
@@ -1945,7 +1994,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             self.variables[x.symbol] = x
 
     def declare_formula(
-        self, relation, *parameters, symbol=None, capitalizable=None,
+        self, relation, *parameters, symbol=None,
         theory=None):
         """Declare a new :term:`formula` in this universe-of-discourse.
 
@@ -1957,7 +2006,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         phi = Formula(
             relation=relation, parameters=parameters,
             universe_of_discourse=self, symbol=symbol,
-            capitalizable=capitalizable)
+        )
         return phi
 
     @contextlib.contextmanager
@@ -1977,7 +2026,6 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     def declare_relation(
         self, arity, symbol=None, formula_rep=None,
-        capitalizable=None, python_name=None,
         signal_proposition=None,
         signal_theoretical_morphism=None,
         implementation=None):
@@ -1987,29 +2035,28 @@ class UniverseOfDiscourse(SymbolicObjct):
         """
         return Relation(
             arity=arity, symbol=symbol, formula_rep=formula_rep,
-            capitalizable=capitalizable, python_name=python_name,
             signal_proposition=signal_proposition,
             signal_theoretical_morphism=signal_theoretical_morphism,
             implementation=implementation,
             universe_of_discourse=self)
 
     def declare_simple_objct(
-        self, symbol=None, capitalizable=False, python_name=None):
+        self, symbol=None):
         """Shortcut for SimpleObjct(theory=t, ...)"""
         return SimpleObjct(
-            symbol=symbol, capitalizable=capitalizable, python_name=python_name,
+            symbol=symbol,
             universe_of_discourse=self)
 
     def declare_symbolic_objct(
-        self, symbol=None, capitalizable=False, python_name=None):
+        self, symbol=None):
         """"""
         return SymbolicObjct(
-            symbol=symbol, capitalizable=capitalizable, python_name=python_name,
+            symbol=symbol,
             universe_of_discourse=self)
 
     def declare_theory(
         self, symbol=None, is_theory_foundation_system=None,
-        capitalizable=False, extended_theories=None,
+        extended_theories=None,
         theory_foundation_system=None):
         """Declare a new theory in this universe-of-discourse.
 
@@ -2017,35 +2064,45 @@ class UniverseOfDiscourse(SymbolicObjct):
 
         :param symbol:
         :param is_theory_foundation_system:
-        :param capitalizable:
         :param extended_theories:
         :return:
         """
         return Theory(
-            symbol=symbol, capitalizable=capitalizable,
+            symbol=symbol,
             extended_theories=extended_theories,
             is_theory_foundation_system=is_theory_foundation_system,
             universe_of_discourse=self,
             theory_foundation_system=theory_foundation_system)
 
     def elaborate_natural_language_axiom(
-        self, natural_language, symbol=None, theory=None):
+        self, natural_language, symbol=None, theory=None, reference=None,
+        title=None):
         """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
         verify(
             theory.universe_of_discourse is self,
             'The universe-of-discourse of the theory parameter is distinct from this universe-of-discourse.')
         return NaturalLanguageAxiom(
-            natural_language=natural_language, symbol=symbol, theory=theory)
+            natural_language=natural_language, symbol=symbol, theory=theory,
+            reference=reference, title=title)
+
+    def elaborate_natural_language_definition(
+        self, natural_language, symbol=None, theory=None, reference=None,
+        title=None):
+        """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
+        verify(
+            theory.universe_of_discourse is self,
+            'The universe-of-discourse of the theory parameter is distinct from this universe-of-discourse.')
+        return NaturalLanguageDefinition(
+            natural_language=natural_language, symbol=symbol, theory=theory,
+            reference=reference, title=title)
 
     def f(
-        self, relation, *parameters, theory=None, symbol=None,
-        capitalizable=None):
+        self, relation, *parameters, theory=None, symbol=None):
         """Declare a new formula in this instance of UniverseOfDiscourse.
 
         Shortcut for self.elaborate_formula(...)."""
         return self.declare_formula(
-            relation, *parameters, theory=theory, symbol=symbol,
-            capitalizable=capitalizable)
+            relation, *parameters, theory=theory, symbol=symbol)
 
     def index_symbol(self, base):
         """Given a symbol-base S (i.e. an unindexed symbol), returns a unique integer n
@@ -2060,21 +2117,30 @@ class UniverseOfDiscourse(SymbolicObjct):
             self.symbol_indexes[base] += 1
         return self.symbol_indexes[base]
 
-    def nla(self, natural_language, symbol=None, theory=None):
+    def nla(
+        self, natural_language, symbol=None, theory=None, reference=None,
+        title=None):
         return self.elaborate_natural_language_axiom(
-            natural_language=natural_language, symbol=symbol, theory=theory)
+            natural_language=natural_language, symbol=symbol, theory=theory,
+            reference=reference, title=title)
+
+    def nld(
+        self, natural_language, symbol=None, theory=None, reference=None,
+        title=None):
+        return self.elaborate_natural_language_definition(
+            natural_language=natural_language, symbol=symbol, theory=theory,
+            reference=reference, title=title)
 
     def o(
-        self, symbol=None, capitalizable=False, python_name=None):
+        self, symbol=None):
         """Declare a simple-objct in this universe-of-discourse.
 
         Shortcut for self.declare_simple_objct(universe_of_discourse=self, ...)"""
         return self.declare_simple_objct(
-            symbol=symbol, capitalizable=capitalizable, python_name=python_name)
+            symbol=symbol)
 
     def r(
         self, arity, symbol=None, formula_rep=None,
-        capitalizable=None, python_name=None,
         signal_proposition=None,
         signal_theoretical_morphism=None,
         implementation=None):
@@ -2083,18 +2149,17 @@ class UniverseOfDiscourse(SymbolicObjct):
         Shortcut for Theory.declare_relation(...)."""
         return self.declare_relation(
             arity=arity, symbol=symbol, formula_rep=formula_rep,
-            capitalizable=capitalizable, python_name=python_name,
             signal_proposition=signal_proposition,
             signal_theoretical_morphism=signal_theoretical_morphism,
             implementation=implementation)
 
-    def so(self, symbol=None, capitalizable=False, python_name=None):
+    def so(self, symbol=None):
         return self.declare_symbolic_objct(
-            symbol=symbol, capitalizable=capitalizable, python_name=python_name)
+            symbol=symbol)
 
     def t(
         self, symbol=None, is_theory_foundation_system=None,
-        capitalizable=False, extended_theories=None,
+        extended_theories=None,
         theory_foundation_system=None):
         """Declare a new theory in this universe-of-discourse.
 
@@ -2102,18 +2167,17 @@ class UniverseOfDiscourse(SymbolicObjct):
 
         :param symbol:
         :param is_theory_foundation_system:
-        :param capitalizable:
         :param extended_theories:
         :return:
         """
         return self.declare_theory(
             symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
-            capitalizable=capitalizable, extended_theories=extended_theories,
+            extended_theories=extended_theories,
             theory_foundation_system=theory_foundation_system)
 
     def v(
-        self, symbol=None, capitalizable=False, python_name=None):
+        self, symbol=None):
         """Declare a free-variable in this universe-of-discourse.
 
         Shortcut for self.declare_free_variable(universe_of_discourse=self, ...)"""
@@ -2123,11 +2187,11 @@ class UniverseOfDiscourse(SymbolicObjct):
 # universe_of_discourse = Theory(
 #    theory=None, is_theory_foundation_system=True,
 #    symbol='universe-of-discourse',
-#    capitalizable=True)
+#    )
 # u = universe_of_discourse
 
 # meta_theory = Theory(
-#    theory=universe_of_discourse, symbol='meta-theory', capitalizable=True)
+#    theory=universe_of_discourse, symbol='meta-theory')
 
 # console = rich.console.Console()
 

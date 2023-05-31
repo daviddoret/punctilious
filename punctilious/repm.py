@@ -15,6 +15,12 @@ _serif_bold_dict = {
     '5': '𝟓', '6': '𝟔', '7': '𝟕',
     '8': '𝟖', '9': '𝟗'}
 
+_monospace_dict = {
+    'A': '𝙰', 'B': '𝙱', 'C': '𝙲', 'D': '𝙳', 'E': '𝙴', 'F': '𝙵', 'G': '𝙶',
+    'H': '𝙷', 'I': '𝙸', 'J': '𝙹', 'K': '𝙺', 'L': '𝙻', 'M': '𝙼', 'N': '𝙽',
+    'O': '𝙾', 'P': '𝙿', 'Q': '𝚀', 'R': '𝚁', 'S': '𝚂', 'T': '𝚃', 'U': '𝚄',
+    'V': '𝚅', 'W': '𝚆', 'X': '𝚇', 'Y': '𝚈', 'Z': '𝚉'}
+
 
 def serif_bold(s=None):
     """Convert to serif bold characters the string s.
@@ -25,6 +31,17 @@ def serif_bold(s=None):
     if s is None or s == '':
         return ''
     return ''.join([_serif_bold_dict.get(c, c) for c in s])
+
+
+def monospace(s=None):
+    """Convert to monospace characters the string s.
+    """
+    global _monospace_dict
+    if isinstance(s, int):
+        s = str(s)
+    if s is None or s == '':
+        return ''
+    return ''.join([_monospace_dict.get(c, c) for c in s])
 
 
 class Representation:
@@ -42,6 +59,43 @@ class Representation:
     def __str__(self):
         return self.name
 
+
+class UseCase(Representation):
+    pass
+
+
+class UseCases(Representation):
+    symbol = UseCase('symbol')
+    dashed_name = UseCase('dashed_name')
+    reference = UseCase('reference')
+    natural_name = UseCase('natural_name')
+
+
+use_cases = UseCases('use_cases')
+
+
+class Style(Representation):
+    pass
+
+
+class Styles(Representation):
+    serif_normal = Style('serif_normal')
+    serif_bold = Style('serif_bold')
+    serif_italic = Style('serif_italic')
+    serif_bold_italic = Style('serif_bold_italic')
+    sans_serif_normal = Style('sans_serif_normal')
+    sans_serif_bold = Style('sans_serif_bold')
+    sans_serif_italic = Style('sans_serif_italic')
+    sans_serif_bold_italic = Style('sans_serif_bold_italic')
+    script_normal = Style('script_normal')
+    script_bold = Style('script_bold')
+    fraktur_normal = Style('fraktur_normal')
+    fraktur_bold = Style('fraktur_bold')
+    monospace_normal = Style('monospace_normal')
+    double_struck_normal = Style('double_struck_normal')
+
+
+styles = Style('styles')
 
 utf8_subscript_dictionary = {
     '0': u'₀',

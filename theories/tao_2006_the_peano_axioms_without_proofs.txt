@@ -1,60 +1,84 @@
 
-𝐓𝐡𝐞𝐨𝐫𝐲 𝟐.𝟏: 𝐭𝐡𝐞 𝐏𝐞𝐚𝐧𝐨 𝐚𝐱𝐢𝐨𝐦𝐬
+𝐭𝐡𝐞𝐨𝐫𝐲 𝟐.𝟏: 𝐭𝐡𝐞 𝐏𝐞𝐚𝐧𝐨 𝐚𝐱𝐢𝐨𝐦𝐬₁
 𝐄𝐱𝐭𝐞𝐧𝐝𝐞𝐝 𝐭𝐡𝐞𝐨𝐫𝐢𝐞𝐬:
-The following theories are extended by 𝐭𝐡𝐞𝐨𝐫𝐲 𝟐.𝟏: 𝐭𝐡𝐞 𝐏𝐞𝐚𝐧𝐨 𝐚𝐱𝐢𝐨𝐦𝐬.
-	 ⁃ foundation-theory
+The following theories are extended by 𝐭𝐡𝐞𝐨𝐫𝐲 𝟐.𝟏: 𝐭𝐡𝐞 𝐏𝐞𝐚𝐧𝐨 𝐚𝐱𝐢𝐨𝐦𝐬₁.
+	 ⁃ foundation-system₁
 
 𝐒𝐢𝐦𝐩𝐥𝐞-𝐨𝐛𝐣𝐜𝐭 𝐝𝐞𝐜𝐥𝐚𝐫𝐚𝐭𝐢𝐨𝐧𝐬:
-Let 0 be a simple-objct denoted as ⌜ 0 ⌝.
-Let 1 be a simple-objct denoted as ⌜ 1 ⌝.
-Let 2 be a simple-objct denoted as ⌜ 2 ⌝.
-Let 3 be a simple-objct denoted as ⌜ 3 ⌝.
-Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
+Let class-of-classes₁ be a simple-objct denoted as ⌜ class-of-classes₁ ⌝.
+Let theory-class₁ be a simple-objct denoted as ⌜ theory-class₁ ⌝.
+Let false₁ be a simple-objct denoted as ⌜ false₁ ⌝.
+Let true₁ be a simple-objct denoted as ⌜ true₁ ⌝.
+Let truth-values₁ be a simple-objct denoted as ⌜ truth-values₁ ⌝.
+Let propositional-relations-class₁ be a simple-objct denoted as ⌜ propositional-relations-class₁ ⌝.
+Let proposition-class₁ be a simple-objct denoted as ⌜ proposition-class₁ ⌝.
+Let contradictory-theories₁ be a simple-objct denoted as ⌜ contradictory-theories₁ ⌝.
+Let contradictory-statement₁ be a simple-objct denoted as ⌜ contradictory-statement₁ ⌝.
+Let 0₁ be a simple-objct denoted as ⌜ 0₁ ⌝.
+Let 1₁ be a simple-objct denoted as ⌜ 1₁ ⌝.
+Let 2₁ be a simple-objct denoted as ⌜ 2₁ ⌝.
+Let 3₁ be a simple-objct denoted as ⌜ 3₁ ⌝.
+Let natural-number₁ be a simple-objct denoted as ⌜ natural-number₁ ⌝.
 
 𝐑𝐞𝐥𝐚𝐭𝐢𝐨𝐧 𝐝𝐞𝐜𝐥𝐚𝐫𝐚𝐭𝐢𝐨𝐧𝐬:
-Let is-a be a binary relation denoted as ⌜ is-a ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ is-a 𝐱₂ ⌝).
-Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formulae in postfix-operator syntax (e.g.: ⌜ 𝐱++ ⌝).
+Let ∈₁ be a binary relation denoted as ⌜ ∈₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∈₁ 𝐱₂ ⌝).
+Let =₁ be a binary relation denoted as ⌜ =₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ =₁ 𝐱₂ ⌝).
+Let ⟹₁ be a binary relation denoted as ⌜ ⟹₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ⟹₁ 𝐱₂ ⌝).
+Let ∧₁ be a binary relation denoted as ⌜ ∧₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∧₁ 𝐱₂ ⌝).
+Let ∨₁ be a binary relation denoted as ⌜ ∨₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∨₁ 𝐱₂ ⌝).
+Let ¬₁ be a unary relation denoted as ⌜ ¬₁ ⌝, that signals well-formed formulae in prefix-operator syntax (e.g.: ⌜ ¬₁𝐱 ⌝).
+Let is₁ be a binary relation denoted as ⌜ is₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ is₁ 𝐱₂ ⌝).
+Let relation-declaration₁ be a binary relation denoted as ⌜ relation-declaration₁ ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ relation-declaration₁(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
+Let simple-objct-declaration₁ be a binary relation denoted as ⌜ simple-objct-declaration₁ ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ simple-objct-declaration₁(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
+Let theory-declaration₁ be a binary relation denoted as ⌜ theory-declaration₁ ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ theory-declaration₁(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
+Let theory-extension₁ be a binary relation denoted as ⌜ theory-extension₁ ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ theory-extension₁(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
+Let variable-declaration₁ be a binary relation denoted as ⌜ variable-declaration₁ ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ variable-declaration₁(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
+Let is-a₁ be a binary relation denoted as ⌜ is-a₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ is-a₁ 𝐱₂ ⌝).
+Let ++₁ be a unary relation denoted as ⌜ ++₁ ⌝, that signals well-formed formulae in postfix-operator syntax (e.g.: ⌜ 𝐱++₁ ⌝).
 
 𝐓𝐡𝐞𝐨𝐫𝐲 𝐞𝐥𝐚𝐛𝐨𝐫𝐚𝐭𝐢𝐨𝐧:
 
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟐.𝟏: “0 is a natural number.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟐.𝟏.𝐚: (0 is-a natural-number)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟐.𝟏.𝐚: (0₁ is-a₁ natural-number₁)
 
-𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟐.𝟐.𝟏: “If 𝐧 is a natural number, then 𝐧++ is a
+𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟐.𝟐.𝟏: “If n is a natural number, then n++ is a
 	natural number.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟐.𝟐.𝟐: ((𝐧 is-a natural-number) implies ((𝐧)++ is-a natural-number))
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟐.𝟐.𝟐: ((n₁ is-a₁ natural-number₁) ⟹₁ ((n₁)++₁ is-a₁ natural-number₁))
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟐.𝟑: ((0)++ is-a natural-number)
+𝙼𝙿₁: ((0₁)++₁ is-a₁ natural-number₁)
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟐.𝟒: (((0)++)++ is-a natural-number)
+𝙼𝙿₂: (((0₁)++₁)++₁ is-a₁ natural-number₁)
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟐.𝟓: ((((0)++)++)++ is-a natural-number)
+𝙼𝙿₃: ((((0₁)++₁)++₁)++₁ is-a₁ natural-number₁)
 
-𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑: “We define 1 to be the number 0++,
-	2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In
-	other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x
-	:= y" to denote the statement that x is defined to equal y.)”
+𝙽𝙻𝙰₁₅: “We define 1 to be the number 0++, 2 to be the number (0++)++,
+	3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 :=
+	1++, 3 := 2++, etc. In this text I use "x := y" to denote the
+	statement that x is defined to equal y.)”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟏.𝐚: (1 = (0)++)
+𝐟𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐𝟏: (1₁ =₁ (0₁)++₁)
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟏.𝐛: ((0)++ = 1)
+𝙼𝙿₄: ((0₁)++₁ =₁ 1₁)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟐.𝐚: (2 = ((0)++)++)
+𝐟𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐𝟐: (2₁ =₁ ((0₁)++₁)++₁)
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟐.𝐛: (2 = (1)++)
+𝐍𝐨𝐧𝐞 𝟓: (2₁ =₁ (1₁)++₁)
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟐.𝐜: (((0)++)++ = 2)
+𝙼𝙿₆: (((0₁)++₁)++₁ =₁ 2₁)
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟐.𝐝: ((1)++ = 2)
+𝐍𝐨𝐧𝐞 𝟕: ((1₁)++₁ =₁ 2₁)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑.𝐚: (3 = (((0)++)++)++)
+𝐟𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐𝟑: (3₁ =₁ (((0₁)++₁)++₁)++₁)
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑.𝐛: (3 = (2)++)
+𝐍𝐨𝐧𝐞 𝟖: (3₁ =₁ (2₁)++₁)
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑.𝐜: ((((0)++)++)++ = 3)
+𝙼𝙿₉: ((((0₁)++₁)++₁)++₁ =₁ 3₁)
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑.𝐝: ((2)++ = 3)
+𝐍𝐨𝐧𝐞 𝟏𝟎: ((2₁)++₁ =₁ 3₁)
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟒: (3 is-a natural-number)
+𝐍𝐨𝐧𝐞 𝟏𝟏: (3₁ is-a₁ natural-number₁)
+
+𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟐.𝟑: “0 is not the successor of any natural
+	number; i.e., we have n++ ≠ 0 for every natural number n.”

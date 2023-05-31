@@ -1,7 +1,7 @@
 from punctilious import Formula, ft, u
 
 t = u.t(
-    symbol=f'theory 2.1: the Peano axioms', capitalizable=True,
+    symbol=f'theory 2.1: the Peano axioms',
     extended_theories={ft}, theory_foundation_system=ft)
 
 # simple-objct declarations
@@ -9,28 +9,29 @@ zero = u.o('0')
 one = u.o('1')
 two = u.o('2')
 three = u.o('3')
-nat = u.o('natural-number', capitalizable=True)
+nat = u.o('natural-number')
 
 # relation declarations
 is_a = u.r(
     2, 'is-a', Formula.infix_operator_representation,
-    python_name='is_a', signal_proposition=True)
+    signal_proposition=True)
 
-nla_2_1 = t.nla(f'0 is a natural number.', symbol='2.1')
-fa_2_1_a = t.fa(u.f(is_a, zero, nat), nla_2_1, symbol='2.1.a')
+nla_2_1 = t.nla(f'0 is a natural number.', reference='2.1')
+fa_2_1_a = t.fa(u.f(is_a, zero, nat), nla_2_1, reference='2.1.a')
 
 nla_2_2_1 = t.nla(
-    'If 𝐧 is a natural number, then 𝐧++ is a natural number.', symbol='2.2.1')
+    'If n is a natural number, then n++ is a natural number.',
+    reference='2.2.1')
 with u.v('n') as n:
     suc = u.r(1, '++', formula_rep=Formula.postfix_operator_representation)
     fa_2_2_2 = t.fa(
         u.f(ft.implication, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
         nla_2_2_1,
-        symbol='2.2.2')
+        reference='2.2.2')
 
-p_2_2_3 = t.mp(fa_2_2_2, fa_2_1_a, symbol='2.2.3')
-p_2_2_4 = t.mp(fa_2_2_2, p_2_2_3, symbol='2.2.4')
-p_2_2_5 = t.mp(fa_2_2_2, p_2_2_4, symbol='2.2.5')
+p_2_2_3 = t.mp(fa_2_2_2, fa_2_1_a, reference='2.2.3')
+p_2_2_4 = t.mp(fa_2_2_2, p_2_2_3, reference='2.2.4')
+p_2_2_5 = t.mp(fa_2_2_2, p_2_2_4, reference='2.2.5')
 
 d_2_1_3 = t.nld(
     'We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number '
@@ -71,7 +72,7 @@ p_2_1_3_3_d = t.soet(p_2_1_3_3_c, p_2_1_3_2_c, symbol='2.1.3.3.d')
 p_2_1_4 = t.soet(p_2_2_5, p_2_1_3_3_c, symbol='2.1.4')
 
 t.nla(
-    '0 is not the successor of any natural number; i.e., we have n++ f=. 0 for every natural number n',
-    symbol='2.3')
+    '0 is not the successor of any natural number; i.e., we have n++ ≠ 0 for every natural number n.',
+    reference='2.3')
 
 t.prnt()
