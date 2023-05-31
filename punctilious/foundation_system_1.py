@@ -80,12 +80,11 @@ ft.fa(u.f(element_of, negation, propositional_relations_class), nla=nla_09)
 nla_01b = ft.nla(
     '= is a binary relation such that, given any two theoretical-objcts x and y, '
     'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.')
-x1 = u.v()
-x2 = u.v()
-x1_equal_x2 = u.f(ft.equality, x1, x2)
-x2_equal_x1 = u.f(ft.equality, x2, x1)
-ft.commutativity_of_equality = ft.fa(
-    u.f(ft.implication, x1_equal_x2, x2_equal_x1), nla_01b)
+with u.v('x') as x1, u.v('y') as x2:
+    x1_equal_x2 = u.f(ft.equality, x1, x2)
+    x2_equal_x1 = u.f(ft.equality, x2, x1)
+    ft.commutativity_of_equality = ft.fa(
+        u.f(ft.implication, x1_equal_x2, x2_equal_x1), nla_01b)
 
 nla_10 = ft.nla(
     'propositions is a class whose elements are '
@@ -116,7 +115,7 @@ nla_30 = ft.nla(
 
 # DOUBLE-NEGATION
 nla_09_50 = ft.nla('If P has-truth-value t, ¬(¬(P)) has-truth-value t.')
-with u.v().set_scope() as p, u.v().set_scope() as t:
+with u.v() as p, u.v() as t:
     fa_09_51 = ft.fa(
         u.f(
             ft.implication,
@@ -131,15 +130,15 @@ nla_40 = ft.nla(
     'then this theory is an element of contradictory-theories class.')
 contradictory_theories = u.o('contradictory-theories')
 contradictory_statements = u.o('contradictory-statement')
-phi = u.v()
-ft.fa(
-    u.f(
-        ft.implication,
+with u.v('φ') as phi:
+    ft.fa(
         u.f(
-            conjunction, u.f(has_truth_value, phi, truth),
-            u.f(has_truth_value, phi, falsehood)),
-        u.f(element_of, phi, contradictory_statements)),
-    nla_40)
+            ft.implication,
+            u.f(
+                conjunction, u.f(has_truth_value, phi, truth),
+                u.f(has_truth_value, phi, falsehood)),
+            u.f(element_of, phi, contradictory_statements)),
+        nla_40)
 
 _relation_declaration = u.r(2, 'relation-declaration')
 _simple_objct_declaration = u.r(2, 'simple-objct-declaration')

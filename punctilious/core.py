@@ -456,13 +456,19 @@ class FreeVariable(TheoreticalObjct):
 
     def __init__(
         self, symbol=None, capitalizable=None, python_name=None,
-        universe_of_discourse=None, status=None):
+        universe_of_discourse=None, status=None, scope=None):
         capitalizable = False if capitalizable is None else capitalizable
         status = FreeVariable.scope_initialization_status if status is None else status
+        scope = frozenset() if scope is None else scope
+        scope = {scope} if isinstance(scope, Formula) else scope
+        verify(
+            isinstance(scope, frozenset),
+            'The scope of a FreeVariable must be of python type frozenset.')
         verify(
             isinstance(status, FreeVariable.Status),
-            'FreeVariable.status must be of the FreeVariable.Status type.')
-        self.status = status
+            'The status of a FreeVariable must be of the FreeVariable.Status type.')
+        self._status = status
+        self._scope = scope
         assert isinstance(universe_of_discourse, UniverseOfDiscourse)
         if symbol is None:
             base = '𝐱'
@@ -480,18 +486,34 @@ class FreeVariable(TheoreticalObjct):
             universe_of_discourse=universe_of_discourse)
         self.universe_of_discourse.cross_reference_variable(x=self)
 
-    @contextlib.contextmanager
-    def set_scope(self):
+    @property
+    def scope(self):
+        """The scope of a free variable is the set of the formula where the variable is used.
+
+        :return:
+        """
+        return self._scope
+
+    def lock_scope(self):
         # Support for the with pythonic syntax
         # Start building  variable scope
         verify(
-            self.status == FreeVariable.scope_initialization_status,
-            'An instance of FreeVariable can only be used once in the with '
-            'syntax.')
-        yield self
-        # TODO: Use formula cross-referencing to build scope here!!!!
+            self._status == FreeVariable.scope_initialization_status,
+            'The scope of an instance of FreeVariable can only be locked if it is open.')
         # Close variable scope
-        self.status = FreeVariable.closed_scope_status
+        self._status = FreeVariable.closed_scope_status
+
+    def extend_scope(self, phi):
+        # Support for the with pythonic syntax
+        # Start building  variable scope
+        verify(
+            self._status == FreeVariable.scope_initialization_status,
+            'The scope of an instance of FreeVariable can only be extended if it is open.')
+        # Close variable scope
+        verify(
+            isinstance(phi, Formula),
+            'Scope extensions of FreeVariable must be of type Formula.')
+        self._scope = self._scope.union({phi})
 
     def is_masked_formula_similar_to(self, o2, mask, _values):
         # TODO: Re-implement this
@@ -605,6 +627,8 @@ class Formula(TheoreticalObjct):
                 isinstance(p, TheoreticalObjct),
                 'Formula parameters must be instances of TheoreticalObjct.',
                 p=p)
+            if isinstance(p, FreeVariable):
+                p.extend_scope(self)
             # The following check is only applicable to Statements, not Formulae:
             # verify(
             #    theory.has_objct_in_hierarchy(p),
@@ -1936,6 +1960,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             capitalizable=capitalizable)
         return phi
 
+    @contextlib.contextmanager
     def declare_free_variable(self, symbol=None):
         """Declare a free-variable in this universe-of-discourse.
 
@@ -1944,7 +1969,11 @@ class UniverseOfDiscourse(SymbolicObjct):
         :param symbol:
         :return:
         """
-        return FreeVariable(universe_of_discourse=self, symbol=symbol)
+        x = FreeVariable(
+            universe_of_discourse=self, symbol=symbol,
+            status=FreeVariable.scope_initialization_status)
+        yield x
+        x.lock_scope()
 
     def declare_relation(
         self, arity, symbol=None, formula_rep=None,

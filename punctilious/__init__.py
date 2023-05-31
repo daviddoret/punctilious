@@ -3,7 +3,8 @@
 """
 
 print('Punctilious package (punctilious/__init__.py)')
-from core import Formula, FormalAxiom, FormalDefinition, FreeVariable, \
+from core import FailedVerificationException, Formula, FormalAxiom, \
+    FormalDefinition, FreeVariable, \
     NaturalLanguageAxiom, NaturalLanguageDefinition, Note, Relation, \
     SimpleObjct, SymbolicObjct, Theory, UniverseOfDiscourse
 from foundation_system_1 import ft, u

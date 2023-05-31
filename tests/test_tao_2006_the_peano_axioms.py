@@ -2,7 +2,7 @@ import unittest
 import core as pt
 import theories.tao_2006_the_peano_axioms as tpa
 
-t = tpa.t
+t = tpa.tf
 
 
 class TestTao2006ThePeanoAxioms(unittest.TestCase):

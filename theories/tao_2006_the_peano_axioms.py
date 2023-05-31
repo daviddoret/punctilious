@@ -21,12 +21,12 @@ fa_2_1_a = t.fa(u.f(is_a, zero, nat), nla_2_1, symbol='2.1.a')
 
 nla_2_2_1 = t.nla(
     'If 𝐧 is a natural number, then 𝐧++ is a natural number.', symbol='2.2.1')
-n = u.v('𝐧')
-suc = u.r(1, '++', formula_rep=Formula.postfix_operator_representation)
-fa_2_2_2 = t.fa(
-    u.f(ft.implication, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
-    nla_2_2_1,
-    symbol='2.2.2')
+with u.v('n') as n:
+    suc = u.r(1, '++', formula_rep=Formula.postfix_operator_representation)
+    fa_2_2_2 = t.fa(
+        u.f(ft.implication, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
+        nla_2_2_1,
+        symbol='2.2.2')
 
 p_2_2_3 = t.mp(fa_2_2_2, fa_2_1_a, symbol='2.2.3')
 p_2_2_4 = t.mp(fa_2_2_2, p_2_2_3, symbol='2.2.4')
