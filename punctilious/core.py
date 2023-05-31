@@ -1,6 +1,7 @@
 import textwrap
 from types import SimpleNamespace
 import repm
+import contextlib
 
 configuration = SimpleNamespace(
     raise_exception_on_verification_failure=True,
@@ -447,10 +448,21 @@ class FreeVariable(TheoreticalObjct):
      * The index-position of the free-variable in its scope-formula
     """
 
+    class Status(repm.Representation):
+        pass
+
+    scope_initialization_status = Status('scope_initialization_status')
+    closed_scope_status = Status('closed_scope_status')
+
     def __init__(
         self, symbol=None, capitalizable=None, python_name=None,
-        universe_of_discourse=None):
+        universe_of_discourse=None, status=None):
         capitalizable = False if capitalizable is None else capitalizable
+        status = FreeVariable.scope_initialization_status if status is None else status
+        verify(
+            isinstance(status, FreeVariable.Status),
+            'FreeVariable.status must be of the FreeVariable.Status type.')
+        self.status = status
         assert isinstance(universe_of_discourse, UniverseOfDiscourse)
         if symbol is None:
             base = '𝐱'
@@ -467,6 +479,19 @@ class FreeVariable(TheoreticalObjct):
             python_name=python_name,
             universe_of_discourse=universe_of_discourse)
         self.universe_of_discourse.cross_reference_variable(x=self)
+
+    @contextlib.contextmanager
+    def set_scope(self):
+        # Support for the with pythonic syntax
+        # Start building  variable scope
+        verify(
+            self.status == FreeVariable.scope_initialization_status,
+            'An instance of FreeVariable can only be used once in the with '
+            'syntax.')
+        yield self
+        # TODO: Use formula cross-referencing to build scope here!!!!
+        # Close variable scope
+        self.status = FreeVariable.closed_scope_status
 
     def is_masked_formula_similar_to(self, o2, mask, _values):
         # TODO: Re-implement this

@@ -116,15 +116,15 @@ nla_30 = ft.nla(
 
 # DOUBLE-NEGATION
 nla_09_50 = ft.nla('If P has-truth-value t, ¬(¬(P)) has-truth-value t.')
-p_09_51 = u.v()
-t_09_52 = u.v()
-fa_09_51 = ft.fa(
-    u.f(
-        ft.implication,
-        u.f(has_truth_value, p_09_51, t_09_52),
+with u.v().set_scope() as p, u.v().set_scope() as t:
+    fa_09_51 = ft.fa(
         u.f(
-            has_truth_value, u.f(negation, u.f(negation, p_09_51)), t_09_52)),
-    nla=nla_09_50)
+            ft.implication,
+            u.f(has_truth_value, p, t),
+            u.f(
+                has_truth_value, u.f(negation, u.f(negation, p)),
+                t)),
+        nla=nla_09_50)
 
 nla_40 = ft.nla(
     'If T is a theory, and both P is valid and ¬P is valid in T, '
