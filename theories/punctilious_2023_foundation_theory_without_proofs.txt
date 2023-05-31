@@ -37,85 +37,85 @@ Let ++₁ be a unary relation denoted as ⌜ ++₁ ⌝, that signals well-formed
 
 𝐓𝐡𝐞𝐨𝐫𝐲 𝐞𝐥𝐚𝐛𝐨𝐫𝐚𝐭𝐢𝐨𝐧:
 
-𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟏: “A theory is a... (define punctilious data
-	model).”
+𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “A theory is a... (define punctilious
+	data model).”
 
-𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟐: “An (axiomatic) class is a collection of
+𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “An (axiomatic) class is a collection of
 	theoretical objects that are unambiguously defined by the axioms of
 	the theory it belongs to.”
 
-𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟑: “The class of classes is the class of all
+𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “The class of classes is the class of all
 	classes defined in the universe-of-discourse (TODO: Or foundation
 	theory?).”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟏: (class-of-classes₁ ∈₁ class-of-classes₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (class-of-classes₁ ∈₁ class-of-classes₁)
 
-𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟒: “The theory-class is the class of all
+𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “The theory-class is the class of all
 	theories”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟐: (theory-class₁ ∈₁ class-of-classes₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (theory-class₁ ∈₁ class-of-classes₁)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟑: (foundation-system₁ ∈₁ theory-class₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (foundation-system₁ ∈₁ theory-class₁)
 
-𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟓: “truth-values is the class whose elements
+𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “truth-values is the class whose elements
 	are the theoretical-objects truth and falsehood.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟒: (truth-values₁ ∈₁ class-of-classes₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (truth-values₁ ∈₁ class-of-classes₁)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟓: (true₁ ∈₁ truth-values₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (true₁ ∈₁ truth-values₁)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟔: (false₁ ∈₁ truth-values₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (false₁ ∈₁ truth-values₁)
 
-𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟔: “propositional-relations is the class whose
-	elements are the relations: conjunction, disjunction, implication,
-	and negation, and any relation defined from these.”
+𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “propositional-relations is the class
+	whose elements are the relations: conjunction, disjunction,
+	implication, and negation, and any relation defined from these.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟕: (propositional-relations-class₁ ∈₁ class-of-classes₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (propositional-relations-class₁ ∈₁ class-of-classes₁)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟖: (∧₁ ∈₁ propositional-relations-class₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (∧₁ ∈₁ propositional-relations-class₁)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟗: (∨₁ ∈₁ propositional-relations-class₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (∨₁ ∈₁ propositional-relations-class₁)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟏𝟎: (⟹₁ ∈₁ propositional-relations-class₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (⟹₁ ∈₁ propositional-relations-class₁)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟏𝟏: (¬₁ ∈₁ propositional-relations-class₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (¬₁ ∈₁ propositional-relations-class₁)
 
-𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟕: “= is a binary relation such that, given any
-	two theoretical-objcts x and y, if x=y then y=x, and for every
+𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “= is a binary relation such that, given
+	any two theoretical-objcts x and y, if x=y then y=x, and for every
 	statement s, s is valid iif subst s is valid.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟏𝟐: ((x₁ =₁ y₁) ⟹₁ (y₁ =₁ x₁))
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: ((x₁ =₁ y₁) ⟹₁ (y₁ =₁ x₁))
 
-𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟖: “propositions is a class whose elements are
-	truth, falsehood, all elements of the theory-formula-statement class,
-	whose relation is an element-of propositional-relations-class, and
-	all theory-formula-statements whose relation is defined from these.
-	Its elements are called propositions.”
+𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “propositions is a class whose elements
+	are truth, falsehood, all elements of the theory-formula-statement
+	class, whose relation is an element-of propositional-relations-class,
+	and all theory-formula-statements whose relation is defined from
+	these. Its elements are called propositions.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟏𝟑: (true₁ ∈₁ class-of-classes₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (true₁ ∈₁ class-of-classes₁)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟏𝟒: (false₁ ∈₁ class-of-classes₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (false₁ ∈₁ class-of-classes₁)
 
-𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟗: “If P is a proposition, then either the
+𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “If P is a proposition, then either the
 	statement P has truth value true,or the statement P has truth value
 	falsehood.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟏𝟓: (true₁ is₁ true₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (true₁ is₁ true₁)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟏𝟔: (false₁ is₁ false₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (false₁ is₁ false₁)
 
-𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟏𝟎: “¬ is a unary relation. If P is a
+𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “¬ is a unary relation. If P is a
 	proposition and it has truth-value truth, then ¬P has-truth-value
 	false. Conversely, if P is a proposition and it has truth-value
 	falsehood, then ¬P has truth-value true.”
 
-𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟏𝟏: “If P has-truth-value t, ¬(¬(P))
+𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “If P has-truth-value t, ¬(¬(P))
 	has-truth-value t.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟏𝟕: ((𝐱₁ is₁ 𝐱₂) ⟹₁ (¬₁(¬₁(𝐱₁)) is₁ 𝐱₂))
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: ((𝐱₁ is₁ 𝐱₂) ⟹₁ (¬₁(¬₁(𝐱₁)) is₁ 𝐱₂))
 
-𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟏𝟐: “If T is a theory, and both P is valid and
-	¬P is valid in T, then this theory is an element of
+𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “If T is a theory, and both P is valid
+	and ¬P is valid in T, then this theory is an element of
 	contradictory-theories class.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟏𝟖: (((φ₁ is₁ true₁) ∧₁ (φ₁ is₁ false₁)) ⟹₁ (φ₁ ∈₁ contradictory-statement₁))
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (((φ₁ is₁ true₁) ∧₁ (φ₁ is₁ false₁)) ⟹₁ (φ₁ ∈₁ contradictory-statement₁))
