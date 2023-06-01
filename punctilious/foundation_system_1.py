@@ -67,15 +67,24 @@ conjunction = u.r(
 disjunction = u.r(
     2, '∨', core.Formula.infix_operator_representation,
     signal_proposition=True)
-negation = u.r(
+ft.negation = u.r(
     1, '¬', core.Formula.prefix_operator_representation,
     signal_proposition=True)
+ft.inequality = u.r(
+    2, '≠', core.Formula.infix_operator_representation,
+    signal_proposition=True)
+ft.inequality.prnt()
+
 ft.fa(u.f(element_of, conjunction, propositional_relations_class), nla=nla_09)
 ft.fa(u.f(element_of, disjunction, propositional_relations_class), nla=nla_09)
 ft.fa(
     u.f(element_of, ft.implication, propositional_relations_class), nla=nla_09)
-ft.fa(u.f(element_of, negation, propositional_relations_class), nla=nla_09)
-
+ft.fa(
+    u.f(element_of, ft.negation, propositional_relations_class),
+    nla=nla_09).prnt(expanded=True)
+ft.fa(
+    u.f(element_of, ft.inequality, propositional_relations_class),
+    nla=nla_09).prnt(expanded=True)
 nla_01b = ft.nla(
     '= is a binary relation such that, given any two theoretical-objcts x and y, '
     'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.')
@@ -84,6 +93,19 @@ with u.v('x') as x1, u.v('y') as x2:
     x2_equal_x1 = u.f(ft.equality, x2, x1)
     ft.commutativity_of_equality = ft.fa(
         u.f(ft.implication, x1_equal_x2, x2_equal_x1), nla_01b)
+
+nld_55 = ft.nld('Inequality is defined as the negation of equality.')
+with u.v('x') as x, u.v('y') as y:
+    u.f(ft.inequality, x, y).prnt(expanded=True)
+    u.f(ft.equality, x, y).prnt(expanded=True)
+    u.f(ft.negation, u.f(ft.equality, x, y)).prnt(expanded=True)
+    fd_55 = ft.fd(
+        valid_proposition=
+        u.f(
+            ft.equality,
+            u.f(ft.inequality, x, y),
+            u.f(ft.negation, u.f(ft.equality, x, y))), nld=nld_55)
+    fd_55.prnt()
 
 nla_10 = ft.nla(
     'propositions is a class whose elements are '
@@ -120,7 +142,7 @@ with u.v() as p, u.v() as t:
             ft.implication,
             u.f(has_truth_value, p, t),
             u.f(
-                has_truth_value, u.f(negation, u.f(negation, p)),
+                has_truth_value, u.f(ft.negation, u.f(ft.negation, p)),
                 t)),
         nla=nla_09_50)
 
@@ -193,7 +215,7 @@ def elaborate_foundation_theory():
     gen1()
 
 
-# ft.prnt()
+ft.prnt()
 
 # elaborate_foundation_theory()
 pass

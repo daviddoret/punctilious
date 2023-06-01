@@ -75,4 +75,10 @@ t.nla(
     '0 is not the successor of any natural number; i.e., we have n++ ≠ 0 for every natural number n.',
     reference='2.3')
 
+with u.v('n') as n:
+    t.fa(
+        valid_proposition=u.f(
+            ft.implication(
+                u.f(is_a, n, nat), u.f(ft.unequality, u.f(suc, n), zero))))
+
 t.prnt()

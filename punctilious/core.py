@@ -187,6 +187,9 @@ class SymbolicObjct:
             return False
         return True
 
+    def prnt(self, expanded=False):
+        repm.prnt(self.repr(expanded=expanded))
+
     def repr_as_declaration(self):
         return f'Let {self.repr_as_symbol()} be a symbolic-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
 
@@ -627,10 +630,10 @@ class Formula(TheoreticalObjct):
         super().__init__(
             symbol=symbol,
             universe_of_discourse=universe_of_discourse)
-        universe_of_discourse.cross_reference_formula(self)
         assert isinstance(relation, (Relation, FreeVariable)) and \
                relation.universe_of_discourse is self.universe_of_discourse
         self.relation = relation
+        universe_of_discourse.cross_reference_formula(self)
         parameters = parameters if isinstance(parameters, tuple) else tuple(
             [parameters])
         assert len(parameters) > 0
@@ -643,15 +646,10 @@ class Formula(TheoreticalObjct):
         for p in parameters:
             verify(
                 isinstance(p, TheoreticalObjct),
-                'Formula parameters must be instances of TheoreticalObjct.',
+                'This formula parameter is not an instance of TheoreticalObjct.',
                 p=p)
             if isinstance(p, FreeVariable):
                 p.extend_scope(self)
-            # The following check is only applicable to Statements, not Formulae:
-            # verify(
-            #    theory.has_objct_in_hierarchy(p),
-            #    'Formula parameters must be elements of the theory extension.',
-            #    f=self.symbol, ft=self.theory, p=p, pt=p.theory)
 
     def __repr__(self):
         return self.repr()
@@ -760,8 +758,15 @@ class Formula(TheoreticalObjct):
 
     def repr_as_prefix_operator(self, expanded=None):
         expanded = True if expanded is None else expanded
-        assert isinstance(expanded, bool)
-        assert self.relation.arity == 1
+        verify(
+            isinstance(expanded, bool),
+            'Method parameter "expanded" is not an instance of bool.',
+            self=self, expanded=expanded)
+        verify(
+            self.relation.arity == 1,
+            'Attempt to represent prefix operator, but relation arity is not equal to 1.',
+            self_relation=self.relation,
+            parameters=self.parameters)
         return f'{self.relation.symbol}({self.parameters[0].repr(expanded=expanded)})'
 
     def repr_as_formula(self, expanded=None):
@@ -1322,6 +1327,8 @@ class Theory(TheoreticalObjct):
         self._commutativity_of_equality = None
         self._equality = None
         self._implication = None
+        self._negation = None
+        self._inequality = None
 
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
         # if is_theory_foundation_system:
@@ -1553,6 +1560,29 @@ class Theory(TheoreticalObjct):
             'The implication property must be a relation.')
         self._implication = r
 
+    @property
+    def inequality(self):
+        """(None, Relation) Inequality is a fundamental theory property.
+        None if the property is not equipped on the theory.
+        An instance of Relation otherwise."""
+        if self._inequality is not None:
+            return self._inequality
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system._inequality
+        else:
+            return None
+
+    @inequality.setter
+    def inequality(self, r):
+        verify(
+            self._inequality is None,
+            'A theory inequality property can only be set once to prevent '
+            'inconsistency.')
+        verify(
+            isinstance(r, Relation),
+            'The inequality property must be a relation.')
+        self._inequality = r
+
     def mp(
         self, conditional, antecedent, symbol=None, category=None,
         reference=None, title=None):
@@ -1561,6 +1591,29 @@ class Theory(TheoreticalObjct):
         return self.elaborate_modus_ponens(
             conditional=conditional, antecedent=antecedent, symbol=symbol,
             category=category, reference=reference, title=title)
+
+    @property
+    def negation(self):
+        """(None, Relation) Inequality is a fundamental theory property.
+        None if the property is not equipped on the theory.
+        An instance of Relation otherwise."""
+        if self._negation is not None:
+            return self._negation
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system._negation
+        else:
+            return None
+
+    @negation.setter
+    def negation(self, r):
+        verify(
+            self._negation is None,
+            'A theory negation property can only be set once to prevent '
+            'inconsistency.')
+        verify(
+            isinstance(r, Relation),
+            'The negation property must be a relation.')
+        self._negation = r
 
     def nla(self, natural_language, symbol=None, reference=None, title=None):
         """Elaborate a new natural-language-axiom statement. Shortcut function for
@@ -1684,10 +1737,16 @@ class Relation(TheoreticalObjct):
             universe_of_discourse=universe_of_discourse, symbol=symbol)
         self.universe_of_discourse.cross_reference_relation(r=self)
 
+    # def repr(self, expanded=None):
+    #    return self.repr_as_symbol()
+
     def repr_as_declaration(self):
         output = f'Let {self.repr_as_symbol()} be a {self.repr_arity_as_text()} relation denoted as ⌜ {self.repr_as_symbol()} ⌝'
         output = output + f', that signals well-formed formulae in {self.formula_rep} syntax (e.g.: ⌜ {self.formula_rep.sample.replace("◆", str(self.symbol))} ⌝).'
         return output
+
+    # def repr_as_symbol(self):
+    #    return str(self.symbol)
 
     def repr_arity_as_text(self):
         match self.arity:
