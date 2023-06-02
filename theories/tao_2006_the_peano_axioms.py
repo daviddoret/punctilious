@@ -9,6 +9,7 @@ zero = u.o('0')
 one = u.o('1')
 two = u.o('2')
 three = u.o('3')
+four = u.o('4')
 nat = u.o('natural-number')
 
 # relation declarations
@@ -31,9 +32,11 @@ with u.v('n') as n:
 
 p_2_2_3 = t.mp(fa_2_2_2, fa_2_1_a, reference='2.2.3')
 p_2_2_4 = t.mp(fa_2_2_2, p_2_2_3, reference='2.2.4')
-p_2_2_5 = t.mp(fa_2_2_2, p_2_2_4, reference='2.2.5')
+proposition_2_2_5 = t.mp(fa_2_2_2, p_2_2_4, reference='2.2.5')
 
-d_2_1_3 = t.nld(
+# Definition 2.1.3. We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that xis defined to equal y.)
+
+definition_2_1_3 = t.nld(
     'We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number '
     '((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text '
     'I use "x := y" to denote the statement that x is defined to equal y.)',
@@ -41,14 +44,15 @@ d_2_1_3 = t.nld(
 
 # 1
 fd_2_1_3_1_a = t.fd(
-    u.f(t.equality, one, u.f(suc, zero)), d_2_1_3, reference='2.1.3.1.a')
+    u.f(t.equality, one, u.f(suc, zero)), definition_2_1_3,
+    reference='2.1.3.1.a')
 
 p_2_1_3_1_b = t.mp(
     t.commutativity_of_equality, fd_2_1_3_1_a, reference='2.1.3.1.b')
 
 # 2
 fd_2_1_3_2_a = t.fd(
-    u.f(t.equality, two, u.f(suc, u.f(suc, zero))), d_2_1_3,
+    u.f(t.equality, two, u.f(suc, u.f(suc, zero))), definition_2_1_3,
     reference='2.1.3.2.a')
 p_2_1_3_2_b = t.soet(fd_2_1_3_2_a, p_2_1_3_1_b, reference='2.1.3.2.b')
 
@@ -59,7 +63,8 @@ p_2_1_3_2_d = t.soet(p_2_1_3_2_c, p_2_1_3_1_b, reference='2.1.3.2.d')
 
 # 3
 fd_2_1_3_3_a = t.fd(
-    u.f(t.equality, three, u.f(suc, u.f(suc, u.f(suc, zero)))), d_2_1_3,
+    u.f(t.equality, three, u.f(suc, u.f(suc, u.f(suc, zero)))),
+    definition_2_1_3,
     reference='2.1.3.3.a')
 
 p_2_1_3_3_b = t.soet(fd_2_1_3_3_a, p_2_1_3_2_c, reference='2.1.3.3.b')
@@ -69,16 +74,38 @@ p_2_1_3_3_c = t.mp(
 
 p_2_1_3_3_d = t.soet(p_2_1_3_3_c, p_2_1_3_2_c, reference='2.1.3.3.d')
 
-p_2_1_4 = t.soet(p_2_2_5, p_2_1_3_3_c, reference='2.1.4')
+p_2_1_4 = t.soet(proposition_2_2_5, p_2_1_3_3_c, reference='2.1.4')
 
-t.nla(
-    '0 is not the successor of any natural number; i.e., we have n++ ≠ 0 for every natural number n.',
+# 4
+fd_2_1_3_3_a = t.fd(
+    u.f(t.equality, four, u.f(suc, u.f(suc, u.f(suc, u.f(suc, zero))))),
+    definition_2_1_3,
+    reference='2.1.3.3.a')
+
+# Axiom 2.3. 0 is not the successor of any natural number;
+# i.e., we have n++ f=. 0 for every natural number n.
+
+a_2_3 = t.nla(
+    '0 is not the successor of any natural number; i.e., we have n++ ≠ 0 for '
+    'every natural number n.',
     reference='2.3')
 
 with u.v('n') as n:
-    t.fa(
+    a_2_3_b = t.fa(
         valid_proposition=u.f(
-            ft.implication(
-                u.f(is_a, n, nat), u.f(ft.unequality, u.f(suc, n), zero))))
+            ft.implication,
+            u.f(is_a, n, nat),
+            u.f(ft.inequality, u.f(suc, n), zero)),
+        nla=a_2_3)
 
-t.prnt()
+
+# Proposition 2.1.6. 4 is not equal to 0.
+def proposition_2_1_6():
+    # 𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟐.𝟓: ((((0₁) + +₁) + +₁) + +₁ is -a₁ natural-number₁)
+    # 𝐅𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑.𝐚: (4₁ =₁ ((((0₁) + +₁)++₁)++₁)++₁)
+    p1 = t.soet(original_expression=a_2_3_b, equality_statement=fd_2_1_3_3_a)
+    pass
+
+
+t.prnt(output_proofs=False)
+proposition_2_1_6()

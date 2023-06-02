@@ -40,9 +40,18 @@ class FailedVerificationException(Exception):
 
 def verify(assertion, msg, **kwargs):
     if not assertion:
-        repm.prnt(f'{msg}\nContextual information:{str(kwargs)}')
+        contextual_information = ''
+        for key, value in kwargs.items():
+            value_as_string = f'(str conversion failure of type {str(type(value))})'
+            try:
+                value_as_string = str(value)
+            finally:
+                pass
+            contextual_information += f'\n{key}: {value_as_string}'
+        report = f'{msg}\nContextual information:{contextual_information}'
+        repm.prnt(report)
         if configuration.raise_exception_on_verification_failure:
-            raise FailedVerificationException(msg=msg, **kwargs)
+            raise FailedVerificationException(msg=report, **kwargs)
 
 
 def set_attr(o, a, v):
@@ -225,6 +234,18 @@ class TheoreticalObjct(SymbolicObjct):
     def __init__(
         self, symbol,
         is_theory_foundation_system=None, universe_of_discourse=None):
+        # pseudo-class properties. these must be overwritten by
+        # the parent constructor after calling __init__().
+        # the rationale is that checking python types fails
+        # miserably (e.g. because of context managers),
+        # thus, implementing explicit functional-types will prove
+        # more robust and allow for duck typing.
+        self.is_formula = False
+        self.is_free_variable = False
+        self.is_relation = False
+        self.is_simple_objct = False
+        self.is_statement = False
+        self.is_theoretical_objct = True
         super().__init__(
             symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
@@ -388,12 +409,20 @@ class TheoreticalObjct(SymbolicObjct):
                 _values[variable] = newly_observed_value
         return True, _values
 
-    def substitute(self, substitution_map, target_theory):
+    def substitute(
+        self, substitution_map, target_theory, lock_variable_scope=None):
         """Given a theoretical-objct o₁ (self),
         and a substitution map 𝐌,
         return a theoretical-objct o₂
         where all components, including o₂ itself,
         have been substituted if present in 𝐌.
+
+        Note
+        ----
+        The scope of variables is locked to their most-parent formula.
+        In consequence, and in order to generate valid formluae,
+        substition must simultaneously substite all variables with
+        new variables.
 
         Note
         ----
@@ -410,15 +439,25 @@ class TheoreticalObjct(SymbolicObjct):
             and o' is the substitute theoretical-objct in o₂.
 
         """
+        lock_variable_scope = True if lock_variable_scope is None else lock_variable_scope
         substitution_map = dict() if substitution_map is None else substitution_map
         assert isinstance(substitution_map, dict)
+        output = None
         for key, value in substitution_map.items():
-            assert isinstance(key, TheoreticalObjct)
-            assert isinstance(value, TheoreticalObjct)
+            # FreeVariable instances may be of type contextlib._GeneratorContextManager
+            # when used inside a with statement.
+            pass
+            # assert isinstance(key, TheoreticalObjct)  ##### XXXXX
+            # verify(
+            #    isinstance(value, (
+            #    TheoreticalObjct, contextlib._GeneratorContextManager)),
+            #    'The value component of this key/value pair in this '
+            #    'substitution map is not an instance of TheoreticalObjct.',
+            #    key=key, value=value, value_type=type(value), self2=self)
             # A formula relation cannot be replaced by a simple-objct.
             # But a simple-object could be replaced by a formula,
             # if that formula "yields" such simple-objects.
-            # TODO: Impelement clever rules here to avoid ill-formed formula,
+            # TODO: Implement clever rules here to avoid ill-formed formula,
             #   or let the formula constructor do the work.
             # assert type(key) == type(value) or isinstance(
             #    value, FreeVariable) or isinstance(
@@ -427,6 +466,19 @@ class TheoreticalObjct(SymbolicObjct):
             # to prevent the creation of an ill-formed formula.
             # NO, THIS IS WRONG. TODO: Re-analyze this point.
             # assert not isinstance(key, Formula) or key.arity == value.arity
+
+        # Because the scope of variables is locked,
+        # the substituted formula must create "duplicates" of all variables.
+        variables_list = self.get_variable_set()
+        for x in variables_list:
+            if x not in substitution_map.keys():
+                # Call declare_free_variable() instead of v()
+                # to explicitly manage variables scope locking.
+                x2 = self.universe_of_discourse.declare_free_variable(
+                    x.symbol.base)
+                substitution_map[x] = x2
+
+        # Now we may proceed with substitution.
         if self in substitution_map:
             return substitution_map[self]
         elif isinstance(self, Formula):
@@ -442,13 +494,17 @@ class TheoreticalObjct(SymbolicObjct):
             # into its constituent parts, i.e. relation and parameters,
             # to apply the substitution operation on these.
             relation = self.relation.substitute(
-                substitution_map=substitution_map, target_theory=target_theory)
+                substitution_map=substitution_map, target_theory=target_theory,
+                lock_variable_scope=lock_variable_scope)
             parameters = tuple(
                 p.substitute(
                     substitution_map=substitution_map,
-                    target_theory=target_theory) for p in
+                    target_theory=target_theory, lock_variable_scope=False) for
+                p in
                 self.parameters)
-            return self.universe_of_discourse.f(relation, *parameters)
+            phi = self.universe_of_discourse.f(
+                relation, *parameters, lock_variable_scope=lock_variable_scope)
+            return phi
         else:
             return self
 
@@ -508,6 +564,7 @@ class FreeVariable(TheoreticalObjct):
             symbol=symbol,
             universe_of_discourse=universe_of_discourse)
         self.universe_of_discourse.cross_reference_variable(x=self)
+        self.is_free_variable = True
 
     @property
     def scope(self):
@@ -611,7 +668,7 @@ class Formula(TheoreticalObjct):
 
     def __init__(
         self, relation, parameters, symbol=None,
-        universe_of_discourse=None):
+        universe_of_discourse=None, lock_variable_scope=None):
         """
 
         :param theory:
@@ -620,6 +677,7 @@ class Formula(TheoreticalObjct):
         :param symbol:
         :param arity: Mandatory if relation is a FreeVariable.
         """
+        lock_variable_scope = False if lock_variable_scope is None else lock_variable_scope
         self.free_variables = dict()  # TODO: Check how to make dict immutable after construction.
         # self.formula_index = theory.crossreference_formula(self)
         if symbol is None:
@@ -630,8 +688,17 @@ class Formula(TheoreticalObjct):
         super().__init__(
             symbol=symbol,
             universe_of_discourse=universe_of_discourse)
-        assert isinstance(relation, (Relation, FreeVariable)) and \
-               relation.universe_of_discourse is self.universe_of_discourse
+        self.is_formula = True
+        verify(
+            relation.is_relation or relation.is_free_variable,
+            'The relation of this formula is neither a relation, nor a '
+            'free_variable.',
+            formula=self, relation=relation)
+        verify(
+            relation.universe_of_discourse is self.universe_of_discourse,
+            'The universe_of_discourse of the relation of this formula is '
+            'distint from the formula unierse_of_disourse.',
+            formula=self, relation=relation)
         self.relation = relation
         universe_of_discourse.cross_reference_formula(self)
         parameters = parameters if isinstance(parameters, tuple) else tuple(
@@ -645,11 +712,13 @@ class Formula(TheoreticalObjct):
         self.cross_reference_variables()
         for p in parameters:
             verify(
-                isinstance(p, TheoreticalObjct),
-                'This formula parameter is not an instance of TheoreticalObjct.',
-                p=p)
-            if isinstance(p, FreeVariable):
+                p.is_theoretical_objct,
+                'This formula parameter is not a theoretical-objct.',
+                formula=self, p=p)
+            if p.is_free_variable:
                 p.extend_scope(self)
+        if lock_variable_scope:
+            self.lock_variable_scope()
 
     def __repr__(self):
         return self.repr()
@@ -730,6 +799,13 @@ class Formula(TheoreticalObjct):
                 o2.parameters[i]):
                 return False
         return True
+
+    def lock_variable_scope(self):
+        """Variable scope must be locked when the formula construction
+        is completed."""
+        variables_list = self.get_variable_set()
+        for x in variables_list:
+            x.lock_scope()
 
     def repr(self, expanded=None):
         expanded = True if expanded is None else expanded
@@ -1662,8 +1738,8 @@ class Theory(TheoreticalObjct):
             equality_statement=equality_statement, symbol=symbol,
             category=category, reference=reference, title=title)
 
-    def prnt(self):
-        repm.prnt(self.repr_as_theory())
+    def prnt(self, output_proofs=True):
+        repm.prnt(self.repr_as_theory(output_proofs=output_proofs))
 
     def export_to_text(self, file_path, output_proofs=True):
         """Export this theory to a Unicode textfile."""
@@ -1735,6 +1811,7 @@ class Relation(TheoreticalObjct):
         self.arity = arity
         super().__init__(
             universe_of_discourse=universe_of_discourse, symbol=symbol)
+        self.is_relation = True
         self.universe_of_discourse.cross_reference_relation(r=self)
 
     # def repr(self, expanded=None):
@@ -1851,7 +1928,8 @@ class SubstitutionOfEqualTerms(FormulaStatement):
         self.equality_statement = equality_statement
         substitution_map = {left_term: right_term}
         valid_proposition = original_expression.valid_proposition.substitute(
-            substitution_map=substitution_map, target_theory=theory)
+            substitution_map=substitution_map, target_theory=theory,
+            lock_variable_scope=True)
         # Note: valid_proposition will be formula-equivalent to self,
         #   if there are no occurrences of left_term in original_expression.
         super().__init__(
@@ -2030,8 +2108,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             self.variables[x.symbol] = x
 
     def declare_formula(
-        self, relation, *parameters, symbol=None,
-        theory=None):
+        self, relation, *parameters, symbol=None, lock_variable_scope=None):
         """Declare a new :term:`formula` in this universe-of-discourse.
 
         This method is a shortcut for Formula(universe_of_discourse=self, ...).
@@ -2042,10 +2119,10 @@ class UniverseOfDiscourse(SymbolicObjct):
         phi = Formula(
             relation=relation, parameters=parameters,
             universe_of_discourse=self, symbol=symbol,
+            lock_variable_scope=lock_variable_scope
         )
         return phi
 
-    @contextlib.contextmanager
     def declare_free_variable(self, symbol=None):
         """Declare a free-variable in this universe-of-discourse.
 
@@ -2057,8 +2134,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         x = FreeVariable(
             universe_of_discourse=self, symbol=symbol,
             status=FreeVariable.scope_initialization_status)
-        yield x
-        x.lock_scope()
+        return x
 
     def declare_relation(
         self, arity, symbol=None, formula_rep=None,
@@ -2134,12 +2210,14 @@ class UniverseOfDiscourse(SymbolicObjct):
             reference=reference, title=title)
 
     def f(
-        self, relation, *parameters, theory=None, symbol=None):
+        self, relation, *parameters, symbol=None,
+        lock_variable_scope=None):
         """Declare a new formula in this instance of UniverseOfDiscourse.
 
         Shortcut for self.elaborate_formula(...)."""
         return self.declare_formula(
-            relation, *parameters, theory=theory, symbol=symbol)
+            relation, *parameters, symbol=symbol,
+            lock_variable_scope=lock_variable_scope)
 
     def index_symbol(self, base):
         """Given a symbol-base S (i.e. an unindexed symbol), returns a unique integer n
@@ -2213,12 +2291,28 @@ class UniverseOfDiscourse(SymbolicObjct):
             extended_theories=extended_theories,
             theory_foundation_system=theory_foundation_system)
 
+    # @FreeVariableContext()
+    @contextlib.contextmanager
     def v(
         self, symbol=None):
         """Declare a free-variable in this universe-of-discourse.
 
-        Shortcut for self.declare_free_variable(universe_of_discourse=self, ...)"""
-        return self.declare_free_variable(symbol=symbol)
+        This method is expected to be as in a with statement,
+        it yields an instance of FreeVariable,
+        and automatically lock the variable scope when the with left.
+        Example:
+            with u.v('x') as x, u.v('y') as y:
+                # some code...
+
+        To manage variable scope extensions and locking expressly,
+        use declare_free_variable() instead.
+        """
+        # return self.declare_free_variable(symbol=symbol)
+        x = FreeVariable(
+            universe_of_discourse=self, symbol=symbol,
+            status=FreeVariable.scope_initialization_status)
+        yield x
+        x.lock_scope()
 
 
 # universe_of_discourse = Theory(

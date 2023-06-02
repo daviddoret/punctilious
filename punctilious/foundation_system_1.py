@@ -73,7 +73,6 @@ ft.negation = u.r(
 ft.inequality = u.r(
     2, '≠', core.Formula.infix_operator_representation,
     signal_proposition=True)
-ft.inequality.prnt()
 
 ft.fa(u.f(element_of, conjunction, propositional_relations_class), nla=nla_09)
 ft.fa(u.f(element_of, disjunction, propositional_relations_class), nla=nla_09)
@@ -81,10 +80,10 @@ ft.fa(
     u.f(element_of, ft.implication, propositional_relations_class), nla=nla_09)
 ft.fa(
     u.f(element_of, ft.negation, propositional_relations_class),
-    nla=nla_09).prnt(expanded=True)
+    nla=nla_09)
 ft.fa(
     u.f(element_of, ft.inequality, propositional_relations_class),
-    nla=nla_09).prnt(expanded=True)
+    nla=nla_09)
 nla_01b = ft.nla(
     '= is a binary relation such that, given any two theoretical-objcts x and y, '
     'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.')
@@ -96,16 +95,12 @@ with u.v('x') as x1, u.v('y') as x2:
 
 nld_55 = ft.nld('Inequality is defined as the negation of equality.')
 with u.v('x') as x, u.v('y') as y:
-    u.f(ft.inequality, x, y).prnt(expanded=True)
-    u.f(ft.equality, x, y).prnt(expanded=True)
-    u.f(ft.negation, u.f(ft.equality, x, y)).prnt(expanded=True)
-    fd_55 = ft.fd(
+    ft.fd(
         valid_proposition=
         u.f(
             ft.equality,
             u.f(ft.inequality, x, y),
             u.f(ft.negation, u.f(ft.equality, x, y))), nld=nld_55)
-    fd_55.prnt()
 
 nla_10 = ft.nla(
     'propositions is a class whose elements are '

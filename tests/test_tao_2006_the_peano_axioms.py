@@ -28,11 +28,14 @@ class TestTao2006ThePeanoAxioms(unittest.TestCase):
             tpa.p_2_2_4.valid_proposition.is_formula_equivalent_to(phi3))
 
         self.assertTrue(
-            tpa.p_2_2_5.valid_proposition.is_formula_equivalent_to(phi3))
+            tpa.proposition_2_2_5.valid_proposition.is_formula_equivalent_to(
+                phi3))
         self.assertFalse(
-            tpa.p_2_2_5.valid_proposition.is_formula_equivalent_to(phi1))
+            tpa.proposition_2_2_5.valid_proposition.is_formula_equivalent_to(
+                phi1))
         self.assertFalse(
-            tpa.p_2_2_5.valid_proposition.is_formula_equivalent_to(phi2))
+            tpa.proposition_2_2_5.valid_proposition.is_formula_equivalent_to(
+                phi2))
 
         phi4 = t.f(tpa.is_a, tpa.three, tpa.nat)
         self.assertTrue(
