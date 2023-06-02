@@ -721,10 +721,10 @@ class Formula(TheoreticalObjct):
             self.lock_variable_scope()
 
     def __repr__(self):
-        return self.repr()
+        return self.repr(expanded=True)
 
     def __str__(self):
-        return self.repr()
+        return self.repr(expanded=True)
 
     def crossreference_variable(self, x):
         """During construction, cross-reference a free-variable 𝓍
@@ -1073,6 +1073,20 @@ class FormulaStatement(Statement):
             assert self.valid_proposition.relation.implementation is not None
             self.morphism_output = Morphism(
                 theory=theory, source_statement=self)
+
+    def __repr__(self):
+        return self.repr(expanded=True)
+
+    def __str__(self):
+        return self.repr(expanded=True)
+
+    def repr(self, expanded=None):
+        expanded = True if expanded is None else expanded
+        assert isinstance(expanded, bool)
+        if expanded:
+            return self.repr_as_formula(expanded=expanded)
+        else:
+            return super().repr(expanded=expanded)
 
     def repr_as_formula(self, expanded=None):
         return self.valid_proposition.repr_as_formula(expanded=expanded)

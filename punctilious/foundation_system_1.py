@@ -210,7 +210,7 @@ def elaborate_foundation_theory():
     gen1()
 
 
-ft.prnt()
+# ft.prnt()
 
 # elaborate_foundation_theory()
 pass

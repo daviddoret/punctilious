@@ -91,21 +91,21 @@ a_2_3 = t.nla(
     reference='2.3')
 
 with u.v('n') as n:
-    a_2_3_b = t.fa(
+    proposition_2_3_1 = t.fa(
         valid_proposition=u.f(
             ft.implication,
             u.f(is_a, n, nat),
             u.f(ft.inequality, u.f(suc, n), zero)),
-        nla=a_2_3)
+        nla=a_2_3, reference='2.3.1')
 
 
 # Proposition 2.1.6. 4 is not equal to 0.
-def proposition_2_1_6():
-    # 𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟐.𝟓: ((((0₁) + +₁) + +₁) + +₁ is -a₁ natural-number₁)
-    # 𝐅𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑.𝐚: (4₁ =₁ ((((0₁) + +₁)++₁)++₁)++₁)
-    p1 = t.soet(original_expression=a_2_3_b, equality_statement=fd_2_1_3_3_a)
+def prove_proposition_2_1_6():
+    p1 = t.mp(proposition_2_3_1, proposition_2_2_5, reference='2.1.6.1')
+    p2 = t.mp(ft.commutativity_of_equality, fd_2_1_3_3_a, reference='2.1.6.2')
+    p3 = t.soet(p1, p2, reference='2.1.6.3')
     pass
 
 
+prove_proposition_2_1_6()
 t.prnt(output_proofs=False)
-proposition_2_1_6()
