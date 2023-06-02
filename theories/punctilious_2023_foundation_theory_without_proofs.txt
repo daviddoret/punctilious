@@ -1,39 +1,41 @@
 
-𝐟𝐨𝐮𝐧𝐝𝐚𝐭𝐢𝐨𝐧-𝐬𝐲𝐬𝐭𝐞𝐦₁
+𝐟𝐨𝐮𝐧𝐝𝐚𝐭𝐢𝐨𝐧-𝐬𝐲𝐬𝐭𝐞𝐦
 𝐄𝐱𝐭𝐞𝐧𝐝𝐞𝐝 𝐭𝐡𝐞𝐨𝐫𝐢𝐞𝐬:
-The following theories are extended by 𝐟𝐨𝐮𝐧𝐝𝐚𝐭𝐢𝐨𝐧-𝐬𝐲𝐬𝐭𝐞𝐦₁.
+The following theories are extended by 𝐟𝐨𝐮𝐧𝐝𝐚𝐭𝐢𝐨𝐧-𝐬𝐲𝐬𝐭𝐞𝐦.
 
 𝐒𝐢𝐦𝐩𝐥𝐞-𝐨𝐛𝐣𝐜𝐭 𝐝𝐞𝐜𝐥𝐚𝐫𝐚𝐭𝐢𝐨𝐧𝐬:
-Let class-of-classes₁ be a simple-objct denoted as ⌜ class-of-classes₁ ⌝.
-Let theory-class₁ be a simple-objct denoted as ⌜ theory-class₁ ⌝.
-Let false₁ be a simple-objct denoted as ⌜ false₁ ⌝.
-Let true₁ be a simple-objct denoted as ⌜ true₁ ⌝.
-Let truth-values₁ be a simple-objct denoted as ⌜ truth-values₁ ⌝.
-Let propositional-relations-class₁ be a simple-objct denoted as ⌜ propositional-relations-class₁ ⌝.
-Let proposition-class₁ be a simple-objct denoted as ⌜ proposition-class₁ ⌝.
-Let contradictory-theories₁ be a simple-objct denoted as ⌜ contradictory-theories₁ ⌝.
-Let contradictory-statement₁ be a simple-objct denoted as ⌜ contradictory-statement₁ ⌝.
-Let 0₁ be a simple-objct denoted as ⌜ 0₁ ⌝.
-Let 1₁ be a simple-objct denoted as ⌜ 1₁ ⌝.
-Let 2₁ be a simple-objct denoted as ⌜ 2₁ ⌝.
-Let 3₁ be a simple-objct denoted as ⌜ 3₁ ⌝.
-Let natural-number₁ be a simple-objct denoted as ⌜ natural-number₁ ⌝.
+Let class-of-classes be a simple-objct denoted as ⌜ class-of-classes ⌝.
+Let theory-class be a simple-objct denoted as ⌜ theory-class ⌝.
+Let false be a simple-objct denoted as ⌜ false ⌝.
+Let true be a simple-objct denoted as ⌜ true ⌝.
+Let truth-values be a simple-objct denoted as ⌜ truth-values ⌝.
+Let propositional-relations-class be a simple-objct denoted as ⌜ propositional-relations-class ⌝.
+Let proposition-class be a simple-objct denoted as ⌜ proposition-class ⌝.
+Let contradictory-theories be a simple-objct denoted as ⌜ contradictory-theories ⌝.
+Let contradictory-statement be a simple-objct denoted as ⌜ contradictory-statement ⌝.
+Let 0 be a simple-objct denoted as ⌜ 0 ⌝.
+Let 1 be a simple-objct denoted as ⌜ 1 ⌝.
+Let 2 be a simple-objct denoted as ⌜ 2 ⌝.
+Let 3 be a simple-objct denoted as ⌜ 3 ⌝.
+Let 4 be a simple-objct denoted as ⌜ 4 ⌝.
+Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 
 𝐑𝐞𝐥𝐚𝐭𝐢𝐨𝐧 𝐝𝐞𝐜𝐥𝐚𝐫𝐚𝐭𝐢𝐨𝐧𝐬:
-Let ∈₁ be a binary relation denoted as ⌜ ∈₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∈₁ 𝐱₂ ⌝).
-Let =₁ be a binary relation denoted as ⌜ =₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ =₁ 𝐱₂ ⌝).
-Let ⟹₁ be a binary relation denoted as ⌜ ⟹₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ⟹₁ 𝐱₂ ⌝).
-Let ∧₁ be a binary relation denoted as ⌜ ∧₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∧₁ 𝐱₂ ⌝).
-Let ∨₁ be a binary relation denoted as ⌜ ∨₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∨₁ 𝐱₂ ⌝).
-Let ¬₁ be a unary relation denoted as ⌜ ¬₁ ⌝, that signals well-formed formulae in prefix-operator syntax (e.g.: ⌜ ¬₁𝐱 ⌝).
-Let is₁ be a binary relation denoted as ⌜ is₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ is₁ 𝐱₂ ⌝).
-Let relation-declaration₁ be a binary relation denoted as ⌜ relation-declaration₁ ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ relation-declaration₁(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
-Let simple-objct-declaration₁ be a binary relation denoted as ⌜ simple-objct-declaration₁ ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ simple-objct-declaration₁(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
-Let theory-declaration₁ be a binary relation denoted as ⌜ theory-declaration₁ ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ theory-declaration₁(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
-Let theory-extension₁ be a binary relation denoted as ⌜ theory-extension₁ ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ theory-extension₁(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
-Let variable-declaration₁ be a binary relation denoted as ⌜ variable-declaration₁ ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ variable-declaration₁(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
-Let is-a₁ be a binary relation denoted as ⌜ is-a₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ is-a₁ 𝐱₂ ⌝).
-Let ++₁ be a unary relation denoted as ⌜ ++₁ ⌝, that signals well-formed formulae in postfix-operator syntax (e.g.: ⌜ 𝐱++₁ ⌝).
+Let ∈ be a binary relation denoted as ⌜ ∈ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∈ 𝐱₂ ⌝).
+Let = be a binary relation denoted as ⌜ = ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ = 𝐱₂ ⌝).
+Let ⟹ be a binary relation denoted as ⌜ ⟹ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ⟹ 𝐱₂ ⌝).
+Let ∧ be a binary relation denoted as ⌜ ∧ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∧ 𝐱₂ ⌝).
+Let ∨ be a binary relation denoted as ⌜ ∨ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∨ 𝐱₂ ⌝).
+Let ¬ be a unary relation denoted as ⌜ ¬ ⌝, that signals well-formed formulae in prefix-operator syntax (e.g.: ⌜ ¬𝐱 ⌝).
+Let ≠ be a binary relation denoted as ⌜ ≠ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ≠ 𝐱₂ ⌝).
+Let is be a binary relation denoted as ⌜ is ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ is 𝐱₂ ⌝).
+Let relation-declaration be a binary relation denoted as ⌜ relation-declaration ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ relation-declaration(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
+Let simple-objct-declaration be a binary relation denoted as ⌜ simple-objct-declaration ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ simple-objct-declaration(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
+Let theory-declaration be a binary relation denoted as ⌜ theory-declaration ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ theory-declaration(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
+Let theory-extension be a binary relation denoted as ⌜ theory-extension ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ theory-extension(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
+Let variable-declaration be a binary relation denoted as ⌜ variable-declaration ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ variable-declaration(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
+Let is-a be a binary relation denoted as ⌜ is-a ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ is-a 𝐱₂ ⌝).
+Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formulae in postfix-operator syntax (e.g.: ⌜ 𝐱++ ⌝).
 
 𝐓𝐡𝐞𝐨𝐫𝐲 𝐞𝐥𝐚𝐛𝐨𝐫𝐚𝐭𝐢𝐨𝐧:
 
@@ -48,43 +50,49 @@ Let ++₁ be a unary relation denoted as ⌜ ++₁ ⌝, that signals well-formed
 	classes defined in the universe-of-discourse (TODO: Or foundation
 	theory?).”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (class-of-classes₁ ∈₁ class-of-classes₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (class-of-classes ∈ class-of-classes)
 
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “The theory-class is the class of all
 	theories”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (theory-class₁ ∈₁ class-of-classes₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (theory-class ∈ class-of-classes)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (foundation-system₁ ∈₁ theory-class₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (foundation-system ∈ theory-class)
 
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “truth-values is the class whose elements
 	are the theoretical-objects truth and falsehood.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (truth-values₁ ∈₁ class-of-classes₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (truth-values ∈ class-of-classes)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (true₁ ∈₁ truth-values₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (true ∈ truth-values)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (false₁ ∈₁ truth-values₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (false ∈ truth-values)
 
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “propositional-relations is the class
 	whose elements are the relations: conjunction, disjunction,
 	implication, and negation, and any relation defined from these.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (propositional-relations-class₁ ∈₁ class-of-classes₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (propositional-relations-class ∈ class-of-classes)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (∧₁ ∈₁ propositional-relations-class₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (∧ ∈ propositional-relations-class)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (∨₁ ∈₁ propositional-relations-class₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (∨ ∈ propositional-relations-class)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (⟹₁ ∈₁ propositional-relations-class₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (⟹ ∈ propositional-relations-class)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (¬₁ ∈₁ propositional-relations-class₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (¬ ∈ propositional-relations-class)
+
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (≠ ∈ propositional-relations-class)
 
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “= is a binary relation such that, given
 	any two theoretical-objcts x and y, if x=y then y=x, and for every
 	statement s, s is valid iif subst s is valid.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: ((x₁ =₁ y₁) ⟹₁ (y₁ =₁ x₁))
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: ((x₁ = y₁) ⟹ (y₁ = x₁))
+
+𝙳₂₀: “Inequality is defined as the negation of equality.”
+
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: ((x₂ ≠ y₂) = ¬((x₂ = y₂)))
 
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “propositions is a class whose elements
 	are truth, falsehood, all elements of the theory-formula-statement
@@ -92,17 +100,17 @@ Let ++₁ be a unary relation denoted as ⌜ ++₁ ⌝, that signals well-formed
 	and all theory-formula-statements whose relation is defined from
 	these. Its elements are called propositions.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (true₁ ∈₁ class-of-classes₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (true ∈ class-of-classes)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (false₁ ∈₁ class-of-classes₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (false ∈ class-of-classes)
 
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “If P is a proposition, then either the
 	statement P has truth value true,or the statement P has truth value
 	falsehood.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (true₁ is₁ true₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (true is true)
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (false₁ is₁ false₁)
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (false is false)
 
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “¬ is a unary relation. If P is a
 	proposition and it has truth-value truth, then ¬P has-truth-value
@@ -112,10 +120,10 @@ Let ++₁ be a unary relation denoted as ⌜ ++₁ ⌝, that signals well-formed
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “If P has-truth-value t, ¬(¬(P))
 	has-truth-value t.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: ((𝐱₁ is₁ 𝐱₂) ⟹₁ (¬₁(¬₁(𝐱₁)) is₁ 𝐱₂))
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: ((𝐱₁ is 𝐱₂) ⟹ (¬(¬(𝐱₁)) is 𝐱₂))
 
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “If T is a theory, and both P is valid
 	and ¬P is valid in T, then this theory is an element of
 	contradictory-theories class.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (((φ₁ is₁ true₁) ∧₁ (φ₁ is₁ false₁)) ⟹₁ (φ₁ ∈₁ contradictory-statement₁))
+𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (((φ is true) ∧ (φ is false)) ⟹ (φ ∈ contradictory-statement))
