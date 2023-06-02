@@ -5,7 +5,7 @@ import core
 u = core.UniverseOfDiscourse('𝒰')
 
 ft = u.t(
-    symbol=core.Symbol('foundation-system', 1),
+    symbol='foundation-system',
     is_theory_foundation_system=True)
 
 nla_01 = ft.nla(

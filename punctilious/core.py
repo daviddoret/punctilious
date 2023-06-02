@@ -3,13 +3,18 @@ from types import SimpleNamespace
 import repm
 import contextlib
 
-configuration = SimpleNamespace(
-    raise_exception_on_verification_failure=True,
-    text_output_indent=2,
-    text_output_statement_column_width=70,
-    text_output_justification_column_width=40,
-    text_output_total_width=122
-)
+
+class Configuration:
+    def __init__(self):
+        self.raise_exception_on_verification_failure = True
+        self.text_output_indent = 2
+        self.text_output_statement_column_width = 70
+        self.text_output_justification_column_width = 40
+        self.text_output_total_width = 122
+        self.output_index_if_max_index_equal_1 = False
+
+
+configuration = Configuration()
 
 
 class AtheoreticalStatement:
@@ -83,10 +88,16 @@ class Symbol:
         return hash((self.base, self.index))
 
     def __repr__(self):
-        return f'{self.base}{repm.subscriptify(self.index)}'
+        return self.repr()
 
     def __str__(self):
-        return f'{self.base}{repm.subscriptify(self.index)}'
+        return self.repr()
+
+    def repr(self, hide_index=False):
+        if hide_index:
+            return f'{self.base}'
+        else:
+            return f'{self.base}{repm.subscriptify(self.index)}'
 
 
 class StatementTitle:
@@ -203,8 +214,11 @@ class SymbolicObjct:
         return f'Let {self.repr_as_symbol()} be a symbolic-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
 
     def repr_as_symbol(self):
-        s = str(self.symbol)
-        return s
+        global configuration
+        hide_index = \
+            self.symbol.index == 1 and not configuration.output_index_if_max_index_equal_1 and self.universe_of_discourse.get_symbol_max_index(
+                self.symbol.base) == 1
+        return self.symbol.repr(hide_index=hide_index)
 
     def repr(self, expanded=None):
         return self.repr_as_symbol()
@@ -818,19 +832,19 @@ class Formula(TheoreticalObjct):
     def repr_as_function_call(self, expanded=None):
         expanded = True if expanded is None else expanded
         assert isinstance(expanded, bool)
-        return f'{self.relation.symbol}({", ".join([p.repr(expanded=expanded) for p in self.parameters])})'
+        return f'{self.relation.repr_as_symbol()}({", ".join([p.repr(expanded=expanded) for p in self.parameters])})'
 
     def repr_as_infix_operator(self, expanded=None):
         expanded = True if expanded is None else expanded
         assert isinstance(expanded, bool)
         assert self.relation.arity == 2
-        return f'({self.parameters[0].repr(expanded=expanded)} {self.relation.symbol} {self.parameters[1].repr(expanded=expanded)})'
+        return f'({self.parameters[0].repr(expanded=expanded)} {self.relation.repr_as_symbol()} {self.parameters[1].repr(expanded=expanded)})'
 
     def repr_as_postfix_operator(self, expanded=None):
         expanded = True if expanded is None else expanded
         assert isinstance(expanded, bool)
         assert self.relation.arity == 1
-        return f'({self.parameters[0].repr(expanded=expanded)}){self.relation.symbol}'
+        return f'({self.parameters[0].repr(expanded=expanded)}){self.relation.repr_as_symbol()}'
 
     def repr_as_prefix_operator(self, expanded=None):
         expanded = True if expanded is None else expanded
@@ -843,7 +857,7 @@ class Formula(TheoreticalObjct):
             'Attempt to represent prefix operator, but relation arity is not equal to 1.',
             self_relation=self.relation,
             parameters=self.parameters)
-        return f'{self.relation.symbol}({self.parameters[0].repr(expanded=expanded)})'
+        return f'{self.relation.repr_as_symbol()}({self.parameters[0].repr(expanded=expanded)})'
 
     def repr_as_formula(self, expanded=None):
         expanded = True if expanded is None else expanded
@@ -1833,11 +1847,8 @@ class Relation(TheoreticalObjct):
 
     def repr_as_declaration(self):
         output = f'Let {self.repr_as_symbol()} be a {self.repr_arity_as_text()} relation denoted as ⌜ {self.repr_as_symbol()} ⌝'
-        output = output + f', that signals well-formed formulae in {self.formula_rep} syntax (e.g.: ⌜ {self.formula_rep.sample.replace("◆", str(self.symbol))} ⌝).'
+        output = output + f', that signals well-formed formulae in {self.formula_rep} syntax (e.g.: ⌜ {self.formula_rep.sample.replace("◆", str(self.repr_as_symbol()))} ⌝).'
         return output
-
-    # def repr_as_symbol(self):
-    #    return str(self.symbol)
 
     def repr_arity_as_text(self):
         match self.arity:
@@ -2232,6 +2243,10 @@ class UniverseOfDiscourse(SymbolicObjct):
         return self.declare_formula(
             relation, *parameters, symbol=symbol,
             lock_variable_scope=lock_variable_scope)
+
+    def get_symbol_max_index(self, base):
+        """Return the highest index for that symbol-base in the universe-of-discourse."""
+        return self.symbol_indexes[base]
 
     def index_symbol(self, base):
         """Given a symbol-base S (i.e. an unindexed symbol), returns a unique integer n
