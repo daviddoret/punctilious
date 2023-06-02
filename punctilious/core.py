@@ -971,7 +971,7 @@ class Statement(TheoreticalObjct):
         return self.title.repr_ref(cap=cap)
 
 
-class NaturalLanguageAxiom(Statement):
+class Axiom(Statement):
     """The NaturalLanguageAxiom pythonic class is a model of the natural-language-axiom formal class.
 
     Definition:
@@ -1003,7 +1003,7 @@ class NaturalLanguageAxiom(Statement):
                 tabsize=4))
 
 
-class NaturalLanguageDefinition(Statement):
+class Definition(Statement):
     """The NaturalLanguageDefinition pythonic class is a model of the natural-language-definition formal class.
 
     Definition:
@@ -1117,18 +1117,18 @@ class DirectAxiomInference(FormulaStatement):
     """
 
     def __init__(
-        self, valid_proposition, nla, symbol=None, theory=None, reference=None,
+        self, valid_proposition, a, symbol=None, theory=None, reference=None,
         title=None, category=None):
         assert isinstance(theory, Theory)
-        assert isinstance(nla, NaturalLanguageAxiom)
-        assert theory.has_objct_in_hierarchy(nla)
+        assert isinstance(a, Axiom)
+        assert theory.has_objct_in_hierarchy(a)
         assert isinstance(valid_proposition, Formula)
-        self.natural_language_axiom = nla
+        self.natural_language_axiom = a
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             symbol=symbol, category=category,
             reference=reference, title=title)
-        assert nla.statement_index < self.statement_index
+        assert a.statement_index < self.statement_index
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
@@ -1299,23 +1299,23 @@ class DirectDefinitionInference(FormulaStatement):
     """
 
     def __init__(
-        self, valid_proposition, nld, symbol=None, theory=None, reference=None,
+        self, valid_proposition, d, symbol=None, theory=None, reference=None,
         title=None):
         assert isinstance(theory, Theory)
-        assert isinstance(nld, NaturalLanguageDefinition)
-        assert theory.has_objct_in_hierarchy(nld)
+        assert isinstance(d, Definition)
+        assert theory.has_objct_in_hierarchy(d)
         assert isinstance(valid_proposition, Formula)
         verify(
             valid_proposition.universe_of_discourse is theory.universe_of_discourse,
             'The UoD of a formal-definition valid-proposition must be '
             'consistent with the UoD of its theory.')
         assert valid_proposition.relation is theory.equality
-        self.natural_language_definition = nld
+        self.natural_language_definition = d
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             symbol=symbol, category=statement_categories.formal_definition,
             reference=reference, title=title)
-        assert nld.statement_index < self.statement_index
+        assert d.statement_index < self.statement_index
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
@@ -1413,7 +1413,7 @@ class Theory(TheoreticalObjct):
          :param extended_theories: :param is_an_element_of_itself:
         """
         # self.symbols = dict()
-        self.natural_language_axioms = tuple()
+        self.axioms = tuple()
         self.natural_language_definitions = tuple()
         self.statements = tuple()
         self._theory_foundation_system = theory_foundation_system
@@ -1508,19 +1508,19 @@ class Theory(TheoreticalObjct):
         """During construction, cross-reference an axiom 𝒜
         with its parent theory if it is not already cross-referenced,
         and return its 0-based index in Theory.axioms."""
-        assert isinstance(a, NaturalLanguageAxiom)
+        assert isinstance(a, Axiom)
         a.theory = a.theory if hasattr(a, 'theory') else self
         assert a.theory is self
-        if a not in self.natural_language_axioms:
-            self.natural_language_axioms = self.natural_language_axioms + tuple(
+        if a not in self.axioms:
+            self.axioms = self.axioms + tuple(
                 [a])
-        return self.natural_language_axioms.index(a)
+        return self.axioms.index(a)
 
     def crossreference_definition(self, d):
         """During construction, cross-reference a definition 𝒟
         with its parent theory if it is not already cross-referenced,
         and return its 0-based index in Theory.axioms."""
-        assert isinstance(d, NaturalLanguageDefinition)
+        assert isinstance(d, Definition)
         d.theory = d.theory if hasattr(d, 'theory') else self
         assert d.theory is self
         if d not in self.natural_language_definitions:
@@ -1551,20 +1551,20 @@ class Theory(TheoreticalObjct):
     #        relation=relation, parameters=parameters, theory=self, **kwargs)
 
     def elaborate_direct_axiom_inference(
-        self, valid_proposition, nla, symbol=None, reference=None, title=None):
+        self, valid_proposition, a, symbol=None, reference=None, title=None):
         """Elaborate a new direct-axiom-inference in the theory. Shortcut for FormalAxiom(theory=t, ...)"""
         return DirectAxiomInference(
-            valid_proposition=valid_proposition, nla=nla, symbol=symbol,
+            valid_proposition=valid_proposition, a=a, symbol=symbol,
             theory=self, reference=reference, title=title)
 
     def elaborate_direct_definition_inference(
-        self, valid_proposition=None, nld=None, symbol=None, reference=None,
+        self, valid_proposition=None, d=None, symbol=None, reference=None,
         title=None):
         """Elaborate a formal-definition in this theory.
 
         Shortcut for FormalDefinition(theory=t, ...)"""
         return DirectDefinitionInference(
-            valid_proposition=valid_proposition, nld=nld, symbol=symbol,
+            valid_proposition=valid_proposition, d=d, symbol=symbol,
             theory=self, reference=reference, title=title)
 
     def elaborate_modus_ponens(
@@ -1576,10 +1576,10 @@ class Theory(TheoreticalObjct):
             conditional=conditional, antecedent=antecedent, symbol=symbol,
             category=category, theory=self, reference=reference, title=title)
 
-    def elaborate_natural_language_axiom(
+    def elaborate_axiom(
         self, natural_language, symbol=None, reference=None, title=None):
         """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
-        return self.universe_of_discourse.elaborate_natural_language_axiom(
+        return self.universe_of_discourse.elaborate_axiom(
             natural_language=natural_language, symbol=symbol, theory=self,
             reference=reference, title=title)
 
@@ -1624,11 +1624,11 @@ class Theory(TheoreticalObjct):
         self._equality = r
 
     def dai(
-        self, valid_proposition, nla, symbol=None, reference=None, title=None):
+        self, valid_proposition, a, symbol=None, reference=None, title=None):
         """Elaborate a new direct-axiom-inference in the theory. Shortcut for
         Theory.elaborate_direct_axiom_inference(...)."""
         return self.elaborate_direct_axiom_inference(
-            valid_proposition=valid_proposition, nla=nla, symbol=symbol,
+            valid_proposition=valid_proposition, a=a, symbol=symbol,
             reference=reference, title=title)
 
     def ddi(
@@ -1638,7 +1638,7 @@ class Theory(TheoreticalObjct):
 
         Shortcut for FormalDefinition(theory=t, ...)"""
         return self.elaborate_direct_definition_inference(
-            valid_proposition=valid_proposition, nld=d, symbol=symbol,
+            valid_proposition=valid_proposition, d=d, symbol=symbol,
             reference=reference, title=title)
 
     def get_theory_extension(self):
@@ -1738,14 +1738,14 @@ class Theory(TheoreticalObjct):
             'The negation property must be a relation.')
         self._negation = r
 
-    def nla(self, natural_language, symbol=None, reference=None, title=None):
+    def a(self, natural_language, symbol=None, reference=None, title=None):
         """Elaborate a new natural-language-axiom statement. Shortcut function for
         Theory.elaborate_natural_language_axiom(...)."""
-        return self.elaborate_natural_language_axiom(
+        return self.elaborate_axiom(
             natural_language=natural_language, symbol=symbol,
             reference=reference, title=title)
 
-    def nld(self, natural_language, symbol=None, reference=None, title=None):
+    def d(self, natural_language, symbol=None, reference=None, title=None):
         """Elaborate a new natural-language-definition statement. Shortcut function for
         Theory.elaborate_natural_language_definition(...)."""
         return self.elaborate_natural_language_definition(
@@ -2230,7 +2230,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             universe_of_discourse=self,
             theory_foundation_system=theory_foundation_system)
 
-    def elaborate_natural_language_axiom(
+    def elaborate_axiom(
         self, natural_language, symbol=None, theory=None, reference=None,
         title=None):
         """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
@@ -2238,7 +2238,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             theory.universe_of_discourse is self,
             'The universe-of-discourse of the theory parameter is distinct '
             'from this universe-of-discourse.')
-        return NaturalLanguageAxiom(
+        return Axiom(
             natural_language=natural_language, symbol=symbol, theory=theory,
             reference=reference, title=title)
 
@@ -2249,7 +2249,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         verify(
             theory.universe_of_discourse is self,
             'The universe-of-discourse of the theory parameter is distinct from this universe-of-discourse.')
-        return NaturalLanguageDefinition(
+        return Definition(
             natural_language=natural_language, symbol=symbol, theory=theory,
             reference=reference, title=title)
 
@@ -2280,14 +2280,14 @@ class UniverseOfDiscourse(SymbolicObjct):
             self.symbol_indexes[base] += 1
         return self.symbol_indexes[base]
 
-    def nla(
+    def a(
         self, natural_language, symbol=None, theory=None, reference=None,
         title=None):
-        return self.elaborate_natural_language_axiom(
+        return self.elaborate_axiom(
             natural_language=natural_language, symbol=symbol, theory=theory,
             reference=reference, title=title)
 
-    def nld(
+    def d(
         self, natural_language, symbol=None, theory=None, reference=None,
         title=None):
         return self.elaborate_natural_language_definition(

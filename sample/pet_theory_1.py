@@ -14,15 +14,15 @@ is_a = core.Relation(
     symbol='is-a',
     python_name='is_a', signal_proposition=True)
 
-a1 = core.NaturalLanguageAxiom(
+a1 = core.Axiom(
     theory=t1, natural_language=f'{mira_name.capitalize()} is a {dog_name}.',
     capitalizable=True)
 mira_is_a_dog = core.DirectAxiomInference(
-    theory=t1, nla=a1,
+    theory=t1, a=a1,
     valid_proposition=core.Formula(
         theory=t1, relation=is_a, parameters=(mira, dog)))
 
-a2 = core.NaturalLanguageAxiom(
+a2 = core.Axiom(
     theory=t1,
     natural_language=f'If 𝒙 is a {dog_name}, then 𝒙 is a {mammal_name}.',
     capitalizable=True)
@@ -33,7 +33,7 @@ if_x_is_a_dog_then_x_is_a_mammal_formula = core.Formula(
     theory=t1, relation=core.foundation_theory.relations.implies,
     parameters=(x_is_a_dog, x_is_a_mammal))
 if_x_is_a_dog_then_x_is_a_mammal = core.DirectAxiomInference(
-    theory=t1, nla=a2,
+    theory=t1, a=a2,
     valid_proposition=if_x_is_a_dog_then_x_is_a_mammal_formula)
 # mira_is_a_mammal_formula = core.Formula(theory=t1, relation=is_a, parameters=(mira, mammal))
 

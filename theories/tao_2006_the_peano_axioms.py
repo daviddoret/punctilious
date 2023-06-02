@@ -17,10 +17,10 @@ is_a = u.r(
     2, 'is-a', Formula.infix_operator_representation,
     signal_proposition=True)
 
-nla_2_1 = t.nla(f'0 is a natural number.', reference='2.1')
+nla_2_1 = t.a(f'0 is a natural number.', reference='2.1')
 fa_2_1_a = t.dai(u.f(is_a, zero, nat), nla_2_1, reference='2.1.a')
 
-nla_2_2_1 = t.nla(
+nla_2_2_1 = t.a(
     'If n is a natural number, then n++ is a natural number.',
     reference='2.2.1')
 with u.v('n') as n:
@@ -36,7 +36,7 @@ proposition_2_2_5 = t.mp(fa_2_2_2, p_2_2_4, reference='2.2.5')
 
 # Definition 2.1.3. We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that xis defined to equal y.)
 
-definition_2_1_3 = t.nld(
+definition_2_1_3 = t.d(
     'We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number '
     '((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text '
     'I use "x := y" to denote the statement that x is defined to equal y.)',
@@ -87,7 +87,7 @@ proposition_2_1_3_3 = t.ddi(
 # Axiom 2.3. 0 is not the successor of any natural number;
 # i.e., we have n++ f=. 0 for every natural number n.
 
-a_2_3 = t.nla(
+a_2_3 = t.a(
     '0 is not the successor of any natural number; i.e., we have n++ ≠ 0 for '
     'every natural number n.',
     reference='2.3')
@@ -98,7 +98,7 @@ with u.v('n') as n:
             ft.implication,
             u.f(is_a, n, nat),
             u.f(ft.inequality, u.f(suc, n), zero)),
-        nla=a_2_3, reference='2.3.1')
+        a=a_2_3, reference='2.3.1')
 
 
 # Proposition 2.1.6. 4 is not equal to 0.
@@ -111,7 +111,7 @@ def prove_proposition_2_1_6():
 
 
 prove_proposition_2_1_6()
-axiom_2_4 = t.nla(
+axiom_2_4 = t.a(
     'Different natural numbers must have different successors; i.e., if n, '
     'm are natural numbers and n ≠ m, then n++ ≠ m++. Equivalently, '
     'if n++ = m++, then we must have n = m.',
@@ -129,6 +129,6 @@ with u.v('n') as n, u.v('m') as m:
                     u.f(is_a, m, nat)),
                 u.f(t.inequality, n, m)),
             u.f(t.inequality, u.f(suc, n), u.f(suc, m)))
-        , reference='2.4.1')
+        , reference='2.4.1', a=axiom_2_4)
 
 t.prnt(output_proofs=False)
