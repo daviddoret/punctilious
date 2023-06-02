@@ -36,7 +36,8 @@ class AtheoreticalStatement:
 
 
 class FailedVerificationException(Exception):
-    """Python custom exception raised whenever a verification fails if setting raise_exception_on_verification_failure = True."""
+    """Python custom exception raised whenever a verification fails if
+    setting raise_exception_on_verification_failure = True."""
 
     def __init__(self, msg, **kwargs):
         self.msg = msg
@@ -919,7 +920,6 @@ class StatementCategory(repm.Representation):
 
 class StatementCategories(repm.Representation):
     corollary = StatementCategory('corollary', '𝙿', 'corollary')
-    formal_axiom = StatementCategory('formal_axiom', '𝙰', 'formal axiom')
     formal_definition = StatementCategory(
         'formal_definition', '𝙳', 'formal definition')
     lemma = StatementCategory('lemma', '𝙿', 'lemma')
@@ -1076,6 +1076,7 @@ class FormulaStatement(Statement):
         self.valid_proposition = valid_proposition
         # TODO: Implement distinct counters per category
         self.statement_index = theory.crossreference_statement(self)
+        category = statement_categories.proposition if category is None else category
         super().__init__(
             theory=theory, symbol=symbol, category=category,
             reference=reference, title=title)
@@ -1106,18 +1107,18 @@ class FormulaStatement(Statement):
         return self.valid_proposition.repr_as_formula(expanded=expanded)
 
 
-class FormalAxiom(FormulaStatement):
+class DirectAxiomInference(FormulaStatement):
     """
 
     Definition:
     -----------
-    A formal-axiom is a valid-proposition directly inferred from a free-text-axiom.
+    A direct-axiom-inference is a valid-proposition directly inferred from a free-text-axiom.
 
     """
 
     def __init__(
         self, valid_proposition, nla, symbol=None, theory=None, reference=None,
-        title=None):
+        title=None, category=None):
         assert isinstance(theory, Theory)
         assert isinstance(nla, NaturalLanguageAxiom)
         assert theory.has_objct_in_hierarchy(nla)
@@ -1125,7 +1126,7 @@ class FormalAxiom(FormulaStatement):
         self.natural_language_axiom = nla
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
-            symbol=symbol, category=statement_categories.formal_axiom,
+            symbol=symbol, category=category,
             reference=reference, title=title)
         assert nla.statement_index < self.statement_index
 
@@ -1286,7 +1287,7 @@ class PropositionStatement:
         self.proof = proof
 
 
-class FormalDefinition(FormulaStatement):
+class DirectDefinitionInference(FormulaStatement):
     """
 
     Definition:
@@ -1429,6 +1430,7 @@ class Theory(TheoreticalObjct):
             assert isinstance(extended_theory, Theory)
         self.extended_theories = extended_theories
         self._commutativity_of_equality = None
+        self._conjunction = None
         self._equality = None
         self._implication = None
         self._negation = None
@@ -1475,15 +1477,32 @@ class Theory(TheoreticalObjct):
             return None
 
     @commutativity_of_equality.setter
-    def commutativity_of_equality(self, fa):
+    def commutativity_of_equality(self, p):
         verify(
             self._commutativity_of_equality is None,
             'A theory commutativity-of-equality property can only be set once '
             'to prevent inconsistency.')
+        self._commutativity_of_equality = p
+
+    @property
+    def conjunction(self):
+        """Conjunction is a fundamental theory property.
+        None if the property is not equipped on the theory.
+        An instance of Relation otherwise."""
+        if self._conjunction is not None:
+            return self._conjunction
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system._conjunction
+        else:
+            return None
+
+    @conjunction.setter
+    def conjunction(self, r):
         verify(
-            isinstance(fa, FormalAxiom),
-            'The commutativity-of-equality property must be a relation.')
-        self._commutativity_of_equality = fa
+            self._conjunction is None,
+            'A theory conjunction property can only be set once '
+            'to prevent inconsistency.')
+        self._conjunction = r
 
     def crossreference_axiom(self, a):
         """During construction, cross-reference an axiom 𝒜
@@ -1531,20 +1550,20 @@ class Theory(TheoreticalObjct):
     #    return Formula(
     #        relation=relation, parameters=parameters, theory=self, **kwargs)
 
-    def elaborate_formal_axiom(
+    def elaborate_direct_axiom_inference(
         self, valid_proposition, nla, symbol=None, reference=None, title=None):
-        """Elaborate a new formal-axiom in the theory. Shortcut for FormalAxiom(theory=t, ...)"""
-        return FormalAxiom(
+        """Elaborate a new direct-axiom-inference in the theory. Shortcut for FormalAxiom(theory=t, ...)"""
+        return DirectAxiomInference(
             valid_proposition=valid_proposition, nla=nla, symbol=symbol,
             theory=self, reference=reference, title=title)
 
-    def elaborate_formal_definition(
+    def elaborate_direct_definition_inference(
         self, valid_proposition=None, nld=None, symbol=None, reference=None,
         title=None):
         """Elaborate a formal-definition in this theory.
 
         Shortcut for FormalDefinition(theory=t, ...)"""
-        return FormalDefinition(
+        return DirectDefinitionInference(
             valid_proposition=valid_proposition, nld=nld, symbol=symbol,
             theory=self, reference=reference, title=title)
 
@@ -1604,22 +1623,22 @@ class Theory(TheoreticalObjct):
             'The equality property must be a relation.')
         self._equality = r
 
-    def fa(
+    def dai(
         self, valid_proposition, nla, symbol=None, reference=None, title=None):
-        """Elaborate a new formal-axiom in the theory. Shortcut for
-        Theory.elaborate_formal_axiom(...)."""
-        return self.elaborate_formal_axiom(
+        """Elaborate a new direct-axiom-inference in the theory. Shortcut for
+        Theory.elaborate_direct_axiom_inference(...)."""
+        return self.elaborate_direct_axiom_inference(
             valid_proposition=valid_proposition, nla=nla, symbol=symbol,
             reference=reference, title=title)
 
-    def fd(
-        self, valid_proposition=None, nld=None, symbol=None, reference=None,
+    def ddi(
+        self, valid_proposition=None, d=None, symbol=None, reference=None,
         title=None):
         """Elaborate a formal-definition in this theory.
 
         Shortcut for FormalDefinition(theory=t, ...)"""
-        return self.elaborate_formal_definition(
-            valid_proposition=valid_proposition, nld=nld, symbol=symbol,
+        return self.elaborate_direct_definition_inference(
+            valid_proposition=valid_proposition, nld=d, symbol=symbol,
             reference=reference, title=title)
 
     def get_theory_extension(self):

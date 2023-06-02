@@ -50,33 +50,33 @@ Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formu
 	classes defined in the universe-of-discourse (TODO: Or foundation
 	theory?).”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (class-of-classes ∈ class-of-classes)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (class-of-classes ∈ class-of-classes)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(class-of-classes ∈ class-of-classes)                                  │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “The theory-class is the class of all
 	theories”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (theory-class ∈ class-of-classes)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (theory-class ∈ class-of-classes)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(theory-class ∈ class-of-classes)                                      │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (foundation-system ∈ theory-class)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (foundation-system ∈ theory-class)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(foundation-system ∈ theory-class)                                     │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “truth-values is the class whose elements
 	are the theoretical-objects truth and falsehood.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (truth-values ∈ class-of-classes)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (truth-values ∈ class-of-classes)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(truth-values ∈ class-of-classes)                                      │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (true ∈ truth-values)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (true ∈ truth-values)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(true ∈ truth-values)                                                  │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (false ∈ truth-values)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (false ∈ truth-values)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(false ∈ truth-values)                                                 │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
@@ -84,27 +84,27 @@ Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formu
 	whose elements are the relations: conjunction, disjunction,
 	implication, and negation, and any relation defined from these.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (propositional-relations-class ∈ class-of-classes)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (propositional-relations-class ∈ class-of-classes)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(propositional-relations-class ∈ class-of-classes)                     │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (∧ ∈ propositional-relations-class)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (∧ ∈ propositional-relations-class)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(∧ ∈ propositional-relations-class)                                    │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (∨ ∈ propositional-relations-class)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (∨ ∈ propositional-relations-class)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(∨ ∈ propositional-relations-class)                                    │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (⟹ ∈ propositional-relations-class)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (⟹ ∈ propositional-relations-class)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(⟹ ∈ propositional-relations-class)                                    │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (¬ ∈ propositional-relations-class)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (¬ ∈ propositional-relations-class)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(¬ ∈ propositional-relations-class)                                    │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (≠ ∈ propositional-relations-class)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (≠ ∈ propositional-relations-class)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(≠ ∈ propositional-relations-class)                                    │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
@@ -112,7 +112,7 @@ Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formu
 	any two theoretical-objcts x and y, if x=y then y=x, and for every
 	statement s, s is valid iif subst s is valid.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: ((x₁ = y₁) ⟹ (y₁ = x₁))
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: ((x₁ = y₁) ⟹ (y₁ = x₁))
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	((x₁ = y₁) ⟹ (y₁ = x₁))                                                │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
@@ -128,11 +128,11 @@ Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formu
 	and all theory-formula-statements whose relation is defined from
 	these. Its elements are called propositions.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (true ∈ class-of-classes)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (true ∈ class-of-classes)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(true ∈ class-of-classes)                                              │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (false ∈ class-of-classes)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (false ∈ class-of-classes)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(false ∈ class-of-classes)                                             │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
@@ -140,11 +140,11 @@ Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formu
 	statement P has truth value true,or the statement P has truth value
 	falsehood.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (true is true)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (true is true)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(true is true)                                                         │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (false is false)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (false is false)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(false is false)                                                       │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
@@ -156,7 +156,7 @@ Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formu
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: “If P has-truth-value t, ¬(¬(P))
 	has-truth-value t.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: ((𝐱₁ is 𝐱₂) ⟹ (¬(¬(𝐱₁)) is 𝐱₂))
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: ((𝐱₁ is 𝐱₂) ⟹ (¬(¬(𝐱₁)) is 𝐱₂))
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	((𝐱₁ is 𝐱₂) ⟹ (¬(¬(𝐱₁)) is 𝐱₂))                                        │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.
 
@@ -164,6 +164,6 @@ Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formu
 	and ¬P is valid in T, then this theory is an element of
 	contradictory-theories class.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞: (((φ is true) ∧ (φ is false)) ⟹ (φ ∈ contradictory-statement))
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝐍𝐨𝐧𝐞: (((φ is true) ∧ (φ is false)) ⟹ (φ ∈ contradictory-statement))
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(((φ is true) ∧ (φ is false)) ⟹ (φ ∈ contradictory-statement))         │ Follows from 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝐍𝐨𝐧𝐞.

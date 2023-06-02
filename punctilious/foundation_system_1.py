@@ -5,7 +5,7 @@ import core
 u = core.UniverseOfDiscourse('𝒰')
 
 ft = u.t(
-    symbol='foundation-system',
+    symbol='ℱ',
     is_theory_foundation_system=True)
 
 nla_01 = ft.nla(
@@ -23,12 +23,12 @@ class_of_classes = u.o('class-of-classes')
 element_of = u.r(
     2, '∈', formula_rep=core.Formula.infix_operator_representation,
     signal_proposition=True)
-fa1 = ft.fa(u.f(element_of, class_of_classes, class_of_classes), nla=nla_02)
+fa1 = ft.dai(u.f(element_of, class_of_classes, class_of_classes), nla=nla_02)
 
 nla_04 = ft.nla('The theory-class is the class of all theories')
 theory_class = u.o('theory-class')
-fa2b = ft.fa(u.f(element_of, theory_class, class_of_classes), nla=nla_02)
-fa2c = ft.fa(u.f(element_of, ft, theory_class), nla=nla_02)
+fa2b = ft.dai(u.f(element_of, theory_class, class_of_classes), nla=nla_02)
+fa2c = ft.dai(u.f(element_of, ft, theory_class), nla=nla_02)
 # TODO: Implement a trigger to automatically add a statement (t in theory-class)
 #   for every existing and new theory that is declared?
 
@@ -39,9 +39,10 @@ nla_05 = ft.nla(
 falsehood = u.o('false')
 truth = u.o('true')
 truth_values = u.o('truth-values')
-fa_06 = ft.fa(u.f(element_of, truth_values, class_of_classes), nla=nla_03)
-fa_07 = ft.fa(u.f(element_of, truth, truth_values), nla=nla_03)
-fa_08 = ft.fa(u.f(element_of, falsehood, truth_values), nla=nla_03)
+proposition_060 = ft.dai(
+    u.f(element_of, truth_values, class_of_classes), nla=nla_03)
+proposition_070 = ft.dai(u.f(element_of, truth, truth_values), nla=nla_03)
+proposition_080 = ft.dai(u.f(element_of, falsehood, truth_values), nla=nla_03)
 
 # foundation propositional relations
 nla_09 = ft.nla(
@@ -49,7 +50,7 @@ nla_09 = ft.nla(
     'the relations: conjunction, disjunction, implication, and negation, '
     'and any relation defined from these.')
 propositional_relations_class = u.o('propositional-relations-class')
-ft.fa(
+ft.dai(
     u.f(element_of, propositional_relations_class, class_of_classes),
     nla=nla_03)
 ft.equality = u.r(
@@ -61,7 +62,7 @@ ft.implication = u.r(
     2, '⟹', core.Formula.infix_operator_representation,
     signal_proposition=True)
 
-conjunction = u.r(
+ft.conjunction = u.r(
     2, '∧', core.Formula.infix_operator_representation,
     signal_proposition=True)
 disjunction = u.r(
@@ -74,14 +75,15 @@ ft.inequality = u.r(
     2, '≠', core.Formula.infix_operator_representation,
     signal_proposition=True)
 
-ft.fa(u.f(element_of, conjunction, propositional_relations_class), nla=nla_09)
-ft.fa(u.f(element_of, disjunction, propositional_relations_class), nla=nla_09)
-ft.fa(
+ft.dai(
+    u.f(element_of, ft.conjunction, propositional_relations_class), nla=nla_09)
+ft.dai(u.f(element_of, disjunction, propositional_relations_class), nla=nla_09)
+ft.dai(
     u.f(element_of, ft.implication, propositional_relations_class), nla=nla_09)
-ft.fa(
+ft.dai(
     u.f(element_of, ft.negation, propositional_relations_class),
     nla=nla_09)
-ft.fa(
+ft.dai(
     u.f(element_of, ft.inequality, propositional_relations_class),
     nla=nla_09)
 nla_01b = ft.nla(
@@ -90,17 +92,17 @@ nla_01b = ft.nla(
 with u.v('x') as x1, u.v('y') as x2:
     x1_equal_x2 = u.f(ft.equality, x1, x2)
     x2_equal_x1 = u.f(ft.equality, x2, x1)
-    ft.commutativity_of_equality = ft.fa(
+    ft.commutativity_of_equality = ft.dai(
         u.f(ft.implication, x1_equal_x2, x2_equal_x1), nla_01b)
 
 nld_55 = ft.nld('Inequality is defined as the negation of equality.')
 with u.v('x') as x, u.v('y') as y:
-    ft.fd(
+    ft.ddi(
         valid_proposition=
         u.f(
             ft.equality,
             u.f(ft.inequality, x, y),
-            u.f(ft.negation, u.f(ft.equality, x, y))), nld=nld_55)
+            u.f(ft.negation, u.f(ft.equality, x, y))), d=nld_55)
 
 nla_10 = ft.nla(
     'propositions is a class whose elements are '
@@ -109,8 +111,8 @@ nla_10 = ft.nla(
     'and all theory-formula-statements whose relation is defined '
     'from these. Its elements are called propositions.')
 proposition_class = u.o('proposition-class')
-ft.fa(u.f(element_of, truth, class_of_classes), nla=nla_10)
-ft.fa(u.f(element_of, falsehood, class_of_classes), nla=nla_10)
+ft.dai(u.f(element_of, truth, class_of_classes), nla=nla_10)
+ft.dai(u.f(element_of, falsehood, class_of_classes), nla=nla_10)
 
 nla_20 = ft.nla(
     'If P is a proposition, then either the statement P has truth value true,'
@@ -119,8 +121,8 @@ has_truth_value = u.r(
     2, 'is',
     formula_rep=core.Formula.infix_operator_representation,
     signal_proposition=True)
-ft.fa(u.f(has_truth_value, truth, truth), nla=nla_10)
-ft.fa(u.f(has_truth_value, falsehood, falsehood), nla=nla_10)
+ft.dai(u.f(has_truth_value, truth, truth), nla=nla_10)
+ft.dai(u.f(has_truth_value, falsehood, falsehood), nla=nla_10)
 
 nla_30 = ft.nla(
     '¬ is a unary relation. '
@@ -132,7 +134,7 @@ nla_30 = ft.nla(
 # DOUBLE-NEGATION
 nla_09_50 = ft.nla('If P has-truth-value t, ¬(¬(P)) has-truth-value t.')
 with u.v() as p, u.v() as t:
-    fa_09_51 = ft.fa(
+    fa_09_51 = ft.dai(
         u.f(
             ft.implication,
             u.f(has_truth_value, p, t),
@@ -141,17 +143,39 @@ with u.v() as p, u.v() as t:
                 t)),
         nla=nla_09_50)
 
+
+# CONJUNCTION
+def define_conjunction():
+    nla_39 = ft.nla(
+        'If P and Q are logical propositions, (P ∧ Q) is true if and only if '
+        'both P and Q are true, '
+        'otherwise it is false.')
+
+
+define_conjunction()
+
+
+def define_biconditional():
+    nla = ft.nla(
+        'If P and Q are logical propositions, '
+        '(P ⇔ Q) is true if and only if '
+        '((P ⇒ Q) ∧ (Q ⇒ P)), '
+        'otherwise it is false.')
+
+
+define_biconditional()
+
 nla_40 = ft.nla(
     'If T is a theory, and both P is valid and ¬P is valid in T, '
     'then this theory is an element of contradictory-theories class.')
 contradictory_theories = u.o('contradictory-theories')
 contradictory_statements = u.o('contradictory-statement')
 with u.v('φ') as phi:
-    ft.fa(
+    ft.dai(
         u.f(
             ft.implication,
             u.f(
-                conjunction, u.f(has_truth_value, phi, truth),
+                ft.conjunction, u.f(has_truth_value, phi, truth),
                 u.f(has_truth_value, phi, falsehood)),
             u.f(element_of, phi, contradictory_statements)),
         nla_40)
@@ -205,7 +229,7 @@ def elaborate_foundation_theory():
         y = u.v()
         o = u.v()
         r1x1 = u.f(implies, u.f(equality, x, y), u.f(subst, o, x, y))
-        equality_substitution = ft.fa(r1x1, axiom2)
+        equality_substitution = ft.dai(r1x1, axiom2)
 
     gen1()
 

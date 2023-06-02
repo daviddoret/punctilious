@@ -42,12 +42,12 @@ Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formu
 
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟐.𝟏: “0 is a natural number.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟐.𝟏.𝐚: (0 is-a natural-number)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝐚: (0 is-a natural-number)
 
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟐.𝟐.𝟏: “If n is a natural number, then n++ is a
 	natural number.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟐.𝟐.𝟐: ((n₁ is-a natural-number) ⟹ ((n₁)++ is-a natural-number))
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟐.𝟐: ((n₁ is-a natural-number) ⟹ ((n₁)++ is-a natural-number))
 
 𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟐.𝟑: ((0)++ is-a natural-number)
 
@@ -87,7 +87,7 @@ Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formu
 𝐍𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦 𝟐.𝟑: “0 is not the successor of any natural
 	number; i.e., we have n++ ≠ 0 for every natural number n.”
 
-𝐅𝐨𝐫𝐦𝐚𝐥 𝐚𝐱𝐢𝐨𝐦 𝟐.𝟑.𝟏: ((n₂ is-a natural-number) ⟹ ((n₂)++ ≠ 0))
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟑.𝟏: ((n₂ is-a natural-number) ⟹ ((n₂)++ ≠ 0))
 
 𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟔.𝟏: (((((0)++)++)++)++ ≠ 0)
 
