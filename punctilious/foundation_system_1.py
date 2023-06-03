@@ -83,7 +83,46 @@ class ModusPonensStatement(core.FormulaStatement):
         self, conditional, antecedent, symbol=None, category=None, theory=None,
         reference=None, title=None):
         category = core.statement_categories.proposition if category is None else category
-        # Check p_implies_q consistency
+        self.conditional = conditional
+        self.antecedent = antecedent
+        valid_proposition = ModusPonensInferenceRule.execute_algorithm(
+            theory=theory, conditional=conditional, antecedent=antecedent)
+        super().__init__(
+            theory=theory, valid_proposition=valid_proposition,
+            category=category, reference=reference, title=title,
+            symbol=symbol)
+
+    def repr_as_statement(self, output_proofs=True):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
+        if output_proofs:
+            output = output + f'\n\t{repm.serif_bold("Proof by modus ponens")}'
+            output = output + f'\n\t{self.conditional.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.conditional.repr_as_ref())}.'
+            output = output + f'\n\t{self.antecedent.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.antecedent.repr_as_ref())}.'
+            output = output + f'\n\t{"─" * 71}┤'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+        return output
+
+
+class ModusPonensInferenceRule(core.InferenceRule):
+
+    @staticmethod
+    def infer(
+        theory, conditional, antecedent, symbol=None, category=None,
+        reference=None, title=None):
+        """Given a conditional and an antecedent, infer a statement using the
+        modus-ponens inference-rule in the theory."""
+        return ModusPonensStatement(
+            conditional=conditional, antecedent=antecedent, symbol=symbol,
+            category=category, theory=theory, reference=reference, title=title)
+
+    @staticmethod
+    def execute_algorithm(theory, conditional, antecedent):
+        """Execute the modus-ponens algorithm."""
         assert isinstance(theory, core.Theory)
         assert isinstance(conditional, core.FormulaStatement)
         assert theory.has_objct_in_hierarchy(conditional)
@@ -105,46 +144,11 @@ class ModusPonensStatement(core.FormulaStatement):
             o2=p_prime, mask=mask)
         assert antecedent.valid_proposition.is_masked_formula_similar_to(
             o2=p_prime, mask=mask)
-        # State q
-        self.p_implies_q = conditional
-        self.p = antecedent
         # Build q by variable substitution
         substitution_map = dict((v, k) for k, v in _values.items())
         valid_proposition = q_prime.substitute(
             substitution_map=substitution_map, target_theory=theory)
-        # assert p_implies_q.statement_index < self.statement_index
-        # assert p.statement_index < self.statement_index
-        super().__init__(
-            theory=theory, valid_proposition=valid_proposition,
-            category=category, reference=reference, title=title,
-            symbol=symbol)
-
-    def repr_as_statement(self, output_proofs=True):
-        """Return a representation that expresses and justifies the statement.
-
-        The representation is in two parts:
-        - The formula that is being stated,
-        - The justification for the formula."""
-        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
-        if output_proofs:
-            output = output + f'\n\t{repm.serif_bold("Proof by modus ponens")}'
-            output = output + f'\n\t{self.p_implies_q.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p_implies_q.repr_as_ref())}.'
-            output = output + f'\n\t{self.p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p.repr_as_ref())}.'
-            output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
-        return output
-
-
-class ModusPonensInferenceRule(core.InferenceRule):
-    @staticmethod
-    def infer(
-        theory, conditional, antecedent, symbol=None, category=None,
-        reference=None, title=None):
-        """Given a conditional and an antecedent, infer a statement using the
-        modus-ponens inference-rule in the theory."""
-        return ModusPonensStatement(
-            conditional=conditional, antecedent=antecedent, symbol=symbol,
-            category=category, theory=theory, reference=reference, title=title)
+        return valid_proposition
 
 
 ft.modus_ponens_inference_rule = ModusPonensInferenceRule
