@@ -2,6 +2,7 @@ import textwrap
 from types import SimpleNamespace
 import repm
 import contextlib
+import abc
 
 
 class Configuration:
@@ -38,6 +39,15 @@ class AtheoreticalStatement:
 class FailedVerificationException(Exception):
     """Python custom exception raised whenever a verification fails if
     setting raise_exception_on_verification_failure = True."""
+
+    def __init__(self, msg, **kwargs):
+        self.msg = msg
+        self.kwargs = kwargs
+
+
+class UnsupportedInferenceRuleException(Exception):
+    """Python custom exception raised if an attempt is made
+     to use an inference rule on a theory."""
 
     def __init__(self, msg, **kwargs):
         self.msg = msg
@@ -1143,77 +1153,6 @@ class DirectAxiomInference(FormulaStatement):
         return output
 
 
-class ModusPonens(FormulaStatement):
-    """
-    TODO: Make ModusPonens a subclass of InferenceRule.
-
-    Definition:
-    -----------
-    A modus-ponens is a valid rule-of-inference propositional-logic argument that,
-    given a proposition (P implies Q)
-    given a proposition (P is True)
-    infers the proposition (Q is True)
-
-    Requirements:
-    -------------
-    The parent theory must expose the implication attribute.
-    """
-
-    def __init__(
-        self, conditional, antecedent, symbol=None, category=None, theory=None,
-        reference=None, title=None):
-        category = statement_categories.proposition if category is None else category
-        # Check p_implies_q consistency
-        assert isinstance(theory, Theory)
-        assert isinstance(conditional, FormulaStatement)
-        assert theory.has_objct_in_hierarchy(conditional)
-        assert theory.has_objct_in_hierarchy(antecedent)
-        verify(
-            isinstance(theory.implication, Relation),
-            'The usage of the ModusPonens class in a theory requires the implication attribute in that theory.')
-        assert conditional.valid_proposition.relation is theory.implication
-        p_prime = conditional.valid_proposition.parameters[0]
-        q_prime = conditional.valid_proposition.parameters[1]
-        mask = p_prime.get_variable_set()
-        # Check p consistency
-        # If the p statement is present in the theory,
-        # it necessarily mean that p is true,
-        # because every statement in the theory is a valid proposition.
-        assert isinstance(antecedent, FormulaStatement)
-        similitude, _values = antecedent.valid_proposition._is_masked_formula_similar_to(
-            o2=p_prime, mask=mask)
-        assert antecedent.valid_proposition.is_masked_formula_similar_to(
-            o2=p_prime, mask=mask)
-        # State q
-        self.p_implies_q = conditional
-        self.p = antecedent
-        # Build q by variable substitution
-        substitution_map = dict((v, k) for k, v in _values.items())
-        valid_proposition = q_prime.substitute(
-            substitution_map=substitution_map, target_theory=theory)
-        # assert p_implies_q.statement_index < self.statement_index
-        # assert p.statement_index < self.statement_index
-        super().__init__(
-            theory=theory, valid_proposition=valid_proposition,
-            category=category, reference=reference, title=title,
-            symbol=symbol)
-
-    def repr_as_statement(self, output_proofs=True):
-        """Return a representation that expresses and justifies the statement.
-
-        The representation is in two parts:
-        - The formula that is being stated,
-        - The justification for the formula."""
-        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
-        if output_proofs:
-            output = output + f'\n\t{repm.serif_bold("Proof by modus ponens")}'
-            output = output + f'\n\t{self.p_implies_q.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p_implies_q.repr_as_ref())}.'
-            output = output + f'\n\t{self.p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p.repr_as_ref())}.'
-            output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
-        return output
-
-
 class Morphism(FormulaStatement):
     """
 
@@ -1362,8 +1301,12 @@ class InferenceRule:
     """
 
     def __init__(self, premises, conclusion):
-        self.premises = premises
-        self.conclusion = conclusion
+        self._premises = premises
+        self._conclusion = conclusion
+
+    @staticmethod
+    def infer(*args, **kwargs):
+        pass
 
 
 class Note(AtheoreticalStatement):
@@ -1435,6 +1378,7 @@ class Theory(TheoreticalObjct):
         self._implication = None
         self._negation = None
         self._inequality = None
+        self._modus_ponens_inference_rule = None
 
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
         # if is_theory_foundation_system:
@@ -1567,19 +1511,55 @@ class Theory(TheoreticalObjct):
             valid_proposition=valid_proposition, d=d, symbol=symbol,
             theory=self, reference=reference, title=title)
 
-    def elaborate_modus_ponens(
+    def infer_by_modus_ponens(
         self, conditional, antecedent, symbol=None, category=None,
         reference=None, title=None):
-        """Elaborate a new modus-ponens statement in the theory. Shortcut for
-        ModusPonens(theory=t, ...)"""
-        return ModusPonens(
-            conditional=conditional, antecedent=antecedent, symbol=symbol,
-            category=category, theory=self, reference=reference, title=title)
+        """Infer a statement by applying the modus-ponens (
+        MP) inference-rule.
 
-    def elaborate_axiom(
+        Let 𝒯 be the theory under consideration.
+        Let 𝝋 ⟹ 𝝍 be an implication-statement in 𝒯,
+        called the conditional.
+        Let 𝝋 be a statement in 𝒯,
+        called the antecedent.
+        It follows that 𝝍 is valid in 𝒯.
+        """
+        if self.modus_ponens_inference_rule is None:
+            raise UnsupportedInferenceRuleException(
+                'The modus-ponens inference-rule is not contained in this '
+                'theory',
+                theory=self, conditional=conditional, antecedent=antecedent)
+        else:
+            return self.modus_ponens_inference_rule.infer(
+                theory=self, conditional=conditional, antecedent=antecedent,
+                symbol=symbol, category=category,
+                reference=reference, title=title)
+
+    @property
+    def modus_ponens_inference_rule(self):
+        """Some theories may contain the modus-ponens inference-rule.
+
+        This property may only be set once to assure the stability of the
+        theory."""
+        if self._modus_ponens_inference_rule is not None:
+            return self._modus_ponens_inference_rule
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system._modus_ponens_inference_rule
+        else:
+            return None
+
+    @modus_ponens_inference_rule.setter
+    def modus_ponens_inference_rule(self, ir: InferenceRule):
+        verify(
+            self._modus_ponens_inference_rule is None,
+            'The modus-ponens inference-rule property of a theory can only be '
+            'set once to prevent instability.')
+        self._modus_ponens_inference_rule = ir
+
+    def postulate_axiom(
         self, natural_language, symbol=None, reference=None, title=None):
-        """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
-        return self.universe_of_discourse.elaborate_axiom(
+        """Postulate an axiom expressed in natural-language as the basis of this theory."""
+        return self.universe_of_discourse.postulate_axiom(
             natural_language=natural_language, symbol=symbol, theory=self,
             reference=reference, title=title)
 
@@ -1590,11 +1570,14 @@ class Theory(TheoreticalObjct):
             natural_language=natural_language, symbol=symbol, theory=self,
             reference=reference, title=title)
 
-    def elaborate_substitution_of_equal_terms(
+    def infer_by_substitution_of_equal_terms(
         self, original_expression, equality_statement, symbol=None,
         category=None, reference=None, title=None):
-        """Elaborate a new modus-ponens statement in the theory. Shortcut for
-        ModusPonens(theory=t, ...)"""
+        """Infer a statement by applying the substitution-of-equal-terms (
+        SoET) inference-rule.
+
+        Let
+        """
         return SubstitutionOfEqualTerms(
             original_expression=original_expression,
             equality_statement=equality_statement, symbol=symbol,
@@ -1657,7 +1640,14 @@ class Theory(TheoreticalObjct):
 
     def has_objct_in_hierarchy(self, o):
         """Return True if o is in this theory's hierarchy, False otherwise."""
-        assert isinstance(o, TheoreticalObjct)
+        verify(o is not None, 'Object o is None', theory=self, o=o)
+        verify(
+            hasattr(o, 'is_theoretical_objct'),
+            'Object o does not have the is_theoretical_objct attribute.',
+            theory=self, o=o)
+        verify(
+            o.is_theoretical_objct, 'Object o is not a theoretical_objct.',
+            theory=self, o=o)
         return o.theory in self.get_theory_extension()
 
     @property
@@ -1711,7 +1701,7 @@ class Theory(TheoreticalObjct):
         reference=None, title=None):
         """Elaborate a new modus-ponens statement in the theory. Shortcut for
         ModusPonens(theory=t, ...)"""
-        return self.elaborate_modus_ponens(
+        return self.infer_by_modus_ponens(
             conditional=conditional, antecedent=antecedent, symbol=symbol,
             category=category, reference=reference, title=title)
 
@@ -1741,7 +1731,7 @@ class Theory(TheoreticalObjct):
     def a(self, natural_language, symbol=None, reference=None, title=None):
         """Elaborate a new natural-language-axiom statement. Shortcut function for
         Theory.elaborate_natural_language_axiom(...)."""
-        return self.elaborate_axiom(
+        return self.postulate_axiom(
             natural_language=natural_language, symbol=symbol,
             reference=reference, title=title)
 
@@ -1780,7 +1770,7 @@ class Theory(TheoreticalObjct):
         category=None, reference=None, title=None):
         """Elaborate a new modus-ponens statement in the theory. Shortcut for
         ModusPonens(theory=t, ...)"""
-        return self.elaborate_substitution_of_equal_terms(
+        return self.infer_by_substitution_of_equal_terms(
             original_expression=original_expression,
             equality_statement=equality_statement, symbol=symbol,
             category=category, reference=reference, title=title)
@@ -2230,10 +2220,10 @@ class UniverseOfDiscourse(SymbolicObjct):
             universe_of_discourse=self,
             theory_foundation_system=theory_foundation_system)
 
-    def elaborate_axiom(
+    def postulate_axiom(
         self, natural_language, symbol=None, theory=None, reference=None,
         title=None):
-        """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
+        """Postulate a new axiom in the designated theory."""
         verify(
             theory.universe_of_discourse is self,
             'The universe-of-discourse of the theory parameter is distinct '
@@ -2283,7 +2273,7 @@ class UniverseOfDiscourse(SymbolicObjct):
     def a(
         self, natural_language, symbol=None, theory=None, reference=None,
         title=None):
-        return self.elaborate_axiom(
+        return self.postulate_axiom(
             natural_language=natural_language, symbol=symbol, theory=theory,
             reference=reference, title=title)
 

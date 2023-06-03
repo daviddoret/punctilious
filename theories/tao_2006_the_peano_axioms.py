@@ -131,4 +131,4 @@ with u.v('n') as n, u.v('m') as m:
             u.f(t.inequality, u.f(suc, n), u.f(suc, m)))
         , reference='2.4.1', a=axiom_2_4)
 
-t.prnt(output_proofs=False)
+t.prnt(output_proofs=True)

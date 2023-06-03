@@ -1,6 +1,7 @@
 """foundation-system-1 is one possible foundation system for Punctilious."""
 
 import core
+import repm
 
 u = core.UniverseOfDiscourse()
 ft = core.Theory(
@@ -60,6 +61,93 @@ ft.equality = u.r(
 ft.implication = u.r(
     2, '⟹', core.Formula.infix_operator_representation,
     signal_proposition=True)
+
+
+class ModusPonensStatement(core.FormulaStatement):
+    """
+    TODO: Make ModusPonens a subclass of InferenceRule.
+
+    Definition:
+    -----------
+    A modus-ponens is a valid rule-of-inference propositional-logic argument that,
+    given a proposition (P implies Q)
+    given a proposition (P is True)
+    infers the proposition (Q is True)
+
+    Requirements:
+    -------------
+    The parent theory must expose the implication attribute.
+    """
+
+    def __init__(
+        self, conditional, antecedent, symbol=None, category=None, theory=None,
+        reference=None, title=None):
+        category = core.statement_categories.proposition if category is None else category
+        # Check p_implies_q consistency
+        assert isinstance(theory, core.Theory)
+        assert isinstance(conditional, core.FormulaStatement)
+        assert theory.has_objct_in_hierarchy(conditional)
+        assert theory.has_objct_in_hierarchy(antecedent)
+        core.verify(
+            isinstance(theory.implication, core.Relation),
+            'The usage of the ModusPonens class in a theory requires the '
+            'implication attribute in that theory.')
+        assert conditional.valid_proposition.relation is theory.implication
+        p_prime = conditional.valid_proposition.parameters[0]
+        q_prime = conditional.valid_proposition.parameters[1]
+        mask = p_prime.get_variable_set()
+        # Check p consistency
+        # If the p statement is present in the theory,
+        # it necessarily mean that p is true,
+        # because every statement in the theory is a valid proposition.
+        assert isinstance(antecedent, core.FormulaStatement)
+        similitude, _values = antecedent.valid_proposition._is_masked_formula_similar_to(
+            o2=p_prime, mask=mask)
+        assert antecedent.valid_proposition.is_masked_formula_similar_to(
+            o2=p_prime, mask=mask)
+        # State q
+        self.p_implies_q = conditional
+        self.p = antecedent
+        # Build q by variable substitution
+        substitution_map = dict((v, k) for k, v in _values.items())
+        valid_proposition = q_prime.substitute(
+            substitution_map=substitution_map, target_theory=theory)
+        # assert p_implies_q.statement_index < self.statement_index
+        # assert p.statement_index < self.statement_index
+        super().__init__(
+            theory=theory, valid_proposition=valid_proposition,
+            category=category, reference=reference, title=title,
+            symbol=symbol)
+
+    def repr_as_statement(self, output_proofs=True):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
+        if output_proofs:
+            output = output + f'\n\t{repm.serif_bold("Proof by modus ponens")}'
+            output = output + f'\n\t{self.p_implies_q.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p_implies_q.repr_as_ref())}.'
+            output = output + f'\n\t{self.p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p.repr_as_ref())}.'
+            output = output + f'\n\t{"─" * 71}┤'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+        return output
+
+
+class ModusPonensInferenceRule(core.InferenceRule):
+    @staticmethod
+    def infer(
+        theory, conditional, antecedent, symbol=None, category=None,
+        reference=None, title=None):
+        """Given a conditional and an antecedent, infer a statement using the
+        modus-ponens inference-rule in the theory."""
+        return ModusPonensStatement(
+            conditional=conditional, antecedent=antecedent, symbol=symbol,
+            category=category, theory=theory, reference=reference, title=title)
+
+
+ft.modus_ponens_inference_rule = ModusPonensInferenceRule
 
 ft.conjunction = u.r(
     2, '∧', core.Formula.infix_operator_representation,
@@ -146,12 +234,24 @@ with u.v() as p, u.v() as t:
 # CONJUNCTION
 def define_conjunction():
     nla_39 = ft.a(
-        'If P and Q are logical propositions, (P ∧ Q) is true if and only if '
+        'If P and Q are logical propositions, '
+        '(P ∧ Q) is true if and only if '
         'both P and Q are true, '
         'otherwise it is false.')
 
 
 define_conjunction()
+
+
+def section_200_theory_consistency():
+    axiom_200 = ft.a(
+        'If 𝓣 is a theory, '
+        'if 𝝋 is a statement in 𝓣, '
+        'and if ¬𝝋 is a statement in 𝓣, '
+        'then 𝓣 is inconsistent.',
+        title='Theory inconsistency')
+
+    proposition_200_1 = ft.implication(u.f(u.im))
 
 
 def define_biconditional():
