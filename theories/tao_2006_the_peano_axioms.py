@@ -122,9 +122,9 @@ with u.v('n') as n, u.v('m') as m:
         u.f(
             t.implication,
             u.f(
-                t.conjunction,
+                u.conjunction_relation,
                 u.f(
-                    t.conjunction,
+                    u.conjunction_relation,
                     u.f(is_a, n, nat),
                     u.f(is_a, m, nat)),
                 u.f(t.inequality, n, m)),

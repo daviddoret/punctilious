@@ -1,4 +1,5 @@
 import textwrap
+import warnings
 from types import SimpleNamespace
 import repm
 import contextlib
@@ -7,7 +8,7 @@ import abc
 
 class Configuration:
     def __init__(self):
-        self.raise_exception_on_verification_failure = True
+        self.raise_exception_on_verification_error = True
         self.text_output_indent = 2
         self.text_output_statement_column_width = 70
         self.text_output_justification_column_width = 40
@@ -54,7 +55,26 @@ class UnsupportedInferenceRuleException(Exception):
         self.kwargs = kwargs
 
 
-def verify(assertion, msg, **kwargs):
+class VerificationSeverity(repm.Representation):
+    def __init__(self, python_name):
+        super().__init__(python_name=python_name)
+
+
+class VerificationSeverities(repm.Representation):
+    def __init__(self, python_name):
+        super().__init__(python_name=python_name)
+        self.verbose = VerificationSeverity('verbose')
+        self.information = VerificationSeverity('information')
+        self.warning = VerificationSeverity('warning')
+        self.error = VerificationSeverity('error')
+
+
+verification_severities = VerificationSeverities('verification_severities')
+
+
+def verify(
+    assertion, msg,
+    severity: VerificationSeverity = verification_severities.error, **kwargs):
     if not assertion:
         contextual_information = ''
         for key, value in kwargs.items():
@@ -64,9 +84,11 @@ def verify(assertion, msg, **kwargs):
             finally:
                 pass
             contextual_information += f'\n{key}: {value_as_string}'
-        report = f'{msg}\nContextual information:{contextual_information}'
+        report = f'{str(severity).upper()}: {msg}\nContextual information:{contextual_information}'
         repm.prnt(report)
-        if configuration.raise_exception_on_verification_failure:
+        if severity is verification_severities.warning:
+            warnings.warn(report)
+        if configuration.raise_exception_on_verification_error and severity is verification_severities.error:
             raise FailedVerificationException(msg=report, **kwargs)
 
 
@@ -1375,7 +1397,7 @@ class Theory(TheoreticalObjct):
             assert isinstance(extended_theory, Theory)
         self.extended_theories = extended_theories
         self._commutativity_of_equality = None
-        self._conjunction = None
+        self._conjunction_relation = None
         self._equality = None
         self._implication = None
         self._negation = None
@@ -1436,26 +1458,6 @@ class Theory(TheoreticalObjct):
             'A theory commutativity-of-equality property can only be set once '
             'to prevent inconsistency.')
         self._commutativity_of_equality = p
-
-    @property
-    def conjunction(self):
-        """Conjunction is a fundamental theory property.
-        None if the property is not equipped on the theory.
-        An instance of Relation otherwise."""
-        if self._conjunction is not None:
-            return self._conjunction
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system._conjunction
-        else:
-            return None
-
-    @conjunction.setter
-    def conjunction(self, r):
-        verify(
-            self._conjunction is None,
-            'A theory conjunction property can only be set once '
-            'to prevent inconsistency.')
-        self._conjunction = r
 
     @property
     def conjunction_introduction_inference_rule(self):
@@ -1737,9 +1739,7 @@ class Theory(TheoreticalObjct):
         #   with adequate statements (axioms?).
         # TODO: Move the inclusion of the conjunction relation to the universe,
         #   in an include_conjunction_relation() method on UniverseOfDiscourse.
-        self.conjunction = self.universe_of_discourse.r(
-            2, '∧', Formula.infix_operator_representation,
-            signal_proposition=True)
+        self.universe_of_discourse.include_conjunction_relation()
         self._includes_conjunction_introduction_inference_rule = True
 
     @property
@@ -2098,6 +2098,11 @@ class UniverseOfDiscourse(SymbolicObjct):
         self.symbolic_objcts = dict()
         self.theories = dict()
         self.variables = dict()
+        # Well-known objects
+        self._conjunction_relation = None
+        self._implication_relation = None
+        self._truth = None
+        self._falsehood = None
 
         if symbol is None:
             base = '𝒰'
@@ -2115,6 +2120,20 @@ class UniverseOfDiscourse(SymbolicObjct):
             is_theory_foundation_system=False,
             symbol=symbol,
             universe_of_discourse=None)
+
+    @property
+    def conjunction_relation(self):
+        """The conjunction-relation if it exists in this universe-of-discourse,
+        otherwise None."""
+        return self._conjunction_relation
+
+    @conjunction_relation.setter
+    def conjunction_relation(self, r):
+        verify(
+            self._conjunction_relation is None,
+            'The conjunction-relation relation exists already in this'
+            'universe-of-discourse')
+        self._conjunction_relation = r
 
     def cross_reference_formula(self, phi: Formula):
         """Cross-references a formula in this universe-of-discourse.
@@ -2282,7 +2301,8 @@ class UniverseOfDiscourse(SymbolicObjct):
     def declare_theory(
         self, symbol=None, is_theory_foundation_system=None,
         extended_theories=None,
-        theory_foundation_system=None):
+        theory_foundation_system=None,
+        include_conjunction_introduction_inference_rule=None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for Theory(universe_of_discourse, ...).
@@ -2297,7 +2317,16 @@ class UniverseOfDiscourse(SymbolicObjct):
             extended_theories=extended_theories,
             is_theory_foundation_system=is_theory_foundation_system,
             universe_of_discourse=self,
-            theory_foundation_system=theory_foundation_system)
+            theory_foundation_system=theory_foundation_system,
+            include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule)
+
+    def include_conjunction_relation(self):
+        """Assure the existence of the conjunction-relation in this
+        universe-of-discourse."""
+        if self.conjunction_relation is None:
+            self.conjunction_relation = self.r(
+                2, '∧', Formula.infix_operator_representation,
+                signal_proposition=True)
 
     def postulate_axiom(
         self, natural_language, symbol=None, theory=None, reference=None,
@@ -2392,7 +2421,8 @@ class UniverseOfDiscourse(SymbolicObjct):
     def t(
         self, symbol=None, is_theory_foundation_system=None,
         extended_theories=None,
-        theory_foundation_system=None):
+        theory_foundation_system=None,
+        include_conjunction_introduction_inference_rule=None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for self.declare_theory(...).
@@ -2406,7 +2436,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
             extended_theories=extended_theories,
-            theory_foundation_system=theory_foundation_system)
+            theory_foundation_system=theory_foundation_system,
+            include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule)
 
     # @FreeVariableContext()
     @contextlib.contextmanager
@@ -2509,7 +2540,7 @@ class ConjunctionIntroductionInferenceRule(InferenceRule):
             'theory hierarchy.',
             antecedent=conjunct_q, theory=theory)
         verify(
-            isinstance(theory.conjunction, Relation),
+            isinstance(theory.conjunction_relation, Relation),
             'The usage of the conjunction-introduction inference-rule in a theory requires the '
             'conjunction relation in that theory universe.')
 
@@ -2524,7 +2555,7 @@ class ConjunctionIntroductionInferenceRule(InferenceRule):
                 source_variable.symbol.base)) for source_variable in
             variables_list)
         valid_proposition = theory.universe_of_discourse.f(
-            theory.conjunction,
+            theory.conjunction_relation,
             conjunct_p.substitute(
                 substitution_map=substitution_map, target_theory=theory),
             conjunct_q.substitute(

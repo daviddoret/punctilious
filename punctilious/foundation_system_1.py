@@ -178,7 +178,8 @@ ft.inequality = u.r(
     signal_proposition=True)
 
 ft.dai(
-    u.f(element_of, ft.conjunction, propositional_relations_class), a=nla_09)
+    u.f(element_of, u.conjunction_relation, propositional_relations_class),
+    a=nla_09)
 ft.dai(u.f(element_of, disjunction, propositional_relations_class), a=nla_09)
 ft.dai(
     u.f(element_of, ft.implication, propositional_relations_class), a=nla_09)
@@ -289,7 +290,7 @@ with u.v('φ') as phi:
         u.f(
             ft.implication,
             u.f(
-                ft.conjunction, u.f(has_truth_value, phi, truth),
+                u.conjunction_relation, u.f(has_truth_value, phi, truth),
                 u.f(has_truth_value, phi, falsehood)),
             u.f(element_of, phi, contradictory_statements)),
         nla_40)
