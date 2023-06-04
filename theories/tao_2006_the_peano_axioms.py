@@ -134,4 +134,4 @@ with u.v('n') as n, u.v('m') as m:
 # Proposition 2.1.8: 6 is not equal to 2.
 
 
-t.prnt(output_proofs=True)
+# t.prnt(output_proofs=True)
