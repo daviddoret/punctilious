@@ -26,7 +26,7 @@ nla_2_2_1 = t.a(
 with u.v('n') as n:
     suc = u.r(1, '++', formula_rep=Formula.postfix_operator_representation)
     fa_2_2_2 = t.dai(
-        u.f(ft.implication, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
+        u.f(u.implies, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
         nla_2_2_1,
         reference='2.2.2')
 
@@ -95,7 +95,7 @@ a_2_3 = t.a(
 with u.v('n') as n:
     proposition_2_3_1 = t.dai(
         valid_proposition=u.f(
-            ft.implication,
+            u.implies,
             u.f(is_a, n, nat),
             u.f(ft.inequality, u.f(suc, n), zero)),
         a=a_2_3, reference='2.3.1')
@@ -120,7 +120,7 @@ axiom_2_4 = t.a(
 with u.v('n') as n, u.v('m') as m:
     proposition_2_4_1 = t.dai(
         u.f(
-            t.implication,
+            u.implies,
             u.f(
                 u.conjunction_relation,
                 u.f(

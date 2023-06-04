@@ -1371,7 +1371,8 @@ class Theory(TheoreticalObjct):
         self, is_theory_foundation_system=None,
         symbol=None, extended_theories=None,
         universe_of_discourse=None, theory_foundation_system=None,
-        include_conjunction_introduction_inference_rule: bool = False
+        include_conjunction_introduction_inference_rule: bool = False,
+        include_modus_ponens_inference_rule: bool = False
     ):
         """
 
@@ -1397,9 +1398,8 @@ class Theory(TheoreticalObjct):
             assert isinstance(extended_theory, Theory)
         self.extended_theories = extended_theories
         self._commutativity_of_equality = None
-        self._conjunction_introduction_inference_rule = None
         self._equality = None
-        self._implication = None
+        # self._implication = None
         self._negation = None
         self._inequality = None
 
@@ -1430,14 +1430,23 @@ class Theory(TheoreticalObjct):
             symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
             universe_of_discourse=universe_of_discourse)
-        # Inference Rules
+        # Inference rules
+        # Conjunction introduction
+        self._conjunction_introduction_inference_rule = None
         include_conjunction_introduction_inference_rule = False if \
             include_conjunction_introduction_inference_rule is None else \
             include_conjunction_introduction_inference_rule
         self._includes_conjunction_introduction_inference_rule = False
         if include_conjunction_introduction_inference_rule:
             self.include_conjunction_introduction_inference_rule()
+        # Modus ponens
         self._modus_ponens_inference_rule = None
+        include_modus_ponens_inference_rule = False if \
+            include_modus_ponens_inference_rule is None else \
+            include_modus_ponens_inference_rule
+        self._includes_modus_ponens_inference_rule = False
+        if include_modus_ponens_inference_rule:
+            self.include_modus_ponens_inference_rule()
 
     def ci(
         self, conjunct_p, conjunct_q, symbol=None, category=None,
@@ -1715,29 +1724,6 @@ class Theory(TheoreticalObjct):
             theory=self, o=o)
         return o.theory in self.get_theory_extension()
 
-    @property
-    def implication(self):
-        """The implication-property is a fundamental property that enables
-        support for modus-ponens. None if the implication-property is not equipped on
-        the theory. An instance of Relation otherwise."""
-        if self._implication is not None:
-            return self._implication
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.implication
-        else:
-            return None
-
-    @implication.setter
-    def implication(self, r):
-        verify(
-            self._implication is None,
-            'A theory implication property can only be set once to prevent '
-            'inconsistency.')
-        verify(
-            isinstance(r, Relation),
-            'The implication property must be a relation.')
-        self._implication = r
-
     def include_conjunction_introduction_inference_rule(self):
         """Include the conjunction-introduction inference-rule in this
         theory."""
@@ -1752,6 +1738,18 @@ class Theory(TheoreticalObjct):
         self._conjunction_introduction_inference_rule = ConjunctionIntroductionInferenceRule
         self._includes_conjunction_introduction_inference_rule = True
 
+    def include_modus_ponens_inference_rule(self):
+        """Include the modus-ponens inference-rule in this
+        theory."""
+        verify(
+            not self.includes_modus_ponens_inference_rule,
+            'The modus-ponens inference-rule is already included in this theory.')
+        # TODO: Justify the inclusion of the inference-rule in the theory
+        #   with adequate statements (axioms?).
+        self.universe_of_discourse.include_implication_relation()
+        self._modus_ponens_inference_rule = ModusPonensInferenceRule
+        self._includes_modus_ponens_inference_rule = True
+
     @property
     def includes_conjunction_introduction_inference_rule(self):
         """True if the conjunction-introduction inference-rule is included in this theory, False otherwise."""
@@ -1759,6 +1757,17 @@ class Theory(TheoreticalObjct):
             return self._includes_conjunction_introduction_inference_rule
         elif self._theory_foundation_system is not None:
             return self._theory_foundation_system.includes_conjunction_introduction_inference_rule
+        else:
+            return None
+
+    @property
+    def includes_modus_ponens_inference_rule(self):
+        """True if the modus-ponens inference-rule is included in this
+        theory, False otherwise."""
+        if self._includes_modus_ponens_inference_rule is not None:
+            return self._includes_modus_ponens_inference_rule
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system.includes_modus_ponens_inference_rule
         else:
             return None
 
@@ -2175,6 +2184,25 @@ class UniverseOfDiscourse(SymbolicObjct):
         self._falsehood_simple_objct = o
 
     @property
+    def implication_relation(self):
+        """The implication relation if it exists in this universe-of-discourse,
+        otherwise None."""
+        return self._implication_relation
+
+    @implication_relation.setter
+    def implication_relation(self, r):
+        verify(
+            self._implication_relation is None,
+            'The implication relation exists already in this'
+            'universe-of-discourse')
+        self._implication_relation = r
+
+    @property
+    def implies(self):
+        """A shortcut for UniverseOfDiscourse.implication_relation."""
+        return self.implication_relation
+
+    @property
     def truth_simple_objct(self):
         """The truth simple-objct if it exists in this universe-of-discourse,
         otherwise None."""
@@ -2405,6 +2433,17 @@ class UniverseOfDiscourse(SymbolicObjct):
         # Assure the existence of falsehood.
         if self.falsehood_simple_objct is None:
             self.falsehood_simple_objct = self.o('⊥')
+
+    def include_implication_relation(self):
+        """Assure the existence of the implication-relation in this
+        universe-of-discourse."""
+        # Assure the existence of dependent theoretical-objcts.
+        # N/A.
+        # Assure the existence of implication-relation.
+        if self.implication_relation is None:
+            self.implication_relation = self.r(
+                2, '⟹', Formula.infix_operator_representation,
+                signal_proposition=True)
 
     def include_truth_simple_objct(self):
         """Assure the existence of the truth simple-objct in this
@@ -2656,6 +2695,110 @@ class ConjunctionIntroductionInferenceRule(InferenceRule):
         a1 = theory.a()
         # TODO: Justify the introduction of the inteference rule with
         # a theory statement.
+
+
+class ModusPonensStatement(FormulaStatement):
+    """
+    TODO: Make ModusPonens a subclass of InferenceRule.
+
+    Definition:
+    -----------
+    A modus-ponens is a valid rule-of-inference propositional-logic argument that,
+    given a proposition (P implies Q)
+    given a proposition (P is True)
+    infers the proposition (Q is True)
+
+    Requirements:
+    -------------
+    The parent theory must expose the implication attribute.
+    """
+
+    def __init__(
+        self, conditional, antecedent, symbol=None, category=None, theory=None,
+        reference=None, title=None):
+        category = statement_categories.proposition if category is None else category
+        self.conditional = conditional
+        self.antecedent = antecedent
+        valid_proposition = ModusPonensInferenceRule.execute_algorithm(
+            theory=theory, conditional=conditional, antecedent=antecedent)
+        super().__init__(
+            theory=theory, valid_proposition=valid_proposition,
+            category=category, reference=reference, title=title,
+            symbol=symbol)
+
+    def repr_as_statement(self, output_proofs=True):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
+        if output_proofs:
+            output = output + f'\n\t{repm.serif_bold("Proof by modus ponens")}'
+            output = output + f'\n\t{self.conditional.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.conditional.repr_as_ref())}.'
+            output = output + f'\n\t{self.antecedent.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.antecedent.repr_as_ref())}.'
+            output = output + f'\n\t{"─" * 71}┤'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+        return output
+
+
+class ModusPonensInferenceRule(InferenceRule):
+    """An implementation of the modus-ponens inference-rule."""
+
+    @staticmethod
+    def infer(
+        theory, conditional, antecedent, symbol=None, category=None,
+        reference=None, title=None):
+        """Given a conditional and an antecedent, infer a statement
+        using the modus-ponens inference-rule."""
+        return ModusPonensStatement(
+            conditional=conditional, antecedent=antecedent, symbol=symbol,
+            category=category, theory=theory, reference=reference, title=title)
+
+    @staticmethod
+    def execute_algorithm(theory, conditional, antecedent):
+        """Execute the modus-ponens algorithm."""
+        assert isinstance(theory, Theory)
+        assert isinstance(conditional, FormulaStatement)
+        verify(
+            theory.has_objct_in_hierarchy(conditional),
+            'The conditional of the modus-ponens is not contained in the '
+            'theory hierarchy.',
+            conditional=conditional, theory=theory)
+        verify(
+            theory.has_objct_in_hierarchy(antecedent),
+            'The antecedent of the modus-ponens is not contained in the '
+            'theory hierarchy.',
+            antecedent=antecedent, theory=theory)
+        verify(
+            isinstance(
+                theory.universe_of_discourse.implication_relation,
+                Relation),
+            'The usage of the ModusPonens class in a theory requires the '
+            'implication-relation in the universe-of-discourse.')
+        assert conditional.valid_proposition.relation is theory.universe_of_discourse.implication_relation
+        p_prime = conditional.valid_proposition.parameters[0]
+        q_prime = conditional.valid_proposition.parameters[1]
+        mask = p_prime.get_variable_set()
+        # Check p consistency
+        # If the p statement is present in the theory,
+        # it necessarily mean that p is true,
+        # because every statement in the theory is a valid proposition.
+        assert isinstance(antecedent, FormulaStatement)
+        similitude, _values = antecedent.valid_proposition._is_masked_formula_similar_to(
+            o2=p_prime, mask=mask)
+        assert antecedent.valid_proposition.is_masked_formula_similar_to(
+            o2=p_prime, mask=mask)
+        # Build q by variable substitution
+        substitution_map = dict((v, k) for k, v in _values.items())
+        valid_proposition = q_prime.substitute(
+            substitution_map=substitution_map, target_theory=theory)
+        return valid_proposition
+
+    @staticmethod
+    def initialize(theory):
+        a1 = theory.a()
+        # TODO: Justify the inclusion of this inference-rule in the theory.
 
 
 # universe_of_discourse = Theory(

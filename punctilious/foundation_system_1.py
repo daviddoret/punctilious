@@ -7,7 +7,8 @@ u = core.UniverseOfDiscourse()
 ft = core.Theory(
     symbol='ℱ',
     is_theory_foundation_system=True, universe_of_discourse=u,
-    include_conjunction_introduction_inference_rule=True)
+    include_conjunction_introduction_inference_rule=True,
+    include_modus_ponens_inference_rule=True)
 
 axiom_01 = ft.a(
     'A theory is a... (define punctilious data model).')
@@ -54,118 +55,6 @@ propositional_relations_class = u.o('propositional-relations-class')
 ft.dai(
     u.f(element_of, propositional_relations_class, class_of_classes),
     a=axiom_03)
-ft.equality = u.r(
-    2, '=',
-    formula_rep=core.Formula.infix_operator_representation,
-    signal_proposition=True)
-
-ft.implication = u.r(
-    2, '⟹', core.Formula.infix_operator_representation,
-    signal_proposition=True)
-
-
-class ModusPonensStatement(core.FormulaStatement):
-    """
-    TODO: Make ModusPonens a subclass of InferenceRule.
-
-    Definition:
-    -----------
-    A modus-ponens is a valid rule-of-inference propositional-logic argument that,
-    given a proposition (P implies Q)
-    given a proposition (P is True)
-    infers the proposition (Q is True)
-
-    Requirements:
-    -------------
-    The parent theory must expose the implication attribute.
-    """
-
-    def __init__(
-        self, conditional, antecedent, symbol=None, category=None, theory=None,
-        reference=None, title=None):
-        category = core.statement_categories.proposition if category is None else category
-        self.conditional = conditional
-        self.antecedent = antecedent
-        valid_proposition = ModusPonensInferenceRule.execute_algorithm(
-            theory=theory, conditional=conditional, antecedent=antecedent)
-        super().__init__(
-            theory=theory, valid_proposition=valid_proposition,
-            category=category, reference=reference, title=title,
-            symbol=symbol)
-
-    def repr_as_statement(self, output_proofs=True):
-        """Return a representation that expresses and justifies the statement.
-
-        The representation is in two parts:
-        - The formula that is being stated,
-        - The justification for the formula."""
-        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
-        if output_proofs:
-            output = output + f'\n\t{repm.serif_bold("Proof by modus ponens")}'
-            output = output + f'\n\t{self.conditional.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.conditional.repr_as_ref())}.'
-            output = output + f'\n\t{self.antecedent.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.antecedent.repr_as_ref())}.'
-            output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
-        return output
-
-
-class ModusPonensInferenceRule(core.InferenceRule):
-    """An implementation of the modus-ponens inference-rule."""
-
-    @staticmethod
-    def infer(
-        theory, conditional, antecedent, symbol=None, category=None,
-        reference=None, title=None):
-        """Given a conditional and an antecedent, infer a statement
-        using the modus-ponens inference-rule."""
-        return ModusPonensStatement(
-            conditional=conditional, antecedent=antecedent, symbol=symbol,
-            category=category, theory=theory, reference=reference, title=title)
-
-    @staticmethod
-    def execute_algorithm(theory, conditional, antecedent):
-        """Execute the modus-ponens algorithm."""
-        assert isinstance(theory, core.Theory)
-        assert isinstance(conditional, core.FormulaStatement)
-        core.verify(
-            theory.has_objct_in_hierarchy(conditional),
-            'The conditional of the modus-ponens is not contained in the '
-            'theory hierarchy.',
-            conditional=conditional, theory=theory)
-        core.verify(
-            theory.has_objct_in_hierarchy(antecedent),
-            'The antecedent of the modus-ponens is not contained in the '
-            'theory hierarchy.',
-            antecedent=antecedent, theory=theory)
-        core.verify(
-            isinstance(theory.implication, core.Relation),
-            'The usage of the ModusPonens class in a theory requires the '
-            'implication attribute in that theory.')
-        assert conditional.valid_proposition.relation is theory.implication
-        p_prime = conditional.valid_proposition.parameters[0]
-        q_prime = conditional.valid_proposition.parameters[1]
-        mask = p_prime.get_variable_set()
-        # Check p consistency
-        # If the p statement is present in the theory,
-        # it necessarily mean that p is true,
-        # because every statement in the theory is a valid proposition.
-        assert isinstance(antecedent, core.FormulaStatement)
-        similitude, _values = antecedent.valid_proposition._is_masked_formula_similar_to(
-            o2=p_prime, mask=mask)
-        assert antecedent.valid_proposition.is_masked_formula_similar_to(
-            o2=p_prime, mask=mask)
-        # Build q by variable substitution
-        substitution_map = dict((v, k) for k, v in _values.items())
-        valid_proposition = q_prime.substitute(
-            substitution_map=substitution_map, target_theory=theory)
-        return valid_proposition
-
-    @staticmethod
-    def initialize(theory):
-        a1 = theory.a()
-
-
-ft.modus_ponens_inference_rule = ModusPonensInferenceRule
 
 disjunction = u.r(
     2, '∨', core.Formula.infix_operator_representation,
@@ -176,13 +65,16 @@ ft.negation = u.r(
 ft.inequality = u.r(
     2, '≠', core.Formula.infix_operator_representation,
     signal_proposition=True)
-
+ft.equality = u.r(
+    2, '=', core.Formula.infix_operator_representation,
+    signal_proposition=True)
 ft.dai(
     u.f(element_of, u.conjunction_relation, propositional_relations_class),
     a=nla_09)
 ft.dai(u.f(element_of, disjunction, propositional_relations_class), a=nla_09)
 ft.dai(
-    u.f(element_of, ft.implication, propositional_relations_class), a=nla_09)
+    u.f(element_of, u.implication_relation, propositional_relations_class),
+    a=nla_09)
 ft.dai(
     u.f(element_of, ft.negation, propositional_relations_class),
     a=nla_09)
@@ -196,7 +88,7 @@ with u.v('x') as x1, u.v('y') as x2:
     x1_equal_x2 = u.f(ft.equality, x1, x2)
     x2_equal_x1 = u.f(ft.equality, x2, x1)
     ft.commutativity_of_equality = ft.dai(
-        u.f(ft.implication, x1_equal_x2, x2_equal_x1), nla_01b)
+        u.f(u.implication_relation, x1_equal_x2, x2_equal_x1), nla_01b)
 
 nld_55 = ft.d('Inequality is defined as the negation of equality.')
 with u.v('x') as x, u.v('y') as y:
@@ -239,7 +131,7 @@ nla_09_50 = ft.a('If P has-truth-value t, ¬(¬(P)) has-truth-value t.')
 with u.v() as p, u.v() as t:
     fa_09_51 = ft.dai(
         u.f(
-            ft.implication,
+            u.implication_relation,
             u.f(has_truth_value, p, t),
             u.f(
                 has_truth_value, u.f(ft.negation, u.f(ft.negation, p)),
@@ -267,7 +159,7 @@ def section_200_theory_consistency():
         'then 𝓣 is inconsistent.',
         title='Theory inconsistency')
 
-    proposition_200_1 = ft.implication(u.f(u.im))
+    proposition_200_1 = u.implication_relation(u.f(u.im))
 
 
 def define_biconditional():
@@ -288,7 +180,7 @@ contradictory_statements = u.o('contradictory-statement')
 with u.v('φ') as phi:
     ft.dai(
         u.f(
-            ft.implication,
+            u.implication_relation,
             u.f(
                 u.conjunction_relation, u.f(has_truth_value, phi, truth),
                 u.f(has_truth_value, phi, falsehood)),
