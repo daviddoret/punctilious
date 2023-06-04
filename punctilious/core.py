@@ -86,6 +86,7 @@ def set_attr(o, a, v):
 # import rich.markdown
 # import rich.table
 
+
 class Symbol:
     """A specialized string-like object to represent things in formulae.
 
@@ -1347,7 +1348,8 @@ class Theory(TheoreticalObjct):
     def __init__(
         self, is_theory_foundation_system=None,
         symbol=None, extended_theories=None,
-        universe_of_discourse=None, theory_foundation_system=None
+        universe_of_discourse=None, theory_foundation_system=None,
+        include_conjunction_introduction_inference_rule: bool = False
     ):
         """
 
@@ -1378,7 +1380,6 @@ class Theory(TheoreticalObjct):
         self._implication = None
         self._negation = None
         self._inequality = None
-        self._modus_ponens_inference_rule = None
 
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
         # if is_theory_foundation_system:
@@ -1407,6 +1408,14 @@ class Theory(TheoreticalObjct):
             symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
             universe_of_discourse=universe_of_discourse)
+        # Inference Rules
+        include_conjunction_introduction_inference_rule = False if \
+            include_conjunction_introduction_inference_rule is None else \
+            include_conjunction_introduction_inference_rule
+        self._includes_conjunction_introduction_inference_rule = False
+        if include_conjunction_introduction_inference_rule:
+            self.include_conjunction_introduction_inference_rule()
+        self._modus_ponens_inference_rule = None
 
     @property
     def commutativity_of_equality(self):
@@ -1447,6 +1456,27 @@ class Theory(TheoreticalObjct):
             'A theory conjunction property can only be set once '
             'to prevent inconsistency.')
         self._conjunction = r
+
+    @property
+    def conjunction_introduction_inference_rule(self):
+        """Some theories may contain the conjunction-introduction inference-rule.
+
+        This property may only be set once to assure the stability of the
+        theory."""
+        if self._conjunction_introduction_inference_rule is not None:
+            return self._conjunction_introduction_inference_rule
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system._conjunction_introduction_inference_rule
+        else:
+            return None
+
+    @conjunction_introduction_inference_rule.setter
+    def conjunction_introduction_inference_rule(self, ir: InferenceRule):
+        verify(
+            self._conjunction_introduction_inference_rule is None,
+            'The conjunction-introduction inference-rule property of a theory can only be '
+            'set once to prevent instability.')
+        self._conjunction_introduction_inference_rule = ir
 
     def crossreference_axiom(self, a):
         """During construction, cross-reference an axiom 𝒜
@@ -1510,6 +1540,30 @@ class Theory(TheoreticalObjct):
         return DirectDefinitionInference(
             valid_proposition=valid_proposition, d=d, symbol=symbol,
             theory=self, reference=reference, title=title)
+
+    def infer_by_conjunction_introduction(
+        self, conjunct_p, conjunct_q, symbol=None, category=None,
+        reference=None, title=None):
+        """Apply the conjunction-introduction inference-rule to infer a new statement.
+
+        :param conjunct_p:
+        :param conjunct_q:
+        :param symbol:
+        :param category:
+        :param reference:
+        :param title:
+        :return:
+        """
+        if not self.includes_conjunction_introduction_inference_rule:
+            raise UnsupportedInferenceRuleException(
+                'The conjunction-introduction inference-rule is not contained '
+                'in this theory.',
+                theory=self, conjunct_p=conjunct_p, conjunct_q=conjunct_q)
+        else:
+            return self.conjunction_introduction_inference_rule.infer(
+                theory=self, conjunct_p=conjunct_p, conjunct_q=conjunct_q,
+                symbol=symbol, category=category,
+                reference=reference, title=title)
 
     def infer_by_modus_ponens(
         self, conditional, antecedent, symbol=None, category=None,
@@ -1672,6 +1726,31 @@ class Theory(TheoreticalObjct):
             isinstance(r, Relation),
             'The implication property must be a relation.')
         self._implication = r
+
+    def include_conjunction_introduction_inference_rule(self):
+        """Include the conjunction-introduction inference-rule in this
+        theory."""
+        verify(
+            not self.includes_conjunction_introduction_inference_rule,
+            'The conjunction-introduction inference-rule is already included in this theory.')
+        # TODO: Justify the inclusion of the inference-rule in the theory
+        #   with adequate statements (axioms?).
+        # TODO: Move the inclusion of the conjunction relation to the universe,
+        #   in an include_conjunction_relation() method on UniverseOfDiscourse.
+        self.conjunction = self.universe_of_discourse.r(
+            2, '∧', Formula.infix_operator_representation,
+            signal_proposition=True)
+        self._includes_conjunction_introduction_inference_rule = True
+
+    @property
+    def includes_conjunction_introduction_inference_rule(self):
+        """True if the conjunction-introduction inference-rule is included in this theory, False otherwise."""
+        if self._includes_conjunction_introduction_inference_rule is not None:
+            return self._includes_conjunction_introduction_inference_rule
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system.includes_conjunction_introduction_inference_rule
+        else:
+            return None
 
     @property
     def inequality(self):
@@ -2351,6 +2430,113 @@ class UniverseOfDiscourse(SymbolicObjct):
             status=FreeVariable.scope_initialization_status)
         yield x
         x.lock_scope()
+
+
+class ConjunctionIntroductionStatement(FormulaStatement):
+    """
+
+    Definition:
+    -----------
+    A conjunction-introduction is a valid rule-of-inference propositional-logic argument that,
+    given a proposition (P is true)
+    given a proposition (Q is true)
+    infers the proposition (P and Q)
+    and infers the proposition not(P and Q) if either or both of P or Q is not true.
+
+    Requirements:
+    -------------
+    The conjunction relation.
+    """
+
+    def __init__(
+        self, conjunct_p, conjunct_q, symbol=None, category=None, theory=None,
+        reference=None, title=None):
+        category = statement_categories.proposition if category is None else category
+        self.conjunct_p = conjunct_p
+        self.conjunct_q = conjunct_q
+        valid_proposition = ConjunctionIntroductionInferenceRule.execute_algorithm(
+            theory=theory, conjunct_p=conjunct_p, conjunct_q=conjunct_q)
+        super().__init__(
+            theory=theory, valid_proposition=valid_proposition,
+            category=category, reference=reference, title=title,
+            symbol=symbol)
+
+    def repr_as_statement(self, output_proofs=True):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
+        if output_proofs:
+            output = output + f'\n\t{repm.serif_bold("Proof by conjunction introduction")}'
+            output = output + f'\n\t{self.conjunct_p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.conjunct_p.repr_as_ref())}.'
+            output = output + f'\n\t{self.conjunct_q.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.conjunct_q.repr_as_ref())}.'
+            output = output + f'\n\t{"─" * 71}┤'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+        return output
+
+
+class ConjunctionIntroductionInferenceRule(InferenceRule):
+    """An implementation of the conjunction-introduction inference-rule."""
+
+    @staticmethod
+    def infer(
+        theory, conjunct_p, conjunct_q, symbol=None, category=None,
+        reference=None, title=None):
+        """Given two conjuncts, infer a statement
+        using the conjunction-introduction inference-rule."""
+        return ConjunctionIntroductionStatement(
+            conjunct_p=conjunct_p, conjunct_q=conjunct_q, symbol=symbol,
+            category=category, theory=theory, reference=reference, title=title)
+
+    @staticmethod
+    def execute_algorithm(
+        theory: Theory, conjunct_p: FormulaStatement,
+        conjunct_q: FormulaStatement):
+        """Execute the conjunction algorithm."""
+        assert isinstance(theory, Theory)
+        assert isinstance(conjunct_p, FormulaStatement)
+        assert isinstance(conjunct_q, FormulaStatement)
+        verify(
+            theory.has_objct_in_hierarchy(conjunct_p),
+            'The conjunct P of the conjunction-introduction is not contained in the '
+            'theory hierarchy.',
+            conditional=conjunct_p, theory=theory)
+        verify(
+            theory.has_objct_in_hierarchy(conjunct_q),
+            'The conjunct Q of the conjunction-introduction is not contained in the '
+            'theory hierarchy.',
+            antecedent=conjunct_q, theory=theory)
+        verify(
+            isinstance(theory.conjunction, Relation),
+            'The usage of the conjunction-introduction inference-rule in a theory requires the '
+            'conjunction relation in that theory universe.')
+
+        # Build the valid proposition as p and q
+        # But, in order to do this, we must re-create new variables
+        # with a new scope.
+        # TODO: Move this variable re-creation procedure to a dedicated function
+        variables_list = conjunct_p.get_variable_set().union(
+            conjunct_q.get_variable_set())
+        substitution_map = dict(
+            (source_variable, theory.universe_of_discourse.v(
+                source_variable.symbol.base)) for source_variable in
+            variables_list)
+        valid_proposition = theory.universe_of_discourse.f(
+            theory.conjunction,
+            conjunct_p.substitute(
+                substitution_map=substitution_map, target_theory=theory),
+            conjunct_q.substitute(
+                substitution_map=substitution_map, target_theory=theory)
+        )
+        return valid_proposition
+
+    @staticmethod
+    def initialize(theory):
+        a1 = theory.a()
+        # TODO: Justify the introduction of the inteference rule with
+        # a theory statement.
 
 
 # universe_of_discourse = Theory(

@@ -6,7 +6,8 @@ import repm
 u = core.UniverseOfDiscourse()
 ft = core.Theory(
     symbol='ℱ',
-    is_theory_foundation_system=True, universe_of_discourse=u)
+    is_theory_foundation_system=True, universe_of_discourse=u,
+    include_conjunction_introduction_inference_rule=True)
 
 axiom_01 = ft.a(
     'A theory is a... (define punctilious data model).')
@@ -57,113 +58,6 @@ ft.equality = u.r(
     2, '=',
     formula_rep=core.Formula.infix_operator_representation,
     signal_proposition=True)
-
-
-class ConjunctionIntroductionStatement(core.FormulaStatement):
-    """
-
-    Definition:
-    -----------
-    A conjunction-introduction is a valid rule-of-inference propositional-logic argument that,
-    given a proposition (P is true)
-    given a proposition (Q is true)
-    infers the proposition (P and Q)
-    and infers the proposition not(P and Q) if either or both of P or Q is not true.
-
-    Requirements:
-    -------------
-    The conjunction relation.
-    """
-
-    def __init__(
-        self, conjunct_p, conjunct_q, symbol=None, category=None, theory=None,
-        reference=None, title=None):
-        category = core.statement_categories.proposition if category is None else category
-        self.conjunct_p = conjunct_p
-        self.conjunct_q = conjunct_q
-        valid_proposition = ConjunctionIntroductionInferenceRule.execute_algorithm(
-            theory=theory, conjunct_p=conjunct_p, conjunct_q=conjunct_q)
-        super().__init__(
-            theory=theory, valid_proposition=valid_proposition,
-            category=category, reference=reference, title=title,
-            symbol=symbol)
-
-    def repr_as_statement(self, output_proofs=True):
-        """Return a representation that expresses and justifies the statement.
-
-        The representation is in two parts:
-        - The formula that is being stated,
-        - The justification for the formula."""
-        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
-        if output_proofs:
-            output = output + f'\n\t{repm.serif_bold("Proof by conjunction introduction")}'
-            output = output + f'\n\t{self.conjunct_p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.conjunct_p.repr_as_ref())}.'
-            output = output + f'\n\t{self.conjunct_q.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.conjunct_q.repr_as_ref())}.'
-            output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
-        return output
-
-
-class ConjunctionIntroductionInferenceRule(core.InferenceRule):
-    """An implementation of the conjunction-introduction inference-rule."""
-
-    @staticmethod
-    def infer(
-        theory, conjunct_p, conjunct_q, symbol=None, category=None,
-        reference=None, title=None):
-        """Given two conjuncts, infer a statement
-        using the conjunction-introduction inference-rule."""
-        return ConjunctionIntroductionStatement(
-            conjunct_p=conjunct_p, conjunct_q=conjunct_q, symbol=symbol,
-            category=category, theory=theory, reference=reference, title=title)
-
-    @staticmethod
-    def execute_algorithm(theory, conjunct_p, conjunct_q):
-        """Execute the conjunction algorithm."""
-        assert isinstance(theory, core.Theory)
-        assert isinstance(conjunct_p, core.FormulaStatement)
-        core.verify(
-            theory.has_objct_in_hierarchy(conjunct_p),
-            'The conjunct P of the conjunction-introduction is not contained in the '
-            'theory hierarchy.',
-            conditional=conjunct_p, theory=theory)
-        core.verify(
-            theory.has_objct_in_hierarchy(conjunct_q),
-            'The conjunct Q of the conjunction-introduction is not contained in the '
-            'theory hierarchy.',
-            antecedent=conjunct_q, theory=theory)
-        core.verify(
-            isinstance(theory.conjunction, core.Relation),
-            'The usage of the conjunction-introduction inference-rule in a theory requires the '
-            'conjunction relation in that theory universe.')
-
-        TODO: RESUME IMPLEMENTATION HERE
-
-        assert conjunct_p.valid_proposition.relation is theory.implication
-        p_prime = conjunct_p.valid_proposition.parameters[0]
-        q_prime = conjunct_p.valid_proposition.parameters[1]
-        mask = p_prime.get_variable_set()
-        # Check p consistency
-        # If the p statement is present in the theory,
-        # it necessarily mean that p is true,
-        # because every statement in the theory is a valid proposition.
-        assert isinstance(conjunct_q, core.FormulaStatement)
-        similitude, _values = conjunct_q.valid_proposition._is_masked_formula_similar_to(
-            o2=p_prime, mask=mask)
-        assert conjunct_q.valid_proposition.is_masked_formula_similar_to(
-            o2=p_prime, mask=mask)
-        # Build q by variable substitution
-        substitution_map = dict((v, k) for k, v in _values.items())
-        valid_proposition = q_prime.substitute(
-            substitution_map=substitution_map, target_theory=theory)
-        return valid_proposition
-
-    @staticmethod
-    def initialize(theory):
-        a1 = theory.a()
-        # TODO: Justify the introduction of the inteference rule with
-        # a theory statement.
-
 
 ft.implication = u.r(
     2, '⟹', core.Formula.infix_operator_representation,
@@ -273,9 +167,6 @@ class ModusPonensInferenceRule(core.InferenceRule):
 
 ft.modus_ponens_inference_rule = ModusPonensInferenceRule
 
-ft.conjunction = u.r(
-    2, '∧', core.Formula.infix_operator_representation,
-    signal_proposition=True)
 disjunction = u.r(
     2, '∨', core.Formula.infix_operator_representation,
     signal_proposition=True)
