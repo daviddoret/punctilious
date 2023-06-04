@@ -1397,7 +1397,7 @@ class Theory(TheoreticalObjct):
             assert isinstance(extended_theory, Theory)
         self.extended_theories = extended_theories
         self._commutativity_of_equality = None
-        self._conjunction_relation = None
+        self._conjunction_introduction_inference_rule = None
         self._equality = None
         self._implication = None
         self._negation = None
@@ -1439,6 +1439,15 @@ class Theory(TheoreticalObjct):
             self.include_conjunction_introduction_inference_rule()
         self._modus_ponens_inference_rule = None
 
+    def ci(
+        self, conjunct_p, conjunct_q, symbol=None, category=None,
+        reference=None, title=None):
+        """Infer a new statement in this theory by applying the
+        conjunction-introduction inference-rule."""
+        return self.infer_by_conjunction_introduction(
+            conjunct_p=conjunct_p, conjunct_q=conjunct_q, symbol=symbol,
+            category=category, reference=reference, title=title)
+
     @property
     def commutativity_of_equality(self):
         """Commutativity-of-equality is a fundamental theory property that enables
@@ -1461,14 +1470,13 @@ class Theory(TheoreticalObjct):
 
     @property
     def conjunction_introduction_inference_rule(self):
-        """Some theories may contain the conjunction-introduction inference-rule.
-
-        This property may only be set once to assure the stability of the
-        theory."""
+        """The conjunction-introduction inference-rule if it exists in this
+        theory, or this theory's foundation-system, otherwise None.
+        """
         if self._conjunction_introduction_inference_rule is not None:
             return self._conjunction_introduction_inference_rule
         elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system._conjunction_introduction_inference_rule
+            return self._theory_foundation_system.conjunction_introduction_inference_rule
         else:
             return None
 
@@ -1546,7 +1554,8 @@ class Theory(TheoreticalObjct):
     def infer_by_conjunction_introduction(
         self, conjunct_p, conjunct_q, symbol=None, category=None,
         reference=None, title=None):
-        """Apply the conjunction-introduction inference-rule to infer a new statement.
+        """Infer a new statement in this theory by applying the
+        conjunction-introduction inference-rule.
 
         :param conjunct_p:
         :param conjunct_q:
@@ -1740,6 +1749,7 @@ class Theory(TheoreticalObjct):
         # TODO: Move the inclusion of the conjunction relation to the universe,
         #   in an include_conjunction_relation() method on UniverseOfDiscourse.
         self.universe_of_discourse.include_conjunction_relation()
+        self._conjunction_introduction_inference_rule = ConjunctionIntroductionInferenceRule
         self._includes_conjunction_introduction_inference_rule = True
 
     @property
@@ -2100,9 +2110,10 @@ class UniverseOfDiscourse(SymbolicObjct):
         self.variables = dict()
         # Well-known objects
         self._conjunction_relation = None
+        self._equality_relation = None
+        self._falsehood_simple_objct = None
         self._implication_relation = None
-        self._truth = None
-        self._falsehood = None
+        self._truth_simple_objct = None
 
         if symbol is None:
             base = '𝒰'
@@ -2134,6 +2145,48 @@ class UniverseOfDiscourse(SymbolicObjct):
             'The conjunction-relation relation exists already in this'
             'universe-of-discourse')
         self._conjunction_relation = r
+
+    @property
+    def equality_relation(self):
+        """The equality relation if it exists in this universe-of-discourse,
+        otherwise None."""
+        return self._equality_relation
+
+    @equality_relation.setter
+    def equality_relation(self, r):
+        verify(
+            self._equality_relation is None,
+            'The equality relation exists already in this'
+            'universe-of-discourse')
+        self._equality_relation = r
+
+    @property
+    def falsehood_simple_objct(self):
+        """The falsehood simple-object if it exists in this universe-of-discourse,
+        otherwise None."""
+        return self._falsehood_simple_objct
+
+    @falsehood_simple_objct.setter
+    def falsehood_simple_objct(self, o):
+        verify(
+            self._falsehood_simple_objct is None,
+            'The falsehood simple-objct exists already in this'
+            'universe-of-discourse')
+        self._falsehood_simple_objct = o
+
+    @property
+    def truth_simple_objct(self):
+        """The truth simple-objct if it exists in this universe-of-discourse,
+        otherwise None."""
+        return self._truth_simple_objct
+
+    @truth_simple_objct.setter
+    def truth_simple_objct(self, o):
+        verify(
+            self._truth_simple_objct is None,
+            'The truth simple-objct exists already in this'
+            'universe-of-discourse')
+        self._truth_simple_objct = o
 
     def cross_reference_formula(self, phi: Formula):
         """Cross-references a formula in this universe-of-discourse.
@@ -2323,10 +2376,44 @@ class UniverseOfDiscourse(SymbolicObjct):
     def include_conjunction_relation(self):
         """Assure the existence of the conjunction-relation in this
         universe-of-discourse."""
+        # Assure the existence of dependent theoretical-objcts.
+        self.include_equality_relation()
+        self.include_falsehood_simple_objct()
+        self.include_truth_simple_objct()
+        # Assure the existence of conjunction-relation.
         if self.conjunction_relation is None:
             self.conjunction_relation = self.r(
                 2, '∧', Formula.infix_operator_representation,
                 signal_proposition=True)
+
+    def include_equality_relation(self):
+        """Assure the existence of the equality-relation in this
+        universe-of-discourse."""
+        # Assure the existence of dependent theoretical-objcts.
+        # N/A.
+        # Assure the existence of equality-relation.
+        if self.equality_relation is None:
+            self.equality_relation = self.r(
+                2, '=', Formula.infix_operator_representation,
+                signal_proposition=True)
+
+    def include_falsehood_simple_objct(self):
+        """Assure the existence of the falsehood simple-objct in this
+        universe-of-discourse."""
+        # Assure the existence of dependent theoretical-objcts.
+        # N/A.
+        # Assure the existence of falsehood.
+        if self.falsehood_simple_objct is None:
+            self.falsehood_simple_objct = self.o('⊥')
+
+    def include_truth_simple_objct(self):
+        """Assure the existence of the truth simple-objct in this
+        universe-of-discourse."""
+        # Assure the existence of dependent theoretical-objcts.
+        # N/A.
+        # Assure the existence of truth.
+        if self.truth_simple_objct is None:
+            self.truth_simple_objct = self.o('⊤')
 
     def postulate_axiom(
         self, natural_language, symbol=None, theory=None, reference=None,
@@ -2540,7 +2627,8 @@ class ConjunctionIntroductionInferenceRule(InferenceRule):
             'theory hierarchy.',
             antecedent=conjunct_q, theory=theory)
         verify(
-            isinstance(theory.conjunction_relation, Relation),
+            isinstance(
+                theory.universe_of_discourse.conjunction_relation, Relation),
             'The usage of the conjunction-introduction inference-rule in a theory requires the '
             'conjunction relation in that theory universe.')
 
@@ -2555,7 +2643,7 @@ class ConjunctionIntroductionInferenceRule(InferenceRule):
                 source_variable.symbol.base)) for source_variable in
             variables_list)
         valid_proposition = theory.universe_of_discourse.f(
-            theory.conjunction_relation,
+            theory.universe_of_discourse.conjunction_relation,
             conjunct_p.substitute(
                 substitution_map=substitution_map, target_theory=theory),
             conjunct_q.substitute(

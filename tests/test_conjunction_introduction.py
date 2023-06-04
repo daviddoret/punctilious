@@ -5,18 +5,17 @@ import random_data
 
 class TestConjunctionIntroduction(TestCase):
     def test_conjunction_introduction(self):
-        t = p.u.t(
+        u = p.UniverseOfDiscourse('testing-universe')
+        o1 = u.o()
+        o2 = u.o()
+        o3 = u.o()
+        r1 = u.r(2, signal_proposition=True)
+        r2 = u.r(1, signal_proposition=True)
+        t = u.t(
             'test-theory-1',
             include_conjunction_introduction_inference_rule=True)
-
-        with p.u.v('x') as x, p.u.v('y') as y:
-            r = p.u.r(arity=2)
-            phi = p.u.f(r, x, y)
-            self.assertIs(x, phi.parameters[0])
-            self.assertIs(y, phi.parameters[1])
-            self.assertIsNot(y, phi.parameters[0])
-            self.assertIsNot(x, phi.parameters[1])
-        with self.assertRaises(p.FailedVerificationException):
-            # Outside the with statement, scope is locked.
-            # Trying to extend the scope raises an exception.
-            psi = p.u.f(r, y, x)
+        a = t.a('The arbitrary axiom of testing.')
+        phi1 = t.dai(u.f(r1, o1, o2), a=a)
+        phi2 = t.dai(u.f(r2, o3), a=a)
+        phi3 = t.ci(phi1, phi2)
+        self.assertEqual('(◆₁(ℴ₁, ℴ₂) ∧ ◆₂(ℴ₃))', phi3.repr())
