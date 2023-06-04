@@ -1372,7 +1372,8 @@ class Theory(TheoreticalObjct):
         symbol=None, extended_theories=None,
         universe_of_discourse=None, theory_foundation_system=None,
         include_conjunction_introduction_inference_rule: bool = False,
-        include_modus_ponens_inference_rule: bool = False
+        include_modus_ponens_inference_rule: bool = False,
+        include_biconditional_introduction_inference_rule: bool = False
     ):
         """
 
@@ -1431,6 +1432,14 @@ class Theory(TheoreticalObjct):
             is_theory_foundation_system=is_theory_foundation_system,
             universe_of_discourse=universe_of_discourse)
         # Inference rules
+        # Biconditional introduction
+        self._biconditional_introduction_inference_rule = None
+        include_biconditional_introduction_inference_rule = False if \
+            include_biconditional_introduction_inference_rule is None else \
+            include_biconditional_introduction_inference_rule
+        self._includes_biconditional_introduction_inference_rule = False
+        if include_biconditional_introduction_inference_rule:
+            self.include_biconditional_introduction_inference_rule()
         # Conjunction introduction
         self._conjunction_introduction_inference_rule = None
         include_conjunction_introduction_inference_rule = False if \
@@ -1447,6 +1456,36 @@ class Theory(TheoreticalObjct):
         self._includes_modus_ponens_inference_rule = False
         if include_modus_ponens_inference_rule:
             self.include_modus_ponens_inference_rule()
+
+    def bi(
+        self, conditional_phi, conditional_psi, symbol=None, category=None,
+        reference=None, title=None):
+        """Infer a new statement in this theory by applying the
+        biconditional-introduction inference-rule."""
+        return self.infer_by_biconditional_introduction(
+            conditional_phi=conditional_phi, conditional_psi=conditional_psi,
+            symbol=symbol,
+            category=category, reference=reference, title=title)
+
+    @property
+    def biconditional_introduction_inference_rule(self):
+        """The biconditional-introduction inference-rule if it exists in this
+        theory, or this theory's foundation-system, otherwise None.
+        """
+        if self._biconditional_introduction_inference_rule is not None:
+            return self._biconditional_introduction_inference_rule
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system.biconditional_introduction_inference_rule
+        else:
+            return None
+
+    @biconditional_introduction_inference_rule.setter
+    def biconditional_introduction_inference_rule(self, ir: InferenceRule):
+        verify(
+            self._biconditional_introduction_inference_rule is None,
+            'The biconditional-introduction inference-rule property of a theory can only be '
+            'set once to prevent instability.')
+        self._biconditional_introduction_inference_rule = ir
 
     def ci(
         self, conjunct_p, conjunct_q, symbol=None, category=None,
@@ -1559,6 +1598,33 @@ class Theory(TheoreticalObjct):
         return DirectDefinitionInference(
             valid_proposition=valid_proposition, d=d, symbol=symbol,
             theory=self, reference=reference, title=title)
+
+    def infer_by_biconditional_introduction(
+        self, conditional_phi, conditional_psi, symbol=None, category=None,
+        reference=None, title=None):
+        """Infer a new statement in this theory by applying the
+        biconditional-introduction inference-rule.
+
+        :param conditional_phi:
+        :param conditional_psi:
+        :param symbol:
+        :param category:
+        :param reference:
+        :param title:
+        :return:
+        """
+        if not self.includes_biconditional_introduction_inference_rule:
+            raise UnsupportedInferenceRuleException(
+                'The biconditional-introduction inference-rule is not contained '
+                'in this theory.',
+                theory=self, conditional_phi=conditional_phi,
+                conditional_psi=conditional_psi)
+        else:
+            return self.biconditional_introduction_inference_rule.infer(
+                theory=self, conditional_phi=conditional_phi,
+                conditional_psi=conditional_psi,
+                symbol=symbol, category=category,
+                reference=reference, title=title)
 
     def infer_by_conjunction_introduction(
         self, conjunct_p, conjunct_q, symbol=None, category=None,
@@ -1724,6 +1790,19 @@ class Theory(TheoreticalObjct):
             theory=self, o=o)
         return o.theory in self.get_theory_extension()
 
+    def include_biconditional_introduction_inference_rule(self):
+        """Include the biconditional-introduction inference-rule in this
+        theory."""
+        verify(
+            not self.includes_biconditional_introduction_inference_rule,
+            'The biconditional-introduction inference-rule is already included in this theory.')
+        # TODO: Justify the inclusion of the inference-rule in the theory
+        #   with adequate statements (axioms?).
+        self.universe_of_discourse.include_implication_relation()
+        self.universe_of_discourse.include_biconditional_relation()
+        self._biconditional_introduction_inference_rule = BiconditionalIntroductionInferenceRule
+        self._includes_biconditional_introduction_inference_rule = True
+
     def include_conjunction_introduction_inference_rule(self):
         """Include the conjunction-introduction inference-rule in this
         theory."""
@@ -1732,8 +1811,6 @@ class Theory(TheoreticalObjct):
             'The conjunction-introduction inference-rule is already included in this theory.')
         # TODO: Justify the inclusion of the inference-rule in the theory
         #   with adequate statements (axioms?).
-        # TODO: Move the inclusion of the conjunction relation to the universe,
-        #   in an include_conjunction_relation() method on UniverseOfDiscourse.
         self.universe_of_discourse.include_conjunction_relation()
         self._conjunction_introduction_inference_rule = ConjunctionIntroductionInferenceRule
         self._includes_conjunction_introduction_inference_rule = True
@@ -1747,8 +1824,19 @@ class Theory(TheoreticalObjct):
         # TODO: Justify the inclusion of the inference-rule in the theory
         #   with adequate statements (axioms?).
         self.universe_of_discourse.include_implication_relation()
+        self.universe_of_discourse.include_biconditional_relation()
         self._modus_ponens_inference_rule = ModusPonensInferenceRule
         self._includes_modus_ponens_inference_rule = True
+
+    @property
+    def includes_biconditional_introduction_inference_rule(self):
+        """True if the biconditional-introduction inference-rule is included in this theory, False otherwise."""
+        if self._includes_biconditional_introduction_inference_rule is not None:
+            return self._includes_biconditional_introduction_inference_rule
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system.includes_biconditional_introduction_inference_rule
+        else:
+            return None
 
     @property
     def includes_conjunction_introduction_inference_rule(self):
@@ -2118,6 +2206,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         self.theories = dict()
         self.variables = dict()
         # Well-known objects
+        self._biconditional_relation = None
         self._conjunction_relation = None
         self._equality_relation = None
         self._falsehood_simple_objct = None
@@ -2140,6 +2229,20 @@ class UniverseOfDiscourse(SymbolicObjct):
             is_theory_foundation_system=False,
             symbol=symbol,
             universe_of_discourse=None)
+
+    @property
+    def biconditional_relation(self):
+        """The biconditional-relation if it exists in this universe-of-discourse,
+        otherwise None."""
+        return self._biconditional_relation
+
+    @biconditional_relation.setter
+    def biconditional_relation(self, r):
+        verify(
+            self._biconditional_relation is None,
+            'The biconditional-relation relation exists already in this'
+            'universe-of-discourse')
+        self._biconditional_relation = r
 
     @property
     def conjunction_relation(self):
@@ -2383,7 +2486,8 @@ class UniverseOfDiscourse(SymbolicObjct):
         self, symbol=None, is_theory_foundation_system=None,
         extended_theories=None,
         theory_foundation_system=None,
-        include_conjunction_introduction_inference_rule=None):
+        include_conjunction_introduction_inference_rule=None,
+        include_biconditional_introduction_inference_rule=None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for Theory(universe_of_discourse, ...).
@@ -2399,7 +2503,19 @@ class UniverseOfDiscourse(SymbolicObjct):
             is_theory_foundation_system=is_theory_foundation_system,
             universe_of_discourse=self,
             theory_foundation_system=theory_foundation_system,
-            include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule)
+            include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule,
+            include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule)
+
+    def include_biconditional_relation(self):
+        """Assure the existence of the biconditional-relation in this
+        universe-of-discourse."""
+        # Assure the existence of dependent theoretical-objcts.
+        # N/A.
+        # Assure the existence of biconditional-relation.
+        if self.biconditional_relation is None:
+            self.biconditional_relation = self.r(
+                2, '⟺', Formula.infix_operator_representation,
+                signal_proposition=True)
 
     def include_conjunction_relation(self):
         """Assure the existence of the conjunction-relation in this
@@ -2548,7 +2664,8 @@ class UniverseOfDiscourse(SymbolicObjct):
         self, symbol=None, is_theory_foundation_system=None,
         extended_theories=None,
         theory_foundation_system=None,
-        include_conjunction_introduction_inference_rule=None):
+        include_conjunction_introduction_inference_rule=None,
+        include_biconditional_introduction_inference_rule=None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for self.declare_theory(...).
@@ -2563,7 +2680,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             is_theory_foundation_system=is_theory_foundation_system,
             extended_theories=extended_theories,
             theory_foundation_system=theory_foundation_system,
-            include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule)
+            include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule,
+            include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule)
 
     # @FreeVariableContext()
     @contextlib.contextmanager
@@ -2587,6 +2705,109 @@ class UniverseOfDiscourse(SymbolicObjct):
             status=FreeVariable.scope_initialization_status)
         yield x
         x.lock_scope()
+
+
+class BiconditionalIntroductionStatement(FormulaStatement):
+    """A statement inferred by the biconditional-introduction inference-rule.
+
+    Requirements:
+    -------------
+    The biconditional relation.
+    """
+
+    def __init__(
+        self, conditional_phi, conditional_psi, symbol=None, category=None,
+        theory=None,
+        reference=None, title=None):
+        category = statement_categories.proposition if category is None else category
+        self.conditional_phi = conditional_phi
+        self.conditional_psi = conditional_psi
+        valid_proposition = BiconditionalIntroductionInferenceRule.execute_algorithm(
+            theory=theory, conditional_phi=conditional_phi,
+            conditional_psi=conditional_psi)
+        super().__init__(
+            theory=theory, valid_proposition=valid_proposition,
+            category=category, reference=reference, title=title,
+            symbol=symbol)
+
+    def repr_as_statement(self, output_proofs=True):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
+        if output_proofs:
+            output = output + f'\n\t{repm.serif_bold("Proof by biconditional introduction")}'
+            output = output + f'\n\t{self.conditional_phi.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.conditional_phi.repr_as_ref())}.'
+            output = output + f'\n\t{self.conditional_psi.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.conditional_psi.repr_as_ref())}.'
+            output = output + f'\n\t{"─" * 71}┤'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+        return output
+
+
+class BiconditionalIntroductionInferenceRule(InferenceRule):
+    """An implementation of the biconditional-introduction inference-rule."""
+
+    @staticmethod
+    def infer(
+        theory, conditional_phi, conditional_psi, symbol=None, category=None,
+        reference=None, title=None):
+        """Given two conditionals phi, and psi, infer a statement
+        using the biconditional-introduction inference-rule."""
+        return BiconditionalIntroductionStatement(
+            conditional_phi=conditional_phi, conditional_psi=conditional_psi,
+            symbol=symbol,
+            category=category, theory=theory, reference=reference, title=title)
+
+    @staticmethod
+    def execute_algorithm(
+        theory: Theory, conditional_phi: FormulaStatement,
+        conditional_psi: FormulaStatement):
+        """Execute the biconditional algorithm."""
+        assert isinstance(theory, Theory)
+        assert isinstance(conditional_phi, FormulaStatement)
+        assert isinstance(conditional_psi, FormulaStatement)
+        verify(
+            theory.has_objct_in_hierarchy(conditional_phi),
+            'The conditional phi of the biconditional-introduction is not contained in the '
+            'theory hierarchy.',
+            conditional=conditional_phi, theory=theory)
+        verify(
+            theory.has_objct_in_hierarchy(conditional_psi),
+            'The conditional psi of the biconditional-introduction is not contained in the '
+            'theory hierarchy.',
+            antecedent=conditional_psi, theory=theory)
+        verify(
+            isinstance(
+                theory.universe_of_discourse.biconditional_relation, Relation),
+            'The usage of the biconditional-introduction inference-rule in a theory requires the '
+            'biconditional relation in that theory universe.')
+
+        # Build the valid proposition
+        # But, in order to do this, we must re-create new variables
+        # with a new scope.
+        # TODO: Move this variable re-creation procedure to a dedicated function
+        variables_list = conditional_phi.get_variable_set().union(
+            conditional_psi.get_variable_set())
+        substitution_map = dict(
+            (source_variable, theory.universe_of_discourse.v(
+                source_variable.symbol.base)) for source_variable in
+            variables_list)
+        valid_proposition = theory.universe_of_discourse.f(
+            theory.universe_of_discourse.biconditional_relation,
+            conditional_phi.substitute(
+                substitution_map=substitution_map, target_theory=theory),
+            conditional_psi.substitute(
+                substitution_map=substitution_map, target_theory=theory)
+        )
+        return valid_proposition
+
+    @staticmethod
+    def initialize(theory):
+        a1 = theory.a()
+        # TODO: Justify the introduction of the inteference rule with
+        # a theory statement.
 
 
 class ConjunctionIntroductionStatement(FormulaStatement):
