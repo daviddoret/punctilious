@@ -131,4 +131,7 @@ with u.v('n') as n, u.v('m') as m:
             u.f(t.inequality, u.f(suc, n), u.f(suc, m)))
         , reference='2.4.1', a=axiom_2_4)
 
+# Proposition 2.1.8: 6 is not equal to 2.
+
+
 t.prnt(output_proofs=True)
