@@ -19,6 +19,28 @@ class Configuration:
 configuration = Configuration()
 
 
+class Consistency(repm.Representation):
+    """A qualification regarding the consistency of a theory."""
+
+    def __init__(self, python_name):
+        super().__init__(python_name=python_name)
+
+
+class ConsistencyValues(repm.Representation):
+    """The list of consistency values."""
+
+    def __init__(self, python_name):
+        super().__init__(python_name=python_name)
+
+    proved_consistent = Consistency('proved-consistent')
+    proved_inconsistent = Consistency('proved-inconsistent')
+    undetermined = Consistency('undetermined')
+
+
+consistency_values = ConsistencyValues('consistency-values')
+"""The list of consistency values."""
+
+
 class AtheoreticalStatement:
     """
     Definition
@@ -73,8 +95,8 @@ verification_severities = VerificationSeverities('verification_severities')
 
 
 def verify(
-    assertion, msg,
-    severity: VerificationSeverity = verification_severities.error, **kwargs):
+        assertion, msg,
+        severity: VerificationSeverity = verification_severities.error, **kwargs):
     if not assertion:
         contextual_information = ''
         for key, value in kwargs.items():
@@ -171,10 +193,10 @@ class SymbolicObjct:
     """
 
     def __init__(
-        self, symbol,
-        is_theory_foundation_system=None,
-        is_universe_of_discourse=None,
-        universe_of_discourse=None):
+            self, symbol,
+            is_theory_foundation_system=None,
+            is_universe_of_discourse=None,
+            universe_of_discourse=None):
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
         is_universe_of_discourse = False if is_universe_of_discourse is None else is_universe_of_discourse
         # By design, every symbolic-objct is a component of a theory,
@@ -235,7 +257,7 @@ class SymbolicObjct:
             # are referencing the same object.
             return True
         if not self.universe_of_discourse.is_symbol_equivalent(
-            o2.universe_of_discourse):
+                o2.universe_of_discourse):
             return False
         if self.symbol != o2.symbol:
             return False
@@ -280,8 +302,8 @@ class TheoreticalObjct(SymbolicObjct):
     """
 
     def __init__(
-        self, symbol,
-        is_theory_foundation_system=None, universe_of_discourse=None):
+            self, symbol,
+            is_theory_foundation_system=None, universe_of_discourse=None):
         # pseudo-class properties. these must be overwritten by
         # the parent constructor after calling __init__().
         # the rationale is that checking python types fails
@@ -441,7 +463,7 @@ class TheoreticalObjct(SymbolicObjct):
             if variable in _values:
                 already_observed_value = _values[variable]
                 if not newly_observed_value.is_formula_equivalent_to(
-                    already_observed_value):
+                        already_observed_value):
                     return False, _values
             else:
                 _values[variable] = newly_observed_value
@@ -451,14 +473,14 @@ class TheoreticalObjct(SymbolicObjct):
             if variable in _values:
                 already_observed_value = _values[variable]
                 if not newly_observed_value.is_formula_equivalent_to(
-                    already_observed_value):
+                        already_observed_value):
                     return False, _values
             else:
                 _values[variable] = newly_observed_value
         return True, _values
 
     def substitute(
-        self, substitution_map, target_theory, lock_variable_scope=None):
+            self, substitution_map, target_theory, lock_variable_scope=None):
         """Given a theoretical-objct o₁ (self),
         and a substitution map 𝐌,
         return a theoretical-objct o₂
@@ -584,8 +606,8 @@ class FreeVariable(TheoreticalObjct):
     closed_scope_status = Status('closed_scope_status')
 
     def __init__(
-        self, symbol=None,
-        universe_of_discourse=None, status=None, scope=None):
+            self, symbol=None,
+            universe_of_discourse=None, status=None, scope=None):
         status = FreeVariable.scope_initialization_status if status is None else status
         scope = frozenset() if scope is None else scope
         scope = {scope} if isinstance(scope, Formula) else scope
@@ -715,8 +737,8 @@ class Formula(TheoreticalObjct):
         python_name='postfix-operator', sample='𝐱◆')
 
     def __init__(
-        self, relation, parameters, symbol=None,
-        universe_of_discourse=None, lock_variable_scope=None):
+            self, relation, parameters, symbol=None,
+            universe_of_discourse=None, lock_variable_scope=None):
         """
 
         :param theory:
@@ -844,7 +866,7 @@ class Formula(TheoreticalObjct):
         # Arities are necessarily equal.
         for i in range(len(self.parameters)):
             if not self.parameters[i].is_formula_equivalent_to(
-                o2.parameters[i]):
+                    o2.parameters[i]):
                 return False
         return True
 
@@ -933,7 +955,7 @@ class SimpleObjctDeclarationFormula(Formula):
     """
 
     def __init__(
-        self, theory, simple_objct, python=None, dashed=None, symbol=None):
+            self, theory, simple_objct, python=None, dashed=None, symbol=None):
         assert isinstance(theory, Theory)
         assert isinstance(simple_objct, SimpleObjct)
         assert theory.has_objct_in_hierarchy(simple_objct)
@@ -981,8 +1003,8 @@ class Statement(TheoreticalObjct):
     """
 
     def __init__(
-        self, theory, category, symbol=None,
-        reference=None, title=None):
+            self, theory, category, symbol=None,
+            reference=None, title=None):
         assert isinstance(theory, Theory)
         universe_of_discourse = theory.universe_of_discourse
         self.statement_index = theory.crossreference_statement(self)
@@ -1014,8 +1036,8 @@ class Axiom(Statement):
     """
 
     def __init__(
-        self, natural_language, symbol=None, theory=None, reference=None,
-        title=None):
+            self, natural_language, symbol=None, theory=None, reference=None,
+            title=None):
         assert isinstance(theory, Theory)
         assert isinstance(natural_language, str)
         self.natural_language = natural_language
@@ -1051,8 +1073,8 @@ class Definition(Statement):
     """
 
     def __init__(
-        self, natural_language, symbol=None, theory=None, reference=None,
-        title=None):
+            self, natural_language, symbol=None, theory=None, reference=None,
+            title=None):
         assert isinstance(theory, Theory)
         assert isinstance(natural_language, str)
         self.natural_language = natural_language
@@ -1088,9 +1110,9 @@ class FormulaStatement(Statement):
     """
 
     def __init__(
-        self, theory, valid_proposition, symbol=None, category=None,
-        reference=None,
-        title=None):
+            self, theory, valid_proposition, symbol=None, category=None,
+            reference=None,
+            title=None):
         verify(
             isinstance(theory, Theory),
             'isinstance(theory, Theory)')
@@ -1150,8 +1172,8 @@ class DirectAxiomInference(FormulaStatement):
     """
 
     def __init__(
-        self, valid_proposition, a, symbol=None, theory=None, reference=None,
-        title=None, category=None):
+            self, valid_proposition, a, symbol=None, theory=None, reference=None,
+            title=None, category=None):
         assert isinstance(theory, Theory)
         assert isinstance(a, Axiom)
         assert theory.has_objct_in_hierarchy(a)
@@ -1186,8 +1208,8 @@ class Morphism(FormulaStatement):
     """
 
     def __init__(
-        self, source_statement, symbol=None, theory=None,
-        category=None):
+            self, source_statement, symbol=None, theory=None,
+            category=None):
         assert isinstance(theory, Theory)
         assert isinstance(source_statement, FormulaStatement)
         assert theory.has_objct_in_hierarchy(source_statement)
@@ -1261,8 +1283,8 @@ class DirectDefinitionInference(FormulaStatement):
     """
 
     def __init__(
-        self, valid_proposition, d, symbol=None, theory=None, reference=None,
-        title=None):
+            self, valid_proposition, d, symbol=None, theory=None, reference=None,
+            title=None):
         assert isinstance(theory, Theory)
         assert isinstance(d, Definition)
         assert theory.has_objct_in_hierarchy(d)
@@ -1348,7 +1370,7 @@ class Note(AtheoreticalStatement):
             symbol = f'{Note.prefix} {statement_index + 1}'
         else:
             if len(symbol) < len(Note.prefix) or \
-                symbol[:len(Note.prefix)] != Note.prefix:
+                    symbol[:len(Note.prefix)] != Note.prefix:
                 symbol = f'{Note.prefix} {symbol}'
         assert isinstance(symbol, str)
         super().__init__(
@@ -1368,12 +1390,13 @@ class Note(AtheoreticalStatement):
 
 class Theory(TheoreticalObjct):
     def __init__(
-        self, is_theory_foundation_system=None,
-        symbol=None, extended_theories=None,
-        universe_of_discourse=None, theory_foundation_system=None,
-        include_conjunction_introduction_inference_rule: bool = False,
-        include_modus_ponens_inference_rule: bool = False,
-        include_biconditional_introduction_inference_rule: bool = False
+            self, is_theory_foundation_system=None,
+            symbol=None, extended_theories=None,
+            universe_of_discourse=None, theory_foundation_system=None,
+            include_conjunction_introduction_inference_rule: bool = False,
+            include_modus_ponens_inference_rule: bool = False,
+            include_biconditional_introduction_inference_rule: bool = False,
+            include_double_negation_introduction_inference_rule: bool = False
     ):
         """
 
@@ -1382,6 +1405,7 @@ class Theory(TheoreticalObjct):
          :param extended_theories: :param is_an_element_of_itself:
         """
         # self.symbols = dict()
+        self._consistency = consistency_values.undetermined
         self.axioms = tuple()
         self.natural_language_definitions = tuple()
         self.statements = tuple()
@@ -1392,7 +1416,7 @@ class Theory(TheoreticalObjct):
             extended_theories = {extended_theories}
         assert isinstance(extended_theories, set)
         if theory_foundation_system is not None and \
-            theory_foundation_system not in extended_theories:
+                theory_foundation_system not in extended_theories:
             extended_theories = extended_theories.union(
                 {theory_foundation_system})
         for extended_theory in extended_theories:
@@ -1448,6 +1472,14 @@ class Theory(TheoreticalObjct):
         self._includes_conjunction_introduction_inference_rule = False
         if include_conjunction_introduction_inference_rule:
             self.include_conjunction_introduction_inference_rule()
+        # Double negation introduction
+        self._double_negation_introduction_inference_rule = None
+        include_double_negation_introduction_inference_rule = False if \
+            include_double_negation_introduction_inference_rule is None else \
+            include_double_negation_introduction_inference_rule
+        self._includes_double_negation_introduction_inference_rule = False
+        if include_double_negation_introduction_inference_rule:
+            self.include_double_negation_introduction_inference_rule()
         # Modus ponens
         self._modus_ponens_inference_rule = None
         include_modus_ponens_inference_rule = False if \
@@ -1458,8 +1490,8 @@ class Theory(TheoreticalObjct):
             self.include_modus_ponens_inference_rule()
 
     def bi(
-        self, conditional_phi, conditional_psi, symbol=None, category=None,
-        reference=None, title=None):
+            self, conditional_phi, conditional_psi, symbol=None, category=None,
+            reference=None, title=None):
         """Infer a new statement in this theory by applying the
         biconditional-introduction inference-rule."""
         return self.infer_by_biconditional_introduction(
@@ -1488,8 +1520,8 @@ class Theory(TheoreticalObjct):
         self._biconditional_introduction_inference_rule = ir
 
     def ci(
-        self, conjunct_p, conjunct_q, symbol=None, category=None,
-        reference=None, title=None):
+            self, conjunct_p, conjunct_q, symbol=None, category=None,
+            reference=None, title=None):
         """Infer a new statement in this theory by applying the
         conjunction-introduction inference-rule."""
         return self.infer_by_conjunction_introduction(
@@ -1582,16 +1614,45 @@ class Theory(TheoreticalObjct):
     #    return Formula(
     #        relation=relation, parameters=parameters, theory=self, **kwargs)
 
+    def dni(
+            self, p, symbol=None, category=None,
+            reference=None, title=None):
+        """Infer a new double-negation statement in the theory."""
+        return self.infer_by_double_negation_introduction(
+            p=p, symbol=symbol,
+            category=category, reference=reference, title=title)
+
+    @property
+    def double_negation_introduction_inference_rule(self):
+        """Some theories may contain the double-negation-introduction inference-rule.
+
+        This property may only be set once to assure the stability of the
+        theory."""
+        if self._double_negation_introduction_inference_rule is not None:
+            return self._double_negation_introduction_inference_rule
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system.double_negation_introduction_inference_rule
+        else:
+            return None
+
+    @double_negation_introduction_inference_rule.setter
+    def double_negation_introduction_inference_rule(self, ir: InferenceRule):
+        verify(
+            self._double_negation_introduction_inference_rule is None,
+            'The modus-ponens inference-rule property of a theory can only be '
+            'set once to prevent instability.')
+        self._double_negation_introduction_inference_rule = ir
+
     def elaborate_direct_axiom_inference(
-        self, valid_proposition, a, symbol=None, reference=None, title=None):
+            self, valid_proposition, a, symbol=None, reference=None, title=None):
         """Elaborate a new direct-axiom-inference in the theory. Shortcut for FormalAxiom(theory=t, ...)"""
         return DirectAxiomInference(
             valid_proposition=valid_proposition, a=a, symbol=symbol,
             theory=self, reference=reference, title=title)
 
     def elaborate_direct_definition_inference(
-        self, valid_proposition=None, d=None, symbol=None, reference=None,
-        title=None):
+            self, valid_proposition=None, d=None, symbol=None, reference=None,
+            title=None):
         """Elaborate a formal-definition in this theory.
 
         Shortcut for FormalDefinition(theory=t, ...)"""
@@ -1600,8 +1661,8 @@ class Theory(TheoreticalObjct):
             theory=self, reference=reference, title=title)
 
     def infer_by_biconditional_introduction(
-        self, conditional_phi, conditional_psi, symbol=None, category=None,
-        reference=None, title=None):
+            self, conditional_phi, conditional_psi, symbol=None, category=None,
+            reference=None, title=None):
         """Infer a new statement in this theory by applying the
         biconditional-introduction inference-rule.
 
@@ -1613,7 +1674,7 @@ class Theory(TheoreticalObjct):
         :param title:
         :return:
         """
-        if not self.includes_biconditional_introduction_inference_rule:
+        if not self.biconditional_introduction_inference_rule_is_included:
             raise UnsupportedInferenceRuleException(
                 'The biconditional-introduction inference-rule is not contained '
                 'in this theory.',
@@ -1627,8 +1688,8 @@ class Theory(TheoreticalObjct):
                 reference=reference, title=title)
 
     def infer_by_conjunction_introduction(
-        self, conjunct_p, conjunct_q, symbol=None, category=None,
-        reference=None, title=None):
+            self, conjunct_p, conjunct_q, symbol=None, category=None,
+            reference=None, title=None):
         """Infer a new statement in this theory by applying the
         conjunction-introduction inference-rule.
 
@@ -1640,7 +1701,7 @@ class Theory(TheoreticalObjct):
         :param title:
         :return:
         """
-        if not self.includes_conjunction_introduction_inference_rule:
+        if not self.conjunction_introduction_inference_rule_is_included:
             raise UnsupportedInferenceRuleException(
                 'The conjunction-introduction inference-rule is not contained '
                 'in this theory.',
@@ -1651,9 +1712,33 @@ class Theory(TheoreticalObjct):
                 symbol=symbol, category=category,
                 reference=reference, title=title)
 
+    def infer_by_double_negation_introduction(
+            self, p, symbol=None, category=None,
+            reference=None, title=None):
+        """Infer a new statement in this theory by applying the
+        double-negation-introduction inference-rule.
+
+        :param p:
+        :param symbol:
+        :param category:
+        :param reference:
+        :param title:
+        :return:
+        """
+        if not self.double_negation_introduction_inference_rule_is_included:
+            raise UnsupportedInferenceRuleException(
+                'The double-negation-introduction inference-rule is not contained '
+                'in this theory.',
+                theory=self, p=p)
+        else:
+            return self.double_negation_introduction_inference_rule.infer(
+                theory=self, p=p,
+                symbol=symbol, category=category,
+                reference=reference, title=title)
+
     def infer_by_modus_ponens(
-        self, conditional, antecedent, symbol=None, category=None,
-        reference=None, title=None):
+            self, conditional, antecedent, symbol=None, category=None,
+            reference=None, title=None):
         """Infer a statement by applying the modus-ponens (
         MP) inference-rule.
 
@@ -1697,22 +1782,22 @@ class Theory(TheoreticalObjct):
         self._modus_ponens_inference_rule = ir
 
     def postulate_axiom(
-        self, natural_language, symbol=None, reference=None, title=None):
+            self, natural_language, symbol=None, reference=None, title=None):
         """Postulate an axiom expressed in natural-language as the basis of this theory."""
         return self.universe_of_discourse.postulate_axiom(
             natural_language=natural_language, symbol=symbol, theory=self,
             reference=reference, title=title)
 
     def elaborate_natural_language_definition(
-        self, natural_language, symbol=None, reference=None, title=None):
+            self, natural_language, symbol=None, reference=None, title=None):
         """Shortcut for NaturalLanguageDefinition(theory=t, ...)"""
         return self.universe_of_discourse.elaborate_natural_language_definition(
             natural_language=natural_language, symbol=symbol, theory=self,
             reference=reference, title=title)
 
     def infer_by_substitution_of_equal_terms(
-        self, original_expression, equality_statement, symbol=None,
-        category=None, reference=None, title=None):
+            self, original_expression, equality_statement, symbol=None,
+            category=None, reference=None, title=None):
         """Infer a statement by applying the substitution-of-equal-terms (
         SoET) inference-rule.
 
@@ -1747,7 +1832,7 @@ class Theory(TheoreticalObjct):
         self._equality = r
 
     def dai(
-        self, valid_proposition, a, symbol=None, reference=None, title=None):
+            self, valid_proposition, a, symbol=None, reference=None, title=None):
         """Elaborate a new direct-axiom-inference in the theory. Shortcut for
         Theory.elaborate_direct_axiom_inference(...)."""
         return self.elaborate_direct_axiom_inference(
@@ -1755,8 +1840,8 @@ class Theory(TheoreticalObjct):
             reference=reference, title=title)
 
     def ddi(
-        self, valid_proposition=None, d=None, symbol=None, reference=None,
-        title=None):
+            self, valid_proposition=None, d=None, symbol=None, reference=None,
+            title=None):
         """Elaborate a formal-definition in this theory.
 
         Shortcut for FormalDefinition(theory=t, ...)"""
@@ -1794,7 +1879,7 @@ class Theory(TheoreticalObjct):
         """Include the biconditional-introduction inference-rule in this
         theory."""
         verify(
-            not self.includes_biconditional_introduction_inference_rule,
+            not self.biconditional_introduction_inference_rule_is_included,
             'The biconditional-introduction inference-rule is already included in this theory.')
         # TODO: Justify the inclusion of the inference-rule in the theory
         #   with adequate statements (axioms?).
@@ -1807,7 +1892,7 @@ class Theory(TheoreticalObjct):
         """Include the conjunction-introduction inference-rule in this
         theory."""
         verify(
-            not self.includes_conjunction_introduction_inference_rule,
+            not self.conjunction_introduction_inference_rule_is_included,
             'The conjunction-introduction inference-rule is already included in this theory.')
         # TODO: Justify the inclusion of the inference-rule in the theory
         #   with adequate statements (axioms?).
@@ -1815,11 +1900,24 @@ class Theory(TheoreticalObjct):
         self._conjunction_introduction_inference_rule = ConjunctionIntroductionInferenceRule
         self._includes_conjunction_introduction_inference_rule = True
 
+    def include_double_negation_introduction_inference_rule(self):
+        """Include the double-negation-introduction inference-rule in this
+        theory."""
+        verify(
+            not self.double_negation_introduction_inference_rule_is_included,
+            'The double-negation-introduction inference-rule is already included in this theory.')
+        # TODO: Justify the inclusion of the inference-rule in the theory
+        #   with adequate statements (axioms?).
+        self.universe_of_discourse.include_implication_relation()
+        self.universe_of_discourse.include_negation_relation()
+        self._double_negation_introduction_inference_rule = DoubleNegationIntroductionInferenceRule
+        self._includes_double_negation_introduction_inference_rule = True
+
     def include_modus_ponens_inference_rule(self):
         """Include the modus-ponens inference-rule in this
         theory."""
         verify(
-            not self.includes_modus_ponens_inference_rule,
+            not self.modus_ponens_inference_rule_is_included,
             'The modus-ponens inference-rule is already included in this theory.')
         # TODO: Justify the inclusion of the inference-rule in the theory
         #   with adequate statements (axioms?).
@@ -1829,33 +1927,53 @@ class Theory(TheoreticalObjct):
         self._includes_modus_ponens_inference_rule = True
 
     @property
-    def includes_biconditional_introduction_inference_rule(self):
+    def biconditional_introduction_inference_rule_is_included(self):
         """True if the biconditional-introduction inference-rule is included in this theory, False otherwise."""
         if self._includes_biconditional_introduction_inference_rule is not None:
             return self._includes_biconditional_introduction_inference_rule
         elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.includes_biconditional_introduction_inference_rule
+            return self._theory_foundation_system.biconditional_introduction_inference_rule_is_included
         else:
             return None
 
     @property
-    def includes_conjunction_introduction_inference_rule(self):
+    def conjunction_introduction_inference_rule_is_included(self):
         """True if the conjunction-introduction inference-rule is included in this theory, False otherwise."""
         if self._includes_conjunction_introduction_inference_rule is not None:
             return self._includes_conjunction_introduction_inference_rule
         elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.includes_conjunction_introduction_inference_rule
+            return self._theory_foundation_system.conjunction_introduction_inference_rule_is_included
         else:
             return None
 
     @property
-    def includes_modus_ponens_inference_rule(self):
+    def consistency(self) -> Consistency:
+        """The currently proven consistency status of this theory.
+
+        Possible values are:
+        - proved-consistent,
+        - proved-inconsistent,
+        - undetermined."""
+        return self._consistency
+
+    @property
+    def double_negation_introduction_inference_rule_is_included(self):
+        """True if the double-negation-introduction inference-rule is included in this theory, False otherwise."""
+        if self._includes_double_negation_introduction_inference_rule is not None:
+            return self._includes_double_negation_introduction_inference_rule
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system.double_negation_introduction_inference_rule_is_included
+        else:
+            return None
+
+    @property
+    def modus_ponens_inference_rule_is_included(self):
         """True if the modus-ponens inference-rule is included in this
         theory, False otherwise."""
         if self._includes_modus_ponens_inference_rule is not None:
             return self._includes_modus_ponens_inference_rule
         elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.includes_modus_ponens_inference_rule
+            return self._theory_foundation_system.modus_ponens_inference_rule_is_included
         else:
             return None
 
@@ -1883,8 +2001,8 @@ class Theory(TheoreticalObjct):
         self._inequality = r
 
     def mp(
-        self, conditional, antecedent, symbol=None, category=None,
-        reference=None, title=None):
+            self, conditional, antecedent, symbol=None, category=None,
+            reference=None, title=None):
         """Elaborate a new modus-ponens statement in the theory. Shortcut for
         ModusPonens(theory=t, ...)"""
         return self.infer_by_modus_ponens(
@@ -1952,8 +2070,8 @@ class Theory(TheoreticalObjct):
         return str(output)
 
     def soet(
-        self, original_expression, equality_statement, symbol=None,
-        category=None, reference=None, title=None):
+            self, original_expression, equality_statement, symbol=None,
+            category=None, reference=None, title=None):
         """Elaborate a new modus-ponens statement in the theory. Shortcut for
         ModusPonens(theory=t, ...)"""
         return self.infer_by_substitution_of_equal_terms(
@@ -2008,9 +2126,9 @@ class Relation(TheoreticalObjct):
     """
 
     def __init__(
-        self, arity, symbol=None, formula_rep=None,
-        signal_proposition=None, signal_theoretical_morphism=None,
-        implementation=None, universe_of_discourse=None):
+            self, arity, symbol=None, formula_rep=None,
+            signal_proposition=None, signal_theoretical_morphism=None,
+            implementation=None, universe_of_discourse=None):
         assert isinstance(universe_of_discourse, UniverseOfDiscourse)
         signal_proposition = False if signal_proposition is None else signal_proposition
         signal_theoretical_morphism = False if signal_theoretical_morphism is None else signal_theoretical_morphism
@@ -2066,8 +2184,8 @@ class SimpleObjct(TheoreticalObjct):
     """
 
     def __init__(
-        self, symbol=None,
-        universe_of_discourse=None):
+            self, symbol=None,
+            universe_of_discourse=None):
         assert isinstance(universe_of_discourse, UniverseOfDiscourse)
         # self.simple_objct_index = theory.crossreference_simple_objct(self)
         if symbol is None:
@@ -2132,8 +2250,8 @@ class SubstitutionOfEqualTerms(FormulaStatement):
     symbol_base = '𝚂𝙾𝙴𝚃'
 
     def __init__(
-        self, original_expression, equality_statement, symbol=None,
-        category=None, theory=None, reference=None, title=None):
+            self, original_expression, equality_statement, symbol=None,
+            category=None, theory=None, reference=None, title=None):
         category = statement_categories.proposition if category is None else category
         # Check p_implies_q consistency
         assert isinstance(theory, Theory)
@@ -2211,6 +2329,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         self._equality_relation = None
         self._falsehood_simple_objct = None
         self._implication_relation = None
+        self._negation_relation = None
         self._truth_simple_objct = None
 
         if symbol is None:
@@ -2304,6 +2423,29 @@ class UniverseOfDiscourse(SymbolicObjct):
     def implies(self):
         """A shortcut for UniverseOfDiscourse.implication_relation."""
         return self.implication_relation
+
+    @property
+    def negation_relation(self):
+        """The negation relation if it exists in this universe-of-discourse,
+        otherwise None."""
+        return self._negation_relation
+
+    @negation_relation.setter
+    def negation_relation(self, r):
+        verify(
+            self._negation_relation is None,
+            'The negation relation exists already in this'
+            'universe-of-discourse')
+        self._negation_relation = r
+
+    @property
+    def nt(self):
+        """The negation relation (¬) if it exists in this universe-of-discourse,
+        otherwise None. A shortcut for UniverseOfDiscourse.negation_relation.
+
+        Unfortunately, 'not' is a reserved keyword, prohibiting its usage
+        as a class property."""
+        return self.negation_relation
 
     @property
     def truth_simple_objct(self):
@@ -2424,7 +2566,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             self.variables[x.symbol] = x
 
     def declare_formula(
-        self, relation, *parameters, symbol=None, lock_variable_scope=None):
+            self, relation, *parameters, symbol=None, lock_variable_scope=None):
         """Declare a new :term:`formula` in this universe-of-discourse.
 
         This method is a shortcut for Formula(universe_of_discourse=self, ...).
@@ -2453,10 +2595,10 @@ class UniverseOfDiscourse(SymbolicObjct):
         return x
 
     def declare_relation(
-        self, arity, symbol=None, formula_rep=None,
-        signal_proposition=None,
-        signal_theoretical_morphism=None,
-        implementation=None):
+            self, arity, symbol=None, formula_rep=None,
+            signal_proposition=None,
+            signal_theoretical_morphism=None,
+            implementation=None):
         """A shortcut function for Relation(theory=t, ...)
 
         A relation is **declared** in a theory because it is not a statement.
@@ -2469,25 +2611,26 @@ class UniverseOfDiscourse(SymbolicObjct):
             universe_of_discourse=self)
 
     def declare_simple_objct(
-        self, symbol=None):
+            self, symbol=None):
         """Shortcut for SimpleObjct(theory=t, ...)"""
         return SimpleObjct(
             symbol=symbol,
             universe_of_discourse=self)
 
     def declare_symbolic_objct(
-        self, symbol=None):
+            self, symbol=None):
         """"""
         return SymbolicObjct(
             symbol=symbol,
             universe_of_discourse=self)
 
     def declare_theory(
-        self, symbol=None, is_theory_foundation_system=None,
-        extended_theories=None,
-        theory_foundation_system=None,
-        include_conjunction_introduction_inference_rule=None,
-        include_biconditional_introduction_inference_rule=None):
+            self, symbol=None, is_theory_foundation_system=None,
+            extended_theories=None,
+            theory_foundation_system=None,
+            include_conjunction_introduction_inference_rule=None,
+            include_biconditional_introduction_inference_rule=None,
+            include_double_negation_introduction_inference_rule=None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for Theory(universe_of_discourse, ...).
@@ -2504,7 +2647,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             universe_of_discourse=self,
             theory_foundation_system=theory_foundation_system,
             include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule,
-            include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule)
+            include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule,
+            include_double_negation_introduction_inference_rule=include_double_negation_introduction_inference_rule)
 
     def include_biconditional_relation(self):
         """Assure the existence of the biconditional-relation in this
@@ -2561,6 +2705,17 @@ class UniverseOfDiscourse(SymbolicObjct):
                 2, '⟹', Formula.infix_operator_representation,
                 signal_proposition=True)
 
+    def include_negation_relation(self):
+        """Assure the existence of the negation relation in this
+        universe-of-discourse."""
+        # Assure the existence of dependent theoretical-objcts.
+        # N/A.
+        # Assure the existence of implication-relation.
+        if self.negation_relation is None:
+            self.negation_relation = self.r(
+                1, '¬', Formula.prefix_operator_representation,
+                signal_proposition=True)
+
     def include_truth_simple_objct(self):
         """Assure the existence of the truth simple-objct in this
         universe-of-discourse."""
@@ -2571,8 +2726,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             self.truth_simple_objct = self.o('⊤')
 
     def postulate_axiom(
-        self, natural_language, symbol=None, theory=None, reference=None,
-        title=None):
+            self, natural_language, symbol=None, theory=None, reference=None,
+            title=None):
         """Postulate a new axiom in the designated theory."""
         verify(
             theory.universe_of_discourse is self,
@@ -2583,8 +2738,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             reference=reference, title=title)
 
     def elaborate_natural_language_definition(
-        self, natural_language, symbol=None, theory=None, reference=None,
-        title=None):
+            self, natural_language, symbol=None, theory=None, reference=None,
+            title=None):
         """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
         verify(
             theory.universe_of_discourse is self,
@@ -2594,8 +2749,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             reference=reference, title=title)
 
     def f(
-        self, relation, *parameters, symbol=None,
-        lock_variable_scope=None):
+            self, relation, *parameters, symbol=None,
+            lock_variable_scope=None):
         """Declare a new formula in this instance of UniverseOfDiscourse.
 
         Shortcut for self.elaborate_formula(...)."""
@@ -2621,21 +2776,21 @@ class UniverseOfDiscourse(SymbolicObjct):
         return self.symbol_indexes[base]
 
     def a(
-        self, natural_language, symbol=None, theory=None, reference=None,
-        title=None):
+            self, natural_language, symbol=None, theory=None, reference=None,
+            title=None):
         return self.postulate_axiom(
             natural_language=natural_language, symbol=symbol, theory=theory,
             reference=reference, title=title)
 
     def d(
-        self, natural_language, symbol=None, theory=None, reference=None,
-        title=None):
+            self, natural_language, symbol=None, theory=None, reference=None,
+            title=None):
         return self.elaborate_natural_language_definition(
             natural_language=natural_language, symbol=symbol, theory=theory,
             reference=reference, title=title)
 
     def o(
-        self, symbol=None):
+            self, symbol=None):
         """Declare a simple-objct in this universe-of-discourse.
 
         Shortcut for self.declare_simple_objct(universe_of_discourse=self, ...)"""
@@ -2643,10 +2798,10 @@ class UniverseOfDiscourse(SymbolicObjct):
             symbol=symbol)
 
     def r(
-        self, arity, symbol=None, formula_rep=None,
-        signal_proposition=None,
-        signal_theoretical_morphism=None,
-        implementation=None):
+            self, arity, symbol=None, formula_rep=None,
+            signal_proposition=None,
+            signal_theoretical_morphism=None,
+            implementation=None):
         """Declare a new relation in this universe-of-discourse.
 
         Shortcut for Theory.declare_relation(...)."""
@@ -2661,11 +2816,12 @@ class UniverseOfDiscourse(SymbolicObjct):
             symbol=symbol)
 
     def t(
-        self, symbol=None, is_theory_foundation_system=None,
-        extended_theories=None,
-        theory_foundation_system=None,
-        include_conjunction_introduction_inference_rule=None,
-        include_biconditional_introduction_inference_rule=None):
+            self, symbol=None, is_theory_foundation_system=None,
+            extended_theories=None,
+            theory_foundation_system=None,
+            include_conjunction_introduction_inference_rule=None,
+            include_biconditional_introduction_inference_rule=None,
+            include_double_negation_introduction_inference_rule=None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for self.declare_theory(...).
@@ -2681,12 +2837,13 @@ class UniverseOfDiscourse(SymbolicObjct):
             extended_theories=extended_theories,
             theory_foundation_system=theory_foundation_system,
             include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule,
-            include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule)
+            include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule,
+            include_double_negation_introduction_inference_rule=include_double_negation_introduction_inference_rule)
 
     # @FreeVariableContext()
     @contextlib.contextmanager
     def v(
-        self, symbol=None):
+            self, symbol=None):
         """Declare a free-variable in this universe-of-discourse.
 
         This method is expected to be as in a with statement,
@@ -2716,9 +2873,9 @@ class BiconditionalIntroductionStatement(FormulaStatement):
     """
 
     def __init__(
-        self, conditional_phi, conditional_psi, symbol=None, category=None,
-        theory=None,
-        reference=None, title=None):
+            self, conditional_phi, conditional_psi, symbol=None, category=None,
+            theory=None,
+            reference=None, title=None):
         category = statement_categories.proposition if category is None else category
         self.conditional_phi = conditional_phi
         self.conditional_psi = conditional_psi
@@ -2751,8 +2908,8 @@ class BiconditionalIntroductionInferenceRule(InferenceRule):
 
     @staticmethod
     def infer(
-        theory, conditional_phi, conditional_psi, symbol=None, category=None,
-        reference=None, title=None):
+            theory, conditional_phi, conditional_psi, symbol=None, category=None,
+            reference=None, title=None):
         """Given two conditionals phi, and psi, infer a statement
         using the biconditional-introduction inference-rule."""
         return BiconditionalIntroductionStatement(
@@ -2762,8 +2919,8 @@ class BiconditionalIntroductionInferenceRule(InferenceRule):
 
     @staticmethod
     def execute_algorithm(
-        theory: Theory, conditional_phi: FormulaStatement,
-        conditional_psi: FormulaStatement):
+            theory: Theory, conditional_phi: FormulaStatement,
+            conditional_psi: FormulaStatement):
         """Execute the biconditional algorithm."""
         assert isinstance(theory, Theory)
         assert isinstance(conditional_phi, FormulaStatement)
@@ -2827,8 +2984,8 @@ class ConjunctionIntroductionStatement(FormulaStatement):
     """
 
     def __init__(
-        self, conjunct_p, conjunct_q, symbol=None, category=None, theory=None,
-        reference=None, title=None):
+            self, conjunct_p, conjunct_q, symbol=None, category=None, theory=None,
+            reference=None, title=None):
         category = statement_categories.proposition if category is None else category
         self.conjunct_p = conjunct_p
         self.conjunct_q = conjunct_q
@@ -2860,8 +3017,8 @@ class ConjunctionIntroductionInferenceRule(InferenceRule):
 
     @staticmethod
     def infer(
-        theory, conjunct_p, conjunct_q, symbol=None, category=None,
-        reference=None, title=None):
+            theory, conjunct_p, conjunct_q, symbol=None, category=None,
+            reference=None, title=None):
         """Given two conjuncts, infer a statement
         using the conjunction-introduction inference-rule."""
         return ConjunctionIntroductionStatement(
@@ -2870,8 +3027,8 @@ class ConjunctionIntroductionInferenceRule(InferenceRule):
 
     @staticmethod
     def execute_algorithm(
-        theory: Theory, conjunct_p: FormulaStatement,
-        conjunct_q: FormulaStatement):
+            theory: Theory, conjunct_p: FormulaStatement,
+            conjunct_q: FormulaStatement):
         """Execute the conjunction algorithm."""
         assert isinstance(theory, Theory)
         assert isinstance(conjunct_p, FormulaStatement)
@@ -2918,6 +3075,96 @@ class ConjunctionIntroductionInferenceRule(InferenceRule):
         # a theory statement.
 
 
+class DoubleNegationIntroductionStatement(FormulaStatement):
+    """The double-negation inference-rule: P ⟹ ¬¬P.
+
+    Requirements:
+    -------------
+    - The negation-relation must exist in the universe-of-discourse.
+    """
+
+    def __init__(
+            self, p, symbol=None, category=None, theory=None,
+            reference=None, title=None):
+        category = statement_categories.proposition if category is None else category
+        self.p = p
+        valid_proposition = DoubleNegationIntroductionInferenceRule.execute_algorithm(
+            theory=theory, p=p)
+        super().__init__(
+            theory=theory, valid_proposition=valid_proposition,
+            category=category, reference=reference, title=title,
+            symbol=symbol)
+
+    def repr_as_statement(self, output_proofs=True):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
+        if output_proofs:
+            output = output + f'\n\t{repm.serif_bold("Proof by double_negation introduction")}'
+            output = output + f'\n\t{self.p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p.repr_as_ref())}.'
+            output = output + f'\n\t{"─" * 71}┤'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+        return output
+
+
+class DoubleNegationIntroductionInferenceRule(InferenceRule):
+    """An implementation of the double_negation-introduction inference-rule."""
+
+    @staticmethod
+    def infer(
+            theory, p, symbol=None, category=None,
+            reference=None, title=None):
+        """Given a proposition P, infer a statement
+        using the double_negation-introduction inference-rule."""
+        return DoubleNegationIntroductionStatement(
+            p=p, symbol=symbol,
+            category=category, theory=theory, reference=reference, title=title)
+
+    @staticmethod
+    def execute_algorithm(
+            theory: Theory, p: FormulaStatement):
+        """Execute the double_negation algorithm."""
+        assert isinstance(theory, Theory)
+        assert isinstance(p, FormulaStatement)
+        verify(
+            theory.has_objct_in_hierarchy(p),
+            'The proposition P of the double-negation-introduction is not contained in the '
+            'theory hierarchy.',
+            conditional=p, theory=theory)
+        verify(
+            isinstance(
+                theory.universe_of_discourse.negation_relation, Relation),
+            'The usage of the double_negation-introduction inference-rule in a theory requires the '
+            'negation relation in that theory universe.')
+
+        # Build the valid proposition as p and q
+        # But, in order to do this, we must re-create new variables
+        # with a new scope.
+        # TODO: Move this variable re-creation procedure to a dedicated function
+        variables_list = p.get_variable_set()
+        substitution_map = dict(
+            (source_variable, theory.universe_of_discourse.v(
+                source_variable.symbol.base)) for source_variable in
+            variables_list)
+        valid_proposition = theory.universe_of_discourse.f(
+            theory.universe_of_discourse.nt,
+            theory.universe_of_discourse.f(
+                theory.universe_of_discourse.nt,
+                p.substitute(substitution_map=substitution_map, target_theory=theory)
+            )
+        )
+        return valid_proposition
+
+    @staticmethod
+    def initialize(theory):
+        a1 = theory.a()
+        # TODO: Justify the introduction of the inteference rule with
+        # a theory statement.
+
+
 class ModusPonensStatement(FormulaStatement):
     """
     TODO: Make ModusPonens a subclass of InferenceRule.
@@ -2935,8 +3182,8 @@ class ModusPonensStatement(FormulaStatement):
     """
 
     def __init__(
-        self, conditional, antecedent, symbol=None, category=None, theory=None,
-        reference=None, title=None):
+            self, conditional, antecedent, symbol=None, category=None, theory=None,
+            reference=None, title=None):
         category = statement_categories.proposition if category is None else category
         self.conditional = conditional
         self.antecedent = antecedent
@@ -2968,8 +3215,8 @@ class ModusPonensInferenceRule(InferenceRule):
 
     @staticmethod
     def infer(
-        theory, conditional, antecedent, symbol=None, category=None,
-        reference=None, title=None):
+            theory, conditional, antecedent, symbol=None, category=None,
+            reference=None, title=None):
         """Given a conditional and an antecedent, infer a statement
         using the modus-ponens inference-rule."""
         return ModusPonensStatement(

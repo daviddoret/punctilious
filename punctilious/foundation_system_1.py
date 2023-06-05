@@ -8,7 +8,8 @@ ft = core.Theory(
     symbol='ℱ',
     is_theory_foundation_system=True, universe_of_discourse=u,
     include_conjunction_introduction_inference_rule=True,
-    include_modus_ponens_inference_rule=True)
+    include_modus_ponens_inference_rule=True,
+    include_double_negation_introduction_inference_rule=True)
 
 axiom_01 = ft.a(
     'A theory is a... (define punctilious data model).')
@@ -59,9 +60,6 @@ ft.dai(
 disjunction = u.r(
     2, '∨', core.Formula.infix_operator_representation,
     signal_proposition=True)
-ft.negation = u.r(
-    1, '¬', core.Formula.prefix_operator_representation,
-    signal_proposition=True)
 ft.inequality = u.r(
     2, '≠', core.Formula.infix_operator_representation,
     signal_proposition=True)
@@ -76,7 +74,7 @@ ft.dai(
     u.f(element_of, u.implication_relation, propositional_relations_class),
     a=nla_09)
 ft.dai(
-    u.f(element_of, ft.negation, propositional_relations_class),
+    u.f(element_of, u.nt, propositional_relations_class),
     a=nla_09)
 ft.dai(
     u.f(element_of, ft.inequality, propositional_relations_class),
@@ -97,7 +95,7 @@ with u.v('x') as x, u.v('y') as y:
         u.f(
             ft.equality,
             u.f(ft.inequality, x, y),
-            u.f(ft.negation, u.f(ft.equality, x, y))), d=nld_55)
+            u.f(u.nt, u.f(ft.equality, x, y))), d=nld_55)
 
 nla_10 = ft.a(
     'propositions is a class whose elements are '
@@ -134,7 +132,7 @@ with u.v() as p, u.v() as t:
             u.implication_relation,
             u.f(has_truth_value, p, t),
             u.f(
-                has_truth_value, u.f(ft.negation, u.f(ft.negation, p)),
+                has_truth_value, u.f(u.nt, u.f(u.nt, p)),
                 t)),
         a=nla_09_50)
 

@@ -1,5 +1,7 @@
 # Consistency
 
+The property of a theory such that there is no formula
+
 ## Quotes
 
 > The property of a formal system requiring that not every formula of the system is
@@ -15,5 +17,6 @@
 
 ## Bibliography
 
-Consistency. Encyclopedia of Mathematics.
-URL: http://encyclopediaofmath.org/index.php?title=Consistency&oldid=43593
+- Consistency. Encyclopedia of Mathematics.
+  URL: http://encyclopediaofmath.org/index.php?title=Consistency&oldid=43593
+- Consistency. Wikipedia. URL:- 
