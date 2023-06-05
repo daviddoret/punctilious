@@ -27,10 +27,10 @@ Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 Let =₁ be a binary relation denoted as ⌜ =₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ =₁ 𝐱₂ ⌝).
 Let ∧ be a binary relation denoted as ⌜ ∧ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∧ 𝐱₂ ⌝).
 Let ⟹ be a binary relation denoted as ⌜ ⟹ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ⟹ 𝐱₂ ⌝).
+Let ¬ be a unary relation denoted as ⌜ ¬ ⌝, that signals well-formed formulae in prefix-operator syntax (e.g.: ⌜ ¬𝐱 ⌝).
 Let ⟺ be a binary relation denoted as ⌜ ⟺ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ⟺ 𝐱₂ ⌝).
 Let ∈ be a binary relation denoted as ⌜ ∈ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∈ 𝐱₂ ⌝).
 Let ∨ be a binary relation denoted as ⌜ ∨ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∨ 𝐱₂ ⌝).
-Let ¬ be a unary relation denoted as ⌜ ¬ ⌝, that signals well-formed formulae in prefix-operator syntax (e.g.: ⌜ ¬𝐱 ⌝).
 Let ≠ be a binary relation denoted as ⌜ ≠ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ≠ 𝐱₂ ⌝).
 Let =₂ be a binary relation denoted as ⌜ =₂ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ =₂ 𝐱₂ ⌝).
 Let is be a binary relation denoted as ⌜ is ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ is 𝐱₂ ⌝).

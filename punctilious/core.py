@@ -6,6 +6,10 @@ import contextlib
 import abc
 
 
+class InconsistencyWarning(UserWarning):
+    pass
+
+
 class Configuration:
     def __init__(self):
         self.raise_exception_on_verification_error = True
@@ -14,6 +18,7 @@ class Configuration:
         self.text_output_justification_column_width = 40
         self.text_output_total_width = 122
         self.output_index_if_max_index_equal_1 = False
+        self.warn_on_inconsistency = True
 
 
 configuration = Configuration()
@@ -1396,7 +1401,8 @@ class Theory(TheoreticalObjct):
             include_conjunction_introduction_inference_rule: bool = False,
             include_modus_ponens_inference_rule: bool = False,
             include_biconditional_introduction_inference_rule: bool = False,
-            include_double_negation_introduction_inference_rule: bool = False
+            include_double_negation_introduction_inference_rule: bool = False,
+            include_inconsistency_introduction_inference_rule: bool = False
     ):
         """
 
@@ -1480,6 +1486,14 @@ class Theory(TheoreticalObjct):
         self._includes_double_negation_introduction_inference_rule = False
         if include_double_negation_introduction_inference_rule:
             self.include_double_negation_introduction_inference_rule()
+        # Inconsistency introduction
+        self._inconsistency_introduction_inference_rule = None
+        include_inconsistency_introduction_inference_rule = False if \
+            include_inconsistency_introduction_inference_rule is None else \
+            include_inconsistency_introduction_inference_rule
+        self._includes_inconsistency_introduction_inference_rule = False
+        if include_inconsistency_introduction_inference_rule:
+            self.include_inconsistency_introduction_inference_rule()
         # Modus ponens
         self._modus_ponens_inference_rule = None
         include_modus_ponens_inference_rule = False if \
@@ -1660,6 +1674,26 @@ class Theory(TheoreticalObjct):
             valid_proposition=valid_proposition, d=d, symbol=symbol,
             theory=self, reference=reference, title=title)
 
+    @property
+    def inconsistency_introduction_inference_rule(self):
+        """The inconsistency-introduction inference-rule if it exists in this
+        theory, or this theory's foundation-system, otherwise None.
+        """
+        if self._inconsistency_introduction_inference_rule is not None:
+            return self._inconsistency_introduction_inference_rule
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system.inconsistency_introduction_inference_rule
+        else:
+            return None
+
+    @inconsistency_introduction_inference_rule.setter
+    def inconsistency_introduction_inference_rule(self, ir: InferenceRule):
+        verify(
+            self._inconsistency_introduction_inference_rule is None,
+            'The inconsistency-introduction inference-rule property of a theory can only be '
+            'set once to prevent instability.')
+        self._inconsistency_introduction_inference_rule = ir
+
     def infer_by_biconditional_introduction(
             self, conditional_phi, conditional_psi, symbol=None, category=None,
             reference=None, title=None):
@@ -1733,6 +1767,31 @@ class Theory(TheoreticalObjct):
         else:
             return self.double_negation_introduction_inference_rule.infer(
                 theory=self, p=p,
+                symbol=symbol, category=category,
+                reference=reference, title=title)
+
+    def infer_by_inconsistency_introduction(
+            self, p, not_p, symbol=None, category=None,
+            reference=None, title=None):
+        """Infer a new statement in this theory by applying the
+        inconsistency-introduction inference-rule.
+
+        :param conjunct_p:
+        :param conjunct_q:
+        :param symbol:
+        :param category:
+        :param reference:
+        :param title:
+        :return:
+        """
+        if not self.inconsistency_introduction_inference_rule_is_included:
+            raise UnsupportedInferenceRuleException(
+                'The inconsistency-introduction inference-rule is not contained '
+                'in this theory.',
+                theory=self, p=p, not_p=not_p)
+        else:
+            return self.inconsistency_introduction_inference_rule.infer(
+                theory=self, p=p, not_p=not_p,
                 symbol=symbol, category=category,
                 reference=reference, title=title)
 
@@ -1875,6 +1934,16 @@ class Theory(TheoreticalObjct):
             theory=self, o=o)
         return o.theory in self.get_theory_extension()
 
+    def ii(
+            self, p, not_p, symbol=None, category=None,
+            reference=None, title=None):
+        """Infer a new statement in this theory by applying the
+        inconsistency-introduction inference-rule."""
+        return self.infer_by_inconsistency_introduction(
+            p=p, not_p=not_p,
+            symbol=symbol,
+            category=category, reference=reference, title=title)
+
     def include_biconditional_introduction_inference_rule(self):
         """Include the biconditional-introduction inference-rule in this
         theory."""
@@ -1912,6 +1981,19 @@ class Theory(TheoreticalObjct):
         self.universe_of_discourse.include_negation_relation()
         self._double_negation_introduction_inference_rule = DoubleNegationIntroductionInferenceRule
         self._includes_double_negation_introduction_inference_rule = True
+
+    def include_inconsistency_introduction_inference_rule(self):
+        """Include the inconsistency-introduction inference-rule in this
+        theory."""
+        verify(
+            not self.inconsistency_introduction_inference_rule_is_included,
+            'The inconsistency-introduction inference-rule is already included in this theory.')
+        # TODO: Justify the inclusion of the inference-rule in the theory
+        #   with adequate statements (axioms?).
+        self.universe_of_discourse.include_negation_relation()
+        self.universe_of_discourse.include_inconsistent_relation()
+        self._inconsistency_introduction_inference_rule = InconsistencyIntroductionInferenceRule
+        self._includes_inconsistency_introduction_inference_rule = True
 
     def include_modus_ponens_inference_rule(self):
         """Include the modus-ponens inference-rule in this
@@ -1963,6 +2045,16 @@ class Theory(TheoreticalObjct):
             return self._includes_double_negation_introduction_inference_rule
         elif self._theory_foundation_system is not None:
             return self._theory_foundation_system.double_negation_introduction_inference_rule_is_included
+        else:
+            return None
+
+    @property
+    def inconsistency_introduction_inference_rule_is_included(self):
+        """True if the inconsistency-introduction inference-rule is included in this theory, False otherwise."""
+        if self._includes_inconsistency_introduction_inference_rule is not None:
+            return self._includes_inconsistency_introduction_inference_rule
+        elif self._theory_foundation_system is not None:
+            return self._theory_foundation_system.inconsistency_introduction_inference_rule_is_included
         else:
             return None
 
@@ -2081,6 +2173,13 @@ class Theory(TheoreticalObjct):
 
     def prnt(self, output_proofs=True):
         repm.prnt(self.repr_as_theory(output_proofs=output_proofs))
+
+    def prove_inconsistent(self, ii):
+        verify(isinstance(ii, InconsistencyIntroductionStatement),
+               'The ii statement is not of type InconsistencyIntroductionStatement.', ii=ii, theory=self)
+        verify(ii in self.statements,
+               'The ii statement is not a statement of this theory.', ii=ii, theory=self)
+        self._consistency = consistency_values.proved_inconsistent
 
     def export_to_text(self, file_path, output_proofs=True):
         """Export this theory to a Unicode textfile."""
@@ -2427,6 +2526,15 @@ class UniverseOfDiscourse(SymbolicObjct):
         return self.implication_relation
 
     @property
+    def inc(self):
+        """The inconsistent relation (Inc) if it exists in this universe-of-discourse,
+        otherwise None. A shortcut for UniverseOfDiscourse.inconsistency_relation.
+
+        Unfortunately, 'not' is a reserved keyword, prohibiting its usage
+        as a class property."""
+        return self.inconsistent_relation
+
+    @property
     def inconsistent_relation(self):
         """The inconsistent-relation if it exists in this universe-of-discourse,
         otherwise None."""
@@ -2660,7 +2768,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             theory_foundation_system=None,
             include_conjunction_introduction_inference_rule=None,
             include_biconditional_introduction_inference_rule=None,
-            include_double_negation_introduction_inference_rule=None):
+            include_double_negation_introduction_inference_rule=None,
+            include_inconsistency_introduction_inference_rule=None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for Theory(universe_of_discourse, ...).
@@ -2678,7 +2787,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             theory_foundation_system=theory_foundation_system,
             include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule,
             include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule,
-            include_double_negation_introduction_inference_rule=include_double_negation_introduction_inference_rule)
+            include_double_negation_introduction_inference_rule=include_double_negation_introduction_inference_rule,
+            include_inconsistency_introduction_inference_rule=include_inconsistency_introduction_inference_rule)
 
     def include_biconditional_relation(self):
         """Assure the existence of the biconditional-relation in this
@@ -2873,7 +2983,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             theory_foundation_system=None,
             include_conjunction_introduction_inference_rule=None,
             include_biconditional_introduction_inference_rule=None,
-            include_double_negation_introduction_inference_rule=None):
+            include_double_negation_introduction_inference_rule=None,
+            include_inconsistency_introduction_inference_rule=None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for self.declare_theory(...).
@@ -2890,7 +3001,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             theory_foundation_system=theory_foundation_system,
             include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule,
             include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule,
-            include_double_negation_introduction_inference_rule=include_double_negation_introduction_inference_rule)
+            include_double_negation_introduction_inference_rule=include_double_negation_introduction_inference_rule,
+            include_inconsistency_introduction_inference_rule=include_inconsistency_introduction_inference_rule)
 
     # @FreeVariableContext()
     @contextlib.contextmanager
@@ -3321,7 +3433,7 @@ class ModusPonensInferenceRule(InferenceRule):
         # TODO: Justify the inclusion of this inference-rule in the theory.
 
 
-class TheoryInconsistencyStatement(FormulaStatement):
+class InconsistencyIntroductionStatement(FormulaStatement):
     """
 
     Requirements:
@@ -3332,15 +3444,21 @@ class TheoryInconsistencyStatement(FormulaStatement):
     def __init__(
             self, p, not_p, symbol=None, category=None, theory=None,
             reference=None, title=None):
+        if title is None:
+            title = 'THEORY INCONSISTENCY'
         category = statement_categories.proposition if category is None else category
         self.p = p
         self.not_p = not_p
-        valid_proposition = TheoryInconsistencyInferenceRule.execute_algorithm(
+        valid_proposition = InconsistencyIntroductionInferenceRule.execute_algorithm(
             theory=theory, p=p, not_p=not_p)
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             category=category, reference=reference, title=title,
             symbol=symbol)
+        # The theory is proved inconsistent!
+        theory.prove_inconsistent(self)
+        if configuration.warn_on_inconsistency:
+            warnings.warn(f'{self.repr_as_statement(output_proofs=True)}', InconsistencyWarning)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
@@ -3358,15 +3476,15 @@ class TheoryInconsistencyStatement(FormulaStatement):
         return output
 
 
-class TheoryInconsistencyInferenceRule(InferenceRule):
-    """An implementation of the theory-inconsistency inference-rule."""
+class InconsistencyIntroductionInferenceRule(InferenceRule):
+    """An implementation of the inconsistency-introduction inference-rule."""
 
     @staticmethod
     def infer(
             theory, p, not_p, symbol=None, category=None,
             reference=None, title=None):
         """"""
-        return TheoryInconsistencyStatement(
+        return InconsistencyIntroductionStatement(
             p=p, not_p=not_p, symbol=symbol,
             category=category, theory=theory, reference=reference, title=title)
 
@@ -3387,28 +3505,19 @@ class TheoryInconsistencyInferenceRule(InferenceRule):
             antecedent=not_p, theory=theory)
         verify(
             isinstance(
-                theory.universe_of_discourse.inconsistency_relation,
+                theory.universe_of_discourse.inconsistent_relation,
                 Relation),
             'The usage of the ModusPonens class in a theory requires the '
             'inconsistency-relation in the universe-of-discourse.')
-        assert not_p.valid_proposition.relation is theory.universe_of_discourse.nt
-        XXXXX REPRENDRE ICI
-        p_prime = p.valid_proposition.parameters[0]
-        q_prime = p.valid_proposition.parameters[1]
-        mask = p_prime.get_variable_set()
-        # Check p consistency
-        # If the p statement is present in the theory,
-        # it necessarily mean that p is true,
-        # because every statement in the theory is a valid proposition.
-        assert isinstance(not_p, FormulaStatement)
-        similitude, _values = not_p.valid_proposition._is_masked_formula_similar_to(
-            o2=p_prime, mask=mask)
-        assert not_p.valid_proposition.is_masked_formula_similar_to(
-            o2=p_prime, mask=mask)
+        verify(not_p.valid_proposition.relation is theory.universe_of_discourse.nt,
+               'The relation of not_p is not the negation relation.')
+        not_p_prime = theory.universe_of_discourse.f(
+            theory.universe_of_discourse.nt, p.valid_proposition)
+        verify(not_p_prime.is_formula_equivalent_to(not_p.valid_proposition), 'not_p is not formula-equialent to ¬(P).',
+               p=p, not_p=not_p, not_p_prime=not_p_prime)
         # Build q by variable substitution
-        substitution_map = dict((v, k) for k, v in _values.items())
-        valid_proposition = q_prime.substitute(
-            substitution_map=substitution_map, target_theory=theory)
+        valid_proposition = theory.universe_of_discourse.f(
+            theory.universe_of_discourse.inconsistent_relation, theory)
         return valid_proposition
 
     @staticmethod
