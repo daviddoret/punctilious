@@ -2329,7 +2329,9 @@ class UniverseOfDiscourse(SymbolicObjct):
         self._equality_relation = None
         self._falsehood_simple_objct = None
         self._implication_relation = None
+        self._inconsistent_relation = None
         self._negation_relation = None
+        self._provable_from_relation = None
         self._truth_simple_objct = None
 
         if symbol is None:
@@ -2425,6 +2427,20 @@ class UniverseOfDiscourse(SymbolicObjct):
         return self.implication_relation
 
     @property
+    def inconsistent_relation(self):
+        """The inconsistent-relation if it exists in this universe-of-discourse,
+        otherwise None."""
+        return self._inconsistent_relation
+
+    @inconsistent_relation.setter
+    def inconsistent_relation(self, r):
+        verify(
+            self._inconsistent_relation is None,
+            'The inconsistent-relation relation exists already in this'
+            'universe-of-discourse')
+        self._inconsistent_relation = r
+
+    @property
     def negation_relation(self):
         """The negation relation if it exists in this universe-of-discourse,
         otherwise None."""
@@ -2446,6 +2462,20 @@ class UniverseOfDiscourse(SymbolicObjct):
         Unfortunately, 'not' is a reserved keyword, prohibiting its usage
         as a class property."""
         return self.negation_relation
+
+    @property
+    def provable_from_relation(self):
+        """The provable_from-relation if it exists in this universe-of-discourse,
+        otherwise None."""
+        return self._provable_from_relation
+
+    @provable_from_relation.setter
+    def provable_from_relation(self, r):
+        verify(
+            self._provable_from_relation is None,
+            'The provable_from-relation relation exists already in this'
+            'universe-of-discourse')
+        self._provable_from_relation = r
 
     @property
     def truth_simple_objct(self):
@@ -2705,6 +2735,17 @@ class UniverseOfDiscourse(SymbolicObjct):
                 2, '⟹', Formula.infix_operator_representation,
                 signal_proposition=True)
 
+    def include_inconsistent_relation(self):
+        """Assure the existence of the inconsistent-relation in this
+        universe-of-discourse."""
+        # Assure the existence of dependent theoretical-objcts.
+        # N/A.
+        # Assure the existence of inconsistent-relation.
+        if self.inconsistent_relation is None:
+            self.inconsistent_relation = self.r(
+                1, 'Inc', Formula.prefix_operator_representation,
+                signal_proposition=True)
+
     def include_negation_relation(self):
         """Assure the existence of the negation relation in this
         universe-of-discourse."""
@@ -2714,6 +2755,17 @@ class UniverseOfDiscourse(SymbolicObjct):
         if self.negation_relation is None:
             self.negation_relation = self.r(
                 1, '¬', Formula.prefix_operator_representation,
+                signal_proposition=True)
+
+    def include_provable_from_relation(self):
+        """Assure the existence of the provable-from-relation in this
+        universe-of-discourse."""
+        # Assure the existence of dependent theoretical-objcts.
+        # N/A.
+        # Assure the existence of provable_from-relation.
+        if self.provable_from_relation is None:
+            self.provable_from_relation = self.r(
+                2, '⊢', Formula.infix_operator_representation,
                 signal_proposition=True)
 
     def include_truth_simple_objct(self):
@@ -3269,16 +3321,100 @@ class ModusPonensInferenceRule(InferenceRule):
         # TODO: Justify the inclusion of this inference-rule in the theory.
 
 
-# universe_of_discourse = Theory(
-#    theory=None, is_theory_foundation_system=True,
-#    symbol='universe-of-discourse',
-#    )
-# u = universe_of_discourse
+class TheoryInconsistencyStatement(FormulaStatement):
+    """
 
-# meta_theory = Theory(
-#    theory=universe_of_discourse, symbol='meta-theory')
+    Requirements:
+    -------------
 
-# console = rich.console.Console()
+    """
+
+    def __init__(
+            self, p, not_p, symbol=None, category=None, theory=None,
+            reference=None, title=None):
+        category = statement_categories.proposition if category is None else category
+        self.p = p
+        self.not_p = not_p
+        valid_proposition = TheoryInconsistencyInferenceRule.execute_algorithm(
+            theory=theory, p=p, not_p=not_p)
+        super().__init__(
+            theory=theory, valid_proposition=valid_proposition,
+            category=category, reference=reference, title=title,
+            symbol=symbol)
+
+    def repr_as_statement(self, output_proofs=True):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
+        if output_proofs:
+            output = output + f'\n\t{repm.serif_bold("Proof of inconsistency")}'
+            output = output + f'\n\t{self.p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p.repr_as_ref())}.'
+            output = output + f'\n\t{self.not_p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.not_p.repr_as_ref())}.'
+            output = output + f'\n\t{"─" * 71}┤'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+        return output
+
+
+class TheoryInconsistencyInferenceRule(InferenceRule):
+    """An implementation of the theory-inconsistency inference-rule."""
+
+    @staticmethod
+    def infer(
+            theory, p, not_p, symbol=None, category=None,
+            reference=None, title=None):
+        """"""
+        return TheoryInconsistencyStatement(
+            p=p, not_p=not_p, symbol=symbol,
+            category=category, theory=theory, reference=reference, title=title)
+
+    @staticmethod
+    def execute_algorithm(theory, p, not_p):
+        """Execute the theory-inconsistency algorithm."""
+        assert isinstance(theory, Theory)
+        assert isinstance(p, FormulaStatement)
+        verify(
+            theory.has_objct_in_hierarchy(p),
+            'The p of the theory-inconsistency is not contained in the '
+            'theory hierarchy.',
+            conditional=p, theory=theory)
+        verify(
+            theory.has_objct_in_hierarchy(not_p),
+            'The not-p of the theory-inconsistency is not contained in the '
+            'theory hierarchy.',
+            antecedent=not_p, theory=theory)
+        verify(
+            isinstance(
+                theory.universe_of_discourse.inconsistency_relation,
+                Relation),
+            'The usage of the ModusPonens class in a theory requires the '
+            'inconsistency-relation in the universe-of-discourse.')
+        assert not_p.valid_proposition.relation is theory.universe_of_discourse.nt
+        XXXXX REPRENDRE ICI
+        p_prime = p.valid_proposition.parameters[0]
+        q_prime = p.valid_proposition.parameters[1]
+        mask = p_prime.get_variable_set()
+        # Check p consistency
+        # If the p statement is present in the theory,
+        # it necessarily mean that p is true,
+        # because every statement in the theory is a valid proposition.
+        assert isinstance(not_p, FormulaStatement)
+        similitude, _values = not_p.valid_proposition._is_masked_formula_similar_to(
+            o2=p_prime, mask=mask)
+        assert not_p.valid_proposition.is_masked_formula_similar_to(
+            o2=p_prime, mask=mask)
+        # Build q by variable substitution
+        substitution_map = dict((v, k) for k, v in _values.items())
+        valid_proposition = q_prime.substitute(
+            substitution_map=substitution_map, target_theory=theory)
+        return valid_proposition
+
+    @staticmethod
+    def initialize(theory):
+        a1 = theory.a()
+        # TODO: Justify the inclusion of this inference-rule in the theory.
 
 
 foundation_theory = None
@@ -3288,7 +3424,6 @@ commutativity_of_equality = None
 equality = None
 tru = None
 fls = None
-negation = None
 has_truth_value = None
 
 pass
