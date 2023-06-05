@@ -243,3 +243,5 @@ def elaborate_foundation_theory():
 
 # elaborate_foundation_theory()
 pass
+
+print(ft.repr_as_theory())

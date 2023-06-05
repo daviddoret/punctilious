@@ -2141,6 +2141,7 @@ class Theory(TheoreticalObjct):
     def repr_as_theory(self, output_proofs=True):
         """Return a representation that expresses and justifies the theory."""
         output = f'\n{repm.serif_bold(self.repr_as_symbol())}'
+        output = output + f'\n{repm.serif_bold("Consistency:")} {str(self.consistency)}'
         output = output + f'\n{repm.serif_bold("Extended theories:")}'
         output = output + f'\nThe following theories are extended by {repm.serif_bold(self.repr_as_symbol())}.'
         output = output + ''.join(
