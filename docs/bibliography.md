@@ -6,6 +6,9 @@ From Classical View to
 Foundations of System Specifications. The Computer Journal 35,
 468–477. https://doi.org/10.1093/comjnl/35.5.468
 
+Mancosu, P., Galvan, S., Zach, R., 2021. An Introduction to Proof Theory: Normalization, Cut-Elimination, and
+Consistency Proofs, 1st ed. Oxford University PressOxford. https://doi.org/10.1093/oso/9780192895936.001.0001
+
 nLab, 2022. class [WWW Document]. URL https://ncatlab.org/nlab/show/class (accessed
 5.27.23).
 

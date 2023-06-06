@@ -1084,11 +1084,7 @@ class Statement(TheoreticalObjct):
 
 
 class Axiom(Statement):
-    """The NaturalLanguageAxiom pythonic class is a model of the natural-language-axiom formal class.
-
-    Definition:
-    -----------
-    An natural-language-axiom is a theory-statement that expresses an axiom in natural-language.
+    """The Axiom pythonic class models _contentual_ _axioms_.
 
     """
 
@@ -1117,16 +1113,7 @@ class Axiom(Statement):
 
 
 class Definition(Statement):
-    """The NaturalLanguageDefinition pythonic class is a model of the natural-language-definition formal class.
-
-    Definition:
-    -----------
-    A natural-language-definition is a theory-statement that expresses a definition in natural-language.
-
-    Definition:
-    -----------
-    A definition is a conservative-extension of a theory, i.e. it may be convenient to prove theorems
-    but per se it does not prove new theorems. In this regard, it is distinct from an axiom.
+    """The Definition pythonic class models _contentual_ _definitions_.
 
     """
 
