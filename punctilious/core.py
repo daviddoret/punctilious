@@ -111,8 +111,9 @@ def is_in_class(o, c):
     :param c: A declarative-class.
     :return: (bool).
     """
-    verify(hasattr(o, 'is_in_class'), 'is_in_class is not an attribute of o.', o=o, c=c)
-    verify(callable(getattr(o, 'is_in_class')), 'is_in_class() is not a method of o.', o=o, c=c)
+    verify(o is not None, 'o is None.', o=o, c=c)
+    verify(hasattr(o, 'is_in_class'), 'o does not have attribute is_in_class.', o=o, c=c)
+    verify(callable(getattr(o, 'is_in_class')), 'o.is_in_class() is not callable.', o=o, c=c)
     return o.is_in_class(c)
 
 
@@ -397,9 +398,6 @@ class TheoreticalObjct(SymbolicObjct):
         # miserably (e.g. because of context managers),
         # thus, implementing explicit functional-types will prove
         # more robust and allow for duck typing.
-        self.is_simple_objct = False
-        self.is_statement = False
-        self.is_theoretical_objct = True
         super().__init__(
             symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
@@ -877,9 +875,9 @@ class Formula(TheoreticalObjct):
         self.cross_reference_variables()
         for p in parameters:
             verify(
-                p.is_theoretical_objct,
-                'This formula parameter is not a theoretical-objct.',
-                formula=self, p=p)
+                is_in_class(p, classes.theoretical_objct),
+                'p is not a theoretical-objct.',
+                slf=self, p=p)
             if is_in_class(p, classes.free_variable):
                 p.extend_scope(self)
         if lock_variable_scope:
@@ -2076,14 +2074,8 @@ class Theory(TheoreticalObjct):
 
     def has_objct_in_hierarchy(self, o):
         """Return True if o is in this theory's hierarchy, False otherwise."""
-        verify(o is not None, 'Object o is None', theory=self, o=o)
-        verify(
-            hasattr(o, 'is_theoretical_objct'),
-            'Object o does not have the is_theoretical_objct attribute.',
-            theory=self, o=o)
-        verify(
-            o.is_theoretical_objct, 'Object o is not a theoretical_objct.',
-            theory=self, o=o)
+        verify(is_in_class(o, classes.theoretical_objct), 'o is not a member of declarative-class theoretical_objct.',
+               slf=self, o=o)
         return o.theory in self.get_theory_extension()
 
     def ii(
