@@ -83,10 +83,37 @@ class DeclarativeClassList(repm.Representation):
         self.proposition = DeclarativeClass('proposition', 'proposition')
         self.relation = DeclarativeClass('relation', 'relation')
         self.simple_objct = DeclarativeClass('simple_objct', 'simple-objct')
+        self.symbolic_objct = DeclarativeClass('symbolic_objct', 'symbolic-objct')
+        self.theoretical_objct = DeclarativeClass('theoretical_objct', 'theoretical-objct')
         self.theory = DeclarativeClass('theory', 'theory')
+        self.universe_of_discourse = DeclarativeClass('universe_of_discourse', 'universe-of-discourse')
+        # Shortcuts
+        self.a = self.axiom
+        self.dai = self.direct_axiom_inference
+        self.ddi = self.direct_definition_inference
+        self.f = self.formula
+        self.r = self.relation
+        self.t = self.theory
+        self.u = self.universe_of_discourse
 
 
+"""A list of well-known declarative-classes."""
 declarative_class_list = DeclarativeClassList('declarative_class_list', 'declarative-class-list')
+
+"""A list of well-known declarative-classes. A shortcut for p.declarative_class_list."""
+classes = declarative_class_list
+
+
+def is_in_class(o, c):
+    """Return True if o is a member of the declarative-class c, False otherwise.
+
+    :param o: An arbitrary python object.
+    :param c: A declarative-class.
+    :return: (bool).
+    """
+    verify(hasattr(o, 'is_in_class'), 'is_in_class is not an attribute of o.', o=o, c=c)
+    verify(callable(getattr(o, 'is_in_class')), 'is_in_class() is not a method of o.', o=o, c=c)
+    return o.is_in_class(c)
 
 
 class FailedVerificationException(Exception):
@@ -248,6 +275,7 @@ class SymbolicObjct:
             self.universe_of_discourse.cross_reference_symbolic_objct(o=self)
         else:
             self.universe_of_discourse = None
+        self._declare_class_membership(classes.symbolic_objct)
 
     def __hash__(self):
         # Symbols are unique within their universe-of-discourse,
@@ -279,6 +307,12 @@ class SymbolicObjct:
     def is_declarative_class_member(self, c: DeclarativeClass):
         """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise."""
         return c in self._declarative_classes
+
+    def is_in_class(self, c: DeclarativeClass):
+        """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise.
+
+        A shortcut for o.is_declarative_class_member(...)."""
+        return self.is_declarative_class_member(c=c)
 
     def is_symbol_equivalent(self, o2):
         """Returns true if this object and o2 are symbol-equivalent.
@@ -363,8 +397,6 @@ class TheoreticalObjct(SymbolicObjct):
         # miserably (e.g. because of context managers),
         # thus, implementing explicit functional-types will prove
         # more robust and allow for duck typing.
-        self.is_formula = False
-        self.is_relation = False
         self.is_simple_objct = False
         self.is_statement = False
         self.is_theoretical_objct = True
@@ -372,6 +404,7 @@ class TheoreticalObjct(SymbolicObjct):
             symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
             universe_of_discourse=universe_of_discourse)
+        super()._declare_class_membership(classes.theoretical_objct)
 
     def get_variable_set(self):
         """Return the set of variables contained in o (self), including o itself.
@@ -821,9 +854,8 @@ class Formula(TheoreticalObjct):
             symbol=symbol,
             universe_of_discourse=universe_of_discourse,
             echo=False)
-        self.is_formula = True
         verify(
-            relation.is_relation or relation.is_declarative_class_member(declarative_class_list.free_variable),
+            is_in_class(relation, classes.relation) or is_in_class(relation, classes.free_variable),
             'The relation of this formula is neither a relation, nor a '
             'free-variable.',
             formula=self, relation=relation)
@@ -848,7 +880,7 @@ class Formula(TheoreticalObjct):
                 p.is_theoretical_objct,
                 'This formula parameter is not a theoretical-objct.',
                 formula=self, p=p)
-            if p.is_declarative_class_member(declarative_class_list.free_variable):
+            if is_in_class(p, classes.free_variable):
                 p.extend_scope(self)
         if lock_variable_scope:
             self.lock_variable_scope()
@@ -2383,8 +2415,8 @@ class Relation(TheoreticalObjct):
         self.arity = arity
         super().__init__(
             universe_of_discourse=universe_of_discourse, symbol=symbol)
-        self.is_relation = True
         self.universe_of_discourse.cross_reference_relation(r=self)
+        super()._declare_class_membership(classes.relation)
 
     # def repr(self, expanded=None):
     #    return self.repr_as_symbol()
@@ -2583,6 +2615,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             is_theory_foundation_system=False,
             symbol=symbol,
             universe_of_discourse=None)
+        super()._declare_class_membership(classes.u)
 
     @property
     def biconditional_relation(self):
