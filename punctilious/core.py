@@ -71,6 +71,7 @@ class DeclarativeClassList(repm.Representation):
 
     def __init__(self, python_name, natural_language_name):
         super().__init__(python_name=python_name, natural_language_name=natural_language_name)
+        self.atheoretical_statement = DeclarativeClass('atheoretical_statement', 'atheoretical-statement')
         self.axiom = DeclarativeClass('axiom', 'axiom')
         self.definition = DeclarativeClass('definition', 'definition')
         self.direct_axiom_inference = DeclarativeClass('direct_axiom_inference', 'direct-axiom-inference')
@@ -256,22 +257,21 @@ class SymbolicObjct:
             self, symbol,
             is_theory_foundation_system=None,
             is_universe_of_discourse=None,
-            universe_of_discourse=None):
+            universe_of_discourse=None, echo=None):
         self._declarative_classes = frozenset()
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
         is_universe_of_discourse = False if is_universe_of_discourse is None else is_universe_of_discourse
         # By design, every symbolic-objct is a component of a theory,
         # unless it is itself a theory-foundation-system,
         # or it is itself a universe-of-discourse.
-        assert is_universe_of_discourse or isinstance(
-            universe_of_discourse, UniverseOfDiscourse)
+        assert is_universe_of_discourse or is_in_class(
+            universe_of_discourse, classes.u)
         verify(
             isinstance(symbol, Symbol),
             'The symbol of a symbolic-objct must be of type Symbol.')
         self.symbol = symbol
         self.is_theory_foundation_system = is_theory_foundation_system
-        self.is_universe_of_discourse = is_universe_of_discourse
-        if not self.is_universe_of_discourse:
+        if not is_universe_of_discourse:
             self.universe_of_discourse = universe_of_discourse
             self.universe_of_discourse.cross_reference_symbolic_objct(o=self)
         else:
@@ -283,7 +283,7 @@ class SymbolicObjct:
         # thus hashing can be safely based on the key: U + symbol.
         # With a special case for the universe-of-discourse itself,
         # where hash of the symbol is sufficient.
-        return hash(self.symbol) if self.is_universe_of_discourse else hash(
+        return hash(self.symbol) if is_in_class(self, classes.u) else hash(
             (self.universe_of_discourse, self.symbol))
 
     def __repr__(self):
@@ -357,7 +357,7 @@ class SymbolicObjct:
     def repr_as_symbol(self):
         global configuration
         hide_index = \
-            not self.is_universe_of_discourse and \
+            not is_in_class(self, classes.u) and \
             self.symbol.index == 1 and \
             not configuration.output_index_if_max_index_equal_1 and \
             self.universe_of_discourse.get_symbol_max_index(
@@ -1490,7 +1490,8 @@ class AtheoreticalStatement(SymbolicObjct):
     def __init__(self, theory, symbol=None, echo=None):
         assert isinstance(theory, Theory)
         self.theory = theory
-        super().__init__(symbol=symbol, echo=echo)
+        super().__init__(symbol=symbol, echo=echo, universe_of_discourse=theory.universe_of_discourse)
+        super()._declare_class_membership(classes.atheoretical_statement)
 
 
 class Note(AtheoreticalStatement):
@@ -1502,7 +1503,8 @@ class Note(AtheoreticalStatement):
             self, natural_language, theory, category: NoteCategory, symbol=None,
             reference=None, title=None, echo=None):
         echo = get_config(echo, configuration.echo_note, configuration.echo_default, fallback_value=False)
-        assert isinstance(theory, Theory)
+        verify(is_in_class(theory, classes.t), 'theory is not a member of declarative-class theory.', theory=theory,
+               slf=self)
         universe_of_discourse = theory.universe_of_discourse
         category = note_categories.note if category is None else category
         self.statement_index = theory.crossreference_statement(self)
@@ -1652,6 +1654,7 @@ class Theory(TheoreticalObjct):
         self._includes_modus_ponens_inference_rule = False
         if include_modus_ponens_inference_rule:
             self.include_modus_ponens_inference_rule()
+        super()._declare_class_membership(classes.t)
 
     def bi(
             self, conditional_phi, conditional_psi, symbol=None, category=None,
