@@ -59,21 +59,34 @@ consistency_values = ConsistencyValues('consistency-values')
 """The list of consistency values."""
 
 
-class AtheoreticalStatement:
-    """
-    Definition
-    ----------
-    A theoretical-statement 𝒮 is a tuple (𝒯, n, …) where:
-    * 𝒯 is a theory
-    * n is a natural number representing the unique position of 𝒮 in 𝒯
-    * … is any number of decorative attributes informally related to 𝒮 for human explanatory purposes
-    """
+class DeclarativeClass(repm.Representation):
+    """The DeclarativeClass python class models a declarative-class."""
 
-    def __init__(self, theory, symbol=None, echo=None):
-        assert isinstance(theory, Theory)
-        self.theory = theory
-        self.symbol = symbol
-        super().__init__()
+    def __init__(self, python_name, natural_language_name):
+        super().__init__(python_name=python_name, natural_language_name=natural_language_name)
+
+
+class DeclarativeClassList(repm.Representation):
+    """A list of of well-known declarative-classes."""
+
+    def __init__(self, python_name, natural_language_name):
+        super().__init__(python_name=python_name, natural_language_name=natural_language_name)
+        self.axiom = DeclarativeClass('axiom', 'axiom')
+        self.definition = DeclarativeClass('definition', 'definition')
+        self.direct_axiom_inference = DeclarativeClass('direct_axiom_inference', 'direct-axiom-inference')
+        self.direct_definition_inference = DeclarativeClass('direct_definition_inference',
+                                                            'direct-definition-inference')
+        self.formula = DeclarativeClass('formula', 'formula')
+        self.formula_statement = DeclarativeClass('formula_statement', 'formula-statement')
+        self.free_variable = DeclarativeClass('free_variable', 'free-variable')
+        self.note = DeclarativeClass('note', 'note')
+        self.proposition = DeclarativeClass('proposition', 'proposition')
+        self.relation = DeclarativeClass('relation', 'relation')
+        self.simple_objct = DeclarativeClass('simple_objct', 'simple-objct')
+        self.theory = DeclarativeClass('theory', 'theory')
+
+
+declarative_class_list = DeclarativeClassList('declarative_class_list', 'declarative-class-list')
 
 
 class FailedVerificationException(Exception):
@@ -216,6 +229,7 @@ class SymbolicObjct:
             is_theory_foundation_system=None,
             is_universe_of_discourse=None,
             universe_of_discourse=None):
+        self._declarative_classes = frozenset()
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
         is_universe_of_discourse = False if is_universe_of_discourse is None else is_universe_of_discourse
         # By design, every symbolic-objct is a component of a theory,
@@ -249,9 +263,22 @@ class SymbolicObjct:
     def __str__(self):
         return self.repr_as_symbol()
 
+    @property
+    def declarative_classes(self):
+        """The set of declarative-classes this symbolic-objct is a member of."""
+        return self._declarative_classes
+
+    def _declare_class_membership(self, c: DeclarativeClass):
+        """During construction (__init__()), add the declarative-classes this symboli-objct is being made a member of."""
+        self._declarative_classes = self._declarative_classes.union({c})
+
     @abc.abstractmethod
     def echo(self):
         raise NotImplementedError('This is an abstract method.')
+
+    def is_declarative_class_member(self, c: DeclarativeClass):
+        """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise."""
+        return c in self._declarative_classes
 
     def is_symbol_equivalent(self, o2):
         """Returns true if this object and o2 are symbol-equivalent.
@@ -337,7 +364,6 @@ class TheoreticalObjct(SymbolicObjct):
         # thus, implementing explicit functional-types will prove
         # more robust and allow for duck typing.
         self.is_formula = False
-        self.is_free_variable = False
         self.is_relation = False
         self.is_simple_objct = False
         self.is_statement = False
@@ -661,7 +687,7 @@ class FreeVariable(TheoreticalObjct):
             symbol=symbol,
             universe_of_discourse=universe_of_discourse, echo=False)
         self.universe_of_discourse.cross_reference_variable(x=self)
-        self.is_free_variable = True
+        super()._declare_class_membership(declarative_class_list.free_variable)
         if echo:
             self.echo()
 
@@ -797,9 +823,9 @@ class Formula(TheoreticalObjct):
             echo=False)
         self.is_formula = True
         verify(
-            relation.is_relation or relation.is_free_variable,
+            relation.is_relation or relation.is_declarative_class_member(declarative_class_list.free_variable),
             'The relation of this formula is neither a relation, nor a '
-            'free_variable.',
+            'free-variable.',
             formula=self, relation=relation)
         verify(
             relation.universe_of_discourse is self.universe_of_discourse,
@@ -822,12 +848,13 @@ class Formula(TheoreticalObjct):
                 p.is_theoretical_objct,
                 'This formula parameter is not a theoretical-objct.',
                 formula=self, p=p)
-            if p.is_free_variable:
+            if p.is_declarative_class_member(declarative_class_list.free_variable):
                 p.extend_scope(self)
         if lock_variable_scope:
             self.lock_variable_scope()
         if echo:
             self.echo()
+        super()._declare_class_membership(declarative_class_list.formula)
 
     def __repr__(self):
         return self.repr(expanded=True)
@@ -1020,13 +1047,10 @@ class StatementCategory(repm.Representation):
 
 class StatementCategories(repm.Representation):
     corollary = StatementCategory('corollary', '𝙿', 'corollary')
-    formal_definition = StatementCategory(
-        'formal_definition', '𝙳', 'formal definition')
+    formal_definition = StatementCategory('formal_definition', '𝙳', 'formal definition')
     lemma = StatementCategory('lemma', '𝙿', 'lemma')
-    natural_language_axiom = StatementCategory(
-        'natural_language_axiom', '𝙳', 'natural language axiom')
-    natural_language_definition = StatementCategory(
-        'natural language definition', '𝙳', 'natural language definition')
+    axiom = StatementCategory('axiom', '𝙰', 'axiom')
+    definition = StatementCategory('definition', '𝙳', 'definition')
     proposition = StatementCategory('proposition', '𝙿', 'proposition')
     theorem = StatementCategory('theorem', '𝙿', 'theorem')
 
@@ -1113,8 +1137,9 @@ class Axiom(Statement):
         theory.crossreference_axiom(self)
         super().__init__(
             theory=theory, symbol=symbol, reference=reference,
-            category=statement_categories.natural_language_axiom, title=title,
+            category=statement_categories.axiom, title=title,
             echo=echo)
+        super()._declare_class_membership(declarative_class_list.axiom)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
@@ -1142,8 +1167,9 @@ class Definition(Statement):
         theory.crossreference_definition(self)
         super().__init__(
             theory=theory, symbol=symbol, reference=reference,
-            category=statement_categories.natural_language_definition,
+            category=statement_categories.definition,
             title=title, echo=echo)
+        super()._declare_class_membership(declarative_class_list.definition)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
@@ -1205,6 +1231,7 @@ class FormulaStatement(Statement):
             assert self.valid_proposition.relation.implementation is not None
             self.morphism_output = Morphism(
                 theory=theory, source_statement=self)
+        super()._declare_class_membership(declarative_class_list.formula_statement)
         if echo:
             self.echo()
 
@@ -1242,12 +1269,13 @@ class DirectAxiomInference(FormulaStatement):
         assert isinstance(a, Axiom)
         assert theory.has_objct_in_hierarchy(a)
         assert isinstance(valid_proposition, Formula)
-        self.natural_language_axiom = a
+        self.axiom = a
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             symbol=symbol, category=category,
             reference=reference, title=title, echo=echo)
         assert a.statement_index < self.statement_index
+        super()._declare_class_membership(declarative_class_list.direct_axiom_inference)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
@@ -1258,7 +1286,7 @@ class DirectAxiomInference(FormulaStatement):
         output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula(expanded=True)}'
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Derivation from natural language axiom")}'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {self.natural_language_axiom.repr_as_ref()}.'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {self.axiom.repr_as_ref()}.'
         return output
 
 
@@ -1358,12 +1386,13 @@ class DirectDefinitionInference(FormulaStatement):
             'The UoD of a formal-definition valid-proposition must be '
             'consistent with the UoD of its theory.')
         assert valid_proposition.relation is theory.equality
-        self.natural_language_definition = d
+        self.definition = d
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             symbol=symbol, category=statement_categories.formal_definition,
             reference=reference, title=title)
         assert d.statement_index < self.statement_index
+        super()._declare_class_membership(declarative_class_list.direct_definition_inference)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
@@ -1374,7 +1403,7 @@ class DirectDefinitionInference(FormulaStatement):
         output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula(expanded=True)}'
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Derivation from natural language definition")}'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.natural_language_definition.repr_as_symbol())}.'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.definition.repr_as_symbol())}.'
         return output
 
 
@@ -1418,6 +1447,22 @@ class InferenceRule:
         pass
 
 
+class AtheoreticalStatement(SymbolicObjct):
+    """
+    Definition
+    ----------
+    A theoretical-statement 𝒮 is a tuple (𝒯, n, …) where:
+    * 𝒯 is a theory
+    * n is a natural number representing the unique position of 𝒮 in 𝒯
+    * … is any number of decorative attributes informally related to 𝒮 for human explanatory purposes
+    """
+
+    def __init__(self, theory, symbol=None, echo=None):
+        assert isinstance(theory, Theory)
+        self.theory = theory
+        super().__init__(symbol=symbol, echo=echo)
+
+
 class Note(AtheoreticalStatement):
     """The Note pythonic-class models a note, comment, or remark in a theory.
 
@@ -1446,6 +1491,7 @@ class Note(AtheoreticalStatement):
             echo=False)
         if echo:
             self.echo()
+        super()._declare_class_membership(declarative_class_list.note)
 
     def echo(self):
         repm.prnt(self.repr_as_statement())
@@ -1488,7 +1534,7 @@ class Theory(TheoreticalObjct):
         # self.symbols = dict()
         self._consistency = consistency_values.undetermined
         self.axioms = tuple()
-        self.natural_language_definitions = tuple()
+        self.definitions = tuple()
         self.statements = tuple()
         self._theory_foundation_system = theory_foundation_system
         extended_theories = set() if extended_theories is None else extended_theories
@@ -1675,10 +1721,10 @@ class Theory(TheoreticalObjct):
         assert isinstance(d, Definition)
         d.theory = d.theory if hasattr(d, 'theory') else self
         assert d.theory is self
-        if d not in self.natural_language_definitions:
-            self.natural_language_definitions = self.natural_language_definitions + tuple(
+        if d not in self.definitions:
+            self.definitions = self.definitions + tuple(
                 [d])
-        return self.natural_language_definitions.index(d)
+        return self.definitions.index(d)
 
     def crossreference_statement(self, s):
         """During construction, cross-reference a statement 𝒮
@@ -2199,15 +2245,16 @@ class Theory(TheoreticalObjct):
         self._negation = r
 
     def a(self, natural_language, symbol=None, reference=None, title=None):
-        """Elaborate a new natural-language-axiom statement. Shortcut function for
-        Theory.elaborate_natural_language_axiom(...)."""
+        """Postulate a new axiom from natural-language.
+
+        Shortcut function for t.postulate_axiom(...)."""
         return self.postulate_axiom(
             natural_language=natural_language, symbol=symbol,
             reference=reference, title=title)
 
     def d(self, natural_language, symbol=None, reference=None, title=None):
-        """Elaborate a new natural-language-definition statement. Shortcut function for
-        Theory.elaborate_natural_language_definition(...)."""
+        """Elaborate a new definition with natural-language. Shortcut function for
+        t.elaborate_definition(...)."""
         return self.elaborate_definition(
             natural_language=natural_language, symbol=symbol,
             reference=reference, title=title)
@@ -2376,7 +2423,9 @@ class SimpleObjct(TheoreticalObjct):
             base = 'ℴ'
             index = universe_of_discourse.index_symbol(base=base)
             symbol = Symbol(base=base, index=index)
-        elif isinstance(symbol, str):
+        if isinstance(symbol, str):
+            symbol = symbol.strip()
+            verify(symbol != '', 'The symbol is an empy string.', symbol=symbol)
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.

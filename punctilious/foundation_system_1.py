@@ -245,3 +245,4 @@ def elaborate_foundation_theory():
 pass
 
 # print(ft.repr_as_theory())
+foundation_system_1 = ft

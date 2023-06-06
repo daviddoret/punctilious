@@ -8,6 +8,6 @@ from core import Axiom, configuration, Definition, FailedVerificationException, 
     DirectDefinitionInference, FreeVariable, \
     Note, note_categories, Relation, InconsistencyWarning, \
     SimpleObjct, SymbolicObjct, statement_categories, Theory, UniverseOfDiscourse
-from foundation_system_1 import ft, u
+from foundation_system_1 import foundation_system_1, ft, u
 
 print('Punctilious package: initialized.')

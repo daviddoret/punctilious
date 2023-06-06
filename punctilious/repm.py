@@ -49,8 +49,9 @@ class Representation:
 
     """
 
-    def __init__(self, python_name, sample=None):
+    def __init__(self, python_name, sample=None, natural_language_name=None):
         self.name = python_name
+        self.natural_language_name = natural_language_name
         self.sample = sample
 
     def __repr__(self):

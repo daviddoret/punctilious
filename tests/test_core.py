@@ -1,22 +1,22 @@
 from unittest import TestCase
-import core
-from types import SimpleNamespace
+import punctilious as p
 import random_data
 
 
 class TestSymbolicObjct(TestCase):
     def test__init__(self):
-        t1 = core.Theory(extended_theories={core.foundation_theory})
-        with self.assertRaises(core.FailedVerificationException):
-            core.SymbolicObjct(theory=t1, symbol='')
+        u = p.UniverseOfDiscourse()
+        t = u.t()
+        with self.assertRaises(p.FailedVerificationException):
+            u.o('')
         o1_symbol = random_data.random_word(3)
-        o1 = core.SymbolicObjct(theory=t1, symbol=o1_symbol)
+        o1 = u.o(o1_symbol)
         self.assertEqual(o1_symbol, o1.repr_as_symbol())
-        self.assertIs(t1, o1.theory)
+        self.assertIs(u, o1.universe_of_discourse)
         o2_symbol = random_data.random_word(3)
-        o2 = core.SymbolicObjct(theory=t1, symbol=o2_symbol)
+        o2 = u.o(o2_symbol)
         self.assertEqual(o2_symbol, o2.repr_as_symbol())
-        self.assertIs(t1, o2.theory)
+        self.assertIs(u, o2.universe_of_discourse)
 
 
 class TestEquality(TestCase):
