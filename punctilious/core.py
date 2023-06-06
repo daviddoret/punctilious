@@ -23,6 +23,7 @@ class Configuration:
         self.echo_statement = None
         self.echo_formula = None
         self.echo_variable = None
+        self.echo_note = None
 
 
 configuration = Configuration()
@@ -68,11 +69,10 @@ class AtheoreticalStatement:
     * … is any number of decorative attributes informally related to 𝒮 for human explanatory purposes
     """
 
-    def __init__(self, theory, position, symbol=None):
+    def __init__(self, theory, symbol=None, echo=None):
         assert isinstance(theory, Theory)
-        assert isinstance(position, int) and position > 0
         self.theory = theory
-        self.position = position
+        self.symbol = symbol
         super().__init__()
 
 
@@ -1034,6 +1034,22 @@ class StatementCategories(repm.Representation):
 statement_categories = StatementCategories('statement_categories')
 
 
+class NoteCategory(repm.Representation):
+    def __init__(self, python_name, symbol_base, natural_name):
+        self.symbol_base = symbol_base
+        self.natural_name = natural_name
+        super().__init__(python_name=python_name)
+
+
+class NoteCategories(repm.Representation):
+    comment = StatementCategory('comment', '𝙲', 'comment')
+    note = StatementCategory('note', '𝙽', 'note')
+    remark = StatementCategory('remark', '𝚁', 'remark')
+
+
+note_categories = NoteCategories('note_categories')
+
+
 class Statement(TheoreticalObjct):
     """
 
@@ -1403,30 +1419,46 @@ class InferenceRule:
 
 
 class Note(AtheoreticalStatement):
-    prefix = 'note'
+    """The Note pythonic-class models a note, comment, or remark in a theory.
 
-    def __init__(self, natural_language, symbol=None, theory=None):
+    """
+
+    def __init__(
+            self, natural_language, theory, category: NoteCategory, symbol=None,
+            reference=None, title=None, echo=None):
+        echo = get_config(echo, configuration.echo_note, configuration.echo_default, fallback_value=False)
         assert isinstance(theory, Theory)
-        assert isinstance(natural_language, str)
+        universe_of_discourse = theory.universe_of_discourse
+        category = note_categories.note if category is None else category
+        self.statement_index = theory.crossreference_note(self)
+        self.theory = theory
         self.natural_language = natural_language
-        self.note_index = theory.crossreference_note(self)
+        self.category = category
         if symbol is None:
-            # We must cross-reference this statement
-            # in advance from Statement.__init__
-            # to retrieve its index.
-            statement_index = theory.crossreference_statement(self)
-            symbol = f'{Note.prefix} {statement_index + 1}'
-        else:
-            if len(symbol) < len(Note.prefix) or \
-                    symbol[:len(Note.prefix)] != Note.prefix:
-                symbol = f'{Note.prefix} {symbol}'
-        assert isinstance(symbol, str)
+            symbol = Symbol(
+                base=self.category.symbol_base, index=self.statement_index)
+        reference = symbol.index if reference is None else reference
+        self.title = StatementTitle(
+            category=category, reference=reference, title=title)
         super().__init__(
-            theory=theory, symbol=symbol)
+            symbol=symbol,
+            theory=theory,
+            echo=False)
+        if echo:
+            self.echo()
+
+    def echo(self):
+        repm.prnt(self.repr_as_statement())
+
+    def repr_as_title(self, cap=False):
+        return self.title.repr_full(cap=cap)
+
+    def repr_as_ref(self, cap=False):
+        return self.title.repr_ref(cap=cap)
 
     def repr_as_statement(self, output_proofs=True):
-        """Return a representation that expresses and justifies the statement."""
-        text = f'{repm.serif_bold(self.repr_as_symbol(capitalized=True))}: “{self.natural_language}”'
+        """Return a representation of the note that may be included in an analysis."""
+        text = f'{repm.serif_bold(self.repr_as_title(cap=True))}: “{self.natural_language}”'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -1457,6 +1489,7 @@ class Theory(TheoreticalObjct):
         self._consistency = consistency_values.undetermined
         self.axioms = tuple()
         self.natural_language_definitions = tuple()
+        self.notes = tuple()
         self.statements = tuple()
         self._theory_foundation_system = theory_foundation_system
         extended_theories = set() if extended_theories is None else extended_theories
@@ -1648,6 +1681,19 @@ class Theory(TheoreticalObjct):
             self.natural_language_definitions = self.natural_language_definitions + tuple(
                 [d])
         return self.natural_language_definitions.index(d)
+
+    def crossreference_note(self, n):
+        """During construction (__init__()),
+        cross-reference a note 𝑛 with its parent theory
+        if it is not already cross-referenced,
+        and return its 0-based index in Theory.axioms."""
+        verify(isinstance(n, Note), 'The type of the note is not Note.', n=n, slf=self)
+        n.theory = n.theory if hasattr(n, 'theory') else self
+        verify(n.theory is self, 'The theory of the note is not self.', n=n, slf=self)
+        if n not in self.notes:
+            self.notes = self.notes + tuple(
+                [n])
+        return self.notes.index(n)
 
     def crossreference_statement(self, s):
         """During construction, cross-reference a statement 𝒮
@@ -2230,6 +2276,16 @@ class Theory(TheoreticalObjct):
         text_file = open(file_path, 'w', encoding='utf-8')
         n = text_file.write(self.repr_as_theory(output_proofs=output_proofs))
         text_file.close()
+
+    def take_note(self, natural_language, symbol=None, reference=None,
+                  title=None, echo=None):
+        """Take a note in this theory.
+
+        Shortcut for u.take_note(theory=t, ...)"""
+        return self.universe_of_discourse.take_note(
+            t=self,
+            natural_language=natural_language, symbol=symbol,
+            reference=reference, title=title, echo=echo)
 
 
 class Proof:
@@ -2954,6 +3010,19 @@ class UniverseOfDiscourse(SymbolicObjct):
         return Definition(
             natural_language=natural_language, symbol=symbol, theory=theory,
             reference=reference, title=title, echo=echo)
+
+    def take_note(
+            self, t, natural_language, symbol=None, reference=None,
+            title=None, echo=None, category=None):
+        """Take a note in theory 𝑡.
+
+        Shortcut for Note(theory=t, ...)"""
+        verify(
+            t.universe_of_discourse is self,
+            'This universe-of-discourse 𝑢₁ (self) is distinct from the universe-of-discourse 𝑢₂ of the theory '
+            'parameter 𝑡.')
+        return Note(theory=t, natural_language=natural_language, symbol=symbol,
+                    reference=reference, title=title, category=category, echo=echo)
 
     def f(
             self, relation, *parameters, symbol=None,
