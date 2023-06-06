@@ -1430,7 +1430,7 @@ class Note(AtheoreticalStatement):
         assert isinstance(theory, Theory)
         universe_of_discourse = theory.universe_of_discourse
         category = note_categories.note if category is None else category
-        self.statement_index = theory.crossreference_note(self)
+        self.statement_index = theory.crossreference_statement(self)
         self.theory = theory
         self.natural_language = natural_language
         self.category = category
@@ -1457,8 +1457,8 @@ class Note(AtheoreticalStatement):
         return self.title.repr_ref(cap=cap)
 
     def repr_as_statement(self, output_proofs=True):
-        """Return a representation of the note that may be included in an analysis."""
-        text = f'{repm.serif_bold(self.repr_as_title(cap=True))}: “{self.natural_language}”'
+        """Return a representation of the note that may be included as a section in a report."""
+        text = f'{repm.serif_bold(self.repr_as_title(cap=True))}: {self.natural_language}'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -1489,7 +1489,6 @@ class Theory(TheoreticalObjct):
         self._consistency = consistency_values.undetermined
         self.axioms = tuple()
         self.natural_language_definitions = tuple()
-        self.notes = tuple()
         self.statements = tuple()
         self._theory_foundation_system = theory_foundation_system
         extended_theories = set() if extended_theories is None else extended_theories
@@ -1506,7 +1505,6 @@ class Theory(TheoreticalObjct):
         self.extended_theories = extended_theories
         self._commutativity_of_equality = None
         self._equality = None
-        # self._implication = None
         self._negation = None
         self._inequality = None
 
@@ -1682,24 +1680,11 @@ class Theory(TheoreticalObjct):
                 [d])
         return self.natural_language_definitions.index(d)
 
-    def crossreference_note(self, n):
-        """During construction (__init__()),
-        cross-reference a note 𝑛 with its parent theory
-        if it is not already cross-referenced,
-        and return its 0-based index in Theory.axioms."""
-        verify(isinstance(n, Note), 'The type of the note is not Note.', n=n, slf=self)
-        n.theory = n.theory if hasattr(n, 'theory') else self
-        verify(n.theory is self, 'The theory of the note is not self.', n=n, slf=self)
-        if n not in self.notes:
-            self.notes = self.notes + tuple(
-                [n])
-        return self.notes.index(n)
-
     def crossreference_statement(self, s):
         """During construction, cross-reference a statement 𝒮
         with its parent theory if it is not already cross-referenced,
         and return its 0-based index in Theory.statements."""
-        assert isinstance(s, Statement)
+        assert isinstance(s, (Statement, Note))
         s.theory = s.theory if hasattr(s, 'theory') else self
         assert s.theory is self
         if s not in self.statements:
@@ -1936,10 +1921,10 @@ class Theory(TheoreticalObjct):
             natural_language=natural_language, symbol=symbol, theory=self,
             reference=reference, title=title, echo=echo)
 
-    def elaborate_natural_language_definition(
+    def elaborate_definition(
             self, natural_language, symbol=None, reference=None, title=None):
         """Shortcut for NaturalLanguageDefinition(theory=t, ...)"""
-        return self.universe_of_discourse.elaborate_natural_language_definition(
+        return self.universe_of_discourse.elaborate_definition(
             natural_language=natural_language, symbol=symbol, theory=self,
             reference=reference, title=title)
 
@@ -2223,7 +2208,7 @@ class Theory(TheoreticalObjct):
     def d(self, natural_language, symbol=None, reference=None, title=None):
         """Elaborate a new natural-language-definition statement. Shortcut function for
         Theory.elaborate_natural_language_definition(...)."""
-        return self.elaborate_natural_language_definition(
+        return self.elaborate_definition(
             natural_language=natural_language, symbol=symbol,
             reference=reference, title=title)
 
@@ -2278,14 +2263,14 @@ class Theory(TheoreticalObjct):
         text_file.close()
 
     def take_note(self, natural_language, symbol=None, reference=None,
-                  title=None, echo=None):
+                  title=None, echo=None, category=None):
         """Take a note in this theory.
 
         Shortcut for u.take_note(theory=t, ...)"""
         return self.universe_of_discourse.take_note(
             t=self,
             natural_language=natural_language, symbol=symbol,
-            reference=reference, title=title, echo=echo)
+            reference=reference, title=title, echo=echo, category=category)
 
 
 class Proof:
@@ -3000,7 +2985,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             natural_language=natural_language, symbol=symbol, theory=theory,
             reference=reference, title=title, echo=echo)
 
-    def elaborate_natural_language_definition(
+    def elaborate_definition(
             self, natural_language, symbol=None, theory=None, reference=None,
             title=None, echo=None):
         """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
@@ -3061,7 +3046,7 @@ class UniverseOfDiscourse(SymbolicObjct):
     def d(
             self, natural_language, symbol=None, theory=None, reference=None,
             title=None, echo=None):
-        return self.elaborate_natural_language_definition(
+        return self.elaborate_definition(
             natural_language=natural_language, symbol=symbol, theory=theory,
             reference=reference, title=title, echo=echo)
 
