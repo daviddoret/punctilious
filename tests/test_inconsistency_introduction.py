@@ -1,6 +1,5 @@
 from unittest import TestCase
 
-import core
 import punctilious as p
 import random_data
 
@@ -19,6 +18,6 @@ class TestInconsistencyIntroduction(TestCase):
         a = t.a('The arbitrary axiom of testing.')
         phi1 = t.dai(u.f(r1, o1, o2), a=a)
         phi2 = t.dai(u.f(u.nt, u.f(r1, o1, o2)), a=a)
-        with self.assertWarns(core.InconsistencyWarning):
+        with self.assertWarns(p.InconsistencyWarning):
             phi3 = t.ii(phi1, phi2)
         self.assertEqual('Inc(testing-theory)', phi3.repr())

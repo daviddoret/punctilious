@@ -1,4 +1,7 @@
-from punctilious import Formula, ft, u
+import punctilious as p
+
+u = p.u
+ft = p.ft
 
 t = u.t(
     symbol=f'theory 2.1: the Peano axioms',
@@ -14,7 +17,7 @@ nat = u.o('natural-number')
 
 # relation declarations
 is_a = u.r(
-    2, 'is-a', Formula.infix_operator_representation,
+    2, 'is-a', p.Formula.infix_operator_representation,
     signal_proposition=True)
 
 nla_2_1 = t.a(f'0 is a natural number.', reference='2.1')
@@ -24,7 +27,7 @@ nla_2_2_1 = t.a(
     'If n is a natural number, then n++ is a natural number.',
     reference='2.2.1')
 with u.v('n') as n:
-    suc = u.r(1, '++', formula_rep=Formula.postfix_operator_representation)
+    suc = u.r(1, '++', formula_rep=p.Formula.postfix_operator_representation)
     fa_2_2_2 = t.dai(
         u.f(u.implies, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
         nla_2_2_1,
