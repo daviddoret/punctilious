@@ -6,7 +6,7 @@ import random_data
 class TestFreeVariable(TestCase):
     def test_with_statement(self):
         p.configuration.echo_variable = True
-        with p.u.v('x') as x, p.u.v('y') as y:
+        with p.u.v('x', echo=True) as x, p.u.v('y', echo=True) as y:
             r = p.u.r(arity=2)
             phi = p.u.f(r, x, y)
             self.assertIs(x, phi.parameters[0])
