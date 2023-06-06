@@ -5,6 +5,8 @@ import random_data
 
 class TestBiconditionalIntroduction(TestCase):
     def test_biconditional_introduction(self):
+        p.configuration.echo_default = False
+        p.configuration.echo_statement = True
         u = p.UniverseOfDiscourse('white-sheet-of-paper')
         o1 = u.o()
         o2 = u.o()
@@ -17,6 +19,6 @@ class TestBiconditionalIntroduction(TestCase):
         a = t.a('The arbitrary axiom of testing.')
         phi1 = t.dai(u.f(u.implies, u.f(r1, o1, o2), u.f(r2, o3)), a=a)
         phi2 = t.dai(u.f(u.implies, u.f(r2, o3), u.f(r1, o1, o2)), a=a)
-        phi3 = t.bi(phi1, phi2)
+        phi3 = t.bi(phi1, phi2, echo=True)
         self.assertEqual(
             '((◆₁(ℴ₁, ℴ₂) ⟹ ◆₂(ℴ₃)) ⟺ (◆₂(ℴ₃) ⟹ ◆₁(ℴ₁, ℴ₂)))', phi3.repr())

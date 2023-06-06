@@ -19,9 +19,21 @@ class Configuration:
         self.text_output_total_width = 122
         self.output_index_if_max_index_equal_1 = False
         self.warn_on_inconsistency = True
+        self.echo_default = False
+        self.echo_statement = None
+        self.echo_formula = None
+        self.echo_variable = None
 
 
 configuration = Configuration()
+
+
+def get_config(*args, fallback_value):
+    """Return the first not None value."""
+    for a in args:
+        if a is not None:
+            return a
+    return fallback_value
 
 
 class Consistency(repm.Representation):
@@ -181,8 +193,10 @@ class StatementTitle:
         return self.repr_ref()
 
     def repr_full(self, cap=False):
+        category = str(self.category.natural_name.capitalize() if cap else self.category.natural_name)
+        reference = str(self.reference)
         return repm.serif_bold(
-            f'{self.category.natural_name.capitalize() if cap else self.category.natural_name} {self.reference}{" - " + self.title if self.title is not None else ""}')
+            f'{category} {reference}{" - " + self.title if self.title is not None else ""}')
 
     def repr_ref(self, cap=False):
         return repm.serif_bold(
@@ -235,6 +249,10 @@ class SymbolicObjct:
     def __str__(self):
         return self.repr_as_symbol()
 
+    @abc.abstractmethod
+    def echo(self):
+        raise NotImplementedError('This is an abstract method.')
+
     def is_symbol_equivalent(self, o2):
         """Returns true if this object and o2 are symbol-equivalent.
 
@@ -277,7 +295,10 @@ class SymbolicObjct:
     def repr_as_symbol(self):
         global configuration
         hide_index = \
-            self.symbol.index == 1 and not configuration.output_index_if_max_index_equal_1 and self.universe_of_discourse.get_symbol_max_index(
+            not self.is_universe_of_discourse and \
+            self.symbol.index == 1 and \
+            not configuration.output_index_if_max_index_equal_1 and \
+            self.universe_of_discourse.get_symbol_max_index(
                 self.symbol.base) == 1
         return self.symbol.repr(hide_index=hide_index)
 
@@ -308,7 +329,7 @@ class TheoreticalObjct(SymbolicObjct):
 
     def __init__(
             self, symbol,
-            is_theory_foundation_system=None, universe_of_discourse=None):
+            is_theory_foundation_system=None, universe_of_discourse=None, echo=None):
         # pseudo-class properties. these must be overwritten by
         # the parent constructor after calling __init__().
         # the rationale is that checking python types fails
@@ -612,7 +633,8 @@ class FreeVariable(TheoreticalObjct):
 
     def __init__(
             self, symbol=None,
-            universe_of_discourse=None, status=None, scope=None):
+            universe_of_discourse=None, status=None, scope=None, echo=None):
+        echo = get_config(echo, configuration.echo_variable, configuration.echo_default, fallback_value=False)
         status = FreeVariable.scope_initialization_status if status is None else status
         scope = frozenset() if scope is None else scope
         scope = {scope} if isinstance(scope, Formula) else scope
@@ -637,9 +659,14 @@ class FreeVariable(TheoreticalObjct):
             symbol = Symbol(base=symbol, index=index)
         super().__init__(
             symbol=symbol,
-            universe_of_discourse=universe_of_discourse)
+            universe_of_discourse=universe_of_discourse, echo=False)
         self.universe_of_discourse.cross_reference_variable(x=self)
         self.is_free_variable = True
+        if echo:
+            self.echo()
+
+    def echo(self):
+        self.repr_as_declaration()
 
     @property
     def scope(self):
@@ -700,6 +727,9 @@ class FreeVariable(TheoreticalObjct):
         # o2 is not a variable.
         return self.is_formula_equivalent_to(o2), _values
 
+    def repr_as_declaration(self):
+        return f'Let {self.repr_as_symbol()} be a free-variable in {self.universe_of_discourse.repr_as_symbol()}'
+
 
 class Formula(TheoreticalObjct):
     """A formula is a theoretical-objct.
@@ -743,7 +773,7 @@ class Formula(TheoreticalObjct):
 
     def __init__(
             self, relation, parameters, symbol=None,
-            universe_of_discourse=None, lock_variable_scope=None):
+            universe_of_discourse=None, lock_variable_scope=None, echo=None):
         """
 
         :param theory:
@@ -752,6 +782,7 @@ class Formula(TheoreticalObjct):
         :param symbol:
         :param arity: Mandatory if relation is a FreeVariable.
         """
+        echo = get_config(echo, configuration.echo_formula, configuration.echo_default, fallback_value=False)
         lock_variable_scope = False if lock_variable_scope is None else lock_variable_scope
         self.free_variables = dict()  # TODO: Check how to make dict immutable after construction.
         # self.formula_index = theory.crossreference_formula(self)
@@ -762,7 +793,8 @@ class Formula(TheoreticalObjct):
                     base=symbol_base))
         super().__init__(
             symbol=symbol,
-            universe_of_discourse=universe_of_discourse)
+            universe_of_discourse=universe_of_discourse,
+            echo=False)
         self.is_formula = True
         verify(
             relation.is_relation or relation.is_free_variable,
@@ -794,6 +826,8 @@ class Formula(TheoreticalObjct):
                 p.extend_scope(self)
         if lock_variable_scope:
             self.lock_variable_scope()
+        if echo:
+            self.echo()
 
     def __repr__(self):
         return self.repr(expanded=True)
@@ -817,6 +851,9 @@ class Formula(TheoreticalObjct):
         # TODO: Call cross_reference_variable on every variable placeholder.
         pass
         # assert False
+
+    def echo(self):
+        repm.prnt(self.repr_as_declaration())
 
     @property
     def is_proposition(self):
@@ -934,6 +971,9 @@ class Formula(TheoreticalObjct):
                 return self.repr_as_postfix_operator(expanded=expanded)
         assert 1 == 2
 
+    def repr_as_declaration(self):
+        return f'Let {self.repr_as_symbol()} be the formula {self.repr_as_formula(expanded=True)} in {self.universe_of_discourse.repr_as_symbol()}.'
+
 
 class RelationDeclarationFormula(Formula):
     def __init__(self, theory, relation, symbol):
@@ -1009,20 +1049,32 @@ class Statement(TheoreticalObjct):
 
     def __init__(
             self, theory, category, symbol=None,
-            reference=None, title=None):
+            reference=None, title=None, echo=None):
+        echo = get_config(echo, configuration.echo_statement, configuration.echo_default, fallback_value=False)
         assert isinstance(theory, Theory)
         universe_of_discourse = theory.universe_of_discourse
         self.statement_index = theory.crossreference_statement(self)
         self.theory = theory
         self.category = category
-        self.title = StatementTitle(
-            category=category, reference=reference, title=title)
         if symbol is None:
             symbol = Symbol(
                 base=self.category.symbol_base, index=self.statement_index)
+        reference = symbol.index if reference is None else reference
+        self.title = StatementTitle(
+            category=category, reference=reference, title=title)
         super().__init__(
             symbol=symbol,
-            universe_of_discourse=universe_of_discourse)
+            universe_of_discourse=universe_of_discourse,
+            echo=False)
+        if echo:
+            self.echo()
+
+    def echo(self):
+        repm.prnt(self.repr_as_statement())
+
+    @abc.abstractmethod
+    def repr_as_statement(self):
+        raise NotImplementedError('This is an abstract method.')
 
     def repr_as_title(self, cap=False):
         return self.title.repr_full(cap=cap)
@@ -1042,14 +1094,15 @@ class Axiom(Statement):
 
     def __init__(
             self, natural_language, symbol=None, theory=None, reference=None,
-            title=None):
+            title=None, echo=None):
         assert isinstance(theory, Theory)
         assert isinstance(natural_language, str)
         self.natural_language = natural_language
         theory.crossreference_axiom(self)
         super().__init__(
             theory=theory, symbol=symbol, reference=reference,
-            category=statement_categories.natural_language_axiom, title=title)
+            category=statement_categories.natural_language_axiom, title=title,
+            echo=echo)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
@@ -1079,7 +1132,7 @@ class Definition(Statement):
 
     def __init__(
             self, natural_language, symbol=None, theory=None, reference=None,
-            title=None):
+            title=None, echo=None):
         assert isinstance(theory, Theory)
         assert isinstance(natural_language, str)
         self.natural_language = natural_language
@@ -1087,7 +1140,7 @@ class Definition(Statement):
         super().__init__(
             theory=theory, symbol=symbol, reference=reference,
             category=statement_categories.natural_language_definition,
-            title=title)
+            title=title, echo=echo)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
@@ -1117,7 +1170,8 @@ class FormulaStatement(Statement):
     def __init__(
             self, theory, valid_proposition, symbol=None, category=None,
             reference=None,
-            title=None):
+            title=None, echo=None):
+        echo = get_config(echo, configuration.echo_statement, configuration.echo_default, fallback_value=False)
         verify(
             isinstance(theory, Theory),
             'isinstance(theory, Theory)')
@@ -1139,7 +1193,7 @@ class FormulaStatement(Statement):
         category = statement_categories.proposition if category is None else category
         super().__init__(
             theory=theory, symbol=symbol, category=category,
-            reference=reference, title=title)
+            reference=reference, title=title, echo=False)
         # manage theoretical-morphisms
         self.morphism_output = None
         if self.valid_proposition.relation.signal_theoretical_morphism:
@@ -1148,6 +1202,8 @@ class FormulaStatement(Statement):
             assert self.valid_proposition.relation.implementation is not None
             self.morphism_output = Morphism(
                 theory=theory, source_statement=self)
+        if echo:
+            self.echo()
 
     def __repr__(self):
         return self.repr(expanded=True)
@@ -1178,7 +1234,7 @@ class DirectAxiomInference(FormulaStatement):
 
     def __init__(
             self, valid_proposition, a, symbol=None, theory=None, reference=None,
-            title=None, category=None):
+            title=None, category=None, echo=None):
         assert isinstance(theory, Theory)
         assert isinstance(a, Axiom)
         assert theory.has_objct_in_hierarchy(a)
@@ -1187,7 +1243,7 @@ class DirectAxiomInference(FormulaStatement):
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             symbol=symbol, category=category,
-            reference=reference, title=title)
+            reference=reference, title=title, echo=echo)
         assert a.statement_index < self.statement_index
 
     def repr_as_statement(self, output_proofs=True):
@@ -1505,7 +1561,7 @@ class Theory(TheoreticalObjct):
 
     def bi(
             self, conditional_phi, conditional_psi, symbol=None, category=None,
-            reference=None, title=None):
+            reference=None, title=None, echo=None):
         """Infer a new statement in this theory by applying the
         biconditional-introduction inference-rule."""
         return self.infer_by_biconditional_introduction(
@@ -1696,7 +1752,7 @@ class Theory(TheoreticalObjct):
 
     def infer_by_biconditional_introduction(
             self, conditional_phi, conditional_psi, symbol=None, category=None,
-            reference=None, title=None):
+            reference=None, title=None, echo=None):
         """Infer a new statement in this theory by applying the
         biconditional-introduction inference-rule.
 
@@ -1719,7 +1775,7 @@ class Theory(TheoreticalObjct):
                 theory=self, conditional_phi=conditional_phi,
                 conditional_psi=conditional_psi,
                 symbol=symbol, category=category,
-                reference=reference, title=title)
+                reference=reference, title=title, echo=echo)
 
     def infer_by_conjunction_introduction(
             self, conjunct_p, conjunct_q, symbol=None, category=None,
@@ -1841,11 +1897,11 @@ class Theory(TheoreticalObjct):
         self._modus_ponens_inference_rule = ir
 
     def postulate_axiom(
-            self, natural_language, symbol=None, reference=None, title=None):
+            self, natural_language, symbol=None, reference=None, title=None, echo=None):
         """Postulate an axiom expressed in natural-language as the basis of this theory."""
         return self.universe_of_discourse.postulate_axiom(
             natural_language=natural_language, symbol=symbol, theory=self,
-            reference=reference, title=title)
+            reference=reference, title=title, echo=echo)
 
     def elaborate_natural_language_definition(
             self, natural_language, symbol=None, reference=None, title=None):
@@ -2705,7 +2761,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             self.variables[x.symbol] = x
 
     def declare_formula(
-            self, relation, *parameters, symbol=None, lock_variable_scope=None):
+            self, relation, *parameters, symbol=None, lock_variable_scope=None, echo=None):
         """Declare a new :term:`formula` in this universe-of-discourse.
 
         This method is a shortcut for Formula(universe_of_discourse=self, ...).
@@ -2716,11 +2772,12 @@ class UniverseOfDiscourse(SymbolicObjct):
         phi = Formula(
             relation=relation, parameters=parameters,
             universe_of_discourse=self, symbol=symbol,
-            lock_variable_scope=lock_variable_scope
+            lock_variable_scope=lock_variable_scope,
+            echo=echo
         )
         return phi
 
-    def declare_free_variable(self, symbol=None):
+    def declare_free_variable(self, symbol=None, echo=None):
         """Declare a free-variable in this universe-of-discourse.
 
         A shortcut function for FreeVariable(universe_of_discourse=u, ...)
@@ -2730,7 +2787,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         """
         x = FreeVariable(
             universe_of_discourse=self, symbol=symbol,
-            status=FreeVariable.scope_initialization_status)
+            status=FreeVariable.scope_initialization_status, echo=echo)
         return x
 
     def declare_relation(
@@ -2890,7 +2947,7 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     def postulate_axiom(
             self, natural_language, symbol=None, theory=None, reference=None,
-            title=None):
+            title=None, echo=None):
         """Postulate a new axiom in the designated theory."""
         verify(
             theory.universe_of_discourse is self,
@@ -2898,18 +2955,18 @@ class UniverseOfDiscourse(SymbolicObjct):
             'from this universe-of-discourse.')
         return Axiom(
             natural_language=natural_language, symbol=symbol, theory=theory,
-            reference=reference, title=title)
+            reference=reference, title=title, echo=echo)
 
     def elaborate_natural_language_definition(
             self, natural_language, symbol=None, theory=None, reference=None,
-            title=None):
+            title=None, echo=None):
         """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
         verify(
             theory.universe_of_discourse is self,
             'The universe-of-discourse of the theory parameter is distinct from this universe-of-discourse.')
         return Definition(
             natural_language=natural_language, symbol=symbol, theory=theory,
-            reference=reference, title=title)
+            reference=reference, title=title, echo=echo)
 
     def f(
             self, relation, *parameters, symbol=None,
@@ -2940,17 +2997,17 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     def a(
             self, natural_language, symbol=None, theory=None, reference=None,
-            title=None):
+            title=None, echo=None):
         return self.postulate_axiom(
             natural_language=natural_language, symbol=symbol, theory=theory,
-            reference=reference, title=title)
+            reference=reference, title=title, echo=echo)
 
     def d(
             self, natural_language, symbol=None, theory=None, reference=None,
-            title=None):
+            title=None, echo=None):
         return self.elaborate_natural_language_definition(
             natural_language=natural_language, symbol=symbol, theory=theory,
-            reference=reference, title=title)
+            reference=reference, title=title, echo=echo)
 
     def o(
             self, symbol=None):
@@ -3008,7 +3065,7 @@ class UniverseOfDiscourse(SymbolicObjct):
     # @FreeVariableContext()
     @contextlib.contextmanager
     def v(
-            self, symbol=None):
+            self, symbol=None, echo=None):
         """Declare a free-variable in this universe-of-discourse.
 
         This method is expected to be as in a with statement,
@@ -3024,7 +3081,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         # return self.declare_free_variable(symbol=symbol)
         x = FreeVariable(
             universe_of_discourse=self, symbol=symbol,
-            status=FreeVariable.scope_initialization_status)
+            status=FreeVariable.scope_initialization_status, echo=echo)
         yield x
         x.lock_scope()
 
@@ -3040,7 +3097,7 @@ class BiconditionalIntroductionStatement(FormulaStatement):
     def __init__(
             self, conditional_phi, conditional_psi, symbol=None, category=None,
             theory=None,
-            reference=None, title=None):
+            reference=None, title=None, echo=None):
         category = statement_categories.proposition if category is None else category
         self.conditional_phi = conditional_phi
         self.conditional_psi = conditional_psi
@@ -3050,7 +3107,7 @@ class BiconditionalIntroductionStatement(FormulaStatement):
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             category=category, reference=reference, title=title,
-            symbol=symbol)
+            symbol=symbol, echo=echo)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
@@ -3074,13 +3131,13 @@ class BiconditionalIntroductionInferenceRule(InferenceRule):
     @staticmethod
     def infer(
             theory, conditional_phi, conditional_psi, symbol=None, category=None,
-            reference=None, title=None):
+            reference=None, title=None, echo=None):
         """Given two conditionals phi, and psi, infer a statement
         using the biconditional-introduction inference-rule."""
         return BiconditionalIntroductionStatement(
             conditional_phi=conditional_phi, conditional_psi=conditional_psi,
             symbol=symbol,
-            category=category, theory=theory, reference=reference, title=title)
+            category=category, theory=theory, reference=reference, title=title, echo=echo)
 
     @staticmethod
     def execute_algorithm(
