@@ -20,12 +20,12 @@ is_a = u.r(
     2, 'is-a', p.Formula.infix_operator_representation,
     signal_proposition=True)
 
-nla_2_1 = t.a(f'0 is a natural number.', reference='2.1')
+nla_2_1 = t.postulate_axiom(u.elaborate_axiom(f'0 is a natural number.', '2.1'))
 fa_2_1_a = t.dai(u.f(is_a, zero, nat), nla_2_1, reference='2.1.a')
 
-nla_2_2_1 = t.a(
+nla_2_2_1 = t.postulate_axiom(u.elaborate_axiom(
     'If n is a natural number, then n++ is a natural number.',
-    reference='2.2.1')
+    '2.2.1'))
 with u.v('n') as n:
     suc = u.r(1, '++', formula_rep=p.Formula.postfix_operator_representation)
     fa_2_2_2 = t.dai(
@@ -90,10 +90,10 @@ proposition_2_1_3_3 = t.ddi(
 # Axiom 2.3. 0 is not the successor of any natural number;
 # i.e., we have n++ f=. 0 for every natural number n.
 
-a_2_3 = t.a(
+a_2_3 = t.postulate_axiom(u.elaborate_axiom(
     '0 is not the successor of any natural number; i.e., we have n++ ≠ 0 for '
     'every natural number n.',
-    reference='2.3')
+    '2.3'))
 
 with u.v('n') as n:
     proposition_2_3_1 = t.dai(
@@ -114,11 +114,11 @@ def prove_proposition_2_1_6():
 
 
 prove_proposition_2_1_6()
-axiom_2_4 = t.a(
+axiom_2_4 = t.postulate_axiom(u.elaborate_axiom(
     'Different natural numbers must have different successors; i.e., if n, '
     'm are natural numbers and n ≠ m, then n++ ≠ m++. Equivalently, '
     'if n++ = m++, then we must have n = m.',
-    reference='2.4')
+    '2.4'))
 
 with u.v('n') as n, u.v('m') as m:
     proposition_2_4_1 = t.dai(

@@ -4,10 +4,12 @@
 
 print('Punctilious package (punctilious/__init__.py)')
 from repm import monospace, serif_bold
-from core import AxiomInclusion, configuration, Definition, FailedVerificationException, Formula, DirectAxiomInference, \
-    DirectDefinitionInference, FreeVariable, \
+from core import Axiom, AxiomInclusion, configuration, Definition, FailedVerificationException, \
+    Formula, \
+    DirectAxiomInference, \
+    DirectDefinitionInference, FreeVariable, LongName, \
     Note, note_categories, Relation, InconsistencyWarning, \
-    SimpleObjct, SymbolicObjct, statement_categories, TheoryElaboration, UniverseOfDiscourse
+    SimpleObjct, Symbol, SymbolicObjct, statement_categories, TheoryElaboration, UniverseOfDiscourse
 from foundation_system_1 import foundation_system_1, ft, u
 
 print('Punctilious package: initialized.')

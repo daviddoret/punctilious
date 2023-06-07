@@ -1,6 +1,7 @@
 
 ℱ
 𝐂𝐨𝐧𝐬𝐢𝐬𝐭𝐞𝐧𝐜𝐲: undetermined
+𝐒𝐭𝐚𝐛𝐢𝐥𝐢𝐳𝐞𝐝: False
 𝐄𝐱𝐭𝐞𝐧𝐝𝐞𝐝 𝐭𝐡𝐞𝐨𝐫𝐢𝐞𝐬:
 The following theories are extended by ℱ.
 

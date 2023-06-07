@@ -8,10 +8,22 @@ class TestAxiom(TestCase):
         echo_axiom = p.configuration.echo_axiom
         p.configuration.echo_axiom = True
         u = p.UniverseOfDiscourse('white-sheet-of-paper')
-        a1 = u.axiom('Some axiom content.')
-        a2 = u.axiom('Another axiom content.')
+        content1 = random_data.random_sentence()
+        content2 = random_data.random_sentence()
+        content3 = random_data.random_sentence()
+        content4 = random_data.random_sentence()
+        content5 = random_data.random_sentence()
+        a1 = u.axiom(content1)
+        a2 = u.axiom(content2)
+        a3 = u.axiom(content3, long_name=p.LongName('1.1.1'))
+        a4 = u.axiom(content4, long_name='1.1.2')
+        a5 = u.axiom(content5, '1.1.3')
+
         print(a1.repr_as_statement())
         print(a2.repr_as_statement())
-        self.assertEqual('Let 𝑎₁ be the axiom: “Some axiom content.”', a1.repr_as_statement())
-        self.assertEqual('Let 𝑎₂ be the axiom: “Another axiom content.”', a2.repr_as_statement())
+        self.assertEqual(f'𝑎₁: “{content1}”', a1.repr_as_statement())
+        self.assertEqual(f'𝑎₂: “{content2}”', a2.repr_as_statement())
+        self.assertEqual(f'𝐀𝐱𝐢𝐨𝐦 𝟏.𝟏.𝟏 (𝑎₃): “{content3}”', a3.repr_as_statement())
+        self.assertEqual(f'𝐀𝐱𝐢𝐨𝐦 𝟏.𝟏.𝟐 (𝑎₄): “{content4}”', a4.repr_as_statement())
+        self.assertEqual(f'𝐀𝐱𝐢𝐨𝐦 𝟏.𝟏.𝟑 (𝑎₅): “{content5}”', a5.repr_as_statement())
         p.configuration.echo_note = echo_axiom

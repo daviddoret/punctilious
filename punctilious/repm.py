@@ -55,10 +55,20 @@ class Representation:
         self.sample = sample
 
     def __repr__(self):
-        return self.name
+        return self.repr_as_python_name()
 
     def __str__(self):
-        return self.name
+        return self.repr_as_python_name()
+
+    def repr(self):
+        return self.repr_as_python_name()
+
+    def repr_as_python_name(self):
+        return str(self.name)
+
+    def repr_as_natural_language(self, cap: bool = False):
+        cap = False if cap is None else cap
+        return str(self.natural_language_name).capitalize() if cap else str(self.natural_language_name)
 
 
 class UseCase(Representation):
