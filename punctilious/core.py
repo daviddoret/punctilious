@@ -19,7 +19,11 @@ class Configuration:
         self.text_output_total_width = 122
         self.output_index_if_max_index_equal_1 = False
         self.warn_on_inconsistency = True
+        self.echo_axiom = None
+        self.echo_axiom_inclusion = None
         self.echo_default = False
+        self.echo_definition = None
+        self.echo_definition_inclusion = None
         self.echo_statement = None
         self.echo_formula = None
         self.echo_variable = None
@@ -73,7 +77,9 @@ class DeclarativeClassList(repm.Representation):
         super().__init__(python_name=python_name, natural_language_name=natural_language_name)
         self.atheoretical_statement = DeclarativeClass('atheoretical_statement', 'atheoretical-statement')
         self.axiom = DeclarativeClass('axiom', 'axiom')
+        self.axiom_inclusion = DeclarativeClass('axiom_inclusion', 'axiom-inclusion')
         self.definition = DeclarativeClass('definition', 'definition')
+        self.definition_inclusion = DeclarativeClass('definition_inclusion', 'definition-inclusion')
         self.direct_axiom_inference = DeclarativeClass('direct_axiom_inference', 'direct-axiom-inference')
         self.direct_definition_inference = DeclarativeClass('direct_definition_inference',
                                                             'direct-definition-inference')
@@ -1153,23 +1159,89 @@ class Statement(TheoreticalObjct):
         return self.title.repr_ref(cap=cap)
 
 
-class Axiom(Statement):
-    """The Axiom pythonic class models _contentual_ _axioms_.
+class Axiom(TheoreticalObjct):
+    """The Axiom pythonic class models the elaboration of a _contentual_ _axiom_ in a _universe-of-discourse_.
 
     """
 
     def __init__(
-            self, natural_language, symbol=None, theory=None, reference=None,
-            title=None, echo=None):
-        assert isinstance(theory, TheoryElaboration)
-        assert isinstance(natural_language, str)
+            self, natural_language, u, symbol=None, echo=None):
+        """
+
+        :param natural_language: The axiom's content in natural-language.
+        :param u: The universe-of-discourse.
+        :param symbol:
+        :param echo:
+        """
+        verify(is_in_class(u, classes.universe_of_discourse),
+               'Parameter u is not a member of class universe-of-discourse.')
+        verify(isinstance(natural_language, str),
+               'Parameter natural-language is not of python-type str.')
+        natural_language = natural_language.strip()
+        verify(natural_language != '',
+               'Parameter natural-language is an empty string (after trimming).')
         self.natural_language = natural_language
-        theory.crossreference_axiom(self)
+        if symbol is None:
+            base = '𝑎'
+            index = u.index_symbol(base=base)
+            symbol = Symbol(base=base, index=index)
+        elif isinstance(symbol, str):
+            # If symbol was passed as a string,
+            # assume the base was passed without index.
+            # TODO: Analyse the string if it ends with index in subscript characters.
+            index = u.index_symbol(base=symbol)
+            symbol = Symbol(base=symbol, index=index)
         super().__init__(
-            theory=theory, symbol=symbol, reference=reference,
+            universe_of_discourse=u, symbol=symbol, echo=echo)
+        super()._declare_class_membership(declarative_class_list.axiom)
+        u.cross_reference_axiom(self)
+
+    def repr_as_statement(self, output_proofs=True):
+        """Return a representation that expresses and justifies the statement."""
+        text = f'Let {self.repr_as_symbol()} be the axiom: “{self.natural_language}”'
+        return '\n'.join(
+            textwrap.wrap(
+                text=text, width=70,
+                subsequent_indent=f'\t',
+                break_on_hyphens=False,
+                expand_tabs=True,
+                tabsize=4))
+
+
+class AxiomInclusion(Statement):
+    """The AxiomInclusion pythonic class models the inclusion of a _contentual_ _axioms_ in a _theory elaboration_.
+
+    """
+
+    def __init__(
+            self, natural_language=None, a=None, symbol=None, t=None, reference=None,
+            title=None, echo=None):
+        """Create a new axiom-inclusion (a, t).
+        
+        :param natural_language:
+        :param a:
+        :param symbol:
+        :param t:
+        :param reference:
+        :param title:
+        :param echo:
+        """
+        verify(is_in_class(t, classes.theory), 'Parameter t is not a member of class theory.')
+        verify(isinstance(natural_language, str) or is_in_class(a, classes.axiom),
+               'To create a new axiom-inclusion, either the parameter natural_language must be passed as a string or '
+               'the parameter a must be passed as an axion.')
+        if isinstance(natural_language, str):
+            natural_language = natural_language.trim()
+            verify(natural_language != '', 'Parameter natural-language is an empty string (after trimming).')
+            u = t.universe_of_discourse
+            a = Axiom(natural_language=natural_language, u=u)
+        self.axiom = a
+        t.crossreference_axiom_inclusion(self)
+        super().__init__(
+            theory=t, symbol=symbol, reference=reference,
             category=statement_categories.axiom, title=title,
             echo=echo)
-        super()._declare_class_membership(declarative_class_list.axiom)
+        super()._declare_class_membership(declarative_class_list.axiom_inclusion)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
@@ -1296,7 +1368,7 @@ class DirectAxiomInference(FormulaStatement):
             self, valid_proposition, a, symbol=None, theory=None, reference=None,
             title=None, category=None, echo=None):
         assert isinstance(theory, TheoryElaboration)
-        assert isinstance(a, Axiom)
+        assert isinstance(a, AxiomInclusion)
         assert theory.has_objct_in_hierarchy(a)
         assert isinstance(valid_proposition, Formula)
         self.axiom = a
@@ -1559,7 +1631,8 @@ class TheoryElaboration(TheoreticalObjct):
             include_modus_ponens_inference_rule: bool = False,
             include_biconditional_introduction_inference_rule: bool = False,
             include_double_negation_introduction_inference_rule: bool = False,
-            include_inconsistency_introduction_inference_rule: bool = False
+            include_inconsistency_introduction_inference_rule: bool = False,
+            stabilized: bool = False
     ):
         """
 
@@ -1569,8 +1642,9 @@ class TheoryElaboration(TheoreticalObjct):
         """
         # self.symbols = dict()
         self._consistency = consistency_values.undetermined
-        self.axioms = tuple()
-        self.definitions = tuple()
+        self._stabilized = False
+        self.axiom_inclusions = tuple()
+        self.definition_inclusions = tuple()
         self.statements = tuple()
         self._theory_foundation_system = theory_foundation_system
         extended_theories = set() if extended_theories is None else extended_theories
@@ -1659,6 +1733,13 @@ class TheoryElaboration(TheoreticalObjct):
         if include_modus_ponens_inference_rule:
             self.include_modus_ponens_inference_rule()
         super()._declare_class_membership(classes.t)
+        if stabilized:
+            # It is a design choice to stabilize the theory-elaboration
+            # at the very end of construction (__init__()). Note that it
+            # is thus possible to extend a theory and, for example,
+            # add some new inference-rules by passing these instructions
+            # to the constructor.
+            self.stabilize()
 
     def bi(
             self, conditional_phi, conditional_psi, symbol=None, category=None,
@@ -1739,17 +1820,17 @@ class TheoryElaboration(TheoreticalObjct):
             'set once to prevent instability.')
         self._conjunction_introduction_inference_rule = ir
 
-    def crossreference_axiom(self, a):
-        """During construction, cross-reference an axiom 𝒜
-        with its parent theory if it is not already cross-referenced,
+    def crossreference_axiom_inclusion(self, a):
+        """During construction, cross-reference an axiom 𝑎
+        with its parent theory 𝑡 if it is not already cross-referenced,
         and return its 0-based index in Theory.axioms."""
-        assert isinstance(a, Axiom)
+        assert isinstance(a, AxiomInclusion)
         a.theory = a.theory if hasattr(a, 'theory') else self
         assert a.theory is self
-        if a not in self.axioms:
-            self.axioms = self.axioms + tuple(
+        if a not in self.axiom_inclusions:
+            self.axiom_inclusions = self.axiom_inclusions + tuple(
                 [a])
-        return self.axioms.index(a)
+        return self.axiom_inclusions.index(a)
 
     def crossreference_definition(self, d):
         """During construction, cross-reference a definition 𝒟
@@ -1758,10 +1839,10 @@ class TheoryElaboration(TheoreticalObjct):
         assert isinstance(d, Definition)
         d.theory = d.theory if hasattr(d, 'theory') else self
         assert d.theory is self
-        if d not in self.definitions:
-            self.definitions = self.definitions + tuple(
+        if d not in self.definition_inclusions:
+            self.definition_inclusions = self.definition_inclusions + tuple(
                 [d])
-        return self.definitions.index(d)
+        return self.definition_inclusions.index(d)
 
     def crossreference_statement(self, s):
         """During construction, cross-reference a statement 𝒮
@@ -1998,10 +2079,10 @@ class TheoryElaboration(TheoreticalObjct):
         self._modus_ponens_inference_rule = ir
 
     def postulate_axiom(
-            self, natural_language, symbol=None, reference=None, title=None, echo=None):
-        """Postulate an axiom expressed in natural-language as the basis of this theory."""
-        return self.universe_of_discourse.postulate_axiom(
-            natural_language=natural_language, symbol=symbol, theory=self,
+            self, a, symbol=None, reference=None, title=None, echo=None):
+        """Postulate an axiom expressed 𝑎 in this theory-elaboration (self)."""
+        return AxiomInclusion(
+            a=a, symbol=symbol, t=self,
             reference=reference, title=title, echo=echo)
 
     def elaborate_definition(
@@ -2275,14 +2356,6 @@ class TheoryElaboration(TheoreticalObjct):
             'The negation property must be a relation.')
         self._negation = r
 
-    def a(self, natural_language, symbol=None, reference=None, title=None):
-        """Postulate a new axiom from natural-language.
-
-        Shortcut function for t.postulate_axiom(...)."""
-        return self.postulate_axiom(
-            natural_language=natural_language, symbol=symbol,
-            reference=reference, title=title)
-
     def d(self, natural_language, symbol=None, reference=None, title=None):
         """Elaborate a new definition with natural-language. Shortcut function for
         t.elaborate_definition(...)."""
@@ -2294,6 +2367,7 @@ class TheoryElaboration(TheoreticalObjct):
         """Return a representation that expresses and justifies the theory."""
         output = f'\n{repm.serif_bold(self.repr_as_symbol())}'
         output = output + f'\n{repm.serif_bold("Consistency:")} {str(self.consistency)}'
+        output = output + f'\n{repm.serif_bold("Stabilized:")} {str(self.stabilized)}'
         output = output + f'\n{repm.serif_bold("Extended theories:")}'
         output = output + f'\nThe following theories are extended by {repm.serif_bold(self.repr_as_symbol())}.'
         output = output + ''.join(
@@ -2339,6 +2413,17 @@ class TheoryElaboration(TheoreticalObjct):
         text_file = open(file_path, 'w', encoding='utf-8')
         n = text_file.write(self.repr_as_theory(output_proofs=output_proofs))
         text_file.close()
+
+    @property
+    def stabilized(self):
+        """Return the stabilized property of this theory-elaboration.
+        """
+        return self._stabilized
+
+    def stabilize(self):
+        verify(not self._stabilized,
+               'This theory-elaboration is already stabilized.', severity=verification_severities.warning)
+        self._stabilized = True
 
     def take_note(self, natural_language, symbol=None, reference=None,
                   title=None, echo=None, category=None):
@@ -2579,6 +2664,7 @@ class Tuple(tuple):
 
 class UniverseOfDiscourse(SymbolicObjct):
     def __init__(self, symbol=None):
+        self.axioms = dict()
         self.formulae = dict()
         self.relations = dict()
         self.theories = dict()
@@ -2614,7 +2700,18 @@ class UniverseOfDiscourse(SymbolicObjct):
             is_theory_foundation_system=False,
             symbol=symbol,
             universe_of_discourse=None)
-        super()._declare_class_membership(classes.u)
+        super()._declare_class_membership(classes.universe_of_discourse)
+
+    def axiom(
+            self, natural_language, symbol=None, echo=None):
+        """Elaborate a new axiom in this universe-of-discourse.
+
+        :param natural_language:
+        :param symbol:
+        :param echo:
+        :return:
+        """
+        return self.elaborate_axiom(natural_language=natural_language, symbol=symbol, echo=echo)
 
     @property
     def biconditional_relation(self):
@@ -2764,6 +2861,22 @@ class UniverseOfDiscourse(SymbolicObjct):
             'The truth simple-objct exists already in this'
             'universe-of-discourse')
         self._truth_simple_objct = o
+
+    def cross_reference_axiom(self, a: Axiom):
+        """Cross-references 𝑎 as an axiom in this universe-of-discourse.
+
+        :param a: an axiom.
+        """
+        verify(is_in_class(a, classes.axiom),
+               '𝑎 is not a member of the axiom declarative-class.', a=a)
+        verify(
+            a.symbol not in self.axioms.keys() or a is self.axioms[
+                a.symbol],
+            'The symbol of 𝑎 is already referenced as an axiom in this universe-of-discourse, but the corresponding '
+            'object is not 𝑎.',
+            a=a)
+        if a not in self.axioms:
+            self.axioms[a.symbol] = a
 
     def cross_reference_formula(self, phi: Formula):
         """Cross-references a formula in this universe-of-discourse.
@@ -3062,9 +3175,15 @@ class UniverseOfDiscourse(SymbolicObjct):
             theory.universe_of_discourse is self,
             'The universe-of-discourse of the theory parameter is distinct '
             'from this universe-of-discourse.')
-        return Axiom(
-            natural_language=natural_language, symbol=symbol, theory=theory,
+        return AxiomInclusion(
+            natural_language=natural_language, symbol=symbol, t=theory,
             reference=reference, title=title, echo=echo)
+
+    def elaborate_axiom(
+            self, natural_language, symbol=None, echo=None):
+        """Elaborate a new axiom 𝑎 in this universe-of-discourse."""
+        return Axiom(
+            u=self, natural_language=natural_language, symbol=symbol, echo=echo)
 
     def elaborate_definition(
             self, natural_language, symbol=None, theory=None, reference=None,
