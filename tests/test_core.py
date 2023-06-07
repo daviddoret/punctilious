@@ -21,7 +21,7 @@ class TestSymbolicObjct(TestCase):
 
 class TestEquality(TestCase):
     def test_equality(self):
-        t1 = core.Theory(symbol='equality-test-theory', extended_theories={core.foundation_theory})
+        t1 = core.TheoryElaboration(symbol='equality-test-theory', extended_theories={core.foundation_theory})
         a1 = core.NaturalLanguageAxiom(theory=t1, natural_language='Whatever I wish to be true is true.')
         mira = core.SimpleObjct(theory=t1, symbol='Mira', capitalizable=False)
         cat = core.SimpleObjct(theory=t1, symbol='cat', capitalizable=True)
@@ -40,7 +40,7 @@ class TestEquality(TestCase):
 class TestAxiom(TestCase):
 
     def test_init(self):
-        t1 = core.Theory()
+        t1 = core.TheoryElaboration()
         a1 = core.NaturalLanguageAxiom(theory=t1,
                                        natural_language='If something is red, then it is neither green, nor blue.')
         a2 = core.NaturalLanguageAxiom(theory=t1,
@@ -55,7 +55,7 @@ class TestAxiom(TestCase):
 class TestStatement(TestCase):
 
     def test_init(self):
-        t1 = core.Theory()
+        t1 = core.TheoryElaboration()
         a1 = core.NaturalLanguageAxiom(theory=t1, text='If something is red, then it is neither green, nor blue.')
         s1 = core.Statement(theory=t1, valid_proposition=a1)
 
@@ -66,7 +66,7 @@ class TestStatement(TestCase):
 class TestFormula(TestCase):
 
     def test_init(self):
-        t1 = core.Theory()
+        t1 = core.TheoryElaboration()
         o11 = core.SimpleObjct(theory=t1)
         o12 = core.SimpleObjct(theory=t1)
 
@@ -93,7 +93,7 @@ class TestNote(TestCase):
 
 class TestRelation(TestCase):
     def test_init(self):
-        t1 = core.Theory()
+        t1 = core.TheoryElaboration()
         r11 = core.Relation(theory=t1, arity=1)
         self.assertIs(t1, r11.theory)
         self.assertEqual(1, r11.arity)
@@ -103,7 +103,7 @@ class TestRelation(TestCase):
         r13 = core.Relation(theory=t1, arity=2)
         self.assertIs(t1, r13.theory)
         self.assertEqual(2, r13.arity)
-        t2 = core.Theory()
+        t2 = core.TheoryElaboration()
         r21 = core.Relation(theory=t2, arity=2)
         self.assertIs(t2, r21.theory)
         self.assertEqual(2, r21.arity)
@@ -118,11 +118,11 @@ class TestRelation(TestCase):
 
 class TestSimpleObjct(TestCase):
     def test_init(self):
-        t1 = core.Theory()
+        t1 = core.TheoryElaboration()
         o11 = core.SimpleObjct(theory=t1)
         o12 = core.SimpleObjct(theory=t1)
         o13 = core.SimpleObjct(theory=t1)
-        t2 = core.Theory()
+        t2 = core.TheoryElaboration()
         o21 = core.SimpleObjct(theory=t2)
         o22 = core.SimpleObjct(theory=t2)
         o23 = core.SimpleObjct(theory=t2)
@@ -131,7 +131,7 @@ class TestSimpleObjct(TestCase):
 
 class TestTheory(TestCase):
     def test___init__(self):
-        t1 = core.Theory(dashed='test-theory-1')
+        t1 = core.TheoryElaboration(dashed='test-theory-1')
         a1 = core.NaturalLanguageAxiom(theory=t1, text='If a filooboo is wala, then it is sholo.')
         s1 = core.Statement(theory=t1, valid_proposition=a1)
         t1.print()
@@ -139,7 +139,7 @@ class TestTheory(TestCase):
 
 class TestTheoreticalObject(TestCase):
     def test_is_formula_equivalent_to(self):
-        t1 = core.Theory()
+        t1 = core.TheoryElaboration()
         o1 = core.SimpleObjct(theory=t1)
         o2 = core.SimpleObjct(theory=t1)
         r1 = core.Relation(theory=t1, arity=1)
@@ -166,7 +166,7 @@ class TestTheoreticalObject(TestCase):
         self.assertFalse(phi5.is_formula_equivalent_to(phi8))
 
     def test_is_masked_variable_similar_to(self):
-        t1 = core.Theory()
+        t1 = core.TheoryElaboration()
         o1 = core.SimpleObjct(theory=t1)
         o2 = core.SimpleObjct(theory=t1)
         r1 = core.Relation(theory=t1, arity=1)
@@ -216,7 +216,7 @@ class TestTheoreticalObject(TestCase):
         self.assertFalse(phi5.is_masked_formula_similar_to(o2=phi32, mask={x2}))
 
     def test_substitute(self):
-        t1 = core.Theory()
+        t1 = core.TheoryElaboration()
         o1 = core.SimpleObjct(theory=t1)
         o2 = core.SimpleObjct(theory=t1)
         o3 = core.SimpleObjct(theory=t1)

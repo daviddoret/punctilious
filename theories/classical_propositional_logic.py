@@ -1,6 +1,6 @@
 import core
 
-t = core.Theory('classical propositional logic')
+t = core.TheoryElaboration('classical propositional logic')
 
 # Simple-objcts
 falsehood = t.o('false')

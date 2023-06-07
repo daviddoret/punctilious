@@ -4,7 +4,7 @@ import core
 import repm
 
 u = core.UniverseOfDiscourse()
-ft = core.Theory(
+ft = core.TheoryElaboration(
     symbol='ℱ',
     is_theory_foundation_system=True, universe_of_discourse=u,
     include_conjunction_introduction_inference_rule=True,

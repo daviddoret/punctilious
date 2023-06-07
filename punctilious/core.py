@@ -1034,7 +1034,7 @@ class Formula(TheoreticalObjct):
 
 class RelationDeclarationFormula(Formula):
     def __init__(self, theory, relation, symbol):
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         assert isinstance(relation, Relation)
         assert theory.has_objct_in_hierarchy(relation)
         formula_relation = theoretical_relations.relation_declaration
@@ -1058,7 +1058,7 @@ class SimpleObjctDeclarationFormula(Formula):
 
     def __init__(
             self, theory, simple_objct, python=None, dashed=None, symbol=None):
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         assert isinstance(simple_objct, SimpleObjct)
         assert theory.has_objct_in_hierarchy(simple_objct)
         relation = theoretical_relations.simple_objct_declaration
@@ -1121,7 +1121,7 @@ class Statement(TheoreticalObjct):
             self, theory, category, symbol=None,
             reference=None, title=None, echo=None):
         echo = get_config(echo, configuration.echo_statement, configuration.echo_default, fallback_value=False)
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         universe_of_discourse = theory.universe_of_discourse
         self.statement_index = theory.crossreference_statement(self)
         self.theory = theory
@@ -1161,7 +1161,7 @@ class Axiom(Statement):
     def __init__(
             self, natural_language, symbol=None, theory=None, reference=None,
             title=None, echo=None):
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         assert isinstance(natural_language, str)
         self.natural_language = natural_language
         theory.crossreference_axiom(self)
@@ -1191,7 +1191,7 @@ class Definition(Statement):
     def __init__(
             self, natural_language, symbol=None, theory=None, reference=None,
             title=None, echo=None):
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         assert isinstance(natural_language, str)
         self.natural_language = natural_language
         theory.crossreference_definition(self)
@@ -1232,7 +1232,7 @@ class FormulaStatement(Statement):
             title=None, echo=None):
         echo = get_config(echo, configuration.echo_statement, configuration.echo_default, fallback_value=False)
         verify(
-            isinstance(theory, Theory),
+            isinstance(theory, TheoryElaboration),
             'isinstance(theory, Theory)')
         verify(
             isinstance(valid_proposition, Formula),
@@ -1295,7 +1295,7 @@ class DirectAxiomInference(FormulaStatement):
     def __init__(
             self, valid_proposition, a, symbol=None, theory=None, reference=None,
             title=None, category=None, echo=None):
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         assert isinstance(a, Axiom)
         assert theory.has_objct_in_hierarchy(a)
         assert isinstance(valid_proposition, Formula)
@@ -1332,7 +1332,7 @@ class Morphism(FormulaStatement):
     def __init__(
             self, source_statement, symbol=None, theory=None,
             category=None):
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         assert isinstance(source_statement, FormulaStatement)
         assert theory.has_objct_in_hierarchy(source_statement)
         self.source_statement = source_statement
@@ -1381,7 +1381,7 @@ class PropositionStatement:
     """
 
     def __init__(self, theory, position, phi, proof):
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         assert isinstance(position, int) and position > 0
         assert isinstance(phi, Formula)
         assert theory.has_objct_in_hierarchy(phi)
@@ -1407,7 +1407,7 @@ class DirectDefinitionInference(FormulaStatement):
     def __init__(
             self, valid_proposition, d, symbol=None, theory=None, reference=None,
             title=None):
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         assert isinstance(d, Definition)
         assert theory.has_objct_in_hierarchy(d)
         assert isinstance(valid_proposition, Formula)
@@ -1488,7 +1488,7 @@ class AtheoreticalStatement(SymbolicObjct):
     """
 
     def __init__(self, theory, symbol=None, echo=None):
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         self.theory = theory
         super().__init__(symbol=symbol, echo=echo, universe_of_discourse=theory.universe_of_discourse)
         super()._declare_class_membership(classes.atheoretical_statement)
@@ -1546,7 +1546,11 @@ class Note(AtheoreticalStatement):
                 tabsize=4))
 
 
-class Theory(TheoreticalObjct):
+class TheoryElaboration(TheoreticalObjct):
+    """The TheoryElaboration pythonic class models a [theory-elaboration](theory-elaboration).
+
+    """
+
     def __init__(
             self, is_theory_foundation_system=None,
             symbol=None, extended_theories=None,
@@ -1570,7 +1574,7 @@ class Theory(TheoreticalObjct):
         self.statements = tuple()
         self._theory_foundation_system = theory_foundation_system
         extended_theories = set() if extended_theories is None else extended_theories
-        if isinstance(extended_theories, Theory):
+        if isinstance(extended_theories, TheoryElaboration):
             # A shortcut to pass a single extended theory without casting a set.
             extended_theories = {extended_theories}
         assert isinstance(extended_theories, set)
@@ -1579,7 +1583,7 @@ class Theory(TheoreticalObjct):
             extended_theories = extended_theories.union(
                 {theory_foundation_system})
         for extended_theory in extended_theories:
-            assert isinstance(extended_theory, Theory)
+            assert isinstance(extended_theory, TheoryElaboration)
         self.extended_theories = extended_theories
         self._commutativity_of_equality = None
         self._equality = None
@@ -2514,7 +2518,7 @@ class SubstitutionOfEqualTerms(FormulaStatement):
             category=None, theory=None, reference=None, title=None):
         category = statement_categories.proposition if category is None else category
         # Check p_implies_q consistency
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         assert isinstance(original_expression, FormulaStatement)
         assert theory.has_objct_in_hierarchy(original_expression)
         assert isinstance(equality_statement, FormulaStatement)
@@ -2831,13 +2835,13 @@ class UniverseOfDiscourse(SymbolicObjct):
         if o not in self.symbolic_objcts:
             self.symbolic_objcts[o.symbol] = o
 
-    def cross_reference_theory(self, t: Theory):
+    def cross_reference_theory(self, t: TheoryElaboration):
         """Cross-references a theory in this universe-of-discourse.
 
         :param t: a formula.
         """
         verify(
-            isinstance(t, Theory),
+            isinstance(t, TheoryElaboration),
             'Cross-referencing a theory in a universe-of-discourse requires '
             'an object of type Theory.')
         verify(
@@ -2942,7 +2946,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         :param extended_theories:
         :return:
         """
-        return Theory(
+        return TheoryElaboration(
             symbol=symbol,
             extended_theories=extended_theories,
             is_theory_foundation_system=is_theory_foundation_system,
@@ -3259,10 +3263,10 @@ class BiconditionalIntroductionInferenceRule(InferenceRule):
 
     @staticmethod
     def execute_algorithm(
-            theory: Theory, conditional_phi: FormulaStatement,
+            theory: TheoryElaboration, conditional_phi: FormulaStatement,
             conditional_psi: FormulaStatement):
         """Execute the biconditional algorithm."""
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         assert isinstance(conditional_phi, FormulaStatement)
         assert isinstance(conditional_psi, FormulaStatement)
         verify(
@@ -3367,10 +3371,10 @@ class ConjunctionIntroductionInferenceRule(InferenceRule):
 
     @staticmethod
     def execute_algorithm(
-            theory: Theory, conjunct_p: FormulaStatement,
+            theory: TheoryElaboration, conjunct_p: FormulaStatement,
             conjunct_q: FormulaStatement):
         """Execute the conjunction algorithm."""
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         assert isinstance(conjunct_p, FormulaStatement)
         assert isinstance(conjunct_q, FormulaStatement)
         verify(
@@ -3465,9 +3469,9 @@ class DoubleNegationIntroductionInferenceRule(InferenceRule):
 
     @staticmethod
     def execute_algorithm(
-            theory: Theory, p: FormulaStatement):
+            theory: TheoryElaboration, p: FormulaStatement):
         """Execute the double_negation algorithm."""
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         assert isinstance(p, FormulaStatement)
         verify(
             theory.has_objct_in_hierarchy(p),
@@ -3566,7 +3570,7 @@ class ModusPonensInferenceRule(InferenceRule):
     @staticmethod
     def execute_algorithm(theory, conditional, antecedent):
         """Execute the modus-ponens algorithm."""
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         assert isinstance(conditional, FormulaStatement)
         verify(
             theory.has_objct_in_hierarchy(conditional),
@@ -3667,7 +3671,7 @@ class InconsistencyIntroductionInferenceRule(InferenceRule):
     @staticmethod
     def execute_algorithm(theory, p, not_p):
         """Execute the theory-inconsistency algorithm."""
-        assert isinstance(theory, Theory)
+        assert isinstance(theory, TheoryElaboration)
         assert isinstance(p, FormulaStatement)
         verify(
             theory.has_objct_in_hierarchy(p),
