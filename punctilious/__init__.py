@@ -4,7 +4,7 @@
 
 print('Punctilious package (punctilious/__init__.py)')
 from repm import monospace, serif_bold
-from core import Axiom, AxiomInclusion, configuration, DashedName, Definition, FailedVerificationException, \
+from core import Axiom, AxiomPostulate, configuration, DashedName, Definition, FailedVerificationException, \
     Formula, \
     DirectAxiomInference, \
     DirectDefinitionInference, FreeVariable, ObjctHeader, \

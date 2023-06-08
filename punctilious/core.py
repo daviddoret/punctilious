@@ -1,9 +1,11 @@
+from __future__ import annotations
 import textwrap
 import warnings
 from types import SimpleNamespace
 import repm
 import contextlib
 import abc
+import collections.abc
 
 
 class InconsistencyWarning(UserWarning):
@@ -92,9 +94,10 @@ class DeclarativeClassList(repm.Representation):
         self.proposition = DeclarativeClass('proposition', 'proposition')
         self.relation = DeclarativeClass('relation', 'relation')
         self.simple_objct = DeclarativeClass('simple_objct', 'simple-objct')
+        self.statement = DeclarativeClass('statement', 'statement')
         self.symbolic_objct = DeclarativeClass('symbolic_objct', 'symbolic-objct')
         self.theoretical_objct = DeclarativeClass('theoretical_objct', 'theoretical-objct')
-        self.theory = DeclarativeClass('theory', 'theory')
+        self.theory_elaboration = DeclarativeClass('theory', 'theory')
         self.universe_of_discourse = DeclarativeClass('universe_of_discourse', 'universe-of-discourse')
         # Shortcuts
         self.a = self.axiom
@@ -102,7 +105,7 @@ class DeclarativeClassList(repm.Representation):
         self.ddi = self.direct_definition_inference
         self.f = self.formula
         self.r = self.relation
-        self.t = self.theory
+        self.t = self.theory_elaboration
         self.u = self.universe_of_discourse
 
 
@@ -794,18 +797,22 @@ class TheoreticalObjct(SymbolicObjct):
         else:
             return self
 
-    def list_theoretical_objcts_recursively(self, ol=None):
-        """Return a python frozenset of this theoretical_objct and all theoretical_objcts it contains."""
-        if ol is None:
-            return frozenset({self})
-        else:
-            return ol.union({self})
+    def iterate_relations(self, include_root: bool = True):
+        """Iterate through this and all the theoretical-objcts it contains recursively, providing they are relations."""
+        return (
+            r for r in self.iterate_theoretical_objcts(include_root=include_root)
+            if is_in_class(r, classes.relation))
 
-    def list_relations_recursively(self, ol=None):
-        """Return a python frozenset of this theoretical_objct and all theoretical_objcts it contains, providing that they are relations."""
-        ol = frozenset() if ol is None else ol
-        ol = self.list_theoretical_objcts_recursively(ol=ol)
-        return frozenset(r for r in ol if is_in_class(r, classes.relation))
+    def iterate_theoretical_objcts(self, include_root: bool = True, visited: (None, set) = None):
+        """Iterate through this and all the theoretical-objcts it contains recursively."""
+        visited = set() if visited is None else visited
+        if include_root and self not in visited:
+            yield self
+            visited.update({self})
+
+    def contains_theoretical_objct(self, o: TheoreticalObjct):
+        """Return True if o is in this theory's hierarchy, False otherwise."""
+        return o in self.iterate_theoretical_objcts(include_root=True)
 
 
 def substitute_xy(o, x, y):
@@ -975,8 +982,8 @@ class Formula(TheoreticalObjct):
         python_name='postfix-operator', sample='𝐱◆')
 
     def __init__(
-            self, relation, parameters, symbol=None,
-            universe_of_discourse=None, lock_variable_scope=None, echo=None):
+            self, relation: (Relation, FreeVariable), parameters: tuple, symbol=None,
+            universe_of_discourse: UniverseOfDiscourse = None, lock_variable_scope=None, echo=None):
         """
 
         :param theory:
@@ -1115,15 +1122,33 @@ class Formula(TheoreticalObjct):
                 return False
         return True
 
-    def list_theoretical_objcts_recursively(self, ol=None):
+    def iterate_theoretical_objcts(self, include_root: bool = True, visited: (None, set) = None):
+        """Iterate through this and all the theoretical-objcts it contains recursively."""
+        visited = set() if visited is None else visited
+        if include_root and self not in visited:
+            yield self
+            visited.update({self})
+        if self.relation not in visited:
+            yield self.relation
+            visited.update({self.relation})
+            yield from self.relation.iterate_theoretical_objcts(
+                include_root=False, visited=visited)
+        for parameter in set(self.parameters).difference(visited):
+            yield parameter
+            visited.update({parameter})
+            yield from parameter.iterate_theoretical_objcts(
+                include_root=False, visited=visited)
+
+    def list_theoretical_objcts_recursively_OBSOLETE(self, ol: (None, frozenset) = None,
+                                                     extension_limit: (None, Statement) = None):
         """Return a python frozenset of this formula and all theoretical_objcts it contains."""
         ol = frozenset() if ol is None else ol
         ol = ol.union({self})
         if self.relation not in ol:
-            ol = ol.union(self.relation.list_theoretical_objcts_recursively(ol=ol))
+            ol = ol.union(self.relation.list_theoretical_objcts_recursively_OBSOLETE(ol=ol))
         for p in self.parameters:
             if p not in ol:
-                ol = ol.union(p.list_theoretical_objcts_recursively(ol=ol))
+                ol = ol.union(p.list_theoretical_objcts_recursively_OBSOLETE(ol=ol))
         return ol
 
     def lock_variable_scope(self):
@@ -1193,7 +1218,7 @@ class RelationDeclarationFormula(Formula):
     def __init__(self, theory, relation, symbol):
         assert isinstance(theory, TheoryElaboration)
         assert isinstance(relation, Relation)
-        assert theory.has_objct_in_hierarchy(relation)
+        assert theory.contains_theoretical_objct(relation)
         formula_relation = theoretical_relations.relation_declaration
         super().__init__(
             theory=theory, relation=formula_relation,
@@ -1217,7 +1242,7 @@ class SimpleObjctDeclarationFormula(Formula):
             self, theory, simple_objct, python=None, dashed=None, symbol=None):
         assert isinstance(theory, TheoryElaboration)
         assert isinstance(simple_objct, SimpleObjct)
-        assert theory.has_objct_in_hierarchy(simple_objct)
+        assert theory.contains_theoretical_objct(simple_objct)
         relation = theoretical_relations.simple_objct_declaration
         super().__init__(
             theory=theory, relation=relation, parameters=(theory, simple_objct),
@@ -1233,14 +1258,14 @@ class StatementCategory(repm.Representation):
 
 
 class StatementCategories(repm.Representation):
-    corollary = StatementCategory('corollary', '𝙿', 'corollary')
-    formal_definition = StatementCategory('formal_definition', '𝙳', 'formal definition')
-    lemma = StatementCategory('lemma', '𝙿', 'lemma')
-    axiom = StatementCategory('axiom', '𝙰', 'axiom')
+    corollary = StatementCategory('corollary', '𝑝', 'corollary')
+    formal_definition = StatementCategory('formal_definition', '𝑑', 'formal definition')
+    lemma = StatementCategory('lemma', '𝑝', 'lemma')
+    axiom = StatementCategory('axiom', '𝑎', 'axiom')
     definition = StatementCategory('definition', '𝙳', 'definition')
-    proposition = StatementCategory('proposition', '𝙿', 'proposition')
-    theorem = StatementCategory('theorem', '𝙿', 'theorem')
-    missing_category = StatementCategory('missing_category', '𝚇', 'missing category')
+    proposition = StatementCategory('proposition', '𝑝', 'proposition')
+    theorem = StatementCategory('theorem', '𝑝', 'theorem')
+    missing_category = StatementCategory('missing_category', '�', 'missing category')
 
 
 statement_categories = StatementCategories('statement_categories')
@@ -1294,6 +1319,7 @@ class Statement(TheoreticalObjct):
             symbol=symbol,
             universe_of_discourse=universe_of_discourse,
             echo=False)
+        super()._declare_class_membership(declarative_class_list.statement)
         if echo:
             self.echo()
 
@@ -1376,7 +1402,7 @@ class Axiom(TheoreticalObjct):
         return text
 
 
-class AxiomInclusion(Statement):
+class AxiomPostulate(Statement):
     """The AxiomInclusion pythonic class models the inclusion of a _contentual_ _axioms_ in a _theory elaboration_.
 
     """
@@ -1394,7 +1420,7 @@ class AxiomInclusion(Statement):
         :param title:
         :param echo:
         """
-        verify(is_in_class(t, classes.theory), 'Parameter t is not a member of class theory.')
+        verify(is_in_class(t, classes.theory_elaboration), 'Parameter t is not a member of class theory.')
         verify(isinstance(natural_language, str) or is_in_class(a, classes.axiom),
                'To create a new axiom-inclusion, either the parameter natural_language must be passed as a string or '
                'the parameter a must be passed as an axion.')
@@ -1511,12 +1537,32 @@ class FormulaStatement(Statement):
     def __str__(self):
         return self.repr(expanded=True)
 
-    def list_theoretical_objcts_recursively(self, ol=None):
-        """Return a python frozenset of this formula-statement and all theoretical_objcts it contains."""
+    def iterate_theoretical_objcts(self, include_root: bool = True, visited: (None, set) = None):
+        """Iterate through this and all the theoretical-objcts it contains recursively."""
+        visited = set() if visited is None else visited
+        if include_root and self not in visited:
+            yield self
+            visited.update({self})
+        if self.valid_proposition not in visited:
+            yield self.valid_proposition
+            visited.update({self.valid_proposition})
+            yield from self.valid_proposition.iterate_theoretical_objcts(
+                include_root=False, visited=visited)
+
+    def list_theoretical_objcts_recursively_OBSOLETE(self, ol: (None, frozenset) = None,
+                                                     extension_limit: (None, Statement) = None):
+        """Return a python frozenset containing this formula-statement,
+         and all theoretical_objcts it contains. If a statement-limit is provided,
+         does not yield statements whose index is greater than the theoretical-objct."""
         ol = frozenset() if ol is None else ol
-        ol = ol.union({self})
-        if self.valid_proposition not in ol:
-            ol = ol.union(self.valid_proposition.list_theoretical_objcts_recursively(ol=ol))
+        if extension_limit is not None and \
+                extension_limit.theory == self.theory and \
+                extension_limit.statement_index >= self.statement_index:
+            ol = ol.union({self})
+            if self.valid_proposition not in ol:
+                ol = ol.union(
+                    self.valid_proposition.list_theoretical_objcts_recursively_OBSOLETE(ol=ol,
+                                                                                        extension_limit=extension_limit))
         return ol
 
     def repr(self, expanded=None):
@@ -1541,20 +1587,43 @@ class DirectAxiomInference(FormulaStatement):
     """
 
     def __init__(
-            self, valid_proposition, ap, theory, symbol=None, reference=None,
-            title=None, category=None, echo=None):
+            self, valid_proposition: FormulaStatement, ap: AxiomPostulate, theory: TheoryElaboration,
+            symbol: (None, str, Symbol) = None,
+            reference=None,
+            title=None, category=None, echo: bool = False):
         assert isinstance(theory, TheoryElaboration)
-        assert isinstance(ap, AxiomInclusion)
+        assert isinstance(ap, AxiomPostulate)
         assert isinstance(valid_proposition, Formula)
         self.axiom = ap
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             symbol=symbol, category=category,
             reference=reference, title=title, echo=echo)
-        verify(theory.has_objct_in_hierarchy(ap), 'The ap is not in the theory hierarchy.', slf=self, ap=ap)
+        verify(theory.contains_theoretical_objct(ap), 'The ap is not in the theory hierarchy.', slf=self,
+               ap=ap)
         verify(ap not in theory.statements or ap.statement_index < self.statement_index,
                'The dai is a predecessor of the ap that is stated in the same theory.', slf=self, ap=ap)
         super()._declare_class_membership(declarative_class_list.direct_axiom_inference)
+
+    def iterate_theoretical_objcts(self, include_root: bool = True, visited: (None, set) = None):
+        """Iterate through this and all the theoretical-objcts it contains recursively."""
+        visited = set() if visited is None else visited
+        if include_root and self not in visited:
+            yield self
+            visited.update({self})
+        if self.axiom not in visited:
+            yield self.axiom
+            visited.update({self.axiom})
+            # axioms are leaf objects, no need to iterate it recursively.
+        if self.valid_proposition not in visited:
+            yield self.valid_proposition
+            visited.update({self.valid_proposition})
+            yield from self.valid_proposition.iterate_theoretical_objcts(
+                include_root=False, visited=visited)
+
+    def list_theoretical_objcts_recursively_OBSOLETE(self, ol: (None, frozenset) = None,
+                                                     extension_limit: (None, Statement) = None):
+        print(1 / 0)  # OBSOLETE, REPLACE WITH iterate_theoretical_objcts
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
@@ -1583,7 +1652,7 @@ class Morphism(FormulaStatement):
             category=None):
         assert isinstance(theory, TheoryElaboration)
         assert isinstance(source_statement, FormulaStatement)
-        assert theory.has_objct_in_hierarchy(source_statement)
+        assert theory.contains_theoretical_objct(source_statement)
         self.source_statement = source_statement
         assert source_statement.valid_proposition.relation.signal_theoretical_morphism
         self.morphism_implementation = source_statement.valid_proposition.relation.implementation
@@ -1633,9 +1702,9 @@ class PropositionStatement:
         assert isinstance(theory, TheoryElaboration)
         assert isinstance(position, int) and position > 0
         assert isinstance(phi, Formula)
-        assert theory.has_objct_in_hierarchy(phi)
+        assert theory.contains_theoretical_objct(phi)
         assert isinstance(proof, Proof)
-        assert theory.has_objct_in_hierarchy(proof)
+        assert theory.contains_theoretical_objct(proof)
         self.theory = theory
         self.position = position
         self.phi = phi
@@ -1658,7 +1727,7 @@ class DirectDefinitionInference(FormulaStatement):
             title=None):
         assert isinstance(theory, TheoryElaboration)
         assert isinstance(d, Definition)
-        assert theory.has_objct_in_hierarchy(d)
+        assert theory.contains_theoretical_objct(d)
         assert isinstance(valid_proposition, Formula)
         verify(
             valid_proposition.universe_of_discourse is theory.universe_of_discourse,
@@ -1801,17 +1870,19 @@ class TheoryElaboration(TheoreticalObjct):
     """
 
     def __init__(
-            self, is_theory_foundation_system=None,
-            symbol=None, extended_theory: (None, TheoreticalObjct) = None,
-            universe_of_discourse=None,
+            self,
+            u: UniverseOfDiscourse,
+            symbol: (str, Symbol) = None,
+            extended_theory: (None, TheoryElaboration) = None,
+            extended_theory_limit: (None, Statement) = None,
             include_conjunction_introduction_inference_rule: bool = False,
             include_modus_ponens_inference_rule: bool = False,
             include_biconditional_introduction_inference_rule: bool = False,
             include_double_negation_introduction_inference_rule: bool = False,
             include_inconsistency_introduction_inference_rule: bool = False,
             stabilized: bool = False,
-            dashed_name=None,
-            header=None
+            dashed_name: (str, DashedName) = None,
+            header: (str, ObjctHeader) = None
     ):
         """
 
@@ -1819,44 +1890,41 @@ class TheoryElaboration(TheoreticalObjct):
         the foundation-system, False otherwise. :param symbol:
          :param extended_theory: :param is_an_element_of_itself:
         """
-        # self.symbols = dict()
+        verify(is_in_class(u, classes.universe_of_discourse),
+               'Parameter "u" is not a member of declarative-class universe-of-discourse.', u=u)
+        verify(extended_theory is None or is_in_class(extended_theory, classes.theory_elaboration),
+               'Parameter "extended_theory" is neither None nor a member of declarative-class theory.', u=u)
+        verify(extended_theory_limit is None or
+               (extended_theory is not None and
+                is_in_class(extended_theory, classes.statement) and
+                extended_theory_limit in extended_theory.statements),
+               'Parameter "theory_extension_statement_limit" is inconsistent.',
+               u=u)
         self._consistency = consistency_values.undetermined
         self._stabilized = False
         self.axiom_inclusions = tuple()
         self.definition_inclusions = tuple()
         self.statements = tuple()
         self._extended_theory = extended_theory
+        self._extended_theory_limit = extended_theory_limit
         self._commutativity_of_equality = None
         self._equality = None
         self._negation = None
         self._inequality = None
-
-        # if is_theory_foundation_system:
-        #    assert theory is None
-        #    # theory = self
-        # if theory is None:
-        # If the parent theory is not specified, we make the assumption
-        # that the parent theory is the universe-of-discourse.
-        # theory = universe_of_discourse
-        # Force the initialization of the theory attribute,
-        # because theory.get_symbolic_object_1_index()
-        # must be called before super().
-        # self.theory = theory
-        # assert is_theory_foundation_system or isinstance(theory, Theory)
         if symbol is None:
-            base = '𝒯'
-            index = universe_of_discourse.index_symbol(base=base)
+            base = '𝑡'
+            index = u.index_symbol(base=base)
             symbol = Symbol(base=base, index=index)
         elif isinstance(symbol, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            index = universe_of_discourse.index_symbol(base=symbol)
+            index = u.index_symbol(base=symbol)
             symbol = Symbol(base=symbol, index=index)
         super().__init__(
             symbol=symbol,
             is_theory_foundation_system=True if extended_theory is None else False,
-            universe_of_discourse=universe_of_discourse,
+            universe_of_discourse=u,
             dashed_name=dashed_name,
             header=header)
         # Inference rules
@@ -1992,7 +2060,7 @@ class TheoryElaboration(TheoreticalObjct):
         """During construction, cross-reference an axiom 𝑎
         with its parent theory 𝑡 if it is not already cross-referenced,
         and return its 0-based index in Theory.axioms."""
-        assert isinstance(a, AxiomInclusion)
+        assert isinstance(a, AxiomPostulate)
         a.theory = a.theory if hasattr(a, 'theory') else self
         assert a.theory is self
         if a not in self.axiom_inclusions:
@@ -2081,9 +2149,14 @@ class TheoryElaboration(TheoreticalObjct):
             theory=self, reference=reference, title=title)
 
     @property
-    def extended_theory(self):
+    def extended_theory(self) -> (None, TheoryElaboration):
         """None if this is a root theory, the theory that this theory extends otherwise."""
         return self._extended_theory
+
+    @property
+    def extended_theory_limit(self) -> (None, Statement):
+        """If this is a limited extended-theory, the inclusive statement-limit of the inclusion."""
+        return self._extended_theory_limit
 
     @property
     def inconsistency_introduction_inference_rule(self):
@@ -2230,14 +2303,34 @@ class TheoryElaboration(TheoreticalObjct):
                 symbol=symbol, category=category,
                 reference=reference, title=title)
 
-    def list_theoretical_objcts_recursively(self, ol=None):
-        """Return a python frozenset of this theory and all theoretical_objcts it contains."""
-        ol = frozenset() if ol is None else ol
-        ol = ol.union({self})
-        for s in self.statements:
-            if s not in ol:
-                ol = ol.union(s.list_theoretical_objcts_recursively(ol=ol))
-        return ol
+    def iterate_theoretical_objcts(self, include_root: bool = True, visited: (None, set) = None):
+        """Iterate through this and all the theoretical-objcts it contains recursively."""
+        visited = set() if visited is None else visited
+        if include_root and self not in visited:
+            yield self
+            visited.update({self})
+        for statement in set(self.statements).difference(visited):
+            yield statement
+            visited.update({statement})
+            yield from statement.iterate_theoretical_objcts(
+                include_root=False, visited=visited)
+        if self.extended_theory is not None and self.extended_theory not in visited:
+            # Iterate the extended-theory.
+            if self.extended_theory_limit is not None:
+                # The extended-theory is limited
+                # i.e. this theory branched out before the end of the elaboration.
+                # Thus, we must exclude statements that are posterior to the limit.
+                # To do this, we simply black-list them
+                # by including them in the visited set.
+                black_list = (
+                    statement
+                    for statement in set(self.extended_theory.statements)
+                    if statement.statement_index > self.extended_theory_limit.statement_index)
+                visited.update(black_list)
+            yield self.extended_theory
+            visited.update({self.extended_theory})
+            yield from self.extended_theory.iterate_theoretical_objcts(
+                include_root=False, visited=visited)
 
     @property
     def modus_ponens_inference_rule(self):
@@ -2263,7 +2356,7 @@ class TheoryElaboration(TheoreticalObjct):
     def postulate_axiom(
             self, a, symbol=None, reference=None, title=None, echo=None):
         """Postulate an axiom expressed 𝑎 in this theory-elaboration (self)."""
-        return AxiomInclusion(
+        return AxiomPostulate(
             a=a, symbol=symbol, t=self,
             reference=reference, title=title, echo=echo)
 
@@ -2342,12 +2435,6 @@ class TheoryElaboration(TheoreticalObjct):
         if self.extended_theory is not None and self.extended_theory not in chain:
             chain = chain.union(self.extended_theory.get_theory_chain(chain=chain))
         return chain
-
-    def has_objct_in_hierarchy(self, o):
-        """Return True if o is in this theory's hierarchy, False otherwise."""
-        verify(is_in_class(o, classes.theoretical_objct), 'o is not a member of declarative-class theoretical_objct.',
-               slf=self, o=o)
-        return o.theory in self.get_theory_chain()
 
     def ii(
             self, p, not_p, symbol=None, category=None,
@@ -2559,7 +2646,7 @@ class TheoryElaboration(TheoreticalObjct):
             o.repr_as_declaration() for o in
             self.universe_of_discourse.simple_objcts.values())
         # Relation declarations
-        relations = self.list_relations_recursively()
+        relations = self.iterate_relations()
         arities = frozenset(r.arity for r in relations)
         for a in arities:
             output += repm.serif_bold(f'\n\n{repr_arity_as_text(a).capitalize()} relations:')
@@ -2801,9 +2888,9 @@ class SubstitutionOfEqualTerms(FormulaStatement):
         # Check p_implies_q consistency
         assert isinstance(theory, TheoryElaboration)
         assert isinstance(original_expression, FormulaStatement)
-        assert theory.has_objct_in_hierarchy(original_expression)
+        assert theory.contains_theoretical_objct(original_expression)
         assert isinstance(equality_statement, FormulaStatement)
-        assert theory.has_objct_in_hierarchy(equality_statement)
+        assert theory.contains_theoretical_objct(equality_statement)
         assert equality_statement.valid_proposition.relation is theory.equality
         left_term = equality_statement.valid_proposition.parameters[0]
         right_term = equality_statement.valid_proposition.parameters[1]
@@ -3263,6 +3350,7 @@ class UniverseOfDiscourse(SymbolicObjct):
     def declare_theory(
             self, symbol=None,
             extended_theory=None,
+            extended_theory_limit=None,
             include_conjunction_introduction_inference_rule=None,
             include_biconditional_introduction_inference_rule=None,
             include_double_negation_introduction_inference_rule=None,
@@ -3279,7 +3367,8 @@ class UniverseOfDiscourse(SymbolicObjct):
         return TheoryElaboration(
             symbol=symbol,
             extended_theory=extended_theory,
-            universe_of_discourse=self,
+            extended_theory_limit=extended_theory_limit,
+            u=self,
             include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule,
             include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule,
             include_double_negation_introduction_inference_rule=include_double_negation_introduction_inference_rule,
@@ -3390,7 +3479,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             theory.universe_of_discourse is self,
             'The universe-of-discourse of the theory parameter is distinct '
             'from this universe-of-discourse.')
-        return AxiomInclusion(
+        return AxiomPostulate(
             natural_language=natural_language, symbol=symbol, t=theory,
             reference=reference, title=title, echo=echo)
 
@@ -3490,6 +3579,7 @@ class UniverseOfDiscourse(SymbolicObjct):
     def t(
             self, symbol=None,
             extended_theory=None,
+            extended_theory_limit=None,
             include_conjunction_introduction_inference_rule=None,
             include_biconditional_introduction_inference_rule=None,
             include_double_negation_introduction_inference_rule=None,
@@ -3506,6 +3596,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         return self.declare_theory(
             symbol=symbol,
             extended_theory=extended_theory,
+            extended_theory_limit=extended_theory_limit,
             include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule,
             include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule,
             include_double_negation_introduction_inference_rule=include_double_negation_introduction_inference_rule,
@@ -3597,12 +3688,12 @@ class BiconditionalIntroductionInferenceRule(InferenceRule):
         assert isinstance(conditional_phi, FormulaStatement)
         assert isinstance(conditional_psi, FormulaStatement)
         verify(
-            theory.has_objct_in_hierarchy(conditional_phi),
+            theory.contains_theoretical_objct(conditional_phi),
             'The conditional phi of the biconditional-introduction is not contained in the '
             'theory hierarchy.',
             conditional=conditional_phi, theory=theory)
         verify(
-            theory.has_objct_in_hierarchy(conditional_psi),
+            theory.contains_theoretical_objct(conditional_psi),
             'The conditional psi of the biconditional-introduction is not contained in the '
             'theory hierarchy.',
             antecedent=conditional_psi, theory=theory)
@@ -3705,12 +3796,12 @@ class ConjunctionIntroductionInferenceRule(InferenceRule):
         assert isinstance(conjunct_p, FormulaStatement)
         assert isinstance(conjunct_q, FormulaStatement)
         verify(
-            theory.has_objct_in_hierarchy(conjunct_p),
+            theory.contains_theoretical_objct(conjunct_p),
             'The conjunct P of the conjunction-introduction is not contained in the '
             'theory hierarchy.',
             conditional=conjunct_p, theory=theory)
         verify(
-            theory.has_objct_in_hierarchy(conjunct_q),
+            theory.contains_theoretical_objct(conjunct_q),
             'The conjunct Q of the conjunction-introduction is not contained in the '
             'theory hierarchy.',
             antecedent=conjunct_q, theory=theory)
@@ -3801,7 +3892,7 @@ class DoubleNegationIntroductionInferenceRule(InferenceRule):
         assert isinstance(theory, TheoryElaboration)
         assert isinstance(p, FormulaStatement)
         verify(
-            theory.has_objct_in_hierarchy(p),
+            theory.contains_theoretical_objct(p),
             'The proposition P of the double-negation-introduction is not contained in the '
             'theory hierarchy.',
             conditional=p, theory=theory)
@@ -3900,12 +3991,12 @@ class ModusPonensInferenceRule(InferenceRule):
         assert isinstance(theory, TheoryElaboration)
         assert isinstance(conditional, FormulaStatement)
         verify(
-            theory.has_objct_in_hierarchy(conditional),
+            theory.contains_theoretical_objct(conditional),
             'The conditional of the modus-ponens is not contained in the '
             'theory hierarchy.',
             conditional=conditional, theory=theory)
         verify(
-            theory.has_objct_in_hierarchy(antecedent),
+            theory.contains_theoretical_objct(antecedent),
             'The antecedent of the modus-ponens is not contained in the '
             'theory hierarchy.',
             antecedent=antecedent, theory=theory)
@@ -4001,12 +4092,12 @@ class InconsistencyIntroductionInferenceRule(InferenceRule):
         assert isinstance(theory, TheoryElaboration)
         assert isinstance(p, FormulaStatement)
         verify(
-            theory.has_objct_in_hierarchy(p),
+            theory.contains_theoretical_objct(p),
             'The p of the theory-inconsistency is not contained in the '
             'theory hierarchy.',
             conditional=p, theory=theory)
         verify(
-            theory.has_objct_in_hierarchy(not_p),
+            theory.contains_theoretical_objct(not_p),
             'The not-p of the theory-inconsistency is not contained in the '
             'theory hierarchy.',
             antecedent=not_p, theory=theory)

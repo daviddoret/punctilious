@@ -1,11 +1,10 @@
 """foundation-system-1 is one possible foundation system for Punctilious."""
-
 import core
 import repm
 
 u = core.UniverseOfDiscourse()
 ft = core.TheoryElaboration(
-    is_theory_foundation_system=True, universe_of_discourse=u,
+    u=u,
     include_conjunction_introduction_inference_rule=True,
     include_modus_ponens_inference_rule=True,
     include_double_negation_introduction_inference_rule=True,
