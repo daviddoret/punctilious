@@ -1801,7 +1801,7 @@ class TheoryElaboration(TheoreticalObjct):
     def __init__(
             self, is_theory_foundation_system=None,
             symbol=None, extended_theory: (None, TheoreticalObjct) = None,
-            universe_of_discourse=None, theory_foundation_system=None,
+            universe_of_discourse=None,
             include_conjunction_introduction_inference_rule: bool = False,
             include_modus_ponens_inference_rule: bool = False,
             include_biconditional_introduction_inference_rule: bool = False,
@@ -1823,14 +1823,12 @@ class TheoryElaboration(TheoreticalObjct):
         self.axiom_inclusions = tuple()
         self.definition_inclusions = tuple()
         self.statements = tuple()
-        self._theory_foundation_system = theory_foundation_system
         self._extended_theory = extended_theory
         self._commutativity_of_equality = None
         self._equality = None
         self._negation = None
         self._inequality = None
 
-        is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
         # if is_theory_foundation_system:
         #    assert theory is None
         #    # theory = self
@@ -1855,7 +1853,7 @@ class TheoryElaboration(TheoreticalObjct):
             symbol = Symbol(base=symbol, index=index)
         super().__init__(
             symbol=symbol,
-            is_theory_foundation_system=is_theory_foundation_system,
+            is_theory_foundation_system=True if extended_theory is None else False,
             universe_of_discourse=universe_of_discourse,
             dashed_name=dashed_name,
             header=header)
@@ -1926,8 +1924,8 @@ class TheoryElaboration(TheoreticalObjct):
         """
         if self._biconditional_introduction_inference_rule is not None:
             return self._biconditional_introduction_inference_rule
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.biconditional_introduction_inference_rule
+        elif self.extended_theory is not None:
+            return self.extended_theory.biconditional_introduction_inference_rule
         else:
             return None
 
@@ -1955,8 +1953,8 @@ class TheoryElaboration(TheoreticalObjct):
         the theory. An instance of FormalAxiom otherwise."""
         if self._commutativity_of_equality is not None:
             return self._commutativity_of_equality
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.commutativity_of_equality
+        elif self.extended_theory is not None:
+            return self.extended_theory.commutativity_of_equality
         else:
             return None
 
@@ -1975,8 +1973,8 @@ class TheoryElaboration(TheoreticalObjct):
         """
         if self._conjunction_introduction_inference_rule is not None:
             return self._conjunction_introduction_inference_rule
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.conjunction_introduction_inference_rule
+        elif self.extended_theory is not None:
+            return self.extended_theory.conjunction_introduction_inference_rule
         else:
             return None
 
@@ -2050,8 +2048,8 @@ class TheoryElaboration(TheoreticalObjct):
         theory."""
         if self._double_negation_introduction_inference_rule is not None:
             return self._double_negation_introduction_inference_rule
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.double_negation_introduction_inference_rule
+        elif self.extended_theory is not None:
+            return self.extended_theory.double_negation_introduction_inference_rule
         else:
             return None
 
@@ -2092,8 +2090,8 @@ class TheoryElaboration(TheoreticalObjct):
         """
         if self._inconsistency_introduction_inference_rule is not None:
             return self._inconsistency_introduction_inference_rule
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.inconsistency_introduction_inference_rule
+        elif self.extended_theory is not None:
+            return self.extended_theory.inconsistency_introduction_inference_rule
         else:
             return None
 
@@ -2247,8 +2245,8 @@ class TheoryElaboration(TheoreticalObjct):
         theory."""
         if self._modus_ponens_inference_rule is not None:
             return self._modus_ponens_inference_rule
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system._modus_ponens_inference_rule
+        elif self.extended_theory is not None:
+            return self.extended_theory.modus_ponens_inference_rule
         else:
             return None
 
@@ -2294,8 +2292,8 @@ class TheoryElaboration(TheoreticalObjct):
         the theory. An instance of Relation otherwise."""
         if self._equality is not None:
             return self._equality
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.equality
+        elif self.extended_theory is not None:
+            return self.extended_theory.equality
         else:
             return None
 
@@ -2428,8 +2426,8 @@ class TheoryElaboration(TheoreticalObjct):
         """True if the biconditional-introduction inference-rule is included in this theory, False otherwise."""
         if self._includes_biconditional_introduction_inference_rule is not None:
             return self._includes_biconditional_introduction_inference_rule
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.biconditional_introduction_inference_rule_is_included
+        elif self.extended_theory is not None:
+            return self.extended_theory.biconditional_introduction_inference_rule_is_included
         else:
             return None
 
@@ -2438,8 +2436,8 @@ class TheoryElaboration(TheoreticalObjct):
         """True if the conjunction-introduction inference-rule is included in this theory, False otherwise."""
         if self._includes_conjunction_introduction_inference_rule is not None:
             return self._includes_conjunction_introduction_inference_rule
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.conjunction_introduction_inference_rule_is_included
+        elif self.extended_theory is not None:
+            return self.extended_theory.conjunction_introduction_inference_rule_is_included
         else:
             return None
 
@@ -2458,8 +2456,8 @@ class TheoryElaboration(TheoreticalObjct):
         """True if the double-negation-introduction inference-rule is included in this theory, False otherwise."""
         if self._includes_double_negation_introduction_inference_rule is not None:
             return self._includes_double_negation_introduction_inference_rule
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.double_negation_introduction_inference_rule_is_included
+        elif self.extended_theory is not None:
+            return self.extended_theory.double_negation_introduction_inference_rule_is_included
         else:
             return None
 
@@ -2468,8 +2466,8 @@ class TheoryElaboration(TheoreticalObjct):
         """True if the inconsistency-introduction inference-rule is included in this theory, False otherwise."""
         if self._includes_inconsistency_introduction_inference_rule is not None:
             return self._includes_inconsistency_introduction_inference_rule
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.inconsistency_introduction_inference_rule_is_included
+        elif self.extended_theory is not None:
+            return self.extended_theory.inconsistency_introduction_inference_rule_is_included
         else:
             return None
 
@@ -2479,8 +2477,8 @@ class TheoryElaboration(TheoreticalObjct):
         theory, False otherwise."""
         if self._includes_modus_ponens_inference_rule is not None:
             return self._includes_modus_ponens_inference_rule
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system.modus_ponens_inference_rule_is_included
+        elif self.extended_theory is not None:
+            return self.extended_theory.modus_ponens_inference_rule_is_included
         else:
             return None
 
@@ -2491,8 +2489,8 @@ class TheoryElaboration(TheoreticalObjct):
         An instance of Relation otherwise."""
         if self._inequality is not None:
             return self._inequality
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system._inequality
+        elif self.extended_theory is not None:
+            return self.extended_theory._inequality
         else:
             return None
 
@@ -2523,8 +2521,8 @@ class TheoryElaboration(TheoreticalObjct):
         An instance of Relation otherwise."""
         if self._negation is not None:
             return self._negation
-        elif self._theory_foundation_system is not None:
-            return self._theory_foundation_system._negation
+        elif self.extended_theory is not None:
+            return self.extended_theory.negation
         else:
             return None
 
@@ -3256,9 +3254,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             universe_of_discourse=self)
 
     def declare_theory(
-            self, symbol=None, is_theory_foundation_system=None,
-            extended_theories=None,
-            theory_foundation_system=None,
+            self, symbol=None,
+            extended_theory=None,
             include_conjunction_introduction_inference_rule=None,
             include_biconditional_introduction_inference_rule=None,
             include_double_negation_introduction_inference_rule=None,
@@ -3269,15 +3266,13 @@ class UniverseOfDiscourse(SymbolicObjct):
 
         :param symbol:
         :param is_theory_foundation_system:
-        :param extended_theories:
+        :param extended_theory:
         :return:
         """
         return TheoryElaboration(
             symbol=symbol,
-            extended_theory=extended_theories,
-            is_theory_foundation_system=is_theory_foundation_system,
+            extended_theory=extended_theory,
             universe_of_discourse=self,
-            theory_foundation_system=theory_foundation_system,
             include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule,
             include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule,
             include_double_negation_introduction_inference_rule=include_double_negation_introduction_inference_rule,
@@ -3490,9 +3485,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             symbol=symbol)
 
     def t(
-            self, symbol=None, is_theory_foundation_system=None,
-            extended_theories=None,
-            theory_foundation_system=None,
+            self, symbol=None,
+            extended_theory=None,
             include_conjunction_introduction_inference_rule=None,
             include_biconditional_introduction_inference_rule=None,
             include_double_negation_introduction_inference_rule=None,
@@ -3503,14 +3497,12 @@ class UniverseOfDiscourse(SymbolicObjct):
 
         :param symbol:
         :param is_theory_foundation_system:
-        :param extended_theories:
+        :param extended_theory:
         :return:
         """
         return self.declare_theory(
             symbol=symbol,
-            is_theory_foundation_system=is_theory_foundation_system,
-            extended_theories=extended_theories,
-            theory_foundation_system=theory_foundation_system,
+            extended_theory=extended_theory,
             include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule,
             include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule,
             include_double_negation_introduction_inference_rule=include_double_negation_introduction_inference_rule,

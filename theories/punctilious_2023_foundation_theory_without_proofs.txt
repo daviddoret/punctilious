@@ -27,13 +27,13 @@ Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
  ⁃ negation (¬)
 
 𝐁𝐢𝐧𝐚𝐫𝐲 𝐫𝐞𝐥𝐚𝐭𝐢𝐨𝐧𝐬:
- ⁃ element-of (∈)
+ ⁃ equality (=₂)
  ⁃ logical-disjunction (∨)
+ ⁃ element-of (∈)
  ⁃ implication (⟹)
+ ⁃ inequality (≠)
  ⁃ is
  ⁃ conjunction (∧)
- ⁃ equality (=₂)
- ⁃ inequality (≠)
 
 𝐓𝐡𝐞𝐨𝐫𝐲 𝐞𝐥𝐚𝐛𝐨𝐫𝐚𝐭𝐢𝐨𝐧:
 

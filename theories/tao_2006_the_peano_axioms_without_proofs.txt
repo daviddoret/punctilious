@@ -27,11 +27,11 @@ Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
  ⁃ successor (++)
 
 𝐁𝐢𝐧𝐚𝐫𝐲 𝐫𝐞𝐥𝐚𝐭𝐢𝐨𝐧𝐬:
- ⁃ implication (⟹)
- ⁃ conjunction (∧)
  ⁃ equality (=₂)
  ⁃ is-a
+ ⁃ implication (⟹)
  ⁃ inequality (≠)
+ ⁃ conjunction (∧)
 
 𝐓𝐡𝐞𝐨𝐫𝐲 𝐞𝐥𝐚𝐛𝐨𝐫𝐚𝐭𝐢𝐨𝐧:
 

@@ -5,7 +5,7 @@ ft = p.ft
 
 t = u.t(
     symbol=f'theory 2.1: the Peano axioms',
-    extended_theories=ft, theory_foundation_system=ft)
+    extended_theory=ft)
 
 # simple-objct declarations
 zero = u.o('0')
