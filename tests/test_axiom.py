@@ -15,8 +15,8 @@ class TestAxiom(TestCase):
         content5 = random_data.random_sentence()
         a1 = u.axiom(content1)
         a2 = u.axiom(content2)
-        a3 = u.axiom(content3, long_name=p.LongName('1.1.1'))
-        a4 = u.axiom(content4, long_name='1.1.2')
+        a3 = u.axiom(content3, header=p.ObjctHeader('1.1.1'))
+        a4 = u.axiom(content4, header='1.1.2')
         a5 = u.axiom(content5, '1.1.3')
 
         print(a1.repr_as_statement())

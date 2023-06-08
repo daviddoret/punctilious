@@ -223,10 +223,10 @@ class Symbol:
             return f'{self.base}{repm.subscriptify(self.index)}'
 
 
-class LongName:
-    """A specialized string-like object to represent things in text.
+class ObjctHeader:
+    """A header to introduce some symbolic-objcts in reports.
 
-    Some properties of long-names:
+    Features:
     - long-names have a short (reference) and long (long-name) version.
     - long-names do not have an index.
     - long-names comprise a category that must be consistent with
@@ -262,12 +262,12 @@ class LongName:
         :param cap: Whether the representation must be capitalized (default: False).
         :return: str
         """
-        return self.repr_as_reference(cap=cap)
+        return self.repr_reference(cap=cap)
 
-    def repr_as_long_name(self, cap: bool = False):
+    def repr_header(self, cap: bool = False):
         return f'{self.category.repr_as_natural_language(cap=cap)} {self.reference}{"" if self.title is None else " - " + self.title}'
 
-    def repr_as_reference(self, cap: bool = False):
+    def repr_reference(self, cap: bool = False):
         cap = False if cap is None else cap
         return f'{self.category.repr_as_natural_language(cap=cap)} {self.reference}'
 
@@ -316,7 +316,7 @@ class SymbolicObjct:
             is_universe_of_discourse=None,
             universe_of_discourse=None,
             echo=None,
-            long_name=None):
+            header=None):
         echo = get_config(echo, configuration.echo_symbolic_objct, configuration.echo_default, fallback_value=False)
         self._declarative_classes = frozenset()
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
@@ -330,7 +330,7 @@ class SymbolicObjct:
             isinstance(symbol, Symbol),
             'The symbol of a symbolic-objct must be of type Symbol.')
         self.symbol = symbol
-        self.long_name = long_name
+        self.header = header
         self.is_theory_foundation_system = is_theory_foundation_system
         if not is_universe_of_discourse:
             self.universe_of_discourse = universe_of_discourse
@@ -427,26 +427,26 @@ class SymbolicObjct:
                 self.symbol.base) == 1
         return self.symbol.repr(hide_index=hide_index)
 
-    def repr_as_long_name(self, cap: bool = False):
+    def repr_header(self, cap: bool = False):
         global configuration
-        if self.long_name is None:
+        if self.header is None:
             # If we have no long-name for this symbolic-objct,
             # we use the (mandatory) symbol as a fallback method.
             return self.repr_as_symbol()
-        return self.long_name.repr_as_long_name(cap=cap)
+        return self.header.repr_header(cap=cap)
 
-    def repr_as_reference(self, cap: bool = False):
+    def repr_reference(self, cap: bool = False):
         global configuration
-        if self.long_name is None:
+        if self.header is None:
             # If we have no long-name for this symbolic-objct,
             # we use the (mandatory) symbol as a fallback method.
             return self.repr_as_symbol()
-        return self.long_name.repr_as_reference(cap=cap)
+        return self.header.repr_reference(cap=cap)
 
     def repr(self, expanded=None):
         # If a long-name is available, represent the objct as a reference.
         # Otherwise, represent it as a symbol.
-        return self.repr_as_reference()
+        return self.repr_reference()
 
 
 class TheoreticalObjct(SymbolicObjct):
@@ -472,7 +472,7 @@ class TheoreticalObjct(SymbolicObjct):
 
     def __init__(
             self, symbol,
-            is_theory_foundation_system=None, universe_of_discourse=None, echo=None, long_name=None):
+            is_theory_foundation_system=None, universe_of_discourse=None, echo=None, header=None):
         # pseudo-class properties. these must be overwritten by
         # the parent constructor after calling __init__().
         # the rationale is that checking python types fails
@@ -483,7 +483,7 @@ class TheoreticalObjct(SymbolicObjct):
             symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
             universe_of_discourse=universe_of_discourse,
-            long_name=long_name)
+            header=header)
         super()._declare_class_membership(classes.theoretical_objct)
 
     def get_variable_set(self):
@@ -1242,7 +1242,7 @@ class Axiom(TheoreticalObjct):
     """
 
     def __init__(
-            self, natural_language, u, symbol=None, auto_index=None, echo=None, long_name=None):
+            self, natural_language, u, symbol=None, auto_index=None, echo=None, header=None):
         """
 
         :param natural_language: The axiom's content in natural-language.
@@ -1260,14 +1260,14 @@ class Axiom(TheoreticalObjct):
         verify(natural_language != '',
                'Parameter natural-language is an empty string (after trimming).')
         self.natural_language = natural_language
-        if long_name is None:
+        if header is None:
             # Long-names are not a mandatory attribute,
             # it is available to improve readability in reports.
             pass
-        elif isinstance(long_name, str):
-            long_name = LongName(long_name, category=statement_categories.axiom, title=None)
-        elif long_name.category is not statement_categories.axiom:
-            long_name = LongName(long_name.reference, category=statement_categories.axiom, title=long_name.title)
+        elif isinstance(header, str):
+            header = ObjctHeader(header, category=statement_categories.axiom, title=None)
+        elif header.category is not statement_categories.axiom:
+            header = ObjctHeader(header.reference, category=statement_categories.axiom, title=header.title)
             # warnings.warn('A new long-name was generated to force its category property to: axiom.')
         if symbol is None:
             # If no symbol is passed as a parameter,
@@ -1281,7 +1281,7 @@ class Axiom(TheoreticalObjct):
             index = u.index_symbol(base=symbol) if auto_index else None
             symbol = Symbol(base=symbol, index=index)
         super().__init__(
-            universe_of_discourse=u, symbol=symbol, echo=echo, long_name=long_name)
+            universe_of_discourse=u, symbol=symbol, echo=echo, header=header)
         super()._declare_class_membership(declarative_class_list.axiom)
         u.cross_reference_axiom(self)
         if echo:
@@ -1289,8 +1289,8 @@ class Axiom(TheoreticalObjct):
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
-        algebraic_name = '' if self.long_name is None else f' ({self.repr_as_symbol()})'
-        text = f'{repm.serif_bold(self.repr_as_long_name(cap=True))}{algebraic_name}: “{self.natural_language}”'
+        algebraic_name = '' if self.header is None else f' ({self.repr_as_symbol()})'
+        text = f'{repm.serif_bold(self.repr_header(cap=True))}{algebraic_name}: “{self.natural_language}”'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -2766,7 +2766,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         self.variables = dict()
         # Auto-index index
         self.symbol_indexes = dict()
-        self.long_names = dict()
+        self.headers = dict()
         # Well-known objects
         self._biconditional_relation = None
         self._conjunction_relation = None
@@ -2797,7 +2797,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         super()._declare_class_membership(classes.universe_of_discourse)
 
     def axiom(
-            self, natural_language, long_name=None, symbol=None, echo=None):
+            self, natural_language, header=None, symbol=None, echo=None):
         """Elaborate a new axiom in this universe-of-discourse.
 
         :param natural_language:
@@ -2805,7 +2805,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         :param echo:
         :return:
         """
-        return self.elaborate_axiom(natural_language=natural_language, long_name=long_name, symbol=symbol, echo=echo)
+        return self.elaborate_axiom(natural_language=natural_language, header=header, symbol=symbol, echo=echo)
 
     @property
     def biconditional_relation(self):
@@ -3041,13 +3041,13 @@ class UniverseOfDiscourse(SymbolicObjct):
             'that it is referenced with a unique symbol.')
         if o not in self.symbolic_objcts:
             self.symbolic_objcts[o.symbol] = o
-        if o.long_name is not None:
+        if o.header is not None:
             # If the symbolic_objct has a long-name,
             # assure the unicity of this long-name in the universe-of-discourse.
-            verify(o.long_name not in self.long_names.keys(),
-                   'The long_name of symbolic_objct o1 is already referenced by o2.',
+            verify(o.header not in self.headers.keys(),
+                   'The header of symbolic_objct o1 is already referenced by o2.',
                    o1=o)
-            self.long_names[o.long_name] = o
+            self.headers[o.header] = o
 
     def cross_reference_theory(self, t: TheoryElaboration):
         """Cross-references a theory in this universe-of-discourse.
@@ -3281,10 +3281,10 @@ class UniverseOfDiscourse(SymbolicObjct):
             reference=reference, title=title, echo=echo)
 
     def elaborate_axiom(
-            self, natural_language, long_name=None, symbol=None, echo=None):
+            self, natural_language, header=None, symbol=None, echo=None):
         """Elaborate a new axiom 𝑎 in this universe-of-discourse."""
         return Axiom(
-            u=self, natural_language=natural_language, long_name=long_name, symbol=symbol, echo=echo)
+            u=self, natural_language=natural_language, header=header, symbol=symbol, echo=echo)
 
     def elaborate_definition(
             self, natural_language, symbol=None, theory=None, reference=None,
