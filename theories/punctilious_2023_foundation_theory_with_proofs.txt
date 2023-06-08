@@ -25,16 +25,16 @@ Let 4 be a simple-objct denoted as ⌜ 4 ⌝.
 Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 
 𝐔𝐧𝐚𝐫𝐲 𝐫𝐞𝐥𝐚𝐭𝐢𝐨𝐧𝐬:
- ⁃ ¬
+ ⁃ negation (¬)
 
 𝐁𝐢𝐧𝐚𝐫𝐲 𝐫𝐞𝐥𝐚𝐭𝐢𝐨𝐧𝐬:
- ⁃ inequality (≠)
- ⁃ ⟹
- ⁃ logical-disjunction (∨)
- ⁃ equality (=₂)
  ⁃ element-of (∈)
- ⁃ ∧
  ⁃ is
+ ⁃ logical-disjunction (∨)
+ ⁃ inequality (≠)
+ ⁃ equality (=₂)
+ ⁃ implication (⟹)
+ ⁃ conjunction (∧)
 
 𝐓𝐡𝐞𝐨𝐫𝐲 𝐞𝐥𝐚𝐛𝐨𝐫𝐚𝐭𝐢𝐨𝐧:
 

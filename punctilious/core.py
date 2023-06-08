@@ -3294,7 +3294,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         if self.biconditional_relation is None:
             self.biconditional_relation = self.r(
                 2, '⟺', Formula.infix_operator_representation,
-                signal_proposition=True)
+                signal_proposition=True, dashed_name='biconditional')
 
     def include_conjunction_relation(self):
         """Assure the existence of the conjunction-relation in this
@@ -3307,7 +3307,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         if self.conjunction_relation is None:
             self.conjunction_relation = self.r(
                 2, '∧', Formula.infix_operator_representation,
-                signal_proposition=True)
+                signal_proposition=True, dashed_name='conjunction')
 
     def include_equality_relation(self):
         """Assure the existence of the equality-relation in this
@@ -3318,7 +3318,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         if self.equality_relation is None:
             self.equality_relation = self.r(
                 2, '=', Formula.infix_operator_representation,
-                signal_proposition=True)
+                signal_proposition=True, dashed_name='equality')
 
     def include_falsehood_simple_objct(self):
         """Assure the existence of the falsehood simple-objct in this
@@ -3338,7 +3338,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         if self.implication_relation is None:
             self.implication_relation = self.r(
                 2, '⟹', Formula.infix_operator_representation,
-                signal_proposition=True)
+                signal_proposition=True, dashed_name='implication')
 
     def include_inconsistent_relation(self):
         """Assure the existence of the inconsistent-relation in this
@@ -3349,7 +3349,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         if self.inconsistent_relation is None:
             self.inconsistent_relation = self.r(
                 1, 'Inc', Formula.prefix_operator_representation,
-                signal_proposition=True)
+                signal_proposition=True, dashed_name='inconsistent')
 
     def include_negation_relation(self):
         """Assure the existence of the negation relation in this
@@ -3360,7 +3360,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         if self.negation_relation is None:
             self.negation_relation = self.r(
                 1, '¬', Formula.prefix_operator_representation,
-                signal_proposition=True)
+                signal_proposition=True, dashed_name='negation')
 
     def include_provable_from_relation(self):
         """Assure the existence of the provable-from-relation in this
@@ -3371,7 +3371,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         if self.provable_from_relation is None:
             self.provable_from_relation = self.r(
                 2, '⊢', Formula.infix_operator_representation,
-                signal_proposition=True)
+                signal_proposition=True, dashed_name='provable-from')
 
     def include_truth_simple_objct(self):
         """Assure the existence of the truth simple-objct in this
