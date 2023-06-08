@@ -5,11 +5,11 @@ import repm
 
 u = core.UniverseOfDiscourse()
 ft = core.TheoryElaboration(
-    symbol='ℱ',
     is_theory_foundation_system=True, universe_of_discourse=u,
     include_conjunction_introduction_inference_rule=True,
     include_modus_ponens_inference_rule=True,
-    include_double_negation_introduction_inference_rule=True)
+    include_double_negation_introduction_inference_rule=True,
+    dashed_name='foundation-theory-1')
 
 axiom_01 = ft.postulate_axiom(u.elaborate_axiom(
     'A theory is a... (define punctilious data model).'))

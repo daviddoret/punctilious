@@ -455,12 +455,13 @@ class SymbolicObjct:
             return None
         return self.dashed_name.repr_dashed_name()
 
-    def repr_long_name(self):
+    def repr_fully_qualified_name(self):
         """"""
-        if self.dashed_name is None:
-            return self.repr_as_symbol()
-        else:
-            return f'{self.repr_dashed_name()} ({self.repr_as_symbol()})'
+        fully_qualified_name = self.repr_header() if self.header is not None else self.repr_dashed_name() if self.dashed_name is not None else self.repr_as_symbol()
+        fully_qualified_name += ' (' if self.header is not None or self.dashed_name is not None else ''
+        fully_qualified_name += self.repr_dashed_name() + ', ' if self.header is not None and self.dashed_name is not None else ''
+        fully_qualified_name += self.repr_as_symbol() + ')' if self.header is not None or self.dashed_name is not None else ''
+        return fully_qualified_name
 
     def repr_as_declaration(self):
         return f'Let {self.repr_as_symbol()} be a symbolic-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
@@ -1360,17 +1361,18 @@ class Axiom(TheoreticalObjct):
         if echo:
             repm.prnt(self.repr_as_statement())
 
-    def repr_as_statement(self, output_proofs=True):
+    def repr_as_statement(self, output_proofs=True, wrap: bool = True):
         """Return a representation that expresses and justifies the statement."""
         algebraic_name = '' if self.header is None else f' ({self.repr_as_symbol()})'
         text = f'{repm.serif_bold(self.repr_header(cap=True))}{algebraic_name}: “{self.natural_language}”'
-        return '\n'.join(
-            textwrap.wrap(
+        if wrap:
+            text = '\n'.join(textwrap.wrap(
                 text=text, width=70,
                 subsequent_indent=f'\t',
                 break_on_hyphens=False,
                 expand_tabs=True,
                 tabsize=4))
+        return text
 
 
 class AxiomInclusion(Statement):
@@ -1798,20 +1800,22 @@ class TheoryElaboration(TheoreticalObjct):
 
     def __init__(
             self, is_theory_foundation_system=None,
-            symbol=None, extended_theories=None,
+            symbol=None, extended_theory: (None, TheoreticalObjct) = None,
             universe_of_discourse=None, theory_foundation_system=None,
             include_conjunction_introduction_inference_rule: bool = False,
             include_modus_ponens_inference_rule: bool = False,
             include_biconditional_introduction_inference_rule: bool = False,
             include_double_negation_introduction_inference_rule: bool = False,
             include_inconsistency_introduction_inference_rule: bool = False,
-            stabilized: bool = False
+            stabilized: bool = False,
+            dashed_name=None,
+            header=None
     ):
         """
 
         :param theory: :param is_foundation_system: True if this theory is
         the foundation-system, False otherwise. :param symbol:
-         :param extended_theories: :param is_an_element_of_itself:
+         :param extended_theory: :param is_an_element_of_itself:
         """
         # self.symbols = dict()
         self._consistency = consistency_values.undetermined
@@ -1820,18 +1824,7 @@ class TheoryElaboration(TheoreticalObjct):
         self.definition_inclusions = tuple()
         self.statements = tuple()
         self._theory_foundation_system = theory_foundation_system
-        extended_theories = set() if extended_theories is None else extended_theories
-        if isinstance(extended_theories, TheoryElaboration):
-            # A shortcut to pass a single extended theory without casting a set.
-            extended_theories = {extended_theories}
-        assert isinstance(extended_theories, set)
-        if theory_foundation_system is not None and \
-                theory_foundation_system not in extended_theories:
-            extended_theories = extended_theories.union(
-                {theory_foundation_system})
-        for extended_theory in extended_theories:
-            assert isinstance(extended_theory, TheoryElaboration)
-        self.extended_theories = extended_theories
+        self._extended_theory = extended_theory
         self._commutativity_of_equality = None
         self._equality = None
         self._negation = None
@@ -1863,7 +1856,9 @@ class TheoryElaboration(TheoreticalObjct):
         super().__init__(
             symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
-            universe_of_discourse=universe_of_discourse)
+            universe_of_discourse=universe_of_discourse,
+            dashed_name=dashed_name,
+            header=header)
         # Inference rules
         # Biconditional introduction
         self._biconditional_introduction_inference_rule = None
@@ -2084,6 +2079,11 @@ class TheoryElaboration(TheoreticalObjct):
         return DirectDefinitionInference(
             valid_proposition=valid_proposition, d=d, symbol=symbol,
             theory=self, reference=reference, title=title)
+
+    @property
+    def extended_theory(self):
+        """None if this is a root theory, the theory that this theory extends otherwise."""
+        return self._extended_theory
 
     @property
     def inconsistency_introduction_inference_rule(self):
@@ -2328,25 +2328,26 @@ class TheoryElaboration(TheoreticalObjct):
             valid_proposition=valid_proposition, d=d, symbol=symbol,
             reference=reference, title=title)
 
-    def get_theory_extension(self):
-        """Return the set of all theories that includes this theory and all the
-        theories it extends recursively."""
-        return self._get_theory_extension(theory_extension={self})
+    def get_theory_chain(self, chain=None):
+        """Return this theory's chain as a python frozenset.
 
-    def _get_theory_extension(self, theory_extension):
-        for t in self.extended_theories:
-            if t not in theory_extension:
-                theory_extension = theory_extension.union({t})
-                # TODO: Optimize this code by adding a private function and pass the current list to it.
-                theory_extension = theory_extension.union(
-                    t._get_theory_extension(theory_extension))
-        return theory_extension
+        Note:
+        -----
+        The theory-chain is distinct from the recursive list of theories contained in the theory.
+        In effect, a theory-elaboration may contain hypothesis, and possibly other theory-references.
+        """
+        chain = frozenset() if chain is None else chain
+        if self not in chain:
+            chain = chain.union({self})
+        if self.extended_theory is not None and self.extended_theory not in chain:
+            chain = chain.union(self.extended_theory.get_theory_chain(chain=chain))
+        return chain
 
     def has_objct_in_hierarchy(self, o):
         """Return True if o is in this theory's hierarchy, False otherwise."""
         verify(is_in_class(o, classes.theoretical_objct), 'o is not a member of declarative-class theoretical_objct.',
                slf=self, o=o)
-        return o.theory in self.get_theory_extension()
+        return o.theory in self.get_theory_chain()
 
     def ii(
             self, p, not_p, symbol=None, category=None,
@@ -2550,10 +2551,7 @@ class TheoryElaboration(TheoreticalObjct):
         output = f'\n{repm.serif_bold(self.repr_as_symbol())}'
         output += f'\n{repm.serif_bold("Consistency:")} {str(self.consistency)}'
         output += f'\n{repm.serif_bold("Stabilized:")} {str(self.stabilized)}'
-        output += f'\n{repm.serif_bold("Extended theories:")}'
-        output += f'\nThe following theories are extended by {repm.serif_bold(self.repr_as_symbol())}.'
-        output += ''.join(
-            '\n\t ⁃ ' + t.repr_as_symbol() for t in self.extended_theories)
+        output += f'\n{repm.serif_bold("Extended theory:")} {"N/A" if self.extended_theory is None else self.extended_theory.repr_fully_qualified_name()}'
         output += f'\n\n{repm.serif_bold("Simple-objct declarations:")}'
         # TODO: Limit the listed objects to those that are referenced by the theory,
         #   instead of outputting all objects in the universe-of-discourse.
@@ -2565,7 +2563,7 @@ class TheoryElaboration(TheoreticalObjct):
         arities = frozenset(r.arity for r in relations)
         for a in arities:
             output += repm.serif_bold(f'\n\n{repr_arity_as_text(a).capitalize()} relations:')
-            for r_long_name in frozenset(r.repr_long_name() for r in relations if r.arity == a):
+            for r_long_name in frozenset(r.repr_fully_qualified_name() for r in relations if r.arity == a):
                 output += '\n ⁃ ' + r_long_name
         # output += f'\n\n{repm.serif_bold("Relation declarations:")}'
         # output = output + '\n' + '\n'.join(
@@ -3276,7 +3274,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         """
         return TheoryElaboration(
             symbol=symbol,
-            extended_theories=extended_theories,
+            extended_theory=extended_theories,
             is_theory_foundation_system=is_theory_foundation_system,
             universe_of_discourse=self,
             theory_foundation_system=theory_foundation_system,

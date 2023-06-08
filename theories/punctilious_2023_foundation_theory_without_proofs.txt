@@ -1,9 +1,8 @@
 
-ℱ
+𝒯
 𝐂𝐨𝐧𝐬𝐢𝐬𝐭𝐞𝐧𝐜𝐲: undetermined
 𝐒𝐭𝐚𝐛𝐢𝐥𝐢𝐳𝐞𝐝: False
-𝐄𝐱𝐭𝐞𝐧𝐝𝐞𝐝 𝐭𝐡𝐞𝐨𝐫𝐢𝐞𝐬:
-The following theories are extended by ℱ.
+𝐄𝐱𝐭𝐞𝐧𝐝𝐞𝐝 𝐭𝐡𝐞𝐨𝐫𝐲: N/A
 
 𝐒𝐢𝐦𝐩𝐥𝐞-𝐨𝐛𝐣𝐜𝐭 𝐝𝐞𝐜𝐥𝐚𝐫𝐚𝐭𝐢𝐨𝐧𝐬:
 Let ⊥ be a simple-objct denoted as ⌜ ⊥ ⌝.
@@ -29,12 +28,12 @@ Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 
 𝐁𝐢𝐧𝐚𝐫𝐲 𝐫𝐞𝐥𝐚𝐭𝐢𝐨𝐧𝐬:
  ⁃ element-of (∈)
- ⁃ is
  ⁃ logical-disjunction (∨)
- ⁃ inequality (≠)
- ⁃ equality (=₂)
  ⁃ implication (⟹)
+ ⁃ is
  ⁃ conjunction (∧)
+ ⁃ equality (=₂)
+ ⁃ inequality (≠)
 
 𝐓𝐡𝐞𝐨𝐫𝐲 𝐞𝐥𝐚𝐛𝐨𝐫𝐚𝐭𝐢𝐨𝐧:
 
@@ -53,7 +52,7 @@ Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 
 𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟓: (theory-class ∈ class-of-classes)
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟔: (ℱ ∈ theory-class)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟔: (𝒯 ∈ theory-class)
 
 𝐀𝐱𝐢𝐨𝐦 𝟕: “truth-values is the class whose elements are the
 	theoretical-objects truth and falsehood.”
