@@ -3454,13 +3454,6 @@ class UniverseOfDiscourse(SymbolicObjct):
             self.symbol_indexes[base] += 1
         return self.symbol_indexes[base]
 
-    def a(
-            self, natural_language, symbol=None, theory=None, reference=None,
-            title=None, echo=None):
-        return self.postulate_axiom(
-            natural_language=natural_language, symbol=symbol, theory=theory,
-            reference=reference, title=title, echo=echo)
-
     def d(
             self, natural_language, symbol=None, theory=None, reference=None,
             title=None, echo=None):

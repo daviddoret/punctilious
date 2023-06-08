@@ -15,9 +15,10 @@ class TestInconsistencyIntroduction(TestCase):
         t = u.t(
             'testing-theory',
             include_inconsistency_introduction_inference_rule=True)
-        a = t.a('The arbitrary axiom of testing.')
-        phi1 = t.dai(u.f(r1, o1, o2), a=a)
-        phi2 = t.dai(u.f(u.nt, u.f(r1, o1, o2)), a=a)
+        a = u.axiom('The arbitrary axiom of testing.')
+        ap = t.postulate_axiom(a)
+        phi1 = t.dai(u.f(r1, o1, o2), ap=ap)
+        phi2 = t.dai(u.f(u.nt, u.f(r1, o1, o2)), ap=ap)
         with self.assertWarns(p.InconsistencyWarning):
             phi3 = t.ii(phi1, phi2)
         self.assertEqual('Inc(testing-theory)', phi3.repr())
