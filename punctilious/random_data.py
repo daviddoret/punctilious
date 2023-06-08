@@ -25,3 +25,9 @@ def random_sentence(min_words=3, n=12, p=.2):
     sentence = ' '.join(
         (random_word() for i in range(random.randint(min_words, num_words))))
     return f'{sentence}.'
+
+
+def random_dashed_name(min_words=1, n=3, p=.2):
+    num_words = np.random.binomial(n=n, p=p) + min_words
+    return '-'.join(
+        (random_word() for i in range(random.randint(min_words, num_words))))

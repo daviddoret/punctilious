@@ -272,10 +272,41 @@ class ObjctHeader:
         return f'{self.category.repr_as_natural_language(cap=cap)} {self.reference}'
 
 
-class StatementTitle:
-    """A specialized string-like object to represent statement titles.
+class DashedName:
+    """A dashed-name to provide more semantically meaningful names to symbolic-objcts in reports than symbols.
 
+    Features:
+    - Immutable
     """
+
+    def __init__(self, dashed_named):
+        verify(isinstance(dashed_named, str), 'dashed-name is not of type str.', dashed_named=dashed_named)
+        # TODO: Clean string from non-alphanumeric, digits, dash characters, etc.
+        self._dashed_name = dashed_named
+
+    def __hash__(self):
+        """"""
+        return hash((self._dashed_name))
+
+    def __repr__(self):
+        return self.repr()
+
+    def __str__(self):
+        return self.repr()
+
+    def repr(self):
+        """Return the default representation.
+        """
+        return self.repr_dashed_name()
+
+    def repr_dashed_name(self):
+        """Return a dashed-name representation.
+        """
+        return self._dashed_name
+
+
+class StatementTitleOBSOLETE:
+    """Replaced by ObjctHeader."""
 
     def __init__(self, category, reference, title):
         self.category = category
@@ -312,11 +343,12 @@ class SymbolicObjct:
 
     def __init__(
             self, symbol,
+            universe_of_discourse,
             is_theory_foundation_system=None,
             is_universe_of_discourse=None,
-            universe_of_discourse=None,
             echo=None,
-            header=None):
+            header=None,
+            dashed_name=None):
         echo = get_config(echo, configuration.echo_symbolic_objct, configuration.echo_default, fallback_value=False)
         self._declarative_classes = frozenset()
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
@@ -330,7 +362,10 @@ class SymbolicObjct:
             isinstance(symbol, Symbol),
             'The symbol of a symbolic-objct must be of type Symbol.')
         self.symbol = symbol
-        self.header = header
+        self.header = header  # Header validation is implemented in parent classes with proper category.
+        if isinstance(dashed_name, str):
+            dashed_name = DashedName(dashed_name)
+        self.dashed_name = dashed_name
         self.is_theory_foundation_system = is_theory_foundation_system
         if not is_universe_of_discourse:
             self.universe_of_discourse = universe_of_discourse
@@ -414,6 +449,19 @@ class SymbolicObjct:
     def prnt(self, expanded=False):
         repm.prnt(self.repr(expanded=expanded))
 
+    def repr_dashed_name(self):
+        """"""
+        if self.dashed_name is None:
+            return None
+        return self.dashed_name.repr_dashed_name()
+
+    def repr_long_name(self):
+        """"""
+        if self.dashed_name is None:
+            return self.repr_as_symbol()
+        else:
+            return f'{self.repr_dashed_name()} ({self.repr_as_symbol()})'
+
     def repr_as_declaration(self):
         return f'Let {self.repr_as_symbol()} be a symbolic-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
 
@@ -472,7 +520,7 @@ class TheoreticalObjct(SymbolicObjct):
 
     def __init__(
             self, symbol,
-            is_theory_foundation_system=None, universe_of_discourse=None, echo=None, header=None):
+            is_theory_foundation_system=None, universe_of_discourse=None, echo=None, header=None, dashed_name=None):
         # pseudo-class properties. these must be overwritten by
         # the parent constructor after calling __init__().
         # the rationale is that checking python types fails
@@ -483,7 +531,8 @@ class TheoreticalObjct(SymbolicObjct):
             symbol=symbol,
             is_theory_foundation_system=is_theory_foundation_system,
             universe_of_discourse=universe_of_discourse,
-            header=header)
+            header=header,
+            dashed_name=dashed_name)
         super()._declare_class_membership(classes.theoretical_objct)
 
     def get_variable_set(self):
@@ -1213,7 +1262,7 @@ class Statement(TheoreticalObjct):
             symbol = Symbol(
                 base=self.category.symbol_base, index=self.statement_index)
         reference = symbol.index if reference is None else reference
-        self.title = StatementTitle(
+        self.title = StatementTitleOBSOLETE(
             category=category, reference=reference, title=title)
         super().__init__(
             symbol=symbol,
@@ -1679,7 +1728,7 @@ class Note(AtheoreticalStatement):
             symbol = Symbol(
                 base=self.category.symbol_base, index=self.statement_index)
         reference = symbol.index if reference is None else reference
-        self.title = StatementTitle(
+        self.title = StatementTitleOBSOLETE(
             category=category, reference=reference, title=title)
         super().__init__(
             symbol=symbol,
@@ -2567,7 +2616,7 @@ class Relation(TheoreticalObjct):
     def __init__(
             self, arity, symbol=None, formula_rep=None,
             signal_proposition=None, signal_theoretical_morphism=None,
-            implementation=None, universe_of_discourse=None):
+            implementation=None, universe_of_discourse=None, dashed_name=None):
         assert isinstance(universe_of_discourse, UniverseOfDiscourse)
         signal_proposition = False if signal_proposition is None else signal_proposition
         signal_theoretical_morphism = False if signal_theoretical_morphism is None else signal_theoretical_morphism
@@ -2590,7 +2639,7 @@ class Relation(TheoreticalObjct):
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
         super().__init__(
-            universe_of_discourse=universe_of_discourse, symbol=symbol)
+            universe_of_discourse=universe_of_discourse, symbol=symbol, dashed_name=dashed_name)
         self.universe_of_discourse.cross_reference_relation(r=self)
         super()._declare_class_membership(classes.relation)
 
