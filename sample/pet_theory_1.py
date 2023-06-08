@@ -18,7 +18,7 @@ a1 = core.AxiomInclusion(
     t=t1, natural_language=f'{mira_name.capitalize()} is a {dog_name}.',
     capitalizable=True)
 mira_is_a_dog = core.DirectAxiomInference(
-    theory=t1, a=a1,
+    theory=t1, ap=a1,
     valid_proposition=core.Formula(
         theory=t1, relation=is_a, parameters=(mira, dog)))
 
@@ -33,7 +33,7 @@ if_x_is_a_dog_then_x_is_a_mammal_formula = core.Formula(
     theory=t1, relation=core.foundation_theory.relations.implies,
     parameters=(x_is_a_dog, x_is_a_mammal))
 if_x_is_a_dog_then_x_is_a_mammal = core.DirectAxiomInference(
-    theory=t1, a=a2,
+    theory=t1, ap=a2,
     valid_proposition=if_x_is_a_dog_then_x_is_a_mammal_formula)
 # mira_is_a_mammal_formula = core.Formula(theory=t1, relation=is_a, parameters=(mira, mammal))
 

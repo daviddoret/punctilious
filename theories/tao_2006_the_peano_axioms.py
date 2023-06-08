@@ -27,7 +27,7 @@ nla_2_2_1 = t.postulate_axiom(u.elaborate_axiom(
     'If n is a natural number, then n++ is a natural number.',
     '2.2.1'))
 with u.v('n') as n:
-    suc = u.r(1, '++', formula_rep=p.Formula.postfix_operator_representation)
+    suc = u.r(1, '++', formula_rep=p.Formula.postfix_operator_representation, dashed_name='successor')
     fa_2_2_2 = t.dai(
         u.f(u.implies, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
         nla_2_2_1,
@@ -101,7 +101,7 @@ with u.v('n') as n:
             u.implies,
             u.f(is_a, n, nat),
             u.f(ft.inequality, u.f(suc, n), zero)),
-        a=a_2_3, reference='2.3.1')
+        ap=a_2_3, reference='2.3.1')
 
 
 # Proposition 2.1.6. 4 is not equal to 0.
@@ -132,7 +132,7 @@ with u.v('n') as n, u.v('m') as m:
                     u.f(is_a, m, nat)),
                 u.f(t.inequality, n, m)),
             u.f(t.inequality, u.f(suc, n), u.f(suc, m)))
-        , reference='2.4.1', a=axiom_2_4)
+        , reference='2.4.1', ap=axiom_2_4)
 
 # Proposition 2.1.8: 6 is not equal to 2.
 

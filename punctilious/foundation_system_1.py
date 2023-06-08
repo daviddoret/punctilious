@@ -25,13 +25,13 @@ axiom_03 = ft.postulate_axiom(u.elaborate_axiom(
 class_of_classes = u.o('class-of-classes')
 element_of = u.r(
     2, '∈', formula_rep=core.Formula.infix_operator_representation,
-    signal_proposition=True)
-fa1 = ft.dai(u.f(element_of, class_of_classes, class_of_classes), a=axiom_02)
+    signal_proposition=True, dashed_name='element-of')
+fa1 = ft.dai(u.f(element_of, class_of_classes, class_of_classes), ap=axiom_02)
 
 nla_04 = ft.postulate_axiom(u.elaborate_axiom('The theory-class is the class of all theories'))
 theory_class = u.o('theory-class')
-fa2b = ft.dai(u.f(element_of, theory_class, class_of_classes), a=axiom_02)
-fa2c = ft.dai(u.f(element_of, ft, theory_class), a=axiom_02)
+fa2b = ft.dai(u.f(element_of, theory_class, class_of_classes), ap=axiom_02)
+fa2c = ft.dai(u.f(element_of, ft, theory_class), ap=axiom_02)
 # TODO: Implement a trigger to automatically add a statement (t in theory-class)
 #   for every existing and new theory that is declared?
 
@@ -43,9 +43,9 @@ falsehood = u.o('false')
 truth = u.o('true')
 truth_values = u.o('truth-values')
 proposition_060 = ft.dai(
-    u.f(element_of, truth_values, class_of_classes), a=axiom_03)
-proposition_070 = ft.dai(u.f(element_of, truth, truth_values), a=axiom_03)
-proposition_080 = ft.dai(u.f(element_of, falsehood, truth_values), a=axiom_03)
+    u.f(element_of, truth_values, class_of_classes), ap=axiom_03)
+proposition_070 = ft.dai(u.f(element_of, truth, truth_values), ap=axiom_03)
+proposition_080 = ft.dai(u.f(element_of, falsehood, truth_values), ap=axiom_03)
 
 # foundation propositional relations
 nla_09 = ft.postulate_axiom(u.elaborate_axiom(natural_language=
@@ -55,30 +55,30 @@ nla_09 = ft.postulate_axiom(u.elaborate_axiom(natural_language=
 propositional_relations_class = u.o('propositional-relations-class')
 ft.dai(
     u.f(element_of, propositional_relations_class, class_of_classes),
-    a=axiom_03)
+    ap=axiom_03)
 
 disjunction = u.r(
     2, '∨', core.Formula.infix_operator_representation,
-    signal_proposition=True)
+    signal_proposition=True, dashed_name='logical-disjunction')
 ft.inequality = u.r(
     2, '≠', core.Formula.infix_operator_representation,
-    signal_proposition=True)
+    signal_proposition=True, dashed_name='inequality')
 ft.equality = u.r(
     2, '=', core.Formula.infix_operator_representation,
-    signal_proposition=True)
+    signal_proposition=True, dashed_name='equality')
 ft.dai(
     u.f(element_of, u.conjunction_relation, propositional_relations_class),
-    a=nla_09)
-ft.dai(u.f(element_of, disjunction, propositional_relations_class), a=nla_09)
+    ap=nla_09)
+ft.dai(u.f(element_of, disjunction, propositional_relations_class), ap=nla_09)
 ft.dai(
     u.f(element_of, u.implication_relation, propositional_relations_class),
-    a=nla_09)
+    ap=nla_09)
 ft.dai(
     u.f(element_of, u.nt, propositional_relations_class),
-    a=nla_09)
+    ap=nla_09)
 ft.dai(
     u.f(element_of, ft.inequality, propositional_relations_class),
-    a=nla_09)
+    ap=nla_09)
 nla_01b = ft.postulate_axiom(u.elaborate_axiom(
     '= is a binary relation such that, given any two theoretical-objcts x and y, '
     'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.'))
@@ -104,8 +104,8 @@ nla_10 = ft.postulate_axiom(u.elaborate_axiom(
     'and all theory-formula-statements whose relation is defined '
     'from these. Its elements are called propositions.'))
 proposition_class = u.o('proposition-class')
-ft.dai(u.f(element_of, truth, class_of_classes), a=nla_10)
-ft.dai(u.f(element_of, falsehood, class_of_classes), a=nla_10)
+ft.dai(u.f(element_of, truth, class_of_classes), ap=nla_10)
+ft.dai(u.f(element_of, falsehood, class_of_classes), ap=nla_10)
 
 nla_20 = ft.postulate_axiom(u.elaborate_axiom(
     'If P is a proposition, then either the statement P has truth value true,'
@@ -114,8 +114,8 @@ has_truth_value = u.r(
     2, 'is',
     formula_rep=core.Formula.infix_operator_representation,
     signal_proposition=True)
-ft.dai(u.f(has_truth_value, truth, truth), a=nla_10)
-ft.dai(u.f(has_truth_value, falsehood, falsehood), a=nla_10)
+ft.dai(u.f(has_truth_value, truth, truth), ap=nla_10)
+ft.dai(u.f(has_truth_value, falsehood, falsehood), ap=nla_10)
 
 nla_30 = ft.postulate_axiom(u.elaborate_axiom(
     '¬ is a unary relation. '
@@ -134,7 +134,7 @@ with u.v() as p, u.v() as t:
             u.f(
                 has_truth_value, u.f(u.nt, u.f(u.nt, p)),
                 t)),
-        a=nla_09_50)
+        ap=nla_09_50)
 
 
 # CONJUNCTION

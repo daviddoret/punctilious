@@ -25,24 +25,15 @@ Let 3 be a simple-objct denoted as ⌜ 3 ⌝.
 Let 4 be a simple-objct denoted as ⌜ 4 ⌝.
 Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 
-𝐑𝐞𝐥𝐚𝐭𝐢𝐨𝐧 𝐝𝐞𝐜𝐥𝐚𝐫𝐚𝐭𝐢𝐨𝐧𝐬:
-Let =₁ be a binary relation denoted as ⌜ =₁ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ =₁ 𝐱₂ ⌝).
-Let ∧ be a binary relation denoted as ⌜ ∧ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∧ 𝐱₂ ⌝).
-Let ⟹ be a binary relation denoted as ⌜ ⟹ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ⟹ 𝐱₂ ⌝).
-Let ¬ be a unary relation denoted as ⌜ ¬ ⌝, that signals well-formed formulae in prefix-operator syntax (e.g.: ⌜ ¬𝐱 ⌝).
-Let ⟺ be a binary relation denoted as ⌜ ⟺ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ⟺ 𝐱₂ ⌝).
-Let ∈ be a binary relation denoted as ⌜ ∈ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∈ 𝐱₂ ⌝).
-Let ∨ be a binary relation denoted as ⌜ ∨ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ∨ 𝐱₂ ⌝).
-Let ≠ be a binary relation denoted as ⌜ ≠ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ ≠ 𝐱₂ ⌝).
-Let =₂ be a binary relation denoted as ⌜ =₂ ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ =₂ 𝐱₂ ⌝).
-Let is be a binary relation denoted as ⌜ is ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ is 𝐱₂ ⌝).
-Let relation-declaration be a binary relation denoted as ⌜ relation-declaration ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ relation-declaration(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
-Let simple-objct-declaration be a binary relation denoted as ⌜ simple-objct-declaration ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ simple-objct-declaration(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
-Let theory-declaration be a binary relation denoted as ⌜ theory-declaration ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ theory-declaration(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
-Let theory-extension be a binary relation denoted as ⌜ theory-extension ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ theory-extension(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
-Let variable-declaration be a binary relation denoted as ⌜ variable-declaration ⌝, that signals well-formed formulae in function-call syntax (e.g.: ⌜ variable-declaration(𝐱₁, 𝐱₂ ,… ,𝐱ₙ) ⌝).
-Let is-a be a binary relation denoted as ⌜ is-a ⌝, that signals well-formed formulae in infix-operator syntax (e.g.: ⌜ 𝐱₁ is-a 𝐱₂ ⌝).
-Let ++ be a unary relation denoted as ⌜ ++ ⌝, that signals well-formed formulae in postfix-operator syntax (e.g.: ⌜ 𝐱++ ⌝).
+𝐔𝐧𝐚𝐫𝐲 𝐫𝐞𝐥𝐚𝐭𝐢𝐨𝐧𝐬:
+ ⁃ successor (++)
+
+𝐁𝐢𝐧𝐚𝐫𝐲 𝐫𝐞𝐥𝐚𝐭𝐢𝐨𝐧𝐬:
+ ⁃ inequality (≠)
+ ⁃ is-a
+ ⁃ ⟹
+ ⁃ equality (=₂)
+ ⁃ ∧
 
 𝐓𝐡𝐞𝐨𝐫𝐲 𝐞𝐥𝐚𝐛𝐨𝐫𝐚𝐭𝐢𝐨𝐧:
 

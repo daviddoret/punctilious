@@ -792,13 +792,17 @@ class TheoreticalObjct(SymbolicObjct):
         else:
             return self
 
-    def list_theoretical_objcts_recursively(self):
+    def list_theoretical_objcts_recursively(self, ol=None):
         """Return a python frozenset of this theoretical_objct and all theoretical_objcts it contains."""
-        return frozenset({self})
+        if ol is None:
+            return frozenset({self})
+        else:
+            return ol.union({self})
 
-    def list_relations_recursively(self):
+    def list_relations_recursively(self, ol=None):
         """Return a python frozenset of this theoretical_objct and all theoretical_objcts it contains, providing that they are relations."""
-        ol = self.list_theoretical_objcts_recursively()
+        ol = frozenset() if ol is None else ol
+        ol = self.list_theoretical_objcts_recursively(ol=ol)
         return frozenset(r for r in ol if is_in_class(r, classes.relation))
 
 
@@ -1109,12 +1113,15 @@ class Formula(TheoreticalObjct):
                 return False
         return True
 
-    def list_theoretical_objcts_recursively(self):
+    def list_theoretical_objcts_recursively(self, ol=None):
         """Return a python frozenset of this formula and all theoretical_objcts it contains."""
-        ol = frozenset({self})
-        ol = ol.union(self.relation.list_theoretical_objcts_recursively())
+        ol = frozenset() if ol is None else ol
+        ol = ol.union({self})
+        if self.relation not in ol:
+            ol = ol.union(self.relation.list_theoretical_objcts_recursively(ol=ol))
         for p in self.parameters:
-            ol = ol.union(p.list_theoretical_objcts_recursively())
+            if p not in ol:
+                ol = ol.union(p.list_theoretical_objcts_recursively(ol=ol))
         return ol
 
     def lock_variable_scope(self):
@@ -1501,10 +1508,12 @@ class FormulaStatement(Statement):
     def __str__(self):
         return self.repr(expanded=True)
 
-    def list_theoretical_objcts_recursively(self):
+    def list_theoretical_objcts_recursively(self, ol=None):
         """Return a python frozenset of this formula-statement and all theoretical_objcts it contains."""
-        ol = frozenset({self})
-        ol = ol.union(self.valid_proposition.list_theoretical_objcts_recursively())
+        ol = frozenset() if ol is None else ol
+        ol = ol.union({self})
+        if self.valid_proposition not in ol:
+            ol = ol.union(self.valid_proposition.list_theoretical_objcts_recursively(ol=ol))
         return ol
 
     def repr(self, expanded=None):
@@ -1529,18 +1538,18 @@ class DirectAxiomInference(FormulaStatement):
     """
 
     def __init__(
-            self, valid_proposition, a, symbol=None, theory=None, reference=None,
+            self, valid_proposition, ap, symbol=None, theory=None, reference=None,
             title=None, category=None, echo=None):
         assert isinstance(theory, TheoryElaboration)
-        assert isinstance(a, AxiomInclusion)
-        assert theory.has_objct_in_hierarchy(a)
+        assert isinstance(ap, AxiomInclusion)
+        assert theory.has_objct_in_hierarchy(ap)
         assert isinstance(valid_proposition, Formula)
-        self.axiom = a
+        self.axiom = ap
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             symbol=symbol, category=category,
             reference=reference, title=title, echo=echo)
-        assert a.statement_index < self.statement_index
+        assert ap.statement_index < self.statement_index
         super()._declare_class_membership(declarative_class_list.direct_axiom_inference)
 
     def repr_as_statement(self, output_proofs=True):
@@ -2060,10 +2069,10 @@ class TheoryElaboration(TheoreticalObjct):
         self._double_negation_introduction_inference_rule = ir
 
     def elaborate_direct_axiom_inference(
-            self, valid_proposition, a, symbol=None, reference=None, title=None):
+            self, valid_proposition, ap, symbol=None, reference=None, title=None):
         """Elaborate a new direct-axiom-inference in the theory. Shortcut for FormalAxiom(theory=t, ...)"""
         return DirectAxiomInference(
-            valid_proposition=valid_proposition, a=a, symbol=symbol,
+            valid_proposition=valid_proposition, ap=ap, symbol=symbol,
             theory=self, reference=reference, title=title)
 
     def elaborate_direct_definition_inference(
@@ -2221,6 +2230,15 @@ class TheoryElaboration(TheoreticalObjct):
                 symbol=symbol, category=category,
                 reference=reference, title=title)
 
+    def list_theoretical_objcts_recursively(self, ol=None):
+        """Return a python frozenset of this theory and all theoretical_objcts it contains."""
+        ol = frozenset() if ol is None else ol
+        ol = ol.union({self})
+        for s in self.statements:
+            if s not in ol:
+                ol = ol.union(s.list_theoretical_objcts_recursively(ol=ol))
+        return ol
+
     @property
     def modus_ponens_inference_rule(self):
         """Some theories may contain the modus-ponens inference-rule.
@@ -2293,11 +2311,11 @@ class TheoryElaboration(TheoreticalObjct):
         self._equality = r
 
     def dai(
-            self, valid_proposition, a, symbol=None, reference=None, title=None):
+            self, valid_proposition, ap, symbol=None, reference=None, title=None):
         """Elaborate a new direct-axiom-inference in the theory. Shortcut for
         Theory.elaborate_direct_axiom_inference(...)."""
         return self.elaborate_direct_axiom_inference(
-            valid_proposition=valid_proposition, a=a, symbol=symbol,
+            valid_proposition=valid_proposition, ap=ap, symbol=symbol,
             reference=reference, title=title)
 
     def ddi(
@@ -2542,10 +2560,17 @@ class TheoryElaboration(TheoreticalObjct):
         output = output + '\n' + '\n'.join(
             o.repr_as_declaration() for o in
             self.universe_of_discourse.simple_objcts.values())
-        output += f'\n\n{repm.serif_bold("Relation declarations:")}'
-        output = output + '\n' + '\n'.join(
-            r.repr_as_declaration() for r in
-            self.universe_of_discourse.relations.values())
+        # Relation declarations
+        relations = self.list_relations_recursively()
+        arities = frozenset(r.arity for r in relations)
+        for a in arities:
+            output += repm.serif_bold(f'\n\n{repr_arity_as_text(a).capitalize()} relations:')
+            for r_long_name in frozenset(r.repr_long_name() for r in relations if r.arity == a):
+                output += '\n ⁃ ' + r_long_name
+        # output += f'\n\n{repm.serif_bold("Relation declarations:")}'
+        # output = output + '\n' + '\n'.join(
+        #    r.repr_as_declaration() for r in
+        #    self.universe_of_discourse.relations.values())
         output += f'\n\n{repm.serif_bold("Theory elaboration:")}'
         output = output + '\n\n' + '\n\n'.join(
             s.repr_as_statement(output_proofs=output_proofs) for s in
@@ -2678,20 +2703,21 @@ class Relation(TheoreticalObjct):
     #    return self.repr_as_symbol()
 
     def repr_as_declaration(self):
-        output = f'Let {self.repr_as_symbol()} be a {self.repr_arity_as_text()} relation denoted as ⌜ {self.repr_as_symbol()} ⌝'
+        output = f'Let {self.repr_as_symbol()} be a {repr_arity_as_text(self.arity)} relation denoted as ⌜ {self.repr_as_symbol()} ⌝'
         output = output + f', that signals well-formed formulae in {self.formula_rep} syntax (e.g.: ⌜ {self.formula_rep.sample.replace("◆", str(self.repr_as_symbol()))} ⌝).'
         return output
 
-    def repr_arity_as_text(self):
-        match self.arity:
-            case 1:
-                return 'unary'
-            case 2:
-                return 'binary'
-            case 3:
-                return 'ternary'
-            case _:
-                return f'{self.arity}-ary'
+
+def repr_arity_as_text(n):
+    match n:
+        case 1:
+            return 'unary'
+        case 2:
+            return 'binary'
+        case 3:
+            return 'ternary'
+        case _:
+            return f'{n}-ary'
 
 
 class SimpleObjct(TheoreticalObjct):
@@ -3205,7 +3231,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             self, arity, symbol=None, formula_rep=None,
             signal_proposition=None,
             signal_theoretical_morphism=None,
-            implementation=None):
+            implementation=None, dashed_name=None):
         """A shortcut function for Relation(theory=t, ...)
 
         A relation is **declared** in a theory because it is not a statement.
@@ -3215,7 +3241,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             signal_proposition=signal_proposition,
             signal_theoretical_morphism=signal_theoretical_morphism,
             implementation=implementation,
-            universe_of_discourse=self)
+            universe_of_discourse=self, dashed_name=dashed_name)
 
     def declare_simple_objct(
             self, symbol=None):
@@ -3451,7 +3477,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             self, arity, symbol=None, formula_rep=None,
             signal_proposition=None,
             signal_theoretical_morphism=None,
-            implementation=None):
+            implementation=None, dashed_name=None):
         """Declare a new relation in this universe-of-discourse.
 
         Shortcut for Theory.declare_relation(...)."""
@@ -3459,7 +3485,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             arity=arity, symbol=symbol, formula_rep=formula_rep,
             signal_proposition=signal_proposition,
             signal_theoretical_morphism=signal_theoretical_morphism,
-            implementation=implementation)
+            implementation=implementation, dashed_name=dashed_name)
 
     def so(self, symbol=None):
         return self.declare_symbolic_objct(
