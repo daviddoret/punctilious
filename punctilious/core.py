@@ -792,6 +792,15 @@ class TheoreticalObjct(SymbolicObjct):
         else:
             return self
 
+    def list_theoretical_objcts_recursively(self):
+        """Return a python frozenset of this theoretical_objct and all theoretical_objcts it contains."""
+        return frozenset({self})
+
+    def list_relations_recursively(self):
+        """Return a python frozenset of this theoretical_objct and all theoretical_objcts it contains, providing that they are relations."""
+        ol = self.list_theoretical_objcts_recursively()
+        return frozenset(r for r in ol if is_in_class(r, classes.relation))
+
 
 def substitute_xy(o, x, y):
     """Return the result of a *substitution* of x with y on o."""
@@ -1099,6 +1108,14 @@ class Formula(TheoreticalObjct):
                     o2.parameters[i]):
                 return False
         return True
+
+    def list_theoretical_objcts_recursively(self):
+        """Return a python frozenset of this formula and all theoretical_objcts it contains."""
+        ol = frozenset({self})
+        ol = ol.union(self.relation.list_theoretical_objcts_recursively())
+        for p in self.parameters:
+            ol = ol.union(p.list_theoretical_objcts_recursively())
+        return ol
 
     def lock_variable_scope(self):
         """Variable scope must be locked when the formula construction
@@ -1483,6 +1500,12 @@ class FormulaStatement(Statement):
 
     def __str__(self):
         return self.repr(expanded=True)
+
+    def list_theoretical_objcts_recursively(self):
+        """Return a python frozenset of this formula-statement and all theoretical_objcts it contains."""
+        ol = frozenset({self})
+        ol = ol.union(self.valid_proposition.list_theoretical_objcts_recursively())
+        return ol
 
     def repr(self, expanded=None):
         expanded = True if expanded is None else expanded
@@ -2504,26 +2527,26 @@ class TheoryElaboration(TheoreticalObjct):
             natural_language=natural_language, symbol=symbol,
             reference=reference, title=title)
 
-    def repr_as_theory(self, output_proofs=True):
+    def repr_theory_report(self, output_proofs=True):
         """Return a representation that expresses and justifies the theory."""
         output = f'\n{repm.serif_bold(self.repr_as_symbol())}'
-        output = output + f'\n{repm.serif_bold("Consistency:")} {str(self.consistency)}'
-        output = output + f'\n{repm.serif_bold("Stabilized:")} {str(self.stabilized)}'
-        output = output + f'\n{repm.serif_bold("Extended theories:")}'
-        output = output + f'\nThe following theories are extended by {repm.serif_bold(self.repr_as_symbol())}.'
-        output = output + ''.join(
+        output += f'\n{repm.serif_bold("Consistency:")} {str(self.consistency)}'
+        output += f'\n{repm.serif_bold("Stabilized:")} {str(self.stabilized)}'
+        output += f'\n{repm.serif_bold("Extended theories:")}'
+        output += f'\nThe following theories are extended by {repm.serif_bold(self.repr_as_symbol())}.'
+        output += ''.join(
             '\n\t ⁃ ' + t.repr_as_symbol() for t in self.extended_theories)
-        output = output + f'\n\n{repm.serif_bold("Simple-objct declarations:")}'
+        output += f'\n\n{repm.serif_bold("Simple-objct declarations:")}'
         # TODO: Limit the listed objects to those that are referenced by the theory,
         #   instead of outputting all objects in the universe-of-discourse.
         output = output + '\n' + '\n'.join(
             o.repr_as_declaration() for o in
             self.universe_of_discourse.simple_objcts.values())
-        output = output + f'\n\n{repm.serif_bold("Relation declarations:")}'
+        output += f'\n\n{repm.serif_bold("Relation declarations:")}'
         output = output + '\n' + '\n'.join(
             r.repr_as_declaration() for r in
             self.universe_of_discourse.relations.values())
-        output = output + f'\n\n{repm.serif_bold("Theory elaboration:")}'
+        output += f'\n\n{repm.serif_bold("Theory elaboration:")}'
         output = output + '\n\n' + '\n\n'.join(
             s.repr_as_statement(output_proofs=output_proofs) for s in
             self.statements)
@@ -2540,7 +2563,7 @@ class TheoryElaboration(TheoreticalObjct):
             category=category, reference=reference, title=title)
 
     def prnt(self, output_proofs=True):
-        repm.prnt(self.repr_as_theory(output_proofs=output_proofs))
+        repm.prnt(self.repr_theory_report(output_proofs=output_proofs))
 
     def prove_inconsistent(self, ii):
         verify(isinstance(ii, InconsistencyIntroductionStatement),
@@ -2552,7 +2575,7 @@ class TheoryElaboration(TheoreticalObjct):
     def export_to_text(self, file_path, output_proofs=True):
         """Export this theory to a Unicode textfile."""
         text_file = open(file_path, 'w', encoding='utf-8')
-        n = text_file.write(self.repr_as_theory(output_proofs=output_proofs))
+        n = text_file.write(self.repr_theory_report(output_proofs=output_proofs))
         text_file.close()
 
     @property
@@ -2575,6 +2598,14 @@ class TheoryElaboration(TheoreticalObjct):
             t=self,
             natural_language=natural_language, symbol=symbol,
             reference=reference, title=title, echo=echo, category=category)
+
+    @property
+    def theoretical_objcts(self):
+        list = set()
+        for s in self.statements:
+            list.add(s)
+            if is_in_class(s, classes.formula):
+                list.add()
 
 
 class Proof:
@@ -2813,9 +2844,10 @@ class UniverseOfDiscourse(SymbolicObjct):
         self.symbolic_objcts = dict()
         self.theories = dict()
         self.variables = dict()
-        # Auto-index index
+        # Unique name indexes
         self.symbol_indexes = dict()
         self.headers = dict()
+        self.dashed_names = dict()
         # Well-known objects
         self._biconditional_relation = None
         self._conjunction_relation = None
@@ -3091,12 +3123,19 @@ class UniverseOfDiscourse(SymbolicObjct):
         if o not in self.symbolic_objcts:
             self.symbolic_objcts[o.symbol] = o
         if o.header is not None:
-            # If the symbolic_objct has a long-name,
-            # assure the unicity of this long-name in the universe-of-discourse.
+            # If the symbolic_objct has a header,
+            # assure the unicity of this header in the universe-of-discourse.
             verify(o.header not in self.headers.keys(),
                    'The header of symbolic_objct o1 is already referenced by o2.',
                    o1=o)
             self.headers[o.header] = o
+        if o.dashed_name is not None:
+            # If the symbolic_objct has a dashed-name,
+            # assure the unicity of this dashed-name in the universe-of-discourse.
+            verify(o.dashed_name not in self.dashed_names.keys(),
+                   'The dashed-name of symbolic-objct o1 is already referenced by o2.',
+                   o1=o)
+            self.dashed_names[o.header] = o
 
     def cross_reference_theory(self, t: TheoryElaboration):
         """Cross-references a theory in this universe-of-discourse.
