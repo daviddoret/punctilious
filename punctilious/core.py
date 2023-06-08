@@ -993,10 +993,20 @@ class Formula(TheoreticalObjct):
             symbol = Symbol(
                 base=symbol_base, index=universe_of_discourse.index_symbol(
                     base=symbol_base))
+        self.relation = relation
+        parameters = parameters if isinstance(parameters, tuple) else tuple(
+            [parameters])
+        assert len(parameters) > 0
+        arity = len(parameters)
+        if isinstance(relation, Relation):
+            assert self.relation.arity == arity
+        self.arity = arity
+        self.parameters = parameters
         super().__init__(
             symbol=symbol,
             universe_of_discourse=universe_of_discourse,
             echo=False)
+        universe_of_discourse.cross_reference_formula(self)
         verify(
             is_in_class(relation, classes.relation) or is_in_class(relation, classes.free_variable),
             'The relation of this formula is neither a relation, nor a '
@@ -1007,16 +1017,6 @@ class Formula(TheoreticalObjct):
             'The universe_of_discourse of the relation of this formula is '
             'distint from the formula unierse_of_disourse.',
             formula=self, relation=relation)
-        self.relation = relation
-        universe_of_discourse.cross_reference_formula(self)
-        parameters = parameters if isinstance(parameters, tuple) else tuple(
-            [parameters])
-        assert len(parameters) > 0
-        arity = len(parameters)
-        if isinstance(relation, Relation):
-            assert self.relation.arity == arity
-        self.arity = arity
-        self.parameters = parameters
         self.cross_reference_variables()
         for p in parameters:
             verify(
@@ -1540,18 +1540,19 @@ class DirectAxiomInference(FormulaStatement):
     """
 
     def __init__(
-            self, valid_proposition, ap, symbol=None, theory=None, reference=None,
+            self, valid_proposition, ap, theory, symbol=None, reference=None,
             title=None, category=None, echo=None):
         assert isinstance(theory, TheoryElaboration)
         assert isinstance(ap, AxiomInclusion)
-        assert theory.has_objct_in_hierarchy(ap)
         assert isinstance(valid_proposition, Formula)
         self.axiom = ap
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             symbol=symbol, category=category,
             reference=reference, title=title, echo=echo)
-        assert ap.statement_index < self.statement_index
+        verify(theory.has_objct_in_hierarchy(ap), 'The ap is not in the theory hierarchy.', slf=self, ap=ap)
+        verify(ap not in theory.statements or ap.statement_index < self.statement_index,
+               'The dai is a predecessor of the ap that is stated in the same theory.', slf=self, ap=ap)
         super()._declare_class_membership(declarative_class_list.direct_axiom_inference)
 
     def repr_as_statement(self, output_proofs=True):
@@ -3429,7 +3430,10 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     def get_symbol_max_index(self, base):
         """Return the highest index for that symbol-base in the universe-of-discourse."""
-        return self.symbol_indexes[base]
+        if base in self.symbol_indexes.keys():
+            return self.symbol_indexes[base]
+        else:
+            return 0
 
     def index_symbol(self, base):
         """Given a symbol-base S (i.e. an unindexed symbol), returns a unique integer n
