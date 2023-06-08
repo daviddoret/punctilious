@@ -14,8 +14,9 @@ class TestConjunctionIntroduction(TestCase):
         t = u.t(
             'testing-theory',
             include_conjunction_introduction_inference_rule=True)
-        a = t.a('The arbitrary axiom of testing.')
-        phi1 = t.dai(u.f(r1, o1, o2), a=a)
-        phi2 = t.dai(u.f(r2, o3), a=a)
+        a = u.elaborate_axiom(random_data.random_sentence())
+        ap = t.postulate_axiom(a)
+        phi1 = t.dai(u.f(r1, o1, o2), ap=ap)
+        phi2 = t.dai(u.f(r2, o3), ap=ap)
         phi3 = t.ci(phi1, phi2)
         self.assertEqual('(◆₁(ℴ₁, ℴ₂) ∧ ◆₂(ℴ₃))', phi3.repr())

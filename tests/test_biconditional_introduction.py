@@ -18,8 +18,8 @@ class TestBiconditionalIntroduction(TestCase):
             include_biconditional_introduction_inference_rule=True)
         a = u.axiom('The arbitrary axiom of testing.')
         ap = t.postulate_axiom(a)
-        phi1 = t.dai(u.f(u.implies, u.f(r1, o1, o2), u.f(r2, o3)), a=ap)
-        phi2 = t.dai(u.f(u.implies, u.f(r2, o3), u.f(r1, o1, o2)), a=ap)
+        phi1 = t.dai(u.f(u.implies, u.f(r1, o1, o2), u.f(r2, o3)), ap=ap)
+        phi2 = t.dai(u.f(u.implies, u.f(r2, o3), u.f(r1, o1, o2)), ap=ap)
         phi3 = t.bi(phi1, phi2, echo=True)
         self.assertEqual(
             '((◆₁(ℴ₁, ℴ₂) ⟹ ◆₂(ℴ₃)) ⟺ (◆₂(ℴ₃) ⟹ ◆₁(ℴ₁, ℴ₂)))', phi3.repr())

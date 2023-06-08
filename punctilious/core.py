@@ -472,8 +472,9 @@ class SymbolicObjct:
             not is_in_class(self, classes.u) and \
             self.symbol.index == 1 and \
             not configuration.output_index_if_max_index_equal_1 and \
-            self.universe_of_discourse.get_symbol_max_index(
-                self.symbol.base) == 1
+            not is_in_class(self, classes.universe_of_discourse) and \
+            self.universe_of_discourse.get_symbol_max_index(self.symbol.base) == 1
+
         return self.symbol.repr(hide_index=hide_index)
 
     def repr_header(self, cap: bool = False):
@@ -2858,7 +2859,8 @@ class Tuple(tuple):
 
 
 class UniverseOfDiscourse(SymbolicObjct):
-    def __init__(self, symbol=None):
+    def __init__(self, symbol=None, echo=None):
+        dashed_name = 'universe-of-discourse'
         self.axioms = dict()
         self.formulae = dict()
         self.relations = dict()
@@ -2897,8 +2899,12 @@ class UniverseOfDiscourse(SymbolicObjct):
             is_universe_of_discourse=True,
             is_theory_foundation_system=False,
             symbol=symbol,
-            universe_of_discourse=None)
+            universe_of_discourse=None,
+            echo=False,
+            dashed_name=dashed_name)
         super()._declare_class_membership(classes.universe_of_discourse)
+        if echo:
+            repm.prnt(self.repr_as_declaration())
 
     def axiom(
             self, natural_language, header=None, symbol=None, echo=None):
