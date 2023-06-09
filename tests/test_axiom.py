@@ -23,4 +23,4 @@ class TestAxiom(TestCase):
         self.assertEqual(f'𝐀𝐱𝐢𝐨𝐦 𝟏.𝟏.𝟏 (𝑎₃): “{content3}”', a3.repr_as_statement(wrap=False))
         self.assertEqual(f'𝐀𝐱𝐢𝐨𝐦 𝟏.𝟏.𝟐 (𝑎₄): “{content4}”', a4.repr_as_statement(wrap=False))
         self.assertEqual(f'𝐀𝐱𝐢𝐨𝐦 𝟏.𝟏.𝟑 (𝑎₅): “{content5}”', a5.repr_as_statement(wrap=False))
-        p.configuration.echo_note = echo_axiom
+        p.configuration.echo_axiom = echo_axiom

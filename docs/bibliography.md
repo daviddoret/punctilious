@@ -1,6 +1,9 @@
 Crabbe, M., 2004. On the Notion of Substitution. Logic Journal of IGPL 12,
 111–124. https://doi.org/10.1093/jigpal/12.2.111
 
+Downing, D., 2009. Dictionary of Mathematics Terms - 3rd Edition, 3rd ed. ed, Barron’s professional guides. Barron’s,
+Hauppauge, N.Y.
+
 Ehrig, H., Mahr, B., Orejas, F., 1992. Introduction to Algebraic Specification. Part 2:
 From Classical View to
 Foundations of System Specifications. The Computer Journal 35,

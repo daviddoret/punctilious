@@ -21,6 +21,7 @@ class Configuration:
         self.echo_definition = None
         self.echo_definition_inclusion = None
         self.echo_formula = None
+        self.echo_hypothesis = None
         self.echo_note = None
         self.echo_statement = None
         self.echo_symbolic_objct = None
@@ -90,6 +91,7 @@ class DeclarativeClassList(repm.Representation):
         self.formula = DeclarativeClass('formula', 'formula')
         self.formula_statement = DeclarativeClass('formula_statement', 'formula-statement')
         self.free_variable = DeclarativeClass('free_variable', 'free-variable')
+        self.hypothesis = DeclarativeClass('hypothesis', 'hypothesis')
         self.note = DeclarativeClass('note', 'note')
         self.proposition = DeclarativeClass('proposition', 'proposition')
         self.relation = DeclarativeClass('relation', 'relation')
@@ -800,10 +802,10 @@ class TheoreticalObjct(SymbolicObjct):
     def iterate_relations(self, include_root: bool = True):
         """Iterate through this and all the theoretical-objcts it contains recursively, providing they are relations."""
         return (
-            r for r in self.iterate_theoretical_objcts(include_root=include_root)
+            r for r in self.iterate_theoretical_objcts_references(include_root=include_root)
             if is_in_class(r, classes.relation))
 
-    def iterate_theoretical_objcts(self, include_root: bool = True, visited: (None, set) = None):
+    def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None):
         """Iterate through this and all the theoretical-objcts it contains recursively."""
         visited = set() if visited is None else visited
         if include_root and self not in visited:
@@ -812,7 +814,7 @@ class TheoreticalObjct(SymbolicObjct):
 
     def contains_theoretical_objct(self, o: TheoreticalObjct):
         """Return True if o is in this theory's hierarchy, False otherwise."""
-        return o in self.iterate_theoretical_objcts(include_root=True)
+        return o in self.iterate_theoretical_objcts_references(include_root=True)
 
 
 def substitute_xy(o, x, y):
@@ -1122,7 +1124,7 @@ class Formula(TheoreticalObjct):
                 return False
         return True
 
-    def iterate_theoretical_objcts(self, include_root: bool = True, visited: (None, set) = None):
+    def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None):
         """Iterate through this and all the theoretical-objcts it contains recursively."""
         visited = set() if visited is None else visited
         if include_root and self not in visited:
@@ -1131,12 +1133,12 @@ class Formula(TheoreticalObjct):
         if self.relation not in visited:
             yield self.relation
             visited.update({self.relation})
-            yield from self.relation.iterate_theoretical_objcts(
+            yield from self.relation.iterate_theoretical_objcts_references(
                 include_root=False, visited=visited)
         for parameter in set(self.parameters).difference(visited):
             yield parameter
             visited.update({parameter})
-            yield from parameter.iterate_theoretical_objcts(
+            yield from parameter.iterate_theoretical_objcts_references(
                 include_root=False, visited=visited)
 
     def list_theoretical_objcts_recursively_OBSOLETE(self, ol: (None, frozenset) = None,
@@ -1262,7 +1264,8 @@ class StatementCategories(repm.Representation):
     formal_definition = StatementCategory('formal_definition', '𝑑', 'formal definition')
     lemma = StatementCategory('lemma', '𝑝', 'lemma')
     axiom = StatementCategory('axiom', '𝑎', 'axiom')
-    definition = StatementCategory('definition', '𝙳', 'definition')
+    definition = StatementCategory('definition', '𝑑', 'definition')
+    hypothesis = StatementCategory('hypothesis', 'ℎ', 'hypothesis')
     proposition = StatementCategory('proposition', '𝑝', 'proposition')
     theorem = StatementCategory('theorem', '𝑝', 'theorem')
     missing_category = StatementCategory('missing_category', '�', 'missing category')
@@ -1301,10 +1304,10 @@ class Statement(TheoreticalObjct):
     """
 
     def __init__(
-            self, theory, category, symbol=None,
-            reference=None, title=None, echo=None):
+            self, theory: TheoryElaboration, category, symbol: (None, Symbol) = None,
+            reference=None, title=None, echo: bool = False,
+            header: (None, ObjctHeader) = None, dashed_name: (None, DashedName) = None):
         echo = get_config(echo, configuration.echo_statement, configuration.echo_default, fallback_value=False)
-        assert isinstance(theory, TheoryElaboration)
         universe_of_discourse = theory.universe_of_discourse
         self.statement_index = theory.crossreference_statement(self)
         self.theory = theory
@@ -1318,6 +1321,8 @@ class Statement(TheoreticalObjct):
         super().__init__(
             symbol=symbol,
             universe_of_discourse=universe_of_discourse,
+            header=header,
+            dashed_name=dashed_name,
             echo=False)
         super()._declare_class_membership(declarative_class_list.statement)
         if echo:
@@ -1493,16 +1498,12 @@ class FormulaStatement(Statement):
     """
 
     def __init__(
-            self, theory, valid_proposition, symbol=None, category=None,
-            reference=None,
-            title=None, echo=None):
+            self, theory: TheoryElaboration, valid_proposition: Formula,
+            symbol: (None, Symbol) = None, category=None,
+            reference=None, title=None,
+            header: (None, ObjctHeader) = None, dashed_name: (None, DashedName) = None,
+            echo=None):
         echo = get_config(echo, configuration.echo_statement, configuration.echo_default, fallback_value=False)
-        verify(
-            isinstance(theory, TheoryElaboration),
-            'isinstance(theory, Theory)')
-        verify(
-            isinstance(valid_proposition, Formula),
-            'isinstance(valid_proposition, Formula)')
         verify(
             theory.universe_of_discourse is valid_proposition.universe_of_discourse,
             'theory.universe_of_discourse is '
@@ -1512,13 +1513,16 @@ class FormulaStatement(Statement):
         verify(
             valid_proposition.is_proposition,
             'valid_proposition.is_proposition')
+        # TODO: Check that all components of the hypothetical-proposition
+        #  are elements of the source theory-branch.
         self.valid_proposition = valid_proposition
-        # TODO: Implement distinct counters per category
         self.statement_index = theory.crossreference_statement(self)
         category = statement_categories.proposition if category is None else category
         super().__init__(
             theory=theory, symbol=symbol, category=category,
-            reference=reference, title=title, echo=False)
+            reference=reference, title=title,
+            header=header, dashed_name=dashed_name,
+            echo=False)
         # manage theoretical-morphisms
         self.morphism_output = None
         if self.valid_proposition.relation.signal_theoretical_morphism:
@@ -1537,7 +1541,7 @@ class FormulaStatement(Statement):
     def __str__(self):
         return self.repr(expanded=True)
 
-    def iterate_theoretical_objcts(self, include_root: bool = True, visited: (None, set) = None):
+    def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None):
         """Iterate through this and all the theoretical-objcts it contains recursively."""
         visited = set() if visited is None else visited
         if include_root and self not in visited:
@@ -1546,7 +1550,7 @@ class FormulaStatement(Statement):
         if self.valid_proposition not in visited:
             yield self.valid_proposition
             visited.update({self.valid_proposition})
-            yield from self.valid_proposition.iterate_theoretical_objcts(
+            yield from self.valid_proposition.iterate_theoretical_objcts_references(
                 include_root=False, visited=visited)
 
     def list_theoretical_objcts_recursively_OBSOLETE(self, ol: (None, frozenset) = None,
@@ -1605,7 +1609,7 @@ class DirectAxiomInference(FormulaStatement):
                'The dai is a predecessor of the ap that is stated in the same theory.', slf=self, ap=ap)
         super()._declare_class_membership(declarative_class_list.direct_axiom_inference)
 
-    def iterate_theoretical_objcts(self, include_root: bool = True, visited: (None, set) = None):
+    def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None):
         """Iterate through this and all the theoretical-objcts it contains recursively."""
         visited = set() if visited is None else visited
         if include_root and self not in visited:
@@ -1618,7 +1622,7 @@ class DirectAxiomInference(FormulaStatement):
         if self.valid_proposition not in visited:
             yield self.valid_proposition
             visited.update({self.valid_proposition})
-            yield from self.valid_proposition.iterate_theoretical_objcts(
+            yield from self.valid_proposition.iterate_theoretical_objcts_references(
                 include_root=False, visited=visited)
 
     def list_theoretical_objcts_recursively_OBSOLETE(self, ol: (None, frozenset) = None,
@@ -1890,16 +1894,6 @@ class TheoryElaboration(TheoreticalObjct):
         the foundation-system, False otherwise. :param symbol:
          :param extended_theory: :param is_an_element_of_itself:
         """
-        verify(is_in_class(u, classes.universe_of_discourse),
-               'Parameter "u" is not a member of declarative-class universe-of-discourse.', u=u)
-        verify(extended_theory is None or is_in_class(extended_theory, classes.theory_elaboration),
-               'Parameter "extended_theory" is neither None nor a member of declarative-class theory.', u=u)
-        verify(extended_theory_limit is None or
-               (extended_theory is not None and
-                is_in_class(extended_theory, classes.statement) and
-                extended_theory_limit in extended_theory.statements),
-               'Parameter "theory_extension_statement_limit" is inconsistent.',
-               u=u)
         self._consistency = consistency_values.undetermined
         self._stabilized = False
         self.axiom_inclusions = tuple()
@@ -1927,6 +1921,16 @@ class TheoryElaboration(TheoreticalObjct):
             universe_of_discourse=u,
             dashed_name=dashed_name,
             header=header)
+        verify(is_in_class(u, classes.universe_of_discourse),
+               'Parameter "u" is not a member of declarative-class universe-of-discourse.', u=u)
+        verify(extended_theory is None or is_in_class(extended_theory, classes.theory_elaboration),
+               'Parameter "extended_theory" is neither None nor a member of declarative-class theory.', u=u)
+        verify(extended_theory_limit is None or
+               (extended_theory is not None and
+                is_in_class(extended_theory_limit, classes.statement) and
+                extended_theory_limit in extended_theory.statements),
+               'Parameter "theory_extension_statement_limit" is inconsistent.',
+               u=u)
         # Inference rules
         # Biconditional introduction
         self._biconditional_introduction_inference_rule = None
@@ -2303,8 +2307,11 @@ class TheoryElaboration(TheoreticalObjct):
                 symbol=symbol, category=category,
                 reference=reference, title=title)
 
-    def iterate_theoretical_objcts(self, include_root: bool = True, visited: (None, set) = None):
-        """Iterate through this and all the theoretical-objcts it contains recursively."""
+    def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None):
+        """Iterate through this and all the theoretical-objcts it references recursively.
+
+        Theoretical-objcts may contain references to multiple and diverse other theoretical-objcts. Do not confuse this iteration of all references with iterations of objects in the theory-chain.
+        """
         visited = set() if visited is None else visited
         if include_root and self not in visited:
             yield self
@@ -2312,7 +2319,7 @@ class TheoryElaboration(TheoreticalObjct):
         for statement in set(self.statements).difference(visited):
             yield statement
             visited.update({statement})
-            yield from statement.iterate_theoretical_objcts(
+            yield from statement.iterate_theoretical_objcts_references(
                 include_root=False, visited=visited)
         if self.extended_theory is not None and self.extended_theory not in visited:
             # Iterate the extended-theory.
@@ -2329,7 +2336,7 @@ class TheoryElaboration(TheoreticalObjct):
                 visited.update(black_list)
             yield self.extended_theory
             visited.update({self.extended_theory})
-            yield from self.extended_theory.iterate_theoretical_objcts(
+            yield from self.extended_theory.iterate_theoretical_objcts_references(
                 include_root=False, visited=visited)
 
     @property
@@ -2421,20 +2428,41 @@ class TheoryElaboration(TheoreticalObjct):
             valid_proposition=valid_proposition, d=d, symbol=symbol,
             reference=reference, title=title)
 
-    def get_theory_chain(self, chain=None):
-        """Return this theory's chain as a python frozenset.
+    def iterate_statements_in_theory_chain(self):
+        """Iterate through the (proven or sound) statements in the current theory-chain."""
+        for t in self.iterate_theory_chain():
+            for s in t.statements:
+                yield s
+
+    def iterate_theory_chain(self, visited: (None, set) = None):
+        """Iterate over the theory-chain of this theory.
+
+
+        The sequence is: this theory, this theory's extended-theory, the extended-theory's extended-theory, etc. until the root-theory is processes.
 
         Note:
         -----
-        The theory-chain is distinct from the recursive list of theories contained in the theory.
-        In effect, a theory-elaboration may contain hypothesis, and possibly other theory-references.
+        The theory-chain set is distinct from theory-dependency set.
+        The theory-chain informs of the parent theories whose statements are considered valid in the current theory.
+        Distinctively, theories may be referenced by meta-theorizing, or in hypothesis, or possibly other use cases.
         """
-        chain = frozenset() if chain is None else chain
-        if self not in chain:
-            chain = chain.union({self})
-        if self.extended_theory is not None and self.extended_theory not in chain:
-            chain = chain.union(self.extended_theory.get_theory_chain(chain=chain))
-        return chain
+        visited = set() if visited is None else visited
+        t = self
+        while t is not None:
+            yield t
+            visited.update({t})
+            if t.extended_theory is not None and t.extended_theory not in visited:
+                t = t.extended_theory
+            else:
+                t = None
+
+    def iterate_valid_propositions_in_theory_chain(self):
+        """Iterate through the valid-propositions in the current theory-chain."""
+        visited = set()
+        for s in self.iterate_statements_in_theory_chain():
+            if is_in_class(s, classes.formula_statement) and s.valid_proposition not in visited:
+                yield s.valid_proposition
+                visited.update({s.valid_proposition})
 
     def ii(
             self, p, not_p, symbol=None, category=None,
@@ -2633,6 +2661,16 @@ class TheoryElaboration(TheoreticalObjct):
             natural_language=natural_language, symbol=symbol,
             reference=reference, title=title)
 
+    def pose_hypothesis(
+            self, hypothetical_proposition: Formula, symbol: (None, Symbol) = None,
+            header: (None, ObjctHeader) = None, dashed_name: (None, DashedName) = None,
+            echo: bool = False):
+        """Pose a new hypothesis in the current theory."""
+        return Hypothesis(
+            t=self, hypothetical_proposition=hypothetical_proposition,
+            symbol=symbol, header=header, dashed_name=dashed_name,
+            echo=echo)
+
     def repr_theory_report(self, output_proofs=True):
         """Return a representation that expresses and justifies the theory."""
         output = f'\n{repm.serif_bold(self.repr_as_symbol())}'
@@ -2716,6 +2754,38 @@ class TheoryElaboration(TheoreticalObjct):
             list.add(s)
             if is_in_class(s, classes.formula):
                 list.add()
+
+
+class Hypothesis(Statement):
+    def __init__(
+            self, t: TheoryElaboration, hypothetical_proposition: Formula, symbol: (None, Symbol) = None,
+            header: (None, ObjctHeader) = None, dashed_name: (None, DashedName) = None,
+            echo: bool = False):
+        category = statement_categories.hypothesis
+        # TODO: Check that all components of the hypothetical-proposition
+        #  are elements of the source theory-branch.
+        verify(
+            hypothetical_proposition.is_proposition,
+            'hypothetical_proposition is not a proposition.')
+        self.hypothetical_proposition = hypothetical_proposition
+        self.hypothetical_t = t.universe_of_discourse.t(
+            extended_theory=t,
+            extended_theory_limit=self
+        )
+        self.hypothetical_axiom = self.hypothetical_t.axiom(
+            f'Assume {hypothetical_proposition.repr_as_formula()} is true.')
+        self.hypothetical_dai = self.hypothetical_t.dai(valid_proposition=hypothetical_proposition,
+                                                        ap=self.hypothetical_axiom)
+        if symbol is None:
+            # If no symbol is passed as a parameter,
+            # automated assignment of symbol is assumed.
+            base = 'ℎ'
+            index = t.universe_of_discourse.index_symbol(base=base)
+            symbol = Symbol(base=base, index=index)
+        super().__init__(
+            theory=t, category=category, symbol=symbol,
+            header=header, dashed_name=dashed_name, echo=False)
+        super()._declare_class_membership(declarative_class_list.hypothesis)
 
 
 class Proof:
@@ -3348,7 +3418,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             universe_of_discourse=self)
 
     def declare_theory(
-            self, symbol=None,
+            self, symbol=None, header=None, dashed_name=None,
             extended_theory=None,
             extended_theory_limit=None,
             include_conjunction_introduction_inference_rule=None,
@@ -3365,7 +3435,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         :return:
         """
         return TheoryElaboration(
-            symbol=symbol,
+            symbol=symbol, header=header, dashed_name=dashed_name,
             extended_theory=extended_theory,
             extended_theory_limit=extended_theory_limit,
             u=self,
@@ -3583,7 +3653,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             include_conjunction_introduction_inference_rule=None,
             include_biconditional_introduction_inference_rule=None,
             include_double_negation_introduction_inference_rule=None,
-            include_inconsistency_introduction_inference_rule=None):
+            include_inconsistency_introduction_inference_rule=None,
+            header=None, dashed_name=None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for self.declare_theory(...).
@@ -3600,7 +3671,9 @@ class UniverseOfDiscourse(SymbolicObjct):
             include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule,
             include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule,
             include_double_negation_introduction_inference_rule=include_double_negation_introduction_inference_rule,
-            include_inconsistency_introduction_inference_rule=include_inconsistency_introduction_inference_rule)
+            include_inconsistency_introduction_inference_rule=include_inconsistency_introduction_inference_rule,
+            header=header,
+            dashed_name=dashed_name)
 
     # @FreeVariableContext()
     @contextlib.contextmanager
