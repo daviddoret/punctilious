@@ -593,7 +593,11 @@ class TheoreticalObjct(SymbolicObjct):
         """
         return self.is_symbol_equivalent(o2)
 
-    def is_masked_formula_similar_to(self, o2, mask=None):
+    def is_masked_formula_similar_to(
+            self,
+            o2: TheoreticalObjct,
+            mask: (None, frozenset[FreeVariable]) = None) \
+            -> bool:
         """Given two theoretical-objects o₁ (self) and o₂,
         and a finite set of variables 𝐌,
         return True if o₁ and o₂ are masked-formula-similar, False otherwise.
@@ -630,7 +634,12 @@ class TheoreticalObjct(SymbolicObjct):
         output, _values = self._is_masked_formula_similar_to(o2=o2, mask=mask)
         return output
 
-    def _is_masked_formula_similar_to(self, o2, mask=None, _values=None):
+    def _is_masked_formula_similar_to(
+            self,
+            o2: TheoreticalObjct,
+            mask: (None, frozenset[FreeVariable]) = None,
+            _values: (None, dict) = None) \
+            -> (bool, dict):
         """A "private" version of the is_masked_formula_similar_to method,
         with the "internal" parameter _values.
 
@@ -646,41 +655,45 @@ class TheoreticalObjct(SymbolicObjct):
             Internal dict of FreeVariable values used to keep track
             of variable values consistency.
         """
-        mask = set() if mask is None else mask
+        o1 = self
+        if is_in_class(o1, classes.formula_statement):
+            # Unpack the formula-statement
+            # to compare the formula it contains.
+            o1 = o1.valid_proposition
+        if is_in_class(o2, classes.formula_statement):
+            # Unpack the formula-statement
+            # to compare the formula it contains.
+            o2 = o2.valid_proposition
+        mask = frozenset() if mask is None else mask
         _values = dict() if _values is None else _values
-        assert isinstance(o2, TheoreticalObjct)
-        assert isinstance(mask, set)
-        assert isinstance(_values, dict)
-        for x in mask:
-            assert isinstance(x, FreeVariable)
-        if self is o2:
+        if o1 is o2:
             # Trivial case.
             return True, _values
-        if self.is_formula_equivalent_to(o2):
+        if o1.is_formula_equivalent_to(o2):
             # Sufficient condition.
             return True, _values
-        if isinstance(self, Formula) and isinstance(o2, Formula):
+        if isinstance(o1, Formula) and isinstance(o2, Formula):
             # When both o1 and o2 are formula,
             # verify that their components are masked-formula-similar.
-            relation_output, _values = self.relation._is_masked_formula_similar_to(
+            relation_output, _values = o1.relation._is_masked_formula_similar_to(
                 o2=o2.relation, mask=mask, _values=_values)
             if not relation_output:
                 return False, _values
             # Arities are necessarily equal.
-            for i in range(len(self.parameters)):
-                parameter_output, _values = self.parameters[
+            for i in range(len(o1.parameters)):
+                parameter_output, _values = o1.parameters[
                     i]._is_masked_formula_similar_to(
                     o2=o2.parameters[i], mask=mask, _values=_values)
                 if not parameter_output:
                     return False, _values
             return True, _values
-        if self not in mask and o2 not in mask:
+        if o1 not in mask and o2 not in mask:
             # We know o1 and o2 are not formula-equivalent,
             # and we know they are not in the mask.
             return False, _values
-        if self in mask:
+        if o1 in mask:
             variable = o2
-            newly_observed_value = self
+            newly_observed_value = o1
             if variable in _values:
                 already_observed_value = _values[variable]
                 if not newly_observed_value.is_formula_equivalent_to(
@@ -689,7 +702,7 @@ class TheoreticalObjct(SymbolicObjct):
             else:
                 _values[variable] = newly_observed_value
         if o2 in mask:
-            variable = self
+            variable = o1
             newly_observed_value = o2
             if variable in _values:
                 already_observed_value = _values[variable]
@@ -1877,6 +1890,8 @@ class TheoryElaboration(TheoreticalObjct):
             self,
             u: UniverseOfDiscourse,
             symbol: (str, Symbol) = None,
+            dashed_name: (str, DashedName) = None,
+            header: (str, ObjctHeader) = None,
             extended_theory: (None, TheoryElaboration) = None,
             extended_theory_limit: (None, Statement) = None,
             include_conjunction_introduction_inference_rule: bool = False,
@@ -1885,8 +1900,7 @@ class TheoryElaboration(TheoreticalObjct):
             include_double_negation_introduction_inference_rule: bool = False,
             include_inconsistency_introduction_inference_rule: bool = False,
             stabilized: bool = False,
-            dashed_name: (str, DashedName) = None,
-            header: (str, ObjctHeader) = None
+            echo: bool = False
     ):
         """
 
@@ -1920,7 +1934,8 @@ class TheoryElaboration(TheoreticalObjct):
             is_theory_foundation_system=True if extended_theory is None else False,
             universe_of_discourse=u,
             dashed_name=dashed_name,
-            header=header)
+            header=header,
+            echo=False)
         verify(is_in_class(u, classes.universe_of_discourse),
                'Parameter "u" is not a member of declarative-class universe-of-discourse.', u=u)
         verify(extended_theory is None or is_in_class(extended_theory, classes.theory_elaboration),
@@ -1980,6 +1995,8 @@ class TheoryElaboration(TheoreticalObjct):
             # add some new inference-rules by passing these instructions
             # to the constructor.
             self.stabilize()
+        if echo:
+            repm.prnt(self.repr_as_declaration())
 
     def bi(
             self, conditional_phi, conditional_psi, symbol=None, category=None,
@@ -2013,7 +2030,7 @@ class TheoryElaboration(TheoreticalObjct):
 
     def ci(
             self, conjunct_p, conjunct_q, symbol=None, category=None,
-            reference=None, title=None):
+            reference=None, title=None) -> ConjunctionIntroductionStatement:
         """Infer a new statement in this theory by applying the
         conjunction-introduction inference-rule."""
         return self.infer_by_conjunction_introduction(
@@ -2136,7 +2153,11 @@ class TheoryElaboration(TheoreticalObjct):
         self._double_negation_introduction_inference_rule = ir
 
     def elaborate_direct_axiom_inference(
-            self, valid_proposition, ap, symbol=None, reference=None, title=None):
+            self,
+            valid_proposition,
+            ap,
+            symbol=None, reference=None, title=None) \
+            -> DirectAxiomInference:
         """Elaborate a new direct-axiom-inference in the theory. Shortcut for FormalAxiom(theory=t, ...)"""
         return DirectAxiomInference(
             valid_proposition=valid_proposition, ap=ap, symbol=symbol,
@@ -2211,7 +2232,7 @@ class TheoryElaboration(TheoreticalObjct):
 
     def infer_by_conjunction_introduction(
             self, conjunct_p, conjunct_q, symbol=None, category=None,
-            reference=None, title=None):
+            reference=None, title=None) -> ConjunctionIntroductionStatement:
         """Infer a new statement in this theory by applying the
         conjunction-introduction inference-rule.
 
@@ -2411,7 +2432,11 @@ class TheoryElaboration(TheoreticalObjct):
         self._equality = r
 
     def dai(
-            self, valid_proposition, ap, symbol=None, reference=None, title=None):
+            self,
+            valid_proposition,
+            ap,
+            symbol=None, reference=None, title=None) \
+            -> DirectAxiomInference:
         """Elaborate a new direct-axiom-inference in the theory. Shortcut for
         Theory.elaborate_direct_axiom_inference(...)."""
         return self.elaborate_direct_axiom_inference(
@@ -2528,15 +2553,17 @@ class TheoryElaboration(TheoreticalObjct):
     def include_modus_ponens_inference_rule(self):
         """Include the modus-ponens inference-rule in this
         theory."""
-        verify(
-            not self.modus_ponens_inference_rule_is_included,
-            'The modus-ponens inference-rule is already included in this theory.')
         # TODO: Justify the inclusion of the inference-rule in the theory
         #   with adequate statements (axioms?).
-        self.universe_of_discourse.include_implication_relation()
-        self.universe_of_discourse.include_biconditional_relation()
-        self._modus_ponens_inference_rule = ModusPonensInferenceRule
-        self._includes_modus_ponens_inference_rule = True
+        if not self.modus_ponens_inference_rule_is_included:
+            verify(not self.stabilized,
+                   'The modus-ponens inference-rule cannot be allowed at this point of the theory-elaboration because the theory-elaboration is stabilized.',
+                   slf_stabilized=self.stabilized, slf=self.repr_fully_qualified_name())
+            self.universe_of_discourse.include_implication_relation()
+            self.universe_of_discourse.include_conjunction_relation()
+            self.include_conjunction_introduction_inference_rule()
+            self._modus_ponens_inference_rule = ModusPonensInferenceRule
+            self._includes_modus_ponens_inference_rule = True
 
     @property
     def biconditional_introduction_inference_rule_is_included(self):
@@ -3175,6 +3202,11 @@ class UniverseOfDiscourse(SymbolicObjct):
         self._inconsistent_relation = r
 
     @property
+    def land(self):
+        """Conjunction (Logical AND)."""
+        return self.conjunction_relation
+
+    @property
     def negation_relation(self):
         """The negation relation if it exists in this universe-of-discourse,
         otherwise None."""
@@ -3420,13 +3452,19 @@ class UniverseOfDiscourse(SymbolicObjct):
             universe_of_discourse=self)
 
     def declare_theory(
-            self, symbol=None, header=None, dashed_name=None,
-            extended_theory=None,
-            extended_theory_limit=None,
+            self,
+            symbol: (None, str, Symbol) = None,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            extended_theory: (None, TheoryElaboration) = None,
+            extended_theory_limit: (None, Statement) = None,
             include_conjunction_introduction_inference_rule=None,
             include_biconditional_introduction_inference_rule=None,
             include_double_negation_introduction_inference_rule=None,
-            include_inconsistency_introduction_inference_rule=None):
+            include_inconsistency_introduction_inference_rule=None,
+            include_modus_ponens_inference_rule=None,
+            stabilized: bool = False,
+            echo: bool = False):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for Theory(universe_of_discourse, ...).
@@ -3437,14 +3475,19 @@ class UniverseOfDiscourse(SymbolicObjct):
         :return:
         """
         return TheoryElaboration(
-            symbol=symbol, header=header, dashed_name=dashed_name,
+            u=self,
+            symbol=symbol,
+            header=header,
+            dashed_name=dashed_name,
             extended_theory=extended_theory,
             extended_theory_limit=extended_theory_limit,
-            u=self,
             include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule,
             include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule,
             include_double_negation_introduction_inference_rule=include_double_negation_introduction_inference_rule,
-            include_inconsistency_introduction_inference_rule=include_inconsistency_introduction_inference_rule)
+            include_inconsistency_introduction_inference_rule=include_inconsistency_introduction_inference_rule,
+            include_modus_ponens_inference_rule=include_modus_ponens_inference_rule,
+            stabilized=stabilized,
+            echo=echo)
 
     def include_biconditional_relation(self):
         """Assure the existence of the biconditional-relation in this
@@ -3649,14 +3692,19 @@ class UniverseOfDiscourse(SymbolicObjct):
             symbol=symbol)
 
     def t(
-            self, symbol=None,
-            extended_theory=None,
-            extended_theory_limit=None,
+            self,
+            symbol: (None, str, Symbol) = None,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            extended_theory: (None, TheoryElaboration) = None,
+            extended_theory_limit: (None, Statement) = None,
             include_conjunction_introduction_inference_rule=None,
             include_biconditional_introduction_inference_rule=None,
             include_double_negation_introduction_inference_rule=None,
             include_inconsistency_introduction_inference_rule=None,
-            header=None, dashed_name=None):
+            include_modus_ponens_inference_rule=None,
+            stabilized: bool = False,
+            echo: bool = False):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for self.declare_theory(...).
@@ -3668,14 +3716,17 @@ class UniverseOfDiscourse(SymbolicObjct):
         """
         return self.declare_theory(
             symbol=symbol,
+            header=header,
+            dashed_name=dashed_name,
             extended_theory=extended_theory,
             extended_theory_limit=extended_theory_limit,
             include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule,
             include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule,
             include_double_negation_introduction_inference_rule=include_double_negation_introduction_inference_rule,
             include_inconsistency_introduction_inference_rule=include_inconsistency_introduction_inference_rule,
-            header=header,
-            dashed_name=dashed_name)
+            include_modus_ponens_inference_rule=include_modus_ponens_inference_rule,
+            stabilized=stabilized,
+            echo=echo)
 
     # @FreeVariableContext()
     @contextlib.contextmanager
@@ -4025,7 +4076,7 @@ class ModusPonensStatement(FormulaStatement):
         self.conditional = conditional
         self.antecedent = antecedent
         valid_proposition = ModusPonensInferenceRule.execute_algorithm(
-            theory=theory, conditional=conditional, antecedent=antecedent)
+            t=theory, conditional=conditional, antecedent=antecedent)
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             category=category, reference=reference, title=title,
@@ -4061,27 +4112,30 @@ class ModusPonensInferenceRule(InferenceRule):
             category=category, theory=theory, reference=reference, title=title)
 
     @staticmethod
-    def execute_algorithm(theory, conditional, antecedent):
+    def execute_algorithm(
+            t: TheoryElaboration,
+            conditional: FormulaStatement,
+            antecedent: FormulaStatement):
         """Execute the modus-ponens algorithm."""
-        assert isinstance(theory, TheoryElaboration)
-        assert isinstance(conditional, FormulaStatement)
         verify(
-            theory.contains_theoretical_objct(conditional),
+            t.contains_theoretical_objct(conditional),
             'The conditional of the modus-ponens is not contained in the '
             'theory hierarchy.',
-            conditional=conditional, theory=theory)
+            conditional=conditional, theory=t)
         verify(
-            theory.contains_theoretical_objct(antecedent),
+            t.contains_theoretical_objct(antecedent),
             'The antecedent of the modus-ponens is not contained in the '
             'theory hierarchy.',
-            antecedent=antecedent, theory=theory)
+            antecedent=antecedent, theory=t)
         verify(
             isinstance(
-                theory.universe_of_discourse.implication_relation,
+                t.universe_of_discourse.implication_relation,
                 Relation),
             'The usage of the ModusPonens class in a theory requires the '
             'implication-relation in the universe-of-discourse.')
-        assert conditional.valid_proposition.relation is theory.universe_of_discourse.implication_relation
+        verify(
+            conditional.valid_proposition.relation is t.universe_of_discourse.implication_relation,
+            'The root relation of the conditional formula is not the implication-relation defined in this universe-of-discourse.')
         p_prime = conditional.valid_proposition.parameters[0]
         q_prime = conditional.valid_proposition.parameters[1]
         mask = p_prime.get_variable_set()
@@ -4097,7 +4151,7 @@ class ModusPonensInferenceRule(InferenceRule):
         # Build q by variable substitution
         substitution_map = dict((v, k) for k, v in _values.items())
         valid_proposition = q_prime.substitute(
-            substitution_map=substitution_map, target_theory=theory)
+            substitution_map=substitution_map, target_theory=t)
         return valid_proposition
 
     @staticmethod
