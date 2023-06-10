@@ -2767,15 +2767,6 @@ class Hypothesis(Statement):
         verify(
             hypothetical_proposition.is_proposition,
             'hypothetical_proposition is not a proposition.')
-        self.hypothetical_proposition = hypothetical_proposition
-        self.hypothetical_t = t.universe_of_discourse.t(
-            extended_theory=t,
-            extended_theory_limit=self
-        )
-        self.hypothetical_axiom = self.hypothetical_t.axiom(
-            f'Assume {hypothetical_proposition.repr_as_formula()} is true.')
-        self.hypothetical_dai = self.hypothetical_t.dai(valid_proposition=hypothetical_proposition,
-                                                        ap=self.hypothetical_axiom)
         if symbol is None:
             # If no symbol is passed as a parameter,
             # automated assignment of symbol is assumed.
@@ -2786,6 +2777,17 @@ class Hypothesis(Statement):
             theory=t, category=category, symbol=symbol,
             header=header, dashed_name=dashed_name, echo=False)
         super()._declare_class_membership(declarative_class_list.hypothesis)
+        self.hypothetical_proposition = hypothetical_proposition
+        self.hypothetical_t = t.universe_of_discourse.t(
+            extended_theory=t,
+            extended_theory_limit=self
+        )
+        self.hypothetical_axiom = self.universe_of_discourse.axiom(
+            f'Assume {hypothetical_proposition.repr_as_formula()} is true.')
+        self.hypothetical_axiom_postulate = self.hypothetical_t.postulate_axiom(
+            self.hypothetical_axiom)
+        self.hypothetical_dai = self.hypothetical_t.dai(valid_proposition=hypothetical_proposition,
+                                                        ap=self.hypothetical_axiom_postulate)
 
 
 class Proof:
