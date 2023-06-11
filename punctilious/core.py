@@ -347,13 +347,14 @@ class SymbolicObjct:
     """
 
     def __init__(
-            self, symbol,
-            universe_of_discourse,
-            is_theory_foundation_system=None,
-            is_universe_of_discourse=None,
-            echo=None,
-            header=None,
-            dashed_name=None):
+            self,
+            symbol: (None, str, Symbol),
+            universe_of_discourse: UniverseOfDiscourse,
+            is_theory_foundation_system: bool = False,
+            is_universe_of_discourse: bool = False,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: bool = False):
         echo = get_config(echo, configuration.echo_symbolic_objct, configuration.echo_default, fallback_value=False)
         self._declarative_classes = frozenset()
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
@@ -526,8 +527,13 @@ class TheoreticalObjct(SymbolicObjct):
     """
 
     def __init__(
-            self, symbol,
-            is_theory_foundation_system=None, universe_of_discourse=None, echo=None, header=None, dashed_name=None):
+            self,
+            symbol: (None, str, Symbol),
+            universe_of_discourse: UniverseOfDiscourse,
+            is_theory_foundation_system: bool = False,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: bool = False):
         # pseudo-class properties. these must be overwritten by
         # the parent constructor after calling __init__().
         # the rationale is that checking python types fails
@@ -536,11 +542,14 @@ class TheoreticalObjct(SymbolicObjct):
         # more robust and allow for duck typing.
         super().__init__(
             symbol=symbol,
-            is_theory_foundation_system=is_theory_foundation_system,
             universe_of_discourse=universe_of_discourse,
+            is_theory_foundation_system=is_theory_foundation_system,
             header=header,
-            dashed_name=dashed_name)
+            dashed_name=dashed_name,
+            echo=False)
         super()._declare_class_membership(classes.theoretical_objct)
+        if echo:
+            repm.prnt(self.repr_fully_qualified_name())
 
     def get_variable_set(self):
         """Return the set of variables contained in o (self), including o itself.
@@ -595,7 +604,7 @@ class TheoreticalObjct(SymbolicObjct):
 
     def is_masked_formula_similar_to(
             self,
-            o2: TheoreticalObjct,
+            o2: (Formula, FormulaStatement, FreeVariable, Relation, SimpleObjct, TheoreticalObjct),
             mask: (None, frozenset[FreeVariable]) = None) \
             -> bool:
         """Given two theoretical-objects o₁ (self) and o₂,
@@ -636,7 +645,7 @@ class TheoreticalObjct(SymbolicObjct):
 
     def _is_masked_formula_similar_to(
             self,
-            o2: TheoreticalObjct,
+            o2: (Formula, FormulaStatement, FreeVariable, Relation, SimpleObjct, TheoreticalObjct),
             mask: (None, frozenset[FreeVariable]) = None,
             _values: (None, dict) = None) \
             -> (bool, dict):
@@ -656,14 +665,14 @@ class TheoreticalObjct(SymbolicObjct):
             of variable values consistency.
         """
         o1 = self
-        if is_in_class(o1, classes.formula_statement):
-            # Unpack the formula-statement
-            # to compare the formula it contains.
-            o1 = o1.valid_proposition
-        if is_in_class(o2, classes.formula_statement):
-            # Unpack the formula-statement
-            # to compare the formula it contains.
-            o2 = o2.valid_proposition
+        # if is_in_class(o1, classes.formula_statement):
+        #    # Unpack the formula-statement
+        #    # to compare the formula it contains.
+        #    o1 = o1.valid_proposition
+        # if is_in_class(o2, classes.formula_statement):
+        #    # Unpack the formula-statement
+        #    # to compare the formula it contains.
+        #    o2 = o2.valid_proposition
         mask = frozenset() if mask is None else mask
         _values = dict() if _values is None else _values
         if o1 is o2:
@@ -672,7 +681,7 @@ class TheoreticalObjct(SymbolicObjct):
         if o1.is_formula_equivalent_to(o2):
             # Sufficient condition.
             return True, _values
-        if isinstance(o1, Formula) and isinstance(o2, Formula):
+        if isinstance(o1, (Formula, FormulaStatement)) and isinstance(o2, (Formula, FormulaStatement)):
             # When both o1 and o2 are formula,
             # verify that their components are masked-formula-similar.
             relation_output, _values = o1.relation._is_masked_formula_similar_to(
@@ -1317,9 +1326,15 @@ class Statement(TheoreticalObjct):
     """
 
     def __init__(
-            self, theory: TheoryElaboration, category, symbol: (None, Symbol) = None,
-            reference=None, title=None, echo: bool = False,
-            header: (None, ObjctHeader) = None, dashed_name: (None, DashedName) = None):
+            self,
+            theory: TheoryElaboration,
+            category,
+            symbol: (None, str, Symbol) = None,
+            reference=None,
+            title=None,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: bool = False):
         echo = get_config(echo, configuration.echo_statement, configuration.echo_default, fallback_value=False)
         universe_of_discourse = theory.universe_of_discourse
         self.statement_index = theory.crossreference_statement(self)
@@ -1519,13 +1534,13 @@ class FormulaStatement(Statement):
         echo = get_config(echo, configuration.echo_statement, configuration.echo_default, fallback_value=False)
         verify(
             theory.universe_of_discourse is valid_proposition.universe_of_discourse,
-            'theory.universe_of_discourse is '
-            'valid_proposition.universe_of_discourse')
+            'The universe-of-discourse of this formula-statement''s theory-elaboration is '
+            'inconsistent with the universe-of-discourse of the valid-proposition of that formula-statement.')
         universe_of_discourse = theory.universe_of_discourse
         # Theory statements must be logical propositions.
         verify(
             valid_proposition.is_proposition,
-            'valid_proposition.is_proposition')
+            'The formula of this statement is not propositional.')
         # TODO: Check that all components of the hypothetical-proposition
         #  are elements of the source theory-branch.
         self.valid_proposition = valid_proposition
@@ -1553,6 +1568,24 @@ class FormulaStatement(Statement):
 
     def __str__(self):
         return self.repr(expanded=True)
+
+    @property
+    def parameters(self):
+        """The parameters of a formula-statement
+        are the parameters of the valid-proposition-formula it contains."""
+        return self.valid_proposition.parameters
+
+    @property
+    def relation(self):
+        """The relation of a formula-statement
+        is the relation of the valid-proposition-formula it contains."""
+        return self.valid_proposition.relation
+
+    def is_formula_equivalent_to(self, o2):
+        """Considering this formula-statement as a formula,
+        that is the valid-proposition-formula it contains,
+        check if it is formula-equivalent to o2."""
+        return self.valid_proposition.is_formula_equivalent_to(o2)
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None):
         """Iterate through this and all the theoretical-objcts it contains recursively."""
