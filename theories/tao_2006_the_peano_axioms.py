@@ -1,11 +1,13 @@
+""""""
 import punctilious as p
 
-u = p.u
-ft = p.ft
+u = p.UniverseOfDiscourse()
+ft = u.t(include_modus_ponens_inference_rule=True, include_conjunction_introduction_inference_rule=True,
+         include_double_negation_introduction_inference_rule=True)
 
 t = u.t(
-    symbol=f'theory 2.1: the Peano axioms',
-    extended_theory=ft)
+    header=f'theory 2.1: the Peano axioms',
+    extended_theory=ft, dashed_name='tao-2006-theory-2-1-the-peano-axioms')
 
 # simple-objct declarations
 zero = u.o('0')

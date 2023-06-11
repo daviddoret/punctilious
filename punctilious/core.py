@@ -92,6 +92,7 @@ class DeclarativeClassList(repm.Representation):
         self.formula_statement = DeclarativeClass('formula_statement', 'formula-statement')
         self.free_variable = DeclarativeClass('free_variable', 'free-variable')
         self.hypothesis = DeclarativeClass('hypothesis', 'hypothesis')
+        self.inference_rule = DeclarativeClass('inference_rule', 'inference-rule')
         self.note = DeclarativeClass('note', 'note')
         self.proposition = DeclarativeClass('proposition', 'proposition')
         self.relation = DeclarativeClass('relation', 'relation')
@@ -120,7 +121,7 @@ classes = declarative_class_list
 
 def is_in_class(
         o: TheoreticalObjct,
-        c: DeclarativeClass):
+        c: DeclarativeClass) -> bool:
     """Return True if o is a member of the declarative-class c, False otherwise.
 
     :param o: An arbitrary python object.
@@ -223,7 +224,12 @@ class Symbol:
     def __str__(self):
         return self.repr()
 
-    def repr(self, hide_index=False):
+    def repr(self, hide_index=False) -> str:
+        """Return the default representation for this python obje.
+
+        :param hide_index:
+        :return:
+        """
         if hide_index:
             return f'{self.base}'
         else:
@@ -263,7 +269,7 @@ class ObjctHeader:
     def __str__(self):
         return self.repr()
 
-    def repr(self, cap: bool = False):
+    def repr(self, cap: bool = False) -> str:
         """Return the default representation for this long-name.
 
         :param cap: Whether the representation must be capitalized (default: False).
@@ -271,10 +277,10 @@ class ObjctHeader:
         """
         return self.repr_reference(cap=cap)
 
-    def repr_header(self, cap: bool = False):
+    def repr_header(self, cap: bool = False) -> str:
         return f'{self.category.repr_as_natural_language(cap=cap)} {self.reference}{"" if self.title is None else " - " + self.title}'
 
-    def repr_reference(self, cap: bool = False):
+    def repr_reference(self, cap: bool = False) -> str:
         cap = False if cap is None else cap
         return f'{self.category.repr_as_natural_language(cap=cap)} {self.reference}'
 
@@ -301,12 +307,12 @@ class DashedName:
     def __str__(self):
         return self.repr()
 
-    def repr(self):
+    def repr(self) -> str:
         """Return the default representation.
         """
         return self.repr_dashed_name()
 
-    def repr_dashed_name(self):
+    def repr_dashed_name(self) -> str:
         """Return a dashed-name representation.
         """
         return self._dashed_name
@@ -329,13 +335,13 @@ class StatementTitleOBSOLETE:
     def __str__(self):
         return self.repr_ref()
 
-    def repr_full(self, cap=False):
+    def repr_full(self, cap=False) -> str:
         category = str(self.category.natural_name.capitalize() if cap else self.category.natural_name)
         reference = str(self.reference)
         return repm.serif_bold(
             f'{category} {reference}{" - " + self.title if self.title is not None else ""}')
 
-    def repr_ref(self, cap=False):
+    def repr_ref(self, cap=False) -> str:
         return repm.serif_bold(
             f'{self.category.natural_name.capitalize() if cap else self.category.natural_name} {self.reference}')
 
@@ -399,7 +405,7 @@ class SymbolicObjct:
         return self.repr_as_symbol()
 
     @property
-    def declarative_classes(self):
+    def declarative_classes(self) -> frozenset[DeclarativeClass]:
         """The set of declarative-classes this symbolic-objct is a member of."""
         return self._declarative_classes
 
@@ -411,17 +417,17 @@ class SymbolicObjct:
     def echo(self):
         raise NotImplementedError('This is an abstract method.')
 
-    def is_declarative_class_member(self, c: DeclarativeClass):
+    def is_declarative_class_member(self, c: DeclarativeClass) -> bool:
         """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise."""
         return c in self._declarative_classes
 
-    def is_in_class(self, c: DeclarativeClass):
+    def is_in_class(self, c: DeclarativeClass) -> bool:
         """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise.
 
         A shortcut for o.is_declarative_class_member(...)."""
         return self.is_declarative_class_member(c=c)
 
-    def is_symbol_equivalent(self, o2):
+    def is_symbol_equivalent(self, o2) -> bool:
         """Returns true if this object and o2 are symbol-equivalent.
 
         Definition:
@@ -457,13 +463,13 @@ class SymbolicObjct:
     def prnt(self, expanded=False):
         repm.prnt(self.repr(expanded=expanded))
 
-    def repr_dashed_name(self):
+    def repr_dashed_name(self) -> str:
         """"""
         if self.dashed_name is None:
             return None
         return self.dashed_name.repr_dashed_name()
 
-    def repr_fully_qualified_name(self):
+    def repr_fully_qualified_name(self) -> str:
         """"""
         fully_qualified_name = self.repr_header() if self.header is not None else self.repr_dashed_name() if self.dashed_name is not None else self.repr_as_symbol()
         fully_qualified_name += ' (' if self.header is not None or self.dashed_name is not None else ''
@@ -471,10 +477,10 @@ class SymbolicObjct:
         fully_qualified_name += self.repr_as_symbol() + ')' if self.header is not None or self.dashed_name is not None else ''
         return fully_qualified_name
 
-    def repr_as_declaration(self):
+    def repr_as_declaration(self) -> str:
         return f'Let {self.repr_as_symbol()} be a symbolic-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
 
-    def repr_as_symbol(self):
+    def repr_as_symbol(self) -> str:
         global configuration
         hide_index = \
             not is_in_class(self, classes.u) and \
@@ -485,7 +491,7 @@ class SymbolicObjct:
 
         return self.symbol.repr(hide_index=hide_index)
 
-    def repr_header(self, cap: bool = False):
+    def repr_header(self, cap: bool = False) -> str:
         global configuration
         if self.header is None:
             # If we have no long-name for this symbolic-objct,
@@ -493,7 +499,7 @@ class SymbolicObjct:
             return self.repr_as_symbol()
         return self.header.repr_header(cap=cap)
 
-    def repr_reference(self, cap: bool = False):
+    def repr_reference(self, cap: bool = False) -> str:
         global configuration
         if self.header is None:
             # If we have no long-name for this symbolic-objct,
@@ -501,7 +507,7 @@ class SymbolicObjct:
             return self.repr_as_symbol()
         return self.header.repr_reference(cap=cap)
 
-    def repr(self, expanded=None):
+    def repr(self, expanded=None) -> str:
         # If a long-name is available, represent the objct as a reference.
         # Otherwise, represent it as a symbol.
         return self.repr_reference()
@@ -1045,9 +1051,7 @@ class Formula(TheoreticalObjct):
             self.relation.arity == self.arity,
             'The arity of this formula''s relation is inconsistent with the number of parameters in the formula.',
             relation=self.relation,
-            relation_arity=self.relation.arity,
-            parameters=parameters,
-            parameters_arity=self.arity)
+            parameters=parameters)
         self.parameters = parameters
         super().__init__(
             symbol=symbol,
@@ -1299,14 +1303,16 @@ class StatementCategory(repm.Representation):
 
 
 class StatementCategories(repm.Representation):
-    corollary = StatementCategory('corollary', '𝑝', 'corollary')
-    formal_definition = StatementCategory('formal_definition', '𝑑', 'formal definition')
-    lemma = StatementCategory('lemma', '𝑝', 'lemma')
     axiom = StatementCategory('axiom', '𝑎', 'axiom')
+    corollary = StatementCategory('corollary', '𝑝', 'corollary')
     definition = StatementCategory('definition', '𝑑', 'definition')
+    formal_definition = StatementCategory('formal_definition', '𝑑', 'formal definition')
     hypothesis = StatementCategory('hypothesis', 'ℎ', 'hypothesis')
+    inference_rule_inclusion = StatementCategory('inference_rule_inclusion', '𝑖', 'inference rule inclusion')
+    lemma = StatementCategory('lemma', '𝑝', 'lemma')
     proposition = StatementCategory('proposition', '𝑝', 'proposition')
     theorem = StatementCategory('theorem', '𝑝', 'theorem')
+    # Special categories
     missing_category = StatementCategory('missing_category', '�', 'missing category')
 
 
@@ -1860,6 +1866,58 @@ class InferenceRule:
     @staticmethod
     def infer(*args, **kwargs):
         pass
+
+
+import collections.abc
+
+
+class InferenceRule2(TheoreticalObjct):
+    """An inference-rule object."""
+
+    def __init__(self,
+                 universe_of_discourse: UniverseOfDiscourse,
+                 infer_method: collections.abc.Callable,
+                 initialize_method: collections.abc.Callable,
+                 symbol: (None, str, Symbol) = None,
+                 header: (None, str, ObjctHeader) = None,
+                 dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
+
+        if symbol is None:
+            # If no symbol is passed as a parameter,
+            # automated assignment of symbol is assumed.
+            base = '𝑖'
+            index = universe_of_discourse.index_symbol(base=base)
+            symbol = Symbol(base=base, index=index)
+        universe_of_discourse.cross_reference_inference_rule(self)
+        super().__init__(universe_of_discourse=universe_of_discourse,
+                         is_theory_foundation_system=False,
+                         symbol=symbol, header=header, dashed_name=dashed_name, echo=False)
+        super()._declare_class_membership(declarative_class_list.hypothesis)
+        if echo:
+            self.echo()
+
+    def echo(self):
+        repm.prnt(self.repr_report())
+
+
+class InferenceRuleInclusionStatement(Statement):
+    """The statement that inference-rule I is allowed in the current theory-elaboration."""
+
+    def __init__(self,
+                 t: TheoryElaboration,
+                 inference_rule: InferenceRule2,
+                 symbol: (None, str, Symbol) = None,
+                 header: (None, str, ObjctHeader) = None,
+                 dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
+        verify(not t.stabilized,
+               'Theory t is stabilized, it is no longer possible to allow a new inference-rule.',
+               t=t,
+               inference_rule=inference_rule)
+        super().__init__(
+            theory=t,
+            category=statement_categories.inference_rule_inclusion,
+            symbol=symbol, header=header, dashed_name=dashed_name, echo=False)
+        XXX
 
 
 class AtheoreticalStatement(SymbolicObjct):
@@ -3100,10 +3158,11 @@ class Tuple(tuple):
 
 
 class UniverseOfDiscourse(SymbolicObjct):
-    def __init__(self, symbol=None, echo=None):
+    def __init__(self, symbol: (None, str, Symbol) = None, echo: (None, bool) = None):
         dashed_name = 'universe-of-discourse'
         self.axioms = dict()
         self.formulae = dict()
+        self.inference_rules = dict()
         self.relations = dict()
         self.theories = dict()
         self.simple_objcts = dict()
@@ -3312,21 +3371,26 @@ class UniverseOfDiscourse(SymbolicObjct):
             'universe-of-discourse')
         self._truth_simple_objct = o
 
-    def cross_reference_axiom(self, a: Axiom):
-        """Cross-references 𝑎 as an axiom in this universe-of-discourse.
+    def cross_reference_axiom(self, a: Axiom) -> bool:
+        """Cross-references an axiom in this universe-of-discourse.
 
         :param a: an axiom.
         """
-        verify(is_in_class(a, classes.axiom),
-               '𝑎 is not a member of the axiom declarative-class.', a=a)
         verify(
-            a.symbol not in self.axioms.keys() or a is self.axioms[
-                a.symbol],
-            'The symbol of 𝑎 is already referenced as an axiom in this universe-of-discourse, but the corresponding '
-            'object is not 𝑎.',
-            a=a)
+            is_in_class(a, classes.axiom),
+            'Parameter ⌜a⌝ is not an axiom.',
+            a=a,
+            universe_of_discourse=self)
+        verify(
+            a.symbol not in self.axioms.keys() or a is self.axioms[a.symbol],
+            'The symbol of parameter ⌜a⌝ is already referenced as a distinct axiom in this universe-of-discourse.',
+            a=a,
+            universe_of_discourse=self)
         if a not in self.axioms:
             self.axioms[a.symbol] = a
+            return True
+        else:
+            return False
 
     def cross_reference_formula(self, phi: Formula):
         """Cross-references a formula in this universe-of-discourse.
@@ -3344,6 +3408,27 @@ class UniverseOfDiscourse(SymbolicObjct):
             'that it is referenced with a unique symbol.')
         if phi not in self.formulae:
             self.formulae[phi.symbol] = phi
+
+    def cross_reference_inference_rule(self, ir: InferenceRule2) -> bool:
+        """Cross-references an inference-rule in this universe-of-discourse.
+
+        :param ir: an inference-rule.
+        """
+        verify(
+            is_in_class(ir, classes.inference_rule),
+            'Parameter ⌜ir⌝ is not an inference-rule.',
+            ir=ir,
+            universe_of_discourse=self)
+        verify(
+            ir.symbol not in self.inference_rules.keys() or ir is self.inference_rules[ir.symbol],
+            'The symbol of parameter ⌜ir⌝ is already referenced as a distinct inference-rule in this universe-of-discourse.',
+            ir=ir,
+            universe_of_discourse=self)
+        if ir not in self.inference_rules:
+            self.inference_rules[ir.symbol] = ir
+            return True
+        else:
+            return False
 
     def cross_reference_relation(self, r: Relation):
         """Cross-references a relation in this universe-of-discourse.
@@ -4215,6 +4300,16 @@ class ModusPonensInferenceRule(InferenceRule):
         # TODO: Justify the inclusion of this inference-rule in the theory.
 
 
+class InferenceRules(repm.Representation):
+    def __init__(self, python_name: str, natural_language_name: str):
+        super().__init__(python_name=python_name, natural_language_name=natural_language_name)
+        self.conjunction_introduction = ConjunctionIntroductionInferenceRule
+        self.modus_ponens = ModusPonensInferenceRule
+
+
+inference_rules = InferenceRules('inference_rules', 'inference-rules')
+
+
 class InconsistencyIntroductionStatement(FormulaStatement):
     """
 
@@ -4308,13 +4403,13 @@ class InconsistencyIntroductionInferenceRule(InferenceRule):
         # TODO: Justify the inclusion of this inference-rule in the theory.
 
 
-foundation_theory = None
-ft = None
-commutativity_of_equality = None
-# implies = None
-equality = None
-tru = None
-fls = None
-has_truth_value = None
+# foundation_theory = None
+# ft = None
+# commutativity_of_equality = None
+## implies = None
+# equality = None
+# tru = None
+# fls = None
+# has_truth_value = None
 
 pass
