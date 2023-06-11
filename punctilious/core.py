@@ -118,14 +118,16 @@ declarative_class_list = DeclarativeClassList('declarative_class_list', 'declara
 classes = declarative_class_list
 
 
-def is_in_class(o, c):
+def is_in_class(
+        o: TheoreticalObjct,
+        c: DeclarativeClass):
     """Return True if o is a member of the declarative-class c, False otherwise.
 
     :param o: An arbitrary python object.
     :param c: A declarative-class.
     :return: (bool).
     """
-    verify(o is not None, 'o is None.', o=o, c=c)
+    # verify(o is not None, 'o is None.', o=o, c=c)
     verify(hasattr(o, 'is_in_class'), 'o does not have attribute is_in_class.', o=o, c=c)
     verify(callable(getattr(o, 'is_in_class')), 'o.is_in_class() is not callable.', o=o, c=c)
     return o.is_in_class(c)
@@ -1006,8 +1008,15 @@ class Formula(TheoreticalObjct):
         python_name='postfix-operator', sample='𝐱◆')
 
     def __init__(
-            self, relation: (Relation, FreeVariable), parameters: tuple, symbol=None,
-            universe_of_discourse: UniverseOfDiscourse = None, lock_variable_scope=None, echo=None):
+            self,
+            relation: (Relation, FreeVariable),
+            parameters: tuple,
+            universe_of_discourse: UniverseOfDiscourse,
+            symbol: (None, str, Symbol) = None,
+            lock_variable_scope: bool = False,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
         """
 
         :param theory:
@@ -1017,7 +1026,6 @@ class Formula(TheoreticalObjct):
         :param arity: Mandatory if relation is a FreeVariable.
         """
         echo = get_config(echo, configuration.echo_formula, configuration.echo_default, fallback_value=False)
-        lock_variable_scope = False if lock_variable_scope is None else lock_variable_scope
         self.free_variables = dict()  # TODO: Check how to make dict immutable after construction.
         # self.formula_index = theory.crossreference_formula(self)
         if symbol is None:
@@ -1028,15 +1036,24 @@ class Formula(TheoreticalObjct):
         self.relation = relation
         parameters = parameters if isinstance(parameters, tuple) else tuple(
             [parameters])
-        assert len(parameters) > 0
-        arity = len(parameters)
-        if isinstance(relation, Relation):
-            assert self.relation.arity == arity
-        self.arity = arity
+        self.arity = len(parameters)
+        verify(self.arity > 0,
+               'The number of parameters in this formula is zero. 0-ary relations are currently not supported.')
+
+        verify(
+            is_in_class(relation, classes.free_variable) or
+            self.relation.arity == self.arity,
+            'The arity of this formula''s relation is inconsistent with the number of parameters in the formula.',
+            relation=self.relation,
+            relation_arity=self.relation.arity,
+            parameters=parameters,
+            parameters_arity=self.arity)
         self.parameters = parameters
         super().__init__(
             symbol=symbol,
             universe_of_discourse=universe_of_discourse,
+            header=header,
+            dashed_name=dashed_name,
             echo=False)
         universe_of_discourse.cross_reference_formula(self)
         verify(
@@ -1993,7 +2010,6 @@ class TheoryElaboration(TheoreticalObjct):
         include_conjunction_introduction_inference_rule = False if \
             include_conjunction_introduction_inference_rule is None else \
             include_conjunction_introduction_inference_rule
-        self._includes_conjunction_introduction_inference_rule = False
         if include_conjunction_introduction_inference_rule:
             self.include_conjunction_introduction_inference_rule()
         # Double negation introduction
@@ -2105,9 +2121,21 @@ class TheoryElaboration(TheoreticalObjct):
     @conjunction_introduction_inference_rule.setter
     def conjunction_introduction_inference_rule(self, ir: InferenceRule):
         verify(
-            self._conjunction_introduction_inference_rule is None,
-            'The conjunction-introduction inference-rule property of a theory can only be '
-            'set once to prevent instability.')
+            not self.stabilized,
+            'This theory-elaboration is stabilized, it is no longer possible to allow new inference-rules.',
+            inference_rule=ir,
+            self_stabilized=self.stabilized,
+            slf=self
+        )
+        verify(
+            self._conjunction_introduction_inference_rule is not None and
+            self._conjunction_introduction_inference_rule is not ir,
+            'The conjunction-introduction inference-rule is already set on this theory-elaboration, '
+            'it is no longer possible to modify this inference-rule.',
+            inference_rule=ir,
+            self_stabilized=self.stabilized,
+            slf=self
+        )
         self._conjunction_introduction_inference_rule = ir
 
     def crossreference_axiom_inclusion(self, a):
@@ -2277,11 +2305,11 @@ class TheoryElaboration(TheoreticalObjct):
         :param title:
         :return:
         """
-        if not self.conjunction_introduction_inference_rule_is_included:
+        if self.conjunction_introduction_inference_rule is None:
             raise UnsupportedInferenceRuleException(
                 'The conjunction-introduction inference-rule is not contained '
-                'in this theory.',
-                theory=self, conjunct_p=conjunct_p, conjunct_q=conjunct_q)
+                'in this theory-elaboration.',
+                theory_elaboration=self, conjunct_p=conjunct_p, conjunct_q=conjunct_q)
         else:
             return self.conjunction_introduction_inference_rule.infer(
                 theory=self, conjunct_p=conjunct_p, conjunct_q=conjunct_q,
@@ -2546,16 +2574,17 @@ class TheoryElaboration(TheoreticalObjct):
         self._includes_biconditional_introduction_inference_rule = True
 
     def include_conjunction_introduction_inference_rule(self):
-        """Include the conjunction-introduction inference-rule in this
-        theory."""
-        verify(
-            not self.conjunction_introduction_inference_rule_is_included,
-            'The conjunction-introduction inference-rule is already included in this theory.')
-        # TODO: Justify the inclusion of the inference-rule in the theory
-        #   with adequate statements (axioms?).
-        self.universe_of_discourse.include_conjunction_relation()
-        self._conjunction_introduction_inference_rule = ConjunctionIntroductionInferenceRule
-        self._includes_conjunction_introduction_inference_rule = True
+        """Include the conjunction-introduction inference-rule in this theory.
+        TODO: Change verb from include to assure."""
+        verify(not self.stabilized,
+               'This theory-elaboration is stabilized. Allowing new inference-rules is no longer possible',
+               self_stabilized=self.stabilized,
+               slf=self)
+        if self._conjunction_introduction_inference_rule is None:
+            # TODO: Justify the inclusion of the inference-rule in the theory
+            #   with adequate statements (axioms?).
+            self.universe_of_discourse.include_conjunction_relation()
+            self._conjunction_introduction_inference_rule = ConjunctionIntroductionInferenceRule
 
     def include_double_negation_introduction_inference_rule(self):
         """Include the double-negation-introduction inference-rule in this
@@ -2605,16 +2634,6 @@ class TheoryElaboration(TheoreticalObjct):
             return self._includes_biconditional_introduction_inference_rule
         elif self.extended_theory is not None:
             return self.extended_theory.biconditional_introduction_inference_rule_is_included
-        else:
-            return None
-
-    @property
-    def conjunction_introduction_inference_rule_is_included(self):
-        """True if the conjunction-introduction inference-rule is included in this theory, False otherwise."""
-        if self._includes_conjunction_introduction_inference_rule is not None:
-            return self._includes_conjunction_introduction_inference_rule
-        elif self.extended_theory is not None:
-            return self.extended_theory.conjunction_introduction_inference_rule_is_included
         else:
             return None
 
@@ -2722,12 +2741,13 @@ class TheoryElaboration(TheoreticalObjct):
             reference=reference, title=title)
 
     def pose_hypothesis(
-            self, hypothetical_proposition: Formula, symbol: (None, Symbol) = None,
-            header: (None, ObjctHeader) = None, dashed_name: (None, DashedName) = None,
-            echo: bool = False):
+            self,
+            hypothetical_proposition: Formula, symbol: (None, str, Symbol) = None,
+            header: (None, str, ObjctHeader) = None, dashed_name: (None, str, DashedName) = None,
+            echo: bool = False) -> Hypothesis:
         """Pose a new hypothesis in the current theory."""
         return Hypothesis(
-            t=self, hypothetical_proposition=hypothetical_proposition,
+            t=self, hypothetical_formula=hypothetical_proposition,
             symbol=symbol, header=header, dashed_name=dashed_name,
             echo=echo)
 
@@ -2818,15 +2838,17 @@ class TheoryElaboration(TheoreticalObjct):
 
 class Hypothesis(Statement):
     def __init__(
-            self, t: TheoryElaboration, hypothetical_proposition: Formula, symbol: (None, Symbol) = None,
+            self, t: TheoryElaboration, hypothetical_formula: Formula, symbol: (None, Symbol) = None,
             header: (None, ObjctHeader) = None, dashed_name: (None, DashedName) = None,
             echo: bool = False):
         category = statement_categories.hypothesis
         # TODO: Check that all components of the hypothetical-proposition
         #  are elements of the source theory-branch.
         verify(
-            hypothetical_proposition.is_proposition,
-            'hypothetical_proposition is not a proposition.')
+            hypothetical_formula.is_proposition,
+            'The hypothetical-formula is not a proposition.',
+            hypothetical_formula=hypothetical_formula,
+            slf=self)
         if symbol is None:
             # If no symbol is passed as a parameter,
             # automated assignment of symbol is assumed.
@@ -2837,17 +2859,17 @@ class Hypothesis(Statement):
             theory=t, category=category, symbol=symbol,
             header=header, dashed_name=dashed_name, echo=False)
         super()._declare_class_membership(declarative_class_list.hypothesis)
-        self.hypothetical_proposition = hypothetical_proposition
+        self.hypothetical_proposition_formula = hypothetical_formula
         self.hypothetical_t = t.universe_of_discourse.t(
             extended_theory=t,
             extended_theory_limit=self
         )
         self.hypothetical_axiom = self.universe_of_discourse.axiom(
-            f'Assume {hypothetical_proposition.repr_as_formula()} is true.')
+            f'Assume {hypothetical_formula.repr_as_formula()} is true.')
         self.hypothetical_axiom_postulate = self.hypothetical_t.postulate_axiom(
             self.hypothetical_axiom)
-        self.hypothetical_dai = self.hypothetical_t.dai(valid_proposition=hypothetical_proposition,
-                                                        ap=self.hypothetical_axiom_postulate)
+        self.proposition = self.hypothetical_t.dai(valid_proposition=hypothetical_formula,
+                                                   ap=self.hypothetical_axiom_postulate)
 
 
 class Proof:
