@@ -14,8 +14,8 @@ class TestTheoryElaboration(TestCase):
         o3 = u.o()
         r1 = u.r(2, signal_proposition=True)
         p.configuration.echo_default = True
-        robust_theory = u.t()
-        robust_theory.modus_ponens_inference_rule = p.ModusPonensInferenceRule
+        robust_theory = u.t(include_conjunction_introduction_inference_rule=True,
+                            include_modus_ponens_inference_rule=True)
         ap1 = robust_theory.postulate_axiom(a=a1)
         with u.v() as x, u.v() as y, u.v() as z:
             implication = robust_theory.dai(

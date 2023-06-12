@@ -49,17 +49,17 @@ definition_2_1_3 = t.d(
 
 # 1
 proposition_2_1_3_1 = t.ddi(
-    u.f(t.equality, one, u.f(suc, zero)), definition_2_1_3,
+    u.f(u.eq, one, u.f(suc, zero)), definition_2_1_3,
     reference='2.1.3.1')
 
 # 2
 proposition_2_1_3_2 = t.ddi(
-    u.f(t.equality, two, u.f(suc, u.f(suc, zero))), definition_2_1_3,
+    u.f(u.eq, two, u.f(suc, u.f(suc, zero))), definition_2_1_3,
     reference='2.1.3.2')
 
 # 3
 proposition_2_1_3_3 = t.ddi(
-    u.f(t.equality, three, u.f(suc, u.f(suc, u.f(suc, zero)))),
+    u.f(u.eq, three, u.f(suc, u.f(suc, u.f(suc, zero)))),
     definition_2_1_3,
     reference='2.1.3.3')
 
@@ -85,7 +85,7 @@ p_2_1_4 = t.soet(proposition_2_2_5, p_2_1_3_3_c, reference='2.1.4')
 
 # 4
 proposition_2_1_3_3 = t.ddi(
-    u.f(t.equality, four, u.f(suc, u.f(suc, u.f(suc, u.f(suc, zero))))),
+    u.f(u.eq, four, u.f(suc, u.f(suc, u.f(suc, u.f(suc, zero))))),
     definition_2_1_3,
     reference='2.1.3.3.a')
 

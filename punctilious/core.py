@@ -1814,7 +1814,7 @@ class DirectDefinitionInference(FormulaStatement):
             valid_proposition.universe_of_discourse is theory.universe_of_discourse,
             'The UoD of a formal-definition valid-proposition must be '
             'consistent with the UoD of its theory.')
-        assert valid_proposition.relation is theory.equality
+        assert valid_proposition.relation is theory.universe_of_discourse.equality_relation
         self.definition = d
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
@@ -2037,9 +2037,9 @@ class TheoryElaboration(TheoreticalObjct):
         self._extended_theory = extended_theory
         self._extended_theory_limit = extended_theory_limit
         self._commutativity_of_equality = None
-        self._equality = None
-        self._negation = None
-        self._inequality = None
+        # self._equality = None
+        # self._negation = None
+        # self._inequality = None
         if symbol is None:
             base = '𝑡'
             index = u.index_symbol(base=base)
@@ -2540,28 +2540,28 @@ class TheoryElaboration(TheoreticalObjct):
             equality_statement=equality_statement, symbol=symbol,
             category=category, theory=self, reference=reference, title=title)
 
-    @property
-    def equality(self):
-        """(None, Relation) Equality is a fundamental theory property that enables
-        support for SoET. None if the property is not equipped on
-        the theory. An instance of Relation otherwise."""
-        if self._equality is not None:
-            return self._equality
-        elif self.extended_theory is not None:
-            return self.extended_theory.equality
-        else:
-            return None
-
-    @equality.setter
-    def equality(self, r):
-        verify(
-            self._equality is None,
-            'A theory equality property can only be set once to prevent '
-            'inconsistency.')
-        verify(
-            isinstance(r, Relation),
-            'The equality property must be a relation.')
-        self._equality = r
+    # @property
+    # def equality(self):
+    #     """(None, Relation) Equality is a fundamental theory property that enables
+    #     support for SoET. None if the property is not equipped on
+    #     the theory. An instance of Relation otherwise."""
+    #     if self._equality is not None:
+    #         return self._equality
+    #     elif self.extended_theory is not None:
+    #         return self.extended_theory.equality
+    #     else:
+    #         return None
+    #
+    # @equality.setter
+    # def equality(self, r):
+    #     verify(
+    #         self._equality is None,
+    #         'A theory equality property can only be set once to prevent '
+    #         'inconsistency.')
+    #     verify(
+    #         isinstance(r, Relation),
+    #         'The equality property must be a relation.')
+    #     self._equality = r
 
     def dai(
             self,
@@ -2748,28 +2748,29 @@ class TheoryElaboration(TheoreticalObjct):
         else:
             return None
 
-    @property
-    def inequality(self):
-        """(None, Relation) Inequality is a fundamental theory property.
-        None if the property is not equipped on the theory.
-        An instance of Relation otherwise."""
-        if self._inequality is not None:
-            return self._inequality
-        elif self.extended_theory is not None:
-            return self.extended_theory._inequality
-        else:
-            return None
-
-    @inequality.setter
-    def inequality(self, r):
-        verify(
-            self._inequality is None,
-            'A theory inequality property can only be set once to prevent '
-            'inconsistency.')
-        verify(
-            isinstance(r, Relation),
-            'The inequality property must be a relation.')
-        self._inequality = r
+    #
+    # @property
+    # def inequality(self):
+    #     """(None, Relation) Inequality is a fundamental theory property.
+    #     None if the property is not equipped on the theory.
+    #     An instance of Relation otherwise."""
+    #     if self._inequality is not None:
+    #         return self._inequality
+    #     elif self.extended_theory is not None:
+    #         return self.extended_theory._inequality
+    #     else:
+    #         return None
+    #
+    # @inequality.setter
+    # def inequality(self, r):
+    #     verify(
+    #         self._inequality is None,
+    #         'A theory inequality property can only be set once to prevent '
+    #         'inconsistency.')
+    #     verify(
+    #         isinstance(r, Relation),
+    #         'The inequality property must be a relation.')
+    #     self._inequality = r
 
     def mp(
             self, conditional, antecedent, symbol=None, category=None,
@@ -2780,28 +2781,29 @@ class TheoryElaboration(TheoreticalObjct):
             conditional=conditional, antecedent=antecedent, symbol=symbol,
             category=category, reference=reference, title=title)
 
-    @property
-    def negation(self):
-        """(None, Relation) Inequality is a fundamental theory property.
-        None if the property is not equipped on the theory.
-        An instance of Relation otherwise."""
-        if self._negation is not None:
-            return self._negation
-        elif self.extended_theory is not None:
-            return self.extended_theory.negation
-        else:
-            return None
-
-    @negation.setter
-    def negation(self, r):
-        verify(
-            self._negation is None,
-            'A theory negation property can only be set once to prevent '
-            'inconsistency.')
-        verify(
-            isinstance(r, Relation),
-            'The negation property must be a relation.')
-        self._negation = r
+    #
+    # @property
+    # def negation(self):
+    #     """(None, Relation) Inequality is a fundamental theory property.
+    #     None if the property is not equipped on the theory.
+    #     An instance of Relation otherwise."""
+    #     if self._negation is not None:
+    #         return self._negation
+    #     elif self.extended_theory is not None:
+    #         return self.extended_theory.negation
+    #     else:
+    #         return None
+    #
+    # @negation.setter
+    # def negation(self, r):
+    #     verify(
+    #         self._negation is None,
+    #         'A theory negation property can only be set once to prevent '
+    #         'inconsistency.')
+    #     verify(
+    #         isinstance(r, Relation),
+    #         'The negation property must be a relation.')
+    #     self._negation = r
 
     def d(self, natural_language, symbol=None, reference=None, title=None):
         """Elaborate a new definition with natural-language. Shortcut function for
@@ -3115,7 +3117,7 @@ class SubstitutionOfEqualTerms(FormulaStatement):
         assert theory.contains_theoretical_objct(original_expression)
         assert isinstance(equality_statement, FormulaStatement)
         assert theory.contains_theoretical_objct(equality_statement)
-        assert equality_statement.valid_proposition.relation is theory.equality
+        assert equality_statement.valid_proposition.relation is theory.universe_of_discourse.equality_relation
         left_term = equality_statement.valid_proposition.parameters[0]
         right_term = equality_statement.valid_proposition.parameters[1]
         self.original_expression = original_expression
@@ -3191,6 +3193,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         self._equality_relation = None
         self._falsehood_simple_objct = None
         self._implication_relation = None
+        self._inequality_relation = None
         self._inconsistent_relation = None
         self._negation_relation = None
         self._provable_from_relation = None
@@ -3246,12 +3249,30 @@ class UniverseOfDiscourse(SymbolicObjct):
         return self._conjunction_relation
 
     @property
+    def eq(self):
+        """⌜ eq ⌝, standing for equality, is an alias for the well-known equality-relation."""
+        return self.equality_relation
+
+    @property
+    def neq(self):
+        """⌜ neq ⌝, standing for not-equality, is an alias for the well-known inequality-relation."""
+        return self.inequality_relation
+
+    @property
     def equality_relation(self):
         """The well-known equality-relation in this universe-of-discourse.
         If it is not yet present in the universe-of-discourse, declare it."""
         if self._equality_relation is None:
             self._declare_equality_relation()
         return self._equality_relation
+
+    @property
+    def inequality_relation(self):
+        """The well-known inequality-relation in this universe-of-discourse.
+        If it is not yet present in the universe-of-discourse, declare it."""
+        if self._inequality_relation is None:
+            self._declare_inequality_relation()
+        return self._inequality_relation
 
     @property
     def falsehood_simple_objct(self):
@@ -3631,6 +3652,13 @@ class UniverseOfDiscourse(SymbolicObjct):
             self._equality_relation = self.r(
                 2, '=', Formula.infix_operator_representation,
                 signal_proposition=True, dashed_name='equality')
+
+    def _declare_inequality_relation(self):
+        """Declare the well-known inequality-relation in this universe-of-discourse."""
+        if self._inequality_relation is None:
+            self._inequality_relation = self.r(
+                2, '≠', Formula.infix_operator_representation,
+                signal_proposition=True, dashed_name='inequality')
 
     def include_falsehood_simple_objct(self):
         """Assure the existence of the falsehood simple-objct in this
