@@ -1727,7 +1727,8 @@ class FormulaStatement(Statement):
             return super().repr(expanded=expanded)
 
     def repr_as_formula(self, expanded=None):
-        return f'{self.repr_as_symbol()} ⊢ ({self.valid_proposition.repr_as_formula(expanded=expanded)})'
+        # return f'{self.repr_as_symbol()} ⊢ ({self.valid_proposition.repr_as_formula(expanded=expanded)})'
+        return f'{self.valid_proposition.repr_as_formula(expanded=expanded)}'
 
 
 class DirectAxiomInference(FormulaStatement):
