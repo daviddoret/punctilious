@@ -1437,7 +1437,7 @@ class Axiom(TheoreticalObjct):
         if symbol is None:
             # If no symbol is passed as a parameter,
             # automated assignment of symbol is assumed.
-            base = '𝑎'
+            base = 'a'
             index = u.index_symbol(base=base)
             symbol = Symbol(base=base, index=index)
         elif isinstance(symbol, str):
@@ -1467,37 +1467,27 @@ class Axiom(TheoreticalObjct):
 
 
 class AxiomPostulate(Statement):
-    """The AxiomInclusion pythonic class models the inclusion of a _contentual_ _axioms_ in a _theory elaboration_.
-
+    """An axiom-postulate in the current theory-elaboration.
     """
 
     def __init__(
-            self, natural_language=None, a=None, symbol=None, t=None, reference=None,
-            title=None, echo=None):
-        """Create a new axiom-inclusion (a, t).
-        
-        :param natural_language:
-        :param a:
-        :param symbol:
-        :param t:
-        :param reference:
-        :param title:
-        :param echo:
+            self,
+            a: Axiom,
+            t: TheoryElaboration,
+            symbol: (None, str, Symbol) = None,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
+        """Postulate (aka include, endorse) an axiom in a theory-elaboration.
         """
-        verify(is_in_class(t, classes.theory_elaboration), 'Parameter t is not a member of class theory.')
-        verify(isinstance(natural_language, str) or is_in_class(a, classes.axiom),
-               'To create a new axiom-inclusion, either the parameter natural_language must be passed as a string or '
-               'the parameter a must be passed as an axion.')
-        if isinstance(natural_language, str):
-            natural_language = natural_language.trim()
-            verify(natural_language != '', 'Parameter natural-language is an empty string (after trimming).')
-            u = t.universe_of_discourse
-            a = Axiom(natural_language=natural_language, u=u)
         self.axiom = a
-        t.crossreference_axiom_inclusion(self)
+        t.crossreference_axiom_postulate(self)
         super().__init__(
-            theory=t, symbol=symbol, reference=reference,
-            category=statement_categories.axiom, title=title,
+            theory=t,
+            category=statement_categories.axiom,
+            symbol=symbol,
+            header=header,
+            dashed_name=dashed_name,
             echo=echo)
         super()._declare_class_membership(declarative_class_list.axiom_inclusion)
 
@@ -1513,13 +1503,81 @@ class AxiomPostulate(Statement):
                 tabsize=4))
 
 
-class Definition(Statement):
-    """The Definition pythonic class models _contentual_ _definitions_.
+class Definition(TheoreticalObjct):
+    """The Definition pythonic class models the elaboration of a _contentual_ _definition_ in a _universe-of-discourse_.
 
     """
 
     def __init__(
-            self, natural_language, symbol=None, theory=None, reference=None,
+            self,
+            natural_language: str,
+            u: UniverseOfDiscourse,
+            symbol: (None, str, Symbol) = None,
+            auto_index=None,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
+        """
+
+        :param natural_language: The definition's content in natural-language.
+        :param u: The universe-of-discourse.
+        :param symbol:
+        :param echo:
+        """
+        auto_index = get_config(auto_index, configuration.auto_index, fallback_value=False)
+        echo = get_config(echo, configuration.echo_definition, configuration.echo_default, fallback_value=False)
+        natural_language = natural_language.strip()
+        verify(natural_language != '',
+               'Parameter natural-language is an empty string (after trimming).')
+        self.natural_language = natural_language
+        if header is None:
+            # Long-names are not a mandatory attribute,
+            # it is available to improve readability in reports.
+            pass
+        elif isinstance(header, str):
+            header = ObjctHeader(header, category=statement_categories.definition, title=None)
+        elif header.category is not statement_categories.definition:
+            header = ObjctHeader(header.reference, category=statement_categories.definition, title=header.title)
+            # warnings.warn('A new long-name was generated to force its category property to: definition.')
+        if symbol is None:
+            # If no symbol is passed as a parameter,
+            # automated assignment of symbol is assumed.
+            base = 'd'
+            index = u.index_symbol(base=base)
+            symbol = Symbol(base=base, index=index)
+        elif isinstance(symbol, str):
+            # If symbol was passed as a string,
+            # assume the base was passed without index.
+            index = u.index_symbol(base=symbol) if auto_index else None
+            symbol = Symbol(base=symbol, index=index)
+        super().__init__(
+            universe_of_discourse=u, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
+        super()._declare_class_membership(declarative_class_list.definition)
+        u.cross_reference_definition(self)
+        if echo:
+            repm.prnt(self.repr_as_statement())
+
+    def repr_as_statement(self, output_proofs=True, wrap: bool = True):
+        """Return a representation that expresses and justifies the statement."""
+        algebraic_name = '' if self.header is None else f' ({self.repr_as_symbol()})'
+        text = f'{repm.serif_bold(self.repr_header(cap=True))}{algebraic_name}: “{self.natural_language}”'
+        if wrap:
+            text = '\n'.join(textwrap.wrap(
+                text=text, width=70,
+                subsequent_indent=f'\t',
+                break_on_hyphens=False,
+                expand_tabs=True,
+                tabsize=4))
+        return text
+
+
+class DefinitionEndorsement(Statement):
+    """The endorsement of a definition in a theory-elaboration.
+
+    """
+
+    def __init__(
+            self, natural_language: str, theory, symbol=None, reference=None,
             title=None, echo=None):
         assert isinstance(theory, TheoryElaboration)
         assert isinstance(natural_language, str)
@@ -1807,7 +1865,7 @@ class DirectDefinitionInference(FormulaStatement):
             self, valid_proposition, d, symbol=None, theory=None, reference=None,
             title=None):
         assert isinstance(theory, TheoryElaboration)
-        assert isinstance(d, Definition)
+        assert isinstance(d, DefinitionEndorsement)
         assert theory.contains_theoretical_objct(d)
         assert isinstance(valid_proposition, Formula)
         verify(
@@ -2209,7 +2267,7 @@ class TheoryElaboration(TheoreticalObjct):
         )
         self._conjunction_introduction_inference_rule = ir
 
-    def crossreference_axiom_inclusion(self, a):
+    def crossreference_axiom_postulate(self, a):
         """During construction, cross-reference an axiom 𝑎
         with its parent theory 𝑡 if it is not already cross-referenced,
         and return its 0-based index in Theory.axioms."""
@@ -2225,7 +2283,7 @@ class TheoryElaboration(TheoreticalObjct):
         """During construction, cross-reference a definition 𝒟
         with its parent theory if it is not already cross-referenced,
         and return its 0-based index in Theory.axioms."""
-        assert isinstance(d, Definition)
+        assert isinstance(d, DefinitionEndorsement)
         d.theory = d.theory if hasattr(d, 'theory') else self
         assert d.theory is self
         if d not in self.definition_inclusions:
@@ -2514,11 +2572,11 @@ class TheoryElaboration(TheoreticalObjct):
         self._modus_ponens_inference_rule = ir
 
     def postulate_axiom(
-            self, a, symbol=None, reference=None, title=None, echo=None):
+            self, a: Axiom, symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
         """Postulate an axiom expressed 𝑎 in this theory-elaboration (self)."""
         return AxiomPostulate(
-            a=a, symbol=symbol, t=self,
-            reference=reference, title=title, echo=echo)
+            a=a, t=self, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
     def elaborate_definition(
             self, natural_language, symbol=None, reference=None, title=None):
@@ -3175,6 +3233,7 @@ class UniverseOfDiscourse(SymbolicObjct):
     def __init__(self, symbol: (None, str, Symbol) = None, echo: (None, bool) = None):
         dashed_name = 'universe-of-discourse'
         self.axioms = dict()
+        self.definitions = dict()
         self.formulae = dict()
         self.inference_rules = dict()
         self.relations = dict()
@@ -3380,17 +3439,28 @@ class UniverseOfDiscourse(SymbolicObjct):
         :param a: an axiom.
         """
         verify(
-            is_in_class(a, classes.axiom),
-            'Parameter ⌜a⌝ is not an axiom.',
-            a=a,
-            universe_of_discourse=self)
-        verify(
             a.symbol not in self.axioms.keys() or a is self.axioms[a.symbol],
             'The symbol of parameter ⌜a⌝ is already referenced as a distinct axiom in this universe-of-discourse.',
             a=a,
             universe_of_discourse=self)
         if a not in self.axioms:
             self.axioms[a.symbol] = a
+            return True
+        else:
+            return False
+
+    def cross_reference_definition(self, d: Definition) -> bool:
+        """Cross-references a definition in this universe-of-discourse.
+
+        :param d: a definition.
+        """
+        verify(
+            d.symbol not in self.definitions.keys() or d is self.definitions[d.symbol],
+            'The symbol of parameter ⌜d⌝ is already referenced as a distinct definition in this universe-of-discourse.',
+            a=d,
+            universe_of_discourse=self)
+        if d not in self.definitions:
+            self.definitions[d.symbol] = d
             return True
         else:
             return False
@@ -3739,7 +3809,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         verify(
             theory.universe_of_discourse is self,
             'The universe-of-discourse of the theory parameter is distinct from this universe-of-discourse.')
-        return Definition(
+        return DefinitionEndorsement(
             natural_language=natural_language, symbol=symbol, theory=theory,
             reference=reference, title=title, echo=echo)
 
