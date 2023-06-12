@@ -1241,18 +1241,26 @@ class Formula(TheoreticalObjct):
             parameters=self.parameters)
         return f'{self.relation.repr_as_symbol()}({self.parameters[0].repr(expanded=expanded)})'
 
-    def repr_as_formula(self, expanded=None):
-        expanded = True if expanded is None else expanded
-        assert isinstance(expanded, bool)
-        match self.relation.formula_rep:
-            case Formula.function_call_representation:
-                return self.repr_as_function_call(expanded=expanded)
-            case Formula.infix_operator_representation:
-                return self.repr_as_infix_operator(expanded=expanded)
-            case Formula.prefix_operator_representation:
-                return self.repr_as_prefix_operator(expanded=expanded)
-            case Formula.postfix_operator_representation:
-                return self.repr_as_postfix_operator(expanded=expanded)
+    def repr_as_formula(self, expanded: bool = True):
+        if is_in_class(self.relation, classes.free_variable):
+            # If the relation of this formula is a free-variable,
+            # it has no arity, neither a representation-mode.
+            # In this situation, our design-choice is to
+            # fallback on the function-call representation-mode.
+            # In future developments, we may choose to allow
+            # the "decoration" of free-variables with arity,
+            # and presentation-mode to improve readability.
+            return self.repr_as_function_call(expanded=expanded)
+        else:
+            match self.relation.formula_rep:
+                case Formula.function_call_representation:
+                    return self.repr_as_function_call(expanded=expanded)
+                case Formula.infix_operator_representation:
+                    return self.repr_as_infix_operator(expanded=expanded)
+                case Formula.prefix_operator_representation:
+                    return self.repr_as_prefix_operator(expanded=expanded)
+                case Formula.postfix_operator_representation:
+                    return self.repr_as_postfix_operator(expanded=expanded)
         assert 1 == 2
 
     def repr_as_declaration(self):
@@ -1872,7 +1880,12 @@ import collections.abc
 
 
 class InferenceRule2(TheoreticalObjct):
-    """An inference-rule object."""
+    """An inference-rule object.
+
+    If an inference-rule is allowed / included in a theory-elaboration,
+    it allows to take a sequences of premise statements P1, P2, P3, ...
+    of certain shapes,
+    and infer a new statement C."""
 
     def __init__(self,
                  universe_of_discourse: UniverseOfDiscourse,
@@ -2626,8 +2639,7 @@ class TheoryElaboration(TheoreticalObjct):
             'The biconditional-introduction inference-rule is already included in this theory.')
         # TODO: Justify the inclusion of the inference-rule in the theory
         #   with adequate statements (axioms?).
-        self.universe_of_discourse.include_implication_relation()
-        self.universe_of_discourse.include_biconditional_relation()
+        self.universe_of_discourse._declare_biconditional_relation()
         self._biconditional_introduction_inference_rule = BiconditionalIntroductionInferenceRule
         self._includes_biconditional_introduction_inference_rule = True
 
@@ -2641,7 +2653,7 @@ class TheoryElaboration(TheoreticalObjct):
         if self._conjunction_introduction_inference_rule is None:
             # TODO: Justify the inclusion of the inference-rule in the theory
             #   with adequate statements (axioms?).
-            self.universe_of_discourse.include_conjunction_relation()
+            self.universe_of_discourse._declare_conjunction_relation()
             self._conjunction_introduction_inference_rule = ConjunctionIntroductionInferenceRule
 
     def include_double_negation_introduction_inference_rule(self):
@@ -2652,8 +2664,8 @@ class TheoryElaboration(TheoreticalObjct):
             'The double-negation-introduction inference-rule is already included in this theory.')
         # TODO: Justify the inclusion of the inference-rule in the theory
         #   with adequate statements (axioms?).
-        self.universe_of_discourse.include_implication_relation()
-        self.universe_of_discourse.include_negation_relation()
+        self.universe_of_discourse._declare_implication_relation()
+        self.universe_of_discourse._declare_negation_relation()
         self._double_negation_introduction_inference_rule = DoubleNegationIntroductionInferenceRule
         self._includes_double_negation_introduction_inference_rule = True
 
@@ -2665,7 +2677,7 @@ class TheoryElaboration(TheoreticalObjct):
             'The inconsistency-introduction inference-rule is already included in this theory.')
         # TODO: Justify the inclusion of the inference-rule in the theory
         #   with adequate statements (axioms?).
-        self.universe_of_discourse.include_negation_relation()
+        self.universe_of_discourse._declare_negation_relation()
         self.universe_of_discourse.include_inconsistent_relation()
         self._inconsistency_introduction_inference_rule = InconsistencyIntroductionInferenceRule
         self._includes_inconsistency_introduction_inference_rule = True
@@ -2679,8 +2691,8 @@ class TheoryElaboration(TheoreticalObjct):
             verify(not self.stabilized,
                    'The modus-ponens inference-rule cannot be allowed at this point of the theory-elaboration because the theory-elaboration is stabilized.',
                    slf_stabilized=self.stabilized, slf=self.repr_fully_qualified_name())
-            self.universe_of_discourse.include_implication_relation()
-            self.universe_of_discourse.include_conjunction_relation()
+            self.universe_of_discourse._declare_implication_relation()
+            self.universe_of_discourse._declare_conjunction_relation()
             self.include_conjunction_introduction_inference_rule()
             self._modus_ponens_inference_rule = ModusPonensInferenceRule
             self._includes_modus_ponens_inference_rule = True
@@ -3219,45 +3231,27 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     @property
     def biconditional_relation(self):
-        """The biconditional-relation if it exists in this universe-of-discourse,
-        otherwise None."""
+        """The well-known biconditional-relation in this universe-of-discourse.
+        If it is not yet present in the universe-of-discourse, declare it."""
+        if self._biconditional_relation is None:
+            self._declare_biconditional_relation()
         return self._biconditional_relation
-
-    @biconditional_relation.setter
-    def biconditional_relation(self, r):
-        verify(
-            self._biconditional_relation is None,
-            'The biconditional-relation relation exists already in this'
-            'universe-of-discourse')
-        self._biconditional_relation = r
 
     @property
     def conjunction_relation(self):
-        """The conjunction-relation if it exists in this universe-of-discourse,
-        otherwise None."""
+        """The well-known conjunction-relation in this universe-of-discourse.
+        If it is not yet present in the universe-of-discourse, declare it."""
+        if self._conjunction_relation is None:
+            self._declare_conjunction_relation()
         return self._conjunction_relation
-
-    @conjunction_relation.setter
-    def conjunction_relation(self, r):
-        verify(
-            self._conjunction_relation is None,
-            'The conjunction-relation relation exists already in this'
-            'universe-of-discourse')
-        self._conjunction_relation = r
 
     @property
     def equality_relation(self):
-        """The equality relation if it exists in this universe-of-discourse,
-        otherwise None."""
+        """The well-known equality-relation in this universe-of-discourse.
+        If it is not yet present in the universe-of-discourse, declare it."""
+        if self._equality_relation is None:
+            self._declare_equality_relation()
         return self._equality_relation
-
-    @equality_relation.setter
-    def equality_relation(self, r):
-        verify(
-            self._equality_relation is None,
-            'The equality relation exists already in this'
-            'universe-of-discourse')
-        self._equality_relation = r
 
     @property
     def falsehood_simple_objct(self):
@@ -3275,21 +3269,15 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     @property
     def implication_relation(self):
-        """The implication relation if it exists in this universe-of-discourse,
-        otherwise None."""
+        """The well-known implication-relation in this universe-of-discourse.
+        If it is not yet present in the universe-of-discourse, declare it."""
+        if self._implication_relation is None:
+            self._declare_implication_relation()
         return self._implication_relation
-
-    @implication_relation.setter
-    def implication_relation(self, r):
-        verify(
-            self._implication_relation is None,
-            'The implication relation exists already in this'
-            'universe-of-discourse')
-        self._implication_relation = r
 
     @property
     def implies(self):
-        """A shortcut for UniverseOfDiscourse.implication_relation."""
+        """⌜ implies ⌝ is an alias for the well-known implication-relation."""
         return self.implication_relation
 
     @property
@@ -3317,22 +3305,16 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     @property
     def land(self):
-        """Conjunction (Logical AND)."""
+        """⌜ land ⌝, standing for logical-and, is an alias for the well-known conjunction-relation."""
         return self.conjunction_relation
 
     @property
     def negation_relation(self):
-        """The negation relation if it exists in this universe-of-discourse,
-        otherwise None."""
+        """The well-known negation-relation in this universe-of-discourse.
+        If it is not yet present in the universe-of-discourse, declare it."""
+        if self._negation_relation is None:
+            self._declare_negation_relation()
         return self._negation_relation
-
-    @negation_relation.setter
-    def negation_relation(self, r):
-        verify(
-            self._negation_relation is None,
-            'The negation relation exists already in this'
-            'universe-of-discourse')
-        self._negation_relation = r
 
     @property
     def nt(self):
@@ -3629,38 +3611,24 @@ class UniverseOfDiscourse(SymbolicObjct):
             stabilized=stabilized,
             echo=echo)
 
-    def include_biconditional_relation(self):
-        """Assure the existence of the biconditional-relation in this
-        universe-of-discourse."""
-        # Assure the existence of dependent theoretical-objcts.
-        # N/A.
-        # Assure the existence of biconditional-relation.
-        if self.biconditional_relation is None:
-            self.biconditional_relation = self.r(
+    def _declare_biconditional_relation(self):
+        """Declare the well-known biconditional-relation in this universe-of-discourse."""
+        if self._biconditional_relation is None:
+            self._biconditional_relation = self.r(
                 2, '⟺', Formula.infix_operator_representation,
                 signal_proposition=True, dashed_name='biconditional')
 
-    def include_conjunction_relation(self):
-        """Assure the existence of the conjunction-relation in this
-        universe-of-discourse."""
-        # Assure the existence of dependent theoretical-objcts.
-        self.include_equality_relation()
-        self.include_falsehood_simple_objct()
-        self.include_truth_simple_objct()
-        # Assure the existence of conjunction-relation.
-        if self.conjunction_relation is None:
-            self.conjunction_relation = self.r(
+    def _declare_conjunction_relation(self):
+        """Declare the well-known conjunction-relation in this universe-of-discourse."""
+        if self._conjunction_relation is None:
+            self._conjunction_relation = self.r(
                 2, '∧', Formula.infix_operator_representation,
                 signal_proposition=True, dashed_name='conjunction')
 
-    def include_equality_relation(self):
-        """Assure the existence of the equality-relation in this
-        universe-of-discourse."""
-        # Assure the existence of dependent theoretical-objcts.
-        # N/A.
-        # Assure the existence of equality-relation.
-        if self.equality_relation is None:
-            self.equality_relation = self.r(
+    def _declare_equality_relation(self):
+        """Declare the well-known equality-relation in this universe-of-discourse."""
+        if self._equality_relation is None:
+            self._equality_relation = self.r(
                 2, '=', Formula.infix_operator_representation,
                 signal_proposition=True, dashed_name='equality')
 
@@ -3673,14 +3641,10 @@ class UniverseOfDiscourse(SymbolicObjct):
         if self.falsehood_simple_objct is None:
             self.falsehood_simple_objct = self.o('⊥')
 
-    def include_implication_relation(self):
-        """Assure the existence of the implication-relation in this
-        universe-of-discourse."""
-        # Assure the existence of dependent theoretical-objcts.
-        # N/A.
-        # Assure the existence of implication-relation.
-        if self.implication_relation is None:
-            self.implication_relation = self.r(
+    def _declare_implication_relation(self):
+        """Declare the well-known implication-relation in this universe-of-discourse."""
+        if self._implication_relation is None:
+            self._implication_relation = self.r(
                 2, '⟹', Formula.infix_operator_representation,
                 signal_proposition=True, dashed_name='implication')
 
@@ -3695,14 +3659,10 @@ class UniverseOfDiscourse(SymbolicObjct):
                 1, 'Inc', Formula.prefix_operator_representation,
                 signal_proposition=True, dashed_name='inconsistent')
 
-    def include_negation_relation(self):
-        """Assure the existence of the negation relation in this
-        universe-of-discourse."""
-        # Assure the existence of dependent theoretical-objcts.
-        # N/A.
-        # Assure the existence of implication-relation.
-        if self.negation_relation is None:
-            self.negation_relation = self.r(
+    def _declare_negation_relation(self):
+        """Declare the well-known negation-relation in this universe-of-discourse."""
+        if self._negation_relation is None:
+            self._negation_relation = self.r(
                 1, '¬', Formula.prefix_operator_representation,
                 signal_proposition=True, dashed_name='negation')
 

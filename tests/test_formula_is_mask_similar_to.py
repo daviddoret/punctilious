@@ -64,7 +64,7 @@ class TestFormulaIsMaskSimilarTo(TestCase):
             phi1b = u.f(r1a, u.f(r1b, x, o3), y)
             self.assertTrue(phi1a.is_masked_formula_similar_to(phi1b, {x, y}))
             self.assertTrue(phi1b.is_masked_formula_similar_to(phi1a, {x, y}))
-        u.include_conjunction_relation()
+        u._declare_conjunction_relation()
         phi1c = u.f(u.land, u.f(r1b, o1, o2), u.f(r1b, o2, o3))
         with u.v() as x1, u.v() as x2, u.v() as x3:
             phi1d = u.f(u.land, u.f(r1b, x1, x2), u.f(r1b, x2, x3))
