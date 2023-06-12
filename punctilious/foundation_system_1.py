@@ -59,12 +59,6 @@ ft.dai(
 disjunction = u.r(
     2, '∨', core.Formula.infix_operator_representation,
     signal_proposition=True, dashed_name='logical-disjunction')
-ft.inequality = u.r(
-    2, '≠', core.Formula.infix_operator_representation,
-    signal_proposition=True, dashed_name='inequality')
-ft.equality = u.r(
-    2, '=', core.Formula.infix_operator_representation,
-    signal_proposition=True, dashed_name='equality')
 ft.dai(
     u.f(element_of, u.conjunction_relation, propositional_relations_class),
     ap=nla_09)
@@ -76,14 +70,14 @@ ft.dai(
     u.f(element_of, u.nt, propositional_relations_class),
     ap=nla_09)
 ft.dai(
-    u.f(element_of, ft.inequality, propositional_relations_class),
+    u.f(element_of, u.neq, propositional_relations_class),
     ap=nla_09)
 nla_01b = ft.postulate_axiom(u.elaborate_axiom(
     '= is a binary relation such that, given any two theoretical-objcts x and y, '
     'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.'))
 with u.v('x') as x1, u.v('y') as x2:
-    x1_equal_x2 = u.f(ft.equality, x1, x2)
-    x2_equal_x1 = u.f(ft.equality, x2, x1)
+    x1_equal_x2 = u.f(u.eq, x1, x2)
+    x2_equal_x1 = u.f(u.eq, x2, x1)
     ft.commutativity_of_equality = ft.dai(
         u.f(u.implication_relation, x1_equal_x2, x2_equal_x1), nla_01b)
 
@@ -92,9 +86,9 @@ with u.v('x') as x, u.v('y') as y:
     ft.ddi(
         valid_proposition=
         u.f(
-            ft.equality,
-            u.f(ft.inequality, x, y),
-            u.f(u.nt, u.f(ft.equality, x, y))), d=nld_55)
+            u.eq,
+            u.f(u.neq, x, y),
+            u.f(u.nt, u.f(u.eq, x, y))), d=nld_55)
 
 nla_10 = ft.postulate_axiom(u.elaborate_axiom(
     'propositions is a class whose elements are '

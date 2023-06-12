@@ -1,13 +1,17 @@
 """"""
 import punctilious as p
+import foundation_system_1 as fs1
 
-u = p.UniverseOfDiscourse()
-ft = u.t(include_modus_ponens_inference_rule=True, include_conjunction_introduction_inference_rule=True,
-         include_double_negation_introduction_inference_rule=True)
+# u = p.UniverseOfDiscourse()
+# ft = u.t(
+#    include_modus_ponens_inference_rule=True, include_conjunction_introduction_inference_rule=True,
+#    include_double_negation_introduction_inference_rule=True)
+u = fs1.u
+ft = fs1.ft
 
 t = u.t(
     header=f'theory 2.1: the Peano axioms',
-    extended_theory=ft, dashed_name='tao-2006-theory-2-1-the-peano-axioms')
+    extended_theory=fs1.ft, dashed_name='tao-2006-theory-2-1-the-peano-axioms')
 
 # simple-objct declarations
 zero = u.o('0')
@@ -102,7 +106,7 @@ with u.v('n') as n:
         valid_proposition=u.f(
             u.implies,
             u.f(is_a, n, nat),
-            u.f(ft.inequality, u.f(suc, n), zero)),
+            u.f(u.neq, u.f(suc, n), zero)),
         ap=a_2_3, reference='2.3.1')
 
 
@@ -132,8 +136,8 @@ with u.v('n') as n, u.v('m') as m:
                     u.conjunction_relation,
                     u.f(is_a, n, nat),
                     u.f(is_a, m, nat)),
-                u.f(t.inequality, n, m)),
-            u.f(t.inequality, u.f(suc, n), u.f(suc, m)))
+                u.f(u.neq, n, m)),
+            u.f(u.neq, u.f(suc, n), u.f(suc, m)))
         , reference='2.4.1', ap=axiom_2_4)
 
 # Proposition 2.1.8: 6 is not equal to 2.
