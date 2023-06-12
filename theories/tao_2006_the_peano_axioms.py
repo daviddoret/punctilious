@@ -55,18 +55,18 @@ definition_2_1_3 = t.endorse_definition(d=def_2_1_3)
 # 1
 proposition_2_1_3_1 = t.ddi(
     u.f(u.eq, one, u.f(suc, zero)), definition_2_1_3,
-    reference='2.1.3.1')
+    header='2.1.3.1')
 
 # 2
 proposition_2_1_3_2 = t.ddi(
     u.f(u.eq, two, u.f(suc, u.f(suc, zero))), definition_2_1_3,
-    reference='2.1.3.2')
+    header='2.1.3.2')
 
 # 3
 proposition_2_1_3_3 = t.ddi(
     u.f(u.eq, three, u.f(suc, u.f(suc, u.f(suc, zero)))),
     definition_2_1_3,
-    reference='2.1.3.3')
+    header='2.1.3.3')
 
 proposition_2_1_3_100 = t.mp(
     t.commutativity_of_equality, proposition_2_1_3_1, reference='2.1.3.1.b')
@@ -92,7 +92,7 @@ p_2_1_4 = t.soet(proposition_2_2_5, p_2_1_3_3_c, reference='2.1.4')
 proposition_2_1_3_3 = t.ddi(
     u.f(u.eq, four, u.f(suc, u.f(suc, u.f(suc, u.f(suc, zero))))),
     definition_2_1_3,
-    reference='2.1.3.3.a')
+    header='2.1.3.3.a')
 
 # Axiom 2.3. 0 is not the successor of any natural number;
 # i.e., we have n++ f=. 0 for every natural number n.

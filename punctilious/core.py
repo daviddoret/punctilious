@@ -20,6 +20,7 @@ class Configuration:
         self.echo_default = False
         self.echo_definition = None
         self.echo_definition_inclusion = None
+        self.echo_definition_direct_inference = None
         self.echo_formula = None
         self.echo_hypothesis = None
         self.echo_note = None
@@ -177,6 +178,8 @@ def verify(
         for key, value in kwargs.items():
             value_as_string = f'(str conversion failure of type {str(type(value))})'
             try:
+                value_as_string = value.repr_as_fully_qualified_name()
+            except:
                 value_as_string = str(value)
             finally:
                 pass
@@ -1585,6 +1588,8 @@ class DefinitionEndorsement(Statement):
             echo: (None, bool) = None):
         """Endorsement (aka include, endorse) an definition in a theory-elaboration.
         """
+        echo = get_config(echo, configuration.echo_definition_inclusion, configuration.echo_default,
+                          fallback_value=False)
         self.definition = d
         t.crossreference_definition_endorsement(self)
         super().__init__(
@@ -1593,8 +1598,10 @@ class DefinitionEndorsement(Statement):
             symbol=symbol,
             header=header,
             dashed_name=dashed_name,
-            echo=echo)
+            echo=False)
         super()._declare_class_membership(declarative_class_list.definition_inclusion)
+        if echo:
+            repm.prnt(self.repr_as_statement())
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
@@ -1720,7 +1727,7 @@ class FormulaStatement(Statement):
             return super().repr(expanded=expanded)
 
     def repr_as_formula(self, expanded=None):
-        return self.valid_proposition.repr_as_formula(expanded=expanded)
+        return f'{self.repr_as_symbol()} ⊢ ({self.valid_proposition.repr_as_formula(expanded=expanded)})'
 
 
 class DirectAxiomInference(FormulaStatement):
@@ -1869,24 +1876,40 @@ class DirectDefinitionInference(FormulaStatement):
     """
 
     def __init__(
-            self, valid_proposition, d, symbol=None, theory=None, reference=None,
-            title=None):
-        assert isinstance(theory, TheoryElaboration)
-        assert isinstance(d, DefinitionEndorsement)
-        assert theory.contains_theoretical_objct(d)
-        assert isinstance(valid_proposition, Formula)
+            self,
+            p: Formula,
+            d: DefinitionEndorsement,
+            t: TheoryElaboration,
+            symbol: (None, str, Symbol) = None,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
+        echo = get_config(echo, configuration.echo_definition_direct_inference, configuration.echo_default,
+                          fallback_value=False)
         verify(
-            valid_proposition.universe_of_discourse is theory.universe_of_discourse,
-            'The UoD of a formal-definition valid-proposition must be '
-            'consistent with the UoD of its theory.')
-        assert valid_proposition.relation is theory.universe_of_discourse.equality_relation
+            t.contains_theoretical_objct(d),
+            'The definition-endorsement ⌜d⌝ must be contained '
+            'in the hierarchy of theory-elaboration ⌜t⌝.',
+            d=d, t=t)
+        verify(
+            p.universe_of_discourse is t.universe_of_discourse,
+            'The universe-of-discourse of the valid-proposition ⌜p⌝ must be '
+            'consistent with the universe-of-discourse of theory-elaboration ⌜t⌝.',
+            p=p, t=t)
+        verify(
+            p.relation is t.universe_of_discourse.equality_relation,
+            'The root relation of the valid-proposition ⌜p⌝ must be '
+            'the well-known equality-relation ⌜=⌝ in the universe-of-discourse.',
+            p=p, p_relation=p.relation)
         self.definition = d
         super().__init__(
-            theory=theory, valid_proposition=valid_proposition,
+            theory=t, valid_proposition=p,
             symbol=symbol, category=statement_categories.formal_definition,
-            reference=reference, title=title)
+            header=header, dashed_name=dashed_name, echo=False)
         assert d.statement_index < self.statement_index
         super()._declare_class_membership(declarative_class_list.direct_definition_inference)
+        if echo:
+            repm.prnt(self.repr_as_statement())
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
@@ -2358,14 +2381,17 @@ class TheoryElaboration(TheoreticalObjct):
             theory=self, reference=reference, title=title)
 
     def elaborate_direct_definition_inference(
-            self, valid_proposition=None, d=None, symbol=None, reference=None,
-            title=None):
+            self, p: Formula, d: DefinitionEndorsement,
+            symbol: (None, str, Symbol) = None,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
         """Elaborate a formal-definition in this theory.
 
         Shortcut for FormalDefinition(theory=t, ...)"""
         return DirectDefinitionInference(
-            valid_proposition=valid_proposition, d=d, symbol=symbol,
-            theory=self, reference=reference, title=title)
+            p=p, d=d,
+            t=self, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
     @property
     def extended_theory(self) -> (None, TheoryElaboration):
@@ -2582,12 +2608,19 @@ class TheoryElaboration(TheoreticalObjct):
         return AxiomPostulate(
             a=a, t=self, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
+    def include_definition(
+            self, d: Definition, symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
+        """Include (aka endorse) a definition in this theory-elaboration (self)."""
+        return DefinitionEndorsement(
+            d=d, t=self, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
+
     def endorse_definition(
             self, d: Definition, symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
-        """Endorse a definition in this theory-elaboration (self)."""
-        return DefinitionEndorsement(
-            d=d, t=self, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
+        """Endorse (aka include) a definition in this theory-elaboration (self)."""
+        return self.include_definition(
+            d=d, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
     def infer_by_substitution_of_equal_terms(
             self, original_expression, equality_statement, symbol=None,
@@ -2638,14 +2671,17 @@ class TheoryElaboration(TheoreticalObjct):
             reference=reference, title=title)
 
     def ddi(
-            self, valid_proposition=None, d=None, symbol=None, reference=None,
-            title=None):
+            self, p: Formula, d: DefinitionEndorsement,
+            symbol: (None, str, Symbol) = None,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
         """Elaborate a formal-definition in this theory.
 
         Shortcut for FormalDefinition(theory=t, ...)"""
         return self.elaborate_direct_definition_inference(
-            valid_proposition=valid_proposition, d=d, symbol=symbol,
-            reference=reference, title=title)
+            p=p, d=d,
+            symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
     def iterate_statements_in_theory_chain(self):
         """Iterate through the (proven or sound) statements in the current theory-chain."""

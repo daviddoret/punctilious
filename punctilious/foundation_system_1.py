@@ -85,7 +85,7 @@ d_55 = u.pose_definition('Inequality is defined as the negation of equality.')
 nld_55 = ft.endorse_definition(d=d_55)
 with u.v('x') as x, u.v('y') as y:
     ft.ddi(
-        valid_proposition=
+        p=
         u.f(
             u.eq,
             u.f(u.neq, x, y),
