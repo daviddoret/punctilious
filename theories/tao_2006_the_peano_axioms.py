@@ -45,11 +45,12 @@ proposition_2_2_5 = t.mp(fa_2_2_2, p_2_2_4, reference='2.2.5')
 
 # Definition 2.1.3. We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that xis defined to equal y.)
 
-definition_2_1_3 = t.d(
+def_2_1_3 = u.pose_definition(
     'We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number '
     '((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text '
     'I use "x := y" to denote the statement that x is defined to equal y.)',
-    reference='2.1.3')
+    header='2.1.3')
+definition_2_1_3 = t.endorse_definition(d=def_2_1_3)
 
 # 1
 proposition_2_1_3_1 = t.ddi(

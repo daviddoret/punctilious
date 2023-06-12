@@ -1512,8 +1512,8 @@ class Definition(TheoreticalObjct):
             self,
             natural_language: str,
             u: UniverseOfDiscourse,
-            symbol: (None, str, Symbol) = None,
             auto_index=None,
+            symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
@@ -1572,26 +1572,33 @@ class Definition(TheoreticalObjct):
 
 
 class DefinitionEndorsement(Statement):
-    """The endorsement of a definition in a theory-elaboration.
-
+    """A definition-endorsement in the current theory-elaboration.
     """
 
     def __init__(
-            self, natural_language: str, theory, symbol=None, reference=None,
-            title=None, echo=None):
-        assert isinstance(theory, TheoryElaboration)
-        assert isinstance(natural_language, str)
-        self.natural_language = natural_language
-        theory.crossreference_definition(self)
+            self,
+            d: Definition,
+            t: TheoryElaboration,
+            symbol: (None, str, Symbol) = None,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
+        """Endorsement (aka include, endorse) an definition in a theory-elaboration.
+        """
+        self.definition = d
+        t.crossreference_definition_endorsement(self)
         super().__init__(
-            theory=theory, symbol=symbol, reference=reference,
+            theory=t,
             category=statement_categories.definition,
-            title=title, echo=echo)
-        super()._declare_class_membership(declarative_class_list.definition)
+            symbol=symbol,
+            header=header,
+            dashed_name=dashed_name,
+            echo=echo)
+        super()._declare_class_membership(declarative_class_list.definition_inclusion)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
-        text = f'{self.repr_as_symbol()}: “{self.natural_language}”'
+        text = f'{self.repr_as_title(cap=True)}: “{self.definition.natural_language}”'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -2095,9 +2102,6 @@ class TheoryElaboration(TheoreticalObjct):
         self._extended_theory = extended_theory
         self._extended_theory_limit = extended_theory_limit
         self._commutativity_of_equality = None
-        # self._equality = None
-        # self._negation = None
-        # self._inequality = None
         if symbol is None:
             base = '𝑡'
             index = u.index_symbol(base=base)
@@ -2268,8 +2272,8 @@ class TheoryElaboration(TheoreticalObjct):
         self._conjunction_introduction_inference_rule = ir
 
     def crossreference_axiom_postulate(self, a):
-        """During construction, cross-reference an axiom 𝑎
-        with its parent theory 𝑡 if it is not already cross-referenced,
+        """During construction, cross-reference an axiom
+        with its parent theory (if it is not already cross-referenced),
         and return its 0-based index in Theory.axioms."""
         assert isinstance(a, AxiomPostulate)
         a.theory = a.theory if hasattr(a, 'theory') else self
@@ -2279,10 +2283,10 @@ class TheoryElaboration(TheoreticalObjct):
                 [a])
         return self.axiom_inclusions.index(a)
 
-    def crossreference_definition(self, d):
-        """During construction, cross-reference a definition 𝒟
-        with its parent theory if it is not already cross-referenced,
-        and return its 0-based index in Theory.axioms."""
+    def crossreference_definition_endorsement(self, d):
+        """During construction, cross-reference an endorsement
+        with its parent theory (if it is not already cross-referenced),
+        and return its 0-based index in Theory.endorsements."""
         assert isinstance(d, DefinitionEndorsement)
         d.theory = d.theory if hasattr(d, 'theory') else self
         assert d.theory is self
@@ -2574,16 +2578,16 @@ class TheoryElaboration(TheoreticalObjct):
     def postulate_axiom(
             self, a: Axiom, symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
-        """Postulate an axiom expressed 𝑎 in this theory-elaboration (self)."""
+        """Postulate an axiom in this theory-elaboration (self)."""
         return AxiomPostulate(
             a=a, t=self, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
-    def elaborate_definition(
-            self, natural_language, symbol=None, reference=None, title=None):
-        """Shortcut for NaturalLanguageDefinition(theory=t, ...)"""
-        return self.universe_of_discourse.elaborate_definition(
-            natural_language=natural_language, symbol=symbol, theory=self,
-            reference=reference, title=title)
+    def endorse_definition(
+            self, d: Definition, symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
+        """Endorse a definition in this theory-elaboration (self)."""
+        return DefinitionEndorsement(
+            d=d, t=self, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
     def infer_by_substitution_of_equal_terms(
             self, original_expression, equality_statement, symbol=None,
@@ -2866,7 +2870,7 @@ class TheoryElaboration(TheoreticalObjct):
     def d(self, natural_language, symbol=None, reference=None, title=None):
         """Elaborate a new definition with natural-language. Shortcut function for
         t.elaborate_definition(...)."""
-        return self.elaborate_definition(
+        return self.endorse_definition(
             natural_language=natural_language, symbol=symbol,
             reference=reference, title=title)
 
@@ -3802,16 +3806,17 @@ class UniverseOfDiscourse(SymbolicObjct):
         return Axiom(
             u=self, natural_language=natural_language, header=header, symbol=symbol, echo=echo)
 
-    def elaborate_definition(
-            self, natural_language, symbol=None, theory=None, reference=None,
-            title=None, echo=None):
-        """Shortcut for NaturalLanguageAxiom(theory=t, ...)"""
-        verify(
-            theory.universe_of_discourse is self,
-            'The universe-of-discourse of the theory parameter is distinct from this universe-of-discourse.')
-        return DefinitionEndorsement(
-            natural_language=natural_language, symbol=symbol, theory=theory,
-            reference=reference, title=title, echo=echo)
+    def pose_definition(
+            self,
+            natural_language: str,
+            symbol: (None, str, Symbol) = None,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
+        """Pose a new definition in the current universe-of-discourse."""
+        return Definition(
+            natural_language=natural_language, u=self,
+            symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
     def take_note(
             self, t, natural_language, symbol=None, reference=None,
@@ -3856,12 +3861,19 @@ class UniverseOfDiscourse(SymbolicObjct):
             self.symbol_indexes[base] += 1
         return self.symbol_indexes[base]
 
-    def d(
-            self, natural_language, symbol=None, theory=None, reference=None,
-            title=None, echo=None):
-        return self.elaborate_definition(
-            natural_language=natural_language, symbol=symbol, theory=theory,
-            reference=reference, title=title, echo=echo)
+    def definition(
+            self,
+            natural_language: str,
+            symbol: (None, str, Symbol) = None,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
+        """Pose a new definition in the current universe-of-discourse.
+
+        Shortcut for: u.pose_definition(...)"""
+        return self.pose_definition(
+            natural_language=natural_language,
+            symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
     def o(
             self, symbol=None):
