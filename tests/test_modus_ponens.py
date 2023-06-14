@@ -10,7 +10,7 @@ class TestModusPonens(TestCase):
         o2 = u.o()
         o3 = u.o()
         o4 = u.o()
-        r1 = u.r(2, signal_proposition=True)
+        r1 = u.r.declare(2, signal_proposition=True)
         t = u.t('modus-ponens-test-theory',
                 include_modus_ponens_inference_rule=True)
         t.include_modus_ponens_inference_rule()

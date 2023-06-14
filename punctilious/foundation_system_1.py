@@ -22,7 +22,7 @@ axiom_03 = ft.postulate_axiom(u.elaborate_axiom(
     'The class of classes is the class of all classes defined in the '
     'universe-of-discourse (TODO: Or foundation theory?).'))
 class_of_classes = u.o('class-of-classes')
-element_of = u.r(
+element_of = u.r.declare(
     2, '∈', formula_rep=core.Formula.infix_operator_representation,
     signal_proposition=True, dashed_name='element-of')
 fa1 = ft.dai(u.f(element_of, class_of_classes, class_of_classes), ap=axiom_02)
@@ -56,7 +56,7 @@ ft.dai(
     u.f(element_of, propositional_relations_class, class_of_classes),
     ap=axiom_03)
 
-disjunction = u.r(
+disjunction = u.r.declare(
     2, '∨', core.Formula.infix_operator_representation,
     signal_proposition=True, dashed_name='logical-disjunction')
 ft.dai(
@@ -67,7 +67,7 @@ ft.dai(
     u.f(element_of, u.implication_relation, propositional_relations_class),
     ap=nla_09)
 ft.dai(
-    u.f(element_of, u.nt, propositional_relations_class),
+    u.f(element_of, u.r.lnot, propositional_relations_class),
     ap=nla_09)
 ft.dai(
     u.f(element_of, u.neq, propositional_relations_class),
@@ -89,7 +89,7 @@ with u.v('x') as x, u.v('y') as y:
         u.f(
             u.eq,
             u.f(u.neq, x, y),
-            u.f(u.nt, u.f(u.eq, x, y))), d=nld_55)
+            u.f(u.r.lnot, u.f(u.eq, x, y))), d=nld_55)
 
 nla_10 = ft.postulate_axiom(u.elaborate_axiom(
     'propositions is a class whose elements are '
@@ -104,7 +104,7 @@ ft.dai(u.f(element_of, falsehood, class_of_classes), ap=nla_10)
 nla_20 = ft.postulate_axiom(u.elaborate_axiom(
     'If P is a proposition, then either the statement P has truth value true,'
     'or the statement P has truth value falsehood.'))
-has_truth_value = u.r(
+has_truth_value = u.r.declare(
     2, 'is',
     formula_rep=core.Formula.infix_operator_representation,
     signal_proposition=True)
@@ -126,7 +126,7 @@ with u.v() as p, u.v() as t:
             u.implication_relation,
             u.f(has_truth_value, p, t),
             u.f(
-                has_truth_value, u.f(u.nt, u.f(u.nt, p)),
+                has_truth_value, u.f(u.r.lnot, u.f(u.r.lnot, p)),
                 t)),
         ap=nla_09_50)
 
@@ -179,11 +179,11 @@ with u.v('φ') as phi:
             u.f(element_of, phi, contradictory_statements)),
         nla_40)
 
-_relation_declaration = u.r(2, 'relation-declaration')
-_simple_objct_declaration = u.r(2, 'simple-objct-declaration')
-_theory_declaration = u.r(2, 'theory-declaration')
-_theory_extension = u.r(2, 'theory-extension')
-_variable_declaration = u.r(2, 'variable-declaration')
+_relation_declaration = u.r.declare(2, 'relation-declaration')
+_simple_objct_declaration = u.r.declare(2, 'simple-objct-declaration')
+_theory_declaration = u.r.declare(2, 'theory-declaration')
+_theory_extension = u.r.declare(2, 'theory-extension')
+_variable_declaration = u.r.declare(2, 'variable-declaration')
 
 # t.prnt()
 
@@ -220,7 +220,7 @@ def elaborate_foundation_theory():
             natural_language='substitution is the process that consists in taking 3 theoretical-object o, p and q, that may be a composed-object such as a formula, and replacing in there all occurences of p by q.')
         axiom2 = ft.postulate_axiom(
             'If x = y, o = subst(o, x, y) where o, x, and y are theoretical-objcts.')
-        subst = u.r(
+        subst = u.r.declare(
             arity=3, symbol='subst',
             signal_theoretical_morphism=True, implementation=substitute_xy)
         # if x = y, implies subst(o, x, y)

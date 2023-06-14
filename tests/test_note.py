@@ -9,7 +9,7 @@ class TestNoteIntroduction(TestCase):
         p.configuration.echo_note = True
         u = p.UniverseOfDiscourse('white-sheet-of-paper')
         o1 = u.o()
-        r1 = u.r(1, signal_proposition=True)
+        r1 = u.r.declare(1, signal_proposition=True)
         t = u.t(
             'testing-theory')
         a = u.axiom('The arbitrary axiom of testing.')

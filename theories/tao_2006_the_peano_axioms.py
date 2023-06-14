@@ -22,7 +22,7 @@ four = u.o('4')
 nat = u.o('natural-number')
 
 # relation declarations
-is_a = u.r(
+is_a = u.r.declare(
     2, 'is-a', p.Formula.infix_operator_representation,
     signal_proposition=True)
 
@@ -33,7 +33,7 @@ nla_2_2_1 = t.postulate_axiom(u.elaborate_axiom(
     'If n is a natural number, then n++ is a natural number.',
     '2.2.1'))
 with u.v('n') as n:
-    suc = u.r(1, '++', formula_rep=p.Formula.postfix_operator_representation, dashed_name='successor')
+    suc = u.r.declare(1, '++', formula_rep=p.Formula.postfix_operator_representation, dashed_name='successor')
     fa_2_2_2 = t.dai(
         u.f(u.implies, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
         nla_2_2_1,

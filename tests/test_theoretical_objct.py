@@ -7,9 +7,9 @@ class TestTheoreticalObjct(TestCase):
     def test_list_theoretical_objcts_recursively(self):
         u = p.UniverseOfDiscourse()
         t = u.t()
-        r1 = u.r(1)
+        r1 = u.r.declare(1)
         self.assertEqual({r1}, set(r1.iterate_theoretical_objcts_references()))
-        r2 = u.r(2)
+        r2 = u.r.declare(2)
         o1 = u.o()
         o2 = u.o()
         o3 = u.o()
@@ -24,9 +24,9 @@ class TestTheoreticalObjct(TestCase):
     def test_list_relations_recursively(self):
         u = p.UniverseOfDiscourse()
         t = u.t()
-        r1 = u.r(1)
+        r1 = u.r.declare(1)
         self.assertEqual({r1}, set(r1.iterate_relations()))
-        r2 = u.r(2)
+        r2 = u.r.declare(2)
         o1 = u.o()
         o2 = u.o()
         o3 = u.o()

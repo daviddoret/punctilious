@@ -12,7 +12,7 @@ class TestTheoryElaboration(TestCase):
         o1 = u.o()
         o2 = u.o()
         o3 = u.o()
-        r1 = u.r(2, signal_proposition=True)
+        r1 = u.r.declare(2, signal_proposition=True)
         p.configuration.echo_default = True
         robust_theory = u.t(include_conjunction_introduction_inference_rule=True,
                             include_modus_ponens_inference_rule=True)

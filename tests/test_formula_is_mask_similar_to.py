@@ -7,8 +7,8 @@ class TestFormulaIsMaskSimilarTo(TestCase):
     def test_formula_is_mask_similar_to_unary_relation(self):
         p.configuration.echo_axiom = True
         u = p.UniverseOfDiscourse('test_formula_is_mask_similar_to_unary_relation')
-        r1a = u.r(1)
-        r1b = u.r(1)
+        r1a = u.r.declare(1)
+        r1b = u.r.declare(1)
         o1 = u.o()
         o2 = u.o()
         phi1a = u.f(r1a, o1)
@@ -32,8 +32,8 @@ class TestFormulaIsMaskSimilarTo(TestCase):
     def test_formula_is_mask_similar_to_binary_relation(self):
         p.configuration.echo_axiom = True
         u = p.UniverseOfDiscourse('test_formula_is_mask_similar_to_binary_relation')
-        r1a = u.r(2)
-        r1b = u.r(2)
+        r1a = u.r.declare(2)
+        r1b = u.r.declare(2)
         o1 = u.o()
         o2 = u.o()
         o3 = u.o()
@@ -54,8 +54,8 @@ class TestFormulaIsMaskSimilarTo(TestCase):
     def test_formula_is_mask_similar_to_embedded(self):
         p.configuration.echo_axiom = True
         u = p.UniverseOfDiscourse('test_formula_is_mask_similar_to_embedded')
-        r1a = u.r(2)
-        r1b = u.r(2)
+        r1a = u.r.declare(2)
+        r1b = u.r.declare(2)
         o1 = u.o()
         o2 = u.o()
         o3 = u.o()
@@ -76,7 +76,7 @@ class TestFormulaIsMaskSimilarTo(TestCase):
         o1 = u.o()
         o2 = u.o()
         o3 = u.o()
-        r1 = u.r(2, signal_proposition=True)
+        r1 = u.r.declare(2, signal_proposition=True)
         t = u.t('modus-ponens-test-theory',
                 include_modus_ponens_inference_rule=True)
         t.include_modus_ponens_inference_rule()

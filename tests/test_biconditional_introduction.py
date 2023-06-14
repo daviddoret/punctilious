@@ -11,8 +11,8 @@ class TestBiconditionalIntroduction(TestCase):
         o1 = u.o()
         o2 = u.o()
         o3 = u.o()
-        r1 = u.r(2, signal_proposition=True)
-        r2 = u.r(1, signal_proposition=True)
+        r1 = u.r.declare(2, signal_proposition=True)
+        r2 = u.r.declare(1, signal_proposition=True)
         t = u.t(
             'testing-theory',
             include_biconditional_introduction_inference_rule=True)

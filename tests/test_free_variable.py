@@ -8,7 +8,7 @@ class TestFreeVariable(TestCase):
         p.configuration.echo_variable = True
         u = p.UniverseOfDiscourse('test_with_statement')
         with u.v('x', echo=True) as x, u.v('y', echo=True) as y:
-            r = u.r(arity=2)
+            r = u.r.declare(arity=2)
             phi = u.f(r, x, y)
             self.assertIs(x, phi.parameters[0])
             self.assertIs(y, phi.parameters[1])
