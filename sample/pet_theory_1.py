@@ -14,7 +14,7 @@ is_a = core.Relation(
     symbol='is-a',
     python_name='is_a', signal_proposition=True)
 
-a1 = core.AxiomPostulate(
+a1 = core.AxiomInclusion(
     t=t1, natural_language=f'{mira_name.capitalize()} is a {dog_name}.',
     capitalizable=True)
 mira_is_a_dog = core.DirectAxiomInference(
@@ -22,7 +22,7 @@ mira_is_a_dog = core.DirectAxiomInference(
     valid_proposition=core.Formula(
         theory=t1, relation=is_a, parameters=(mira, dog)))
 
-a2 = core.AxiomPostulate(
+a2 = core.AxiomInclusion(
     t=t1,
     natural_language=f'If 𝒙 is a {dog_name}, then 𝒙 is a {mammal_name}.',
     capitalizable=True)

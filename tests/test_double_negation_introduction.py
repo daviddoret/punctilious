@@ -3,8 +3,8 @@ import punctilious as p
 import random_data
 
 
-class TestBiconditionalIntroduction(TestCase):
-    def test_biconditional_introduction(self):
+class TestDoubleNegationIntroduction(TestCase):
+    def test_double_negation_introduction(self):
         p.configuration.echo_default = True
         u = p.UniverseOfDiscourse('white-sheet-of-paper')
         o1 = u.o()
@@ -16,6 +16,6 @@ class TestBiconditionalIntroduction(TestCase):
         a = u.elaborate_axiom(random_data.random_sentence())
         ap = t.postulate_axiom(a)
         phi1 = t.dai(u.f(r1, o1, o2), ap=ap)
-        phi2 = t.dni(phi1)
+        phi2 = t.i.dni.infer_from(phi1)
         self.assertEqual(
             '¬(¬(◆(ℴ₁, ℴ₂)))', phi2.repr())

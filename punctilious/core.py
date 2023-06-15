@@ -95,6 +95,7 @@ class DeclarativeClassList(repm.Representation):
         self.free_variable = DeclarativeClass('free_variable', 'free-variable')
         self.hypothesis = DeclarativeClass('hypothesis', 'hypothesis')
         self.inference_rule = DeclarativeClass('inference_rule', 'inference-rule')
+        self.inference_rule_inclusion = DeclarativeClass('inference_rule_inclusion', 'inference-rule-inclusion')
         self.note = DeclarativeClass('note', 'note')
         self.proposition = DeclarativeClass('proposition', 'proposition')
         self.relation = DeclarativeClass('relation', 'relation')
@@ -435,7 +436,10 @@ class SymbolicObjct:
 
     def is_declarative_class_member(self, c: DeclarativeClass) -> bool:
         """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise."""
-        return c in self._declarative_classes
+        if hasattr(self, '_declarative_classes'):
+            return c in self._declarative_classes
+        else:
+            return False
 
     def is_in_class(self, c: DeclarativeClass) -> bool:
         """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise.
@@ -1482,8 +1486,8 @@ class Axiom(TheoreticalObjct):
         return text
 
 
-class AxiomPostulate(Statement):
-    """An axiom-postulate in the current theory-elaboration.
+class AxiomInclusion(Statement):
+    """An axiom postulation (aka inclusion, endorsement) in the current theory-elaboration.
     """
 
     def __init__(
@@ -1497,15 +1501,17 @@ class AxiomPostulate(Statement):
         """Postulate (aka include, endorse) an axiom in a theory-elaboration.
         """
         self.axiom = a
-        t.crossreference_axiom_postulate(self)
+        t.crossreference_axiom_inclusion(self)
         super().__init__(
             theory=t,
             category=statement_categories.axiom,
             symbol=symbol,
             header=header,
             dashed_name=dashed_name,
-            echo=echo)
+            echo=False)
         super()._declare_class_membership(declarative_class_list.axiom_inclusion)
+        if echo:
+            repm.prnt(self.repr_as_statement())
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
@@ -1754,12 +1760,12 @@ class DirectAxiomInference(FormulaStatement):
     """
 
     def __init__(
-            self, valid_proposition: FormulaStatement, ap: AxiomPostulate, theory: TheoryElaboration,
+            self, valid_proposition: FormulaStatement, ap: AxiomInclusion, theory: TheoryElaboration,
             symbol: (None, str, Symbol) = None,
             reference=None,
             title=None, category=None, echo: bool = False):
         assert isinstance(theory, TheoryElaboration)
-        assert isinstance(ap, AxiomPostulate)
+        assert isinstance(ap, AxiomInclusion)
         assert isinstance(valid_proposition, Formula)
         self.axiom = ap
         super().__init__(
@@ -1992,12 +1998,10 @@ class InferenceRule2(TheoreticalObjct):
     def __init__(self,
                  universe_of_discourse: UniverseOfDiscourse,
                  infer: collections.abc.Callable,
-                 verify_compatibility: collections.abc.Callable,
                  symbol: (None, str, Symbol) = None,
                  header: (None, str, ObjctHeader) = None,
                  dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
         self._infer = infer
-        self._verify_compatibility = verify_compatibility
         if symbol is None:
             # If no symbol is passed as a parameter,
             # automated assignment of symbol is assumed.
@@ -2022,26 +2026,6 @@ class InferenceRule2(TheoreticalObjct):
     def verify_compatibility(self, *args, **kwargs):
         """Verify the syntactical-compatibility of input statements and return True if they are compatible, False otherwise."""
         return self._infer(*args, **kwargs)
-
-
-class InferenceRuleInclusionStatement(Statement):
-    """The statement that inference-rule I is allowed in the current theory-elaboration."""
-
-    def __init__(self,
-                 t: TheoryElaboration,
-                 inference_rule: InferenceRule2,
-                 symbol: (None, str, Symbol) = None,
-                 header: (None, str, ObjctHeader) = None,
-                 dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
-        verify(not t.stabilized,
-               'Theory t is stabilized, it is no longer possible to allow a new inference-rule.',
-               t=t,
-               inference_rule=inference_rule)
-        super().__init__(
-            theory=t,
-            category=statement_categories.inference_rule_inclusion,
-            symbol=symbol, header=header, dashed_name=dashed_name, echo=False)
-        XXX
 
 
 class AtheoreticalStatement(SymbolicObjct):
@@ -2144,6 +2128,7 @@ class TheoryElaboration(TheoreticalObjct):
         self._stabilized = False
         self.axiom_inclusions = tuple()
         self.definition_inclusions = tuple()
+        self._inference_rule_inclusions = InferenceRuleInclusionUserDict(t=self)
         self.statements = tuple()
         self._extended_theory = extended_theory
         self._extended_theory_limit = extended_theory_limit
@@ -2317,11 +2302,11 @@ class TheoryElaboration(TheoreticalObjct):
         )
         self._conjunction_introduction_inference_rule = ir
 
-    def crossreference_axiom_postulate(self, a):
+    def crossreference_axiom_inclusion(self, a):
         """During construction, cross-reference an axiom
         with its parent theory (if it is not already cross-referenced),
         and return its 0-based index in Theory.axioms."""
-        assert isinstance(a, AxiomPostulate)
+        assert isinstance(a, AxiomInclusion)
         a.theory = a.theory if hasattr(a, 'theory') else self
         assert a.theory is self
         if a not in self.axiom_inclusions:
@@ -2340,6 +2325,17 @@ class TheoryElaboration(TheoreticalObjct):
             self.definition_inclusions = self.definition_inclusions + tuple(
                 [d])
         return self.definition_inclusions.index(d)
+
+    def crossreference_inference_rule_inclusion(self, i: InferenceRuleInclusion):
+        """During construction, cross-reference an inference-rule
+        with its parent theory-elaboration (if it is not already cross-referenced)."""
+        i.theory = i.theory if hasattr(i, 'theory') else self
+        assert i.theory is self
+        if i not in self.inference_rule_inclusions:
+            self.inference_rule_inclusions[i] = i
+            return True
+        else:
+            return False
 
     def crossreference_statement(self, s):
         """During construction, cross-reference a statement 𝒮
@@ -2362,35 +2358,6 @@ class TheoryElaboration(TheoreticalObjct):
     #    """
     #    return Formula(
     #        relation=relation, parameters=parameters, theory=self, **kwargs)
-
-    def dni(
-            self, p, symbol=None, category=None,
-            reference=None, title=None):
-        """Infer a new double-negation statement in the theory."""
-        return self.infer_by_double_negation_introduction(
-            p=p, symbol=symbol,
-            category=category, reference=reference, title=title)
-
-    @property
-    def double_negation_introduction_inference_rule(self):
-        """Some theories may contain the double-negation-introduction inference-rule.
-
-        This property may only be set once to assure the stability of the
-        theory."""
-        if self._double_negation_introduction_inference_rule is not None:
-            return self._double_negation_introduction_inference_rule
-        elif self.extended_theory is not None:
-            return self.extended_theory.double_negation_introduction_inference_rule
-        else:
-            return None
-
-    @double_negation_introduction_inference_rule.setter
-    def double_negation_introduction_inference_rule(self, ir: InferenceRule):
-        verify(
-            self._double_negation_introduction_inference_rule is None,
-            'The modus-ponens inference-rule property of a theory can only be '
-            'set once to prevent instability.')
-        self._double_negation_introduction_inference_rule = ir
 
     def elaborate_direct_axiom_inference(
             self,
@@ -2571,6 +2538,16 @@ class TheoryElaboration(TheoreticalObjct):
                 symbol=symbol, category=category,
                 reference=reference, title=title)
 
+    @property
+    def i(self):
+        """Return the dictionary of inference-rule-inclusions contained in this theory-elaboration."""
+        return self.inference_rule_inclusions
+
+    @property
+    def inference_rule_inclusions(self):
+        """Return the dictionary of inference-rule-inclusions contained in this theory-elaboration."""
+        return self._inference_rule_inclusions
+
     def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None):
         """Iterate through this and all the theoretical-objcts it references recursively.
 
@@ -2628,7 +2605,7 @@ class TheoryElaboration(TheoreticalObjct):
             self, a: Axiom, symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
         """Postulate an axiom in this theory-elaboration (self)."""
-        return AxiomPostulate(
+        return AxiomInclusion(
             a=a, t=self, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
     def include_definition(
@@ -3354,7 +3331,7 @@ class Relations(collections.UserDict):
         return self.negation
 
 
-class InferenceRules(collections.UserDict):
+class InferenceRuleUserDict(collections.UserDict):
     """A dictionary that exposes well-known objects as properties.
 
     """
@@ -3379,8 +3356,45 @@ class InferenceRules(collections.UserDict):
                 universe_of_discourse=self.u,
                 symbol=Symbol('dni', index=None),
                 dashed_name=DashedName('double-negation-introduction'),
-                infer=None,
-                verify_compatibility=None)
+                infer=None)
+        return self._double_negation_introduction
+
+    @property
+    def dni(self):
+        """The well-known double-negation-introduction inference-rule.
+
+        Original method: universe_of_discourse.inference_rules.double_negation_introduction()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.double_negation_introduction
+
+
+class InferenceRuleInclusionUserDict(collections.UserDict):
+    """A dictionary that exposes well-known objects as properties.
+
+    """
+
+    def __init__(self, t: TheoryElaboration):
+        self.t = t
+        super().__init__()
+        # Well-known objects
+        self._double_negation_introduction = None
+
+    @property
+    def double_negation_introduction(self):
+        """The well-known double-negation-introduction inference-rule.
+
+        Shortcut method: t.i.dni()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        if self._double_negation_introduction is None:
+            self._double_negation_introduction = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.double_negation_introduction)
         return self._double_negation_introduction
 
     @property
@@ -3401,7 +3415,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         self.axioms = dict()
         self.definitions = dict()
         self.formulae = dict()
-        self._inference_rules = InferenceRules(u=self)
+        self._inference_rules = InferenceRuleUserDict(u=self)
         self._relations = Relations(u=self)
         self.theories = dict()
         self.simple_objcts = dict()
@@ -3497,6 +3511,12 @@ class UniverseOfDiscourse(SymbolicObjct):
         if self._inequality_relation is None:
             self._declare_inequality_relation()
         return self._inequality_relation
+
+    @property
+    def i(self):
+        """A python dictionary of inference-rules contained in this universe-of-discourse,
+        where well-known inference-rules are directly available as properties."""
+        return self.inference_rules
 
     @property
     def inference_rules(self):
@@ -3901,7 +3921,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             theory.universe_of_discourse is self,
             'The universe-of-discourse of the theory parameter is distinct '
             'from this universe-of-discourse.')
-        return AxiomPostulate(
+        return AxiomInclusion(
             natural_language=natural_language, symbol=symbol, t=theory,
             reference=reference, title=title, echo=echo)
 
@@ -4299,9 +4319,53 @@ class DoubleNegationIntroductionStatement(FormulaStatement):
         return output
 
 
-def _dni_verify_compatibility(
-        theory: TheoryElaboration, p: FormulaStatement):
-    pass
+class InferenceRuleInclusion(Statement):
+    """An inference_rule inclusion (aka allowance) in the current theory-elaboration.
+    """
+
+    def __init__(
+            self,
+            i: InferenceRule,
+            t: TheoryElaboration,
+            symbol: (None, str, Symbol) = None,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
+        """Include (aka allow) an inference_rule in a theory-elaboration.
+        """
+        verify(not t.stabilized,
+               'Theory-elaboration ⌜t⌝ is stabilized, it is no longer possible to include (aka allow) inference-rule ⌜i⌝.',
+               t=t,
+               i=i)
+        self._inference_rule = i
+        super().__init__(
+            theory=t,
+            category=statement_categories.inference_rule_inclusion,
+            symbol=symbol,
+            header=header,
+            dashed_name=dashed_name,
+            echo=False)
+        t.crossreference_inference_rule_inclusion(self)
+        super()._declare_class_membership(declarative_class_list.inference_rule_inclusion)
+        if echo:
+            repm.prnt(self.repr_as_statement())
+
+    @property
+    def inference_rule(self):
+        """Return the inference-rule upon which this inference-rule-inclusion is based.
+        """
+        return self._inference_rule
+
+    def repr_as_statement(self, output_proofs=True):
+        """Return a representation that expresses and justifies the statement."""
+        text = f'{self.repr_as_title(cap=True)}: “{self.inference_rule.natural_language}”'
+        return '\n'.join(
+            textwrap.wrap(
+                text=text, width=70,
+                subsequent_indent=f'\t',
+                break_on_hyphens=False,
+                expand_tabs=True,
+                tabsize=4))
 
 
 def apply_negation(phi: Formula):
@@ -4312,11 +4376,6 @@ def apply_negation(phi: Formula):
 def apply_double_negation(phi: Formula):
     """Apply double-negation to a formula phi."""
     return apply_negation(apply_negation(phi))
-
-
-def _dni_infer(phi: FormulaStatement):
-    verify(_dni_verify_compatibility(), 'hellow world')
-    pass
 
 
 class DoubleNegationIntroductionInferenceRule(InferenceRule):
