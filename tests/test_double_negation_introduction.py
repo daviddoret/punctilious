@@ -4,7 +4,7 @@ import random_data
 
 
 class TestDoubleNegationIntroduction(TestCase):
-    def test_dni_dne(self):
+    def test_dni(self):
         p.configuration.echo_default = True
         u = p.UniverseOfDiscourse('white-sheet-of-paper')
         o1 = u.o()
