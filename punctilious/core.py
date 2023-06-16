@@ -3490,7 +3490,7 @@ class InferenceRuleDict(collections.UserDict):
 
     @property
     def conjunction_elimination_left(self):
-        """The well-known conjunction-elimination (left) inference-rule.
+        """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
         Abridged method: u.i.cel()
 
@@ -3547,7 +3547,7 @@ class InferenceRuleDict(collections.UserDict):
 
     @property
     def conjunction_elimination_right(self):
-        """The well-known conjunction-elimination (right) inference-rule.
+        """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
         Abridged method: u.i.cer()
 
@@ -3604,7 +3604,7 @@ class InferenceRuleDict(collections.UserDict):
 
     @property
     def conjunction_introduction(self):
-        """The well-known conjunction-introduction inference-rule.
+        """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
         Shortcut method: u.i.ci()
 
@@ -3657,7 +3657,7 @@ class InferenceRuleDict(collections.UserDict):
 
     @property
     def double_negation_elimination(self):
-        """The well-known double-negation-elimination inference-rule.
+        """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
         Shortcut method: u.i.dne()
 
@@ -3720,7 +3720,7 @@ class InferenceRuleDict(collections.UserDict):
 
     @property
     def double_negation_introduction(self):
-        """The well-known double-negation-introduction inference-rule.
+        """The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.
 
         Shortcut method: u.i.dni()
 
@@ -3767,7 +3767,7 @@ class InferenceRuleDict(collections.UserDict):
 
     @property
     def cel(self):
-        """The well-known conjunction-elimination (left) inference-rule.
+        """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
         Unabridged method: universe_of_discourse.inference_rules.conjunction_elimination_left
 
@@ -3778,7 +3778,7 @@ class InferenceRuleDict(collections.UserDict):
 
     @property
     def cer(self):
-        """The well-known conjunction-elimination (right) inference-rule.
+        """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
         Unabridged method: universe_of_discourse.inference_rules.conjunction_elimination_right
 
@@ -3789,7 +3789,7 @@ class InferenceRuleDict(collections.UserDict):
 
     @property
     def ci(self):
-        """The well-known conjunction-introduction inference-rule.
+        """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
         Unabridged method: universe_of_discourse.inference_rules.conjunction_introduction
 
@@ -3800,7 +3800,7 @@ class InferenceRuleDict(collections.UserDict):
 
     @property
     def dne(self):
-        """The well-known double-negation-elimination inference-rule.
+        """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
         Original method: universe_of_discourse.inference_rules.double_negation_elimination
 
@@ -3811,7 +3811,7 @@ class InferenceRuleDict(collections.UserDict):
 
     @property
     def dni(self):
-        """The well-known double-negation-introduction inference-rule.
+        """The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.
 
         Original method: universe_of_discourse.inference_rules.double_negation_introduction()
 
@@ -3838,7 +3838,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def conjunction_elimination_left(self):
-        """The well-known conjunction-elimination (left) inference-rule.
+        """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
         Abridged method: t.i.cel()
 
@@ -3853,7 +3853,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def conjunction_elimination_right(self):
-        """The well-known conjunction-elimination (right) inference-rule.
+        """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
         Abridged method: t.i.cel()
 
@@ -3868,7 +3868,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def conjunction_introduction(self):
-        """The well-known conjunction-introduction inference-rule.
+        """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
         Abridged method: t.i.ci()
 
@@ -3883,7 +3883,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def cel(self):
-        """The well-known conjunction-elimination (left) inference-rule.
+        """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
         Unabridged method: universe_of_discourse.inference_rules.conjunction_elimination_left()
 
@@ -3894,7 +3894,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def cer(self):
-        """The well-known conjunction-elimination (right) inference-rule.
+        """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
         Unabridged method: universe_of_discourse.inference_rules.conjunction_elimination_right()
 
@@ -3905,7 +3905,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def ci(self):
-        """The well-known conjunction-introduction inference-rule.
+        """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
         Unabridged method: universe_of_discourse.inference_rules.conjunction_introduction()
 
@@ -3916,7 +3916,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def dne(self):
-        """The well-known double-negation-elimination inference-rule.
+        """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
         Original method: universe_of_discourse.inference_rules.double_negation_elimination()
 
@@ -3927,7 +3927,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def dni(self):
-        """The well-known double-negation-introduction inference-rule.
+        """The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.
 
         Original method: universe_of_discourse.inference_rules.double_negation_introduction()
 
@@ -3938,7 +3938,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def double_negation_elimination(self):
-        """The well-known double-negation-elimination inference-rule.
+        """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
         Abridged method: t.i.dne()
 
@@ -3953,7 +3953,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def double_negation_introduction(self):
-        """The well-known double-negation-introduction inference-rule.
+        """The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.
 
         Shortcut method: t.i.dni()
 
