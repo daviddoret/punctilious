@@ -96,6 +96,7 @@ class DeclarativeClassList(repm.Representation):
         self.hypothesis = DeclarativeClass('hypothesis', 'hypothesis')
         self.inference_rule = DeclarativeClass('inference_rule', 'inference-rule')
         self.inference_rule_inclusion = DeclarativeClass('inference_rule_inclusion', 'inference-rule-inclusion')
+        self.inferred_proposition = DeclarativeClass('inferred_proposition', 'inferred-proposition')
         self.note = DeclarativeClass('note', 'note')
         self.proposition = DeclarativeClass('proposition', 'proposition')
         self.relation = DeclarativeClass('relation', 'relation')
@@ -1333,14 +1334,15 @@ class StatementCategory(repm.Representation):
 class StatementCategories(repm.Representation):
     axiom = StatementCategory('axiom', 'a', 'axiom')
     axiom_inclusion = StatementCategory('axiom_inclusion', 'a', 'axiom-inclusion')
-    corollary = StatementCategory('corollary', '𝑝', 'corollary')
-    definition = StatementCategory('definition', '𝑑', 'definition')
-    formal_definition = StatementCategory('formal_definition', '𝑑', 'formal definition')
-    hypothesis = StatementCategory('hypothesis', 'ℎ', 'hypothesis')
-    inference_rule_inclusion = StatementCategory('inference_rule_inclusion', '𝑖', 'inference rule inclusion')
-    lemma = StatementCategory('lemma', '𝑝', 'lemma')
-    proposition = StatementCategory('proposition', '𝑝', 'proposition')
-    theorem = StatementCategory('theorem', '𝑝', 'theorem')
+    corollary = StatementCategory('corollary', 'p', 'corollary')
+    definition = StatementCategory('definition', 'd', 'definition')
+    formal_definition = StatementCategory('formal_definition', 'd', 'formal definition')
+    hypothesis = StatementCategory('hypothesis', 'h', 'hypothesis')
+    inference_rule_inclusion = StatementCategory('inference_rule_inclusion', 'i', 'inference rule inclusion')
+    inferred_proposition = ('inferred_proposition', 'i', 'inferred-proposition')
+    lemma = StatementCategory('lemma', 'p', 'lemma')
+    proposition = StatementCategory('proposition', 'p', 'proposition')
+    theorem = StatementCategory('theorem', 'p', 'theorem')
     # Special categories
     missing_category = StatementCategory('missing_category', '�', 'missing category')
 
@@ -1553,15 +1555,29 @@ class InferenceRuleInclusion(Statement):
         if echo:
             repm.prnt(self.repr_as_statement())
 
-    def infer_from(self, *args):
-        return self._inference_rule.infer_from(*args, t=self.theory)
+    def infer_formula(self, *args):
+        return self.inference_rule.infer_formula(*args, t=self.theory)
+
+    def infer_statement(self, *args):
+        return self.inference_rule.infer_statement(*args, t=self.theory)
+
+    def verify_args(self, *args):
+        return self.inference_rule.verify_args(*args, t=self.theory)
+
+    @property
+    def i(self):
+        return self.inference_rule
+
+    @property
+    def inference_rule(self):
+        return self._inference_rule
 
     def verify_compatibility(self, *args):
-        return self._inference_rule.verify_compatibility(*args, t=self.theory)
+        return self.inference_rule.verify_args(*args, t=self.theory)
 
     def repr_as_statement(self, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        text = f'Allow inference-rule “{self._inference_rule}”.'
+        text = f'Allow inference-rule “{self.inference_rule}”.'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -2043,13 +2059,13 @@ class InferenceRule2(TheoreticalObjct):
 
     def __init__(self,
                  universe_of_discourse: UniverseOfDiscourse,
-                 infer_from: collections.abc.Callable,
-                 verify_compatibility: collections.abc.Callable,
+                 infer_formula: collections.abc.Callable,
+                 verify_args: collections.abc.Callable,
                  symbol: (None, str, Symbol) = None,
                  header: (None, str, ObjctHeader) = None,
                  dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
-        self._infer_from = infer_from
-        self._verify_compatibility = verify_compatibility
+        self._infer_formula = infer_formula
+        self._verify_compatibility = verify_args
         if symbol is None:
             # If no symbol is passed as a parameter,
             # automated assignment of symbol is assumed.
@@ -2067,17 +2083,18 @@ class InferenceRule2(TheoreticalObjct):
     def echo(self):
         repm.prnt(self.repr_report())
 
-    def infer_from(self, *args, t: TheoryElaboration):
+    def infer_formula(self, *args, t: TheoryElaboration) -> Formula:
         """Apply this inference-rules on input statements and return the resulting statement."""
-        verify(self.verify_compatibility(*args, t=t),
-               '⌜*args⌝ and  ⌜**kwargs⌝ parameters are not compatible with the ⌜self⌝ inference-rule.',
-               args=args, self=self, t=t)
-        return self._infer_from(*args, t=t)
+        return self._infer_formula(*args, t=t)
 
-    def verify_compatibility(self, *args, t: TheoryElaboration):
+    def infer_statement(self, *args, t: TheoryElaboration) -> InferredProposition:
+        """Apply this inference-rules on input statements and return the resulting statement."""
+        return InferredProposition(*args, i=self, t=t)
+
+    def verify_args(self, *args, t: TheoryElaboration):
         """Verify the syntactical-compatibility of input statements and return True
         if they are compatible, False otherwise."""
-        return self._verify_compatibility(*args)
+        return self._verify_compatibility(*args, t=t)
 
 
 class AtheoreticalStatement(SymbolicObjct):
@@ -3404,8 +3421,15 @@ class InferenceRuleUserDict(collections.UserDict):
         the inference-rule is automatically created.
         """
 
-        def infer(*args, t: TheoryElaboration) -> InferredProposition:
-            return InferredProposition(*args, i=self.double_negation_introduction, t=t)
+        def infer_formula(*args, t: TheoryElaboration) -> InferredProposition:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            p = args[0]
+            return t.u.f(t.u.r.lnot, t.u.f(t.u.r.lnot, p))
 
         def verify_compatibility(*args, t: TheoryElaboration) -> bool:
             """
@@ -3418,8 +3442,9 @@ class InferenceRuleUserDict(collections.UserDict):
                 len(args) == 1,
                 'The double-negation-introduction inference-rule expects exactly 1 argument.',
                 args=args, t=t, slf=self)
+            p = args[0]
             verify(
-                is_in_class(args[0], classes.statement) and t.contains_theoretical_objct(args[0]) is t,
+                is_in_class(p, classes.statement) and t.contains_theoretical_objct(p),
                 'The argument passed to the double-negation-introduction inference-rule must be a statement and that statement must be contained in the theory.',
                 args=args, t=t, slf=self)
             return True
@@ -3429,8 +3454,8 @@ class InferenceRuleUserDict(collections.UserDict):
                 universe_of_discourse=self.u,
                 symbol=Symbol('dni', index=None),
                 dashed_name=DashedName('double-negation-introduction'),
-                infer_from=infer,
-                verify_compatibility=None)
+                infer_formula=infer_formula,
+                verify_args=verify_compatibility)
         return self._double_negation_introduction
 
     @property
@@ -4434,9 +4459,9 @@ class InferredProposition(FormulaStatement):
 
     def __init__(
             self,
+            *args,
             i: InferenceRule2,
             t: TheoryElaboration,
-            kwargs: dict,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
@@ -4445,20 +4470,19 @@ class InferredProposition(FormulaStatement):
         """
         self._inference_rule = i
         verify(
-            self._inference_rule.verify_compatibility(t=t, kwargs=kwargs),
-            'Parameters ⌜kwargs⌝ are not compatible with inference-rule ⌜self⌝',
-            slf=self, kwargs=kwargs, t=t)
-        valid_proposition = self._inference_rule.infer_from(
-            t=t, kwargs=kwargs)
+            self._inference_rule.verify_args(*args, t=t),
+            'Parameters ⌜*args⌝ are not compatible with inference-rule ⌜self⌝',
+            args=args, slf=self, t=t)
+        valid_proposition = self._inference_rule.infer_formula(*args, t=t)
         super().__init__(
             theory=t,
             valid_proposition=valid_proposition,
-            category=statement_categories.inferred_proposition,
+            category=statement_categories.proposition,
             symbol=symbol,
             header=header,
             dashed_name=dashed_name,
             echo=False)
-        t.crossreference_inferred_proposition(self)
+        # t.crossreference_inferred_proposition(self)
         super()._declare_class_membership(declarative_class_list.inferred_proposition)
         if echo:
             repm.prnt(self.repr_as_statement())
