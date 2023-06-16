@@ -48,6 +48,11 @@ def get_config(*args, fallback_value):
     return fallback_value
 
 
+def unstate(o: (Formula, FormulaStatement)) -> Formula:
+    """Receive either a formula or a formula-statement and return the formula."""
+    return o.valid_statement if is_in_class(o, classes.formula_statement) else o
+
+
 class Consistency(repm.Representation):
     """A qualification regarding the consistency of a theory."""
 
@@ -2181,7 +2186,6 @@ class TheoryElaboration(TheoreticalObjct):
             extended_theory: (None, TheoryElaboration) = None,
             extended_theory_limit: (None, Statement) = None,
             include_modus_ponens_inference_rule: bool = False,
-            include_biconditional_introduction_inference_rule: bool = False,
             include_inconsistency_introduction_inference_rule: bool = False,
             stabilized: bool = False,
             echo: bool = False
@@ -3482,11 +3486,191 @@ class InferenceRuleDict(collections.UserDict):
         self.u = u
         super().__init__()
         # Well-known objects
+        self._biconditional_elimination_left = None
+        self._biconditional_elimination_right = None
+        self._biconditional_introduction = None
         self._conjunction_elimination_left = None
         self._conjunction_elimination_right = None
         self._conjunction_introduction = None
         self._double_negation_elimination = None
         self._double_negation_introduction = None
+
+    @property
+    def biconditional_elimination_left(self):
+        """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
+
+        Abridged property: u.i.bel
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+
+        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            phi = unstate(args[0])
+            # phi is a formula of the form P ⟺ Q
+            # unpack the embedded formulae
+            p = unstate(phi.parameters[0])
+            q = unstate(phi.parameters[1])
+            psi = t.u.f(t.u.implies, p, q)
+            return psi
+
+        def verify_args(*args, t: TheoryElaboration) -> bool:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            verify(
+                len(args) == 1,
+                'Exactly 1 item is expected in ⌜*args⌝ .',
+                args=args, t=t, slf=self)
+            phi = args[0]
+            verify(
+                t.contains_theoretical_objct(p),
+                'Statement ⌜phi⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                phi=phi, t=t, slf=self)
+            phi = unstate(phi)
+            verify(
+                phi.relation is t.u.r.biconditional,
+                'The relation of formula ⌜phi⌝ must be a biconditional.',
+                phi_relation=phi.relation, phi=phi, t=t, slf=self)
+            return True
+
+        if self._biconditional_elimination_left is None:
+            self._biconditional_elimination_left = InferenceRule(
+                universe_of_discourse=self.u,
+                symbol=Symbol('bel', index=None),
+                dashed_name=DashedName('biconditional-elimination-left'),
+                infer_formula=infer_formula,
+                verify_args=verify_args)
+        return self._biconditional_elimination_left
+
+    @property
+    def biconditional_elimination_right(self):
+        """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
+
+        Abridged method: u.i.ber()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+
+        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            phi = unstate(args[0])
+            # phi is a formula of the form P ⟺ Q
+            # unpack the embedded formulae
+            p = unstate(phi.parameters[0])
+            q = unstate(phi.parameters[1])
+            psi = t.u.f(t.u.implies, q, p)
+            return psi
+
+        def verify_compatibility(*args, t: TheoryElaboration) -> bool:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            verify(
+                len(args) == 1,
+                'Exactly 1 item is expected in ⌜*args⌝ .',
+                args=args, t=t, slf=self)
+            phi = args[0]
+            verify(
+                t.contains_theoretical_objct(p),
+                'Statement ⌜phi⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                phi=phi, t=t, slf=self)
+            phi = unstate(phi)
+            verify(
+                phi.relation is t.u.r.biconditional,
+                'The relation of formula ⌜phi⌝ must be a biconditional.',
+                phi_relation=phi.relation, phi=phi, t=t, slf=self)
+            return True
+
+        if self._biconditional_elimination_right is None:
+            self._biconditional_elimination_right = InferenceRule(
+                universe_of_discourse=self.u,
+                symbol=Symbol('ber', index=None),
+                dashed_name=DashedName('biconditional-elimination-right'),
+                infer_formula=infer_formula,
+                verify_args=verify_compatibility)
+        return self._biconditional_elimination_right
+
+    @property
+    def biconditional_introduction(self):
+        """The well-known biconditional-introduction inference-rule: : P ⟹ Q, Q ⟹ P ⊢ P ⟺ Q.
+
+        Shortcut method: u.i.bi()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+
+        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            p = unstate(args[0])
+            q = unstate(args[1])
+            return t.u.f(t.u.r.biconditional, p, q)
+
+        def verify_args(*args, t: TheoryElaboration) -> bool:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            verify(
+                len(args) == 2,
+                'Exactly 2 items are expected in ⌜*args⌝ .',
+                args=args, t=t, slf=self)
+            p_implies_q = args[0]
+            verify(
+                t.contains_theoretical_objct(p),
+                'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                p_implies_q=p_implies_q, t=t, slf=self)
+            p_implies_q = unstate(p_implies_q)
+            verify(
+                p_implies_q.relation is t.u.r.implication,
+                'The relation of formula ⌜p_implies_q⌝ must be an implication.',
+                p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
+            q_implies_p = args[1]
+            verify(
+                t.contains_theoretical_objct(q_implies_p),
+                'Statement ⌜q_implies_p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                q_implies_p=q_implies_p, t=t, slf=self)
+            q_implies_p = unstate(q_implies_p)
+            verify(
+                q_implies_p.relation is t.u.r.implication,
+                'The relation of formula ⌜q_implies_p⌝ must be an implication.',
+                q_implies_p_relation=p_implies_q.relation, q_implies_p=q_implies_p, t=t, slf=self)
+            return True
+
+        if self._biconditional_introduction is None:
+            self._biconditional_introduction = InferenceRule(
+                universe_of_discourse=self.u,
+                symbol=Symbol('bi', index=None),
+                dashed_name=DashedName('biconditional-introduction'),
+                infer_formula=infer_formula,
+                verify_args=verify_args)
+        return self._biconditional_introduction
 
     @property
     def conjunction_elimination_left(self):
@@ -3498,19 +3682,15 @@ class InferenceRuleDict(collections.UserDict):
         the inference-rule is automatically created.
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> InferredProposition:
+        def infer_formula(*args, t: TheoryElaboration) -> Formula:
             """
 
             :param args:
             :param t:
             :return:
             """
-            p = args[0]
-            # p is a formula of the form q ∧ r
-            # unpack the embedded formulae
-            q = p.parameters[0]
-            # unpack the formula if this is a statement
-            q = q.valid_proposition if is_in_class(q, classes.statement) else q
+            p = unstate(args[0])
+            q = unstate(p.parameters[0])
             return q
 
         def verify_compatibility(*args, t: TheoryElaboration) -> bool:
@@ -3529,9 +3709,9 @@ class InferenceRuleDict(collections.UserDict):
                 t.contains_theoretical_objct(p),
                 'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 args=args, t=t, slf=self)
-            p = p.valid_proposition
+            p = unstate(p)
             verify(
-                p.relation is t.u.r.land,
+                p.relation is t.u.r.conjunction,
                 'The relation of formula ⌜p⌝ must be a conjunction.',
                 p_relation=p.relation, p=p, t=t, slf=self)
             return True
@@ -3555,19 +3735,15 @@ class InferenceRuleDict(collections.UserDict):
         the inference-rule is automatically created.
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> InferredProposition:
+        def infer_formula(*args, t: TheoryElaboration) -> Formula:
             """
 
             :param args:
             :param t:
             :return:
             """
-            p = args[0]
-            # p is a formula of the form q ∧ r
-            # unpack the embedded formulae
-            r = p.parameters[1]
-            # unpack the formula if this is a statement
-            r = r.valid_proposition if is_in_class(r, classes.statement) else r
+            p = unstate(args[0])
+            r = unstate(p.parameters[1])
             return r
 
         def verify_compatibility(*args, t: TheoryElaboration) -> bool:
@@ -3586,9 +3762,9 @@ class InferenceRuleDict(collections.UserDict):
                 t.contains_theoretical_objct(p),
                 'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 args=args, t=t, slf=self)
-            p = p.valid_proposition
+            p = unstate(p)
             verify(
-                p.relation is t.u.r.land,
+                p.relation is t.u.r.conjunction,
                 'The relation of formula ⌜p⌝ must be a conjunction.',
                 p_relation=p.relation, p=p, t=t, slf=self)
             return True
@@ -3612,15 +3788,15 @@ class InferenceRuleDict(collections.UserDict):
         the inference-rule is automatically created.
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> InferredProposition:
+        def infer_formula(*args, t: TheoryElaboration) -> Formula:
             """
 
             :param args:
             :param t:
             :return:
             """
-            p = args[0]
-            q = args[1]
+            p = unstate(args[0])
+            q = unstate(args[1])
             return t.u.f(t.u.r.land, p, q)
 
         def verify_args(*args, t: TheoryElaboration) -> bool:
@@ -3635,15 +3811,17 @@ class InferenceRuleDict(collections.UserDict):
                 'Exactly 2 items are expected in ⌜*args⌝ .',
                 args=args, t=t, slf=self)
             p = args[0]
-            q = args[1]
             verify(
                 t.contains_theoretical_objct(p),
                 'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 p=p, t=t, slf=self)
+            p = unstate(p)
+            q = args[1]
             verify(
                 t.contains_theoretical_objct(q),
                 'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 q=q, t=t, slf=self)
+            q = unstate(q)
             return True
 
         if self._conjunction_introduction is None:
@@ -3665,23 +3843,19 @@ class InferenceRuleDict(collections.UserDict):
         the inference-rule is automatically created.
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> InferredProposition:
+        def infer_formula(*args, t: TheoryElaboration) -> Formula:
             """
 
             :param args:
             :param t:
             :return:
             """
-            p = args[0]
-            # p is a formula of the form ¬(¬(r))
-            # unpack the embedded formulae
-            q = p.parameters[0]
-            r = q.parameters[0]
-            # unpack the formula if this is a statement
-            r = r.valid_proposition if is_in_class(r, classes.statement) else r
+            p = unstate(args[0])
+            q = unstate(p.parameters[0])
+            r = unstate(q.parameters[0])
             return r
 
-        def verify_compatibility(*args, t: TheoryElaboration) -> bool:
+        def verify_args(*args, t: TheoryElaboration) -> bool:
             """
 
             :param args:
@@ -3697,12 +3871,12 @@ class InferenceRuleDict(collections.UserDict):
                 t.contains_theoretical_objct(p),
                 'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 args=args, t=t, slf=self)
-            p = p.valid_proposition
+            p = unstate(p)
             verify(
                 p.relation is t.u.r.lnot,
                 'The relation of formula ⌜p⌝ must be a negation.',
                 p_relation=p.relation, p=p, t=t, slf=self)
-            q = p.parameters[0]
+            q = unstate(p.parameters[0])
             verify(
                 q.relation is t.u.r.lnot,
                 'The relation of formula ⌜q⌝ must be a negation.',
@@ -3715,7 +3889,7 @@ class InferenceRuleDict(collections.UserDict):
                 symbol=Symbol('dne', index=None),
                 dashed_name=DashedName('double-negation-elimination'),
                 infer_formula=infer_formula,
-                verify_args=verify_compatibility)
+                verify_args=verify_args)
         return self._double_negation_elimination
 
     @property
@@ -3728,14 +3902,14 @@ class InferenceRuleDict(collections.UserDict):
         the inference-rule is automatically created.
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> InferredProposition:
+        def infer_formula(*args, t: TheoryElaboration) -> Formula:
             """
 
             :param args:
             :param t:
             :return:
             """
-            p = args[0]
+            p = unstate(args[0])
             return t.u.f(t.u.r.lnot, t.u.f(t.u.r.lnot, p))
 
         def verify_args(*args, t: TheoryElaboration) -> bool:
@@ -3830,6 +4004,9 @@ class InferenceRuleInclusionDict(collections.UserDict):
         self.t = t
         super().__init__()
         # Well-known objects
+        self._biconditional_elimination_left = None
+        self._biconditional_elimination_right = None
+        self._biconditional_introduction = None
         self._conjunction_elimination_left = None
         self._conjunction_elimination_right = None
         self._conjunction_introduction = None
