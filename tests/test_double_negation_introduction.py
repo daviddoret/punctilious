@@ -16,6 +16,8 @@ class TestDoubleNegationIntroduction(TestCase):
         a = u.elaborate_axiom(random_data.random_sentence())
         ap = t.postulate_axiom(a)
         phi1 = t.dai(u.f(r1, o1, o2), ap=ap)
+        print(u.inference_rules.double_negation_introduction)
+        print(t.inference_rule_inclusions.double_negation_introduction)
         phi2 = t.i.dni.infer_from(phi1)
         self.assertEqual(
             '¬(¬(◆(ℴ₁, ℴ₂)))', phi2.repr())

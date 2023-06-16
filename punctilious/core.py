@@ -1331,7 +1331,8 @@ class StatementCategory(repm.Representation):
 
 
 class StatementCategories(repm.Representation):
-    axiom = StatementCategory('axiom', '𝑎', 'axiom')
+    axiom = StatementCategory('axiom', 'a', 'axiom')
+    axiom_inclusion = StatementCategory('axiom_inclusion', 'a', 'axiom-inclusion')
     corollary = StatementCategory('corollary', '𝑝', 'corollary')
     definition = StatementCategory('definition', '𝑑', 'definition')
     formal_definition = StatementCategory('formal_definition', '𝑑', 'formal definition')
@@ -1504,7 +1505,7 @@ class AxiomInclusion(Statement):
         t.crossreference_axiom_inclusion(self)
         super().__init__(
             theory=t,
-            category=statement_categories.axiom,
+            category=statement_categories.axiom_inclusion,
             symbol=symbol,
             header=header,
             dashed_name=dashed_name,
@@ -1513,9 +1514,54 @@ class AxiomInclusion(Statement):
         if echo:
             repm.prnt(self.repr_as_statement())
 
-    def repr_as_statement(self, output_proofs=True):
+    def repr_as_statement(self, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
         text = f'{self.repr_as_title(cap=True)}: “{self.axiom.natural_language}”'
+        return '\n'.join(
+            textwrap.wrap(
+                text=text, width=70,
+                subsequent_indent=f'\t',
+                break_on_hyphens=False,
+                expand_tabs=True,
+                tabsize=4))
+
+
+class InferenceRuleInclusion(Statement):
+    """An inference-rule inclusion (aka allowance) in the current theory-elaboration.
+    """
+
+    def __init__(
+            self,
+            i: InferenceRule2,
+            t: TheoryElaboration,
+            symbol: (None, str, Symbol) = None,
+            header: (None, str, ObjctHeader) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
+        """Include (aka allow) an inference-rule in a theory-elaboration.
+        """
+        self._inference_rule = i
+        super().__init__(
+            theory=t,
+            category=statement_categories.inference_rule_inclusion,
+            symbol=symbol,
+            header=header,
+            dashed_name=dashed_name,
+            echo=False)
+        t.crossreference_inference_rule_inclusion(self)
+        super()._declare_class_membership(declarative_class_list.inference_rule_inclusion)
+        if echo:
+            repm.prnt(self.repr_as_statement())
+
+    def infer_from(self, *args):
+        return self._inference_rule.infer_from(*args, t=self.theory)
+
+    def verify_compatibility(self, *args):
+        return self._inference_rule.verify_compatibility(*args, t=self.theory)
+
+    def repr_as_statement(self, output_proofs=True) -> str:
+        """Return a representation that expresses and justifies the statement."""
+        text = f'Allow inference-rule “{self._inference_rule}”.'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -1962,7 +2008,7 @@ def index_universe_of_discourse_symbol(base):
     return universe_of_discourse_symbol_indexes[base]
 
 
-class InferenceRule:
+class InferenceRuleOBSOLETE:
     """
     TODO: Complete the implementation of InferenceRule, and make ModusPonens a subclass of it.
     TODO: Make InferenceRule itself a Formula with the Sequent operator ⊢.
@@ -1997,11 +2043,13 @@ class InferenceRule2(TheoreticalObjct):
 
     def __init__(self,
                  universe_of_discourse: UniverseOfDiscourse,
-                 infer: collections.abc.Callable,
+                 infer_from: collections.abc.Callable,
+                 verify_compatibility: collections.abc.Callable,
                  symbol: (None, str, Symbol) = None,
                  header: (None, str, ObjctHeader) = None,
                  dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
-        self._infer = infer
+        self._infer_from = infer_from
+        self._verify_compatibility = verify_compatibility
         if symbol is None:
             # If no symbol is passed as a parameter,
             # automated assignment of symbol is assumed.
@@ -2019,13 +2067,17 @@ class InferenceRule2(TheoreticalObjct):
     def echo(self):
         repm.prnt(self.repr_report())
 
-    def infer(self, *args, **kwargs):
+    def infer_from(self, *args, t: TheoryElaboration):
         """Apply this inference-rules on input statements and return the resulting statement."""
-        return self._infer(*args, **kwargs)
+        verify(self.verify_compatibility(*args, t=t),
+               '⌜*args⌝ and  ⌜**kwargs⌝ parameters are not compatible with the ⌜self⌝ inference-rule.',
+               args=args, self=self, t=t)
+        return self._infer_from(*args, t=t)
 
-    def verify_compatibility(self, *args, **kwargs):
-        """Verify the syntactical-compatibility of input statements and return True if they are compatible, False otherwise."""
-        return self._infer(*args, **kwargs)
+    def verify_compatibility(self, *args, t: TheoryElaboration):
+        """Verify the syntactical-compatibility of input statements and return True
+        if they are compatible, False otherwise."""
+        return self._verify_compatibility(*args)
 
 
 class AtheoreticalStatement(SymbolicObjct):
@@ -2234,7 +2286,7 @@ class TheoryElaboration(TheoreticalObjct):
             return None
 
     @biconditional_introduction_inference_rule.setter
-    def biconditional_introduction_inference_rule(self, ir: InferenceRule):
+    def biconditional_introduction_inference_rule(self, ir: InferenceRuleOBSOLETE):
         verify(
             self._biconditional_introduction_inference_rule is None,
             'The biconditional-introduction inference-rule property of a theory can only be '
@@ -2283,7 +2335,7 @@ class TheoryElaboration(TheoreticalObjct):
             return None
 
     @conjunction_introduction_inference_rule.setter
-    def conjunction_introduction_inference_rule(self, ir: InferenceRule):
+    def conjunction_introduction_inference_rule(self, ir: InferenceRuleOBSOLETE):
         verify(
             not self.stabilized,
             'This theory-elaboration is stabilized, it is no longer possible to allow new inference-rules.',
@@ -2406,7 +2458,7 @@ class TheoryElaboration(TheoreticalObjct):
             return None
 
     @inconsistency_introduction_inference_rule.setter
-    def inconsistency_introduction_inference_rule(self, ir: InferenceRule):
+    def inconsistency_introduction_inference_rule(self, ir: InferenceRuleOBSOLETE):
         verify(
             self._inconsistency_introduction_inference_rule is None,
             'The inconsistency-introduction inference-rule property of a theory can only be '
@@ -2594,7 +2646,7 @@ class TheoryElaboration(TheoreticalObjct):
             return None
 
     @modus_ponens_inference_rule.setter
-    def modus_ponens_inference_rule(self, ir: InferenceRule):
+    def modus_ponens_inference_rule(self, ir: InferenceRuleOBSOLETE):
         verify(
             self._modus_ponens_inference_rule is None,
             'The modus-ponens inference-rule property of a theory can only be '
@@ -2738,7 +2790,7 @@ class TheoryElaboration(TheoreticalObjct):
         # TODO: Justify the inclusion of the inference-rule in the theory
         #   with adequate statements (axioms?).
         self.universe_of_discourse._declare_biconditional_relation()
-        self._biconditional_introduction_inference_rule = BiconditionalIntroductionInferenceRule
+        self._biconditional_introduction_inference_rule = BiconditionalIntroductionInferenceRuleOBSOLETE
         self._includes_biconditional_introduction_inference_rule = True
 
     def include_conjunction_introduction_inference_rule(self):
@@ -2752,7 +2804,7 @@ class TheoryElaboration(TheoreticalObjct):
             # TODO: Justify the inclusion of the inference-rule in the theory
             #   with adequate statements (axioms?).
             self.universe_of_discourse._declare_conjunction_relation()
-            self._conjunction_introduction_inference_rule = ConjunctionIntroductionInferenceRule
+            self._conjunction_introduction_inference_rule = ConjunctionIntroductionInferenceRuleOBSOLETE
 
     def include_double_negation_introduction_inference_rule(self):
         """Include the double-negation-introduction inference-rule in this
@@ -2762,7 +2814,7 @@ class TheoryElaboration(TheoreticalObjct):
             'The double-negation-introduction inference-rule is already included in this theory.')
         # TODO: Justify the inclusion of the inference-rule in the theory
         #   with adequate statements (axioms?).
-        self._double_negation_introduction_inference_rule = DoubleNegationIntroductionInferenceRule
+        self._double_negation_introduction_inference_rule = DoubleNegationIntroductionInferenceRuleOBSOLETE
         self._includes_double_negation_introduction_inference_rule = True
 
     def include_inconsistency_introduction_inference_rule(self):
@@ -2773,7 +2825,7 @@ class TheoryElaboration(TheoreticalObjct):
             'The inconsistency-introduction inference-rule is already included in this theory.')
         # TODO: Justify the inclusion of the inference-rule in the theory
         #   with adequate statements (axioms?).
-        self._inconsistency_introduction_inference_rule = InconsistencyIntroductionInferenceRule
+        self._inconsistency_introduction_inference_rule = InconsistencyIntroductionInferenceRuleOBSOLETE
         self._includes_inconsistency_introduction_inference_rule = True
 
     def include_modus_ponens_inference_rule(self):
@@ -2788,7 +2840,7 @@ class TheoryElaboration(TheoreticalObjct):
             self.universe_of_discourse._declare_implication_relation()
             self.universe_of_discourse._declare_conjunction_relation()
             self.include_conjunction_introduction_inference_rule()
-            self._modus_ponens_inference_rule = ModusPonensInferenceRule
+            self._modus_ponens_inference_rule = ModusPonensInferenceRuleOBSOLETE
             self._includes_modus_ponens_inference_rule = True
 
     @property
@@ -3030,7 +3082,7 @@ class Hypothesis(Statement):
             extended_theory=t,
             extended_theory_limit=self
         )
-        self.hypothetical_axiom = self.universe_of_discourse.axiom(
+        self.hypothetical_axiom = self.universe_of_discourse._inference_rule(
             f'Assume {hypothetical_formula.repr_as_formula()} is true.')
         self.hypothetical_axiom_postulate = self.hypothetical_t.postulate_axiom(
             self.hypothetical_axiom)
@@ -3351,12 +3403,34 @@ class InferenceRuleUserDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
         """
+
+        def infer(*args, t: TheoryElaboration) -> InferredProposition:
+            return InferredProposition(*args, i=self.double_negation_introduction, t=t)
+
+        def verify_compatibility(*args, t: TheoryElaboration) -> bool:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            verify(
+                len(args) == 1,
+                'The double-negation-introduction inference-rule expects exactly 1 argument.',
+                args=args, t=t, slf=self)
+            verify(
+                is_in_class(args[0], classes.statement) and t.contains_theoretical_objct(args[0]) is t,
+                'The argument passed to the double-negation-introduction inference-rule must be a statement and that statement must be contained in the theory.',
+                args=args, t=t, slf=self)
+            return True
+
         if self._double_negation_introduction is None:
             self._double_negation_introduction = InferenceRule2(
                 universe_of_discourse=self.u,
                 symbol=Symbol('dni', index=None),
                 dashed_name=DashedName('double-negation-introduction'),
-                infer=None)
+                infer_from=infer,
+                verify_compatibility=None)
         return self._double_negation_introduction
 
     @property
@@ -4088,7 +4162,7 @@ class BiconditionalIntroductionStatement(FormulaStatement):
         category = statement_categories.proposition if category is None else category
         self.conditional_phi = conditional_phi
         self.conditional_psi = conditional_psi
-        valid_proposition = BiconditionalIntroductionInferenceRule.execute_algorithm(
+        valid_proposition = BiconditionalIntroductionInferenceRuleOBSOLETE.execute_algorithm(
             theory=theory, conditional_phi=conditional_phi,
             conditional_psi=conditional_psi)
         super().__init__(
@@ -4112,7 +4186,7 @@ class BiconditionalIntroductionStatement(FormulaStatement):
         return output
 
 
-class BiconditionalIntroductionInferenceRule(InferenceRule):
+class BiconditionalIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
     """An implementation of the biconditional-introduction inference-rule."""
 
     @staticmethod
@@ -4198,7 +4272,7 @@ class ConjunctionIntroductionStatement(FormulaStatement):
         category = statement_categories.proposition if category is None else category
         self.conjunct_p = conjunct_p
         self.conjunct_q = conjunct_q
-        valid_proposition = ConjunctionIntroductionInferenceRule.execute_algorithm(
+        valid_proposition = ConjunctionIntroductionInferenceRuleOBSOLETE.execute_algorithm(
             theory=theory, conjunct_p=conjunct_p, conjunct_q=conjunct_q)
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
@@ -4221,7 +4295,7 @@ class ConjunctionIntroductionStatement(FormulaStatement):
         return output
 
 
-class ConjunctionIntroductionInferenceRule(InferenceRule):
+class ConjunctionIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
     """An implementation of the conjunction-introduction inference-rule."""
 
     @staticmethod
@@ -4297,7 +4371,7 @@ class DoubleNegationIntroductionStatement(FormulaStatement):
             reference=None, title=None):
         category = statement_categories.proposition if category is None else category
         self.p = p
-        valid_proposition = DoubleNegationIntroductionInferenceRule.execute_algorithm(
+        valid_proposition = DoubleNegationIntroductionInferenceRuleOBSOLETE.execute_algorithm(
             theory=theory, p=p)
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
@@ -4319,46 +4393,85 @@ class DoubleNegationIntroductionStatement(FormulaStatement):
         return output
 
 
-class InferenceRuleInclusion(Statement):
-    """An inference_rule inclusion (aka allowance) in the current theory-elaboration.
+class DoubleNegationIntroductionStatement(FormulaStatement):
+    """The double-negation inference-rule: P ⟹ ¬¬P.
+
+    Requirements:
+    -------------
+    - The negation-relation must exist in the universe-of-discourse.
+    """
+
+    def __init__(
+            self, p, symbol=None, category=None, theory=None,
+            reference=None, title=None):
+        category = statement_categories.proposition if category is None else category
+        self.p = p
+        valid_proposition = DoubleNegationIntroductionInferenceRuleOBSOLETE.execute_algorithm(
+            theory=theory, p=p)
+        super().__init__(
+            theory=theory, valid_proposition=valid_proposition,
+            category=category, reference=reference, title=title,
+            symbol=symbol)
+
+    def repr_as_statement(self, output_proofs=True):
+        """Return a representation that expresses and justifies the statement.
+
+        The representation is in two parts:
+        - The formula that is being stated,
+        - The justification for the formula."""
+        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
+        if output_proofs:
+            output = output + f'\n\t{repm.serif_bold("Proof by double_negation introduction")}'
+            output = output + f'\n\t{self.p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p.repr_as_ref())}.'
+            output = output + f'\n\t{"─" * 71}┤'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+        return output
+
+
+class InferredProposition(FormulaStatement):
+    """A proposition inferred from an inference-rule in the current theory-elaboration.
     """
 
     def __init__(
             self,
-            i: InferenceRule,
+            i: InferenceRule2,
             t: TheoryElaboration,
+            kwargs: dict,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
         """Include (aka allow) an inference_rule in a theory-elaboration.
         """
-        verify(not t.stabilized,
-               'Theory-elaboration ⌜t⌝ is stabilized, it is no longer possible to include (aka allow) inference-rule ⌜i⌝.',
-               t=t,
-               i=i)
         self._inference_rule = i
+        verify(
+            self._inference_rule.verify_compatibility(t=t, kwargs=kwargs),
+            'Parameters ⌜kwargs⌝ are not compatible with inference-rule ⌜self⌝',
+            slf=self, kwargs=kwargs, t=t)
+        valid_proposition = self._inference_rule.infer_from(
+            t=t, kwargs=kwargs)
         super().__init__(
             theory=t,
-            category=statement_categories.inference_rule_inclusion,
+            valid_proposition=valid_proposition,
+            category=statement_categories.inferred_proposition,
             symbol=symbol,
             header=header,
             dashed_name=dashed_name,
             echo=False)
-        t.crossreference_inference_rule_inclusion(self)
-        super()._declare_class_membership(declarative_class_list.inference_rule_inclusion)
+        t.crossreference_inferred_proposition(self)
+        super()._declare_class_membership(declarative_class_list.inferred_proposition)
         if echo:
             repm.prnt(self.repr_as_statement())
 
     @property
-    def inference_rule(self):
+    def inference_rule(self) -> InferenceRule2:
         """Return the inference-rule upon which this inference-rule-inclusion is based.
         """
         return self._inference_rule
 
-    def repr_as_statement(self, output_proofs=True):
+    def repr_as_statement(self, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        text = f'{self.repr_as_title(cap=True)}: “{self.inference_rule.natural_language}”'
+        text = f'Inferred Proposition {self.repr_as_title(cap=True)}: “{self.inference_rule.natural_language}”'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -4378,7 +4491,7 @@ def apply_double_negation(phi: Formula):
     return apply_negation(apply_negation(phi))
 
 
-class DoubleNegationIntroductionInferenceRule(InferenceRule):
+class DoubleNegationIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
     """An implementation of the double_negation-introduction inference-rule."""
 
     @staticmethod
@@ -4450,7 +4563,7 @@ class ModusPonensStatement(FormulaStatement):
         category = statement_categories.proposition if category is None else category
         self.conditional = conditional
         self.antecedent = antecedent
-        valid_proposition = ModusPonensInferenceRule.execute_algorithm(
+        valid_proposition = ModusPonensInferenceRuleOBSOLETE.execute_algorithm(
             t=theory, conditional=conditional, antecedent=antecedent)
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
@@ -4473,7 +4586,7 @@ class ModusPonensStatement(FormulaStatement):
         return output
 
 
-class ModusPonensInferenceRule(InferenceRule):
+class ModusPonensInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
     """An implementation of the modus-ponens inference-rule."""
 
     @staticmethod
@@ -4561,7 +4674,7 @@ class InconsistencyIntroductionStatement(FormulaStatement):
         category = statement_categories.proposition if category is None else category
         self.p = p
         self.not_p = not_p
-        valid_proposition = InconsistencyIntroductionInferenceRule.execute_algorithm(
+        valid_proposition = InconsistencyIntroductionInferenceRuleOBSOLETE.execute_algorithm(
             theory=theory, p=p, not_p=not_p)
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
@@ -4588,7 +4701,7 @@ class InconsistencyIntroductionStatement(FormulaStatement):
         return output
 
 
-class InconsistencyIntroductionInferenceRule(InferenceRule):
+class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
     """An implementation of the inconsistency-introduction inference-rule."""
 
     @staticmethod

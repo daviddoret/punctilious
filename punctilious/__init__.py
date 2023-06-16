@@ -9,7 +9,7 @@ from core import \
     configuration, \
     DashedName, DefinitionEndorsement, DirectAxiomInference, DirectDefinitionInference, \
     FailedVerificationException, Formula, FreeVariable, \
-    ModusPonensStatement, ModusPonensInferenceRule, \
+    ModusPonensStatement, ModusPonensInferenceRuleOBSOLETE, \
     Note, note_categories, InconsistencyWarning, \
     ObjctHeader, \
     Relation, \

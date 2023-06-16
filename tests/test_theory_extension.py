@@ -42,7 +42,7 @@ class TestTheory(TestCase):
         self.assertEqual({t1, t2a}, set(t2a.iterate_theoretical_objcts_references()))
         self.assertEqual({t1, t2b}, set(t2b.iterate_theoretical_objcts_references()))
         t2a.dai(f2, ap1)
-        a2 = u.axiom(random_data.random_sentence())
+        a2 = u._inference_rule(random_data.random_sentence())
         ap2 = t2a.postulate_axiom(a2)
         t2a.dai(f3, ap2)
         t3 = u.t(extended_theory=t2a)
