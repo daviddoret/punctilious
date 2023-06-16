@@ -1535,7 +1535,7 @@ class InferenceRuleInclusion(Statement):
 
     def __init__(
             self,
-            i: InferenceRule2,
+            i: InferenceRule,
             t: TheoryElaboration,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
@@ -2050,7 +2050,7 @@ class InferenceRuleOBSOLETE:
 import collections.abc
 
 
-class InferenceRule2(TheoreticalObjct):
+class InferenceRule(TheoreticalObjct):
     """An inference-rule object.
 
     If an inference-rule is allowed / included in a theory-elaboration,
@@ -3335,7 +3335,7 @@ class Tuple(tuple):
     pass
 
 
-class Relations(collections.UserDict):
+class RelationUserDict(collections.UserDict):
     """A dictionary that exposes well-known relations as properties.
 
     """
@@ -3344,6 +3344,7 @@ class Relations(collections.UserDict):
         self.u = u
         super().__init__()
         # Well-known objects
+        self._conjunction = None
         self._inconsistent = None
         self._negation = None
 
@@ -3361,6 +3362,21 @@ class Relations(collections.UserDict):
             universe_of_discourse=self.u, dashed_name=dashed_name)
 
     @property
+    def conjunction(self):
+        """The well-known conjunction relation.
+
+        Abridged method: u.r.land()
+
+        If the well-known relation does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        if self._conjunction is None:
+            self._conjunction = self.declare(
+                2, '∧', Formula.infix_operator_representation,
+                signal_proposition=True, dashed_name='conjunction')
+        return self._conjunction
+
+    @property
     def inc(self):
         """Return the well-known inconsistent-relation in this universe-of-discourse."""
         return self.inconsistent
@@ -3373,6 +3389,11 @@ class Relations(collections.UserDict):
                 1, 'Inc', Formula.prefix_operator_representation,
                 signal_proposition=True, dashed_name='inconsistent')
         return self._inconsistent
+
+    @property
+    def land(self):
+        """Return the well-known conjunction-relation."""
+        return self.conjunction
 
     @property
     def negation(self):
@@ -3410,8 +3431,178 @@ class InferenceRuleUserDict(collections.UserDict):
         self.u = u
         super().__init__()
         # Well-known objects
+        self._conjunction_elimination_left = None
+        self._conjunction_elimination_right = None
+        self._conjunction_introduction = None
         self._double_negation_elimination = None
         self._double_negation_introduction = None
+
+    @property
+    def conjunction_elimination_left(self):
+        """The well-known conjunction-elimination (left) inference-rule.
+
+        Abridged method: u.i.cel()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+
+        def infer_formula(*args, t: TheoryElaboration) -> InferredProposition:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            p = args[0]
+            # p is a formula of the form q ∧ r
+            # unpack the embedded formulae
+            q = p.parameters[0]
+            # unpack the formula if this is a statement
+            q = q.valid_proposition if is_in_class(q, classes.statement) else q
+            return q
+
+        def verify_compatibility(*args, t: TheoryElaboration) -> bool:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            verify(
+                len(args) == 1,
+                'Exactly 1 item is expected in ⌜*args⌝ .',
+                args=args, t=t, slf=self)
+            p = args[0]
+            verify(
+                t.contains_theoretical_objct(p),
+                'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                args=args, t=t, slf=self)
+            p = p.valid_proposition
+            verify(
+                p.relation is t.u.r.land,
+                'The relation of formula ⌜p⌝ must be a conjunction.',
+                p_relation=p.relation, p=p, t=t, slf=self)
+            return True
+
+        if self._conjunction_elimination_left is None:
+            self._conjunction_elimination_left = InferenceRule(
+                universe_of_discourse=self.u,
+                symbol=Symbol('cel', index=None),
+                dashed_name=DashedName('conjunction-elimination-left'),
+                infer_formula=infer_formula,
+                verify_args=verify_compatibility)
+        return self._conjunction_elimination_left
+
+    @property
+    def conjunction_elimination_right(self):
+        """The well-known conjunction-elimination (right) inference-rule.
+
+        Abridged method: u.i.cer()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+
+        def infer_formula(*args, t: TheoryElaboration) -> InferredProposition:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            p = args[0]
+            # p is a formula of the form q ∧ r
+            # unpack the embedded formulae
+            r = p.parameters[1]
+            # unpack the formula if this is a statement
+            r = r.valid_proposition if is_in_class(r, classes.statement) else r
+            return r
+
+        def verify_compatibility(*args, t: TheoryElaboration) -> bool:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            verify(
+                len(args) == 1,
+                'Exactly 1 item is expected in ⌜*args⌝ .',
+                args=args, t=t, slf=self)
+            p = args[0]
+            verify(
+                t.contains_theoretical_objct(p),
+                'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                args=args, t=t, slf=self)
+            p = p.valid_proposition
+            verify(
+                p.relation is t.u.r.land,
+                'The relation of formula ⌜p⌝ must be a conjunction.',
+                p_relation=p.relation, p=p, t=t, slf=self)
+            return True
+
+        if self._conjunction_elimination_right is None:
+            self._conjunction_elimination_right = InferenceRule(
+                universe_of_discourse=self.u,
+                symbol=Symbol('cer', index=None),
+                dashed_name=DashedName('conjunction-elimination-right'),
+                infer_formula=infer_formula,
+                verify_args=verify_compatibility)
+        return self._conjunction_elimination_right
+
+    @property
+    def conjunction_introduction(self):
+        """The well-known conjunction-introduction inference-rule.
+
+        Shortcut method: u.i.ci()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+
+        def infer_formula(*args, t: TheoryElaboration) -> InferredProposition:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            p = args[0]
+            q = args[1]
+            return t.u.f(t.u.r.land, p, q)
+
+        def verify_args(*args, t: TheoryElaboration) -> bool:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            verify(
+                len(args) == 2,
+                'Exactly 2 items are expected in ⌜*args⌝ .',
+                args=args, t=t, slf=self)
+            p = args[0]
+            q = args[1]
+            verify(
+                t.contains_theoretical_objct(p),
+                'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                p=p, t=t, slf=self)
+            verify(
+                t.contains_theoretical_objct(q),
+                'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                q=q, t=t, slf=self)
+            return True
+
+        if self._conjunction_introduction is None:
+            self._conjunction_introduction = InferenceRule(
+                universe_of_discourse=self.u,
+                symbol=Symbol('ci', index=None),
+                dashed_name=DashedName('conjunction-introduction'),
+                infer_formula=infer_formula,
+                verify_args=verify_args)
+        return self._conjunction_introduction
 
     @property
     def double_negation_elimination(self):
@@ -3468,7 +3659,7 @@ class InferenceRuleUserDict(collections.UserDict):
             return True
 
         if self._double_negation_elimination is None:
-            self._double_negation_elimination = InferenceRule2(
+            self._double_negation_elimination = InferenceRule(
                 universe_of_discourse=self.u,
                 symbol=Symbol('dne', index=None),
                 dashed_name=DashedName('double-negation-elimination'),
@@ -3515,13 +3706,46 @@ class InferenceRuleUserDict(collections.UserDict):
             return True
 
         if self._double_negation_introduction is None:
-            self._double_negation_introduction = InferenceRule2(
+            self._double_negation_introduction = InferenceRule(
                 universe_of_discourse=self.u,
                 symbol=Symbol('dni', index=None),
                 dashed_name=DashedName('double-negation-introduction'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._double_negation_introduction
+
+    @property
+    def cel(self):
+        """The well-known conjunction-elimination (left) inference-rule.
+
+        Unabridged method: universe_of_discourse.inference_rules.conjunction_elimination_left
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.conjunction_elimination_left
+
+    @property
+    def cer(self):
+        """The well-known conjunction-elimination (right) inference-rule.
+
+        Unabridged method: universe_of_discourse.inference_rules.conjunction_elimination_right
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.conjunction_elimination_right
+
+    @property
+    def ci(self):
+        """The well-known conjunction-introduction inference-rule.
+
+        Unabridged method: universe_of_discourse.inference_rules.conjunction_introduction
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.conjunction_introduction
 
     @property
     def dne(self):
@@ -3555,8 +3779,111 @@ class InferenceRuleInclusionUserDict(collections.UserDict):
         self.t = t
         super().__init__()
         # Well-known objects
+        self._conjunction_elimination_left = None
+        self._conjunction_elimination_right = None
+        self._conjunction_introduction = None
         self._double_negation_elimination = None
         self._double_negation_introduction = None
+
+    @property
+    def conjunction_elimination_left(self):
+        """The well-known conjunction-elimination (left) inference-rule.
+
+        Abridged method: t.i.cel()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        if self._conjunction_elimination_left is None:
+            self._conjunction_elimination_left = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.conjunction_elimination_left)
+        return self._conjunction_elimination_left
+
+    @property
+    def conjunction_elimination_right(self):
+        """The well-known conjunction-elimination (right) inference-rule.
+
+        Abridged method: t.i.cel()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        if self._conjunction_elimination_right is None:
+            self._conjunction_elimination_right = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.conjunction_elimination_right)
+        return self._conjunction_elimination_right
+
+    @property
+    def conjunction_introduction(self):
+        """The well-known conjunction-introduction inference-rule.
+
+        Abridged method: t.i.ci()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        if self._conjunction_introduction is None:
+            self._conjunction_introduction = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.conjunction_introduction)
+        return self._conjunction_introduction
+
+    @property
+    def cel(self):
+        """The well-known conjunction-elimination (left) inference-rule.
+
+        Unabridged method: universe_of_discourse.inference_rules.conjunction_elimination_left()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.conjunction_elimination_left
+
+    @property
+    def cer(self):
+        """The well-known conjunction-elimination (right) inference-rule.
+
+        Unabridged method: universe_of_discourse.inference_rules.conjunction_elimination_right()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.conjunction_elimination_right
+
+    @property
+    def ci(self):
+        """The well-known conjunction-introduction inference-rule.
+
+        Unabridged method: universe_of_discourse.inference_rules.conjunction_introduction()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.conjunction_introduction
+
+    @property
+    def dne(self):
+        """The well-known double-negation-elimination inference-rule.
+
+        Original method: universe_of_discourse.inference_rules.double_negation_elimination()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.double_negation_elimination
+
+    @property
+    def dni(self):
+        """The well-known double-negation-introduction inference-rule.
+
+        Original method: universe_of_discourse.inference_rules.double_negation_introduction()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.double_negation_introduction
 
     @property
     def double_negation_elimination(self):
@@ -3574,17 +3901,6 @@ class InferenceRuleInclusionUserDict(collections.UserDict):
         return self._double_negation_elimination
 
     @property
-    def dne(self):
-        """The well-known double-negation-elimination inference-rule.
-
-        Original method: universe_of_discourse.inference_rules.double_negation_elimination()
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically created.
-        """
-        return self.double_negation_elimination
-
-    @property
     def double_negation_introduction(self):
         """The well-known double-negation-introduction inference-rule.
 
@@ -3599,17 +3915,6 @@ class InferenceRuleInclusionUserDict(collections.UserDict):
                 i=self.t.u.i.double_negation_introduction)
         return self._double_negation_introduction
 
-    @property
-    def dni(self):
-        """The well-known double-negation-introduction inference-rule.
-
-        Original method: universe_of_discourse.inference_rules.double_negation_introduction()
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically created.
-        """
-        return self.double_negation_introduction
-
 
 class UniverseOfDiscourse(SymbolicObjct):
     def __init__(self, symbol: (None, str, Symbol) = None, echo: (None, bool) = None):
@@ -3618,7 +3923,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         self.definitions = dict()
         self.formulae = dict()
         self._inference_rules = InferenceRuleUserDict(u=self)
-        self._relations = Relations(u=self)
+        self._relations = RelationUserDict(u=self)
         self.theories = dict()
         self.simple_objcts = dict()
         self.symbolic_objcts = dict()
@@ -3847,7 +4152,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         if phi not in self.formulae:
             self.formulae[phi.symbol] = phi
 
-    def cross_reference_inference_rule(self, ir: InferenceRule2) -> bool:
+    def cross_reference_inference_rule(self, ir: InferenceRule) -> bool:
         """Cross-references an inference-rule in this universe-of-discourse.
 
         :param ir: an inference-rule.
@@ -4563,7 +4868,7 @@ class InferredProposition(FormulaStatement):
     def __init__(
             self,
             *args,
-            i: InferenceRule2,
+            i: InferenceRule,
             t: TheoryElaboration,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
@@ -4591,7 +4896,7 @@ class InferredProposition(FormulaStatement):
             repm.prnt(self.repr_as_statement())
 
     @property
-    def inference_rule(self) -> InferenceRule2:
+    def inference_rule(self) -> InferenceRule:
         """Return the inference-rule upon which this inference-rule-inclusion is based.
         """
         return self._inference_rule
