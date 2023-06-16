@@ -26,8 +26,8 @@ class TestHypothesis(TestCase):
         with u.v() as x, u.v() as y, u.v() as z:
             conditional = robust_theory.dai(
                 valid_proposition=
-                u.f(u.implies,
-                    u.f(u.conjunction_relation, u.f(r1, x, y), u.f(r1, y, z)),
+                u.f(u.r.implies,
+                    u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)),
                     u.f(r1, x, z)),
                 ap=ap1)
         robust_theory.stabilize()

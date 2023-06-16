@@ -64,10 +64,9 @@ class TestFormulaIsMaskSimilarTo(TestCase):
             phi1b = u.f(r1a, u.f(r1b, x, o3), y)
             self.assertTrue(phi1a.is_masked_formula_similar_to(phi1b, {x, y}))
             self.assertTrue(phi1b.is_masked_formula_similar_to(phi1a, {x, y}))
-        u._declare_conjunction_relation()
-        phi1c = u.f(u.land, u.f(r1b, o1, o2), u.f(r1b, o2, o3))
+        phi1c = u.f(u.r.land, u.f(r1b, o1, o2), u.f(r1b, o2, o3))
         with u.v() as x1, u.v() as x2, u.v() as x3:
-            phi1d = u.f(u.land, u.f(r1b, x1, x2), u.f(r1b, x2, x3))
+            phi1d = u.f(u.r.land, u.f(r1b, x1, x2), u.f(r1b, x2, x3))
             self.assertTrue(phi1c.is_masked_formula_similar_to(phi1d, {x1, x2, x3}))
             self.assertTrue(phi1d.is_masked_formula_similar_to(phi1c, {x1, x2, x3}))
 
@@ -84,15 +83,15 @@ class TestFormulaIsMaskSimilarTo(TestCase):
         ap = t.postulate_axiom(a)
         phi1 = t.dai(u.f(r1, o1, o2), ap=ap)
         phi2 = t.dai(u.f(r1, o2, o3), ap=ap)
-        antecedent_statement = t.ci(phi1, phi2)
+        antecedent_statement = t.i.ci.infer_statement(phi1, phi2)
         antecedent = antecedent_statement.valid_proposition
 
         with u.v() as x, u.v() as y, u.v() as z:
             variable_set = {x, y, z}
             implication = t.dai(
                 u.f(
-                    u.implies,
-                    u.f(u.land, u.f(r1, x, y), u.f(r1, y, z)),
+                    u.r.implies,
+                    u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)),
                     u.f(r1, x, z)),
                 ap=ap)
             antecedent_with_variables = implication.valid_proposition.parameters[0]
