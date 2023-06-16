@@ -1139,7 +1139,7 @@ class Formula(TheoreticalObjct):
         attribute of the formula's relation."""
         return self.relation.signal_proposition
 
-    def is_formula_equivalent_to(self, o2):
+    def is_formula_equivalent_to(self, o2: (TheoreticalObjct, Statement, Formula)) -> bool:
         """Returns true if this formula and o2 are formula-equivalent.
 
         Definition:
@@ -1173,10 +1173,11 @@ class Formula(TheoreticalObjct):
             and removing formula-equivalence as a concept from Punctilious.
 
         """
+        # if o2 is a statement, unpack its embedded formula
+        o2 = o2.valid_proposition if is_in_class(o2, classes.statement) else o2
         if self is o2:
             # Trivial case.
             return True
-        assert isinstance(o2, TheoreticalObjct)
         if not isinstance(o2, Formula):
             return False
         if not self.relation.is_formula_equivalent_to(o2.relation):
@@ -3409,7 +3410,71 @@ class InferenceRuleUserDict(collections.UserDict):
         self.u = u
         super().__init__()
         # Well-known objects
+        self._double_negation_elimination = None
         self._double_negation_introduction = None
+
+    @property
+    def double_negation_elimination(self):
+        """The well-known double-negation-elimination inference-rule.
+
+        Shortcut method: u.i.dne()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+
+        def infer_formula(*args, t: TheoryElaboration) -> InferredProposition:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            p = args[0]
+            # p is a formula of the form ¬(¬(r))
+            # unpack the embedded formulae
+            q = p.parameters[0]
+            r = q.parameters[0]
+            # unpack the formula if this is a statement
+            r = r.valid_proposition if is_in_class(r, classes.statement) else r
+            return r
+
+        def verify_compatibility(*args, t: TheoryElaboration) -> bool:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            verify(
+                len(args) == 1,
+                'Exactly 1 item is expected in ⌜*args⌝ .',
+                args=args, t=t, slf=self)
+            p = args[0]
+            verify(
+                t.contains_theoretical_objct(p),
+                'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                args=args, t=t, slf=self)
+            p = p.valid_proposition
+            verify(
+                p.relation is t.u.r.lnot,
+                'The relation of formula ⌜p⌝ must be a negation.',
+                p_relation=p.relation, p=p, t=t, slf=self)
+            q = p.parameters[0]
+            verify(
+                q.relation is t.u.r.lnot,
+                'The relation of formula ⌜q⌝ must be a negation.',
+                q_relation=q.relation, q=q, p=p, t=t, slf=self)
+            return True
+
+        if self._double_negation_elimination is None:
+            self._double_negation_elimination = InferenceRule2(
+                universe_of_discourse=self.u,
+                symbol=Symbol('dne', index=None),
+                dashed_name=DashedName('double-negation-elimination'),
+                infer_formula=infer_formula,
+                verify_args=verify_compatibility)
+        return self._double_negation_elimination
 
     @property
     def double_negation_introduction(self):
@@ -3431,7 +3496,7 @@ class InferenceRuleUserDict(collections.UserDict):
             p = args[0]
             return t.u.f(t.u.r.lnot, t.u.f(t.u.r.lnot, p))
 
-        def verify_compatibility(*args, t: TheoryElaboration) -> bool:
+        def verify_args(*args, t: TheoryElaboration) -> bool:
             """
 
             :param args:
@@ -3440,12 +3505,12 @@ class InferenceRuleUserDict(collections.UserDict):
             """
             verify(
                 len(args) == 1,
-                'The double-negation-introduction inference-rule expects exactly 1 argument.',
+                'Exactly 1 item is expected in ⌜*args⌝ .',
                 args=args, t=t, slf=self)
             p = args[0]
             verify(
-                is_in_class(p, classes.statement) and t.contains_theoretical_objct(p),
-                'The argument passed to the double-negation-introduction inference-rule must be a statement and that statement must be contained in the theory.',
+                t.contains_theoretical_objct(p),
+                'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 args=args, t=t, slf=self)
             return True
 
@@ -3455,8 +3520,19 @@ class InferenceRuleUserDict(collections.UserDict):
                 symbol=Symbol('dni', index=None),
                 dashed_name=DashedName('double-negation-introduction'),
                 infer_formula=infer_formula,
-                verify_args=verify_compatibility)
+                verify_args=verify_args)
         return self._double_negation_introduction
+
+    @property
+    def dne(self):
+        """The well-known double-negation-elimination inference-rule.
+
+        Original method: universe_of_discourse.inference_rules.double_negation_elimination
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.double_negation_elimination
 
     @property
     def dni(self):
@@ -3479,7 +3555,34 @@ class InferenceRuleInclusionUserDict(collections.UserDict):
         self.t = t
         super().__init__()
         # Well-known objects
+        self._double_negation_elimination = None
         self._double_negation_introduction = None
+
+    @property
+    def double_negation_elimination(self):
+        """The well-known double-negation-elimination inference-rule.
+
+        Abridged method: t.i.dne()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        if self._double_negation_elimination is None:
+            self._double_negation_elimination = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.double_negation_elimination)
+        return self._double_negation_elimination
+
+    @property
+    def dne(self):
+        """The well-known double-negation-elimination inference-rule.
+
+        Original method: universe_of_discourse.inference_rules.double_negation_elimination()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.double_negation_elimination
 
     @property
     def double_negation_introduction(self):
