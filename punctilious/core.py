@@ -48,23 +48,18 @@ def get_config(*args, fallback_value):
     return fallback_value
 
 
-def unstate(o: (Formula, FormulaStatement)) -> Formula:
-    """Receive either a formula or a formula-statement and return the formula."""
+def unpack_formula(o: TheoreticalObjct) -> Formula:
+    """Receive a theoretical-objct and unpack its formula if it is a statement that contains a formula."""
     verify(
-        is_in_class(o, classes.formula) or
-        is_in_class(o, classes.formula_statement) or
-        is_in_class(o, classes.direct_axiom_inference) or
-        is_in_class(o, classes.direct_definition_inference),
-        'Parameter ⌜o⌝ must be either formula, formula-statement, dai, dei declarative-class.',
+        is_in_class(o, classes.theoretical_objct),
+        'Parameter ⌜o⌝ must be an element of the theoretical-objct declarative-class.',
         o=o)
-    if is_in_class(o, classes.formula):
+    if hasattr(o, 'valid_proposition'):
+        # Unpack python objects that "contain" their formula,
+        # such as FormulaStatement, DirectAxiomInference, etc.
+        return o.valid_proposition
+    else:
         return o
-    if is_in_class(o, classes.formula_statement):
-        return o.valid_proposition
-    if is_in_class(o, classes.direct_axiom_inference):
-        return o.valid_proposition
-    if is_in_class(o, classes.direct_definition_inference):
-        return o.valid_proposition
 
 
 class Consistency(repm.Representation):
@@ -2202,7 +2197,6 @@ class TheoryElaboration(TheoreticalObjct):
             header: (str, ObjctHeader) = None,
             extended_theory: (None, TheoryElaboration) = None,
             extended_theory_limit: (None, Statement) = None,
-            include_modus_ponens_inference_rule: bool = False,
             include_inconsistency_introduction_inference_rule: bool = False,
             stabilized: bool = False,
             echo: bool = False
@@ -2258,15 +2252,7 @@ class TheoryElaboration(TheoreticalObjct):
         self._includes_inconsistency_introduction_inference_rule = False
         if include_inconsistency_introduction_inference_rule:
             self.include_inconsistency_introduction_inference_rule()
-        # Modus ponens
-        self._modus_ponens_inference_rule = None
-        include_modus_ponens_inference_rule = False if \
-            include_modus_ponens_inference_rule is None else \
-            include_modus_ponens_inference_rule
-        self._includes_modus_ponens_inference_rule = False
-        if include_modus_ponens_inference_rule:
-            self.include_modus_ponens_inference_rule()
-        super()._declare_class_membership(classes.t)
+        super()._declare_class_membership(classes.theory_elaboration)
         if stabilized:
             # It is a design choice to stabilize the theory-elaboration
             # at the very end of construction (__init__()). Note that it
@@ -2757,29 +2743,6 @@ class TheoryElaboration(TheoreticalObjct):
             symbol=symbol,
             category=category, reference=reference, title=title)
 
-    def include_biconditional_introduction_inference_rule(self):
-        """Include the biconditional-introduction inference-rule in this
-        theory."""
-        verify(
-            not self.biconditional_introduction_inference_rule_is_included,
-            'The biconditional-introduction inference-rule is already included in this theory.')
-        # TODO: Justify the inclusion of the inference-rule in the theory
-        #   with adequate statements (axioms?).
-        self.universe_of_discourse._declare_biconditional_relation()
-        self._biconditional_introduction_inference_rule = BiconditionalIntroductionInferenceRuleOBSOLETE
-        self._includes_biconditional_introduction_inference_rule = True
-
-    def include_double_negation_introduction_inference_rule(self):
-        """Include the double-negation-introduction inference-rule in this
-        theory."""
-        verify(
-            not self.double_negation_introduction_inference_rule_is_included,
-            'The double-negation-introduction inference-rule is already included in this theory.')
-        # TODO: Justify the inclusion of the inference-rule in the theory
-        #   with adequate statements (axioms?).
-        self._double_negation_introduction_inference_rule = DoubleNegationIntroductionInferenceRuleOBSOLETE
-        self._includes_double_negation_introduction_inference_rule = True
-
     def include_inconsistency_introduction_inference_rule(self):
         """Include the inconsistency-introduction inference-rule in this
         theory."""
@@ -2790,28 +2753,6 @@ class TheoryElaboration(TheoreticalObjct):
         #   with adequate statements (axioms?).
         self._inconsistency_introduction_inference_rule = InconsistencyIntroductionInferenceRuleOBSOLETE
         self._includes_inconsistency_introduction_inference_rule = True
-
-    def include_modus_ponens_inference_rule(self):
-        """Include the modus-ponens inference-rule in this
-        theory."""
-        # TODO: Justify the inclusion of the inference-rule in the theory
-        #   with adequate statements (axioms?).
-        if not self.modus_ponens_inference_rule_is_included:
-            verify(not self.stabilized,
-                   'The modus-ponens inference-rule cannot be allowed at this point of the theory-elaboration because the theory-elaboration is stabilized.',
-                   slf_stabilized=self.stabilized, slf=self.repr_fully_qualified_name())
-            self._modus_ponens_inference_rule = ModusPonensInferenceRuleOBSOLETE
-            self._includes_modus_ponens_inference_rule = True
-
-    @property
-    def biconditional_introduction_inference_rule_is_included(self):
-        """True if the biconditional-introduction inference-rule is included in this theory, False otherwise."""
-        if self._includes_biconditional_introduction_inference_rule is not None:
-            return self._includes_biconditional_introduction_inference_rule
-        elif self.extended_theory is not None:
-            return self.extended_theory.biconditional_introduction_inference_rule_is_included
-        else:
-            return None
 
     @property
     def consistency(self) -> Consistency:
@@ -2832,26 +2773,6 @@ class TheoryElaboration(TheoreticalObjct):
             return self.extended_theory.inconsistency_introduction_inference_rule_is_included
         else:
             return None
-
-    @property
-    def modus_ponens_inference_rule_is_included(self):
-        """True if the modus-ponens inference-rule is included in this
-        theory, False otherwise."""
-        if self._includes_modus_ponens_inference_rule is not None:
-            return self._includes_modus_ponens_inference_rule
-        elif self.extended_theory is not None:
-            return self.extended_theory.modus_ponens_inference_rule_is_included
-        else:
-            return None
-
-    def mp(
-            self, conditional, antecedent, symbol=None, category=None,
-            reference=None, title=None):
-        """Elaborate a new modus-ponens statement in the theory. Shortcut for
-        ModusPonens(theory=t, ...)"""
-        return self.infer_by_modus_ponens(
-            conditional=conditional, antecedent=antecedent, symbol=symbol,
-            category=category, reference=reference, title=title)
 
     def d(self, natural_language, symbol=None, reference=None, title=None):
         """Elaborate a new definition with natural-language. Shortcut function for
@@ -3457,14 +3378,84 @@ class InferenceRuleDict(collections.UserDict):
         self.u = u
         super().__init__()
         # Well-known objects
+        self._absorption = None
         self._biconditional_elimination_left = None
         self._biconditional_elimination_right = None
         self._biconditional_introduction = None
         self._conjunction_elimination_left = None
         self._conjunction_elimination_right = None
         self._conjunction_introduction = None
+        self._disjunction_elimination = None  # TODO: IMPLEMENT disjunction_elimination
+        self._disjunction_introduction = None
         self._double_negation_elimination = None
         self._double_negation_introduction = None
+        self._modus_ponens = None
+
+    @property
+    def absorb(self) -> InferenceRule:
+        """The well-known absorption inference-rule: (P ⟹ Q) ⊢ (P ⟹ (P ∧ Q)).
+
+        Unabridged property: u.i.absorption
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.absorption
+
+    @property
+    def absorption(self) -> InferenceRule:
+        """The well-known absorption inference-rule: (P ⟹ Q) ⊢ (P ⟹ (P ∧ Q)).
+
+        Abridged property: u.i.absorb
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+
+        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            phi = unpack_formula(args[0])
+            p = unpack_formula(phi.parameters[0])
+            q = unpack_formula(phi.parameters[1])
+            psi = t.u.f(t.u.r.implication, p, t.u.f(t.u.r.conjunction, p, q))
+            return psi
+
+        def verify_args(*args, t: TheoryElaboration) -> bool:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            verify(
+                len(args) == 1,
+                'Exactly 1 item is expected in ⌜*args⌝ .',
+                args=args, t=t, slf=self)
+            phi = args[0]
+            verify(
+                t.contains_theoretical_objct(phi),
+                'Statement ⌜phi⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                phi=phi, t=t, slf=self)
+            phi = unpack_formula(phi)
+            verify(
+                phi.relation is t.u.r.implication,
+                'The relation of formula ⌜phi⌝ must be an implication.',
+                phi_relation=phi.relation, phi=phi, t=t, slf=self)
+            return True
+
+        if self._absorption is None:
+            self._absorption = InferenceRule(
+                universe_of_discourse=self.u,
+                symbol=Symbol('absorb', index=None),
+                dashed_name=DashedName('absorption'),
+                infer_formula=infer_formula,
+                verify_args=verify_args)
+        return self._absorption
 
     @property
     def bi(self) -> InferenceRule:
@@ -3516,11 +3507,11 @@ class InferenceRuleDict(collections.UserDict):
             :param t:
             :return:
             """
-            phi = unstate(args[0])
+            phi = unpack_formula(args[0])
             # phi is a formula of the form P ⟺ Q
             # unpack the embedded formulae
-            p = unstate(phi.parameters[0])
-            q = unstate(phi.parameters[1])
+            p = unpack_formula(phi.parameters[0])
+            q = unpack_formula(phi.parameters[1])
             psi = t.u.f(t.u.r.implication, p, q)
             return psi
 
@@ -3540,7 +3531,7 @@ class InferenceRuleDict(collections.UserDict):
                 t.contains_theoretical_objct(phi),
                 'Statement ⌜phi⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 phi=phi, t=t, slf=self)
-            phi = unstate(phi)
+            phi = unpack_formula(phi)
             verify(
                 phi.relation is t.u.r.biconditional,
                 'The relation of formula ⌜phi⌝ must be a biconditional.',
@@ -3573,11 +3564,11 @@ class InferenceRuleDict(collections.UserDict):
             :param t:
             :return:
             """
-            phi = unstate(args[0])
+            phi = unpack_formula(args[0])
             # phi is a formula of the form P ⟺ Q
             # unpack the embedded formulae
-            p = unstate(phi.parameters[0])
-            q = unstate(phi.parameters[1])
+            p = unpack_formula(phi.parameters[0])
+            q = unpack_formula(phi.parameters[1])
             psi = t.u.f(t.u.r.implication, q, p)
             return psi
 
@@ -3597,7 +3588,7 @@ class InferenceRuleDict(collections.UserDict):
                 t.contains_theoretical_objct(phi),
                 'Statement ⌜phi⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 phi=phi, t=t, slf=self)
-            phi = unstate(phi)
+            phi = unpack_formula(phi)
             verify(
                 phi.relation is t.u.r.biconditional,
                 'The relation of formula ⌜phi⌝ must be a biconditional.',
@@ -3630,8 +3621,8 @@ class InferenceRuleDict(collections.UserDict):
             :param t:
             :return:
             """
-            p = unstate(args[0])
-            q = unstate(args[1])
+            p = unpack_formula(args[0])
+            q = unpack_formula(args[1])
             return t.u.f(t.u.r.biconditional, p, q)
 
         def verify_args(*args, t: TheoryElaboration) -> bool:
@@ -3650,7 +3641,7 @@ class InferenceRuleDict(collections.UserDict):
                 t.contains_theoretical_objct(p_implies_q),
                 'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 p_implies_q=p_implies_q, t=t, slf=self)
-            p_implies_q = unstate(p_implies_q)
+            p_implies_q = unpack_formula(p_implies_q)
             verify(
                 p_implies_q.relation is t.u.r.implication,
                 'The relation of formula ⌜p_implies_q⌝ must be an implication.',
@@ -3660,7 +3651,7 @@ class InferenceRuleDict(collections.UserDict):
                 t.contains_theoretical_objct(q_implies_p),
                 'Statement ⌜q_implies_p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 q_implies_p=q_implies_p, t=t, slf=self)
-            q_implies_p = unstate(q_implies_p)
+            q_implies_p = unpack_formula(q_implies_p)
             verify(
                 q_implies_p.relation is t.u.r.implication,
                 'The relation of formula ⌜q_implies_p⌝ must be an implication.',
@@ -3693,8 +3684,8 @@ class InferenceRuleDict(collections.UserDict):
             :param t:
             :return:
             """
-            p = unstate(args[0])
-            q = unstate(p.parameters[0])
+            p = unpack_formula(args[0])
+            q = unpack_formula(p.parameters[0])
             return q
 
         def verify_compatibility(*args, t: TheoryElaboration) -> bool:
@@ -3713,7 +3704,7 @@ class InferenceRuleDict(collections.UserDict):
                 t.contains_theoretical_objct(p),
                 'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 args=args, t=t, slf=self)
-            p = unstate(p)
+            p = unpack_formula(p)
             verify(
                 p.relation is t.u.r.conjunction,
                 'The relation of formula ⌜p⌝ must be a conjunction.',
@@ -3746,8 +3737,8 @@ class InferenceRuleDict(collections.UserDict):
             :param t:
             :return:
             """
-            p = unstate(args[0])
-            r = unstate(p.parameters[1])
+            p = unpack_formula(args[0])
+            r = unpack_formula(p.parameters[1])
             return r
 
         def verify_compatibility(*args, t: TheoryElaboration) -> bool:
@@ -3766,7 +3757,7 @@ class InferenceRuleDict(collections.UserDict):
                 t.contains_theoretical_objct(p),
                 'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 args=args, t=t, slf=self)
-            p = unstate(p)
+            p = unpack_formula(p)
             verify(
                 p.relation is t.u.r.conjunction,
                 'The relation of formula ⌜p⌝ must be a conjunction.',
@@ -3799,8 +3790,8 @@ class InferenceRuleDict(collections.UserDict):
             :param t:
             :return:
             """
-            p = unstate(args[0])
-            q = unstate(args[1])
+            p = unpack_formula(args[0])
+            q = unpack_formula(args[1])
             return t.u.f(t.u.r.land, p, q)
 
         def verify_args(*args, t: TheoryElaboration) -> bool:
@@ -3819,13 +3810,13 @@ class InferenceRuleDict(collections.UserDict):
                 t.contains_theoretical_objct(p),
                 'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 p=p, t=t, slf=self)
-            p = unstate(p)
+            p = unpack_formula(p)
             q = args[1]
             verify(
                 t.contains_theoretical_objct(q),
                 'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 q=q, t=t, slf=self)
-            q = unstate(q)
+            q = unpack_formula(q)
             return True
 
         if self._conjunction_introduction is None:
@@ -3836,6 +3827,73 @@ class InferenceRuleDict(collections.UserDict):
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._conjunction_introduction
+
+    @property
+    def di(self) -> InferenceRule:
+        """The well-known disjunction-introduction inference-rule: P ⊢ (P ∨ Q).
+
+        Unabridged property: u.i.disjunction_introduction
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.disjunction_introduction
+
+    @property
+    def disjunction_introduction(self) -> InferenceRule:
+        """The well-known disjunction-introduction inference-rule: P ⊢ (P ∨ Q).
+
+        Abridged property: u.i.di
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+
+        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            p = unpack_formula(args[0])
+            q = unpack_formula(args[1])  # Note: q may be a formula, because q may be false.
+            return t.u.f(t.u.r.disjunction, p, q)
+
+        def verify_args(*args, t: TheoryElaboration) -> bool:
+            """
+
+            :param args: A statement P, and a propositional-formula Q
+            :param t:
+            :return: The statement (P ∨ Q)
+            """
+            verify(
+                len(args) == 2,
+                'Exactly 2 items are expected in ⌜*args⌝ .',
+                args=args, t=t, slf=self)
+            p = args[0]
+            verify(
+                t.contains_theoretical_objct(p),
+                'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                p=p, t=t, slf=self)
+            p = unpack_formula(p)
+            # Q may be a formula (i.e. it is not necessarily a statement),
+            # because Q may be any propositional formula (i.e it may be false).
+            q = unpack_formula(args[1])
+            verify(
+                q.is_proposition,
+                'Statement ⌜q⌝ must be a logical-proposition formula (and not necessarily a statement).',
+                q_is_proposition=q.is_proposition, q=q, p=p, t=t, slf=self)
+            return True
+
+        if self._disjunction_introduction is None:
+            self._disjunction_introduction = InferenceRule(
+                universe_of_discourse=self.u,
+                symbol=Symbol('di', index=None),
+                dashed_name=DashedName('disjunction-introduction'),
+                infer_formula=infer_formula,
+                verify_args=verify_args)
+        return self._disjunction_introduction
 
     @property
     def double_negation_elimination(self) -> InferenceRule:
@@ -3854,9 +3912,9 @@ class InferenceRuleDict(collections.UserDict):
             :param t:
             :return:
             """
-            p = unstate(args[0])
-            q = unstate(p.parameters[0])
-            r = unstate(q.parameters[0])
+            p = unpack_formula(args[0])
+            q = unpack_formula(p.parameters[0])
+            r = unpack_formula(q.parameters[0])
             return r
 
         def verify_args(*args, t: TheoryElaboration) -> bool:
@@ -3875,12 +3933,12 @@ class InferenceRuleDict(collections.UserDict):
                 t.contains_theoretical_objct(p),
                 'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 args=args, t=t, slf=self)
-            p = unstate(p)
+            p = unpack_formula(p)
             verify(
                 p.relation is t.u.r.lnot,
                 'The relation of formula ⌜p⌝ must be a negation.',
                 p_relation=p.relation, p=p, t=t, slf=self)
-            q = unstate(p.parameters[0])
+            q = unpack_formula(p.parameters[0])
             verify(
                 q.relation is t.u.r.lnot,
                 'The relation of formula ⌜q⌝ must be a negation.',
@@ -3913,7 +3971,7 @@ class InferenceRuleDict(collections.UserDict):
             :param t:
             :return:
             """
-            p = unstate(args[0])
+            p = unpack_formula(args[0])
             return t.u.f(t.u.r.lnot, t.u.f(t.u.r.lnot, p))
 
         def verify_args(*args, t: TheoryElaboration) -> bool:
@@ -3998,6 +4056,82 @@ class InferenceRuleDict(collections.UserDict):
         """
         return self.double_negation_introduction
 
+    @property
+    def modus_ponens(self) -> InferenceRule:
+        """The well-known modus-ponens inference-rule: (P ⟹ Q), P ⊢ Q.
+
+        Abridged property: u.i.mp
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+
+        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+            """
+
+            :param args: A statement (P ⟹ Q), and a statement P
+            :param t:
+            :return: A formula Q
+            """
+            p_implies_q = unpack_formula(args[0])
+            p = unpack_formula(args[1])  # Received as a statement-parameter to prove that p is true in t.
+            q = p_implies_q.parameters[1]
+            return q  # TODO: Provide support for statements that are atomic propositional formula, that is without relation or where the objct is a 0-ary relation.
+
+        def verify_args(*args, t: TheoryElaboration) -> bool:
+            """
+
+            :param args: A statement (P ⟹ Q), and a statement P
+            :param t:
+            :return: A formula Q
+            """
+            verify(
+                len(args) == 2,
+                'Exactly 2 items are expected in ⌜*args⌝ .',
+                args=args, t=t, slf=self)
+            p_implies_q = args[0]
+            verify(
+                t.contains_theoretical_objct(p_implies_q),
+                'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                p_implies_q=p_implies_q, t=t, slf=self)
+            p_implies_q = unpack_formula(p_implies_q)
+            verify(
+                p_implies_q.relation is t.u.r.implication,
+                'The relation of formula ⌜p_implies_q⌝ must be an implication.',
+                p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
+            p_prime = args[1]
+            verify(
+                t.contains_theoretical_objct(p_prime),
+                'Statement ⌜p_prime⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                p_prime=p_prime, t=t, slf=self)
+            p_prime = unpack_formula(p_prime)
+            p = unpack_formula(p_implies_q.parameters[0])
+            verify(
+                p.is_formula_equivalent_to(p_prime),
+                'Formula ⌜p⌝ in statement ⌜p_implies_q⌝ must be formula-equivalent to statement ⌜p_prime⌝.',
+                p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t, slf=self)
+            return True
+
+        if self._modus_ponens is None:
+            self._modus_ponens = InferenceRule(
+                universe_of_discourse=self.u,
+                symbol=Symbol('mp', index=None),
+                dashed_name=DashedName('modus-ponens'),
+                infer_formula=infer_formula,
+                verify_args=verify_args)
+        return self._modus_ponens
+
+    @property
+    def mp(self) -> InferenceRule:
+        """The well-known modus-ponens inference-rule: (P ⟹ Q), P ⊢ Q.
+
+        Unabridged property: u.i.modus_ponens
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.modus_ponens
+
 
 class InferenceRuleInclusionDict(collections.UserDict):
     """A dictionary that exposes well-known objects as properties.
@@ -4008,14 +4142,44 @@ class InferenceRuleInclusionDict(collections.UserDict):
         self.t = t
         super().__init__()
         # Well-known objects
+        self._absorption = None
         self._biconditional_elimination_left = None
         self._biconditional_elimination_right = None
         self._biconditional_introduction = None
         self._conjunction_elimination_left = None
         self._conjunction_elimination_right = None
         self._conjunction_introduction = None
+        self._disjunction_elimination = None  # TODO: IMPLEMENT disjunction_elimination
+        self._disjunction_introduction = None
         self._double_negation_elimination = None
         self._double_negation_introduction = None
+        self._modus_ponens = None
+
+    @property
+    def absorb(self) -> InferenceRuleInclusion:
+        """The well-known absorption inference-rule: (P ⟹ Q) ⊢ (P ⟹ (P ∧ Q)).
+
+        Unabridged property: u.i.absorption
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.absorption
+
+    @property
+    def absorption(self) -> InferenceRuleInclusion:
+        """The well-known absorption inference-rule: (P ⟹ Q) ⊢ (P ⟹ (P ∧ Q)).
+
+        Abridged property: u.i.absorb
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        if self._absorption is None:
+            self._absorption = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.absorption)
+        return self._absorption
 
     @property
     def bel(self) -> InferenceRuleInclusion:
@@ -4174,6 +4338,32 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.conjunction_introduction
 
     @property
+    def di(self) -> InferenceRuleInclusion:
+        """The well-known disjunction-introduction inference-rule: P ⊢ (P ∨ Q).
+
+        Unabridged property: u.i.disjunction_introduction
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.disjunction_introduction
+
+    @property
+    def disjunction_introduction(self) -> InferenceRuleInclusion:
+        """The well-known disjunction-introduction inference-rule: P ⊢ (P ∨ Q).
+
+        Abridged property: u.i.di
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        if self._disjunction_introduction is None:
+            self._disjunction_introduction = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.disjunction_introduction)
+        return self._disjunction_introduction
+
+    @property
     def dne(self) -> InferenceRuleInclusion:
         """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
@@ -4224,6 +4414,32 @@ class InferenceRuleInclusionDict(collections.UserDict):
                 t=self.t,
                 i=self.t.u.i.double_negation_introduction)
         return self._double_negation_introduction
+
+    @property
+    def modus_ponens(self) -> InferenceRuleInclusion:
+        """The well-known modus-ponens inference-rule: (P ⟹ Q), P ⊢ Q.
+
+        Abridged property: u.i.mp
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        if self._modus_ponens is None:
+            self._modus_ponens = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.modus_ponens)
+        return self._modus_ponens
+
+    @property
+    def mp(self) -> InferenceRuleInclusion:
+        """The well-known modus-ponens inference-rule: (P ⟹ Q), P ⊢ Q.
+
+        Unabridged property: u.i.modus_ponens
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.modus_ponens
 
 
 class UniverseOfDiscourse(SymbolicObjct):
@@ -4554,11 +4770,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             dashed_name: (None, str, DashedName) = None,
             extended_theory: (None, TheoryElaboration) = None,
             extended_theory_limit: (None, Statement) = None,
-            include_conjunction_introduction_inference_rule=None,
-            include_biconditional_introduction_inference_rule=None,
-            include_double_negation_introduction_inference_rule=None,
             include_inconsistency_introduction_inference_rule=None,
-            include_modus_ponens_inference_rule=None,
             stabilized: bool = False,
             echo: bool = False):
         """Declare a new theory in this universe-of-discourse.
@@ -4578,7 +4790,6 @@ class UniverseOfDiscourse(SymbolicObjct):
             extended_theory=extended_theory,
             extended_theory_limit=extended_theory_limit,
             include_inconsistency_introduction_inference_rule=include_inconsistency_introduction_inference_rule,
-            include_modus_ponens_inference_rule=include_modus_ponens_inference_rule,
             stabilized=stabilized,
             echo=echo)
 
@@ -4706,11 +4917,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             dashed_name: (None, str, DashedName) = None,
             extended_theory: (None, TheoryElaboration) = None,
             extended_theory_limit: (None, Statement) = None,
-            include_conjunction_introduction_inference_rule=None,
-            include_biconditional_introduction_inference_rule=None,
-            include_double_negation_introduction_inference_rule=None,
             include_inconsistency_introduction_inference_rule=None,
-            include_modus_ponens_inference_rule=None,
             stabilized: bool = False,
             echo: bool = False):
         """Declare a new theory in this universe-of-discourse.
@@ -4728,11 +4935,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             dashed_name=dashed_name,
             extended_theory=extended_theory,
             extended_theory_limit=extended_theory_limit,
-            include_conjunction_introduction_inference_rule=include_conjunction_introduction_inference_rule,
-            include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule,
-            include_double_negation_introduction_inference_rule=include_double_negation_introduction_inference_rule,
             include_inconsistency_introduction_inference_rule=include_inconsistency_introduction_inference_rule,
-            include_modus_ponens_inference_rule=include_modus_ponens_inference_rule,
             stabilized=stabilized,
             echo=echo)
 
