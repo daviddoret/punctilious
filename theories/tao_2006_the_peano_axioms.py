@@ -35,7 +35,7 @@ nla_2_2_1 = t.postulate_axiom(u.elaborate_axiom(
 with u.v('n') as n:
     suc = u.r.declare(1, '++', formula_rep=p.Formula.postfix_operator_representation, dashed_name='successor')
     fa_2_2_2 = t.dai(
-        u.f(u.implies, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
+        u.f(u.r.implies, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
         nla_2_2_1,
         reference='2.2.2')
 
@@ -54,17 +54,17 @@ definition_2_1_3 = t.endorse_definition(d=def_2_1_3)
 
 # 1
 proposition_2_1_3_1 = t.ddi(
-    u.f(u.eq, one, u.f(suc, zero)), definition_2_1_3,
+    u.f(u.r.eq, one, u.f(suc, zero)), definition_2_1_3,
     header='2.1.3.1')
 
 # 2
 proposition_2_1_3_2 = t.ddi(
-    u.f(u.eq, two, u.f(suc, u.f(suc, zero))), definition_2_1_3,
+    u.f(u.r.eq, two, u.f(suc, u.f(suc, zero))), definition_2_1_3,
     header='2.1.3.2')
 
 # 3
 proposition_2_1_3_3 = t.ddi(
-    u.f(u.eq, three, u.f(suc, u.f(suc, u.f(suc, zero)))),
+    u.f(u.r.eq, three, u.f(suc, u.f(suc, u.f(suc, zero)))),
     definition_2_1_3,
     header='2.1.3.3')
 
@@ -90,7 +90,7 @@ p_2_1_4 = t.soet(proposition_2_2_5, p_2_1_3_3_c, reference='2.1.4')
 
 # 4
 proposition_2_1_3_3 = t.ddi(
-    u.f(u.eq, four, u.f(suc, u.f(suc, u.f(suc, u.f(suc, zero))))),
+    u.f(u.r.eq, four, u.f(suc, u.f(suc, u.f(suc, u.f(suc, zero))))),
     definition_2_1_3,
     header='2.1.3.3.a')
 
@@ -105,9 +105,9 @@ a_2_3 = t.postulate_axiom(u.elaborate_axiom(
 with u.v('n') as n:
     proposition_2_3_1 = t.dai(
         valid_proposition=u.f(
-            u.implies,
+            u.r.implies,
             u.f(is_a, n, nat),
-            u.f(u.neq, u.f(suc, n), zero)),
+            u.f(u.r.neq, u.f(suc, n), zero)),
         ap=a_2_3, reference='2.3.1')
 
 
@@ -130,15 +130,15 @@ axiom_2_4 = t.postulate_axiom(u.elaborate_axiom(
 with u.v('n') as n, u.v('m') as m:
     proposition_2_4_1 = t.dai(
         u.f(
-            u.implies,
+            u.r.implies,
             u.f(
-                u.conjunction_relation,
+                u.r.conjunction,
                 u.f(
-                    u.conjunction_relation,
+                    u.r.conjunction,
                     u.f(is_a, n, nat),
                     u.f(is_a, m, nat)),
-                u.f(u.neq, n, m)),
-            u.f(u.neq, u.f(suc, n), u.f(suc, m)))
+                u.f(u.r.neq, n, m)),
+            u.f(u.r.neq, u.f(suc, n), u.f(suc, m)))
         , reference='2.4.1', ap=axiom_2_4)
 
 # Proposition 2.1.8: 6 is not equal to 2.

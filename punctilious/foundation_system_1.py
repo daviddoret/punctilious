@@ -5,9 +5,7 @@ import repm
 u = core.UniverseOfDiscourse()
 ft = core.TheoryElaboration(
     u=u,
-    include_conjunction_introduction_inference_rule=True,
     include_modus_ponens_inference_rule=True,
-    include_double_negation_introduction_inference_rule=True,
     dashed_name='foundation-theory-1')
 
 axiom_01 = ft.postulate_axiom(u.elaborate_axiom(
@@ -56,30 +54,27 @@ ft.dai(
     u.f(element_of, propositional_relations_class, class_of_classes),
     ap=axiom_03)
 
-disjunction = u.r.declare(
-    2, '∨', core.Formula.infix_operator_representation,
-    signal_proposition=True, dashed_name='logical-disjunction')
 ft.dai(
-    u.f(element_of, u.conjunction_relation, propositional_relations_class),
+    u.f(element_of, u.r.conjunction, propositional_relations_class),
     ap=nla_09)
-ft.dai(u.f(element_of, disjunction, propositional_relations_class), ap=nla_09)
+ft.dai(u.f(element_of, u.r.disjunction, propositional_relations_class), ap=nla_09)
 ft.dai(
-    u.f(element_of, u.implication_relation, propositional_relations_class),
+    u.f(element_of, u.r.implication, propositional_relations_class),
     ap=nla_09)
 ft.dai(
     u.f(element_of, u.r.lnot, propositional_relations_class),
     ap=nla_09)
 ft.dai(
-    u.f(element_of, u.neq, propositional_relations_class),
+    u.f(element_of, u.r.neq, propositional_relations_class),
     ap=nla_09)
 nla_01b = ft.postulate_axiom(u.elaborate_axiom(
     '= is a binary relation such that, given any two theoretical-objcts x and y, '
     'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.'))
 with u.v('x') as x1, u.v('y') as x2:
-    x1_equal_x2 = u.f(u.eq, x1, x2)
-    x2_equal_x1 = u.f(u.eq, x2, x1)
+    x1_equal_x2 = u.f(u.r.eq, x1, x2)
+    x2_equal_x1 = u.f(u.r.eq, x2, x1)
     ft.commutativity_of_equality = ft.dai(
-        u.f(u.implication_relation, x1_equal_x2, x2_equal_x1), nla_01b)
+        u.f(u.r.implication, x1_equal_x2, x2_equal_x1), nla_01b)
 
 d_55 = u.pose_definition('Inequality is defined as the negation of equality.')
 nld_55 = ft.endorse_definition(d=d_55)
@@ -87,9 +82,9 @@ with u.v('x') as x, u.v('y') as y:
     ft.ddi(
         p=
         u.f(
-            u.eq,
-            u.f(u.neq, x, y),
-            u.f(u.r.lnot, u.f(u.eq, x, y))), d=nld_55)
+            u.r.eq,
+            u.f(u.r.neq, x, y),
+            u.f(u.r.lnot, u.f(u.r.eq, x, y))), d=nld_55)
 
 nla_10 = ft.postulate_axiom(u.elaborate_axiom(
     'propositions is a class whose elements are '
@@ -123,7 +118,7 @@ nla_09_50 = ft.postulate_axiom(u.elaborate_axiom('If P has-truth-value t, ¬(¬(
 with u.v() as p, u.v() as t:
     fa_09_51 = ft.dai(
         u.f(
-            u.implication_relation,
+            u.r.implication,
             u.f(has_truth_value, p, t),
             u.f(
                 has_truth_value, u.f(u.r.lnot, u.f(u.r.lnot, p)),
@@ -172,9 +167,9 @@ contradictory_statements = u.o('contradictory-statement')
 with u.v('φ') as phi:
     ft.dai(
         u.f(
-            u.implication_relation,
+            u.r.implication,
             u.f(
-                u.conjunction_relation, u.f(has_truth_value, phi, truth),
+                u.r.conjunction, u.f(has_truth_value, phi, truth),
                 u.f(has_truth_value, phi, falsehood)),
             u.f(element_of, phi, contradictory_statements)),
         nla_40)

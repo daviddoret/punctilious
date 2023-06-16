@@ -27,13 +27,14 @@ Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 
 𝐓𝐡𝐞𝐨𝐫𝐲 𝐞𝐥𝐚𝐛𝐨𝐫𝐚𝐭𝐢𝐨𝐧:
 
-𝐀𝐱𝐢𝐨𝐦 𝟎: “0 is a natural number.”
+𝐀𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟎: “0 is a natural number.”
 
 𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝐚: (0 is-a natural-number)
 
-𝐀𝐱𝐢𝐨𝐦 𝟐: “If n is a natural number, then n++ is a natural number.”
+𝐀𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟐: “If n is a natural number, then n++ is a natural
+	number.”
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟐.𝟐: ((n₁ is-a natural-number) ⟹ ((n₁)++ is-a natural-number))
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟐.𝟐: ((n₁ is-a natural-number) ⇒ ((n₁)++ is-a natural-number))
 
 𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟐.𝟑: ((0)++ is-a natural-number)
 
@@ -70,10 +71,10 @@ Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 
 𝐅𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟏𝟗: (4 = ((((0)++)++)++)++)
 
-𝐀𝐱𝐢𝐨𝐦 𝟐𝟎: “0 is not the successor of any natural number; i.e., we have
-	n++ ≠ 0 for every natural number n.”
+𝐀𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟐𝟎: “0 is not the successor of any natural number;
+	i.e., we have n++ ≠ 0 for every natural number n.”
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟑.𝟏: ((n₂ is-a natural-number) ⟹ ((n₂)++ ≠ 0))
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟑.𝟏: ((n₂ is-a natural-number) ⇒ ((n₂)++ ≠ 0))
 
 𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟔.𝟏: (((((0)++)++)++)++ ≠ 0)
 
@@ -81,8 +82,8 @@ Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 
 𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟔.𝟑: (4 ≠ 0)
 
-𝐀𝐱𝐢𝐨𝐦 𝟐𝟓: “Different natural numbers must have different successors;
-	i.e., if n, m are natural numbers and n ≠ m, then n++ ≠ m++.
-	Equivalently, if n++ = m++, then we must have n = m.”
+𝐀𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟐𝟓: “Different natural numbers must have different
+	successors; i.e., if n, m are natural numbers and n ≠ m, then n++ ≠
+	m++. Equivalently, if n++ = m++, then we must have n = m.”
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟒.𝟏: ((((n₃ is-a natural-number) ∧ (m is-a natural-number)) ∧ (n₃ ≠ m)) ⟹ ((n₃)++ ≠ (m)++))
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟒.𝟏: ((((n₃ is-a natural-number) ∧ (m is-a natural-number)) ∧ (n₃ ≠ m)) ⇒ ((n₃)++ ≠ (m)++))
