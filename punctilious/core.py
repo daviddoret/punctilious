@@ -50,7 +50,21 @@ def get_config(*args, fallback_value):
 
 def unstate(o: (Formula, FormulaStatement)) -> Formula:
     """Receive either a formula or a formula-statement and return the formula."""
-    return o.valid_statement if is_in_class(o, classes.formula_statement) else o
+    verify(
+        is_in_class(o, classes.formula) or
+        is_in_class(o, classes.formula_statement) or
+        is_in_class(o, classes.direct_axiom_inference) or
+        is_in_class(o, classes.direct_definition_inference),
+        'Parameter ⌜o⌝ must be either formula, formula-statement, dai, dei declarative-class.',
+        o=o)
+    if is_in_class(o, classes.formula):
+        return o
+    if is_in_class(o, classes.formula_statement):
+        return o.valid_proposition
+    if is_in_class(o, classes.direct_axiom_inference):
+        return o.valid_proposition
+    if is_in_class(o, classes.direct_definition_inference):
+        return o.valid_proposition
 
 
 class Consistency(repm.Representation):
@@ -2071,7 +2085,7 @@ class InferenceRule(TheoreticalObjct):
                  header: (None, str, ObjctHeader) = None,
                  dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
         self._infer_formula = infer_formula
-        self._verify_compatibility = verify_args
+        self._verify_args = verify_args
         if symbol is None:
             # If no symbol is passed as a parameter,
             # automated assignment of symbol is assumed.
@@ -2100,7 +2114,7 @@ class InferenceRule(TheoreticalObjct):
     def verify_args(self, *args, t: TheoryElaboration):
         """Verify the syntactical-compatibility of input statements and return True
         if they are compatible, False otherwise."""
-        return self._verify_compatibility(*args, t=t)
+        return self._verify_args(*args, t=t)
 
 
 class AtheoreticalStatement(SymbolicObjct):
@@ -2233,14 +2247,6 @@ class TheoryElaboration(TheoreticalObjct):
                'Parameter "theory_extension_statement_limit" is inconsistent.',
                u=u)
         # Inference rules
-        # Biconditional introduction
-        self._biconditional_introduction_inference_rule = None
-        include_biconditional_introduction_inference_rule = False if \
-            include_biconditional_introduction_inference_rule is None else \
-            include_biconditional_introduction_inference_rule
-        self._includes_biconditional_introduction_inference_rule = False
-        if include_biconditional_introduction_inference_rule:
-            self.include_biconditional_introduction_inference_rule()
         # Inconsistency introduction
         self._inconsistency_introduction_inference_rule = None
         include_inconsistency_introduction_inference_rule = False if \
@@ -4495,7 +4501,6 @@ class UniverseOfDiscourse(SymbolicObjct):
             dashed_name=dashed_name,
             extended_theory=extended_theory,
             extended_theory_limit=extended_theory_limit,
-            include_biconditional_introduction_inference_rule=include_biconditional_introduction_inference_rule,
             include_inconsistency_introduction_inference_rule=include_inconsistency_introduction_inference_rule,
             include_modus_ponens_inference_rule=include_modus_ponens_inference_rule,
             stabilized=stabilized,
