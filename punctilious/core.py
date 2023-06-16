@@ -2198,7 +2198,7 @@ class TheoryElaboration(TheoreticalObjct):
         self._stabilized = False
         self.axiom_inclusions = tuple()
         self.definition_inclusions = tuple()
-        self._inference_rule_inclusions = InferenceRuleInclusionUserDict(t=self)
+        self._inference_rule_inclusions = InferenceRuleInclusionDict(t=self)
         self.statements = tuple()
         self._extended_theory = extended_theory
         self._extended_theory_limit = extended_theory_limit
@@ -3335,7 +3335,7 @@ class Tuple(tuple):
     pass
 
 
-class RelationUserDict(collections.UserDict):
+class RelationDict(collections.UserDict):
     """A dictionary that exposes well-known relations as properties.
 
     """
@@ -3422,7 +3422,7 @@ class RelationUserDict(collections.UserDict):
         return self.negation
 
 
-class InferenceRuleUserDict(collections.UserDict):
+class InferenceRuleDict(collections.UserDict):
     """A dictionary that exposes well-known objects as properties.
 
     """
@@ -3770,7 +3770,7 @@ class InferenceRuleUserDict(collections.UserDict):
         return self.double_negation_introduction
 
 
-class InferenceRuleInclusionUserDict(collections.UserDict):
+class InferenceRuleInclusionDict(collections.UserDict):
     """A dictionary that exposes well-known objects as properties.
 
     """
@@ -3922,8 +3922,8 @@ class UniverseOfDiscourse(SymbolicObjct):
         self.axioms = dict()
         self.definitions = dict()
         self.formulae = dict()
-        self._inference_rules = InferenceRuleUserDict(u=self)
-        self._relations = RelationUserDict(u=self)
+        self._inference_rules = InferenceRuleDict(u=self)
+        self._relations = RelationDict(u=self)
         self.theories = dict()
         self.simple_objcts = dict()
         self.symbolic_objcts = dict()
