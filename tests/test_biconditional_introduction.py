@@ -14,12 +14,11 @@ class TestBiconditionalIntroduction(TestCase):
         r1 = u.r.declare(2, signal_proposition=True)
         r2 = u.r.declare(1, signal_proposition=True)
         t = u.t(
-            'testing-theory',
-            include_biconditional_introduction_inference_rule=True)
+            'testing-theory')
         a = u.axiom('The arbitrary axiom of testing.')
         ap = t.postulate_axiom(a)
-        phi1 = t.dai(u.f(u.implies, u.f(r1, o1, o2), u.f(r2, o3)), ap=ap)
-        phi2 = t.dai(u.f(u.implies, u.f(r2, o3), u.f(r1, o1, o2)), ap=ap)
-        phi3 = t.bi(phi1, phi2, echo=True)
+        phi1 = t.dai(u.f(u.r.implies, u.f(r1, o1, o2), u.f(r2, o3)), ap=ap)
+        phi2 = t.dai(u.f(u.r.implies, u.f(r2, o3), u.f(r1, o1, o2)), ap=ap)
+        phi3 = t.i.bi.infer_statement(phi1, phi2, echo=True)
         self.assertEqual(
             '((◆₁(ℴ₁, ℴ₂) ⟹ ◆₂(ℴ₃)) ⟺ (◆₂(ℴ₃) ⟹ ◆₁(ℴ₁, ℴ₂)))', phi3.repr())

@@ -1575,11 +1575,11 @@ class InferenceRuleInclusion(Statement):
         if echo:
             repm.prnt(self.repr_as_statement())
 
-    def infer_formula(self, *args):
-        return self.inference_rule.infer_formula(*args, t=self.theory)
+    def infer_formula(self, *args, echo: (None, bool) = None):
+        return self.inference_rule.infer_formula(*args, t=self.theory, echo=echo)
 
-    def infer_statement(self, *args):
-        return self.inference_rule.infer_statement(*args, t=self.theory)
+    def infer_statement(self, *args, echo: (None, bool) = None):
+        return self.inference_rule.infer_statement(*args, t=self.theory, echo=echo)
 
     def verify_args(self, *args):
         return self.inference_rule.verify_args(*args, t=self.theory)
@@ -2103,13 +2103,16 @@ class InferenceRule(TheoreticalObjct):
     def echo(self):
         repm.prnt(self.repr_report())
 
-    def infer_formula(self, *args, t: TheoryElaboration) -> Formula:
+    def infer_formula(self, *args, t: TheoryElaboration, echo: (None, bool) = None) -> Formula:
         """Apply this inference-rules on input statements and return the resulting statement."""
-        return self._infer_formula(*args, t=t)
+        phi = self._infer_formula(*args, t=t)
+        if echo:
+            repm.prnt(phi.repr_as_statement())
+        return phi
 
-    def infer_statement(self, *args, t: TheoryElaboration) -> InferredProposition:
+    def infer_statement(self, *args, t: TheoryElaboration, echo: (None, bool) = None) -> InferredProposition:
         """Apply this inference-rules on input statements and return the resulting statement."""
-        return InferredProposition(*args, i=self, t=t)
+        return InferredProposition(*args, i=self, t=t, echo=echo)
 
     def verify_args(self, *args, t: TheoryElaboration):
         """Verify the syntactical-compatibility of input statements and return True
@@ -2274,45 +2277,6 @@ class TheoryElaboration(TheoreticalObjct):
         if echo:
             repm.prnt(self.repr_as_declaration())
 
-    def bi(
-            self, conditional_phi, conditional_psi, symbol=None, category=None,
-            reference=None, title=None, echo=None):
-        """Infer a new statement in this theory by applying the
-        biconditional-introduction inference-rule."""
-        return self.infer_by_biconditional_introduction(
-            conditional_phi=conditional_phi, conditional_psi=conditional_psi,
-            symbol=symbol,
-            category=category, reference=reference, title=title)
-
-    @property
-    def biconditional_introduction_inference_rule(self):
-        """The biconditional-introduction inference-rule if it exists in this
-        theory, or this theory's foundation-system, otherwise None.
-        """
-        if self._biconditional_introduction_inference_rule is not None:
-            return self._biconditional_introduction_inference_rule
-        elif self.extended_theory is not None:
-            return self.extended_theory.biconditional_introduction_inference_rule
-        else:
-            return None
-
-    @biconditional_introduction_inference_rule.setter
-    def biconditional_introduction_inference_rule(self, ir: InferenceRuleOBSOLETE):
-        verify(
-            self._biconditional_introduction_inference_rule is None,
-            'The biconditional-introduction inference-rule property of a theory can only be '
-            'set once to prevent instability.')
-        self._biconditional_introduction_inference_rule = ir
-
-    def ci(
-            self, conjunct_p, conjunct_q, symbol=None, category=None,
-            reference=None, title=None) -> ConjunctionIntroductionStatement:
-        """Infer a new statement in this theory by applying the
-        conjunction-introduction inference-rule."""
-        return self.infer_by_conjunction_introduction(
-            conjunct_p=conjunct_p, conjunct_q=conjunct_q, symbol=symbol,
-            category=category, reference=reference, title=title)
-
     @property
     def commutativity_of_equality(self):
         """Commutativity-of-equality is a fundamental theory property that enables
@@ -2426,12 +2390,12 @@ class TheoryElaboration(TheoreticalObjct):
             self,
             valid_proposition,
             ap,
-            symbol=None, reference=None, title=None) \
+            symbol=None, reference=None, title=None, echo: (None, bool) = None) \
             -> DirectAxiomInference:
         """Elaborate a new direct-axiom-inference in the theory. Shortcut for FormalAxiom(theory=t, ...)"""
         return DirectAxiomInference(
             valid_proposition=valid_proposition, ap=ap, symbol=symbol,
-            theory=self, reference=reference, title=title)
+            theory=self, reference=reference, title=title, echo=echo)
 
     def elaborate_direct_definition_inference(
             self, p: Formula, d: DefinitionEndorsement,
@@ -2725,13 +2689,14 @@ class TheoryElaboration(TheoreticalObjct):
             self,
             valid_proposition,
             ap,
-            symbol=None, reference=None, title=None) \
+            symbol=None, reference=None, title=None,
+            echo: (None, bool) = None) \
             -> DirectAxiomInference:
         """Elaborate a new direct-axiom-inference in the theory. Shortcut for
         Theory.elaborate_direct_axiom_inference(...)."""
         return self.elaborate_direct_axiom_inference(
             valid_proposition=valid_proposition, ap=ap, symbol=symbol,
-            reference=reference, title=title)
+            reference=reference, title=title, echo=echo)
 
     def ddi(
             self, p: Formula, d: DefinitionEndorsement,
@@ -3289,7 +3254,7 @@ class RelationDict(collections.UserDict):
     def biconditional(self):
         """The well-known biconditional relation.
 
-        Abridged method: u.r.iif
+        Abridged property: u.r.iif
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3304,7 +3269,7 @@ class RelationDict(collections.UserDict):
     def conjunction(self):
         """The well-known conjunction relation.
 
-        Abridged method: u.r.land
+        Abridged property: u.r.land
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3319,7 +3284,7 @@ class RelationDict(collections.UserDict):
     def disjunction(self):
         """The well-known disjunction relation.
 
-        Abridged method: u.r.land
+        Abridged property: u.r.land
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3334,7 +3299,7 @@ class RelationDict(collections.UserDict):
     def eq(self):
         """The well-known equality relation.
 
-        Unabridged method: u.r.equality
+        Unabridged property: u.r.equality
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3345,7 +3310,7 @@ class RelationDict(collections.UserDict):
     def equality(self):
         """The well-known equality relation.
 
-        Abridged method: u.r.eq
+        Abridged property: u.r.eq
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3360,7 +3325,7 @@ class RelationDict(collections.UserDict):
     def inc(self):
         """The well-known (theory-)inconsistent relation.
 
-        Unabridged method: u.r.inconsistent
+        Unabridged property: u.r.inconsistent
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3371,14 +3336,14 @@ class RelationDict(collections.UserDict):
     def implication(self):
         """The well-known implication relation.
 
-        Abridged method: u.r.implies
+        Abridged property: u.r.implies
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
         """
         if self._implication is None:
             self._implication = self.declare(
-                2, '⇒', Formula.infix_operator_representation,
+                2, '⟹', Formula.infix_operator_representation,
                 signal_proposition=True, dashed_name='implication')
         return self._implication
 
@@ -3386,7 +3351,7 @@ class RelationDict(collections.UserDict):
     def implies(self):
         """The well-known implication relation.
 
-        Unabridged method: u.r.implication
+        Unabridged property: u.r.implication
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3397,7 +3362,7 @@ class RelationDict(collections.UserDict):
     def inconsistent(self):
         """The well-known (theory-)inconsistent relation.
 
-        Abridged method: u.r.inc
+        Abridged property: u.r.inc
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3412,7 +3377,7 @@ class RelationDict(collections.UserDict):
     def inequality(self):
         """The well-known inequality relation.
 
-        Abridged method: u.r.neq
+        Abridged property: u.r.neq
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3427,7 +3392,7 @@ class RelationDict(collections.UserDict):
     def land(self):
         """The well-known conjunction relation.
 
-        Unabridged method: u.r.conjunction
+        Unabridged property: u.r.conjunction
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3438,7 +3403,7 @@ class RelationDict(collections.UserDict):
     def lnot(self):
         """The well-known negation relation.
 
-        Abridged method: u.r.negation
+        Abridged property: u.r.negation
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3449,7 +3414,7 @@ class RelationDict(collections.UserDict):
     def lor(self):
         """The well-known disjunction relation.
 
-        Unabridged method: u.r.disjunction
+        Unabridged property: u.r.disjunction
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3460,7 +3425,7 @@ class RelationDict(collections.UserDict):
     def negation(self):
         """The well-known negation relation.
 
-        Abridged method: u.r.lnot
+        Abridged property: u.r.lnot
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3475,7 +3440,7 @@ class RelationDict(collections.UserDict):
     def neq(self):
         """The well-known inequality relation.
 
-        Unabridged method: u.r.inequality
+        Unabridged property: u.r.inequality
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3502,7 +3467,40 @@ class InferenceRuleDict(collections.UserDict):
         self._double_negation_introduction = None
 
     @property
-    def biconditional_elimination_left(self):
+    def bi(self) -> InferenceRule:
+        """The well-known biconditional-introduction inference-rule: : P ⟹ Q, Q ⟹ P ⊢ P ⟺ Q.
+
+        Unabridged property: u.i.biconditional_introduction
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.biconditional_introduction
+
+    @property
+    def bel(self) -> InferenceRule:
+        """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
+
+        Abridged property: u.i.bel
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.biconditional_elimination_left
+
+    @property
+    def ber(self) -> InferenceRule:
+        """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
+
+        Abridged property: u.i.ber()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.biconditional_elimination_right
+
+    @property
+    def biconditional_elimination_left(self) -> InferenceRule:
         """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
         Abridged property: u.i.bel
@@ -3523,7 +3521,7 @@ class InferenceRuleDict(collections.UserDict):
             # unpack the embedded formulae
             p = unstate(phi.parameters[0])
             q = unstate(phi.parameters[1])
-            psi = t.u.f(t.u.implies, p, q)
+            psi = t.u.f(t.u.r.implication, p, q)
             return psi
 
         def verify_args(*args, t: TheoryElaboration) -> bool:
@@ -3539,7 +3537,7 @@ class InferenceRuleDict(collections.UserDict):
                 args=args, t=t, slf=self)
             phi = args[0]
             verify(
-                t.contains_theoretical_objct(p),
+                t.contains_theoretical_objct(phi),
                 'Statement ⌜phi⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 phi=phi, t=t, slf=self)
             phi = unstate(phi)
@@ -3559,10 +3557,10 @@ class InferenceRuleDict(collections.UserDict):
         return self._biconditional_elimination_left
 
     @property
-    def biconditional_elimination_right(self):
+    def biconditional_elimination_right(self) -> InferenceRule:
         """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
 
-        Abridged method: u.i.ber()
+        Abridged property: u.i.ber()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -3580,7 +3578,7 @@ class InferenceRuleDict(collections.UserDict):
             # unpack the embedded formulae
             p = unstate(phi.parameters[0])
             q = unstate(phi.parameters[1])
-            psi = t.u.f(t.u.implies, q, p)
+            psi = t.u.f(t.u.r.implication, q, p)
             return psi
 
         def verify_compatibility(*args, t: TheoryElaboration) -> bool:
@@ -3596,7 +3594,7 @@ class InferenceRuleDict(collections.UserDict):
                 args=args, t=t, slf=self)
             phi = args[0]
             verify(
-                t.contains_theoretical_objct(p),
+                t.contains_theoretical_objct(phi),
                 'Statement ⌜phi⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 phi=phi, t=t, slf=self)
             phi = unstate(phi)
@@ -3616,10 +3614,10 @@ class InferenceRuleDict(collections.UserDict):
         return self._biconditional_elimination_right
 
     @property
-    def biconditional_introduction(self):
+    def biconditional_introduction(self) -> InferenceRule:
         """The well-known biconditional-introduction inference-rule: : P ⟹ Q, Q ⟹ P ⊢ P ⟺ Q.
 
-        Shortcut method: u.i.bi()
+        Abridged property: u.i.bi
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -3649,7 +3647,7 @@ class InferenceRuleDict(collections.UserDict):
                 args=args, t=t, slf=self)
             p_implies_q = args[0]
             verify(
-                t.contains_theoretical_objct(p),
+                t.contains_theoretical_objct(p_implies_q),
                 'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
                 p_implies_q=p_implies_q, t=t, slf=self)
             p_implies_q = unstate(p_implies_q)
@@ -3679,10 +3677,10 @@ class InferenceRuleDict(collections.UserDict):
         return self._biconditional_introduction
 
     @property
-    def conjunction_elimination_left(self):
+    def conjunction_elimination_left(self) -> InferenceRule:
         """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
-        Abridged method: u.i.cel()
+        Abridged property: u.i.cel()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -3732,10 +3730,10 @@ class InferenceRuleDict(collections.UserDict):
         return self._conjunction_elimination_left
 
     @property
-    def conjunction_elimination_right(self):
+    def conjunction_elimination_right(self) -> InferenceRule:
         """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
-        Abridged method: u.i.cer()
+        Abridged property: u.i.cer()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -3785,10 +3783,10 @@ class InferenceRuleDict(collections.UserDict):
         return self._conjunction_elimination_right
 
     @property
-    def conjunction_introduction(self):
+    def conjunction_introduction(self) -> InferenceRule:
         """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
-        Shortcut method: u.i.ci()
+        Abridged property: u.i.ci
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -3840,10 +3838,10 @@ class InferenceRuleDict(collections.UserDict):
         return self._conjunction_introduction
 
     @property
-    def double_negation_elimination(self):
+    def double_negation_elimination(self) -> InferenceRule:
         """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
-        Shortcut method: u.i.dne()
+        Abridged property: u.i.dne
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -3899,10 +3897,10 @@ class InferenceRuleDict(collections.UserDict):
         return self._double_negation_elimination
 
     @property
-    def double_negation_introduction(self):
+    def double_negation_introduction(self) -> InferenceRule:
         """The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.
 
-        Shortcut method: u.i.dni()
+        Abridged property: u.i.dni
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -3946,10 +3944,10 @@ class InferenceRuleDict(collections.UserDict):
         return self._double_negation_introduction
 
     @property
-    def cel(self):
+    def cel(self) -> InferenceRule:
         """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
-        Unabridged method: universe_of_discourse.inference_rules.conjunction_elimination_left
+        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_left
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -3957,10 +3955,10 @@ class InferenceRuleDict(collections.UserDict):
         return self.conjunction_elimination_left
 
     @property
-    def cer(self):
+    def cer(self) -> InferenceRule:
         """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
-        Unabridged method: universe_of_discourse.inference_rules.conjunction_elimination_right
+        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_right
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -3968,10 +3966,10 @@ class InferenceRuleDict(collections.UserDict):
         return self.conjunction_elimination_right
 
     @property
-    def ci(self):
+    def ci(self) -> InferenceRule:
         """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
-        Unabridged method: universe_of_discourse.inference_rules.conjunction_introduction
+        Unabridged property: universe_of_discourse.inference_rules.conjunction_introduction
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -3979,7 +3977,7 @@ class InferenceRuleDict(collections.UserDict):
         return self.conjunction_introduction
 
     @property
-    def dne(self):
+    def dne(self) -> InferenceRule:
         """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
         Original method: universe_of_discourse.inference_rules.double_negation_elimination
@@ -3990,7 +3988,7 @@ class InferenceRuleDict(collections.UserDict):
         return self.double_negation_elimination
 
     @property
-    def dni(self):
+    def dni(self) -> InferenceRule:
         """The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.
 
         Original method: universe_of_discourse.inference_rules.double_negation_introduction()
@@ -4020,10 +4018,88 @@ class InferenceRuleInclusionDict(collections.UserDict):
         self._double_negation_introduction = None
 
     @property
-    def conjunction_elimination_left(self):
+    def bel(self) -> InferenceRuleInclusion:
+        """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
+
+        Unabridged property: u.i.biconditional_elimination_left
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.biconditional_elimination_left
+
+    @property
+    def ber(self) -> InferenceRuleInclusion:
+        """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
+
+        Unabridged property: u.i.biconditional_elimination_right
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.biconditional_elimination_right
+
+    @property
+    def bi(self) -> InferenceRuleInclusion:
+        """The well-known biconditional-introduction inference-rule: : P ⟹ Q, Q ⟹ P ⊢ P ⟺ Q.
+
+        Unabridged property: u.i.biconditional_introduction
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.biconditional_introduction
+
+    @property
+    def biconditional_elimination_left(self) -> InferenceRuleInclusion:
+        """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
+
+        Abridged property: u.i.bel
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        if self._biconditional_elimination_left is None:
+            self._biconditional_elimination_left = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.biconditional_elimination_left)
+        return self._biconditional_elimination_left
+
+    @property
+    def biconditional_elimination_right(self) -> InferenceRuleInclusion:
+        """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
+
+        Abridged property: u.i.ber()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        if self._biconditional_elimination_right is None:
+            self._biconditional_elimination_right = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.biconditional_elimination_right)
+        return self._biconditional_elimination_right
+
+    @property
+    def biconditional_introduction(self) -> InferenceRuleInclusion:
+        """The well-known biconditional-introduction inference-rule: : P ⟹ Q, Q ⟹ P ⊢ P ⟺ Q.
+
+        Abridged property: u.i.bi
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        if self._biconditional_introduction is None:
+            self._biconditional_introduction = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.biconditional_introduction)
+        return self._biconditional_introduction
+
+    @property
+    def conjunction_elimination_left(self) -> InferenceRuleInclusion:
         """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
-        Abridged method: t.i.cel()
+        Abridged property: t.i.cel()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -4035,10 +4111,10 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._conjunction_elimination_left
 
     @property
-    def conjunction_elimination_right(self):
+    def conjunction_elimination_right(self) -> InferenceRuleInclusion:
         """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
-        Abridged method: t.i.cel()
+        Abridged property: t.i.cer
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -4050,10 +4126,10 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._conjunction_elimination_right
 
     @property
-    def conjunction_introduction(self):
+    def conjunction_introduction(self) -> InferenceRuleInclusion:
         """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
-        Abridged method: t.i.ci()
+        Abridged property: t.i.ci()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -4065,10 +4141,10 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._conjunction_introduction
 
     @property
-    def cel(self):
+    def cel(self) -> InferenceRuleInclusion:
         """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
-        Unabridged method: universe_of_discourse.inference_rules.conjunction_elimination_left()
+        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_left()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -4076,10 +4152,10 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.conjunction_elimination_left
 
     @property
-    def cer(self):
+    def cer(self) -> InferenceRuleInclusion:
         """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
-        Unabridged method: universe_of_discourse.inference_rules.conjunction_elimination_right()
+        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_right()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -4087,10 +4163,10 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.conjunction_elimination_right
 
     @property
-    def ci(self):
+    def ci(self) -> InferenceRuleInclusion:
         """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
-        Unabridged method: universe_of_discourse.inference_rules.conjunction_introduction()
+        Unabridged property: universe_of_discourse.inference_rules.conjunction_introduction()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -4098,7 +4174,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.conjunction_introduction
 
     @property
-    def dne(self):
+    def dne(self) -> InferenceRuleInclusion:
         """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
         Original method: universe_of_discourse.inference_rules.double_negation_elimination()
@@ -4109,7 +4185,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.double_negation_elimination
 
     @property
-    def dni(self):
+    def dni(self) -> InferenceRuleInclusion:
         """The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.
 
         Original method: universe_of_discourse.inference_rules.double_negation_introduction()
@@ -4120,10 +4196,10 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.double_negation_introduction
 
     @property
-    def double_negation_elimination(self):
+    def double_negation_elimination(self) -> InferenceRuleInclusion:
         """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
-        Abridged method: t.i.dne()
+        Abridged property: t.i.dne()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -4135,10 +4211,10 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._double_negation_elimination
 
     @property
-    def double_negation_introduction(self):
+    def double_negation_introduction(self) -> InferenceRuleInclusion:
         """The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.
 
-        Shortcut method: t.i.dni()
+        Abridged property: t.i.dni
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -5007,7 +5083,7 @@ class InferredProposition(FormulaStatement):
 
     def repr_as_statement(self, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        text = f'Inferred Proposition {self.repr_as_title(cap=True)}: “{self.inference_rule.natural_language}”'
+        text = f'Inferred Proposition {self.repr_as_title(cap=True)}: “{self.valid_proposition.repr_as_formula()}”'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
