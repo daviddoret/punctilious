@@ -1,5 +1,5 @@
 """"""
-import punctilious as p
+import punctilious as pu
 import foundation_system_1 as fs1
 
 # u = p.UniverseOfDiscourse()
@@ -23,7 +23,7 @@ nat = u.o('natural-number')
 
 # relation declarations
 is_a = u.r.declare(
-    2, 'is-a', p.Formula.infix_operator_representation,
+    2, 'is-a', pu.Formula.infix_operator_representation,
     signal_proposition=True)
 
 nla_2_1 = t.postulate_axiom(u.elaborate_axiom(f'0 is a natural number.', '2.1'))
@@ -33,7 +33,7 @@ nla_2_2_1 = t.postulate_axiom(u.elaborate_axiom(
     'If n is a natural number, then n++ is a natural number.',
     '2.2.1'))
 with u.v('n') as n:
-    suc = u.r.declare(1, '++', formula_rep=p.Formula.postfix_operator_representation, dashed_name='successor')
+    suc = u.r.declare(1, '++', formula_rep=pu.Formula.postfix_operator_representation, dashed_name='successor')
     fa_2_2_2 = t.dai(
         u.f(u.r.implies, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
         nla_2_2_1,
@@ -132,9 +132,9 @@ with u.v('n') as n, u.v('m') as m:
         u.f(
             u.r.implies,
             u.f(
-                u.r.conjunction,
+                u.r.land,
                 u.f(
-                    u.r.conjunction,
+                    u.r.land,
                     u.f(is_a, n, nat),
                     u.f(is_a, m, nat)),
                 u.f(u.r.neq, n, m)),
