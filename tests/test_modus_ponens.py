@@ -39,9 +39,9 @@ class TestModusPonens(TestCase):
                     u.r.implies,
                     u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)),
                     u.f(r1, x, z)),
-                ap=ap)
+                ap=ap, echo=True)
         phi1 = t.dai(u.f(r1, o1, o2), ap=ap)
         phi2 = t.dai(u.f(r1, o2, o3), ap=ap)
-        phi1_and_phi2 = t.i.ci.infer_statement(phi1, phi2)
-        conclusion_1 = t.i.mp.infer_statement(implication, phi1_and_phi2)
+        phi1_and_phi2 = t.i.ci.infer_statement(phi1, phi2, echo=True)
+        conclusion_1 = t.i.mp.infer_statement(implication, phi1_and_phi2, echo=True)
         self.assertEqual('◆(ℴ₁, ℴ₃)', conclusion_1.valid_proposition.repr_as_formula())

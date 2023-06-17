@@ -4074,9 +4074,23 @@ class InferenceRuleDict(collections.UserDict):
             :return: A formula Q
             """
             p_implies_q = unpack_formula(args[0])
-            p = unpack_formula(args[1])  # Received as a statement-parameter to prove that p is true in t.
-            q = p_implies_q.parameters[1]
-            return q  # TODO: Provide support for statements that are atomic propositional formula, that is without relation or where the objct is a 0-ary relation.
+            p = unpack_formula(p_implies_q.parameters[0])
+            q = unpack_formula(p_implies_q.parameters[1])
+            # The antecedant ⌜p⌝ of the implication ⌜p_implies_q⌝ may contain free-variables,
+            # store these in a mask for masked-formula-similitude comparison.
+            mask = p.get_variable_set()
+            p_prime = unpack_formula(args[1])  # Received as a statement-parameter to prove that p is true in t.
+            # Check for mask-formula-similitude and simultaneously,
+            # retrieve all free-variable values.
+            similitude, free_variables_values = p_prime._is_masked_formula_similar_to(
+                o2=p, mask=mask)
+            # Build a variable substitution map from the variable values.
+            substitution_map = dict((v, k) for k, v in free_variables_values.items())
+            # Finally, build the concluding proposition by applying
+            # variable substitutions.
+            conclusion = q.substitute(
+                substitution_map=substitution_map, target_theory=t)
+            return conclusion  # TODO: Provide support for statements that are atomic propositional formula, that is without relation or where the objct is a 0-ary relation.
 
         def verify_args(*args, t: TheoryElaboration) -> bool:
             """
@@ -4106,10 +4120,15 @@ class InferenceRuleDict(collections.UserDict):
                 p_prime=p_prime, t=t, slf=self)
             p_prime = unpack_formula(p_prime)
             p = unpack_formula(p_implies_q.parameters[0])
+            # The antecedant of the implication may contain free-variables,
+            # store these in a mask for masked-formula-similitude comparison.
+            mask = p.get_variable_set()
+            masked_formula_similitude = p_prime.is_masked_formula_similar_to(o2=p, mask=mask)
             verify(
-                p.is_formula_equivalent_to(p_prime),
-                'Formula ⌜p⌝ in statement ⌜p_implies_q⌝ must be formula-equivalent to statement ⌜p_prime⌝.',
-                p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t, slf=self)
+                masked_formula_similitude,
+                'Formula ⌜p⌝ in statement ⌜p_implies_q⌝ must be masked-formula-similar to statement ⌜p_prime⌝.',
+                masked_formula_similitude=masked_formula_similitude, p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t,
+                slf=self)
             return True
 
         if self._modus_ponens is None:
@@ -4857,7 +4876,7 @@ class UniverseOfDiscourse(SymbolicObjct):
     def f(
             self, relation, *parameters, symbol=None,
             lock_variable_scope=None):
-        """Declare a new formula in this instance of UniverseOfDiscourse.
+        """Declare a new formula in this universe-of-discourse.
 
         Shortcut for self.elaborate_formula(...)."""
         return self.declare_formula(
