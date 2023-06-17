@@ -39,9 +39,9 @@ with u.v('n') as n:
         nla_2_2_1,
         reference='2.2.2')
 
-p_2_2_3 = t.mp(fa_2_2_2, fa_2_1_a, reference='2.2.3')
-p_2_2_4 = t.mp(fa_2_2_2, p_2_2_3, reference='2.2.4')
-proposition_2_2_5 = t.mp(fa_2_2_2, p_2_2_4, reference='2.2.5')
+p_2_2_3 = t.i.mp.infer_statement(fa_2_2_2, fa_2_1_a, reference='2.2.3')
+p_2_2_4 = t.i.mp.infer_statement(fa_2_2_2, p_2_2_3, reference='2.2.4')
+proposition_2_2_5 = t.i.mp.infer_statement(fa_2_2_2, p_2_2_4, reference='2.2.5')
 
 # Definition 2.1.3. We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that xis defined to equal y.)
 
@@ -68,20 +68,20 @@ proposition_2_1_3_3 = t.ddi(
     definition_2_1_3,
     header='2.1.3.3')
 
-proposition_2_1_3_100 = t.mp(
+proposition_2_1_3_100 = t.i.mp.infer_statement(
     t.commutativity_of_equality, proposition_2_1_3_1, reference='2.1.3.1.b')
 
 p_2_1_3_2_b = t.soet(
     proposition_2_1_3_2, proposition_2_1_3_100, reference='2.1.3.2.b')
 
-p_2_1_3_2_c = t.mp(
+p_2_1_3_2_c = t.i.mp.infer_statement(
     t.commutativity_of_equality, proposition_2_1_3_2, reference='2.1.3.2.c')
 
 p_2_1_3_2_d = t.soet(p_2_1_3_2_c, proposition_2_1_3_100, reference='2.1.3.2.d')
 
 p_2_1_3_3_b = t.soet(proposition_2_1_3_3, p_2_1_3_2_c, reference='2.1.3.3.b')
 
-p_2_1_3_3_c = t.mp(
+p_2_1_3_3_c = t.i.mp.infer_statement(
     t.commutativity_of_equality, proposition_2_1_3_3, reference='2.1.3.3.c')
 
 p_2_1_3_3_d = t.soet(p_2_1_3_3_c, p_2_1_3_2_c, reference='2.1.3.3.d')
@@ -113,8 +113,8 @@ with u.v('n') as n:
 
 # Proposition 2.1.6. 4 is not equal to 0.
 def prove_proposition_2_1_6():
-    p1 = t.mp(proposition_2_3_1, proposition_2_2_5, reference='2.1.6.1')
-    p2 = t.mp(
+    p1 = t.i.mp.infer_statement(proposition_2_3_1, proposition_2_2_5, reference='2.1.6.1')
+    p2 = t.i.mp.infer_statement(
         ft.commutativity_of_equality, proposition_2_1_3_3, reference='2.1.6.2')
     p3 = t.soet(p1, p2, reference='2.1.6.3')
     pass

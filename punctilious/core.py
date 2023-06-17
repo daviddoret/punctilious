@@ -2295,38 +2295,6 @@ class TheoryElaboration(TheoreticalObjct):
             'to prevent inconsistency.')
         self._commutativity_of_equality = p
 
-    @property
-    def conjunction_introduction_inference_rule(self):
-        """The conjunction-introduction inference-rule if it exists in this
-        theory, or this theory's foundation-system, otherwise None.
-        """
-        if self._conjunction_introduction_inference_rule is not None:
-            return self._conjunction_introduction_inference_rule
-        elif self.extended_theory is not None:
-            return self.extended_theory.conjunction_introduction_inference_rule
-        else:
-            return None
-
-    @conjunction_introduction_inference_rule.setter
-    def conjunction_introduction_inference_rule(self, ir: InferenceRuleOBSOLETE):
-        verify(
-            not self.stabilized,
-            'This theory-elaboration is stabilized, it is no longer possible to allow new inference-rules.',
-            inference_rule=ir,
-            self_stabilized=self.stabilized,
-            slf=self
-        )
-        verify(
-            self._conjunction_introduction_inference_rule is not None and
-            self._conjunction_introduction_inference_rule is not ir,
-            'The conjunction-introduction inference-rule is already set on this theory-elaboration, '
-            'it is no longer possible to modify this inference-rule.',
-            inference_rule=ir,
-            self_stabilized=self.stabilized,
-            slf=self
-        )
-        self._conjunction_introduction_inference_rule = ir
-
     def crossreference_axiom_inclusion(self, a):
         """During construction, cross-reference an axiom
         with its parent theory (if it is not already cross-referenced),
@@ -2438,82 +2406,6 @@ class TheoryElaboration(TheoreticalObjct):
             'set once to prevent instability.')
         self._inconsistency_introduction_inference_rule = ir
 
-    def infer_by_biconditional_introduction(
-            self, conditional_phi, conditional_psi, symbol=None, category=None,
-            reference=None, title=None, echo=None):
-        """Infer a new statement in this theory by applying the
-        biconditional-introduction inference-rule.
-
-        :param conditional_phi:
-        :param conditional_psi:
-        :param symbol:
-        :param category:
-        :param reference:
-        :param title:
-        :return:
-        """
-        if not self.biconditional_introduction_inference_rule_is_included:
-            raise UnsupportedInferenceRuleException(
-                'The biconditional-introduction inference-rule is not contained '
-                'in this theory.',
-                theory=self, conditional_phi=conditional_phi,
-                conditional_psi=conditional_psi)
-        else:
-            return self.biconditional_introduction_inference_rule.infer(
-                theory=self, conditional_phi=conditional_phi,
-                conditional_psi=conditional_psi,
-                symbol=symbol, category=category,
-                reference=reference, title=title, echo=echo)
-
-    def infer_by_conjunction_introduction(
-            self, conjunct_p, conjunct_q, symbol=None, category=None,
-            reference=None, title=None) -> ConjunctionIntroductionStatement:
-        """Infer a new statement in this theory by applying the
-        conjunction-introduction inference-rule.
-
-        :param conjunct_p:
-        :param conjunct_q:
-        :param symbol:
-        :param category:
-        :param reference:
-        :param title:
-        :return:
-        """
-        if self.conjunction_introduction_inference_rule is None:
-            raise UnsupportedInferenceRuleException(
-                'The conjunction-introduction inference-rule is not contained '
-                'in this theory-elaboration.',
-                theory_elaboration=self, conjunct_p=conjunct_p, conjunct_q=conjunct_q)
-        else:
-            return self.conjunction_introduction_inference_rule.infer(
-                theory=self, conjunct_p=conjunct_p, conjunct_q=conjunct_q,
-                symbol=symbol, category=category,
-                reference=reference, title=title)
-
-    def infer_by_double_negation_introduction(
-            self, p, symbol=None, category=None,
-            reference=None, title=None):
-        """Infer a new statement in this theory by applying the
-        double-negation-introduction inference-rule.
-
-        :param p:
-        :param symbol:
-        :param category:
-        :param reference:
-        :param title:
-        :return:
-        """
-        if not self.double_negation_introduction_inference_rule_is_included:
-            raise UnsupportedInferenceRuleException(
-                'The double-negation-introduction inference-rule is not contained '
-                'in this theory.',
-                theory=self, p=p)
-        else:
-            return self.double_negation_introduction_inference_rule.infer(
-                theory=self, p=p,
-                symbol=symbol, category=category,
-                reference=reference, title=title)
-
     def infer_by_inconsistency_introduction(
             self, p, not_p, symbol=None, category=None,
             reference=None, title=None):
@@ -2536,30 +2428,6 @@ class TheoryElaboration(TheoreticalObjct):
         else:
             return self.inconsistency_introduction_inference_rule.infer(
                 theory=self, p=p, not_p=not_p,
-                symbol=symbol, category=category,
-                reference=reference, title=title)
-
-    def infer_by_modus_ponens(
-            self, conditional, antecedent, symbol=None, category=None,
-            reference=None, title=None):
-        """Infer a statement by applying the modus-ponens (
-        MP) inference-rule.
-
-        Let 𝒯 be the theory under consideration.
-        Let 𝝋 ⟹ 𝝍 be an implication-statement in 𝒯,
-        called the conditional.
-        Let 𝝋 be a statement in 𝒯,
-        called the antecedent.
-        It follows that 𝝍 is valid in 𝒯.
-        """
-        if self.modus_ponens_inference_rule is None:
-            raise UnsupportedInferenceRuleException(
-                'The modus-ponens inference-rule is not contained in this '
-                'theory',
-                theory=self, conditional=conditional, antecedent=antecedent)
-        else:
-            return self.modus_ponens_inference_rule.infer(
-                theory=self, conditional=conditional, antecedent=antecedent,
                 symbol=symbol, category=category,
                 reference=reference, title=title)
 
@@ -2604,27 +2472,6 @@ class TheoryElaboration(TheoreticalObjct):
             visited.update({self.extended_theory})
             yield from self.extended_theory.iterate_theoretical_objcts_references(
                 include_root=False, visited=visited)
-
-    @property
-    def modus_ponens_inference_rule(self):
-        """Some theories may contain the modus-ponens inference-rule.
-
-        This property may only be set once to assure the stability of the
-        theory."""
-        if self._modus_ponens_inference_rule is not None:
-            return self._modus_ponens_inference_rule
-        elif self.extended_theory is not None:
-            return self.extended_theory.modus_ponens_inference_rule
-        else:
-            return None
-
-    @modus_ponens_inference_rule.setter
-    def modus_ponens_inference_rule(self, ir: InferenceRuleOBSOLETE):
-        verify(
-            self._modus_ponens_inference_rule is None,
-            'The modus-ponens inference-rule property of a theory can only be '
-            'set once to prevent instability.')
-        self._modus_ponens_inference_rule = ir
 
     def postulate_axiom(
             self, a: Axiom, symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
@@ -2917,7 +2764,7 @@ class Hypothesis(Statement):
             extended_theory=t,
             extended_theory_limit=self
         )
-        self.hypothetical_axiom = self.universe_of_discourse._inference_rule(
+        self.hypothetical_axiom = self.universe_of_discourse.axiom(
             f'Assume {hypothetical_formula.repr_as_formula()} is true.')
         self.hypothetical_axiom_postulate = self.hypothetical_t.postulate_axiom(
             self.hypothetical_axiom)

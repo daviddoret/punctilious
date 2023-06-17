@@ -17,9 +17,7 @@ class TestHypothesis(TestCase):
         o3 = u.o()
         r1 = u.r.declare(2, signal_proposition=True)
         p.configuration.echo_default = True
-        robust_theory = u.t(
-            include_conjunction_introduction_inference_rule=True,
-            include_modus_ponens_inference_rule=True)
+        robust_theory = u.t()
         ap1 = robust_theory.postulate_axiom(a=a1)
         first_proposition = robust_theory.dai(
             valid_proposition=u.f(r1, o1, o2), ap=ap1)
@@ -36,8 +34,8 @@ class TestHypothesis(TestCase):
             hypothetical_proposition=u.f(r1, o2, o3))
         hypothetical_proposition = hypothesis.proposition
         hypothetical_theory = hypothesis.hypothetical_t
-        hypothetical_conjunction = hypothetical_theory.ci(first_proposition, hypothetical_proposition)
-        conclusion_1 = hypothetical_theory.infer_by_modus_ponens(
-            conditional=conditional,
-            antecedent=hypothetical_conjunction)
+        hypothetical_conjunction = hypothetical_theory.i.ci.infer_statement(first_proposition, hypothetical_proposition)
+        conclusion_1 = hypothetical_theory.i.mp.infer_statement(
+            conditional,
+            hypothetical_conjunction)
         self.assertEqual('◆(ℴ₁, ℴ₃)', conclusion_1.valid_proposition.repr_as_formula())

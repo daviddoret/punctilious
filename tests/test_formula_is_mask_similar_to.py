@@ -71,14 +71,12 @@ class TestFormulaIsMaskSimilarTo(TestCase):
             self.assertTrue(phi1d.is_masked_formula_similar_to(phi1c, {x1, x2, x3}))
 
     def test_formula_is_mask_similar_to_for_modus_ponens(self):
-        u = p.UniverseOfDiscourse('test_formula_is_mask_similar_to_for_modus_ponens')
+        u = p.UniverseOfDiscourse('test_formula_is_mask_similar_to_for_modus_ponens-universe')
         o1 = u.o()
         o2 = u.o()
         o3 = u.o()
         r1 = u.r.declare(2, signal_proposition=True)
-        t = u.t('modus-ponens-test-theory',
-                include_modus_ponens_inference_rule=True)
-        t.include_modus_ponens_inference_rule()
+        t = u.t('test_formula_is_mask_similar_to_for_modus_ponens-theory')
         a = u.elaborate_axiom(random_data.random_sentence())
         ap = t.postulate_axiom(a)
         phi1 = t.dai(u.f(r1, o1, o2), ap=ap)

@@ -1,18 +1,16 @@
 from unittest import TestCase
-import punctilious as p
+import punctilious as pu
 import random_data
 
 
 class TestDoubleNegationIntroduction(TestCase):
     def test_dni(self):
-        p.configuration.echo_default = True
-        u = p.UniverseOfDiscourse('white-sheet-of-paper')
+        pu.configuration.echo_default = True
+        u = pu.UniverseOfDiscourse('test-dni-universe')
         o1 = u.o()
         o2 = u.o()
         r1 = u.r.declare(2, signal_proposition=True)
-        t = u.t(
-            'testing-theory',
-            include_double_negation_introduction_inference_rule=True)
+        t = u.t('test-dni-theory')
         a = u.elaborate_axiom(random_data.random_sentence())
         ap = t.postulate_axiom(a)
         phi1 = t.dai(u.f(r1, o1, o2), ap=ap)
