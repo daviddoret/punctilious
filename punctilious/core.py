@@ -3435,6 +3435,8 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
+
+        TODO: Implement free-variables support for absorption
         """
 
         def infer_formula(*args, t: TheoryElaboration) -> Formula:
@@ -3523,6 +3525,8 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
+
+        TODO: Implement free-variables support for bel
         """
 
         def infer_formula(*args, t: TheoryElaboration) -> Formula:
@@ -3580,6 +3584,8 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
+
+        TODO: Implement free-variables support for ber
         """
 
         def infer_formula(*args, t: TheoryElaboration) -> Formula:
@@ -3637,6 +3643,8 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
+
+        TODO: Implement free-variables support for bi
         """
 
         def infer_formula(*args, t: TheoryElaboration) -> Formula:
@@ -3700,6 +3708,8 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
+
+        TODO: Implement free-variables support for cel
         """
 
         def infer_formula(*args, t: TheoryElaboration) -> Formula:
@@ -3753,6 +3763,8 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
+
+        TODO: Implement free-variables support for cer
         """
 
         def infer_formula(*args, t: TheoryElaboration) -> Formula:
@@ -3806,6 +3818,8 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
+
+        TODO: Implement free-variables support for CI
         """
 
         def infer_formula(*args, t: TheoryElaboration) -> Formula:
@@ -3872,6 +3886,8 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
+
+        TODO: Implement free-variables support for di
         """
 
         def infer_formula(*args, t: TheoryElaboration) -> Formula:
@@ -3928,6 +3944,8 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
+
+        TODO: Implement free-variables support for dne
         """
 
         def infer_formula(*args, t: TheoryElaboration) -> Formula:
@@ -3987,6 +4005,8 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
+
+        TODO: Implement free-variables support for dni
         """
 
         def infer_formula(*args, t: TheoryElaboration) -> Formula:
@@ -4083,9 +4103,13 @@ class InferenceRuleDict(collections.UserDict):
 
     @property
     def modus_ponens(self) -> InferenceRule:
-        """The well-known modus-ponens inference-rule: (P ⟹ Q), P ⊢ Q.
+        """The well-known modus-ponens inference-rule: (P ⟹ Q), P' ⊢ Q'.
 
         Abridged property: u.i.mp
+
+        The implication (P ⟹ Q) may contain free-variables. If such is the
+        case, the resulting Q' is computed by extracting variable-values
+        from P' and applying variable-substitution.
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
@@ -4464,6 +4488,11 @@ class InferenceRuleInclusionDict(collections.UserDict):
         """The well-known modus-ponens inference-rule: (P ⟹ Q), P ⊢ Q.
 
         Abridged property: u.i.mp
+
+        The implication (P ⟹ Q) may contain free-variables. If such is the
+        case, the resulting Q' is computed by extracting variable-values
+        from P' and applying variable-substitution.
+
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
