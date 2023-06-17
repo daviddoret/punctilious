@@ -597,26 +597,35 @@ class TheoreticalObjct(SymbolicObjct):
         if echo:
             repm.prnt(self.repr_fully_qualified_name())
 
-    def get_variable_set(self):
-        """Return the set of variables contained in o (self), including o itself.
+    def get_variable_ordered_set(self) -> tuple:
+        """Return the ordered-set of free-variables contained in ⌜self⌝,
+        ordered in canonical-order (TODO: add link to doc on canonical-order).
 
         This function recursively traverse formula components (relation + parameters)
-        to compile the set of variables contained in o."""
-        return self._get_variable_set()
+        to compile the set of variables contained in o.
 
-    def _get_variable_set(self, _variable_set=None):
-        _variable_set = set() if _variable_set is None else _variable_set
-        if isinstance(self, Formula):
-            _variable_set = _variable_set.union(
-                self.relation._get_variable_set(_variable_set=_variable_set))
-            for p in self.parameters:
-                _variable_set = _variable_set.union(
-                    p._get_variable_set(_variable_set=_variable_set))
-            return _variable_set
-        elif isinstance(self, FreeVariable):
-            return _variable_set.union({self})
-        else:
-            return _variable_set
+        Internally, it uses a mutable python list, which is natively ordered,
+        to proxy an ordered-set. It then returns an immutable python tuple
+        for stability.
+        """
+        ordered_set = list()
+        self._get_variable_ordered_set(ordered_set)
+        # Make the ordered-set proxy immutable.
+        ordered_set = tuple(ordered_set)
+        return ordered_set
+
+    def _get_variable_ordered_set(self, ordered_set=None):
+        """This private method uses a mutable python list,
+        which is natively ordered, to proxy an ordered-set,
+        and populate the variable oredered-set during formula traversal."""
+        if is_in_class(self, classes.formula):
+            self.relation._get_variable_ordered_set(ordered_set)
+            # Uses for i in range() to preserve parameter order.
+            for i in range(0, len(self.parameters)):
+                self.parameters[i]._get_variable_ordered_set(ordered_set)
+        elif is_in_class(self, classes.free_variable):
+            if self not in ordered_set:
+                ordered_set.append(self)
 
     def is_formula_equivalent_to(self, o2):
         """Returns true if this theoretical-obct and theoretical-obct o2 are formula-equivalent.
@@ -828,7 +837,7 @@ class TheoreticalObjct(SymbolicObjct):
 
         # Because the scope of variables is locked,
         # the substituted formula must create "duplicates" of all variables.
-        variables_list = self.get_variable_set()
+        variables_list = self.get_variable_ordered_set()
         for x in variables_list:
             if x not in substitution_map.keys():
                 # Call declare_free_variable() instead of v()
@@ -1238,7 +1247,7 @@ class Formula(TheoreticalObjct):
     def lock_variable_scope(self):
         """Variable scope must be locked when the formula construction
         is completed."""
-        variables_list = self.get_variable_set()
+        variables_list = self.get_variable_ordered_set()
         for x in variables_list:
             x.lock_scope()
 
@@ -3415,6 +3424,7 @@ class InferenceRuleDict(collections.UserDict):
         self._double_negation_elimination = None
         self._double_negation_introduction = None
         self._modus_ponens = None
+        self._variable_substitution = None
 
     @property
     def absorb(self) -> InferenceRule:
@@ -4127,7 +4137,117 @@ class InferenceRuleDict(collections.UserDict):
             q = unpack_formula(p_implies_q.parameters[1])
             # The antecedant ⌜p⌝ of the implication ⌜p_implies_q⌝ may contain free-variables,
             # store these in a mask for masked-formula-similitude comparison.
-            mask = p.get_variable_set()
+            mask = p.get_variable_ordered_set()
+            p_prime = unpack_formula(args[1])  # Received as a statement-parameter to prove that p is true in t.
+            # Check for mask-formula-similitude and simultaneously,
+            # retrieve all free-variable values.
+            similitude, free_variables_values = p_prime._is_masked_formula_similar_to(
+                o2=p, mask=mask)
+            # Build a variable substitution map from the variable values.
+            substitution_map = dict((v, k) for k, v in free_variables_values.items())
+            # Finally, build the concluding proposition by applying
+            # variable substitutions.
+            conclusion = q.substitute(
+                substitution_map=substitution_map, target_theory=t)
+            return conclusion  # TODO: Provide support for statements that are atomic propositional formula, that is
+            # without relation or where the objct is a 0-ary relation.
+
+        def verify_args(*args, t: TheoryElaboration) -> bool:
+            """
+
+            :param args: A statement (P ⟹ Q), and a statement P
+            :param t:
+            :return: A formula Q
+            """
+            verify(
+                len(args) == 2,
+                'Exactly 2 items are expected in ⌜*args⌝ .',
+                args=args, t=t, slf=self)
+            p_implies_q = args[0]
+            verify(
+                t.contains_theoretical_objct(p_implies_q),
+                'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                p_implies_q=p_implies_q, t=t, slf=self)
+            p_implies_q = unpack_formula(p_implies_q)
+            verify(
+                p_implies_q.relation is t.u.r.implication,
+                'The relation of formula ⌜p_implies_q⌝ must be an implication.',
+                p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
+            p_prime = args[1]
+            verify(
+                t.contains_theoretical_objct(p_prime),
+                'Statement ⌜p_prime⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                p_prime=p_prime, t=t, slf=self)
+            p_prime = unpack_formula(p_prime)
+            p = unpack_formula(p_implies_q.parameters[0])
+            # The antecedant of the implication may contain free-variables,
+            # store these in a mask for masked-formula-similitude comparison.
+            mask = p.get_variable_ordered_set()
+            masked_formula_similitude = p_prime.is_masked_formula_similar_to(o2=p, mask=mask)
+            verify(
+                masked_formula_similitude,
+                'Formula ⌜p⌝ in statement ⌜p_implies_q⌝ must be masked-formula-similar to statement ⌜p_prime⌝.',
+                masked_formula_similitude=masked_formula_similitude, p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t,
+                slf=self)
+            return True
+
+        if self._modus_ponens is None:
+            self._modus_ponens = InferenceRule(
+                universe_of_discourse=self.u,
+                symbol=Symbol('mp', index=None),
+                dashed_name=DashedName('modus-ponens'),
+                infer_formula=infer_formula,
+                verify_args=verify_args)
+        return self._modus_ponens
+
+    @property
+    def mp(self) -> InferenceRule:
+        """The well-known modus-ponens inference-rule: (P ⟹ Q), P ⊢ Q.
+
+        Unabridged property: u.i.modus_ponens
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.modus_ponens
+
+    @property
+    def variable_substitution(self) -> InferenceRule:
+        """An inference-rule: P ⊢ P'
+
+        Abridged property: u.i.vs
+
+        Formal definition:
+        Given a statement P whose formula contains an ordered set
+        of n free-variables, ordered by their canonical order of
+        appearance in the formula,
+        given an ordered set of theoretical-objcts O of cardinality n,
+        the _variable substitution_ _inference rule_ returns a new
+        statement P' where all occurrences of variables in P were
+        replaced by their corresponding substitution values in O.
+
+        Warning:
+        To avoid inconsistent theories, one must be cautious
+        with variable manipulations. In effect, the proposition:
+            ((2n + 4) = 2(n + 2))
+        may lead to inconsistencies following variable-substitution
+        because the variable n is not typed. On the contrary:
+            (n ∈ ℕ) ⟹ ((2n + 4) = 2(n + 2))
+        where n is constrained leads to consistent results.
+
+        If the inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+
+        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+            """
+
+            :param args: ⌜ P ⌝  a statement, o1, o2, ... theoretical-objcts in canonical order.
+            :param t:
+            :return: A formula P'
+            """
+            p = unpack_formula(args[0])
+            mask = p.get_variable_ordered_set()
             p_prime = unpack_formula(args[1])  # Received as a statement-parameter to prove that p is true in t.
             # Check for mask-formula-similitude and simultaneously,
             # retrieve all free-variable values.
@@ -4171,7 +4291,7 @@ class InferenceRuleDict(collections.UserDict):
             p = unpack_formula(p_implies_q.parameters[0])
             # The antecedant of the implication may contain free-variables,
             # store these in a mask for masked-formula-similitude comparison.
-            mask = p.get_variable_set()
+            mask = p.get_variable_ordered_set()
             masked_formula_similitude = p_prime.is_masked_formula_similar_to(o2=p, mask=mask)
             verify(
                 masked_formula_similitude,
@@ -4190,15 +4310,33 @@ class InferenceRuleDict(collections.UserDict):
         return self._modus_ponens
 
     @property
-    def mp(self) -> InferenceRule:
-        """The well-known modus-ponens inference-rule: (P ⟹ Q), P ⊢ Q.
+    def vs(self) -> InferenceRule:
+        """An inference-rule: P ⊢ P'
 
-        Unabridged property: u.i.modus_ponens
+        Abridged property: u.i.vs
 
-        If the well-known inference-rule does not exist in the universe-of-discourse,
+        Formal definition:
+        Given a statement P whose formula contains an ordered set
+        of n free-variables, ordered by their canonical order of
+        appearance in the formula,
+        given an ordered set of theoretical-objcts O of cardinality n,
+        the _variable substitution_ _inference rule_ returns a new
+        statement P' where all occurrences of variables in P were
+        replaced by their corresponding substitution values in O.
+
+        Warning:
+        To avoid inconsistent theories, one must be cautious
+        with variable manipulations. In effect, the proposition:
+            ((2n + 4) = 2(n + 2))
+        may lead to inconsistencies following variable-substitution
+        because the variable n is not typed. On the contrary:
+            (n ∈ ℕ) ⟹ ((2n + 4) = 2(n + 2))
+        where n is constrained leads to consistent results.
+
+        If the inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
         """
-        return self.modus_ponens
+        return self.variable_substitution
 
 
 class InferenceRuleInclusionDict(collections.UserDict):
@@ -4796,7 +4934,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             self.variables[x.symbol] = x
 
     def declare_formula(
-            self, relation, *parameters, symbol=None, lock_variable_scope=None, echo=None):
+            self, relation: Relation, *parameters, symbol: (None, str, Symbol) = None,
+            lock_variable_scope: (None, bool) = None, echo: (None, bool) = None):
         """Declare a new :term:`formula` in this universe-of-discourse.
 
         This method is a shortcut for Formula(universe_of_discourse=self, ...).
@@ -4937,13 +5076,14 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     def f(
             self, relation, *parameters, symbol=None,
-            lock_variable_scope=None):
+            lock_variable_scope=None,
+            echo: (None, bool) = None):
         """Declare a new formula in this universe-of-discourse.
 
         Shortcut for self.elaborate_formula(...)."""
         return self.declare_formula(
             relation, *parameters, symbol=symbol,
-            lock_variable_scope=lock_variable_scope)
+            lock_variable_scope=lock_variable_scope, echo=echo)
 
     def get_symbol_max_index(self, base):
         """Return the highest index for that symbol-base in the universe-of-discourse."""
@@ -5130,8 +5270,8 @@ class BiconditionalIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
         # But, in order to do this, we must re-create new variables
         # with a new scope.
         # TODO: Move this variable re-creation procedure to a dedicated function
-        variables_list = conditional_phi.get_variable_set().union(
-            conditional_psi.get_variable_set())
+        variables_list = conditional_phi.get_variable_ordered_set().union(
+            conditional_psi.get_variable_ordered_set())
         substitution_map = dict(
             (source_variable, theory.universe_of_discourse.v(
                 source_variable.symbol.base)) for source_variable in
@@ -5238,8 +5378,8 @@ class ConjunctionIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
         # But, in order to do this, we must re-create new variables
         # with a new scope.
         # TODO: Move this variable re-creation procedure to a dedicated function
-        variables_list = conjunct_p.get_variable_set().union(
-            conjunct_q.get_variable_set())
+        variables_list = conjunct_p.get_variable_ordered_set().union(
+            conjunct_q.get_variable_ordered_set())
         substitution_map = dict(
             (source_variable, theory.universe_of_discourse.v(
                 source_variable.symbol.base)) for source_variable in
@@ -5421,7 +5561,7 @@ class DoubleNegationIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
         # But, in order to do this, we must re-create new variables
         # with a new scope.
         # TODO: Move this variable re-creation procedure to a dedicated function
-        variables_list = p.get_variable_set()
+        variables_list = p.get_variable_ordered_set()
         substitution_map = dict(
             (source_variable, theory.universe_of_discourse.v(
                 source_variable.symbol.base)) for source_variable in

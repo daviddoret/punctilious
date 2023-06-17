@@ -1,21 +1,8 @@
-def foo(i):
-    if i == 1:
-        return 1
-    if i == 2:
-        return 1, 2
-    if i == 3:
-        return 1, 2, 3
+import punctilious as pu
 
-
-bar = foo(1)
-print(bar)
-
-bar = foo(2)
-print(bar)
-
-bar = foo(3)
-print(bar)
-
-bar, tog = foo(2)
-print(bar)
-print(tog)
+u = pu.UniverseOfDiscourse()
+r1 = u.r.declare(1)
+r2 = u.r.declare(2)
+with u.v('x') as x, u.v('y') as y, u.v('z') as z:
+    f = u.f(r2, z, u.f(r2, z, u.f(x, y, u.f(x, y, z))), echo=True)
+    print(f.get_variable_ordered_set())
