@@ -25,8 +25,11 @@ class Configuration:
         self.echo_formula = None
         self.echo_hypothesis = None
         self.echo_note = None
+        self.echo_relation = None
+        self.echo_simple_objct = None
         self.echo_statement = None
         self.echo_symbolic_objct = None
+        self.echo_universe_of_discourse = None
         self.echo_variable = None
         self.output_index_if_max_index_equal_1 = False
         self.raise_exception_on_verification_error = True
@@ -2950,9 +2953,12 @@ class Relation(TheoreticalObjct):
     """
 
     def __init__(
-            self, arity, symbol=None, formula_rep=None,
+            self, arity: int, symbol: (None, str, Symbol) = None, formula_rep=None,
             signal_proposition=None, signal_theoretical_morphism=None,
-            implementation=None, universe_of_discourse=None, dashed_name=None):
+            implementation=None, universe_of_discourse=None, dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
+        echo = get_config(echo, configuration.echo_relation, configuration.echo_default,
+                          fallback_value=False)
         assert isinstance(universe_of_discourse, UniverseOfDiscourse)
         signal_proposition = False if signal_proposition is None else signal_proposition
         signal_theoretical_morphism = False if signal_theoretical_morphism is None else signal_theoretical_morphism
@@ -2975,16 +2981,22 @@ class Relation(TheoreticalObjct):
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
         super().__init__(
-            universe_of_discourse=universe_of_discourse, symbol=symbol, dashed_name=dashed_name)
+            universe_of_discourse=universe_of_discourse, symbol=symbol, dashed_name=dashed_name,
+            echo=False)
         self.universe_of_discourse.cross_reference_relation(r=self)
         super()._declare_class_membership(classes.relation)
+        if echo:
+            self.echo()
 
     # def repr(self, expanded=None):
     #    return self.repr_as_symbol()
 
+    def echo(self):
+        repm.prnt(self.repr_as_declaration())
+
     def repr_as_declaration(self):
-        output = f'Let {self.repr_as_symbol()} be a {repr_arity_as_text(self.arity)} relation denoted as ⌜ {self.repr_as_symbol()} ⌝'
-        output = output + f', that signals well-formed formulae in {self.formula_rep} syntax (e.g.: ⌜ {self.formula_rep.sample.replace("◆", str(self.repr_as_symbol()))} ⌝).'
+        output = f'Let {self.repr_fully_qualified_name()} be a {repr_arity_as_text(self.arity)} relation in {self.u.repr_as_symbol()}'
+        output = output + f' (notation convention: {self.formula_rep} syntax).'
         return output
 
 
@@ -3009,10 +3021,12 @@ class SimpleObjct(TheoreticalObjct):
     """
 
     def __init__(
-            self, symbol=None,
-            universe_of_discourse=None):
-        assert isinstance(universe_of_discourse, UniverseOfDiscourse)
-        # self.simple_objct_index = theory.crossreference_simple_objct(self)
+            self, universe_of_discourse: UniverseOfDiscourse,
+            symbol: (None, str, Symbol) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
+        echo = get_config(echo, configuration.echo_simple_objct, configuration.echo_default,
+                          fallback_value=False)
         if symbol is None:
             base = 'ℴ'
             index = universe_of_discourse.index_symbol(base=base)
@@ -3026,8 +3040,14 @@ class SimpleObjct(TheoreticalObjct):
             index = universe_of_discourse.index_symbol(base=symbol)
             symbol = Symbol(base=symbol, index=index)
         super().__init__(
-            universe_of_discourse=universe_of_discourse, symbol=symbol)
+            universe_of_discourse=universe_of_discourse, symbol=symbol,
+            dashed_name=dashed_name, echo=False)
         self.universe_of_discourse.cross_reference_simple_objct(o=self)
+        if echo:
+            self.echo()
+
+    def echo(self):
+        repm.prnt(self.repr_as_declaration())
 
     def is_masked_formula_similar_to(self, o2, mask, _values):
         assert isinstance(o2, TheoreticalObjct)
@@ -3058,8 +3078,9 @@ class SimpleObjct(TheoreticalObjct):
         # o2 is not a variable.
         return self.is_formula_equivalent_to(o2), _values
 
-    def repr_as_declaration(self, **kwargs):
-        return f'Let {self.repr_as_symbol()} be a simple-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
+    def repr_as_declaration(self):
+        output = f'Let {self.repr_fully_qualified_name()} be a simple-objct in {self.u.repr_as_symbol()}.'
+        return output
 
 
 class SubstitutionOfEqualTerms(FormulaStatement):
@@ -3158,18 +3179,22 @@ class RelationDict(collections.UserDict):
         self._implication = None
         self._negation = None
 
-    def declare(self, arity, symbol=None, formula_rep=None,
+    def declare(self, arity: int, symbol: (None, str, Symbol) = None, formula_rep=None,
                 signal_proposition=None,
                 signal_theoretical_morphism=None,
-                implementation=None, dashed_name=None):
+                implementation=None, dashed_name: (None, str, DashedName) = None,
+                echo: (None, bool) = None):
         """Declare a new relation in this universe-of-discourse.
         """
         return Relation(
-            arity=arity, symbol=symbol, formula_rep=formula_rep,
+            arity=arity,
+            symbol=symbol, dashed_name=dashed_name,
+            formula_rep=formula_rep,
             signal_proposition=signal_proposition,
             signal_theoretical_morphism=signal_theoretical_morphism,
             implementation=implementation,
-            universe_of_discourse=self.u, dashed_name=dashed_name)
+            universe_of_discourse=self.u,
+            echo=echo)
 
     @property
     def biconditional(self):
@@ -4462,8 +4487,10 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
 
 class UniverseOfDiscourse(SymbolicObjct):
-    def __init__(self, symbol: (None, str, Symbol) = None, echo: (None, bool) = None):
-        dashed_name = 'universe-of-discourse'
+    def __init__(self, symbol: (None, str, Symbol) = None, dashed_name: (None, str, DashedName) = None,
+                 echo: (None, bool) = None):
+        echo = get_config(echo, configuration.echo_universe_of_discourse, configuration.echo_default,
+                          fallback_value=False)
         self.axioms = dict()
         self.definitions = dict()
         self.formulae = dict()
@@ -4492,17 +4519,18 @@ class UniverseOfDiscourse(SymbolicObjct):
             # TODO: Analyse the string if it ends with index in subscript characters.
             index = index_universe_of_discourse_symbol(base=symbol)
             symbol = Symbol(base=symbol, index=index)
-
+        if dashed_name is None:
+            dashed_name = f'universe-of-discourse-{str(symbol.index)}'
         super().__init__(
             is_universe_of_discourse=True,
             is_theory_foundation_system=False,
             symbol=symbol,
+            dashed_name=dashed_name,
             universe_of_discourse=None,
-            echo=False,
-            dashed_name=dashed_name)
+            echo=False)
         super()._declare_class_membership(classes.universe_of_discourse)
         if echo:
-            repm.prnt(self.repr_as_declaration())
+            self.echo()
 
     def axiom(
             self, natural_language, header=None, symbol=None, echo=None):
@@ -4769,11 +4797,13 @@ class UniverseOfDiscourse(SymbolicObjct):
         return x
 
     def declare_simple_objct(
-            self, symbol=None):
+            self, symbol: (None, str, Symbol) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
         """Shortcut for SimpleObjct(theory=t, ...)"""
         return SimpleObjct(
-            symbol=symbol,
-            universe_of_discourse=self)
+            symbol=symbol, dashed_name=dashed_name,
+            universe_of_discourse=self, echo=echo)
 
     def declare_symbolic_objct(
             self, symbol=None):
@@ -4873,6 +4903,9 @@ class UniverseOfDiscourse(SymbolicObjct):
         return Note(theory=t, natural_language=natural_language, symbol=symbol,
                     reference=reference, title=title, category=category, echo=echo)
 
+    def echo(self):
+        return repm.prnt(self.repr_as_declaration())
+
     def f(
             self, relation, *parameters, symbol=None,
             lock_variable_scope=None):
@@ -4918,12 +4951,17 @@ class UniverseOfDiscourse(SymbolicObjct):
             symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
     def o(
-            self, symbol=None):
+            self, symbol: (None, str, Symbol) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
         """Declare a simple-objct in this universe-of-discourse.
 
         Shortcut for self.declare_simple_objct(universe_of_discourse=self, ...)"""
         return self.declare_simple_objct(
-            symbol=symbol)
+            symbol=symbol, dashed_name=dashed_name, echo=echo)
+
+    def repr_as_declaration(self) -> str:
+        return f'Let {self.repr_fully_qualified_name()} be a universe-of-discourse.'
 
     def so(self, symbol=None):
         return self.declare_symbolic_objct(
