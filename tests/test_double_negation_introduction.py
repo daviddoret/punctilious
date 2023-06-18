@@ -7,8 +7,8 @@ class TestDoubleNegationIntroduction(TestCase):
     def test_dni(self):
         pu.configuration.echo_default = True
         u = pu.UniverseOfDiscourse('test-dni-universe')
-        o1 = u.o()
-        o2 = u.o()
+        o1 = u.o2.declare()
+        o2 = u.o2.declare()
         r1 = u.r.declare(2, signal_proposition=True)
         t = u.t('test-dni-theory')
         a = u.elaborate_axiom(random_data.random_sentence())

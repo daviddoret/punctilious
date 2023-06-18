@@ -13,6 +13,12 @@ class InconsistencyWarning(UserWarning):
 
 
 class Configuration:
+    """Configuration settings.
+
+    This class allows the storage of all punctilious configuration and preference settings.
+
+    """
+
     def __init__(self):
         self.auto_index = None
         self.echo_axiom = None
@@ -1334,6 +1340,79 @@ class SimpleObjctDeclarationFormula(Formula):
             theory=theory, relation=relation, parameters=(theory, simple_objct),
             python=python,
             dashed=dashed, symbol=symbol)
+
+
+class SimpleObjctDict(collections.UserDict):
+    """A dictionary that exposes well-known simple-objcts as properties.
+
+    """
+
+    def __init__(self, u: UniverseOfDiscourse):
+        self.u = u
+        super().__init__()
+        # Well-known objects
+        self._falsehood = None
+        self._truth = None
+
+    def declare(self,
+                symbol: (None, str, Symbol) = None,
+                dashed_name: (None, str, DashedName) = None,
+                echo: (None, bool) = None) -> SimpleObjct:
+        """Declare a new simple-objct in this universe-of-discourse.
+        """
+        return SimpleObjct(
+            symbol=symbol,
+            dashed_name=dashed_name,
+            universe_of_discourse=self.u,
+            echo=echo)
+
+    @property
+    def fals(self):
+        """The well-known falsehood simple-objct.
+
+        Unabridged property: universe_of_discourse.simple_objcts.falsehood
+
+        If it does not exist in the universe-of-discourse,
+        declares it automatically.
+        """
+        return self.falsehood
+
+    @property
+    def falsehood(self):
+        """The well-known falsehood simple-objct.
+
+        Abridged property: u.o.fals
+
+        If it does not exist in the universe-of-discourse,
+        declares it automatically.
+        """
+        if self._falsehood is None:
+            self._falsehood = self.declare(symbol='⊥', dashed_name='falsehood')
+        return self._falsehood
+
+    @property
+    def tru(self):
+        """The well-known truth simple-objct.
+
+        Unabridged property: universe_of_discourse.simple_objcts.truth
+
+        If it does not exist in the universe-of-discourse,
+        declares it automatically.
+        """
+        return self.truth
+
+    @property
+    def truth(self):
+        """The well-known truth simple-objct.
+
+        Abridged property: u.o.tru
+
+        If it does not exist in the universe-of-discourse,
+        declares it automatically.
+        """
+        if self._truth is None:
+            self._truth = self.declare(symbol='⊤', dashed_name='truth')
+        return self._truth
 
 
 class StatementCategory(repm.Representation):
@@ -4530,7 +4609,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         self._inference_rules = InferenceRuleDict(u=self)
         self._relations = RelationDict(u=self)
         self.theories = dict()
-        self.simple_objcts = dict()
+        self._simple_objcts = SimpleObjctDict(u=self)
         self.symbolic_objcts = dict()
         self.theories = dict()
         self.variables = dict()
@@ -4538,9 +4617,6 @@ class UniverseOfDiscourse(SymbolicObjct):
         self.symbol_indexes = dict()
         self.headers = dict()
         self.dashed_names = dict()
-        # Well-known objects
-        self._falsehood_simple_objct = None
-        self._truth_simple_objct = None
 
         if symbol is None:
             base = '𝒰'
@@ -4589,44 +4665,16 @@ class UniverseOfDiscourse(SymbolicObjct):
         return self._inference_rules
 
     @property
-    def falsehood_simple_objct(self):
-        """The falsehood simple-object if it exists in this universe-of-discourse,
-        otherwise None."""
-        return self._falsehood_simple_objct
-
-    @falsehood_simple_objct.setter
-    def falsehood_simple_objct(self, o):
-        verify(
-            self._falsehood_simple_objct is None,
-            'The falsehood simple-objct exists already in this'
-            'universe-of-discourse')
-        self._falsehood_simple_objct = o
-
-    @property
-    def r(self):
+    def r(self) -> RelationDict:
         """A python dictionary of relations contained in this universe-of-discourse,
         where well-known relations are directly available as properties."""
         return self.relations
 
     @property
-    def relations(self):
+    def relations(self) -> RelationDict:
         """A python dictionary of relations contained in this universe-of-discourse,
         where well-known relations are directly available as properties."""
         return self._relations
-
-    @property
-    def truth_simple_objct(self):
-        """The truth simple-objct if it exists in this universe-of-discourse,
-        otherwise None."""
-        return self._truth_simple_objct
-
-    @truth_simple_objct.setter
-    def truth_simple_objct(self, o):
-        verify(
-            self._truth_simple_objct is None,
-            'The truth simple-objct exists already in this'
-            'universe-of-discourse')
-        self._truth_simple_objct = o
 
     def cross_reference_axiom(self, a: Axiom) -> bool:
         """Cross-references an axiom in this universe-of-discourse.
@@ -4830,15 +4878,6 @@ class UniverseOfDiscourse(SymbolicObjct):
             status=FreeVariable.scope_initialization_status, echo=echo)
         return x
 
-    def declare_simple_objct(
-            self, symbol: (None, str, Symbol) = None,
-            dashed_name: (None, str, DashedName) = None,
-            echo: (None, bool) = None):
-        """Shortcut for SimpleObjct(theory=t, ...)"""
-        return SimpleObjct(
-            symbol=symbol, dashed_name=dashed_name,
-            universe_of_discourse=self, echo=echo)
-
     def declare_symbolic_objct(
             self, symbol=None):
         """"""
@@ -4875,24 +4914,6 @@ class UniverseOfDiscourse(SymbolicObjct):
             include_inconsistency_introduction_inference_rule=include_inconsistency_introduction_inference_rule,
             stabilized=stabilized,
             echo=echo)
-
-    def include_falsehood_simple_objct(self):
-        """Assure the existence of the falsehood simple-objct in this
-        universe-of-discourse."""
-        # Assure the existence of dependent theoretical-objcts.
-        # N/A.
-        # Assure the existence of falsehood.
-        if self.falsehood_simple_objct is None:
-            self.falsehood_simple_objct = self.o('⊥')
-
-    def include_truth_simple_objct(self):
-        """Assure the existence of the truth simple-objct in this
-        universe-of-discourse."""
-        # Assure the existence of dependent theoretical-objcts.
-        # N/A.
-        # Assure the existence of truth.
-        if self.truth_simple_objct is None:
-            self.truth_simple_objct = self.o('⊤')
 
     def postulate_axiom(
             self, natural_language, symbol=None, theory=None, reference=None,
@@ -4985,15 +5006,13 @@ class UniverseOfDiscourse(SymbolicObjct):
             natural_language=natural_language,
             symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
-    def o(
-            self, symbol: (None, str, Symbol) = None,
-            dashed_name: (None, str, DashedName) = None,
-            echo: (None, bool) = None):
-        """Declare a simple-objct in this universe-of-discourse.
+    @property
+    def simple_objcts(self) -> SimpleObjctDict:
+        return self._simple_objcts
 
-        Shortcut for self.declare_simple_objct(universe_of_discourse=self, ...)"""
-        return self.declare_simple_objct(
-            symbol=symbol, dashed_name=dashed_name, echo=echo)
+    @property
+    def o2(self) -> SimpleObjctDict:
+        return self.simple_objcts
 
     def repr_as_declaration(self) -> str:
         return f'Let {self.repr_fully_qualified_name()} be a universe-of-discourse.'

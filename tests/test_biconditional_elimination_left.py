@@ -6,9 +6,9 @@ import random_data
 class TestBiconditionalEliminationLeft(TestCase):
     def test_bel(self):
         u = p.UniverseOfDiscourse('biconditional-elimination-left-universe')
-        o1 = u.o()
-        o2 = u.o()
-        o3 = u.o()
+        o1 = u.o2.declare()
+        o2 = u.o2.declare()
+        o3 = u.o2.declare()
         r1 = u.r.declare(2, signal_proposition=True)
         r2 = u.r.declare(1, signal_proposition=True)
         t = u.t('biconditional-elimination-left-theory')

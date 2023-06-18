@@ -6,8 +6,8 @@ import random_data
 class TestAbsorption(TestCase):
     def test_absorb(self):
         u = p.UniverseOfDiscourse('white-sheet-of-paper')
-        o1 = u.o()
-        o2 = u.o()
+        o1 = u.o2.declare()
+        o2 = u.o2.declare()
         t = u.t('testing-theory')
         a = u.elaborate_axiom(random_data.random_sentence())
         ap = t.postulate_axiom(a)

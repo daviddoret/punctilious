@@ -6,9 +6,9 @@ import random_data
 class TestConjunctionEliminationRight(TestCase):
     def test_cer(self):
         u = p.UniverseOfDiscourse('conjunction-elimination-right-universe')
-        o1 = u.o()
-        o2 = u.o()
-        o3 = u.o()
+        o1 = u.o2.declare()
+        o2 = u.o2.declare()
+        o3 = u.o2.declare()
         r1 = u.r.declare(2, signal_proposition=True)
         r2 = u.r.declare(1, signal_proposition=True)
         t = u.t('conjunction-elimination-right-theory')

@@ -9,9 +9,9 @@ class TestTheoryElaboration(TestCase):
         u = p.UniverseOfDiscourse('original-theory')
         blah_blah_blah = random_data.random_sentence(min_words=8)
         a1 = u.axiom(blah_blah_blah)
-        o1 = u.o()
-        o2 = u.o()
-        o3 = u.o()
+        o1 = u.o2.declare()
+        o2 = u.o2.declare()
+        o3 = u.o2.declare()
         r1 = u.r.declare(2, signal_proposition=True)
         p.configuration.echo_default = True
         robust_theory = u.t()
