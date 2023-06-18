@@ -3,7 +3,7 @@
 """
 
 print('Punctilious package (punctilious/__init__.py)')
-from repm import monospace, serif_bold
+from repm import monospace, prnt, serif_bold
 from core import \
     Axiom, AxiomInclusion, \
     configuration, \

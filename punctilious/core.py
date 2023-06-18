@@ -408,11 +408,11 @@ class SymbolicObjct:
         verify(
             isinstance(symbol, Symbol),
             'The symbol of a symbolic-objct must be of type Symbol.')
-        self.symbol = symbol
-        self.header = header  # Header validation is implemented in parent classes with proper category.
+        self._symbol = symbol
+        self._header = header  # Header validation is implemented in parent classes with proper category.
         if isinstance(dashed_name, str):
             dashed_name = DashedName(dashed_name)
-        self.dashed_name = dashed_name
+        self._dashed_name = dashed_name
         self.is_theory_foundation_system = is_theory_foundation_system
         if not is_universe_of_discourse:
             self._universe_of_discourse = universe_of_discourse
@@ -438,9 +438,21 @@ class SymbolicObjct:
         return self.repr_as_symbol()
 
     @property
+    def dashed_name(self) -> DashedName:
+        return self._dashed_name
+
+    @property
     def declarative_classes(self) -> frozenset[DeclarativeClass]:
         """The set of declarative-classes this symbolic-objct is a member of."""
         return self._declarative_classes
+
+    @property
+    def header(self) -> ObjctHeader:
+        return self._header
+
+    @property
+    def symbol(self) -> Symbol:
+        return self._symbol
 
     @property
     def u(self):
@@ -543,7 +555,7 @@ class SymbolicObjct:
         global configuration
         if self.header is None:
             # If we have no long-name for this symbolic-objct,
-            # we use the (mandatory) symbol as a fallback method.
+            # we fallback on the (mandatory) symbol.
             return self.repr_as_symbol()
         return self.header.repr_header(cap=cap)
 
@@ -586,9 +598,9 @@ class TheoreticalObjct(SymbolicObjct):
             self,
             symbol: (None, str, Symbol),
             universe_of_discourse: UniverseOfDiscourse,
-            is_theory_foundation_system: bool = False,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
+            is_theory_foundation_system: bool = False,
             echo: bool = False):
         # pseudo-class properties. these must be overwritten by
         # the parent constructor after calling __init__().
@@ -1475,8 +1487,6 @@ class Statement(TheoreticalObjct):
             theory: TheoryElaborationSequence,
             category,
             symbol: (None, str, Symbol) = None,
-            reference=None,
-            title=None,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: bool = False):
@@ -1488,9 +1498,18 @@ class Statement(TheoreticalObjct):
         if symbol is None:
             symbol = Symbol(
                 base=self.category.symbol_base, index=self.statement_index)
-        reference = symbol.index if reference is None else reference
-        self.title = StatementTitleOBSOLETE(
-            category=category, reference=reference, title=title)
+        if header is None:
+            header = ObjctHeader(
+                reference=str(symbol.index),
+                category=category,
+                title=None
+            )
+        if isinstance(header, str):
+            header = ObjctHeader(
+                reference=header,
+                category=category,
+                title=None
+            )
         super().__init__(
             symbol=symbol,
             universe_of_discourse=universe_of_discourse,
@@ -1509,10 +1528,10 @@ class Statement(TheoreticalObjct):
         raise NotImplementedError('This is an abstract method.')
 
     def repr_as_title(self, cap=False):
-        return self.title.repr_full(cap=cap)
+        return self.header.repr(cap=cap)
 
     def repr_as_ref(self, cap=False):
-        return self.title.repr_ref(cap=cap)
+        return self.header.repr_reference(cap=cap)
 
 
 class Axiom(TheoreticalObjct):
@@ -1830,7 +1849,6 @@ class FormulaStatement(Statement):
     def __init__(
             self, theory: TheoryElaborationSequence, valid_proposition: Formula,
             symbol: (None, Symbol) = None, category=None,
-            reference=None, title=None,
             header: (None, ObjctHeader) = None, dashed_name: (None, DashedName) = None,
             echo=None):
         echo = get_config(echo, configuration.echo_statement, configuration.echo_default, fallback_value=False)
@@ -1850,7 +1868,6 @@ class FormulaStatement(Statement):
         category = statement_categories.proposition if category is None else category
         super().__init__(
             theory=theory, symbol=symbol, category=category,
-            reference=reference, title=title,
             header=header, dashed_name=dashed_name,
             echo=False)
         # manage theoretical-morphisms
@@ -1940,18 +1957,19 @@ class DirectAxiomInference(FormulaStatement):
     """
 
     def __init__(
-            self, valid_proposition: FormulaStatement, ap: AxiomInclusion, theory: TheoryElaborationSequence,
+            self,
+            valid_proposition: Formula,
+            ap: AxiomInclusion,
+            theory: TheoryElaborationSequence,
             symbol: (None, str, Symbol) = None,
-            reference=None,
-            title=None, category=None, echo: bool = False):
-        assert isinstance(theory, TheoryElaborationSequence)
-        assert isinstance(ap, AxiomInclusion)
-        assert isinstance(valid_proposition, Formula)
+            header: (None, str, ObjctHeader) = None,
+            category: (None, StatementCategory) = None,
+            echo: (None, bool) = None):
         self.axiom = ap
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
-            symbol=symbol, category=category,
-            reference=reference, title=title, echo=echo)
+            symbol=symbol, category=category, header=header,
+            echo=echo)
         verify(theory.contains_theoretical_objct(ap), 'The ap is not in the theory hierarchy.', slf=self,
                ap=ap)
         verify(ap not in theory.statements or ap.statement_index < self.statement_index,
@@ -2215,9 +2233,9 @@ class InferenceRule(TheoreticalObjct):
             symbol: (None, str, Symbol) = None,
             dashed_name: (None, str, DashedName) = None,
             header: (None, str, ObjctHeader) = None,
-            echo: (None, bool) = None) -> InferredProposition:
+            echo: (None, bool) = None) -> InferredStatement:
         """Apply this inference-rules on input statements and return the resulting statement."""
-        return InferredProposition(*args, i=self, t=t, symbol=symbol, dashed_name=dashed_name, header=header, echo=echo)
+        return InferredStatement(*args, i=self, t=t, symbol=symbol, dashed_name=dashed_name, header=header, echo=echo)
 
     def verify_args(self, *args, t: TheoryElaborationSequence):
         """Verify the syntactical-compatibility of input statements and return True
@@ -2454,12 +2472,12 @@ class TheoryElaborationSequence(TheoreticalObjct):
             self,
             valid_proposition,
             ap,
-            symbol=None, reference=None, title=None, echo: (None, bool) = None) \
+            symbol=None, header=None, echo: (None, bool) = None) \
             -> DirectAxiomInference:
         """Elaborate a new direct-axiom-inference in the theory. Shortcut for FormalAxiom(theory=t, ...)"""
         return DirectAxiomInference(
             valid_proposition=valid_proposition, ap=ap, symbol=symbol,
-            theory=self, reference=reference, title=title, echo=echo)
+            theory=self, header=header, echo=echo)
 
     def elaborate_direct_definition_inference(
             self, p: Formula, d: DefinitionEndorsement,
@@ -2506,7 +2524,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
 
     def infer_by_inconsistency_introduction(
             self, p, not_p, symbol=None, category=None,
-            reference=None, title=None):
+            header=None):
         """Infer a new statement in this theory by applying the
         inconsistency-introduction inference-rule.
 
@@ -2514,7 +2532,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
         :param conjunct_q:
         :param symbol:
         :param category:
-        :param reference:
+        :param header:
         :param title:
         :return:
         """
@@ -2527,7 +2545,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
             return self.inconsistency_introduction_inference_rule.infer(
                 theory=self, p=p, not_p=not_p,
                 symbol=symbol, category=category,
-                reference=reference, title=title)
+                header=header)
 
     @property
     def i(self):
@@ -2630,16 +2648,16 @@ class TheoryElaborationSequence(TheoreticalObjct):
 
     def dai(
             self,
-            valid_proposition,
-            ap,
-            symbol=None, reference=None, title=None,
+            valid_proposition: Formula,
+            ap: AxiomInclusion,
+            symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
             echo: (None, bool) = None) \
             -> DirectAxiomInference:
         """Elaborate a new direct-axiom-inference in the theory. Shortcut for
         Theory.elaborate_direct_axiom_inference(...)."""
         return self.elaborate_direct_axiom_inference(
             valid_proposition=valid_proposition, ap=ap, symbol=symbol,
-            reference=reference, title=title, echo=echo)
+            header=header, echo=echo)
 
     def ddi(
             self, p: Formula, d: DefinitionEndorsement,
@@ -2692,13 +2710,13 @@ class TheoryElaborationSequence(TheoreticalObjct):
 
     def ii(
             self, p, not_p, symbol=None, category=None,
-            reference=None, title=None):
+            header=None, title=None):
         """Infer a new statement in this theory by applying the
         inconsistency-introduction inference-rule."""
         return self.infer_by_inconsistency_introduction(
             p=p, not_p=not_p,
             symbol=symbol,
-            category=category, reference=reference, title=title)
+            category=category, header=header)
 
     def include_inconsistency_introduction_inference_rule(self):
         """Include the inconsistency-introduction inference-rule in this
@@ -3075,7 +3093,7 @@ class SubstitutionOfEqualTerms(FormulaStatement):
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
             category=category,
-            symbol=symbol, reference=reference, title=title)
+            symbol=symbol)
 
     def repr_as_statement(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
@@ -5090,8 +5108,8 @@ class UniverseOfDiscourse(SymbolicObjct):
         x.lock_scope()
 
 
-class InferredProposition(FormulaStatement):
-    """A proposition inferred from an inference-rule in the current theory-elaboration.
+class InferredStatement(FormulaStatement):
+    """A statement inferred from an inference-rule in the current theory-elaboration.
     """
 
     def __init__(
@@ -5100,6 +5118,7 @@ class InferredProposition(FormulaStatement):
             i: InferenceRule,
             t: TheoryElaborationSequence,
             symbol: (None, str, Symbol) = None,
+            cat: (None, StatementCategory) = None,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
@@ -5114,7 +5133,7 @@ class InferredProposition(FormulaStatement):
         super().__init__(
             theory=t,
             valid_proposition=valid_proposition,
-            category=statement_categories.proposition,
+            category=cat,
             symbol=symbol,
             header=header,
             dashed_name=dashed_name,
@@ -5132,7 +5151,7 @@ class InferredProposition(FormulaStatement):
 
     def repr_as_statement(self, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        text = f'Inferred Proposition {self.repr_as_title(cap=True)}: “{self.valid_proposition.repr_as_formula()}”'
+        text = f'{self.repr_as_title(cap=True)}: “{self.valid_proposition.repr_as_formula()}”'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -5162,9 +5181,9 @@ class InconsistencyIntroductionStatement(FormulaStatement):
 
     def __init__(
             self, p, not_p, symbol=None, category=None, theory=None,
-            reference=None, title=None):
-        if title is None:
-            title = 'THEORY INCONSISTENCY'
+            header=None):
+        if header is None:
+            header = 'THEORY INCONSISTENCY'
         category = statement_categories.proposition if category is None else category
         self.p = p
         self.not_p = not_p
@@ -5172,7 +5191,7 @@ class InconsistencyIntroductionStatement(FormulaStatement):
             theory=theory, p=p, not_p=not_p)
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
-            category=category, reference=reference, title=title,
+            category=category, header=header,
             symbol=symbol)
         # The theory is proved inconsistent!
         theory.prove_inconsistent(self)
@@ -5201,11 +5220,11 @@ class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
     @staticmethod
     def infer(
             theory, p, not_p, symbol=None, category=None,
-            reference=None, title=None):
+            header=None):
         """"""
         return InconsistencyIntroductionStatement(
             p=p, not_p=not_p, symbol=symbol,
-            category=category, theory=theory, reference=reference, title=title)
+            category=category, theory=theory, header=header)
 
     @staticmethod
     def execute_algorithm(theory, p, not_p):
