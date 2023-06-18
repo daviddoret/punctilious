@@ -5204,13 +5204,4 @@ class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
         # TODO: Justify the inclusion of this inference-rule in the theory.
 
 
-# foundation_theory = None
-# ft = None
-# commutativity_of_equality = None
-## implies = None
-# equality = None
-# tru = None
-# fls = None
-# has_truth_value = None
-
 pass

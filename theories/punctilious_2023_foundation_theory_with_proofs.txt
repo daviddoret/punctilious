@@ -5,21 +5,21 @@
 𝐄𝐱𝐭𝐞𝐧𝐝𝐞𝐝 𝐭𝐡𝐞𝐨𝐫𝐲: N/A
 
 𝐒𝐢𝐦𝐩𝐥𝐞-𝐨𝐛𝐣𝐜𝐭 𝐝𝐞𝐜𝐥𝐚𝐫𝐚𝐭𝐢𝐨𝐧𝐬:
-Let class-of-classes be a simple-objct denoted as ⌜ class-of-classes ⌝.
-Let theory-class be a simple-objct denoted as ⌜ theory-class ⌝.
-Let false be a simple-objct denoted as ⌜ false ⌝.
-Let true be a simple-objct denoted as ⌜ true ⌝.
-Let truth-values be a simple-objct denoted as ⌜ truth-values ⌝.
-Let propositional-relations-class be a simple-objct denoted as ⌜ propositional-relations-class ⌝.
-Let proposition-class be a simple-objct denoted as ⌜ proposition-class ⌝.
-Let contradictory-theories be a simple-objct denoted as ⌜ contradictory-theories ⌝.
-Let contradictory-statement be a simple-objct denoted as ⌜ contradictory-statement ⌝.
-Let 0 be a simple-objct denoted as ⌜ 0 ⌝.
-Let 1 be a simple-objct denoted as ⌜ 1 ⌝.
-Let 2 be a simple-objct denoted as ⌜ 2 ⌝.
-Let 3 be a simple-objct denoted as ⌜ 3 ⌝.
-Let 4 be a simple-objct denoted as ⌜ 4 ⌝.
-Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
+Let class-of-classes be a simple-objct in 𝒰₁.
+Let theory-class be a simple-objct in 𝒰₁.
+Let false be a simple-objct in 𝒰₁.
+Let true be a simple-objct in 𝒰₁.
+Let truth-values be a simple-objct in 𝒰₁.
+Let propositional-relations-class be a simple-objct in 𝒰₁.
+Let proposition-class be a simple-objct in 𝒰₁.
+Let contradictory-theories be a simple-objct in 𝒰₁.
+Let contradictory-statement be a simple-objct in 𝒰₁.
+Let 0 be a simple-objct in 𝒰₁.
+Let 1 be a simple-objct in 𝒰₁.
+Let 2 be a simple-objct in 𝒰₁.
+Let 3 be a simple-objct in 𝒰₁.
+Let 4 be a simple-objct in 𝒰₁.
+Let natural-number be a simple-objct in 𝒰₁.
 
 𝐔𝐧𝐚𝐫𝐲 𝐫𝐞𝐥𝐚𝐭𝐢𝐨𝐧𝐬:
 
@@ -81,9 +81,9 @@ Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
 	(∨ ∈ propositional-relations-class)                                    │ Follows from 𝐚𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟏𝟏.
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟏𝟓: (⇒ ∈ propositional-relations-class)
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟏𝟓: (⟹ ∈ propositional-relations-class)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(⇒ ∈ propositional-relations-class)                                    │ Follows from 𝐚𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟏𝟏.
+	(⟹ ∈ propositional-relations-class)                                    │ Follows from 𝐚𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟏𝟏.
 
 𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟏𝟔: (¬ ∈ propositional-relations-class)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
@@ -97,9 +97,9 @@ Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 	theoretical-objcts x and y, if x=y then y=x, and for every statement
 	s, s is valid iif subst s is valid.”
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟏𝟗: ((x₁ = y₁) ⇒ (y₁ = x₁))
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟏𝟗: ((x₁ = y₁) ⟹ (y₁ = x₁))
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	((x₁ = y₁) ⇒ (y₁ = x₁))                                                │ Follows from 𝐚𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟏𝟖.
+	((x₁ = y₁) ⟹ (y₁ = x₁))                                                │ Follows from 𝐚𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟏𝟖.
 
 𝐃𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐𝟎: “Inequality is defined as the negation of equality.”
 
@@ -140,9 +140,9 @@ Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 𝐀𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟐𝟗: “If P has-truth-value t, ¬(¬(P)) has-truth-value
 	t.”
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟑𝟎: ((𝐱₁ is 𝐱₂) ⇒ (¬(¬(𝐱₁)) is 𝐱₂))
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟑𝟎: ((𝐱₁ is 𝐱₂) ⟹ (¬(¬(𝐱₁)) is 𝐱₂))
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	((𝐱₁ is 𝐱₂) ⇒ (¬(¬(𝐱₁)) is 𝐱₂))                                        │ Follows from 𝐚𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟐𝟗.
+	((𝐱₁ is 𝐱₂) ⟹ (¬(¬(𝐱₁)) is 𝐱₂))                                        │ Follows from 𝐚𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟐𝟗.
 
 𝐀𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟑𝟏: “If P and Q are logical propositions, (P ∧ Q) is
 	true if and only if both P and Q are true, otherwise it is false.”
@@ -154,6 +154,6 @@ Let natural-number be a simple-objct denoted as ⌜ natural-number ⌝.
 	valid in T, then this theory is an element of contradictory-theories
 	class.”
 
-𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟑𝟒: (((φ is true) ∧ (φ is false)) ⇒ (φ ∈ contradictory-statement))
+𝐏𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟑𝟒: (((φ is true) ∧ (φ is false)) ⟹ (φ ∈ contradictory-statement))
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(((φ is true) ∧ (φ is false)) ⇒ (φ ∈ contradictory-statement))         │ Follows from 𝐚𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟑𝟑.
+	(((φ is true) ∧ (φ is false)) ⟹ (φ ∈ contradictory-statement))         │ Follows from 𝐚𝐱𝐢𝐨𝐦-𝐢𝐧𝐜𝐥𝐮𝐬𝐢𝐨𝐧 𝟑𝟑.
