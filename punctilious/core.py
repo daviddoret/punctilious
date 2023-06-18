@@ -5193,7 +5193,7 @@ class DoubleNegationIntroductionStatement(FormulaStatement):
         return output
 
 
-class DoubleNegationIntroductionStatement(FormulaStatement):
+class DoubleNegationIntroductionStatementOBSOLETE(FormulaStatement):
     """The double-negation inference-rule: P ⟹ ¬¬P.
 
     Requirements:
@@ -5280,181 +5280,14 @@ class InferredProposition(FormulaStatement):
                 tabsize=4))
 
 
-def apply_negation(phi: Formula):
+def apply_negation(phi: Formula) -> Formula:
     """Apply negation to a formula phi."""
     return phi.u.f(phi.u.r.lnot, phi.u.f(phi.u.r.lnot, phi))
 
 
-def apply_double_negation(phi: Formula):
+def apply_double_negation(phi: Formula) -> Formula:
     """Apply double-negation to a formula phi."""
     return apply_negation(apply_negation(phi))
-
-
-class DoubleNegationIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
-    """An implementation of the double_negation-introduction inference-rule."""
-
-    @staticmethod
-    def infer(
-            theory, p, symbol=None, category=None,
-            reference=None, title=None):
-        """Given a proposition P, infer a statement
-        using the double_negation-introduction inference-rule."""
-        return DoubleNegationIntroductionStatement(
-            p=p, symbol=symbol,
-            category=category, theory=theory, reference=reference, title=title)
-
-    @staticmethod
-    def execute_algorithm(
-            theory: TheoryElaborationSequence, p: FormulaStatement):
-        """Execute the double_negation algorithm."""
-        assert isinstance(theory, TheoryElaborationSequence)
-        assert isinstance(p, FormulaStatement)
-        verify(
-            theory.contains_theoretical_objct(p),
-            'The proposition P of the double-negation-introduction is not contained in the '
-            'theory hierarchy.',
-            conditional=p, theory=theory)
-
-        # Build the valid proposition as p and q
-        # But, in order to do this, we must re-create new variables
-        # with a new scope.
-        # TODO: Move this variable re-creation procedure to a dedicated function
-        variables_list = p.get_variable_ordered_set()
-        substitution_map = dict(
-            (source_variable, theory.universe_of_discourse.v(
-                source_variable.symbol.base)) for source_variable in
-            variables_list)
-        valid_proposition = theory.universe_of_discourse.f(
-            theory.universe_of_discourse.relations.negation,
-            theory.universe_of_discourse.f(
-                theory.universe_of_discourse.relations.negation,
-                p.substitute(substitution_map=substitution_map, target_theory=theory)
-            )
-        )
-        return valid_proposition
-
-    @staticmethod
-    def initialize(theory):
-        a1 = theory.a()
-        # TODO: Justify the introduction of the inteference rule with
-        # a theory statement.
-
-
-class ModusPonensStatement(FormulaStatement):
-    """
-    TODO: Make ModusPonens a subclass of InferenceRule.
-
-    Definition:
-    -----------
-    A modus-ponens is a valid rule-of-inference propositional-logic argument that,
-    given a proposition (P implies Q)
-    given a proposition (P is True)
-    infers the proposition (Q is True)
-
-    Requirements:
-    -------------
-    The parent theory must expose the implication attribute.
-    """
-
-    def __init__(
-            self, conditional, antecedent, symbol=None, category=None, theory=None,
-            reference=None, title=None):
-        category = statement_categories.proposition if category is None else category
-        self.conditional = conditional
-        self.antecedent = antecedent
-        valid_proposition = ModusPonensInferenceRuleOBSOLETE.execute_algorithm(
-            t=theory, conditional=conditional, antecedent=antecedent)
-        super().__init__(
-            theory=theory, valid_proposition=valid_proposition,
-            category=category, reference=reference, title=title,
-            symbol=symbol)
-
-    def repr_as_statement(self, output_proofs=True):
-        """Return a representation that expresses and justifies the statement.
-
-        The representation is in two parts:
-        - The formula that is being stated,
-        - The justification for the formula."""
-        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
-        if output_proofs:
-            output = output + f'\n\t{repm.serif_bold("Proof by modus ponens")}'
-            output = output + f'\n\t{self.conditional.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.conditional.repr_as_ref())}.'
-            output = output + f'\n\t{self.antecedent.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.antecedent.repr_as_ref())}.'
-            output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
-        return output
-
-
-class ModusPonensInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
-    """An implementation of the modus-ponens inference-rule."""
-
-    @staticmethod
-    def infer(
-            theory, conditional, antecedent, symbol=None, category=None,
-            reference=None, title=None):
-        """Given a conditional and an antecedent, infer a statement
-        using the modus-ponens inference-rule."""
-        return ModusPonensStatement(
-            conditional=conditional, antecedent=antecedent, symbol=symbol,
-            category=category, theory=theory, reference=reference, title=title)
-
-    @staticmethod
-    def execute_algorithm(
-            t: TheoryElaborationSequence,
-            conditional: FormulaStatement,
-            antecedent: FormulaStatement):
-        """Execute the modus-ponens algorithm."""
-        verify(
-            t.contains_theoretical_objct(conditional),
-            'The conditional of the modus-ponens is not contained in the '
-            'theory hierarchy.',
-            conditional=conditional, theory=t)
-        verify(
-            t.contains_theoretical_objct(antecedent),
-            'The antecedent of the modus-ponens is not contained in the '
-            'theory hierarchy.',
-            antecedent=antecedent, theory=t)
-        verify(
-            isinstance(
-                t.universe_of_discourse.r.implication,
-                Relation),
-            'The usage of the ModusPonens class in a theory requires the '
-            'implication-relation in the universe-of-discourse.')
-        verify(
-            conditional.valid_proposition.relation is t.universe_of_discourse.r.implication,
-            'The root relation of the conditional formula is not the implication-relation defined in this universe-of-discourse.')
-        p_prime = conditional.valid_proposition.parameters[0]
-        q_prime = conditional.valid_proposition.parameters[1]
-        mask = p_prime.get_variable_set()
-        # Check p consistency
-        # If the p statement is present in the theory,
-        # it necessarily mean that p is true,
-        # because every statement in the theory is a valid proposition.
-        assert isinstance(antecedent, FormulaStatement)
-        similitude, _values = antecedent.valid_proposition._is_masked_formula_similar_to(
-            o2=p_prime, mask=mask)
-        assert antecedent.valid_proposition.is_masked_formula_similar_to(
-            o2=p_prime, mask=mask)
-        # Build q by variable substitution
-        substitution_map = dict((v, k) for k, v in _values.items())
-        valid_proposition = q_prime.substitute(
-            substitution_map=substitution_map, target_theory=t)
-        return valid_proposition
-
-    @staticmethod
-    def initialize(theory):
-        a1 = theory.a()
-        # TODO: Justify the inclusion of this inference-rule in the theory.
-
-
-# class InferenceRules(repm.Representation):
-#    def __init__(self, python_name: str, natural_language_name: str):
-#        super().__init__(python_name=python_name, natural_language_name=natural_language_name)
-#        self.conjunction_introduction = ConjunctionIntroductionInferenceRule
-#        self.modus_ponens = ModusPonensInferenceRule
-#
-#
-# inference_rules = InferenceRules('inference_rules', 'inference-rules')
 
 
 class InconsistencyIntroductionStatement(FormulaStatement):
