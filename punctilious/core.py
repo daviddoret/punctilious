@@ -1,7 +1,6 @@
 from __future__ import annotations
 import textwrap
 import warnings
-from types import SimpleNamespace
 import repm
 import contextlib
 import abc
@@ -301,6 +300,11 @@ class ObjctHeader:
         return self.repr_reference(cap=cap)
 
     def repr_header(self, cap: bool = False) -> str:
+        """
+
+        :param cap:
+        :return:
+        """
         return f'{self.category.repr_as_natural_language(cap=cap)} {self.reference}{"" if self.title is None else " - " + self.title}'
 
     def repr_reference(self, cap: bool = False) -> str:
@@ -380,7 +384,7 @@ class SymbolicObjct:
     def __init__(
             self,
             symbol: (None, str, Symbol),
-            universe_of_discourse: UniverseOfDiscourse,
+            universe_of_discourse: (None, UniverseOfDiscourse),
             is_theory_foundation_system: bool = False,
             is_universe_of_discourse: bool = False,
             header: (None, str, ObjctHeader) = None,
@@ -504,7 +508,7 @@ class SymbolicObjct:
     def repr_dashed_name(self) -> str:
         """"""
         if self.dashed_name is None:
-            return None
+            return ''
         return self.dashed_name.repr_dashed_name()
 
     def repr_fully_qualified_name(self) -> str:
@@ -1071,12 +1075,6 @@ class Formula(TheoreticalObjct):
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
         """
-
-        :param theory:
-        :param relation:
-        :param parameters:
-        :param symbol:
-        :param arity: Mandatory if relation is a FreeVariable.
         """
         echo = get_config(echo, configuration.echo_formula, configuration.echo_default, fallback_value=False)
         self.free_variables = dict()  # TODO: Check how to make dict immutable after construction.
@@ -1315,19 +1313,6 @@ class Formula(TheoreticalObjct):
         return f'Let {self.repr_as_symbol()} be the formula {self.repr_as_formula(expanded=True)} in {self.universe_of_discourse.repr_as_symbol()}.'
 
 
-class RelationDeclarationFormula(Formula):
-    def __init__(self, theory, relation, symbol):
-        assert isinstance(theory, TheoryElaboration)
-        assert isinstance(relation, Relation)
-        assert theory.contains_theoretical_objct(relation)
-        formula_relation = theoretical_relations.relation_declaration
-        super().__init__(
-            theory=theory, relation=formula_relation,
-            parameters=(theory, relation),
-            python=python,
-            dashed=dashed, symbol=symbol)
-
-
 class SimpleObjctDeclarationFormula(Formula):
     """
 
@@ -1341,7 +1326,7 @@ class SimpleObjctDeclarationFormula(Formula):
 
     def __init__(
             self, theory, simple_objct, python=None, dashed=None, symbol=None):
-        assert isinstance(theory, TheoryElaboration)
+        assert isinstance(theory, TheoryElaborationSequence)
         assert isinstance(simple_objct, SimpleObjct)
         assert theory.contains_theoretical_objct(simple_objct)
         relation = theoretical_relations.simple_objct_declaration
@@ -1408,7 +1393,7 @@ class Statement(TheoreticalObjct):
 
     def __init__(
             self,
-            theory: TheoryElaboration,
+            theory: TheoryElaborationSequence,
             category,
             symbol: (None, str, Symbol) = None,
             reference=None,
@@ -1523,7 +1508,7 @@ class AxiomInclusion(Statement):
     def __init__(
             self,
             a: Axiom,
-            t: TheoryElaboration,
+            t: TheoryElaborationSequence,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
@@ -1556,13 +1541,13 @@ class AxiomInclusion(Statement):
 
 
 class InferenceRuleInclusion(Statement):
-    """An inference-rule inclusion (aka allowance) in the current theory-elaboration.
+    """An inference-rule inclusion (aka inference-rule allowance) in the current theory-elaboration.
     """
 
     def __init__(
             self,
             i: InferenceRule,
-            t: TheoryElaboration,
+            t: TheoryElaborationSequence,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
@@ -1583,16 +1568,43 @@ class InferenceRuleInclusion(Statement):
             repm.prnt(self.repr_as_statement())
 
     def infer_formula(self, *args, echo: (None, bool) = None):
+        """
+
+        :param args:
+        :param echo:
+        :return:
+        """
         return self.inference_rule.infer_formula(*args, t=self.theory, echo=echo)
 
-    def infer_statement(self, *args, echo: (None, bool) = None):
-        return self.inference_rule.infer_statement(*args, t=self.theory, echo=echo)
+    def infer_statement(self,
+                        *args,
+                        symbol: (None, str, Symbol) = None,
+                        dashed_name: (None, str, DashedName) = None,
+                        header: (None, str, ObjctHeader) = None,
+                        echo: (None, bool) = None):
+        """
+
+        :param args:
+        :param echo:
+        :return:
+        """
+        return self.inference_rule.infer_statement(*args, t=self.theory, symbol=symbol, dashed_name=dashed_name,
+                                                   header=header, echo=echo)
 
     def verify_args(self, *args):
+        """
+
+        :param args:
+        :return:
+        """
         return self.inference_rule.verify_args(*args, t=self.theory)
 
     @property
     def i(self):
+        """
+
+        :return:
+        """
         return self.inference_rule
 
     @property
@@ -1689,7 +1701,7 @@ class DefinitionEndorsement(Statement):
     def __init__(
             self,
             d: Definition,
-            t: TheoryElaboration,
+            t: TheoryElaborationSequence,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
@@ -1737,7 +1749,7 @@ class FormulaStatement(Statement):
     """
 
     def __init__(
-            self, theory: TheoryElaboration, valid_proposition: Formula,
+            self, theory: TheoryElaborationSequence, valid_proposition: Formula,
             symbol: (None, Symbol) = None, category=None,
             reference=None, title=None,
             header: (None, ObjctHeader) = None, dashed_name: (None, DashedName) = None,
@@ -1849,11 +1861,11 @@ class DirectAxiomInference(FormulaStatement):
     """
 
     def __init__(
-            self, valid_proposition: FormulaStatement, ap: AxiomInclusion, theory: TheoryElaboration,
+            self, valid_proposition: FormulaStatement, ap: AxiomInclusion, theory: TheoryElaborationSequence,
             symbol: (None, str, Symbol) = None,
             reference=None,
             title=None, category=None, echo: bool = False):
-        assert isinstance(theory, TheoryElaboration)
+        assert isinstance(theory, TheoryElaborationSequence)
         assert isinstance(ap, AxiomInclusion)
         assert isinstance(valid_proposition, Formula)
         self.axiom = ap
@@ -1912,7 +1924,7 @@ class Morphism(FormulaStatement):
     def __init__(
             self, source_statement, symbol=None, theory=None,
             category=None):
-        assert isinstance(theory, TheoryElaboration)
+        assert isinstance(theory, TheoryElaborationSequence)
         assert isinstance(source_statement, FormulaStatement)
         assert theory.contains_theoretical_objct(source_statement)
         self.source_statement = source_statement
@@ -1961,7 +1973,7 @@ class PropositionStatement:
     """
 
     def __init__(self, theory, position, phi, proof):
-        assert isinstance(theory, TheoryElaboration)
+        assert isinstance(theory, TheoryElaborationSequence)
         assert isinstance(position, int) and position > 0
         assert isinstance(phi, Formula)
         assert theory.contains_theoretical_objct(phi)
@@ -1988,7 +2000,7 @@ class DirectDefinitionInference(FormulaStatement):
             self,
             p: Formula,
             d: DefinitionEndorsement,
-            t: TheoryElaboration,
+            t: TheoryElaborationSequence,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
@@ -2110,18 +2122,25 @@ class InferenceRule(TheoreticalObjct):
     def echo(self):
         repm.prnt(self.repr_report())
 
-    def infer_formula(self, *args, t: TheoryElaboration, echo: (None, bool) = None) -> Formula:
+    def infer_formula(self, *args, t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """Apply this inference-rules on input statements and return the resulting statement."""
         phi = self._infer_formula(*args, t=t)
         if echo:
             repm.prnt(phi.repr_as_statement())
         return phi
 
-    def infer_statement(self, *args, t: TheoryElaboration, echo: (None, bool) = None) -> InferredProposition:
+    def infer_statement(
+            self,
+            *args,
+            t: TheoryElaborationSequence,
+            symbol: (None, str, Symbol) = None,
+            dashed_name: (None, str, DashedName) = None,
+            header: (None, str, ObjctHeader) = None,
+            echo: (None, bool) = None) -> InferredProposition:
         """Apply this inference-rules on input statements and return the resulting statement."""
-        return InferredProposition(*args, i=self, t=t, echo=echo)
+        return InferredProposition(*args, i=self, t=t, symbol=symbol, dashed_name=dashed_name, header=header, echo=echo)
 
-    def verify_args(self, *args, t: TheoryElaboration):
+    def verify_args(self, *args, t: TheoryElaborationSequence):
         """Verify the syntactical-compatibility of input statements and return True
         if they are compatible, False otherwise."""
         return self._verify_args(*args, t=t)
@@ -2138,7 +2157,7 @@ class AtheoreticalStatement(SymbolicObjct):
     """
 
     def __init__(self, theory, symbol=None, echo=None):
-        assert isinstance(theory, TheoryElaboration)
+        assert isinstance(theory, TheoryElaborationSequence)
         self.theory = theory
         super().__init__(symbol=symbol, echo=echo, universe_of_discourse=theory.universe_of_discourse)
         super()._declare_class_membership(classes.atheoretical_statement)
@@ -2196,7 +2215,7 @@ class Note(AtheoreticalStatement):
                 tabsize=4))
 
 
-class TheoryElaboration(TheoreticalObjct):
+class TheoryElaborationSequence(TheoreticalObjct):
     """The TheoryElaboration pythonic class models a [theory-elaboration](theory-elaboration).
 
     """
@@ -2207,7 +2226,7 @@ class TheoryElaboration(TheoreticalObjct):
             symbol: (str, Symbol) = None,
             dashed_name: (str, DashedName) = None,
             header: (str, ObjctHeader) = None,
-            extended_theory: (None, TheoryElaboration) = None,
+            extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None,
             include_inconsistency_introduction_inference_rule: bool = False,
             stabilized: bool = False,
@@ -2377,7 +2396,7 @@ class TheoryElaboration(TheoreticalObjct):
             t=self, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
     @property
-    def extended_theory(self) -> (None, TheoryElaboration):
+    def extended_theory(self) -> (None, TheoryElaborationSequence):
         """None if this is a root theory, the theory that this theory extends otherwise."""
         return self._extended_theory
 
@@ -2738,7 +2757,7 @@ class TheoryElaboration(TheoreticalObjct):
 
 class Hypothesis(Statement):
     def __init__(
-            self, t: TheoryElaboration, hypothetical_formula: Formula, symbol: (None, Symbol) = None,
+            self, t: TheoryElaborationSequence, hypothetical_formula: Formula, symbol: (None, Symbol) = None,
             header: (None, ObjctHeader) = None, dashed_name: (None, DashedName) = None,
             echo: bool = False):
         category = statement_categories.hypothesis
@@ -2958,7 +2977,7 @@ class SubstitutionOfEqualTerms(FormulaStatement):
             category=None, theory=None, reference=None, title=None):
         category = statement_categories.proposition if category is None else category
         # Check p_implies_q consistency
-        assert isinstance(theory, TheoryElaboration)
+        assert isinstance(theory, TheoryElaborationSequence)
         assert isinstance(original_expression, FormulaStatement)
         assert theory.contains_theoretical_objct(original_expression)
         assert isinstance(equality_statement, FormulaStatement)
@@ -3296,7 +3315,7 @@ class InferenceRuleDict(collections.UserDict):
         TODO: Implement free-variables support for absorption
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
 
             :param args:
@@ -3309,7 +3328,7 @@ class InferenceRuleDict(collections.UserDict):
             psi = t.u.f(t.u.r.implication, p, t.u.f(t.u.r.conjunction, p, q))
             return psi
 
-        def verify_args(*args, t: TheoryElaboration) -> bool:
+        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
             """
 
             :param args:
@@ -3386,7 +3405,7 @@ class InferenceRuleDict(collections.UserDict):
         TODO: Implement free-variables support for bel
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
 
             :param args:
@@ -3401,7 +3420,7 @@ class InferenceRuleDict(collections.UserDict):
             psi = t.u.f(t.u.r.implication, p, q)
             return psi
 
-        def verify_args(*args, t: TheoryElaboration) -> bool:
+        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
             """
 
             :param args:
@@ -3445,7 +3464,7 @@ class InferenceRuleDict(collections.UserDict):
         TODO: Implement free-variables support for ber
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
 
             :param args:
@@ -3460,7 +3479,7 @@ class InferenceRuleDict(collections.UserDict):
             psi = t.u.f(t.u.r.implication, q, p)
             return psi
 
-        def verify_compatibility(*args, t: TheoryElaboration) -> bool:
+        def verify_compatibility(*args, t: TheoryElaborationSequence) -> bool:
             """
 
             :param args:
@@ -3504,7 +3523,7 @@ class InferenceRuleDict(collections.UserDict):
         TODO: Implement free-variables support for bi
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
 
             :param args:
@@ -3515,7 +3534,7 @@ class InferenceRuleDict(collections.UserDict):
             q = unpack_formula(args[1])
             return t.u.f(t.u.r.biconditional, p, q)
 
-        def verify_args(*args, t: TheoryElaboration) -> bool:
+        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
             """
 
             :param args:
@@ -3569,7 +3588,7 @@ class InferenceRuleDict(collections.UserDict):
         TODO: Implement free-variables support for cel
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
 
             :param args:
@@ -3580,7 +3599,7 @@ class InferenceRuleDict(collections.UserDict):
             q = unpack_formula(p.parameters[0])
             return q
 
-        def verify_compatibility(*args, t: TheoryElaboration) -> bool:
+        def verify_compatibility(*args, t: TheoryElaborationSequence) -> bool:
             """
 
             :param args:
@@ -3624,7 +3643,7 @@ class InferenceRuleDict(collections.UserDict):
         TODO: Implement free-variables support for cer
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
 
             :param args:
@@ -3635,7 +3654,7 @@ class InferenceRuleDict(collections.UserDict):
             r = unpack_formula(p.parameters[1])
             return r
 
-        def verify_compatibility(*args, t: TheoryElaboration) -> bool:
+        def verify_compatibility(*args, t: TheoryElaborationSequence) -> bool:
             """
 
             :param args:
@@ -3679,7 +3698,7 @@ class InferenceRuleDict(collections.UserDict):
         TODO: Implement free-variables support for CI
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
 
             :param args:
@@ -3690,7 +3709,7 @@ class InferenceRuleDict(collections.UserDict):
             q = unpack_formula(args[1])
             return t.u.f(t.u.r.land, p, q)
 
-        def verify_args(*args, t: TheoryElaboration) -> bool:
+        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
             """
 
             :param args:
@@ -3747,7 +3766,7 @@ class InferenceRuleDict(collections.UserDict):
         TODO: Implement free-variables support for di
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
 
             :param args:
@@ -3758,7 +3777,7 @@ class InferenceRuleDict(collections.UserDict):
             q = unpack_formula(args[1])  # Note: q may be a formula, because q may be false.
             return t.u.f(t.u.r.disjunction, p, q)
 
-        def verify_args(*args, t: TheoryElaboration) -> bool:
+        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
             """
 
             :param args: A statement P, and a propositional-formula Q
@@ -3805,7 +3824,7 @@ class InferenceRuleDict(collections.UserDict):
         TODO: Implement free-variables support for dne
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
 
             :param args:
@@ -3817,7 +3836,7 @@ class InferenceRuleDict(collections.UserDict):
             r = unpack_formula(q.parameters[0])
             return r
 
-        def verify_args(*args, t: TheoryElaboration) -> bool:
+        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
             """
 
             :param args:
@@ -3866,7 +3885,7 @@ class InferenceRuleDict(collections.UserDict):
         TODO: Implement free-variables support for dni
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
 
             :param args:
@@ -3876,7 +3895,7 @@ class InferenceRuleDict(collections.UserDict):
             p = unpack_formula(args[0])
             return t.u.f(t.u.r.lnot, t.u.f(t.u.r.lnot, p))
 
-        def verify_args(*args, t: TheoryElaboration) -> bool:
+        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
             """
 
             :param args:
@@ -3972,7 +3991,7 @@ class InferenceRuleDict(collections.UserDict):
         the inference-rule is automatically created.
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
 
             :param args: A statement (P ⟹ Q), and a statement P
@@ -3999,7 +4018,7 @@ class InferenceRuleDict(collections.UserDict):
             return conclusion  # TODO: Provide support for statements that are atomic propositional formula, that is
             # without relation or where the objct is a 0-ary relation.
 
-        def verify_args(*args, t: TheoryElaboration) -> bool:
+        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
             """
 
             :param args: A statement (P ⟹ Q), and a statement P
@@ -4086,7 +4105,7 @@ class InferenceRuleDict(collections.UserDict):
         the inference-rule is automatically created.
         """
 
-        def infer_formula(*args, t: TheoryElaboration) -> Formula:
+        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
 
             :param args: ⌜ P ⌝  a statement, o1, o2, ... theoretical-objcts in canonical order.
@@ -4108,7 +4127,7 @@ class InferenceRuleDict(collections.UserDict):
                 substitution_map=substitution_map, target_theory=t)
             return conclusion  # TODO: Provide support for statements that are atomic propositional formula, that is without relation or where the objct is a 0-ary relation.
 
-        def verify_args(*args, t: TheoryElaboration) -> bool:
+        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
             """
 
             :param args: A statement (P ⟹ Q), and a statement P
@@ -4191,7 +4210,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     """
 
-    def __init__(self, t: TheoryElaboration):
+    def __init__(self, t: TheoryElaborationSequence):
         self.t = t
         super().__init__()
         # Well-known objects
@@ -4746,13 +4765,13 @@ class UniverseOfDiscourse(SymbolicObjct):
                    o1=o)
             self.dashed_names[o.header] = o
 
-    def cross_reference_theory(self, t: TheoryElaboration):
+    def cross_reference_theory(self, t: TheoryElaborationSequence):
         """Cross-references a theory in this universe-of-discourse.
 
         :param t: a formula.
         """
         verify(
-            isinstance(t, TheoryElaboration),
+            isinstance(t, TheoryElaborationSequence),
             'Cross-referencing a theory in a universe-of-discourse requires '
             'an object of type Theory.')
         verify(
@@ -4832,7 +4851,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
-            extended_theory: (None, TheoryElaboration) = None,
+            extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None,
             include_inconsistency_introduction_inference_rule=None,
             stabilized: bool = False,
@@ -4846,7 +4865,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         :param extended_theory:
         :return:
         """
-        return TheoryElaboration(
+        return TheoryElaborationSequence(
             u=self,
             symbol=symbol,
             header=header,
@@ -4988,7 +5007,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
-            extended_theory: (None, TheoryElaboration) = None,
+            extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None,
             include_inconsistency_introduction_inference_rule=None,
             stabilized: bool = False,
@@ -5091,10 +5110,10 @@ class BiconditionalIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
 
     @staticmethod
     def execute_algorithm(
-            theory: TheoryElaboration, conditional_phi: FormulaStatement,
+            theory: TheoryElaborationSequence, conditional_phi: FormulaStatement,
             conditional_psi: FormulaStatement):
         """Execute the biconditional algorithm."""
-        assert isinstance(theory, TheoryElaboration)
+        assert isinstance(theory, TheoryElaborationSequence)
         assert isinstance(conditional_phi, FormulaStatement)
         assert isinstance(conditional_psi, FormulaStatement)
         verify(
@@ -5128,114 +5147,6 @@ class BiconditionalIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
             conditional_phi.substitute(
                 substitution_map=substitution_map, target_theory=theory),
             conditional_psi.substitute(
-                substitution_map=substitution_map, target_theory=theory)
-        )
-        return valid_proposition
-
-    @staticmethod
-    def initialize(theory):
-        a1 = theory.a()
-        # TODO: Justify the introduction of the inteference rule with
-        # a theory statement.
-
-
-class ConjunctionIntroductionStatement(FormulaStatement):
-    """
-
-    Definition:
-    -----------
-    A conjunction-introduction is a valid rule-of-inference propositional-logic argument that,
-    given a proposition (P is true)
-    given a proposition (Q is true)
-    infers the proposition (P and Q)
-    and infers the proposition not(P and Q) if either or both of P or Q is not true.
-
-    Requirements:
-    -------------
-    The conjunction relation.
-    """
-
-    def __init__(
-            self, conjunct_p, conjunct_q, symbol=None, category=None, theory=None,
-            reference=None, title=None):
-        category = statement_categories.proposition if category is None else category
-        self.conjunct_p = conjunct_p
-        self.conjunct_q = conjunct_q
-        valid_proposition = ConjunctionIntroductionInferenceRuleOBSOLETE.execute_algorithm(
-            theory=theory, conjunct_p=conjunct_p, conjunct_q=conjunct_q)
-        super().__init__(
-            theory=theory, valid_proposition=valid_proposition,
-            category=category, reference=reference, title=title,
-            symbol=symbol)
-
-    def repr_as_statement(self, output_proofs=True):
-        """Return a representation that expresses and justifies the statement.
-
-        The representation is in two parts:
-        - The formula that is being stated,
-        - The justification for the formula."""
-        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
-        if output_proofs:
-            output = output + f'\n\t{repm.serif_bold("Proof by conjunction introduction")}'
-            output = output + f'\n\t{self.conjunct_p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.conjunct_p.repr_as_ref())}.'
-            output = output + f'\n\t{self.conjunct_q.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.conjunct_q.repr_as_ref())}.'
-            output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
-        return output
-
-
-class ConjunctionIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
-    """An implementation of the conjunction-introduction inference-rule."""
-
-    @staticmethod
-    def infer(
-            theory, conjunct_p, conjunct_q, symbol=None, category=None,
-            reference=None, title=None):
-        """Given two conjuncts, infer a statement
-        using the conjunction-introduction inference-rule."""
-        return ConjunctionIntroductionStatement(
-            conjunct_p=conjunct_p, conjunct_q=conjunct_q, symbol=symbol,
-            category=category, theory=theory, reference=reference, title=title)
-
-    @staticmethod
-    def execute_algorithm(
-            theory: TheoryElaboration, conjunct_p: FormulaStatement,
-            conjunct_q: FormulaStatement):
-        """Execute the conjunction algorithm."""
-        assert isinstance(theory, TheoryElaboration)
-        assert isinstance(conjunct_p, FormulaStatement)
-        assert isinstance(conjunct_q, FormulaStatement)
-        verify(
-            theory.contains_theoretical_objct(conjunct_p),
-            'The conjunct P of the conjunction-introduction is not contained in the '
-            'theory hierarchy.',
-            conditional=conjunct_p, theory=theory)
-        verify(
-            theory.contains_theoretical_objct(conjunct_q),
-            'The conjunct Q of the conjunction-introduction is not contained in the '
-            'theory hierarchy.',
-            antecedent=conjunct_q, theory=theory)
-        verify(
-            isinstance(
-                theory.universe_of_discourse.conjunction_relation, Relation),
-            'The usage of the conjunction-introduction inference-rule in a theory requires the '
-            'conjunction relation in that theory universe.')
-
-        # Build the valid proposition as p and q
-        # But, in order to do this, we must re-create new variables
-        # with a new scope.
-        # TODO: Move this variable re-creation procedure to a dedicated function
-        variables_list = conjunct_p.get_variable_ordered_set().union(
-            conjunct_q.get_variable_ordered_set())
-        substitution_map = dict(
-            (source_variable, theory.universe_of_discourse.v(
-                source_variable.symbol.base)) for source_variable in
-            variables_list)
-        valid_proposition = theory.universe_of_discourse.f(
-            theory.universe_of_discourse.conjunction_relation,
-            conjunct_p.substitute(
-                substitution_map=substitution_map, target_theory=theory),
-            conjunct_q.substitute(
                 substitution_map=substitution_map, target_theory=theory)
         )
         return valid_proposition
@@ -5325,7 +5236,7 @@ class InferredProposition(FormulaStatement):
             self,
             *args,
             i: InferenceRule,
-            t: TheoryElaboration,
+            t: TheoryElaborationSequence,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
@@ -5394,9 +5305,9 @@ class DoubleNegationIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
 
     @staticmethod
     def execute_algorithm(
-            theory: TheoryElaboration, p: FormulaStatement):
+            theory: TheoryElaborationSequence, p: FormulaStatement):
         """Execute the double_negation algorithm."""
-        assert isinstance(theory, TheoryElaboration)
+        assert isinstance(theory, TheoryElaborationSequence)
         assert isinstance(p, FormulaStatement)
         verify(
             theory.contains_theoretical_objct(p),
@@ -5489,7 +5400,7 @@ class ModusPonensInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
 
     @staticmethod
     def execute_algorithm(
-            t: TheoryElaboration,
+            t: TheoryElaborationSequence,
             conditional: FormulaStatement,
             antecedent: FormulaStatement):
         """Execute the modus-ponens algorithm."""
@@ -5604,7 +5515,7 @@ class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
     @staticmethod
     def execute_algorithm(theory, p, not_p):
         """Execute the theory-inconsistency algorithm."""
-        assert isinstance(theory, TheoryElaboration)
+        assert isinstance(theory, TheoryElaborationSequence)
         assert isinstance(p, FormulaStatement)
         verify(
             theory.contains_theoretical_objct(p),

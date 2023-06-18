@@ -1,4 +1,0 @@
-# elaboration (of theories)
-
-## Definition
-
