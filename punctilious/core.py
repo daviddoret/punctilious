@@ -5008,10 +5008,26 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     @property
     def simple_objcts(self) -> SimpleObjctDict:
+        """The collection of simple-objcts in this universe-of-discourse.
+
+        Abridged version: u.o
+
+        Well-known simple-objcts are exposed as python properties. In general, a well-known simple-objct is declared in the universe-of-discourse the first time its property is accessed.
+
+        :return:
+        """
         return self._simple_objcts
 
     @property
     def o(self) -> SimpleObjctDict:
+        """The collection of simple-objcts in this universe-of-discourse.
+
+        Unabridged version: universe_of_discourse.simple_objcts
+
+        Well-known simple-objcts are exposed as python properties. In general, a well-known simple-objct is declared in the universe-of-discourse the first time its property is accessed.
+
+        :return:
+        """
         return self.simple_objcts
 
     def repr_as_declaration(self) -> str:
