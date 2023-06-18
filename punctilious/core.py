@@ -5011,7 +5011,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         return self._simple_objcts
 
     @property
-    def o2(self) -> SimpleObjctDict:
+    def o(self) -> SimpleObjctDict:
         return self.simple_objcts
 
     def repr_as_declaration(self) -> str:

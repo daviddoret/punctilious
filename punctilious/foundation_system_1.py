@@ -16,14 +16,14 @@ axiom_02 = ft.postulate_axiom(u.elaborate_axiom(
 axiom_03 = ft.postulate_axiom(u.elaborate_axiom(
     'The class of classes is the class of all classes defined in the '
     'universe-of-discourse (TODO: Or foundation theory?).'))
-class_of_classes = u.o2.declare('class-of-classes')
+class_of_classes = u.o.declare('class-of-classes')
 element_of = u.r.declare(
     2, '∈', formula_rep=core.Formula.infix_operator_representation,
     signal_proposition=True, dashed_name='element-of')
 fa1 = ft.dai(u.f(element_of, class_of_classes, class_of_classes), ap=axiom_02)
 
 nla_04 = ft.postulate_axiom(u.elaborate_axiom('The theory-class is the class of all theories'))
-theory_class = u.o2.declare('theory-class')
+theory_class = u.o.declare('theory-class')
 fa2b = ft.dai(u.f(element_of, theory_class, class_of_classes), ap=axiom_02)
 fa2c = ft.dai(u.f(element_of, ft, theory_class), ap=axiom_02)
 # TODO: Implement a trigger to automatically add a statement (t in theory-class)
@@ -33,9 +33,9 @@ fa2c = ft.dai(u.f(element_of, ft, theory_class), ap=axiom_02)
 nla_05 = ft.postulate_axiom(u.elaborate_axiom(natural_language=
                                               'truth-values is the class whose elements are '
                                               'the theoretical-objects truth and falsehood.'))
-falsehood = u.o2.declare('false')
-truth = u.o2.declare('true')
-truth_values = u.o2.declare('truth-values')
+falsehood = u.o.declare('false')
+truth = u.o.declare('true')
+truth_values = u.o.declare('truth-values')
 proposition_060 = ft.dai(
     u.f(element_of, truth_values, class_of_classes), ap=axiom_03)
 proposition_070 = ft.dai(u.f(element_of, truth, truth_values), ap=axiom_03)
@@ -46,7 +46,7 @@ nla_09 = ft.postulate_axiom(u.elaborate_axiom(natural_language=
                                               'propositional-relations is the class whose elements are '
                                               'the relations: conjunction, disjunction, implication, and negation, '
                                               'and any relation defined from these.'))
-propositional_relations_class = u.o2.declare('propositional-relations-class')
+propositional_relations_class = u.o.declare('propositional-relations-class')
 ft.dai(
     u.f(element_of, propositional_relations_class, class_of_classes),
     ap=axiom_03)
@@ -89,7 +89,7 @@ nla_10 = ft.postulate_axiom(u.elaborate_axiom(
     'whose relation is an element-of propositional-relations-class, '
     'and all theory-formula-statements whose relation is defined '
     'from these. Its elements are called propositions.'))
-proposition_class = u.o2.declare('proposition-class')
+proposition_class = u.o.declare('proposition-class')
 ft.dai(u.f(element_of, truth, class_of_classes), ap=nla_10)
 ft.dai(u.f(element_of, falsehood, class_of_classes), ap=nla_10)
 
@@ -159,8 +159,8 @@ define_biconditional()
 nla_40 = ft.postulate_axiom(u.elaborate_axiom(natural_language=
                                               'If T is a theory, and both P is valid and ¬P is valid in T, '
                                               'then this theory is an element of contradictory-theories class.'))
-contradictory_theories = u.o2.declare('contradictory-theories')
-contradictory_statements = u.o2.declare('contradictory-statement')
+contradictory_theories = u.o.declare('contradictory-theories')
+contradictory_statements = u.o.declare('contradictory-statement')
 with u.v('φ') as phi:
     ft.dai(
         u.f(
@@ -201,8 +201,8 @@ def elaborate_foundation_theory():
     global neg
     global tru
 
-    tru = u.o2.declare('true', capitalizable=True, python_name='tru')
-    fls = u.o2.declare('false', capitalizable=True, python_name='fls')
+    tru = u.o.declare('true', capitalizable=True, python_name='tru')
+    fls = u.o.declare('false', capitalizable=True, python_name='fls')
 
     def gen1():
         global fls

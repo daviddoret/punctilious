@@ -14,12 +14,12 @@ t = u.t(
     extended_theory=fs1.ft, dashed_name='tao-2006-theory-2-1-the-peano-axioms')
 
 # simple-objct declarations
-zero = u.o2.declare('0')
-one = u.o2.declare('1')
-two = u.o2.declare('2')
-three = u.o2.declare('3')
-four = u.o2.declare('4')
-nat = u.o2.declare('natural-number')
+zero = u.o.declare('0')
+one = u.o.declare('1')
+two = u.o.declare('2')
+three = u.o.declare('3')
+four = u.o.declare('4')
+nat = u.o.declare('natural-number')
 
 # relation declarations
 is_a = u.r.declare(

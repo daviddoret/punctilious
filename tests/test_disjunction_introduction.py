@@ -6,9 +6,9 @@ import random_data
 class TestDisjunctionIntroduction(TestCase):
     def test_di(self):
         u = p.UniverseOfDiscourse('white-sheet-of-paper')
-        o1 = u.o2.declare()
-        o2 = u.o2.declare()
-        o3 = u.o2.declare()
+        o1 = u.o.declare()
+        o2 = u.o.declare()
+        o3 = u.o.declare()
         r1 = u.r.declare(2, signal_proposition=True)
         r2 = u.r.declare(1, signal_proposition=True)
         t = u.t('testing-theory')

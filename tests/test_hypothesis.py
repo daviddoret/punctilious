@@ -12,9 +12,9 @@ class TestHypothesis(TestCase):
         u = p.UniverseOfDiscourse('test-hypothesis-universe-of-discourse')
         blah_blah_blah = random_data.random_sentence(min_words=8)
         a1 = u.axiom(blah_blah_blah)
-        o1 = u.o2.declare()
-        o2 = u.o2.declare()
-        o3 = u.o2.declare()
+        o1 = u.o.declare()
+        o2 = u.o.declare()
+        o3 = u.o.declare()
         r1 = u.r.declare(2, signal_proposition=True)
         p.configuration.echo_default = True
         robust_theory = u.t()

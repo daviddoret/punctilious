@@ -8,7 +8,7 @@ class TestNoteIntroduction(TestCase):
         echo_note = p.configuration.echo_note
         p.configuration.echo_note = True
         u = p.UniverseOfDiscourse('white-sheet-of-paper')
-        o1 = u.o2.declare()
+        o1 = u.o.declare()
         r1 = u.r.declare(1, signal_proposition=True)
         t = u.t(
             'testing-theory')

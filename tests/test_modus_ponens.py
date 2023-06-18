@@ -8,8 +8,8 @@ class TestModusPonens(TestCase):
     def test_modus_ponens_without_variable(self):
         pu.configuration.echo_default = True
         u = pu.UniverseOfDiscourse()
-        o1 = u.o2.declare()
-        o2 = u.o2.declare()
+        o1 = u.o.declare()
+        o2 = u.o.declare()
         r1 = u.r.declare(1, signal_proposition=True)
         r2 = u.r.declare(1, signal_proposition=True)
         t = u.t('test_modus_ponens_without_variable')
@@ -27,9 +27,9 @@ class TestModusPonens(TestCase):
     def test_modus_ponens_with_free_variables(self):
         pu.configuration.echo_default = True
         u = pu.UniverseOfDiscourse()
-        o1 = u.o2.declare()
-        o2 = u.o2.declare()
-        o3 = u.o2.declare()
+        o1 = u.o.declare()
+        o2 = u.o.declare()
+        o3 = u.o.declare()
         r1 = u.r.declare(2, signal_proposition=True)
         t = u.t('test_modus_ponens_with_free_variables')
         a = u.elaborate_axiom(random_data.random_sentence())
