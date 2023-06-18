@@ -1436,12 +1436,13 @@ class StatementCategory(repm.Representation):
 
 class StatementCategories(repm.Representation):
     axiom = StatementCategory('axiom', 'a', 'axiom')
-    axiom_inclusion = StatementCategory('axiom_inclusion', 'a', 'axiom-inclusion')
+    axiom_inclusion = StatementCategory('axiom_inclusion', 'a', 'axiom')
     corollary = StatementCategory('corollary', 'p', 'corollary')
     definition = StatementCategory('definition', 'd', 'definition')
     formal_definition = StatementCategory('formal_definition', 'd', 'formal definition')
     hypothesis = StatementCategory('hypothesis', 'h', 'hypothesis')
-    inference_rule_inclusion = StatementCategory('inference_rule_inclusion', 'i', 'inference rule inclusion')
+    inference_rule = StatementCategory('inference_rule', 'i', 'inference rule')
+    inference_rule_inclusion = StatementCategory('inference_rule_inclusion', 'ii', 'inference rule inclusion')
     inferred_proposition = ('inferred_proposition', 'i', 'inferred-proposition')
     lemma = StatementCategory('lemma', 'p', 'lemma')
     proposition = StatementCategory('proposition', 'p', 'proposition')
@@ -1540,7 +1541,13 @@ class Axiom(TheoreticalObjct):
     """
 
     def __init__(
-            self, natural_language, u, symbol=None, auto_index=None, echo=None, header=None):
+            self,
+            natural_language: str,
+            u: UniverseOfDiscourse,
+            symbol: (None, str, Symbol) = None,
+            header: (None, str, ObjctHeader) = None,
+            auto_index: (None, bool) = None,
+            echo: (None, bool) = None):
         """
 
         :param natural_language: The axiom's content in natural-language.
@@ -1550,10 +1557,6 @@ class Axiom(TheoreticalObjct):
         """
         auto_index = get_config(auto_index, configuration.auto_index, fallback_value=False)
         echo = get_config(echo, configuration.echo_axiom, configuration.echo_default, fallback_value=False)
-        verify(is_in_class(u, classes.universe_of_discourse),
-               'Parameter u is not a member of class universe-of-discourse.')
-        verify(isinstance(natural_language, str),
-               'Parameter natural-language is not of python-type str.')
         natural_language = natural_language.strip()
         verify(natural_language != '',
                'Parameter natural-language is an empty string (after trimming).')
@@ -1600,7 +1603,8 @@ class Axiom(TheoreticalObjct):
 
 
 class AxiomInclusion(Statement):
-    """An axiom postulation (aka inclusion, endorsement) in the current theory-elaboration.
+    """An axiom-inclusion (aka axiom-postulation) is defined as a pair (𝑡,𝑎),
+    where 𝑡 is a theory-elaboration-sequence and 𝑎 is a contentual axiom.
     """
 
     def __init__(
@@ -1611,10 +1615,33 @@ class AxiomInclusion(Statement):
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
-        """Postulate (aka include, endorse) an axiom in a theory-elaboration.
+        """Include (postulate) an axiom in a theory-elaboration-sequence.
         """
-        self.axiom = a
+        self._axiom = a
         t.crossreference_axiom_inclusion(self)
+        if symbol is None:
+            # If no symbol is passed as a parameter,
+            # automated assignment of symbol is assumed.
+            base = 'a'
+            index = t.u.index_symbol(base=base)
+            symbol = Symbol(base=base, index=index)
+        elif isinstance(symbol, str):
+            # If symbol was passed as a string,
+            # assume the base was passed without index.
+            index = t.u.index_symbol(base=symbol)  # if auto_index else None
+            symbol = Symbol(base=symbol, index=index)
+        if header is None:
+            header = ObjctHeader(
+                reference=str(symbol.index),
+                category=statement_categories.axiom_inclusion,
+                title=None
+            )
+        if isinstance(header, str):
+            header = ObjctHeader(
+                reference=header,
+                category=statement_categories.axiom_inclusion,
+                title=None
+            )
         super().__init__(
             theory=t,
             category=statement_categories.axiom_inclusion,
@@ -1626,16 +1653,29 @@ class AxiomInclusion(Statement):
         if echo:
             repm.prnt(self.repr_as_statement())
 
-    def repr_as_statement(self, output_proofs=True) -> str:
+    @property
+    def a(self) -> Axiom:
+        """The axiom of an axiom-inclusion.
+
+        Unabridged property: axiom_inclusion.axiom"""
+        return self.axiom
+
+    @property
+    def axiom(self) -> Axiom:
+        """The axiom of an axiom-inclusion.
+
+        Abridged property: a.a"""
+        return self._axiom
+
+    def repr_as_statement(self, output_proofs: bool = True) -> str:
         """Return a representation that expresses and justifies the statement."""
         text = f'{self.repr_as_title(cap=True)}: “{self.axiom.natural_language}”'
-        return '\n'.join(
-            textwrap.wrap(
-                text=text, width=70,
-                subsequent_indent=f'\t',
-                break_on_hyphens=False,
-                expand_tabs=True,
-                tabsize=4))
+        text = repm.wrap(text)
+        if output_proofs:
+            text2 = f'Let postulate {self.axiom.repr_fully_qualified_name()} in {self.theory.repr_reference()}.'
+            text2 = repm.wrap(text2)
+            text = text + '\n' + text2
+        return text
 
 
 class InferenceRuleInclusion(Statement):
@@ -1653,6 +1693,17 @@ class InferenceRuleInclusion(Statement):
         """Include (aka allow) an inference-rule in a theory-elaboration.
         """
         self._inference_rule = i
+        if symbol is None:
+            # If no symbol is passed as a parameter,
+            # automated assignment of symbol is assumed.
+            base = 'ii'
+            index = t.universe_of_discourse.index_symbol(base=base)
+            symbol = Symbol(base=base, index=index)
+        if header is None:
+            header = ObjctHeader(reference=str(symbol.index), category=statement_categories.inference_rule_inclusion,
+                                 title=None)
+        if isinstance(header, str):
+            header = ObjctHeader(reference=header, category=statement_categories.inference_rule_inclusion, title=None)
         super().__init__(
             theory=t,
             category=statement_categories.inference_rule_inclusion,
@@ -1714,7 +1765,7 @@ class InferenceRuleInclusion(Statement):
 
     def repr_as_statement(self, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        text = f'Allow inference-rule “{self.inference_rule}”.'
+        text = f'Let us allow the inference-rule {self.inference_rule.repr_fully_qualified_name()} in {self.theory.repr_reference()}.'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -2208,6 +2259,10 @@ class InferenceRule(TheoreticalObjct):
             base = 'ir'
             index = universe_of_discourse.index_symbol(base=base)
             symbol = Symbol(base=base, index=index)
+        if header is None:
+            header = ObjctHeader(reference=str(symbol.index), category=statement_categories.inference_rule, title=None)
+        if isinstance(header, str):
+            header = ObjctHeader(reference=header, category=statement_categories.inference_rule, title=None)
         super().__init__(universe_of_discourse=universe_of_discourse,
                          is_theory_foundation_system=False,
                          symbol=symbol, header=header, dashed_name=dashed_name, echo=False)
@@ -2354,6 +2409,10 @@ class TheoryElaborationSequence(TheoreticalObjct):
             # TODO: Analyse the string if it ends with index in subscript characters.
             index = u.index_symbol(base=symbol)
             symbol = Symbol(base=symbol, index=index)
+        if header is None:
+            header = ObjctHeader(reference=str(symbol.index), category=statement_categories.inference_rule, title=None)
+        if isinstance(header, str):
+            header = ObjctHeader(reference=header, category=statement_categories.inference_rule, title=None)
         super().__init__(
             symbol=symbol,
             is_theory_foundation_system=True if extended_theory is None else False,
@@ -2591,7 +2650,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
 
     def postulate_axiom(
             self, a: Axiom, symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
-            dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
+            dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None) -> AxiomInclusion:
         """Postulate an axiom in this theory-elaboration (self)."""
         return AxiomInclusion(
             a=a, t=self, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)

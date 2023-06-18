@@ -27,24 +27,24 @@ Let natural-number be a simple-objct in 𝒰₁.
 
 𝐓𝐡𝐞𝐨𝐫𝐲 𝐞𝐥𝐚𝐛𝐨𝐫𝐚𝐭𝐢𝐨𝐧:
 
-Axiom-inclusion 0: “A theory is a... (define punctilious data model).”
+Axiom 2: “A theory is a... (define punctilious data model).”
 
-Axiom-inclusion 1: “An (axiomatic) class is a collection of
-	theoretical objects that are unambiguously defined by the axioms of
-	the theory it belongs to.”
+Axiom 4: “An (axiomatic) class is a collection of theoretical objects
+	that are unambiguously defined by the axioms of the theory it belongs
+	to.”
 
-Axiom-inclusion 2: “The class of classes is the class of all classes
-	defined in the universe-of-discourse (TODO: Or foundation theory?).”
+Axiom 6: “The class of classes is the class of all classes defined in
+	the universe-of-discourse (TODO: Or foundation theory?).”
 
 Proposition 3: (class-of-classes ∈ class-of-classes)
 
-Axiom-inclusion 4: “The theory-class is the class of all theories”
+Axiom 8: “The theory-class is the class of all theories”
 
 Proposition 5: (theory-class ∈ class-of-classes)
 
-Proposition 6: (𝑡₁ ∈ theory-class)
+Proposition 6: (inference rule 1 ∈ theory-class)
 
-Axiom-inclusion 7: “truth-values is the class whose elements are the
+Axiom 10: “truth-values is the class whose elements are the
 	theoretical-objects truth and falsehood.”
 
 Proposition 8: (truth-values ∈ class-of-classes)
@@ -53,9 +53,9 @@ Proposition 9: (true ∈ truth-values)
 
 Proposition 10: (false ∈ truth-values)
 
-Axiom-inclusion 11: “propositional-relations is the class whose
-	elements are the relations: conjunction, disjunction, implication,
-	and negation, and any relation defined from these.”
+Axiom 12: “propositional-relations is the class whose elements are the
+	relations: conjunction, disjunction, implication, and negation, and
+	any relation defined from these.”
 
 Proposition 12: (propositional-relations-class ∈ class-of-classes)
 
@@ -69,7 +69,7 @@ Proposition 16: (¬ ∈ propositional-relations-class)
 
 Proposition 17: (≠ ∈ propositional-relations-class)
 
-Axiom-inclusion 18: “= is a binary relation such that, given any two
+Axiom 14: “= is a binary relation such that, given any two
 	theoretical-objcts x and y, if x=y then y=x, and for every statement
 	s, s is valid iif subst s is valid.”
 
@@ -79,7 +79,7 @@ Definition 20: “Inequality is defined as the negation of equality.”
 
 Formal definition 21: ((x₂ ≠ y₂) = ¬((x₂ = y₂)))
 
-Axiom-inclusion 22: “propositions is a class whose elements are truth,
+Axiom 16: “propositions is a class whose elements are truth,
 	falsehood, all elements of the theory-formula-statement class, whose
 	relation is an element-of propositional-relations-class, and all
 	theory-formula-statements whose relation is defined from these. Its
@@ -89,31 +89,29 @@ Proposition 23: (true ∈ class-of-classes)
 
 Proposition 24: (false ∈ class-of-classes)
 
-Axiom-inclusion 25: “If P is a proposition, then either the statement
-	P has truth value true,or the statement P has truth value falsehood.”
+Axiom 18: “If P is a proposition, then either the statement P has
+	truth value true,or the statement P has truth value falsehood.”
 
 Proposition 26: (true is true)
 
 Proposition 27: (false is false)
 
-Axiom-inclusion 28: “¬ is a unary relation. If P is a proposition and
-	it has truth-value truth, then ¬P has-truth-value false. Conversely,
-	if P is a proposition and it has truth-value falsehood, then ¬P has
+Axiom 20: “¬ is a unary relation. If P is a proposition and it has
+	truth-value truth, then ¬P has-truth-value false. Conversely, if P is
+	a proposition and it has truth-value falsehood, then ¬P has
 	truth-value true.”
 
-Axiom-inclusion 29: “If P has-truth-value t, ¬(¬(P)) has-truth-value
-	t.”
+Axiom 22: “If P has-truth-value t, ¬(¬(P)) has-truth-value t.”
 
 Proposition 30: ((𝐱₁ is 𝐱₂) ⟹ (¬(¬(𝐱₁)) is 𝐱₂))
 
-Axiom-inclusion 31: “If P and Q are logical propositions, (P ∧ Q) is
-	true if and only if both P and Q are true, otherwise it is false.”
+Axiom 24: “If P and Q are logical propositions, (P ∧ Q) is true if and
+	only if both P and Q are true, otherwise it is false.”
 
-Axiom-inclusion 32: “If P and Q are logical propositions, (P ⇔ Q) is
-	true if and only if ((P ⇒ Q) ∧ (Q ⇒ P)), otherwise it is false.”
+Axiom 26: “If P and Q are logical propositions, (P ⇔ Q) is true if and
+	only if ((P ⇒ Q) ∧ (Q ⇒ P)), otherwise it is false.”
 
-Axiom-inclusion 33: “If T is a theory, and both P is valid and ¬P is
-	valid in T, then this theory is an element of contradictory-theories
-	class.”
+Axiom 28: “If T is a theory, and both P is valid and ¬P is valid in T,
+	then this theory is an element of contradictory-theories class.”
 
 Proposition 34: (((φ is true) ∧ (φ is false)) ⟹ (φ ∈ contradictory-statement))

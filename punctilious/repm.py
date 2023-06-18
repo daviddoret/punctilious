@@ -1,4 +1,5 @@
 """The Representation Module (repm) is an independant module that provides IO and string manipulation utilities."""
+import textwrap
 
 _serif_bold_dict = {
     'a': '𝐚', 'b': '𝐛', 'c': '𝐜', 'd': '𝐝', 'e': '𝐞', 'f': '𝐟', 'g': '𝐠',
@@ -42,6 +43,21 @@ def monospace(s=None):
     if s is None or s == '':
         return ''
     return ''.join([_monospace_dict.get(c, c) for c in s])
+
+
+def wrap(text):
+    """Wrap text for friendly rendering as text, e.g. in a console.
+
+    :param text:
+    :return:
+    """
+    return '\n'.join(
+        textwrap.wrap(
+            text=text, width=70,
+            subsequent_indent=f'\t',
+            break_on_hyphens=False,
+            expand_tabs=True,
+            tabsize=4))
 
 
 class Representation:

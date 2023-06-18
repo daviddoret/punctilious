@@ -27,79 +27,86 @@ Let natural-number be a simple-objct in 𝒰₁.
 
 𝐓𝐡𝐞𝐨𝐫𝐲 𝐞𝐥𝐚𝐛𝐨𝐫𝐚𝐭𝐢𝐨𝐧:
 
-Axiom-inclusion 0: “A theory is a... (define punctilious data model).”
+Axiom 2: “A theory is a... (define punctilious data model).”
+Let postulate a₁ in inference rule 1.
 
-Axiom-inclusion 1: “An (axiomatic) class is a collection of
-	theoretical objects that are unambiguously defined by the axioms of
-	the theory it belongs to.”
+Axiom 4: “An (axiomatic) class is a collection of theoretical objects
+	that are unambiguously defined by the axioms of the theory it belongs
+	to.”
+Let postulate a₃ in inference rule 1.
 
-Axiom-inclusion 2: “The class of classes is the class of all classes
-	defined in the universe-of-discourse (TODO: Or foundation theory?).”
+Axiom 6: “The class of classes is the class of all classes defined in
+	the universe-of-discourse (TODO: Or foundation theory?).”
+Let postulate a₅ in inference rule 1.
 
 Proposition 3: (class-of-classes ∈ class-of-classes)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(class-of-classes ∈ class-of-classes)                                  │ Follows from axiom-inclusion 1.
+	(class-of-classes ∈ class-of-classes)                                  │ Follows from axiom 4.
 
-Axiom-inclusion 4: “The theory-class is the class of all theories”
+Axiom 8: “The theory-class is the class of all theories”
+Let postulate a₇ in inference rule 1.
 
 Proposition 5: (theory-class ∈ class-of-classes)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(theory-class ∈ class-of-classes)                                      │ Follows from axiom-inclusion 1.
+	(theory-class ∈ class-of-classes)                                      │ Follows from axiom 4.
 
-Proposition 6: (𝑡₁ ∈ theory-class)
+Proposition 6: (inference rule 1 ∈ theory-class)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(𝑡₁ ∈ theory-class)                                                    │ Follows from axiom-inclusion 1.
+	(inference rule 1 ∈ theory-class)                                      │ Follows from axiom 4.
 
-Axiom-inclusion 7: “truth-values is the class whose elements are the
+Axiom 10: “truth-values is the class whose elements are the
 	theoretical-objects truth and falsehood.”
+Let postulate a₉ in inference rule 1.
 
 Proposition 8: (truth-values ∈ class-of-classes)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(truth-values ∈ class-of-classes)                                      │ Follows from axiom-inclusion 2.
+	(truth-values ∈ class-of-classes)                                      │ Follows from axiom 6.
 
 Proposition 9: (true ∈ truth-values)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(true ∈ truth-values)                                                  │ Follows from axiom-inclusion 2.
+	(true ∈ truth-values)                                                  │ Follows from axiom 6.
 
 Proposition 10: (false ∈ truth-values)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(false ∈ truth-values)                                                 │ Follows from axiom-inclusion 2.
+	(false ∈ truth-values)                                                 │ Follows from axiom 6.
 
-Axiom-inclusion 11: “propositional-relations is the class whose
-	elements are the relations: conjunction, disjunction, implication,
-	and negation, and any relation defined from these.”
+Axiom 12: “propositional-relations is the class whose elements are the
+	relations: conjunction, disjunction, implication, and negation, and
+	any relation defined from these.”
+Let postulate a₁₁ in inference rule 1.
 
 Proposition 12: (propositional-relations-class ∈ class-of-classes)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(propositional-relations-class ∈ class-of-classes)                     │ Follows from axiom-inclusion 2.
+	(propositional-relations-class ∈ class-of-classes)                     │ Follows from axiom 6.
 
 Proposition 13: (∧ ∈ propositional-relations-class)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(∧ ∈ propositional-relations-class)                                    │ Follows from axiom-inclusion 11.
+	(∧ ∈ propositional-relations-class)                                    │ Follows from axiom 12.
 
 Proposition 14: (∨ ∈ propositional-relations-class)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(∨ ∈ propositional-relations-class)                                    │ Follows from axiom-inclusion 11.
+	(∨ ∈ propositional-relations-class)                                    │ Follows from axiom 12.
 
 Proposition 15: (⟹ ∈ propositional-relations-class)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(⟹ ∈ propositional-relations-class)                                    │ Follows from axiom-inclusion 11.
+	(⟹ ∈ propositional-relations-class)                                    │ Follows from axiom 12.
 
 Proposition 16: (¬ ∈ propositional-relations-class)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(¬ ∈ propositional-relations-class)                                    │ Follows from axiom-inclusion 11.
+	(¬ ∈ propositional-relations-class)                                    │ Follows from axiom 12.
 
 Proposition 17: (≠ ∈ propositional-relations-class)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(≠ ∈ propositional-relations-class)                                    │ Follows from axiom-inclusion 11.
+	(≠ ∈ propositional-relations-class)                                    │ Follows from axiom 12.
 
-Axiom-inclusion 18: “= is a binary relation such that, given any two
+Axiom 14: “= is a binary relation such that, given any two
 	theoretical-objcts x and y, if x=y then y=x, and for every statement
 	s, s is valid iif subst s is valid.”
+Let postulate a₁₃ in inference rule 1.
 
 Proposition 19: ((x₁ = y₁) ⟹ (y₁ = x₁))
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	((x₁ = y₁) ⟹ (y₁ = x₁))                                                │ Follows from axiom-inclusion 18.
+	((x₁ = y₁) ⟹ (y₁ = x₁))                                                │ Follows from axiom 14.
 
 Definition 20: “Inequality is defined as the negation of equality.”
 
@@ -107,53 +114,58 @@ Formal definition 21: ((x₂ ≠ y₂) = ¬((x₂ = y₂)))
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧
 	((x₂ ≠ y₂) = ¬((x₂ = y₂)))                                             │ Follows from 𝐝₂₀.
 
-Axiom-inclusion 22: “propositions is a class whose elements are truth,
+Axiom 16: “propositions is a class whose elements are truth,
 	falsehood, all elements of the theory-formula-statement class, whose
 	relation is an element-of propositional-relations-class, and all
 	theory-formula-statements whose relation is defined from these. Its
 	elements are called propositions.”
+Let postulate a₁₅ in inference rule 1.
 
 Proposition 23: (true ∈ class-of-classes)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(true ∈ class-of-classes)                                              │ Follows from axiom-inclusion 22.
+	(true ∈ class-of-classes)                                              │ Follows from axiom 16.
 
 Proposition 24: (false ∈ class-of-classes)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(false ∈ class-of-classes)                                             │ Follows from axiom-inclusion 22.
+	(false ∈ class-of-classes)                                             │ Follows from axiom 16.
 
-Axiom-inclusion 25: “If P is a proposition, then either the statement
-	P has truth value true,or the statement P has truth value falsehood.”
+Axiom 18: “If P is a proposition, then either the statement P has
+	truth value true,or the statement P has truth value falsehood.”
+Let postulate a₁₇ in inference rule 1.
 
 Proposition 26: (true is true)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(true is true)                                                         │ Follows from axiom-inclusion 22.
+	(true is true)                                                         │ Follows from axiom 16.
 
 Proposition 27: (false is false)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(false is false)                                                       │ Follows from axiom-inclusion 22.
+	(false is false)                                                       │ Follows from axiom 16.
 
-Axiom-inclusion 28: “¬ is a unary relation. If P is a proposition and
-	it has truth-value truth, then ¬P has-truth-value false. Conversely,
-	if P is a proposition and it has truth-value falsehood, then ¬P has
+Axiom 20: “¬ is a unary relation. If P is a proposition and it has
+	truth-value truth, then ¬P has-truth-value false. Conversely, if P is
+	a proposition and it has truth-value falsehood, then ¬P has
 	truth-value true.”
+Let postulate a₁₉ in inference rule 1.
 
-Axiom-inclusion 29: “If P has-truth-value t, ¬(¬(P)) has-truth-value
-	t.”
+Axiom 22: “If P has-truth-value t, ¬(¬(P)) has-truth-value t.”
+Let postulate a₂₁ in inference rule 1.
 
 Proposition 30: ((𝐱₁ is 𝐱₂) ⟹ (¬(¬(𝐱₁)) is 𝐱₂))
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	((𝐱₁ is 𝐱₂) ⟹ (¬(¬(𝐱₁)) is 𝐱₂))                                        │ Follows from axiom-inclusion 29.
+	((𝐱₁ is 𝐱₂) ⟹ (¬(¬(𝐱₁)) is 𝐱₂))                                        │ Follows from axiom 22.
 
-Axiom-inclusion 31: “If P and Q are logical propositions, (P ∧ Q) is
-	true if and only if both P and Q are true, otherwise it is false.”
+Axiom 24: “If P and Q are logical propositions, (P ∧ Q) is true if and
+	only if both P and Q are true, otherwise it is false.”
+Let postulate a₂₃ in inference rule 1.
 
-Axiom-inclusion 32: “If P and Q are logical propositions, (P ⇔ Q) is
-	true if and only if ((P ⇒ Q) ∧ (Q ⇒ P)), otherwise it is false.”
+Axiom 26: “If P and Q are logical propositions, (P ⇔ Q) is true if and
+	only if ((P ⇒ Q) ∧ (Q ⇒ P)), otherwise it is false.”
+Let postulate a₂₅ in inference rule 1.
 
-Axiom-inclusion 33: “If T is a theory, and both P is valid and ¬P is
-	valid in T, then this theory is an element of contradictory-theories
-	class.”
+Axiom 28: “If T is a theory, and both P is valid and ¬P is valid in T,
+	then this theory is an element of contradictory-theories class.”
+Let postulate a₂₇ in inference rule 1.
 
 Proposition 34: (((φ is true) ∧ (φ is false)) ⟹ (φ ∈ contradictory-statement))
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐚𝐱𝐢𝐨𝐦
-	(((φ is true) ∧ (φ is false)) ⟹ (φ ∈ contradictory-statement))         │ Follows from axiom-inclusion 33.
+	(((φ is true) ∧ (φ is false)) ⟹ (φ ∈ contradictory-statement))         │ Follows from axiom 28.
