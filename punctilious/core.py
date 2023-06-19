@@ -1765,7 +1765,7 @@ class InferenceRuleInclusion(Statement):
 
     def repr_as_statement(self, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        text = f'Let us allow the inference-rule {self.inference_rule.repr_fully_qualified_name()} in {self.theory.repr_reference()}.'
+        text = f'Let allow the {repm.serif_bold(self.inference_rule.header.reference)} inference-rule in {self.theory.repr_reference()}.'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -3511,6 +3511,7 @@ class InferenceRuleDict(collections.UserDict):
             self._absorption = InferenceRule(
                 universe_of_discourse=self.u,
                 symbol=Symbol('absorb', index=None),
+                header='absorption',
                 dashed_name=DashedName('absorption'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -3603,6 +3604,7 @@ class InferenceRuleDict(collections.UserDict):
             self._biconditional_elimination_left = InferenceRule(
                 universe_of_discourse=self.u,
                 symbol=Symbol('bel', index=None),
+                header='biconditional elimination (left)',
                 dashed_name=DashedName('biconditional-elimination-left'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -3662,6 +3664,7 @@ class InferenceRuleDict(collections.UserDict):
             self._biconditional_elimination_right = InferenceRule(
                 universe_of_discourse=self.u,
                 symbol=Symbol('ber', index=None),
+                header='biconditional elimination (right)',
                 dashed_name=DashedName('biconditional-elimination-right'),
                 infer_formula=infer_formula,
                 verify_args=verify_compatibility)
@@ -3727,6 +3730,7 @@ class InferenceRuleDict(collections.UserDict):
             self._biconditional_introduction = InferenceRule(
                 universe_of_discourse=self.u,
                 symbol=Symbol('bi', index=None),
+                header='biconditional introduction',
                 dashed_name=DashedName('biconditional-introduction'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -3782,6 +3786,7 @@ class InferenceRuleDict(collections.UserDict):
             self._conjunction_elimination_left = InferenceRule(
                 universe_of_discourse=self.u,
                 symbol=Symbol('cel', index=None),
+                header='conjunction elimination (left)',
                 dashed_name=DashedName('conjunction-elimination-left'),
                 infer_formula=infer_formula,
                 verify_args=verify_compatibility)
@@ -3837,6 +3842,7 @@ class InferenceRuleDict(collections.UserDict):
             self._conjunction_elimination_right = InferenceRule(
                 universe_of_discourse=self.u,
                 symbol=Symbol('cer', index=None),
+                header='conjunction elimination (right)',
                 dashed_name=DashedName('conjunction-elimination-right'),
                 infer_formula=infer_formula,
                 verify_args=verify_compatibility)
@@ -3894,6 +3900,7 @@ class InferenceRuleDict(collections.UserDict):
             self._conjunction_introduction = InferenceRule(
                 universe_of_discourse=self.u,
                 symbol=Symbol('ci', index=None),
+                header='conjunction introduction',
                 dashed_name=DashedName('conjunction-introduction'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -3963,6 +3970,7 @@ class InferenceRuleDict(collections.UserDict):
             self._disjunction_introduction = InferenceRule(
                 universe_of_discourse=self.u,
                 symbol=Symbol('di', index=None),
+                header='disjunction introduction',
                 dashed_name=DashedName('disjunction-introduction'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -4024,6 +4032,7 @@ class InferenceRuleDict(collections.UserDict):
             self._double_negation_elimination = InferenceRule(
                 universe_of_discourse=self.u,
                 symbol=Symbol('dne', index=None),
+                header='double negation elimination',
                 dashed_name=DashedName('double-negation-elimination'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -4073,6 +4082,7 @@ class InferenceRuleDict(collections.UserDict):
             self._double_negation_introduction = InferenceRule(
                 universe_of_discourse=self.u,
                 symbol=Symbol('dni', index=None),
+                header='double negation introduction',
                 dashed_name=DashedName('double-negation-introduction'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -4217,6 +4227,7 @@ class InferenceRuleDict(collections.UserDict):
             self._modus_ponens = InferenceRule(
                 universe_of_discourse=self.u,
                 symbol=Symbol('mp', index=None),
+                header='modus ponens',
                 dashed_name=DashedName('modus-ponens'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -4325,8 +4336,9 @@ class InferenceRuleDict(collections.UserDict):
         if self._modus_ponens is None:
             self._modus_ponens = InferenceRule(
                 universe_of_discourse=self.u,
-                symbol=Symbol('mp', index=None),
-                dashed_name=DashedName('modus-ponens'),
+                symbol=Symbol('vs', index=None),
+                header='variable substitution',
+                dashed_name=DashedName('variable-substitution'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._modus_ponens
@@ -4406,7 +4418,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._absorption is None:
             self._absorption = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.absorption)
+                i=self.t.u.i.absorption,
+                header='absorption')
         return self._absorption
 
     @property
@@ -4454,7 +4467,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._biconditional_elimination_left is None:
             self._biconditional_elimination_left = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.biconditional_elimination_left)
+                i=self.t.u.i.biconditional_elimination_left,
+                header='biconditional elimination (left)')
         return self._biconditional_elimination_left
 
     @property
@@ -4469,7 +4483,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._biconditional_elimination_right is None:
             self._biconditional_elimination_right = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.biconditional_elimination_right)
+                i=self.t.u.i.biconditional_elimination_right,
+                header='biconditional elimination (right)')
         return self._biconditional_elimination_right
 
     @property
@@ -4484,7 +4499,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._biconditional_introduction is None:
             self._biconditional_introduction = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.biconditional_introduction)
+                i=self.t.u.i.biconditional_introduction,
+                header='biconditional introduction')
         return self._biconditional_introduction
 
     @property
@@ -4499,7 +4515,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._conjunction_elimination_left is None:
             self._conjunction_elimination_left = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.conjunction_elimination_left)
+                i=self.t.u.i.conjunction_elimination_left,
+                header='conjunction elimination (left)')
         return self._conjunction_elimination_left
 
     @property
@@ -4514,7 +4531,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._conjunction_elimination_right is None:
             self._conjunction_elimination_right = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.conjunction_elimination_right)
+                i=self.t.u.i.conjunction_elimination_right,
+                header='conjunction elimination (right)')
         return self._conjunction_elimination_right
 
     @property
@@ -4529,7 +4547,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._conjunction_introduction is None:
             self._conjunction_introduction = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.conjunction_introduction)
+                i=self.t.u.i.conjunction_introduction,
+                header='conjunction introduction')
         return self._conjunction_introduction
 
     @property
@@ -4588,7 +4607,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._disjunction_introduction is None:
             self._disjunction_introduction = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.disjunction_introduction)
+                i=self.t.u.i.disjunction_introduction,
+                header='disjunction introduction')
         return self._disjunction_introduction
 
     @property
@@ -4625,7 +4645,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._double_negation_elimination is None:
             self._double_negation_elimination = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.double_negation_elimination)
+                i=self.t.u.i.double_negation_elimination,
+                header='double negation elimination')
         return self._double_negation_elimination
 
     @property
@@ -4640,7 +4661,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._double_negation_introduction is None:
             self._double_negation_introduction = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.double_negation_introduction)
+                i=self.t.u.i.double_negation_introduction,
+                header='double negation introduction')
         return self._double_negation_introduction
 
     @property
@@ -4660,7 +4682,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._modus_ponens is None:
             self._modus_ponens = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.modus_ponens)
+                i=self.t.u.i.modus_ponens,
+                header='modus ponens')
         return self._modus_ponens
 
     @property
@@ -5173,8 +5196,8 @@ class InferredStatement(FormulaStatement):
 
     def __init__(
             self,
-            *args,
-            i: InferenceRule,
+            *parameters,
+            i: InferenceRule,  # TODO: DESIGN-FLAW: PASS InferenceRuleInclusion instead
             t: TheoryElaborationSequence,
             symbol: (None, str, Symbol) = None,
             cat: (None, StatementCategory) = None,
@@ -5184,11 +5207,12 @@ class InferredStatement(FormulaStatement):
         """Include (aka allow) an inference_rule in a theory-elaboration.
         """
         self._inference_rule = i
+        self._parameters = tuple(parameters)
         verify(
-            self._inference_rule.verify_args(*args, t=t),
+            self._inference_rule.verify_args(*parameters, t=t),
             'Parameters ⌜*args⌝ are not compatible with inference-rule ⌜self⌝',
-            args=args, slf=self, t=t)
-        valid_proposition = self._inference_rule.infer_formula(*args, t=t)
+            args=parameters, slf=self, t=t)
+        valid_proposition = self._inference_rule.infer_formula(*parameters, t=t)
         super().__init__(
             theory=t,
             valid_proposition=valid_proposition,
@@ -5203,6 +5227,10 @@ class InferredStatement(FormulaStatement):
             repm.prnt(self.repr_as_statement())
 
     @property
+    def parameters(self) -> tuple:
+        return self._parameters
+
+    @property
     def inference_rule(self) -> InferenceRule:
         """Return the inference-rule upon which this inference-rule-inclusion is based.
         """
@@ -5210,14 +5238,15 @@ class InferredStatement(FormulaStatement):
 
     def repr_as_statement(self, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        text = f'{self.repr_as_title(cap=True)}: “{self.valid_proposition.repr_as_formula()}”'
-        return '\n'.join(
-            textwrap.wrap(
-                text=text, width=70,
-                subsequent_indent=f'\t',
-                break_on_hyphens=False,
-                expand_tabs=True,
-                tabsize=4))
+        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
+        output = repm.wrap(output)
+        if output_proofs:
+            output = output + f'\n\tBy the {repm.serif_bold(self.inference_rule.header.reference)} inference-rule:'
+            for parameter in self.parameters:
+                output = output + f'\n\t{parameter.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(parameter.repr_as_ref())}.'
+            output = output + f'\n\t{"─" * 71}┤'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+        return output
 
 
 def apply_negation(phi: Formula) -> Formula:
