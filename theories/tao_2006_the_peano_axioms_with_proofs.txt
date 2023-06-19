@@ -27,6 +27,10 @@ Let natural-number be a simple-objct in 𝒰₁.
 
 𝐓𝐡𝐞𝐨𝐫𝐲 𝐞𝐥𝐚𝐛𝐨𝐫𝐚𝐭𝐢𝐨𝐧:
 
+# 𝟐 𝐓𝐡𝐞 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐧𝐮𝐦𝐛𝐞𝐫𝐬
+
+## 𝟐.𝟏 𝐓𝐡𝐞 𝐩𝐞𝐚𝐧𝐨 𝐚𝐱𝐢𝐨𝐦𝐬
+
 Axiom 2.1: “0 is a natural number.”
 Let postulate a₂₉ in inference rule theory 2.1: the Peano axioms.
 
@@ -65,22 +69,22 @@ Proposition 2.2.5: ((((0)++)++)++ is-a natural-number)
 	───────────────────────────────────────────────────────────────────────┤
 	((((0)++)++)++ is-a natural-number)                                    │ ∎
 
-Definition 8: “We define 1 to be the number 0++, 2 to be the number
+Definition 10: “We define 1 to be the number 0++, 2 to be the number
 	(0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 :=
 	0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote
 	the statement that x is defined to equal y.)”
 
 Formal definition 2.1.3.1: (1 = (0)++)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧
-	(1 = (0)++)                                                            │ Follows from 𝐝₈.
+	(1 = (0)++)                                                            │ Follows from 𝐝₁₀.
 
 Formal definition 2.1.3.2: (2 = ((0)++)++)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧
-	(2 = ((0)++)++)                                                        │ Follows from 𝐝₈.
+	(2 = ((0)++)++)                                                        │ Follows from 𝐝₁₀.
 
 Formal definition 2.1.3.3: (3 = (((0)++)++)++)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧
-	(3 = (((0)++)++)++)                                                    │ Follows from 𝐝₈.
+	(3 = (((0)++)++)++)                                                    │ Follows from 𝐝₁₀.
 
 Proposition 2.1.3.1.b: ((0)++ = 1)
 	By the 𝐦𝐨𝐝𝐮𝐬 𝐩𝐨𝐧𝐞𝐧𝐬 inference-rule:
@@ -89,7 +93,7 @@ Proposition 2.1.3.1.b: ((0)++ = 1)
 	───────────────────────────────────────────────────────────────────────┤
 	((0)++ = 1)                                                            │ ∎
 
-Proposition 13: (2 = (1)++)
+Proposition 15: (2 = (1)++)
 	𝐒𝐮𝐛𝐬𝐭𝐢𝐭𝐮𝐭𝐢𝐨𝐧 𝐨𝐟 𝐞𝐪𝐮𝐚𝐥 𝐭𝐞𝐫𝐦𝐬
 	(2 = ((0)++)++)                                                        │ Follows from 𝐟𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟐.
 	((0)++ = 1)                                                            │ Follows from 𝐩𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟏.𝐛.
@@ -103,14 +107,14 @@ Proposition 2.1.3.2.c: (((0)++)++ = 2)
 	───────────────────────────────────────────────────────────────────────┤
 	(((0)++)++ = 2)                                                        │ ∎
 
-Proposition 15: ((1)++ = 2)
+Proposition 17: ((1)++ = 2)
 	𝐒𝐮𝐛𝐬𝐭𝐢𝐭𝐮𝐭𝐢𝐨𝐧 𝐨𝐟 𝐞𝐪𝐮𝐚𝐥 𝐭𝐞𝐫𝐦𝐬
 	(((0)++)++ = 2)                                                        │ Follows from 𝐩𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟐.𝐜.
 	((0)++ = 1)                                                            │ Follows from 𝐩𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟏.𝐛.
 	───────────────────────────────────────────────────────────────────────┤
 	((1)++ = 2)                                                            │ ∎
 
-Proposition 16: (3 = (2)++)
+Proposition 18: (3 = (2)++)
 	𝐒𝐮𝐛𝐬𝐭𝐢𝐭𝐮𝐭𝐢𝐨𝐧 𝐨𝐟 𝐞𝐪𝐮𝐚𝐥 𝐭𝐞𝐫𝐦𝐬
 	(3 = (((0)++)++)++)                                                    │ Follows from 𝐟𝐨𝐫𝐦𝐚𝐥 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑.
 	(((0)++)++ = 2)                                                        │ Follows from 𝐩𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟐.𝐜.
@@ -124,14 +128,14 @@ Proposition 2.1.3.3.c: ((((0)++)++)++ = 3)
 	───────────────────────────────────────────────────────────────────────┤
 	((((0)++)++)++ = 3)                                                    │ ∎
 
-Proposition 18: ((2)++ = 3)
+Proposition 20: ((2)++ = 3)
 	𝐒𝐮𝐛𝐬𝐭𝐢𝐭𝐮𝐭𝐢𝐨𝐧 𝐨𝐟 𝐞𝐪𝐮𝐚𝐥 𝐭𝐞𝐫𝐦𝐬
 	((((0)++)++)++ = 3)                                                    │ Follows from 𝐩𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑.𝐜.
 	(((0)++)++ = 2)                                                        │ Follows from 𝐩𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟐.𝐜.
 	───────────────────────────────────────────────────────────────────────┤
 	((2)++ = 3)                                                            │ ∎
 
-Proposition 19: (3 is-a natural-number)
+Proposition 21: (3 is-a natural-number)
 	𝐒𝐮𝐛𝐬𝐭𝐢𝐭𝐮𝐭𝐢𝐨𝐧 𝐨𝐟 𝐞𝐪𝐮𝐚𝐥 𝐭𝐞𝐫𝐦𝐬
 	((((0)++)++)++ is-a natural-number)                                    │ Follows from 𝐩𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟐.𝟓.
 	((((0)++)++)++ = 3)                                                    │ Follows from 𝐩𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟑.𝟑.𝐜.
@@ -140,7 +144,7 @@ Proposition 19: (3 is-a natural-number)
 
 Formal definition 2.1.3.3.a: (4 = ((((0)++)++)++)++)
 	𝐃𝐞𝐫𝐢𝐯𝐚𝐭𝐢𝐨𝐧 𝐟𝐫𝐨𝐦 𝐧𝐚𝐭𝐮𝐫𝐚𝐥 𝐥𝐚𝐧𝐠𝐮𝐚𝐠𝐞 𝐝𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧
-	(4 = ((((0)++)++)++)++)                                                │ Follows from 𝐝₈.
+	(4 = ((((0)++)++)++)++)                                                │ Follows from 𝐝₁₀.
 
 Axiom 2.3: “0 is not the successor of any natural number; i.e., we
 	have n++ ≠ 0 for every natural number n.”
@@ -164,7 +168,7 @@ Proposition 2.1.6.2: (((((0)++)++)++)++ = 4)
 	───────────────────────────────────────────────────────────────────────┤
 	(((((0)++)++)++)++ = 4)                                                │ ∎
 
-Proposition 25: (4 ≠ 0)
+Proposition 27: (4 ≠ 0)
 	𝐒𝐮𝐛𝐬𝐭𝐢𝐭𝐮𝐭𝐢𝐨𝐧 𝐨𝐟 𝐞𝐪𝐮𝐚𝐥 𝐭𝐞𝐫𝐦𝐬
 	(((((0)++)++)++)++ ≠ 0)                                                │ Follows from 𝐩𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟔.𝟏.
 	(((((0)++)++)++)++ = 4)                                                │ Follows from 𝐩𝐫𝐨𝐩𝐨𝐬𝐢𝐭𝐢𝐨𝐧 𝟐.𝟏.𝟔.𝟐.

@@ -13,6 +13,9 @@ t = u.t(
     header=f'theory 2.1: the Peano axioms',
     extended_theory=fs1.ft, dashed_name='tao-2006-theory-2-1-the-peano-axioms')
 
+s_2 = t.open_section('The natural numbers', section_number=2)
+s_2_1 = t.open_section('The Peano axioms', section_parent=s_2)
+
 # simple-objct declarations
 zero = u.o.declare('0')
 one = u.o.declare('1')

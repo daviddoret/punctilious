@@ -2718,10 +2718,11 @@ class TheoryElaborationSequence(TheoreticalObjct):
             yield self
             visited.update({self})
         for statement in set(self.statements).difference(visited):
-            yield statement
-            visited.update({statement})
-            yield from statement.iterate_theoretical_objcts_references(
-                include_root=False, visited=visited)
+            if not is_in_class(statement, declarative_class_list.atheoretical_statement):
+                yield statement
+                visited.update({statement})
+                yield from statement.iterate_theoretical_objcts_references(
+                    include_root=False, visited=visited)
         if self.extended_theory is not None and self.extended_theory not in visited:
             # Iterate the extended-theory.
             if self.extended_theory_limit is not None:
