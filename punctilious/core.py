@@ -4349,7 +4349,15 @@ class InferenceRuleDict(collections.UserDict):
 
     @property
     def variable_substitution(self) -> InferenceRule:
-        """An inference-rule: P ⊢ P'
+        """An inference-rule: P, X→Y ⊢ P' where:
+         - P is an input statement,
+         - X→Y is a mapping between the free-variables in P and their substitution values,
+         - P' is a new formula identical to P except that free-variables have been
+           substituted according to the X→Y mapping.
+
+        In practice, the mapping X→Y is implicit. A sequence Y' of substitution values
+        is provided as an input, where substitution values are indexed by the canonical-order
+        of their corresponding free-variables in the ordered set of free-variables in P.
 
         Abridged property: u.i.vs
 
@@ -4375,76 +4383,40 @@ class InferenceRuleDict(collections.UserDict):
         the inference-rule is automatically created.
         """
 
-        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
+        def infer_formula(p, *y_sequence, t: TheoryElaborationSequence) -> Formula:
             """
 
             :param args: ⌜ P ⌝  a statement, o1, o2, ... theoretical-objcts in canonical order.
             :param t:
             :return: A formula P'
             """
-            p = unpack_formula(args[0])
-            mask = p.get_variable_ordered_set()
-            p_prime = unpack_formula(args[1])  # Received as a statement-parameter to prove that p is true in t.
-            # Check for mask-formula-similitude and simultaneously,
-            # retrieve all free-variable values.
-            similitude, free_variables_values = p_prime._is_masked_formula_similar_to(
-                o2=p, mask=mask)
-            # Build a variable substitution map from the variable values.
-            substitution_map = dict((v, k) for k, v in free_variables_values.items())
-            # Finally, build the concluding proposition by applying
-            # variable substitutions.
-            conclusion = q.substitute(
-                substitution_map=substitution_map, target_theory=t)
-            return conclusion  # TODO: Provide support for statements that are atomic propositional formula, that is without relation or where the objct is a 0-ary relation.
+            x_oset = unpack_formula(p.get_variable_ordered_set())
+            x_y_map = dict((x, y) for x, y in zip(x_oset, y_sequence))
+            p_prime = p.substitute(substitution_map=x_y_map, target_theory=t)
+            return p_prime  # TODO: Provide support for statements that are atomic propositional formula, that is without relation or where the objct is a 0-ary relation.
 
-        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
-            """
-
-            :param args: A statement (P ⟹ Q), and a statement P
-            :param t:
-            :return: A formula Q
-            """
-            verify(
-                len(args) == 2,
-                'Exactly 2 items are expected in ⌜*args⌝ .',
-                args=args, t=t, slf=self)
-            p_implies_q = args[0]
-            verify(
-                t.contains_theoretical_objct(p_implies_q),
-                'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-                p_implies_q=p_implies_q, t=t, slf=self)
-            p_implies_q = unpack_formula(p_implies_q)
-            verify(
-                p_implies_q.relation is t.u.r.implication,
-                'The relation of formula ⌜p_implies_q⌝ must be an implication.',
-                p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
-            p_prime = args[1]
-            verify(
-                t.contains_theoretical_objct(p_prime),
-                'Statement ⌜p_prime⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-                p_prime=p_prime, t=t, slf=self)
-            p_prime = unpack_formula(p_prime)
-            p = unpack_formula(p_implies_q.parameters[0])
-            # The antecedant of the implication may contain free-variables,
-            # store these in a mask for masked-formula-similitude comparison.
-            mask = p.get_variable_ordered_set()
-            masked_formula_similitude = p_prime.is_masked_formula_similar_to(o2=p, mask=mask)
-            verify(
-                masked_formula_similitude,
-                'Formula ⌜p⌝ in statement ⌜p_implies_q⌝ must be masked-formula-similar to statement ⌜p_prime⌝.',
-                masked_formula_similitude=masked_formula_similitude, p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t,
-                slf=self)
+        def verify_args(p: FormulaStatement, *y_sequence, t: TheoryElaborationSequence) -> bool:
+            verify(t.contains_theoretical_objct(p),
+                   '⌜p⌝ is not contained in theoretical-elaboration-sequence ⌜t⌝.',
+                   p=p, y_sequence=y_sequence, slf=self, t=t)
+            x_oset = p.get_variable_ordered_set()
+            verify(len(x_oset) == len(y_sequence),
+                   'The cardinality of the canonically ordered free-variables.')
+            for y in y_sequence:
+                verify(t.contains_theoretical_objct(y),
+                       '⌜y⌝ is not contained in theoretical-elaboration-sequence ⌜t⌝.',
+                       y=y, y_sequence=y_sequence, x_oset=x_oset, p=p, slf=self, t=t)
             return True
 
-        if self._modus_ponens is None:
-            self._modus_ponens = InferenceRule(
+        if self._variable_substitution is None:
+            self._variable_substitution = InferenceRule(
                 universe_of_discourse=self.u,
                 symbol=Symbol('vs', index=None),
                 header='variable substitution',
                 dashed_name=DashedName('variable-substitution'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
-        return self._modus_ponens
+        return self._variable_substitution
 
     @property
     def vs(self) -> InferenceRule:
@@ -4497,6 +4469,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         self._double_negation_elimination = None
         self._double_negation_introduction = None
         self._modus_ponens = None
+        self._variable_substitution = None
 
     @property
     def absorb(self) -> InferenceRuleInclusion:
@@ -4799,6 +4772,85 @@ class InferenceRuleInclusionDict(collections.UserDict):
         the inference-rule is automatically created.
         """
         return self.modus_ponens
+
+    @property
+    def variable_substitution(self) -> InferenceRuleInclusion:
+        """An inference-rule: P, X→Y ⊢ P' where:
+         - P is an input statement,
+         - X→Y is a mapping between the free-variables in P and their substitution values,
+         - P' is a new formula identical to P except that free-variables have been
+           substituted according to the X→Y mapping.
+
+        In practice, the mapping X→Y is implicit. A sequence Y' of substitution values
+        is provided as an input, where substitution values are indexed by the canonical-order
+        of their corresponding free-variables in the ordered set of free-variables in P.
+
+        Abridged property: u.i.vs
+
+        Formal definition:
+        Given a statement P whose formula contains an ordered set
+        of n free-variables, ordered by their canonical order of
+        appearance in the formula,
+        given an ordered set of theoretical-objcts O of cardinality n,
+        the _variable substitution_ _inference rule_ returns a new
+        statement P' where all occurrences of variables in P were
+        replaced by their corresponding substitution values in O.
+
+        Warning:
+        To avoid inconsistent theories, one must be cautious
+        with variable manipulations. In effect, the proposition:
+            ((2n + 4) = 2(n + 2))
+        may lead to inconsistencies following variable-substitution
+        because the variable n is not typed. On the contrary:
+            (n ∈ ℕ) ⟹ ((2n + 4) = 2(n + 2))
+        where n is constrained leads to consistent results.
+
+        If the inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        if self._variable_substitution is None:
+            self._variable_substitution = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.variable_substitution,
+                header='variable substitution')
+        return self._variable_substitution
+
+    @property
+    def vs(self) -> InferenceRuleInclusion:
+        """An inference-rule: P, X→Y ⊢ P' where:
+         - P is an input statement,
+         - X→Y is a mapping between the free-variables in P and their substitution values,
+         - P' is a new formula identical to P except that free-variables have been
+           substituted according to the X→Y mapping.
+
+        In practice, the mapping X→Y is implicit. A sequence Y' of substitution values
+        is provided as an input, where substitution values are indexed by the canonical-order
+        of their corresponding free-variables in the ordered set of free-variables in P.
+
+        Unabridged property: universe_of_discourse.inference_rules.variable_substitution
+
+        Formal definition:
+        Given a statement P whose formula contains an ordered set
+        of n free-variables, ordered by their canonical order of
+        appearance in the formula,
+        given an ordered set of theoretical-objcts O of cardinality n,
+        the _variable substitution_ _inference rule_ returns a new
+        statement P' where all occurrences of variables in P were
+        replaced by their corresponding substitution values in O.
+
+        Warning:
+        To avoid inconsistent theories, one must be cautious
+        with variable manipulations. In effect, the proposition:
+            ((2n + 4) = 2(n + 2))
+        may lead to inconsistencies following variable-substitution
+        because the variable n is not typed. On the contrary:
+            (n ∈ ℕ) ⟹ ((2n + 4) = 2(n + 2))
+        where n is constrained leads to consistent results.
+
+        If the inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+        return self.variable_substitution
 
 
 class UniverseOfDiscourse(SymbolicObjct):
