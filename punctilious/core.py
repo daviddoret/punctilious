@@ -2367,6 +2367,90 @@ class Note(AtheoreticalStatement):
                 tabsize=4))
 
 
+section_category = StatementCategory(python_name='section', symbol_base='§', natural_name='section')
+
+
+class Section(AtheoreticalStatement):
+    """A (leveled) section in a theory-elaboration-sequence.
+
+    Sections allow to organize / structure (lengthy) theory-elaboration-sequences
+    to improve readability.
+
+    """
+
+    def __init__(
+            self,
+            section_title: str,
+            t: TheoryElaborationSequence,
+            section_number: (None, int) = None,
+            section_parent: (None, Section) = None,
+            echo: (None, bool) = None):
+        echo = get_config(echo, configuration.echo_note, configuration.echo_default, fallback_value=False)
+        self._section_title = section_title
+        self._section_parent = section_parent
+        self._section_level = 1 if section_parent is None else section_parent.section_level + 1
+        if section_parent is not None:
+            section_number = section_parent.get_next_section_number(section_number)
+        else:
+            section_number = t.get_next_section_number(section_number)
+        self._section_number = section_number
+        prefix = '' if section_parent is None else section_parent.section_reference + '.'
+        self._section_reference = f'{prefix}{str(section_number)}'
+        self.statement_index = t.crossreference_statement(self)
+        self._max_subsection_number = 0
+        self.category = section_category
+        symbol = Symbol(
+            base=self.category.symbol_base, index=self.statement_index)
+        header = ObjctHeader(reference=self._section_reference, category=section_category, title=section_title)
+        super().__init__(
+            symbol=symbol,
+            theory=t,
+            echo=False)
+        super()._declare_class_membership(declarative_class_list.note)
+        if echo:
+            self.echo()
+
+    def echo(self):
+        repm.prnt(self.repr_as_statement())
+
+    def get_next_section_number(self, section_number: int = None) -> int:
+        if section_number is None:
+            self._max_subsection_number += 1
+        else:
+            self._max_subsection_number = max([self._max_subsection_number + 1, section_number])
+        return self._max_subsection_number
+
+    @property
+    def max_subsection_number(self) -> int:
+        return self._max_subsection_number
+
+    def repr_as_ref(self, cap=False) -> str:
+        prefix = 'section' if self.section_level == 1 else 'sub-' * (self.section_level - 1) + 'section'
+        text = f'{prefix}{repm.serif_bold(self.section_reference)}'
+        return text
+
+    def repr_as_statement(self, output_proofs=True) -> str:
+        text = f'{"#" * self.section_level} {repm.serif_bold(self.section_reference)} {repm.serif_bold(str(self.section_title).capitalize())}'
+        text = repm.wrap(text)
+        return text
+
+    @property
+    def section_level(self) -> int:
+        return self._section_level
+
+    @property
+    def section_number(self) -> int:
+        return self._section_number
+
+    @property
+    def section_reference(self) -> str:
+        return self._section_reference
+
+    @property
+    def section_title(self) -> str:
+        return self._section_title
+
+
 class TheoryElaborationSequence(TheoreticalObjct):
     """The TheoryElaboration pythonic class models a [theory-elaboration](theory-elaboration).
 
@@ -2390,6 +2474,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
         the foundation-system, False otherwise. :param symbol:
          :param extended_theory: :param is_an_element_of_itself:
         """
+        self._max_subsection_number = 0
         self._consistency = consistency_values.undetermined
         self._stabilized = False
         self.axiom_inclusions = tuple()
@@ -2509,7 +2594,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
         """During construction, cross-reference a statement 𝒮
         with its parent theory if it is not already cross-referenced,
         and return its 0-based index in Theory.statements."""
-        assert isinstance(s, (Statement, Note))
+        assert isinstance(s, (Statement, Note, Section))
         s.theory = s.theory if hasattr(s, 'theory') else self
         assert s.theory is self
         if s not in self.statements:
@@ -2560,6 +2645,13 @@ class TheoryElaborationSequence(TheoreticalObjct):
     def extended_theory_limit(self) -> (None, Statement):
         """If this is a limited extended-theory, the inclusive statement-limit of the inclusion."""
         return self._extended_theory_limit
+
+    def get_next_section_number(self, section_number: int = None) -> int:
+        if section_number is None:
+            self._max_subsection_number += 1
+        else:
+            self._max_subsection_number = max([self._max_subsection_number + 1, section_number])
+        return self._max_subsection_number
 
     @property
     def inconsistency_introduction_inference_rule(self):
@@ -2880,6 +2972,16 @@ class TheoryElaborationSequence(TheoreticalObjct):
         text_file = open(file_path, 'w', encoding='utf-8')
         n = text_file.write(self.repr_theory_report(output_proofs=output_proofs))
         text_file.close()
+
+    def open_section(self,
+                     section_title: str,
+                     section_number: (None, int) = None,
+                     section_parent: (None, Section) = None,
+                     echo: (None, bool) = None) -> Section:
+        """Open a new section in the current theory-elaboration-sequence."""
+        return Section(section_title=section_title, section_number=section_number, section_parent=section_parent,
+                       t=self,
+                       echo=echo)
 
     @property
     def stabilized(self):
