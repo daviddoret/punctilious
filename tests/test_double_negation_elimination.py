@@ -16,8 +16,8 @@ class TestDoubleNegationElimination(TestCase):
         phi0 = u.f(r1, o1, o2)
         phi1 = t.dai(u.f(u.r.lnot, u.f(u.r.lnot, phi0)), ap=ap)
         self.assertEqual(
-            '¬(¬(◆(ℴ₁, ℴ₂)))', phi1.repr())
+            '¬(¬(◆₁(ℴ₁, ℴ₂)))', phi1.repr())
         phi2 = t.i.dne.infer_statement(phi1)
         self.assertEqual(
-            '◆(ℴ₁, ℴ₂)', phi2.repr())
+            '◆₁(ℴ₁, ℴ₂)', phi2.repr())
         self.assertTrue(phi2.is_formula_equivalent_to(phi0))

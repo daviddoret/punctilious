@@ -18,5 +18,5 @@ class TestInconsistencyIntroduction(TestCase):
         p = t.dai(u.f(r1, o1, o2), ap=ap, echo=True)
         not_p = t.dai(u.f(u.r.lnot, u.f(r1, o1, o2)), ap=ap, echo=True)
         inc = t.i.inconsistency_introduction.infer_statement(p, not_p, echo=True)
-        self.assertEqual('Inc₁(𝑡₁)', inc.repr())
+        self.assertEqual('Inc(𝑡₁)', inc.repr())
         self.assertIs(pu.consistency_values.proved_inconsistent, t.consistency)

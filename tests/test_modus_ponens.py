@@ -21,10 +21,8 @@ class TestModusPonens(TestCase):
         self.assertEqual('◆₂(ℴ₂)', q_formula.repr_as_formula())
         p_implies_q = t.dai(u.f(u.r.implies, p_formula, q_formula), ap=ap)
         p_statement = t.dai(p_formula, ap=ap)
-        with_auto_vs = t.i.mp.infer_statement(p_implies_q, p_statement, auto_vs=True)
-        self.assertEqual('◆₂(ℴ₂)', with_auto_vs.valid_proposition.repr_as_formula())
-        without_auto_vs = t.i.mp.infer_statement(p_implies_q, p_statement, auto_vs=False)
-        self.assertEqual('◆₂(ℴ₂)', without_auto_vs.valid_proposition.repr_as_formula())
+        mp = t.i.mp.infer_statement(p_implies_q, p_statement)
+        self.assertEqual('◆₂(ℴ₂)', mp.valid_proposition.repr_as_formula())
 
     def test_modus_ponens_with_free_variables(self):
         pu.configuration.echo_default = True
@@ -48,4 +46,4 @@ class TestModusPonens(TestCase):
         p_prime = t.i.ci.infer_statement(phi1, phi2, echo=True)
         p_implies_q_prime = t.i.vs.infer_statement(p_implies_q, o1, o2, o3, echo=True)
         conclusion = t.i.mp.infer_statement(p_implies_q_prime, p_prime, echo=True)
-        self.assertEqual('◆(ℴ₁, ℴ₃)', conclusion.valid_proposition.repr_as_formula())
+        self.assertEqual('◆₁(ℴ₁, ℴ₃)', conclusion.valid_proposition.repr_as_formula())

@@ -250,7 +250,7 @@ class Symbol:
 
     """
 
-    def __init__(self, base, index):
+    def __init__(self, base: str, index: (None, str) = None):
         self.base = base
         self.index = index
 
@@ -269,7 +269,7 @@ class Symbol:
         :param hide_index:
         :return:
         """
-        if hide_index:
+        if hide_index or self.index is None:
             return f'{self.base}'
         else:
             return f'{self.base}{repm.subscriptify(self.index)}'
@@ -3344,7 +3344,7 @@ class RelationDict(collections.UserDict):
         """
         if self._biconditional is None:
             self._biconditional = self.declare(
-                2, '⟺', Formula.infix_operator_representation,
+                2, Symbol('⟺'), Formula.infix_operator_representation,
                 signal_proposition=True, dashed_name='biconditional')
         return self._biconditional
 
@@ -3359,7 +3359,7 @@ class RelationDict(collections.UserDict):
         """
         if self._conjunction is None:
             self._conjunction = self.declare(
-                2, '∧', Formula.infix_operator_representation,
+                2, Symbol('∧'), Formula.infix_operator_representation,
                 signal_proposition=True, dashed_name='conjunction')
         return self._conjunction
 
@@ -3374,7 +3374,7 @@ class RelationDict(collections.UserDict):
         """
         if self._disjunction is None:
             self._disjunction = self.declare(
-                2, '∨', Formula.infix_operator_representation,
+                2, Symbol('∨'), Formula.infix_operator_representation,
                 signal_proposition=True, dashed_name='disjunction')
         return self._disjunction
 
@@ -3400,7 +3400,7 @@ class RelationDict(collections.UserDict):
         """
         if self._equality is None:
             self._equality = self.declare(
-                2, '=', Formula.infix_operator_representation,
+                2, Symbol('='), Formula.infix_operator_representation,
                 signal_proposition=True, dashed_name='equality')
         return self._equality
 
@@ -3426,7 +3426,7 @@ class RelationDict(collections.UserDict):
         """
         if self._implication is None:
             self._implication = self.declare(
-                2, '⟹', Formula.infix_operator_representation,
+                2, Symbol('⟹'), Formula.infix_operator_representation,
                 signal_proposition=True, dashed_name='implication')
         return self._implication
 
@@ -3452,7 +3452,7 @@ class RelationDict(collections.UserDict):
         """
         if self._inconsistent is None:
             self._inconsistent = self.declare(
-                1, 'Inc', Formula.prefix_operator_representation,
+                1, Symbol('Inc'), Formula.prefix_operator_representation,
                 signal_proposition=True, dashed_name='inconsistent')
         return self._inconsistent
 
@@ -3467,7 +3467,7 @@ class RelationDict(collections.UserDict):
         """
         if self._inequality is None:
             self._inequality = self.declare(
-                2, '≠', Formula.infix_operator_representation,
+                2, Symbol('≠'), Formula.infix_operator_representation,
                 signal_proposition=True, dashed_name='inequality')
         return self._inequality
 
@@ -3515,7 +3515,7 @@ class RelationDict(collections.UserDict):
         """
         if self._negation is None:
             self._negation = self.declare(
-                1, '¬', Formula.prefix_operator_representation,
+                1, Symbol('¬'), Formula.prefix_operator_representation,
                 signal_proposition=True, dashed_name='negation')
         return self._negation
 
