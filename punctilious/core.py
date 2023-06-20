@@ -23,11 +23,11 @@ class Configuration:
         self.auto_index = None
         self.echo_axiom = None
         self.echo_axiom_inclusion = None
-        self.echo_default = False
+        self._echo_default = False
         self.echo_definition = None
         self.echo_definition_inclusion = None
         self.echo_definition_direct_inference = None
-        self.echo_formula = None
+        self.echo_formula = False  # In general, this is too verbose.
         self.echo_hypothesis = None
         self.echo_note = None
         self.echo_relation = None
@@ -43,6 +43,14 @@ class Configuration:
         self.text_output_justification_column_width = 40
         self.text_output_total_width = 122
         self.warn_on_inconsistency = True
+
+    @property
+    def echo_default(self) -> (None, bool):
+        return self._echo_default
+
+    @echo_default.setter
+    def echo_default(self, value: (None, bool)):
+        self._echo_default = value
 
 
 configuration = Configuration()
@@ -1810,7 +1818,8 @@ class InferenceRuleInclusion(Statement):
         :param echo:
         :return:
         """
-        return self.inference_rule.infer_statement(*args, t=self.theory, symbol=symbol, dashed_name=dashed_name,
+        return self.inference_rule.infer_statement(*args, t=self.theory, symbol=symbol,
+                                                   dashed_name=dashed_name,
                                                    header=header, echo=echo)
 
     def verify_args(self, *args):
@@ -2348,9 +2357,9 @@ class InferenceRule(TheoreticalObjct):
     def echo(self):
         repm.prnt(self.repr_report())
 
-    def infer_formula(self, *args, t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+    def infer_formula(self, *args, t: TheoryElaborationSequence, echo: (None, bool) = None, **kwargs) -> Formula:
         """Apply this inference-rules on input statements and return the resulting statement."""
-        phi = self._infer_formula(*args, t=t)
+        phi = self._infer_formula(*args, t=t, **kwargs)
         if echo:
             repm.prnt(phi.repr_as_statement())
         return phi
@@ -2362,9 +2371,10 @@ class InferenceRule(TheoreticalObjct):
             symbol: (None, str, Symbol) = None,
             dashed_name: (None, str, DashedName) = None,
             header: (None, str, ObjctHeader) = None,
-            echo: (None, bool) = None) -> InferredStatement:
+            echo: (None, bool) = None, **kwargs) -> InferredStatement:
         """Apply this inference-rules on input statements and return the resulting statement."""
-        return InferredStatement(*args, i=self, t=t, symbol=symbol, dashed_name=dashed_name, header=header, echo=echo)
+        return InferredStatement(*args, i=self, t=t, symbol=symbol, dashed_name=dashed_name, header=header, echo=echo,
+                                 **kwargs)
 
     def verify_args(self, *args, t: TheoryElaborationSequence):
         """Verify the syntactical-compatibility of input statements and return True
@@ -2643,9 +2653,6 @@ class TheoryElaborationSequence(TheoreticalObjct):
         """During construction, cross-reference an endorsement
         with its parent theory (if it is not already cross-referenced),
         and return its 0-based index in Theory.endorsements."""
-        assert isinstance(d, DefinitionEndorsement)
-        d.theory = d.theory if hasattr(d, 'theory') else self
-        assert d.theory is self
         if d not in self.definition_inclusions:
             self.definition_inclusions = self.definition_inclusions + tuple(
                 [d])
@@ -4338,69 +4345,57 @@ class InferenceRuleDict(collections.UserDict):
         the inference-rule is automatically created.
         """
 
-        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
+        def infer_formula(p_implies_q: FormulaStatement,
+                          p: FormulaStatement,
+                          t: TheoryElaborationSequence) -> Formula:
             """
 
             :param args: A statement (P ⟹ Q), and a statement P
             :param t:
             :return: A formula Q
             """
-            p_implies_q = unpack_formula(args[0])
-            p = unpack_formula(p_implies_q.parameters[0])
+            p_implies_q = unpack_formula(p_implies_q)
+            # p_prime = unpack_formula(p_implies_q.parameters[0])
             q = unpack_formula(p_implies_q.parameters[1])
-            # The antecedant ⌜p⌝ of the implication ⌜p_implies_q⌝ may contain free-variables,
-            # store these in a mask for masked-formula-similitude comparison.
-            mask = p.get_variable_ordered_set()
-            p_prime = unpack_formula(args[1])  # Received as a statement-parameter to prove that p is true in t.
-            # Check for mask-formula-similitude and simultaneously,
-            # retrieve all free-variable values.
-            similitude, free_variables_values = p_prime._is_masked_formula_similar_to(
-                o2=p, mask=mask)
-            # Build a variable substitution map from the variable values.
-            substitution_map = dict((v, k) for k, v in free_variables_values.items())
-            # Finally, build the concluding proposition by applying
-            # variable substitutions.
-            conclusion = q.substitute(
-                substitution_map=substitution_map, target_theory=t)
-            return conclusion  # TODO: Provide support for statements that are atomic propositional formula, that is
+            # p_prime = unpack_formula(p_prime)  # Received as a statement-parameter to prove that p is true in t.
+            return q  # TODO: Provide support for statements that are atomic propositional formula, that is
             # without relation or where the objct is a 0-ary relation.
 
-        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
+        def verify_args(p_implies_q: FormulaStatement,
+                        p: FormulaStatement, t: TheoryElaborationSequence) -> bool:
             """
 
             :param args: A statement (P ⟹ Q), and a statement P
             :param t:
             :return: A formula Q
             """
-            verify(
-                len(args) == 2,
-                'Exactly 2 items are expected in ⌜*args⌝ .',
-                args=args, t=t, slf=self)
-            p_implies_q = args[0]
+            verify(is_in_class(p_implies_q, classes.formula_statement),
+                   '⌜p_implies_q⌝ is not a formula-statement.',
+                   p_implies_q=p_implies_q, slf=self)
+            verify(is_in_class(p, classes.formula_statement),
+                   '⌜p⌝ is not a formula-statement.',
+                   p=p, slf=self)
             verify(
                 t.contains_theoretical_objct(p_implies_q),
-                'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                'Statement ⌜p_implies_q⌝ is not contained in theory ⌜t⌝''s hierarchy.',
                 p_implies_q=p_implies_q, t=t, slf=self)
             p_implies_q = unpack_formula(p_implies_q)
             verify(
                 p_implies_q.relation is t.u.r.implication,
-                'The relation of formula ⌜p_implies_q⌝ must be an implication.',
+                'The relation of formula ⌜p_implies_q⌝ is not an implication.',
                 p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
-            p_prime = args[1]
             verify(
-                t.contains_theoretical_objct(p_prime),
-                'Statement ⌜p_prime⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-                p_prime=p_prime, t=t, slf=self)
-            p_prime = unpack_formula(p_prime)
-            p = unpack_formula(p_implies_q.parameters[0])
+                t.contains_theoretical_objct(p),
+                'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+                p_prime=p, t=t, slf=self)
+            p = unpack_formula(p)
+            p_prime = unpack_formula(p_implies_q.parameters[0])
             # The antecedant of the implication may contain free-variables,
             # store these in a mask for masked-formula-similitude comparison.
-            mask = p.get_variable_ordered_set()
-            masked_formula_similitude = p_prime.is_masked_formula_similar_to(o2=p, mask=mask)
             verify(
-                masked_formula_similitude,
-                'Formula ⌜p⌝ in statement ⌜p_implies_q⌝ must be masked-formula-similar to statement ⌜p_prime⌝.',
-                masked_formula_similitude=masked_formula_similitude, p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t,
+                p.is_formula_equivalent_to(p_prime),
+                'Formula ⌜p_prime⌝ in statement ⌜p_implies_q⌝ must be formula-equivalent to statement ⌜p⌝.',
+                p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t,
                 slf=self)
             return True
 

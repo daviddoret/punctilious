@@ -21,8 +21,10 @@ class TestModusPonens(TestCase):
         self.assertEqual('◆₂(ℴ₂)', q_formula.repr_as_formula())
         p_implies_q = t.dai(u.f(u.r.implies, p_formula, q_formula), ap=ap)
         p_statement = t.dai(p_formula, ap=ap)
-        conclusion = t.i.mp.infer_statement(p_implies_q, p_statement)
-        self.assertEqual('◆₂(ℴ₂)', conclusion.valid_proposition.repr_as_formula())
+        with_auto_vs = t.i.mp.infer_statement(p_implies_q, p_statement, auto_vs=True)
+        self.assertEqual('◆₂(ℴ₂)', with_auto_vs.valid_proposition.repr_as_formula())
+        without_auto_vs = t.i.mp.infer_statement(p_implies_q, p_statement, auto_vs=False)
+        self.assertEqual('◆₂(ℴ₂)', without_auto_vs.valid_proposition.repr_as_formula())
 
     def test_modus_ponens_with_free_variables(self):
         pu.configuration.echo_default = True
@@ -35,7 +37,7 @@ class TestModusPonens(TestCase):
         a = u.elaborate_axiom(random_data.random_sentence())
         ap = t.postulate_axiom(a)
         with u.v() as x, u.v() as y, u.v() as z:
-            implication = t.dai(
+            p_implies_q = t.dai(
                 u.f(
                     u.r.implies,
                     u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)),
@@ -43,6 +45,7 @@ class TestModusPonens(TestCase):
                 ap=ap, echo=True)
         phi1 = t.dai(u.f(r1, o1, o2), ap=ap)
         phi2 = t.dai(u.f(r1, o2, o3), ap=ap)
-        phi1_and_phi2 = t.i.ci.infer_statement(phi1, phi2, echo=True)
-        conclusion_1 = t.i.mp.infer_statement(implication, phi1_and_phi2, echo=True)
-        self.assertEqual('◆(ℴ₁, ℴ₃)', conclusion_1.valid_proposition.repr_as_formula())
+        p_prime = t.i.ci.infer_statement(phi1, phi2, echo=True)
+        p_implies_q_prime = t.i.vs.infer_statement(p_implies_q, o1, o2, o3, echo=True)
+        conclusion = t.i.mp.infer_statement(p_implies_q_prime, p_prime, echo=True)
+        self.assertEqual('◆(ℴ₁, ℴ₃)', conclusion.valid_proposition.repr_as_formula())
