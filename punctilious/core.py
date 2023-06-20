@@ -155,7 +155,7 @@ def is_in_class(
     :return: (bool).
     """
     # verify(o is not None, 'o is None.', o=o, c=c)
-    verify(hasattr(o, 'is_in_class'), 'o does not have attribute is_in_class.', o=o, c=c)
+    # verify(hasattr(o, 'is_in_class'), 'o does not have attribute is_in_class.', o=o, c=c)
     verify(callable(getattr(o, 'is_in_class')), 'o.is_in_class() is not callable.', o=o, c=c)
     return o.is_in_class(c)
 
@@ -204,8 +204,11 @@ def verify(
             value_as_string = f'(str conversion failure of type {str(type(value))})'
             try:
                 value_as_string = value.repr_as_fully_qualified_name()
-            except:
-                value_as_string = str(value)
+            except AttributeError:
+                try:
+                    value_as_string = repr(value)
+                finally:
+                    pass
             finally:
                 pass
             contextual_information += f'\n{key}: {value_as_string}'
@@ -450,6 +453,30 @@ class SymbolicObjct:
     def header(self) -> ObjctHeader:
         return self._header
 
+    def repr_as_formula(self, expanded=None) -> str:
+        """If supported, return a formula representation,
+        a symbolic representation otherwise.
+
+        The objective of the repr_as_formula() method is to
+        represent formulae and formula-statements not as symbols
+        (e.g.: 𝜑₅) but as expanded formulae (e.g.: (4 > 3)).
+        Most symbolic-objcts do not have a formula representation,
+        where we fall back on symbolic representation.
+        """
+        return self.repr_as_symbol()
+
+    def repr_as_ref(self, expanded=None) -> str:
+        """If supported, return a reference representation,
+        return a symbolic representation otherwise.
+
+        The objective of the repr_as_ref() method is to
+        represent symbolic-objcts not as symbols
+        (e.g.: 𝜑₅) but as reference (e.g.: theorem 3.1.4).
+        Most symbolic-objcts do not have a reference representation,
+        where we fall back on symbolic representation.
+        """
+        return self.repr_as_symbol()
+
     @property
     def symbol(self) -> Symbol:
         return self._symbol
@@ -640,6 +667,10 @@ class TheoreticalObjct(SymbolicObjct):
         """This private method uses a mutable python list,
         which is natively ordered, to proxy an ordered-set,
         and populate the variable oredered-set during formula traversal."""
+        if is_in_class(self, classes.formula_statement):
+            # Unpack the formula statement to
+            # retrieve the variables contained in its formula.
+            self.valid_proposition._get_variable_ordered_set(ordered_set)
         if is_in_class(self, classes.formula):
             self.relation._get_variable_ordered_set(ordered_set)
             # Uses for i in range() to preserve parameter order.
@@ -1478,6 +1509,10 @@ class Statement(TheoreticalObjct):
     Given a theory 𝒯, a statement 𝒮 is a theoretical-object that:
      * announces some truth in 𝒯.
 
+    There are two broad categories of statements:
+    - contentual-statements (e.g. axiom-inclusion, definition-inclusion)
+    - formula-statements
+
     For 𝒯 to be valid, all statements in 𝒯 must be valid.
     For 𝒯 to be consistent, all statements in 𝒯 must be consistent.
     etc.
@@ -1491,10 +1526,10 @@ class Statement(TheoreticalObjct):
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: bool = False):
+        self._theory = theory
         echo = get_config(echo, configuration.echo_statement, configuration.echo_default, fallback_value=False)
         universe_of_discourse = theory.universe_of_discourse
         self.statement_index = theory.crossreference_statement(self)
-        self.theory = theory
         self.category = category
         if symbol is None:
             symbol = Symbol(
@@ -1533,6 +1568,44 @@ class Statement(TheoreticalObjct):
 
     def repr_as_ref(self, cap=False):
         return self.header.repr_reference(cap=cap)
+
+    @property
+    def t(self) -> TheoryElaborationSequence:
+        """The theory-elaboration-sequence that contains this statement.
+
+        Unabridged property: statement.theory"""
+        return self.theory
+
+    @property
+    def theory(self) -> TheoryElaborationSequence:
+        """The theory-elaboration-sequence that contains this statement.
+
+        Abridged property: s.t
+
+        This property may only be set once. In effect, moving statements
+        between theories would lead to unstable theories."""
+        return self._theory
+
+    @theory.setter
+    def theory(self, t: TheoryElaborationSequence):
+        verify(self._theory is None,
+               '⌜theory⌝ property may only be set once.',
+               slf=self, slf_theory=self._theory, t=t)
+        self._theory = t
+
+    @property
+    def u(self) -> UniverseOfDiscourse:
+        """The universe-of-discourse where this statement is declared.
+
+        Unabridged property: statement.universe_of_discourse"""
+        return self.universe_of_discourse
+
+    @property
+    def universe_of_discourse(self) -> UniverseOfDiscourse:
+        """The universe-of-discourse where this statement is declared.
+
+        Abridged property: s.u"""
+        return self._universe_of_discourse
 
 
 class Axiom(TheoreticalObjct):
@@ -1618,7 +1691,6 @@ class AxiomInclusion(Statement):
         """Include (postulate) an axiom in a theory-elaboration-sequence.
         """
         self._axiom = a
-        t.crossreference_axiom_inclusion(self)
         if symbol is None:
             # If no symbol is passed as a parameter,
             # automated assignment of symbol is assumed.
@@ -1649,6 +1721,7 @@ class AxiomInclusion(Statement):
             header=header,
             dashed_name=dashed_name,
             echo=False)
+        t.crossreference_axiom_inclusion(self)
         super()._declare_class_membership(declarative_class_list.axiom_inclusion)
         if echo:
             repm.prnt(self.repr_as_statement())
@@ -1909,6 +1982,7 @@ class FormulaStatement(Statement):
             'inconsistent with the universe-of-discourse of the valid-proposition of that formula-statement.')
         universe_of_discourse = theory.universe_of_discourse
         # Theory statements must be logical propositions.
+        valid_proposition = unpack_formula(valid_proposition)
         verify(
             valid_proposition.is_proposition,
             'The formula of this statement is not propositional.')
@@ -2560,8 +2634,6 @@ class TheoryElaborationSequence(TheoreticalObjct):
         with its parent theory (if it is not already cross-referenced),
         and return its 0-based index in Theory.axioms."""
         assert isinstance(a, AxiomInclusion)
-        a.theory = a.theory if hasattr(a, 'theory') else self
-        assert a.theory is self
         if a not in self.axiom_inclusions:
             self.axiom_inclusions = self.axiom_inclusions + tuple(
                 [a])
@@ -2582,8 +2654,6 @@ class TheoryElaborationSequence(TheoreticalObjct):
     def crossreference_inference_rule_inclusion(self, i: InferenceRuleInclusion):
         """During construction, cross-reference an inference-rule
         with its parent theory-elaboration (if it is not already cross-referenced)."""
-        i.theory = i.theory if hasattr(i, 'theory') else self
-        assert i.theory is self
         if i not in self.inference_rule_inclusions:
             self.inference_rule_inclusions[i] = i
             return True
@@ -2595,8 +2665,16 @@ class TheoryElaborationSequence(TheoreticalObjct):
         with its parent theory if it is not already cross-referenced,
         and return its 0-based index in Theory.statements."""
         assert isinstance(s, (Statement, Note, Section))
-        s.theory = s.theory if hasattr(s, 'theory') else self
-        assert s.theory is self
+        # During construction (__init__()), the _theory property
+        # may not be already set.
+        # And calling crossreference_statement()
+        # may be required before calling super(), in order to
+        # retrieve the statement_index.
+        # It follows that we cannot check the consistency of the
+        # theory of the object under construction, like with:
+        #   assert s.theory is self
+        # It follows that we must fully delegate the responsibility
+        # of theory consistency to the constructing object.
         if s not in self.statements:
             self.statements = self.statements + tuple([s])
         return self.statements.index(s)
@@ -4390,22 +4468,24 @@ class InferenceRuleDict(collections.UserDict):
             :param t:
             :return: A formula P'
             """
-            x_oset = unpack_formula(p.get_variable_ordered_set())
+            x_oset = unpack_formula(p).get_variable_ordered_set()
             x_y_map = dict((x, y) for x, y in zip(x_oset, y_sequence))
-            p_prime = p.substitute(substitution_map=x_y_map, target_theory=t)
+            p_prime = p.valid_proposition.substitute(substitution_map=x_y_map, target_theory=t)
             return p_prime  # TODO: Provide support for statements that are atomic propositional formula, that is without relation or where the objct is a 0-ary relation.
 
         def verify_args(p: FormulaStatement, *y_sequence, t: TheoryElaborationSequence) -> bool:
             verify(t.contains_theoretical_objct(p),
                    '⌜p⌝ is not contained in theoretical-elaboration-sequence ⌜t⌝.',
                    p=p, y_sequence=y_sequence, slf=self, t=t)
-            x_oset = p.get_variable_ordered_set()
+            x_oset = unpack_formula(p).get_variable_ordered_set()
             verify(len(x_oset) == len(y_sequence),
                    'The cardinality of the canonically ordered free-variables.')
+            # Substitution objects in Y must be declared in U,
+            # but they may not be referenced yet in T's extension.
             for y in y_sequence:
-                verify(t.contains_theoretical_objct(y),
-                       '⌜y⌝ is not contained in theoretical-elaboration-sequence ⌜t⌝.',
-                       y=y, y_sequence=y_sequence, x_oset=x_oset, p=p, slf=self, t=t)
+                verify(y.u is self.u,
+                       '⌜y⌝ and ⌜self⌝ do not share the same universe-of-discourse.',
+                       y=y, y_u=y.u, slf=self, slf_u=self.u)
             return True
 
         if self._variable_substitution is None:
@@ -5397,8 +5477,21 @@ class InferredStatement(FormulaStatement):
         output = repm.wrap(output)
         if output_proofs:
             output = output + f'\n\tBy the {repm.serif_bold(self.inference_rule.header.reference)} inference-rule:'
-            for parameter in self.parameters:
+            if self.inference_rule is self.u.inference_rules.variable_substitution:
+                # This is a special case for the variable-substitution inference-rule,
+                # which receives arbitrary theoretical-objcts as the 2nd and
+                # following parameters, to constitute a free-variable mappings.
+                parameter = self.parameters[0]
                 output = output + f'\n\t{parameter.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(parameter.repr_as_ref())}.'
+                # Display the free-variables mapping.
+                free_variables = self.parameters[0].get_variable_ordered_set()
+                mapping = zip(free_variables, self.parameters[1:])
+                mapping_text = '(' + ','.join(f'{k.repr_as_symbol()} ↦ {v.repr_as_formula()}' for k, v in mapping) + ')'
+                output = output + f'\n\t{mapping_text:<70} │ Given as parameters.'
+            else:
+                for i in range(len(self.parameters)):
+                    parameter = self.parameters[i]
+                    output = output + f'\n\t{parameter.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(parameter.repr_as_ref())}.'
             output = output + f'\n\t{"─" * 71}┤'
             output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
         return output
