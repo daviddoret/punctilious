@@ -1,11 +1,53 @@
 from __future__ import annotations
+import collections.abc
 import textwrap
 import warnings
 import repm
 import contextlib
 import abc
-import collections.abc
 import collections
+
+
+class VerificationSeverity(repm.Representation):
+    def __init__(self, python_name):
+        super().__init__(python_name=python_name)
+
+
+class VerificationSeverities(repm.Representation):
+    def __init__(self, python_name):
+        super().__init__(python_name=python_name)
+        self.verbose = VerificationSeverity('verbose')
+        self.information = VerificationSeverity('information')
+        self.warning = VerificationSeverity('warning')
+        self.error = VerificationSeverity('error')
+
+
+verification_severities = VerificationSeverities('verification_severities')
+
+
+def verify(
+        assertion, msg,
+        severity: VerificationSeverity = verification_severities.error, **kwargs):
+    if not assertion:
+        contextual_information = ''
+        for key, value in kwargs.items():
+            value_as_string = f'(str conversion failure of type {str(type(value))})'
+            try:
+                value_as_string = value.repr_as_fully_qualified_name()
+            except AttributeError:
+                try:
+                    value_as_string = repr(value)
+                finally:
+                    pass
+            finally:
+                pass
+            contextual_information += f'\n{key}: {value_as_string}'
+        report = f'{str(severity).upper()}: {msg}\nContextual information:{contextual_information}'
+        repm.prnt(report)
+        if severity is verification_severities.warning:
+            warnings.warn(report)
+        if configuration.raise_exception_on_verification_error and severity is verification_severities.error:
+            raise FailedVerificationException(msg=report, **kwargs)
 
 
 class InconsistencyWarning(UserWarning):
@@ -64,7 +106,7 @@ def get_config(*args, fallback_value):
     return fallback_value
 
 
-def unpack_formula(o: TheoreticalObjct) -> Formula:
+def unpack_formula(o: (TheoreticalObjct, Formula, FormulaStatement)) -> Formula:
     """Receive a theoretical-objct and unpack its formula if it is a statement that contains a formula."""
     verify(
         is_in_class(o, classes.theoretical_objct),
@@ -184,48 +226,6 @@ class UnsupportedInferenceRuleException(Exception):
     def __init__(self, msg, **kwargs):
         self.msg = msg
         self.kwargs = kwargs
-
-
-class VerificationSeverity(repm.Representation):
-    def __init__(self, python_name):
-        super().__init__(python_name=python_name)
-
-
-class VerificationSeverities(repm.Representation):
-    def __init__(self, python_name):
-        super().__init__(python_name=python_name)
-        self.verbose = VerificationSeverity('verbose')
-        self.information = VerificationSeverity('information')
-        self.warning = VerificationSeverity('warning')
-        self.error = VerificationSeverity('error')
-
-
-verification_severities = VerificationSeverities('verification_severities')
-
-
-def verify(
-        assertion, msg,
-        severity: VerificationSeverity = verification_severities.error, **kwargs):
-    if not assertion:
-        contextual_information = ''
-        for key, value in kwargs.items():
-            value_as_string = f'(str conversion failure of type {str(type(value))})'
-            try:
-                value_as_string = value.repr_as_fully_qualified_name()
-            except AttributeError:
-                try:
-                    value_as_string = repr(value)
-                finally:
-                    pass
-            finally:
-                pass
-            contextual_information += f'\n{key}: {value_as_string}'
-        report = f'{str(severity).upper()}: {msg}\nContextual information:{contextual_information}'
-        repm.prnt(report)
-        if severity is verification_severities.warning:
-            warnings.warn(report)
-        if configuration.raise_exception_on_verification_error and severity is verification_severities.error:
-            raise FailedVerificationException(msg=report, **kwargs)
 
 
 def set_attr(o, a, v):
@@ -1370,29 +1370,6 @@ class Formula(TheoreticalObjct):
         return f'Let {self.repr_as_symbol()} be the formula {self.repr_as_formula(expanded=True)} in {self.universe_of_discourse.repr_as_symbol()}.'
 
 
-class SimpleObjctDeclarationFormula(Formula):
-    """
-
-    Definition
-    ----------
-    A simple-objct-declaration-formula 𝜑 is a binary formula of the form (◆, (𝒯, ℴ)) where:
-    * ◆ is the simple-objct-declaration relation-component.
-    * 𝒯 is the parent theory.
-    * ℴ is a simple-objct-component.
-    """
-
-    def __init__(
-            self, theory, simple_objct, python=None, dashed=None, symbol=None):
-        assert isinstance(theory, TheoryElaborationSequence)
-        assert isinstance(simple_objct, SimpleObjct)
-        assert theory.contains_theoretical_objct(simple_objct)
-        relation = theoretical_relations.simple_objct_declaration
-        super().__init__(
-            theory=theory, relation=relation, parameters=(theory, simple_objct),
-            python=python,
-            dashed=dashed, symbol=symbol)
-
-
 class SimpleObjctDict(collections.UserDict):
     """A dictionary that exposes well-known simple-objcts as properties.
 
@@ -2173,7 +2150,7 @@ class Morphism(FormulaStatement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'{repm.serif_bold(self.repr_as_symbol(cap=True))}: {self.valid_proposition.repr_as_formula(expanded=True)}'
+        output = f'{repm.serif_bold(self.repr_as_symbol())}: {self.valid_proposition.repr_as_formula(expanded=True)}'
         if output_proofs:
             output = output + self.repr_as_sub_statement()
         return output
@@ -2314,9 +2291,6 @@ class InferenceRuleOBSOLETE:
     @staticmethod
     def infer(*args, **kwargs):
         pass
-
-
-import collections.abc
 
 
 class InferenceRule(TheoreticalObjct):
@@ -2548,16 +2522,9 @@ class TheoryElaborationSequence(TheoreticalObjct):
             header: (str, ObjctHeader) = None,
             extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None,
-            include_inconsistency_introduction_inference_rule: bool = False,
             stabilized: bool = False,
             echo: bool = False
     ):
-        """
-
-        :param theory: :param is_foundation_system: True if this theory is
-        the foundation-system, False otherwise. :param symbol:
-         :param extended_theory: :param is_an_element_of_itself:
-        """
         self._max_subsection_number = 0
         self._consistency = consistency_values.undetermined
         self._stabilized = False
@@ -2599,15 +2566,6 @@ class TheoryElaborationSequence(TheoreticalObjct):
                 extended_theory_limit in extended_theory.statements),
                'Parameter "theory_extension_statement_limit" is inconsistent.',
                u=u)
-        # Inference rules
-        # Inconsistency introduction
-        self._inconsistency_introduction_inference_rule = None
-        include_inconsistency_introduction_inference_rule = False if \
-            include_inconsistency_introduction_inference_rule is None else \
-            include_inconsistency_introduction_inference_rule
-        self._includes_inconsistency_introduction_inference_rule = False
-        if include_inconsistency_introduction_inference_rule:
-            self.include_inconsistency_introduction_inference_rule()
         super()._declare_class_membership(classes.theory_elaboration)
         if stabilized:
             # It is a design choice to stabilize the theory-elaboration
@@ -2737,51 +2695,6 @@ class TheoryElaborationSequence(TheoreticalObjct):
         else:
             self._max_subsection_number = max([self._max_subsection_number + 1, section_number])
         return self._max_subsection_number
-
-    @property
-    def inconsistency_introduction_inference_rule(self):
-        """The inconsistency-introduction inference-rule if it exists in this
-        theory, or this theory's foundation-system, otherwise None.
-        """
-        if self._inconsistency_introduction_inference_rule is not None:
-            return self._inconsistency_introduction_inference_rule
-        elif self.extended_theory is not None:
-            return self.extended_theory.inconsistency_introduction_inference_rule
-        else:
-            return None
-
-    @inconsistency_introduction_inference_rule.setter
-    def inconsistency_introduction_inference_rule(self, ir: InferenceRuleOBSOLETE):
-        verify(
-            self._inconsistency_introduction_inference_rule is None,
-            'The inconsistency-introduction inference-rule property of a theory can only be '
-            'set once to prevent instability.')
-        self._inconsistency_introduction_inference_rule = ir
-
-    def infer_by_inconsistency_introduction(
-            self, p, not_p, symbol=None, category=None,
-            header=None):
-        """Infer a new statement in this theory by applying the
-        inconsistency-introduction inference-rule.
-
-        :param conjunct_p:
-        :param conjunct_q:
-        :param symbol:
-        :param category:
-        :param header:
-        :param title:
-        :return:
-        """
-        if not self.inconsistency_introduction_inference_rule_is_included:
-            raise UnsupportedInferenceRuleException(
-                'The inconsistency-introduction inference-rule is not contained '
-                'in this theory.',
-                theory=self, p=p, not_p=not_p)
-        else:
-            return self.inconsistency_introduction_inference_rule.infer(
-                theory=self, p=p, not_p=not_p,
-                symbol=symbol, category=category,
-                header=header)
 
     @property
     def i(self):
@@ -2955,17 +2868,6 @@ class TheoryElaborationSequence(TheoreticalObjct):
             symbol=symbol,
             category=category, header=header)
 
-    def include_inconsistency_introduction_inference_rule(self):
-        """Include the inconsistency-introduction inference-rule in this
-        theory."""
-        verify(
-            not self.inconsistency_introduction_inference_rule_is_included,
-            'The inconsistency-introduction inference-rule is already included in this theory.')
-        # TODO: Justify the inclusion of the inference-rule in the theory
-        #   with adequate statements (axioms?).
-        self._inconsistency_introduction_inference_rule = InconsistencyIntroductionInferenceRuleOBSOLETE
-        self._includes_inconsistency_introduction_inference_rule = True
-
     @property
     def consistency(self) -> Consistency:
         """The currently proven consistency status of this theory.
@@ -3068,6 +2970,19 @@ class TheoryElaborationSequence(TheoreticalObjct):
         return Section(section_title=section_title, section_number=section_number, section_parent=section_parent,
                        t=self,
                        echo=echo)
+
+    def report_inconsistency_proof(self, proof: InferredStatement):
+        verify(proof.t is self,
+               'The theory of the ⌜proof⌝ is not the current theory ⌜self⌝.',
+               proof_t=proof.t, proof=proof, slf=self)
+        proof = unpack_formula(proof)
+        verify(proof.r is self.u.r.inconsistency,
+               'The relation of the ⌜proof⌝ formula is not ⌜inconsistency⌝.',
+               proof_relation=proof.r, proof=proof, slf=self)
+        verify(proof.parameters[0] is self,
+               'The parameter of the ⌜proof⌝ formula is not the current theory ⌜self⌝.',
+               proof_parameter=proof.parameters[0], proof=proof, slf=self)
+        self._consistency = consistency_values.proved_inconsistent
 
     @property
     def stabilized(self):
@@ -3633,6 +3548,7 @@ class InferenceRuleDict(collections.UserDict):
         self._disjunction_introduction = None
         self._double_negation_elimination = None
         self._double_negation_introduction = None
+        self._inconsistency_introduction = None
         self._modus_ponens = None
         self._variable_substitution = None
 
@@ -3655,22 +3571,20 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
-
-        TODO: Implement free-variables support for absorption
         """
 
-        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
+        def infer_formula(p_implies_q: FormulaStatement, t: TheoryElaborationSequence) -> Formula:
             """
 
-            :param args:
-            :param t:
-            :return:
+            :param p_implies_q: A formula-statement of the form: (P ⟹ Q).
+            :param t: The current theory-elaboration-sequence.
+            :return: The (proven) formula: (P ⟹ (P ∧ Q)).
             """
-            phi = unpack_formula(args[0])
-            p = unpack_formula(phi.parameters[0])
-            q = unpack_formula(phi.parameters[1])
-            psi = t.u.f(t.u.r.implication, p, t.u.f(t.u.r.conjunction, p, q))
-            return psi
+            p_implies_q = unpack_formula(p_implies_q)
+            p = unpack_formula(p_implies_q.parameters[0])
+            q = unpack_formula(p_implies_q.parameters[1])
+            p_implies_p_and_q = t.u.f(t.u.r.implication, p, t.u.f(t.u.r.conjunction, p, q))
+            return p_implies_p_and_q
 
         def verify_args(*args, t: TheoryElaborationSequence) -> bool:
             """
@@ -3746,8 +3660,6 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
-
-        TODO: Implement free-variables support for bel
         """
 
         def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
@@ -3806,8 +3718,6 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
-
-        TODO: Implement free-variables support for ber
         """
 
         def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
@@ -3866,8 +3776,6 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
-
-        TODO: Implement free-variables support for bi
         """
 
         def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
@@ -3932,8 +3840,6 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
-
-        TODO: Implement free-variables support for cel
         """
 
         def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
@@ -3988,8 +3894,6 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
-
-        TODO: Implement free-variables support for cer
         """
 
         def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
@@ -4044,8 +3948,6 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
-
-        TODO: Implement free-variables support for CI
         """
 
         def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
@@ -4113,8 +4015,6 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
-
-        TODO: Implement free-variables support for di
         """
 
         def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
@@ -4172,8 +4072,6 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
-
-        TODO: Implement free-variables support for dne
         """
 
         def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
@@ -4234,8 +4132,6 @@ class InferenceRuleDict(collections.UserDict):
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically created.
-
-        TODO: Implement free-variables support for dni
         """
 
         def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
@@ -4330,6 +4226,94 @@ class InferenceRuleDict(collections.UserDict):
         the inference-rule is automatically created.
         """
         return self.double_negation_introduction
+
+    @property
+    def inconsistency_introduction(self) -> InferenceRule:
+        """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
+
+        Abridged property: u.i.ii
+
+        Inconsistency-introduction is an extraordinary inference-rule
+        because it proves that the theory is inconsistent. It follows
+        that the corresponding statement: ⌜Inc(t)⌝ becomes paradoxically
+        invalid as soon as it is expressed in the current theory. In
+        fact, ⌜Inc(t)⌝ should rather be understood as a meta-statement
+        about the theory. In future versions of punctilious we will consider
+        stating ⌜Inc(t)⌝ in a distinct meta-theory.
+        
+        Once ⌜Inc(t)⌝ is stated, the ⌜consistency⌝ property of the 
+        current theory is automatically changed to ⌜inconsistent⌝.
+
+        If the inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+        """
+
+        def infer_formula(p: FormulaStatement, not_p: FormulaStatement, t: TheoryElaborationSequence) -> Formula:
+            """
+            :param p: a formula-statement of the form: (P).
+            :param not_p: a formula-statement of the form: (¬P).
+
+            """
+            inc = t.u.f(t.u.r.inconsistent, t)
+            return inc
+
+        def verify_args(p: FormulaStatement, not_p: FormulaStatement, t: TheoryElaborationSequence) -> bool:
+            """
+
+            :param args:
+            :param t:
+            :return:
+            """
+            verify(is_in_class(p, classes.formula_statement),
+                   '⌜p⌝ is not of declarative-class formula-statement.',
+                   p=p, t=t, slf=self)
+            p = unpack_formula(p)
+            verify(is_in_class(not_p, classes.formula_statement),
+                   '⌜not_p⌝ is not of declarative-class formula-statement.',
+                   not_p=not_p, t=t, slf=self)
+            not_p_r = unpack_formula(not_p)
+            verify(
+                not_p_r.relation is t.u.r.negation,
+                'The relation of formula ⌜not_p_r⌝ is not a negation.',
+                not_p_r_relation=not_p_r.relation, not_p_r=not_p_r, t=t, slf=self)
+            p_in_not_p = unpack_formula(not_p_r.parameters[0])
+            verify(
+                p_in_not_p.is_formula_equivalent_to(p),
+                'The sub-formula ⌜p⌝ in ⌜not_p⌝ is not formula-equivalent to formula ⌜p⌝.',
+                p_in_not_p=p_in_not_p.relation, not_p_r=not_p_r, t=t, slf=self)
+            return True
+
+        if self._absorption is None:
+            self._absorption = InferenceRule(
+                universe_of_discourse=self.u,
+                symbol=Symbol('absorb', index=None),
+                header='absorption',
+                dashed_name=DashedName('absorption'),
+                infer_formula=infer_formula,
+                verify_args=verify_args)
+        return self._absorption
+
+    @property
+    def ii(self) -> InferenceRule:
+        """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
+
+            Unabridged property: universe_of_discourse.inference_rules.inconsistency_introduction
+
+            Inconsistency-introduction is an extraordinary inference-rule
+            because it proves that the theory is inconsistent. It follows
+            that the corresponding statement: ⌜Inc(t)⌝ becomes paradoxically
+            invalid as soon as it is expressed in the current theory. In
+            fact, ⌜Inc(t)⌝ should rather be understood as a meta-statement
+            about the theory. In future versions of punctilious we will consider
+            stating ⌜Inc(t)⌝ in a distinct meta-theory.
+
+            Once ⌜Inc(t)⌝ is stated, the ⌜consistency⌝ property of the
+            current theory is automatically changed to ⌜inconsistent⌝.
+
+            If the inference-rule does not exist in the universe-of-discourse,
+            the inference-rule is automatically created.
+            """
+        return self.inconsistency_introduction
 
     @property
     def modus_ponens(self) -> InferenceRule:
@@ -4543,6 +4527,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         self._disjunction_introduction = None
         self._double_negation_elimination = None
         self._double_negation_introduction = None
+        self._inconsistency_introduction = None
         self._modus_ponens = None
         self._variable_substitution = None
 
@@ -4815,6 +4800,55 @@ class InferenceRuleInclusionDict(collections.UserDict):
                 i=self.t.u.i.double_negation_introduction,
                 header='double negation introduction')
         return self._double_negation_introduction
+
+    @property
+    def inconsistency_introduction(self) -> InferenceRuleInclusion:
+        """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
+
+                Abridged property: t.i.ii
+
+                Inconsistency-introduction is an extraordinary inference-rule
+                because it proves that the theory is inconsistent. It follows
+                that the corresponding statement: ⌜Inc(t)⌝ becomes paradoxically
+                invalid as soon as it is expressed in the current theory. In
+                fact, ⌜Inc(t)⌝ should rather be understood as a meta-statement
+                about the theory. In future versions of punctilious we will consider
+                stating ⌜Inc(t)⌝ in a distinct meta-theory.
+
+                Once ⌜Inc(t)⌝ is stated, the ⌜consistency⌝ property of the
+                current theory is automatically changed to ⌜inconsistent⌝.
+
+                If the inference-rule does not exist in the universe-of-discourse,
+                the inference-rule is automatically created.
+                """
+        if self._inconsistency_introduction is None:
+            self._inconsistency_introduction = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.inconsistency_introduction,
+                header='inconsistency introduction')
+        return self._inconsistency_introduction
+
+    @property
+    def ii(self) -> InferenceRuleInclusion:
+        """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
+
+                Unabridged property: theory_elaboration_sequence.inference_rules.inconsistency_introduction
+
+                Inconsistency-introduction is an extraordinary inference-rule
+                because it proves that the theory is inconsistent. It follows
+                that the corresponding statement: ⌜Inc(t)⌝ becomes paradoxically
+                invalid as soon as it is expressed in the current theory. In
+                fact, ⌜Inc(t)⌝ should rather be understood as a meta-statement
+                about the theory. In future versions of punctilious we will consider
+                stating ⌜Inc(t)⌝ in a distinct meta-theory.
+
+                Once ⌜Inc(t)⌝ is stated, the ⌜consistency⌝ property of the
+                current theory is automatically changed to ⌜inconsistent⌝.
+
+                If the inference-rule does not exist in the universe-of-discourse,
+                the inference-rule is automatically created.
+                """
+        return self.inconsistency_introduction
 
     @property
     def modus_ponens(self) -> InferenceRuleInclusion:
@@ -5222,7 +5256,6 @@ class UniverseOfDiscourse(SymbolicObjct):
             dashed_name: (None, str, DashedName) = None,
             extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None,
-            include_inconsistency_introduction_inference_rule=None,
             stabilized: bool = False,
             echo: bool = False):
         """Declare a new theory in this universe-of-discourse.
@@ -5241,7 +5274,6 @@ class UniverseOfDiscourse(SymbolicObjct):
             dashed_name=dashed_name,
             extended_theory=extended_theory,
             extended_theory_limit=extended_theory_limit,
-            include_inconsistency_introduction_inference_rule=include_inconsistency_introduction_inference_rule,
             stabilized=stabilized,
             echo=echo)
 
@@ -5292,8 +5324,8 @@ class UniverseOfDiscourse(SymbolicObjct):
         return repm.prnt(self.repr_as_declaration())
 
     def f(
-            self, relation, *parameters, symbol=None,
-            lock_variable_scope=None,
+            self, relation: (Relation, FreeVariable), *parameters, symbol: (None, str, Symbol) = None,
+            lock_variable_scope: (None, bool) = None,
             echo: (None, bool) = None):
         """Declare a new formula in this universe-of-discourse.
 
@@ -5374,7 +5406,6 @@ class UniverseOfDiscourse(SymbolicObjct):
             dashed_name: (None, str, DashedName) = None,
             extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None,
-            include_inconsistency_introduction_inference_rule=None,
             stabilized: bool = False,
             echo: bool = False):
         """Declare a new theory in this universe-of-discourse.
@@ -5392,7 +5423,6 @@ class UniverseOfDiscourse(SymbolicObjct):
             dashed_name=dashed_name,
             extended_theory=extended_theory,
             extended_theory_limit=extended_theory_limit,
-            include_inconsistency_introduction_inference_rule=include_inconsistency_introduction_inference_rule,
             stabilized=stabilized,
             echo=echo)
 
@@ -5453,6 +5483,12 @@ class InferredStatement(FormulaStatement):
             echo=False)
         # t.crossreference_inferred_proposition(self)
         super()._declare_class_membership(declarative_class_list.inferred_proposition)
+        if self.inference_rule is self.t.i.inconsistency_introduction and \
+                self.valid_proposition.relation is self.t.u.r.inconsistent and \
+                self.valid_proposition.parameters[0] is self.t:
+            # This inferred-statement proves the inconsistency
+            # of the current theory-elaboration-sequence.
+            t.report_inconsistency_proof(proof=self)
         if echo:
             repm.prnt(self.repr_as_statement())
 

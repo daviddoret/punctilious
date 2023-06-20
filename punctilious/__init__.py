@@ -9,6 +9,7 @@ from core import \
     configuration, \
     DashedName, DefinitionEndorsement, DirectAxiomInference, DirectDefinitionInference, \
     FailedVerificationException, Formula, FreeVariable, \
+    consistency_values, \
     Note, note_categories, InconsistencyWarning, \
     ObjctHeader, \
     Relation, \
