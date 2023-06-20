@@ -576,15 +576,15 @@ class SymbolicObjct:
         return f'Let {self.repr_as_symbol()} be a symbolic-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
 
     def repr_as_symbol(self) -> str:
-        global configuration
-        hide_index = \
-            not is_in_class(self, classes.u) and \
-            self.symbol.index == 1 and \
-            not configuration.output_index_if_max_index_equal_1 and \
-            not is_in_class(self, classes.universe_of_discourse) and \
-            self.universe_of_discourse.get_symbol_max_index(self.symbol.base) == 1
-
-        return self.symbol.repr(hide_index=hide_index)
+        # global configuration
+        # hide_index = \
+        #    not is_in_class(self, classes.u) and \
+        #    self.symbol.index == 1 and \
+        #    not configuration.output_index_if_max_index_equal_1 and \
+        #    not is_in_class(self, classes.universe_of_discourse) and \
+        #    self.universe_of_discourse.get_symbol_max_index(self.symbol.base) == 1
+        # return self.symbol.repr(hide_index=hide_index)
+        return self.symbol.repr()
 
     def repr_header(self, cap: bool = False) -> str:
         global configuration
@@ -1317,7 +1317,7 @@ class Formula(TheoreticalObjct):
     def repr_as_function_call(self, expanded=None):
         expanded = True if expanded is None else expanded
         assert isinstance(expanded, bool)
-        return f'{self.relation.repr_as_symbol()}({", ".join([p.repr(expanded=expanded) for p in self.parameters])})'
+        return f'{self.relation.repr_as_formula()}({", ".join([p.repr_as_formula(expanded=expanded) for p in self.parameters])})'
 
     def repr_as_infix_operator(self, expanded=None):
         expanded = True if expanded is None else expanded
@@ -1342,7 +1342,7 @@ class Formula(TheoreticalObjct):
             'Attempt to represent prefix operator, but relation arity is not equal to 1.',
             self_relation=self.relation,
             parameters=self.parameters)
-        return f'{self.relation.repr_as_symbol()}({self.parameters[0].repr(expanded=expanded)})'
+        return f'{self.relation.repr_as_formula()}({self.parameters[0].repr_as_formula(expanded=expanded)})'
 
     def repr_as_formula(self, expanded: bool = True):
         if is_in_class(self.relation, classes.free_variable):
@@ -1463,6 +1463,7 @@ class StatementCategories(repm.Representation):
     lemma = StatementCategory('lemma', 'p', 'lemma')
     proposition = StatementCategory('proposition', 'p', 'proposition')
     theorem = StatementCategory('theorem', 'p', 'theorem')
+    theory_elaboration_sequence = StatementCategory('theory_elaboration_sequence', 't', 'theory elaboration sequence')
     # Special categories
     missing_category = StatementCategory('missing_category', '�', 'missing category')
 
@@ -2517,9 +2518,9 @@ class TheoryElaborationSequence(TheoreticalObjct):
     def __init__(
             self,
             u: UniverseOfDiscourse,
-            symbol: (str, Symbol) = None,
-            dashed_name: (str, DashedName) = None,
-            header: (str, ObjctHeader) = None,
+            symbol: (None, str, Symbol) = None,
+            dashed_name: (None, str, DashedName) = None,
+            header: (None, str, ObjctHeader) = None,
             extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None,
             stabilized: bool = False,
@@ -2546,9 +2547,11 @@ class TheoryElaborationSequence(TheoreticalObjct):
             index = u.index_symbol(base=symbol)
             symbol = Symbol(base=symbol, index=index)
         if header is None:
-            header = ObjctHeader(reference=str(symbol.index), category=statement_categories.inference_rule, title=None)
+            header = ObjctHeader(reference=str(symbol.index), category=statement_categories.theory_elaboration_sequence,
+                                 title=None)
         if isinstance(header, str):
-            header = ObjctHeader(reference=header, category=statement_categories.inference_rule, title=None)
+            header = ObjctHeader(reference=header, category=statement_categories.theory_elaboration_sequence,
+                                 title=None)
         super().__init__(
             symbol=symbol,
             is_theory_foundation_system=True if extended_theory is None else False,
@@ -2976,9 +2979,9 @@ class TheoryElaborationSequence(TheoreticalObjct):
                'The theory of the ⌜proof⌝ is not the current theory ⌜self⌝.',
                proof_t=proof.t, proof=proof, slf=self)
         proof = unpack_formula(proof)
-        verify(proof.r is self.u.r.inconsistency,
+        verify(proof.relation is self.u.r.inconsistent,
                'The relation of the ⌜proof⌝ formula is not ⌜inconsistency⌝.',
-               proof_relation=proof.r, proof=proof, slf=self)
+               proof_relation=proof.relation, proof=proof, slf=self)
         verify(proof.parameters[0] is self,
                'The parameter of the ⌜proof⌝ formula is not the current theory ⌜self⌝.',
                proof_parameter=proof.parameters[0], proof=proof, slf=self)
@@ -4283,15 +4286,15 @@ class InferenceRuleDict(collections.UserDict):
                 p_in_not_p=p_in_not_p.relation, not_p_r=not_p_r, t=t, slf=self)
             return True
 
-        if self._absorption is None:
-            self._absorption = InferenceRule(
+        if self._inconsistency_introduction is None:
+            self._inconsistency_introduction = InferenceRule(
                 universe_of_discourse=self.u,
-                symbol=Symbol('absorb', index=None),
-                header='absorption',
-                dashed_name=DashedName('absorption'),
+                symbol=Symbol('Inc', index=None),
+                header='inconsistency introduction',
+                dashed_name=DashedName('inconsistency-introduction'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
-        return self._absorption
+        return self._inconsistency_introduction
 
     @property
     def ii(self) -> InferenceRule:
@@ -5483,7 +5486,7 @@ class InferredStatement(FormulaStatement):
             echo=False)
         # t.crossreference_inferred_proposition(self)
         super()._declare_class_membership(declarative_class_list.inferred_proposition)
-        if self.inference_rule is self.t.i.inconsistency_introduction and \
+        if self.inference_rule is self.t.u.i.inconsistency_introduction and \
                 self.valid_proposition.relation is self.t.u.r.inconsistent and \
                 self.valid_proposition.parameters[0] is self.t:
             # This inferred-statement proves the inconsistency
