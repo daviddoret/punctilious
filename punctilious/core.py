@@ -4122,8 +4122,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             :param t: The current theory-elaboration-sequence.
             :return: (Formula) The inferred formula: (P = Q).
             """
-            p = unpack_formula(p)
-            return p
+            p_equal_q = unpack_formula(p_equal_q)
+            return p_equal_q
 
         def verify_args(d: DefinitionInclusion, p_equal_q: Formula, t: TheoryElaborationSequence) -> bool:
             """Verify if the arguments comply syntactically with the inference-rule.
@@ -5752,7 +5752,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             self.symbol_indexes[base] += 1
         return self.symbol_indexes[base]
 
-    def definition(
+    def declare_definition(
             self,
             natural_language: str,
             symbol: (None, str, Symbol) = None,
