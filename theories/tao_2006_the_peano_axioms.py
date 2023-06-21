@@ -14,6 +14,7 @@ pu.configuration.echo_axiom_inclusion = True
 pu.configuration.echo_axiom_declaration = True
 pu.configuration.echo_inferred_statement = True
 pu.configuration.echo_simple_objct_declaration = True
+pu.configuration.echo_statement = True
 pu.configuration.echo_relation = True
 
 pass
@@ -26,66 +27,60 @@ section_2 = t.open_section('The natural numbers', section_number=2)
 
 section_2_1 = t.open_section('The Peano axioms', section_parent=section_2)
 
-axiom_2_1_declaration = u.declare_axiom(f'0 is a natural number.')
-axiom_2_1 = t.include_axiom(axiom_2_1_declaration, header='2.1')
+# AXIOM 2.1.1
+axiom_2_1_1_declaration = u.declare_axiom(f'0 is a natural number.')
+axiom_2_1_1 = t.include_axiom(axiom_2_1_1_declaration, header='2.1.1')
 zero = u.o.declare(pu.Symbol('0'))
 natural_number = u.o.declare(pu.Symbol('natural-number'))
 is_a = u.r.declare(2, pu.Symbol('is-a'), pu.Formula.infix, signal_proposition=True)
-proposition_2_1_a = t.i.axiom_interpretation.infer_statement(
-    axiom_2_1,
-    u.f(is_a, zero, natural_number),
-    header='2.1.a')
+# (0 is-a natural-number):
+proposition_2_1_1_1 = t.i.axiom_interpretation.infer_statement(
+    axiom_2_1_1, u.f(is_a, zero, natural_number), header='2.1.1.1')
 
-# simple-objct declarations
-one = u.o.declare(pu.Symbol('1'))
-two = u.o.declare(pu.Symbol('2'))
-three = u.o.declare(pu.Symbol('3'))
-four = u.o.declare(pu.Symbol('4'))
-
-# relation declarations
-
-axiom_2_2_1 = t.include_axiom(u.declare_axiom('If n is a natural number, then n++ is a natural number.'),
-                              header='2.2.1')
+# AXIOM 2.1.2
+axiom_2_1_2_declaration = u.declare_axiom('If n is a natural number, then n++ is a natural number.')
+axiom_2_1_2 = t.include_axiom(axiom_2_1_2_declaration, header='2.1.2')
 plusplus = u.r.declare(1, pu.Symbol('++'), formula_rep=pu.Formula.postfix, dashed_name='successor')
 with u.v('n') as n:
-    proposition_2_2_2 = t.i.axiom_interpretation.infer_statement(
-        axiom_2_2_1,
+    # ((n₁ is-a natural-number) ⟹ ((n₁)++ is-a natural-number)):
+    proposition_2_1_2_1 = t.i.axiom_interpretation.infer_statement(
+        axiom_2_1_2,
         u.f(u.r.implies, u.f(is_a, n, natural_number), u.f(is_a, u.f(plusplus, n), natural_number)),
-        header='2.2.2')
-p_2_2_3_1 = t.i.vs.infer_statement(proposition_2_2_2, zero, header='2.2.3')
+        header='2.1.2.1')
+# ((0 is-a natural-number) ⟹ ((0)++ is-a natural-number)):
+proposition_2_1_2_2 = t.i.vs.infer_statement(proposition_2_1_2_1, zero, header='2.1.2.2')
 # ((0)++ is-a natural-number):
-p_2_2_3 = t.i.mp.infer_statement(p_2_2_3_1, proposition_2_1_a, header='2.2.3')
-zero_plus_plus = u.f(plusplus, zero)
-p_2_2_4_1 = t.i.vs.infer_statement(proposition_2_2_2, zero_plus_plus, header='2.2.3')
-p_2_2_4 = t.i.mp.infer_statement(p_2_2_4_1, p_2_2_3, header='2.2.4')
-zero_plus_plus_plusplus = u.f(plusplus, zero_plus_plus)
-p_2_2_5_1 = t.i.vs.infer_statement(proposition_2_2_2, zero_plus_plus_plusplus, header='2.2.3')
-proposition_2_2_5 = t.i.mp.infer_statement(p_2_2_5_1, p_2_2_4, header='2.2.5')
+proposition_2_1_2_3 = t.i.mp.infer_statement(proposition_2_1_2_2, proposition_2_1_1_1, header='2.2.3')
 
-# Definition 2.1.3. We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that xis defined to equal y.)
-
-def_2_1_3 = u.pose_definition(
+# DEFINITION 2.1.3
+definition_2_1_3_declaration = u.declare_definition(
     'We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number '
     '((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text '
     'I use "x := y" to denote the statement that x is defined to equal y.)',
     header='2.1.3')
-definition_2_1_3 = t.endorse_definition(d=def_2_1_3)
+definition_2_1_3 = t.include_definition(d=definition_2_1_3_declaration)
+one = u.o.declare(pu.Symbol('1'))
+proposition_2_1_3_1 = t.i.definition_interpretation.infer_statement(
+    definition_2_1_3, u.f(u.r.equal, one, u.f(plusplus, zero)), header='2.1.3.1')
+two = u.o.declare(pu.Symbol('2'))
+proposition_2_1_3_2 = t.i.definition_interpretation.infer_statement(
+    definition_2_1_3, u.f(u.r.equal, two, u.f(plusplus, u.f(plusplus, zero))), header='2.1.3.2')
+three = u.o.declare(pu.Symbol('3'))
+proposition_2_1_3_3 = t.i.definition_interpretation.infer_statement(
+    definition_2_1_3, u.f(u.r.equal, three, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero)))), header='2.1.3.3')
+four = u.o.declare(pu.Symbol('4'))
+proposition_2_1_3_4 = t.i.definition_interpretation.infer_statement(
+    definition_2_1_3, u.f(u.r.equal, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))),
+    header='2.1.3.4')
 
-# 1
-proposition_2_1_3_1 = t.ddi(
-    u.f(u.r.equal, one, u.f(plusplus, zero)), definition_2_1_3,
-    header='2.1.3.1')
+# RESUME CLEAN-UP FROM HERE
 
-# 2
-proposition_2_1_3_2 = t.ddi(
-    u.f(u.r.equal, two, u.f(plusplus, u.f(plusplus, zero))), definition_2_1_3,
-    header='2.1.3.2')
-
-# 3
-proposition_2_1_3_3 = t.ddi(
-    u.f(u.r.equal, three, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero)))),
-    definition_2_1_3,
-    header='2.1.3.3')
+zero_plusplus = u.f(plusplus, zero)
+p_2_2_4_1 = t.i.vs.infer_statement(proposition_2_1_2_1, zero_plusplus, header='2.2.3')
+p_2_2_4 = t.i.mp.infer_statement(p_2_2_4_1, proposition_2_1_2_3, header='2.2.4')
+zero_plus_plus_plusplus = u.f(plusplus, zero_plusplus)
+p_2_2_5_1 = t.i.vs.infer_statement(proposition_2_1_2_1, zero_plus_plus_plusplus, header='2.2.3')
+proposition_2_2_5 = t.i.mp.infer_statement(p_2_2_5_1, p_2_2_4, header='2.2.5')
 
 proposition_2_1_3_100 = t.i.mp.infer_statement(
     t.commutativity_of_equality, proposition_2_1_3_1, header='2.1.3.1.b')

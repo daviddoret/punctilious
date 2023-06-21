@@ -16,11 +16,11 @@ class TestTao2006ThePeanoAxioms(unittest.TestCase):
             tpa.natural_number)
 
         self.assertTrue(
-            tpa.p_2_2_3.valid_proposition.is_formula_equivalent_to(phi1))
+            tpa.proposition_2_1_2_3.valid_proposition.is_formula_equivalent_to(phi1))
         self.assertFalse(
-            tpa.p_2_2_3.valid_proposition.is_formula_equivalent_to(phi2))
+            tpa.proposition_2_1_2_3.valid_proposition.is_formula_equivalent_to(phi2))
         self.assertFalse(
-            tpa.p_2_2_3.valid_proposition.is_formula_equivalent_to(phi3))
+            tpa.proposition_2_1_2_3.valid_proposition.is_formula_equivalent_to(phi3))
 
         self.assertTrue(
             tpa.p_2_2_4.valid_proposition.is_formula_equivalent_to(phi2))

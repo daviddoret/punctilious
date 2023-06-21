@@ -73,8 +73,8 @@ with u.v('x') as x1, u.v('y') as x2:
     ft.commutativity_of_equality = ft.dai(
         u.f(u.r.implication, x1_equal_x2, x2_equal_x1), nla_01b)
 
-d_55 = u.pose_definition('Inequality is defined as the negation of equality.')
-nld_55 = ft.endorse_definition(d=d_55)
+d_55 = u.declare_definition('Inequality is defined as the negation of equality.')
+nld_55 = ft.include_definition(d=d_55)
 with u.v('x') as x, u.v('y') as y:
     ft.ddi(
         p=

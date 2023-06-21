@@ -71,6 +71,7 @@ class Configuration:
         self.echo_definition_direct_inference = None
         self.echo_formula_declaration = False  # In general, this is too verbose.
         self.echo_hypothesis = None
+        self.echo_inferred_statement = None
         self.echo_note = None
         self.echo_relation = None
         self.echo_simple_objct_declaration = None
@@ -2771,13 +2772,6 @@ class TheoryElaborationSequence(TheoreticalObjct):
         return DefinitionInclusion(
             d=d, t=self, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
-    def endorse_definition(
-            self, d: Definition, symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
-            dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
-        """Endorse (aka include) a definition in this theory-elaboration (self)."""
-        return self.include_definition(
-            d=d, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
-
     def infer_by_substitution_of_equal_terms(
             self, original_expression, equality_statement, symbol=None,
             category=None, reference=None, title=None):
@@ -2886,7 +2880,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
     def d(self, natural_language, symbol=None, reference=None, title=None):
         """Elaborate a new definition with natural-language. Shortcut function for
         t.elaborate_definition(...)."""
-        return self.endorse_definition(
+        return self.include_definition(
             natural_language=natural_language, symbol=symbol,
             reference=reference, title=title)
 
@@ -5693,18 +5687,6 @@ class UniverseOfDiscourse(SymbolicObjct):
         return AxiomDeclaration(
             u=self, natural_language=natural_language, header=header, symbol=symbol, echo=echo)
 
-    def pose_definition(
-            self,
-            natural_language: str,
-            symbol: (None, str, Symbol) = None,
-            header: (None, str, ObjctHeader) = None,
-            dashed_name: (None, str, DashedName) = None,
-            echo: (None, bool) = None):
-        """Pose a new definition in the current universe-of-discourse."""
-        return Definition(
-            natural_language=natural_language, u=self,
-            symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
-
     def take_note(
             self, t, natural_language, symbol=None, reference=None,
             title=None, echo=None, category=None):
@@ -5762,8 +5744,9 @@ class UniverseOfDiscourse(SymbolicObjct):
         """Pose a new definition in the current universe-of-discourse.
 
         Shortcut for: u.pose_definition(...)"""
-        return self.pose_definition(
+        return Definition(
             natural_language=natural_language,
+            u=self,
             symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
     @property
@@ -5864,7 +5847,8 @@ class InferredStatement(FormulaStatement):
             echo: (None, bool) = None):
         """Include (aka allow) an inference_rule in a theory-elaboration.
         """
-        echo = get_config(echo, configuration.echo_statement, fallback_value=False)
+        echo = get_config(echo, configuration.echo_inferred_statement, configuration.echo_statement,
+                          fallback_value=False)
         self._inference_rule = i
         self._parameters = tuple(parameters)
         verify(
@@ -5889,10 +5873,13 @@ class InferredStatement(FormulaStatement):
             # of the current theory-elaboration-sequence.
             t.report_inconsistency_proof(proof=self)
         if echo:
-            repm.prnt(self.repr_as_statement())
+            self.echo()
         if self.inference_rule is self.t.u.i.axiom_interpretation or \
                 self.inference_rule is self.t.u.i.definition_interpretation:
             t.assure_interpretation_disclaimer(echo=echo)
+
+    def echo(self):
+        repm.prnt(self.repr_as_statement())
 
     @property
     def parameters(self) -> tuple:
