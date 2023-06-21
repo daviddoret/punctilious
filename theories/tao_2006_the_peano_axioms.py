@@ -12,18 +12,22 @@ import foundation_system_1 as fs1
 pu.configuration.echo_default = True
 pu.configuration.echo_axiom_inclusion = True
 pu.configuration.echo_axiom_declaration = True
+pu.configuration.echo_inferred_statement = True
 pu.configuration.echo_simple_objct_declaration = True
 pu.configuration.echo_relation = True
 
 pass
 
 u = pu.UniverseOfDiscourse()
+
 t = u.t(header=pu.ObjctHeader(reference='2.1', title='the Peano axioms'), extended_theory=fs1.ft)
 
 section_2 = t.open_section('The natural numbers', section_number=2)
+
 section_2_1 = t.open_section('The Peano axioms', section_parent=section_2)
 
-axiom_2_1 = t.include_axiom(u.declare_axiom(f'0 is a natural number.'), header='2.1')
+axiom_2_1_declaration = u.declare_axiom(f'0 is a natural number.')
+axiom_2_1 = t.include_axiom(axiom_2_1_declaration, header='2.1')
 zero = u.o.declare(pu.Symbol('0'))
 natural_number = u.o.declare(pu.Symbol('natural-number'))
 is_a = u.r.declare(2, pu.Symbol('is-a'), pu.Formula.infix, signal_proposition=True)
@@ -44,9 +48,9 @@ axiom_2_2_1 = t.include_axiom(u.declare_axiom('If n is a natural number, then n+
                               header='2.2.1')
 plusplus = u.r.declare(1, pu.Symbol('++'), formula_rep=pu.Formula.postfix, dashed_name='successor')
 with u.v('n') as n:
-    proposition_2_2_2 = t.dai(
-        u.f(u.r.implies, u.f(is_a, n, natural_number), u.f(is_a, u.f(plusplus, n), natural_number)),
+    proposition_2_2_2 = t.i.axiom_interpretation.infer_statement(
         axiom_2_2_1,
+        u.f(u.r.implies, u.f(is_a, n, natural_number), u.f(is_a, u.f(plusplus, n), natural_number)),
         header='2.2.2')
 p_2_2_3_1 = t.i.vs.infer_statement(proposition_2_2_2, zero, header='2.2.3')
 # ((0)++ is-a natural-number):
@@ -140,7 +144,8 @@ axiom_2_4 = t.include_axiom(u.declare_axiom(
     'if n++ = m++, then we must have n = m.'), header='2.4')
 
 with u.v('n') as n, u.v('m') as m:
-    proposition_2_4_1 = t.dai(
+    proposition_2_4_1 = t.i.axiom_interpretation.infer_statement(
+        axiom_2_4,
         u.f(
             u.r.implies,
             u.f(
@@ -151,7 +156,7 @@ with u.v('n') as n, u.v('m') as m:
                     u.f(is_a, m, natural_number)),
                 u.f(u.r.neq, n, m)),
             u.f(u.r.neq, u.f(plusplus, n), u.f(plusplus, m)))
-        , header='2.4.1', ap=axiom_2_4)
+        , header='2.4.1')
 
 # Proposition 2.1.8: 6 is not equal to 2.
 

@@ -3549,6 +3549,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         self._double_negation_elimination = None
         self._double_negation_introduction = None
         self._equality_commutativity = None
+        self._equal_terms_substitution = None
         self._inconsistency_introduction = None
         self._modus_ponens = None
         self._variable_substitution = None
@@ -4605,6 +4606,93 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.modus_ponens
 
     @property
+    def equal_terms_substitution(self) -> InferenceRuleDeclaration:
+        """The equal-terms-substitution inference-rule: P, Q=R ⊢ P' where:
+         - P is an input statement,
+         - Q=R is an equality statement,
+         - P' is a new formula identical to P except that occurrences of Q in P
+           are substituted with R.
+
+        Abridged property: u.i.eqs
+
+        The algorithm for formula substitution is:
+        - canonical-order (top-down, depth-first, left-to-right)
+        - replace all occurrences until end of formula is reached
+
+        TODO: QUESTION: substitution_of_equal_terms: Should we forbid the presence of Q in R or R in Q?
+
+        If the inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+
+        def infer_formula(p: FormulaStatement, q_equal_r: FormulaStatement, t: TheoryElaborationSequence) -> Formula:
+            """
+
+            :param p: ⌜ P ⌝  a formula-statement.
+            :param q_equal_r: a formula-statement of the form: (Q = R).
+            :return: (FormulaStatement) A formula-statement P' where occurrences of Q are replaced with R.
+            """
+            p = unpack_formula(p)
+            q_equal_r = unpack_formula(q_equal_r)
+            q = q_equal_r.parameters[0]
+            r = q_equal_r.parameters[1]
+            substitution_map = {q: r}
+            p_prime = p.substitute(
+                substitution_map=substitution_map, target_theory=t,
+                lock_variable_scope=True)
+            return p_prime  # TODO: Provide support for statements that are atomic propositional formula, that is without relation or where the objct is a 0-ary relation.
+
+        def verify_args(p: FormulaStatement, q_equal_r: FormulaStatement, t: TheoryElaborationSequence) -> bool:
+            verify(is_in_class(p, classes.formula_statement),
+                   '⌜p⌝ is not of the formula-statement declarative-class.',
+                   p=p, slf=self, t=t)
+            verify(t.contains_theoretical_objct(p),
+                   '⌜p⌝ is not contained in theoretical-elaboration-sequence ⌜t⌝.',
+                   p=p, slf=self, t=t)
+            verify(is_in_class(q_equal_r, classes.formula_statement),
+                   '⌜q_equal_r⌝ is not of the formula-statement declarative-class.',
+                   q_equal_r=q_equal_r, slf=self, t=t)
+            verify(t.contains_theoretical_objct(q_equal_r),
+                   '⌜q_equal_r⌝ is not contained in theoretical-elaboration-sequence ⌜t⌝.',
+                   q_equal_r=q_equal_r, slf=self, t=t)
+            q_equal_r = unpack_formula(q_equal_r)
+            verify(q_equal_r.relation is self.u.r.equality,
+                   'The root relation of ⌜q_equal_r⌝ is not the equality relation.',
+                   q_equal_r=q_equal_r, slf=self, t=t)
+            return True
+
+        if self._equal_terms_substitution is None:
+            self._equal_terms_substitution = InferenceRuleDeclaration(
+                universe_of_discourse=self.u,
+                symbol=Symbol('ets', index=None),
+                header='equal terms substitution',
+                dashed_name=DashedName('equal-terms-substitution'),
+                infer_formula=infer_formula,
+                verify_args=verify_args)
+        return self._equal_terms_substitution
+
+    @property
+    def ets(self) -> InferenceRuleDeclaration:
+        """An inference-rule: P, Q=R ⊢ P' where:
+         - P is an input statement,
+         - Q=R is an equality statement,
+         - P' is a new formula identical to P except that occurences of Q in P
+           are substituted with R.
+
+        Unabridged property: universe_of_discourse.inference_rules.equal_terms_substitution
+
+        The algorithm for formula substitution is:
+        - canonical-order (top-down, depth-first, left-to-right)
+        - replace all occurrences until end of formula is reached
+
+        TODO: QUESTION: substitution_of_equal_terms: Should we forbid the presence of Q in R or R in Q?
+
+        If the inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        return self.equal_terms_substitution
+
+    @property
     def variable_substitution(self) -> InferenceRuleDeclaration:
         """An inference-rule: P, X→Y ⊢ P' where:
          - P is an input statement,
@@ -4730,6 +4818,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         self._double_negation_elimination = None
         self._double_negation_introduction = None
         self._equality_commutativity = None
+        self._equal_terms_substitution = None
         self._inconsistency_introduction = None
         self._modus_ponens = None
         self._variable_substitution = None
@@ -5072,6 +5161,53 @@ class InferenceRuleInclusionDict(collections.UserDict):
                 i=self.t.u.i.equality_commutativity,
                 header='equality commutativity')
         return self._equality_commutativity
+
+    @property
+    def equal_terms_substitution(self) -> InferenceRuleInclusion:
+        """The equal-terms-substitution inference-rule: P, Q=R ⊢ P' where:
+                 - P is an input statement,
+                 - Q=R is an equality statement,
+                 - P' is a new formula identical to P except that occurrences of Q in P
+                   are substituted with R.
+
+                Abridged property: u.i.eqs
+
+                The algorithm for formula substitution is:
+                - canonical-order (top-down, depth-first, left-to-right)
+                - replace all occurrences until end of formula is reached
+
+                TODO: QUESTION: substitution_of_equal_terms: Should we forbid the presence of Q in R or R in Q?
+
+                If the inference-rule does not exist in the universe-of-discourse,
+                the inference-rule is automatically declared.
+                """
+        if self._equal_terms_substitution is None:
+            self._equal_terms_substitution = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.equal_terms_substitution,
+                header='equal terms substitution')
+        return self._equal_terms_substitution
+
+    @property
+    def ets(self) -> InferenceRuleInclusion:
+        """The equal-terms-substitution inference-rule: P, Q=R ⊢ P' where:
+                         - P is an input statement,
+                         - Q=R is an equality statement,
+                         - P' is a new formula identical to P except that occurrences of Q in P
+                           are substituted with R.
+
+                        Abridged property: u.i.eqs
+
+                        The algorithm for formula substitution is:
+                        - canonical-order (top-down, depth-first, left-to-right)
+                        - replace all occurrences until end of formula is reached
+
+                        TODO: QUESTION: substitution_of_equal_terms: Should we forbid the presence of Q in R or R in Q?
+
+                        If the inference-rule does not exist in the universe-of-discourse,
+                        the inference-rule is automatically declared.
+                        """
+        return self.equal_terms_substitution
 
     @property
     def inconsistency_introduction(self) -> InferenceRuleInclusion:
@@ -5728,6 +5864,7 @@ class InferredStatement(FormulaStatement):
             echo: (None, bool) = None):
         """Include (aka allow) an inference_rule in a theory-elaboration.
         """
+        echo = get_config(echo, configuration.echo_statement, fallback_value=False)
         self._inference_rule = i
         self._parameters = tuple(parameters)
         verify(
