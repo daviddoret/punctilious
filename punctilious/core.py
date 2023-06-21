@@ -1594,7 +1594,7 @@ class Statement(TheoreticalObjct):
         return self._universe_of_discourse
 
 
-class Axiom(TheoreticalObjct):
+class AxiomDeclaration(TheoreticalObjct):
     """The Axiom pythonic class models the elaboration of a _contentual_ _axiom_ in a _universe-of-discourse_.
 
     """
@@ -1641,7 +1641,7 @@ class Axiom(TheoreticalObjct):
             index = u.index_symbol(base=symbol) if auto_index else None
             symbol = Symbol(base=symbol, index=index)
         super().__init__(
-            universe_of_discourse=u, symbol=symbol, echo=echo, header=header)
+            universe_of_discourse=u, symbol=symbol, echo=False, header=header)
         super()._declare_class_membership(declarative_class_list.axiom)
         u.cross_reference_axiom(self)
         if echo:
@@ -1668,7 +1668,7 @@ class AxiomInclusion(Statement):
 
     def __init__(
             self,
-            a: Axiom,
+            a: AxiomDeclaration,
             t: TheoryElaborationSequence,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
@@ -1714,14 +1714,14 @@ class AxiomInclusion(Statement):
             repm.prnt(self.repr_as_statement())
 
     @property
-    def a(self) -> Axiom:
+    def a(self) -> AxiomDeclaration:
         """The axiom of an axiom-inclusion.
 
         Unabridged property: axiom_inclusion.axiom"""
         return self.axiom
 
     @property
-    def axiom(self) -> Axiom:
+    def axiom(self) -> AxiomDeclaration:
         """The axiom of an axiom-inclusion.
 
         Abridged property: a.a"""
@@ -1744,7 +1744,7 @@ class InferenceRuleInclusion(Statement):
 
     def __init__(
             self,
-            i: InferenceRule,
+            i: InferenceRuleDeclaration,
             t: TheoryElaborationSequence,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
@@ -1905,7 +1905,7 @@ class Definition(TheoreticalObjct):
         return text
 
 
-class DefinitionEndorsement(Statement):
+class DefinitionInclusion(Statement):
     """A definition-endorsement in the current theory-elaboration.
     """
 
@@ -2210,7 +2210,7 @@ class DirectDefinitionInference(FormulaStatement):
     def __init__(
             self,
             p: Formula,
-            d: DefinitionEndorsement,
+            d: DefinitionInclusion,
             t: TheoryElaborationSequence,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
@@ -2296,7 +2296,7 @@ class InferenceRuleOBSOLETE:
         pass
 
 
-class InferenceRule(TheoreticalObjct):
+class InferenceRuleDeclaration(TheoreticalObjct):
     """An inference-rule object.
 
     If an inference-rule is allowed / included in a theory-elaboration,
@@ -2540,6 +2540,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
         self._extended_theory = extended_theory
         self._extended_theory_limit = extended_theory_limit
         self._commutativity_of_equality = None
+        self._interpretation_disclaimer = False
         if symbol is None:
             base = '𝑡'
             index = u.index_symbol(base=base)
@@ -2589,6 +2590,21 @@ class TheoryElaborationSequence(TheoreticalObjct):
             self.stabilize()
         if echo:
             repm.prnt(self.repr_as_declaration())
+
+    def assure_interpretation_disclaimer(self, echo: (None, bool) = None):
+        """After the first usage of a contentual interpretation inference-rule,
+        warns the user that no semantic verification is performed."""
+        echo = get_config(echo, configuration.echo_default, fallback_value=False)
+        if not self._interpretation_disclaimer:
+            self.take_note(
+                'By design, punctilious assures the syntactical correctness of theories and does not perform any '
+                'semantic verification. Consequently, the usage of inference-rules that interpret content (i.e. '
+                'axiom-interpretation and definition-interpretation) is critically dependent on the correctness of '
+                'the content translation performed by the theory author, from axiom or definition natural language, '
+                'to formulae.',
+                title='warning on content interpretation',
+                echo=echo)
+            self._interpretation_disclaimer = True
 
     @property
     def commutativity_of_equality(self):
@@ -2669,7 +2685,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
             theory=self, header=header, echo=echo)
 
     def elaborate_direct_definition_inference(
-            self, p: Formula, d: DefinitionEndorsement,
+            self, p: Formula, d: DefinitionInclusion,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
@@ -2741,8 +2757,8 @@ class TheoryElaborationSequence(TheoreticalObjct):
             yield from self.extended_theory.iterate_theoretical_objcts_references(
                 include_root=False, visited=visited)
 
-    def postulate_axiom(
-            self, a: Axiom, symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
+    def include_axiom(
+            self, a: AxiomDeclaration, symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None) -> AxiomInclusion:
         """Postulate an axiom in this theory-elaboration (self)."""
         return AxiomInclusion(
@@ -2752,7 +2768,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
             self, d: Definition, symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
         """Include (aka endorse) a definition in this theory-elaboration (self)."""
-        return DefinitionEndorsement(
+        return DefinitionInclusion(
             d=d, t=self, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
     def endorse_definition(
@@ -2789,7 +2805,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
             header=header, echo=echo)
 
     def ddi(
-            self, p: Formula, d: DefinitionEndorsement,
+            self, p: Formula, d: DefinitionInclusion,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None,
@@ -3024,9 +3040,9 @@ class Hypothesis(Statement):
             extended_theory=t,
             extended_theory_limit=self
         )
-        self.hypothetical_axiom = self.universe_of_discourse.axiom(
+        self.hypothetical_axiom = self.universe_of_discourse.declare_axiom(
             f'Assume {hypothetical_formula.repr_as_formula()} is true.')
-        self.hypothetical_axiom_postulate = self.hypothetical_t.postulate_axiom(
+        self.hypothetical_axiom_postulate = self.hypothetical_t.include_axiom(
             self.hypothetical_axiom)
         self.proposition = self.hypothetical_t.dai(valid_proposition=hypothetical_formula,
                                                    ap=self.hypothetical_axiom_postulate)
@@ -3510,7 +3526,7 @@ class RelationDict(collections.UserDict):
         return self.inequality
 
 
-class InferenceRuleDict(collections.UserDict):
+class InferenceRuleDeclarationDict(collections.UserDict):
     """A dictionary that exposes well-known objects as properties.
 
     """
@@ -3520,12 +3536,14 @@ class InferenceRuleDict(collections.UserDict):
         super().__init__()
         # Well-known objects
         self._absorption = None
+        self._axiom_interpretation = None
         self._biconditional_elimination_left = None
         self._biconditional_elimination_right = None
         self._biconditional_introduction = None
         self._conjunction_elimination_left = None
         self._conjunction_elimination_right = None
         self._conjunction_introduction = None
+        self._definition_interpretation = None
         self._disjunction_elimination = None  # TODO: IMPLEMENT disjunction_elimination
         self._disjunction_introduction = None
         self._double_negation_elimination = None
@@ -3535,7 +3553,7 @@ class InferenceRuleDict(collections.UserDict):
         self._variable_substitution = None
 
     @property
-    def absorb(self) -> InferenceRule:
+    def absorb(self) -> InferenceRuleDeclaration:
         """The well-known absorption inference-rule: (P ⟹ Q) ⊢ (P ⟹ (P ∧ Q)).
 
         Unabridged property: u.i.absorption
@@ -3546,7 +3564,7 @@ class InferenceRuleDict(collections.UserDict):
         return self.absorption
 
     @property
-    def absorption(self) -> InferenceRule:
+    def absorption(self) -> InferenceRuleDeclaration:
         """The well-known absorption inference-rule: (P ⟹ Q) ⊢ (P ⟹ (P ∧ Q)).
 
         Abridged property: u.i.absorb
@@ -3592,7 +3610,7 @@ class InferenceRuleDict(collections.UserDict):
             return True
 
         if self._absorption is None:
-            self._absorption = InferenceRule(
+            self._absorption = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 symbol=Symbol('absorb', index=None),
                 header='absorption',
@@ -3602,7 +3620,75 @@ class InferenceRuleDict(collections.UserDict):
         return self._absorption
 
     @property
-    def bi(self) -> InferenceRule:
+    def axiom_interpretation(self) -> InferenceRuleDeclaration:
+        """The axiom_interpretation inference-rule: 𝒜 ⊢ P.
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+
+        Warning
+        -------
+        Axiom-interpretation is especially dangerous because, contrary to most inference-rules,
+        it allows the introduction of arbitrary truthes in the theory. For this reason,
+        one must be very attentive when applying this inference-rule to assure the resulting
+        formula-statement complies / interprets properly its related contentual-axiom.
+        """
+
+        def infer_formula(a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence) -> Formula:
+            """Compute the formula that results from applying this inference-rule with those arguments.
+
+            :param a: An axiom-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
+            :param p: A propositional formula: P.
+            :param t: The current theory-elaboration-sequence.
+            :return: (Formula) The inferred formula: P.
+            """
+            p = unpack_formula(p)
+            return p
+
+        def verify_args(a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence) -> bool:
+            """Verify if the arguments comply syntactically with the inference-rule.
+
+            WARNING:
+            --------
+            No semantic operation is performed.
+
+           :param a: An axiom-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
+            :param p: A propositional formula: P.
+            :param t: The current theory-elaboration-sequence.
+            :return: (bool) True if the inference-rule arguments comply syntactically
+                with the inference-rule, False otherwise.
+            """
+            verify(
+                is_in_class(a, classes.axiom_inclusion),
+                '⌜a⌝ is not of declarative-class axiom-inclusion.',
+                a=a, t=t, slf=self)
+            verify(
+                t.contains_theoretical_objct(a),
+                '⌜a⌝ is not contained in ⌜t⌝.',
+                a=a, t=t, slf=self)
+            verify(
+                is_in_class(p, classes.formula),
+                '⌜p⌝ is not of declarative-class formula.',
+                p=p, t=t, slf=self)
+            verify(
+                p.is_proposition,
+                '⌜p⌝ is not propositional.',
+                p=p, t=t, slf=self)
+            # TODO: Add a verification step: the axiom is not locked.
+            return True
+
+        if self._axiom_interpretation is None:
+            self._axiom_interpretation = InferenceRuleDeclaration(
+                universe_of_discourse=self.u,
+                symbol=Symbol('𝙰𝙸', index=None),
+                header='axiom interpretation',
+                dashed_name=DashedName('axiom-interpretation'),
+                infer_formula=infer_formula,
+                verify_args=verify_args)
+        return self._axiom_interpretation
+
+    @property
+    def bi(self) -> InferenceRuleDeclaration:
         """The well-known biconditional-introduction inference-rule: : P ⟹ Q, Q ⟹ P ⊢ P ⟺ Q.
 
         Unabridged property: u.i.biconditional_introduction
@@ -3613,7 +3699,7 @@ class InferenceRuleDict(collections.UserDict):
         return self.biconditional_introduction
 
     @property
-    def bel(self) -> InferenceRule:
+    def bel(self) -> InferenceRuleDeclaration:
         """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
         Abridged property: u.i.bel
@@ -3624,7 +3710,7 @@ class InferenceRuleDict(collections.UserDict):
         return self.biconditional_elimination_left
 
     @property
-    def ber(self) -> InferenceRule:
+    def ber(self) -> InferenceRuleDeclaration:
         """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
 
         Abridged property: u.i.ber()
@@ -3635,7 +3721,7 @@ class InferenceRuleDict(collections.UserDict):
         return self.biconditional_elimination_right
 
     @property
-    def biconditional_elimination_left(self) -> InferenceRule:
+    def biconditional_elimination_left(self) -> InferenceRuleDeclaration:
         """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
         Abridged property: u.i.bel
@@ -3683,7 +3769,7 @@ class InferenceRuleDict(collections.UserDict):
             return True
 
         if self._biconditional_elimination_left is None:
-            self._biconditional_elimination_left = InferenceRule(
+            self._biconditional_elimination_left = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 symbol=Symbol('bel', index=None),
                 header='biconditional elimination (left)',
@@ -3693,7 +3779,7 @@ class InferenceRuleDict(collections.UserDict):
         return self._biconditional_elimination_left
 
     @property
-    def biconditional_elimination_right(self) -> InferenceRule:
+    def biconditional_elimination_right(self) -> InferenceRuleDeclaration:
         """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
 
         Abridged property: u.i.ber()
@@ -3741,7 +3827,7 @@ class InferenceRuleDict(collections.UserDict):
             return True
 
         if self._biconditional_elimination_right is None:
-            self._biconditional_elimination_right = InferenceRule(
+            self._biconditional_elimination_right = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 symbol=Symbol('ber', index=None),
                 header='biconditional elimination (right)',
@@ -3751,7 +3837,7 @@ class InferenceRuleDict(collections.UserDict):
         return self._biconditional_elimination_right
 
     @property
-    def biconditional_introduction(self) -> InferenceRule:
+    def biconditional_introduction(self) -> InferenceRuleDeclaration:
         """The well-known biconditional-introduction inference-rule: : P ⟹ Q, Q ⟹ P ⊢ P ⟺ Q.
 
         Abridged property: u.i.bi
@@ -3805,7 +3891,7 @@ class InferenceRuleDict(collections.UserDict):
             return True
 
         if self._biconditional_introduction is None:
-            self._biconditional_introduction = InferenceRule(
+            self._biconditional_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 symbol=Symbol('bi', index=None),
                 header='biconditional introduction',
@@ -3815,7 +3901,7 @@ class InferenceRuleDict(collections.UserDict):
         return self._biconditional_introduction
 
     @property
-    def conjunction_elimination_left(self) -> InferenceRule:
+    def conjunction_elimination_left(self) -> InferenceRuleDeclaration:
         """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
         Abridged property: u.i.cel()
@@ -3859,7 +3945,7 @@ class InferenceRuleDict(collections.UserDict):
             return True
 
         if self._conjunction_elimination_left is None:
-            self._conjunction_elimination_left = InferenceRule(
+            self._conjunction_elimination_left = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 symbol=Symbol('cel', index=None),
                 header='conjunction elimination (left)',
@@ -3869,7 +3955,7 @@ class InferenceRuleDict(collections.UserDict):
         return self._conjunction_elimination_left
 
     @property
-    def conjunction_elimination_right(self) -> InferenceRule:
+    def conjunction_elimination_right(self) -> InferenceRuleDeclaration:
         """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
         Abridged property: u.i.cer()
@@ -3913,7 +3999,7 @@ class InferenceRuleDict(collections.UserDict):
             return True
 
         if self._conjunction_elimination_right is None:
-            self._conjunction_elimination_right = InferenceRule(
+            self._conjunction_elimination_right = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 symbol=Symbol('cer', index=None),
                 header='conjunction elimination (right)',
@@ -3923,7 +4009,7 @@ class InferenceRuleDict(collections.UserDict):
         return self._conjunction_elimination_right
 
     @property
-    def conjunction_introduction(self) -> InferenceRule:
+    def conjunction_introduction(self) -> InferenceRuleDeclaration:
         """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
         Abridged property: u.i.ci
@@ -3969,7 +4055,7 @@ class InferenceRuleDict(collections.UserDict):
             return True
 
         if self._conjunction_introduction is None:
-            self._conjunction_introduction = InferenceRule(
+            self._conjunction_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 symbol=Symbol('ci', index=None),
                 header='conjunction introduction',
@@ -3979,7 +4065,91 @@ class InferenceRuleDict(collections.UserDict):
         return self._conjunction_introduction
 
     @property
-    def di(self) -> InferenceRule:
+    def di(self) -> InferenceRuleDeclaration:
+        """The definition_interpretation inference-rule: 𝒜 ⊢ P.
+
+        Unabridged property: universe_of_discourse.inference_rules.definition_interpretation
+
+        If the inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+
+        Warning
+        -------
+        Axiom-interpretation is especially dangerous because, contrary to most inference-rules,
+        it allows the introduction of arbitrary truthes in the theory. For this reason,
+        one must be very attentive when applying this inference-rule to assure the resulting
+        formula-statement complies / interprets properly its related contentual-definition.
+        """
+        return self.definition_interpretation
+
+    @property
+    def definition_interpretation(self) -> InferenceRuleDeclaration:
+        """The definition_interpretation inference-rule: 𝒟 ⊢ (P = Q).
+
+        If the inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+
+        Warning
+        -------
+        Axiom-interpretation is especially dangerous because, contrary to most inference-rules,
+        it allows the introduction of arbitrary truthes in the theory. For this reason,
+        one must be very attentive when applying this inference-rule to assure the resulting
+        formula-statement complies / interprets properly its related contentual-definition.
+        """
+
+        def infer_formula(d: DefinitionInclusion, p_equal_q: Formula, t: TheoryElaborationSequence) -> Formula:
+            """Compute the formula that results from applying this inference-rule with those arguments.
+
+            :param d: A definition-inclusion in the theory-elaboration-sequence under consideration: 𝒟.
+            :param p_equal_q: A propositional formula of the form: (P = Q)
+            :param t: The current theory-elaboration-sequence.
+            :return: (Formula) The inferred formula: (P = Q).
+            """
+            p = unpack_formula(p)
+            return p
+
+        def verify_args(d: DefinitionInclusion, p_equal_q: Formula, t: TheoryElaborationSequence) -> bool:
+            """Verify if the arguments comply syntactically with the inference-rule.
+
+            WARNING:
+            --------
+            No semantic operation is performed.
+
+            :param d: A definition-inclusion in the theory-elaboration-sequence under consideration: 𝒟.
+            :param p_equal_q: A propositional formula of the form: (P = Q)
+            :param t: The current theory-elaboration-sequence.
+            :return: (Formula) The inferred formula: (P = Q).
+            """
+            verify(
+                is_in_class(d, classes.definition_inclusion),
+                '⌜d⌝ is not of declarative-class definition-inclusion.',
+                d=d, t=t, slf=self)
+            verify(
+                t.contains_theoretical_objct(d),
+                '⌜d⌝ is not contained in ⌜t⌝.',
+                d=d, t=t, slf=self)
+            verify(
+                is_in_class(p_equal_q, classes.formula),
+                '⌜p_equal_q⌝ is not of declarative-class formula.',
+                p_equal_q=p_equal_q, d=d, t=t, slf=self)
+            verify(
+                p_equal_q.relation is t.u.r.equality,
+                'The root relation of ⌜p_equal_q⌝ is not the equality relation.',
+                p_equal_q_relation=p_equal_q.relation, p_equal_q=p_equal_q, d=d, t=t, slf=self)
+            return True
+
+        if self._definition_interpretation is None:
+            self._definition_interpretation = InferenceRuleDeclaration(
+                universe_of_discourse=self.u,
+                symbol=Symbol('𝙳𝙸', index=None),
+                header='definition interpretation',
+                dashed_name=DashedName('definition-interpretation'),
+                infer_formula=infer_formula,
+                verify_args=verify_args)
+        return self._definition_interpretation
+
+    @property
+    def di(self) -> InferenceRuleDeclaration:
         """The well-known disjunction-introduction inference-rule: P ⊢ (P ∨ Q).
 
         Unabridged property: u.i.disjunction_introduction
@@ -3990,7 +4160,7 @@ class InferenceRuleDict(collections.UserDict):
         return self.disjunction_introduction
 
     @property
-    def disjunction_introduction(self) -> InferenceRule:
+    def disjunction_introduction(self) -> InferenceRuleDeclaration:
         """The well-known disjunction-introduction inference-rule: P ⊢ (P ∨ Q).
 
         Abridged property: u.i.di
@@ -4037,7 +4207,7 @@ class InferenceRuleDict(collections.UserDict):
             return True
 
         if self._disjunction_introduction is None:
-            self._disjunction_introduction = InferenceRule(
+            self._disjunction_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 symbol=Symbol('di', index=None),
                 header='disjunction introduction',
@@ -4047,7 +4217,7 @@ class InferenceRuleDict(collections.UserDict):
         return self._disjunction_introduction
 
     @property
-    def double_negation_elimination(self) -> InferenceRule:
+    def double_negation_elimination(self) -> InferenceRuleDeclaration:
         """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
         Abridged property: u.i.dne
@@ -4097,7 +4267,7 @@ class InferenceRuleDict(collections.UserDict):
             return True
 
         if self._double_negation_elimination is None:
-            self._double_negation_elimination = InferenceRule(
+            self._double_negation_elimination = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 symbol=Symbol('dne', index=None),
                 header='double negation elimination',
@@ -4107,7 +4277,7 @@ class InferenceRuleDict(collections.UserDict):
         return self._double_negation_elimination
 
     @property
-    def double_negation_introduction(self) -> InferenceRule:
+    def double_negation_introduction(self) -> InferenceRuleDeclaration:
         """The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.
 
         Abridged property: u.i.dni
@@ -4145,7 +4315,7 @@ class InferenceRuleDict(collections.UserDict):
             return True
 
         if self._double_negation_introduction is None:
-            self._double_negation_introduction = InferenceRule(
+            self._double_negation_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 symbol=Symbol('dni', index=None),
                 header='double negation introduction',
@@ -4155,7 +4325,7 @@ class InferenceRuleDict(collections.UserDict):
         return self._double_negation_introduction
 
     @property
-    def cel(self) -> InferenceRule:
+    def cel(self) -> InferenceRuleDeclaration:
         """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
         Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_left
@@ -4166,7 +4336,7 @@ class InferenceRuleDict(collections.UserDict):
         return self.conjunction_elimination_left
 
     @property
-    def cer(self) -> InferenceRule:
+    def cer(self) -> InferenceRuleDeclaration:
         """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
         Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_right
@@ -4177,7 +4347,7 @@ class InferenceRuleDict(collections.UserDict):
         return self.conjunction_elimination_right
 
     @property
-    def ci(self) -> InferenceRule:
+    def ci(self) -> InferenceRuleDeclaration:
         """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
         Unabridged property: universe_of_discourse.inference_rules.conjunction_introduction
@@ -4188,7 +4358,7 @@ class InferenceRuleDict(collections.UserDict):
         return self.conjunction_introduction
 
     @property
-    def dne(self) -> InferenceRule:
+    def dne(self) -> InferenceRuleDeclaration:
         """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
         Original method: universe_of_discourse.inference_rules.double_negation_elimination
@@ -4199,7 +4369,7 @@ class InferenceRuleDict(collections.UserDict):
         return self.double_negation_elimination
 
     @property
-    def dni(self) -> InferenceRule:
+    def dni(self) -> InferenceRuleDeclaration:
         """The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.
 
         Original method: universe_of_discourse.inference_rules.double_negation_introduction()
@@ -4210,7 +4380,7 @@ class InferenceRuleDict(collections.UserDict):
         return self.double_negation_introduction
 
     @property
-    def inconsistency_introduction(self) -> InferenceRule:
+    def inconsistency_introduction(self) -> InferenceRuleDeclaration:
         """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
 
         Abridged property: u.i.ii
@@ -4266,7 +4436,7 @@ class InferenceRuleDict(collections.UserDict):
             return True
 
         if self._inconsistency_introduction is None:
-            self._inconsistency_introduction = InferenceRule(
+            self._inconsistency_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 symbol=Symbol('Inc', index=None),
                 header='inconsistency introduction',
@@ -4276,7 +4446,7 @@ class InferenceRuleDict(collections.UserDict):
         return self._inconsistency_introduction
 
     @property
-    def ii(self) -> InferenceRule:
+    def ii(self) -> InferenceRuleDeclaration:
         """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
 
             Unabridged property: universe_of_discourse.inference_rules.inconsistency_introduction
@@ -4298,7 +4468,7 @@ class InferenceRuleDict(collections.UserDict):
         return self.inconsistency_introduction
 
     @property
-    def modus_ponens(self) -> InferenceRule:
+    def modus_ponens(self) -> InferenceRuleDeclaration:
         """The well-known modus-ponens inference-rule: (P ⟹ Q), P' ⊢ Q'.
 
         Abridged property: u.i.mp
@@ -4366,7 +4536,7 @@ class InferenceRuleDict(collections.UserDict):
             return True
 
         if self._modus_ponens is None:
-            self._modus_ponens = InferenceRule(
+            self._modus_ponens = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 symbol=Symbol('mp', index=None),
                 header='modus ponens',
@@ -4376,7 +4546,7 @@ class InferenceRuleDict(collections.UserDict):
         return self._modus_ponens
 
     @property
-    def mp(self) -> InferenceRule:
+    def mp(self) -> InferenceRuleDeclaration:
         """The well-known modus-ponens inference-rule: (P ⟹ Q), P ⊢ Q.
 
         Unabridged property: u.i.modus_ponens
@@ -4387,7 +4557,7 @@ class InferenceRuleDict(collections.UserDict):
         return self.modus_ponens
 
     @property
-    def variable_substitution(self) -> InferenceRule:
+    def variable_substitution(self) -> InferenceRuleDeclaration:
         """An inference-rule: P, X→Y ⊢ P' where:
          - P is an input statement,
          - X→Y is a mapping between the free-variables in P and their substitution values,
@@ -4450,7 +4620,7 @@ class InferenceRuleDict(collections.UserDict):
             return True
 
         if self._variable_substitution is None:
-            self._variable_substitution = InferenceRule(
+            self._variable_substitution = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 symbol=Symbol('vs', index=None),
                 header='variable substitution',
@@ -4460,7 +4630,7 @@ class InferenceRuleDict(collections.UserDict):
         return self._variable_substitution
 
     @property
-    def vs(self) -> InferenceRule:
+    def vs(self) -> InferenceRuleDeclaration:
         """An inference-rule: P ⊢ P'
 
         Abridged property: u.i.vs
@@ -4499,12 +4669,14 @@ class InferenceRuleInclusionDict(collections.UserDict):
         super().__init__()
         # Well-known objects
         self._absorption = None
+        self._axiom_interpretation = None
         self._biconditional_elimination_left = None
         self._biconditional_elimination_right = None
         self._biconditional_introduction = None
         self._conjunction_elimination_left = None
         self._conjunction_elimination_right = None
         self._conjunction_introduction = None
+        self._definition_interpretation = None
         self._disjunction_elimination = None  # TODO: IMPLEMENT disjunction_elimination
         self._disjunction_introduction = None
         self._double_negation_elimination = None
@@ -4539,6 +4711,27 @@ class InferenceRuleInclusionDict(collections.UserDict):
                 i=self.t.u.i.absorption,
                 header='absorption')
         return self._absorption
+
+    @property
+    def axiom_interpretation(self) -> InferenceRuleInclusion:
+        """The axiom_interpretation inference-rule: 𝒜 ⊢ P.
+
+               If the well-known inference-rule does not exist in the universe-of-discourse,
+               the inference-rule is automatically created.
+
+               Warning
+               -------
+               Axiom-interpretation is especially dangerous because, contrary to most inference-rules,
+               it allows the introduction of arbitrary truthes in the theory. For this reason,
+               one must be very attentive when applying this inference-rule to assure the resulting
+               formula-statement complies / interprets properly its related contentual-axiom.
+               """
+        if self._axiom_interpretation is None:
+            self._axiom_interpretation = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.axiom_interpretation,
+                header='axiom interpretation')
+        return self._axiom_interpretation
 
     @property
     def bel(self) -> InferenceRuleInclusion:
@@ -4701,6 +4894,27 @@ class InferenceRuleInclusionDict(collections.UserDict):
         the inference-rule is automatically created.
         """
         return self.conjunction_introduction
+
+    @property
+    def definition_interpretation(self) -> InferenceRuleInclusion:
+        """The definition_interpretation inference-rule: 𝒟 ⊢ (P = Q).
+
+        If the inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically created.
+
+        Warning
+        -------
+        Axiom-interpretation is especially dangerous because, contrary to most inference-rules,
+        it allows the introduction of arbitrary truthes in the theory. For this reason,
+        one must be very attentive when applying this inference-rule to assure the resulting
+        formula-statement complies / interprets properly its related contentual-definition.
+        """
+        if self._definition_interpretation is None:
+            self._definition_interpretation = InferenceRuleInclusion(
+                t=self.t,
+                i=self.t.u.i.definition_interpretation,
+                header='definition interpretation')
+        return self._definition_interpretation
 
     @property
     def di(self) -> InferenceRuleInclusion:
@@ -4952,7 +5166,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         self.axioms = dict()
         self.definitions = dict()
         self.formulae = dict()
-        self._inference_rules = InferenceRuleDict(u=self)
+        self._inference_rules = InferenceRuleDeclarationDict(u=self)
         self._relations = RelationDict(u=self)
         self.theories = dict()
         self._simple_objcts = SimpleObjctDict(u=self)
@@ -4987,17 +5201,6 @@ class UniverseOfDiscourse(SymbolicObjct):
         if echo:
             self.echo()
 
-    def axiom(
-            self, natural_language, header=None, symbol=None, echo=None):
-        """Elaborate a new axiom in this universe-of-discourse.
-
-        :param natural_language:
-        :param symbol:
-        :param echo:
-        :return:
-        """
-        return self.elaborate_axiom(natural_language=natural_language, header=header, symbol=symbol, echo=echo)
-
     @property
     def i(self):
         """A python dictionary of inference-rules contained in this universe-of-discourse,
@@ -5022,7 +5225,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         where well-known relations are directly available as properties."""
         return self._relations
 
-    def cross_reference_axiom(self, a: Axiom) -> bool:
+    def cross_reference_axiom(self, a: AxiomDeclaration) -> bool:
         """Cross-references an axiom in this universe-of-discourse.
 
         :param a: an axiom.
@@ -5071,7 +5274,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         if phi not in self.formulae:
             self.formulae[phi.symbol] = phi
 
-    def cross_reference_inference_rule(self, ir: InferenceRule) -> bool:
+    def cross_reference_inference_rule(self, ir: InferenceRuleDeclaration) -> bool:
         """Cross-references an inference-rule in this universe-of-discourse.
 
         :param ir: an inference-rule.
@@ -5271,11 +5474,11 @@ class UniverseOfDiscourse(SymbolicObjct):
             natural_language=natural_language, symbol=symbol, t=theory,
             reference=reference, title=title, echo=echo)
 
-    def elaborate_axiom(
+    def declare_axiom(
             self, natural_language: str, header: (None, str, ObjctHeader) = None, symbol: (None, str, Symbol) = None,
             echo: (None, bool) = None):
         """Elaborate a new axiom 𝑎 in this universe-of-discourse."""
-        return Axiom(
+        return AxiomDeclaration(
             u=self, natural_language=natural_language, header=header, symbol=symbol, echo=echo)
 
     def pose_definition(
@@ -5440,7 +5643,7 @@ class InferredStatement(FormulaStatement):
     def __init__(
             self,
             *parameters,
-            i: InferenceRule,  # TODO: DESIGN-FLAW: PASS InferenceRuleInclusion instead
+            i: InferenceRuleDeclaration,  # TODO: DESIGN-FLAW: PASS InferenceRuleInclusion instead
             t: TheoryElaborationSequence,
             symbol: (None, str, Symbol) = None,
             cat: (None, StatementCategory) = None,
@@ -5474,13 +5677,16 @@ class InferredStatement(FormulaStatement):
             t.report_inconsistency_proof(proof=self)
         if echo:
             repm.prnt(self.repr_as_statement())
+        if self.inference_rule is self.t.u.i.axiom_interpretation or \
+                self.inference_rule is self.t.u.i.definition_interpretation:
+            t.assure_interpretation_disclaimer(echo=echo)
 
     @property
     def parameters(self) -> tuple:
         return self._parameters
 
     @property
-    def inference_rule(self) -> InferenceRule:
+    def inference_rule(self) -> InferenceRuleDeclaration:
         """Return the inference-rule upon which this inference-rule-inclusion is based.
         """
         return self._inference_rule

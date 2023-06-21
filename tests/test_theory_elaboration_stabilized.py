@@ -8,14 +8,14 @@ class TestTheoryElaboration(TestCase):
         p.configuration.echo_default = False
         u = p.UniverseOfDiscourse('original-theory')
         blah_blah_blah = random_data.random_sentence(min_words=8)
-        a1 = u.axiom(blah_blah_blah)
+        a1 = u.declare_axiom(blah_blah_blah)
         o1 = u.o.declare()
         o2 = u.o.declare()
         o3 = u.o.declare()
         r1 = u.r.declare(2, signal_proposition=True)
         p.configuration.echo_default = True
         robust_theory = u.t()
-        ap1 = robust_theory.postulate_axiom(a=a1)
+        ap1 = robust_theory.include_axiom(a=a1)
         with u.v() as x, u.v() as y, u.v() as z:
             implication = robust_theory.dai(
                 valid_proposition=

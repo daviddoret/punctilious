@@ -11,8 +11,8 @@ class TestDoubleNegationElimination(TestCase):
         o2 = u.o.declare()
         r1 = u.r.declare(2, signal_proposition=True)
         t = u.t('testing-theory')
-        a = u.elaborate_axiom(random_data.random_sentence())
-        ap = t.postulate_axiom(a)
+        a = u.declare_axiom(random_data.random_sentence())
+        ap = t.include_axiom(a)
         phi0 = u.f(r1, o1, o2)
         phi1 = t.dai(u.f(u.r.lnot, u.f(u.r.lnot, phi0)), ap=ap)
         self.assertEqual(

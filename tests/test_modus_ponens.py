@@ -13,8 +13,8 @@ class TestModusPonens(TestCase):
         r1 = u.r.declare(1, signal_proposition=True)
         r2 = u.r.declare(1, signal_proposition=True)
         t = u.t('test_modus_ponens_without_variable')
-        a = u.elaborate_axiom(random_data.random_sentence())
-        ap = t.postulate_axiom(a)
+        a = u.declare_axiom(random_data.random_sentence())
+        ap = t.include_axiom(a)
         p_formula = u.f(r1, o1)
         self.assertEqual('◆₁(ℴ₁)', p_formula.repr_as_formula())
         q_formula = u.f(r2, o2)
@@ -32,8 +32,8 @@ class TestModusPonens(TestCase):
         o3 = u.o.declare()
         r1 = u.r.declare(2, signal_proposition=True)
         t = u.t('test_modus_ponens_with_free_variables')
-        a = u.elaborate_axiom(random_data.random_sentence())
-        ap = t.postulate_axiom(a)
+        a = u.declare_axiom(random_data.random_sentence())
+        ap = t.include_axiom(a)
         with u.v() as x, u.v() as y, u.v() as z:
             p_implies_q = t.dai(
                 u.f(

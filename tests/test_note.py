@@ -12,8 +12,8 @@ class TestNoteIntroduction(TestCase):
         r1 = u.r.declare(1, signal_proposition=True)
         t = u.t(
             'testing-theory')
-        a = u.axiom('The arbitrary axiom of testing.')
-        ap = t.postulate_axiom(a)
+        a = u.declare_axiom('The arbitrary axiom of testing.')
+        ap = t.include_axiom(a)
         t.dai(u.f(r1, o1), ap=ap)
         note = t.take_note('Hello world!', reference='N1')
         self.assertEqual('𝐍𝐨𝐭𝐞 𝐍𝟏: Hello world!', note.repr_as_statement())

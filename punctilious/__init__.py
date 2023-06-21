@@ -5,9 +5,9 @@
 print('Punctilious package (punctilious/__init__.py)')
 from repm import monospace, prnt, serif_bold
 from core import \
-    Axiom, AxiomInclusion, \
+    AxiomDeclaration, AxiomInclusion, \
     configuration, \
-    DashedName, DefinitionEndorsement, DirectAxiomInference, DirectDefinitionInference, \
+    DashedName, DefinitionInclusion, DirectAxiomInference, DirectDefinitionInference, \
     FailedVerificationException, Formula, FreeVariable, \
     consistency_values, \
     Note, note_categories, InconsistencyWarning, \

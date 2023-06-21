@@ -5,15 +5,15 @@ import repm
 u = core.UniverseOfDiscourse()
 ft = u.t(dashed_name='foundation-theory-1')
 
-axiom_01 = ft.postulate_axiom(u.elaborate_axiom(
+axiom_01 = ft.include_axiom(u.declare_axiom(
     'A theory is a... (define punctilious data model).'))
 
 # The (axiomatic) class of (axiomatic) classes
-axiom_02 = ft.postulate_axiom(u.elaborate_axiom(
+axiom_02 = ft.include_axiom(u.declare_axiom(
     'An (axiomatic) class is a collection of theoretical objects that are '
     'unambiguously defined by the axioms of the theory it belongs to.'))
 
-axiom_03 = ft.postulate_axiom(u.elaborate_axiom(
+axiom_03 = ft.include_axiom(u.declare_axiom(
     'The class of classes is the class of all classes defined in the '
     'universe-of-discourse (TODO: Or foundation theory?).'))
 class_of_classes = u.o.declare('class-of-classes')
@@ -22,7 +22,7 @@ element_of = u.r.declare(
     signal_proposition=True, dashed_name='element-of')
 fa1 = ft.dai(u.f(element_of, class_of_classes, class_of_classes), ap=axiom_02)
 
-nla_04 = ft.postulate_axiom(u.elaborate_axiom('The theory-class is the class of all theories'))
+nla_04 = ft.include_axiom(u.declare_axiom('The theory-class is the class of all theories'))
 theory_class = u.o.declare('theory-class')
 fa2b = ft.dai(u.f(element_of, theory_class, class_of_classes), ap=axiom_02)
 fa2c = ft.dai(u.f(element_of, ft, theory_class), ap=axiom_02)
@@ -30,9 +30,9 @@ fa2c = ft.dai(u.f(element_of, ft, theory_class), ap=axiom_02)
 #   for every existing and new theory that is declared?
 
 # Truth values
-nla_05 = ft.postulate_axiom(u.elaborate_axiom(natural_language=
-                                              'truth-values is the class whose elements are '
-                                              'the theoretical-objects truth and falsehood.'))
+nla_05 = ft.include_axiom(u.declare_axiom(natural_language=
+                                          'truth-values is the class whose elements are '
+                                          'the theoretical-objects truth and falsehood.'))
 falsehood = u.o.declare('false')
 truth = u.o.declare('true')
 truth_values = u.o.declare('truth-values')
@@ -42,10 +42,10 @@ proposition_070 = ft.dai(u.f(element_of, truth, truth_values), ap=axiom_03)
 proposition_080 = ft.dai(u.f(element_of, falsehood, truth_values), ap=axiom_03)
 
 # foundation propositional relations
-nla_09 = ft.postulate_axiom(u.elaborate_axiom(natural_language=
-                                              'propositional-relations is the class whose elements are '
-                                              'the relations: conjunction, disjunction, implication, and negation, '
-                                              'and any relation defined from these.'))
+nla_09 = ft.include_axiom(u.declare_axiom(natural_language=
+                                          'propositional-relations is the class whose elements are '
+                                          'the relations: conjunction, disjunction, implication, and negation, '
+                                          'and any relation defined from these.'))
 propositional_relations_class = u.o.declare('propositional-relations-class')
 ft.dai(
     u.f(element_of, propositional_relations_class, class_of_classes),
@@ -64,7 +64,7 @@ ft.dai(
 ft.dai(
     u.f(element_of, u.r.neq, propositional_relations_class),
     ap=nla_09)
-nla_01b = ft.postulate_axiom(u.elaborate_axiom(
+nla_01b = ft.include_axiom(u.declare_axiom(
     '= is a binary relation such that, given any two theoretical-objcts x and y, '
     'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.'))
 with u.v('x') as x1, u.v('y') as x2:
@@ -83,7 +83,7 @@ with u.v('x') as x, u.v('y') as y:
             u.f(u.r.neq, x, y),
             u.f(u.r.lnot, u.f(u.r.eq, x, y))), d=nld_55)
 
-nla_10 = ft.postulate_axiom(u.elaborate_axiom(
+nla_10 = ft.include_axiom(u.declare_axiom(
     'propositions is a class whose elements are '
     'truth, falsehood, all elements of the theory-formula-statement class, '
     'whose relation is an element-of propositional-relations-class, '
@@ -93,7 +93,7 @@ proposition_class = u.o.declare('proposition-class')
 ft.dai(u.f(element_of, truth, class_of_classes), ap=nla_10)
 ft.dai(u.f(element_of, falsehood, class_of_classes), ap=nla_10)
 
-nla_20 = ft.postulate_axiom(u.elaborate_axiom(
+nla_20 = ft.include_axiom(u.declare_axiom(
     'If P is a proposition, then either the statement P has truth value true,'
     'or the statement P has truth value falsehood.'))
 has_truth_value = u.r.declare(
@@ -103,7 +103,7 @@ has_truth_value = u.r.declare(
 ft.dai(u.f(has_truth_value, truth, truth), ap=nla_10)
 ft.dai(u.f(has_truth_value, falsehood, falsehood), ap=nla_10)
 
-nla_30 = ft.postulate_axiom(u.elaborate_axiom(
+nla_30 = ft.include_axiom(u.declare_axiom(
     '¬ is a unary relation. '
     'If P is a proposition and it has truth-value truth, '
     'then ¬P has-truth-value false. '
@@ -111,7 +111,7 @@ nla_30 = ft.postulate_axiom(u.elaborate_axiom(
     'then ¬P has truth-value true.'))
 
 # DOUBLE-NEGATION
-nla_09_50 = ft.postulate_axiom(u.elaborate_axiom('If P has-truth-value t, ¬(¬(P)) has-truth-value t.'))
+nla_09_50 = ft.include_axiom(u.declare_axiom('If P has-truth-value t, ¬(¬(P)) has-truth-value t.'))
 with u.v() as p, u.v() as t:
     fa_09_51 = ft.dai(
         u.f(
@@ -125,7 +125,7 @@ with u.v() as p, u.v() as t:
 
 # CONJUNCTION
 def define_conjunction():
-    nla_39 = ft.postulate_axiom(u.elaborate_axiom(
+    nla_39 = ft.include_axiom(u.declare_axiom(
         'If P and Q are logical propositions, '
         '(P ∧ Q) is true if and only if '
         'both P and Q are true, '
@@ -136,7 +136,7 @@ define_conjunction()
 
 
 def section_200_theory_consistency():
-    axiom_200 = ft.postulate_axiom(
+    axiom_200 = ft.include_axiom(
         'If 𝓣 is a theory, '
         'if 𝝋 is a statement in 𝓣, '
         'and if ¬𝝋 is a statement in 𝓣, '
@@ -147,18 +147,18 @@ def section_200_theory_consistency():
 
 
 def define_biconditional():
-    nla = ft.postulate_axiom(u.elaborate_axiom(natural_language=
-                                               'If P and Q are logical propositions, '
-                                               '(P ⇔ Q) is true if and only if '
-                                               '((P ⇒ Q) ∧ (Q ⇒ P)), '
-                                               'otherwise it is false.'))
+    nla = ft.include_axiom(u.declare_axiom(natural_language=
+                                           'If P and Q are logical propositions, '
+                                           '(P ⇔ Q) is true if and only if '
+                                           '((P ⇒ Q) ∧ (Q ⇒ P)), '
+                                           'otherwise it is false.'))
 
 
 define_biconditional()
 
-nla_40 = ft.postulate_axiom(u.elaborate_axiom(natural_language=
-                                              'If T is a theory, and both P is valid and ¬P is valid in T, '
-                                              'then this theory is an element of contradictory-theories class.'))
+nla_40 = ft.include_axiom(u.declare_axiom(natural_language=
+                                          'If T is a theory, and both P is valid and ¬P is valid in T, '
+                                          'then this theory is an element of contradictory-theories class.'))
 contradictory_theories = u.o.declare('contradictory-theories')
 contradictory_statements = u.o.declare('contradictory-statement')
 with u.v('φ') as phi:
@@ -210,7 +210,7 @@ def elaborate_foundation_theory():
         global tru
         def1 = ft.d(
             natural_language='substitution is the process that consists in taking 3 theoretical-object o, p and q, that may be a composed-object such as a formula, and replacing in there all occurences of p by q.')
-        axiom2 = ft.postulate_axiom(
+        axiom2 = ft.include_axiom(
             'If x = y, o = subst(o, x, y) where o, x, and y are theoretical-objcts.')
         subst = u.r.declare(
             arity=3, symbol='subst',

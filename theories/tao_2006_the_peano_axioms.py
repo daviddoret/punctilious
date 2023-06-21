@@ -23,11 +23,14 @@ t = u.t(header=pu.ObjctHeader(reference='2.1', title='the Peano axioms'), extend
 section_2 = t.open_section('The natural numbers', section_number=2)
 section_2_1 = t.open_section('The Peano axioms', section_parent=section_2)
 
-axiom_2_1 = t.postulate_axiom(u.elaborate_axiom(f'0 is a natural number.'), header='2.1')
+axiom_2_1 = t.include_axiom(u.declare_axiom(f'0 is a natural number.'), header='2.1')
 zero = u.o.declare(pu.Symbol('0'))
 natural_number = u.o.declare(pu.Symbol('natural-number'))
 is_a = u.r.declare(2, pu.Symbol('is-a'), pu.Formula.infix, signal_proposition=True)
-proposition_2_1_a = t.dai(u.f(is_a, zero, natural_number), axiom_2_1, header='2.1.a')
+proposition_2_1_a = t.i.axiom_interpretation.infer_statement(
+    axiom_2_1,
+    u.f(is_a, zero, natural_number),
+    header='2.1.a')
 
 # simple-objct declarations
 one = u.o.declare(pu.Symbol('1'))
@@ -37,8 +40,8 @@ four = u.o.declare(pu.Symbol('4'))
 
 # relation declarations
 
-axiom_2_2_1 = t.postulate_axiom(u.elaborate_axiom('If n is a natural number, then n++ is a natural number.'),
-                                header='2.2.1')
+axiom_2_2_1 = t.include_axiom(u.declare_axiom('If n is a natural number, then n++ is a natural number.'),
+                              header='2.2.1')
 plusplus = u.r.declare(1, pu.Symbol('++'), formula_rep=pu.Formula.postfix, dashed_name='successor')
 with u.v('n') as n:
     proposition_2_2_2 = t.dai(
@@ -109,17 +112,16 @@ proposition_2_1_3_3 = t.ddi(
 # Axiom 2.3. 0 is not the successor of any natural number;
 # i.e., we have n++ f=. 0 for every natural number n.
 
-a_2_3 = t.postulate_axiom(u.elaborate_axiom(
+axiom_2_3 = t.include_axiom(u.declare_axiom(
     '0 is not the successor of any natural number; i.e., we have n++ ≠ 0 for '
     'every natural number n.'), header='2.3')
 
 with u.v('n') as n:
-    proposition_2_3_1 = t.dai(
-        valid_proposition=u.f(
-            u.r.implies,
-            u.f(is_a, n, natural_number),
-            u.f(u.r.neq, u.f(plusplus, n), zero)),
-        ap=a_2_3, header='2.3.1')
+    proposition_2_3_1 = t.i.axiom_interpretation.infer_statement(
+        axiom_2_3,
+        u.f(u.r.implies, u.f(is_a, n, natural_number), u.f(u.r.neq, u.f(plusplus, n), zero)),
+        header='2.3.1'
+    )
 
 
 # Proposition 2.1.6. 4 is not equal to 0.
@@ -132,7 +134,7 @@ def prove_proposition_2_1_6():
 
 
 prove_proposition_2_1_6()
-axiom_2_4 = t.postulate_axiom(u.elaborate_axiom(
+axiom_2_4 = t.include_axiom(u.declare_axiom(
     'Different natural numbers must have different successors; i.e., if n, '
     'm are natural numbers and n ≠ m, then n++ ≠ m++. Equivalently, '
     'if n++ = m++, then we must have n = m.'), header='2.4')

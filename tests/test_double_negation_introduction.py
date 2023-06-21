@@ -11,8 +11,8 @@ class TestDoubleNegationIntroduction(TestCase):
         o2 = u.o.declare()
         r1 = u.r.declare(2, signal_proposition=True)
         t = u.t('test-dni-theory')
-        a = u.elaborate_axiom(random_data.random_sentence())
-        ap = t.postulate_axiom(a)
+        a = u.declare_axiom(random_data.random_sentence())
+        ap = t.include_axiom(a)
         phi1 = t.dai(u.f(r1, o1, o2), ap=ap)
         self.assertEqual(
             '◆₁(ℴ₁, ℴ₂)', phi1.repr())
