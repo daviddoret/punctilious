@@ -5,8 +5,8 @@ import random_data
 
 class TestDefinition(TestCase):
     def test_definition(self):
-        echo_definition = p.configuration.echo_definition
-        p.configuration.echo_definition = True
+        echo_definition = p.configuration.echo_definition_declaration
+        p.configuration.echo_definition_declaration = True
         u = p.UniverseOfDiscourse('white-sheet-of-paper')
         content1 = random_data.random_sentence()
         content2 = random_data.random_sentence(min_words=30)
@@ -23,4 +23,4 @@ class TestDefinition(TestCase):
         self.assertEqual(f'𝐃𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟏.𝟏.𝟏 (d₃): “{content3}”', d3.repr_as_statement(wrap=False))
         self.assertEqual(f'𝐃𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟏.𝟏.𝟐 (d₄): “{content4}”', d4.repr_as_statement(wrap=False))
         self.assertEqual(f'𝐃𝐞𝐟𝐢𝐧𝐢𝐭𝐢𝐨𝐧 𝟏.𝟏.𝟑 (d₅): “{content5}”', d5.repr_as_statement(wrap=False))
-        p.configuration.echo_definition = echo_definition
+        p.configuration.echo_definition_declaration = echo_definition

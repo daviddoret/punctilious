@@ -2,7 +2,7 @@ Subscript:	₀ ₁ ₂ ₃ ₄ ₅ ₆ ₇ ₈ ₉ ₐ ₑ ₕ ᵢ ₘ ₙ ₖ �
 Logic: ⊤ ⊥ ⟺ ⟹ ⇒ ⊨ ⊢ ⊬ ¬ ∧ ∨ ∴ ∵
 Quantifiers: ∀ ⋀ (big wedge) ∃ ⋁ (big vee) ∃! ⩒ (dot big vee) ∄
 Brackets: ⟨⟩ {} ()
-Quotes: ⌜⌝
+Quotes: ⌜⌝ “” ‘’
 Set theory: ∈
 Functions: → ⭢
 Prime symbols: ′ ″ ‴ ⁗

@@ -18,7 +18,7 @@ axiom_03 = ft.postulate_axiom(u.elaborate_axiom(
     'universe-of-discourse (TODO: Or foundation theory?).'))
 class_of_classes = u.o.declare('class-of-classes')
 element_of = u.r.declare(
-    2, '∈', formula_rep=core.Formula.infix_operator_representation,
+    2, '∈', formula_rep=core.Formula.infix,
     signal_proposition=True, dashed_name='element-of')
 fa1 = ft.dai(u.f(element_of, class_of_classes, class_of_classes), ap=axiom_02)
 
@@ -98,7 +98,7 @@ nla_20 = ft.postulate_axiom(u.elaborate_axiom(
     'or the statement P has truth value falsehood.'))
 has_truth_value = u.r.declare(
     2, 'is',
-    formula_rep=core.Formula.infix_operator_representation,
+    formula_rep=core.Formula.infix,
     signal_proposition=True)
 ft.dai(u.f(has_truth_value, truth, truth), ap=nla_10)
 ft.dai(u.f(has_truth_value, falsehood, falsehood), ap=nla_10)

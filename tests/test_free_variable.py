@@ -5,7 +5,7 @@ import random_data
 
 class TestFreeVariable(TestCase):
     def test_with_statement(self):
-        p.configuration.echo_variable = True
+        p.configuration.echo_free_variable_declaration = True
         u = p.UniverseOfDiscourse('test_with_statement')
         with u.v('x', echo=True) as x, u.v('y', echo=True) as y:
             r = u.r.declare(arity=2)

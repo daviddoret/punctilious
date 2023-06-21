@@ -10,7 +10,7 @@ mira = core.SimpleObjct(theory=t1, symbol=mira_name, capitalizable=True)
 dog = core.SimpleObjct(theory=t1, symbol=dog_name, capitalizable=True)
 mammal = core.SimpleObjct(theory=t1, symbol=mammal_name, capitalizable=True)
 is_a = core.Relation(
-    theory=t1, arity=2, formula_rep=core.Formula.infix_operator_representation,
+    theory=t1, arity=2, formula_rep=core.Formula.infix,
     symbol='is-a',
     python_name='is_a', signal_proposition=True)
 

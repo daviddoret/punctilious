@@ -5,7 +5,7 @@ import random_data
 
 class TestFormulaIsMaskSimilarTo(TestCase):
     def test_formula_is_mask_similar_to_unary_relation(self):
-        p.configuration.echo_axiom = True
+        p.configuration.echo_axiom_declaration = True
         u = p.UniverseOfDiscourse('test_formula_is_mask_similar_to_unary_relation')
         r1a = u.r.declare(1)
         r1b = u.r.declare(1)
@@ -30,7 +30,7 @@ class TestFormulaIsMaskSimilarTo(TestCase):
             self.assertFalse(phi1e.is_masked_formula_similar_to(phi1a, {x}))
 
     def test_formula_is_mask_similar_to_binary_relation(self):
-        p.configuration.echo_axiom = True
+        p.configuration.echo_axiom_declaration = True
         u = p.UniverseOfDiscourse('test_formula_is_mask_similar_to_binary_relation')
         r1a = u.r.declare(2)
         r1b = u.r.declare(2)
@@ -52,7 +52,7 @@ class TestFormulaIsMaskSimilarTo(TestCase):
             self.assertFalse(phi1d.is_masked_formula_similar_to(phi1a, {x, y}))
 
     def test_formula_is_mask_similar_to_embedded(self):
-        p.configuration.echo_axiom = True
+        p.configuration.echo_axiom_declaration = True
         u = p.UniverseOfDiscourse('test_formula_is_mask_similar_to_embedded')
         r1a = u.r.declare(2)
         r1b = u.r.declare(2)

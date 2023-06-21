@@ -9,11 +9,11 @@ t = tpa.t
 
 class TestTao2006ThePeanoAxioms(unittest.TestCase):
     def test_2_2(self):
-        phi1 = u.f(tpa.is_a, u.f(tpa.suc, tpa.zero), tpa.nat)
-        phi2 = u.f(tpa.is_a, u.f(tpa.suc, u.f(tpa.suc, tpa.zero)), tpa.nat)
+        phi1 = u.f(tpa.is_a, u.f(tpa.plusplus, tpa.zero), tpa.natural_number)
+        phi2 = u.f(tpa.is_a, u.f(tpa.plusplus, u.f(tpa.plusplus, tpa.zero)), tpa.natural_number)
         phi3 = u.f(
-            tpa.is_a, u.f(tpa.suc, u.f(tpa.suc, u.f(tpa.suc, tpa.zero))),
-            tpa.nat)
+            tpa.is_a, u.f(tpa.plusplus, u.f(tpa.plusplus, u.f(tpa.plusplus, tpa.zero))),
+            tpa.natural_number)
 
         self.assertTrue(
             tpa.p_2_2_3.valid_proposition.is_formula_equivalent_to(phi1))
@@ -39,7 +39,7 @@ class TestTao2006ThePeanoAxioms(unittest.TestCase):
             tpa.proposition_2_2_5.valid_proposition.is_formula_equivalent_to(
                 phi2))
 
-        phi4 = u.f(tpa.is_a, tpa.three, tpa.nat)
+        phi4 = u.f(tpa.is_a, tpa.three, tpa.natural_number)
         self.assertTrue(
             tpa.p_2_1_4.valid_proposition.is_formula_equivalent_to(phi4))
 

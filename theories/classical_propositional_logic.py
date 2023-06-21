@@ -9,19 +9,19 @@ proposition_class = t.o('proposition-class')
 
 # Relations
 conjunction = t.r(
-    2, '∧', core.Formula.infix_operator_representation,
+    2, '∧', core.Formula.infix,
     signal_proposition=True)
 disjunction = t.r(
-    2, '∨', core.Formula.infix_operator_representation,
+    2, '∨', core.Formula.infix,
     signal_proposition=True)
 has_truth_value = t.r(
-    2, 'is', core.Formula.infix_operator_representation,
+    2, 'is', core.Formula.infix,
     signal_proposition=True)
 implication = t.r(
-    2, '⟹', core.Formula.infix_operator_representation,
+    2, '⟹', core.Formula.infix,
     signal_proposition=True)
 negation = t.r(
-    1, '¬', core.Formula.prefix_operator_representation,
+    1, '¬', core.Formula.prefix,
     signal_proposition=True)
 
 """

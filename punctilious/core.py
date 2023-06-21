@@ -63,21 +63,22 @@ class Configuration:
 
     def __init__(self):
         self.auto_index = None
-        self.echo_axiom = None
-        self.echo_axiom_inclusion = None
         self._echo_default = False
-        self.echo_definition = None
+        self.echo_axiom_declaration = None
+        self.echo_axiom_inclusion = None
+        self.echo_definition_declaration = None
         self.echo_definition_inclusion = None
         self.echo_definition_direct_inference = None
-        self.echo_formula = False  # In general, this is too verbose.
+        self.echo_formula_declaration = False  # In general, this is too verbose.
         self.echo_hypothesis = None
         self.echo_note = None
         self.echo_relation = None
-        self.echo_simple_objct = None
+        self.echo_simple_objct_declaration = None
         self.echo_statement = None
         self.echo_symbolic_objct = None
-        self.echo_universe_of_discourse = None
-        self.echo_variable = None
+        self.echo_theory_elaboration_sequence_declaration = None
+        self.echo_universe_of_discourse_declaration = None
+        self.echo_free_variable_declaration = None
         self.output_index_if_max_index_equal_1 = False
         self.raise_exception_on_verification_error = True
         self.text_output_indent = 2
@@ -285,13 +286,7 @@ class ObjctHeader:
         the declarative class of the symbolic-objct.
     """
 
-    def __init__(self, reference, category=None, title=None):
-        category = statement_categories.missing_category if category is None else category
-        verify(isinstance(category, (StatementCategory, NoteCategory)),
-               'category is not of type StatementCategory or NoteCategory.',
-               reference=reference, category=category, title=title)
-        verify(isinstance(reference, str), 'reference is not of type str.', reference=reference, category=category,
-               title=title)
+    def __init__(self, reference: str, category: (None, StatementCategory, NoteCategory) = None, title: str = None):
         self.reference = reference
         self.category = category
         self.title = title
@@ -566,10 +561,13 @@ class SymbolicObjct:
 
     def repr_fully_qualified_name(self) -> str:
         """"""
-        fully_qualified_name = self.repr_header() if self.header is not None else self.repr_dashed_name() if self.dashed_name is not None else self.repr_as_symbol()
-        fully_qualified_name += ' (' if self.header is not None or self.dashed_name is not None else ''
-        fully_qualified_name += self.repr_dashed_name() + ', ' if self.header is not None and self.dashed_name is not None else ''
-        fully_qualified_name += self.repr_as_symbol() + ')' if self.header is not None or self.dashed_name is not None else ''
+        fully_qualified_name = f'⌜{self.repr_dashed_name()}⌝ (⌜{self.repr_as_symbol()}⌝)' if self.dashed_name is not None else f'⌜{self.repr_as_symbol()}⌝'
+        fully_qualified_name += f' entitled “{self.repr_header(cap=True)}”' if self.header is not None else ''
+
+        # fully_qualified_name = f'⌜{self.repr_header()}⌝' if self.header is not None else self.repr_dashed_name() if self.dashed_name is not None else self.repr_as_symbol()
+        # fully_qualified_name += ' (' if self.header is not None or self.dashed_name is not None else ''
+        # fully_qualified_name += self.repr_dashed_name() + ', ' if self.header is not None and self.dashed_name is not None else ''
+        # fully_qualified_name += self.repr_as_symbol() + ')' if self.header is not None or self.dashed_name is not None else ''
         return fully_qualified_name
 
     def repr_as_declaration(self) -> str:
@@ -984,7 +982,8 @@ class FreeVariable(TheoreticalObjct):
     def __init__(
             self, symbol=None,
             universe_of_discourse=None, status=None, scope=None, echo=None):
-        echo = get_config(echo, configuration.echo_variable, configuration.echo_default, fallback_value=False)
+        echo = get_config(echo, configuration.echo_free_variable_declaration, configuration.echo_default,
+                          fallback_value=False)
         status = FreeVariable.scope_initialization_status if status is None else status
         scope = frozenset() if scope is None else scope
         scope = {scope} if isinstance(scope, Formula) else scope
@@ -1112,13 +1111,13 @@ class Formula(TheoreticalObjct):
 
     """
 
-    function_call_representation = repm.Representation(
+    function_call = repm.Representation(
         python_name='function-call', sample='◆(𝐱₁, 𝐱₂ ,… ,𝐱ₙ)')
-    infix_operator_representation = repm.Representation(
+    infix = repm.Representation(
         python_name='infix-operator', sample='𝐱₁ ◆ 𝐱₂')
-    prefix_operator_representation = repm.Representation(
+    prefix = repm.Representation(
         python_name='prefix-operator', sample='◆𝐱')
-    postfix_operator_representation = repm.Representation(
+    postfix = repm.Representation(
         python_name='postfix-operator', sample='𝐱◆')
 
     def __init__(
@@ -1133,7 +1132,8 @@ class Formula(TheoreticalObjct):
             echo: (None, bool) = None):
         """
         """
-        echo = get_config(echo, configuration.echo_formula, configuration.echo_default, fallback_value=False)
+        echo = get_config(echo, configuration.echo_formula_declaration, configuration.echo_default,
+                          fallback_value=False)
         self.free_variables = dict()  # TODO: Check how to make dict immutable after construction.
         # self.formula_index = theory.crossreference_formula(self)
         if symbol is None:
@@ -1356,13 +1356,13 @@ class Formula(TheoreticalObjct):
             return self.repr_as_function_call(expanded=expanded)
         else:
             match self.relation.formula_rep:
-                case Formula.function_call_representation:
+                case Formula.function_call:
                     return self.repr_as_function_call(expanded=expanded)
-                case Formula.infix_operator_representation:
+                case Formula.infix:
                     return self.repr_as_infix_operator(expanded=expanded)
-                case Formula.prefix_operator_representation:
+                case Formula.prefix:
                     return self.repr_as_prefix_operator(expanded=expanded)
-                case Formula.postfix_operator_representation:
+                case Formula.postfix:
                     return self.repr_as_postfix_operator(expanded=expanded)
         assert 1 == 2
 
@@ -1615,7 +1615,7 @@ class Axiom(TheoreticalObjct):
         :param echo:
         """
         auto_index = get_config(auto_index, configuration.auto_index, fallback_value=False)
-        echo = get_config(echo, configuration.echo_axiom, configuration.echo_default, fallback_value=False)
+        echo = get_config(echo, configuration.echo_axiom_declaration, configuration.echo_default, fallback_value=False)
         natural_language = natural_language.strip()
         verify(natural_language != '',
                'Parameter natural-language is an empty string (after trimming).')
@@ -1676,6 +1676,7 @@ class AxiomInclusion(Statement):
             echo: (None, bool) = None):
         """Include (postulate) an axiom in a theory-elaboration-sequence.
         """
+        echo = get_config(echo, configuration.echo_axiom_inclusion, configuration.echo_default, fallback_value=False)
         self._axiom = a
         if symbol is None:
             # If no symbol is passed as a parameter,
@@ -1857,7 +1858,8 @@ class Definition(TheoreticalObjct):
         :param echo:
         """
         auto_index = get_config(auto_index, configuration.auto_index, fallback_value=False)
-        echo = get_config(echo, configuration.echo_definition, configuration.echo_default, fallback_value=False)
+        echo = get_config(echo, configuration.echo_definition_declaration, configuration.echo_default,
+                          fallback_value=False)
         natural_language = natural_language.strip()
         verify(natural_language != '',
                'Parameter natural-language is an empty string (after trimming).')
@@ -2524,8 +2526,10 @@ class TheoryElaborationSequence(TheoreticalObjct):
             extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None,
             stabilized: bool = False,
-            echo: bool = False
+            echo: bool = None
     ):
+        echo = get_config(echo, configuration.echo_theory_elaboration_sequence_declaration, configuration.echo_default,
+                          fallback_value=False)
         self._max_subsection_number = 0
         self._consistency = consistency_values.undetermined
         self._stabilized = False
@@ -2549,9 +2553,15 @@ class TheoryElaborationSequence(TheoreticalObjct):
         if header is None:
             header = ObjctHeader(reference=str(symbol.index), category=statement_categories.theory_elaboration_sequence,
                                  title=None)
-        if isinstance(header, str):
+        elif isinstance(header, str):
             header = ObjctHeader(reference=header, category=statement_categories.theory_elaboration_sequence,
                                  title=None)
+        else:
+            verify(header.category is None or header.category is statement_categories.theory_elaboration_sequence,
+                   'The header category must be theory-elaboration-sequence.',
+                   header_category=header.category, header=header, slf=self)
+            if header.category is None:
+                header.category = statement_categories.theory_elaboration_sequence
         super().__init__(
             symbol=symbol,
             is_theory_foundation_system=True if extended_theory is None else False,
@@ -2646,17 +2656,6 @@ class TheoryElaborationSequence(TheoreticalObjct):
         if s not in self.statements:
             self.statements = self.statements + tuple([s])
         return self.statements.index(s)
-
-    # def declare_formula(self, relation, *parameters, **kwargs):
-    #    """Declare a new :term:`formula` in this theory.
-    #
-    #    This method is a shortcut for Formula(theory=t, ...).
-    #
-    #    A formula is *declared* in a theory, and not *stated*, because it is not a statement,
-    #    i.e. it is not necessarily true in this theory.
-    #    """
-    #    return Formula(
-    #        relation=relation, parameters=parameters, theory=self, **kwargs)
 
     def elaborate_direct_axiom_inference(
             self,
@@ -2775,29 +2774,6 @@ class TheoryElaborationSequence(TheoreticalObjct):
             original_expression=original_expression,
             equality_statement=equality_statement, symbol=symbol,
             category=category, theory=self, reference=reference, title=title)
-
-    # @property
-    # def equality(self):
-    #     """(None, Relation) Equality is a fundamental theory property that enables
-    #     support for SoET. None if the property is not equipped on
-    #     the theory. An instance of Relation otherwise."""
-    #     if self._equality is not None:
-    #         return self._equality
-    #     elif self.extended_theory is not None:
-    #         return self.extended_theory.equality
-    #     else:
-    #         return None
-    #
-    # @equality.setter
-    # def equality(self, r):
-    #     verify(
-    #         self._equality is None,
-    #         'A theory equality property can only be set once to prevent '
-    #         'inconsistency.')
-    #     verify(
-    #         isinstance(r, Relation),
-    #         'The equality property must be a relation.')
-    #     self._equality = r
 
     def dai(
             self,
@@ -2987,6 +2963,9 @@ class TheoryElaborationSequence(TheoreticalObjct):
                proof_parameter=proof.parameters[0], proof=proof, slf=self)
         self._consistency = consistency_values.proved_inconsistent
 
+    def repr_as_declaration(self) -> str:
+        return f'Let {self.repr_fully_qualified_name()} be a theory-elaboration-sequence in {self.u.repr_as_symbol()}.'
+
     @property
     def stabilized(self):
         """Return the stabilized property of this theory-elaboration.
@@ -3101,7 +3080,7 @@ class Relation(TheoreticalObjct):
         signal_theoretical_morphism = False if signal_theoretical_morphism is None else signal_theoretical_morphism
         assert isinstance(signal_proposition, bool)
         assert isinstance(signal_theoretical_morphism, bool)
-        self.formula_rep = Formula.function_call_representation if formula_rep is None else formula_rep
+        self.formula_rep = Formula.function_call if formula_rep is None else formula_rep
         self.signal_proposition = signal_proposition
         self.signal_theoretical_morphism = signal_theoretical_morphism
         self.implementation = implementation
@@ -3133,7 +3112,7 @@ class Relation(TheoreticalObjct):
 
     def repr_as_declaration(self):
         output = f'Let {self.repr_fully_qualified_name()} be a {repr_arity_as_text(self.arity)} relation in {self.u.repr_as_symbol()}'
-        output = output + f' (notation convention: {self.formula_rep} syntax).'
+        output = output + f' (default notation: {self.formula_rep}).'
         return output
 
 
@@ -3162,7 +3141,7 @@ class SimpleObjct(TheoreticalObjct):
             symbol: (None, str, Symbol) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
-        echo = get_config(echo, configuration.echo_simple_objct, configuration.echo_default,
+        echo = get_config(echo, configuration.echo_simple_objct_declaration, configuration.echo_default,
                           fallback_value=False)
         if symbol is None:
             base = 'ℴ'
@@ -3344,7 +3323,7 @@ class RelationDict(collections.UserDict):
         """
         if self._biconditional is None:
             self._biconditional = self.declare(
-                2, Symbol('⟺'), Formula.infix_operator_representation,
+                2, Symbol('⟺'), Formula.infix,
                 signal_proposition=True, dashed_name='biconditional')
         return self._biconditional
 
@@ -3359,7 +3338,7 @@ class RelationDict(collections.UserDict):
         """
         if self._conjunction is None:
             self._conjunction = self.declare(
-                2, Symbol('∧'), Formula.infix_operator_representation,
+                2, Symbol('∧'), Formula.infix,
                 signal_proposition=True, dashed_name='conjunction')
         return self._conjunction
 
@@ -3374,7 +3353,7 @@ class RelationDict(collections.UserDict):
         """
         if self._disjunction is None:
             self._disjunction = self.declare(
-                2, Symbol('∨'), Formula.infix_operator_representation,
+                2, Symbol('∨'), Formula.infix,
                 signal_proposition=True, dashed_name='disjunction')
         return self._disjunction
 
@@ -3400,7 +3379,7 @@ class RelationDict(collections.UserDict):
         """
         if self._equality is None:
             self._equality = self.declare(
-                2, Symbol('='), Formula.infix_operator_representation,
+                2, Symbol('='), Formula.infix,
                 signal_proposition=True, dashed_name='equality')
         return self._equality
 
@@ -3426,7 +3405,7 @@ class RelationDict(collections.UserDict):
         """
         if self._implication is None:
             self._implication = self.declare(
-                2, Symbol('⟹'), Formula.infix_operator_representation,
+                2, Symbol('⟹'), Formula.infix,
                 signal_proposition=True, dashed_name='implication')
         return self._implication
 
@@ -3452,7 +3431,7 @@ class RelationDict(collections.UserDict):
         """
         if self._inconsistent is None:
             self._inconsistent = self.declare(
-                1, Symbol('Inc'), Formula.prefix_operator_representation,
+                1, Symbol('Inc'), Formula.prefix,
                 signal_proposition=True, dashed_name='inconsistent')
         return self._inconsistent
 
@@ -3467,7 +3446,7 @@ class RelationDict(collections.UserDict):
         """
         if self._inequality is None:
             self._inequality = self.declare(
-                2, Symbol('≠'), Formula.infix_operator_representation,
+                2, Symbol('≠'), Formula.infix,
                 signal_proposition=True, dashed_name='inequality')
         return self._inequality
 
@@ -3515,7 +3494,7 @@ class RelationDict(collections.UserDict):
         """
         if self._negation is None:
             self._negation = self.declare(
-                1, Symbol('¬'), Formula.prefix_operator_representation,
+                1, Symbol('¬'), Formula.prefix,
                 signal_proposition=True, dashed_name='negation')
         return self._negation
 
@@ -4968,7 +4947,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 class UniverseOfDiscourse(SymbolicObjct):
     def __init__(self, symbol: (None, str, Symbol) = None, dashed_name: (None, str, DashedName) = None,
                  echo: (None, bool) = None):
-        echo = get_config(echo, configuration.echo_universe_of_discourse, configuration.echo_default,
+        echo = get_config(echo, configuration.echo_universe_of_discourse_declaration, configuration.echo_default,
                           fallback_value=False)
         self.axioms = dict()
         self.definitions = dict()
@@ -4995,8 +4974,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             # TODO: Analyse the string if it ends with index in subscript characters.
             index = index_universe_of_discourse_symbol(base=symbol)
             symbol = Symbol(base=symbol, index=index)
-        if dashed_name is None:
-            dashed_name = f'universe-of-discourse-{str(symbol.index)}'
+        # if dashed_name is None:
+        #    dashed_name = f'universe-of-discourse-{str(symbol.index)}'
         super().__init__(
             is_universe_of_discourse=True,
             is_theory_foundation_system=False,
@@ -5260,7 +5239,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None,
             stabilized: bool = False,
-            echo: bool = False):
+            echo: bool = None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for Theory(universe_of_discourse, ...).
@@ -5293,7 +5272,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             reference=reference, title=title, echo=echo)
 
     def elaborate_axiom(
-            self, natural_language, header=None, symbol=None, echo=None):
+            self, natural_language: str, header: (None, str, ObjctHeader) = None, symbol: (None, str, Symbol) = None,
+            echo: (None, bool) = None):
         """Elaborate a new axiom 𝑎 in this universe-of-discourse."""
         return Axiom(
             u=self, natural_language=natural_language, header=header, symbol=symbol, echo=echo)
@@ -5410,7 +5390,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None,
             stabilized: bool = False,
-            echo: bool = False):
+            echo: bool = None):
         """Declare a new theory in this universe-of-discourse.
 
         Shortcut for self.declare_theory(...).

@@ -5,8 +5,8 @@ import random_data
 
 class TestAxiom(TestCase):
     def test_axiom(self):
-        echo_axiom = p.configuration.echo_axiom
-        p.configuration.echo_axiom = True
+        echo_axiom = p.configuration.echo_axiom_declaration
+        p.configuration.echo_axiom_declaration = True
         u = p.UniverseOfDiscourse('white-sheet-of-paper')
         content1 = random_data.random_sentence()
         content2 = random_data.random_sentence(min_words=30)
@@ -23,4 +23,4 @@ class TestAxiom(TestCase):
         self.assertEqual(f'𝐀𝐱𝐢𝐨𝐦 𝟏.𝟏.𝟏 (a₃): “{content3}”', a3.repr_as_statement(wrap=False))
         self.assertEqual(f'𝐀𝐱𝐢𝐨𝐦 𝟏.𝟏.𝟐 (a₄): “{content4}”', a4.repr_as_statement(wrap=False))
         self.assertEqual(f'𝐀𝐱𝐢𝐨𝐦 𝟏.𝟏.𝟑 (a₅): “{content5}”', a5.repr_as_statement(wrap=False))
-        p.configuration.echo_axiom = echo_axiom
+        p.configuration.echo_axiom_declaration = echo_axiom

@@ -6,44 +6,54 @@ import foundation_system_1 as fs1
 # ft = u.t(
 #    include_modus_ponens_inference_rule=True, include_conjunction_introduction_inference_rule=True,
 #    include_double_negation_introduction_inference_rule=True)
-u = fs1.u
-ft = fs1.ft
+# u = fs1.u
+# ft = fs1.ft
 
-t = u.t(
-    header=f'theory 2.1: the Peano axioms',
-    extended_theory=fs1.ft, dashed_name='tao-2006-theory-2-1-the-peano-axioms')
+pu.configuration.echo_default = True
+pu.configuration.echo_axiom_inclusion = True
+pu.configuration.echo_axiom_declaration = True
+pu.configuration.echo_simple_objct_declaration = True
+pu.configuration.echo_relation = True
 
-s_2 = t.open_section('The natural numbers', section_number=2)
-s_2_1 = t.open_section('The Peano axioms', section_parent=s_2)
+pass
+
+u = pu.UniverseOfDiscourse()
+t = u.t(header=pu.ObjctHeader(reference='2.1', title='the Peano axioms'), extended_theory=fs1.ft)
+
+section_2 = t.open_section('The natural numbers', section_number=2)
+section_2_1 = t.open_section('The Peano axioms', section_parent=section_2)
+
+axiom_2_1 = t.postulate_axiom(u.elaborate_axiom(f'0 is a natural number.'), header='2.1')
+zero = u.o.declare(pu.Symbol('0'))
+natural_number = u.o.declare(pu.Symbol('natural-number'))
+is_a = u.r.declare(2, pu.Symbol('is-a'), pu.Formula.infix, signal_proposition=True)
+proposition_2_1_a = t.dai(u.f(is_a, zero, natural_number), axiom_2_1, header='2.1.a')
 
 # simple-objct declarations
-zero = u.o.declare('0')
-one = u.o.declare('1')
-two = u.o.declare('2')
-three = u.o.declare('3')
-four = u.o.declare('4')
-nat = u.o.declare('natural-number')
+one = u.o.declare(pu.Symbol('1'))
+two = u.o.declare(pu.Symbol('2'))
+three = u.o.declare(pu.Symbol('3'))
+four = u.o.declare(pu.Symbol('4'))
 
 # relation declarations
-is_a = u.r.declare(
-    2, 'is-a', pu.Formula.infix_operator_representation,
-    signal_proposition=True)
 
-nla_2_1 = t.postulate_axiom(u.elaborate_axiom(f'0 is a natural number.'), header='2.1')
-fa_2_1_a = t.dai(u.f(is_a, zero, nat), nla_2_1, header='2.1.a')
-
-nla_2_2_1 = t.postulate_axiom(u.elaborate_axiom(
-    'If n is a natural number, then n++ is a natural number.'), header='2.2.1')
+axiom_2_2_1 = t.postulate_axiom(u.elaborate_axiom('If n is a natural number, then n++ is a natural number.'),
+                                header='2.2.1')
+plusplus = u.r.declare(1, pu.Symbol('++'), formula_rep=pu.Formula.postfix, dashed_name='successor')
 with u.v('n') as n:
-    suc = u.r.declare(1, '++', formula_rep=pu.Formula.postfix_operator_representation, dashed_name='successor')
-    fa_2_2_2 = t.dai(
-        u.f(u.r.implies, u.f(is_a, n, nat), u.f(is_a, u.f(suc, n), nat)),
-        nla_2_2_1,
+    proposition_2_2_2 = t.dai(
+        u.f(u.r.implies, u.f(is_a, n, natural_number), u.f(is_a, u.f(plusplus, n), natural_number)),
+        axiom_2_2_1,
         header='2.2.2')
-
-p_2_2_3 = t.i.mp.infer_statement(fa_2_2_2, fa_2_1_a, header='2.2.3')
-p_2_2_4 = t.i.mp.infer_statement(fa_2_2_2, p_2_2_3, header='2.2.4')
-proposition_2_2_5 = t.i.mp.infer_statement(fa_2_2_2, p_2_2_4, header='2.2.5')
+p_2_2_3_1 = t.i.vs.infer_statement(proposition_2_2_2, zero, header='2.2.3')
+# ((0)++ is-a natural-number):
+p_2_2_3 = t.i.mp.infer_statement(p_2_2_3_1, proposition_2_1_a, header='2.2.3')
+zero_plus_plus = u.f(plusplus, zero)
+p_2_2_4_1 = t.i.vs.infer_statement(proposition_2_2_2, zero_plus_plus, header='2.2.3')
+p_2_2_4 = t.i.mp.infer_statement(p_2_2_4_1, p_2_2_3, header='2.2.4')
+zero_plus_plus_plusplus = u.f(plusplus, zero_plus_plus)
+p_2_2_5_1 = t.i.vs.infer_statement(proposition_2_2_2, zero_plus_plus_plusplus, header='2.2.3')
+proposition_2_2_5 = t.i.mp.infer_statement(p_2_2_5_1, p_2_2_4, header='2.2.5')
 
 # Definition 2.1.3. We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that xis defined to equal y.)
 
@@ -56,17 +66,17 @@ definition_2_1_3 = t.endorse_definition(d=def_2_1_3)
 
 # 1
 proposition_2_1_3_1 = t.ddi(
-    u.f(u.r.eq, one, u.f(suc, zero)), definition_2_1_3,
+    u.f(u.r.eq, one, u.f(plusplus, zero)), definition_2_1_3,
     header='2.1.3.1')
 
 # 2
 proposition_2_1_3_2 = t.ddi(
-    u.f(u.r.eq, two, u.f(suc, u.f(suc, zero))), definition_2_1_3,
+    u.f(u.r.eq, two, u.f(plusplus, u.f(plusplus, zero))), definition_2_1_3,
     header='2.1.3.2')
 
 # 3
 proposition_2_1_3_3 = t.ddi(
-    u.f(u.r.eq, three, u.f(suc, u.f(suc, u.f(suc, zero)))),
+    u.f(u.r.eq, three, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero)))),
     definition_2_1_3,
     header='2.1.3.3')
 
@@ -92,7 +102,7 @@ p_2_1_4 = t.soet(proposition_2_2_5, p_2_1_3_3_c, reference='2.1.4')
 
 # 4
 proposition_2_1_3_3 = t.ddi(
-    u.f(u.r.eq, four, u.f(suc, u.f(suc, u.f(suc, u.f(suc, zero))))),
+    u.f(u.r.eq, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))),
     definition_2_1_3,
     header='2.1.3.3.a')
 
@@ -107,8 +117,8 @@ with u.v('n') as n:
     proposition_2_3_1 = t.dai(
         valid_proposition=u.f(
             u.r.implies,
-            u.f(is_a, n, nat),
-            u.f(u.r.neq, u.f(suc, n), zero)),
+            u.f(is_a, n, natural_number),
+            u.f(u.r.neq, u.f(plusplus, n), zero)),
         ap=a_2_3, header='2.3.1')
 
 
@@ -135,10 +145,10 @@ with u.v('n') as n, u.v('m') as m:
                 u.r.land,
                 u.f(
                     u.r.land,
-                    u.f(is_a, n, nat),
-                    u.f(is_a, m, nat)),
+                    u.f(is_a, n, natural_number),
+                    u.f(is_a, m, natural_number)),
                 u.f(u.r.neq, n, m)),
-            u.f(u.r.neq, u.f(suc, n), u.f(suc, m)))
+            u.f(u.r.neq, u.f(plusplus, n), u.f(plusplus, m)))
         , header='2.4.1', ap=axiom_2_4)
 
 # Proposition 2.1.8: 6 is not equal to 2.
