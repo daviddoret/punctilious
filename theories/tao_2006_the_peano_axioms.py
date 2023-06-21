@@ -69,17 +69,17 @@ definition_2_1_3 = t.endorse_definition(d=def_2_1_3)
 
 # 1
 proposition_2_1_3_1 = t.ddi(
-    u.f(u.r.eq, one, u.f(plusplus, zero)), definition_2_1_3,
+    u.f(u.r.equal, one, u.f(plusplus, zero)), definition_2_1_3,
     header='2.1.3.1')
 
 # 2
 proposition_2_1_3_2 = t.ddi(
-    u.f(u.r.eq, two, u.f(plusplus, u.f(plusplus, zero))), definition_2_1_3,
+    u.f(u.r.equal, two, u.f(plusplus, u.f(plusplus, zero))), definition_2_1_3,
     header='2.1.3.2')
 
 # 3
 proposition_2_1_3_3 = t.ddi(
-    u.f(u.r.eq, three, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero)))),
+    u.f(u.r.equal, three, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero)))),
     definition_2_1_3,
     header='2.1.3.3')
 
@@ -105,7 +105,7 @@ p_2_1_4 = t.soet(proposition_2_2_5, p_2_1_3_3_c, reference='2.1.4')
 
 # 4
 proposition_2_1_3_3 = t.ddi(
-    u.f(u.r.eq, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))),
+    u.f(u.r.equal, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))),
     definition_2_1_3,
     header='2.1.3.3.a')
 

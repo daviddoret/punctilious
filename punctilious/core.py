@@ -3374,10 +3374,10 @@ class RelationDict(collections.UserDict):
         return self._disjunction
 
     @property
-    def eq(self):
+    def equal(self):
         """The well-known equality relation.
 
-        Unabridged property: u.r.equality
+        Unabridged property: universe_of_discourse.relations.equality
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -3388,7 +3388,7 @@ class RelationDict(collections.UserDict):
     def equality(self):
         """The well-known equality relation.
 
-        Abridged property: u.r.eq
+        Abridged property: u.r.equal
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.

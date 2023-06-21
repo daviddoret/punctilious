@@ -68,8 +68,8 @@ nla_01b = ft.include_axiom(u.declare_axiom(
     '= is a binary relation such that, given any two theoretical-objcts x and y, '
     'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.'))
 with u.v('x') as x1, u.v('y') as x2:
-    x1_equal_x2 = u.f(u.r.eq, x1, x2)
-    x2_equal_x1 = u.f(u.r.eq, x2, x1)
+    x1_equal_x2 = u.f(u.r.equal, x1, x2)
+    x2_equal_x1 = u.f(u.r.equal, x2, x1)
     ft.commutativity_of_equality = ft.dai(
         u.f(u.r.implication, x1_equal_x2, x2_equal_x1), nla_01b)
 
@@ -79,9 +79,9 @@ with u.v('x') as x, u.v('y') as y:
     ft.ddi(
         p=
         u.f(
-            u.r.eq,
+            u.r.equal,
             u.f(u.r.neq, x, y),
-            u.f(u.r.lnot, u.f(u.r.eq, x, y))), d=nld_55)
+            u.f(u.r.lnot, u.f(u.r.equal, x, y))), d=nld_55)
 
 nla_10 = ft.include_axiom(u.declare_axiom(
     'propositions is a class whose elements are '
