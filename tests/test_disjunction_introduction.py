@@ -14,7 +14,7 @@ class TestDisjunctionIntroduction(TestCase):
         t = u.t('testing-theory')
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
-        phi1 = t.dai(u.f(r1, o1, o2), ap=ap)
+        phi1 = t.i.axiom_interpretation.infer_statement(ap, u.f(r1, o1, o2))
         phi2_formula = u.f(r2, o3)
         phi3 = t.i.di.infer_statement(phi1, phi2_formula)
         self.assertEqual('(◆₁(ℴ₁, ℴ₂) ∨ ◆₂(ℴ₃))', phi3.repr())

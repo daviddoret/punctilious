@@ -32,7 +32,7 @@ class TestTheory(TestCase):
         f3 = u.f(r2, o3, f1)
         a1 = u.declare_axiom(random_data.random_sentence())
         ap1 = t1.include_axiom(a1)
-        t1.dai(f1, ap1)
+        t1.i.axiom_interpretation.infer_statement(ap1, f1)
         return None
         self.assertEqual({t1, r1, o1}, set(t1.iterate_theoretical_objcts_references()))
         limit = t1.dai(f2, ap1)

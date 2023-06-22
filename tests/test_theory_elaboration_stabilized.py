@@ -17,16 +17,19 @@ class TestTheoryElaboration(TestCase):
         robust_theory = u.t()
         ap1 = robust_theory.include_axiom(a=a1)
         with u.v() as x, u.v() as y, u.v() as z:
-            implication = robust_theory.dai(
+            implication = robust_theory.i.axiom_interpretation.infer_statement(
+                ap1,
                 valid_proposition=
                 u.f(u.r.implies,
-                    u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)),
-                    u.f(r1, x, z)),
-                ap=ap1)
-        r1o1o2 = robust_theory.dai(
-            valid_proposition=u.f(r1, o1, o2), ap=ap1)
-        r1o2o3 = robust_theory.dai(
-            valid_proposition=u.f(r1, o2, o3), ap=ap1)
+                    u.f(u.r.land, u.f(r1, x, y),
+                        u.f(r1, y, z)),
+                    u.f(r1, x, z)))
+        r1o1o2 = robust_theory.i.axiom_interpretation.infer_statement(
+            ap1,
+            valid_proposition=u.f(r1, o1, o2))
+        r1o2o3 = robust_theory.i.axiom_interpretation.infer_statement(
+            ap1,
+            valid_proposition=u.f(r1, o2, o3))
         r1o1o2_and_r1o2o3 = robust_theory.i.ci.infer_statement(
             r1o1o2,
             r1o2o3)

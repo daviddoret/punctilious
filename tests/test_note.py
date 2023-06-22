@@ -14,7 +14,7 @@ class TestNoteIntroduction(TestCase):
             'testing-theory')
         a = u.declare_axiom('The arbitrary axiom of testing.')
         ap = t.include_axiom(a)
-        t.dai(u.f(r1, o1), ap=ap)
+        t.i.axiom_interpretation.infer_statement(ap, u.f(r1, o1))
         note = t.take_note('Hello world!', reference='N1')
         self.assertEqual('𝐍𝐨𝐭𝐞 𝐍𝟏: Hello world!', note.repr_as_statement())
         comment = t.take_note('Foo', reference='N2', category=p.note_categories.comment)

@@ -14,7 +14,7 @@ class TestDoubleNegationElimination(TestCase):
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
         phi0 = u.f(r1, o1, o2)
-        phi1 = t.dai(u.f(u.r.lnot, u.f(u.r.lnot, phi0)), ap=ap)
+        phi1 = t.i.axiom_interpretation.infer_statement(ap, u.f(u.r.lnot, u.f(u.r.lnot, phi0)))
         self.assertEqual(
             '¬(¬(◆₁(ℴ₁, ℴ₂)))', phi1.repr())
         phi2 = t.i.dne.infer_statement(phi1)
