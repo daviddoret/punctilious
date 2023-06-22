@@ -7,7 +7,7 @@ from repm import monospace, prnt, serif_bold
 from core import \
     AxiomDeclaration, AxiomInclusion, \
     configuration, \
-    DashedName, DefinitionInclusion, DirectAxiomInference, DirectDefinitionInference, \
+    DashedName, DefinitionInclusion, DirectDefinitionInference, \
     FailedVerificationException, Formula, FreeVariable, \
     consistency_values, \
     Note, note_categories, InconsistencyWarning, \

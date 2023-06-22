@@ -2062,68 +2062,6 @@ class FormulaStatement(Statement):
         return f'{self.valid_proposition.repr_as_formula(expanded=expanded)}'
 
 
-class DirectAxiomInference(FormulaStatement):
-    """
-
-    Definition:
-    -----------
-    A direct-axiom-inference is a valid-proposition directly inferred from a free-text-axiom.
-
-    """
-
-    def __init__(
-            self,
-            valid_proposition: Formula,
-            ap: AxiomInclusion,
-            theory: TheoryElaborationSequence,
-            symbol: (None, str, Symbol) = None,
-            header: (None, str, ObjctHeader) = None,
-            category: (None, StatementCategory) = None,
-            echo: (None, bool) = None):
-        self.axiom = ap
-        super().__init__(
-            theory=theory, valid_proposition=valid_proposition,
-            symbol=symbol, category=category, header=header,
-            echo=echo)
-        verify(theory.contains_theoretical_objct(ap), 'The ap is not in the theory hierarchy.', slf=self,
-               ap=ap)
-        verify(ap not in theory.statements or ap.statement_index < self.statement_index,
-               'The dai is a predecessor of the ap that is stated in the same theory.', slf=self, ap=ap)
-        super()._declare_class_membership(declarative_class_list.direct_axiom_inference)
-
-    def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None):
-        """Iterate through this and all the theoretical-objcts it contains recursively."""
-        visited = set() if visited is None else visited
-        if include_root and self not in visited:
-            yield self
-            visited.update({self})
-        if self.axiom not in visited:
-            yield self.axiom
-            visited.update({self.axiom})
-            # axioms are leaf objects, no need to iterate it recursively.
-        if self.valid_proposition not in visited:
-            yield self.valid_proposition
-            visited.update({self.valid_proposition})
-            yield from self.valid_proposition.iterate_theoretical_objcts_references(
-                include_root=False, visited=visited)
-
-    def list_theoretical_objcts_recursively_OBSOLETE(self, ol: (None, frozenset) = None,
-                                                     extension_limit: (None, Statement) = None):
-        print(1 / 0)  # OBSOLETE, REPLACE WITH iterate_theoretical_objcts
-
-    def repr_as_statement(self, output_proofs=True):
-        """Return a representation that expresses and justifies the statement.
-
-        The representation is in two parts:
-        - The formula that is being stated,
-        - The justification for the formula."""
-        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula(expanded=True)}'
-        if output_proofs:
-            output = output + f'\n\t{repm.serif_bold("Derivation from natural language axiom")}'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {self.axiom.repr_as_ref()}.'
-        return output
-
-
 class Morphism(FormulaStatement):
     """
 
@@ -2674,17 +2612,6 @@ class TheoryElaborationSequence(TheoreticalObjct):
             self.statements = self.statements + tuple([s])
         return self.statements.index(s)
 
-    def elaborate_direct_axiom_inference(
-            self,
-            valid_proposition,
-            ap,
-            symbol=None, header=None, echo: (None, bool) = None) \
-            -> DirectAxiomInference:
-        """Elaborate a new direct-axiom-inference in the theory. Shortcut for FormalAxiom(theory=t, ...)"""
-        return DirectAxiomInference(
-            valid_proposition=valid_proposition, ap=ap, symbol=symbol,
-            theory=self, header=header, echo=echo)
-
     def elaborate_direct_definition_inference(
             self, p: Formula, d: DefinitionInclusion,
             symbol: (None, str, Symbol) = None,
@@ -2784,19 +2711,6 @@ class TheoryElaborationSequence(TheoreticalObjct):
             original_expression=original_expression,
             equality_statement=equality_statement, symbol=symbol,
             category=category, theory=self, reference=reference, title=title)
-
-    def dai(
-            self,
-            valid_proposition: Formula,
-            ap: AxiomInclusion,
-            symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
-            echo: (None, bool) = None) \
-            -> DirectAxiomInference:
-        """Elaborate a new direct-axiom-inference in the theory. Shortcut for
-        Theory.elaborate_direct_axiom_inference(...)."""
-        return self.elaborate_direct_axiom_inference(
-            valid_proposition=valid_proposition, ap=ap, symbol=symbol,
-            header=header, echo=echo)
 
     def ddi(
             self, p: Formula, d: DefinitionInclusion,
@@ -3038,8 +2952,8 @@ class Hypothesis(Statement):
             f'Assume {hypothetical_formula.repr_as_formula()} is true.')
         self.hypothetical_axiom_postulate = self.hypothetical_t.include_axiom(
             self.hypothetical_axiom)
-        self.proposition = self.hypothetical_t.dai(valid_proposition=hypothetical_formula,
-                                                   ap=self.hypothetical_axiom_postulate)
+        self.proposition = self.hypothetical_t.i.axiom_interpretation.infer_statement(self.hypothetical_axiom_postulate,
+                                                                                      hypothetical_formula)
 
 
 class Proof:
