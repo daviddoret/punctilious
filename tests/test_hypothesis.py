@@ -8,8 +8,8 @@ class TestHypothesis(TestCase):
         """Elaborate a first theory that is insufficient to prove P.
         Then, make an hypothesis with a new proposition to would prove P.
         Finally, prove P under that hypothesis."""
-        p.configuration.echo_default = False
-        u = p.UniverseOfDiscourse('test-hypothesis-universe-of-discourse')
+        p.configuration.echo_default = True
+        u = p.UniverseOfDiscourse()
         blah_blah_blah = random_data.random_sentence(min_words=8)
         a1 = u.declare_axiom(blah_blah_blah)
         o1 = u.o.declare()
@@ -35,7 +35,12 @@ class TestHypothesis(TestCase):
         hypothetical_proposition = hypothesis.proposition
         hypothetical_theory = hypothesis.hypothetical_t
         hypothetical_conjunction = hypothetical_theory.i.ci.infer_statement(first_proposition, hypothetical_proposition)
-        conclusion_1 = hypothetical_theory.i.mp.infer_statement(
+        proposition_1 = hypothetical_theory.i.vs.infer_statement(
             conditional,
+            o1,  # x
+            o2,  # y
+            o3)  # z
+        conclusion_1 = hypothetical_theory.i.mp.infer_statement(
+            proposition_1,
             hypothetical_conjunction)
-        self.assertEqual('◆(ℴ₁, ℴ₃)', conclusion_1.valid_proposition.repr_as_formula())
+        self.assertEqual('◆₁(ℴ₁, ℴ₃)', conclusion_1.valid_proposition.repr_as_formula())
