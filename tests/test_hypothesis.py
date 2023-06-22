@@ -20,12 +20,10 @@ class TestHypothesis(TestCase):
         robust_theory = u.t()
         ap1 = robust_theory.include_axiom(a=a1)
         first_proposition = robust_theory.i.axiom_interpretation.infer_statement(
-            ap1,
-            valid_proposition=u.f(r1, o1, o2))
+            ap1, u.f(r1, o1, o2))
         with u.v() as x, u.v() as y, u.v() as z:
             conditional = robust_theory.i.axiom_interpretation.infer_statement(
                 ap1,
-                valid_proposition=
                 u.f(u.r.implies,
                     u.f(u.r.land, u.f(r1, x, y),
                         u.f(r1, y, z)),
