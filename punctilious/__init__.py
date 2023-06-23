@@ -14,7 +14,7 @@ from core import \
     ObjctHeader, \
     Relation, \
     SimpleObjct, Symbol, SymbolicObjct, statement_categories, \
-    TheoryElaborationSequence, \
+    TheoreticalObjct, TheoryElaborationSequence, \
     UniverseOfDiscourse
 
 # from foundation_system_1 import foundation_system_1, ft, u

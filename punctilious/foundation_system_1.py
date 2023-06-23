@@ -72,12 +72,12 @@ with u.v('x') as x1, u.v('y') as x2:
 d_55 = u.declare_definition('Inequality is defined as the negation of equality.')
 nld_55 = ft.include_definition(d=d_55)
 with u.v('x') as x, u.v('y') as y:
-    ft.ddi(
-        p=
+    ft.i.definition_interpretation.infer_statement(
+        nld_55,
         u.f(
             u.r.equal,
             u.f(u.r.neq, x, y),
-            u.f(u.r.lnot, u.f(u.r.equal, x, y))), d=nld_55)
+            u.f(u.r.lnot, u.f(u.r.equal, x, y))))
 
 nla_10 = ft.include_axiom(u.declare_axiom(
     'propositions is a class whose elements are '

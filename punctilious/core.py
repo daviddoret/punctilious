@@ -6,6 +6,7 @@ import repm
 import contextlib
 import abc
 import collections
+import networkx as nx
 
 
 class VerificationSeverity(repm.Representation):
@@ -652,6 +653,13 @@ class TheoreticalObjct(SymbolicObjct):
         super()._declare_class_membership(classes.theoretical_objct)
         if echo:
             repm.prnt(self.repr_fully_qualified_name())
+
+    def add_to_graph(self, g):
+        """Add this theoretical object as a node in the target graph g.
+        Recursively add directly linked objects unless they are already present in g.
+        NetworkX automatically and quietly ignores nodes and edges that are already present."""
+        g.add_node(self.repr_as_symbol())
+        self.u.add_to_graph(g)
 
     def get_variable_ordered_set(self) -> tuple:
         """Return the ordered-set of free-variables contained in ⌜self⌝,
@@ -1837,7 +1845,7 @@ class InferenceRuleInclusion(Statement):
                 tabsize=4))
 
 
-class Definition(TheoreticalObjct):
+class DefinitionDeclaration(TheoreticalObjct):
     """The Definition pythonic class models the elaboration of a _contentual_ _definition_ in a _universe-of-discourse_.
 
     """
@@ -1912,7 +1920,7 @@ class DefinitionInclusion(Statement):
 
     def __init__(
             self,
-            d: Definition,
+            d: DefinitionDeclaration,
             t: TheoryElaborationSequence,
             symbol: (None, str, Symbol) = None,
             header: (None, str, ObjctHeader) = None,
@@ -2612,19 +2620,6 @@ class TheoryElaborationSequence(TheoreticalObjct):
             self.statements = self.statements + tuple([s])
         return self.statements.index(s)
 
-    def elaborate_direct_definition_inference(
-            self, p: Formula, d: DefinitionInclusion,
-            symbol: (None, str, Symbol) = None,
-            header: (None, str, ObjctHeader) = None,
-            dashed_name: (None, str, DashedName) = None,
-            echo: (None, bool) = None):
-        """Elaborate a formal-definition in this theory.
-
-        Shortcut for FormalDefinition(theory=t, ...)"""
-        return DirectDefinitionInference(
-            p=p, d=d,
-            t=self, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
-
     @property
     def extended_theory(self) -> (None, TheoryElaborationSequence):
         """None if this is a root theory, the theory that this theory extends otherwise."""
@@ -2693,7 +2688,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
             a=a, t=self, symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
     def include_definition(
-            self, d: Definition, symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
+            self, d: DefinitionDeclaration, symbol: (None, str, Symbol) = None, header: (None, str, ObjctHeader) = None,
             dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
         """Include (aka endorse) a definition in this theory-elaboration (self)."""
         return DefinitionInclusion(
@@ -2711,19 +2706,6 @@ class TheoryElaborationSequence(TheoreticalObjct):
             original_expression=original_expression,
             equality_statement=equality_statement, symbol=symbol,
             category=category, theory=self, reference=reference, title=title)
-
-    def ddi(
-            self, p: Formula, d: DefinitionInclusion,
-            symbol: (None, str, Symbol) = None,
-            header: (None, str, ObjctHeader) = None,
-            dashed_name: (None, str, DashedName) = None,
-            echo: (None, bool) = None):
-        """Elaborate a formal-definition in this theory.
-
-        Shortcut for FormalDefinition(theory=t, ...)"""
-        return self.elaborate_direct_definition_inference(
-            p=p, d=d,
-            symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)
 
     def iterate_statements_in_theory_chain(self):
         """Iterate through the (proven or sound) statements in the current theory-chain."""
@@ -3177,21 +3159,6 @@ class SubstitutionOfEqualTerms(FormulaStatement):
             output = output + f'\n\t{"─" * 71}┤'
             output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
         return output
-
-
-class TheoreticalRelation(Relation):
-    """
-    Definition:
-    A theoretical-relation ◆ is a relation that express theoretical-statements.
-
-    Note:
-    Simply put, theoretical-relations is a list of pre-defined relations
-    that makes it possible to elaborate theories.
-
-    """
-
-    def __init__(self, theory, arity, symbol):
-        super().__init__(theory=theory, arity=arity, symbol=symbol)
 
 
 class Tuple(tuple):
@@ -4016,7 +3983,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
         Warning
         -------
-        Axiom-interpretation is especially dangerous because, contrary to most inference-rules,
+        Definition-interpretation is especially dangerous because, contrary to most inference-rules,
         it allows the introduction of arbitrary truthes in the theory. For this reason,
         one must be very attentive when applying this inference-rule to assure the resulting
         formula-statement complies / interprets properly its related contentual-definition.
@@ -5361,7 +5328,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         else:
             return False
 
-    def cross_reference_definition(self, d: Definition) -> bool:
+    def cross_reference_definition(self, d: DefinitionDeclaration) -> bool:
         """Cross-references a definition in this universe-of-discourse.
 
         :param d: a definition.
@@ -5582,18 +5549,6 @@ class UniverseOfDiscourse(SymbolicObjct):
             stabilized=stabilized,
             echo=echo)
 
-    def postulate_axiom(
-            self, natural_language, symbol=None, theory=None, reference=None,
-            title=None, echo=None):
-        """Postulate a new axiom in the designated theory."""
-        verify(
-            theory.universe_of_discourse is self,
-            'The universe-of-discourse of the theory parameter is distinct '
-            'from this universe-of-discourse.')
-        return AxiomInclusion(
-            natural_language=natural_language, symbol=symbol, t=theory,
-            reference=reference, title=title, echo=echo)
-
     def declare_axiom(
             self, natural_language: str, header: (None, str, ObjctHeader) = None, symbol: (None, str, Symbol) = None,
             echo: (None, bool) = None):
@@ -5658,7 +5613,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         """Pose a new definition in the current universe-of-discourse.
 
         Shortcut for: u.pose_definition(...)"""
-        return Definition(
+        return DefinitionDeclaration(
             natural_language=natural_language,
             u=self,
             symbol=symbol, header=header, dashed_name=dashed_name, echo=echo)

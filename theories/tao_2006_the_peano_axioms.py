@@ -103,9 +103,9 @@ p_2_1_3_3_d = t.soet(p_2_1_3_3_c, p_2_1_3_2_c, reference='2.1.3.3.d')
 p_2_1_4 = t.soet(proposition_2_2_5, p_2_1_3_3_c, reference='2.1.4')
 
 # 4
-proposition_2_1_3_3 = t.ddi(
-    u.f(u.r.equal, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))),
+proposition_2_1_3_3 = t.i.definition_interpretation.infer_statement(
     definition_2_1_3,
+    u.f(u.r.equal, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))),
     header='2.1.3.3.a')
 
 # Axiom 2.3. 0 is not the successor of any natural number;
