@@ -3,7 +3,7 @@ import punctilious as pu
 mira_name = 'Mira'  # random_data.random_word()
 dog_name = 'dog'  # random_data.random_word()
 mammal_name = 'mammal'  # random_data.random_word()
-
+ 
 u = pu.UniverseOfDiscourse(dashed_name='The-world-of-Mira')
 t1 = u.t(header=f'My pet theory')
 mira = u.o.declare(pu.Symbol(mira_name))
