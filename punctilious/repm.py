@@ -1,5 +1,7 @@
 """The Representation Module (repm) is an independant module that provides IO and string manipulation utilities."""
 import textwrap
+import unidecode
+import typing
 
 _serif_bold_dict = {
     'a': '𝐚', 'b': '𝐛', 'c': '𝐜', 'd': '𝐝', 'e': '𝐞', 'f': '𝐟', 'g': '𝐠',
@@ -60,52 +62,213 @@ def wrap(text):
             tabsize=4))
 
 
-class Representation:
-    """
+class TextFormat:
+    def __init__(self, text_format_name: str):
+        self._text_format_name = text_format_name
 
-    """
-
-    def __init__(self, python_name, sample=None, natural_language_name=None):
-        self.name = python_name
-        self.natural_language_name = natural_language_name
-        self.sample = sample
+    def __hash__(self):
+        return hash((TextFormat, self._text_format_name))
 
     def __repr__(self):
-        return self.repr_as_python_name()
+        return self._text_format_name
 
     def __str__(self):
-        return self.repr_as_python_name()
-
-    def repr(self):
-        return self.repr_as_python_name()
-
-    def repr_as_python_name(self):
-        return str(self.name)
-
-    def repr_as_natural_language(self, cap: bool = False):
-        cap = False if cap is None else cap
-        return str(self.natural_language_name).capitalize() if cap else str(self.natural_language_name)
+        return self._text_format_name
 
 
-class UseCase(Representation):
+class TextFormats():
+    def __init__(self):
+        super().__init__('text-formats')
+        self.html = TextFormat('html')
+        self.latex = TextFormat('latex')
+        self.plaintext = TextFormat('plaintext')
+        self.markdown = TextFormat('markdown')
+        self.unicode = TextFormat('unicode')
+
+
+text_formats = TextFormats()
+
+
+class FontWeight:
+    def __init__(self, font_weight_name: str):
+        self._font_weight_name = font_weight_name
+
+    def __hash__(self):
+        return hash((FontWeight, self._font_weight_name))
+
+    def __repr__(self):
+        return self._font_weight_name
+
+    def __str__(self):
+        return self._font_weight_name
+
+
+class FontWeights:
+    def __init__(self):
+        self.plain = FontWeight('plain')
+        self.bold = FontWeight('bold')
+
+
+font_weights = FontWeights()
+
+
+class FontStyle:
+    def __init__(self, font_style_name: str):
+        self._font_style_name = font_style_name
+
+    def __hash__(self):
+        return hash((FontStyle, self._font_style_name))
+
+    def __repr__(self):
+        return self._font_style_name
+
+    def __str__(self):
+        return self._font_style_name
+
+    def repr(self, s: str, text_format: TextFormat = text_formats.plaintext):
+        match text_format:
+            case text_formats.latex:
+                return self.repr_as_latex(s)
+            case text_formats.plaintext:
+                return self.repr_as_plaintext(s)
+            case text_formats.unicode:
+                return self.repr_as_unicode(s)
+            case _:
+                return self.repr_as_plaintext(s)
+
+    def repr_as_plaintext(self, s: str):
+        return s
+
+    def repr_as_unicode(self, s: str):
+        return s
+
+    def repr_as_latex(self, s: str):
+        return s
+
+
+class ItalicFontStyle(FontStyle):
+    def __init__(self):
+        super().__init__('italic')
+
+    def repr_as_plaintext(self, s: str):
+        return s
+
+    def repr_as_unicode(self, s: str):
+        return s
+
+    def repr_as_latex(self, s: str):
+        return s
+
+
+class FontStyles:
+    def __init__(self):
+        self.normal = FontStyle('normal')
+        self.italic = FontStyle('italic')
+
+
+font_styles = FontStyles()
+
+
+class FontFamily:
+    def __init__(self, font_family_name: str):
+        self._font_family_name = font_family_name
+
+    def __hash__(self):
+        return hash((FontFamily, self._font_family_name))
+
+    def __repr__(self):
+        return self._font_family_name
+
+    def __str__(self):
+        return self._font_family_name
+
+
+class FontFamilies:
+    def __init__(self):
+        self.monospace = FontFamily('monospace')
+        self.sans_serif = FontFamily('sans-serif')
+        self.serif = FontFamily('serif')
+
+
+font_families = FontFamilies()
+
+
+class StyledText:
+    """
+
+    """
+
+    def __init__(self, content: str, font_weight: FontWeight = font_weights.plain,
+                 font_style: FontStyle = font_styles.normal, font_family: FontFamily = font_families.sans_serif):
+        self._content = unidecode.unidecode(content)
+        self._font_weight = font_weight
+        self._font_style = font_style
+        self._font_family = font_family
+
+    def __hash__(self):
+        """WARNING: hash is only computed on the content???"""
+        return hash(self._content)
+
+    def __repr__(self):
+        return self.content
+
+    def __str__(self):
+        return self.content
+
+    @property
+    def content(self) -> str:
+        return self._content
+
+    def repr(self, text_format: TextFormat = text_formats.plaintext):
+        match text_format:
+            case text_formats.plaintext:
+                return self.repr_as_plaintext()
+            case text_formats.unicode:
+                return self.repr_as_unicode()
+            case _:
+                return self.repr_as_plaintext()
+
+    def repr_as_latex(self):
+        pass
+
+    def repr_as_plaintext(self):
+        return self.content
+
+    def repr_as_unicode(self):
+        return self.content
+
+
+class ValueName(StyledText):
+    """ValueName models arbitrary named values.
+
+    The ValueName pythonic-class is used to expose feasible value-lists.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+class UseCase(ValueName):
     pass
 
 
-class UseCases(Representation):
-    symbol = UseCase('symbol')
-    dashed_name = UseCase('dashed_name')
-    reference = UseCase('reference')
-    natural_name = UseCase('natural_name')
+class UseCases(ValueName):
+    def __init__(self):
+        super().__init__('use_cases')
+        self.symbol = UseCase('symbol')
+        self.dashed_name = UseCase('dashed_name')
+        self.reference = UseCase('reference')
+        self.natural_name = UseCase('natural_name')
 
 
-use_cases = UseCases('use_cases')
+use_cases = UseCases()
 
 
-class Style(Representation):
+class Style(ValueName):
     pass
 
 
-class Styles(Representation):
+class Styles(ValueName):
     serif_normal = Style('serif_normal')
     serif_bold = Style('serif_bold')
     serif_italic = Style('serif_italic')

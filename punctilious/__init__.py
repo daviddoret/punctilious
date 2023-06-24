@@ -6,10 +6,10 @@ print('Punctilious package (punctilious/__init__.py)')
 from repm import monospace, prnt, serif_bold
 from core import \
     AxiomDeclaration, AxiomInclusion, \
-    configuration, \
+    classes, configuration, consistency_values, \
     DashedName, DefinitionInclusion, DirectDefinitionInference, \
     FailedVerificationException, Formula, FreeVariable, \
-    consistency_values, \
+    is_in_class, \
     Note, note_categories, InconsistencyWarning, \
     ObjctHeader, \
     Relation, \

@@ -9,14 +9,14 @@ import collections
 import networkx as nx
 
 
-class VerificationSeverity(repm.Representation):
-    def __init__(self, python_name):
-        super().__init__(python_name=python_name)
+class VerificationSeverity(repm.ValueName):
+    def __init__(self, name):
+        super().__init__(name=name)
 
 
-class VerificationSeverities(repm.Representation):
-    def __init__(self, python_name):
-        super().__init__(python_name=python_name)
+class VerificationSeverities(repm.ValueName):
+    def __init__(self, name):
+        super().__init__(name=name)
         self.verbose = VerificationSeverity('verbose')
         self.information = VerificationSeverity('information')
         self.warning = VerificationSeverity('warning')
@@ -123,18 +123,18 @@ def unpack_formula(o: (TheoreticalObjct, Formula, FormulaStatement)) -> Formula:
         return o
 
 
-class Consistency(repm.Representation):
+class Consistency(repm.ValueName):
     """A qualification regarding the consistency of a theory."""
 
-    def __init__(self, python_name):
-        super().__init__(python_name=python_name)
+    def __init__(self, name):
+        super().__init__(name=name)
 
 
-class ConsistencyValues(repm.Representation):
+class ConsistencyValues(repm.ValueName):
     """The list of consistency values."""
 
-    def __init__(self, python_name):
-        super().__init__(python_name=python_name)
+    def __init__(self, name):
+        super().__init__(name=name)
 
     proved_consistent = Consistency('proved-consistent')
     proved_inconsistent = Consistency('proved-inconsistent')
@@ -145,18 +145,18 @@ consistency_values = ConsistencyValues('consistency-values')
 """The list of consistency values."""
 
 
-class DeclarativeClass(repm.Representation):
+class DeclarativeClass(repm.ValueName):
     """The DeclarativeClass python class models a declarative-class."""
 
-    def __init__(self, python_name, natural_language_name):
-        super().__init__(python_name=python_name, natural_language_name=natural_language_name)
+    def __init__(self, name, natural_language_name):
+        super().__init__(name=name, natural_language_name=natural_language_name)
 
 
-class DeclarativeClassList(repm.Representation):
+class DeclarativeClassList(repm.ValueName):
     """A list of of well-known declarative-classes."""
 
-    def __init__(self, python_name, natural_language_name):
-        super().__init__(python_name=python_name, natural_language_name=natural_language_name)
+    def __init__(self, name, natural_language_name):
+        super().__init__(name=name, natural_language_name=natural_language_name)
         self.atheoretical_statement = DeclarativeClass('atheoretical_statement', 'atheoretical-statement')
         self.axiom = DeclarativeClass('axiom', 'axiom')
         self.axiom_inclusion = DeclarativeClass('axiom_inclusion', 'axiom-inclusion')
@@ -982,7 +982,7 @@ class FreeVariable(TheoreticalObjct):
      * The index-position of the free-variable in its scope-formula
     """
 
-    class Status(repm.Representation):
+    class Status(repm.ValueName):
         pass
 
     scope_initialization_status = Status('scope_initialization_status')
@@ -1120,14 +1120,14 @@ class Formula(TheoreticalObjct):
 
     """
 
-    function_call = repm.Representation(
-        python_name='function-call', sample='◆(𝐱₁, 𝐱₂ ,… ,𝐱ₙ)')
-    infix = repm.Representation(
-        python_name='infix-operator', sample='𝐱₁ ◆ 𝐱₂')
-    prefix = repm.Representation(
-        python_name='prefix-operator', sample='◆𝐱')
-    postfix = repm.Representation(
-        python_name='postfix-operator', sample='𝐱◆')
+    function_call = repm.ValueName(
+        name='function-call', sample='◆(𝐱₁, 𝐱₂ ,… ,𝐱ₙ)')
+    infix = repm.ValueName(
+        name='infix-operator', sample='𝐱₁ ◆ 𝐱₂')
+    prefix = repm.ValueName(
+        name='prefix-operator', sample='◆𝐱')
+    postfix = repm.ValueName(
+        name='postfix-operator', sample='𝐱◆')
 
     def __init__(
             self,
@@ -1452,14 +1452,14 @@ class SimpleObjctDict(collections.UserDict):
         return self._truth
 
 
-class StatementCategory(repm.Representation):
-    def __init__(self, python_name, symbol_base, natural_name):
+class StatementCategory(repm.ValueName):
+    def __init__(self, name, symbol_base, natural_name):
         self.symbol_base = symbol_base
         self.natural_name = natural_name
-        super().__init__(python_name=python_name, natural_language_name=natural_name)
+        super().__init__(name=name, natural_language_name=natural_name)
 
 
-class StatementCategories(repm.Representation):
+class StatementCategories(repm.ValueName):
     axiom = StatementCategory('axiom', 'a', 'axiom')
     axiom_inclusion = StatementCategory('axiom_inclusion', 'a', 'axiom')
     corollary = StatementCategory('corollary', 'p', 'corollary')
@@ -1480,14 +1480,14 @@ class StatementCategories(repm.Representation):
 statement_categories = StatementCategories('statement_categories')
 
 
-class NoteCategory(repm.Representation):
-    def __init__(self, python_name, symbol_base, natural_name):
+class NoteCategory(repm.ValueName):
+    def __init__(self, name, symbol_base, natural_name):
         self.symbol_base = symbol_base
         self.natural_name = natural_name
-        super().__init__(python_name=python_name)
+        super().__init__(name=name)
 
 
-class NoteCategories(repm.Representation):
+class NoteCategories(repm.ValueName):
     comment = StatementCategory('comment', '𝙲', 'comment')
     note = StatementCategory('note', '𝙽', 'note')
     remark = StatementCategory('remark', '𝚁', 'remark')
@@ -2375,7 +2375,7 @@ class Note(AtheoreticalStatement):
                 tabsize=4))
 
 
-section_category = StatementCategory(python_name='section', symbol_base='§', natural_name='section')
+section_category = StatementCategory(name='section', symbol_base='§', natural_name='section')
 
 
 class Section(AtheoreticalStatement):
