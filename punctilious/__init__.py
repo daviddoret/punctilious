@@ -13,8 +13,8 @@ from core import \
     Note, note_categories, InconsistencyWarning, \
     ObjctHeader, \
     Relation, \
-    SimpleObjct, Symbol, SymbolicObjct, statement_categories, \
-    TheoreticalObjct, TheoryElaborationSequence, \
+    SimpleObjct, Symbol, SymbolicObjct, statement_categories, StyledText, \
+    TextFormat, text_formats, TextStyle, text_styles, TheoreticalObjct, TheoryElaborationSequence, \
     UniverseOfDiscourse
 
 # from foundation_system_1 import foundation_system_1, ft, u

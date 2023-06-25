@@ -7,7 +7,7 @@ import contextlib
 import abc
 import collections
 import networkx as nx
-from text import StyledText, text_formats, text_styles
+from text import StyledText, subscriptify, TextFormat, text_formats, TextStyle, text_styles
 
 
 class VerificationSeverity(repm.ValueName):
@@ -82,8 +82,10 @@ class Configuration:
         self.echo_theory_elaboration_sequence_declaration = None
         self.echo_universe_of_discourse_declaration = None
         self.echo_free_variable_declaration = None
+        self.echo_text_format = None
         self.output_index_if_max_index_equal_1 = False
         self.raise_exception_on_verification_error = True
+        self.text_format = text_formats.latex_math
         self.text_output_indent = 2
         self.text_output_statement_column_width = 70
         self.text_output_justification_column_width = 40
@@ -255,11 +257,13 @@ class Symbol:
     """
 
     def __init__(self, base: (str, StyledText), index: (None, str) = None):
-        self.base = base
-        self.index = index
+        if isinstance(base, str):
+            base = StyledText(base)
+        self._base = base
+        self._index = index
 
     def __hash__(self):
-        return hash((self.base, self.index))
+        return hash((Symbol, self.base, self.index))
 
     def __repr__(self):
         return self.repr()
@@ -267,16 +271,29 @@ class Symbol:
     def __str__(self):
         return self.repr()
 
-    def repr(self, hide_index=False) -> str:
+    @property
+    def base(self) -> StyledText:
+        """The symbol core glyph.
+
+        :return: (StyledText) The symbol core glyph.
+        """
+        return self._base
+
+    @property
+    def index(self) -> str:
+        return self._index
+
+    def repr(self, hide_index=False, text_format: TextFormat = None) -> str:
         """Return the default representation for this python obje.
 
         :param hide_index:
         :return:
         """
+        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         if hide_index or self.index is None:
-            return f'{self.base}'
+            return f'{self.base.repr(text_format)}'
         else:
-            return f'{self.base}{repm.subscriptify(self.index)}'
+            return f'{self.base.repr(text_format)}{subscriptify(self.index, text_format)}'
 
 
 class ObjctHeader:
@@ -320,9 +337,7 @@ class ObjctHeader:
         :param cap:
         :return:
         """
-        return f'{self.category.repr_as_natural_language(cap=cap)} {self.reference}{"" if self.title is None else " - " + self.title}'
-
-    def repr_as_natural_language(self, cap:bool=False):
+        return f'{self.category.repr(cap=cap)} {self.reference}{"" if self.title is None else " - " + self.title}'
 
     def repr_reference(self, cap: bool = False) -> str:
         cap = False if cap is None else cap
@@ -2995,13 +3010,12 @@ class Relation(TheoreticalObjct):
         self.signal_theoretical_morphism = signal_theoretical_morphism
         self.implementation = implementation
         if symbol is None:
-            base = '◆'
-            index = universe_of_discourse.index_symbol(base=base)
-            symbol = Symbol(base=base, index=index)
-        elif isinstance(symbol, str):
+            symbol = 'r'
+        if isinstance(symbol, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
+            base = StyledText(symbol, text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(base=symbol)
             symbol = Symbol(base=symbol, index=index)
         assert arity is not None and isinstance(arity, int) and arity > 0
@@ -3054,15 +3068,14 @@ class SimpleObjct(TheoreticalObjct):
         echo = get_config(echo, configuration.echo_simple_objct_declaration, configuration.echo_default,
                           fallback_value=False)
         if symbol is None:
-            base = 'ℴ'
-            index = universe_of_discourse.index_symbol(base=base)
-            symbol = Symbol(base=base, index=index)
+            symbol = 'o'
         if isinstance(symbol, str):
             symbol = symbol.strip()
             verify(symbol != '', 'The symbol is an empy string.', symbol=symbol)
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
+            symbol = StyledText(symbol, text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(base=symbol)
             symbol = Symbol(base=symbol, index=index)
         super().__init__(

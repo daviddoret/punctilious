@@ -52,6 +52,11 @@ class TextStyles:
             unicode_table_index=unicode.unicode_serif_bold_index,
             latex_math_start_tag=r'\mathbf{',
             latex_math_end_tag=r'}')
+        self.serif_italic = TextStyle(
+            font_style_name='serif-italic',
+            unicode_table_index=unicode.unicode_serif_italic_index,
+            latex_math_start_tag=r'\mathit{',
+            latex_math_end_tag=r'}')
         self.serif_normal = TextStyle(
             font_style_name='serif-normal',
             unicode_table_index=unicode.unicode_serif_normal_index,
@@ -113,3 +118,15 @@ class StyledText:
 
     def repr_as_unicode(self):
         return unicode.unicode_format(self._plaintext, self._text_style.unicode_table_index)
+
+
+def subscriptify(text: (str, StyledText) = '', text_format: TextFormat = text_formats.plaintext):
+    match text_format:
+        case text_formats.plaintext:
+            return text
+        case text_formats.unicode:
+            return unicode.unicode_subscriptify(text)
+        case text_formats.latex_math:
+            return f'_{{{text}}}'
+        case _:
+            return text

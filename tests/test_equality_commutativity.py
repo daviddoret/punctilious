@@ -6,6 +6,7 @@ import random_data
 class TestEqualityCommutativity(TestCase):
     def test_ec(self):
         pu.configuration.echo_default = False
+        pu.configuration.text_format = pu.text_formats.plaintext
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
         o2 = u.o.declare()
