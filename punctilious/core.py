@@ -322,6 +322,8 @@ class ObjctHeader:
         """
         return f'{self.category.repr_as_natural_language(cap=cap)} {self.reference}{"" if self.title is None else " - " + self.title}'
 
+    def repr_as_natural_language(self, cap:bool=False):
+
     def repr_reference(self, cap: bool = False) -> str:
         cap = False if cap is None else cap
         return f'{self.category.repr_as_natural_language(cap=cap)} {self.reference}'
@@ -1453,28 +1455,29 @@ class SimpleObjctDict(collections.UserDict):
 
 
 class StatementCategory(repm.ValueName):
-    def __init__(self, name, symbol_base, natural_name):
+    def __init__(self, name, symbol_base, natural_name, abridged_name):
         self.symbol_base = symbol_base
         self.natural_name = natural_name
         super().__init__(name)
 
 
 class StatementCategories(repm.ValueName):
-    axiom = StatementCategory('axiom', 'a', 'axiom')
-    axiom_inclusion = StatementCategory('axiom_inclusion', 'a', 'axiom')
-    corollary = StatementCategory('corollary', 'p', 'corollary')
-    definition = StatementCategory('definition', 'd', 'definition')
-    formal_definition = StatementCategory('formal_definition', 'd', 'formal definition')
-    hypothesis = StatementCategory('hypothesis', 'h', 'hypothesis')
-    inference_rule = StatementCategory('inference_rule', 'i', 'inference rule')
-    inference_rule_inclusion = StatementCategory('inference_rule_inclusion', 'ii', 'inference rule inclusion')
+    axiom = StatementCategory('axiom', 'a', 'axiom', 'ax.')
+    axiom_inclusion = StatementCategory('axiom_inclusion', 'a', 'axiom', 'ax.')
+    corollary = StatementCategory('corollary', 'p', 'corollary', 'cor.')
+    definition = StatementCategory('definition', 'd', 'definition', 'def.')
+    formal_definition = StatementCategory('formal_definition', 'd', 'formal definition', 'def.')
+    hypothesis = StatementCategory('hypothesis', 'h', 'hypothesis', 'hyp.')
+    inference_rule = StatementCategory('inference_rule', 'i', 'inference rule', 'i.-r.')
+    inference_rule_inclusion = StatementCategory('inference_rule_inclusion', 'ii', 'inference rule inclusion', 'i.-r.')
     inferred_proposition = ('inferred_proposition', 'i', 'inferred-proposition')
-    lemma = StatementCategory('lemma', 'p', 'lemma')
-    proposition = StatementCategory('proposition', 'p', 'proposition')
-    theorem = StatementCategory('theorem', 'p', 'theorem')
-    theory_elaboration_sequence = StatementCategory('theory_elaboration_sequence', 't', 'theory elaboration sequence')
+    lemma = StatementCategory('lemma', 'p', 'lemma', 'lem.')
+    proposition = StatementCategory('proposition', 'p', 'proposition', 'prop.')
+    theorem = StatementCategory('theorem', 'p', 'theorem', 'thrm.')
+    theory_elaboration_sequence = StatementCategory('theory_elaboration_sequence', 't', 'theory elaboration sequence',
+                                                    'theo.')
     # Special categories
-    missing_category = StatementCategory('missing_category', '�', 'missing category')
+    missing_category = StatementCategory('missing_category', '�', 'missing category', 'miss.')
 
 
 statement_categories = StatementCategories('statement_categories')
@@ -1488,9 +1491,9 @@ class NoteCategory(repm.ValueName):
 
 
 class NoteCategories(repm.ValueName):
-    comment = StatementCategory('comment', '𝙲', 'comment')
-    note = StatementCategory('note', '𝙽', 'note')
-    remark = StatementCategory('remark', '𝚁', 'remark')
+    comment = StatementCategory('comment', '𝙲', 'comment', 'cmt.')
+    note = StatementCategory('note', '𝙽', 'note', 'note')
+    remark = StatementCategory('remark', '𝚁', 'remark', 'rmrk.')
 
 
 note_categories = NoteCategories('note_categories')
@@ -2375,7 +2378,8 @@ class Note(AtheoreticalStatement):
                 tabsize=4))
 
 
-section_category = StatementCategory(name='section', symbol_base='§', natural_name='section')
+section_category = StatementCategory(
+    name='section', symbol_base='§', natural_name='section', abridged_name='sect.')
 
 
 class Section(AtheoreticalStatement):
