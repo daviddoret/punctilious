@@ -92,7 +92,11 @@ class StyledText:
         self._plaintext = unidecode.unidecode(plaintext)
         self._text_style = text_style
 
+    def __eq__(self, other):
+        return hash(self) == hash(other)
+
     def __hash__(self):
+        """Two styled-texts are considered distinct if either their plaintext content or their style are distinct."""
         return hash((StyledText, self._plaintext, self._text_style))
 
     def __repr__(self):

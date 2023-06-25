@@ -17,6 +17,6 @@ class TestEqualityCommutativity(TestCase):
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
         phi1 = t.i.axiom_interpretation.infer_statement(ap, u.f(u.r.equal, u.f(r1, o1, o2), u.f(r2, o3)))
-        self.assertEqual('(◆₁(ℴ₁, ℴ₂) = ◆₂(ℴ₃))', phi1.repr_as_formula())
+        self.assertEqual('(r1(o1, o2) = r2(o3))', phi1.repr_as_formula())
         phi2 = t.i.ec.infer_statement(phi1, echo=True)
-        self.assertEqual('(◆₂(ℴ₃) = ◆₁(ℴ₁, ℴ₂))', phi2.repr_as_formula())
+        self.assertEqual('(r2(o3) = r1(o1, o2))', phi2.repr_as_formula())

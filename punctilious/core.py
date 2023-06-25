@@ -262,6 +262,9 @@ class Symbol:
         self._base = base
         self._index = index
 
+    def __eq__(self, other):
+        return hash(self) == hash(other)
+
     def __hash__(self):
         return hash((Symbol, self.base, self.index))
 
@@ -311,6 +314,9 @@ class ObjctHeader:
         self.category = category
         self.title = title
 
+    def __eq__(self, other):
+        return hash(self) == hash(other)
+
     def __hash__(self):
         """Note that the title attribute is not hashed,
         because title is considered purely decorative.
@@ -341,7 +347,7 @@ class ObjctHeader:
 
     def repr_reference(self, cap: bool = False) -> str:
         cap = False if cap is None else cap
-        return f'{self.category.repr_as_natural_language(cap=cap)} {self.reference}'
+        return f'{self.category.repr(cap=cap)} {self.reference}'
 
 
 class DashedName:
@@ -1474,6 +1480,9 @@ class StatementCategory(repm.ValueName):
         self.symbol_base = symbol_base
         self.natural_name = natural_name
         super().__init__(name)
+
+    def repr(self, cap=None):
+        return self.natural_name
 
 
 class StatementCategories(repm.ValueName):
@@ -5607,7 +5616,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         else:
             return 0
 
-    def index_symbol(self, base):
+    def index_symbol(self, base: (str, StyledText)):
         """Given a symbol-base S (i.e. an unindexed symbol), returns a unique integer n
         such that (S, n) is a unique identifier in this instance of UniverseOfDiscourse.
 
