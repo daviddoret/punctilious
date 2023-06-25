@@ -7,16 +7,17 @@ import contextlib
 import abc
 import collections
 import networkx as nx
+from text import StyledText, text_formats, text_styles
 
 
 class VerificationSeverity(repm.ValueName):
     def __init__(self, name):
-        super().__init__(name=name)
+        super().__init__(name)
 
 
 class VerificationSeverities(repm.ValueName):
     def __init__(self, name):
-        super().__init__(name=name)
+        super().__init__(name)
         self.verbose = VerificationSeverity('verbose')
         self.information = VerificationSeverity('information')
         self.warning = VerificationSeverity('warning')
@@ -127,14 +128,14 @@ class Consistency(repm.ValueName):
     """A qualification regarding the consistency of a theory."""
 
     def __init__(self, name):
-        super().__init__(name=name)
+        super().__init__(name)
 
 
 class ConsistencyValues(repm.ValueName):
     """The list of consistency values."""
 
     def __init__(self, name):
-        super().__init__(name=name)
+        super().__init__(name)
 
     proved_consistent = Consistency('proved-consistent')
     proved_inconsistent = Consistency('proved-inconsistent')
@@ -149,14 +150,14 @@ class DeclarativeClass(repm.ValueName):
     """The DeclarativeClass python class models a declarative-class."""
 
     def __init__(self, name, natural_language_name):
-        super().__init__(name=name, natural_language_name=natural_language_name)
+        super().__init__(name)
 
 
 class DeclarativeClassList(repm.ValueName):
     """A list of of well-known declarative-classes."""
 
     def __init__(self, name, natural_language_name):
-        super().__init__(name=name, natural_language_name=natural_language_name)
+        super().__init__(name)
         self.atheoretical_statement = DeclarativeClass('atheoretical_statement', 'atheoretical-statement')
         self.axiom = DeclarativeClass('axiom', 'axiom')
         self.axiom_inclusion = DeclarativeClass('axiom_inclusion', 'axiom-inclusion')
@@ -253,7 +254,7 @@ class Symbol:
 
     """
 
-    def __init__(self, base: str, index: (None, str) = None):
+    def __init__(self, base: (str, StyledText), index: (None, str) = None):
         self.base = base
         self.index = index
 
@@ -1006,15 +1007,14 @@ class FreeVariable(TheoreticalObjct):
         self._scope = scope
         assert isinstance(universe_of_discourse, UniverseOfDiscourse)
         if symbol is None:
-            base = '𝐱'
-            index = universe_of_discourse.index_symbol(base=base)
-            symbol = Symbol(base=base, index=index)
-        elif isinstance(symbol, str):
+            symbol = 'x'
+        if isinstance(symbol, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
+            base = StyledText(symbol, text_styles.serif_bold)
             index = universe_of_discourse.index_symbol(base=symbol)
-            symbol = Symbol(base=symbol, index=index)
+            symbol = Symbol(base=base, index=index)
         super().__init__(
             symbol=symbol,
             universe_of_discourse=universe_of_discourse, echo=False)
@@ -1121,13 +1121,13 @@ class Formula(TheoreticalObjct):
     """
 
     function_call = repm.ValueName(
-        name='function-call', sample='◆(𝐱₁, 𝐱₂ ,… ,𝐱ₙ)')
+        'function-call')
     infix = repm.ValueName(
-        name='infix-operator', sample='𝐱₁ ◆ 𝐱₂')
+        'infix-operator')
     prefix = repm.ValueName(
-        name='prefix-operator', sample='◆𝐱')
+        'prefix-operator')
     postfix = repm.ValueName(
-        name='postfix-operator', sample='𝐱◆')
+        'postfix-operator')
 
     def __init__(
             self,
@@ -1456,7 +1456,7 @@ class StatementCategory(repm.ValueName):
     def __init__(self, name, symbol_base, natural_name):
         self.symbol_base = symbol_base
         self.natural_name = natural_name
-        super().__init__(name=name, natural_language_name=natural_name)
+        super().__init__(name)
 
 
 class StatementCategories(repm.ValueName):

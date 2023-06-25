@@ -1,3 +1,5 @@
+"""Unicode text utilities."""
+
 unicode_serif_normal_index = 0
 unicode_serif_bold_index = 1
 unicode_serif_italic_index = 2
@@ -6,14 +8,14 @@ unicode_sans_serif_normal_index = 4
 unicode_sans_serif_bold_index = 5
 unicode_sans_serif_italic_index = 6
 unicode_sans_serif_bold_italic_index = 7
-unicode_script_normal = 8
-unicode_script_bold = 9
-unicode_fraktur_normal = 10
-unicode_fraktur_bold = 11
-unicode_monospace = 12
-unicode_double_struck = 13
+unicode_script_normal_index = 8
+unicode_script_bold_index = 9
+unicode_fraktur_normal_index = 10
+unicode_fraktur_bold_index = 11
+unicode_monospace_index = 12
+unicode_double_struck_index = 13
 
-_unicode_table = {
+unicode_styled_characters = {
     'a': 'a𝐚𝑎𝒂𝖺𝗮𝘢𝙖𝒶𝓪𝔞𝖆𝚊𝕒',
     'b': 'b𝐛𝑏𝒃𝖻𝗯𝘣𝙗𝒷𝓫𝔟𝖇𝚋𝕓',
     'c': 'c𝐜𝑐𝒄𝖼𝗰𝘤𝙘𝒸𝓬𝔠𝖈𝚌𝕔',
@@ -79,9 +81,15 @@ _unicode_table = {
 }
 
 
-def unicode_format(s: str = '', index: int = 0):
-    global _unicode_table
-    return ''.join([_unicode_table.get(c, c * 14)[index] for c in s])
+def unicode_format(s: str = '', index: int = 0) -> str:
+    """Formats a string with Unicode formatting.
+    
+    :param s: A string of basic plaintext (visible ASCII characters).
+    :param index: The style index from the unicode_styles_dictionary.
+    :return: The string formatted with the desired style.
+    """
+    global unicode_styled_characters
+    return ''.join([unicode_styled_characters.get(c, c * 14)[index] for c in s])
 
 # print(unicode_format('hello world'))
 # print(unicode_format('hello world', 0))
