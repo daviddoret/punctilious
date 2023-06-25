@@ -88,8 +88,10 @@ text_formats = TextFormats()
 
 
 class StyledText:
-    def __init__(self, plaintext: str, text_style: TextStyle = text_styles.serif_normal):
+    def __init__(self, plaintext: str, unicode=None, latex_math=None, text_style: TextStyle = text_styles.serif_normal):
         self._plaintext = unidecode.unidecode(plaintext)
+        self._unicode = unicode
+        self._latex_math = latex_math
         self._text_style = text_style
 
     def __eq__(self, other):
@@ -115,13 +117,14 @@ class StyledText:
                 return self.repr_as_unicode()
 
     def repr_as_latex_math(self):
-        return f'{self._text_style.latex_math_start_tag}{self._plaintext}{self._text_style.latex_math_end_tag}'
+        return f'{self._text_style.latex_math_start_tag}{self._plaintext if self._latex_math is None else self._latex_math}{self._text_style.latex_math_end_tag}'
 
     def repr_as_plaintext(self):
         return self._plaintext
 
     def repr_as_unicode(self):
-        return unicode.unicode_format(self._plaintext, self._text_style.unicode_table_index)
+        return unicode.unicode_format(self._plaintext if self._unicode is None else self._unicode,
+                                      self._text_style.unicode_table_index)
 
 
 def subscriptify(text: (str, StyledText) = '', text_format: TextFormat = text_formats.plaintext):

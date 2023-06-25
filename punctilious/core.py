@@ -85,7 +85,7 @@ class Configuration:
         self.echo_text_format = None
         self.output_index_if_max_index_equal_1 = False
         self.raise_exception_on_verification_error = True
-        self.text_format = text_formats.latex_math
+        self.text_format = text_formats.unicode
         self.text_output_indent = 2
         self.text_output_statement_column_width = 70
         self.text_output_justification_column_width = 40
@@ -448,12 +448,12 @@ class SymbolicObjct:
             dashed_name = DashedName(dashed_name)
         self._dashed_name = dashed_name
         self.is_theory_foundation_system = is_theory_foundation_system
+        self._declare_class_membership(classes.symbolic_objct)
         if not is_universe_of_discourse:
             self._universe_of_discourse = universe_of_discourse
             self._universe_of_discourse.cross_reference_symbolic_objct(o=self)
         else:
             self._universe_of_discourse = None
-        self._declare_class_membership(classes.symbolic_objct)
         if echo:
             repm.prnt(self.repr_as_declaration())
 
@@ -484,7 +484,7 @@ class SymbolicObjct:
     def header(self) -> ObjctHeader:
         return self._header
 
-    def repr_as_formula(self, text_format: (None, TextFormat) = None, expanded: (None, bool) = None) -> str:
+    def repr_as_formula(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
         """If supported, return a formula representation,
         a symbolic representation otherwise.
 
@@ -578,8 +578,8 @@ class SymbolicObjct:
             return False
         return True
 
-    def prnt(self, expanded=False):
-        repm.prnt(self.repr(expanded=expanded))
+    def prnt(self, expand=False):
+        repm.prnt(self.repr(expand=expand))
 
     def repr_dashed_name(self, text_format: (None, TextFormat) = None) -> str:
         """"""
@@ -620,15 +620,15 @@ class SymbolicObjct:
             return self.repr_as_symbol(text_format=text_format)
         return self.header.repr_header(text_format=text_format, cap=cap)
 
-    def repr_reference(self, text_format: (None, TextFormat) = None, cap: (None,bool) = None) -> str:
+    def repr_reference(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
         global configuration
         if self.header is None:
             # If we have no long-name for this symbolic-objct,
             # we use the (mandatory) symbol as a fallback method.
             return self.repr_as_symbol(text_format=text_format)
-        return self.header.repr_reference(text_format=text_format,cap=cap)
+        return self.header.repr_reference(text_format=text_format, cap=cap)
 
-    def repr(self, text_format: (None, TextFormat) = None, expanded:(None,bool)=None) -> str:
+    def repr(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
         # If a long-name is available, represent the objct as a reference.
         # Otherwise, represent it as a symbol.
         return self.repr_reference(text_format=text_format)
@@ -1195,6 +1195,7 @@ class Formula(TheoreticalObjct):
             header=header,
             dashed_name=dashed_name,
             echo=False)
+        super()._declare_class_membership(declarative_class_list.formula)
         universe_of_discourse.cross_reference_formula(self)
         verify(
             is_in_class(relation, classes.relation) or is_in_class(relation, classes.free_variable),
@@ -1218,13 +1219,12 @@ class Formula(TheoreticalObjct):
             self.lock_variable_scope()
         if echo:
             self.echo()
-        super()._declare_class_membership(declarative_class_list.formula)
 
     def __repr__(self):
-        return self.repr(expanded=True)
+        return self.repr(expand=True)
 
     def __str__(self):
-        return self.repr(expanded=True)
+        return self.repr(expand=True)
 
     def crossreference_variable(self, x):
         """During construction, cross-reference a free-variable 𝓍
@@ -1340,15 +1340,15 @@ class Formula(TheoreticalObjct):
         for x in variables_list:
             x.lock_scope()
 
-    def repr(self, text_format: (None, TextFormat) = None, expanded:(None,bool)=None)->str:
-        expanded = True if expanded is None else expanded
-        assert isinstance(expanded, bool)
-        if expanded:
-            return self.repr_as_formula(text_format=text_format, expand=expanded)
+    def repr(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
+        expand = True if expand is None else expand
+        assert isinstance(expand, bool)
+        if expand:
+            return self.repr_as_formula(text_format=text_format, expand=expand)
         else:
-            return super().repr(text_format=text_format, expanded=expanded)
+            return super().repr(text_format=text_format, expand=expand)
 
-    def repr_as_function_call(self, text_format: (None, TextFormat) = None, expand:(None,bool)=None):
+    def repr_as_function_call(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None):
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
@@ -1358,7 +1358,7 @@ class Formula(TheoreticalObjct):
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         assert self.relation.arity == 2
-        return f'({self.parameters[0].repr(text_format=text_format, expanded=expand)} {self.relation.repr_as_symbol(text_format=text_format)} {self.parameters[1].repr(text_format=text_format, expanded=expand)})'
+        return f'({self.parameters[0].repr(text_format=text_format, expand=expand)} {self.relation.repr_as_symbol(text_format=text_format)} {self.parameters[1].repr(text_format=text_format, expand=expand)})'
 
     def repr_as_postfix_operator(self, text_format: (None, TextFormat) = None, expand=None):
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
@@ -1367,19 +1367,19 @@ class Formula(TheoreticalObjct):
         assert self.relation.arity == 1
         return f'({self.parameters[0].repr(text_format=text_format, expand=expand)}){self.relation.repr_as_symbol(text_format=text_format)}'
 
-    def repr_as_prefix_operator(self, text_format: (None, TextFormat) = None, expanded=None):
+    def repr_as_prefix_operator(self, text_format: (None, TextFormat) = None, expand=None):
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
-        expanded = True if expanded is None else expanded
+        expand = True if expand is None else expand
         verify(
-            isinstance(expanded, bool),
-            'Method parameter "expanded" is not an instance of bool.',
-            self=self, expanded=expanded)
+            isinstance(expand, bool),
+            'Method parameter "expand" is not an instance of bool.',
+            self=self, expand=expand)
         verify(
             self.relation.arity == 1,
             'Attempt to represent prefix operator, but relation arity is not equal to 1.',
             self_relation=self.relation,
             parameters=self.parameters)
-        return f'{self.relation.repr_as_formula(text_format=text_format)}({self.parameters[0].repr_as_formula(text_format=text_format, expanded=expanded)})'
+        return f'{self.relation.repr_as_formula(text_format=text_format)}({self.parameters[0].repr_as_formula(text_format=text_format, expand=expand)})'
 
     def repr_as_formula(self, text_format: (None, TextFormat) = None, expand: bool = True):
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
@@ -1399,7 +1399,7 @@ class Formula(TheoreticalObjct):
                 case Formula.infix:
                     return self.repr_as_infix_operator(text_format=text_format, expand=expand)
                 case Formula.prefix:
-                    return self.repr_as_prefix_operator(text_format=text_format, expanded=expand)
+                    return self.repr_as_prefix_operator(text_format=text_format, expand=expand)
                 case Formula.postfix:
                     return self.repr_as_postfix_operator(text_format=text_format, expand=expand)
                 case _:
@@ -1455,7 +1455,8 @@ class SimpleObjctDict(collections.UserDict):
         declares it automatically.
         """
         if self._falsehood is None:
-            self._falsehood = self.declare(symbol='⊥', dashed_name='falsehood')
+            self._falsehood = self.declare(
+                symbol=Symbol(StyledText(plaintext='false', unicode='⊥', latex_math=r'\bot')), dashed_name='falsehood')
         return self._falsehood
 
     @property
@@ -1479,7 +1480,8 @@ class SimpleObjctDict(collections.UserDict):
         declares it automatically.
         """
         if self._truth is None:
-            self._truth = self.declare(symbol='⊤', dashed_name='truth')
+            self._truth = self.declare(Symbol(StyledText(plaintext='true', unicode='⊤', latex_math=r'\top')),
+                                       dashed_name='truth')
         return self._truth
 
 
@@ -1489,7 +1491,8 @@ class StatementCategory(repm.ValueName):
         self.natural_name = natural_name
         super().__init__(name)
 
-    def repr(self, cap=None):
+    def repr(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None, expand: (None, bool) = None):
+        # TODO: Implement text_format
         return self.natural_name
 
 
@@ -2041,10 +2044,10 @@ class FormulaStatement(Statement):
             self.echo()
 
     def __repr__(self):
-        return self.repr(expanded=True)
+        return self.repr(expand=True)
 
     def __str__(self):
-        return self.repr(expanded=True)
+        return self.repr(expand=True)
 
     @property
     def parameters(self):
@@ -2092,17 +2095,14 @@ class FormulaStatement(Statement):
                                                                                         extension_limit=extension_limit))
         return ol
 
-    def repr(self, expanded=None):
-        expanded = True if expanded is None else expanded
-        assert isinstance(expanded, bool)
-        if expanded:
-            return self.repr_as_formula(expanded=expanded)
+    def repr(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None):
+        if expand:
+            return self.repr_as_formula(text_format=text_format, expand=expand)
         else:
-            return super().repr(expanded=expanded)
+            return super().repr(text_format=text_format, expand=expand)
 
-    def repr_as_formula(self, expanded=None):
-        # return f'{self.repr_as_symbol()} ⊢ ({self.valid_proposition.repr_as_formula(expanded=expanded)})'
-        return f'{self.valid_proposition.repr_as_formula(expand=expanded)}'
+    def repr_as_formula(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None):
+        return f'{self.valid_proposition.repr_as_formula(text_format=text_format, expand=expand)}'
 
 
 class Morphism(FormulaStatement):
@@ -3045,8 +3045,11 @@ class Relation(TheoreticalObjct):
         if echo:
             self.echo()
 
-    # def repr(self, expanded=None):
-    #    return self.repr_as_symbol()
+    def __eq__(self, other):
+        return hash(self) == hash(other)
+
+    def __hash__(self):
+        return hash((Relation, self.symbol, self.arity))
 
     def echo(self):
         repm.prnt(self.repr_as_declaration())
@@ -3188,8 +3191,8 @@ class SubstitutionOfEqualTerms(FormulaStatement):
         output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Substitution of equal terms")}'
-            output = output + f'\n\t{self.original_expression.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.original_expression.repr_as_ref())}.'
-            output = output + f'\n\t{self.equality_statement.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.equality_statement.repr_as_ref())}.'
+            output = output + f'\n\t{self.original_expression.repr_as_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.original_expression.repr_as_ref())}.'
+            output = output + f'\n\t{self.equality_statement.repr_as_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.equality_statement.repr_as_ref())}.'
             output = output + f'\n\t{"─" * 71}┤'
             output = output + f'\n\t{self.valid_proposition.repr_as_formula(expand=True):<70} │ ∎'
         return output
@@ -3248,7 +3251,7 @@ class RelationDict(collections.UserDict):
         """
         if self._biconditional is None:
             self._biconditional = self.declare(
-                2, Symbol('⟺'), Formula.infix,
+                2, Symbol(StyledText(plaintext='<==>', unicode='⟺', latex_math=r'\iff')), Formula.infix,
                 signal_proposition=True, dashed_name='biconditional')
         return self._biconditional
 
@@ -3263,7 +3266,7 @@ class RelationDict(collections.UserDict):
         """
         if self._conjunction is None:
             self._conjunction = self.declare(
-                2, Symbol('∧'), Formula.infix,
+                2, Symbol(StyledText(plaintext='and', unicode='∧', latex_math=r'\land')), Formula.infix,
                 signal_proposition=True, dashed_name='conjunction')
         return self._conjunction
 
@@ -3278,7 +3281,7 @@ class RelationDict(collections.UserDict):
         """
         if self._disjunction is None:
             self._disjunction = self.declare(
-                2, Symbol('∨'), Formula.infix,
+                2, Symbol(StyledText(plaintext='or', unicode='∨', latex_math=r'\lor')), Formula.infix,
                 signal_proposition=True, dashed_name='disjunction')
         return self._disjunction
 
@@ -3330,7 +3333,7 @@ class RelationDict(collections.UserDict):
         """
         if self._implication is None:
             self._implication = self.declare(
-                2, Symbol('⟹'), Formula.infix,
+                2, Symbol(StyledText(plaintext='==>', unicode='⟹', latex_math=r'\implies')), Formula.infix,
                 signal_proposition=True, dashed_name='implication')
         return self._implication
 
@@ -3371,7 +3374,7 @@ class RelationDict(collections.UserDict):
         """
         if self._inequality is None:
             self._inequality = self.declare(
-                2, Symbol('≠'), Formula.infix,
+                2, Symbol(StyledText(plaintext='neq', unicode='≠', latex_math=r'\neq')), Formula.infix,
                 signal_proposition=True, dashed_name='inequality')
         return self._inequality
 
@@ -3419,7 +3422,7 @@ class RelationDict(collections.UserDict):
         """
         if self._negation is None:
             self._negation = self.declare(
-                1, Symbol('¬'), Formula.prefix,
+                1, Symbol(StyledText(plaintext='not', unicode='¬', latex_math=r'\neg')), Formula.prefix,
                 signal_proposition=True, dashed_name='negation')
         return self._negation
 
@@ -5384,14 +5387,16 @@ class UniverseOfDiscourse(SymbolicObjct):
         :param phi: a formula.
         """
         verify(
-            isinstance(phi, Formula),
+            is_in_class(phi, classes.formula),
             'Cross-referencing a formula in a universe-of-discourse requires '
-            'an object of type Formula.')
+            'an object of type Formula.',
+            phi=phi, slf=self)
         verify(
             phi.symbol not in self.formulae.keys() or phi is self.formulae[
                 phi.symbol],
             'Cross-referencing a formula in a universe-of-discourse requires '
-            'that it is referenced with a unique symbol.')
+            'that it is referenced with a unique symbol.',
+            phi_symbol=phi.symbol, phi=phi, slf=self)
         if phi not in self.formulae:
             self.formulae[phi.symbol] = phi
 
@@ -5429,7 +5434,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             r.symbol not in self.relations.keys() or r is self.relations[
                 r.symbol],
             'Cross-referencing a relation in a universe-of-discourse requires '
-            'that it is referenced with a unique symbol.')
+            'that it is referenced with a unique symbol.',
+            r_symbol=r.symbol, r=r, slf=self)
         if r not in self.relations:
             self.relations[r.symbol] = r
 
@@ -5447,7 +5453,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             self.simple_objcts[
                 o.symbol],
             'Cross-referencing a simple-objct in a universe-of-discourse requires '
-            'that it is referenced with a unique symbol.')
+            'that it is referenced with a unique symbol.',
+            o_symbol=o.symbol, o=o, slf=self)
         if o not in self.simple_objcts:
             self.simple_objcts[o.symbol] = o
 
@@ -5457,15 +5464,17 @@ class UniverseOfDiscourse(SymbolicObjct):
         :param o: a symbolic-objct.
         """
         verify(
-            isinstance(o, SymbolicObjct),
+            is_in_class(o, classes.symbolic_objct),
             'Cross-referencing a symbolic-objct in a universe-of-discourse requires '
-            'an object of type SymbolicObjct.')
+            'an object of type SymbolicObjct.',
+            o=o, slf=self)
         verify(
             o.symbol not in self.symbolic_objcts.keys() or o is
             self.symbolic_objcts[
                 o.symbol],
             'Cross-referencing a symbolic-objct in a universe-of-discourse requires '
-            'that it is referenced with a unique symbol.')
+            'that it is referenced with a unique symbol.',
+            o_symbol=o.symbol, o=o, slf=self)
         if o not in self.symbolic_objcts:
             self.symbolic_objcts[o.symbol] = o
         if o.header is not None:
@@ -5489,14 +5498,16 @@ class UniverseOfDiscourse(SymbolicObjct):
         :param t: a formula.
         """
         verify(
-            isinstance(t, TheoryElaborationSequence),
+            is_in_class(t, classes.theory_elaboration),
             'Cross-referencing a theory in a universe-of-discourse requires '
-            'an object of type Theory.')
+            'an object of type Theory.',
+            t=t, slf=self)
         verify(
             t.symbol not in self.theories.keys() or t is self.theories[
                 t.symbol],
             'Cross-referencing a theory in a universe-of-discourse requires '
-            'that it is referenced with a unique symbol.')
+            'that it is referenced with a unique symbol.',
+            t_symbol=t.symbol, t=t, slf=self)
         if t not in self.theories:
             self.theories[t.symbol] = t
 
@@ -5506,14 +5517,16 @@ class UniverseOfDiscourse(SymbolicObjct):
         :param x: a formula.
         """
         verify(
-            isinstance(x, FreeVariable),
+            is_in_class(x, classes.free_variable),
             'Cross-referencing a free-variable in a universe-of-discourse requires '
-            'an object of type FreeVariable.')
+            'an object of type FreeVariable.',
+            x=x, slf=self)
         verify(
             x.symbol not in self.variables.keys() or x is self.variables[
                 x.symbol],
             'Cross-referencing a free-variable in a universe-of-discourse requires '
-            'that it is referenced with a unique symbol.')
+            'that it is referenced with a unique symbol.',
+            x_symbol=x.symbol, x=x, slf=self)
         if x not in self.variables:
             self.variables[x.symbol] = x
 
