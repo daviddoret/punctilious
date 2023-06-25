@@ -286,7 +286,7 @@ class Symbol:
     def index(self) -> str:
         return self._index
 
-    def repr(self, hide_index=False, text_format: TextFormat = None) -> str:
+    def repr(self, hide_index=False, text_format: (None, TextFormat) = None) -> str:
         """Return the default representation for this python obje.
 
         :param hide_index:
@@ -329,15 +329,15 @@ class ObjctHeader:
     def __str__(self):
         return self.repr()
 
-    def repr(self, cap: bool = False) -> str:
+    def repr(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
         """Return the default representation for this long-name.
 
         :param cap: Whether the representation must be capitalized (default: False).
         :return: str
         """
-        return self.repr_reference(cap=cap)
+        return self.repr_reference(text_format=text_format, cap=cap)
 
-    def repr_header(self, cap: bool = False) -> str:
+    def repr_header(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
         """
 
         :param cap:
@@ -345,9 +345,8 @@ class ObjctHeader:
         """
         return f'{self.category.repr(cap=cap)} {self.reference}{"" if self.title is None else " - " + self.title}'
 
-    def repr_reference(self, cap: bool = False) -> str:
-        cap = False if cap is None else cap
-        return f'{self.category.repr(cap=cap)} {self.reference}'
+    def repr_reference(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+        return f'{self.category.repr(text_format=text_format, cap=cap)} {self.reference}'
 
 
 class DashedName:
@@ -372,14 +371,15 @@ class DashedName:
     def __str__(self):
         return self.repr()
 
-    def repr(self) -> str:
+    def repr(self, text_format: (None, TextFormat) = None) -> str:
         """Return the default representation.
         """
-        return self.repr_dashed_name()
+        return self.repr_dashed_name(text_format=text_format)
 
-    def repr_dashed_name(self) -> str:
+    def repr_dashed_name(self, text_format: (None, TextFormat) = None) -> str:
         """Return a dashed-name representation.
         """
+        # TODO: Implement text_formats
         return self._dashed_name
 
 
@@ -400,13 +400,15 @@ class StatementTitleOBSOLETE:
     def __str__(self):
         return self.repr_ref()
 
-    def repr_full(self, cap=False) -> str:
+    def repr_full(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+        # TODO: Implement text_format
         category = str(self.category.natural_name.capitalize() if cap else self.category.natural_name)
         reference = str(self.reference)
         return repm.serif_bold(
             f'{category} {reference}{" - " + self.title if self.title is not None else ""}')
 
-    def repr_ref(self, cap=False) -> str:
+    def repr_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+        # TODO: Implement text_format
         return repm.serif_bold(
             f'{self.category.natural_name.capitalize() if cap else self.category.natural_name} {self.reference}')
 
@@ -482,7 +484,7 @@ class SymbolicObjct:
     def header(self) -> ObjctHeader:
         return self._header
 
-    def repr_as_formula(self, expanded=None) -> str:
+    def repr_as_formula(self, text_format: (None, TextFormat) = None, expanded: (None, bool) = None) -> str:
         """If supported, return a formula representation,
         a symbolic representation otherwise.
 
@@ -492,9 +494,9 @@ class SymbolicObjct:
         Most symbolic-objcts do not have a formula representation,
         where we fall back on symbolic representation.
         """
-        return self.repr_as_symbol()
+        return self.repr_as_symbol(text_format=text_format)
 
-    def repr_as_ref(self, expanded=None) -> str:
+    def repr_as_ref(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
         """If supported, return a reference representation,
         return a symbolic representation otherwise.
 
@@ -504,7 +506,7 @@ class SymbolicObjct:
         Most symbolic-objcts do not have a reference representation,
         where we fall back on symbolic representation.
         """
-        return self.repr_as_symbol()
+        return self.repr_as_symbol(text_format=text_format)
 
     @property
     def symbol(self) -> Symbol:
@@ -579,16 +581,16 @@ class SymbolicObjct:
     def prnt(self, expanded=False):
         repm.prnt(self.repr(expanded=expanded))
 
-    def repr_dashed_name(self) -> str:
+    def repr_dashed_name(self, text_format: (None, TextFormat) = None) -> str:
         """"""
         if self.dashed_name is None:
             return ''
-        return self.dashed_name.repr_dashed_name()
+        return self.dashed_name.repr_dashed_name(text_format=text_format)
 
-    def repr_fully_qualified_name(self) -> str:
+    def repr_fully_qualified_name(self, text_format: (None, TextFormat) = None) -> str:
         """"""
-        fully_qualified_name = f'⌜{self.repr_dashed_name()}⌝ (⌜{self.repr_as_symbol()}⌝)' if self.dashed_name is not None else f'⌜{self.repr_as_symbol()}⌝'
-        fully_qualified_name += f' entitled “{self.repr_header(cap=True)}”' if self.header is not None else ''
+        fully_qualified_name = f'⌜{self.repr_dashed_name(text_format=text_format)}⌝ (⌜{self.repr_as_symbol(text_format=text_format)}⌝)' if self.dashed_name is not None else f'⌜{self.repr_as_symbol(text_format=text_format)}⌝'
+        fully_qualified_name += f' entitled “{self.repr_header(text_format=text_format, cap=True)}”' if self.header is not None else ''
 
         # fully_qualified_name = f'⌜{self.repr_header()}⌝' if self.header is not None else self.repr_dashed_name() if self.dashed_name is not None else self.repr_as_symbol()
         # fully_qualified_name += ' (' if self.header is not None or self.dashed_name is not None else ''
@@ -596,10 +598,10 @@ class SymbolicObjct:
         # fully_qualified_name += self.repr_as_symbol() + ')' if self.header is not None or self.dashed_name is not None else ''
         return fully_qualified_name
 
-    def repr_as_declaration(self) -> str:
-        return f'Let {self.repr_as_symbol()} be a symbolic-objct denoted as ⌜ {self.repr_as_symbol()} ⌝.'
+    def repr_as_declaration(self, text_format: (None, TextFormat) = None) -> str:
+        return f'Let {self.repr_as_symbol(text_format=text_format)} be a symbolic-objct denoted as ⌜ {self.repr_as_symbol(text_format=text_format)} ⌝.'
 
-    def repr_as_symbol(self) -> str:
+    def repr_as_symbol(self, text_format: (None, TextFormat) = None) -> str:
         # global configuration
         # hide_index = \
         #    not is_in_class(self, classes.u) and \
@@ -608,28 +610,28 @@ class SymbolicObjct:
         #    not is_in_class(self, classes.universe_of_discourse) and \
         #    self.universe_of_discourse.get_symbol_max_index(self.symbol.base) == 1
         # return self.symbol.repr(hide_index=hide_index)
-        return self.symbol.repr()
+        return self.symbol.repr(text_format=text_format)
 
-    def repr_header(self, cap: bool = False) -> str:
+    def repr_header(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
         global configuration
         if self.header is None:
             # If we have no long-name for this symbolic-objct,
             # we fallback on the (mandatory) symbol.
-            return self.repr_as_symbol()
-        return self.header.repr_header(cap=cap)
+            return self.repr_as_symbol(text_format=text_format)
+        return self.header.repr_header(text_format=text_format, cap=cap)
 
-    def repr_reference(self, cap: bool = False) -> str:
+    def repr_reference(self, text_format: (None, TextFormat) = None, cap: (None,bool) = None) -> str:
         global configuration
         if self.header is None:
             # If we have no long-name for this symbolic-objct,
             # we use the (mandatory) symbol as a fallback method.
-            return self.repr_as_symbol()
-        return self.header.repr_reference(cap=cap)
+            return self.repr_as_symbol(text_format=text_format)
+        return self.header.repr_reference(text_format=text_format,cap=cap)
 
-    def repr(self, expanded=None) -> str:
+    def repr(self, text_format: (None, TextFormat) = None, expanded:(None,bool)=None) -> str:
         # If a long-name is available, represent the objct as a reference.
         # Otherwise, represent it as a symbol.
-        return self.repr_reference()
+        return self.repr_reference(text_format=text_format)
 
 
 class TheoreticalObjct(SymbolicObjct):
@@ -1108,8 +1110,8 @@ class FreeVariable(TheoreticalObjct):
         # o2 is not a variable.
         return self.is_formula_equivalent_to(o2), _values
 
-    def repr_as_declaration(self):
-        return f'Let {self.repr_as_symbol()} be a free-variable in {self.universe_of_discourse.repr_as_symbol()}'
+    def repr_as_declaration(self, text_format: (None, TextFormat) = None):
+        return f'Let {self.repr_as_symbol(text_format=text_format)} be a free-variable in {self.universe_of_discourse.repr_as_symbol(text_format=text_format)}'
 
 
 class Formula(TheoreticalObjct):
@@ -1338,32 +1340,35 @@ class Formula(TheoreticalObjct):
         for x in variables_list:
             x.lock_scope()
 
-    def repr(self, expanded=None):
+    def repr(self, text_format: (None, TextFormat) = None, expanded:(None,bool)=None)->str:
         expanded = True if expanded is None else expanded
         assert isinstance(expanded, bool)
         if expanded:
-            return self.repr_as_formula(expanded=expanded)
+            return self.repr_as_formula(text_format=text_format, expand=expanded)
         else:
-            return super().repr(expanded=expanded)
+            return super().repr(text_format=text_format, expanded=expanded)
 
-    def repr_as_function_call(self, expanded=None):
-        expanded = True if expanded is None else expanded
-        assert isinstance(expanded, bool)
-        return f'{self.relation.repr_as_formula()}({", ".join([p.repr_as_formula(expanded=expanded) for p in self.parameters])})'
+    def repr_as_function_call(self, text_format: (None, TextFormat) = None, expand:(None,bool)=None):
+        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
+        expand = True if expand is None else expand
+        assert isinstance(expand, bool)
+        return f'{self.relation.repr_as_formula(text_format=text_format)}({", ".join([p.repr_as_formula(text_format=text_format) for p in self.parameters])})'
 
-    def repr_as_infix_operator(self, expanded=None):
-        expanded = True if expanded is None else expanded
-        assert isinstance(expanded, bool)
+    def repr_as_infix_operator(self, text_format: (None, TextFormat) = None, expand=(None, bool)):
+        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
+        expand = True if expand is None else expand
         assert self.relation.arity == 2
-        return f'({self.parameters[0].repr(expanded=expanded)} {self.relation.repr_as_symbol()} {self.parameters[1].repr(expanded=expanded)})'
+        return f'({self.parameters[0].repr(text_format=text_format, expanded=expand)} {self.relation.repr_as_symbol(text_format=text_format)} {self.parameters[1].repr(text_format=text_format, expanded=expand)})'
 
-    def repr_as_postfix_operator(self, expanded=None):
-        expanded = True if expanded is None else expanded
-        assert isinstance(expanded, bool)
+    def repr_as_postfix_operator(self, text_format: (None, TextFormat) = None, expand=None):
+        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
+        expand = True if expand is None else expand
+        assert isinstance(expand, bool)
         assert self.relation.arity == 1
-        return f'({self.parameters[0].repr(expanded=expanded)}){self.relation.repr_as_symbol()}'
+        return f'({self.parameters[0].repr(text_format=text_format, expand=expand)}){self.relation.repr_as_symbol(text_format=text_format)}'
 
-    def repr_as_prefix_operator(self, expanded=None):
+    def repr_as_prefix_operator(self, text_format: (None, TextFormat) = None, expanded=None):
+        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         expanded = True if expanded is None else expanded
         verify(
             isinstance(expanded, bool),
@@ -1374,9 +1379,10 @@ class Formula(TheoreticalObjct):
             'Attempt to represent prefix operator, but relation arity is not equal to 1.',
             self_relation=self.relation,
             parameters=self.parameters)
-        return f'{self.relation.repr_as_formula()}({self.parameters[0].repr_as_formula(expanded=expanded)})'
+        return f'{self.relation.repr_as_formula(text_format=text_format)}({self.parameters[0].repr_as_formula(text_format=text_format, expanded=expanded)})'
 
-    def repr_as_formula(self, expanded: bool = True):
+    def repr_as_formula(self, text_format: (None, TextFormat) = None, expand: bool = True):
+        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         if is_in_class(self.relation, classes.free_variable):
             # If the relation of this formula is a free-variable,
             # it has no arity, neither a representation-mode.
@@ -1385,21 +1391,23 @@ class Formula(TheoreticalObjct):
             # In future developments, we may choose to allow
             # the "decoration" of free-variables with arity,
             # and presentation-mode to improve readability.
-            return self.repr_as_function_call(expanded=expanded)
+            return self.repr_as_function_call(text_format=text_format, expand=expand)
         else:
             match self.relation.formula_rep:
                 case Formula.function_call:
-                    return self.repr_as_function_call(expanded=expanded)
+                    return self.repr_as_function_call(text_format=text_format, expand=expand)
                 case Formula.infix:
-                    return self.repr_as_infix_operator(expanded=expanded)
+                    return self.repr_as_infix_operator(text_format=text_format, expand=expand)
                 case Formula.prefix:
-                    return self.repr_as_prefix_operator(expanded=expanded)
+                    return self.repr_as_prefix_operator(text_format=text_format, expanded=expand)
                 case Formula.postfix:
-                    return self.repr_as_postfix_operator(expanded=expanded)
-        assert 1 == 2
+                    return self.repr_as_postfix_operator(text_format=text_format, expand=expand)
+                case _:
+                    # Fallback notation.
+                    return self.repr_as_function_call(text_format=text_format, expand=expand)
 
     def repr_as_declaration(self):
-        return f'Let {self.repr_as_symbol()} be the formula {self.repr_as_formula(expanded=True)} in {self.universe_of_discourse.repr_as_symbol()}.'
+        return f'Let {self.repr_as_symbol()} be the formula {self.repr_as_formula(expand=True)} in {self.universe_of_discourse.repr_as_symbol()}.'
 
 
 class SimpleObjctDict(collections.UserDict):
@@ -2094,7 +2102,7 @@ class FormulaStatement(Statement):
 
     def repr_as_formula(self, expanded=None):
         # return f'{self.repr_as_symbol()} ⊢ ({self.valid_proposition.repr_as_formula(expanded=expanded)})'
-        return f'{self.valid_proposition.repr_as_formula(expanded=expanded)}'
+        return f'{self.valid_proposition.repr_as_formula(expand=expanded)}'
 
 
 class Morphism(FormulaStatement):
@@ -2127,7 +2135,7 @@ class Morphism(FormulaStatement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'{repm.serif_bold(self.repr_as_symbol())}: {self.valid_proposition.repr_as_formula(expanded=True)}'
+        output = f'{repm.serif_bold(self.repr_as_symbol())}: {self.valid_proposition.repr_as_formula(expand=True)}'
         if output_proofs:
             output = output + self.repr_as_sub_statement()
         return output
@@ -2139,8 +2147,8 @@ class Morphism(FormulaStatement):
         - The formula that is being stated,
         - The justification for the formula."""
         output = f'\n\t{repm.serif_bold("Derivation by theoretical-morphism / syntactic-operation")}'
-        output = output + f'\n\t{self.source_statement.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.source_statement.repr_as_symbol())}.'
-        output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Output of {repm.serif_bold(self.source_statement.valid_proposition.relation.repr_as_symbol())} morphism.'
+        output = output + f'\n\t{self.source_statement.valid_proposition.repr_as_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.source_statement.repr_as_symbol())}.'
+        output = output + f'\n\t{self.valid_proposition.repr_as_formula(expand=True):<70} │ Output of {repm.serif_bold(self.source_statement.valid_proposition.relation.repr_as_symbol())} morphism.'
         return output
 
 
@@ -2223,10 +2231,10 @@ class DirectDefinitionInference(FormulaStatement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula(expanded=True)}'
+        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula(expand=True)}'
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Derivation from natural language definition")}'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.definition.repr_as_symbol())}.'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.definition.repr_as_symbol())}.'
         return output
 
 
@@ -3183,7 +3191,7 @@ class SubstitutionOfEqualTerms(FormulaStatement):
             output = output + f'\n\t{self.original_expression.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.original_expression.repr_as_ref())}.'
             output = output + f'\n\t{self.equality_statement.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.equality_statement.repr_as_ref())}.'
             output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expand=True):<70} │ ∎'
         return output
 
 
@@ -5797,7 +5805,7 @@ class InferredStatement(FormulaStatement):
                 # which receives arbitrary theoretical-objcts as the 2nd and
                 # following parameters, to constitute a free-variable mappings.
                 parameter = self.parameters[0]
-                output = output + f'\n\t{parameter.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(parameter.repr_as_ref())}.'
+                output = output + f'\n\t{parameter.repr_as_formula(expand=True):<70} │ Follows from {repm.serif_bold(parameter.repr_as_ref())}.'
                 # Display the free-variables mapping.
                 free_variables = self.parameters[0].get_variable_ordered_set()
                 mapping = zip(free_variables, self.parameters[1:])
@@ -5806,9 +5814,9 @@ class InferredStatement(FormulaStatement):
             else:
                 for i in range(len(self.parameters)):
                     parameter = self.parameters[i]
-                    output = output + f'\n\t{parameter.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(parameter.repr_as_ref())}.'
+                    output = output + f'\n\t{parameter.repr_as_formula(expand=True):<70} │ Follows from {repm.serif_bold(parameter.repr_as_ref())}.'
             output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expand=True):<70} │ ∎'
         return output
 
 
@@ -5858,10 +5866,10 @@ class InconsistencyIntroductionStatement(FormulaStatement):
         output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Proof of inconsistency")}'
-            output = output + f'\n\t{self.p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.p.repr_as_ref())}.'
-            output = output + f'\n\t{self.not_p.repr_as_formula(expanded=True):<70} │ Follows from {repm.serif_bold(self.not_p.repr_as_ref())}.'
+            output = output + f'\n\t{self.p.repr_as_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.p.repr_as_ref())}.'
+            output = output + f'\n\t{self.not_p.repr_as_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.not_p.repr_as_ref())}.'
             output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expanded=True):<70} │ ∎'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expand=True):<70} │ ∎'
         return output
 
 
