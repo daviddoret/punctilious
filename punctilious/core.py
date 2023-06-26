@@ -477,6 +477,7 @@ class SymbolicObjct:
             # If symbol was passed as a string,
             # assume the base was passed without index.
             index = universe_of_discourse.index_symbol(base=symbol)  # if auto_index else None
+            base = StyledText(symbol, text_styles.serif_italic)
             symbol = Symbol(base=symbol, index=index)
         self._symbol = symbol
         self._header = title  # Header validation is implemented in parent classes with proper category.
@@ -1761,11 +1762,7 @@ class AxiomInclusion(Statement):
         echo = get_config(echo, configuration.echo_axiom_inclusion, configuration.echo_default, fallback_value=False)
         self._axiom = a
         if title is None:
-            title = Title(
-                ref=str(symbol.index),
-                category=title_categories.axiom_inclusion,
-                complement=None
-            )
+            title = Title(category=title_categories.axiom_inclusion)
         if isinstance(title, str):
             title = Title(
                 ref=title,
@@ -3116,17 +3113,6 @@ class SimpleObjct(TheoreticalObjct):
             echo: (None, bool) = None):
         echo = get_config(echo, configuration.echo_simple_objct_declaration, configuration.echo_default,
                           fallback_value=False)
-        if symbol is None:
-            symbol = 'o'
-        if isinstance(symbol, str):
-            symbol = symbol.strip()
-            verify(symbol != '', 'The symbol is an empy string.', symbol=symbol)
-            # If symbol was passed as a string,
-            # assume the base was passed without index.
-            # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = StyledText(symbol, text_styles.serif_italic)
-            index = universe_of_discourse.index_symbol(base=symbol)
-            symbol = Symbol(base=symbol, index=index)
         super().__init__(
             universe_of_discourse=universe_of_discourse, symbol=symbol,
             dashed_name=dashed_name, echo=False)
