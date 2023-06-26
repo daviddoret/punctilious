@@ -21,7 +21,7 @@ pass
 
 u = pu.UniverseOfDiscourse()
 
-t = u.t(header=pu.ObjctHeader(reference='2.1', title='the Peano axioms'), extended_theory=fs1.ft)
+t = u.t(header=pu.Title(ref='2.1', complement='the Peano axioms'), extended_theory=fs1.ft)
 
 section_2 = t.open_section('The natural numbers', section_number=2)
 

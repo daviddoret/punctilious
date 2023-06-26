@@ -22,6 +22,11 @@ class TextStyles:
     """Expose a catalog of supported text-styles."""
 
     def __init__(self):
+        self._no_style = TextStyle(
+            font_style_name='no-style',
+            unicode_table_index=unicode.unicode_sans_serif_normal_index,
+            latex_math_start_tag=r'',
+            latex_math_end_tag=r'')
         self.double_struck = TextStyle(
             font_style_name='double-struck',
             unicode_table_index=unicode.unicode_double_struck_index,
@@ -37,6 +42,11 @@ class TextStyles:
             unicode_table_index=unicode.unicode_monospace_index,
             latex_math_start_tag=r'\mathtt{',
             latex_math_end_tag=r'}')
+        self.sans_serif_bold = TextStyle(
+            font_style_name='sans-serif-bold',
+            unicode_table_index=unicode.unicode_sans_serif_bold_index,
+            latex_math_start_tag=r'\boldsymbol\mathsf{',
+            latex_math_end_tag=r'}}')
         self.sans_serif_normal = TextStyle(
             font_style_name='sans-serif-normal',
             unicode_table_index=unicode.unicode_sans_serif_normal_index,
@@ -62,6 +72,13 @@ class TextStyles:
             unicode_table_index=unicode.unicode_serif_normal_index,
             latex_math_start_tag=r'\mathnormal{',
             latex_math_end_tag=r'}')
+
+    @property
+    def no_style(self):
+        """The ⌜no_style⌝ text-style is a neutral style.
+        Rendering defaults to sans-serif-normal.
+        It is expected to be overriden by passing the text_style parameter to the rendering method."""
+        return self._no_style
 
 
 text_styles = TextStyles()
@@ -107,24 +124,29 @@ class StyledText:
     def __str__(self):
         return self.repr()
 
-    def repr(self, text_format: TextFormat = text_formats.plaintext):
+    def repr(self, text_format: TextFormat = text_formats.plaintext, cap: bool = False):
         match text_format:
             case text_formats.plaintext:
-                return self.repr_as_plaintext()
+                return self.repr_as_plaintext(cap=cap)
             case text_formats.latex_math:
-                return self.repr_as_latex_math()
+                return self.repr_as_latex_math(cap=cap)
             case text_formats.unicode:
-                return self.repr_as_unicode()
+                return self.repr_as_unicode(cap=cap)
 
-    def repr_as_latex_math(self):
-        return f'{self._text_style.latex_math_start_tag}{self._plaintext if self._latex_math is None else self._latex_math}{self._text_style.latex_math_end_tag}'
+    def repr_as_latex_math(self, cap: bool = False):
+        content = self._plaintext if self._latex_math is None else self._latex_math
+        content = content.capitalize() if cap else content
+        return f'{self._text_style.latex_math_start_tag}{content}{self._text_style.latex_math_end_tag}'
 
-    def repr_as_plaintext(self):
-        return self._plaintext
+    def repr_as_plaintext(self, cap: bool = False):
+        content = self._plaintext
+        content = content.capitalize() if cap else content
+        return content
 
-    def repr_as_unicode(self):
-        return unicode.unicode_format(self._plaintext if self._unicode is None else self._unicode,
-                                      self._text_style.unicode_table_index)
+    def repr_as_unicode(self, cap: bool = False):
+        content = self._plaintext if self._unicode is None else self._unicode
+        content = content.capitalize() if cap else content
+        return unicode.unicode_format(content, self._text_style.unicode_table_index)
 
 
 def subscriptify(text: (str, StyledText) = '', text_format: TextFormat = text_formats.plaintext):

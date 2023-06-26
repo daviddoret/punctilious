@@ -10,10 +10,10 @@ from core import \
     DashedName, DefinitionInclusion, DirectDefinitionInference, \
     FailedVerificationException, Formula, FreeVariable, \
     is_in_class, \
-    Note, note_categories, InconsistencyWarning, \
-    ObjctHeader, \
+    Note, title_categories, InconsistencyWarning, \
+    Title, \
     Relation, \
-    SimpleObjct, subscriptify, statement_categories, StyledText, Symbol, SymbolicObjct, \
+    SimpleObjct, subscriptify, title_categories, StyledText, Symbol, SymbolicObjct, \
     TextFormat, text_formats, TextStyle, text_styles, TheoreticalObjct, TheoryElaborationSequence, \
     UniverseOfDiscourse
 

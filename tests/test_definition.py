@@ -15,7 +15,7 @@ class TestDefinition(TestCase):
         content5 = random_data.random_sentence()
         d1 = u.declare_definition(content1)
         d2 = u.declare_definition(content2)
-        d3 = u.declare_definition(content3, header=p.ObjctHeader('1.1.1'))
+        d3 = u.declare_definition(content3, header=p.Title('1.1.1'))
         d4 = u.declare_definition(content4, header='1.1.2')
         d5 = u.declare_definition(content5, header='1.1.3', dashed_name='my-definition')
         self.assertEqual(f'𝐝₁: “{content1}”', d1.repr_as_statement(wrap=False))
