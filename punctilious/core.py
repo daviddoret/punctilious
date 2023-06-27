@@ -1811,11 +1811,11 @@ class Statement(TheoreticalObjct):
     def repr_as_statement(self):
         raise NotImplementedError('This is an abstract method.')
 
-    def repr_as_title(self, cap: bool = False) -> str:
-        return self.header.repr(cap=cap)
+    def repr_as_title(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+        return self.header.repr(text_format=text_format, cap=cap)
 
-    def repr_as_ref(self, cap=False):
-        return self.header.repr_as_ref(cap=cap)
+    def repr_as_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
+        return self.header.repr_as_ref(text_format=text_format, cap=cap)
 
     @property
     def t(self) -> TheoryElaborationSequence:
@@ -5994,18 +5994,20 @@ class InferredStatement(FormulaStatement):
         """
         return self._inference_rule
 
-    def repr_as_statement(self, output_proofs=True) -> str:
+    def repr_as_statement(self, text_format: (None, TextFormat) = None, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        output = f'{self.repr_as_title(cap=True)}: {self.valid_proposition.repr_as_formula()}'
+        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
+        cap = True
+        output = f'{self.repr_as_title(text_format=text_format, cap=cap)} ({self.repr_as_symbol(text_format=text_format)}): {self.valid_proposition.repr_as_formula()}'
         output = repm.wrap(output)
         if output_proofs:
-            output = output + f'\n\tBy the {repm.serif_bold(self.inference_rule.header.reference)} inference-rule:'
+            output = output + f'\n\tBy the {self.inference_rule.header.repr_as_ref(text_format=text_format)} inference-rule:'
             if self.inference_rule is self.u.inference_rules.variable_substitution:
                 # This is a special case for the variable-substitution inference-rule,
                 # which receives arbitrary theoretical-objcts as the 2nd and
                 # following parameters, to constitute a free-variable mappings.
                 parameter = self.parameters[0]
-                output = output + f'\n\t{parameter.repr_as_formula(expand=True):<70} │ Follows from {repm.serif_bold(parameter.repr_as_ref())}.'
+                output = output + f'\n\t{parameter.repr_as_formula(text_format=text_format, expand=True):<70} │ Follows from {repm.serif_bold(parameter.repr_as_ref(text_format=text_format))}.'
                 # Display the free-variables mapping.
                 free_variables = self.parameters[0].get_variable_ordered_set()
                 mapping = zip(free_variables, self.parameters[1:])
@@ -6014,9 +6016,9 @@ class InferredStatement(FormulaStatement):
             else:
                 for i in range(len(self.parameters)):
                     parameter = self.parameters[i]
-                    output = output + f'\n\t{parameter.repr_as_formula(expand=True):<70} │ Follows from {repm.serif_bold(parameter.repr_as_ref())}.'
+                    output = output + f'\n\t{parameter.repr_as_formula(text_format=text_format, expand=True):<70} │ Follows from {repm.serif_bold(parameter.repr_as_ref(text_format=text_format))}.'
             output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.repr_as_formula(expand=True):<70} │ ∎'
+            output = output + f'\n\t{self.valid_proposition.repr_as_formula(text_format=text_format, expand=True):<70} │ ∎'
         return output
 
 
