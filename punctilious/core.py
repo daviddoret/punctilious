@@ -7,7 +7,168 @@ import contextlib
 import abc
 import collections
 import networkx as nx
-from text import StyledText, subscriptify, TextFormat, text_formats, TextStyle, text_styles
+import unicode
+import unidecode
+
+
+class TextStyle:
+    """A supported text style."""
+
+    def __init__(self, font_style_name: str, unicode_table_index: int, latex_math_start_tag: str,
+                 latex_math_end_tag: str):
+        self.font_style_name = font_style_name
+        self.unicode_table_index = unicode_table_index
+        self.latex_math_start_tag = latex_math_start_tag
+        self.latex_math_end_tag = latex_math_end_tag
+
+    def __hash__(self):
+        return hash((TextStyle, self.font_style_name))
+
+
+class TextStyles:
+    """Expose a catalog of supported text-styles."""
+
+    def __init__(self):
+        self._no_style = TextStyle(
+            font_style_name='no-style',
+            unicode_table_index=unicode.unicode_sans_serif_normal_index,
+            latex_math_start_tag=r'',
+            latex_math_end_tag=r'')
+        self.double_struck = TextStyle(
+            font_style_name='double-struck',
+            unicode_table_index=unicode.unicode_double_struck_index,
+            latex_math_start_tag=r'\mathbb{',
+            latex_math_end_tag=r'}')
+        self.monospace = TextStyle(
+            font_style_name='fraktur-normal',
+            unicode_table_index=unicode.unicode_fraktur_normal_index,
+            latex_math_start_tag=r'\mathfrak{',
+            latex_math_end_tag=r'}')
+        self.monospace = TextStyle(
+            font_style_name='monospace',
+            unicode_table_index=unicode.unicode_monospace_index,
+            latex_math_start_tag=r'\mathtt{',
+            latex_math_end_tag=r'}')
+        self.sans_serif_bold = TextStyle(
+            font_style_name='sans-serif-bold',
+            unicode_table_index=unicode.unicode_sans_serif_bold_index,
+            latex_math_start_tag=r'\boldsymbol\mathsf{',
+            latex_math_end_tag=r'}}')
+        self.sans_serif_normal = TextStyle(
+            font_style_name='sans-serif-normal',
+            unicode_table_index=unicode.unicode_sans_serif_normal_index,
+            latex_math_start_tag=r'\mathsf{',
+            latex_math_end_tag=r'}')
+        self.script_normal = TextStyle(
+            font_style_name='script-normal',
+            unicode_table_index=unicode.unicode_script_normal_index,
+            latex_math_start_tag=r'\mathcal{',
+            latex_math_end_tag=r'}')
+        self.serif_bold = TextStyle(
+            font_style_name='serif-bold',
+            unicode_table_index=unicode.unicode_serif_bold_index,
+            latex_math_start_tag=r'\mathbf{',
+            latex_math_end_tag=r'}')
+        self.serif_italic = TextStyle(
+            font_style_name='serif-italic',
+            unicode_table_index=unicode.unicode_serif_italic_index,
+            latex_math_start_tag=r'\mathit{',
+            latex_math_end_tag=r'}')
+        self.serif_normal = TextStyle(
+            font_style_name='serif-normal',
+            unicode_table_index=unicode.unicode_serif_normal_index,
+            latex_math_start_tag=r'\mathnormal{',
+            latex_math_end_tag=r'}')
+
+    @property
+    def no_style(self):
+        """The ⌜no_style⌝ text-style is a neutral style.
+        Rendering defaults to sans-serif-normal.
+        It is expected to be overriden by passing the text_style parameter to the rendering method."""
+        return self._no_style
+
+
+text_styles = TextStyles()
+
+
+class TextFormat:
+    """A supported output text format."""
+
+    def __init__(self, text_format_name: str):
+        self._text_format_name = text_format_name
+
+    def __hash__(self):
+        return hash((TextFormat, self._text_format_name))
+
+
+class TextFormats:
+    def __init__(self):
+        self.latex_math = TextFormat('latex-math')
+        self.plaintext = TextFormat('plaintext')
+        self.unicode = TextFormat('unicode')
+
+
+text_formats = TextFormats()
+
+
+class StyledText:
+    def __init__(self, plaintext: str, unicode=None, latex_math=None, text_style: TextStyle = text_styles.serif_normal):
+        self._plaintext = unidecode.unidecode(plaintext)
+        self._unicode = unicode
+        self._latex_math = latex_math
+        self._text_style = text_style
+
+    def __eq__(self, other):
+        return hash(self) == hash(other)
+
+    def __hash__(self):
+        """Two styled-texts are considered distinct if either their plaintext content or their style are distinct."""
+        return hash((StyledText, self._plaintext, self._text_style))
+
+    def __repr__(self):
+        return self.repr()
+
+    def __str__(self):
+        return self.repr()
+
+    def repr(self, text_format: TextFormat = text_formats.plaintext, cap: bool = False):
+        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
+        match text_format:
+            case text_formats.plaintext:
+                return self.repr_as_plaintext(cap=cap)
+            case text_formats.latex_math:
+                return self.repr_as_latex_math(cap=cap)
+            case text_formats.unicode:
+                return self.repr_as_unicode(cap=cap)
+            case _:
+                return self.repr_as_plaintext(cap=cap)
+
+    def repr_as_latex_math(self, cap: bool = False):
+        content = self._plaintext if self._latex_math is None else self._latex_math
+        content = content.capitalize() if cap else content
+        return f'{self._text_style.latex_math_start_tag}{content}{self._text_style.latex_math_end_tag}'
+
+    def repr_as_plaintext(self, cap: bool = False):
+        content = self._plaintext
+        content = content.capitalize() if cap else content
+        return content
+
+    def repr_as_unicode(self, cap: bool = False):
+        content = self._plaintext if self._unicode is None else self._unicode
+        content = content.capitalize() if cap else content
+        return unicode.unicode_format(content, self._text_style.unicode_table_index)
+
+
+def subscriptify(text: (str, StyledText) = '', text_format: TextFormat = text_formats.plaintext):
+    match text_format:
+        case text_formats.plaintext:
+            return text
+        case text_formats.unicode:
+            return unicode.unicode_subscriptify(text)
+        case text_formats.latex_math:
+            return f'_{{{text}}}'
+        case _:
+            return text
 
 
 class VerificationSeverity(repm.ValueName):
@@ -310,11 +471,13 @@ class Title:
         the declarative class of the symbolic-objct.
     """
 
-    def __init__(self, ref: (None, str) = None, category: (None, TitleCategory, TitleCategory) = None,
+    def __init__(self, ref: (None, str) = None, category: (None, TitleCategory) = None,
                  complement: (None, str) = None):
         self._ref = ref
-        self._category = category
+        self._category = title_categories.uncategorized if category is None else category
         self._complement = complement
+        self._styled_title = None
+        self._styled_ref = None
 
     def __eq__(self, other):
         return hash(self) == hash(other)
@@ -354,29 +517,38 @@ class Title:
         """
         return self.repr_as_ref(text_format=text_format, cap=cap)
 
-    def repr_as_title(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
+    def repr_as_title(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
         """
 
         :param cap:
         :return:
         """
-        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
-        text_style = get_config(configuration.paragraph_header_text_style, fallback_value=text_styles.sans_serif_normal)
-        title = f'{self.category.natural_name}{"" if self.ref is None else " " + self.ref}{"" if self.complement is None else " - " + self.complement}'
-        title = title.capitalize() if cap else title
-        title = StyledText(title, text_style=text_style)
-        title = title.repr(text_format=text_format)
-        return title
+        return self.styled_title.repr(text_format=text_format, cap=cap)
         # return f'{self.category.repr(text_style=text_style, text_format=text_format, cap=cap)} {self.repr_as_ref(text_style=text_style, text_format=text_format, cap=False)}{"" if self.complement is None else " - " + self.complement}'
 
     def repr_as_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+        return self.styled_ref.repr(text_format=text_format, cap=cap)
         text_style = get_config(configuration.paragraph_header_text_style, fallback_value=text_styles.sans_serif_normal)
-        ref_string = f'{"uncategorized" if self.category is None else self.category.abridged_name} {"unreferenced" if self.ref is None else self.ref}'
-        ref_string = ref_string.capitalize() if cap else ref_string
-        ref_string = StyledText(ref_string, text_style=text_style)
-        ref_string = ref_string.repr(text_format=text_format)
-        return ref_string
-        # return f'{self.category.repr(text_format=text_format, cap=cap)} {self.ref}'
+
+    @property
+    def styled_ref(self) -> StyledText:
+        if self._styled_ref is None:
+            text_style = get_config(configuration.paragraph_header_text_style,
+                                    fallback_value=text_styles.sans_serif_normal)
+            self._styled_ref = StyledText(
+                f'{self.category.abridged_name}{"" if self.ref is None else " " + self.ref}',
+                text_style=text_style)
+        return self._styled_ref
+
+    @property
+    def styled_title(self) -> StyledText:
+        if self._styled_title is None:
+            text_style = get_config(configuration.paragraph_header_text_style,
+                                    fallback_value=text_styles.sans_serif_normal)
+            self._styled_title = StyledText(
+                f'{self.category.natural_name}{"" if self.ref is None else " " + self.ref}{"" if self.complement is None else " - " + self.complement}',
+                text_style=text_style)
+        return self._styled_title
 
 
 class DashedName:
@@ -1542,9 +1714,9 @@ class TitleCategory(repm.ValueName):
 
 
 class TitleCategories(repm.ValueName):
-    axiom = TitleCategory('axiom', 's', 'axiom', 'ax.')
-    axiom_declaration = TitleCategory('axiom_declaration', 's', 'axiom declaration', 'ax.')
-    axiom_inclusion = TitleCategory('axiom_inclusion', 'a', 'axiom', 'ax.')
+    axiom = TitleCategory('axiom', 's', 'axiom', 'axiom')
+    axiom_declaration = TitleCategory('axiom_declaration', 's', 'axiom declaration', 'axiom decl.')
+    axiom_inclusion = TitleCategory('axiom_inclusion', 'a', 'axiom', 'axiom')
     corollary = TitleCategory('corollary', 'p', 'corollary', 'cor.')
     definition = TitleCategory('definition', 'd', 'definition', 'def.')
     formal_definition = TitleCategory('formal_definition', 'd', 'formal definition', 'def.')
@@ -1557,11 +1729,11 @@ class TitleCategories(repm.ValueName):
     theorem = TitleCategory('theorem', 'p', 'theorem', 'thrm.')
     theory_elaboration_sequence = TitleCategory('theory_elaboration_sequence', 't', 'theory elaboration sequence',
                                                 'theo.')
-    # Special categories
-    missing_category = TitleCategory('missing_category', '�', 'missing category', 'miss.')
     comment = TitleCategory('comment', '𝙲', 'comment', 'cmt.')
     note = TitleCategory('note', '𝙽', 'note', 'note')
     remark = TitleCategory('remark', '𝚁', 'remark', 'rmrk.')
+    # Special categories
+    uncategorized = TitleCategory('uncategorized', '?', 'uncategorized', 'uncat.')
 
 
 title_categories = TitleCategories('title_categories')
