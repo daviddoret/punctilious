@@ -19,7 +19,7 @@ class TestVariableSubstitution(TestCase):
         p_statement = t.i.axiom_interpretation.infer_statement(ap, p_formula, echo=True)
         # y_sequence = tuple()
         p_prime = t.i.vs.infer_statement(p_statement, echo=True)
-        self.assertEqual('◆₁(◆₂(ℴ₁, ℴ₂))', p_prime.repr_as_formula())
+        self.assertEqual('◆₁(◆₂(ℴ₁, ℴ₂))', p_prime.repr_formula())
 
     def test_variable_substitution_with_free_variables(self):
         pu.configuration.echo_default = True
@@ -40,4 +40,4 @@ class TestVariableSubstitution(TestCase):
         p_statement = t.i.axiom_interpretation.infer_statement(ap, p_formula, echo=True)
         y_sequence = (o4, o6, o5)  # sequence: (z, x, y)
         p_prime = t.i.vs.infer_statement(p_statement, *y_sequence, echo=True)
-        self.assertEqual('◆₁(◆₂(◆₂(ℴ₄, ◆₂(◆₁(ℴ₆), ℴ₅)), ◆₂(ℴ₆, ℴ₅)))', p_prime.repr_as_formula())
+        self.assertEqual('◆₁(◆₂(◆₂(ℴ₄, ◆₂(◆₁(ℴ₆), ℴ₅)), ◆₂(ℴ₆, ℴ₅)))', p_prime.repr_formula())

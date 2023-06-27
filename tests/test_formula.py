@@ -14,9 +14,9 @@ class TestFormula(TestCase):
         r1 = u.r.declare(1)
         r2 = u.r.declare(2)
         phi1 = u.f(r1, o1)
-        self.assertEqual('r1(o1)', str(phi1.repr_as_formula()))
-        self.assertEqual('r1(o1)', str(phi1.repr_as_formula(text_format=pu.text_formats.plaintext)))
-        self.assertEqual('r₁(𝑜₁)', str(phi1.repr_as_formula(text_format=pu.text_formats.unicode)))
+        self.assertEqual('r1(o1)', str(phi1.repr_formula()))
+        self.assertEqual('r1(o1)', str(phi1.repr_formula(text_format=pu.text_formats.plaintext)))
+        self.assertEqual('r₁(𝑜₁)', str(phi1.repr_formula(text_format=pu.text_formats.unicode)))
         self.assertEqual(
             r'\mathnormal{r}_{1}(\mathit{o}_{1})',
-            str(phi1.repr_as_formula(text_format=pu.text_formats.latex_math)))
+            str(phi1.repr_formula(text_format=pu.text_formats.latex_math)))

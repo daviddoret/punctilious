@@ -43,4 +43,4 @@ class TestHypothesis(TestCase):
         conclusion_1 = hypothetical_theory.i.mp.infer_statement(
             proposition_1,
             hypothetical_conjunction)
-        self.assertEqual('◆₁(ℴ₁, ℴ₃)', conclusion_1.valid_proposition.repr_as_formula())
+        self.assertEqual('◆₁(ℴ₁, ℴ₃)', conclusion_1.valid_proposition.repr_formula())
