@@ -495,7 +495,8 @@ class NoNameSolutionException(LookupError):
 class NameSet:
     """A set of qualified names used to identify an object.
 
-    TODO: Enhancement idea: for relations in particular, add a verb NameType (e.g. implies).
+    TODO: Enhancement: for relations in particular, add a verb NameType (e.g. implies).
+    TODO: Enhancement: add dashed-name here, and a repr_symbolic (i.e. to support plaintext for non-ASCII symbols).
     """
 
     def __init__(self, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
@@ -868,10 +869,10 @@ class SymbolicObjct:
             (self.universe_of_discourse, self.symbol))
 
     def __repr__(self):
-        return self.repr_symbol()
+        return self.repr_name()
 
     def __str__(self):
-        return self.repr_symbol()
+        return self.repr_name()
 
     @property
     def dashed_name(self) -> DashedName:
@@ -896,18 +897,18 @@ class SymbolicObjct:
         Most symbolic-objcts do not have a formula representation,
         where we fall back on symbolic representation.
         """
-        return self.repr_symbol(text_format=text_format)
+        return self.repr_name(text_format=text_format)
 
     def repr_mention(self, text_format: (None, TextFormat) = None) -> str:
-        return self.repr_symbol(text_format=text_format) if self.title is None else self.title.repr_mention(
+        return self.repr_name(text_format=text_format) if self.title is None else self.title.repr_mention(
             text_format=text_format)
 
     def repr_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return self.repr_symbol(text_format=text_format) if self.title is None else self.title.repr_ref(
+        return self.repr_name(text_format=text_format) if self.title is None else self.title.repr_ref(
             text_format=text_format, cap=cap)
 
     def repr_title(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return self.repr_symbol(text_format=text_format) if self.title is None else self.title.repr_title(
+        return self.repr_name(text_format=text_format) if self.title is None else self.title.repr_title(
             text_format=text_format, cap=cap)
 
     @property
@@ -992,14 +993,14 @@ class SymbolicObjct:
 
     def repr_fully_qualified_name(self, text_format: (None, TextFormat) = None) -> str:
         """"""
-        fully_qualified_name = f'⌜{self.repr_dashed_name(text_format=text_format)}⌝ (⌜{self.repr_symbol(text_format=text_format)}⌝)' if self.dashed_name is not None else f'⌜{self.repr_symbol(text_format=text_format)}⌝'
+        fully_qualified_name = f'⌜{self.repr_dashed_name(text_format=text_format)}⌝ (⌜{self.repr_name(text_format=text_format)}⌝)' if self.dashed_name is not None else f'⌜{self.repr_name(text_format=text_format)}⌝'
         fully_qualified_name += f' entitled “{self.repr_title(text_format=text_format, cap=True)}”' if self.title is not None else ''
         return fully_qualified_name
 
     def repr_declaration(self, text_format: (None, TextFormat) = None) -> str:
-        return f'Let {self.repr_symbol(text_format=text_format)} be a symbolic-objct denoted as ⌜ {self.repr_symbol(text_format=text_format)} ⌝.'
+        return f'Let {self.repr_name(text_format=text_format)} be a symbolic-objct denoted as ⌜ {self.repr_name(text_format=text_format)} ⌝.'
 
-    def repr_symbol(self, text_format: (None, TextFormat) = None) -> str:
+    def repr_name(self, text_format: (None, TextFormat) = None) -> str:
         # global configuration
         # hide_index = \
         #    not is_in_class(self, classes.u) and \
@@ -1015,7 +1016,7 @@ class SymbolicObjct:
         if self.title is None:
             # If we have no long-name for this symbolic-objct,
             # we fallback on the (mandatory) symbol.
-            return self.repr_symbol(text_format=text_format)
+            return self.repr_name(text_format=text_format)
         return self.title.repr_title(text_format=text_format, cap=cap)
 
     def repr_reference(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
@@ -1023,7 +1024,7 @@ class SymbolicObjct:
         if self.title is None:
             # If we have no long-name for this symbolic-objct,
             # we use the (mandatory) symbol as a fallback method.
-            return self.repr_symbol(text_format=text_format)
+            return self.repr_name(text_format=text_format)
         return self.title.repr_ref(text_format=text_format, cap=cap)
 
     def repr(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
@@ -1082,7 +1083,7 @@ class TheoreticalObjct(SymbolicObjct):
         """Add this theoretical object as a node in the target graph g.
         Recursively add directly linked objects unless they are already present in g.
         NetworkX automatically and quietly ignores nodes and edges that are already present."""
-        g.add_node(self.repr_symbol())
+        g.add_node(self.repr_name())
         self.u.add_to_graph(g)
 
     def get_variable_ordered_set(self) -> tuple:
@@ -1509,7 +1510,7 @@ class FreeVariable(TheoreticalObjct):
         return self.is_formula_equivalent_to(o2), _values
 
     def repr_declaration(self, text_format: (None, TextFormat) = None):
-        return f'Let {self.repr_symbol(text_format=text_format)} be a free-variable in {self.universe_of_discourse.repr_symbol(text_format=text_format)}'
+        return f'Let {self.repr_name(text_format=text_format)} be a free-variable in {self.universe_of_discourse.repr_name(text_format=text_format)}'
 
 
 class Formula(TheoreticalObjct):
@@ -1756,14 +1757,14 @@ class Formula(TheoreticalObjct):
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         assert self.relation.arity == 2
-        return f'({self.parameters[0].repr(text_format=text_format, expand=expand)} {self.relation.repr_symbol(text_format=text_format)} {self.parameters[1].repr(text_format=text_format, expand=expand)})'
+        return f'({self.parameters[0].repr(text_format=text_format, expand=expand)} {self.relation.repr_name(text_format=text_format)} {self.parameters[1].repr(text_format=text_format, expand=expand)})'
 
     def repr_as_postfix_operator(self, text_format: (None, TextFormat) = None, expand=None):
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
         assert self.relation.arity == 1
-        return f'({self.parameters[0].repr(text_format=text_format, expand=expand)}){self.relation.repr_symbol(text_format=text_format)}'
+        return f'({self.parameters[0].repr(text_format=text_format, expand=expand)}){self.relation.repr_name(text_format=text_format)}'
 
     def repr_as_prefix_operator(self, text_format: (None, TextFormat) = None, expand=None):
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
@@ -1805,7 +1806,7 @@ class Formula(TheoreticalObjct):
                     return self.repr_as_function_call(text_format=text_format, expand=expand)
 
     def repr_declaration(self):
-        return f'Let {self.repr_symbol()} be the formula {self.repr_formula(expand=True)} in {self.universe_of_discourse.repr_symbol()}.'
+        return f'Let {self.repr_name()} be the formula {self.repr_formula(expand=True)} in {self.universe_of_discourse.repr_name()}.'
 
 
 class SimpleObjctDict(collections.UserDict):
@@ -1821,13 +1822,13 @@ class SimpleObjctDict(collections.UserDict):
         self._truth = None
 
     def declare(self,
-                symbol: (None, str, NameSet) = None,
+                nameset: (None, str, NameSet) = None,
                 dashed_name: (None, str, DashedName) = None,
                 echo: (None, bool) = None) -> SimpleObjct:
         """Declare a new simple-objct in this universe-of-discourse.
         """
         return SimpleObjct(
-            nameset=symbol,
+            nameset=nameset,
             dashed_name=dashed_name,
             universe_of_discourse=self.u,
             echo=echo)
@@ -1854,7 +1855,11 @@ class SimpleObjctDict(collections.UserDict):
         """
         if self._falsehood is None:
             self._falsehood = self.declare(
-                symbol=NameSet(StyledText(plaintext='false', unicode='⊥', latex_math=r'\bot')), dashed_name='falsehood')
+                nameset=NameSet(
+                    symbol=StyledText(unicode='⊥', latex_math='\\bot'),
+                    name=StyledText(plaintext='false'),
+                    explicit_name=StyledText(plaintext='falsehood'),
+                    index=None))
         return self._falsehood
 
     @property
@@ -1878,8 +1883,12 @@ class SimpleObjctDict(collections.UserDict):
         declares it automatically.
         """
         if self._truth is None:
-            self._truth = self.declare(NameSet(StyledText(plaintext='true', unicode='⊤', latex_math=r'\top')),
-                                       dashed_name='truth')
+            self._truth = self.declare(nameset=
+            NameSet(
+                symbol=StyledText(unicode='⊤', latex_math='\\top'),
+                name=StyledText(plaintext='true'),
+                explicit_name=StyledText(plaintext='truth'),
+                index=None))
         return self._truth
 
 
@@ -2085,7 +2094,7 @@ class AxiomDeclaration(TheoreticalObjct):
                     wrap: (None, bool) = True):
         """Return a representation that expresses and justifies the statement."""
         # TODO: Implement text_format.
-        text = f'{self.title.repr_title(text_format=text_format, cap=True)} ({self.repr_symbol()}): “{self.natural_language}”.'
+        text = f'{self.title.repr_title(text_format=text_format, cap=True)} ({self.repr_name()}): “{self.natural_language}”.'
         if wrap:
             text = '\n'.join(textwrap.wrap(
                 text=text, width=70,
@@ -2208,7 +2217,7 @@ class InferenceRuleInclusion(Statement):
 
     def infer_statement(self,
                         *args,
-                        symbol: (None, str, NameSet) = None,
+                        nameset: (None, str, NameSet) = None,
                         ref: (None, str) = None,
                         cat: (None, TitleCategory) = None,
                         subtitle: (None, str) = None,
@@ -2219,7 +2228,7 @@ class InferenceRuleInclusion(Statement):
         :param echo:
         :return:
         """
-        return self.inference_rule.infer_statement(*args, t=self.theory, symbol=symbol,
+        return self.inference_rule.infer_statement(*args, t=self.theory, nameset=nameset,
                                                    ref=ref, cat=cat, subtitle=subtitle, echo=echo)
 
     def verify_args(self, *args):
@@ -2315,7 +2324,7 @@ class DefinitionDeclaration(TheoreticalObjct):
 
     def repr_report(self, output_proofs=True, wrap: bool = True):
         """Return a representation that expresses and justifies the statement."""
-        algebraic_name = '' if self.title is None else f' ({self.repr_symbol()})'
+        algebraic_name = '' if self.title is None else f' ({self.repr_name()})'
         text = f'{repm.serif_bold(self.repr_title(cap=True))}{algebraic_name}: “{self.natural_language}”'
         if wrap:
             text = '\n'.join(textwrap.wrap(
@@ -2510,7 +2519,7 @@ class Morphism(FormulaStatement):
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'{repm.serif_bold(self.repr_symbol())}: {self.valid_proposition.repr_formula(expand=True)}'
+        output = f'{repm.serif_bold(self.repr_name())}: {self.valid_proposition.repr_formula(expand=True)}'
         if output_proofs:
             output = output + self.repr_subreport()
         return output
@@ -2522,8 +2531,8 @@ class Morphism(FormulaStatement):
         - The formula that is being stated,
         - The justification for the formula."""
         output = f'\n\t{repm.serif_bold("Derivation by theoretical-morphism / syntactic-operation")}'
-        output = output + f'\n\t{self.source_statement.valid_proposition.repr_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.source_statement.repr_symbol())}.'
-        output = output + f'\n\t{self.valid_proposition.repr_formula(expand=True):<70} │ Output of {repm.serif_bold(self.source_statement.valid_proposition.relation.repr_symbol())} morphism.'
+        output = output + f'\n\t{self.source_statement.valid_proposition.repr_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.source_statement.repr_name())}.'
+        output = output + f'\n\t{self.valid_proposition.repr_formula(expand=True):<70} │ Output of {repm.serif_bold(self.source_statement.valid_proposition.relation.repr_name())} morphism.'
         return output
 
 
@@ -2609,7 +2618,7 @@ class DirectDefinitionInference(FormulaStatement):
         output = f'{self.repr_title(cap=True)}: {self.valid_proposition.repr_formula(expand=True)}'
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Derivation from natural language definition")}'
-            output = output + f'\n\t{self.valid_proposition.repr_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.definition.repr_symbol())}.'
+            output = output + f'\n\t{self.valid_proposition.repr_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.definition.repr_name())}.'
         return output
 
 
@@ -2704,13 +2713,13 @@ class InferenceRuleDeclaration(TheoreticalObjct):
             self,
             *args,
             t: TheoryElaborationSequence,
-            symbol: (None, str, NameSet) = None,
+            nameset: (None, str, NameSet) = None,
             ref: (None, str) = None,
             cat: (None, TitleCategory) = None,
             subtitle: (None, str) = None,
             echo: (None, bool) = None, **kwargs) -> InferredStatement:
         """Apply this inference-rules on input statements and return the resulting statement."""
-        return InferredStatement(*args, i=self, t=t, nameset=symbol, ref=ref, cat=cat, subtitle=subtitle,
+        return InferredStatement(*args, i=self, t=t, nameset=nameset, ref=ref, cat=cat, subtitle=subtitle,
                                  echo=echo,
                                  **kwargs)
 
@@ -3100,18 +3109,18 @@ class TheoryElaborationSequence(TheoreticalObjct):
                 include_root=False, visited=visited)
 
     def include_axiom(
-            self, a: AxiomDeclaration, symbol: (None, str, NameSet) = None, title: (None, str, Title) = None,
+            self, a: AxiomDeclaration, nameset: (None, str, NameSet) = None, title: (None, str, Title) = None,
             dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None) -> AxiomInclusion:
         """Postulate an axiom in this theory-elaboration (self)."""
         return AxiomInclusion(
-            a=a, t=self, nameset=symbol, title=title, dashed_name=dashed_name, echo=echo)
+            a=a, t=self, nameset=nameset, title=title, dashed_name=dashed_name, echo=echo)
 
     def include_definition(
-            self, d: DefinitionDeclaration, symbol: (None, str, NameSet) = None, title: (None, str, Title) = None,
+            self, d: DefinitionDeclaration, nameset: (None, str, NameSet) = None, title: (None, str, Title) = None,
             dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
         """Include (aka endorse) a definition in this theory-elaboration (self)."""
         return DefinitionInclusion(
-            d=d, t=self, nameset=symbol, title=title, dashed_name=dashed_name, echo=echo)
+            d=d, t=self, nameset=nameset, title=title, dashed_name=dashed_name, echo=echo)
 
     def infer_by_substitution_of_equal_terms(
             self, original_expression, equality_statement, symbol=None,
@@ -3186,23 +3195,23 @@ class TheoryElaborationSequence(TheoreticalObjct):
         """Elaborate a new definition with natural-language. Shortcut function for
         t.elaborate_definition(...)."""
         return self.include_definition(
-            natural_language=natural_language, symbol=symbol,
+            natural_language=natural_language, nameset=symbol,
             reference=reference, title=title)
 
     def pose_hypothesis(
             self,
-            hypothetical_proposition: Formula, symbol: (None, str, NameSet) = None,
+            hypothetical_proposition: Formula, nameset: (None, str, NameSet) = None,
             title: (None, str, Title) = None, dashed_name: (None, str, DashedName) = None,
             echo: bool = False) -> Hypothesis:
         """Pose a new hypothesis in the current theory."""
         return Hypothesis(
             t=self, hypothetical_formula=hypothetical_proposition,
-            nameset=symbol, title=title, dashed_name=dashed_name,
+            nameset=nameset, title=title, dashed_name=dashed_name,
             echo=echo)
 
     def repr_theory_report(self, output_proofs=True):
         """Return a representation that expresses and justifies the theory."""
-        output = f'\n{repm.serif_bold(self.repr_symbol())}'
+        output = f'\n{repm.serif_bold(self.repr_name())}'
         output += f'\n{repm.serif_bold("Consistency:")} {str(self.consistency)}'
         output += f'\n{repm.serif_bold("Stabilized:")} {str(self.stabilized)}'
         output += f'\n{repm.serif_bold("Extended theory:")} {"N/A" if self.extended_theory is None else self.extended_theory.repr_fully_qualified_name()}'
@@ -3275,7 +3284,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
         self._consistency = consistency_values.proved_inconsistent
 
     def repr_declaration(self) -> str:
-        return f'Let {self.repr_fully_qualified_name()} be a theory-elaboration-sequence in {self.u.repr_symbol()}.'
+        return f'Let {self.repr_fully_qualified_name()} be a theory-elaboration-sequence in {self.u.repr_name()}.'
 
     @property
     def stabilized(self):
@@ -3288,21 +3297,21 @@ class TheoryElaborationSequence(TheoreticalObjct):
                'This theory-elaboration is already stabilized.', severity=verification_severities.warning)
         self._stabilized = True
 
-    def take_note(self, content: str, symbol: (None, str, NameSet) = None, ref: (None, str) = None,
+    def take_note(self, content: str, nameset: (None, str, NameSet) = None, ref: (None, str) = None,
                   cat: (None, TitleCategory) = None, subtitle: (None, str) = None, echo: (None, bool) = None) -> Note:
         """Take a note, make a comment, or remark in this theory.
 
         Shortcut for u.take_note(theory=t, ...)
 
         :param content: The natural-language content of the note.
-        :param symbol:
+        :param nameset:
         :param ref:
         :param cat:
         :param subtitle:
         :param echo:
         :return:
         """
-        return self.universe_of_discourse.take_note(t=self, content=content, symbol=symbol, ref=ref, cat=cat,
+        return self.universe_of_discourse.take_note(t=self, content=content, nameset=nameset, ref=ref, cat=cat,
                                                     subtitle=subtitle, echo=echo)
 
     @property
@@ -3431,7 +3440,7 @@ class Relation(TheoreticalObjct):
         repm.prnt(self.repr_declaration())
 
     def repr_declaration(self):
-        output = f'Let {self.repr_fully_qualified_name()} be a {repr_arity_as_text(self.arity)} relation in {self.u.repr_symbol()}'
+        output = f'Let {self.repr_fully_qualified_name()} be a {repr_arity_as_text(self.arity)} relation in {self.u.repr_name()}'
         output = output + f' (default notation: {self.formula_rep}).'
         return output
 
@@ -3503,7 +3512,7 @@ class SimpleObjct(TheoreticalObjct):
         return self.is_formula_equivalent_to(o2), _values
 
     def repr_declaration(self):
-        output = f'Let {self.repr_fully_qualified_name()} be a simple-objct in {self.u.repr_symbol()}.'
+        output = f'Let {self.repr_fully_qualified_name()} be a simple-objct in {self.u.repr_name()}.'
         return output
 
 
@@ -3588,7 +3597,7 @@ class RelationDict(collections.UserDict):
         self._implication = None
         self._negation = None
 
-    def declare(self, arity: int, symbol: (None, str, NameSet) = None, formula_rep=None,
+    def declare(self, arity: int, nameset: (None, str, NameSet) = None, formula_rep=None,
                 signal_proposition=None,
                 signal_theoretical_morphism=None,
                 implementation=None, dashed_name: (None, str, DashedName) = None,
@@ -3597,7 +3606,7 @@ class RelationDict(collections.UserDict):
         """
         return Relation(
             arity=arity,
-            nameset=symbol, dashed_name=dashed_name,
+            nameset=nameset, dashed_name=dashed_name,
             formula_rep=formula_rep,
             signal_proposition=signal_proposition,
             signal_theoretical_morphism=signal_theoretical_morphism,
@@ -3747,8 +3756,13 @@ class RelationDict(collections.UserDict):
         """
         if self._inconsistent is None:
             self._inconsistent = self.declare(
-                1, NameSet('Inc'), Formula.prefix,
-                signal_proposition=True, dashed_name='inconsistent')
+                1,
+                NameSet(
+                    acronym=StyledText(plaintext='Inc'),
+                    name=StyledText(plaintext='inconsistent'),
+                    index=None),
+                Formula.prefix,
+                signal_proposition=True)
         return self._inconsistent
 
     @property
@@ -3762,8 +3776,14 @@ class RelationDict(collections.UserDict):
         """
         if self._inequality is None:
             self._inequality = self.declare(
-                2, NameSet(StyledText(plaintext='neq', unicode='≠', latex_math=r'\neq')), Formula.infix,
-                signal_proposition=True, dashed_name='inequality')
+                2,
+                NameSet(
+                    symbol=StyledText(unicode='≠', latex_math='\\neq'),
+                    acronym=StyledText(plaintext='neq'),
+                    name=StyledText(plaintext='not equal'),
+                    index=None),
+                Formula.infix,
+                signal_proposition=True)
         return self._inequality
 
     @property
@@ -3810,8 +3830,14 @@ class RelationDict(collections.UserDict):
         """
         if self._negation is None:
             self._negation = self.declare(
-                1, NameSet(StyledText(plaintext='not', unicode='¬', latex_math=r'\neg')), Formula.prefix,
-                signal_proposition=True, dashed_name='negation')
+                1,
+                NameSet(
+                    symbol=StyledText(unicode='¬', latex_math='\\neg'),
+                    acronym=StyledText(plaintext='not'),
+                    name=StyledText(plaintext='negation'),
+                    index=None),
+                Formula.prefix,
+                signal_proposition=True)
         return self._negation
 
     @property
@@ -5905,7 +5931,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             self.variables[x.symbol] = x
 
     def declare_formula(
-            self, relation: Relation, *parameters, symbol: (None, str, NameSet) = None,
+            self, relation: Relation, *parameters, nameset: (None, str, NameSet) = None,
             lock_variable_scope: (None, bool) = None, echo: (None, bool) = None):
         """Declare a new :term:`formula` in this universe-of-discourse.
 
@@ -5916,7 +5942,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         """
         phi = Formula(
             relation=relation, parameters=parameters,
-            universe_of_discourse=self, nameset=symbol,
+            universe_of_discourse=self, nameset=nameset,
             lock_variable_scope=lock_variable_scope,
             echo=echo
         )
@@ -5944,7 +5970,7 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     def declare_theory(
             self,
-            symbol: (None, str, NameSet) = None,
+            nameset: (None, str, NameSet) = None,
             title: (None, str, Title) = None,
             dashed_name: (None, str, DashedName) = None,
             extended_theory: (None, TheoryElaborationSequence) = None,
@@ -5955,14 +5981,14 @@ class UniverseOfDiscourse(SymbolicObjct):
 
         Shortcut for Theory(universe_of_discourse, ...).
 
-        :param symbol:
+        :param nameset:
         :param is_theory_foundation_system:
         :param extended_theory:
         :return:
         """
         return TheoryElaborationSequence(
             u=self,
-            nameset=symbol,
+            nameset=nameset,
             title=title,
             dashed_name=dashed_name,
             extended_theory=extended_theory,
@@ -5971,14 +5997,14 @@ class UniverseOfDiscourse(SymbolicObjct):
             echo=echo)
 
     def declare_axiom(
-            self, natural_language: str, title: (None, str, Title) = None, symbol: (None, str, NameSet) = None,
+            self, natural_language: str, title: (None, str, Title) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         """Elaborate a new axiom 𝑎 in this universe-of-discourse."""
         return AxiomDeclaration(
-            u=self, natural_language=natural_language, title=title, nameset=symbol, echo=echo)
+            u=self, natural_language=natural_language, title=title, nameset=nameset, echo=echo)
 
     def take_note(
-            self, t: TheoryElaborationSequence, content: str, symbol: (None, str, NameSet) = None,
+            self, t: TheoryElaborationSequence, content: str, nameset: (None, str, NameSet) = None,
             cat: (None, TitleCategory) = None, ref: (None, str) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None):
         """Take a note, make a comment, or remark.
@@ -5987,7 +6013,7 @@ class UniverseOfDiscourse(SymbolicObjct):
 
         :param t:
         :param content:
-        :param symbol:
+        :param nameset:
         :param cat:
         :param ref:
         :param subtitle:
@@ -5998,21 +6024,21 @@ class UniverseOfDiscourse(SymbolicObjct):
             t.universe_of_discourse is self,
             'This universe-of-discourse 𝑢₁ (self) is distinct from the universe-of-discourse 𝑢₂ of the theory '
             'parameter 𝑡.')
-        return Note(theory=t, content=content, nameset=symbol,
+        return Note(theory=t, content=content, nameset=nameset,
                     cat=cat, ref=ref, subtitle=subtitle, echo=echo)
 
     def echo(self):
         return repm.prnt(self.repr_declaration())
 
     def f(
-            self, relation: (Relation, FreeVariable), *parameters, symbol: (None, str, NameSet) = None,
+            self, relation: (Relation, FreeVariable), *parameters, nameset: (None, str, NameSet) = None,
             lock_variable_scope: (None, bool) = None,
             echo: (None, bool) = None):
         """Declare a new formula in this universe-of-discourse.
 
         Shortcut for self.elaborate_formula(...)."""
         return self.declare_formula(
-            relation, *parameters, symbol=symbol,
+            relation, *parameters, nameset=nameset,
             lock_variable_scope=lock_variable_scope, echo=echo)
 
     def get_symbol_max_index(self, base):
@@ -6038,7 +6064,7 @@ class UniverseOfDiscourse(SymbolicObjct):
     def declare_definition(
             self,
             natural_language: str,
-            symbol: (None, str, NameSet) = None,
+            nameset: (None, str, NameSet) = None,
             title: (None, str, Title) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
@@ -6048,7 +6074,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         return DefinitionDeclaration(
             natural_language=natural_language,
             u=self,
-            nameset=symbol, title=title, dashed_name=dashed_name, echo=echo)
+            nameset=nameset, title=title, dashed_name=dashed_name, echo=echo)
 
     @property
     def simple_objcts(self) -> SimpleObjctDict:
@@ -6083,7 +6109,7 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     def t(
             self,
-            symbol: (None, str, NameSet) = None,
+            nameset: (None, str, NameSet) = None,
             title: (None, str, Title) = None,
             dashed_name: (None, str, DashedName) = None,
             extended_theory: (None, TheoryElaborationSequence) = None,
@@ -6094,13 +6120,13 @@ class UniverseOfDiscourse(SymbolicObjct):
 
         Shortcut for self.declare_theory(...).
 
-        :param symbol:
+        :param nameset:
         :param is_theory_foundation_system:
         :param extended_theory:
         :return:
         """
         return self.declare_theory(
-            symbol=symbol,
+            nameset=nameset,
             title=title,
             dashed_name=dashed_name,
             extended_theory=extended_theory,
@@ -6198,7 +6224,7 @@ class InferredStatement(FormulaStatement):
         """Return a representation that expresses and justifies the statement."""
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         cap = True
-        output = f'{self.repr_title(text_format=text_format, cap=cap)} ({self.repr_symbol(text_format=text_format)}): {self.valid_proposition.repr_formula()}'
+        output = f'{self.repr_title(text_format=text_format, cap=cap)} ({self.repr_name(text_format=text_format)}): {self.valid_proposition.repr_formula()}'
         output = repm.wrap(output)
         if output_proofs:
             output = output + f'\n\tBy the {self.inference_rule.title.repr_mention(text_format=text_format)} inference-rule:'
@@ -6211,7 +6237,7 @@ class InferredStatement(FormulaStatement):
                 # Display the free-variables mapping.
                 free_variables = self.parameters[0].get_variable_ordered_set()
                 mapping = zip(free_variables, self.parameters[1:])
-                mapping_text = '(' + ','.join(f'{k.repr_symbol()} ↦ {v.repr_formula()}' for k, v in mapping) + ')'
+                mapping_text = '(' + ','.join(f'{k.repr_name()} ↦ {v.repr_formula()}' for k, v in mapping) + ')'
                 output = output + f'\n\t{mapping_text:<70} │ Given as parameters.'
             else:
                 for i in range(len(self.parameters)):

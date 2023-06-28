@@ -11,7 +11,7 @@ dog = u.o.declare(pu.NameSet(dog_name))
 mammal = u.o.declare(pu.NameSet(mammal_name))
 is_a = u.r.declare(
     arity=2, formula_rep=pu.Formula.infix,
-    symbol=pu.NameSet('is-a'),
+    nameset=pu.NameSet('is-a'),
     signal_proposition=True)
 a1d = u.declare_axiom(f'{mira_name.capitalize()} is a {dog_name}.')
 a1 = t1.include_axiom(a1d)

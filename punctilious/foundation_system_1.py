@@ -207,7 +207,7 @@ def elaborate_foundation_theory():
         axiom2 = ft.include_axiom(
             'If x = y, o = subst(o, x, y) where o, x, and y are theoretical-objcts.')
         subst = u.r.declare(
-            arity=3, symbol='subst',
+            arity=3, nameset='subst',
             signal_theoretical_morphism=True, implementation=substitute_xy)
         # if x = y, implies subst(o, x, y)
         x = u.v()
