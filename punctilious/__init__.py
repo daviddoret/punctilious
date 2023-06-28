@@ -13,7 +13,7 @@ from core import \
     Note, title_categories, InconsistencyWarning, \
     Title, \
     Relation, \
-    SimpleObjct, subscriptify, title_categories, StyledText, Symbol, SymbolicObjct, \
+    SimpleObjct, subscriptify, title_categories, StyledText, NameSet, SymbolicObjct, \
     TextFormat, text_formats, TextStyle, text_styles, TheoreticalObjct, TheoryElaborationSequence, \
     UniverseOfDiscourse
 

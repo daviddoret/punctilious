@@ -30,9 +30,9 @@ section_2_1 = t.open_section('The Peano axioms', section_parent=section_2)
 # AXIOM 2.1.1
 axiom_2_1_1_declaration = u.declare_axiom(f'0 is a natural number.')
 axiom_2_1_1 = t.include_axiom(axiom_2_1_1_declaration, title='2.1.1')
-zero = u.o.declare(pu.Symbol('0'))
-natural_number = u.o.declare(pu.Symbol('natural-number'))
-is_a = u.r.declare(2, pu.Symbol('is-a'), pu.Formula.infix, signal_proposition=True)
+zero = u.o.declare(pu.NameSet('0'))
+natural_number = u.o.declare(pu.NameSet('natural-number'))
+is_a = u.r.declare(2, pu.NameSet('is-a'), pu.Formula.infix, signal_proposition=True)
 # (0 is-a natural-number):
 proposition_2_1_1_1 = t.i.axiom_interpretation.infer_statement(
     axiom_2_1_1, u.f(is_a, zero, natural_number), title='2.1.1.1')
@@ -40,7 +40,7 @@ proposition_2_1_1_1 = t.i.axiom_interpretation.infer_statement(
 # AXIOM 2.1.2
 axiom_2_1_2_declaration = u.declare_axiom('If n is a natural number, then n++ is a natural number.')
 axiom_2_1_2 = t.include_axiom(axiom_2_1_2_declaration, title='2.1.2')
-plusplus = u.r.declare(1, pu.Symbol('++'), formula_rep=pu.Formula.postfix, dashed_name='successor')
+plusplus = u.r.declare(1, pu.NameSet('++'), formula_rep=pu.Formula.postfix, dashed_name='successor')
 with u.v('n') as n:
     # ((n₁ is-a natural-number) ⟹ ((n₁)++ is-a natural-number)):
     proposition_2_1_2_1 = t.i.axiom_interpretation.infer_statement(
@@ -59,16 +59,16 @@ definition_2_1_3_declaration = u.declare_definition(
     'I use "x := y" to denote the statement that x is defined to equal y.)',
     title='2.1.3')
 definition_2_1_3 = t.include_definition(d=definition_2_1_3_declaration)
-one = u.o.declare(pu.Symbol('1'))
+one = u.o.declare(pu.NameSet('1'))
 proposition_2_1_3_1 = t.i.definition_interpretation.infer_statement(
     definition_2_1_3, u.f(u.r.equal, one, u.f(plusplus, zero)), title='2.1.3.1')
-two = u.o.declare(pu.Symbol('2'))
+two = u.o.declare(pu.NameSet('2'))
 proposition_2_1_3_2 = t.i.definition_interpretation.infer_statement(
     definition_2_1_3, u.f(u.r.equal, two, u.f(plusplus, u.f(plusplus, zero))), title='2.1.3.2')
-three = u.o.declare(pu.Symbol('3'))
+three = u.o.declare(pu.NameSet('3'))
 proposition_2_1_3_3 = t.i.definition_interpretation.infer_statement(
     definition_2_1_3, u.f(u.r.equal, three, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero)))), title='2.1.3.3')
-four = u.o.declare(pu.Symbol('4'))
+four = u.o.declare(pu.NameSet('4'))
 proposition_2_1_3_4 = t.i.definition_interpretation.infer_statement(
     definition_2_1_3, u.f(u.r.equal, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))),
     title='2.1.3.4')
