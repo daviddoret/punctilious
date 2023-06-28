@@ -499,9 +499,21 @@ class NameSet:
     TODO: Enhancement: add dashed-name here, and a repr_symbolic (i.e. to support plaintext for non-ASCII symbols).
     """
 
-    def __init__(self, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
+    def __init__(self, s:(None,str)=None, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
                  acronym: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
                  explicit_name: (None, str, StyledText) = None):
+        if s is not None:
+            # Shortcut parameter to quickly declare a nameset from a python string,
+            # inferring in best-effort mode whether the string represent a symbol,
+            # a name, or a representation of another name-type.
+            if symbol is None and len(s) == 1:
+                # Assumption: a string of a single character represent a symbol.
+                symbol = s
+            elif explicit_name is None ' ' in s:
+                # Assumption: a string containing some space represent an explicit-name.
+                explicit_name = s
+            elif name is None and len(s) > 1:
+                name = s
         self._symbol = StyledText(symbol) if isinstance(symbol, str) else symbol
         self._acronym = StyledText(acronym) if isinstance(acronym, str) else acronym
         self._name = StyledText(name) if isinstance(name, str) else name
@@ -844,7 +856,7 @@ class SymbolicObjct:
             # assume the base was passed without index.
             index = universe_of_discourse.index_symbol(base=nameset)  # if auto_index else None
             base = StyledText(nameset, text_styles.serif_italic)
-            nameset = NameSet(nameset=nameset, index=index)
+            nameset = NameSet(s=nameset, index=index)
         self._symbol = nameset
         self._title = title  # Header validation is implemented in parent classes with proper category.
         if isinstance(dashed_name, str):
@@ -1438,7 +1450,7 @@ class FreeVariable(TheoreticalObjct):
             # TODO: Analyse the string if it ends with index in subscript characters.
             base = StyledText(nameset, text_styles.serif_bold)
             index = universe_of_discourse.index_symbol(base=nameset)
-            nameset = NameSet(nameset=base, index=index)
+            nameset = NameSet(s=base, index=index)
         super().__init__(
             nameset=nameset,
             universe_of_discourse=universe_of_discourse, echo=False)
@@ -2185,9 +2197,9 @@ class InferenceRuleInclusion(Statement):
         if nameset is None:
             # If no symbol is passed as a parameter,
             # automated assignment of symbol is assumed.
-            base = 'ii'
+            base = 's'
             index = t.universe_of_discourse.index_symbol(base=base)
-            nameset = NameSet(nameset=base, index=index)
+            nameset = NameSet(s=base, index=index)
         if title is None:
             title = Title(ref=str(nameset.index), cat=title_categories.inference_rule_inclusion,
                           subtitle=None)
@@ -2304,17 +2316,6 @@ class DefinitionDeclaration(TheoreticalObjct):
             title = Title(title.reference, cat=title_categories.definition,
                           subtitle=title.title)
             # warnings.warn('A new long-name was generated to force its category property to: definition.')
-        if nameset is None:
-            # If no symbol is passed as a parameter,
-            # automated assignment of symbol is assumed.
-            base = 'd'
-            index = u.index_symbol(base=base)
-            nameset = NameSet(nameset=base, index=index)
-        elif isinstance(nameset, str):
-            # If symbol was passed as a string,
-            # assume the base was passed without index.
-            index = u.index_symbol(base=nameset) if auto_index else None
-            nameset = NameSet(nameset=nameset, index=index)
         super().__init__(
             universe_of_discourse=u, nameset=nameset, title=title, dashed_name=dashed_name, echo=echo)
         super()._declare_class_membership(declarative_class_list.definition)
@@ -2682,9 +2683,9 @@ class InferenceRuleDeclaration(TheoreticalObjct):
         if nameset is None:
             # If no symbol is passed as a parameter,
             # automated assignment of symbol is assumed.
-            base = 'ir'
-            index = universe_of_discourse.index_symbol(base=base)
-            nameset = NameSet(nameset=base, index=index)
+            symbol = 's' # The general symbol base for statements.
+            index = universe_of_discourse.index_symbol(base=symbol)
+            nameset = NameSet(symbol=symbol, index=index)
         if title is None:
             title = Title(ref=str(nameset.index), cat=title_categories.inference_rule,
                           subtitle=None)
@@ -2917,15 +2918,15 @@ class TheoryElaborationSequence(TheoreticalObjct):
         self._commutativity_of_equality = None
         self._interpretation_disclaimer = False
         if nameset is None:
-            base = '𝑡'
+            symbol = StyledText(plaintext='T', text_style=text_styles.script_normal)
             index = u.index_symbol(base=base)
-            nameset = NameSet(nameset=base, index=index)
+            nameset = NameSet(symbol=symbol, name='theory', index=index)
         elif isinstance(nameset, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
             index = u.index_symbol(base=nameset)
-            nameset = NameSet(nameset=nameset, index=index)
+            nameset = NameSet(s=nameset, index=index)
         if title is None:
             title = Title(ref=str(nameset.index), cat=title_categories.theory_elaboration_sequence,
                           subtitle=None)
@@ -3336,12 +3337,6 @@ class Hypothesis(Statement):
             'The hypothetical-formula is not a proposition.',
             hypothetical_formula=hypothetical_formula,
             slf=self)
-        if nameset is None:
-            # If no symbol is passed as a parameter,
-            # automated assignment of symbol is assumed.
-            base = 'ℎ'
-            index = t.universe_of_discourse.index_symbol(base=base)
-            nameset = NameSet(nameset=base, index=index)
         super().__init__(
             theory=t, category=category, nameset=nameset,
             title=title, dashed_name=dashed_name, echo=False)
@@ -5725,7 +5720,7 @@ class UniverseOfDiscourse(SymbolicObjct):
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
             index = index_universe_of_discourse_symbol(base=nameset)
-            nameset = NameSet(nameset=nameset, index=index)
+            nameset = NameSet(s=nameset, index=index)
         # if dashed_name is None:
         #    dashed_name = f'universe-of-discourse-{str(symbol.index)}'
         super().__init__(
