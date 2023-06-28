@@ -495,6 +495,7 @@ class NoNameSolutionException(LookupError):
 class NameSet:
     """A set of qualified names used to identify an object.
 
+    TODO: Enhancement idea: for relations in particular, add a verb NameType (e.g. implies).
     """
 
     def __init__(self, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
