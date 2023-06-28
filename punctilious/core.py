@@ -3615,7 +3615,12 @@ class RelationDict(collections.UserDict):
         """
         if self._biconditional is None:
             self._biconditional = self.declare(
-                2, NameSet(StyledText(plaintext='<==>', unicode='⟺', latex_math=r'\iff')), Formula.infix,
+                2,
+                NameSet(
+                    symbol=StyledText(plaintext='<==>', unicode='⟺', latex_math='\\iff'),
+                    name=StyledText(plaintext='biconditional'),
+                    index=None),
+                Formula.infix,
                 signal_proposition=True, dashed_name='biconditional')
         return self._biconditional
 
@@ -3630,8 +3635,14 @@ class RelationDict(collections.UserDict):
         """
         if self._conjunction is None:
             self._conjunction = self.declare(
-                2, NameSet(nameset=StyledText(plaintext='and', unicode='∧', latex_math=r'\land')), Formula.infix,
-                signal_proposition=True, dashed_name='conjunction')
+                2,
+                NameSet(
+                    symbol=StyledText(unicode='∧', latex_math='\\land'),
+                    name=StyledText(plaintext='and'),
+                    explicit_name=StyledText(plaintext='conjunction'),
+                    index=None),
+                Formula.infix,
+                signal_proposition=True)
         return self._conjunction
 
     @property
@@ -3645,8 +3656,14 @@ class RelationDict(collections.UserDict):
         """
         if self._disjunction is None:
             self._disjunction = self.declare(
-                2, NameSet(StyledText(plaintext='or', unicode='∨', latex_math=r'\lor')), Formula.infix,
-                signal_proposition=True, dashed_name='disjunction')
+                2,
+                NameSet(
+                    symbol=StyledText(unicode='∨', latex_math='\\lor'),
+                    name=StyledText(plaintext='or'),
+                    explicit_name=StyledText(plaintext='disjunction'),
+                    index=None),
+                Formula.infix,
+                signal_proposition=True)
         return self._disjunction
 
     @property
@@ -3697,8 +3714,14 @@ class RelationDict(collections.UserDict):
         """
         if self._implication is None:
             self._implication = self.declare(
-                2, NameSet(StyledText(plaintext='==>', unicode='⟹', latex_math=r'\implies')), Formula.infix,
-                signal_proposition=True, dashed_name='implication')
+                2,
+                NameSet(
+                    symbol=StyledText(plaintext='==>', unicode='⟹', latex_math=r'\implies'),
+                    name=StyledText(plaintext='implies'),
+                    explicit_name=StyledText(plaintext='implication'),
+                    index=None),
+                Formula.infix,
+                signal_proposition=True)
         return self._implication
 
     @property
