@@ -168,7 +168,8 @@ class StyledText:
     - may support one or several text_format outputs."""
 
     def __init__(self, s: (None, str) = None, text_style: TextStyle = text_styles.serif_normal,
-                 plaintext: (None, str) = None, unicode: (None, str) = None, latex_math: (None, str) = None
+                 plaintext: (None, str) = None, unicode: (None, str) = None,
+                 latex_math: (None, str) = None
                  ):
         """
 
@@ -201,7 +202,8 @@ class StyledText:
         return self.rep()
 
     def rep(self, text_format: TextFormat = text_formats.plaintext, cap: bool = False):
-        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
         match text_format:
             case text_formats.plaintext:
                 return self.rep_as_plaintext(cap=cap)
@@ -391,12 +393,14 @@ class DeclarativeClassList(repm.ValueName):
 
     def __init__(self, name, natural_language_name):
         super().__init__(name)
-        self.atheoretical_statement = DeclarativeClass('atheoretical_statement', 'atheoretical-statement')
+        self.atheoretical_statement = DeclarativeClass('atheoretical_statement',
+                                                       'atheoretical-statement')
         self.axiom = DeclarativeClass('axiom', 'axiom')
         self.axiom_inclusion = DeclarativeClass('axiom_inclusion', 'axiom-inclusion')
         self.definition = DeclarativeClass('definition', 'definition')
         self.definition_inclusion = DeclarativeClass('definition_inclusion', 'definition-inclusion')
-        self.direct_axiom_inference = DeclarativeClass('direct_axiom_inference', 'direct-axiom-inference')
+        self.direct_axiom_inference = DeclarativeClass('direct_axiom_inference',
+                                                       'direct-axiom-inference')
         self.direct_definition_inference = DeclarativeClass('direct_definition_inference',
                                                             'direct-definition-inference')
         self.formula = DeclarativeClass('formula', 'formula')
@@ -404,7 +408,8 @@ class DeclarativeClassList(repm.ValueName):
         self.free_variable = DeclarativeClass('free_variable', 'free-variable')
         self.hypothesis = DeclarativeClass('hypothesis', 'hypothesis')
         self.inference_rule = DeclarativeClass('inference_rule', 'inference-rule')
-        self.inference_rule_inclusion = DeclarativeClass('inference_rule_inclusion', 'inference-rule-inclusion')
+        self.inference_rule_inclusion = DeclarativeClass('inference_rule_inclusion',
+                                                         'inference-rule-inclusion')
         self.inferred_proposition = DeclarativeClass('inferred_proposition', 'inferred-proposition')
         self.note = DeclarativeClass('note', 'note')
         self.proposition = DeclarativeClass('proposition', 'proposition')
@@ -414,7 +419,8 @@ class DeclarativeClassList(repm.ValueName):
         self.symbolic_objct = DeclarativeClass('symbolic_objct', 'symbolic-objct')
         self.theoretical_objct = DeclarativeClass('theoretical_objct', 'theoretical-objct')
         self.theory_elaboration = DeclarativeClass('theory', 'theory')
-        self.universe_of_discourse = DeclarativeClass('universe_of_discourse', 'universe-of-discourse')
+        self.universe_of_discourse = DeclarativeClass('universe_of_discourse',
+                                                      'universe-of-discourse')
         # Shortcuts
         self.a = self.axiom
         self.dai = self.direct_axiom_inference
@@ -499,7 +505,8 @@ class NameSet:
     TODO: Enhancement: add dashed-name here, and a repr_symbolic (i.e. to support plaintext for non-ASCII symbols).
     """
 
-    def __init__(self, s:(None,str)=None, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
+    def __init__(self, s: (None, str) = None, symbol: (None, str, StyledText) = None,
+                 index: (None, int, str) = None,
                  acronym: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
                  explicit_name: (None, str, StyledText) = None):
         if s is not None:
@@ -509,7 +516,7 @@ class NameSet:
             if symbol is None and len(s) == 1:
                 # Assumption: a string of a single character represent a symbol.
                 symbol = s
-            elif explicit_name is None ' ' in s:
+            elif explicit_name is None and ' ' in s:
                 # Assumption: a string containing some space represent an explicit-name.
                 explicit_name = s
             elif name is None and len(s) > 1:
@@ -517,7 +524,8 @@ class NameSet:
         self._symbol = StyledText(symbol) if isinstance(symbol, str) else symbol
         self._acronym = StyledText(acronym) if isinstance(acronym, str) else acronym
         self._name = StyledText(name) if isinstance(name, str) else name
-        self._explicit_name = StyledText(explicit_name) if isinstance(explicit_name, str) else explicit_name
+        self._explicit_name = StyledText(explicit_name) if isinstance(explicit_name,
+                                                                      str) else explicit_name
         if isinstance(index, int):
             index = str(index)
         self._index = index
@@ -541,20 +549,8 @@ class NameSet:
             return f'nameset {hash(self)}'
 
     @property
-    def symbol(self) -> StyledText:
-        """The symbol core glyph.
-
-        :return: (StyledText) The symbol core glyph.
-        """
-        return self._symbol
-
-    @property
     def acronym(self) -> StyledText:
         return self._acronym
-
-    @property
-    def name(self) -> StyledText:
-        return self._name
 
     @property
     def explicit_name(self) -> StyledText:
@@ -563,6 +559,45 @@ class NameSet:
     @property
     def index(self) -> str:
         return self._index
+
+    @property
+    def name(self) -> StyledText:
+        return self._name
+
+    def rep(self, hide_index_OBSOLETE=False, text_format: (None, TextFormat) = None) -> str:
+        """Return the default representation for this python obje.
+
+        :param hide_index_OBSOLETE:
+        :return:
+        """
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
+        return f'{self.rep_compact(text_format)}'
+
+    def rep_accurate(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
+        """Returns the most accurate (longest) possible name in the nameset for the required text-format.
+
+        Order of priority:
+        1) explicit-name
+        2) name
+        3) acronym
+        4) symbol
+        """
+        output = None if self.explicit_name is None else self.explicit_name.rep(
+            text_format=text_format, cap=cap)
+        if output is not None:
+            return output
+        output = None if self.name is None else self.name.rep(text_format=text_format, cap=cap)
+        if output is not None:
+            return output
+        output = None if self.acronym is None else self.acronym.rep(text_format=text_format,
+                                                                    cap=cap)
+        if output is not None:
+            return output
+        output = None if self.symbol is None else self.symbol.rep(text_format=text_format, cap=cap)
+        if output is not None:
+            return output
+        raise NoNameSolutionException(nameset=self, text_format=text_format)
 
     def rep_compact(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
         """Returns the shortest possible name in the nameset for the required text-format.
@@ -576,36 +611,15 @@ class NameSet:
         output = None if self.symbol is None else self.symbol.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
-        output = None if self.acronym is None else self.acronym.rep(text_format=text_format, cap=cap)
+        output = None if self.acronym is None else self.acronym.rep(text_format=text_format,
+                                                                    cap=cap)
         if output is not None:
             return output
         output = None if self.name is None else self.name.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
-        output = None if self.explicit_name is None else self.explicit_name.rep(text_format=text_format, cap=cap)
-        if output is not None:
-            return output
-        raise NoNameSolutionException(nameset=self, text_format=text_format)
-
-    def rep_accurate(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
-        """Returns the most accurate (longest) possible name in the nameset for the required text-format.
-
-        Order of priority:
-        1) explicit-name
-        2) name
-        3) acronym
-        4) symbol
-        """
-        output = None if self.explicit_name is None else self.explicit_name.rep(text_format=text_format, cap=cap)
-        if output is not None:
-            return output
-        output = None if self.name is None else self.name.rep(text_format=text_format, cap=cap)
-        if output is not None:
-            return output
-        output = None if self.acronym is None else self.acronym.rep(text_format=text_format, cap=cap)
-        if output is not None:
-            return output
-        output = None if self.symbol is None else self.symbol.rep(text_format=text_format, cap=cap)
+        output = None if self.explicit_name is None else self.explicit_name.rep(
+            text_format=text_format, cap=cap)
         if output is not None:
             return output
         raise NoNameSolutionException(nameset=self, text_format=text_format)
@@ -622,28 +636,26 @@ class NameSet:
         output = None if self.name is None else self.name.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
-        output = None if self.acronym is None else self.acronym.rep(text_format=text_format, cap=cap)
+        output = None if self.acronym is None else self.acronym.rep(text_format=text_format,
+                                                                    cap=cap)
         if output is not None:
             return output
         output = None if self.symbol is None else self.symbol.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
-        output = None if self.explicit_name is None else self.explicit_name.rep(text_format=text_format, cap=cap)
+        output = None if self.explicit_name is None else self.explicit_name.rep(
+            text_format=text_format, cap=cap)
         if output is not None:
             return output
         raise NoNameSolutionException(nameset=self, text_format=text_format)
 
-    def rep(self, hide_index=False, text_format: (None, TextFormat) = None) -> str:
-        """Return the default representation for this python obje.
+    @property
+    def symbol(self) -> StyledText:
+        """The symbol core glyph.
 
-        :param hide_index:
-        :return:
+        :return: (StyledText) The symbol core glyph.
         """
-        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
-        if hide_index or self.index is None:
-            return f'{self.symbol.rep(text_format)}'
-        else:
-            return f'{self.symbol.rep(text_format)}{subscriptify(self.index, text_format)}'
+        return self._symbol
 
 
 class Title:
@@ -659,7 +671,8 @@ class Title:
         the declarative class of the symbolic-objct.
     """
 
-    def __init__(self, ref: (None, str) = None, cat: (None, TitleCategory) = None, subtitle: (None, str) = None,
+    def __init__(self, ref: (None, str) = None, cat: (None, TitleCategory) = None,
+                 subtitle: (None, str) = None,
                  abr: (None, str) = None):
         self._ref = ref
         self._abr = abr
@@ -765,7 +778,8 @@ class DashedName:
     """
 
     def __init__(self, dashed_named):
-        verify(isinstance(dashed_named, str), 'dashed-name is not of type str.', dashed_named=dashed_named)
+        verify(isinstance(dashed_named, str), 'dashed-name is not of type str.',
+               dashed_named=dashed_named)
         # TODO: Clean string from non-alphanumeric, digits, dash characters, etc.
         self._dashed_name = dashed_named
 
@@ -810,7 +824,8 @@ class StatementTitleOBSOLETE:
 
     def rep_full(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
         # TODO: Implement text_format
-        category = str(self.category.natural_name.capitalize() if cap else self.category.natural_name)
+        category = str(
+            self.category.natural_name.capitalize() if cap else self.category.natural_name)
         reference = str(self.reference)
         return repm.serif_bold(
             f'{category} {reference}{" - " + self.title if self.title is not None else ""}')
@@ -838,7 +853,8 @@ class SymbolicObjct:
             title: (None, str, Title) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: bool = False):
-        echo = get_config(echo, configuration.echo_symbolic_objct, configuration.echo_default, fallback_value=False)
+        echo = get_config(echo, configuration.echo_symbolic_objct, configuration.echo_default,
+                          fallback_value=False)
         self._declarative_classes = frozenset()
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
         is_universe_of_discourse = False if is_universe_of_discourse is None else is_universe_of_discourse
@@ -964,11 +980,11 @@ class SymbolicObjct:
             return ''
         return self.dashed_name.rep_dashed_name(text_format=text_format)
 
-
     def rep_declaration(self, text_format: (None, TextFormat) = None) -> str:
         return f'Let {self.rep_name(text_format=text_format)} be a symbolic-objct denoted as ⌜ {self.rep_name(text_format=text_format)} ⌝.'
 
-    def rep_formula(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
+    def rep_formula(self, text_format: (None, TextFormat) = None,
+                    expand: (None, bool) = None) -> str:
         """If supported, return a formula representation,
         a symbolic representation otherwise.
 
@@ -987,7 +1003,8 @@ class SymbolicObjct:
         return fully_qualified_name
 
     def rep_mention(self, text_format: (None, TextFormat) = None) -> str:
-        return self.rep_name(text_format=text_format) if self.title is None else self.title.rep_mention(
+        return self.rep_name(
+            text_format=text_format) if self.title is None else self.title.rep_mention(
             text_format=text_format)
 
     def rep_name(self, text_format: (None, TextFormat) = None) -> str:
@@ -1005,7 +1022,8 @@ class SymbolicObjct:
         return self.rep_name(text_format=text_format) if self.title is None else self.title.rep_ref(
             text_format=text_format, cap=cap)
 
-    def rep_reference(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+    def rep_reference(self, text_format: (None, TextFormat) = None,
+                      cap: (None, bool) = None) -> str:
         global configuration
         if self.title is None:
             # If we have no long-name for this symbolic-objct,
@@ -1021,10 +1039,9 @@ class SymbolicObjct:
             return self.rep_name(text_format=text_format)
         return self.title.rep_title(text_format=text_format, cap=cap)
 
-
-
     def rep_title_2(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return self.rep_name(text_format=text_format) if self.title is None else self.title.rep_title(
+        return self.rep_name(
+            text_format=text_format) if self.title is None else self.title.rep_title(
             text_format=text_format, cap=cap)
 
     @property
@@ -1243,7 +1260,8 @@ class TheoreticalObjct(SymbolicObjct):
         if o1.is_formula_equivalent_to(o2):
             # Sufficient condition.
             return True, _values
-        if isinstance(o1, (Formula, FormulaStatement)) and isinstance(o2, (Formula, FormulaStatement)):
+        if isinstance(o1, (Formula, FormulaStatement)) and isinstance(o2,
+                                                                      (Formula, FormulaStatement)):
             # When both o1 and o2 are formula,
             # verify that their components are masked-formula-similar.
             relation_output, _values = o1.relation._is_masked_formula_similar_to(
@@ -1389,7 +1407,8 @@ class TheoreticalObjct(SymbolicObjct):
             r for r in self.iterate_theoretical_objcts_references(include_root=include_root)
             if is_in_class(r, classes.relation))
 
-    def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None):
+    def iterate_theoretical_objcts_references(self, include_root: bool = True,
+                                              visited: (None, set) = None):
         """Iterate through this and all the theoretical-objcts it contains recursively."""
         visited = set() if visited is None else visited
         if include_root and self not in visited:
@@ -1430,7 +1449,8 @@ class FreeVariable(TheoreticalObjct):
     def __init__(
             self, nameset=None,
             universe_of_discourse=None, status=None, scope=None, echo=None):
-        echo = get_config(echo, configuration.echo_free_variable_declaration, configuration.echo_default,
+        echo = get_config(echo, configuration.echo_free_variable_declaration,
+                          configuration.echo_default,
                           fallback_value=False)
         status = FreeVariable.scope_initialization_status if status is None else status
         scope = frozenset() if scope is None else scope
@@ -1586,7 +1606,7 @@ class Formula(TheoreticalObjct):
         if nameset is None:
             symbol_base = '𝜑'
             nameset = NameSet(
-                nameset=symbol_base, index=universe_of_discourse.index_symbol(
+                symbol=symbol_base, index=universe_of_discourse.index_symbol(
                     base=symbol_base))
         self.relation = relation
         parameters = parameters if isinstance(parameters, tuple) else tuple(
@@ -1717,7 +1737,8 @@ class Formula(TheoreticalObjct):
                 return False
         return True
 
-    def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None):
+    def iterate_theoretical_objcts_references(self, include_root: bool = True,
+                                              visited: (None, set) = None):
         """Iterate through this and all the theoretical-objcts it contains recursively."""
         visited = set() if visited is None else visited
         if include_root and self not in visited:
@@ -1761,27 +1782,32 @@ class Formula(TheoreticalObjct):
         else:
             return super().rep(text_format=text_format, expand=expand)
 
-    def rep_as_function_call(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None):
-        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
+    def rep_as_function_call(self, text_format: (None, TextFormat) = None,
+                             expand: (None, bool) = None):
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
         return f'{self.relation.rep_formula(text_format=text_format)}({", ".join([p.repr_formula(text_format=text_format) for p in self.parameters])})'
 
     def rep_as_infix_operator(self, text_format: (None, TextFormat) = None, expand=(None, bool)):
-        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         assert self.relation.arity == 2
         return f'({self.parameters[0].repr(text_format=text_format, expand=expand)} {self.relation.rep_name(text_format=text_format)} {self.parameters[1].repr(text_format=text_format, expand=expand)})'
 
     def rep_as_postfix_operator(self, text_format: (None, TextFormat) = None, expand=None):
-        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
         assert self.relation.arity == 1
         return f'({self.parameters[0].repr(text_format=text_format, expand=expand)}){self.relation.rep_name(text_format=text_format)}'
 
     def rep_as_prefix_operator(self, text_format: (None, TextFormat) = None, expand=None):
-        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         verify(
             isinstance(expand, bool),
@@ -1795,7 +1821,8 @@ class Formula(TheoreticalObjct):
         return f'{self.relation.rep_formula(text_format=text_format)}({self.parameters[0].repr_formula(text_format=text_format, expand=expand)})'
 
     def rep_formula(self, text_format: (None, TextFormat) = None, expand: bool = True):
-        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
         if is_in_class(self.relation, classes.free_variable):
             # If the relation of this formula is a free-variable,
             # it has no arity, neither a representation-mode.
@@ -1919,32 +1946,35 @@ class TitleCategory(repm.ValueName):
     def __str__(self):
         return self.rep(text_format=text_formats.plaintext)
 
-    def rep(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None, expand: (None, bool) = None):
+    def rep(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None,
+            expand: (None, bool) = None):
         # TODO: Implement text_format
         return self.natural_name
 
 
 class TitleCategories(repm.ValueName):
-    axiom = TitleCategory('axiom', 's', 'axiom', 'axiom')
+    # axiom = TitleCategory('axiom', 's', 'axiom', 'axiom')
     axiom_declaration = TitleCategory('axiom_declaration', 's', 'axiom declaration', 'axiom decl.')
-    axiom_inclusion = TitleCategory('axiom_inclusion', 'a', 'axiom', 'axiom')
-    corollary = TitleCategory('corollary', 'p', 'corollary', 'cor.')
-    definition = TitleCategory('definition', 'd', 'definition', 'def.')
-    formal_definition = TitleCategory('formal_definition', 'd', 'formal definition', 'def.')
-    hypothesis = TitleCategory('hypothesis', 'h', 'hypothesis', 'hyp.')
-    inference_rule = TitleCategory('inference_rule', 'i', 'inference rule', 'inference rule')
-    inference_rule_inclusion = TitleCategory('inference_rule_inclusion', 'ii', 'inference rule inclusion', 'i.-r.')
-    inferred_proposition = ('inferred_proposition', 'i', 'inferred-proposition')
-    lemma = TitleCategory('lemma', 'p', 'lemma', 'lem.')
-    proposition = TitleCategory('proposition', 'p', 'proposition', 'prop.')
-    theorem = TitleCategory('theorem', 'p', 'theorem', 'thrm.')
-    theory_elaboration_sequence = TitleCategory('theory_elaboration_sequence', 't', 'theory elaboration sequence',
+    axiom_inclusion = TitleCategory('axiom_inclusion', 's', 'axiom', 'axiom')
+    corollary = TitleCategory('corollary', 's', 'corollary', 'cor.')
+    definition = TitleCategory('definition', 's', 'definition', 'def.')
+    formal_definition = TitleCategory('formal_definition', 's', 'formal definition', 'def.')
+    hypothesis = TitleCategory('hypothesis', 's', 'hypothesis', 'hyp.')
+    inference_rule = TitleCategory('inference_rule', 's', 'inference rule', 'inference rule')
+    inference_rule_inclusion = TitleCategory('inference_rule_inclusion', 's',
+                                             'inference rule inclusion', 'i.-r.')
+    inferred_proposition = ('inferred_proposition', 's', 'inferred-proposition')
+    lemma = TitleCategory('lemma', 's', 'lemma', 'lem.')
+    proposition = TitleCategory('proposition', 's', 'proposition', 'prop.')
+    theorem = TitleCategory('theorem', 's', 'theorem', 'thrm.')
+    theory_elaboration_sequence = TitleCategory('theory_elaboration_sequence', 't',
+                                                'theory elaboration sequence',
                                                 'theo.')
-    comment = TitleCategory('comment', '𝙲', 'comment', 'cmt.')
-    note = TitleCategory('note', '𝙽', 'note', 'note')
-    remark = TitleCategory('remark', '𝚁', 'remark', 'rmrk.')
+    comment = TitleCategory('comment', 's', 'comment', 'cmt.')
+    note = TitleCategory('note', 's', 'note', 'note')
+    remark = TitleCategory('remark', 's', 'remark', 'rmrk.')
     # Special categories
-    uncategorized = TitleCategory('uncategorized', '?', 'uncategorized', 'uncat.')
+    uncategorized = TitleCategory('uncategorized', 's', 'uncategorized', 'uncat.')
 
 
 title_categories = TitleCategories('title_categories')
@@ -1977,7 +2007,8 @@ class Statement(TheoreticalObjct):
             dashed_name: (None, str, DashedName) = None,
             echo: bool = False):
         self._theory = theory
-        echo = get_config(echo, configuration.echo_statement, configuration.echo_default, fallback_value=False)
+        echo = get_config(echo, configuration.echo_statement, configuration.echo_default,
+                          fallback_value=False)
         universe_of_discourse = theory.universe_of_discourse
         self.statement_index = theory.crossreference_statement(self)
         self._category = category
@@ -2082,7 +2113,8 @@ class AxiomDeclaration(TheoreticalObjct):
         :param echo:
         """
         auto_index = get_config(auto_index, configuration.auto_index, fallback_value=False)
-        echo = get_config(echo, configuration.echo_axiom_declaration, configuration.echo_default, fallback_value=False)
+        echo = get_config(echo, configuration.echo_axiom_declaration, configuration.echo_default,
+                          fallback_value=False)
         natural_language = natural_language.strip()
         verify(natural_language != '',
                'Parameter natural-language is an empty string (after trimming).')
@@ -2095,7 +2127,8 @@ class AxiomDeclaration(TheoreticalObjct):
             title = Title(ref=title, cat=title_categories.axiom_declaration, subtitle=None)
         if isinstance(title, Title) and (
                 title.cat is not title_categories.axiom_declaration or title.cat is None):
-            title = Title(ref=title.ref, cat=title_categories.axiom_declaration, subtitle=title.subtitle)
+            title = Title(ref=title.ref, cat=title_categories.axiom_declaration,
+                          subtitle=title.subtitle)
         # warnings.warn('A new long-name was generated to force its category property to: axiom.')
         super().__init__(
             universe_of_discourse=u, nameset=nameset, echo=False, title=title)
@@ -2134,7 +2167,8 @@ class AxiomInclusion(Statement):
             echo: (None, bool) = None):
         """Include (postulate) an axiom in a theory-elaboration-sequence.
         """
-        echo = get_config(echo, configuration.echo_axiom_inclusion, configuration.echo_default, fallback_value=False)
+        echo = get_config(echo, configuration.echo_axiom_inclusion, configuration.echo_default,
+                          fallback_value=False)
         self._axiom = a
         if title is None:
             title = Title(cat=title_categories.axiom_inclusion)
@@ -2302,7 +2336,8 @@ class DefinitionDeclaration(TheoreticalObjct):
         :param echo:
         """
         auto_index = get_config(auto_index, configuration.auto_index, fallback_value=False)
-        echo = get_config(echo, configuration.echo_definition_declaration, configuration.echo_default,
+        echo = get_config(echo, configuration.echo_definition_declaration,
+                          configuration.echo_default,
                           fallback_value=False)
         natural_language = natural_language.strip()
         verify(natural_language != '',
@@ -2319,7 +2354,8 @@ class DefinitionDeclaration(TheoreticalObjct):
                           subtitle=title.title)
             # warnings.warn('A new long-name was generated to force its category property to: definition.')
         super().__init__(
-            universe_of_discourse=u, nameset=nameset, title=title, dashed_name=dashed_name, echo=echo)
+            universe_of_discourse=u, nameset=nameset, title=title, dashed_name=dashed_name,
+            echo=echo)
         super()._declare_class_membership(declarative_class_list.definition)
         u.cross_reference_definition(self)
         if echo:
@@ -2398,7 +2434,8 @@ class FormulaStatement(Statement):
             nameset: (None, NameSet) = None, category: (None, TitleCategory) = None,
             title: (None, Title) = None, dashed_name: (None, DashedName) = None,
             echo=None):
-        echo = get_config(echo, configuration.echo_statement, configuration.echo_default, fallback_value=False)
+        echo = get_config(echo, configuration.echo_statement, configuration.echo_default,
+                          fallback_value=False)
         verify(
             theory.universe_of_discourse is valid_proposition.universe_of_discourse,
             'The universe-of-discourse of this formula-statement''s theory-elaboration is '
@@ -2454,7 +2491,8 @@ class FormulaStatement(Statement):
         check if it is formula-equivalent to o2."""
         return self.valid_proposition.is_formula_equivalent_to(o2)
 
-    def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None):
+    def iterate_theoretical_objcts_references(self, include_root: bool = True,
+                                              visited: (None, set) = None):
         """Iterate through this and all the theoretical-objcts it contains recursively."""
         visited = set() if visited is None else visited
         if include_root and self not in visited:
@@ -2585,7 +2623,8 @@ class DirectDefinitionInference(FormulaStatement):
             title: (None, str, Title) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
-        echo = get_config(echo, configuration.echo_definition_direct_inference, configuration.echo_default,
+        echo = get_config(echo, configuration.echo_definition_direct_inference,
+                          configuration.echo_default,
                           fallback_value=False)
         verify(
             t.contains_theoretical_objct(d),
@@ -2685,7 +2724,7 @@ class InferenceRuleDeclaration(TheoreticalObjct):
         if nameset is None:
             # If no symbol is passed as a parameter,
             # automated assignment of symbol is assumed.
-            symbol = 's' # The general symbol base for statements.
+            symbol = 's'  # The general symbol base for statements.
             index = universe_of_discourse.index_symbol(base=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         if title is None:
@@ -2705,7 +2744,8 @@ class InferenceRuleDeclaration(TheoreticalObjct):
     def echo(self):
         repm.prnt(self.repr_report())
 
-    def infer_formula(self, *args, t: TheoryElaborationSequence, echo: (None, bool) = None, **kwargs) -> Formula:
+    def infer_formula(self, *args, t: TheoryElaborationSequence, echo: (None, bool) = None,
+                      **kwargs) -> Formula:
         """Apply this inference-rules on input statements and return the resulting statement."""
         phi = self._infer_formula(*args, t=t, **kwargs)
         if echo:
@@ -2722,7 +2762,8 @@ class InferenceRuleDeclaration(TheoreticalObjct):
             subtitle: (None, str) = None,
             echo: (None, bool) = None, **kwargs) -> InferredStatement:
         """Apply this inference-rules on input statements and return the resulting statement."""
-        return InferredStatement(*args, i=self, t=t, nameset=nameset, ref=ref, cat=cat, subtitle=subtitle,
+        return InferredStatement(*args, i=self, t=t, nameset=nameset, ref=ref, cat=cat,
+                                 subtitle=subtitle,
                                  echo=echo,
                                  **kwargs)
 
@@ -2747,7 +2788,8 @@ class AtheoreticalStatement(SymbolicObjct):
                  title: (None, str, Title) = None, echo: (None, bool) = None):
         assert isinstance(theory, TheoryElaborationSequence)
         self.theory = theory
-        super().__init__(universe_of_discourse=theory.universe_of_discourse, nameset=nameset, title=title,
+        super().__init__(universe_of_discourse=theory.universe_of_discourse, nameset=nameset,
+                         title=title,
                          echo=echo)
         super()._declare_class_membership(classes.atheoretical_statement)
 
@@ -2758,11 +2800,15 @@ class Note(AtheoreticalStatement):
     """
 
     def __init__(
-            self, theory: TheoryElaborationSequence, content: str, nameset: (None, str, NameSet) = None,
-            cat: (None, TitleCategory) = None, ref: (None, str) = None, subtitle: (None, str) = None,
+            self, theory: TheoryElaborationSequence, content: str,
+            nameset: (None, str, NameSet) = None,
+            cat: (None, TitleCategory) = None, ref: (None, str) = None,
+            subtitle: (None, str) = None,
             echo: (None, bool) = None):
-        echo = get_config(echo, configuration.echo_note, configuration.echo_default, fallback_value=False)
-        verify(is_in_class(theory, classes.t), 'theory is not a member of declarative-class theory.', theory=theory,
+        echo = get_config(echo, configuration.echo_note, configuration.echo_default,
+                          fallback_value=False)
+        verify(is_in_class(theory, classes.t),
+               'theory is not a member of declarative-class theory.', theory=theory,
                slf=self)
         universe_of_discourse = theory.universe_of_discourse
         cat = title_categories.note if cat is None else cat
@@ -2772,12 +2818,13 @@ class Note(AtheoreticalStatement):
         self.category = cat
         if nameset is None:
             nameset = NameSet(
-                nameset=self.category.symbol_base, index=self.statement_index)
+                symbol=self.category.symbol_base, index=self.statement_index)
         ref = nameset.index if ref is None else ref
         title = Title(cat=cat, ref=ref, subtitle=subtitle)
         super().__init__(
             nameset=nameset,
             theory=theory,
+            title=title,
             echo=False)
         if echo:
             self.echo()
@@ -2823,7 +2870,8 @@ class Section(AtheoreticalStatement):
             section_number: (None, int) = None,
             section_parent: (None, Section) = None,
             echo: (None, bool) = None):
-        echo = get_config(echo, configuration.echo_note, configuration.echo_default, fallback_value=False)
+        echo = get_config(echo, configuration.echo_note, configuration.echo_default,
+                          fallback_value=False)
         self._section_title = section_title
         self._section_parent = section_parent
         self._section_level = 1 if section_parent is None else section_parent.section_level + 1
@@ -2838,7 +2886,7 @@ class Section(AtheoreticalStatement):
         self._max_subsection_number = 0
         self.category = section_category
         symbol = NameSet(
-            nameset=self.category.symbol_base, index=self.statement_index)
+            symbol=self.category.symbol_base, index=self.statement_index)
         title = Title(ref=self._section_reference, cat=section_category,
                       subtitle=section_title)
         super().__init__(
@@ -2864,7 +2912,8 @@ class Section(AtheoreticalStatement):
         return self._max_subsection_number
 
     def rep_ref(self, cap=False) -> str:
-        prefix = 'section' if self.section_level == 1 else 'sub-' * (self.section_level - 1) + 'section'
+        prefix = 'section' if self.section_level == 1 else 'sub-' * (
+                self.section_level - 1) + 'section'
         text = f'{prefix}{repm.serif_bold(self.section_reference)}'
         return text
 
@@ -2906,7 +2955,8 @@ class TheoryElaborationSequence(TheoreticalObjct):
             stabilized: bool = False,
             echo: bool = None
     ):
-        echo = get_config(echo, configuration.echo_theory_elaboration_sequence_declaration, configuration.echo_default,
+        echo = get_config(echo, configuration.echo_theory_elaboration_sequence_declaration,
+                          configuration.echo_default,
                           fallback_value=False)
         self._max_subsection_number = 0
         self._consistency = consistency_values.undetermined
@@ -2936,9 +2986,10 @@ class TheoryElaborationSequence(TheoreticalObjct):
             title = Title(ref=title, cat=title_categories.theory_elaboration_sequence,
                           subtitle=None)
         else:
-            verify(title.category is None or title.category is title_categories.theory_elaboration_sequence,
-                   'The title category must be theory-elaboration-sequence.',
-                   title_category=title.category, title=title, slf=self)
+            verify(
+                title.category is None or title.category is title_categories.theory_elaboration_sequence,
+                'The title category must be theory-elaboration-sequence.',
+                title_category=title.category, title=title, slf=self)
             if title.category is None:
                 title.category = title_categories.theory_elaboration_sequence
         super().__init__(
@@ -2951,7 +3002,8 @@ class TheoryElaborationSequence(TheoreticalObjct):
         verify(is_in_class(u, classes.universe_of_discourse),
                'Parameter "u" is not a member of declarative-class universe-of-discourse.', u=u)
         verify(extended_theory is None or is_in_class(extended_theory, classes.theory_elaboration),
-               'Parameter "extended_theory" is neither None nor a member of declarative-class theory.', u=u)
+               'Parameter "extended_theory" is neither None nor a member of declarative-class theory.',
+               u=u)
         verify(extended_theory_limit is None or
                (extended_theory is not None and
                 is_in_class(extended_theory_limit, classes.statement) and
@@ -3078,7 +3130,8 @@ class TheoryElaborationSequence(TheoreticalObjct):
         """Return the dictionary of inference-rule-inclusions contained in this theory-elaboration."""
         return self._inference_rule_inclusions
 
-    def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None):
+    def iterate_theoretical_objcts_references(self, include_root: bool = True,
+                                              visited: (None, set) = None):
         """Iterate through this and all the theoretical-objcts it references recursively.
 
         Theoretical-objcts may contain references to multiple and diverse other theoretical-objcts. Do not confuse this iteration of all references with iterations of objects in the theory-chain.
@@ -3112,14 +3165,17 @@ class TheoryElaborationSequence(TheoreticalObjct):
                 include_root=False, visited=visited)
 
     def include_axiom(
-            self, a: AxiomDeclaration, nameset: (None, str, NameSet) = None, title: (None, str, Title) = None,
-            dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None) -> AxiomInclusion:
+            self, a: AxiomDeclaration, nameset: (None, str, NameSet) = None,
+            title: (None, str, Title) = None,
+            dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None) -> AxiomInclusion:
         """Postulate an axiom in this theory-elaboration (self)."""
         return AxiomInclusion(
             a=a, t=self, nameset=nameset, title=title, dashed_name=dashed_name, echo=echo)
 
     def include_definition(
-            self, d: DefinitionDeclaration, nameset: (None, str, NameSet) = None, title: (None, str, Title) = None,
+            self, d: DefinitionDeclaration, nameset: (None, str, NameSet) = None,
+            title: (None, str, Title) = None,
             dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
         """Include (aka endorse) a definition in this theory-elaboration (self)."""
         return DefinitionInclusion(
@@ -3229,7 +3285,8 @@ class TheoryElaborationSequence(TheoreticalObjct):
         arities = frozenset(r.arity for r in relations)
         for a in arities:
             output += repm.serif_bold(f'\n\n{rep_arity_as_text(a).capitalize()} relations:')
-            for r_long_name in frozenset(r.rep_fully_qualified_name() for r in relations if r.arity == a):
+            for r_long_name in frozenset(
+                    r.rep_fully_qualified_name() for r in relations if r.arity == a):
                 output += '\n ⁃ ' + r_long_name
         output += f'\n\n{repm.serif_bold("Theory elaboration:")}'
         output = output + '\n\n' + '\n\n'.join(
@@ -3252,7 +3309,8 @@ class TheoryElaborationSequence(TheoreticalObjct):
 
     def prove_inconsistent(self, ii):
         verify(isinstance(ii, InconsistencyIntroductionStatement),
-               'The ii statement is not of type InconsistencyIntroductionStatement.', ii=ii, theory=self)
+               'The ii statement is not of type InconsistencyIntroductionStatement.', ii=ii,
+               theory=self)
         verify(ii in self.statements,
                'The ii statement is not a statement of this theory.', ii=ii, theory=self)
         self._consistency = consistency_values.proved_inconsistent
@@ -3269,7 +3327,8 @@ class TheoryElaborationSequence(TheoreticalObjct):
                      section_parent: (None, Section) = None,
                      echo: (None, bool) = None) -> Section:
         """Open a new section in the current theory-elaboration-sequence."""
-        return Section(section_title=section_title, section_number=section_number, section_parent=section_parent,
+        return Section(section_title=section_title, section_number=section_number,
+                       section_parent=section_parent,
                        t=self,
                        echo=echo)
 
@@ -3297,11 +3356,13 @@ class TheoryElaborationSequence(TheoreticalObjct):
 
     def stabilize(self):
         verify(not self._stabilized,
-               'This theory-elaboration is already stabilized.', severity=verification_severities.warning)
+               'This theory-elaboration is already stabilized.',
+               severity=verification_severities.warning)
         self._stabilized = True
 
     def take_note(self, content: str, nameset: (None, str, NameSet) = None, ref: (None, str) = None,
-                  cat: (None, TitleCategory) = None, subtitle: (None, str) = None, echo: (None, bool) = None) -> Note:
+                  cat: (None, TitleCategory) = None, subtitle: (None, str) = None,
+                  echo: (None, bool) = None) -> Note:
         """Take a note, make a comment, or remark in this theory.
 
         Shortcut for u.take_note(theory=t, ...)
@@ -3314,7 +3375,8 @@ class TheoryElaborationSequence(TheoreticalObjct):
         :param echo:
         :return:
         """
-        return self.universe_of_discourse.take_note(t=self, content=content, nameset=nameset, ref=ref, cat=cat,
+        return self.universe_of_discourse.take_note(t=self, content=content, nameset=nameset,
+                                                    ref=ref, cat=cat,
                                                     subtitle=subtitle, echo=echo)
 
     @property
@@ -3328,7 +3390,8 @@ class TheoryElaborationSequence(TheoreticalObjct):
 
 class Hypothesis(Statement):
     def __init__(
-            self, t: TheoryElaborationSequence, hypothetical_formula: Formula, nameset: (None, NameSet) = None,
+            self, t: TheoryElaborationSequence, hypothetical_formula: Formula,
+            nameset: (None, NameSet) = None,
             title: (None, Title) = None, dashed_name: (None, DashedName) = None,
             echo: bool = False):
         category = title_categories.hypothesis
@@ -3352,8 +3415,9 @@ class Hypothesis(Statement):
             f'Assume {hypothetical_formula.rep_formula()} is true.')
         self.hypothetical_axiom_postulate = self.hypothetical_t.include_axiom(
             self.hypothetical_axiom)
-        self.proposition = self.hypothetical_t.i.axiom_interpretation.infer_statement(self.hypothetical_axiom_postulate,
-                                                                                      hypothetical_formula)
+        self.proposition = self.hypothetical_t.i.axiom_interpretation.infer_statement(
+            self.hypothetical_axiom_postulate,
+            hypothetical_formula)
 
 
 class Proof:
@@ -3395,7 +3459,8 @@ class Relation(TheoreticalObjct):
     def __init__(
             self, arity: int, nameset: (None, str, NameSet) = None, formula_rep=None,
             signal_proposition=None, signal_theoretical_morphism=None,
-            implementation=None, universe_of_discourse=None, dashed_name: (None, str, DashedName) = None,
+            implementation=None, universe_of_discourse=None,
+            dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
         echo = get_config(echo, configuration.echo_relation, configuration.echo_default,
                           fallback_value=False)
@@ -3409,14 +3474,14 @@ class Relation(TheoreticalObjct):
         self.signal_theoretical_morphism = signal_theoretical_morphism
         self.implementation = implementation
         if nameset is None:
-            nameset = 'r'
+            nameset = 's'
         if isinstance(nameset, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
             base = StyledText(nameset, text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(base=nameset)
-            nameset = NameSet(nameset=nameset, index=index)
+            nameset = NameSet(symbol=nameset, index=index)
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
         super().__init__(
@@ -3467,7 +3532,8 @@ class SimpleObjct(TheoreticalObjct):
             nameset: (None, str, NameSet) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
-        echo = get_config(echo, configuration.echo_simple_objct_declaration, configuration.echo_default,
+        echo = get_config(echo, configuration.echo_simple_objct_declaration,
+                          configuration.echo_default,
                           fallback_value=False)
         super().__init__(
             universe_of_discourse=universe_of_discourse, nameset=nameset,
@@ -4437,7 +4503,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         formula-statement complies / interprets properly its related contentual-definition.
         """
 
-        def infer_formula(d: DefinitionInclusion, p_equal_q: Formula, t: TheoryElaborationSequence) -> Formula:
+        def infer_formula(d: DefinitionInclusion, p_equal_q: Formula,
+                          t: TheoryElaborationSequence) -> Formula:
             """Compute the formula that results from applying this inference-rule with those arguments.
 
             :param d: A definition-inclusion in the theory-elaboration-sequence under consideration: 𝒟.
@@ -4448,7 +4515,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             p_equal_q = unpack_formula(p_equal_q)
             return p_equal_q
 
-        def verify_args(d: DefinitionInclusion, p_equal_q: Formula, t: TheoryElaborationSequence) -> bool:
+        def verify_args(d: DefinitionInclusion, p_equal_q: Formula,
+                        t: TheoryElaborationSequence) -> bool:
             """Verify if the arguments comply syntactically with the inference-rule.
 
             WARNING:
@@ -4772,7 +4840,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
-        def infer_formula(p: FormulaStatement, not_p: FormulaStatement, t: TheoryElaborationSequence) -> Formula:
+        def infer_formula(p: FormulaStatement, not_p: FormulaStatement,
+                          t: TheoryElaborationSequence) -> Formula:
             """
             :param p: a formula-statement of the form: (P).
             :param not_p: a formula-statement of the form: (¬P).
@@ -4781,7 +4850,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             inc = t.u.f(t.u.r.inconsistent, t)
             return inc
 
-        def verify_args(p: FormulaStatement, not_p: FormulaStatement, t: TheoryElaborationSequence) -> bool:
+        def verify_args(p: FormulaStatement, not_p: FormulaStatement,
+                        t: TheoryElaborationSequence) -> bool:
             """
 
             :param args:
@@ -4948,7 +5018,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
-        def infer_formula(p: FormulaStatement, q_equal_r: FormulaStatement, t: TheoryElaborationSequence) -> Formula:
+        def infer_formula(p: FormulaStatement, q_equal_r: FormulaStatement,
+                          t: TheoryElaborationSequence) -> Formula:
             """
 
             :param p: ⌜ P ⌝  a formula-statement.
@@ -4965,7 +5036,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
                 lock_variable_scope=True)
             return p_prime  # TODO: Provide support for statements that are atomic propositional formula, that is without relation or where the objct is a 0-ary relation.
 
-        def verify_args(p: FormulaStatement, q_equal_r: FormulaStatement, t: TheoryElaborationSequence) -> bool:
+        def verify_args(p: FormulaStatement, q_equal_r: FormulaStatement,
+                        t: TheoryElaborationSequence) -> bool:
             verify(is_in_class(p, classes.formula_statement),
                    '⌜p⌝ is not of the formula-statement declarative-class.',
                    p=p, slf=self, t=t)
@@ -5694,9 +5766,11 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
 
 class UniverseOfDiscourse(SymbolicObjct):
-    def __init__(self, nameset: (None, str, NameSet) = None, dashed_name: (None, str, DashedName) = None,
+    def __init__(self, nameset: (None, str, NameSet) = None,
+                 dashed_name: (None, str, DashedName) = None,
                  echo: (None, bool) = None):
-        echo = get_config(echo, configuration.echo_universe_of_discourse_declaration, configuration.echo_default,
+        echo = get_config(echo, configuration.echo_universe_of_discourse_declaration,
+                          configuration.echo_default,
                           fallback_value=False)
         self.axioms = dict()
         self.definitions = dict()
@@ -5714,9 +5788,9 @@ class UniverseOfDiscourse(SymbolicObjct):
         self.dashed_names = dict()
 
         if nameset is None:
-            base = '𝒰'
-            index = index_universe_of_discourse_symbol(base=base)
-            nameset = NameSet(nameset=base, index=index)
+            symbol = StyledText(plaintext='U', text_style=text_styles.script_normal)
+            index = index_universe_of_discourse_symbol(base=symbol)
+            nameset = NameSet(symbol=symbol, index=index)
         elif isinstance(nameset, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
@@ -5994,7 +6068,8 @@ class UniverseOfDiscourse(SymbolicObjct):
             echo=echo)
 
     def declare_axiom(
-            self, natural_language: str, title: (None, str, Title) = None, nameset: (None, str, NameSet) = None,
+            self, natural_language: str, title: (None, str, Title) = None,
+            nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         """Elaborate a new axiom 𝑎 in this universe-of-discourse."""
         return AxiomDeclaration(
@@ -6002,7 +6077,8 @@ class UniverseOfDiscourse(SymbolicObjct):
 
     def take_note(
             self, t: TheoryElaborationSequence, content: str, nameset: (None, str, NameSet) = None,
-            cat: (None, TitleCategory) = None, ref: (None, str) = None, subtitle: (None, str) = None,
+            cat: (None, TitleCategory) = None, ref: (None, str) = None,
+            subtitle: (None, str) = None,
             echo: (None, bool) = None):
         """Take a note, make a comment, or remark.
 
@@ -6028,7 +6104,8 @@ class UniverseOfDiscourse(SymbolicObjct):
         return repm.prnt(self.rep_declaration())
 
     def f(
-            self, relation: (Relation, FreeVariable), *parameters, nameset: (None, str, NameSet) = None,
+            self, relation: (Relation, FreeVariable), *parameters,
+            nameset: (None, str, NameSet) = None,
             lock_variable_scope: (None, bool) = None,
             echo: (None, bool) = None):
         """Declare a new formula in this universe-of-discourse.
@@ -6219,7 +6296,8 @@ class InferredStatement(FormulaStatement):
 
     def rep_report(self, text_format: (None, TextFormat) = None, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
         cap = True
         output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.valid_proposition.rep_formula()}'
         output = repm.wrap(output)
@@ -6234,7 +6312,8 @@ class InferredStatement(FormulaStatement):
                 # Display the free-variables mapping.
                 free_variables = self.parameters[0].get_variable_ordered_set()
                 mapping = zip(free_variables, self.parameters[1:])
-                mapping_text = '(' + ','.join(f'{k.rep_name()} ↦ {v.rep_formula()}' for k, v in mapping) + ')'
+                mapping_text = '(' + ','.join(
+                    f'{k.rep_name()} ↦ {v.rep_formula()}' for k, v in mapping) + ')'
                 output = output + f'\n\t{mapping_text:<70} │ Given as parameters.'
             else:
                 for i in range(len(self.parameters)):
@@ -6329,7 +6408,8 @@ class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
                'The relation of not_p is not the negation relation.')
         not_p_prime = theory.universe_of_discourse.f(
             theory.universe_of_discourse.relations.negation, p.valid_proposition)
-        verify(not_p_prime.is_formula_equivalent_to(not_p.valid_proposition), 'not_p is not formula-equialent to ¬(P).',
+        verify(not_p_prime.is_formula_equivalent_to(not_p.valid_proposition),
+               'not_p is not formula-equialent to ¬(P).',
                p=p, not_p=not_p, not_p_prime=not_p_prime)
         # Build q by variable substitution
         valid_proposition = theory.universe_of_discourse.f(
