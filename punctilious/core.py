@@ -195,29 +195,29 @@ class StyledText:
         return hash((StyledText, self._plaintext, self._text_style))
 
     def __repr__(self):
-        return self.repr()
+        return self.rep()
 
     def __str__(self):
-        return self.repr()
+        return self.rep()
 
-    def repr(self, text_format: TextFormat = text_formats.plaintext, cap: bool = False):
+    def rep(self, text_format: TextFormat = text_formats.plaintext, cap: bool = False):
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         match text_format:
             case text_formats.plaintext:
-                return self.repr_as_plaintext(cap=cap)
+                return self.rep_as_plaintext(cap=cap)
             case text_formats.latex_math:
-                return self.repr_as_latex_math(cap=cap)
+                return self.rep_as_latex_math(cap=cap)
             case text_formats.unicode:
                 return self.repr_as_unicode(cap=cap)
             case _:
-                return self.repr_as_plaintext(cap=cap)
+                return self.rep_as_plaintext(cap=cap)
 
-    def repr_as_latex_math(self, cap: bool = False):
+    def rep_as_latex_math(self, cap: bool = False):
         content = self._plaintext if self._latex_math is None else self._latex_math
         content = content.capitalize() if cap else content
         return f'{self._text_style.latex_math_start_tag}{content}{self._text_style.latex_math_end_tag}'
 
-    def repr_as_plaintext(self, cap: bool = False):
+    def rep_as_plaintext(self, cap: bool = False):
         content = self._plaintext
         content = content.capitalize() if cap else content
         return content
@@ -530,13 +530,13 @@ class NameSet:
 
     def __repr__(self):
         try:
-            return self.repr_compact(text_format=text_formats.plaintext)
+            return self.rep_compact(text_format=text_formats.plaintext)
         except NoNameSolutionException:
             return f'nameset {hash(self)}'
 
     def __str__(self):
         try:
-            return self.repr_compact(text_format=text_formats.plaintext)
+            return self.rep_compact(text_format=text_formats.plaintext)
         except NoNameSolutionException:
             return f'nameset {hash(self)}'
 
@@ -564,7 +564,7 @@ class NameSet:
     def index(self) -> str:
         return self._index
 
-    def repr_compact(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
+    def rep_compact(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
         """Returns the shortest possible name in the nameset for the required text-format.
 
         Order of priority:
@@ -573,21 +573,21 @@ class NameSet:
         3) name
         4) explicit-name
         """
-        output = None if self.symbol is None else self.symbol.repr(text_format=text_format, cap=cap)
+        output = None if self.symbol is None else self.symbol.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
-        output = None if self.acronym is None else self.acronym.repr(text_format=text_format, cap=cap)
+        output = None if self.acronym is None else self.acronym.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
-        output = None if self.name is None else self.name.repr(text_format=text_format, cap=cap)
+        output = None if self.name is None else self.name.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
-        output = None if self.explicit_name is None else self.explicit_name.repr(text_format=text_format, cap=cap)
+        output = None if self.explicit_name is None else self.explicit_name.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
         raise NoNameSolutionException(nameset=self, text_format=text_format)
 
-    def repr_accurate(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
+    def rep_accurate(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
         """Returns the most accurate (longest) possible name in the nameset for the required text-format.
 
         Order of priority:
@@ -596,21 +596,21 @@ class NameSet:
         3) acronym
         4) symbol
         """
-        output = None if self.explicit_name is None else self.explicit_name.repr(text_format=text_format, cap=cap)
+        output = None if self.explicit_name is None else self.explicit_name.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
-        output = None if self.name is None else self.name.repr(text_format=text_format, cap=cap)
+        output = None if self.name is None else self.name.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
-        output = None if self.acronym is None else self.acronym.repr(text_format=text_format, cap=cap)
+        output = None if self.acronym is None else self.acronym.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
-        output = None if self.symbol is None else self.symbol.repr(text_format=text_format, cap=cap)
+        output = None if self.symbol is None else self.symbol.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
         raise NoNameSolutionException(nameset=self, text_format=text_format)
 
-    def repr_conventional(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
+    def rep_conventional(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
         """Returns the most conventional (default) possible name in the nameset for the required text-format.
 
         Order of priority:
@@ -619,21 +619,21 @@ class NameSet:
         4) symbol
         1) explicit-name
         """
-        output = None if self.name is None else self.name.repr(text_format=text_format, cap=cap)
+        output = None if self.name is None else self.name.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
-        output = None if self.acronym is None else self.acronym.repr(text_format=text_format, cap=cap)
+        output = None if self.acronym is None else self.acronym.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
-        output = None if self.symbol is None else self.symbol.repr(text_format=text_format, cap=cap)
+        output = None if self.symbol is None else self.symbol.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
-        output = None if self.explicit_name is None else self.explicit_name.repr(text_format=text_format, cap=cap)
+        output = None if self.explicit_name is None else self.explicit_name.rep(text_format=text_format, cap=cap)
         if output is not None:
             return output
         raise NoNameSolutionException(nameset=self, text_format=text_format)
 
-    def repr(self, hide_index=False, text_format: (None, TextFormat) = None) -> str:
+    def rep(self, hide_index=False, text_format: (None, TextFormat) = None) -> str:
         """Return the default representation for this python obje.
 
         :param hide_index:
@@ -641,9 +641,9 @@ class NameSet:
         """
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         if hide_index or self.index is None:
-            return f'{self.symbol.repr(text_format)}'
+            return f'{self.symbol.rep(text_format)}'
         else:
-            return f'{self.symbol.repr(text_format)}{subscriptify(self.index, text_format)}'
+            return f'{self.symbol.rep(text_format)}{subscriptify(self.index, text_format)}'
 
 
 class Title:
@@ -678,10 +678,10 @@ class Title:
         return hash((self.cat, self.ref))
 
     def __repr__(self) -> str:
-        return self.repr(text_format=text_formats.plaintext)
+        return self.rep(text_format=text_formats.plaintext)
 
     def __str__(self) -> str:
-        return self.repr(text_format=text_formats.plaintext)
+        return self.rep(text_format=text_formats.plaintext)
 
     @property
     def cat(self) -> TitleCategory:
@@ -703,27 +703,27 @@ class Title:
         """Abridged name."""
         return self._abr
 
-    def repr(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
+    def rep(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
         """Return the default representation for this long-name.
 
         :param cap: Whether the representation must be capitalized (default: False).
         :return: str
         """
-        return self.repr_ref(text_format=text_format, cap=cap)
+        return self.rep_ref(text_format=text_format, cap=cap)
 
-    def repr_title(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+    def rep_title(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
         """
 
         :param cap:
         :return:
         """
-        return self.styled_title.repr(text_format=text_format, cap=cap)
+        return self.styled_title.rep(text_format=text_format, cap=cap)
 
-    def repr_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return self.styled_ref.repr(text_format=text_format, cap=cap)
+    def rep_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+        return self.styled_ref.rep(text_format=text_format, cap=cap)
 
-    def repr_mention(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return self.styled_mention.repr(text_format=text_format, cap=cap)
+    def rep_mention(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+        return self.styled_mention.rep(text_format=text_format, cap=cap)
 
     @property
     def styled_ref(self) -> StyledText:
@@ -774,17 +774,17 @@ class DashedName:
         return hash((self._dashed_name))
 
     def __repr__(self):
-        return self.repr()
+        return self.rep()
 
     def __str__(self):
-        return self.repr()
+        return self.rep()
 
-    def repr(self, text_format: (None, TextFormat) = None) -> str:
+    def rep(self, text_format: (None, TextFormat) = None) -> str:
         """Return the default representation.
         """
-        return self.repr_dashed_name(text_format=text_format)
+        return self.rep_dashed_name(text_format=text_format)
 
-    def repr_dashed_name(self, text_format: (None, TextFormat) = None) -> str:
+    def rep_dashed_name(self, text_format: (None, TextFormat) = None) -> str:
         """Return a dashed-name representation.
         """
         # TODO: Implement text_formats
@@ -803,19 +803,19 @@ class StatementTitleOBSOLETE:
         return hash((self.category, self.reference, self.title))
 
     def __repr__(self):
-        return self.repr_ref()
+        return self.rep_ref()
 
     def __str__(self):
-        return self.repr_ref()
+        return self.rep_ref()
 
-    def repr_full(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+    def rep_full(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
         # TODO: Implement text_format
         category = str(self.category.natural_name.capitalize() if cap else self.category.natural_name)
         reference = str(self.reference)
         return repm.serif_bold(
             f'{category} {reference}{" - " + self.title if self.title is not None else ""}')
 
-    def repr_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+    def rep_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
         # TODO: Implement text_format
         return repm.serif_bold(
             f'{self.category.natural_name.capitalize() if cap else self.category.natural_name} {self.reference}')
@@ -870,7 +870,7 @@ class SymbolicObjct:
         else:
             self._universe_of_discourse = None
         if echo:
-            repm.prnt(self.repr_declaration())
+            repm.prnt(self.rep_declaration())
 
     def __hash__(self):
         # Symbols are unique within their universe-of-discourse,
@@ -881,10 +881,10 @@ class SymbolicObjct:
             (self.universe_of_discourse, self.symbol))
 
     def __repr__(self):
-        return self.repr_name()
+        return self.rep_name()
 
     def __str__(self):
-        return self.repr_name()
+        return self.rep_name()
 
     @property
     def dashed_name(self) -> DashedName:
@@ -895,58 +895,14 @@ class SymbolicObjct:
         """The set of declarative-classes this symbolic-objct is a member of."""
         return self._declarative_classes
 
-    @property
-    def title(self) -> Title:
-        return self._title
-
-    def repr_formula(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
-        """If supported, return a formula representation,
-        a symbolic representation otherwise.
-
-        The objective of the repr_as_formula() method is to
-        represent formulae and formula-statements not as symbols
-        (e.g.: 𝜑₅) but as expanded formulae (e.g.: (4 > 3)).
-        Most symbolic-objcts do not have a formula representation,
-        where we fall back on symbolic representation.
-        """
-        return self.repr_name(text_format=text_format)
-
-    def repr_mention(self, text_format: (None, TextFormat) = None) -> str:
-        return self.repr_name(text_format=text_format) if self.title is None else self.title.repr_mention(
-            text_format=text_format)
-
-    def repr_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return self.repr_name(text_format=text_format) if self.title is None else self.title.repr_ref(
-            text_format=text_format, cap=cap)
-
-    def repr_title(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return self.repr_name(text_format=text_format) if self.title is None else self.title.repr_title(
-            text_format=text_format, cap=cap)
-
-    @property
-    def symbol(self) -> NameSet:
-        """Every symbolic-object that is being referenced must be assigned a unique symbol in its universe-of-discourse."""
-        return self._symbol
-
-    @property
-    def u(self):
-        """This symbolic-object''s universe of discourse. Full name: o.universe_of_discourse."""
-        return self.universe_of_discourse
-
-    @property
-    def universe_of_discourse(self):
-        """This symbolic-object''s universe of discourse. Shortcut: o.u"""
-        return self._universe_of_discourse
-
     def _declare_class_membership(self, c: DeclarativeClass):
         """During construction (__init__()), add the declarative-classes this symboli-objct is being made a member of."""
         if not hasattr(self, '_declarative_classes'):
             setattr(self, '_declarative_classes', frozenset())
         self._declarative_classes = self._declarative_classes.union({c})
 
-    @abc.abstractmethod
     def echo(self):
-        raise NotImplementedError('This is an abstract method.')
+        repm.prnt(self.rep())
 
     def is_declarative_class_member(self, c: DeclarativeClass) -> bool:
         """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise."""
@@ -995,24 +951,46 @@ class SymbolicObjct:
         return True
 
     def prnt(self, expand=False):
-        repm.prnt(self.repr(expand=expand))
+        repm.prnt(self.rep(expand=expand))
 
-    def repr_dashed_name(self, text_format: (None, TextFormat) = None) -> str:
+    def rep(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
+        # If a long-name is available, represent the objct as a reference.
+        # Otherwise, represent it as a symbol.
+        return self.rep_reference(text_format=text_format)
+
+    def rep_dashed_name(self, text_format: (None, TextFormat) = None) -> str:
         """"""
         if self.dashed_name is None:
             return ''
-        return self.dashed_name.repr_dashed_name(text_format=text_format)
+        return self.dashed_name.rep_dashed_name(text_format=text_format)
 
-    def repr_fully_qualified_name(self, text_format: (None, TextFormat) = None) -> str:
+
+    def rep_declaration(self, text_format: (None, TextFormat) = None) -> str:
+        return f'Let {self.rep_name(text_format=text_format)} be a symbolic-objct denoted as ⌜ {self.rep_name(text_format=text_format)} ⌝.'
+
+    def rep_formula(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
+        """If supported, return a formula representation,
+        a symbolic representation otherwise.
+
+        The objective of the repr_as_formula() method is to
+        represent formulae and formula-statements not as symbols
+        (e.g.: 𝜑₅) but as expanded formulae (e.g.: (4 > 3)).
+        Most symbolic-objcts do not have a formula representation,
+        where we fall back on symbolic representation.
+        """
+        return self.rep_name(text_format=text_format)
+
+    def rep_fully_qualified_name(self, text_format: (None, TextFormat) = None) -> str:
         """"""
-        fully_qualified_name = f'⌜{self.repr_dashed_name(text_format=text_format)}⌝ (⌜{self.repr_name(text_format=text_format)}⌝)' if self.dashed_name is not None else f'⌜{self.repr_name(text_format=text_format)}⌝'
-        fully_qualified_name += f' entitled “{self.repr_title(text_format=text_format, cap=True)}”' if self.title is not None else ''
+        fully_qualified_name = f'⌜{self.rep_dashed_name(text_format=text_format)}⌝ (⌜{self.rep_name(text_format=text_format)}⌝)' if self.dashed_name is not None else f'⌜{self.rep_name(text_format=text_format)}⌝'
+        fully_qualified_name += f' entitled “{self.rep_title(text_format=text_format, cap=True)}”' if self.title is not None else ''
         return fully_qualified_name
 
-    def repr_declaration(self, text_format: (None, TextFormat) = None) -> str:
-        return f'Let {self.repr_name(text_format=text_format)} be a symbolic-objct denoted as ⌜ {self.repr_name(text_format=text_format)} ⌝.'
+    def rep_mention(self, text_format: (None, TextFormat) = None) -> str:
+        return self.rep_name(text_format=text_format) if self.title is None else self.title.rep_mention(
+            text_format=text_format)
 
-    def repr_name(self, text_format: (None, TextFormat) = None) -> str:
+    def rep_name(self, text_format: (None, TextFormat) = None) -> str:
         # global configuration
         # hide_index = \
         #    not is_in_class(self, classes.u) and \
@@ -1021,28 +999,52 @@ class SymbolicObjct:
         #    not is_in_class(self, classes.universe_of_discourse) and \
         #    self.universe_of_discourse.get_symbol_max_index(self.symbol.base) == 1
         # return self.symbol.repr(hide_index=hide_index)
-        return self.symbol.repr(text_format=text_format)
+        return self.symbol.rep(text_format=text_format)
 
-    def repr_title(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        global configuration
-        if self.title is None:
-            # If we have no long-name for this symbolic-objct,
-            # we fallback on the (mandatory) symbol.
-            return self.repr_name(text_format=text_format)
-        return self.title.repr_title(text_format=text_format, cap=cap)
+    def rep_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+        return self.rep_name(text_format=text_format) if self.title is None else self.title.rep_ref(
+            text_format=text_format, cap=cap)
 
-    def repr_reference(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+    def rep_reference(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
         global configuration
         if self.title is None:
             # If we have no long-name for this symbolic-objct,
             # we use the (mandatory) symbol as a fallback method.
-            return self.repr_name(text_format=text_format)
-        return self.title.repr_ref(text_format=text_format, cap=cap)
+            return self.rep_name(text_format=text_format)
+        return self.title.rep_ref(text_format=text_format, cap=cap)
 
-    def repr(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
-        # If a long-name is available, represent the objct as a reference.
-        # Otherwise, represent it as a symbol.
-        return self.repr_reference(text_format=text_format)
+    def rep_title(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+        global configuration
+        if self.title is None:
+            # If we have no long-name for this symbolic-objct,
+            # we fallback on the (mandatory) symbol.
+            return self.rep_name(text_format=text_format)
+        return self.title.rep_title(text_format=text_format, cap=cap)
+
+
+
+    def rep_title_2(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+        return self.rep_name(text_format=text_format) if self.title is None else self.title.rep_title(
+            text_format=text_format, cap=cap)
+
+    @property
+    def symbol(self) -> NameSet:
+        """Every symbolic-object that is being referenced must be assigned a unique symbol in its universe-of-discourse."""
+        return self._symbol
+
+    @property
+    def title(self) -> Title:
+        return self._title
+
+    @property
+    def u(self):
+        """This symbolic-object''s universe of discourse. Full name: o.universe_of_discourse."""
+        return self.universe_of_discourse
+
+    @property
+    def universe_of_discourse(self):
+        """This symbolic-object''s universe of discourse. Shortcut: o.u"""
+        return self._universe_of_discourse
 
 
 class TheoreticalObjct(SymbolicObjct):
@@ -1089,13 +1091,13 @@ class TheoreticalObjct(SymbolicObjct):
             echo=False)
         super()._declare_class_membership(classes.theoretical_objct)
         if echo:
-            repm.prnt(self.repr_fully_qualified_name())
+            repm.prnt(self.rep_fully_qualified_name())
 
     def add_to_graph(self, g):
         """Add this theoretical object as a node in the target graph g.
         Recursively add directly linked objects unless they are already present in g.
         NetworkX automatically and quietly ignores nodes and edges that are already present."""
-        g.add_node(self.repr_name())
+        g.add_node(self.rep_name())
         self.u.add_to_graph(g)
 
     def get_variable_ordered_set(self) -> tuple:
@@ -1460,7 +1462,7 @@ class FreeVariable(TheoreticalObjct):
             self.echo()
 
     def echo(self):
-        self.repr_declaration()
+        self.rep_declaration()
 
     @property
     def scope(self):
@@ -1521,8 +1523,8 @@ class FreeVariable(TheoreticalObjct):
         # o2 is not a variable.
         return self.is_formula_equivalent_to(o2), _values
 
-    def repr_declaration(self, text_format: (None, TextFormat) = None):
-        return f'Let {self.repr_name(text_format=text_format)} be a free-variable in {self.universe_of_discourse.repr_name(text_format=text_format)}'
+    def rep_declaration(self, text_format: (None, TextFormat) = None):
+        return f'Let {self.rep_name(text_format=text_format)} be a free-variable in {self.universe_of_discourse.rep_name(text_format=text_format)}'
 
 
 class Formula(TheoreticalObjct):
@@ -1632,10 +1634,10 @@ class Formula(TheoreticalObjct):
             self.echo()
 
     def __repr__(self):
-        return self.repr(expand=True)
+        return self.rep(expand=True)
 
     def __str__(self):
-        return self.repr(expand=True)
+        return self.rep(expand=True)
 
     def crossreference_variable(self, x):
         """During construction, cross-reference a free-variable 𝓍
@@ -1655,7 +1657,7 @@ class Formula(TheoreticalObjct):
         # assert False
 
     def echo(self):
-        repm.prnt(self.repr_declaration())
+        repm.prnt(self.rep_declaration())
 
     @property
     def is_proposition(self):
@@ -1751,34 +1753,34 @@ class Formula(TheoreticalObjct):
         for x in variables_list:
             x.lock_scope()
 
-    def repr(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
+    def rep(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
         if expand:
-            return self.repr_formula(text_format=text_format, expand=expand)
+            return self.rep_formula(text_format=text_format, expand=expand)
         else:
-            return super().repr(text_format=text_format, expand=expand)
+            return super().rep(text_format=text_format, expand=expand)
 
-    def repr_as_function_call(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None):
+    def rep_as_function_call(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None):
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
-        return f'{self.relation.repr_formula(text_format=text_format)}({", ".join([p.repr_formula(text_format=text_format) for p in self.parameters])})'
+        return f'{self.relation.rep_formula(text_format=text_format)}({", ".join([p.repr_formula(text_format=text_format) for p in self.parameters])})'
 
-    def repr_as_infix_operator(self, text_format: (None, TextFormat) = None, expand=(None, bool)):
+    def rep_as_infix_operator(self, text_format: (None, TextFormat) = None, expand=(None, bool)):
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         assert self.relation.arity == 2
-        return f'({self.parameters[0].repr(text_format=text_format, expand=expand)} {self.relation.repr_name(text_format=text_format)} {self.parameters[1].repr(text_format=text_format, expand=expand)})'
+        return f'({self.parameters[0].repr(text_format=text_format, expand=expand)} {self.relation.rep_name(text_format=text_format)} {self.parameters[1].repr(text_format=text_format, expand=expand)})'
 
-    def repr_as_postfix_operator(self, text_format: (None, TextFormat) = None, expand=None):
+    def rep_as_postfix_operator(self, text_format: (None, TextFormat) = None, expand=None):
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
         assert self.relation.arity == 1
-        return f'({self.parameters[0].repr(text_format=text_format, expand=expand)}){self.relation.repr_name(text_format=text_format)}'
+        return f'({self.parameters[0].repr(text_format=text_format, expand=expand)}){self.relation.rep_name(text_format=text_format)}'
 
-    def repr_as_prefix_operator(self, text_format: (None, TextFormat) = None, expand=None):
+    def rep_as_prefix_operator(self, text_format: (None, TextFormat) = None, expand=None):
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         verify(
@@ -1790,9 +1792,9 @@ class Formula(TheoreticalObjct):
             'Attempt to represent prefix operator, but relation arity is not equal to 1.',
             self_relation=self.relation,
             parameters=self.parameters)
-        return f'{self.relation.repr_formula(text_format=text_format)}({self.parameters[0].repr_formula(text_format=text_format, expand=expand)})'
+        return f'{self.relation.rep_formula(text_format=text_format)}({self.parameters[0].repr_formula(text_format=text_format, expand=expand)})'
 
-    def repr_formula(self, text_format: (None, TextFormat) = None, expand: bool = True):
+    def rep_formula(self, text_format: (None, TextFormat) = None, expand: bool = True):
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         if is_in_class(self.relation, classes.free_variable):
             # If the relation of this formula is a free-variable,
@@ -1802,23 +1804,23 @@ class Formula(TheoreticalObjct):
             # In future developments, we may choose to allow
             # the "decoration" of free-variables with arity,
             # and presentation-mode to improve readability.
-            return self.repr_as_function_call(text_format=text_format, expand=expand)
+            return self.rep_as_function_call(text_format=text_format, expand=expand)
         else:
             match self.relation.formula_rep:
                 case Formula.function_call:
-                    return self.repr_as_function_call(text_format=text_format, expand=expand)
+                    return self.rep_as_function_call(text_format=text_format, expand=expand)
                 case Formula.infix:
-                    return self.repr_as_infix_operator(text_format=text_format, expand=expand)
+                    return self.rep_as_infix_operator(text_format=text_format, expand=expand)
                 case Formula.prefix:
-                    return self.repr_as_prefix_operator(text_format=text_format, expand=expand)
+                    return self.rep_as_prefix_operator(text_format=text_format, expand=expand)
                 case Formula.postfix:
-                    return self.repr_as_postfix_operator(text_format=text_format, expand=expand)
+                    return self.rep_as_postfix_operator(text_format=text_format, expand=expand)
                 case _:
                     # Fallback notation.
-                    return self.repr_as_function_call(text_format=text_format, expand=expand)
+                    return self.rep_as_function_call(text_format=text_format, expand=expand)
 
-    def repr_declaration(self):
-        return f'Let {self.repr_name()} be the formula {self.repr_formula(expand=True)} in {self.universe_of_discourse.repr_name()}.'
+    def rep_declaration(self):
+        return f'Let {self.rep_name()} be the formula {self.rep_formula(expand=True)} in {self.universe_of_discourse.rep_name()}.'
 
 
 class SimpleObjctDict(collections.UserDict):
@@ -1912,12 +1914,12 @@ class TitleCategory(repm.ValueName):
         super().__init__(name)
 
     def __repr__(self):
-        return self.repr(text_format=text_formats.plaintext)
+        return self.rep(text_format=text_formats.plaintext)
 
     def __str__(self):
-        return self.repr(text_format=text_formats.plaintext)
+        return self.rep(text_format=text_formats.plaintext)
 
-    def repr(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None, expand: (None, bool) = None):
+    def rep(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None, expand: (None, bool) = None):
         # TODO: Implement text_format
         return self.natural_name
 
@@ -2014,10 +2016,10 @@ class Statement(TheoreticalObjct):
         return self._category
 
     def echo(self):
-        repm.prnt(self.repr_report())
+        repm.prnt(self.rep_report())
 
     @abc.abstractmethod
-    def repr_report(self):
+    def rep_report(self):
         raise NotImplementedError('This is an abstract method.')
 
     @property
@@ -2100,13 +2102,13 @@ class AxiomDeclaration(TheoreticalObjct):
         super()._declare_class_membership(declarative_class_list.axiom)
         u.cross_reference_axiom(self)
         if echo:
-            repm.prnt(self.repr_report())
+            repm.prnt(self.rep_report())
 
-    def repr_report(self, text_format: (None, TextFormat) = None, output_proofs: (None, bool) = True,
-                    wrap: (None, bool) = True):
+    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs: (None, bool) = True,
+                   wrap: (None, bool) = True):
         """Return a representation that expresses and justifies the statement."""
         # TODO: Implement text_format.
-        text = f'{self.title.repr_title(text_format=text_format, cap=True)} ({self.repr_name()}): “{self.natural_language}”.'
+        text = f'{self.title.rep_title(text_format=text_format, cap=True)} ({self.rep_name()}): “{self.natural_language}”.'
         if wrap:
             text = '\n'.join(textwrap.wrap(
                 text=text, width=70,
@@ -2152,7 +2154,7 @@ class AxiomInclusion(Statement):
         t.crossreference_axiom_inclusion(self)
         super()._declare_class_membership(declarative_class_list.axiom_inclusion)
         if echo:
-            repm.prnt(self.repr_report())
+            repm.prnt(self.rep_report())
 
     @property
     def a(self) -> AxiomDeclaration:
@@ -2168,12 +2170,12 @@ class AxiomInclusion(Statement):
         Abridged property: a.a"""
         return self._axiom
 
-    def repr_report(self, output_proofs: bool = True) -> str:
+    def rep_report(self, output_proofs: bool = True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        text = f'{self.repr_title(cap=True)}: “{self.axiom.natural_language}”'
+        text = f'{self.rep_title(cap=True)}: “{self.axiom.natural_language}”'
         text = repm.wrap(text)
         if output_proofs:
-            text2 = f'Let postulate {self.axiom.repr_fully_qualified_name()} in {self.theory.repr_reference()}.'
+            text2 = f'Let postulate {self.axiom.rep_fully_qualified_name()} in {self.theory.rep_reference()}.'
             text2 = repm.wrap(text2)
             text = text + '\n' + text2
         return text
@@ -2216,7 +2218,7 @@ class InferenceRuleInclusion(Statement):
         t.crossreference_inference_rule_inclusion(self)
         super()._declare_class_membership(declarative_class_list.inference_rule_inclusion)
         if echo:
-            repm.prnt(self.repr_report())
+            repm.prnt(self.rep_report())
 
     def infer_formula(self, *args, echo: (None, bool) = None):
         """
@@ -2266,9 +2268,9 @@ class InferenceRuleInclusion(Statement):
     def verify_compatibility(self, *args):
         return self.inference_rule.verify_args(*args, t=self.theory)
 
-    def repr_report(self, output_proofs=True) -> str:
+    def rep_report(self, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        text = f'Let allow the {repm.serif_bold(self.inference_rule.title.reference)} inference-rule in {self.theory.repr_reference()}.'
+        text = f'Let allow the {repm.serif_bold(self.inference_rule.title.reference)} inference-rule in {self.theory.rep_reference()}.'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -2321,12 +2323,12 @@ class DefinitionDeclaration(TheoreticalObjct):
         super()._declare_class_membership(declarative_class_list.definition)
         u.cross_reference_definition(self)
         if echo:
-            repm.prnt(self.repr_report())
+            repm.prnt(self.rep_report())
 
-    def repr_report(self, output_proofs=True, wrap: bool = True):
+    def rep_report(self, output_proofs=True, wrap: bool = True):
         """Return a representation that expresses and justifies the statement."""
-        algebraic_name = '' if self.title is None else f' ({self.repr_name()})'
-        text = f'{repm.serif_bold(self.repr_title(cap=True))}{algebraic_name}: “{self.natural_language}”'
+        algebraic_name = '' if self.title is None else f' ({self.rep_name()})'
+        text = f'{repm.serif_bold(self.rep_title(cap=True))}{algebraic_name}: “{self.natural_language}”'
         if wrap:
             text = '\n'.join(textwrap.wrap(
                 text=text, width=70,
@@ -2364,11 +2366,11 @@ class DefinitionInclusion(Statement):
             echo=False)
         super()._declare_class_membership(declarative_class_list.definition_inclusion)
         if echo:
-            repm.prnt(self.repr_report())
+            repm.prnt(self.rep_report())
 
-    def repr_report(self, output_proofs=True):
+    def rep_report(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement."""
-        text = f'{self.repr_title(cap=True)}: “{self.definition.natural_language}”'
+        text = f'{self.rep_title(cap=True)}: “{self.definition.natural_language}”'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -2429,10 +2431,10 @@ class FormulaStatement(Statement):
             self.echo()
 
     def __repr__(self):
-        return self.repr(expand=True)
+        return self.rep(expand=True)
 
     def __str__(self):
-        return self.repr(expand=True)
+        return self.rep(expand=True)
 
     @property
     def parameters(self):
@@ -2480,14 +2482,14 @@ class FormulaStatement(Statement):
                                                                                         extension_limit=extension_limit))
         return ol
 
-    def repr(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None):
+    def rep(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None):
         if expand:
-            return self.repr_formula(text_format=text_format, expand=expand)
+            return self.rep_formula(text_format=text_format, expand=expand)
         else:
-            return super().repr(text_format=text_format, expand=expand)
+            return super().rep(text_format=text_format, expand=expand)
 
-    def repr_formula(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None):
-        return f'{self.valid_proposition.repr_formula(text_format=text_format, expand=expand)}'
+    def rep_formula(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None):
+        return f'{self.valid_proposition.rep_formula(text_format=text_format, expand=expand)}'
 
 
 class Morphism(FormulaStatement):
@@ -2514,26 +2516,26 @@ class Morphism(FormulaStatement):
             theory=theory, valid_proposition=valid_proposition,
             nameset=nameset, category=category)
 
-    def repr_report(self, output_proofs=True):
+    def rep_report(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
 
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'{repm.serif_bold(self.repr_name())}: {self.valid_proposition.repr_formula(expand=True)}'
+        output = f'{repm.serif_bold(self.rep_name())}: {self.valid_proposition.rep_formula(expand=True)}'
         if output_proofs:
-            output = output + self.repr_subreport()
+            output = output + self.rep_subreport()
         return output
 
-    def repr_subreport(self):
+    def rep_subreport(self):
         """Return a representation that expresses and justifies the statement.
 
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
         output = f'\n\t{repm.serif_bold("Derivation by theoretical-morphism / syntactic-operation")}'
-        output = output + f'\n\t{self.source_statement.valid_proposition.repr_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.source_statement.repr_name())}.'
-        output = output + f'\n\t{self.valid_proposition.repr_formula(expand=True):<70} │ Output of {repm.serif_bold(self.source_statement.valid_proposition.relation.repr_name())} morphism.'
+        output = output + f'\n\t{self.source_statement.valid_proposition.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.source_statement.rep_name())}.'
+        output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ Output of {repm.serif_bold(self.source_statement.valid_proposition.relation.rep_name())} morphism.'
         return output
 
 
@@ -2608,18 +2610,18 @@ class DirectDefinitionInference(FormulaStatement):
         assert d.statement_index < self.statement_index
         super()._declare_class_membership(declarative_class_list.direct_definition_inference)
         if echo:
-            repm.prnt(self.repr_report())
+            repm.prnt(self.rep_report())
 
-    def repr_report(self, output_proofs=True):
+    def rep_report(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
 
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'{self.repr_title(cap=True)}: {self.valid_proposition.repr_formula(expand=True)}'
+        output = f'{self.rep_title(cap=True)}: {self.valid_proposition.rep_formula(expand=True)}'
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Derivation from natural language definition")}'
-            output = output + f'\n\t{self.valid_proposition.repr_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.definition.repr_name())}.'
+            output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.definition.rep_name())}.'
         return output
 
 
@@ -2707,7 +2709,7 @@ class InferenceRuleDeclaration(TheoreticalObjct):
         """Apply this inference-rules on input statements and return the resulting statement."""
         phi = self._infer_formula(*args, t=t, **kwargs)
         if echo:
-            repm.prnt(phi.repr_report())
+            repm.prnt(phi.rep_report())
         return phi
 
     def infer_statement(
@@ -2782,17 +2784,17 @@ class Note(AtheoreticalStatement):
         super()._declare_class_membership(declarative_class_list.note)
 
     def echo(self):
-        repm.prnt(self.repr_report())
+        repm.prnt(self.rep_report())
 
-    def repr_title(self, cap=False):
-        return self.title.repr_title(cap=cap)
+    def rep_title(self, cap=False):
+        return self.title.rep_title(cap=cap)
 
-    def repr_ref(self, cap=False):
-        return self.title.repr_ref(cap=cap)
+    def rep_ref(self, cap=False):
+        return self.title.rep_ref(cap=cap)
 
-    def repr_report(self, output_proofs=True):
+    def rep_report(self, output_proofs=True):
         """Return a representation of the note that may be included as a section in a report."""
-        text = f'{repm.serif_bold(self.repr_title(cap=True))}: {self.natural_language}'
+        text = f'{repm.serif_bold(self.rep_title(cap=True))}: {self.natural_language}'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -2848,7 +2850,7 @@ class Section(AtheoreticalStatement):
             self.echo()
 
     def echo(self):
-        repm.prnt(self.repr_report())
+        repm.prnt(self.rep_report())
 
     def get_next_section_number(self, section_number: int = None) -> int:
         if section_number is None:
@@ -2861,12 +2863,12 @@ class Section(AtheoreticalStatement):
     def max_subsection_number(self) -> int:
         return self._max_subsection_number
 
-    def repr_ref(self, cap=False) -> str:
+    def rep_ref(self, cap=False) -> str:
         prefix = 'section' if self.section_level == 1 else 'sub-' * (self.section_level - 1) + 'section'
         text = f'{prefix}{repm.serif_bold(self.section_reference)}'
         return text
 
-    def repr_report(self, output_proofs=True) -> str:
+    def rep_report(self, output_proofs=True) -> str:
         text = f'{"#" * self.section_level} {repm.serif_bold(self.section_reference)} {repm.serif_bold(str(self.section_title).capitalize())}'
         text = repm.wrap(text)
         return text
@@ -2965,7 +2967,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
             # to the constructor.
             self.stabilize()
         if echo:
-            repm.prnt(self.repr_declaration())
+            repm.prnt(self.rep_declaration())
 
     def assure_interpretation_disclaimer(self, echo: (None, bool) = None):
         """After the first usage of a contentual interpretation inference-rule,
@@ -3210,28 +3212,28 @@ class TheoryElaborationSequence(TheoreticalObjct):
             nameset=nameset, title=title, dashed_name=dashed_name,
             echo=echo)
 
-    def repr_theory_report(self, output_proofs=True):
+    def rep_theory_report(self, output_proofs=True):
         """Return a representation that expresses and justifies the theory."""
-        output = f'\n{repm.serif_bold(self.repr_name())}'
+        output = f'\n{repm.serif_bold(self.rep_name())}'
         output += f'\n{repm.serif_bold("Consistency:")} {str(self.consistency)}'
         output += f'\n{repm.serif_bold("Stabilized:")} {str(self.stabilized)}'
-        output += f'\n{repm.serif_bold("Extended theory:")} {"N/A" if self.extended_theory is None else self.extended_theory.repr_fully_qualified_name()}'
+        output += f'\n{repm.serif_bold("Extended theory:")} {"N/A" if self.extended_theory is None else self.extended_theory.rep_fully_qualified_name()}'
         output += f'\n\n{repm.serif_bold("Simple-objct declarations:")}'
         # TODO: Limit the listed objects to those that are referenced by the theory,
         #   instead of outputting all objects in the universe-of-discourse.
         output = output + '\n' + '\n'.join(
-            o.repr_declaration() for o in
+            o.rep_declaration() for o in
             self.universe_of_discourse.simple_objcts.values())
         # Relation declarations
         relations = self.iterate_relations()
         arities = frozenset(r.arity for r in relations)
         for a in arities:
-            output += repm.serif_bold(f'\n\n{repr_arity_as_text(a).capitalize()} relations:')
-            for r_long_name in frozenset(r.repr_fully_qualified_name() for r in relations if r.arity == a):
+            output += repm.serif_bold(f'\n\n{rep_arity_as_text(a).capitalize()} relations:')
+            for r_long_name in frozenset(r.rep_fully_qualified_name() for r in relations if r.arity == a):
                 output += '\n ⁃ ' + r_long_name
         output += f'\n\n{repm.serif_bold("Theory elaboration:")}'
         output = output + '\n\n' + '\n\n'.join(
-            s.repr_report(output_proofs=output_proofs) for s in
+            s.rep_report(output_proofs=output_proofs) for s in
             self.statements)
         return str(output)
 
@@ -3246,7 +3248,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
             category=category, reference=reference, title=title)
 
     def prnt(self, output_proofs=True):
-        repm.prnt(self.repr_theory_report(output_proofs=output_proofs))
+        repm.prnt(self.rep_theory_report(output_proofs=output_proofs))
 
     def prove_inconsistent(self, ii):
         verify(isinstance(ii, InconsistencyIntroductionStatement),
@@ -3258,7 +3260,7 @@ class TheoryElaborationSequence(TheoreticalObjct):
     def export_to_text(self, file_path, output_proofs=True):
         """Export this theory to a Unicode textfile."""
         text_file = open(file_path, 'w', encoding='utf-8')
-        n = text_file.write(self.repr_theory_report(output_proofs=output_proofs))
+        n = text_file.write(self.rep_theory_report(output_proofs=output_proofs))
         text_file.close()
 
     def open_section(self,
@@ -3284,8 +3286,8 @@ class TheoryElaborationSequence(TheoreticalObjct):
                proof_parameter=proof.parameters[0], proof=proof, slf=self)
         self._consistency = consistency_values.proved_inconsistent
 
-    def repr_declaration(self) -> str:
-        return f'Let {self.repr_fully_qualified_name()} be a theory-elaboration-sequence in {self.u.repr_name()}.'
+    def rep_declaration(self) -> str:
+        return f'Let {self.rep_fully_qualified_name()} be a theory-elaboration-sequence in {self.u.rep_name()}.'
 
     @property
     def stabilized(self):
@@ -3347,7 +3349,7 @@ class Hypothesis(Statement):
             extended_theory_limit=self
         )
         self.hypothetical_axiom = self.universe_of_discourse.declare_axiom(
-            f'Assume {hypothetical_formula.repr_formula()} is true.')
+            f'Assume {hypothetical_formula.rep_formula()} is true.')
         self.hypothetical_axiom_postulate = self.hypothetical_t.include_axiom(
             self.hypothetical_axiom)
         self.proposition = self.hypothetical_t.i.axiom_interpretation.infer_statement(self.hypothetical_axiom_postulate,
@@ -3432,15 +3434,15 @@ class Relation(TheoreticalObjct):
         return hash((Relation, self.symbol, self.arity))
 
     def echo(self):
-        repm.prnt(self.repr_declaration())
+        repm.prnt(self.rep_declaration())
 
-    def repr_declaration(self):
-        output = f'Let {self.repr_fully_qualified_name()} be a {repr_arity_as_text(self.arity)} relation in {self.u.repr_name()}'
+    def rep_declaration(self):
+        output = f'Let {self.rep_fully_qualified_name()} be a {rep_arity_as_text(self.arity)} relation in {self.u.rep_name()}'
         output = output + f' (default notation: {self.formula_rep}).'
         return output
 
 
-def repr_arity_as_text(n):
+def rep_arity_as_text(n):
     match n:
         case 1:
             return 'unary'
@@ -3475,7 +3477,7 @@ class SimpleObjct(TheoreticalObjct):
             self.echo()
 
     def echo(self):
-        repm.prnt(self.repr_declaration())
+        repm.prnt(self.rep_declaration())
 
     def is_masked_formula_similar_to(self, o2, mask, _values):
         assert isinstance(o2, TheoreticalObjct)
@@ -3506,8 +3508,8 @@ class SimpleObjct(TheoreticalObjct):
         # o2 is not a variable.
         return self.is_formula_equivalent_to(o2), _values
 
-    def repr_declaration(self):
-        output = f'Let {self.repr_fully_qualified_name()} be a simple-objct in {self.u.repr_name()}.'
+    def rep_declaration(self):
+        output = f'Let {self.rep_fully_qualified_name()} be a simple-objct in {self.u.rep_name()}.'
         return output
 
 
@@ -3551,19 +3553,19 @@ class SubstitutionOfEqualTerms(FormulaStatement):
             category=category,
             nameset=nameset)
 
-    def repr_report(self, output_proofs=True):
+    def rep_report(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
 
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'{self.repr_title(cap=True)}: {self.valid_proposition.repr_formula()}'
+        output = f'{self.rep_title(cap=True)}: {self.valid_proposition.rep_formula()}'
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Substitution of equal terms")}'
-            output = output + f'\n\t{self.original_expression.repr_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.original_expression.repr_ref())}.'
-            output = output + f'\n\t{self.equality_statement.repr_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.equality_statement.repr_ref())}.'
+            output = output + f'\n\t{self.original_expression.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.original_expression.rep_ref())}.'
+            output = output + f'\n\t{self.equality_statement.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.equality_statement.rep_ref())}.'
             output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.repr_formula(expand=True):<70} │ ∎'
+            output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ ∎'
         return output
 
 
@@ -6023,7 +6025,7 @@ class UniverseOfDiscourse(SymbolicObjct):
                     cat=cat, ref=ref, subtitle=subtitle, echo=echo)
 
     def echo(self):
-        return repm.prnt(self.repr_declaration())
+        return repm.prnt(self.rep_declaration())
 
     def f(
             self, relation: (Relation, FreeVariable), *parameters, nameset: (None, str, NameSet) = None,
@@ -6095,8 +6097,8 @@ class UniverseOfDiscourse(SymbolicObjct):
         """
         return self.simple_objcts
 
-    def repr_declaration(self) -> str:
-        return f'Let {self.repr_fully_qualified_name()} be a universe-of-discourse.'
+    def rep_declaration(self) -> str:
+        return f'Let {self.rep_fully_qualified_name()} be a universe-of-discourse.'
 
     def so(self, symbol=None):
         return self.declare_symbolic_objct(
@@ -6203,7 +6205,7 @@ class InferredStatement(FormulaStatement):
             t.assure_interpretation_disclaimer(echo=echo)
 
     def echo(self):
-        repm.prnt(self.repr_report())
+        repm.prnt(self.rep_report())
 
     @property
     def parameters(self) -> tuple:
@@ -6215,31 +6217,31 @@ class InferredStatement(FormulaStatement):
         """
         return self._inference_rule
 
-    def repr_report(self, text_format: (None, TextFormat) = None, output_proofs=True) -> str:
+    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
         text_format = get_config(text_format, configuration.text_format, fallback_value=text_formats.plaintext)
         cap = True
-        output = f'{self.repr_title(text_format=text_format, cap=cap)} ({self.repr_name(text_format=text_format)}): {self.valid_proposition.repr_formula()}'
+        output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.valid_proposition.rep_formula()}'
         output = repm.wrap(output)
         if output_proofs:
-            output = output + f'\n\tBy the {self.inference_rule.title.repr_mention(text_format=text_format)} inference-rule:'
+            output = output + f'\n\tBy the {self.inference_rule.title.rep_mention(text_format=text_format)} inference-rule:'
             if self.inference_rule is self.u.inference_rules.variable_substitution:
                 # This is a special case for the variable-substitution inference-rule,
                 # which receives arbitrary theoretical-objcts as the 2nd and
                 # following parameters, to constitute a free-variable mappings.
                 parameter = self.parameters[0]
-                output = output + f'\n\t{parameter.repr_formula(text_format=text_format, expand=True):<70} │ Follows from {repm.serif_bold(parameter.repr_ref(text_format=text_format))}.'
+                output = output + f'\n\t{parameter.rep_formula(text_format=text_format, expand=True):<70} │ Follows from {repm.serif_bold(parameter.rep_ref(text_format=text_format))}.'
                 # Display the free-variables mapping.
                 free_variables = self.parameters[0].get_variable_ordered_set()
                 mapping = zip(free_variables, self.parameters[1:])
-                mapping_text = '(' + ','.join(f'{k.repr_name()} ↦ {v.repr_formula()}' for k, v in mapping) + ')'
+                mapping_text = '(' + ','.join(f'{k.rep_name()} ↦ {v.rep_formula()}' for k, v in mapping) + ')'
                 output = output + f'\n\t{mapping_text:<70} │ Given as parameters.'
             else:
                 for i in range(len(self.parameters)):
                     parameter = self.parameters[i]
-                    output = output + f'\n\t{parameter.repr_formula(text_format=text_format, expand=True):<70} │ Follows from {repm.serif_bold(parameter.repr_ref(text_format=text_format))}.'
+                    output = output + f'\n\t{parameter.rep_formula(text_format=text_format, expand=True):<70} │ Follows from {repm.serif_bold(parameter.rep_ref(text_format=text_format))}.'
             output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.repr_formula(text_format=text_format, expand=True):<70} │ ∎'
+            output = output + f'\n\t{self.valid_proposition.rep_formula(text_format=text_format, expand=True):<70} │ ∎'
         return output
 
 
@@ -6278,21 +6280,21 @@ class InconsistencyIntroductionStatement(FormulaStatement):
         # The theory is proved inconsistent!
         theory.prove_inconsistent(self)
         if configuration.warn_on_inconsistency:
-            warnings.warn(f'{self.repr_report(output_proofs=True)}', InconsistencyWarning)
+            warnings.warn(f'{self.rep_report(output_proofs=True)}', InconsistencyWarning)
 
-    def repr_report(self, output_proofs=True):
+    def rep_report(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
 
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
-        output = f'{self.repr_title(cap=True)}: {self.valid_proposition.repr_formula()}'
+        output = f'{self.rep_title(cap=True)}: {self.valid_proposition.rep_formula()}'
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Proof of inconsistency")}'
-            output = output + f'\n\t{self.p.repr_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.p.repr_ref())}.'
-            output = output + f'\n\t{self.not_p.repr_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.not_p.repr_ref())}.'
+            output = output + f'\n\t{self.p.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.p.rep_ref())}.'
+            output = output + f'\n\t{self.not_p.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.not_p.rep_ref())}.'
             output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.repr_formula(expand=True):<70} │ ∎'
+            output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ ∎'
         return output
 
 

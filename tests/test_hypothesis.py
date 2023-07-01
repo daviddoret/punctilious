@@ -29,12 +29,14 @@ class TestHypothesis(TestCase):
                         u.f(r1, y, z)),
                     u.f(r1, x, z)))
         robust_theory.stabilize()
-        self.assertTrue(robust_theory.stabilized, 'The stabilized property of the original-theory is not True.')
+        self.assertTrue(robust_theory.stabilized,
+                        'The stabilized property of the original-theory is not True.')
         hypothesis = robust_theory.pose_hypothesis(
             hypothetical_proposition=u.f(r1, o2, o3))
         hypothetical_proposition = hypothesis.proposition
         hypothetical_theory = hypothesis.hypothetical_t
-        hypothetical_conjunction = hypothetical_theory.i.ci.infer_statement(first_proposition, hypothetical_proposition)
+        hypothetical_conjunction = hypothetical_theory.i.ci.infer_statement(first_proposition,
+                                                                            hypothetical_proposition)
         proposition_1 = hypothetical_theory.i.vs.infer_statement(
             conditional,
             o1,  # x
@@ -43,4 +45,4 @@ class TestHypothesis(TestCase):
         conclusion_1 = hypothetical_theory.i.mp.infer_statement(
             proposition_1,
             hypothetical_conjunction)
-        self.assertEqual('◆₁(ℴ₁, ℴ₃)', conclusion_1.valid_proposition.repr_formula())
+        self.assertEqual('◆₁(ℴ₁, ℴ₃)', conclusion_1.valid_proposition.rep_formula())

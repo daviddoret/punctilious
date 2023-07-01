@@ -23,4 +23,4 @@ class TestAxiomInterpretation(TestCase):
         r2 = u.r.declare(2, signal_proposition=True)
         aii1 = t.i.axiom_interpretation.infer_statement(ai1, u.f(r1, o1))
         self.assertTrue(aii1.valid_proposition.is_formula_equivalent_to(u.f(r1, o1)))
-        print(aii1.repr_report())
+        print(aii1.rep_report())

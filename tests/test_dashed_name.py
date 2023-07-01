@@ -8,5 +8,5 @@ class TestDashedName(TestCase):
         raw = random_data.random_dashed_name()
         dashed_name = p.DashedName(raw)
         self.assertEqual(raw, str(dashed_name))
-        self.assertEqual(raw, dashed_name.repr())
-        self.assertEqual(raw, dashed_name.repr_dashed_name())
+        self.assertEqual(raw, dashed_name.rep())
+        self.assertEqual(raw, dashed_name.rep_dashed_name())

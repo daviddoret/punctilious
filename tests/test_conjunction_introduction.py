@@ -17,6 +17,6 @@ class TestConjunctionIntroduction(TestCase):
         phi1 = t.i.axiom_interpretation.infer_statement(ap, u.f(r1, o1, o2))
         phi2 = t.i.axiom_interpretation.infer_statement(ap, u.f(r2, o3))
         phi3 = t.i.ci.infer_statement(phi1, phi2)
-        self.assertEqual('(◆₁(ℴ₁, ℴ₂) ∧ ◆₂(ℴ₃))', phi3.repr())
+        self.assertEqual('(◆₁(ℴ₁, ℴ₂) ∧ ◆₂(ℴ₃))', phi3.rep())
         phi4 = t.i.ci.infer_statement(phi1, phi1)
-        self.assertEqual('(◆₁(ℴ₁, ℴ₂) ∧ ◆₁(ℴ₁, ℴ₂))', phi4.repr())
+        self.assertEqual('(◆₁(ℴ₁, ℴ₂) ∧ ◆₁(ℴ₁, ℴ₂))', phi4.rep())

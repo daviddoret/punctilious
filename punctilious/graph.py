@@ -25,43 +25,43 @@ def graph_theoretical_objct(g: nx.MultiDiGraph, o: pu.TheoryElaborationSequence)
 
 
 def graph_theory(g: nx.MultiDiGraph, t: pu.TheoryElaborationSequence):
-    g.add_node(t.repr_name())
+    g.add_node(t.rep_name())
     for s in t.statements:
         graph_theoretical_objct(g, s)
 
 
 def graph_formula_statement(g: nx.MultiDiGraph, s: pu.TheoryElaborationSequence):
-    g.add_node(t.repr_name())
+    g.add_node(t.rep_name())
     graph_theoretical_objct(g, s.valid_proposition)
-    g.add_edge(s.valid_proposition.repr_name(), t.repr_name())
+    g.add_edge(s.valid_proposition.rep_name(), t.rep_name())
 
 
 def graph_free_variable(g: nx.MultiDiGraph, x: pu.FreeVariable):
-    g.add_node(x.repr_name())
+    g.add_node(x.rep_name())
 
 
 def graph_simple_objct(g: nx.MultiDiGraph, o: pu.Formula):
-    g.add_node(o.repr_name())
+    g.add_node(o.rep_name())
 
 
 def graph_relation(g: nx.MultiDiGraph, r: pu.Relation):
-    g.add_node(r.repr_name())
+    g.add_node(r.rep_name())
 
 
 def graph_formula(g: nx.MultiDiGraph, f: pu.Formula):
-    g.add_node(f.repr_name())
+    g.add_node(f.rep_name())
     if f.relation.arity == 1:
         graph_theoretical_objct(g, f.relation)
-        g.add_edge(f.relation.repr_name(), f.repr_name())
+        g.add_edge(f.relation.rep_name(), f.rep_name())
         graph_theoretical_objct(g, f.parameters[0])
-        g.add_edge(f.parameters[0].repr_name(), f.repr_name())
+        g.add_edge(f.parameters[0].rep_name(), f.rep_name())
     if f.relation.arity == 2:
         graph_theoretical_objct(g, f.relation)
-        g.add_edge(f.relation.repr_name(), f.repr_name())
+        g.add_edge(f.relation.rep_name(), f.rep_name())
         graph_theoretical_objct(g, f.parameters[0])
-        g.add_edge(f.parameters[0].repr_name(), f.repr_name())
+        g.add_edge(f.parameters[0].rep_name(), f.rep_name())
         graph_theoretical_objct(g, f.parameters[1])
-        g.add_edge(f.parameters[1].repr_name(), f.repr_name())
+        g.add_edge(f.parameters[1].rep_name(), f.rep_name())
 
 
 g = nx.Graph()

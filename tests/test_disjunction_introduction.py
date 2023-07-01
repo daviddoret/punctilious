@@ -17,4 +17,4 @@ class TestDisjunctionIntroduction(TestCase):
         phi1 = t.i.axiom_interpretation.infer_statement(ap, u.f(r1, o1, o2))
         phi2_formula = u.f(r2, o3)
         phi3 = t.i.di.infer_statement(phi1, phi2_formula)
-        self.assertEqual('(◆₁(ℴ₁, ℴ₂) ∨ ◆₂(ℴ₃))', phi3.repr())
+        self.assertEqual('(◆₁(ℴ₁, ℴ₂) ∨ ◆₂(ℴ₃))', phi3.rep())
