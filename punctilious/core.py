@@ -2092,22 +2092,6 @@ class Statement(TheoreticalObject):
         universe_of_discourse = theory.universe_of_discourse
         self.statement_index = theory.crossreference_statement(self)
         self._category = category
-        if nameset is None:
-            # If no symbol is passed as a parameter,
-            # automated assignment of symbol is assumed.
-            nameset = 's'
-        if title is None:
-            title = Title(
-                ref=str(nameset.index),
-                cat=category,
-                subtitle=None
-            )
-        if isinstance(title, str):
-            title = Title(
-                ref=title,
-                cat=category,
-                subtitle=None
-            )
         super().__init__(
             nameset=nameset,
             universe_of_discourse=universe_of_discourse,
@@ -3051,8 +3035,9 @@ class TheoryElaborationSequence(TheoreticalObject):
         self._interpretation_disclaimer = False
         if nameset is None:
             symbol = StyledText(plaintext='T', text_style=text_styles.script_normal)
-            index = u.index_symbol(base=base)
-            nameset = NameSet(symbol=symbol, name='theory', index=index)
+            index = u.index_symbol(base=symbol)
+            nameset = NameSet(symbol=symbol, name='theory',
+                              explicit_name='theory elaboration sequence', index=index)
         elif isinstance(nameset, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
@@ -3553,15 +3538,6 @@ class Relation(TheoreticalObject):
         self.signal_proposition = signal_proposition
         self.signal_theoretical_morphism = signal_theoretical_morphism
         self.implementation = implementation
-        if nameset is None:
-            nameset = 's'
-        if isinstance(nameset, str):
-            # If symbol was passed as a string,
-            # assume the base was passed without index.
-            # TODO: Analyse the string if it ends with index in subscript characters.
-            base = StyledText(nameset, text_styles.serif_italic)
-            index = universe_of_discourse.index_symbol(base=nameset)
-            nameset = NameSet(symbol=nameset, index=index)
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
         super().__init__(
