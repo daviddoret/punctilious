@@ -327,7 +327,7 @@ def verify(
         for key, value in kwargs.items():
             value_as_string = f'(str conversion failure of type {str(type(value))})'
             try:
-                value_as_string = value.repr_as_fully_qualified_name()
+                value_as_string = value.rep_as_fully_qualified_name()
             except AttributeError:
                 try:
                     value_as_string = repr(value)
@@ -1095,7 +1095,7 @@ class SymbolicObject:
         #    not configuration.output_index_if_max_index_equal_1 and \
         #    not is_in_class(self, classes.universe_of_discourse) and \
         #    self.universe_of_discourse.get_symbol_max_index(self.symbol.base) == 1
-        # return self.symbol.repr(hide_index=hide_index)
+        # return self.symbol.rep(hide_index=hide_index)
         return self.symbol.rep(text_format=text_format)
 
     def rep_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
@@ -1876,7 +1876,7 @@ class Formula(TheoreticalObject):
                                  fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         assert self.relation.arity == 2
-        return f'({self.parameters[0].rep(text_format=text_format, expand=expand)} {self.relation.rep_name(text_format=text_format)} {self.parameters[1].repr(text_format=text_format, expand=expand)})'
+        return f'({self.parameters[0].rep(text_format=text_format, expand=expand)} {self.relation.rep_name(text_format=text_format)} {self.parameters[1].rep(text_format=text_format, expand=expand)})'
 
     def rep_as_postfix_operator(self, text_format: (None, TextFormat) = None, expand=None) -> str:
         text_format = get_config(text_format, configuration.text_format,
@@ -1884,7 +1884,7 @@ class Formula(TheoreticalObject):
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
         assert self.relation.arity == 1
-        return f'({self.parameters[0].repr(text_format=text_format, expand=expand)}){self.relation.rep_name(text_format=text_format)}'
+        return f'({self.parameters[0].rep(text_format=text_format, expand=expand)}){self.relation.rep_name(text_format=text_format)}'
 
     def rep_as_prefix_operator(self, text_format: (None, TextFormat) = None, expand=None) -> str:
         text_format = get_config(text_format, configuration.text_format,
@@ -1899,7 +1899,7 @@ class Formula(TheoreticalObject):
             'Attempt to represent prefix operator, but relation arity is not equal to 1.',
             self_relation=self.relation,
             parameters=self.parameters)
-        return f'{self.relation.rep_formula(text_format=text_format)}({self.parameters[0].repr_formula(text_format=text_format, expand=expand)})'
+        return f'{self.relation.rep_formula(text_format=text_format)}({self.parameters[0].rep_formula(text_format=text_format, expand=expand)})'
 
     def rep_formula(self, text_format: (None, TextFormat) = None, expand: bool = True) -> str:
         text_format = get_config(text_format, configuration.text_format,
@@ -2807,7 +2807,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
             self.echo()
 
     def echo(self):
-        repm.prnt(self.repr_report())
+        repm.prnt(self.rep_report())
 
     def infer_formula(self, *args, t: TheoryElaborationSequence, echo: (None, bool) = None,
                       **kwargs) -> Formula:
