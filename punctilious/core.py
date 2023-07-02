@@ -282,10 +282,19 @@ class StyledText:
 
 
 def subscriptify(text: (str, StyledText) = '', text_format: TextFormat = text_formats.plaintext):
+    text_format = get_config(text_format, configuration.text_format,
+                             fallback_value=text_formats.plaintext)
+    if text is None:
+        return ''
     match text_format:
         case text_formats.plaintext:
             return text
         case text_formats.unicode:
+            if isinstance(text, StyledText):
+                # The Unicode set of subscript characters is very limited,
+                # subscriptification must be executed on the plaintext value
+                # of the Unicode string.
+                text = text.rep_as_plaintext()
             return unicode.unicode_subscriptify(text)
         case text_formats.latex_math:
             return f'_{{{text}}}'
@@ -572,14 +581,18 @@ class NameSet:
                 explicit_name = s
             elif name is None and len(s) > 1:
                 name = s
-        self._symbol = StyledText(symbol) if isinstance(symbol, str) else symbol
-        self._acronym = StyledText(acronym) if isinstance(acronym, str) else acronym
-        self._name = StyledText(name) if isinstance(name, str) else name
-        self._explicit_name = StyledText(explicit_name) if isinstance(explicit_name,
-                                                                      str) else explicit_name
+        self._symbol = StyledText(s=symbol, text_style=text_styles.serif_italic) \
+            if isinstance(symbol, str) else symbol
+        self._acronym = StyledText(s=acronym, text_style=text_styles.monospace) \
+            if isinstance(acronym, str) else acronym
+        self._name = StyledText(s=name, text_style=text_styles.sans_serif_normal) \
+            if isinstance(name, str) else name
+        self._explicit_name = StyledText(s=explicit_name, text_style=text_styles.sans_serif_normal) \
+            if isinstance(explicit_name, str) else explicit_name
         if isinstance(index, int):
             index = str(index)
-        self._index = index
+        self._index = StyledText(s=index, text_style=text_styles.sans_serif_normal) \
+            if isinstance(index, str) else index
 
     def __eq__(self, other):
         """Two NameSets n and m are equal if any of their name-types are equal,
@@ -627,9 +640,7 @@ class NameSet:
 
         :return:
         """
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
-        return f'{self.rep_compact(text_format)}'
+        return f'{self.rep_compact(text_format=text_format)}'
 
     def rep_accurate(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
         """Returns the most accurate (longest) possible name in the nameset for the required text-format.
@@ -640,21 +651,30 @@ class NameSet:
         3) acronym
         4) symbol
         """
-        output = None if self.explicit_name is None else self.explicit_name.rep(
-            text_format=text_format, cap=cap)
+        output = self.rep_explicit_name(text_format=text_format)
         if output is not None:
             return output
-        output = None if self.name is None else self.name.rep(text_format=text_format, cap=cap)
+        output = self.rep_name(text_format=text_format)
         if output is not None:
             return output
-        output = None if self.acronym is None else self.acronym.rep(text_format=text_format,
-                                                                    cap=cap)
+        output = self.rep_acronym(text_format=text_format)
         if output is not None:
             return output
-        output = None if self.symbol is None else self.symbol.rep(text_format=text_format, cap=cap)
+        output = self.rep_symbol(text_format=text_format)
         if output is not None:
             return output
         raise NoNameSolutionException(nameset=self, text_format=text_format)
+
+    def rep_acronym(self, text_format: (None, TextFormat) = None) -> (None, str):
+        """Return a string that represent the object as an acronym."""
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
+        if self._acronym is None:
+            return None
+        else:
+            base = self._acronym.rep(text_format=text_format)
+            index = '' if self._index is None else self._index.rep(text_format=text_format)
+            return f'{base}{index}'
 
     def rep_compact(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
         """Returns the shortest possible name in the nameset for the required text-format.
@@ -665,18 +685,16 @@ class NameSet:
         3) name
         4) explicit-name
         """
-        output = None if self.symbol is None else self.symbol.rep(text_format=text_format, cap=cap)
+        output = self.rep_symbol(text_format=text_format)
         if output is not None:
             return output
-        output = None if self.acronym is None else self.acronym.rep(text_format=text_format,
-                                                                    cap=cap)
+        output = self.rep_acronym(text_format=text_format)
         if output is not None:
             return output
-        output = None if self.name is None else self.name.rep(text_format=text_format, cap=cap)
+        output = self.rep_name(text_format=text_format)
         if output is not None:
             return output
-        output = None if self.explicit_name is None else self.explicit_name.rep(
-            text_format=text_format, cap=cap)
+        output = self.rep_explicit_name(text_format=text_format)
         if output is not None:
             return output
         raise NoNameSolutionException(nameset=self, text_format=text_format)
@@ -690,21 +708,50 @@ class NameSet:
         4) symbol
         1) explicit-name
         """
-        output = None if self.name is None else self.name.rep(text_format=text_format, cap=cap)
+        output = self.rep_name(text_format=text_format)
         if output is not None:
             return output
-        output = None if self.acronym is None else self.acronym.rep(text_format=text_format,
-                                                                    cap=cap)
+        output = self.rep_acronym(text_format=text_format)
         if output is not None:
             return output
-        output = None if self.symbol is None else self.symbol.rep(text_format=text_format, cap=cap)
+        output = self.rep_symbol(text_format=text_format)
         if output is not None:
             return output
-        output = None if self.explicit_name is None else self.explicit_name.rep(
-            text_format=text_format, cap=cap)
+        output = self.rep_explicit_name(text_format=text_format)
         if output is not None:
             return output
         raise NoNameSolutionException(nameset=self, text_format=text_format)
+
+    def rep_explicit_name(self, text_format: (None, TextFormat) = None) -> (None, str):
+        """Return a string that represent the object as an explicit name."""
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
+        if self._explicit_name is None:
+            return None
+        else:
+            base = self._explicit_name.rep(text_format=text_format)
+            index = '' if self._index is None else ' ' + self._index.rep(text_format=text_format)
+            return f'{base}{index}'
+
+    def rep_name(self, text_format: (None, TextFormat) = None) -> (None, str):
+        """Return a string that represent the object as a plain name."""
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
+        if self._name is None:
+            return None
+        else:
+            base = self._name.rep(text_format=text_format)
+            index = '' if self._index is None else ' ' + self._index.rep(text_format=text_format)
+            return f'{base}{index}'
+
+    def rep_symbol(self, text_format: (None, TextFormat) = None) -> (None, str):
+        """Return a string that represent the object as a symbol."""
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
+        if self._symbol is None:
+            return None
+        else:
+            return f'{self._symbol.rep(text_format=text_format)}{subscriptify(text=self._index, text_format=text_format)}'
 
     @property
     def symbol(self) -> StyledText:
