@@ -763,10 +763,10 @@ class NameSet:
 
     def to_dict(self):
         return {
-            '_symbol':        self._symbol,
-            '_acronym':       self._acronym,
-            '_name':          self._name,
-            '_explicit_name': self._explicit_name
+            'symbol':        self._symbol,
+            'acronym':       self._acronym,
+            'name':          self._name,
+            'explicit_name': self._explicit_name
         }
 
 
