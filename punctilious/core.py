@@ -1551,12 +1551,12 @@ class FreeVariable(TheoreticalObject):
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
             base = StyledText(nameset, text_styles.serif_bold)
-            index = universe_of_discourse.index_symbol(base=nameset)
-            nameset = NameSet(s=base, index=index)
+            index = universe_of_discourse.index_symbol(base=base)
+            nameset = NameSet(symbol=base, index=index)
         super().__init__(
             nameset=nameset,
             universe_of_discourse=universe_of_discourse, echo=False)
-        self.universe_of_discourse.cross_reference_variable(x=self)
+        # self.universe_of_discourse.cross_reference_variable(x=self)
         super()._declare_class_membership(declarative_class_list.free_variable)
         if echo:
             self.echo()
@@ -1863,21 +1863,22 @@ class Formula(TheoreticalObject):
             return super().rep(text_format=text_format, expand=expand)
 
     def rep_as_function_call(self, text_format: (None, TextFormat) = None,
-                             expand: (None, bool) = None):
+                             expand: (None, bool) = None) -> str:
         text_format = get_config(text_format, configuration.text_format,
                                  fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
-        return f'{self.relation.rep_formula(text_format=text_format)}({", ".join([p.repr_formula(text_format=text_format) for p in self.parameters])})'
+        return f'{self.relation.rep_formula(text_format=text_format)}({", ".join([p.rep_formula(text_format=text_format) for p in self.parameters])})'
 
-    def rep_as_infix_operator(self, text_format: (None, TextFormat) = None, expand=(None, bool)):
+    def rep_as_infix_operator(self, text_format: (None, TextFormat) = None,
+                              expand=(None, bool)) -> str:
         text_format = get_config(text_format, configuration.text_format,
                                  fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         assert self.relation.arity == 2
-        return f'({self.parameters[0].repr(text_format=text_format, expand=expand)} {self.relation.rep_name(text_format=text_format)} {self.parameters[1].repr(text_format=text_format, expand=expand)})'
+        return f'({self.parameters[0].rep(text_format=text_format, expand=expand)} {self.relation.rep_name(text_format=text_format)} {self.parameters[1].repr(text_format=text_format, expand=expand)})'
 
-    def rep_as_postfix_operator(self, text_format: (None, TextFormat) = None, expand=None):
+    def rep_as_postfix_operator(self, text_format: (None, TextFormat) = None, expand=None) -> str:
         text_format = get_config(text_format, configuration.text_format,
                                  fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
@@ -1885,7 +1886,7 @@ class Formula(TheoreticalObject):
         assert self.relation.arity == 1
         return f'({self.parameters[0].repr(text_format=text_format, expand=expand)}){self.relation.rep_name(text_format=text_format)}'
 
-    def rep_as_prefix_operator(self, text_format: (None, TextFormat) = None, expand=None):
+    def rep_as_prefix_operator(self, text_format: (None, TextFormat) = None, expand=None) -> str:
         text_format = get_config(text_format, configuration.text_format,
                                  fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
@@ -1900,7 +1901,7 @@ class Formula(TheoreticalObject):
             parameters=self.parameters)
         return f'{self.relation.rep_formula(text_format=text_format)}({self.parameters[0].repr_formula(text_format=text_format, expand=expand)})'
 
-    def rep_formula(self, text_format: (None, TextFormat) = None, expand: bool = True):
+    def rep_formula(self, text_format: (None, TextFormat) = None, expand: bool = True) -> str:
         text_format = get_config(text_format, configuration.text_format,
                                  fallback_value=text_formats.plaintext)
         if is_in_class(self.relation, classes.free_variable):
@@ -5837,7 +5838,7 @@ class UniverseOfDiscourse(SymbolicObject):
         self._simple_objcts = SimpleObjctDict(u=self)
         self.symbolic_objcts = dict()
         self.theories = dict()
-        self.variables = dict()
+        # self.variables = dict()
         # Unique name indexes
         self.symbol_indexes = dict()
         self.titles = dict()
@@ -6037,25 +6038,6 @@ class UniverseOfDiscourse(SymbolicObject):
             t_symbol=t.symbol, t=t, slf=self)
         if t not in self.theories:
             self.theories[t.symbol] = t
-
-    def cross_reference_variable(self, x: FreeVariable):
-        """Cross-references a free-variable in this universe-of-discourse.
-
-        :param x: a formula.
-        """
-        verify(
-            is_in_class(x, classes.free_variable),
-            'Cross-referencing a free-variable in a universe-of-discourse requires '
-            'an object of type FreeVariable.',
-            x=x, slf=self)
-        verify(
-            x.symbol not in self.variables.keys() or x is self.variables[
-                x.symbol],
-            'Cross-referencing a free-variable in a universe-of-discourse requires '
-            'that it is referenced with a unique symbol.',
-            x_symbol=x.symbol, x=x, slf=self)
-        if x not in self.variables:
-            self.variables[x.symbol] = x
 
     def declare_formula(
             self, relation: Relation, *parameters, nameset: (None, str, NameSet) = None,
