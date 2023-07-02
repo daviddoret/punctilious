@@ -38,3 +38,18 @@ class TestStyledText(TestCase):
         self.assertEqual(
             '\\mathbb{The quick brown fox jumps over the lazy dog 0123456789!}',
             x.rep(pu.text_formats.latex_math))
+
+    def test_equality(self):
+        t1 = pu.StyledText(plaintext='foo')
+        t2 = pu.StyledText(plaintext='foo', unicode='bar')
+        self.assertEqual(t1, t2)
+        self.assertEqual(t2, t2)
+        t3 = pu.StyledText(unicode='bar')
+        self.assertNotEqual(t1, t3)
+        self.assertEqual(t2, t3)
+        self.assertEqual(t3, t3)
+        t4 = pu.StyledText(unicode='bar', text_style=pu.text_styles.double_struck)
+        self.assertNotEqual(t1, t4)
+        self.assertNotEqual(t2, t4)
+        self.assertNotEqual(t3, t4)
+        self.assertEqual(t4, t4)

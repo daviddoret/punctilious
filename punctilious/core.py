@@ -21,8 +21,17 @@ class TextStyle:
         self.latex_math_start_tag = latex_math_start_tag
         self.latex_math_end_tag = latex_math_end_tag
 
+    def __eq__(self, other):
+        return type(other) is type(self) and hash(self) == hash(other)
+
     def __hash__(self):
         return hash((TextStyle, self.font_style_name))
+
+    def __repr__(self):
+        return self.font_style_name
+
+    def __str__(self):
+        return self.font_style_name
 
 
 class TextStyles:
@@ -162,12 +171,17 @@ name_types = NameTypes(value_name='name types')
 """The catalog of the supported types of names / symbolic representations used to identify objects."""
 
 
+def equal_not_none(s1: (None, str), s2: (None, str)):
+    """Compare 2 strings are return if they are equal, unless either or both are None."""
+    return False if s1 is None or s2 is None else s1 == s2
+
+
 class StyledText:
     """A styled-text is a string of text that:
     - is of a supported text_style,
     - may support one or several text_format outputs."""
 
-    def __init__(self, s: (None, str) = None, text_style: TextStyle = text_styles.serif_normal,
+    def __init__(self, s: (None, str) = None, text_style: (None, TextStyle) = None,
                  plaintext: (None, str) = None, unicode: (None, str) = None,
                  latex_math: (None, str) = None
                  ):
@@ -183,23 +197,44 @@ class StyledText:
             plaintext = s
         if s is not None and unicode is None and s != unidecode.unidecode(s):
             unicode = s
+        if unicode is not None and plaintext is None:
+            plaintext = unidecode.unidecode(unicode)
+        if text_style is None:
+            text_style = text_styles.serif_normal
         self._plaintext = plaintext
         self._unicode = unicode
         self._latex_math = latex_math
         self._text_style = text_style
 
-    def __eq__(self, other):
-        return hash(self) == hash(other)
+    def __eq__(self, other: (None, object, StyledText)) -> bool:
+        """Two instances of TextStyle are equal if any of their formatted representation are equal and not None."""
+        return type(self) is type(other) and \
+            (self.text_style == other.text_style) and \
+            (equal_not_none(self.plaintext, other.plaintext) or
+             equal_not_none(self.unicode, other.unicode) or
+             equal_not_none(self.latex_math, other.latex_math))
 
     def __hash__(self):
         """Two styled-texts are considered distinct if either their plaintext content or their style are distinct."""
-        return hash((StyledText, self._plaintext, self._text_style))
+        return hash(
+            (StyledText, self._plaintext, self._unicode, self._latex_math, self._text_style))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
+        try:
+            return self.rep()
+        except:
+            return repr(self.to_dict())
+
+    def __str__(self) -> str:
         return self.rep()
 
-    def __str__(self):
-        return self.rep()
+    @property
+    def latex_math(self) -> (None, str):
+        return self._latex_math
+
+    @property
+    def plaintext(self) -> (None, str):
+        return self._plaintext
 
     def rep(self, text_format: TextFormat = text_formats.plaintext, cap: bool = False):
         text_format = get_config(text_format, configuration.text_format,
@@ -210,7 +245,7 @@ class StyledText:
             case text_formats.latex_math:
                 return self.rep_as_latex_math(cap=cap)
             case text_formats.unicode:
-                return self.repr_as_unicode(cap=cap)
+                return self.rep_as_unicode(cap=cap)
             case _:
                 return self.rep_as_plaintext(cap=cap)
 
@@ -224,10 +259,26 @@ class StyledText:
         content = content.capitalize() if cap else content
         return content
 
-    def repr_as_unicode(self, cap: bool = False):
+    def rep_as_unicode(self, cap: bool = False):
         content = self._plaintext if self._unicode is None else self._unicode
         content = content.capitalize() if cap else content
         return unicode.unicode_format(content, self._text_style.unicode_table_index)
+
+    @property
+    def text_style(self) -> TextStyle:
+        return self._text_style
+
+    def to_dict(self) -> dict:
+        return {
+            '_plaintext':  self._plaintext,
+            '_unicode':    self._unicode,
+            '_latex_math': self._latex_math,
+            '_text_style': self._text_style
+        }
+
+    @property
+    def unicode(self) -> (None, str):
+        return self._unicode
 
 
 def subscriptify(text: (str, StyledText) = '', text_format: TextFormat = text_formats.plaintext):
@@ -345,7 +396,7 @@ def get_config(*args, fallback_value):
     return fallback_value
 
 
-def unpack_formula(o: (TheoreticalObjct, Formula, FormulaStatement)) -> Formula:
+def unpack_formula(o: (TheoreticalObject, Formula, FormulaStatement)) -> Formula:
     """Receive a theoretical-objct and unpack its formula if it is a statement that contains a formula."""
     verify(
         is_in_class(o, classes.theoretical_objct),
@@ -439,7 +490,7 @@ classes = declarative_class_list
 
 
 def is_in_class(
-        o: TheoreticalObjct,
+        o: TheoreticalObject,
         c: DeclarativeClass) -> bool:
     """Return True if o is a member of the declarative-class c, False otherwise.
 
@@ -495,7 +546,7 @@ class NoNameSolutionException(LookupError):
         self.text_format = text_format
 
     def __str__(self):
-        return f'The nameset ⌜{self.nameset}⌝ contains no representation for the ⌜{self.text_format}⌝ text-format.'
+        return f'The nameset ⌜{repr(self.nameset)}⌝ contains no representation for the ⌜{self.text_format}⌝ text-format.'
 
 
 class NameSet:
@@ -531,7 +582,14 @@ class NameSet:
         self._index = index
 
     def __eq__(self, other):
-        return hash(self) == hash(other)
+        """Two NameSets n and m are equal if any of their name-types are equal,
+        and their indexes are equal."""
+        return type(self) is type(other) and \
+            (self.symbol == other.symbol or
+             self.acronym == other.acronym or
+             self.name == other.name or
+             self.explicit_name == other.explicit_name) and \
+            self.index == other.index
 
     def __hash__(self):
         return hash((NameSet, self.symbol, self.acronym, self.name, self.explicit_name, self.index))
@@ -540,7 +598,7 @@ class NameSet:
         try:
             return self.rep_compact(text_format=text_formats.plaintext)
         except NoNameSolutionException:
-            return f'nameset {hash(self)}'
+            return repr(self.to_dict())
 
     def __str__(self):
         try:
@@ -564,10 +622,9 @@ class NameSet:
     def name(self) -> StyledText:
         return self._name
 
-    def rep(self, hide_index_OBSOLETE=False, text_format: (None, TextFormat) = None) -> str:
+    def rep(self, text_format: (None, TextFormat) = None) -> str:
         """Return the default representation for this python obje.
 
-        :param hide_index_OBSOLETE:
         :return:
         """
         text_format = get_config(text_format, configuration.text_format,
@@ -656,6 +713,14 @@ class NameSet:
         :return: (StyledText) The symbol core glyph.
         """
         return self._symbol
+
+    def to_dict(self):
+        return {
+            '_symbol':        self._symbol,
+            '_acronym':       self._acronym,
+            '_name':          self._name,
+            '_explicit_name': self._explicit_name
+        }
 
 
 class Title:
@@ -805,38 +870,7 @@ class DashedName:
         return self._dashed_name
 
 
-class StatementTitleOBSOLETE:
-    """Replaced by ObjctHeader."""
-
-    def __init__(self, category, reference, title):
-        self.category = category
-        self.reference = reference
-        self.title = title
-
-    def __hash__(self):
-        return hash((self.category, self.reference, self.title))
-
-    def __repr__(self):
-        return self.rep_ref()
-
-    def __str__(self):
-        return self.rep_ref()
-
-    def rep_full(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        # TODO: Implement text_format
-        category = str(
-            self.category.natural_name.capitalize() if cap else self.category.natural_name)
-        reference = str(self.reference)
-        return repm.serif_bold(
-            f'{category} {reference}{" - " + self.title if self.title is not None else ""}')
-
-    def rep_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        # TODO: Implement text_format
-        return repm.serif_bold(
-            f'{self.category.natural_name.capitalize() if cap else self.category.natural_name} {self.reference}')
-
-
-class SymbolicObjct:
+class SymbolicObject:
     """
     Definition
     ----------
@@ -863,17 +897,16 @@ class SymbolicObjct:
         # or it is itself a universe-of-discourse.
         assert is_universe_of_discourse or is_in_class(
             universe_of_discourse, classes.u)
-        if nameset is None:
-            # If no symbol is passed as a parameter,
-            # automated assignment of symbol is assumed.
-            nameset = 'o'
-        if isinstance(nameset, str):
-            # If symbol was passed as a string,
-            # assume the base was passed without index.
-            index = universe_of_discourse.index_symbol(base=nameset)  # if auto_index else None
-            base = StyledText(nameset, text_styles.serif_italic)
-            nameset = NameSet(s=nameset, index=index)
-        self._symbol = nameset
+        if not isinstance(nameset, NameSet):
+            symbol = nameset if isinstance(nameset, StyledText) else None
+            symbol = StyledText(plaintext=nameset,
+                                text_style=text_styles.serif_italic) if isinstance(nameset,
+                                                                                   str) else None
+            symbol = StyledText(plaintext='o',
+                                text_style=text_styles.serif_italic) if symbol is None else nameset
+            index = universe_of_discourse.index_symbol(base=symbol)  # if auto_index else None
+            nameset = NameSet(symbol=symbol, index=index)
+        self._nameset = nameset
         self._title = title  # Header validation is implemented in parent classes with proper category.
         if isinstance(dashed_name, str):
             dashed_name = DashedName(dashed_name)
@@ -953,7 +986,7 @@ class SymbolicObjct:
          * Symbolic-objcts linked to distinct theories.
         """
         # A theoretical-object can only be compared with a theoretical-object
-        assert isinstance(o2, SymbolicObjct)
+        assert isinstance(o2, SymbolicObject)
         if self is o2:
             # If the current symbolic-objct is referencing the same
             # python object instance, by definitions the two python references
@@ -1047,7 +1080,7 @@ class SymbolicObjct:
     @property
     def symbol(self) -> NameSet:
         """Every symbolic-object that is being referenced must be assigned a unique symbol in its universe-of-discourse."""
-        return self._symbol
+        return self._nameset
 
     @property
     def title(self) -> Title:
@@ -1064,7 +1097,7 @@ class SymbolicObjct:
         return self._universe_of_discourse
 
 
-class TheoreticalObjct(SymbolicObjct):
+class TheoreticalObject(SymbolicObject):
     """
     Definition
     ----------
@@ -1183,7 +1216,7 @@ class TheoreticalObjct(SymbolicObjct):
 
     def is_masked_formula_similar_to(
             self,
-            o2: (Formula, FormulaStatement, FreeVariable, Relation, SimpleObjct, TheoreticalObjct),
+            o2: (Formula, FormulaStatement, FreeVariable, Relation, SimpleObjct, TheoreticalObject),
             mask: (None, frozenset[FreeVariable]) = None) \
             -> bool:
         """Given two theoretical-objects o₁ (self) and o₂,
@@ -1212,7 +1245,7 @@ class TheoreticalObjct(SymbolicObjct):
 
         Parameters
         ----------
-        o2 : TheoreticalObjct
+        o2 : TheoreticalObject
             A theoretical-object with which to verify masked-formula-similitude.
 
         mask: set
@@ -1224,7 +1257,7 @@ class TheoreticalObjct(SymbolicObjct):
 
     def _is_masked_formula_similar_to(
             self,
-            o2: (Formula, FormulaStatement, FreeVariable, Relation, SimpleObjct, TheoreticalObjct),
+            o2: (Formula, FormulaStatement, FreeVariable, Relation, SimpleObjct, TheoreticalObject),
             mask: (None, frozenset[FreeVariable]) = None,
             _values: (None, dict) = None) \
             -> (bool, dict):
@@ -1233,7 +1266,7 @@ class TheoreticalObjct(SymbolicObjct):
 
         Parameters
         ----------
-        o2 : TheoreticalObjct
+        o2 : TheoreticalObject
             A theoretical-object with which to verify masked-formula-similitude.
 
         mask: set
@@ -1415,20 +1448,20 @@ class TheoreticalObjct(SymbolicObjct):
             yield self
             visited.update({self})
 
-    def contains_theoretical_objct(self, o: TheoreticalObjct):
+    def contains_theoretical_objct(self, o: TheoreticalObject):
         """Return True if o is in this theory's hierarchy, False otherwise."""
         return o in self.iterate_theoretical_objcts_references(include_root=True)
 
 
 def substitute_xy(o, x, y):
     """Return the result of a *substitution* of x with y on o."""
-    verify(isinstance(o, TheoreticalObjct), msg='o is not a TheoreticalObjct.')
-    verify(isinstance(x, TheoreticalObjct), msg='x is not a TheoreticalObjct.')
-    verify(isinstance(y, TheoreticalObjct), msg='y is not a TheoreticalObjct.')
+    verify(isinstance(o, TheoreticalObject), msg='o is not a TheoreticalObjct.')
+    verify(isinstance(x, TheoreticalObject), msg='x is not a TheoreticalObjct.')
+    verify(isinstance(y, TheoreticalObject), msg='y is not a TheoreticalObjct.')
     return o.substitute(substitution_map={x: y})
 
 
-class FreeVariable(TheoreticalObjct):
+class FreeVariable(TheoreticalObject):
     """
 
 
@@ -1515,7 +1548,7 @@ class FreeVariable(TheoreticalObjct):
 
     def is_masked_formula_similar_to(self, o2, mask, _values):
         # TODO: Re-implement this
-        assert isinstance(o2, TheoreticalObjct)
+        assert isinstance(o2, TheoreticalObject)
         if isinstance(o2, FreeVariable):
             if o2 in mask:
                 # o2 is a variable, and it is present in the mask.
@@ -1547,7 +1580,7 @@ class FreeVariable(TheoreticalObjct):
         return f'Let {self.rep_name(text_format=text_format)} be a free-variable in {self.universe_of_discourse.rep_name(text_format=text_format)}'
 
 
-class Formula(TheoreticalObjct):
+class Formula(TheoreticalObject):
     """A formula is a theoretical-objct.
     It is also a tuple (U, r, p1, p1, p2, ..., pn)
 
@@ -1687,7 +1720,7 @@ class Formula(TheoreticalObjct):
         attribute of the formula's relation."""
         return self.relation.signal_proposition
 
-    def is_formula_equivalent_to(self, o2: (TheoreticalObjct, Statement, Formula)) -> bool:
+    def is_formula_equivalent_to(self, o2: (TheoreticalObject, Statement, Formula)) -> bool:
         """Returns true if this formula and o2 are formula-equivalent.
 
         Definition:
@@ -1980,7 +2013,7 @@ class TitleCategories(repm.ValueName):
 title_categories = TitleCategories('title_categories')
 
 
-class Statement(TheoreticalObjct):
+class Statement(TheoreticalObject):
     """
 
     Definition
@@ -2092,7 +2125,7 @@ class Statement(TheoreticalObjct):
         return self._universe_of_discourse
 
 
-class AxiomDeclaration(TheoreticalObjct):
+class AxiomDeclaration(TheoreticalObject):
     """The Axiom pythonic class models the elaboration of a _contentual_ _axiom_ in a _universe-of-discourse_.
 
     """
@@ -2314,7 +2347,7 @@ class InferenceRuleInclusion(Statement):
                 tabsize=4))
 
 
-class DefinitionDeclaration(TheoreticalObjct):
+class DefinitionDeclaration(TheoreticalObject):
     """The Definition pythonic class models the elaboration of a _contentual_ _definition_ in a _universe-of-discourse_.
 
     """
@@ -2704,7 +2737,7 @@ class InferenceRuleOBSOLETE:
         pass
 
 
-class InferenceRuleDeclaration(TheoreticalObjct):
+class InferenceRuleDeclaration(TheoreticalObject):
     """An inference-rule object.
 
     If an inference-rule is allowed / included in a theory-elaboration,
@@ -2773,7 +2806,7 @@ class InferenceRuleDeclaration(TheoreticalObjct):
         return self._verify_args(*args, t=t)
 
 
-class AtheoreticalStatement(SymbolicObjct):
+class AtheoreticalStatement(SymbolicObject):
     """
     Definition
     ----------
@@ -2939,7 +2972,7 @@ class Section(AtheoreticalStatement):
         return self._section_title
 
 
-class TheoryElaborationSequence(TheoreticalObjct):
+class TheoryElaborationSequence(TheoreticalObject):
     """The TheoryElaboration pythonic class models a [theory-elaboration](theory-elaboration).
 
     """
@@ -3427,7 +3460,7 @@ class Proof:
         self.is_valid = True  # TODO: Develop the is_valid attribute
 
 
-class Relation(TheoreticalObjct):
+class Relation(TheoreticalObject):
     """
     Definition
     ----------
@@ -3519,7 +3552,7 @@ def rep_arity_as_text(n):
             return f'{n}-ary'
 
 
-class SimpleObjct(TheoreticalObjct):
+class SimpleObjct(TheoreticalObject):
     """
     Definition
     ----------
@@ -3546,7 +3579,7 @@ class SimpleObjct(TheoreticalObjct):
         repm.prnt(self.rep_declaration())
 
     def is_masked_formula_similar_to(self, o2, mask, _values):
-        assert isinstance(o2, TheoreticalObjct)
+        assert isinstance(o2, TheoreticalObject)
         if isinstance(o2, FreeVariable):
             if o2 in mask:
                 # o2 is a variable, and it is present in the mask.
@@ -5765,7 +5798,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.variable_substitution
 
 
-class UniverseOfDiscourse(SymbolicObjct):
+class UniverseOfDiscourse(SymbolicObject):
     def __init__(self, nameset: (None, str, NameSet) = None,
                  dashed_name: (None, str, DashedName) = None,
                  echo: (None, bool) = None):
@@ -5943,7 +5976,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         if o not in self.simple_objcts:
             self.simple_objcts[o.symbol] = o
 
-    def cross_reference_symbolic_objct(self, o: SymbolicObjct):
+    def cross_reference_symbolic_objct(self, o: SymbolicObject):
         """Cross-references a symbolic-objct in this universe-of-discourse.
 
         :param o: a symbolic-objct.
@@ -6035,7 +6068,7 @@ class UniverseOfDiscourse(SymbolicObjct):
     def declare_symbolic_objct(
             self, symbol=None):
         """"""
-        return SymbolicObjct(
+        return SymbolicObject(
             nameset=symbol,
             universe_of_discourse=self)
 
@@ -6122,7 +6155,7 @@ class UniverseOfDiscourse(SymbolicObjct):
         else:
             return 0
 
-    def index_symbol(self, base: (str, StyledText)):
+    def index_symbol(self, base: NameSet) -> int:
         """Given a symbol-base S (i.e. an unindexed symbol), returns a unique integer n
         such that (S, n) is a unique identifier in this instance of UniverseOfDiscourse.
 
