@@ -9,3 +9,4 @@ class TestRelationDict(TestCase):
         pu.configuration.text_format = pu.text_formats.plaintext
         u = pu.UniverseOfDiscourse()
         self.assertEqual('==>', u.r.implication.rep())
+        self.assertEqual('and', u.r.conjunction.rep())

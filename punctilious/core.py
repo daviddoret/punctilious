@@ -201,10 +201,10 @@ class StyledText:
             plaintext = unidecode.unidecode(unicode)
         if text_style is None:
             text_style = text_styles.serif_normal
-        self._plaintext = plaintext
-        self._unicode = unicode
-        self._latex_math = latex_math
-        self._text_style = text_style
+        self._plaintext = plaintext if plaintext != '' else None
+        self._unicode = unicode if unicode != '' else None
+        self._latex_math = latex_math if latex_math != '' else None
+        self._text_style = text_style if text_style != '' else None
 
     def __eq__(self, other: (None, object, StyledText)) -> bool:
         """Two instances of TextStyle are equal if any of their formatted representation are equal and not None."""
@@ -598,7 +598,7 @@ class NameSet:
         """Two NameSets n and m are equal if any of their name-types are equal,
         and their indexes are equal."""
         return type(self) is type(other) and \
-            (self.symbol == other.symbol or
+            (self.symbol == other.nameset or
              self.acronym == other.acronym or
              self.name == other.name or
              self.explicit_name == other.explicit_name) and \
@@ -674,7 +674,8 @@ class NameSet:
         else:
             base = self._acronym.rep(text_format=text_format)
             index = '' if self._index is None else self._index.rep(text_format=text_format)
-            return f'{base}{index}'
+            output = None if base is None else f'{base}{index}'
+            return output
 
     def rep_compact(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
         """Returns the shortest possible name in the nameset for the required text-format.
@@ -731,7 +732,8 @@ class NameSet:
         else:
             base = self._explicit_name.rep(text_format=text_format)
             index = '' if self._index is None else ' ' + self._index.rep(text_format=text_format)
-            return f'{base}{index}'
+            output = None if base is None else f'{base}{index}'
+            return output
 
     def rep_name(self, text_format: (None, TextFormat) = None) -> (None, str):
         """Return a string that represent the object as a plain name."""
@@ -742,7 +744,8 @@ class NameSet:
         else:
             base = self._name.rep(text_format=text_format)
             index = '' if self._index is None else ' ' + self._index.rep(text_format=text_format)
-            return f'{base}{index}'
+            output = None if base is None else f'{base}{index}'
+            return output
 
     def rep_symbol(self, text_format: (None, TextFormat) = None) -> (None, str):
         """Return a string that represent the object as a symbol."""
@@ -751,7 +754,10 @@ class NameSet:
         if self._symbol is None:
             return None
         else:
-            return f'{self._symbol.rep(text_format=text_format)}{subscriptify(text=self._index, text_format=text_format)}'
+            base = self._symbol.rep(text_format=text_format)
+            index = subscriptify(text=self._index, text_format=text_format)
+            output = None if base is None else f'{base}{index}'
+            return output
 
     @property
     def symbol(self) -> StyledText:
@@ -973,8 +979,8 @@ class SymbolicObject:
         # thus hashing can be safely based on the key: U + symbol.
         # With a special case for the universe-of-discourse itself,
         # where hash of the symbol is sufficient.
-        return hash(self.symbol) if is_in_class(self, classes.u) else hash(
-            (self.universe_of_discourse, self.symbol))
+        return hash(self.nameset) if is_in_class(self, classes.u) else hash(
+            (self.universe_of_discourse, self.nameset))
 
     def __repr__(self):
         return self.rep_name()
@@ -1042,7 +1048,7 @@ class SymbolicObject:
         if not self.universe_of_discourse.is_symbol_equivalent(
                 o2.universe_of_discourse):
             return False
-        if self.symbol != o2.symbol:
+        if self.nameset != o2.nameset:
             return False
         return True
 
@@ -1052,7 +1058,7 @@ class SymbolicObject:
     def rep(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
         # If a long-name is available, represent the objct as a reference.
         # Otherwise, represent it as a symbol.
-        return self.rep_reference(text_format=text_format)
+        return self.nameset.rep(text_format=text_format)
 
     def rep_dashed_name(self, text_format: (None, TextFormat) = None) -> str:
         """"""
@@ -1096,7 +1102,7 @@ class SymbolicObject:
         #    not is_in_class(self, classes.universe_of_discourse) and \
         #    self.universe_of_discourse.get_symbol_max_index(self.symbol.base) == 1
         # return self.symbol.rep(hide_index=hide_index)
-        return self.symbol.rep(text_format=text_format)
+        return self.nameset.rep(text_format=text_format)
 
     def rep_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
         return self.rep_name(text_format=text_format) if self.title is None else self.title.rep_ref(
@@ -1125,7 +1131,7 @@ class SymbolicObject:
             text_format=text_format, cap=cap)
 
     @property
-    def symbol(self) -> NameSet:
+    def nameset(self) -> NameSet:
         """Every symbolic-object that is being referenced must be assigned a unique symbol in its universe-of-discourse."""
         return self._nameset
 
@@ -1448,7 +1454,7 @@ class TheoreticalObject(SymbolicObject):
                 # Call declare_free_variable() instead of v()
                 # to explicitly manage variables scope locking.
                 x2 = self.universe_of_discourse.declare_free_variable(
-                    x.symbol.symbol)
+                    x.nameset.nameset)
                 substitution_map[x] = x2
 
         # Now we may proceed with substitution.
@@ -3553,7 +3559,7 @@ class Relation(TheoreticalObject):
         return hash(self) == hash(other)
 
     def __hash__(self):
-        return hash((Relation, self.symbol, self.arity))
+        return hash((Relation, self.nameset, self.arity))
 
     def echo(self):
         repm.prnt(self.rep_declaration())
@@ -5897,12 +5903,12 @@ class UniverseOfDiscourse(SymbolicObject):
         :param a: an axiom.
         """
         verify(
-            a.symbol not in self.axioms.keys() or a is self.axioms[a.symbol],
+            a.nameset not in self.axioms.keys() or a is self.axioms[a.nameset],
             'The symbol of parameter ⌜a⌝ is already referenced as a distinct axiom in this universe-of-discourse.',
             a=a,
             universe_of_discourse=self)
         if a not in self.axioms:
-            self.axioms[a.symbol] = a
+            self.axioms[a.nameset] = a
             return True
         else:
             return False
@@ -5913,12 +5919,12 @@ class UniverseOfDiscourse(SymbolicObject):
         :param d: a definition.
         """
         verify(
-            d.symbol not in self.definitions.keys() or d is self.definitions[d.symbol],
+            d.nameset not in self.definitions.keys() or d is self.definitions[d.nameset],
             'The symbol of parameter ⌜d⌝ is already referenced as a distinct definition in this universe-of-discourse.',
             a=d,
             universe_of_discourse=self)
         if d not in self.definitions:
-            self.definitions[d.symbol] = d
+            self.definitions[d.nameset] = d
             return True
         else:
             return False
@@ -5934,13 +5940,13 @@ class UniverseOfDiscourse(SymbolicObject):
             'an object of type Formula.',
             phi=phi, slf=self)
         verify(
-            phi.symbol not in self.formulae.keys() or phi is self.formulae[
-                phi.symbol],
+            phi.nameset not in self.formulae.keys() or phi is self.formulae[
+                phi.nameset],
             'Cross-referencing a formula in a universe-of-discourse requires '
             'that it is referenced with a unique symbol.',
-            phi_symbol=phi.symbol, phi=phi, slf=self)
+            phi_symbol=phi.nameset, phi=phi, slf=self)
         if phi not in self.formulae:
-            self.formulae[phi.symbol] = phi
+            self.formulae[phi.nameset] = phi
 
     def cross_reference_inference_rule(self, ir: InferenceRuleDeclaration) -> bool:
         """Cross-references an inference-rule in this universe-of-discourse.
@@ -5953,12 +5959,12 @@ class UniverseOfDiscourse(SymbolicObject):
             ir=ir,
             universe_of_discourse=self)
         verify(
-            ir.symbol not in self.inference_rules.keys() or ir is self.inference_rules[ir.symbol],
+            ir.nameset not in self.inference_rules.keys() or ir is self.inference_rules[ir.nameset],
             'The symbol of parameter ⌜ir⌝ is already referenced as a distinct inference-rule in this universe-of-discourse.',
             ir=ir,
             universe_of_discourse=self)
         if ir not in self.inference_rules:
-            self.inference_rules[ir.symbol] = ir
+            self.inference_rules[ir.nameset] = ir
             return True
         else:
             return False
@@ -5973,13 +5979,13 @@ class UniverseOfDiscourse(SymbolicObject):
             'Cross-referencing a relation in a universe-of-discourse requires '
             'an object of type Relation.')
         verify(
-            r.symbol not in self.relations.keys() or r is self.relations[
-                r.symbol],
+            r.nameset not in self.relations.keys() or r is self.relations[
+                r.nameset],
             'Cross-referencing a relation in a universe-of-discourse requires '
             'that it is referenced with a unique symbol.',
-            r_symbol=r.symbol, r=r, slf=self)
+            r_symbol=r.nameset, r=r, slf=self)
         if r not in self.relations:
-            self.relations[r.symbol] = r
+            self.relations[r.nameset] = r
 
     def cross_reference_simple_objct(self, o: SimpleObjct):
         """Cross-references a simple-objct in this universe-of-discourse.
@@ -5991,14 +5997,14 @@ class UniverseOfDiscourse(SymbolicObject):
             'Cross-referencing a simple-objct in a universe-of-discourse requires '
             'an object of type SimpleObjct.')
         verify(
-            o.symbol not in self.simple_objcts.keys() or o is
+            o.nameset not in self.simple_objcts.keys() or o is
             self.simple_objcts[
-                o.symbol],
+                o.nameset],
             'Cross-referencing a simple-objct in a universe-of-discourse requires '
             'that it is referenced with a unique symbol.',
-            o_symbol=o.symbol, o=o, slf=self)
+            o_symbol=o.nameset, o=o, slf=self)
         if o not in self.simple_objcts:
-            self.simple_objcts[o.symbol] = o
+            self.simple_objcts[o.nameset] = o
 
     def cross_reference_symbolic_objct(self, o: SymbolicObject):
         """Cross-references a symbolic-objct in this universe-of-discourse.
@@ -6011,14 +6017,14 @@ class UniverseOfDiscourse(SymbolicObject):
             'an object of type SymbolicObjct.',
             o=o, slf=self)
         verify(
-            o.symbol not in self.symbolic_objcts.keys() or o is
+            o.nameset not in self.symbolic_objcts.keys() or o is
             self.symbolic_objcts[
-                o.symbol],
+                o.nameset],
             'Cross-referencing a symbolic-objct in a universe-of-discourse requires '
             'that it is referenced with a unique symbol.',
-            o_symbol=o.symbol, o=o, slf=self)
+            o_symbol=o.nameset, o=o, slf=self)
         if o not in self.symbolic_objcts:
-            self.symbolic_objcts[o.symbol] = o
+            self.symbolic_objcts[o.nameset] = o
 
     def cross_reference_theory(self, t: TheoryElaborationSequence):
         """Cross-references a theory in this universe-of-discourse.
@@ -6031,13 +6037,13 @@ class UniverseOfDiscourse(SymbolicObject):
             'an object of type Theory.',
             t=t, slf=self)
         verify(
-            t.symbol not in self.theories.keys() or t is self.theories[
-                t.symbol],
+            t.nameset not in self.theories.keys() or t is self.theories[
+                t.nameset],
             'Cross-referencing a theory in a universe-of-discourse requires '
             'that it is referenced with a unique symbol.',
-            t_symbol=t.symbol, t=t, slf=self)
+            t_symbol=t.nameset, t=t, slf=self)
         if t not in self.theories:
-            self.theories[t.symbol] = t
+            self.theories[t.nameset] = t
 
     def declare_formula(
             self, relation: Relation, *parameters, nameset: (None, str, NameSet) = None,
