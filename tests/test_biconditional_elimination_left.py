@@ -21,3 +21,4 @@ class TestBiconditionalEliminationLeft(TestCase):
         self.assertEqual('(r1(o1, o2) <==> r2(o3))', phi1.rep_formula())
         phi2 = t.i.bel.infer_statement(phi1)
         self.assertEqual('(r1(o1, o2) ==> r2(o3))', phi2.rep_formula())
+        self.assertEqual('(𝑟₁(𝑜₁, 𝑜₂) ⟹ 𝑟₂(𝑜₃))', phi2.rep_formula(pu.text_formats.unicode))

@@ -1,11 +1,11 @@
 from unittest import TestCase
-import punctilious as p
+import punctilious as pu
 import random_data
 
 
 class TestConjunctionEliminationLeft(TestCase):
     def test_cel(self):
-        u = p.UniverseOfDiscourse('conjunction-elimination-left-universe')
+        u = pu.UniverseOfDiscourse('conjunction-elimination-left-universe')
         o1 = u.o.declare()
         o2 = u.o.declare()
         o3 = u.o.declare()
@@ -16,6 +16,6 @@ class TestConjunctionEliminationLeft(TestCase):
         ap = t.include_axiom(a)
         phi1 = t.i.axiom_interpretation.infer_statement(ap, u.f(u.r.conjunction, u.f(r1, o1, o2),
                                                                 u.f(r2, o3)))
-        self.assertEqual('(◆₁(ℴ₁, ℴ₂) ∧ ◆₂(ℴ₃))', phi1.rep())
+        self.assertEqual('(𝑟₁(𝑜₁, 𝑜₂) ∧ 𝑟₂(𝑜₃))', phi1.rep_formula(pu.text_formats.unicode))
         phi2 = t.i.cel.infer_statement(phi1)
-        self.assertEqual('◆₁(ℴ₁, ℴ₂)', phi2.rep())
+        self.assertEqual('𝑟₁(𝑜₁, 𝑜₂)', phi2.rep_formula(pu.text_formats.unicode))

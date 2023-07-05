@@ -358,6 +358,7 @@ class Configuration:
     def __init__(self):
         self.auto_index = None
         self._echo_default = False
+        self.default_relation_nameset = 'r'
         self.echo_axiom_declaration = None
         self.echo_axiom_inclusion = None
         self.echo_definition_declaration = None
@@ -3547,6 +3548,8 @@ class Relation(TheoreticalObject):
         self.implementation = implementation
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
+        if nameset is None:
+            nameset = configuration.default_relation_nameset
         super().__init__(
             universe_of_discourse=universe_of_discourse, nameset=nameset, dashed_name=dashed_name,
             echo=False)
