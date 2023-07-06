@@ -198,7 +198,12 @@ class StyledText:
         if s is not None and unicode is None and s != unidecode.unidecode(s):
             unicode = s
         if unicode is not None and plaintext is None:
-            plaintext = unidecode.unidecode(unicode)
+            if str(unicode).isalnum():
+                # This is a best-effort mapping to plaintext.
+                # It may lead to undesirable results,
+                # e.g. symbol '¬' is mapped to '!'.
+                # To avoid this, isalnum() is used as a temporary solution.
+                plaintext = unidecode.unidecode(unicode)
         if text_style is None:
             text_style = text_styles.serif_normal
         self._plaintext = plaintext if plaintext != '' else None
@@ -2046,6 +2051,9 @@ class TitleCategories(repm.ValueName):
     axiom_inclusion = TitleCategory('axiom_inclusion', 's', 'axiom', 'axiom')
     corollary = TitleCategory('corollary', 's', 'corollary', 'cor.')
     definition = TitleCategory('definition', 's', 'definition', 'def.')
+    definition_declaration = TitleCategory('definition_declaration', 's', 'definition declaration',
+                                           'definition decl.')
+    definition_inclusion = TitleCategory('definition_inclusion', 's', 'definition', 'definition')
     formal_definition = TitleCategory('formal_definition', 's', 'formal definition', 'def.')
     hypothesis = TitleCategory('hypothesis', 's', 'hypothesis', 'hyp.')
     inference_rule = TitleCategory('inference_rule', 's', 'inference rule', 'inference rule')
@@ -2418,13 +2426,13 @@ class DefinitionDeclaration(TheoreticalObject):
         if title is None:
             # Long-names are not a mandatory attribute,
             # it is available to improve readability in reports.
-            pass
+            title = Title(cat=title_categories.definition_declaration)
         elif isinstance(title, str):
-            title = Title(title, cat=title_categories.definition, subtitle=None)
-        elif title.category is not title_categories.definition:
-            title = Title(title.reference, cat=title_categories.definition,
-                          subtitle=title.title)
-            # warnings.warn('A new long-name was generated to force its category property to: definition.')
+            title = Title(ref=title, cat=title_categories.definition_declaration, subtitle=None)
+        if isinstance(title, Title) and (
+                title.cat is not title_categories.definition_declaration or title.cat is None):
+            title = Title(ref=title.ref, cat=title_categories.definition_declaration,
+                          subtitle=title.subtitle)
         super().__init__(
             universe_of_discourse=u, nameset=nameset, title=title, dashed_name=dashed_name,
             echo=echo)

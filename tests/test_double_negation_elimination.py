@@ -1,23 +1,27 @@
 from unittest import TestCase
-import punctilious as p
+import punctilious as pu
 import random_data
 
 
 class TestDoubleNegationElimination(TestCase):
     def test_dne(self):
-        p.configuration.echo_default = True
-        u = p.UniverseOfDiscourse('white-sheet-of-paper')
+        pu.configuration.echo_default = True
+        u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
         o2 = u.o.declare()
         r1 = u.r.declare(2, signal_proposition=True)
-        t = u.t('testing-theory')
+        t = u.t()
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
         phi0 = u.f(r1, o1, o2)
         phi1 = t.i.axiom_interpretation.infer_statement(ap, u.f(u.r.lnot, u.f(u.r.lnot, phi0)))
         self.assertEqual(
-            '¬(¬(◆₁(ℴ₁, ℴ₂)))', phi1.rep())
+            'not(not(r1(o1, o2)))', phi1.rep_formula(pu.text_formats.plaintext))
+        self.assertEqual(
+            '¬(¬(𝑟₁(𝑜₁, 𝑜₂)))', phi1.rep_formula(pu.text_formats.unicode))
         phi2 = t.i.dne.infer_statement(phi1)
         self.assertEqual(
-            '◆₁(ℴ₁, ℴ₂)', phi2.rep())
+            'r1(o1, o2)', phi2.rep_formula(pu.text_formats.plaintext))
+        self.assertEqual(
+            '𝑟₁(𝑜₁, 𝑜₂)', phi2.rep_formula(pu.text_formats.unicode))
         self.assertTrue(phi2.is_formula_equivalent_to(phi0))
