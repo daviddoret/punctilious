@@ -363,7 +363,18 @@ class Configuration:
     def __init__(self):
         self.auto_index = None
         self._echo_default = False
-        self.default_relation_nameset = 'r'
+        self.default_relation_symbol = StyledText(plaintext='r',
+                                                  text_style=text_styles.serif_italic)
+        self.default_symbolic_object_symbol = StyledText(plaintext='o',
+                                                         text_style=text_styles.serif_italic)
+        self.default_formula_symbol = StyledText(plaintext='phi', unicode='𝜑',
+                                                 text_style=text_styles.serif_italic)
+        self.default_free_variable_symbol = StyledText(plaintext='x',
+                                                       text_style=text_styles.serif_bold)
+        self.default_statement_symbol = StyledText(plaintext='s',
+                                                   text_style=text_styles.serif_italic)
+        self.default_theory_symbol = StyledText(plaintext='T',
+                                                text_style=text_styles.script_normal)
         self.echo_axiom_declaration = None
         self.echo_axiom_inclusion = None
         self.echo_definition_declaration = None
@@ -572,7 +583,7 @@ class NameSet:
     """
 
     def __init__(self, s: (None, str) = None, symbol: (None, str, StyledText) = None,
-                 index: (None, int, str) = None,
+                 index: (None, int, str, StyledText) = None,
                  acronym: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
                  explicit_name: (None, str, StyledText) = None):
         if s is not None:
@@ -589,41 +600,38 @@ class NameSet:
                 name = s
         self._symbol = StyledText(s=symbol, text_style=text_styles.serif_italic) \
             if isinstance(symbol, str) else symbol
+        verify(self.symbol is not None, msg='The symbol of this nameset is None.', slf=self)
         self._acronym = StyledText(s=acronym, text_style=text_styles.monospace) \
             if isinstance(acronym, str) else acronym
         self._name = StyledText(s=name, text_style=text_styles.sans_serif_normal) \
             if isinstance(name, str) else name
         self._explicit_name = StyledText(s=explicit_name, text_style=text_styles.sans_serif_normal) \
             if isinstance(explicit_name, str) else explicit_name
-        if isinstance(index, int):
-            index = str(index)
-        self._index = StyledText(s=index, text_style=text_styles.sans_serif_normal) \
-            if isinstance(index, str) else index
+        self._index_as_int = index if isinstance(index, int) else None
+        if isinstance(index, StyledText):
+            self._index = index
+        elif isinstance(index, str):
+            self._index = StyledText(s=index, text_style=text_styles.sans_serif_normal)
+        elif isinstance(index, int):
+            self._index = StyledText(s=str(index), text_style=text_styles.sans_serif_normal)
+        else:
+            self._index = None
 
     def __eq__(self, other):
-        """Two NameSets n and m are equal if any of their name-types are equal,
-        and their indexes are equal."""
+        """Two NameSets n and m are equal if their (symbol, index) pairs are equal.
+        """
         return type(self) is type(other) and \
-            (self.symbol == other.nameset or
-             self.acronym == other.acronym or
-             self.name == other.name or
-             self.explicit_name == other.explicit_name) and \
+            self.symbol == other.symbol and \
             self.index == other.index
 
     def __hash__(self):
-        return hash((NameSet, self.symbol, self.acronym, self.name, self.explicit_name, self.index))
+        return hash((NameSet, self.symbol, self.index))
 
     def __repr__(self):
-        try:
-            return self.rep_compact(text_format=text_formats.plaintext)
-        except NoNameSolutionException:
-            return repr(self.to_dict())
+        return self.rep_symbol()
 
     def __str__(self):
-        try:
-            return self.rep_compact(text_format=text_formats.plaintext)
-        except NoNameSolutionException:
-            return f'nameset {hash(self)}'
+        return self.rep_symbol()
 
     @property
     def acronym(self) -> StyledText:
@@ -636,6 +644,11 @@ class NameSet:
     @property
     def index(self) -> str:
         return self._index
+
+    @property
+    def index_as_int(self) -> int:
+        """Especially for auto-indexing purposes, exposes the index as an int if it is an int."""
+        return self._index_as_int
 
     @property
     def name(self) -> StyledText:
@@ -956,14 +969,13 @@ class SymbolicObject:
         # or it is itself a universe-of-discourse.
         assert is_universe_of_discourse or is_in_class(
             universe_of_discourse, classes.u)
-        if not isinstance(nameset, NameSet):
-            symbol = nameset if isinstance(nameset, StyledText) else None
-            symbol = StyledText(plaintext=nameset,
-                                text_style=text_styles.serif_italic) if isinstance(nameset,
-                                                                                   str) else None
-            symbol = StyledText(plaintext='o',
-                                text_style=text_styles.serif_italic) if symbol is None else nameset
-            index = universe_of_discourse.index_symbol(base=symbol)  # if auto_index else None
+        if nameset is None:
+            symbol = configuration.default_symbolic_object_symbol
+            index = universe_of_discourse.index_symbol(symbol=symbol)
+            nameset = NameSet(symbol=symbol, index=index)
+        if isinstance(nameset, str):
+            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
+            index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         self._nameset = nameset
         self._title = title  # Header validation is implemented in parent classes with proper category.
@@ -1557,14 +1569,16 @@ class FreeVariable(TheoreticalObject):
         self._scope = scope
         assert isinstance(universe_of_discourse, UniverseOfDiscourse)
         if nameset is None:
-            nameset = 'x'
+            symbol = configuration.default_free_variable_symbol
+            index = universe_of_discourse.index_symbol(symbol=symbol)
+            nameset = NameSet(symbol=symbol, index=index)
         if isinstance(nameset, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            base = StyledText(nameset, text_styles.serif_bold)
-            index = universe_of_discourse.index_symbol(base=base)
-            nameset = NameSet(symbol=base, index=index)
+            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_bold)
+            index = universe_of_discourse.index_symbol(symbol=symbol)
+            nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
             nameset=nameset,
             universe_of_discourse=universe_of_discourse, echo=False)
@@ -1696,10 +1710,16 @@ class Formula(TheoreticalObject):
         self.free_variables = dict()  # TODO: Check how to make dict immutable after construction.
         # self.formula_index = theory.crossreference_formula(self)
         if nameset is None:
-            symbol_base = '𝜑'
-            nameset = NameSet(
-                symbol=symbol_base, index=universe_of_discourse.index_symbol(
-                    base=symbol_base))
+            symbol = configuration.default_formula_symbol
+            index = universe_of_discourse.index_symbol(symbol=symbol)
+            nameset = NameSet(symbol=symbol, index=index)
+        if isinstance(nameset, str):
+            # If symbol was passed as a string,
+            # assume the base was passed without index.
+            # TODO: Analyse the string if it ends with index in subscript characters.
+            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
+            index = universe_of_discourse.index_symbol(symbol=symbol)
+            nameset = NameSet(symbol=symbol, index=index)
         self.relation = relation
         parameters = parameters if isinstance(parameters, tuple) else tuple(
             [parameters])
@@ -1990,7 +2010,7 @@ class SimpleObjctDict(collections.UserDict):
         if self._falsehood is None:
             self._falsehood = self.declare(
                 nameset=NameSet(
-                    symbol=StyledText(unicode='⊥', latex_math='\\bot'),
+                    symbol=StyledText(unicode='⊥', latex_math='\\bot', plaintext='false'),
                     name=StyledText(plaintext='false'),
                     explicit_name=StyledText(plaintext='falsehood'),
                     index=None))
@@ -2019,7 +2039,7 @@ class SimpleObjctDict(collections.UserDict):
         if self._truth is None:
             self._truth = self.declare(nameset=
             NameSet(
-                symbol=StyledText(unicode='⊤', latex_math='\\top'),
+                symbol=StyledText(unicode='⊤', latex_math='\\top', plaintext='true'),
                 name=StyledText(plaintext='true'),
                 explicit_name=StyledText(plaintext='truth'),
                 index=None))
@@ -2220,8 +2240,7 @@ class AxiomDeclaration(TheoreticalObject):
     def rep_report(self, text_format: (None, TextFormat) = None, output_proofs: (None, bool) = True,
                    wrap: (None, bool) = True):
         """Return a representation that expresses and justifies the statement."""
-        # TODO: Implement text_format.
-        text = f'{self.title.rep_title(text_format=text_format, cap=True)} ({self.rep_name()}): “{self.natural_language}”.'
+        text = f'{self.title.rep_title(text_format=text_format, cap=True)} ({self.rep_name(text_format=text_format)}): “{self.natural_language}”.'
         if wrap:
             text = '\n'.join(textwrap.wrap(
                 text=text, width=70,
@@ -2284,9 +2303,9 @@ class AxiomInclusion(Statement):
         Abridged property: a.a"""
         return self._axiom
 
-    def rep_report(self, output_proofs: bool = True) -> str:
+    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs: bool = True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        text = f'{self.rep_title(cap=True)}: “{self.axiom.natural_language}”'
+        text = f'{self.rep_title(text_format=text_format, cap=True)}: “{self.axiom.natural_language}”'
         text = repm.wrap(text)
         if output_proofs:
             text2 = f'Let postulate {self.axiom.rep_fully_qualified_name()} in {self.theory.rep_reference()}.'
@@ -2311,11 +2330,9 @@ class InferenceRuleInclusion(Statement):
         """
         self._inference_rule = i
         if nameset is None:
-            # If no symbol is passed as a parameter,
-            # automated assignment of symbol is assumed.
-            base = 's'
-            index = t.universe_of_discourse.index_symbol(base=base)
-            nameset = NameSet(s=base, index=index)
+            symbol = configuration.default_statement_symbol
+            index = t.universe_of_discourse.index_symbol(symbol=symbol)
+            nameset = NameSet(symbol=symbol, index=index)
         if title is None:
             title = Title(ref=str(nameset.index), cat=title_categories.inference_rule_inclusion,
                           subtitle=None)
@@ -2441,10 +2458,10 @@ class DefinitionDeclaration(TheoreticalObject):
         if echo:
             repm.prnt(self.rep_report())
 
-    def rep_report(self, output_proofs=True, wrap: bool = True):
+    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs: (None, bool) = True,
+                   wrap: (None, bool) = True):
         """Return a representation that expresses and justifies the statement."""
-        algebraic_name = '' if self.title is None else f' ({self.rep_name()})'
-        text = f'{repm.serif_bold(self.rep_title(cap=True))}{algebraic_name}: “{self.natural_language}”'
+        text = f'{self.title.rep_title(text_format=text_format, cap=True)} ({self.rep_name(text_format=text_format)}): “{self.natural_language}”.'
         if wrap:
             text = '\n'.join(textwrap.wrap(
                 text=text, width=70,
@@ -2802,10 +2819,8 @@ class InferenceRuleDeclaration(TheoreticalObject):
         self._infer_formula = infer_formula
         self._verify_args = verify_args
         if nameset is None:
-            # If no symbol is passed as a parameter,
-            # automated assignment of symbol is assumed.
-            symbol = 's'  # The general symbol base for statements.
-            index = universe_of_discourse.index_symbol(base=symbol)
+            symbol = configuration.default_symbolic_object_symbol
+            index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         if title is None:
             title = Title(ref=str(nameset.index), cat=title_categories.inference_rule,
@@ -3050,16 +3065,17 @@ class TheoryElaborationSequence(TheoreticalObject):
         self._commutativity_of_equality = None
         self._interpretation_disclaimer = False
         if nameset is None:
-            symbol = StyledText(plaintext='T', text_style=text_styles.script_normal)
-            index = u.index_symbol(base=symbol)
-            nameset = NameSet(symbol=symbol, name='theory',
-                              explicit_name='theory elaboration sequence', index=index)
+            symbol = configuration.default_theory_symbol
+            index = u.index_symbol(symbol=symbol)
+            nameset = NameSet(symbol=symbol, index=index, name='theory',
+                              explicit_name='theory elaboration sequence')
         elif isinstance(nameset, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            index = u.index_symbol(base=nameset)
-            nameset = NameSet(s=nameset, index=index)
+            symbol = StyledText(plaintext=nameset, text_style=text_styles.script_normal)
+            index = u.index_symbol(symbol=symbol)
+            nameset = NameSet(s=symbol, index=index)
         if title is None:
             title = Title(ref=str(nameset.index), cat=title_categories.theory_elaboration_sequence,
                           subtitle=None)
@@ -3557,7 +3573,13 @@ class Relation(TheoreticalObject):
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
         if nameset is None:
-            nameset = configuration.default_relation_nameset
+            symbol = configuration.default_relation_symbol
+            index = universe_of_discourse.index_symbol(symbol=symbol)
+            nameset = NameSet(symbol=symbol, index=index)
+        if isinstance(nameset, str):
+            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
+            index = universe_of_discourse.index_symbol(symbol=symbol)
+            nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
             universe_of_discourse=universe_of_discourse, nameset=nameset, dashed_name=dashed_name,
             echo=False)
@@ -3784,7 +3806,7 @@ class RelationDict(collections.UserDict):
             self._conjunction = self.declare(
                 2,
                 NameSet(
-                    symbol=StyledText(unicode='∧', latex_math='\\land'),
+                    symbol=StyledText(unicode='∧', latex_math='\\land', plaintext='and'),
                     name=StyledText(plaintext='and'),
                     explicit_name=StyledText(plaintext='conjunction'),
                     index=None),
@@ -3805,7 +3827,7 @@ class RelationDict(collections.UserDict):
             self._disjunction = self.declare(
                 2,
                 NameSet(
-                    symbol=StyledText(unicode='∨', latex_math='\\lor'),
+                    symbol=StyledText(unicode='∨', latex_math='\\lor', plaintext='or'),
                     name=StyledText(plaintext='or'),
                     explicit_name=StyledText(plaintext='disjunction'),
                     index=None),
@@ -3835,7 +3857,7 @@ class RelationDict(collections.UserDict):
         """
         if self._equality is None:
             self._equality = self.declare(
-                2, NameSet('='), Formula.infix,
+                2, NameSet(symbol=StyledText(plaintext='=')), Formula.infix,
                 signal_proposition=True, dashed_name='equality')
         return self._equality
 
@@ -3915,7 +3937,7 @@ class RelationDict(collections.UserDict):
             self._inequality = self.declare(
                 2,
                 NameSet(
-                    symbol=StyledText(unicode='≠', latex_math='\\neq'),
+                    symbol=StyledText(plaintext='neq', unicode='≠', latex_math='\\neq'),
                     acronym=StyledText(plaintext='neq'),
                     name=StyledText(plaintext='not equal'),
                     index=None),
@@ -3969,7 +3991,7 @@ class RelationDict(collections.UserDict):
             self._negation = self.declare(
                 1,
                 NameSet(
-                    symbol=StyledText(unicode='¬', latex_math='\\neg'),
+                    symbol=StyledText(plaintext='not', unicode='¬', latex_math='\\neg'),
                     acronym=StyledText(plaintext='not'),
                     name=StyledText(plaintext='negation'),
                     index=None),
@@ -4077,7 +4099,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._absorption is None:
             self._absorption = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('absorb', index=None),
+                nameset=NameSet(
+                    symbol=StyledText(plaintext='absorb', text_style=text_styles.monospace),
+                    index=None),
                 title='absorption',
                 dashed_name=DashedName('absorption'),
                 infer_formula=infer_formula,
@@ -4145,7 +4169,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._axiom_interpretation is None:
             self._axiom_interpretation = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('𝙰𝙸', index=None),
+                nameset=NameSet(symbol=StyledText(plaintext='axiom-interpretation',
+                                                  text_style=text_styles.monospace),
+                                index=None),
                 title='axiom interpretation',
                 dashed_name=DashedName('axiom-interpretation'),
                 infer_formula=infer_formula,
@@ -4236,7 +4262,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._biconditional_elimination_left is None:
             self._biconditional_elimination_left = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('bel', index=None),
+                nameset=NameSet(symbol=StyledText(plaintext='biconditional-elimination-left',
+                                                  text_style=text_styles.monospace),
+                                index=None),
                 title='biconditional elimination (left)',
                 dashed_name=DashedName('biconditional-elimination-left'),
                 infer_formula=infer_formula,
@@ -4294,7 +4322,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._biconditional_elimination_right is None:
             self._biconditional_elimination_right = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('ber', index=None),
+                nameset=NameSet(symbol=StyledText(plaintext='biconditional-elimination-right',
+                                                  text_style=text_styles.monospace),
+                                index=None),
                 title='biconditional elimination (right)',
                 dashed_name=DashedName('biconditional-elimination-right'),
                 infer_formula=infer_formula,
@@ -4358,7 +4388,11 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._biconditional_introduction is None:
             self._biconditional_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('bi', index=None),
+                nameset=NameSet(
+                    symbol=StyledText(symbol=StyledText(plaintext='biconditional-introduction',
+                                                        text_style=text_styles.monospace),
+                                      text_style=text_styles.monospace),
+                    index=None),
                 title='biconditional introduction',
                 dashed_name=DashedName('biconditional-introduction'),
                 infer_formula=infer_formula,
@@ -4445,7 +4479,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._conjunction_elimination_left is None:
             self._conjunction_elimination_left = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('cel', index=None),
+                nameset=NameSet(symbol=StyledText(plaintext='conjunction-elimination-left',
+                                                  text_style=text_styles.monospace),
+                                index=None),
                 title='conjunction elimination (left)',
                 dashed_name=DashedName('conjunction-elimination-left'),
                 infer_formula=infer_formula,
@@ -4499,7 +4535,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._conjunction_elimination_right is None:
             self._conjunction_elimination_right = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('cer', index=None),
+                nameset=NameSet(symbol=StyledText(plaintext='conjunction-elimination-right',
+                                                  text_style=text_styles.monospace),
+                                index=None),
                 title='conjunction elimination (right)',
                 dashed_name=DashedName('conjunction-elimination-right'),
                 infer_formula=infer_formula,
@@ -4555,7 +4593,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._conjunction_introduction is None:
             self._conjunction_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('ci', index=None),
+                nameset=NameSet(symbol=StyledText(plaintext='conjunction-introduction',
+                                                  text_style=text_styles.monospace),
+                                index=None),
                 title='conjunction introduction',
                 dashed_name=DashedName('conjunction-introduction'),
                 infer_formula=infer_formula,
@@ -4623,7 +4663,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._definition_interpretation is None:
             self._definition_interpretation = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('𝙳𝙸', index=None),
+                nameset=NameSet(symbol=StyledText(plaintext='definition-interpretation',
+                                                  text_style=text_styles.monospace),
+                                index=None),
                 title='definition interpretation',
                 dashed_name=DashedName('definition-interpretation'),
                 infer_formula=infer_formula,
@@ -4691,7 +4733,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._disjunction_introduction is None:
             self._disjunction_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('di', index=None),
+                nameset=NameSet(symbol=StyledText(plaintext='disjunction-introduction',
+                                                  text_style=text_styles.monospace),
+                                index=None),
                 title='disjunction introduction',
                 dashed_name=DashedName('disjunction-introduction'),
                 infer_formula=infer_formula,
@@ -4773,7 +4817,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._double_negation_elimination is None:
             self._double_negation_elimination = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('dne', index=None),
+                nameset=NameSet(symbol=StyledText(plaintext='double-negation-elimination',
+                                                  text_style=text_styles.monospace),
+                                index=None),
                 title='double negation elimination',
                 dashed_name=DashedName('double-negation-elimination'),
                 infer_formula=infer_formula,
@@ -4790,38 +4836,38 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
-        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
+        def infer_formula(p: FormulaStatement, t: TheoryElaborationSequence) -> Formula:
             """
 
-            :param args:
+            :param p: A propositional formula, or formula-statement.
             :param t:
             :return:
             """
-            p = unpack_formula(args[0])
+            p = unpack_formula(p)
             return t.u.f(t.u.r.lnot, t.u.f(t.u.r.lnot, p))
 
-        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            verify(
-                len(args) == 1,
-                'Exactly 1 item is expected in ⌜*args⌝ .',
-                args=args, t=t, slf=self)
-            p = args[0]
+        def verify_args(p: FormulaStatement, t: TheoryElaborationSequence) -> bool:
+            # verify(
+            #    len(args) == 1,
+            #    'Exactly 1 item is expected in ⌜*args⌝ .',
+            #    args=args, t=t, slf=self)
+            # p = args[0]
+            verify(is_in_class(p, classes.formula_statement),
+                   msg='⌜p⌝ is not an element of the formula-statement class.', p=p, t=t, slf=self)
+            verify(is_in_class(t, classes.theory_elaboration),
+                   msg='⌜t⌝ is not an element of the theory-elaboration-sequence class.', t=t, p=p,
+                   slf=self)
             verify(
                 t.contains_theoretical_objct(p),
-                'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-                args=args, t=t, slf=self)
+                'formula-statement ⌜p⌝ is not contained in theory ⌜t⌝.', p=p, t=t, slf=self)
             return True
 
         if self._double_negation_introduction is None:
             self._double_negation_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('dni', index=None),
+                nameset=NameSet(symbol=StyledText(plaintext='double-negation-introduction',
+                                                  text_style=text_styles.monospace),
+                                index=None),
                 title='double negation introduction',
                 dashed_name=DashedName('double-negation-introduction'),
                 infer_formula=infer_formula,
@@ -4886,7 +4932,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._equality_commutativity is None:
             self._equality_commutativity = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('𝙴𝙲', index=None),
+                nameset=NameSet(
+                    symbol=StyledText(plaintext='equality-commutativity',
+                                      text_style=text_styles.monospace),
+                    index=None),
                 title='equality commutativity',
                 dashed_name=DashedName('equality-commutativity'),
                 infer_formula=infer_formula,
@@ -4954,7 +5003,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._inconsistency_introduction is None:
             self._inconsistency_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('Inc', index=None),
+                nameset=NameSet(symbol=StyledText(plaintext='inconsistency-introduction',
+                                                  text_style=text_styles.monospace), index=None),
                 title='inconsistency introduction',
                 dashed_name=DashedName('inconsistency-introduction'),
                 infer_formula=infer_formula,
@@ -5054,7 +5104,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._modus_ponens is None:
             self._modus_ponens = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('mp', index=None),
+                nameset=NameSet(symbol=StyledText(plaintext='modus-ponens',
+                                                  text_style=text_styles.monospace), index=None),
                 title='modus ponens',
                 dashed_name=DashedName('modus-ponens'),
                 infer_formula=infer_formula,
@@ -5133,7 +5184,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._equal_terms_substitution is None:
             self._equal_terms_substitution = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('ets', index=None),
+                nameset=NameSet(symbol=StyledText(plaintext='equal-terms-substitution',
+                                                  text_style=text_styles.monospace), index=None),
                 title='equal terms substitution',
                 dashed_name=DashedName('equal-terms-substitution'),
                 infer_formula=infer_formula,
@@ -5227,7 +5279,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._variable_substitution is None:
             self._variable_substitution = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet('vs', index=None),
+                nameset=NameSet(symbol=StyledText(plaintext='variable-substitution',
+                                                  text_style=text_styles.monospace), index=None),
                 title='variable substitution',
                 dashed_name=DashedName('variable-substitution'),
                 infer_formula=infer_formula,
@@ -6027,15 +6080,14 @@ class UniverseOfDiscourse(SymbolicObject):
             'Cross-referencing a symbolic-objct in a universe-of-discourse requires '
             'an object of type SymbolicObjct.',
             o=o, slf=self)
+        duplicate = self.symbolic_objcts.get(o.nameset)
         verify(
-            o.nameset not in self.symbolic_objcts.keys() or o is
-            self.symbolic_objcts[
-                o.nameset],
-            'Cross-referencing a symbolic-objct in a universe-of-discourse requires '
-            'that it is referenced with a unique symbol.',
-            o_symbol=o.nameset, o=o, slf=self)
-        if o not in self.symbolic_objcts:
-            self.symbolic_objcts[o.nameset] = o
+            duplicate is None,
+            'A symbolic-object already exists in the current universe-of-discourse with a duplicate (symbol, index) pair.',
+            o=o,
+            duplicate=duplicate,
+            slf=self)
+        self.symbolic_objcts[o.nameset] = o
 
     def cross_reference_theory(self, t: TheoryElaborationSequence):
         """Cross-references a theory in this universe-of-discourse.
@@ -6170,25 +6222,25 @@ class UniverseOfDiscourse(SymbolicObject):
             relation, *parameters, nameset=nameset,
             lock_variable_scope=lock_variable_scope, echo=echo)
 
-    def get_symbol_max_index(self, base):
+    def get_symbol_max_index(self, symbol: StyledText) -> int:
         """Return the highest index for that symbol-base in the universe-of-discourse."""
-        if base in self.symbol_indexes.keys():
-            return self.symbol_indexes[base]
-        else:
-            return 0
+        # if symbol in self.symbol_indexes.keys():
+        #    return self.symbol_indexes[symbol]
+        # else:
+        #    return 0
+        same_symbols = tuple((nameset.index_as_int for nameset in self.symbolic_objcts.keys() if
+                              nameset.symbol == symbol and nameset.index_as_int is not None))
+        return max(same_symbols, default=0)
 
-    def index_symbol(self, base: NameSet) -> int:
+    def index_symbol(self, symbol: StyledText) -> int:
         """Given a symbol-base S (i.e. an unindexed symbol), returns a unique integer n
         such that (S, n) is a unique identifier in this instance of UniverseOfDiscourse.
 
-        :param base: The symbol-base.
+        :param symbol: The symbol-base.
         :return:
         """
-        if base not in self.symbol_indexes:
-            self.symbol_indexes[base] = 1
-        else:
-            self.symbol_indexes[base] += 1
-        return self.symbol_indexes[base]
+        assert isinstance(symbol, StyledText)
+        return self.get_symbol_max_index(symbol) + 1
 
     def declare_definition(
             self,

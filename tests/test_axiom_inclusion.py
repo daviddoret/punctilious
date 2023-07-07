@@ -16,3 +16,4 @@ class TestAxiomInclusion(TestCase):
         t = u.t()
         ai1 = t.include_axiom(ad1)
         ai2 = t.include_axiom(ad2)
+        pu.prnt(ai1.rep_report())
