@@ -17,13 +17,15 @@ class TestEqualTermsSubstitution(TestCase):
         ap = t.include_axiom(a)
         phi1 = t.i.axiom_interpretation.infer_statement(
             ap, u.f(u.r.equal, u.f(r1, o1, o2), u.f(r2, o3)))
-        self.assertEqual('(◆₁(ℴ₁, ℴ₂) = ◆₂(ℴ₃))', phi1.rep_formula())
+        self.assertEqual('(r1(o1, o2) = r2(o3))',
+                         phi1.rep_formula(text_format=pu.text_formats.plaintext))
         phi2 = t.i.axiom_interpretation.infer_statement(ap,
                                                         u.f(r1, u.f(r1, u.f(r1, u.f(r1, o1, o2),
                                                                             u.f(r1, o1, o2)), o2),
                                                             u.f(r2, u.f(r1, o1, o2))),
                                                         echo=True)
-        self.assertEqual('◆₁(◆₁(◆₁(◆₁(ℴ₁, ℴ₂), ◆₁(ℴ₁, ℴ₂)), ℴ₂), ◆₂(◆₁(ℴ₁, ℴ₂)))',
-                         phi2.rep_formula())
+        self.assertEqual('r1(r1(r1(r1(o1, o2), r1(o1, o2)), o2), r2(r1(o1, o2)))',
+                         phi2.rep_formula(text_format=pu.text_formats.plaintext))
         phi3 = t.i.ets.infer_statement(phi2, phi1, echo=True)
-        self.assertEqual('◆₁(◆₁(◆₁(◆₂(ℴ₃), ◆₂(ℴ₃)), ℴ₂), ◆₂(◆₂(ℴ₃)))', phi3.rep_formula())
+        self.assertEqual('r1(r1(r1(r2(o3), r2(o3)), o2), r2(r2(o3)))',
+                         phi3.rep_formula(text_format=pu.text_formats.plaintext))

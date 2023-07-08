@@ -27,7 +27,7 @@ class TestDoubleNegationIntroduction(TestCase):
             '¬(¬(𝑟₁(𝑜₁, 𝑜₂)))', phi2.rep_formula(text_format=pu.text_formats.unicode))
         phi3 = t.i.dne.infer_statement(phi2)
         self.assertEqual(
-            '◆₁(ℴ₁, ℴ₂)', phi3.rep_formula(text_format=pu.text_formats.plaintext))
+            'r1(o1, o2)', phi3.rep_formula(text_format=pu.text_formats.plaintext))
         self.assertEqual(
-            '◆₁(ℴ₁, ℴ₂)', phi3.rep_formula(text_format=pu.text_formats.unicode))
+            '𝑟₁(𝑜₁, 𝑜₂)', phi3.rep_formula(text_format=pu.text_formats.unicode))
         self.assertTrue(phi1.is_formula_equivalent_to(phi3))
