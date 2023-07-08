@@ -2049,11 +2049,8 @@ class TitleCategories(repm.ValueName):
     axiom_declaration = TitleCategory('axiom_declaration', 's', 'axiom', 'axiom')
     axiom_inclusion = TitleCategory('axiom_inclusion', 's', 'axiom', 'axiom')
     corollary = TitleCategory('corollary', 's', 'corollary', 'cor.')
-    definition = TitleCategory('definition', 's', 'definition', 'def.')
-    definition_declaration = TitleCategory('definition_declaration', 's', 'definition declaration',
-                                           'definition decl.')
-    definition_inclusion = TitleCategory('definition_inclusion', 's', 'definition', 'definition')
-    formal_definition = TitleCategory('formal_definition', 's', 'formal definition', 'def.')
+    definition_declaration = TitleCategory('definition_declaration', 's', 'definition', 'def.')
+    definition_inclusion = TitleCategory('definition_inclusion', 's', 'definition', 'def.')
     hypothesis = TitleCategory('hypothesis', 's', 'hypothesis', 'hyp.')
     inference_rule = TitleCategory('inference_rule', 's', 'inference rule', 'inference rule')
     inference_rule_inclusion = TitleCategory('inference_rule_inclusion', 's',
@@ -2216,18 +2213,20 @@ class AxiomDeclaration(TheoreticalObject):
         if echo:
             repm.prnt(self.rep_report())
 
-    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs: (None, bool) = True,
-                   wrap: (None, bool) = True):
-        """Return a representation that expresses and justifies the statement."""
-        text = f'{self.title.rep_title(text_format=text_format, cap=True)} ({self.rep_name(text_format=text_format)}): “{self.natural_language}”.'
-        if wrap:
-            text = '\n'.join(textwrap.wrap(
-                text=text, width=70,
-                subsequent_indent=f'\t',
-                break_on_hyphens=False,
-                expand_tabs=True,
-                tabsize=4))
-        return text
+    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs: bool = True,
+                   wrap: bool = True) -> str:
+        """Return a representation that expresses and justifies the statement.
+
+        :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
+        :param output_proofs:
+        :return:
+        """
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
+        cap = True
+        output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.natural_language}'
+        output = repm.wrap(output) if wrap else output
+        return output
 
 
 class AxiomInclusion(Statement):
@@ -2282,15 +2281,19 @@ class AxiomInclusion(Statement):
         Abridged property: a.a"""
         return self._axiom
 
-    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs: bool = True) -> str:
-        """Return a representation that expresses and justifies the statement."""
-        text = f'{self.rep_title(text_format=text_format, cap=True)}: “{self.axiom.natural_language}”'
-        text = repm.wrap(text)
-        if output_proofs:
-            text2 = f'Let postulate {self.axiom.rep_fully_qualified_name()} in {self.theory.rep_reference()}.'
-            text2 = repm.wrap(text2)
-            text = text + '\n' + text2
-        return text
+    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs=True) -> str:
+        """Return a representation that expresses and justifies the statement.
+
+        :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
+        :param output_proofs:
+        :return:
+        """
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
+        cap = True
+        output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.axiom.natural_language}'
+        output = repm.wrap(output)
+        return output
 
 
 class InferenceRuleInclusion(Statement):
@@ -2345,7 +2348,7 @@ class InferenceRuleInclusion(Statement):
                         ref: (None, str) = None,
                         cat: (None, TitleCategory) = None,
                         subtitle: (None, str) = None,
-                        echo: (None, bool) = None):
+                        echo: (None, bool) = None) -> InferredStatement:
         """
 
         :param args:
@@ -2435,20 +2438,24 @@ class DefinitionDeclaration(TheoreticalObject):
         super()._declare_class_membership(declarative_class_list.definition)
         u.cross_reference_definition(self)
         if echo:
-            repm.prnt(self.rep_report())
+            self.echo()
 
-    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs: (None, bool) = True,
-                   wrap: (None, bool) = True):
-        """Return a representation that expresses and justifies the statement."""
-        text = f'{self.title.rep_title(text_format=text_format, cap=True)} ({self.rep_name(text_format=text_format)}): {self.natural_language}'
-        if wrap:
-            text = '\n'.join(textwrap.wrap(
-                text=text, width=70,
-                subsequent_indent=f'\t',
-                break_on_hyphens=False,
-                expand_tabs=True,
-                tabsize=4))
-        return text
+    def echo(self):
+        repm.prnt(self.rep_report())
+
+    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs=True) -> str:
+        """Return a representation that expresses and justifies the statement.
+
+        :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
+        :param output_proofs:
+        :return:
+        """
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
+        cap = True
+        output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.natural_language}'
+        output = repm.wrap(output)
+        return output
 
 
 class DefinitionInclusion(Statement):
@@ -2469,27 +2476,43 @@ class DefinitionInclusion(Statement):
                           fallback_value=False)
         self.definition = d
         t.crossreference_definition_endorsement(self)
+        if title is None:
+            # Long-names are not a mandatory attribute,
+            # it is available to improve readability in reports.
+            title = Title(cat=title_categories.definition_inclusion)
+        elif isinstance(title, str):
+            title = Title(ref=title, cat=title_categories.definition_inclusion, subtitle=None)
+        if isinstance(title, Title) and (
+                title.cat is not title_categories.definition_inclusion or title.cat is None):
+            title = Title(ref=title.ref, cat=title_categories.definition_inclusion,
+                          subtitle=title.subtitle)
         super().__init__(
             theory=t,
-            category=title_categories.definition,
+            category=title_categories.definition_inclusion,
             nameset=nameset,
             title=title,
             dashed_name=dashed_name,
             echo=False)
         super()._declare_class_membership(declarative_class_list.definition_inclusion)
         if echo:
-            repm.prnt(self.rep_report())
+            self.echo()
 
-    def rep_report(self, output_proofs=True):
-        """Return a representation that expresses and justifies the statement."""
-        text = f'{self.rep_title(cap=True)}: “{self.definition.natural_language}”'
-        return '\n'.join(
-            textwrap.wrap(
-                text=text, width=70,
-                subsequent_indent=f'\t',
-                break_on_hyphens=False,
-                expand_tabs=True,
-                tabsize=4))
+    def echo(self):
+        repm.prnt(self.rep_report())
+
+    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs=True) -> str:
+        """Return a representation that expresses and justifies the statement.
+
+        :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
+        :param output_proofs:
+        :return:
+        """
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
+        cap = True
+        output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.definition.natural_language}'
+        output = repm.wrap(output)
+        return output
 
 
 class FormulaStatement(Statement):
