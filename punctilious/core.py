@@ -808,12 +808,18 @@ class Title:
         the declarative class of the symbolic-objct.
     """
 
-    def __init__(self, ref: (None, str) = None, cat: (None, TitleCategory) = None,
-                 subtitle: (None, str) = None,
-                 abr: (None, str) = None):
+    def __init__(self, ref: (None, str, StyledText) = None, cat: (None, TitleCategory) = None,
+                 subtitle: (None, str, StyledText) = None,
+                 abr: (None, str, StyledText) = None):
+        if isinstance(ref, str):
+            ref = StyledText(s=ref, text_style=text_styles.sans_serif_bold)
         self._ref = ref
+        if isinstance(abr, str):
+            abr = StyledText(s=abr, text_style=text_styles.sans_serif_bold)
         self._abr = abr
         self._cat = title_categories.uncategorized if cat is None else cat
+        if isinstance(subtitle, str):
+            subtitle = StyledText(s=subtitle, text_style=text_styles.sans_serif_normal)
         self._subtitle = subtitle
         self._styled_title = None
         self._styled_ref = None
@@ -839,17 +845,17 @@ class Title:
         return self._cat
 
     @property
-    def subtitle(self) -> str:
+    def subtitle(self) -> StyledText:
         """A conditional complement to the automatically structured title."""
         return self._subtitle
 
     @property
-    def ref(self) -> str:
+    def ref(self) -> StyledText:
         """Unabridged name."""
         return self._ref
 
     @property
-    def abr(self) -> str:
+    def abr(self) -> StyledText:
         """Abridged name."""
         return self._abr
 
@@ -867,44 +873,17 @@ class Title:
         :param cap:
         :return:
         """
-        return self.styled_title.rep(text_format=text_format, cap=cap)
+        return f'{StyledText(s=self.cat.natural_name, text_style=text_styles.sans_serif_bold).rep(text_format=text_format, cap=cap)}' \
+               f'{"" if self.ref is None else " " + self.ref.rep(text_format=text_format)}' \
+               f'{"" if self.subtitle is None else " - " + self.subtitle.rep(text_format=text_format)}'
 
     def rep_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return self.styled_ref.rep(text_format=text_format, cap=cap)
+        return f'{StyledText(s=self.cat.abridged_name, text_style=text_styles.sans_serif_bold).rep(text_format=text_format, cap=cap)}' \
+               f'{"" if self.ref is None else " " + self.ref.rep(text_format=text_format)}'
 
     def rep_mention(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return self.styled_mention.rep(text_format=text_format, cap=cap)
-
-    @property
-    def styled_ref(self) -> StyledText:
-        if self._styled_ref is None:
-            text_style = get_config(configuration.title_text_style,
-                                    fallback_value=text_styles.sans_serif_normal)
-            self._styled_ref = StyledText(
-                f'{self.cat.abridged_name}{"" if self.ref is None else " " + self.ref}',
-                text_style=text_style)
-        return self._styled_ref
-
-    @property
-    def styled_mention(self) -> StyledText:
-        """A mention is a representation of the format ref + cat."""
-        if self._styled_ref is None:
-            text_style = get_config(configuration.title_text_style,
-                                    fallback_value=text_styles.sans_serif_normal)
-            self._styled_ref = StyledText(
-                f'{self.ref + "" if self.ref is None else " "}{self.cat.natural_name}',
-                text_style=text_style)
-        return self._styled_ref
-
-    @property
-    def styled_title(self) -> StyledText:
-        if self._styled_title is None:
-            text_style = get_config(configuration.title_text_style,
-                                    fallback_value=text_styles.sans_serif_normal)
-            self._styled_title = StyledText(
-                f'{self.cat.natural_name}{"" if self.ref is None else " " + self.ref}{"" if self.subtitle is None else " - " + self.subtitle}',
-                text_style=text_style)
-        return self._styled_title
+        return f'{"" if self.ref is None else " " + self.ref.rep(text_format=text_format)}' \
+               f'{StyledText(s=self.cat.natural_name, text_style=text_styles.sans_serif_bold).rep(text_format=text_format, cap=cap)}'
 
 
 class DashedName:
@@ -2461,7 +2440,7 @@ class DefinitionDeclaration(TheoreticalObject):
     def rep_report(self, text_format: (None, TextFormat) = None, output_proofs: (None, bool) = True,
                    wrap: (None, bool) = True):
         """Return a representation that expresses and justifies the statement."""
-        text = f'{self.title.rep_title(text_format=text_format, cap=True)} ({self.rep_name(text_format=text_format)}): “{self.natural_language}”.'
+        text = f'{self.title.rep_title(text_format=text_format, cap=True)} ({self.rep_name(text_format=text_format)}): {self.natural_language}'
         if wrap:
             text = '\n'.join(textwrap.wrap(
                 text=text, width=70,
@@ -4389,8 +4368,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             self._biconditional_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 nameset=NameSet(
-                    symbol=StyledText(symbol=StyledText(plaintext='biconditional-introduction',
-                                                        text_style=text_styles.monospace),
+                    symbol=StyledText(s='biconditional-introduction',
                                       text_style=text_styles.monospace),
                     index=None),
                 title='biconditional introduction',

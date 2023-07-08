@@ -5,13 +5,13 @@ import random_data
 
 class TestConjunctionEliminationRight(TestCase):
     def test_cer(self):
-        u = pu.UniverseOfDiscourse('conjunction-elimination-right-universe')
+        u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
         o2 = u.o.declare()
         o3 = u.o.declare()
         r1 = u.r.declare(2, signal_proposition=True)
         r2 = u.r.declare(1, signal_proposition=True)
-        t = u.t('conjunction-elimination-right-theory')
+        t = u.t()
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
         phi1 = t.i.axiom_interpretation.infer_statement(ap, u.f(u.r.conjunction, u.f(r1, o1, o2),
