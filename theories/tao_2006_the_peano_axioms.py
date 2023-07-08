@@ -10,8 +10,10 @@ import foundation_system_1 as fs1
 # ft = fs1.ft
 
 pu.configuration.echo_default = True
+pu.configuration.echo_axiom_declaration = False
 pu.configuration.echo_axiom_inclusion = True
-pu.configuration.echo_axiom_declaration = True
+pu.configuration.echo_definition_declaration = False
+pu.configuration.echo_definition_inclusion = True
 pu.configuration.echo_inferred_statement = True
 pu.configuration.echo_simple_objct_declaration = True
 pu.configuration.echo_statement = True
@@ -21,38 +23,45 @@ pass
 
 u = pu.UniverseOfDiscourse()
 
-t = u.t(title=pu.Title(ref='2.1', subtitle='the Peano axioms'), extended_theory=fs1.ft)
+# SECTION 2.1
+
+t = u.t(title=pu.Title(ref='2.1', cat=pu.title_categories.theory_elaboration_sequence,
+                       subtitle='the Peano axioms'))
 
 section_2 = t.open_section('The natural numbers', section_number=2)
 
 section_2_1 = t.open_section('The Peano axioms', section_parent=section_2)
 
 # AXIOM 2.1.1
+
 axiom_2_1_1_declaration = u.declare_axiom(f'0 is a natural number.')
 axiom_2_1_1 = t.include_axiom(axiom_2_1_1_declaration, title='2.1.1')
 zero = u.o.declare(pu.NameSet('0'))
-natural_number = u.o.declare(pu.NameSet('natural-number'))
-is_a = u.r.declare(2, pu.NameSet('is-a'), pu.Formula.infix, signal_proposition=True)
+natural_number = u.o.declare(pu.NameSet(symbol='natural-number'))
+is_a = u.r.declare(2, pu.NameSet(symbol='is-a'), formula_rep=pu.Formula.infix,
+                   signal_proposition=True)
 # (0 is-a natural-number):
 proposition_2_1_1_1 = t.i.axiom_interpretation.infer_statement(
-    axiom_2_1_1, u.f(is_a, zero, natural_number), title='2.1.1.1')
+    axiom_2_1_1, u.f(is_a, zero, natural_number))
 
 # AXIOM 2.1.2
+
 axiom_2_1_2_declaration = u.declare_axiom('If n is a natural number, then n++ is a natural number.')
 axiom_2_1_2 = t.include_axiom(axiom_2_1_2_declaration, title='2.1.2')
-plusplus = u.r.declare(1, pu.NameSet('++'), formula_rep=pu.Formula.postfix, dashed_name='successor')
+plusplus = u.r.declare(1, pu.NameSet(symbol='++', name='successor'), formula_rep=pu.Formula.postfix)
 with u.v('n') as n:
     # ((n₁ is-a natural-number) ⟹ ((n₁)++ is-a natural-number)):
     proposition_2_1_2_1 = t.i.axiom_interpretation.infer_statement(
         axiom_2_1_2,
-        u.f(u.r.implies, u.f(is_a, n, natural_number), u.f(is_a, u.f(plusplus, n), natural_number)),
-        title='2.1.2.1')
+        u.f(u.r.implies, u.f(is_a, n, natural_number), u.f(is_a, u.f(plusplus, n), natural_number)))
 # ((0 is-a natural-number) ⟹ ((0)++ is-a natural-number)):
-proposition_2_1_2_2 = t.i.vs.infer_statement(proposition_2_1_2_1, zero, title='2.1.2.2')
+proposition_2_1_2_2 = t.i.vs.infer_statement(proposition_2_1_2_1, zero)
 # ((0)++ is-a natural-number):
-proposition_2_1_2_3 = t.i.mp.infer_statement(proposition_2_1_2_2, proposition_2_1_1_1, title='2.2.3')
+proposition_2_1_2_3 = t.i.mp.infer_statement(proposition_2_1_2_2, proposition_2_1_1_1,
+                                             ref='2.2.3')
 
 # DEFINITION 2.1.3
+
 definition_2_1_3_declaration = u.declare_definition(
     'We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number '
     '((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text '
@@ -61,52 +70,51 @@ definition_2_1_3_declaration = u.declare_definition(
 definition_2_1_3 = t.include_definition(d=definition_2_1_3_declaration)
 one = u.o.declare(pu.NameSet('1'))
 proposition_2_1_3_1 = t.i.definition_interpretation.infer_statement(
-    definition_2_1_3, u.f(u.r.equal, one, u.f(plusplus, zero)), title='2.1.3.1')
+    definition_2_1_3, u.f(u.r.equal, one, u.f(plusplus, zero)))
 two = u.o.declare(pu.NameSet('2'))
 proposition_2_1_3_2 = t.i.definition_interpretation.infer_statement(
-    definition_2_1_3, u.f(u.r.equal, two, u.f(plusplus, u.f(plusplus, zero))), title='2.1.3.2')
+    definition_2_1_3, u.f(u.r.equal, two, u.f(plusplus, u.f(plusplus, zero))))
 three = u.o.declare(pu.NameSet('3'))
 proposition_2_1_3_3 = t.i.definition_interpretation.infer_statement(
-    definition_2_1_3, u.f(u.r.equal, three, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero)))), title='2.1.3.3')
+    definition_2_1_3, u.f(u.r.equal, three, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero)))))
 four = u.o.declare(pu.NameSet('4'))
 proposition_2_1_3_4 = t.i.definition_interpretation.infer_statement(
-    definition_2_1_3, u.f(u.r.equal, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))),
-    title='2.1.3.4')
+    definition_2_1_3,
+    u.f(u.r.equal, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))))
 
 # RESUME CLEAN-UP FROM HERE
 
 zero_plusplus = u.f(plusplus, zero)
-p_2_2_4_1 = t.i.vs.infer_statement(proposition_2_1_2_1, zero_plusplus, title='2.2.3')
-p_2_2_4 = t.i.mp.infer_statement(p_2_2_4_1, proposition_2_1_2_3, title='2.2.4')
+p_2_2_4_1 = t.i.vs.infer_statement(proposition_2_1_2_1, zero_plusplus, ref='2.2.3')
+p_2_2_4 = t.i.mp.infer_statement(p_2_2_4_1, proposition_2_1_2_3, ref='2.2.4')
 zero_plus_plus_plusplus = u.f(plusplus, zero_plusplus)
-p_2_2_5_1 = t.i.vs.infer_statement(proposition_2_1_2_1, zero_plus_plus_plusplus, title='2.2.3')
-proposition_2_2_5 = t.i.mp.infer_statement(p_2_2_5_1, p_2_2_4, title='2.2.5')
+p_2_2_5_1 = t.i.vs.infer_statement(proposition_2_1_2_1, zero_plus_plus_plusplus, ref='2.2.3')
+proposition_2_2_5 = t.i.mp.infer_statement(p_2_2_5_1, p_2_2_4, ref='2.2.5')
 
 proposition_2_1_3_100 = t.i.mp.infer_statement(
-    t.commutativity_of_equality, proposition_2_1_3_1, title='2.1.3.1.b')
+    t.commutativity_of_equality, proposition_2_1_3_1)
 
 p_2_1_3_2_b = t.soet(
-    proposition_2_1_3_2, proposition_2_1_3_100, reference='2.1.3.2.b')
+    proposition_2_1_3_2, proposition_2_1_3_100)
 
 p_2_1_3_2_c = t.i.mp.infer_statement(
-    t.commutativity_of_equality, proposition_2_1_3_2, title='2.1.3.2.c')
+    t.commutativity_of_equality, proposition_2_1_3_2)
 
-p_2_1_3_2_d = t.soet(p_2_1_3_2_c, proposition_2_1_3_100, reference='2.1.3.2.d')
+p_2_1_3_2_d = t.soet(p_2_1_3_2_c, proposition_2_1_3_100)
 
-p_2_1_3_3_b = t.soet(proposition_2_1_3_3, p_2_1_3_2_c, reference='2.1.3.3.b')
+p_2_1_3_3_b = t.soet(proposition_2_1_3_3, p_2_1_3_2_c)
 
 p_2_1_3_3_c = t.i.mp.infer_statement(
-    t.commutativity_of_equality, proposition_2_1_3_3, title='2.1.3.3.c')
+    t.commutativity_of_equality, proposition_2_1_3_3)
 
-p_2_1_3_3_d = t.soet(p_2_1_3_3_c, p_2_1_3_2_c, reference='2.1.3.3.d')
+p_2_1_3_3_d = t.soet(p_2_1_3_3_c, p_2_1_3_2_c)
 
-p_2_1_4 = t.soet(proposition_2_2_5, p_2_1_3_3_c, reference='2.1.4')
+p_2_1_4 = t.soet(proposition_2_2_5, p_2_1_3_3_c)
 
 # 4
 proposition_2_1_3_3 = t.i.definition_interpretation.infer_statement(
     definition_2_1_3,
-    u.f(u.r.equal, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))),
-    title='2.1.3.3.a')
+    u.f(u.r.equal, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))))
 
 # Axiom 2.3. 0 is not the successor of any natural number;
 # i.e., we have n++ f=. 0 for every natural number n.

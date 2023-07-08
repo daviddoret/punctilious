@@ -63,6 +63,11 @@ class TextStyles:
             unicode_table_index=unicode.unicode_sans_serif_bold_index,
             latex_math_start_tag=r'\boldsymbol\mathsf{',
             latex_math_end_tag=r'}}')
+        self.sans_serif_italic = TextStyle(
+            font_style_name='sans-serif-italic',
+            unicode_table_index=unicode.unicode_sans_serif_italic_index,
+            latex_math_start_tag=r'\text{\sffamily\itshape{',
+            latex_math_end_tag=r'}}}')
         self.sans_serif_normal = TextStyle(
             font_style_name='sans-serif-normal',
             unicode_table_index=unicode.unicode_sans_serif_normal_index,
@@ -331,15 +336,18 @@ def verify(
         contextual_information = ''
         for key, value in kwargs.items():
             value_as_string = f'(str conversion failure of type {str(type(value))})'
-            try:
-                value_as_string = value.rep_as_fully_qualified_name()
-            except AttributeError:
+            if value is None:
+                value = 'None'
+            else:
                 try:
-                    value_as_string = repr(value)
+                    value_as_string = value.rep(text_format=text_formats.plaintext)
+                except AttributeError:
+                    try:
+                        value_as_string = str(value)
+                    finally:
+                        pass
                 finally:
                     pass
-            finally:
-                pass
             contextual_information += f'\n{key}: {value_as_string}'
         report = f'{str(severity).upper()}: {msg}\nContextual information:{contextual_information}'
         repm.prnt(report)
@@ -886,8 +894,8 @@ class Title:
                f'{"" if self.ref is None else " " + self.ref.rep(text_format=text_format)}'
 
     def rep_mention(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return f'{"" if self.ref is None else " " + self.ref.rep(text_format=text_format)}' \
-               f'{StyledText(s=self.cat.natural_name, text_style=text_styles.sans_serif_bold).rep(text_format=text_format, cap=cap)}'
+        return f'{"" if self.ref is None else self.ref.rep(text_format=text_format) + " "}' \
+               f'{StyledText(s=self.cat.natural_name, text_style=text_styles.sans_serif_normal).rep(text_format=text_format, cap=cap)}'
 
 
 class DashedName:
@@ -1068,7 +1076,7 @@ class SymbolicObject:
         return self.dashed_name.rep_dashed_name(text_format=text_format)
 
     def rep_declaration(self, text_format: (None, TextFormat) = None) -> str:
-        return f'Let {self.rep_name(text_format=text_format)} be a symbolic-objct denoted as ⌜ {self.rep_name(text_format=text_format)} ⌝.'
+        return f'Let {self.rep_name(text_format=text_format)} be a symbolic-objct denoted as ⌜ {self.rep_name(text_format=text_format)} ⌝.' + '\n'
 
     def rep_formula(self, text_format: (None, TextFormat) = None,
                     expand: (None, bool) = None) -> str:
@@ -1633,7 +1641,7 @@ class FreeVariable(TheoreticalObject):
         return self.is_formula_equivalent_to(o2), _values
 
     def rep_declaration(self, text_format: (None, TextFormat) = None):
-        return f'Let {self.rep_name(text_format=text_format)} be a free-variable in {self.universe_of_discourse.rep_name(text_format=text_format)}'
+        return f'Let {self.rep_name(text_format=text_format)} be a free-variable in {self.universe_of_discourse.rep_name(text_format=text_format)}' + '\n'
 
 
 class Formula(TheoreticalObject):
@@ -1943,7 +1951,7 @@ class Formula(TheoreticalObject):
                     return self.rep_as_function_call(text_format=text_format, expand=expand)
 
     def rep_declaration(self):
-        return f'Let {self.rep_name()} be the formula {self.rep_formula(expand=True)} in {self.universe_of_discourse.rep_name()}.'
+        return f'Let {self.rep_name()} be the formula {self.rep_formula(expand=True)} in {self.universe_of_discourse.rep_name()}.' + '\n'
 
 
 class SimpleObjctDict(collections.UserDict):
@@ -2220,6 +2228,15 @@ class AxiomDeclaration(TheoreticalObject):
         if echo:
             repm.prnt(self.rep_report())
 
+    def rep_natural_language(self, text_format: (None, TextFormat) = None,
+                             wrap: bool = True) -> str:
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
+        cap = True
+        output = f'⌜{self.natural_language}⌝'
+        output = repm.wrap(output) if wrap else output
+        return output
+
     def rep_report(self, text_format: (None, TextFormat) = None, output_proofs: bool = True,
                    wrap: bool = True) -> str:
         """Return a representation that expresses and justifies the statement.
@@ -2233,7 +2250,7 @@ class AxiomDeclaration(TheoreticalObject):
         cap = True
         output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.natural_language}'
         output = repm.wrap(output) if wrap else output
-        return output
+        return output + f'\n'
 
 
 class AxiomInclusion(Statement):
@@ -2288,6 +2305,10 @@ class AxiomInclusion(Statement):
         Abridged property: a.a"""
         return self._axiom
 
+    def rep_natural_language(self, text_format: (None, TextFormat) = None,
+                             wrap: bool = True) -> str:
+        return self._axiom.rep_natural_language(text_format=text_format, wrap=wrap)
+
     def rep_report(self, text_format: (None, TextFormat) = None, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement.
 
@@ -2300,7 +2321,7 @@ class AxiomInclusion(Statement):
         cap = True
         output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.axiom.natural_language}'
         output = repm.wrap(output)
-        return output
+        return output + f'\n'
 
 
 class InferenceRuleInclusion(Statement):
@@ -2397,7 +2418,7 @@ class InferenceRuleInclusion(Statement):
                 subsequent_indent=f'\t',
                 break_on_hyphens=False,
                 expand_tabs=True,
-                tabsize=4))
+                tabsize=4)) + f'\n'
 
 
 class DefinitionDeclaration(TheoreticalObject):
@@ -2462,7 +2483,7 @@ class DefinitionDeclaration(TheoreticalObject):
         cap = True
         output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.natural_language}'
         output = repm.wrap(output)
-        return output
+        return output + f'\n'
 
 
 class DefinitionInclusion(Statement):
@@ -2519,7 +2540,7 @@ class DefinitionInclusion(Statement):
         cap = True
         output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.definition.natural_language}'
         output = repm.wrap(output)
-        return output
+        return output + f'\n'
 
 
 class FormulaStatement(Statement):
@@ -2669,7 +2690,7 @@ class Morphism(FormulaStatement):
         output = f'{repm.serif_bold(self.rep_name())}: {self.valid_proposition.rep_formula(expand=True)}'
         if output_proofs:
             output = output + self.rep_subreport()
-        return output
+        return output + f'\n'
 
     def rep_subreport(self):
         """Return a representation that expresses and justifies the statement.
@@ -2767,7 +2788,7 @@ class DirectDefinitionInference(FormulaStatement):
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Derivation from natural language definition")}'
             output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.definition.rep_name())}.'
-        return output
+        return output + f'\n'
 
 
 universe_of_discourse_symbol_indexes = dict()
@@ -2960,7 +2981,7 @@ class Note(AtheoreticalStatement):
                 subsequent_indent=f'\t',
                 break_on_hyphens=False,
                 expand_tabs=True,
-                tabsize=4))
+                tabsize=4)) + f'\n'
 
 
 section_category = TitleCategory(
@@ -3032,7 +3053,7 @@ class Section(AtheoreticalStatement):
     def rep_report(self, output_proofs=True) -> str:
         text = f'{"#" * self.section_level} {repm.serif_bold(self.section_reference)} {repm.serif_bold(str(self.section_title).capitalize())}'
         text = repm.wrap(text)
-        return text
+        return text + f'\n'
 
     @property
     def section_level(self) -> int:
@@ -3101,11 +3122,11 @@ class TheoryElaborationSequence(TheoreticalObject):
                           subtitle=None)
         else:
             verify(
-                title.category is None or title.category is title_categories.theory_elaboration_sequence,
+                title.cat is None or title.cat is title_categories.theory_elaboration_sequence,
                 'The title category must be theory-elaboration-sequence.',
-                title_category=title.category, title=title, slf=self)
-            if title.category is None:
-                title.category = title_categories.theory_elaboration_sequence
+                title_category=title.cat, title=title, slf=self)
+            if title.cat is None:
+                title.cat = title_categories.theory_elaboration_sequence
         super().__init__(
             nameset=nameset,
             is_theory_foundation_system=True if extended_theory is None else False,
@@ -3460,7 +3481,7 @@ class TheoryElaborationSequence(TheoreticalObject):
         self._consistency = consistency_values.proved_inconsistent
 
     def rep_declaration(self) -> str:
-        return f'Let {self.rep_fully_qualified_name()} be a theory-elaboration-sequence in {self.u.rep_name()}.'
+        return f'Let {self.rep_fully_qualified_name()} be a theory-elaboration-sequence in {self.u.rep_name()}.' + '\n'
 
     @property
     def stabilized(self):
@@ -3631,7 +3652,7 @@ class Relation(TheoreticalObject):
     def rep_declaration(self):
         output = f'Let {self.rep_fully_qualified_name()} be a {rep_arity_as_text(self.arity)} relation in {self.u.rep_name()}'
         output = output + f' (default notation: {self.formula_rep}).'
-        return output
+        return output + '\n'
 
 
 def rep_arity_as_text(n):
@@ -3703,7 +3724,7 @@ class SimpleObjct(TheoreticalObject):
 
     def rep_declaration(self):
         output = f'Let {self.rep_fully_qualified_name()} be a simple-objct in {self.u.rep_name()}.'
-        return output
+        return output + '\n'
 
 
 class SubstitutionOfEqualTerms(FormulaStatement):
@@ -3759,7 +3780,7 @@ class SubstitutionOfEqualTerms(FormulaStatement):
             output = output + f'\n\t{self.equality_statement.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.equality_statement.rep_ref())}.'
             output = output + f'\n\t{"─" * 71}┤'
             output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ ∎'
-        return output
+        return output + f'\n'
 
 
 class Tuple(tuple):
@@ -6314,7 +6335,7 @@ class UniverseOfDiscourse(SymbolicObject):
         return self.simple_objcts
 
     def rep_declaration(self) -> str:
-        return f'Let {self.rep_fully_qualified_name()} be a universe-of-discourse.'
+        return f'Let {self.rep_fully_qualified_name()} be a universe-of-discourse.' + '\n'
 
     def so(self, symbol=None):
         return self.declare_symbolic_objct(
@@ -6441,7 +6462,7 @@ class InferredStatement(FormulaStatement):
         output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.valid_proposition.rep_formula()}'
         output = repm.wrap(output)
         if output_proofs:
-            output = output + f'\n\tBy the {self.inference_rule.title.rep_mention(text_format=text_format)} inference-rule:'
+            output = output + f'\n\t{StyledText(s="Proof", text_style=text_styles.sans_serif_italic).rep(text_format=text_format)} - By the {self.inference_rule.title.rep_mention(text_format=text_format)}:'
             if self.inference_rule is self.u.inference_rules.variable_substitution:
                 # This is a special case for the variable-substitution inference-rule,
                 # which receives arbitrary theoretical-objcts as the 2nd and
@@ -6454,13 +6475,18 @@ class InferredStatement(FormulaStatement):
                 mapping_text = '(' + ','.join(
                     f'{k.rep_name()} ↦ {v.rep_formula()}' for k, v in mapping) + ')'
                 output = output + f'\n\t{mapping_text:<70} │ Given as parameters.'
+            elif self.inference_rule is self.u.inference_rules.axiom_interpretation:
+                parameter = self.parameters[0]
+                output = output + f'\n\t{parameter.rep_natural_language(text_format=text_format):<70} │ Natural-language postulated by {repm.serif_bold(parameter.rep_ref(text_format=text_format))}.'
+                parameter = self.parameters[1]
+                output = output + f'\n\t{parameter.rep_formula(text_format=text_format, expand=True):<70} │ Interpreted from natural-language.'
             else:
                 for i in range(len(self.parameters)):
                     parameter = self.parameters[i]
                     output = output + f'\n\t{parameter.rep_formula(text_format=text_format, expand=True):<70} │ Follows from {repm.serif_bold(parameter.rep_ref(text_format=text_format))}.'
             output = output + f'\n\t{"─" * 71}┤'
             output = output + f'\n\t{self.valid_proposition.rep_formula(text_format=text_format, expand=True):<70} │ ∎'
-        return output
+        return output + f'\n'
 
 
 def apply_negation(phi: Formula) -> Formula:
@@ -6513,7 +6539,7 @@ class InconsistencyIntroductionStatement(FormulaStatement):
             output = output + f'\n\t{self.not_p.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.not_p.rep_ref())}.'
             output = output + f'\n\t{"─" * 71}┤'
             output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ ∎'
-        return output
+        return output + f'\n'
 
 
 class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):

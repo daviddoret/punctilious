@@ -7,7 +7,7 @@ Set theory: ∈
 Functions: → ⭢
 Prime symbols: ′ ″ ‴ ⁗
 Proofs: ■ (QED) □ ∎ (tombstone)
-
+Pluses: + ⧺
 
 Monospace Normal: 𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉
 𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ
