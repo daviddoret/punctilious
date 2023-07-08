@@ -6,7 +6,7 @@ import random_data
 class TestFormulaIsMaskSimilarTo(TestCase):
     def test_formula_is_mask_similar_to_unary_relation(self):
         p.configuration.echo_axiom_declaration = True
-        u = p.UniverseOfDiscourse('test_formula_is_mask_similar_to_unary_relation')
+        u = p.UniverseOfDiscourse()
         r1a = u.r.declare(1)
         r1b = u.r.declare(1)
         o1 = u.o.declare()
@@ -53,7 +53,7 @@ class TestFormulaIsMaskSimilarTo(TestCase):
 
     def test_formula_is_mask_similar_to_embedded(self):
         p.configuration.echo_axiom_declaration = True
-        u = p.UniverseOfDiscourse('test_formula_is_mask_similar_to_embedded')
+        u = p.UniverseOfDiscourse()
         r1a = u.r.declare(2)
         r1b = u.r.declare(2)
         o1 = u.o.declare()
@@ -71,12 +71,12 @@ class TestFormulaIsMaskSimilarTo(TestCase):
             self.assertTrue(phi1d.is_masked_formula_similar_to(phi1c, {x1, x2, x3}))
 
     def test_formula_is_mask_similar_to_for_modus_ponens(self):
-        u = p.UniverseOfDiscourse('test_formula_is_mask_similar_to_for_modus_ponens-universe')
+        u = p.UniverseOfDiscourse()
         o1 = u.o.declare()
         o2 = u.o.declare()
         o3 = u.o.declare()
         r1 = u.r.declare(2, signal_proposition=True)
-        t = u.t('test_formula_is_mask_similar_to_for_modus_ponens-theory')
+        t = u.t()
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
         phi1 = t.i.axiom_interpretation.infer_statement(ap, u.f(r1, o1, o2))
@@ -89,7 +89,8 @@ class TestFormulaIsMaskSimilarTo(TestCase):
             implication = t.i.axiom_interpretation.infer_statement(ap,
                                                                    u.f(
                                                                        u.r.implies,
-                                                                       u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)),
+                                                                       u.f(u.r.land, u.f(r1, x, y),
+                                                                           u.f(r1, y, z)),
                                                                        u.f(r1, x, z)))
             antecedent_with_variables = implication.valid_proposition.parameters[0]
             self.assertTrue(antecedent_with_variables.is_masked_formula_similar_to(

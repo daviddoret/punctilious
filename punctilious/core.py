@@ -2046,7 +2046,7 @@ class TitleCategory(repm.ValueName):
 
 class TitleCategories(repm.ValueName):
     # axiom = TitleCategory('axiom', 's', 'axiom', 'axiom')
-    axiom_declaration = TitleCategory('axiom_declaration', 's', 'axiom declaration', 'axiom decl.')
+    axiom_declaration = TitleCategory('axiom_declaration', 's', 'axiom', 'axiom')
     axiom_inclusion = TitleCategory('axiom_inclusion', 's', 'axiom', 'axiom')
     corollary = TitleCategory('corollary', 's', 'corollary', 'cor.')
     definition = TitleCategory('definition', 's', 'definition', 'def.')
