@@ -3948,8 +3948,10 @@ class RelationDict(collections.UserDict):
             self._inconsistent = self.declare(
                 1,
                 NameSet(
-                    acronym=StyledText(plaintext='Inc'),
-                    name=StyledText(plaintext='inconsistent'),
+                    symbol=StyledText(plaintext='Inc', text_style=text_styles.serif_italic),
+                    acronym=StyledText(plaintext='Inc', text_style=text_styles.sans_serif_normal),
+                    name=StyledText(plaintext='inconsistent',
+                                    text_style=text_styles.sans_serif_normal),
                     index=None),
                 Formula.prefix,
                 signal_proposition=True)
