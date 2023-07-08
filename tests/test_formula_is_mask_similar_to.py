@@ -1,12 +1,12 @@
 from unittest import TestCase
-import punctilious as p
+import punctilious as pu
 import random_data
 
 
 class TestFormulaIsMaskSimilarTo(TestCase):
     def test_formula_is_mask_similar_to_unary_relation(self):
-        p.configuration.echo_axiom_declaration = True
-        u = p.UniverseOfDiscourse()
+        pu.configuration.echo_axiom_declaration = True
+        u = pu.UniverseOfDiscourse()
         r1a = u.r.declare(1)
         r1b = u.r.declare(1)
         o1 = u.o.declare()
@@ -30,8 +30,8 @@ class TestFormulaIsMaskSimilarTo(TestCase):
             self.assertFalse(phi1e.is_masked_formula_similar_to(phi1a, {x}))
 
     def test_formula_is_mask_similar_to_binary_relation(self):
-        p.configuration.echo_axiom_declaration = True
-        u = p.UniverseOfDiscourse('test_formula_is_mask_similar_to_binary_relation')
+        pu.configuration.echo_axiom_declaration = True
+        u = pu.UniverseOfDiscourse()
         r1a = u.r.declare(2)
         r1b = u.r.declare(2)
         o1 = u.o.declare()
@@ -52,8 +52,8 @@ class TestFormulaIsMaskSimilarTo(TestCase):
             self.assertFalse(phi1d.is_masked_formula_similar_to(phi1a, {x, y}))
 
     def test_formula_is_mask_similar_to_embedded(self):
-        p.configuration.echo_axiom_declaration = True
-        u = p.UniverseOfDiscourse()
+        pu.configuration.echo_axiom_declaration = True
+        u = pu.UniverseOfDiscourse()
         r1a = u.r.declare(2)
         r1b = u.r.declare(2)
         o1 = u.o.declare()
@@ -71,7 +71,7 @@ class TestFormulaIsMaskSimilarTo(TestCase):
             self.assertTrue(phi1d.is_masked_formula_similar_to(phi1c, {x1, x2, x3}))
 
     def test_formula_is_mask_similar_to_for_modus_ponens(self):
-        u = p.UniverseOfDiscourse()
+        u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
         o2 = u.o.declare()
         o3 = u.o.declare()

@@ -363,6 +363,10 @@ class Configuration:
     def __init__(self):
         self.auto_index = None
         self._echo_default = False
+        self.default_note_symbol = StyledText(plaintext='note',
+                                              text_style=text_styles.serif_italic)
+        self.default_hypothesis_symbol = StyledText(plaintext='h',
+                                                    text_style=text_styles.serif_italic)
         self.default_relation_symbol = StyledText(plaintext='r',
                                                   text_style=text_styles.serif_italic)
         self.default_symbolic_object_symbol = StyledText(plaintext='o',
@@ -2062,9 +2066,12 @@ class TitleCategories(repm.ValueName):
     theory_elaboration_sequence = TitleCategory('theory_elaboration_sequence', 't',
                                                 'theory elaboration sequence',
                                                 'theo.')
-    comment = TitleCategory('comment', 's', 'comment', 'cmt.')
-    note = TitleCategory('note', 's', 'note', 'note')
-    remark = TitleCategory('remark', 's', 'remark', 'rmrk.')
+    comment = TitleCategory('comment', StyledText(s='comment', text_style=text_styles.serif_italic),
+                            'comment', 'cmt.')
+    note = TitleCategory('note', StyledText(s='note', text_style=text_styles.serif_italic), 'note',
+                         'note')
+    remark = TitleCategory('remark', StyledText(s='remark', text_style=text_styles.serif_italic),
+                           'remark', 'rmrk.')
     # Special categories
     uncategorized = TitleCategory('uncategorized', 's', 'uncategorized', 'uncat.')
 
@@ -2909,13 +2916,21 @@ class Note(AtheoreticalStatement):
                slf=self)
         universe_of_discourse = theory.universe_of_discourse
         cat = title_categories.note if cat is None else cat
-        self.statement_index = theory.crossreference_statement(self)
+        #  self.statement_index = theory.crossreference_statement(self)
         self.theory = theory
         self.natural_language = content
         self.category = cat
         if nameset is None:
-            nameset = NameSet(
-                symbol=self.category.symbol_base, index=self.statement_index)
+            symbol = self.category.symbol_base
+            index = universe_of_discourse.index_symbol(symbol=symbol)
+            nameset = NameSet(symbol=symbol, index=index)
+        if isinstance(nameset, str):
+            # If symbol was passed as a string,
+            # assume the base was passed without index.
+            # TODO: Analyse the string if it ends with index in subscript characters.
+            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
+            index = universe_of_discourse.index_symbol(symbol=symbol)
+            nameset = NameSet(symbol=symbol, index=index)
         ref = nameset.index if ref is None else ref
         title = Title(cat=cat, ref=ref, subtitle=subtitle)
         super().__init__(
@@ -3501,6 +3516,17 @@ class Hypothesis(Statement):
             'The hypothetical-formula is not a proposition.',
             hypothetical_formula=hypothetical_formula,
             slf=self)
+        if nameset is None:
+            symbol = configuration.default_hypothesis_symbol
+            index = t.u.index_symbol(symbol=symbol)
+            nameset = NameSet(symbol=symbol, index=index)
+        if isinstance(nameset, str):
+            # If symbol was passed as a string,
+            # assume the base was passed without index.
+            # TODO: Analyse the string if it ends with index in subscript characters.
+            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
+            index = t.u.index_symbol(symbol=symbol)
+            nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
             theory=t, category=category, nameset=nameset,
             title=title, dashed_name=dashed_name, echo=False)
@@ -3510,12 +3536,15 @@ class Hypothesis(Statement):
             extended_theory=t,
             extended_theory_limit=self
         )
-        self.hypothetical_axiom = self.universe_of_discourse.declare_axiom(
-            f'Assume {hypothetical_formula.rep_formula()} is true.')
-        self.hypothetical_axiom_postulate = self.hypothetical_t.include_axiom(
-            self.hypothetical_axiom)
+        # Declare the hypothesis as an axiom in the universe-of-discourse.
+        self.hypothetical_axiom_declaration = self.universe_of_discourse.declare_axiom(
+            f'By this hypothesis, assume {hypothetical_formula.rep_formula()} is true.')
+        # Postulate that axiom in the hypothetical-theory.
+        self.hypothetical_axiom_inclusion = self.hypothetical_t.include_axiom(
+            self.hypothetical_axiom_declaration)
+        # Interpret the hypothesis formula from the axiom.
         self.proposition = self.hypothetical_t.i.axiom_interpretation.infer_statement(
-            self.hypothetical_axiom_postulate,
+            self.hypothetical_axiom_inclusion,
             hypothetical_formula)
 
 
