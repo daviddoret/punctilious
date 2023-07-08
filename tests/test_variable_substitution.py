@@ -12,14 +12,14 @@ class TestVariableSubstitution(TestCase):
         o2 = u.o.declare()
         r1 = u.r.declare(1, signal_proposition=True)
         r2 = u.r.declare(2, signal_proposition=True)
-        t = u.t('test_variable_substitution_without_variable')
+        t = u.t()
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
         p_formula = u.f(r1, u.f(r2, o1, o2))
         p_statement = t.i.axiom_interpretation.infer_statement(ap, p_formula, echo=True)
         # y_sequence = tuple()
         p_prime = t.i.vs.infer_statement(p_statement, echo=True)
-        self.assertEqual('◆₁(◆₂(ℴ₁, ℴ₂))', p_prime.rep_formula())
+        self.assertEqual('𝑟₁(𝑟₂(𝑜₁, 𝑜₂))', p_prime.rep_formula(text_format=pu.text_formats.unicode))
 
     def test_variable_substitution_with_free_variables(self):
         pu.configuration.echo_default = True

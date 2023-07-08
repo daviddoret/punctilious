@@ -7,8 +7,8 @@ class TestSection(TestCase):
     def test_section(self):
         echo_note = p.configuration.echo_note
         p.configuration.echo_note = True
-        u = p.UniverseOfDiscourse('white-sheet-of-paper')
-        t = u.t('testing-theory')
+        u = p.UniverseOfDiscourse()
+        t = u.t(title='A test theory')
         s_1 = t.open_section('something interesting', echo=True)
         self.assertEqual('# 𝟏 𝐒𝐨𝐦𝐞𝐭𝐡𝐢𝐧𝐠 𝐢𝐧𝐭𝐞𝐫𝐞𝐬𝐭𝐢𝐧𝐠', s_1.rep_report())
         s_2 = t.open_section('something else', echo=True)
