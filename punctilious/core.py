@@ -355,12 +355,7 @@ def verify(
                 value = 'None'
             else:
                 try:
-                    value_as_string = value.rep(text_format=text_formats.plaintext)
-                except AttributeError:
-                    try:
-                        value_as_string = str(value)
-                    finally:
-                        pass
+                    value_as_string = str(value)
                 finally:
                     pass
             contextual_information += f'\n{key}: {value_as_string}'
@@ -609,9 +604,15 @@ class NameSet:
     TODO: Enhancement: add dashed-name here, and a repr_symbolic (i.e. to support plaintext for non-ASCII symbols).
     """
 
-    def __init__(self, s: (None, str) = None, symbol: (None, str, StyledText) = None,
+    def __init__(self,
+                 s: (None, str) = None,
+                 symbol: (None, str, StyledText) = None,
                  index: (None, int, str, StyledText) = None,
-                 acronym: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+                 acronym: (None, str, StyledText) = None,
+                 name: (None, str, StyledText) = None,
+                 ref: (None, str) = None,
+                 cat: (None, TitleCategory) = None,
+                 subtitle: (None, str, StyledText) = None,
                  explicit_name: (None, str, StyledText) = None):
         if s is not None:
             # Shortcut parameter to quickly declare a nameset from a python string,
@@ -643,6 +644,11 @@ class NameSet:
             self._index = StyledText(s=str(index), text_style=text_styles.sans_serif_normal)
         else:
             self._index = None
+        self._ref = ref
+        self._cat = title_categories.uncategorized if cat is None else cat
+        if isinstance(subtitle, str):
+            subtitle = StyledText(s=subtitle, text_style=text_styles.sans_serif_normal)
+        self._subtitle = subtitle
 
     def __eq__(self, other):
         """Two NameSets n and m are equal if their (symbol, index) pairs are equal.
@@ -665,6 +671,18 @@ class NameSet:
         return self._acronym
 
     @property
+    def cat(self) -> TitleCategory:
+        """The category of this statement."""
+        return self._cat
+
+    @cat.setter
+    def cat(self, cat: TitleCategory):
+        """TODO: Remove this property setter to only set property values at init-time,
+        and make the hash stable. This quick-fix was necessary while migrating from
+        the old approach that used the obsolete Title class."""
+        self._cat = cat
+
+    @property
     def explicit_name(self) -> StyledText:
         return self._explicit_name
 
@@ -680,6 +698,18 @@ class NameSet:
     @property
     def name(self) -> StyledText:
         return self._name
+
+    @property
+    def ref(self) -> str:
+        """Unabridged name."""
+        return self._ref
+
+    @ref.setter
+    def ref(self, ref: str):
+        """TODO: Remove this property setter to only set property values at init-time,
+        and make the hash stable. This quick-fix was necessary while migrating from
+        the old approach that used the obsolete Title class."""
+        self._ref = ref
 
     def rep(self, text_format: (None, TextFormat) = None) -> str:
         """Return the default representation for this python obje.
@@ -781,17 +811,40 @@ class NameSet:
             output = None if base is None else f'{base}{index}'
             return output
 
-    def rep_name(self, text_format: (None, TextFormat) = None) -> (None, str):
+    def rep_mention(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+        """A mention of the form: [name] ([symbol]) [unabridged-category]
+        """
+        rep = ''
+        if self._name is not None:
+            rep = rep + self.rep_name(text_format=text_format, cap=cap)
+        rep = rep + ' '
+        rep = rep + StyledText(s='(', text_style=text_styles.sans_serif_bold).rep(
+            text_format=text_format)
+        rep = rep + self.rep_symbol(text_format=text_format)
+        rep = rep + StyledText(s=')', text_style=text_styles.sans_serif_bold).rep(
+            text_format=text_format)
+        rep = '' if self._cat is None else StyledText(s=self.cat.natural_name,
+                                                      text_style=text_styles.sans_serif_bold).rep(
+            text_format=text_format, cap=cap)
+        return rep
+
+    def rep_name(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> (
+            None, str):
         """Return a string that represent the object as a plain name."""
         text_format = get_config(text_format, configuration.text_format,
                                  fallback_value=text_formats.plaintext)
         if self._name is None:
-            return None
+            return ''
         else:
-            base = self._name.rep(text_format=text_format)
-            index = '' if self._index is None else ' ' + self._index.rep(text_format=text_format)
-            output = None if base is None else f'{base}{index}'
-            return output
+            return StyledText(s=self._name, text_style=text_styles.sans_serif_normal).rep(
+                text_format=text_format, cap=cap)
+
+    def rep_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+        return '' if self._cat is None else StyledText(s=self._cat.abridged_name,
+                                                       text_style=text_styles.sans_serif_bold).rep(
+            text_format=text_format, cap=cap) + '' if self._ref is None else str(
+            ' ' + StyledText(s=self._ref, text_style=text_styles.sans_serif_bold).rep(
+                text_format=text_format)) + ' (' + self.rep_symbol(text_format=text_format) + ')'
 
     def rep_symbol(self, text_format: (None, TextFormat) = None) -> (None, str):
         """Return a string that represent the object as a symbol."""
@@ -804,6 +857,40 @@ class NameSet:
             index = subscriptify(text=self._index, text_format=text_format)
             output = None if base is None else f'{base}{index}'
             return output
+
+    def rep_title(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+        """A title of the form: [unabridged-category] [reference] ([symbol]) - [subtitle]
+        """
+        rep = '' if self._cat is None else StyledText(s=self.cat.natural_name,
+                                                      text_style=text_styles.sans_serif_bold).rep(
+            text_format=text_format, cap=cap)
+        if self._ref is not None:
+            rep = rep + ' '
+            rep = rep + StyledText(s=self._ref, text_style=text_styles.sans_serif_bold).rep(
+                text_format=text_format)
+        rep = rep + ' '
+        rep = rep + StyledText(s='(', text_style=text_styles.sans_serif_bold).rep(
+            text_format=text_format)
+        rep = rep + self.rep_symbol(text_format=text_format)
+        rep = rep + StyledText(s=')', text_style=text_styles.sans_serif_bold).rep(
+            text_format=text_format)
+        if self._subtitle is not None:
+            rep = rep + '- '
+            rep = rep + StyledText(s=self._subtitle, text_style=text_styles.sans_serif_bold).rep(
+                text_format=text_format)
+        return rep
+
+    @property
+    def subtitle(self) -> StyledText:
+        """A conditional complement to the automatically structured title."""
+        return self._subtitle
+
+    @subtitle.setter
+    def subtitle(self, subtitle: str):
+        """TODO: Remove this property setter to only set property values at init-time,
+        and make the hash stable. This quick-fix was necessary while migrating from
+        the old approach that used the obsolete Title class."""
+        self._subtitle = subtitle
 
     @property
     def symbol(self) -> StyledText:
@@ -822,7 +909,7 @@ class NameSet:
         }
 
 
-class Title:
+class TitleOBSOLETE:
     """A title to introduce some symbolic-objcts in reports.
 
     TODO: QUESTION: rename Title to Name, Category to Nature, Reference to Abridged and Unabridged Name.
@@ -835,7 +922,8 @@ class Title:
         the declarative class of the symbolic-objct.
     """
 
-    def __init__(self, ref: (None, str, StyledText) = None, cat: (None, TitleCategory) = None,
+    def __init__(self, nameset: (None, NameSet) = None, ref: (None, str, StyledText) = None,
+                 cat: (None, TitleCategory) = None,
                  subtitle: (None, str, StyledText) = None,
                  abr: (None, str, StyledText) = None):
         if isinstance(ref, str):
@@ -847,6 +935,7 @@ class Title:
         self._cat = title_categories.uncategorized if cat is None else cat
         if isinstance(subtitle, str):
             subtitle = StyledText(s=subtitle, text_style=text_styles.sans_serif_normal)
+        self._nameset = nameset
         self._subtitle = subtitle
         self._styled_title = None
         self._styled_ref = None
@@ -886,6 +975,14 @@ class Title:
         """Abridged name."""
         return self._abr
 
+    @property
+    def nameset(self) -> NameSet:
+        return self._nameset
+
+    @nameset.setter
+    def nameset(self, nameset: NameSet):
+        self._nameset = nameset
+
     def rep(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
         """Return the default representation for this long-name.
 
@@ -905,8 +1002,12 @@ class Title:
                f'{"" if self.subtitle is None else " - " + self.subtitle.rep(text_format=text_format)}'
 
     def rep_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return f'{StyledText(s=self.cat.abridged_name, text_style=text_styles.sans_serif_bold).rep(text_format=text_format, cap=cap)}' \
-               f'{"" if self.ref is None else " " + self.ref.rep(text_format=text_format)}'
+        return StyledText(s=self._cat.abridged_name, text_style=text_styles.sans_serif_bold).rep(
+            text_format=text_format, cap=cap) + \
+               '' if self._ref is None else str(' ' + self._ref.rep(text_format=text_format)) + \
+                                            '' if self._nameset is None else str(
+            ' (' + self._nameset.rep_symbol(
+                text_format=text_format) + ')')
 
     def rep_mention(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
         return f'{"" if self.ref is None else self.ref.rep(text_format=text_format) + " "}' \
@@ -962,8 +1063,8 @@ class SymbolicObject:
             universe_of_discourse: (None, UniverseOfDiscourse),
             is_theory_foundation_system: bool = False,
             is_universe_of_discourse: bool = False,
-            title: (None, str, Title) = None,
-            dashed_name: (None, str, DashedName) = None,
+            cat: (None, TitleCategory) = None,
+            ref: (None, str) = None,
             echo: bool = False):
         echo = get_config(echo, configuration.echo_symbolic_objct, configuration.echo_default,
                           fallback_value=False)
@@ -983,11 +1084,9 @@ class SymbolicObject:
             symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
+        nameset.cat = cat
+        nameset.ref = ref
         self._nameset = nameset
-        self._title = title  # Header validation is implemented in parent classes with proper category.
-        if isinstance(dashed_name, str):
-            dashed_name = DashedName(dashed_name)
-        self._dashed_name = dashed_name
         self.is_theory_foundation_system = is_theory_foundation_system
         self._declare_class_membership(classes.symbolic_objct)
         if not is_universe_of_discourse:
@@ -1011,10 +1110,6 @@ class SymbolicObject:
 
     def __str__(self):
         return self.rep_name()
-
-    @property
-    def dashed_name(self) -> DashedName:
-        return self._dashed_name
 
     @property
     def declarative_classes(self) -> frozenset[DeclarativeClass]:
@@ -1108,16 +1203,14 @@ class SymbolicObject:
 
     def rep_fully_qualified_name(self, text_format: (None, TextFormat) = None) -> str:
         """"""
-        fully_qualified_name = f'⌜{self.rep_dashed_name(text_format=text_format)}⌝ (⌜{self.rep_name(text_format=text_format)}⌝)' if self.dashed_name is not None else f'⌜{self.rep_name(text_format=text_format)}⌝'
-        fully_qualified_name += f' entitled “{self.rep_title(text_format=text_format, cap=True)}”' if self.title is not None else ''
+        fully_qualified_name = f'⌜{self.nameset.rep_conventional(text_format=text_format)}⌝ (⌜{self.nameset.rep_symbol(text_format=text_format)}⌝)'  # if self.dashed_name is not None else f'⌜{self.rep_name(text_format=text_format)}⌝'
+        # fully_qualified_name += f' entitled “{self.rep_title(text_format=text_format, cap=True)}”' if self.title is not None else ''
         return fully_qualified_name
 
-    def rep_mention(self, text_format: (None, TextFormat) = None) -> str:
-        return self.rep_name(
-            text_format=text_format) if self.title is None else self.title.rep_mention(
-            text_format=text_format)
+    def rep_mention(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
+        return self.nameset.rep_mention(text_format=text_format, cap=cap)
 
-    def rep_name(self, text_format: (None, TextFormat) = None) -> str:
+    def rep_name(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
         # global configuration
         # hide_index = \
         #    not is_in_class(self, classes.u) and \
@@ -1126,42 +1219,18 @@ class SymbolicObject:
         #    not is_in_class(self, classes.universe_of_discourse) and \
         #    self.universe_of_discourse.get_symbol_max_index(self.symbol.base) == 1
         # return self.symbol.rep(hide_index=hide_index)
-        return self.nameset.rep(text_format=text_format)
+        return self.nameset.rep_name(text_format=text_format, cap=cap)
 
-    def rep_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return self.rep_name(text_format=text_format) if self.title is None else self.title.rep_ref(
-            text_format=text_format, cap=cap)
+    def rep_ref(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
+        return self.nameset.rep_ref(text_format=text_format, cap=cap)
 
-    def rep_reference(self, text_format: (None, TextFormat) = None,
-                      cap: (None, bool) = None) -> str:
-        global configuration
-        if self.title is None:
-            # If we have no long-name for this symbolic-objct,
-            # we use the (mandatory) symbol as a fallback method.
-            return self.rep_name(text_format=text_format)
-        return self.title.rep_ref(text_format=text_format, cap=cap)
-
-    def rep_title(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        global configuration
-        if self.title is None:
-            # If we have no long-name for this symbolic-objct,
-            # we fallback on the (mandatory) symbol.
-            return self.rep_name(text_format=text_format)
-        return self.title.rep_title(text_format=text_format, cap=cap)
-
-    def rep_title_2(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return self.rep_name(
-            text_format=text_format) if self.title is None else self.title.rep_title(
-            text_format=text_format, cap=cap)
+    def rep_title(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
+        return self.nameset.rep_title(text_format=text_format, cap=cap)
 
     @property
     def nameset(self) -> NameSet:
         """Every symbolic-object that is being referenced must be assigned a unique symbol in its universe-of-discourse."""
         return self._nameset
-
-    @property
-    def title(self) -> Title:
-        return self._title
 
     @property
     def u(self):
@@ -1199,9 +1268,9 @@ class TheoreticalObject(SymbolicObject):
             self,
             nameset: (None, str, NameSet),
             universe_of_discourse: UniverseOfDiscourse,
-            title: (None, str, Title) = None,
-            dashed_name: (None, str, DashedName) = None,
             is_theory_foundation_system: bool = False,
+            cat: (None, TitleCategory) = None,
+            ref: (None, str) = None,
             echo: bool = False):
         # pseudo-class properties. these must be overwritten by
         # the parent constructor after calling __init__().
@@ -1213,8 +1282,8 @@ class TheoreticalObject(SymbolicObject):
             nameset=nameset,
             universe_of_discourse=universe_of_discourse,
             is_theory_foundation_system=is_theory_foundation_system,
-            title=title,
-            dashed_name=dashed_name,
+            cat=cat,
+            ref=ref,
             echo=False)
         super()._declare_class_membership(classes.theoretical_objct)
         if echo:
@@ -1706,7 +1775,7 @@ class Formula(TheoreticalObject):
             universe_of_discourse: UniverseOfDiscourse,
             nameset: (None, str, NameSet) = None,
             lock_variable_scope: bool = False,
-            title: (None, str, Title) = None,
+            title: (None, str, TitleOBSOLETE) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
         """
@@ -1743,8 +1812,6 @@ class Formula(TheoreticalObject):
         super().__init__(
             nameset=nameset,
             universe_of_discourse=universe_of_discourse,
-            title=title,
-            dashed_name=dashed_name,
             echo=False)
         super()._declare_class_membership(declarative_class_list.formula)
         universe_of_discourse.cross_reference_formula(self)
@@ -1983,13 +2050,11 @@ class SimpleObjctDict(collections.UserDict):
 
     def declare(self,
                 nameset: (None, str, NameSet) = None,
-                dashed_name: (None, str, DashedName) = None,
                 echo: (None, bool) = None) -> SimpleObjct:
         """Declare a new simple-objct in this universe-of-discourse.
         """
         return SimpleObjct(
             nameset=nameset,
-            dashed_name=dashed_name,
             universe_of_discourse=self.u,
             echo=echo)
 
@@ -2123,22 +2188,21 @@ class Statement(TheoreticalObject):
     def __init__(
             self,
             theory: TheoryElaborationSequence,
-            category: TitleCategory,
             nameset: (None, str, NameSet) = None,
-            title: (None, str, Title) = None,
-            dashed_name: (None, str, DashedName) = None,
+            cat: (None, TitleCategory) = None,
+            ref: (None, str) = None,
             echo: bool = False):
         self._theory = theory
         echo = get_config(echo, configuration.echo_statement, configuration.echo_default,
                           fallback_value=False)
         universe_of_discourse = theory.universe_of_discourse
         self.statement_index = theory.crossreference_statement(self)
-        self._category = category
+        self._cat = cat
         super().__init__(
             nameset=nameset,
             universe_of_discourse=universe_of_discourse,
-            title=title,
-            dashed_name=dashed_name,
+            cat=cat,
+            ref=ref,
             echo=False)
         super()._declare_class_membership(declarative_class_list.statement)
         if echo:
@@ -2150,7 +2214,7 @@ class Statement(TheoreticalObject):
 
         :return:
         """
-        return self._category
+        return self._cat
 
     def echo(self):
         repm.prnt(self.rep_report())
@@ -2208,7 +2272,7 @@ class AxiomDeclaration(TheoreticalObject):
             natural_language: str,
             u: UniverseOfDiscourse,
             nameset: (None, str, NameSet) = None,
-            title: (None, str, Title) = None,
+            title: (None, str, TitleOBSOLETE) = None,
             auto_index: (None, bool) = None,
             echo: (None, bool) = None):
         """
@@ -2225,19 +2289,10 @@ class AxiomDeclaration(TheoreticalObject):
         verify(natural_language != '',
                'Parameter natural-language is an empty string (after trimming).')
         self.natural_language = natural_language
-        if title is None:
-            # Long-names are not a mandatory attribute,
-            # it is available to improve readability in reports.
-            title = Title(cat=title_categories.axiom_declaration)
-        elif isinstance(title, str):
-            title = Title(ref=title, cat=title_categories.axiom_declaration, subtitle=None)
-        if isinstance(title, Title) and (
-                title.cat is not title_categories.axiom_declaration or title.cat is None):
-            title = Title(ref=title.ref, cat=title_categories.axiom_declaration,
-                          subtitle=title.subtitle)
+        cat = title_categories.axiom_declaration
         # warnings.warn('A new long-name was generated to force its category property to: axiom.')
         super().__init__(
-            universe_of_discourse=u, nameset=nameset, echo=False, title=title)
+            universe_of_discourse=u, nameset=nameset, cat=cat, echo=False)
         super()._declare_class_membership(declarative_class_list.axiom)
         u.cross_reference_axiom(self)
         if echo:
@@ -2281,28 +2336,18 @@ class AxiomInclusion(Statement):
             a: AxiomDeclaration,
             t: TheoryElaborationSequence,
             nameset: (None, str, NameSet) = None,
-            title: (None, str, Title) = None,
-            dashed_name: (None, str, DashedName) = None,
+            ref: (None, str) = None,
             echo: (None, bool) = None):
         """Include (postulate) an axiom in a theory-elaboration-sequence.
         """
         echo = get_config(echo, configuration.echo_axiom_inclusion, configuration.echo_default,
                           fallback_value=False)
         self._axiom = a
-        if title is None:
-            title = Title(cat=title_categories.axiom_inclusion)
-        if isinstance(title, str):
-            title = Title(
-                ref=title,
-                cat=title_categories.axiom_inclusion,
-                subtitle=None
-            )
         super().__init__(
             theory=t,
-            category=title_categories.axiom_inclusion,
+            cat=title_categories.axiom_inclusion,
+            ref=ref,
             nameset=nameset,
-            title=title,
-            dashed_name=dashed_name,
             echo=False)
         t.crossreference_axiom_inclusion(self)
         super()._declare_class_membership(declarative_class_list.axiom_inclusion)
@@ -2351,8 +2396,6 @@ class InferenceRuleInclusion(Statement):
             i: InferenceRuleDeclaration,
             t: TheoryElaborationSequence,
             nameset: (None, str, NameSet) = None,
-            title: (None, str, Title) = None,
-            dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
         """Include (aka allow) an inference-rule in a theory-elaboration.
         """
@@ -2361,18 +2404,10 @@ class InferenceRuleInclusion(Statement):
             symbol = configuration.default_statement_symbol
             index = t.universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
-        if title is None:
-            title = Title(ref=str(nameset.index), cat=title_categories.inference_rule_inclusion,
-                          subtitle=None)
-        if isinstance(title, str):
-            title = Title(ref=title, cat=title_categories.inference_rule_inclusion,
-                          subtitle=None)
         super().__init__(
             theory=t,
-            category=title_categories.inference_rule_inclusion,
+            cat=title_categories.inference_rule_inclusion,
             nameset=nameset,
-            title=title,
-            dashed_name=dashed_name,
             echo=False)
         t.crossreference_inference_rule_inclusion(self)
         super()._declare_class_membership(declarative_class_list.inference_rule_inclusion)
@@ -2429,7 +2464,7 @@ class InferenceRuleInclusion(Statement):
 
     def rep_report(self, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        text = f'Let allow the {repm.serif_bold(self.inference_rule.title.reference)} inference-rule in {self.theory.rep_reference()}.'
+        text = f'Let allow the {repm.serif_bold(self.inference_rule.title.reference)} inference-rule in {self.theory.rep_ref()}.'
         return '\n'.join(
             textwrap.wrap(
                 text=text, width=70,
@@ -2450,7 +2485,7 @@ class DefinitionDeclaration(TheoreticalObject):
             u: UniverseOfDiscourse,
             auto_index=None,
             nameset: (None, str, NameSet) = None,
-            title: (None, str, Title) = None,
+            title: (None, str, TitleOBSOLETE) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
         """
@@ -2468,18 +2503,8 @@ class DefinitionDeclaration(TheoreticalObject):
         verify(natural_language != '',
                'Parameter natural-language is an empty string (after trimming).')
         self.natural_language = natural_language
-        if title is None:
-            # Long-names are not a mandatory attribute,
-            # it is available to improve readability in reports.
-            title = Title(cat=title_categories.definition_declaration)
-        elif isinstance(title, str):
-            title = Title(ref=title, cat=title_categories.definition_declaration, subtitle=None)
-        if isinstance(title, Title) and (
-                title.cat is not title_categories.definition_declaration or title.cat is None):
-            title = Title(ref=title.ref, cat=title_categories.definition_declaration,
-                          subtitle=title.subtitle)
         super().__init__(
-            universe_of_discourse=u, nameset=nameset, title=title, dashed_name=dashed_name,
+            universe_of_discourse=u, nameset=nameset, cat=title_categories.definition_declaration,
             echo=echo)
         super()._declare_class_membership(declarative_class_list.definition)
         u.cross_reference_definition(self)
@@ -2513,7 +2538,7 @@ class DefinitionInclusion(Statement):
             d: DefinitionDeclaration,
             t: TheoryElaborationSequence,
             nameset: (None, str, NameSet) = None,
-            title: (None, str, Title) = None,
+            title: (None, str, TitleOBSOLETE) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
         """Endorsement (aka include, endorse) an definition in a theory-elaboration.
@@ -2522,22 +2547,10 @@ class DefinitionInclusion(Statement):
                           fallback_value=False)
         self.definition = d
         t.crossreference_definition_endorsement(self)
-        if title is None:
-            # Long-names are not a mandatory attribute,
-            # it is available to improve readability in reports.
-            title = Title(cat=title_categories.definition_inclusion)
-        elif isinstance(title, str):
-            title = Title(ref=title, cat=title_categories.definition_inclusion, subtitle=None)
-        if isinstance(title, Title) and (
-                title.cat is not title_categories.definition_inclusion or title.cat is None):
-            title = Title(ref=title.ref, cat=title_categories.definition_inclusion,
-                          subtitle=title.subtitle)
         super().__init__(
             theory=t,
-            category=title_categories.definition_inclusion,
+            cat=title_categories.definition_inclusion,
             nameset=nameset,
-            title=title,
-            dashed_name=dashed_name,
             echo=False)
         super()._declare_class_membership(declarative_class_list.definition_inclusion)
         if echo:
@@ -2576,8 +2589,8 @@ class FormulaStatement(Statement):
 
     def __init__(
             self, theory: TheoryElaborationSequence, valid_proposition: Formula,
-            nameset: (None, NameSet) = None, category: (None, TitleCategory) = None,
-            title: (None, Title) = None, dashed_name: (None, DashedName) = None,
+            nameset: (None, NameSet) = None, cat: (None, TitleCategory) = None,
+            title: (None, TitleOBSOLETE) = None, dashed_name: (None, DashedName) = None,
             echo=None):
         echo = get_config(echo, configuration.echo_statement, configuration.echo_default,
                           fallback_value=False)
@@ -2595,10 +2608,9 @@ class FormulaStatement(Statement):
         #  are elements of the source theory-branch.
         self.valid_proposition = valid_proposition
         self.statement_index = theory.crossreference_statement(self)
-        category = title_categories.proposition if category is None else category
+        cat = title_categories.proposition if cat is None else cat
         super().__init__(
-            theory=theory, nameset=nameset, category=category,
-            title=title, dashed_name=dashed_name,
+            theory=theory, nameset=nameset, cat=cat,
             echo=False)
         # manage theoretical-morphisms
         self.morphism_output = None
@@ -2686,7 +2698,7 @@ class Morphism(FormulaStatement):
 
     def __init__(
             self, source_statement, nameset=None, theory=None,
-            category=None):
+            cat=None):
         assert isinstance(theory, TheoryElaborationSequence)
         assert isinstance(source_statement, FormulaStatement)
         assert theory.contains_theoretical_objct(source_statement)
@@ -2697,7 +2709,7 @@ class Morphism(FormulaStatement):
             self.source_statement.valid_proposition)
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
-            nameset=nameset, category=category)
+            nameset=nameset, cat=cat)
 
     def rep_report(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
@@ -2765,7 +2777,7 @@ class DirectDefinitionInference(FormulaStatement):
             d: DefinitionInclusion,
             t: TheoryElaborationSequence,
             nameset: (None, str, NameSet) = None,
-            title: (None, str, Title) = None,
+            title: (None, str, TitleOBSOLETE) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
         echo = get_config(echo, configuration.echo_definition_direct_inference,
@@ -2789,7 +2801,7 @@ class DirectDefinitionInference(FormulaStatement):
         self.definition = d
         super().__init__(
             theory=t, valid_proposition=p,
-            nameset=nameset, category=title_categories.formal_definition,
+            nameset=nameset, cat=title_categories.formal_definition,
             title=title, dashed_name=dashed_name, echo=False)
         assert d.statement_index < self.statement_index
         super()._declare_class_membership(declarative_class_list.direct_definition_inference)
@@ -2863,7 +2875,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
                  verify_args: collections.abc.Callable,
                  rep_two_columns_proof: (None, collections.abc.Callable) = None,
                  nameset: (None, str, NameSet) = None,
-                 title: (None, str, Title) = None,
+                 title: (None, str, TitleOBSOLETE) = None,
                  dashed_name: (None, str, DashedName) = None,
                  echo: (None, bool) = None):
         self._infer_formula = infer_formula
@@ -2874,14 +2886,14 @@ class InferenceRuleDeclaration(TheoreticalObject):
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         if title is None:
-            title = Title(ref=str(nameset.index), cat=title_categories.inference_rule,
-                          subtitle=None)
+            title = TitleOBSOLETE(ref=str(nameset.index), cat=title_categories.inference_rule,
+                                  subtitle=None)
         if isinstance(title, str):
-            title = Title(ref=title, cat=title_categories.inference_rule,
-                          subtitle=None)
+            title = TitleOBSOLETE(ref=title, cat=title_categories.inference_rule,
+                                  subtitle=None)
         super().__init__(universe_of_discourse=universe_of_discourse,
                          is_theory_foundation_system=False,
-                         nameset=nameset, title=title, dashed_name=dashed_name, echo=False)
+                         nameset=nameset, echo=False)
         super()._declare_class_membership(declarative_class_list.inference_rule)
         universe_of_discourse.cross_reference_inference_rule(self)
         if echo:
@@ -2926,7 +2938,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
                 text_format=text_format) + \
             StyledText(s=" - By the ", text_style=text_styles.sans_serif_normal).rep(
                 text_format=text_format) + \
-            s.inference_rule.title.rep_mention(text_format=text_format) + \
+            s.inference_rule.rep_mention(text_format=text_format) + \
             ':\n'
         if self._rep_two_columns_proof is None:
             # There is no specific rep_two_columns_proof method
@@ -2964,11 +2976,10 @@ class AtheoreticalStatement(SymbolicObject):
     """
 
     def __init__(self, theory: TheoryElaborationSequence, nameset: (None, str, NameSet) = None,
-                 title: (None, str, Title) = None, echo: (None, bool) = None):
+                 title: (None, str, TitleOBSOLETE) = None, echo: (None, bool) = None):
         assert isinstance(theory, TheoryElaborationSequence)
         self.theory = theory
         super().__init__(universe_of_discourse=theory.universe_of_discourse, nameset=nameset,
-                         title=title,
                          echo=echo)
         super()._declare_class_membership(classes.atheoretical_statement)
 
@@ -3007,7 +3018,7 @@ class Note(AtheoreticalStatement):
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         ref = nameset.index if ref is None else ref
-        title = Title(cat=cat, ref=ref, subtitle=subtitle)
+        title = TitleOBSOLETE(cat=cat, ref=ref, subtitle=subtitle)
         super().__init__(
             nameset=nameset,
             theory=theory,
@@ -3020,11 +3031,8 @@ class Note(AtheoreticalStatement):
     def echo(self):
         repm.prnt(self.rep_report())
 
-    def rep_title(self, cap=False):
-        return self.title.rep_title(cap=cap)
-
-    def rep_ref(self, cap=False):
-        return self.title.rep_ref(cap=cap)
+    def rep_title(self, text_format: (None, TextFormat) = None, cap=False):
+        return self.nameset.rep_title(text_format=text_format, cap=cap)
 
     def rep_report(self, output_proofs=True):
         """Return a representation of the note that may be included as a section in a report."""
@@ -3074,8 +3082,8 @@ class Section(AtheoreticalStatement):
         self.category = section_category
         symbol = NameSet(
             symbol=self.category.symbol_base, index=self.statement_index)
-        title = Title(ref=self._section_reference, cat=section_category,
-                      subtitle=section_title)
+        title = TitleOBSOLETE(ref=self._section_reference, cat=section_category,
+                              subtitle=section_title)
         super().__init__(
             nameset=symbol,
             theory=t,
@@ -3135,8 +3143,8 @@ class TheoryElaborationSequence(TheoreticalObject):
             self,
             u: UniverseOfDiscourse,
             nameset: (None, str, NameSet) = None,
-            dashed_name: (None, str, DashedName) = None,
-            title: (None, str, Title) = None,
+            ref: (None, str) = None,
+            subtitle: (None, str) = None,
             extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None,
             stabilized: bool = False,
@@ -3159,8 +3167,7 @@ class TheoryElaborationSequence(TheoreticalObject):
         if nameset is None:
             symbol = configuration.default_theory_symbol
             index = u.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index, name='theory',
-                              explicit_name='theory elaboration sequence')
+            nameset = NameSet(symbol=symbol, index=index)
         elif isinstance(nameset, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
@@ -3168,25 +3175,14 @@ class TheoryElaborationSequence(TheoreticalObject):
             symbol = StyledText(plaintext=nameset, text_style=text_styles.script_normal)
             index = u.index_symbol(symbol=symbol)
             nameset = NameSet(s=symbol, index=index)
-        if title is None:
-            title = Title(ref=str(nameset.index), cat=title_categories.theory_elaboration_sequence,
-                          subtitle=None)
-        elif isinstance(title, str):
-            title = Title(ref=title, cat=title_categories.theory_elaboration_sequence,
-                          subtitle=None)
-        else:
-            verify(
-                title.cat is None or title.cat is title_categories.theory_elaboration_sequence,
-                'The title category must be theory-elaboration-sequence.',
-                title_category=title.cat, title=title, slf=self)
-            if title.cat is None:
-                title.cat = title_categories.theory_elaboration_sequence
+        nameset.cat = title_categories.theory_elaboration_sequence
+        nameset.ref = ref
+        nameset.subtitle = subtitle
         super().__init__(
             nameset=nameset,
+            cat=nameset.cat,
             is_theory_foundation_system=True if extended_theory is None else False,
             universe_of_discourse=u,
-            dashed_name=dashed_name,
-            title=title,
             echo=False)
         verify(is_in_class(u, classes.universe_of_discourse),
                'Parameter "u" is not a member of declarative-class universe-of-discourse.', u=u)
@@ -3355,16 +3351,14 @@ class TheoryElaborationSequence(TheoreticalObject):
 
     def include_axiom(
             self, a: AxiomDeclaration, nameset: (None, str, NameSet) = None,
-            title: (None, str, Title) = None,
-            dashed_name: (None, str, DashedName) = None,
-            echo: (None, bool) = None) -> AxiomInclusion:
+            ref: (None, str) = None, echo: (None, bool) = None) -> AxiomInclusion:
         """Postulate an axiom in this theory-elaboration (self)."""
         return AxiomInclusion(
-            a=a, t=self, nameset=nameset, title=title, dashed_name=dashed_name, echo=echo)
+            a=a, t=self, nameset=nameset, ref=ref, echo=echo)
 
     def include_definition(
             self, d: DefinitionDeclaration, nameset: (None, str, NameSet) = None,
-            title: (None, str, Title) = None,
+            title: (None, str, TitleOBSOLETE) = None,
             dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
         """Include (aka endorse) a definition in this theory-elaboration (self)."""
         return DefinitionInclusion(
@@ -3381,7 +3375,7 @@ class TheoryElaborationSequence(TheoreticalObject):
         return SubstitutionOfEqualTerms(
             original_expression=original_expression,
             equality_statement=equality_statement, nameset=symbol,
-            category=category, theory=self, reference=reference, title=title)
+            cat=category, theory=self, reference=reference, title=title)
 
     def iterate_statements_in_theory_chain(self):
         """Iterate through the (proven or sound) statements in the current theory-chain."""
@@ -3449,7 +3443,7 @@ class TheoryElaborationSequence(TheoreticalObject):
     def pose_hypothesis(
             self,
             hypothetical_proposition: Formula, nameset: (None, str, NameSet) = None,
-            title: (None, str, Title) = None, dashed_name: (None, str, DashedName) = None,
+            title: (None, str, TitleOBSOLETE) = None, dashed_name: (None, str, DashedName) = None,
             echo: bool = False) -> Hypothesis:
         """Pose a new hypothesis in the current theory."""
         return Hypothesis(
@@ -3581,7 +3575,7 @@ class Hypothesis(Statement):
     def __init__(
             self, t: TheoryElaborationSequence, hypothetical_formula: Formula,
             nameset: (None, NameSet) = None,
-            title: (None, Title) = None, dashed_name: (None, DashedName) = None,
+            title: (None, TitleOBSOLETE) = None, dashed_name: (None, DashedName) = None,
             echo: bool = False):
         category = title_categories.hypothesis
         # TODO: Check that all components of the hypothetical-proposition
@@ -3603,7 +3597,7 @@ class Hypothesis(Statement):
             index = t.u.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
-            theory=t, category=category, nameset=nameset,
+            theory=t, cat=category, nameset=nameset,
             title=title, dashed_name=dashed_name, echo=False)
         super()._declare_class_membership(declarative_class_list.hypothesis)
         self.hypothetical_proposition_formula = hypothetical_formula
@@ -3687,8 +3681,7 @@ class Relation(TheoreticalObject):
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
-            universe_of_discourse=universe_of_discourse, nameset=nameset, dashed_name=dashed_name,
-            echo=False)
+            universe_of_discourse=universe_of_discourse, nameset=nameset, echo=False)
         self.universe_of_discourse.cross_reference_relation(r=self)
         super()._declare_class_membership(classes.relation)
         if echo:
@@ -3732,14 +3725,12 @@ class SimpleObjct(TheoreticalObject):
     def __init__(
             self, universe_of_discourse: UniverseOfDiscourse,
             nameset: (None, str, NameSet) = None,
-            dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
         echo = get_config(echo, configuration.echo_simple_objct_declaration,
                           configuration.echo_default,
                           fallback_value=False)
         super().__init__(
-            universe_of_discourse=universe_of_discourse, nameset=nameset,
-            dashed_name=dashed_name, echo=False)
+            universe_of_discourse=universe_of_discourse, nameset=nameset, echo=False)
         self.universe_of_discourse.cross_reference_simple_objct(o=self)
         if echo:
             self.echo()
@@ -3797,8 +3788,8 @@ class SubstitutionOfEqualTerms(FormulaStatement):
 
     def __init__(
             self, original_expression, equality_statement, nameset=None,
-            category=None, theory=None, reference=None, title=None):
-        category = title_categories.proposition if category is None else category
+            cat=None, theory=None, reference=None, title=None):
+        cat = title_categories.proposition if cat is None else cat
         # Check p_implies_q consistency
         assert isinstance(theory, TheoryElaborationSequence)
         assert isinstance(original_expression, FormulaStatement)
@@ -3818,7 +3809,7 @@ class SubstitutionOfEqualTerms(FormulaStatement):
         #   if there are no occurrences of left_term in original_expression.
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
-            category=category,
+            cat=cat,
             nameset=nameset)
 
     def rep_report(self, output_proofs=True):
@@ -5520,7 +5511,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._axiom_interpretation = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.axiom_interpretation,
-                title='axiom interpretation')
+                nameset=NameSet(symbol='axiom-interpretation', name='axiom interpretation'))
         return self._axiom_interpretation
 
     @property
@@ -5703,7 +5694,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._definition_interpretation = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.definition_interpretation,
-                title='definition interpretation')
+                nameset=NameSet(symbol='definition-interpretation',
+                                name='definition interpretation'))
         return self._definition_interpretation
 
     @property
@@ -5928,7 +5920,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._modus_ponens = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.modus_ponens,
-                title='modus ponens')
+                nameset=NameSet(symbol='modus-ponens', name='modus ponens'))
         return self._modus_ponens
 
     @property
@@ -5981,7 +5973,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._variable_substitution = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.variable_substitution,
-                title='variable substitution')
+                nameset=NameSet(symbol='variable-substitution', name='variable substitution'))
         return self._variable_substitution
 
     @property
@@ -6024,7 +6016,6 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
 class UniverseOfDiscourse(SymbolicObject):
     def __init__(self, nameset: (None, str, NameSet) = None,
-                 dashed_name: (None, str, DashedName) = None,
                  echo: (None, bool) = None):
         echo = get_config(echo, configuration.echo_universe_of_discourse_declaration,
                           configuration.echo_default,
@@ -6042,7 +6033,6 @@ class UniverseOfDiscourse(SymbolicObject):
         # Unique name indexes
         self.symbol_indexes = dict()
         self.titles = dict()
-        self.dashed_names = dict()
 
         if nameset is None:
             symbol = StyledText(plaintext='U', text_style=text_styles.script_normal)
@@ -6060,7 +6050,6 @@ class UniverseOfDiscourse(SymbolicObject):
             is_universe_of_discourse=True,
             is_theory_foundation_system=False,
             nameset=nameset,
-            dashed_name=dashed_name,
             universe_of_discourse=None,
             echo=False)
         super()._declare_class_membership(classes.universe_of_discourse)
@@ -6279,8 +6268,8 @@ class UniverseOfDiscourse(SymbolicObject):
     def declare_theory(
             self,
             nameset: (None, str, NameSet) = None,
-            title: (None, str, Title) = None,
-            dashed_name: (None, str, DashedName) = None,
+            ref: (None, str) = None,
+            subtitle: (None, str) = None,
             extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None,
             stabilized: bool = False,
@@ -6297,15 +6286,15 @@ class UniverseOfDiscourse(SymbolicObject):
         return TheoryElaborationSequence(
             u=self,
             nameset=nameset,
-            title=title,
-            dashed_name=dashed_name,
+            ref=ref,
+            subtitle=subtitle,
             extended_theory=extended_theory,
             extended_theory_limit=extended_theory_limit,
             stabilized=stabilized,
             echo=echo)
 
     def declare_axiom(
-            self, natural_language: str, title: (None, str, Title) = None,
+            self, natural_language: str, title: (None, str, TitleOBSOLETE) = None,
             nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         """Elaborate a new axiom 𝑎 in this universe-of-discourse."""
@@ -6376,7 +6365,7 @@ class UniverseOfDiscourse(SymbolicObject):
             self,
             natural_language: str,
             nameset: (None, str, NameSet) = None,
-            title: (None, str, Title) = None,
+            title: (None, str, TitleOBSOLETE) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
         """Pose a new definition in the current universe-of-discourse.
@@ -6421,8 +6410,8 @@ class UniverseOfDiscourse(SymbolicObject):
     def t(
             self,
             nameset: (None, str, NameSet) = None,
-            title: (None, str, Title) = None,
-            dashed_name: (None, str, DashedName) = None,
+            ref: (None, str) = None,
+            subtitle: (None, str) = None,
             extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None,
             stabilized: bool = False,
@@ -6438,8 +6427,8 @@ class UniverseOfDiscourse(SymbolicObject):
         """
         return self.declare_theory(
             nameset=nameset,
-            title=title,
-            dashed_name=dashed_name,
+            ref=ref,
+            subtitle=subtitle,
             extended_theory=extended_theory,
             extended_theory_limit=extended_theory_limit,
             stabilized=stabilized,
@@ -6489,7 +6478,7 @@ class InferredStatement(FormulaStatement):
                           fallback_value=False)
         cat = title_categories.proposition if cat is None else cat
         # TODO: Check that cat is a valid statement cat (prop., lem., cor., theorem)
-        title = Title(ref=ref, cat=cat, subtitle=subtitle)
+        title = TitleOBSOLETE(ref=ref, cat=cat, subtitle=subtitle)
         self._inference_rule = i
         self._parameters = tuple(parameters)
         verify(
@@ -6501,7 +6490,7 @@ class InferredStatement(FormulaStatement):
             theory=t,
             valid_proposition=valid_proposition,
             nameset=nameset,
-            category=cat,
+            cat=cat,
             title=title,
             echo=False)
         # t.crossreference_inferred_proposition(self)
@@ -6535,8 +6524,7 @@ class InferredStatement(FormulaStatement):
         """Return a representation that expresses and justifies the statement."""
         text_format = get_config(text_format, configuration.text_format,
                                  fallback_value=text_formats.plaintext)
-        cap = True
-        rep = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.valid_proposition.rep_formula()}' + '\n\t'
+        rep = f'{self.rep_title(text_format=text_format, cap=True)}: {self.valid_proposition.rep_formula()}' + '\n\t'
         rep = wrap_text(rep) + '\n'
         if output_proofs:
             if self.inference_rule is self.u.inference_rules.variable_substitution:
@@ -6608,18 +6596,18 @@ class InconsistencyIntroductionStatement(FormulaStatement):
     """
 
     def __init__(
-            self, p, not_p, nameset=None, category=None, theory=None,
+            self, p, not_p, nameset=None, cat=None, theory=None,
             title=None):
         if title is None:
             title = 'THEORY INCONSISTENCY'
-        category = title_categories.proposition if category is None else category
+        cat = title_categories.proposition if cat is None else cat
         self.p = p
         self.not_p = not_p
         valid_proposition = InconsistencyIntroductionInferenceRuleOBSOLETE.execute_algorithm(
             theory=theory, p=p, not_p=not_p)
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
-            category=category, title=title,
+            cat=cat, title=title,
             nameset=nameset)
         # The theory is proved inconsistent!
         theory.prove_inconsistent(self)
@@ -6652,7 +6640,7 @@ class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
         """"""
         return InconsistencyIntroductionStatement(
             p=p, not_p=not_p, nameset=symbol,
-            category=category, theory=theory, title=title)
+            cat=category, theory=theory, title=title)
 
     @staticmethod
     def execute_algorithm(theory, p, not_p):

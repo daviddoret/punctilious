@@ -25,8 +25,7 @@ u = pu.UniverseOfDiscourse()
 
 # SECTION 2.1
 
-t = u.t(title=pu.Title(ref='2.1', cat=pu.title_categories.theory_elaboration_sequence,
-                       subtitle='the Peano axioms'))
+t = u.t(ref='2.1', subtitle='the Peano axioms')
 
 section_2 = t.open_section('The natural numbers', section_number=2)
 
@@ -35,7 +34,7 @@ section_2_1 = t.open_section('The Peano axioms', section_parent=section_2)
 # AXIOM 2.1.1
 
 axiom_2_1_1_declaration = u.declare_axiom(f'0 is a natural number.')
-axiom_2_1_1 = t.include_axiom(axiom_2_1_1_declaration, title='2.1.1')
+axiom_2_1_1 = t.include_axiom(axiom_2_1_1_declaration, ref='2.1.1')
 zero = u.o.declare(pu.NameSet('0'))
 natural_number = u.o.declare(pu.NameSet(symbol='natural-number'))
 is_a = u.r.declare(2, pu.NameSet(symbol='is-a'), formula_rep=pu.Formula.infix,
@@ -47,7 +46,7 @@ proposition_2_1_1_1 = t.i.axiom_interpretation.infer_statement(
 # AXIOM 2.1.2
 
 axiom_2_1_2_declaration = u.declare_axiom('If n is a natural number, then n++ is a natural number.')
-axiom_2_1_2 = t.include_axiom(axiom_2_1_2_declaration, title='2.1.2')
+axiom_2_1_2 = t.include_axiom(axiom_2_1_2_declaration, ref='2.1.2')
 plusplus = u.r.declare(1, pu.NameSet(symbol='++', name='successor'), formula_rep=pu.Formula.postfix)
 with u.v('n') as n:
     # ((n₁ is-a natural-number) ⟹ ((n₁)++ is-a natural-number)):

@@ -11,7 +11,7 @@ from core import \
     FailedVerificationException, Formula, FreeVariable, \
     is_in_class, \
     Note, title_categories, InconsistencyWarning, \
-    Title, \
+    TitleOBSOLETE, \
     Relation, rep_two_columns_proof_item, \
     SimpleObjct, subscriptify, title_categories, StyledText, NameSet, SymbolicObject, \
     TextFormat, text_formats, TextStyle, text_styles, TheoreticalObject, TheoryElaborationSequence, \

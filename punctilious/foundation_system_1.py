@@ -3,7 +3,7 @@ import core
 import repm
 
 u = core.UniverseOfDiscourse()
-ft = u.t(dashed_name='foundation-theory-1')
+ft = u.t(nameset=core.NameSet(symbol='foundation-theory-1'))
 
 axiom_01 = ft.include_axiom(u.declare_axiom(
     'A theory is a... (define punctilious data model).'))
@@ -20,11 +20,13 @@ class_of_classes = u.o.declare('class-of-classes')
 element_of = u.r.declare(
     2, '∈', formula_rep=core.Formula.infix,
     signal_proposition=True, dashed_name='element-of')
-fa1 = ft.i.axiom_interpretation.infer_statement(axiom_02, u.f(element_of, class_of_classes, class_of_classes))
+fa1 = ft.i.axiom_interpretation.infer_statement(axiom_02,
+                                                u.f(element_of, class_of_classes, class_of_classes))
 
 nla_04 = ft.include_axiom(u.declare_axiom('The theory-class is the class of all theories'))
 theory_class = u.o.declare('theory-class')
-fa2b = ft.i.axiom_interpretation.infer_statement(axiom_02, u.f(element_of, theory_class, class_of_classes))
+fa2b = ft.i.axiom_interpretation.infer_statement(axiom_02,
+                                                 u.f(element_of, theory_class, class_of_classes))
 fa2c = ft.i.axiom_interpretation.infer_statement(axiom_02, u.f(element_of, ft, theory_class))
 # TODO: Implement a trigger to automatically add a statement (t in theory-class)
 #   for every existing and new theory that is declared?
@@ -37,9 +39,12 @@ falsehood = u.o.declare('false')
 truth = u.o.declare('true')
 truth_values = u.o.declare('truth-values')
 proposition_060 = ft.i.axiom_interpretation.infer_statement(axiom_03,
-                                                            u.f(element_of, truth_values, class_of_classes))
-proposition_070 = ft.i.axiom_interpretation.infer_statement(axiom_03, u.f(element_of, truth, truth_values))
-proposition_080 = ft.i.axiom_interpretation.infer_statement(axiom_03, u.f(element_of, falsehood, truth_values))
+                                                            u.f(element_of, truth_values,
+                                                                class_of_classes))
+proposition_070 = ft.i.axiom_interpretation.infer_statement(axiom_03,
+                                                            u.f(element_of, truth, truth_values))
+proposition_080 = ft.i.axiom_interpretation.infer_statement(axiom_03, u.f(element_of, falsehood,
+                                                                          truth_values))
 
 # foundation propositional relations
 nla_09 = ft.include_axiom(u.declare_axiom(natural_language=
@@ -48,13 +53,17 @@ nla_09 = ft.include_axiom(u.declare_axiom(natural_language=
                                           'and any relation defined from these.'))
 propositional_relations_class = u.o.declare('propositional-relations-class')
 ft.i.axiom_interpretation.infer_statement(axiom_03,
-                                          u.f(element_of, propositional_relations_class, class_of_classes))
+                                          u.f(element_of, propositional_relations_class,
+                                              class_of_classes))
 
 ft.i.axiom_interpretation.infer_statement(nla_09,
-                                          u.f(element_of, u.r.conjunction, propositional_relations_class))
-ft.i.axiom_interpretation.infer_statement(nla_09, u.f(element_of, u.r.disjunction, propositional_relations_class))
+                                          u.f(element_of, u.r.conjunction,
+                                              propositional_relations_class))
+ft.i.axiom_interpretation.infer_statement(nla_09, u.f(element_of, u.r.disjunction,
+                                                      propositional_relations_class))
 ft.i.axiom_interpretation.infer_statement(nla_09,
-                                          u.f(element_of, u.r.implication, propositional_relations_class))
+                                          u.f(element_of, u.r.implication,
+                                              propositional_relations_class))
 ft.i.axiom_interpretation.infer_statement(nla_09,
                                           u.f(element_of, u.r.lnot, propositional_relations_class))
 ft.i.axiom_interpretation.infer_statement(nla_09,
@@ -66,7 +75,8 @@ with u.v('x') as x1, u.v('y') as x2:
     x1_equal_x2 = u.f(u.r.equal, x1, x2)
     x2_equal_x1 = u.f(u.r.equal, x2, x1)
     ft.commutativity_of_equality = ft.i.axiom_interpretation.infer_statement(nla_01b,
-                                                                             u.f(u.r.implication, x1_equal_x2,
+                                                                             u.f(u.r.implication,
+                                                                                 x1_equal_x2,
                                                                                  x2_equal_x1))
 
 d_55 = u.declare_definition('Inequality is defined as the negation of equality.')
@@ -114,7 +124,8 @@ with u.v() as p, u.v() as t:
                                                              u.r.implication,
                                                              u.f(has_truth_value, p, t),
                                                              u.f(
-                                                                 has_truth_value, u.f(u.r.lnot, u.f(u.r.lnot, p)),
+                                                                 has_truth_value,
+                                                                 u.f(u.r.lnot, u.f(u.r.lnot, p)),
                                                                  t)))
 
 
@@ -161,7 +172,8 @@ with u.v('φ') as phi:
                                               u.f(
                                                   u.r.implication,
                                                   u.f(
-                                                      u.r.conjunction, u.f(has_truth_value, phi, truth),
+                                                      u.r.conjunction,
+                                                      u.f(has_truth_value, phi, truth),
                                                       u.f(has_truth_value, phi, falsehood)),
                                                   u.f(element_of, phi, contradictory_statements)))
 

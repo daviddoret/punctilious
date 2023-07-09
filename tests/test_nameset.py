@@ -34,3 +34,8 @@ class TestNameSet(TestCase):
         self.assertEqual('xy1', n.rep_acronym())
         self.assertEqual('something 1', n.rep_name())
         self.assertEqual('something precise 1', n.rep_explicit_name())
+
+    def test_nameset_title(self):
+        n1 = pu.NameSet(symbol='x', index=1, cat=pu.title_categories.proposition)
+        s1 = n1.rep_title(text_format=pu.text_formats.plaintext)
+        print(s1)

@@ -15,7 +15,7 @@ class TestAxiomDeclaration(TestCase):
         content5 = random_data.random_sentence()
         a1 = u.declare_axiom(content1)
         a2 = u.declare_axiom(content2)
-        a3 = u.declare_axiom(content3, title=pu.Title('1.1.1'))
+        a3 = u.declare_axiom(content3, title=pu.TitleOBSOLETE('1.1.1'))
         a4 = u.declare_axiom(content4, title='1.1.2')
         a5 = u.declare_axiom(content5, '1.1.3')
         self.assertEqual(f'Axiom (o1): {content1}', a1.rep_report(wrap=False))
