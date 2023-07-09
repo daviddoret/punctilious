@@ -786,16 +786,16 @@ class NameSet:
         1) explicit-name
         """
         output = self.rep_name(text_format=text_format)
-        if output is not None:
+        if output is not None and output != '':
             return output
         output = self.rep_acronym(text_format=text_format)
-        if output is not None:
+        if output is not None and output != '':
             return output
         output = self.rep_symbol(text_format=text_format)
-        if output is not None:
+        if output is not None and output != '':
             return output
         output = self.rep_explicit_name(text_format=text_format)
-        if output is not None:
+        if output is not None and output != '':
             return output
         raise NoNameSolutionException(nameset=self, text_format=text_format)
 
@@ -811,8 +811,16 @@ class NameSet:
             output = None if base is None else f'{base}{index}'
             return output
 
+    def rep_fully_qualified_name(self, text_format: (None, TextFormat) = None,
+                                 cap: (None, bool) = None):
+        rep = self.rep_conventional(text_format=text_format, cap=cap)
+        sym = self.rep_symbol(text_format=text_format)
+        if rep != sym:
+            rep = rep + ' (' + sym + ')'
+        return rep
+
     def rep_mention(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        """A mention of the form: [name] ([symbol]) [unabridged-category]
+        """A mention of the form: [symbol] [unabridged-category]
         """
         rep = ''
         if self._name is not None:
@@ -840,11 +848,16 @@ class NameSet:
                 text_format=text_format, cap=cap)
 
     def rep_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return '' if self._cat is None else StyledText(s=self._cat.abridged_name,
-                                                       text_style=text_styles.sans_serif_bold).rep(
-            text_format=text_format, cap=cap) + '' if self._ref is None else str(
-            ' ' + StyledText(s=self._ref, text_style=text_styles.sans_serif_bold).rep(
-                text_format=text_format)) + ' (' + self.rep_symbol(text_format=text_format) + ')'
+        rep = '' if self._cat is None else StyledText(s=self._cat.abridged_name,
+                                                      text_style=text_styles.sans_serif_bold).rep(
+            text_format=text_format, cap=cap)
+        if self._ref is not None:
+            if rep != '':
+                rep = rep + ' '
+            rep = rep + StyledText(s=self._ref, text_style=text_styles.sans_serif_bold).rep(
+                text_format=text_format)
+        rep = rep + ' (' + self.rep_symbol(text_format=text_format) + ')'
+        return rep
 
     def rep_symbol(self, text_format: (None, TextFormat) = None) -> (None, str):
         """Return a string that represent the object as a symbol."""
@@ -1106,10 +1119,10 @@ class SymbolicObject:
             (self.universe_of_discourse, self.nameset))
 
     def __repr__(self):
-        return self.rep_name()
+        return self.rep_symbol(text_format=text_formats.plaintext)
 
     def __str__(self):
-        return self.rep_name()
+        return self.rep_symbol(text_format=text_formats.plaintext)
 
     @property
     def declarative_classes(self) -> frozenset[DeclarativeClass]:
@@ -1186,7 +1199,7 @@ class SymbolicObject:
         return self.dashed_name.rep_dashed_name(text_format=text_format)
 
     def rep_declaration(self, text_format: (None, TextFormat) = None) -> str:
-        return f'Let {self.rep_name(text_format=text_format)} be a symbolic-objct denoted as ⌜ {self.rep_name(text_format=text_format)} ⌝.' + '\n'
+        return f'Let {self.rep_fully_qualified_name(text_format=text_format)} be a symbolic-objct in {self.universe_of_discourse.rep_symbol(text_format=text_format)}.' + '\n'
 
     def rep_formula(self, text_format: (None, TextFormat) = None,
                     expand: (None, bool) = None) -> str:
@@ -1199,30 +1212,24 @@ class SymbolicObject:
         Most symbolic-objcts do not have a formula representation,
         where we fall back on symbolic representation.
         """
-        return self.rep_name(text_format=text_format)
+        return self.rep_symbol(text_format=text_format)
 
-    def rep_fully_qualified_name(self, text_format: (None, TextFormat) = None) -> str:
+    def rep_fully_qualified_name(self, text_format: (None, TextFormat) = None,
+                                 cap: (None, bool) = None) -> str:
         """"""
-        fully_qualified_name = f'⌜{self.nameset.rep_conventional(text_format=text_format)}⌝ (⌜{self.nameset.rep_symbol(text_format=text_format)}⌝)'  # if self.dashed_name is not None else f'⌜{self.rep_name(text_format=text_format)}⌝'
-        # fully_qualified_name += f' entitled “{self.rep_title(text_format=text_format, cap=True)}”' if self.title is not None else ''
-        return fully_qualified_name
+        return self.nameset.rep_fully_qualified_name(text_format=text_format, cap=cap)
 
     def rep_mention(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
         return self.nameset.rep_mention(text_format=text_format, cap=cap)
 
     def rep_name(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        # global configuration
-        # hide_index = \
-        #    not is_in_class(self, classes.u) and \
-        #    self.symbol.index == 1 and \
-        #    not configuration.output_index_if_max_index_equal_1 and \
-        #    not is_in_class(self, classes.universe_of_discourse) and \
-        #    self.universe_of_discourse.get_symbol_max_index(self.symbol.base) == 1
-        # return self.symbol.rep(hide_index=hide_index)
         return self.nameset.rep_name(text_format=text_format, cap=cap)
 
     def rep_ref(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
         return self.nameset.rep_ref(text_format=text_format, cap=cap)
+
+    def rep_symbol(self, text_format: (None, TextFormat) = None) -> str:
+        return self.nameset.rep_symbol(text_format=text_format)
 
     def rep_title(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
         return self.nameset.rep_title(text_format=text_format, cap=cap)
@@ -1981,7 +1988,7 @@ class Formula(TheoreticalObject):
                                  fallback_value=text_formats.plaintext)
         expand = True if expand is None else expand
         assert self.relation.arity == 2
-        return f'({self.parameters[0].rep(text_format=text_format, expand=expand)} {self.relation.rep_name(text_format=text_format)} {self.parameters[1].rep(text_format=text_format, expand=expand)})'
+        return f'({self.parameters[0].rep(text_format=text_format, expand=expand)} {self.relation.rep_symbol(text_format=text_format)} {self.parameters[1].rep(text_format=text_format, expand=expand)})'
 
     def rep_as_postfix_operator(self, text_format: (None, TextFormat) = None, expand=None) -> str:
         text_format = get_config(text_format, configuration.text_format,
@@ -1989,7 +1996,7 @@ class Formula(TheoreticalObject):
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
         assert self.relation.arity == 1
-        return f'({self.parameters[0].rep(text_format=text_format, expand=expand)}){self.relation.rep_name(text_format=text_format)}'
+        return f'({self.parameters[0].rep(text_format=text_format, expand=expand)}){self.relation.rep_symbol(text_format=text_format)}'
 
     def rep_as_prefix_operator(self, text_format: (None, TextFormat) = None, expand=None) -> str:
         text_format = get_config(text_format, configuration.text_format,
@@ -2033,7 +2040,7 @@ class Formula(TheoreticalObject):
                     return self.rep_as_function_call(text_format=text_format, expand=expand)
 
     def rep_declaration(self):
-        return f'Let {self.rep_name()} be the formula {self.rep_formula(expand=True)} in {self.universe_of_discourse.rep_name()}.' + '\n'
+        return f'Let {self.rep_symbol()} be the formula {self.rep_formula(expand=True)} in {self.universe_of_discourse.rep_symbol()}.' + '\n'
 
 
 class SimpleObjctDict(collections.UserDict):
@@ -2321,7 +2328,7 @@ class AxiomDeclaration(TheoreticalObject):
         text_format = get_config(text_format, configuration.text_format,
                                  fallback_value=text_formats.plaintext)
         cap = True
-        output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.natural_language}'
+        output = f'{self.rep_title(text_format=text_format, cap=cap)}: ⌜{self.natural_language}⌝'
         output = wrap_text(output) if wrap else output
         return output + f'\n'
 
@@ -2382,7 +2389,7 @@ class AxiomInclusion(Statement):
         text_format = get_config(text_format, configuration.text_format,
                                  fallback_value=text_formats.plaintext)
         cap = True
-        output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.axiom.natural_language}'
+        output = f'{self.rep_title(text_format=text_format, cap=cap)}: ⌜{self.axiom.natural_language}⌝'
         output = wrap_text(output)
         return output + f'\n'
 
@@ -2729,8 +2736,8 @@ class Morphism(FormulaStatement):
         - The formula that is being stated,
         - The justification for the formula."""
         output = f'\n\t{repm.serif_bold("Derivation by theoretical-morphism / syntactic-operation")}'
-        output = output + f'\n\t{self.source_statement.valid_proposition.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.source_statement.rep_name())}.'
-        output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ Output of {repm.serif_bold(self.source_statement.valid_proposition.relation.rep_name())} morphism.'
+        output = output + f'\n\t{self.source_statement.valid_proposition.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.source_statement.rep_symbol())}.'
+        output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ Output of {repm.serif_bold(self.source_statement.valid_proposition.relation.rep_symbol())} morphism.'
         return output
 
 
@@ -2817,7 +2824,7 @@ class DirectDefinitionInference(FormulaStatement):
         output = f'{self.rep_title(cap=True)}: {self.valid_proposition.rep_formula(expand=True)}'
         if output_proofs:
             output = output + f'\n\t{repm.serif_bold("Derivation from natural language definition")}'
-            output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.definition.rep_name())}.'
+            output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ Follows from {self.definition.rep_ref()}.'
         return output + f'\n'
 
 
@@ -2938,8 +2945,9 @@ class InferenceRuleDeclaration(TheoreticalObject):
                 text_format=text_format) + \
             StyledText(s=" - By the ", text_style=text_styles.sans_serif_normal).rep(
                 text_format=text_format) + \
-            s.inference_rule.rep_mention(text_format=text_format) + \
-            ':\n'
+            s.inference_rule.rep_fully_qualified_name(text_format=text_format) + \
+            StyledText(s=" inference rule:\n", text_style=text_styles.sans_serif_normal).rep(
+                text_format=text_format)
         if self._rep_two_columns_proof is None:
             # There is no specific rep_two_columns_proof method
             # linked to this inference-rule,
@@ -3528,8 +3536,8 @@ class TheoryElaborationSequence(TheoreticalObject):
                proof_parameter=proof.parameters[0], proof=proof, slf=self)
         self._consistency = consistency_values.proved_inconsistent
 
-    def rep_declaration(self) -> str:
-        return f'Let {self.rep_fully_qualified_name()} be a theory-elaboration-sequence in {self.u.rep_name()}.' + '\n'
+    def rep_declaration(self, text_format: (None, TextFormat) = None) -> str:
+        return f'Let {self.rep_fully_qualified_name(text_format=text_format)} be a theory-elaboration-sequence in {self.u.rep_symbol(text_format=text_format)}.' + '\n'
 
     @property
     def stabilized(self):
@@ -3697,7 +3705,7 @@ class Relation(TheoreticalObject):
         repm.prnt(self.rep_declaration())
 
     def rep_declaration(self):
-        output = f'Let {self.rep_fully_qualified_name()} be a {rep_arity_as_text(self.arity)} relation in {self.u.rep_name()}'
+        output = f'Let {self.rep_fully_qualified_name()} be a {rep_arity_as_text(self.arity)} relation in {self.u.rep_symbol()}'
         output = output + f' (default notation: {self.formula_rep}).'
         return output + '\n'
 
@@ -3768,7 +3776,7 @@ class SimpleObjct(TheoreticalObject):
         return self.is_formula_equivalent_to(o2), _values
 
     def rep_declaration(self):
-        output = f'Let {self.rep_fully_qualified_name()} be a simple-objct in {self.u.rep_name()}.'
+        output = f'Let {self.rep_fully_qualified_name()} be a simple-objct in {self.u.rep_symbol()}.'
         return output + '\n'
 
 
@@ -4245,7 +4253,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             report = rep_two_columns_proof_item(
                 left=a.rep_natural_language(text_format=text_format),
                 right=StyledText(
-                    s='Postulated in natural-language by ',
+                    s='Postulated by ',
                     text_style=text_styles.sans_serif_normal).rep(text_format=text_format) + \
                       a.rep_ref(text_format=text_format))
             report = report + rep_two_columns_proof_item(
@@ -4289,12 +4297,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
         if self._axiom_interpretation is None:
             self._axiom_interpretation = InferenceRuleDeclaration(
+                nameset=NameSet(symbol='axiom-interpretation'),
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=StyledText(plaintext='axiom-interpretation',
-                                                  text_style=text_styles.monospace),
-                                index=None),
-                title='axiom interpretation',
-                dashed_name=DashedName('axiom-interpretation'),
                 infer_formula=infer_formula,
                 verify_args=verify_args,
                 rep_two_columns_proof=rep_two_columns_proof)
@@ -5510,8 +5514,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._axiom_interpretation is None:
             self._axiom_interpretation = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.axiom_interpretation,
-                nameset=NameSet(symbol='axiom-interpretation', name='axiom interpretation'))
+                i=self.t.u.i.axiom_interpretation)
         return self._axiom_interpretation
 
     @property
@@ -6538,7 +6541,7 @@ class InferredStatement(FormulaStatement):
                 free_variables = self.parameters[0].get_variable_ordered_set()
                 mapping = zip(free_variables, self.parameters[1:])
                 mapping_text = '(' + ','.join(
-                    f'{k.rep_name()} ↦ {v.rep_formula()}' for k, v in mapping) + ')'
+                    f'{k.rep_symbol()} ↦ {v.rep_formula()}' for k, v in mapping) + ')'
                 rep = rep + f'\n\t{mapping_text:<70} │ Given as parameters.'
             else:
                 rep = rep + self.rep_two_columns_proof(text_format=text_format)

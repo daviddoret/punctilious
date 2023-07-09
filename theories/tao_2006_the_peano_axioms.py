@@ -1,6 +1,7 @@
 """"""
 import punctilious as pu
-import foundation_system_1 as fs1
+
+# import foundation_system_1 as fs1
 
 # u = p.UniverseOfDiscourse()
 # ft = u.t(
