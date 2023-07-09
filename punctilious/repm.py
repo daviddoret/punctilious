@@ -1,5 +1,4 @@
 """The Representation Module (repm) is an independant module that provides IO and string manipulation utilities."""
-import textwrap
 import unidecode
 import typing
 
@@ -45,21 +44,6 @@ def monospace(s=None):
     if s is None or s == '':
         return ''
     return ''.join([_monospace_dict.get(c, c) for c in s])
-
-
-def wrap(text):
-    """Wrap text for friendly rendering as text, e.g. in a console.
-
-    :param text:
-    :return:
-    """
-    return '\n'.join(
-        textwrap.wrap(
-            text=text, width=70,
-            subsequent_indent=f'\t',
-            break_on_hyphens=False,
-            expand_tabs=True,
-            tabsize=4))
 
 
 class ValueName:

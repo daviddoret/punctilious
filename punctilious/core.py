@@ -11,6 +11,21 @@ import unicode
 import unidecode
 
 
+def wrap_text(text):
+    """Wrap text for friendly rendering as text, e.g. in a console.
+
+    :param text:
+    :return:
+    """
+    return '\n'.join(
+        textwrap.wrap(
+            text=text, width=configuration.text_output_total_width,
+            subsequent_indent=f'\t',
+            break_on_hyphens=False,
+            expand_tabs=True,
+            tabsize=4))
+
+
 class TextStyle:
     """A supported text style."""
 
@@ -409,9 +424,9 @@ class Configuration:
         self.title_text_style = text_styles.sans_serif_bold
         self.text_format = text_formats.unicode
         self.text_output_indent = 2
-        self.text_output_statement_column_width = 70
-        self.text_output_justification_column_width = 40
-        self.text_output_total_width = 122
+        self.two_columns_proof_left_column_width = 67
+        self.two_columns_proof_right_column_width = 30
+        self.text_output_total_width = 100
         self.warn_on_inconsistency = True
 
     @property
@@ -2233,8 +2248,11 @@ class AxiomDeclaration(TheoreticalObject):
         text_format = get_config(text_format, configuration.text_format,
                                  fallback_value=text_formats.plaintext)
         cap = True
-        output = f'⌜{self.natural_language}⌝'
-        output = repm.wrap(output) if wrap else output
+        output = '⌜' + \
+                 StyledText(s=self.natural_language, text_style=text_styles.sans_serif_normal).rep(
+                     text_format=text_format) + \
+                 '⌝'
+        output = wrap_text(output) if wrap else output
         return output
 
     def rep_report(self, text_format: (None, TextFormat) = None, output_proofs: bool = True,
@@ -2249,7 +2267,7 @@ class AxiomDeclaration(TheoreticalObject):
                                  fallback_value=text_formats.plaintext)
         cap = True
         output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.natural_language}'
-        output = repm.wrap(output) if wrap else output
+        output = wrap_text(output) if wrap else output
         return output + f'\n'
 
 
@@ -2320,7 +2338,7 @@ class AxiomInclusion(Statement):
                                  fallback_value=text_formats.plaintext)
         cap = True
         output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.axiom.natural_language}'
-        output = repm.wrap(output)
+        output = wrap_text(output)
         return output + f'\n'
 
 
@@ -2482,7 +2500,7 @@ class DefinitionDeclaration(TheoreticalObject):
                                  fallback_value=text_formats.plaintext)
         cap = True
         output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.natural_language}'
-        output = repm.wrap(output)
+        output = wrap_text(output)
         return output + f'\n'
 
 
@@ -2539,7 +2557,7 @@ class DefinitionInclusion(Statement):
                                  fallback_value=text_formats.plaintext)
         cap = True
         output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.definition.natural_language}'
-        output = repm.wrap(output)
+        output = wrap_text(output)
         return output + f'\n'
 
 
@@ -2843,11 +2861,14 @@ class InferenceRuleDeclaration(TheoreticalObject):
                  universe_of_discourse: UniverseOfDiscourse,
                  infer_formula: collections.abc.Callable,
                  verify_args: collections.abc.Callable,
+                 rep_two_columns_proof: (None, collections.abc.Callable) = None,
                  nameset: (None, str, NameSet) = None,
                  title: (None, str, Title) = None,
-                 dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
+                 dashed_name: (None, str, DashedName) = None,
+                 echo: (None, bool) = None):
         self._infer_formula = infer_formula
         self._verify_args = verify_args
+        self._rep_two_columns_proof = rep_two_columns_proof
         if nameset is None:
             symbol = configuration.default_symbolic_object_symbol
             index = universe_of_discourse.index_symbol(symbol=symbol)
@@ -2891,6 +2912,39 @@ class InferenceRuleDeclaration(TheoreticalObject):
                                  subtitle=subtitle,
                                  echo=echo,
                                  **kwargs)
+
+    def rep_two_columns_proof(self, s: InferredStatement,
+                              text_format: (None, TextFormat) = None) -> str:
+        """Given an inferred-statement 𝑠 based on this inference-rule,
+        return a two-column proof
+
+        :param inferred_statement:
+        :return:
+        """
+        rep = \
+            StyledText(s="Proof", text_style=text_styles.sans_serif_italic).rep(
+                text_format=text_format) + \
+            StyledText(s=" - By the ", text_style=text_styles.sans_serif_normal).rep(
+                text_format=text_format) + \
+            s.inference_rule.title.rep_mention(text_format=text_format) + \
+            ':\n'
+        if self._rep_two_columns_proof is None:
+            # There is no specific rep_two_columns_proof method
+            # linked to this inference-rule,
+            # make a best-effort to write a readable proof.
+            for i in range(len(s.parameters)):
+                parameter = s.parameters[i]
+                rep = rep + rep_two_columns_proof_item(
+                    left=parameter.rep_formula(text_format=text_format, expand=True),
+                    right=StyledText(s='Follows from ',
+                                     text_style=text_styles.sans_serif_normal).rep(
+                        text_format=text_format) + parameter.rep_ref(
+                        text_format=text_format))
+        else:
+            rep = rep + self._rep_two_columns_proof(*s.parameters, text_format=text_format)
+        rep = rep + rep_two_columns_proof_end(
+            left=s.valid_proposition.rep_formula(text_format=text_format))
+        return rep
 
     def verify_args(self, *args, t: TheoryElaborationSequence):
         """Verify the syntactical-compatibility of input statements and return True
@@ -3052,7 +3106,7 @@ class Section(AtheoreticalStatement):
 
     def rep_report(self, output_proofs=True) -> str:
         text = f'{"#" * self.section_level} {repm.serif_bold(self.section_reference)} {repm.serif_bold(str(self.section_title).capitalize())}'
-        text = repm.wrap(text)
+        text = wrap_text(text)
         return text + f'\n'
 
     @property
@@ -4188,6 +4242,28 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             p = unpack_formula(p)
             return p
 
+        def rep_two_columns_proof(a: AxiomInclusion, p: Formula,
+                                  text_format: (None, TextFormat) = None) -> str:
+            """Return
+
+            :param a: An axiom-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
+            :param p: A propositional formula: P.
+            :param text_format:
+            :return:
+            """
+            report = rep_two_columns_proof_item(
+                left=a.rep_natural_language(text_format=text_format),
+                right=StyledText(
+                    s='Postulated in natural-language by ',
+                    text_style=text_styles.sans_serif_normal).rep(text_format=text_format) + \
+                      a.rep_ref(text_format=text_format))
+            report = report + rep_two_columns_proof_item(
+                left=p.rep_formula(text_format=text_format, expand=True),
+                right=StyledText(
+                    s='Interpreted from natural-language',
+                    text_style=text_styles.sans_serif_normal).rep(text_format=text_format))
+            return report
+
         def verify_args(a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence) -> bool:
             """Verify if the arguments comply syntactically with the inference-rule.
 
@@ -4229,7 +4305,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
                 title='axiom interpretation',
                 dashed_name=DashedName('axiom-interpretation'),
                 infer_formula=infer_formula,
-                verify_args=verify_args)
+                verify_args=verify_args,
+                rep_two_columns_proof=rep_two_columns_proof)
         return self._axiom_interpretation
 
     @property
@@ -6459,34 +6536,57 @@ class InferredStatement(FormulaStatement):
         text_format = get_config(text_format, configuration.text_format,
                                  fallback_value=text_formats.plaintext)
         cap = True
-        output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.valid_proposition.rep_formula()}'
-        output = repm.wrap(output)
+        rep = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.valid_proposition.rep_formula()}' + '\n\t'
+        rep = wrap_text(rep) + '\n'
         if output_proofs:
-            output = output + f'\n\t{StyledText(s="Proof", text_style=text_styles.sans_serif_italic).rep(text_format=text_format)} - By the {self.inference_rule.title.rep_mention(text_format=text_format)}:'
             if self.inference_rule is self.u.inference_rules.variable_substitution:
+                # TODO: MOVE THIS TO THE NEW INFERENCE_RULE LOGIC
                 # This is a special case for the variable-substitution inference-rule,
                 # which receives arbitrary theoretical-objcts as the 2nd and
                 # following parameters, to constitute a free-variable mappings.
                 parameter = self.parameters[0]
-                output = output + f'\n\t{parameter.rep_formula(text_format=text_format, expand=True):<70} │ Follows from {repm.serif_bold(parameter.rep_ref(text_format=text_format))}.'
+                rep = rep + f'\n\t{parameter.rep_formula(text_format=text_format, expand=True):<70} │ Follows from {repm.serif_bold(parameter.rep_ref(text_format=text_format))}.'
                 # Display the free-variables mapping.
                 free_variables = self.parameters[0].get_variable_ordered_set()
                 mapping = zip(free_variables, self.parameters[1:])
                 mapping_text = '(' + ','.join(
                     f'{k.rep_name()} ↦ {v.rep_formula()}' for k, v in mapping) + ')'
-                output = output + f'\n\t{mapping_text:<70} │ Given as parameters.'
-            elif self.inference_rule is self.u.inference_rules.axiom_interpretation:
-                parameter = self.parameters[0]
-                output = output + f'\n\t{parameter.rep_natural_language(text_format=text_format):<70} │ Natural-language postulated by {repm.serif_bold(parameter.rep_ref(text_format=text_format))}.'
-                parameter = self.parameters[1]
-                output = output + f'\n\t{parameter.rep_formula(text_format=text_format, expand=True):<70} │ Interpreted from natural-language.'
+                rep = rep + f'\n\t{mapping_text:<70} │ Given as parameters.'
             else:
-                for i in range(len(self.parameters)):
-                    parameter = self.parameters[i]
-                    output = output + f'\n\t{parameter.rep_formula(text_format=text_format, expand=True):<70} │ Follows from {repm.serif_bold(parameter.rep_ref(text_format=text_format))}.'
-            output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.rep_formula(text_format=text_format, expand=True):<70} │ ∎'
-        return output + f'\n'
+                rep = rep + self.rep_two_columns_proof(text_format=text_format)
+        return rep
+
+    def rep_two_columns_proof(self, text_format: (None, TextFormat) = None):
+        rep = self.inference_rule.rep_two_columns_proof(s=self, text_format=text_format)
+        return rep
+
+
+def rep_two_columns_proof_item(left: str, right: str) -> str:
+    """Format a two-columns proof row.
+    TODO: Implement logic for plaintext, unicode and latex.
+    """
+    left_column_width = get_config(configuration.two_columns_proof_left_column_width,
+                                   fallback_value=67)
+    right_column_width = get_config(configuration.two_columns_proof_right_column_width,
+                                    fallback_value=30)
+    report = textwrap.wrap(text=left, width=left_column_width, break_on_hyphens=False)
+    report = [line.ljust(left_column_width, ' ') + ' | ' for line in report]
+    report[len(report) - 1] = report[len(report) - 1] + right
+    report = '\n'.join(report)
+    return report + '\n'
+
+
+def rep_two_columns_proof_end(left: str) -> str:
+    """Format the end of a two-columns proof
+    TODO: Implement logic for plaintext, unicode and latex.
+    """
+    left_column_width = get_config(configuration.two_columns_proof_left_column_width,
+                                   fallback_value=67)
+    right_column_width = get_config(configuration.two_columns_proof_right_column_width,
+                                    fallback_value=30)
+    report = ''.ljust(left_column_width + 1, '─') + '┤ ' + '\n'
+    report = report + rep_two_columns_proof_item(left=left, right='∎')
+    return report
 
 
 def apply_negation(phi: Formula) -> Formula:
