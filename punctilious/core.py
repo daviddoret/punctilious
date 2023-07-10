@@ -120,6 +120,77 @@ class TextStyles:
 text_styles = TextStyles()
 
 
+class TextComposition(list):
+    def __init__(self, iterable: (None, collections.abc.Iterable) = None):
+        if iterable is not None:
+            super().__init__(self.prepare_item(item) for item in iterable)
+
+    def __setitem__(self, index: int, item: (None, str, StyledText)):
+        super().__setitem__(index, self.prepare_item(item))
+
+    def insert(self, index: int, item: (None, str, StyledText)):
+        super().insert(index, self.prepare_item(item))
+
+    def append(self, item: (None, str, StyledText),
+               sep_before: (None, str, StyledText) = ' ',
+               sep_after: (None, str, StyledText) = None):
+        if len(self) > 0 and sep_before is not None:
+            super().append(self.prepare_item(sep_before))
+        super().append(self.prepare_item(item))
+        if sep_after is not None:
+            super().append(self.prepare_item(sep_after))
+
+    def extend(self, other: (None, collections.abc.Iterable)):
+        if other is not None:
+            if isinstance(other, type(self)):
+                super().extend(other)
+            else:
+                super().extend(self.prepare_item(item) for item in other)
+
+    def prepare_item(self, item: (None, str, int, StyledText)) -> StyledText:
+        """Force conversion of item to StyledText to assure the internal consistency of the TextComposition."""
+        if item is None:
+            return text_dict.empty_string
+        elif isinstance(item, str):
+            if item == '':
+                return text_dict.empty_string
+            else:
+                return StyledText(s=item)
+        elif isinstance(item, int):
+            return StyledText(s=str(item))
+        elif isinstance(item, StyledText):
+            return item
+        else:
+            raise TypeError('item is of unsupported type.')
+
+    def rep(self, text_format: (None, TextFormat) = None, compose: bool = False) -> (
+            str, TextComposition):
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
+        if compose:
+            # Output as text composition.
+            return self
+        else:
+            # Output as final string.
+            return ''.join(item.rep(text_format=text_format) for item in self)
+
+
+class Paragraph(TextComposition):
+    def __init__(self, iterable=None):
+        super().__init__(iterable=None)
+
+    def rep(self, text_format: (None, TextFormat) = None, compose: bool = False) -> str:
+        text_format = get_config(text_format, configuration.text_format,
+                                 fallback_value=text_formats.plaintext)
+        match text_format:
+            case text_formats.plaintext:
+                return super().rep(text_format=text_format) + '\n\n'
+            case text_formats.unicode:
+                return super().rep(text_format=text_format) + '\n\n'
+            case text_formats.latex_math:
+                raise NotImplementedError('oooops')
+
+
 class TextFormat:
     """A supported output text format."""
 
@@ -304,6 +375,19 @@ class StyledText:
     @property
     def unicode(self) -> (None, str):
         return self._unicode
+
+
+class TextDict:
+    """Predefined texts are exposed in the TextDict. This should facilite internatiolization at a later stage."""
+
+    def __init__(self):
+        self.empty_string = StyledText(s='')
+        self.space_separator = StyledText(s=' ')
+        self.point_separator = StyledText(s='.')
+        self.comma_separator = StyledText(s=', ')
+
+
+text_dict = TextDict()
 
 
 def subscriptify(text: (str, StyledText) = '', text_format: TextFormat = text_formats.plaintext):
@@ -812,11 +896,17 @@ class NameSet:
             return output
 
     def rep_fully_qualified_name(self, text_format: (None, TextFormat) = None,
-                                 cap: (None, bool) = None):
-        rep = self.rep_conventional(text_format=text_format, cap=cap)
+                                 cap: (None, bool) = None, compose: bool = False):
+        conventional = self.rep_conventional(text_format=text_format, cap=cap)
         sym = self.rep_symbol(text_format=text_format)
-        if rep != sym:
-            rep = rep + ' (' + sym + ')'
+        rep = TextComposition()
+        rep.append(conventional)
+        if conventional != sym:
+            rep.append('(')
+            rep.append(sym)
+            rep.append(')')
+        if not compose:
+            rep = rep.rep(text_format=text_format)
         return rep
 
     def rep_mention(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
@@ -1184,8 +1274,8 @@ class SymbolicObject:
             return False
         return True
 
-    def prnt(self, expand=False):
-        repm.prnt(self.rep(expand=expand))
+    def prnt(self, text_format: (None, TextFormat) = None, expand=False):
+        repm.prnt(self.rep(text_format=text_format, expand=expand))
 
     def rep(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
         # If a long-name is available, represent the objct as a reference.
@@ -1215,9 +1305,10 @@ class SymbolicObject:
         return self.rep_symbol(text_format=text_format)
 
     def rep_fully_qualified_name(self, text_format: (None, TextFormat) = None,
-                                 cap: (None, bool) = None) -> str:
+                                 cap: (None, bool) = None, compose: bool = False) -> str:
         """"""
-        return self.nameset.rep_fully_qualified_name(text_format=text_format, cap=cap)
+        return self.nameset.rep_fully_qualified_name(text_format=text_format, cap=cap,
+                                                     compose=compose)
 
     def rep_mention(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
         return self.nameset.rep_mention(text_format=text_format, cap=cap)
@@ -6403,8 +6494,13 @@ class UniverseOfDiscourse(SymbolicObject):
         """
         return self.simple_objcts
 
-    def rep_declaration(self) -> str:
-        return f'Let {self.rep_fully_qualified_name()} be a universe-of-discourse.' + '\n'
+    def rep_declaration(self, text_format: (None, TextFormat) = None, compose: bool = False) -> (
+            str, TextComposition):
+        rep = Paragraph()
+        rep.append('Let')
+        rep.append(self.rep_fully_qualified_name())
+        rep.append('be a universe-of-discourse.')
+        return rep.rep(text_format=text_format, compose=compose)
 
     def so(self, symbol=None):
         return self.declare_symbolic_objct(

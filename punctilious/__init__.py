@@ -9,12 +9,14 @@ from core import \
     classes, configuration, consistency_values, \
     DashedName, DefinitionInclusion, DirectDefinitionInference, \
     FailedVerificationException, Formula, FreeVariable, \
-    is_in_class, \
-    Note, title_categories, InconsistencyWarning, \
-    TitleOBSOLETE, \
+    InconsistencyWarning, is_in_class, \
+    Note, \
+    Paragraph, \
     Relation, rep_two_columns_proof_item, \
     SimpleObjct, subscriptify, title_categories, StyledText, NameSet, SymbolicObject, \
-    TextFormat, text_formats, TextStyle, text_styles, TheoreticalObject, TheoryElaborationSequence, \
+    TextComposition, TextFormat, text_formats, TextStyle, text_styles, TheoreticalObject, \
+    TheoryElaborationSequence, \
+    title_categories, \
     UniverseOfDiscourse
 
 # from foundation_system_1 import foundation_system_1, ft, u
