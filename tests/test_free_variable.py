@@ -5,7 +5,7 @@ import random_data
 
 class TestFreeVariable(TestCase):
     def test_1(self):
-        pu.configuration.text_format = pu.text_formats.unicode
+        pu.configuration.encoding = pu.encodings.unicode
         u = pu.UniverseOfDiscourse()
         with u.v(symbol='x') as x1:
             pass

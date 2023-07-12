@@ -16,12 +16,12 @@ class TestDoubleNegationElimination(TestCase):
         phi0 = u.f(r1, o1, o2)
         phi1 = t.i.axiom_interpretation.infer_statement(ap, u.f(u.r.lnot, u.f(u.r.lnot, phi0)))
         self.assertEqual(
-            'not(not(r1(o1, o2)))', phi1.rep_formula(pu.text_formats.plaintext))
+            'not(not(r1(o1, o2)))', phi1.rep_formula(pu.encodings.plaintext))
         self.assertEqual(
-            '¬(¬(𝑟₁(𝑜₁, 𝑜₂)))', phi1.rep_formula(pu.text_formats.unicode))
+            '¬(¬(𝑟₁(𝑜₁, 𝑜₂)))', phi1.rep_formula(pu.encodings.unicode))
         phi2 = t.i.dne.infer_statement(phi1)
         self.assertEqual(
-            'r1(o1, o2)', phi2.rep_formula(pu.text_formats.plaintext))
+            'r1(o1, o2)', phi2.rep_formula(pu.encodings.plaintext))
         self.assertEqual(
-            '𝑟₁(𝑜₁, 𝑜₂)', phi2.rep_formula(pu.text_formats.unicode))
+            '𝑟₁(𝑜₁, 𝑜₂)', phi2.rep_formula(pu.encodings.unicode))
         self.assertTrue(phi2.is_formula_equivalent_to(phi0))

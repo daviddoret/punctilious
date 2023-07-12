@@ -8,7 +8,7 @@ class TestNameSet(TestCase):
         n = pu.NameSet(symbol='x', index=1, acronym='xy', name='something',
                        explicit_name='something precise')
 
-        pu.configuration.text_format = pu.text_formats.unicode
+        pu.configuration.encoding = pu.encodings.unicode
         self.assertEqual('𝑥₁', n.rep_compact())
         self.assertEqual('𝗌𝗈𝗆𝖾𝗍𝗁𝗂𝗇𝗀 𝗉𝗋𝖾𝖼𝗂𝗌𝖾 𝟣', n.rep_accurate())
         self.assertEqual('𝗌𝗈𝗆𝖾𝗍𝗁𝗂𝗇𝗀 𝟣', n.rep_conventional())
@@ -17,7 +17,7 @@ class TestNameSet(TestCase):
         self.assertEqual('𝗌𝗈𝗆𝖾𝗍𝗁𝗂𝗇𝗀 𝟣', n.rep_name())
         self.assertEqual('𝗌𝗈𝗆𝖾𝗍𝗁𝗂𝗇𝗀 𝗉𝗋𝖾𝖼𝗂𝗌𝖾 𝟣', n.rep_explicit_name())
 
-        pu.configuration.text_format = pu.text_formats.latex_math
+        pu.configuration.encoding = pu.encodings.latex_math
         self.assertEqual('\\mathit{x}_{1}', n.rep_compact())
         self.assertEqual('\\mathsf{something precise} \\mathsf{1}', n.rep_accurate())
         self.assertEqual('\\mathsf{something} \\mathsf{1}', n.rep_conventional())
@@ -26,7 +26,7 @@ class TestNameSet(TestCase):
         self.assertEqual('\\mathsf{something} \\mathsf{1}', n.rep_name())
         self.assertEqual('\\mathsf{something precise} \\mathsf{1}', n.rep_explicit_name())
 
-        pu.configuration.text_format = pu.text_formats.plaintext
+        pu.configuration.encoding = pu.encodings.plaintext
         self.assertEqual('x1', n.rep_compact())
         self.assertEqual('something precise 1', n.rep_accurate())
         self.assertEqual('something 1', n.rep_conventional())
@@ -37,5 +37,5 @@ class TestNameSet(TestCase):
 
     def test_nameset_title(self):
         n1 = pu.NameSet(symbol='x', index=1, cat=pu.title_categories.proposition)
-        s1 = n1.rep_title(text_format=pu.text_formats.plaintext)
+        s1 = n1.rep_title(text_format=pu.encodings.plaintext)
         print(s1)

@@ -19,26 +19,26 @@ class TestDefinition(TestCase):
         d5 = u.declare_definition(content5, title='1.1.3', dashed_name='my-definition')
 
         self.assertEqual(f'Definition (o1): {content1}',
-                         d1.rep_report(text_format=pu.text_formats.plaintext, wrap=False))
+                         d1.rep_report(text_format=pu.encodings.plaintext, wrap=False))
         self.assertEqual(f'𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 (𝑜₁): {content1}',
-                         d1.rep_report(text_format=pu.text_formats.unicode, wrap=False))
+                         d1.rep_report(text_format=pu.encodings.unicode, wrap=False))
 
         self.assertEqual(f'Definition (o2): {content2}',
-                         d2.rep_report(text_format=pu.text_formats.plaintext, wrap=False))
+                         d2.rep_report(text_format=pu.encodings.plaintext, wrap=False))
         self.assertEqual(f'𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 (𝑜₂): {content2}',
-                         d2.rep_report(text_format=pu.text_formats.unicode, wrap=False))
+                         d2.rep_report(text_format=pu.encodings.unicode, wrap=False))
 
         self.assertEqual(f'Definition 1.1.1 (o3): {content3}',
-                         d3.rep_report(text_format=pu.text_formats.plaintext, wrap=False))
+                         d3.rep_report(text_format=pu.encodings.plaintext, wrap=False))
         self.assertEqual(f'𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 𝟭.𝟭.𝟭 (𝑜₃): {content3}',
-                         d3.rep_report(text_format=pu.text_formats.unicode, wrap=False))
+                         d3.rep_report(text_format=pu.encodings.unicode, wrap=False))
 
         self.assertEqual(f'Definition 1.1.2 (o4): {content4}',
-                         d4.rep_report(text_format=pu.text_formats.plaintext, wrap=False))
+                         d4.rep_report(text_format=pu.encodings.plaintext, wrap=False))
         self.assertEqual(f'𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 𝟭.𝟭.𝟮 (𝑜₄): {content4}',
-                         d4.rep_report(text_format=pu.text_formats.unicode, wrap=False))
+                         d4.rep_report(text_format=pu.encodings.unicode, wrap=False))
 
         self.assertEqual(f'Definition 1.1.3 (o5): {content5}',
-                         d5.rep_report(text_format=pu.text_formats.plaintext, wrap=False))
+                         d5.rep_report(text_format=pu.encodings.plaintext, wrap=False))
         self.assertEqual(f'𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 𝟭.𝟭.𝟯 (𝑜₅): {content5}',
-                         d5.rep_report(text_format=pu.text_formats.unicode, wrap=False))
+                         d5.rep_report(text_format=pu.encodings.unicode, wrap=False))

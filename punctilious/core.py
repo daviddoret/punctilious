@@ -11,19 +11,50 @@ import unicode
 import unidecode
 
 
-def wrap_text(text):
-    """Wrap text for friendly rendering as text, e.g. in a console.
+class Encoding:
+    """A supported output text format."""
 
-    :param text:
-    :return:
-    """
-    return '\n'.join(
-        textwrap.wrap(
-            text=text, width=configuration.text_output_total_width,
-            subsequent_indent=f'\t',
-            break_on_hyphens=False,
-            expand_tabs=True,
-            tabsize=4))
+    def __init__(self, name: str):
+        self._name = name
+
+    def __eq__(self, other):
+        return hash(self) == hash(other)
+
+    def __hash__(self):
+        return hash((Encoding, self._name))
+
+    def __repr__(self):
+        return self._name
+
+    def __str__(self):
+        return self._name
+
+
+class Encodings:
+    def __init__(self):
+        self.latex_math = Encoding('latex-math')
+        self.plaintext = Encoding('plaintext')
+        self.unicode = Encoding('unicode')
+
+
+encodings = Encodings()
+
+
+class Representable(abc.ABC):
+
+    @abc.abstractmethod
+    def rep(self, encoding: (None, Encoding) = None, **args) -> str:
+        raise NotImplementedError('This method is not implemented.')
+
+    @abc.abstractmethod
+    def rep_declaration(self, encoding: (None, Encoding) = None, **args) -> str:
+        raise NotImplementedError('This method is not implemented.')
+
+    @abc.abstractmethod
+    def rep_report(self, encoding: (None, Encoding) = None, **args) -> str:
+        raise NotImplementedError('This method is not implemented.')
+
+    # etc.
 
 
 class TextStyle:
@@ -120,25 +151,163 @@ class TextStyles:
 text_styles = TextStyles()
 
 
-class TextComposition(list):
-    def __init__(self, iterable: (None, collections.abc.Iterable) = None):
+class Text:
+    """A text is a string of text that:
+    - is of a supported text_style,
+    - may support one or several encodings."""
+
+    def __init__(self, s: (None, str) = None, text_style: (None, TextStyle) = None,
+                 plaintext: (None, str) = None, unicode: (None, str) = None,
+                 latex_math: (None, str) = None
+                 ):
+        """
+
+        :param s: A string. Leave it to the constructor to interpret if it is plaintext or unicode.
+        :param plaintext:
+        :param unicode:
+        :param latex_math:
+        :param text_style:
+        """
+        if s is not None and plaintext is None and s == unidecode.unidecode(s):
+            plaintext = s
+        if s is not None and unicode is None and s != unidecode.unidecode(s):
+            unicode = s
+        if unicode is not None and plaintext is None:
+            if str(unicode).isalnum():
+                # This is a best-effort mapping to plaintext.
+                # It may lead to undesirable results,
+                # e.g. symbol '¬' is mapped to '!'.
+                # To avoid this, isalnum() is used as a temporary solution.
+                plaintext = unidecode.unidecode(unicode)
+        if text_style is None:
+            text_style = text_styles.serif_normal
+        self._plaintext = plaintext if plaintext != '' else None
+        self._unicode = unicode if unicode != '' else None
+        self._latex_math = latex_math if latex_math != '' else None
+        self._text_style = text_style if text_style != '' else None
+
+    def __eq__(self, other: (None, object, Text)) -> bool:
+        """Two instances of TextStyle are equal if any of their formatted representation are equal and not None."""
+        return type(self) is type(other) and \
+            (self.text_style == other.text_style) and \
+            (equal_not_none(self.plaintext, other.plaintext) or
+             equal_not_none(self.unicode, other.unicode) or
+             equal_not_none(self.latex_math, other.latex_math))
+
+    def __hash__(self):
+        """Two styled-texts are considered distinct if either their plaintext content or their style are distinct."""
+        return hash(
+            (Text, self._plaintext, self._unicode, self._latex_math, self._text_style))
+
+    def __repr__(self) -> str:
+        try:
+            return self.rep()
+        except:
+            return repr(self.to_dict())
+
+    def __str__(self) -> str:
+        return self.rep()
+
+    @property
+    def latex_math(self) -> (None, str):
+        return self._latex_math
+
+    @property
+    def plaintext(self) -> (None, str):
+        return self._plaintext
+
+    def rep(self, encoding: Encoding = encodings.plaintext, cap: bool = False):
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
+        match encoding:
+            case encodings.plaintext:
+                return self.rep_as_plaintext(cap=cap)
+            case encodings.latex_math:
+                return self.rep_as_latex_math(cap=cap)
+            case encodings.unicode:
+                return self.rep_as_unicode(cap=cap)
+            case _:
+                return self.rep_as_plaintext(cap=cap)
+
+    def rep_as_latex_math(self, cap: bool = False):
+        content = self._plaintext if self._latex_math is None else self._latex_math
+        content = content.capitalize() if cap else content
+        return f'{self._text_style.latex_math_start_tag}{content}{self._text_style.latex_math_end_tag}'
+
+    def rep_as_plaintext(self, cap: bool = False):
+        content = self._plaintext
+        content = content.capitalize() if cap else content
+        return content
+
+    def rep_as_unicode(self, cap: bool = False):
+        content = self._plaintext if self._unicode is None else self._unicode
+        content = content.capitalize() if cap else content
+        return unicode.unicode_format(content, self._text_style.unicode_table_index)
+
+    @property
+    def text_style(self) -> TextStyle:
+        return self._text_style
+
+    def to_dict(self) -> dict:
+        return {
+            '_plaintext':  self._plaintext,
+            '_unicode':    self._unicode,
+            '_latex_math': self._latex_math,
+            '_text_style': self._text_style
+        }
+
+    @property
+    def unicode(self) -> (None, str):
+        return self._unicode
+
+
+class TextDict:
+    """Predefined texts are exposed in the TextDict. This should facilite internatiolization at a later stage."""
+
+    def __init__(self):
+        self.comma = Text(plaintext=', ')
+        self.empty_string = Text(plaintext='')
+        self.period = Text(plaintext='.')
+        self.space = Text(plaintext=' ')
+
+
+text_dict = TextDict()
+
+
+class Block(list, Representable):
+    """A block representable element is a markup element that has a start tag, content, and an end tag."""
+
+    def __init__(self, iterable: (None, collections.abc.Iterable) = None,
+                 start_tag: (None, Text) = None, end_tag: (None, Text) = None):
+        self._start_tag = start_tag
+        self._end_tag = end_tag
         if iterable is not None:
             super().__init__(self.prepare_item(item) for item in iterable)
 
-    def __setitem__(self, index: int, item: (None, str, StyledText)):
+    def __setitem__(self, index: int, item: (None, str, Text)):
         super().__setitem__(index, self.prepare_item(item))
 
-    def insert(self, index: int, item: (None, str, StyledText)):
-        super().insert(index, self.prepare_item(item))
+    def __repr__(self):
+        return self.rep(encoding=encodings.plaintext)
 
-    def append(self, item: (None, str, StyledText),
-               sep_before: (None, str, StyledText) = ' ',
-               sep_after: (None, str, StyledText) = None):
+    def __str__(self):
+        return self.rep(encoding=encodings.plaintext)
+
+    def append(self, item: (None, str, Text),
+               sep_before: (None, str, Text) = ' ',
+               sep_after: (None, str, Text) = None):
         if len(self) > 0 and sep_before is not None:
             super().append(self.prepare_item(sep_before))
         super().append(self.prepare_item(item))
         if sep_after is not None:
             super().append(self.prepare_item(sep_after))
+
+    def append_period(self):
+        self.append(text_dict.period)
+
+    @property
+    def end_tag(self):
+        return self._end_tag
 
     def extend(self, other: (None, collections.abc.Iterable)):
         if other is not None:
@@ -147,7 +316,20 @@ class TextComposition(list):
             else:
                 super().extend(self.prepare_item(item) for item in other)
 
-    def prepare_item(self, item: (None, str, int, StyledText)) -> StyledText:
+    def insert(self, index: int, item: (None, str, Text)):
+        super().insert(index, self.prepare_item(item))
+
+    @property
+    def outer_composition(self) -> list[Representable]:
+        compo = list()
+        if self._start_tag is not None:
+            compo.append(self._start_tag)
+        compo.extend(self)
+        if self._end_tag is not None:
+            compo.append(self._end_tag)
+        return compo
+
+    def prepare_item(self, item: (None, str, int, Text)) -> Text:
         """Force conversion of item to StyledText to assure the internal consistency of the TextComposition."""
         if item is None:
             return text_dict.empty_string
@@ -155,69 +337,93 @@ class TextComposition(list):
             if item == '':
                 return text_dict.empty_string
             else:
-                return StyledText(s=item)
+                return Text(s=item)
         elif isinstance(item, int):
-            return StyledText(s=str(item))
-        elif isinstance(item, StyledText):
+            return Text(s=str(item))
+        elif isinstance(item, Text):
             return item
         else:
             raise TypeError('item is of unsupported type.')
 
-    def rep(self, text_format: (None, TextFormat) = None, compose: bool = False) -> (
-            str, TextComposition):
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
-        if compose:
-            # Output as text composition.
-            return self
-        else:
-            # Output as final string.
-            return ''.join(item.rep(text_format=text_format) for item in self)
+    def rep(self, encoding: (None, Encoding) = None, **args) -> str:
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
+        return ''.join(item.rep(encoding=encoding) for item in
+                       self.outer_composition)
+
+    @property
+    def start_tag(self):
+        return self._start_tag
 
 
-class Paragraph(TextComposition):
-    def __init__(self, iterable=None):
-        super().__init__(iterable=None)
+class QuasiQuotation(Block):
+    """As a convention in Punctilious, quasi quotes are used to denote natural language.
 
-    def rep(self, text_format: (None, TextFormat) = None, compose: bool = False) -> str:
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
-        match text_format:
-            case text_formats.plaintext:
-                return super().rep(text_format=text_format) + '\n\n'
-            case text_formats.unicode:
-                return super().rep(text_format=text_format) + '\n\n'
-            case text_formats.latex_math:
-                raise NotImplementedError('oooops')
+    """
+
+    def __init__(self, iterable: (None, collections.Iterable) = None) -> None:
+        super().__init__(iterable=iterable, start_tag=QuasiQuotation._static_start_tag,
+                         end_tag=QuasiQuotation._static_end_tag)
+
+    _static_end_tag = Text(plaintext='"', unicode='⌝')
+
+    _static_start_tag = Text(plaintext='"', unicode='⌜')
 
 
-class TextFormat:
-    """A supported output text format."""
+class Paragraph(Block):
+    def __init__(self, iterable: (None, collections.Iterable) = None) -> None:
+        super().__init__(iterable=iterable, start_tag=Paragraph._static_start_tag,
+                         end_tag=Paragraph._static_end_tag)
 
-    def __init__(self, text_format_name: str):
-        self._text_format_name = text_format_name
+    _static_end_tag = Text(plaintext='\n\n', unicode='\n\n')
 
-    def __eq__(self, other):
-        return hash(self) == hash(other)
-
-    def __hash__(self):
-        return hash((TextFormat, self._text_format_name))
-
-    def __repr__(self):
-        return self._text_format_name
-
-    def __str__(self):
-        return self._text_format_name
+    _static_start_tag = Text(plaintext='', unicode='')
 
 
-class TextFormats:
-    def __init__(self):
-        self.latex_math = TextFormat('latex-math')
-        self.plaintext = TextFormat('plaintext')
-        self.unicode = TextFormat('unicode')
+def wrap_text(text):
+    """Wrap text for friendly rendering as text, e.g. in a console.
+
+    :param text:
+    :return:
+    """
+    return '\n'.join(
+        textwrap.wrap(
+            text=text, width=configuration.text_output_total_width,
+            subsequent_indent=f'\t',
+            break_on_hyphens=False,
+            expand_tabs=True,
+            tabsize=4))
 
 
-text_formats = TextFormats()
+class ProofFormat(repm.ValueName):
+    pass
+
+
+class ProofFormats(repm.ValueName):
+    """A catalog of supported proof presentation formats."""
+
+    def __init__(self, value_name: str) -> None:
+        super().__init__(value_name=value_name)
+        self._flow_chart_proof = ProofFormat('flow chart proof')
+        self._formal_proof = ProofFormat('formal proof')
+        self._paragraph_proof = ProofFormat('paragraph proof')
+        self._two_column_proof = ProofFormat('two column proof')
+
+    @property
+    def flow_chart_proof(self) -> ProofFormat:
+        return self._flow_chart_proof
+
+    @property
+    def formal_proof(self) -> ProofFormat:
+        return self._formal_proof
+
+    @property
+    def paragraph_proof(self) -> ProofFormat:
+        return self._paragraph_proof
+
+    @property
+    def two_column_proof(self) -> ProofFormat:
+        return self._two_column_proof
 
 
 class NameType(repm.ValueName):
@@ -267,145 +473,22 @@ def equal_not_none(s1: (None, str), s2: (None, str)):
     return False if s1 is None or s2 is None else s1 == s2
 
 
-class StyledText:
-    """A styled-text is a string of text that:
-    - is of a supported text_style,
-    - may support one or several text_format outputs."""
-
-    def __init__(self, s: (None, str) = None, text_style: (None, TextStyle) = None,
-                 plaintext: (None, str) = None, unicode: (None, str) = None,
-                 latex_math: (None, str) = None
-                 ):
-        """
-
-        :param s: A string. Leave it to the constructor to interpret if it is plaintext or unicode.
-        :param plaintext:
-        :param unicode:
-        :param latex_math:
-        :param text_style:
-        """
-        if s is not None and plaintext is None and s == unidecode.unidecode(s):
-            plaintext = s
-        if s is not None and unicode is None and s != unidecode.unidecode(s):
-            unicode = s
-        if unicode is not None and plaintext is None:
-            if str(unicode).isalnum():
-                # This is a best-effort mapping to plaintext.
-                # It may lead to undesirable results,
-                # e.g. symbol '¬' is mapped to '!'.
-                # To avoid this, isalnum() is used as a temporary solution.
-                plaintext = unidecode.unidecode(unicode)
-        if text_style is None:
-            text_style = text_styles.serif_normal
-        self._plaintext = plaintext if plaintext != '' else None
-        self._unicode = unicode if unicode != '' else None
-        self._latex_math = latex_math if latex_math != '' else None
-        self._text_style = text_style if text_style != '' else None
-
-    def __eq__(self, other: (None, object, StyledText)) -> bool:
-        """Two instances of TextStyle are equal if any of their formatted representation are equal and not None."""
-        return type(self) is type(other) and \
-            (self.text_style == other.text_style) and \
-            (equal_not_none(self.plaintext, other.plaintext) or
-             equal_not_none(self.unicode, other.unicode) or
-             equal_not_none(self.latex_math, other.latex_math))
-
-    def __hash__(self):
-        """Two styled-texts are considered distinct if either their plaintext content or their style are distinct."""
-        return hash(
-            (StyledText, self._plaintext, self._unicode, self._latex_math, self._text_style))
-
-    def __repr__(self) -> str:
-        try:
-            return self.rep()
-        except:
-            return repr(self.to_dict())
-
-    def __str__(self) -> str:
-        return self.rep()
-
-    @property
-    def latex_math(self) -> (None, str):
-        return self._latex_math
-
-    @property
-    def plaintext(self) -> (None, str):
-        return self._plaintext
-
-    def rep(self, text_format: TextFormat = text_formats.plaintext, cap: bool = False):
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
-        match text_format:
-            case text_formats.plaintext:
-                return self.rep_as_plaintext(cap=cap)
-            case text_formats.latex_math:
-                return self.rep_as_latex_math(cap=cap)
-            case text_formats.unicode:
-                return self.rep_as_unicode(cap=cap)
-            case _:
-                return self.rep_as_plaintext(cap=cap)
-
-    def rep_as_latex_math(self, cap: bool = False):
-        content = self._plaintext if self._latex_math is None else self._latex_math
-        content = content.capitalize() if cap else content
-        return f'{self._text_style.latex_math_start_tag}{content}{self._text_style.latex_math_end_tag}'
-
-    def rep_as_plaintext(self, cap: bool = False):
-        content = self._plaintext
-        content = content.capitalize() if cap else content
-        return content
-
-    def rep_as_unicode(self, cap: bool = False):
-        content = self._plaintext if self._unicode is None else self._unicode
-        content = content.capitalize() if cap else content
-        return unicode.unicode_format(content, self._text_style.unicode_table_index)
-
-    @property
-    def text_style(self) -> TextStyle:
-        return self._text_style
-
-    def to_dict(self) -> dict:
-        return {
-            '_plaintext':  self._plaintext,
-            '_unicode':    self._unicode,
-            '_latex_math': self._latex_math,
-            '_text_style': self._text_style
-        }
-
-    @property
-    def unicode(self) -> (None, str):
-        return self._unicode
-
-
-class TextDict:
-    """Predefined texts are exposed in the TextDict. This should facilite internatiolization at a later stage."""
-
-    def __init__(self):
-        self.empty_string = StyledText(s='')
-        self.space_separator = StyledText(s=' ')
-        self.point_separator = StyledText(s='.')
-        self.comma_separator = StyledText(s=', ')
-
-
-text_dict = TextDict()
-
-
-def subscriptify(text: (str, StyledText) = '', text_format: TextFormat = text_formats.plaintext):
-    text_format = get_config(text_format, configuration.text_format,
-                             fallback_value=text_formats.plaintext)
+def subscriptify(text: (str, Text) = '', encoding: Encoding = encodings.plaintext):
+    encoding = get_config(encoding, configuration.encoding,
+                          fallback_value=encodings.plaintext)
     if text is None:
         return ''
-    match text_format:
-        case text_formats.plaintext:
+    match encoding:
+        case encodings.plaintext:
             return text
-        case text_formats.unicode:
-            if isinstance(text, StyledText):
+        case encodings.unicode:
+            if isinstance(text, Text):
                 # The Unicode set of subscript characters is very limited,
                 # subscriptification must be executed on the plaintext value
                 # of the Unicode string.
                 text = text.rep_as_plaintext()
             return unicode.unicode_subscriptify(text)
-        case text_formats.latex_math:
+        case encodings.latex_math:
             return f'_{{{text}}}'
         case _:
             return text
@@ -465,22 +548,22 @@ class Configuration:
     def __init__(self):
         self.auto_index = None
         self._echo_default = False
-        self.default_note_symbol = StyledText(plaintext='note',
+        self.default_note_symbol = Text(plaintext='note',
+                                        text_style=text_styles.serif_italic)
+        self.default_hypothesis_symbol = Text(plaintext='h',
                                               text_style=text_styles.serif_italic)
-        self.default_hypothesis_symbol = StyledText(plaintext='h',
-                                                    text_style=text_styles.serif_italic)
-        self.default_relation_symbol = StyledText(plaintext='r',
-                                                  text_style=text_styles.serif_italic)
-        self.default_symbolic_object_symbol = StyledText(plaintext='o',
-                                                         text_style=text_styles.serif_italic)
-        self.default_formula_symbol = StyledText(plaintext='phi', unicode='𝜑',
-                                                 text_style=text_styles.serif_italic)
-        self.default_free_variable_symbol = StyledText(plaintext='x',
-                                                       text_style=text_styles.serif_bold)
-        self.default_statement_symbol = StyledText(plaintext='s',
+        self.default_relation_symbol = Text(plaintext='r',
+                                            text_style=text_styles.serif_italic)
+        self.default_symbolic_object_symbol = Text(plaintext='o',
                                                    text_style=text_styles.serif_italic)
-        self.default_theory_symbol = StyledText(plaintext='T',
-                                                text_style=text_styles.script_normal)
+        self.default_formula_symbol = Text(plaintext='phi', unicode='𝜑',
+                                           text_style=text_styles.serif_italic)
+        self.default_free_variable_symbol = Text(plaintext='x',
+                                                 text_style=text_styles.serif_bold)
+        self.default_statement_symbol = Text(plaintext='s',
+                                             text_style=text_styles.serif_italic)
+        self.default_theory_symbol = Text(plaintext='T',
+                                          text_style=text_styles.script_normal)
         self.echo_axiom_declaration = None
         self.echo_axiom_inclusion = None
         self.echo_definition_declaration = None
@@ -497,11 +580,11 @@ class Configuration:
         self.echo_theory_elaboration_sequence_declaration = None
         self.echo_universe_of_discourse_declaration = None
         self.echo_free_variable_declaration = None
-        self.echo_text_format = None
+        self.echo_encoding = None
         self.output_index_if_max_index_equal_1 = False
         self.raise_exception_on_verification_error = True
         self.title_text_style = text_styles.sans_serif_bold
-        self.text_format = text_formats.unicode
+        self.encoding = encodings.unicode
         self.text_output_indent = 2
         self.two_columns_proof_left_column_width = 67
         self.two_columns_proof_right_column_width = 30
@@ -671,14 +754,14 @@ def set_attr(o, a, v):
 # import rich.table
 
 class NoNameSolutionException(LookupError):
-    """The NoNameSolutionException is the exception that is raised when a NameSet cannot be represented because no representation was found for the required TextFormat."""
+    """The NoNameSolutionException is the exception that is raised when a NameSet cannot be represented because no representation was found for the required Encoding."""
 
-    def __init__(self, nameset, text_format):
+    def __init__(self, nameset, encoding):
         self.nameset = nameset
-        self.text_format = text_format
+        self.encoding = encoding
 
     def __str__(self):
-        return f'The nameset ⌜{repr(self.nameset)}⌝ contains no representation for the ⌜{self.text_format}⌝ text-format.'
+        return f'The nameset ⌜{repr(self.nameset)}⌝ contains no representation for the ⌜{self.encoding}⌝ text-format.'
 
 
 class NameSet:
@@ -690,14 +773,14 @@ class NameSet:
 
     def __init__(self,
                  s: (None, str) = None,
-                 symbol: (None, str, StyledText) = None,
-                 index: (None, int, str, StyledText) = None,
-                 acronym: (None, str, StyledText) = None,
-                 name: (None, str, StyledText) = None,
+                 symbol: (None, str, Text) = None,
+                 index: (None, int, str, Text) = None,
+                 acronym: (None, str, Text) = None,
+                 name: (None, str) = None,
                  ref: (None, str) = None,
                  cat: (None, TitleCategory) = None,
-                 subtitle: (None, str, StyledText) = None,
-                 explicit_name: (None, str, StyledText) = None):
+                 subtitle: (None, str, Text) = None,
+                 explicit_name: (None, str, Text) = None):
         if s is not None:
             # Shortcut parameter to quickly declare a nameset from a python string,
             # inferring in best-effort mode whether the string represent a symbol,
@@ -710,28 +793,23 @@ class NameSet:
                 explicit_name = s
             elif name is None and len(s) > 1:
                 name = s
-        self._symbol = StyledText(s=symbol, text_style=text_styles.serif_italic) \
+        self._symbol = Text(s=symbol, text_style=text_styles.serif_italic) \
             if isinstance(symbol, str) else symbol
         verify(self.symbol is not None, msg='The symbol of this nameset is None.', slf=self)
-        self._acronym = StyledText(s=acronym, text_style=text_styles.monospace) \
-            if isinstance(acronym, str) else acronym
-        self._name = StyledText(s=name, text_style=text_styles.sans_serif_normal) \
-            if isinstance(name, str) else name
-        self._explicit_name = StyledText(s=explicit_name, text_style=text_styles.sans_serif_normal) \
-            if isinstance(explicit_name, str) else explicit_name
+        self._acronym = acronym
+        self._name = name
+        self._explicit_name = explicit_name
         self._index_as_int = index if isinstance(index, int) else None
-        if isinstance(index, StyledText):
+        if isinstance(index, Text):
             self._index = index
         elif isinstance(index, str):
-            self._index = StyledText(s=index, text_style=text_styles.sans_serif_normal)
+            self._index = Text(s=index, text_style=text_styles.sans_serif_normal)
         elif isinstance(index, int):
-            self._index = StyledText(s=str(index), text_style=text_styles.sans_serif_normal)
+            self._index = Text(s=str(index), text_style=text_styles.sans_serif_normal)
         else:
             self._index = None
         self._ref = ref
         self._cat = title_categories.uncategorized if cat is None else cat
-        if isinstance(subtitle, str):
-            subtitle = StyledText(s=subtitle, text_style=text_styles.sans_serif_normal)
         self._subtitle = subtitle
 
     def __eq__(self, other):
@@ -751,7 +829,7 @@ class NameSet:
         return self.rep_symbol()
 
     @property
-    def acronym(self) -> StyledText:
+    def acronym(self) -> Text:
         return self._acronym
 
     @property
@@ -767,7 +845,7 @@ class NameSet:
         self._cat = cat
 
     @property
-    def explicit_name(self) -> StyledText:
+    def explicit_name(self) -> Text:
         return self._explicit_name
 
     @property
@@ -780,7 +858,7 @@ class NameSet:
         return self._index_as_int
 
     @property
-    def name(self) -> StyledText:
+    def name(self) -> str:
         return self._name
 
     @property
@@ -795,14 +873,14 @@ class NameSet:
         the old approach that used the obsolete Title class."""
         self._ref = ref
 
-    def rep(self, text_format: (None, TextFormat) = None) -> str:
+    def rep(self, encoding: (None, Encoding) = None) -> str:
         """Return the default representation for this python obje.
 
         :return:
         """
-        return f'{self.rep_compact(text_format=text_format)}'
+        return f'{self.rep_compact(encoding=encoding)}'
 
-    def rep_accurate(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
+    def rep_accurate(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
         """Returns the most accurate (longest) possible name in the nameset for the required text-format.
 
         Order of priority:
@@ -811,33 +889,29 @@ class NameSet:
         3) acronym
         4) symbol
         """
-        output = self.rep_explicit_name(text_format=text_format)
+        output = self.rep_explicit_name(encoding=encoding)
         if output is not None:
             return output
-        output = self.rep_name(text_format=text_format)
+        output = self.rep_name(encoding=encoding)
         if output is not None:
             return output
-        output = self.rep_acronym(text_format=text_format)
+        output = self.rep_acronym(encoding=encoding)
         if output is not None:
             return output
-        output = self.rep_symbol(text_format=text_format)
+        output = self.rep_symbol(encoding=encoding)
         if output is not None:
             return output
-        raise NoNameSolutionException(nameset=self, text_format=text_format)
+        raise NoNameSolutionException(nameset=self, encoding=encoding)
 
-    def rep_acronym(self, text_format: (None, TextFormat) = None) -> (None, str):
+    def rep_acronym(self, encoding: (None, Encoding) = None, compose: bool = False) -> (
+            None, str):
         """Return a string that represent the object as an acronym."""
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
-        if self._acronym is None:
-            return None
-        else:
-            base = self._acronym.rep(text_format=text_format)
-            index = '' if self._index is None else self._index.rep(text_format=text_format)
-            output = None if base is None else f'{base}{index}'
-            return output
+        rep = Block()
+        if self._acronym is not None:
+            rep.append(Text(s=self._acronym, text_style=text_styles.sans_serif_normal))
+        return rep.rep(encoding=encoding, compose=compose)
 
-    def rep_compact(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
+    def rep_compact(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
         """Returns the shortest possible name in the nameset for the required text-format.
 
         Order of priority:
@@ -846,21 +920,21 @@ class NameSet:
         3) name
         4) explicit-name
         """
-        output = self.rep_symbol(text_format=text_format)
+        output = self.rep_symbol(encoding=encoding)
         if output is not None:
             return output
-        output = self.rep_acronym(text_format=text_format)
+        output = self.rep_acronym(encoding=encoding)
         if output is not None:
             return output
-        output = self.rep_name(text_format=text_format)
+        output = self.rep_name(encoding=encoding)
         if output is not None:
             return output
-        output = self.rep_explicit_name(text_format=text_format)
+        output = self.rep_explicit_name(encoding=encoding)
         if output is not None:
             return output
-        raise NoNameSolutionException(nameset=self, text_format=text_format)
+        raise NoNameSolutionException(nameset=self, encoding=encoding)
 
-    def rep_conventional(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None):
+    def rep_conventional(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
         """Returns the most conventional (default) possible name in the nameset for the required text-format.
 
         Order of priority:
@@ -869,122 +943,122 @@ class NameSet:
         4) symbol
         1) explicit-name
         """
-        output = self.rep_name(text_format=text_format)
+        output = self.rep_name(encoding=encoding)
         if output is not None and output != '':
             return output
-        output = self.rep_acronym(text_format=text_format)
+        output = self.rep_acronym(encoding=encoding)
         if output is not None and output != '':
             return output
-        output = self.rep_symbol(text_format=text_format)
+        output = self.rep_symbol(encoding=encoding)
         if output is not None and output != '':
             return output
-        output = self.rep_explicit_name(text_format=text_format)
+        output = self.rep_explicit_name(encoding=encoding)
         if output is not None and output != '':
             return output
-        raise NoNameSolutionException(nameset=self, text_format=text_format)
+        raise NoNameSolutionException(nameset=self, encoding=encoding)
 
-    def rep_explicit_name(self, text_format: (None, TextFormat) = None) -> (None, str):
+    def rep_explicit_name(self, encoding: (None, Encoding) = None) -> (None, str):
         """Return a string that represent the object as an explicit name."""
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
         if self._explicit_name is None:
             return None
         else:
-            base = self._explicit_name.rep(text_format=text_format)
-            index = '' if self._index is None else ' ' + self._index.rep(text_format=text_format)
+            base = self._explicit_name.rep(encoding=encoding)
+            index = '' if self._index is None else ' ' + self._index.rep(encoding=encoding)
             output = None if base is None else f'{base}{index}'
             return output
 
-    def rep_fully_qualified_name(self, text_format: (None, TextFormat) = None,
+    def rep_fully_qualified_name(self, encoding: (None, Encoding) = None,
                                  cap: (None, bool) = None, compose: bool = False):
-        conventional = self.rep_conventional(text_format=text_format, cap=cap)
-        sym = self.rep_symbol(text_format=text_format)
-        rep = TextComposition()
+        conventional = self.rep_conventional(encoding=encoding, cap=cap)
+        sym = self.rep_symbol(encoding=encoding)
+        rep = Block()
         rep.append(conventional)
         if conventional != sym:
             rep.append('(')
             rep.append(sym)
             rep.append(')')
         if not compose:
-            rep = rep.rep(text_format=text_format)
+            rep = rep.rep(encoding=encoding)
         return rep
 
-    def rep_mention(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+    def rep_mention(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         """A mention of the form: [symbol] [unabridged-category]
         """
         rep = ''
         if self._name is not None:
-            rep = rep + self.rep_name(text_format=text_format, cap=cap)
+            rep = rep + self.rep_name(encoding=encoding, cap=cap)
         rep = rep + ' '
-        rep = rep + StyledText(s='(', text_style=text_styles.sans_serif_bold).rep(
-            text_format=text_format)
-        rep = rep + self.rep_symbol(text_format=text_format)
-        rep = rep + StyledText(s=')', text_style=text_styles.sans_serif_bold).rep(
-            text_format=text_format)
-        rep = '' if self._cat is None else StyledText(s=self.cat.natural_name,
-                                                      text_style=text_styles.sans_serif_bold).rep(
-            text_format=text_format, cap=cap)
+        rep = rep + Text(s='(', text_style=text_styles.sans_serif_bold).rep(
+            encoding=encoding)
+        rep = rep + self.rep_symbol(encoding=encoding)
+        rep = rep + Text(s=')', text_style=text_styles.sans_serif_bold).rep(
+            encoding=encoding)
+        rep = '' if self._cat is None else Text(s=self.cat.natural_name,
+                                                text_style=text_styles.sans_serif_bold).rep(
+            encoding=encoding, cap=cap)
         return rep
 
-    def rep_name(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> (
+    def rep_name(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> (
             None, str):
         """Return a string that represent the object as a plain name."""
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
         if self._name is None:
             return ''
         else:
-            return StyledText(s=self._name, text_style=text_styles.sans_serif_normal).rep(
-                text_format=text_format, cap=cap)
+            return Text(s=self._name, text_style=text_styles.sans_serif_normal).rep(
+                encoding=encoding, cap=cap)
 
-    def rep_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        rep = '' if self._cat is None else StyledText(s=self._cat.abridged_name,
-                                                      text_style=text_styles.sans_serif_bold).rep(
-            text_format=text_format, cap=cap)
+    def rep_ref(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
+        rep = '' if self._cat is None else Text(s=self._cat.abridged_name,
+                                                text_style=text_styles.sans_serif_bold).rep(
+            encoding=encoding, cap=cap)
         if self._ref is not None:
             if rep != '':
                 rep = rep + ' '
-            rep = rep + StyledText(s=self._ref, text_style=text_styles.sans_serif_bold).rep(
-                text_format=text_format)
-        rep = rep + ' (' + self.rep_symbol(text_format=text_format) + ')'
+            rep = rep + Text(s=self._ref, text_style=text_styles.sans_serif_bold).rep(
+                encoding=encoding)
+        rep = rep + ' (' + self.rep_symbol(encoding=encoding) + ')'
         return rep
 
-    def rep_symbol(self, text_format: (None, TextFormat) = None) -> (None, str):
+    def rep_symbol(self, encoding: (None, Encoding) = None) -> (None, str):
         """Return a string that represent the object as a symbol."""
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
         if self._symbol is None:
             return None
         else:
-            base = self._symbol.rep(text_format=text_format)
-            index = subscriptify(text=self._index, text_format=text_format)
+            base = self._symbol.rep(encoding=encoding)
+            index = subscriptify(text=self._index, encoding=encoding)
             output = None if base is None else f'{base}{index}'
             return output
 
-    def rep_title(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+    def rep_title(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         """A title of the form: [unabridged-category] [reference] ([symbol]) - [subtitle]
         """
-        rep = '' if self._cat is None else StyledText(s=self.cat.natural_name,
-                                                      text_style=text_styles.sans_serif_bold).rep(
-            text_format=text_format, cap=cap)
+        rep = '' if self._cat is None else Text(s=self.cat.natural_name,
+                                                text_style=text_styles.sans_serif_bold).rep(
+            encoding=encoding, cap=cap)
         if self._ref is not None:
             rep = rep + ' '
-            rep = rep + StyledText(s=self._ref, text_style=text_styles.sans_serif_bold).rep(
-                text_format=text_format)
+            rep = rep + Text(s=self._ref, text_style=text_styles.sans_serif_bold).rep(
+                encoding=encoding)
         rep = rep + ' '
-        rep = rep + StyledText(s='(', text_style=text_styles.sans_serif_bold).rep(
-            text_format=text_format)
-        rep = rep + self.rep_symbol(text_format=text_format)
-        rep = rep + StyledText(s=')', text_style=text_styles.sans_serif_bold).rep(
-            text_format=text_format)
+        rep = rep + Text(s='(', text_style=text_styles.sans_serif_bold).rep(
+            encoding=encoding)
+        rep = rep + self.rep_symbol(encoding=encoding)
+        rep = rep + Text(s=')', text_style=text_styles.sans_serif_bold).rep(
+            encoding=encoding)
         if self._subtitle is not None:
             rep = rep + '- '
-            rep = rep + StyledText(s=self._subtitle, text_style=text_styles.sans_serif_bold).rep(
-                text_format=text_format)
+            rep = rep + Text(s=self._subtitle, text_style=text_styles.sans_serif_bold).rep(
+                encoding=encoding)
         return rep
 
     @property
-    def subtitle(self) -> StyledText:
+    def subtitle(self) -> str:
         """A conditional complement to the automatically structured title."""
         return self._subtitle
 
@@ -996,7 +1070,7 @@ class NameSet:
         self._subtitle = subtitle
 
     @property
-    def symbol(self) -> StyledText:
+    def symbol(self) -> Text:
         """The symbol core glyph.
 
         :return: (StyledText) The symbol core glyph.
@@ -1025,19 +1099,19 @@ class TitleOBSOLETE:
         the declarative class of the symbolic-objct.
     """
 
-    def __init__(self, nameset: (None, NameSet) = None, ref: (None, str, StyledText) = None,
+    def __init__(self, nameset: (None, NameSet) = None, ref: (None, str, Text) = None,
                  cat: (None, TitleCategory) = None,
-                 subtitle: (None, str, StyledText) = None,
-                 abr: (None, str, StyledText) = None):
+                 subtitle: (None, str, Text) = None,
+                 abr: (None, str, Text) = None):
         if isinstance(ref, str):
-            ref = StyledText(s=ref, text_style=text_styles.sans_serif_bold)
+            ref = Text(s=ref, text_style=text_styles.sans_serif_bold)
         self._ref = ref
         if isinstance(abr, str):
-            abr = StyledText(s=abr, text_style=text_styles.sans_serif_bold)
+            abr = Text(s=abr, text_style=text_styles.sans_serif_bold)
         self._abr = abr
         self._cat = title_categories.uncategorized if cat is None else cat
         if isinstance(subtitle, str):
-            subtitle = StyledText(s=subtitle, text_style=text_styles.sans_serif_normal)
+            subtitle = Text(s=subtitle, text_style=text_styles.sans_serif_normal)
         self._nameset = nameset
         self._subtitle = subtitle
         self._styled_title = None
@@ -1053,10 +1127,10 @@ class TitleOBSOLETE:
         return hash((self.cat, self.ref))
 
     def __repr__(self) -> str:
-        return self.rep(text_format=text_formats.plaintext)
+        return self.rep(encoding=encodings.plaintext)
 
     def __str__(self) -> str:
-        return self.rep(text_format=text_formats.plaintext)
+        return self.rep(encoding=encodings.plaintext)
 
     @property
     def cat(self) -> TitleCategory:
@@ -1064,17 +1138,17 @@ class TitleOBSOLETE:
         return self._cat
 
     @property
-    def subtitle(self) -> StyledText:
+    def subtitle(self) -> Text:
         """A conditional complement to the automatically structured title."""
         return self._subtitle
 
     @property
-    def ref(self) -> StyledText:
+    def ref(self) -> Text:
         """Unabridged name."""
         return self._ref
 
     @property
-    def abr(self) -> StyledText:
+    def abr(self) -> Text:
         """Abridged name."""
         return self._abr
 
@@ -1086,35 +1160,35 @@ class TitleOBSOLETE:
     def nameset(self, nameset: NameSet):
         self._nameset = nameset
 
-    def rep(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
+    def rep(self, encoding: (None, Encoding) = None, cap: bool = False) -> str:
         """Return the default representation for this long-name.
 
         :param cap: Whether the representation must be capitalized (default: False).
         :return: str
         """
-        return self.rep_ref(text_format=text_format, cap=cap)
+        return self.rep_ref(encoding=encoding, cap=cap)
 
-    def rep_title(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
+    def rep_title(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         """
 
         :param cap:
         :return:
         """
-        return f'{StyledText(s=self.cat.natural_name, text_style=text_styles.sans_serif_bold).rep(text_format=text_format, cap=cap)}' \
-               f'{"" if self.ref is None else " " + self.ref.rep(text_format=text_format)}' \
-               f'{"" if self.subtitle is None else " - " + self.subtitle.rep(text_format=text_format)}'
+        return f'{Text(s=self.cat.natural_name, text_style=text_styles.sans_serif_bold).rep(encoding=encoding, cap=cap)}' \
+               f'{"" if self.ref is None else " " + self.ref.rep(encoding=encoding)}' \
+               f'{"" if self.subtitle is None else " - " + self.subtitle.rep(encoding=encoding)}'
 
-    def rep_ref(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return StyledText(s=self._cat.abridged_name, text_style=text_styles.sans_serif_bold).rep(
-            text_format=text_format, cap=cap) + \
-               '' if self._ref is None else str(' ' + self._ref.rep(text_format=text_format)) + \
+    def rep_ref(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
+        return Text(s=self._cat.abridged_name, text_style=text_styles.sans_serif_bold).rep(
+            encoding=encoding, cap=cap) + \
+               '' if self._ref is None else str(' ' + self._ref.rep(encoding=encoding)) + \
                                             '' if self._nameset is None else str(
             ' (' + self._nameset.rep_symbol(
-                text_format=text_format) + ')')
+                encoding=encoding) + ')')
 
-    def rep_mention(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return f'{"" if self.ref is None else self.ref.rep(text_format=text_format) + " "}' \
-               f'{StyledText(s=self.cat.natural_name, text_style=text_styles.sans_serif_normal).rep(text_format=text_format, cap=cap)}'
+    def rep_mention(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
+        return f'{"" if self.ref is None else self.ref.rep(encoding=encoding) + " "}' \
+               f'{Text(s=self.cat.natural_name, text_style=text_styles.sans_serif_normal).rep(encoding=encoding, cap=cap)}'
 
 
 class DashedName:
@@ -1140,15 +1214,15 @@ class DashedName:
     def __str__(self):
         return self.rep()
 
-    def rep(self, text_format: (None, TextFormat) = None) -> str:
+    def rep(self, encoding: (None, Encoding) = None) -> str:
         """Return the default representation.
         """
-        return self.rep_dashed_name(text_format=text_format)
+        return self.rep_dashed_name(encoding=encoding)
 
-    def rep_dashed_name(self, text_format: (None, TextFormat) = None) -> str:
+    def rep_dashed_name(self, encoding: (None, Encoding) = None) -> str:
         """Return a dashed-name representation.
         """
-        # TODO: Implement text_formats
+        # TODO: Implement encodings
         return self._dashed_name
 
 
@@ -1184,7 +1258,7 @@ class SymbolicObject:
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         if isinstance(nameset, str):
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = Text(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         nameset.cat = cat
@@ -1209,10 +1283,10 @@ class SymbolicObject:
             (self.universe_of_discourse, self.nameset))
 
     def __repr__(self):
-        return self.rep_symbol(text_format=text_formats.plaintext)
+        return self.rep_symbol(encoding=encodings.plaintext)
 
     def __str__(self):
-        return self.rep_symbol(text_format=text_formats.plaintext)
+        return self.rep_symbol(encoding=encodings.plaintext)
 
     @property
     def declarative_classes(self) -> frozenset[DeclarativeClass]:
@@ -1274,24 +1348,24 @@ class SymbolicObject:
             return False
         return True
 
-    def prnt(self, text_format: (None, TextFormat) = None, expand=False):
-        repm.prnt(self.rep(text_format=text_format, expand=expand))
+    def prnt(self, encoding: (None, Encoding) = None, expand=False):
+        repm.prnt(self.rep(encoding=encoding, expand=expand))
 
-    def rep(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
+    def rep(self, encoding: (None, Encoding) = None, expand: (None, bool) = None) -> str:
         # If a long-name is available, represent the objct as a reference.
         # Otherwise, represent it as a symbol.
-        return self.nameset.rep(text_format=text_format)
+        return self.nameset.rep(encoding=encoding)
 
-    def rep_dashed_name(self, text_format: (None, TextFormat) = None) -> str:
+    def rep_dashed_name(self, encoding: (None, Encoding) = None) -> str:
         """"""
         if self.dashed_name is None:
             return ''
-        return self.dashed_name.rep_dashed_name(text_format=text_format)
+        return self.dashed_name.rep_dashed_name(encoding=encoding)
 
-    def rep_declaration(self, text_format: (None, TextFormat) = None) -> str:
-        return f'Let {self.rep_fully_qualified_name(text_format=text_format)} be a symbolic-objct in {self.universe_of_discourse.rep_symbol(text_format=text_format)}.' + '\n'
+    def rep_declaration(self, encoding: (None, Encoding) = None) -> str:
+        return f'Let {self.rep_fully_qualified_name(encoding=encoding)} be a symbolic-objct in {self.universe_of_discourse.rep_symbol(encoding=encoding)}.' + '\n'
 
-    def rep_formula(self, text_format: (None, TextFormat) = None,
+    def rep_formula(self, encoding: (None, Encoding) = None,
                     expand: (None, bool) = None) -> str:
         """If supported, return a formula representation,
         a symbolic representation otherwise.
@@ -1302,28 +1376,28 @@ class SymbolicObject:
         Most symbolic-objcts do not have a formula representation,
         where we fall back on symbolic representation.
         """
-        return self.rep_symbol(text_format=text_format)
+        return self.rep_symbol(encoding=encoding)
 
-    def rep_fully_qualified_name(self, text_format: (None, TextFormat) = None,
+    def rep_fully_qualified_name(self, encoding: (None, Encoding) = None,
                                  cap: (None, bool) = None, compose: bool = False) -> str:
         """"""
-        return self.nameset.rep_fully_qualified_name(text_format=text_format, cap=cap,
+        return self.nameset.rep_fully_qualified_name(encoding=encoding, cap=cap,
                                                      compose=compose)
 
-    def rep_mention(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
-        return self.nameset.rep_mention(text_format=text_format, cap=cap)
+    def rep_mention(self, encoding: (None, Encoding) = None, cap: bool = False) -> str:
+        return self.nameset.rep_mention(encoding=encoding, cap=cap)
 
-    def rep_name(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None) -> str:
-        return self.nameset.rep_name(text_format=text_format, cap=cap)
+    def rep_name(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
+        return self.nameset.rep_name(encoding=encoding, cap=cap)
 
-    def rep_ref(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
-        return self.nameset.rep_ref(text_format=text_format, cap=cap)
+    def rep_ref(self, encoding: (None, Encoding) = None, cap: bool = False) -> str:
+        return self.nameset.rep_ref(encoding=encoding, cap=cap)
 
-    def rep_symbol(self, text_format: (None, TextFormat) = None) -> str:
-        return self.nameset.rep_symbol(text_format=text_format)
+    def rep_symbol(self, encoding: (None, Encoding) = None) -> str:
+        return self.nameset.rep_symbol(encoding=encoding)
 
-    def rep_title(self, text_format: (None, TextFormat) = None, cap: bool = False) -> str:
-        return self.nameset.rep_title(text_format=text_format, cap=cap)
+    def rep_title(self, encoding: (None, Encoding) = None, cap: bool = False) -> str:
+        return self.nameset.rep_title(encoding=encoding, cap=cap)
 
     @property
     def nameset(self) -> NameSet:
@@ -1749,7 +1823,7 @@ class FreeVariable(TheoreticalObject):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_bold)
+            symbol = Text(plaintext=nameset, text_style=text_styles.serif_bold)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
@@ -1822,8 +1896,8 @@ class FreeVariable(TheoreticalObject):
         # o2 is not a variable.
         return self.is_formula_equivalent_to(o2), _values
 
-    def rep_declaration(self, text_format: (None, TextFormat) = None):
-        return f'Let {self.rep_name(text_format=text_format)} be a free-variable in {self.universe_of_discourse.rep_name(text_format=text_format)}' + '\n'
+    def rep_declaration(self, encoding: (None, Encoding) = None):
+        return f'Let {self.rep_name(encoding=encoding)} be a free-variable in {self.universe_of_discourse.rep_name(encoding=encoding)}' + '\n'
 
 
 class Formula(TheoreticalObject):
@@ -1890,7 +1964,7 @@ class Formula(TheoreticalObject):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = Text(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         self.relation = relation
@@ -2057,41 +2131,41 @@ class Formula(TheoreticalObject):
         for x in variables_list:
             x.lock_scope()
 
-    def rep(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None) -> str:
+    def rep(self, encoding: (None, Encoding) = None, expand: (None, bool) = None) -> str:
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
         if expand:
-            return self.rep_formula(text_format=text_format, expand=expand)
+            return self.rep_formula(encoding=encoding, expand=expand)
         else:
-            return super().rep(text_format=text_format, expand=expand)
+            return super().rep(encoding=encoding, expand=expand)
 
-    def rep_as_function_call(self, text_format: (None, TextFormat) = None,
+    def rep_as_function_call(self, encoding: (None, Encoding) = None,
                              expand: (None, bool) = None) -> str:
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
-        return f'{self.relation.rep_formula(text_format=text_format)}({", ".join([p.rep_formula(text_format=text_format) for p in self.parameters])})'
+        return f'{self.relation.rep_formula(encoding=encoding)}({", ".join([p.rep_formula(encoding=encoding) for p in self.parameters])})'
 
-    def rep_as_infix_operator(self, text_format: (None, TextFormat) = None,
+    def rep_as_infix_operator(self, encoding: (None, Encoding) = None,
                               expand=(None, bool)) -> str:
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
         expand = True if expand is None else expand
         assert self.relation.arity == 2
-        return f'({self.parameters[0].rep(text_format=text_format, expand=expand)} {self.relation.rep_symbol(text_format=text_format)} {self.parameters[1].rep(text_format=text_format, expand=expand)})'
+        return f'({self.parameters[0].rep(encoding=encoding, expand=expand)} {self.relation.rep_symbol(encoding=encoding)} {self.parameters[1].rep(encoding=encoding, expand=expand)})'
 
-    def rep_as_postfix_operator(self, text_format: (None, TextFormat) = None, expand=None) -> str:
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
+    def rep_as_postfix_operator(self, encoding: (None, Encoding) = None, expand=None) -> str:
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
         assert self.relation.arity == 1
-        return f'({self.parameters[0].rep(text_format=text_format, expand=expand)}){self.relation.rep_symbol(text_format=text_format)}'
+        return f'({self.parameters[0].rep(encoding=encoding, expand=expand)}){self.relation.rep_symbol(encoding=encoding)}'
 
-    def rep_as_prefix_operator(self, text_format: (None, TextFormat) = None, expand=None) -> str:
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
+    def rep_as_prefix_operator(self, encoding: (None, Encoding) = None, expand=None) -> str:
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
         expand = True if expand is None else expand
         verify(
             isinstance(expand, bool),
@@ -2102,11 +2176,11 @@ class Formula(TheoreticalObject):
             'Attempt to represent prefix operator, but relation arity is not equal to 1.',
             self_relation=self.relation,
             parameters=self.parameters)
-        return f'{self.relation.rep_formula(text_format=text_format)}({self.parameters[0].rep_formula(text_format=text_format, expand=expand)})'
+        return f'{self.relation.rep_formula(encoding=encoding)}({self.parameters[0].rep_formula(encoding=encoding, expand=expand)})'
 
-    def rep_formula(self, text_format: (None, TextFormat) = None, expand: bool = True) -> str:
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
+    def rep_formula(self, encoding: (None, Encoding) = None, expand: bool = True) -> str:
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
         if is_in_class(self.relation, classes.free_variable):
             # If the relation of this formula is a free-variable,
             # it has no arity, neither a representation-mode.
@@ -2115,20 +2189,20 @@ class Formula(TheoreticalObject):
             # In future developments, we may choose to allow
             # the "decoration" of free-variables with arity,
             # and presentation-mode to improve readability.
-            return self.rep_as_function_call(text_format=text_format, expand=expand)
+            return self.rep_as_function_call(encoding=encoding, expand=expand)
         else:
             match self.relation.formula_rep:
                 case Formula.function_call:
-                    return self.rep_as_function_call(text_format=text_format, expand=expand)
+                    return self.rep_as_function_call(encoding=encoding, expand=expand)
                 case Formula.infix:
-                    return self.rep_as_infix_operator(text_format=text_format, expand=expand)
+                    return self.rep_as_infix_operator(encoding=encoding, expand=expand)
                 case Formula.prefix:
-                    return self.rep_as_prefix_operator(text_format=text_format, expand=expand)
+                    return self.rep_as_prefix_operator(encoding=encoding, expand=expand)
                 case Formula.postfix:
-                    return self.rep_as_postfix_operator(text_format=text_format, expand=expand)
+                    return self.rep_as_postfix_operator(encoding=encoding, expand=expand)
                 case _:
                     # Fallback notation.
-                    return self.rep_as_function_call(text_format=text_format, expand=expand)
+                    return self.rep_as_function_call(encoding=encoding, expand=expand)
 
     def rep_declaration(self):
         return f'Let {self.rep_symbol()} be the formula {self.rep_formula(expand=True)} in {self.universe_of_discourse.rep_symbol()}.' + '\n'
@@ -2179,9 +2253,9 @@ class SimpleObjctDict(collections.UserDict):
         if self._falsehood is None:
             self._falsehood = self.declare(
                 nameset=NameSet(
-                    symbol=StyledText(unicode='⊥', latex_math='\\bot', plaintext='false'),
-                    name=StyledText(plaintext='false'),
-                    explicit_name=StyledText(plaintext='falsehood'),
+                    symbol=Text(unicode='⊥', latex_math='\\bot', plaintext='false'),
+                    name=Text(plaintext='false'),
+                    explicit_name=Text(plaintext='falsehood'),
                     index=None))
         return self._falsehood
 
@@ -2208,9 +2282,9 @@ class SimpleObjctDict(collections.UserDict):
         if self._truth is None:
             self._truth = self.declare(nameset=
             NameSet(
-                symbol=StyledText(unicode='⊤', latex_math='\\top', plaintext='true'),
-                name=StyledText(plaintext='true'),
-                explicit_name=StyledText(plaintext='truth'),
+                symbol=Text(unicode='⊤', latex_math='\\top', plaintext='true'),
+                name=Text(plaintext='true'),
+                explicit_name=Text(plaintext='truth'),
                 index=None))
         return self._truth
 
@@ -2223,14 +2297,14 @@ class TitleCategory(repm.ValueName):
         super().__init__(name)
 
     def __repr__(self):
-        return self.rep(text_format=text_formats.plaintext)
+        return self.rep(encoding=encodings.plaintext)
 
     def __str__(self):
-        return self.rep(text_format=text_formats.plaintext)
+        return self.rep(encoding=encodings.plaintext)
 
-    def rep(self, text_format: (None, TextFormat) = None, cap: (None, bool) = None,
+    def rep(self, encoding: (None, Encoding) = None, cap: (None, bool) = None,
             expand: (None, bool) = None):
-        # TODO: Implement text_format
+        # TODO: Implement encoding
         return self.natural_name
 
 
@@ -2252,11 +2326,11 @@ class TitleCategories(repm.ValueName):
     theory_elaboration_sequence = TitleCategory('theory_elaboration_sequence', 't',
                                                 'theory elaboration sequence',
                                                 'theo.')
-    comment = TitleCategory('comment', StyledText(s='comment', text_style=text_styles.serif_italic),
+    comment = TitleCategory('comment', Text(s='comment', text_style=text_styles.serif_italic),
                             'comment', 'cmt.')
-    note = TitleCategory('note', StyledText(s='note', text_style=text_styles.serif_italic), 'note',
+    note = TitleCategory('note', Text(s='note', text_style=text_styles.serif_italic), 'note',
                          'note')
-    remark = TitleCategory('remark', StyledText(s='remark', text_style=text_styles.serif_italic),
+    remark = TitleCategory('remark', Text(s='remark', text_style=text_styles.serif_italic),
                            'remark', 'rmrk.')
     # Special categories
     uncategorized = TitleCategory('uncategorized', 's', 'uncategorized', 'uncat.')
@@ -2396,19 +2470,19 @@ class AxiomDeclaration(TheoreticalObject):
         if echo:
             repm.prnt(self.rep_report())
 
-    def rep_natural_language(self, text_format: (None, TextFormat) = None,
+    def rep_natural_language(self, encoding: (None, Encoding) = None,
                              wrap: bool = True) -> str:
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
         cap = True
         output = '⌜' + \
-                 StyledText(s=self.natural_language, text_style=text_styles.sans_serif_normal).rep(
-                     text_format=text_format) + \
+                 Text(s=self.natural_language, text_style=text_styles.sans_serif_normal).rep(
+                     encoding=encoding) + \
                  '⌝'
         output = wrap_text(output) if wrap else output
         return output
 
-    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs: bool = True,
+    def rep_report(self, encoding: (None, Encoding) = None, output_proofs: bool = True,
                    wrap: bool = True) -> str:
         """Return a representation that expresses and justifies the statement.
 
@@ -2416,10 +2490,10 @@ class AxiomDeclaration(TheoreticalObject):
         :param output_proofs:
         :return:
         """
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
         cap = True
-        output = f'{self.rep_title(text_format=text_format, cap=cap)}: ⌜{self.natural_language}⌝'
+        output = f'{self.rep_title(encoding=encoding, cap=cap)}: ⌜{self.natural_language}⌝'
         output = wrap_text(output) if wrap else output
         return output + f'\n'
 
@@ -2466,21 +2540,21 @@ class AxiomInclusion(Statement):
         Abridged property: a.a"""
         return self._axiom
 
-    def rep_natural_language(self, text_format: (None, TextFormat) = None,
+    def rep_natural_language(self, encoding: (None, Encoding) = None,
                              wrap: bool = True) -> str:
-        return self._axiom.rep_natural_language(text_format=text_format, wrap=wrap)
+        return self._axiom.rep_natural_language(encoding=encoding, wrap=wrap)
 
-    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs=True) -> str:
+    def rep_report(self, encoding: (None, Encoding) = None, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement.
 
         :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
         :param output_proofs:
         :return:
         """
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
         cap = True
-        output = f'{self.rep_title(text_format=text_format, cap=cap)}: ⌜{self.axiom.natural_language}⌝'
+        output = f'{self.rep_title(encoding=encoding, cap=cap)}: ⌜{self.axiom.natural_language}⌝'
         output = wrap_text(output)
         return output + f'\n'
 
@@ -2612,17 +2686,17 @@ class DefinitionDeclaration(TheoreticalObject):
     def echo(self):
         repm.prnt(self.rep_report())
 
-    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs=True) -> str:
+    def rep_report(self, encoding: (None, Encoding) = None, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement.
 
         :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
         :param output_proofs:
         :return:
         """
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
         cap = True
-        output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.natural_language}'
+        output = f'{self.rep_title(encoding=encoding, cap=cap)} ({self.rep_name(encoding=encoding)}): {self.natural_language}'
         output = wrap_text(output)
         return output + f'\n'
 
@@ -2657,17 +2731,17 @@ class DefinitionInclusion(Statement):
     def echo(self):
         repm.prnt(self.rep_report())
 
-    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs=True) -> str:
+    def rep_report(self, encoding: (None, Encoding) = None, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement.
 
         :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
         :param output_proofs:
         :return:
         """
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
         cap = True
-        output = f'{self.rep_title(text_format=text_format, cap=cap)} ({self.rep_name(text_format=text_format)}): {self.definition.natural_language}'
+        output = f'{self.rep_title(encoding=encoding, cap=cap)} ({self.rep_name(encoding=encoding)}): {self.definition.natural_language}'
         output = wrap_text(output)
         return output + f'\n'
 
@@ -2775,14 +2849,14 @@ class FormulaStatement(Statement):
                                                                                         extension_limit=extension_limit))
         return ol
 
-    def rep(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None):
+    def rep(self, encoding: (None, Encoding) = None, expand: (None, bool) = None):
         if expand:
-            return self.rep_formula(text_format=text_format, expand=expand)
+            return self.rep_formula(encoding=encoding, expand=expand)
         else:
-            return super().rep(text_format=text_format, expand=expand)
+            return super().rep(encoding=encoding, expand=expand)
 
-    def rep_formula(self, text_format: (None, TextFormat) = None, expand: (None, bool) = None):
-        return f'{self.valid_proposition.rep_formula(text_format=text_format, expand=expand)}'
+    def rep_formula(self, encoding: (None, Encoding) = None, expand: (None, bool) = None):
+        return f'{self.valid_proposition.rep_formula(encoding=encoding, expand=expand)}'
 
 
 class Morphism(FormulaStatement):
@@ -2973,8 +3047,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
                  verify_args: collections.abc.Callable,
                  rep_two_columns_proof: (None, collections.abc.Callable) = None,
                  nameset: (None, str, NameSet) = None,
-                 title: (None, str, TitleOBSOLETE) = None,
-                 dashed_name: (None, str, DashedName) = None,
+                 name: (None, str) = None,
                  echo: (None, bool) = None):
         self._infer_formula = infer_formula
         self._verify_args = verify_args
@@ -2982,13 +3055,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
         if nameset is None:
             symbol = configuration.default_symbolic_object_symbol
             index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
-        if title is None:
-            title = TitleOBSOLETE(ref=str(nameset.index), cat=title_categories.inference_rule,
-                                  subtitle=None)
-        if isinstance(title, str):
-            title = TitleOBSOLETE(ref=title, cat=title_categories.inference_rule,
-                                  subtitle=None)
+            nameset = NameSet(symbol=symbol, index=index, name=name)
         super().__init__(universe_of_discourse=universe_of_discourse,
                          is_theory_foundation_system=False,
                          nameset=nameset, echo=False)
@@ -3024,7 +3091,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
                                  **kwargs)
 
     def rep_two_columns_proof(self, s: InferredStatement,
-                              text_format: (None, TextFormat) = None) -> str:
+                              encoding: (None, Encoding) = None) -> str:
         """Given an inferred-statement 𝑠 based on this inference-rule,
         return a two-column proof
 
@@ -3032,13 +3099,13 @@ class InferenceRuleDeclaration(TheoreticalObject):
         :return:
         """
         rep = \
-            StyledText(s="Proof", text_style=text_styles.sans_serif_italic).rep(
-                text_format=text_format) + \
-            StyledText(s=" - By the ", text_style=text_styles.sans_serif_normal).rep(
-                text_format=text_format) + \
-            s.inference_rule.rep_fully_qualified_name(text_format=text_format) + \
-            StyledText(s=" inference rule:\n", text_style=text_styles.sans_serif_normal).rep(
-                text_format=text_format)
+            Text(s="Proof", text_style=text_styles.sans_serif_italic).rep(
+                encoding=encoding) + \
+            Text(s=" - By the ", text_style=text_styles.sans_serif_normal).rep(
+                encoding=encoding) + \
+            s.inference_rule.rep_fully_qualified_name(encoding=encoding) + \
+            Text(s=" inference rule:\n", text_style=text_styles.sans_serif_normal).rep(
+                encoding=encoding)
         if self._rep_two_columns_proof is None:
             # There is no specific rep_two_columns_proof method
             # linked to this inference-rule,
@@ -3046,15 +3113,15 @@ class InferenceRuleDeclaration(TheoreticalObject):
             for i in range(len(s.parameters)):
                 parameter = s.parameters[i]
                 rep = rep + rep_two_columns_proof_item(
-                    left=parameter.rep_formula(text_format=text_format, expand=True),
-                    right=StyledText(s='Follows from ',
-                                     text_style=text_styles.sans_serif_normal).rep(
-                        text_format=text_format) + parameter.rep_ref(
-                        text_format=text_format))
+                    left=parameter.rep_formula(encoding=encoding, expand=True),
+                    right=Text(s='Follows from ',
+                               text_style=text_styles.sans_serif_normal).rep(
+                        encoding=encoding) + parameter.rep_ref(
+                        encoding=encoding))
         else:
-            rep = rep + self._rep_two_columns_proof(*s.parameters, text_format=text_format)
+            rep = rep + self._rep_two_columns_proof(*s.parameters, encoding=encoding)
         rep = rep + rep_two_columns_proof_end(
-            left=s.valid_proposition.rep_formula(text_format=text_format))
+            left=s.valid_proposition.rep_formula(encoding=encoding))
         return rep
 
     def verify_args(self, *args, t: TheoryElaborationSequence):
@@ -3113,7 +3180,7 @@ class Note(AtheoreticalStatement):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = Text(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         ref = nameset.index if ref is None else ref
@@ -3130,8 +3197,8 @@ class Note(AtheoreticalStatement):
     def echo(self):
         repm.prnt(self.rep_report())
 
-    def rep_title(self, text_format: (None, TextFormat) = None, cap=False):
-        return self.nameset.rep_title(text_format=text_format, cap=cap)
+    def rep_title(self, encoding: (None, Encoding) = None, cap=False):
+        return self.nameset.rep_title(encoding=encoding, cap=cap)
 
     def rep_report(self, output_proofs=True):
         """Return a representation of the note that may be included as a section in a report."""
@@ -3271,7 +3338,7 @@ class TheoryElaborationSequence(TheoreticalObject):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.script_normal)
+            symbol = Text(plaintext=nameset, text_style=text_styles.script_normal)
             index = u.index_symbol(symbol=symbol)
             nameset = NameSet(s=symbol, index=index)
         nameset.cat = title_categories.theory_elaboration_sequence
@@ -3627,8 +3694,15 @@ class TheoryElaborationSequence(TheoreticalObject):
                proof_parameter=proof.parameters[0], proof=proof, slf=self)
         self._consistency = consistency_values.proved_inconsistent
 
-    def rep_declaration(self, text_format: (None, TextFormat) = None) -> str:
-        return f'Let {self.rep_fully_qualified_name(text_format=text_format)} be a theory-elaboration-sequence in {self.u.rep_symbol(text_format=text_format)}.' + '\n'
+    def rep_declaration(self, encoding: (None, Encoding) = None, compose: bool = False) -> str:
+        rep = Paragraph()
+        rep.append('Let')
+        rep.append(self.rep_fully_qualified_name(encoding=encoding))
+        rep.append('be a theory-elaboration-sequence in')
+        rep.append(self.u.rep_symbol(encoding=encoding), sep_after=text_dict.period)
+        if not compose:
+            rep = rep.rep(encoding=encoding)
+        return rep
 
     @property
     def stabilized(self):
@@ -3692,7 +3766,7 @@ class Hypothesis(Statement):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = Text(plaintext=nameset, text_style=text_styles.serif_italic)
             index = t.u.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
@@ -3776,7 +3850,7 @@ class Relation(TheoreticalObject):
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         if isinstance(nameset, str):
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = Text(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
@@ -3982,8 +4056,8 @@ class RelationDict(collections.UserDict):
             self._biconditional = self.declare(
                 2,
                 NameSet(
-                    symbol=StyledText(plaintext='<==>', unicode='⟺', latex_math='\\iff'),
-                    name=StyledText(plaintext='biconditional'),
+                    symbol=Text(plaintext='<==>', unicode='⟺', latex_math='\\iff'),
+                    name=Text(plaintext='biconditional'),
                     index=None),
                 Formula.infix,
                 signal_proposition=True, dashed_name='biconditional')
@@ -4002,9 +4076,9 @@ class RelationDict(collections.UserDict):
             self._conjunction = self.declare(
                 2,
                 NameSet(
-                    symbol=StyledText(unicode='∧', latex_math='\\land', plaintext='and'),
-                    name=StyledText(plaintext='and'),
-                    explicit_name=StyledText(plaintext='conjunction'),
+                    symbol=Text(unicode='∧', latex_math='\\land', plaintext='and'),
+                    name=Text(plaintext='and'),
+                    explicit_name=Text(plaintext='conjunction'),
                     index=None),
                 Formula.infix,
                 signal_proposition=True)
@@ -4023,9 +4097,9 @@ class RelationDict(collections.UserDict):
             self._disjunction = self.declare(
                 2,
                 NameSet(
-                    symbol=StyledText(unicode='∨', latex_math='\\lor', plaintext='or'),
-                    name=StyledText(plaintext='or'),
-                    explicit_name=StyledText(plaintext='disjunction'),
+                    symbol=Text(unicode='∨', latex_math='\\lor', plaintext='or'),
+                    name=Text(plaintext='or'),
+                    explicit_name=Text(plaintext='disjunction'),
                     index=None),
                 Formula.infix,
                 signal_proposition=True)
@@ -4053,7 +4127,7 @@ class RelationDict(collections.UserDict):
         """
         if self._equality is None:
             self._equality = self.declare(
-                2, NameSet(symbol=StyledText(plaintext='=')), Formula.infix,
+                2, NameSet(symbol=Text(plaintext='=')), Formula.infix,
                 signal_proposition=True, dashed_name='equality')
         return self._equality
 
@@ -4081,9 +4155,9 @@ class RelationDict(collections.UserDict):
             self._implication = self.declare(
                 2,
                 NameSet(
-                    symbol=StyledText(plaintext='==>', unicode='⟹', latex_math=r'\implies'),
-                    name=StyledText(plaintext='implies'),
-                    explicit_name=StyledText(plaintext='implication'),
+                    symbol=Text(plaintext='==>', unicode='⟹', latex_math=r'\implies'),
+                    name=Text(plaintext='implies'),
+                    explicit_name=Text(plaintext='implication'),
                     index=None),
                 Formula.infix,
                 signal_proposition=True)
@@ -4113,10 +4187,10 @@ class RelationDict(collections.UserDict):
             self._inconsistent = self.declare(
                 1,
                 NameSet(
-                    symbol=StyledText(plaintext='Inc', text_style=text_styles.serif_italic),
-                    acronym=StyledText(plaintext='Inc', text_style=text_styles.sans_serif_normal),
-                    name=StyledText(plaintext='inconsistent',
-                                    text_style=text_styles.sans_serif_normal),
+                    symbol=Text(plaintext='Inc', text_style=text_styles.serif_italic),
+                    acronym=Text(plaintext='Inc', text_style=text_styles.sans_serif_normal),
+                    name=Text(plaintext='inconsistent',
+                              text_style=text_styles.sans_serif_normal),
                     index=None),
                 Formula.prefix,
                 signal_proposition=True)
@@ -4135,9 +4209,9 @@ class RelationDict(collections.UserDict):
             self._inequality = self.declare(
                 2,
                 NameSet(
-                    symbol=StyledText(plaintext='neq', unicode='≠', latex_math='\\neq'),
-                    acronym=StyledText(plaintext='neq'),
-                    name=StyledText(plaintext='not equal'),
+                    symbol=Text(plaintext='neq', unicode='≠', latex_math='\\neq'),
+                    acronym=Text(plaintext='neq'),
+                    name=Text(plaintext='not equal'),
                     index=None),
                 Formula.infix,
                 signal_proposition=True)
@@ -4189,9 +4263,9 @@ class RelationDict(collections.UserDict):
             self._negation = self.declare(
                 1,
                 NameSet(
-                    symbol=StyledText(plaintext='not', unicode='¬', latex_math='\\neg'),
-                    acronym=StyledText(plaintext='not'),
-                    name=StyledText(plaintext='negation'),
+                    symbol=Text(plaintext='not', unicode='¬', latex_math='\\neg'),
+                    acronym=Text(plaintext='not'),
+                    name=Text(plaintext='negation'),
                     index=None),
                 Formula.prefix,
                 signal_proposition=True)
@@ -4298,9 +4372,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             self._absorption = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 nameset=NameSet(
-                    symbol=StyledText(plaintext='absorb', text_style=text_styles.monospace),
+                    symbol=Text(plaintext='absorb', text_style=text_styles.monospace),
                     index=None),
-                title='absorption',
+                name='absorption',
                 dashed_name=DashedName('absorption'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -4332,27 +4406,38 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             p = unpack_formula(p)
             return p
 
-        def rep_two_columns_proof(a: AxiomInclusion, p: Formula,
-                                  text_format: (None, TextFormat) = None) -> str:
+        def compose_two_column_proof(a: AxiomInclusion, p: Formula,
+                                     encoding: (None, Encoding) = None) -> str:
             """Return
 
             :param a: An axiom-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
             :param p: A propositional formula: P.
-            :param text_format:
+            :param encoding:
             :return:
             """
             report = rep_two_columns_proof_item(
-                left=a.rep_natural_language(text_format=text_format),
-                right=StyledText(
+                left=a.rep_natural_language(encoding=encoding),
+                right=Text(
                     s='Postulated by ',
-                    text_style=text_styles.sans_serif_normal).rep(text_format=text_format) + \
-                      a.rep_ref(text_format=text_format))
+                    text_style=text_styles.sans_serif_normal).rep(encoding=encoding) + \
+                      a.rep_ref(encoding=encoding))
             report = report + rep_two_columns_proof_item(
-                left=p.rep_formula(text_format=text_format, expand=True),
-                right=StyledText(
+                left=p.rep_formula(encoding=encoding, expand=True),
+                right=Text(
                     s='Interpreted from natural-language',
-                    text_style=text_styles.sans_serif_normal).rep(text_format=text_format))
+                    text_style=text_styles.sans_serif_normal).rep(encoding=encoding))
             return report
+
+        def compose_paragraph_proof(a: AxiomInclusion, p: Formula):
+            c = Paragraph()
+            c.append(a.compose_quasi_quote())
+            c.append('is postulated by')
+            c.append(a.compose_reference())
+            c.append_period()
+            c.append(p.compose_formula())
+            c.append('is an interpreted translation of that axiom.')
+            c.append_period()
+            return c
 
         def verify_args(a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence) -> bool:
             """Verify if the arguments comply syntactically with the inference-rule.
@@ -4392,7 +4477,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
                 universe_of_discourse=self.u,
                 infer_formula=infer_formula,
                 verify_args=verify_args,
-                rep_two_columns_proof=rep_two_columns_proof)
+                rep_two_columns_proof=compose_two_column_proof)
         return self._axiom_interpretation
 
     @property
@@ -4479,10 +4564,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._biconditional_elimination_left is None:
             self._biconditional_elimination_left = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=StyledText(plaintext='biconditional-elimination-left',
-                                                  text_style=text_styles.monospace),
+                nameset=NameSet(symbol=Text(plaintext='biconditional-elimination-left',
+                                            text_style=text_styles.monospace),
                                 index=None),
-                title='biconditional elimination (left)',
+                name='biconditional elimination (left)',
                 dashed_name=DashedName('biconditional-elimination-left'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -4539,10 +4624,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._biconditional_elimination_right is None:
             self._biconditional_elimination_right = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=StyledText(plaintext='biconditional-elimination-right',
-                                                  text_style=text_styles.monospace),
+                nameset=NameSet(symbol=Text(plaintext='biconditional-elimination-right',
+                                            text_style=text_styles.monospace),
                                 index=None),
-                title='biconditional elimination (right)',
+                name='biconditional elimination (right)',
                 dashed_name=DashedName('biconditional-elimination-right'),
                 infer_formula=infer_formula,
                 verify_args=verify_compatibility)
@@ -4606,10 +4691,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             self._biconditional_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 nameset=NameSet(
-                    symbol=StyledText(s='biconditional-introduction',
-                                      text_style=text_styles.monospace),
+                    symbol=Text(s='biconditional-introduction',
+                                text_style=text_styles.monospace),
                     index=None),
-                title='biconditional introduction',
+                name='biconditional introduction',
                 dashed_name=DashedName('biconditional-introduction'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -4695,10 +4780,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._conjunction_elimination_left is None:
             self._conjunction_elimination_left = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=StyledText(plaintext='conjunction-elimination-left',
-                                                  text_style=text_styles.monospace),
+                nameset=NameSet(symbol=Text(plaintext='conjunction-elimination-left',
+                                            text_style=text_styles.monospace),
                                 index=None),
-                title='conjunction elimination (left)',
+                name='conjunction elimination (left)',
                 dashed_name=DashedName('conjunction-elimination-left'),
                 infer_formula=infer_formula,
                 verify_args=verify_compatibility)
@@ -4751,10 +4836,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._conjunction_elimination_right is None:
             self._conjunction_elimination_right = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=StyledText(plaintext='conjunction-elimination-right',
-                                                  text_style=text_styles.monospace),
+                nameset=NameSet(symbol=Text(plaintext='conjunction-elimination-right',
+                                            text_style=text_styles.monospace),
                                 index=None),
-                title='conjunction elimination (right)',
+                name='conjunction elimination (right)',
                 dashed_name=DashedName('conjunction-elimination-right'),
                 infer_formula=infer_formula,
                 verify_args=verify_compatibility)
@@ -4809,10 +4894,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._conjunction_introduction is None:
             self._conjunction_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=StyledText(plaintext='conjunction-introduction',
-                                                  text_style=text_styles.monospace),
+                nameset=NameSet(symbol=Text(plaintext='conjunction-introduction',
+                                            text_style=text_styles.monospace),
                                 index=None),
-                title='conjunction introduction',
+                name='conjunction introduction',
                 dashed_name=DashedName('conjunction-introduction'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -4879,10 +4964,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._definition_interpretation is None:
             self._definition_interpretation = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=StyledText(plaintext='definition-interpretation',
-                                                  text_style=text_styles.monospace),
+                nameset=NameSet(symbol=Text(plaintext='definition-interpretation',
+                                            text_style=text_styles.monospace),
                                 index=None),
-                title='definition interpretation',
+                name='definition interpretation',
                 dashed_name=DashedName('definition-interpretation'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -4949,10 +5034,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._disjunction_introduction is None:
             self._disjunction_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=StyledText(plaintext='disjunction-introduction',
-                                                  text_style=text_styles.monospace),
+                nameset=NameSet(symbol=Text(plaintext='disjunction-introduction',
+                                            text_style=text_styles.monospace),
                                 index=None),
-                title='disjunction introduction',
+                name='disjunction introduction',
                 dashed_name=DashedName('disjunction-introduction'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -5033,10 +5118,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._double_negation_elimination is None:
             self._double_negation_elimination = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=StyledText(plaintext='double-negation-elimination',
-                                                  text_style=text_styles.monospace),
+                nameset=NameSet(symbol=Text(plaintext='double-negation-elimination',
+                                            text_style=text_styles.monospace),
                                 index=None),
-                title='double negation elimination',
+                name='double negation elimination',
                 dashed_name=DashedName('double-negation-elimination'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -5081,10 +5166,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._double_negation_introduction is None:
             self._double_negation_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=StyledText(plaintext='double-negation-introduction',
-                                                  text_style=text_styles.monospace),
+                nameset=NameSet(symbol=Text(plaintext='double-negation-introduction',
+                                            text_style=text_styles.monospace),
                                 index=None),
-                title='double negation introduction',
+                name='double negation introduction',
                 dashed_name=DashedName('double-negation-introduction'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -5149,10 +5234,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             self._equality_commutativity = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 nameset=NameSet(
-                    symbol=StyledText(plaintext='equality-commutativity',
-                                      text_style=text_styles.monospace),
+                    symbol=Text(plaintext='equality-commutativity',
+                                text_style=text_styles.monospace),
                     index=None),
-                title='equality commutativity',
+                name='equality commutativity',
                 dashed_name=DashedName('equality-commutativity'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -5219,9 +5304,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._inconsistency_introduction is None:
             self._inconsistency_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=StyledText(plaintext='inconsistency-introduction',
-                                                  text_style=text_styles.monospace), index=None),
-                title='inconsistency introduction',
+                nameset=NameSet(symbol=Text(plaintext='inconsistency-introduction',
+                                            text_style=text_styles.monospace), index=None),
+                name='inconsistency introduction',
                 dashed_name=DashedName('inconsistency-introduction'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -5320,9 +5405,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._modus_ponens is None:
             self._modus_ponens = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=StyledText(plaintext='modus-ponens',
-                                                  text_style=text_styles.monospace), index=None),
-                title='modus ponens',
+                nameset=NameSet(symbol=Text(plaintext='modus-ponens',
+                                            text_style=text_styles.monospace), index=None),
+                name='modus ponens',
                 dashed_name=DashedName('modus-ponens'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -5400,9 +5485,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._equal_terms_substitution is None:
             self._equal_terms_substitution = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=StyledText(plaintext='equal-terms-substitution',
-                                                  text_style=text_styles.monospace), index=None),
-                title='equal terms substitution',
+                nameset=NameSet(symbol=Text(plaintext='equal-terms-substitution',
+                                            text_style=text_styles.monospace), index=None),
+                name='equal terms substitution',
                 dashed_name=DashedName('equal-terms-substitution'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -5495,9 +5580,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._variable_substitution is None:
             self._variable_substitution = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=StyledText(plaintext='variable-substitution',
-                                                  text_style=text_styles.monospace), index=None),
-                title='variable substitution',
+                nameset=NameSet(symbol=Text(plaintext='variable-substitution',
+                                            text_style=text_styles.monospace), index=None),
+                name='variable substitution',
                 dashed_name=DashedName('variable-substitution'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
@@ -5585,7 +5670,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._absorption = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.absorption,
-                title='absorption')
+                nameset='absorption')
         return self._absorption
 
     @property
@@ -6110,6 +6195,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
 class UniverseOfDiscourse(SymbolicObject):
     def __init__(self, nameset: (None, str, NameSet) = None,
+                 name: (None, str, Text) = None,
                  echo: (None, bool) = None):
         echo = get_config(echo, configuration.echo_universe_of_discourse_declaration,
                           configuration.echo_default,
@@ -6126,18 +6212,18 @@ class UniverseOfDiscourse(SymbolicObject):
         # self.variables = dict()
         # Unique name indexes
         self.symbol_indexes = dict()
-        self.titles = dict()
+        # self.titles = dict()
 
         if nameset is None:
-            symbol = StyledText(plaintext='U', text_style=text_styles.script_normal)
+            symbol = Text(plaintext='U', text_style=text_styles.script_normal)
             index = index_universe_of_discourse_symbol(base=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
+            nameset = NameSet(symbol=symbol, index=index, name=name)
         elif isinstance(nameset, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
             index = index_universe_of_discourse_symbol(base=nameset)
-            nameset = NameSet(s=nameset, index=index)
+            nameset = NameSet(s=nameset, index=index, name=name)
         # if dashed_name is None:
         #    dashed_name = f'universe-of-discourse-{str(symbol.index)}'
         super().__init__(
@@ -6388,12 +6474,11 @@ class UniverseOfDiscourse(SymbolicObject):
             echo=echo)
 
     def declare_axiom(
-            self, natural_language: str, title: (None, str, TitleOBSOLETE) = None,
-            nameset: (None, str, NameSet) = None,
+            self, natural_language: str, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         """Elaborate a new axiom 𝑎 in this universe-of-discourse."""
         return AxiomDeclaration(
-            u=self, natural_language=natural_language, title=title, nameset=nameset, echo=echo)
+            u=self, natural_language=natural_language, nameset=nameset, echo=echo)
 
     def take_note(
             self, t: TheoryElaborationSequence, content: str, nameset: (None, str, NameSet) = None,
@@ -6435,7 +6520,7 @@ class UniverseOfDiscourse(SymbolicObject):
             relation, *parameters, nameset=nameset,
             lock_variable_scope=lock_variable_scope, echo=echo)
 
-    def get_symbol_max_index(self, symbol: StyledText) -> int:
+    def get_symbol_max_index(self, symbol: Text) -> int:
         """Return the highest index for that symbol-base in the universe-of-discourse."""
         # if symbol in self.symbol_indexes.keys():
         #    return self.symbol_indexes[symbol]
@@ -6445,14 +6530,14 @@ class UniverseOfDiscourse(SymbolicObject):
                               nameset.symbol == symbol and nameset.index_as_int is not None))
         return max(same_symbols, default=0)
 
-    def index_symbol(self, symbol: StyledText) -> int:
+    def index_symbol(self, symbol: Text) -> int:
         """Given a symbol-base S (i.e. an unindexed symbol), returns a unique integer n
         such that (S, n) is a unique identifier in this instance of UniverseOfDiscourse.
 
         :param symbol: The symbol-base.
         :return:
         """
-        assert isinstance(symbol, StyledText)
+        assert isinstance(symbol, Text)
         return self.get_symbol_max_index(symbol) + 1
 
     def declare_definition(
@@ -6494,13 +6579,13 @@ class UniverseOfDiscourse(SymbolicObject):
         """
         return self.simple_objcts
 
-    def rep_declaration(self, text_format: (None, TextFormat) = None, compose: bool = False) -> (
-            str, TextComposition):
+    def rep_declaration(self, encoding: (None, Encoding) = None, compose: bool = False) -> (
+            str, Block):
         rep = Paragraph()
         rep.append('Let')
         rep.append(self.rep_fully_qualified_name())
         rep.append('be a universe-of-discourse.')
-        return rep.rep(text_format=text_format, compose=compose)
+        return rep.rep(encoding=encoding, compose=compose)
 
     def so(self, symbol=None):
         return self.declare_symbolic_objct(
@@ -6555,6 +6640,12 @@ class UniverseOfDiscourse(SymbolicObject):
             status=FreeVariable.scope_initialization_status, echo=echo)
         yield x
         x.lock_scope()
+
+
+def declare_universe_of_discourse(nameset: (None, str, NameSet) = None,
+                                  name: (None, str, Text) = None,
+                                  echo: (None, bool) = None) -> UniverseOfDiscourse:
+    return UniverseOfDiscourse(nameset=nameset, name=name, echo=echo)
 
 
 class InferredStatement(FormulaStatement):
@@ -6619,11 +6710,11 @@ class InferredStatement(FormulaStatement):
         """
         return self._inference_rule
 
-    def rep_report(self, text_format: (None, TextFormat) = None, output_proofs=True) -> str:
+    def rep_report(self, encoding: (None, Encoding) = None, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        text_format = get_config(text_format, configuration.text_format,
-                                 fallback_value=text_formats.plaintext)
-        rep = f'{self.rep_title(text_format=text_format, cap=True)}: {self.valid_proposition.rep_formula()}' + '\n\t'
+        encoding = get_config(encoding, configuration.encoding,
+                              fallback_value=encodings.plaintext)
+        rep = f'{self.rep_title(encoding=encoding, cap=True)}: {self.valid_proposition.rep_formula()}' + '\n\t'
         rep = wrap_text(rep) + '\n'
         if output_proofs:
             if self.inference_rule is self.u.inference_rules.variable_substitution:
@@ -6632,7 +6723,7 @@ class InferredStatement(FormulaStatement):
                 # which receives arbitrary theoretical-objcts as the 2nd and
                 # following parameters, to constitute a free-variable mappings.
                 parameter = self.parameters[0]
-                rep = rep + f'\n\t{parameter.rep_formula(text_format=text_format, expand=True):<70} │ Follows from {repm.serif_bold(parameter.rep_ref(text_format=text_format))}.'
+                rep = rep + f'\n\t{parameter.rep_formula(encoding=encoding, expand=True):<70} │ Follows from {repm.serif_bold(parameter.rep_ref(encoding=encoding))}.'
                 # Display the free-variables mapping.
                 free_variables = self.parameters[0].get_variable_ordered_set()
                 mapping = zip(free_variables, self.parameters[1:])
@@ -6640,11 +6731,11 @@ class InferredStatement(FormulaStatement):
                     f'{k.rep_symbol()} ↦ {v.rep_formula()}' for k, v in mapping) + ')'
                 rep = rep + f'\n\t{mapping_text:<70} │ Given as parameters.'
             else:
-                rep = rep + self.rep_two_columns_proof(text_format=text_format)
+                rep = rep + self.rep_two_columns_proof(encoding=encoding)
         return rep
 
-    def rep_two_columns_proof(self, text_format: (None, TextFormat) = None):
-        rep = self.inference_rule.rep_two_columns_proof(s=self, text_format=text_format)
+    def rep_two_columns_proof(self, encoding: (None, Encoding) = None):
+        rep = self.inference_rule.rep_two_columns_proof(s=self, encoding=encoding)
         return rep
 
 

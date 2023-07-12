@@ -6,7 +6,7 @@ import random_data
 class TestAxiomInterpretation(TestCase):
     def test_axiom_interpretation(self):
         pu.configuration.echo_default = False
-        pu.configuration.text_format = pu.text_formats.unicode
+        pu.configuration.encoding = pu.encodings.unicode
         pu.configuration.echo_default = False
         u = pu.UniverseOfDiscourse()
         content1 = random_data.random_sentence()

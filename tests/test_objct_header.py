@@ -9,17 +9,17 @@ class TestHeader(TestCase):
         header = pu.TitleOBSOLETE(header_reference, cat=pu.title_categories.axiom_declaration)
         self.assertEqual(f'axiom {header_reference}', str(header))
         self.assertEqual(f'axiom {header_reference}',
-                         header.rep(text_format=pu.text_formats.plaintext))
+                         header.rep(encoding=pu.encodings.plaintext))
         self.assertEqual(f'axiom {header_reference}',
-                         header.rep_title(text_format=pu.text_formats.plaintext))
+                         header.rep_title(text_format=pu.encodings.plaintext))
         self.assertEqual(f'axiom {header_reference}',
-                         header.rep_ref(text_format=pu.text_formats.plaintext))
+                         header.rep_ref(text_format=pu.encodings.plaintext))
         self.assertEqual(f'Axiom {header_reference}',
-                         header.rep(text_format=pu.text_formats.plaintext, cap=True))
+                         header.rep(encoding=pu.encodings.plaintext, cap=True))
         self.assertEqual(f'Axiom {header_reference}',
-                         header.rep_title(text_format=pu.text_formats.plaintext, cap=True))
+                         header.rep_title(text_format=pu.encodings.plaintext, cap=True))
         self.assertEqual(f'Axiom {header_reference}',
-                         header.rep_ref(text_format=pu.text_formats.plaintext, cap=True))
+                         header.rep_ref(text_format=pu.encodings.plaintext, cap=True))
 
     def test_header_2(self):
         header_reference = random_data.random_word()
@@ -28,14 +28,14 @@ class TestHeader(TestCase):
                                   subtitle=header_title)
         self.assertEqual(f'prop. {header_reference}', str(header))
         self.assertEqual(f'prop. {header_reference}',
-                         header.rep(text_format=pu.text_formats.plaintext))
+                         header.rep(encoding=pu.encodings.plaintext))
         self.assertEqual(f'proposition {header_reference} - {header_title}',
-                         header.rep_title(text_format=pu.text_formats.plaintext))
+                         header.rep_title(text_format=pu.encodings.plaintext))
         self.assertEqual(f'prop. {header_reference}',
-                         header.rep_ref(text_format=pu.text_formats.plaintext))
+                         header.rep_ref(text_format=pu.encodings.plaintext))
         self.assertEqual(f'Prop. {header_reference}',
-                         header.rep(text_format=pu.text_formats.plaintext, cap=True))
+                         header.rep(encoding=pu.encodings.plaintext, cap=True))
         self.assertEqual(f'Proposition {header_reference} - {header_title}',
-                         header.rep_title(text_format=pu.text_formats.plaintext, cap=True))
+                         header.rep_title(text_format=pu.encodings.plaintext, cap=True))
         self.assertEqual(f'Prop. {header_reference}',
-                         header.rep_ref(text_format=pu.text_formats.plaintext, cap=True))
+                         header.rep_ref(text_format=pu.encodings.plaintext, cap=True))

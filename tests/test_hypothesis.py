@@ -46,4 +46,4 @@ class TestHypothesis(TestCase):
             proposition_1,
             hypothetical_conjunction)
         self.assertEqual('𝑟₁(𝑜₂, 𝑜₄)',
-                         conclusion_1.valid_proposition.rep_formula(pu.text_formats.unicode))
+                         conclusion_1.valid_proposition.rep_formula(pu.encodings.unicode))

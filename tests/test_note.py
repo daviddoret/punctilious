@@ -6,7 +6,7 @@ import random_data
 class TestNoteIntroduction(TestCase):
     def test_note_introduction(self):
         pu.configuration.echo_note = True
-        pu.configuration.text_format = pu.text_formats.unicode
+        pu.configuration.encoding = pu.encodings.unicode
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
         r1 = u.r.declare(1, signal_proposition=True)
