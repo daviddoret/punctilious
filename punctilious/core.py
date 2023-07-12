@@ -41,6 +41,11 @@ encodings = Encodings()
 
 
 class Representable(abc.ABC):
+    @property
+    def outer_composition(self) -> list[Representable]:
+        compo = list()
+        compo.append(self)
+        return compo
 
     @abc.abstractmethod
     def rep(self, encoding: (None, Encoding) = None, **args) -> str:
@@ -345,9 +350,12 @@ class Block(list, Representable):
         else:
             raise TypeError('item is of unsupported type.')
 
-    def rep(self, encoding: (None, Encoding) = None, **args) -> str:
+    def rep(self, encoding: (None, Encoding) = None, wrap: (None, bool) = None, **args) -> str:
         encoding = get_config(encoding, configuration.encoding,
                               fallback_value=encodings.plaintext)
+        # Implement parameter wrap
+        # wrap = get_config(wrap, configuration.wrap,
+        #                  fallback_value=False)
         return ''.join(item.rep(encoding=encoding) for item in
                        self.outer_composition)
 
@@ -2470,16 +2478,16 @@ class AxiomDeclaration(TheoreticalObject):
         if echo:
             repm.prnt(self.rep_report())
 
+    def compose_natural_language(self):
+        compo = QuasiQuotation()
+        compo.append(self.natural_language)
+        return compo
+
     def rep_natural_language(self, encoding: (None, Encoding) = None,
                              wrap: bool = True) -> str:
         encoding = get_config(encoding, configuration.encoding,
                               fallback_value=encodings.plaintext)
-        cap = True
-        output = '⌜' + \
-                 Text(s=self.natural_language, text_style=text_styles.sans_serif_normal).rep(
-                     encoding=encoding) + \
-                 '⌝'
-        output = wrap_text(output) if wrap else output
+        output = self.compose_natural_language().rep(encoding=encoding, wrap=wrap)
         return output
 
     def rep_report(self, encoding: (None, Encoding) = None, output_proofs: bool = True,
