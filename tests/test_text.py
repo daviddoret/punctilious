@@ -2,10 +2,17 @@ from unittest import TestCase
 import punctilious as pu
 
 
-class TestStyledText(TestCase):
+class TestText(TestCase):
+
+    def test_1(self):
+        pangram = 'The quick brown fox jumps over the lazy dog 0123456789!'
+        compo = pu.ComposableText(plaintext=pangram)
+        self.assertEqual(pangram, compo.rep(encoding=pu.encodings.plaintext))
+        self.assertEqual(pangram, compo.rep(encoding=pu.encodings.unicode))
+
     def test_styled_text(self):
         pangram = 'The quick brown fox jumps over the lazy dog 0123456789!'
-        x = pu.Text(pangram, text_style=pu.text_styles.serif_bold)
+        x = pu.ComposableText(pangram, text_style=pu.text_styles.serif_bold)
         x_plaintext = x.rep(encoding=pu.encodings.plaintext)
         self.assertEqual(
             'The quick brown fox jumps over the lazy dog 0123456789!',
@@ -18,7 +25,7 @@ class TestStyledText(TestCase):
         self.assertEqual(
             '\\mathbf{The quick brown fox jumps over the lazy dog 0123456789!}',
             x_latex_math)
-        x = pu.Text(pangram, text_style=pu.text_styles.serif_normal)
+        x = pu.ComposableText(pangram, text_style=pu.text_styles.serif_normal)
         self.assertEqual(
             'The quick brown fox jumps over the lazy dog 0123456789!',
             x.rep(pu.encodings.plaintext))
@@ -28,7 +35,7 @@ class TestStyledText(TestCase):
         self.assertEqual(
             '\\mathnormal{The quick brown fox jumps over the lazy dog 0123456789!}',
             x.rep(pu.encodings.latex_math))
-        x = pu.Text(pangram, pu.text_styles.double_struck)
+        x = pu.ComposableText(pangram, pu.text_styles.double_struck)
         self.assertEqual(
             'The quick brown fox jumps over the lazy dog 0123456789!',
             x.rep(pu.encodings.plaintext))
@@ -40,15 +47,15 @@ class TestStyledText(TestCase):
             x.rep(pu.encodings.latex_math))
 
     def test_equality(self):
-        t1 = pu.Text(plaintext='foo')
-        t2 = pu.Text(plaintext='foo', unicode='bar')
+        t1 = pu.ComposableText(plaintext='foo')
+        t2 = pu.ComposableText(plaintext='foo', unicode='bar')
         self.assertEqual(t1, t2)
         self.assertEqual(t2, t2)
-        t3 = pu.Text(unicode='bar')
+        t3 = pu.ComposableText(unicode='bar')
         self.assertNotEqual(t1, t3)
         self.assertEqual(t2, t3)
         self.assertEqual(t3, t3)
-        t4 = pu.Text(unicode='bar', text_style=pu.text_styles.double_struck)
+        t4 = pu.ComposableText(unicode='bar', text_style=pu.text_styles.double_struck)
         self.assertNotEqual(t1, t4)
         self.assertNotEqual(t2, t4)
         self.assertNotEqual(t3, t4)

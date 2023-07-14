@@ -92,6 +92,62 @@ def unicode_format(s: str = '', index: int = 0) -> str:
     return ''.join([unicode_styled_characters.get(c, c * 14)[index] for c in s])
 
 
+def unicode_sans_serif_normal(s: str):
+    return unicode_format(s=s, index=unicode_sans_serif_normal_index)
+
+
+def unicode_sans_serif_bold(s: str):
+    return unicode_format(s=s, index=unicode_sans_serif_bold_index)
+
+
+def unicode_sans_serif_italic(s: str):
+    return unicode_format(s=s, index=unicode_sans_serif_italic_index)
+
+
+def unicode_sans_serif_bold_italic(s: str):
+    return unicode_format(s=s, index=unicode_sans_serif_bold_italic_index)
+
+
+def unicode_serif_normal(s: str):
+    return unicode_format(s=s, index=unicode_serif_normal_index)
+
+
+def unicode_serif_bold(s: str):
+    return unicode_format(s=s, index=unicode_serif_bold_index)
+
+
+def unicode_serif_italic(s: str):
+    return unicode_format(s=s, index=unicode_serif_italic_index)
+
+
+def unicode_serif_bold_italic(s: str):
+    return unicode_format(s=s, index=unicode_serif_italic_bold_index)
+
+
+def unicode_script_normal(s: str):
+    return unicode_format(s=s, index=unicode_script_normal_index)
+
+
+def unicode_script_bold(s: str):
+    return unicode_format(s=s, index=unicode_script_bold_index)
+
+
+def unicode_fraktur_normal(s: str):
+    return unicode_format(s=s, index=unicode_fraktur_normal_index)
+
+
+def unicode_fraktur_bold(s: str):
+    return unicode_format(s=s, index=unicode_fraktur_bold_index)
+
+
+def unicode_monospace(s: str):
+    return unicode_format(s=s, index=unicode_monospace_index)
+
+
+def unicode_double_struck(s: str):
+    return unicode_format(s=s, index=unicode_double_struck_index)
+
+
 unicode_subscript_dictionary = {
     '0': u'₀',
     '1': u'₁',

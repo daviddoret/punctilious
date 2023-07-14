@@ -11,7 +11,7 @@ class TestQuasiQuotes(TestCase):
                          b1.rep(encoding=pu.encodings.plaintext))
         self.assertEqual('⌜⌝',
                          b1.rep(encoding=pu.encodings.unicode))
-        b1.append(pu.Text(plaintext='plaintext content', unicode='unicode content'))
+        b1.append(pu.ComposableText(plaintext='plaintext content', unicode='unicode content'))
         self.assertEqual('"plaintext content"',
                          b1.rep(encoding=pu.encodings.plaintext))
         self.assertEqual('⌜unicode content⌝',

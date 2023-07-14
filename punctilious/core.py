@@ -7,7 +7,7 @@ import contextlib
 import abc
 import collections
 import networkx as nx
-import unicode
+import unicode_utilities
 import unidecode
 
 
@@ -40,128 +40,26 @@ class Encodings:
 encodings = Encodings()
 
 
-class Representable(abc.ABC):
-    @property
-    def outer_composition(self) -> list[Representable]:
-        compo = list()
-        compo.append(self)
-        return compo
+class Composable(abc.ABC):
+    """An object that is Composable is an object that may participate in a representation composition and may be represented."""
 
     @abc.abstractmethod
+    def compose(self) -> collections.abc.Generator[Composable, None, None]:
+        raise NotImplementedError('This method is not implemented.')
+
     def rep(self, encoding: (None, Encoding) = None, **args) -> str:
-        raise NotImplementedError('This method is not implemented.')
-
-    @abc.abstractmethod
-    def rep_declaration(self, encoding: (None, Encoding) = None, **args) -> str:
-        raise NotImplementedError('This method is not implemented.')
-
-    @abc.abstractmethod
-    def rep_report(self, encoding: (None, Encoding) = None, **args) -> str:
-        raise NotImplementedError('This method is not implemented.')
-
-    # etc.
+        composition = ''
+        for item in self.compose():
+            composition += item.rep(encoding=encoding, **args)
+        return composition
 
 
-class TextStyle:
-    """A supported text style."""
-
-    def __init__(self, font_style_name: str, unicode_table_index: int, latex_math_start_tag: str,
-                 latex_math_end_tag: str):
-        self.font_style_name = font_style_name
-        self.unicode_table_index = unicode_table_index
-        self.latex_math_start_tag = latex_math_start_tag
-        self.latex_math_end_tag = latex_math_end_tag
-
-    def __eq__(self, other):
-        return type(other) is type(self) and hash(self) == hash(other)
-
-    def __hash__(self):
-        return hash((TextStyle, self.font_style_name))
-
-    def __repr__(self):
-        return self.font_style_name
-
-    def __str__(self):
-        return self.font_style_name
-
-
-class TextStyles:
-    """Expose a catalog of supported text-styles."""
-
-    def __init__(self):
-        self._no_style = TextStyle(
-            font_style_name='no-style',
-            unicode_table_index=unicode.unicode_sans_serif_normal_index,
-            latex_math_start_tag=r'',
-            latex_math_end_tag=r'')
-        self.double_struck = TextStyle(
-            font_style_name='double-struck',
-            unicode_table_index=unicode.unicode_double_struck_index,
-            latex_math_start_tag=r'\mathbb{',
-            latex_math_end_tag=r'}')
-        self.monospace = TextStyle(
-            font_style_name='fraktur-normal',
-            unicode_table_index=unicode.unicode_fraktur_normal_index,
-            latex_math_start_tag=r'\mathfrak{',
-            latex_math_end_tag=r'}')
-        self.monospace = TextStyle(
-            font_style_name='monospace',
-            unicode_table_index=unicode.unicode_monospace_index,
-            latex_math_start_tag=r'\mathtt{',
-            latex_math_end_tag=r'}')
-        self.sans_serif_bold = TextStyle(
-            font_style_name='sans-serif-bold',
-            unicode_table_index=unicode.unicode_sans_serif_bold_index,
-            latex_math_start_tag=r'\boldsymbol\mathsf{',
-            latex_math_end_tag=r'}}')
-        self.sans_serif_italic = TextStyle(
-            font_style_name='sans-serif-italic',
-            unicode_table_index=unicode.unicode_sans_serif_italic_index,
-            latex_math_start_tag=r'\text{\sffamily\itshape{',
-            latex_math_end_tag=r'}}}')
-        self.sans_serif_normal = TextStyle(
-            font_style_name='sans-serif-normal',
-            unicode_table_index=unicode.unicode_sans_serif_normal_index,
-            latex_math_start_tag=r'\mathsf{',
-            latex_math_end_tag=r'}')
-        self.script_normal = TextStyle(
-            font_style_name='script-normal',
-            unicode_table_index=unicode.unicode_script_normal_index,
-            latex_math_start_tag=r'\mathcal{',
-            latex_math_end_tag=r'}')
-        self.serif_bold = TextStyle(
-            font_style_name='serif-bold',
-            unicode_table_index=unicode.unicode_serif_bold_index,
-            latex_math_start_tag=r'\mathbf{',
-            latex_math_end_tag=r'}')
-        self.serif_italic = TextStyle(
-            font_style_name='serif-italic',
-            unicode_table_index=unicode.unicode_serif_italic_index,
-            latex_math_start_tag=r'\mathit{',
-            latex_math_end_tag=r'}')
-        self.serif_normal = TextStyle(
-            font_style_name='serif-normal',
-            unicode_table_index=unicode.unicode_serif_normal_index,
-            latex_math_start_tag=r'\mathnormal{',
-            latex_math_end_tag=r'}')
-
-    @property
-    def no_style(self):
-        """The ⌜no_style⌝ text-style is a neutral style.
-        Rendering defaults to sans-serif-normal.
-        It is expected to be overriden by passing the text_style parameter to the rendering method."""
-        return self._no_style
-
-
-text_styles = TextStyles()
-
-
-class Text:
+class ComposableText(Composable):
     """A text is a string of text that:
     - is of a supported text_style,
     - may support one or several encodings."""
 
-    def __init__(self, s: (None, str) = None, text_style: (None, TextStyle) = None,
+    def __init__(self, s: (None, str) = None,
                  plaintext: (None, str) = None, unicode: (None, str) = None,
                  latex_math: (None, str) = None
                  ):
@@ -184,34 +82,24 @@ class Text:
                 # e.g. symbol '¬' is mapped to '!'.
                 # To avoid this, isalnum() is used as a temporary solution.
                 plaintext = unidecode.unidecode(unicode)
-        if text_style is None:
-            text_style = text_styles.serif_normal
         self._plaintext = plaintext if plaintext != '' else None
         self._unicode = unicode if unicode != '' else None
         self._latex_math = latex_math if latex_math != '' else None
-        self._text_style = text_style if text_style != '' else None
 
-    def __eq__(self, other: (None, object, Text)) -> bool:
+    def __eq__(self, other: (None, object, ComposableText)) -> bool:
         """Two instances of TextStyle are equal if any of their formatted representation are equal and not None."""
         return type(self) is type(other) and \
-            (self.text_style == other.text_style) and \
-            (equal_not_none(self.plaintext, other.plaintext) or
-             equal_not_none(self.unicode, other.unicode) or
-             equal_not_none(self.latex_math, other.latex_math))
+            self.plaintext == other.plaintext and \
+            self.unicode == other.unicode and \
+            self.latex_math == other.latex_math
 
     def __hash__(self):
         """Two styled-texts are considered distinct if either their plaintext content or their style are distinct."""
         return hash(
-            (Text, self._plaintext, self._unicode, self._latex_math, self._text_style))
+            (ComposableText, self._plaintext, self._unicode, self._latex_math))
 
-    def __repr__(self) -> str:
-        try:
-            return self.rep()
-        except:
-            return repr(self.to_dict())
-
-    def __str__(self) -> str:
-        return self.rep()
+    def compose(self) -> collections.abc.Generator[Composable, None, None]:
+        yield self
 
     @property
     def latex_math(self) -> (None, str):
@@ -222,8 +110,8 @@ class Text:
         return self._plaintext
 
     def rep(self, encoding: Encoding = encodings.plaintext, cap: bool = False):
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         match encoding:
             case encodings.plaintext:
                 return self.rep_as_plaintext(cap=cap)
@@ -237,7 +125,7 @@ class Text:
     def rep_as_latex_math(self, cap: bool = False):
         content = self._plaintext if self._latex_math is None else self._latex_math
         content = content.capitalize() if cap else content
-        return f'{self._text_style.latex_math_start_tag}{content}{self._text_style.latex_math_end_tag}'
+        return content
 
     def rep_as_plaintext(self, cap: bool = False):
         content = self._plaintext
@@ -247,50 +135,128 @@ class Text:
     def rep_as_unicode(self, cap: bool = False):
         content = self._plaintext if self._unicode is None else self._unicode
         content = content.capitalize() if cap else content
-        return unicode.unicode_format(content, self._text_style.unicode_table_index)
-
-    @property
-    def text_style(self) -> TextStyle:
-        return self._text_style
-
-    def to_dict(self) -> dict:
-        return {
-            '_plaintext':  self._plaintext,
-            '_unicode':    self._unicode,
-            '_latex_math': self._latex_math,
-            '_text_style': self._text_style
-        }
+        return content
 
     @property
     def unicode(self) -> (None, str):
         return self._unicode
 
 
+class TextStyle:
+    """A supported text style."""
+
+    def __init__(self, font_style_name: str, unicode_table_index: int, start_tag: ComposableText,
+                 end_tag: ComposableText):
+        self.font_style_name = font_style_name
+        self.unicode_table_index = unicode_table_index
+        self.start_tag = start_tag
+        self.end_tag = end_tag
+
+    def __eq__(self, other):
+        return type(other) is type(self) and hash(self) == hash(other)
+
+    def __hash__(self):
+        return hash((TextStyle, self.font_style_name))
+
+    def __repr__(self):
+        return self.font_style_name
+
+    def __str__(self):
+        return self.font_style_name
+
+
+class TextStyles:
+    """Expose a catalog of supported text-styles."""
+
+    def __init__(self):
+        self._no_style = TextStyle(
+            font_style_name='no-style',
+            unicode_table_index=unicode_utilities.unicode_sans_serif_normal_index,
+            start_tag=ComposableText(plaintext=''),
+            end_tag=ComposableText(plaintext=''))
+        self.double_struck = TextStyle(
+            font_style_name='double-struck',
+            unicode_table_index=unicode_utilities.unicode_double_struck_index,
+            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathbb{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+        self.monospace = TextStyle(
+            font_style_name='fraktur-normal',
+            unicode_table_index=unicode_utilities.unicode_fraktur_normal_index,
+            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathfrak{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+        self.monospace = TextStyle(
+            font_style_name='monospace',
+            unicode_table_index=unicode_utilities.unicode_monospace_index,
+            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathtt{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+        self.sans_serif_bold = TextStyle(
+            font_style_name='sans-serif-bold',
+            unicode_table_index=unicode_utilities.unicode_sans_serif_bold_index,
+            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\boldsymbol\\mathsf{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex_math='}}'))
+        self.sans_serif_italic = TextStyle(
+            font_style_name='sans-serif-italic',
+            unicode_table_index=unicode_utilities.unicode_sans_serif_italic_index,
+            start_tag=ComposableText(plaintext='', unicode='',
+                                     latex_math='\\text{\\sffamily{\\itshape{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex_math='}}}'))
+        self.sans_serif_normal = TextStyle(
+            font_style_name='sans-serif-normal',
+            unicode_table_index=unicode_utilities.unicode_sans_serif_normal_index,
+            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathsf{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+        self.script_normal = TextStyle(
+            font_style_name='script-normal',
+            unicode_table_index=unicode_utilities.unicode_script_normal_index,
+            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathcal{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+        self.serif_bold = TextStyle(
+            font_style_name='serif-bold',
+            unicode_table_index=unicode_utilities.unicode_serif_bold_index,
+            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathbf{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+        self.serif_italic = TextStyle(
+            font_style_name='serif-italic',
+            unicode_table_index=unicode_utilities.unicode_serif_italic_index,
+            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathit{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+        self.serif_normal = TextStyle(
+            font_style_name='serif-normal',
+            unicode_table_index=unicode_utilities.unicode_serif_normal_index,
+            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathnormal{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+
+    @property
+    def no_style(self):
+        """The ⌜no_style⌝ text-style is a neutral style.
+        Rendering defaults to sans-serif-normal.
+        It is expected to be overriden by passing the text_style parameter to the rendering method."""
+        return self._no_style
+
+
+text_styles = TextStyles()
+
+
 class TextDict:
     """Predefined texts are exposed in the TextDict. This should facilite internatiolization at a later stage."""
 
     def __init__(self):
-        self.comma = Text(plaintext=', ')
-        self.empty_string = Text(plaintext='')
-        self.period = Text(plaintext='.')
-        self.space = Text(plaintext=' ')
+        self.comma = ComposableText(plaintext=', ')
+        self.empty_string = ComposableText(plaintext='')
+        self.period = ComposableText(plaintext='.')
+        self.space = ComposableText(plaintext=' ')
 
 
 text_dict = TextDict()
 
 
-class Block(list, Representable):
-    """A block representable element is a markup element that has a start tag, content, and an end tag."""
+class ComposableBlock(Composable, abc.ABC):
+    """A CompositionBlock is a composition that has a start_tag and an end_tag."""
 
-    def __init__(self, iterable: (None, collections.abc.Iterable) = None,
-                 start_tag: (None, Text) = None, end_tag: (None, Text) = None):
+    def __init__(self, start_tag: (None, ComposableText) = None,
+                 end_tag: (None, ComposableText) = None):
         self._start_tag = start_tag
         self._end_tag = end_tag
-        if iterable is not None:
-            super().__init__(self.prepare_item(item) for item in iterable)
-
-    def __setitem__(self, index: int, item: (None, str, Text)):
-        super().__setitem__(index, self.prepare_item(item))
 
     def __repr__(self):
         return self.rep(encoding=encodings.plaintext)
@@ -298,64 +264,20 @@ class Block(list, Representable):
     def __str__(self):
         return self.rep(encoding=encodings.plaintext)
 
-    def append(self, item: (None, str, Text),
-               sep_before: (None, str, Text) = ' ',
-               sep_after: (None, str, Text) = None):
-        if len(self) > 0 and sep_before is not None:
-            super().append(self.prepare_item(sep_before))
-        super().append(self.prepare_item(item))
-        if sep_after is not None:
-            super().append(self.prepare_item(sep_after))
-
-    def append_period(self):
-        self.append(text_dict.period)
+    @abc.abstractmethod
+    def compose(self) -> collections.abc.Generator[Composable, None, None]:
+        raise NotImplementedError('This method is not implemented.')
 
     @property
     def end_tag(self):
         return self._end_tag
 
-    def extend(self, other: (None, collections.abc.Iterable)):
-        if other is not None:
-            if isinstance(other, type(self)):
-                super().extend(other)
-            else:
-                super().extend(self.prepare_item(item) for item in other)
-
-    def insert(self, index: int, item: (None, str, Text)):
-        super().insert(index, self.prepare_item(item))
-
-    @property
-    def outer_composition(self) -> list[Representable]:
-        compo = list()
-        if self._start_tag is not None:
-            compo.append(self._start_tag)
-        compo.extend(self)
-        if self._end_tag is not None:
-            compo.append(self._end_tag)
-        return compo
-
-    def prepare_item(self, item: (None, str, int, Text)) -> Text:
-        """Force conversion of item to StyledText to assure the internal consistency of the TextComposition."""
-        if item is None:
-            return text_dict.empty_string
-        elif isinstance(item, str):
-            if item == '':
-                return text_dict.empty_string
-            else:
-                return Text(s=item)
-        elif isinstance(item, int):
-            return Text(s=str(item))
-        elif isinstance(item, Text):
-            return item
-        else:
-            raise TypeError('item is of unsupported type.')
-
     def rep(self, encoding: (None, Encoding) = None, wrap: (None, bool) = None, **args) -> str:
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         # Implement parameter wrap
         # wrap = get_config(wrap, configuration.wrap,
-        #                  fallback_value=False)
+        #                  False)
         return ''.join(item.rep(encoding=encoding) for item in
                        self.outer_composition)
 
@@ -364,7 +286,176 @@ class Block(list, Representable):
         return self._start_tag
 
 
-class QuasiQuotation(Block):
+empty_string = ComposableText(plaintext='')
+
+
+def composify(item: (None, str, int, ComposableText, ComposableBlock)) -> Composable:
+    """Force conversion of item to Composable type."""
+    if item is None:
+        return ComposableText(s='')
+    elif isinstance(item, str):
+        return ComposableText(s=item)
+    elif isinstance(item, int):
+        return ComposableText(s=str(item))
+    elif isinstance(item, Composable):
+        return item
+    else:
+        raise TypeError('item is of unsupported type.')
+
+
+class ComposableBlockLeaf(ComposableBlock):
+    """An instance of CompositionLeafBlock is a composition string that start with a start-element, that contains a single leaf-element, and that ends with an end-element.
+    """
+
+    def __init__(self, content: (None, ComposableText) = None,
+                 start_tag: (None, ComposableText) = None,
+                 end_tag: (None, ComposableText) = None):
+        self._content = composify(content)
+        super().__init__(start_tag=start_tag, end_tag=end_tag)
+
+    def compose(self) -> collections.abc.Generator[Composable, None, None]:
+        if self._start_tag is not None:
+            yield self._start_tag
+        yield self._content
+        if self._end_tag is not None:
+            yield self._end_tag
+
+    @property
+    def content(self) -> Composable:
+        return self._content
+
+    @content.setter
+    def content(self, content: (None, Composable)) -> None:
+        self._content = content
+
+
+class ComposableTextWithStyle(ComposableBlockLeaf):
+    """Enrich ComposableText with a complementary style property."""
+
+    def __init__(self, s: (None, str) = None, text_style: (None, TextStyle) = None,
+                 plaintext: (None, str) = None, unicode: (None, str) = None,
+                 latex_math: (None, str) = None
+                 ):
+        """
+
+        :param s: A string. Leave it to the constructor to interpret if it is plaintext or unicode.
+        :param plaintext:
+        :param unicode:
+        :param latex_math:
+        :param text_style:
+        """
+        self._text_style = prioritize_value(text_style, text_styles.serif_normal)
+        content = ComposableText(s=s, plaintext=plaintext, unicode=unicode, latex_math=latex_math)
+        start_tag = self._text_style.start_tag
+        end_tag = self._text_style.end_tag
+        super().__init__(content=content, start_tag=start_tag, end_tag=end_tag)
+
+    def __eq__(self, other: (None, object, ComposableText)) -> bool:
+        """Two instances of TextStyle are equal if any of their styled representation are equal
+        and not None."""
+        return type(self) is type(other) and \
+            self._content == other.content and \
+            self._text_style is other.text_style
+
+    def __hash__(self):
+        """Two styled-texts are considered distinct if either their plaintext content or their
+        style are distinct."""
+        return hash(
+            (ComposableText, self._content, self._text_style))
+
+    def compose(self) -> collections.abc.Generator[Composable, None, None]:
+        # Override the composition logic.
+        # Like this we yield start_tag, content, and end_tag as an atomic object.
+        # This makes it possible to override the rep() method on content.
+        yield self
+
+    def rep(self, encoding: Encoding = encodings.plaintext, cap: bool = False, **kwargs):
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
+        match encoding:
+            case encodings.plaintext:
+                return self.rep_as_plaintext(cap=cap)
+            case encodings.latex_math:
+                return self.rep_as_latex_math(cap=cap)
+            case encodings.unicode:
+                return self.rep_as_unicode(cap=cap)
+            case _:
+                return self.rep_as_plaintext(cap=cap)
+
+    def rep_as_latex_math(self, cap: bool = False):
+        start_tag = self.start_tag.rep(encoding=encodings.latex_math)
+        content = self._content.plaintext if self._content.latex_math is None else self._content.latex_math
+        content = content.capitalize() if cap else content
+        end_tag = self.end_tag.rep(encoding=encodings.latex_math)
+        return start_tag + content + end_tag
+
+    def rep_as_plaintext(self, cap: bool = False):
+        content = self._content.plaintext
+        content = content.capitalize() if cap else content
+        return content
+
+    def rep_as_unicode(self, cap: bool = False):
+        content = self._content.plaintext if self._content.unicode is None else self._content.unicode
+        content = content.capitalize() if cap else content
+        return unicode_utilities.unicode_format(content, self._text_style.unicode_table_index)
+
+    @property
+    def text_style(self) -> TextStyle:
+        return self._text_style
+
+
+class ComposableBlockSequence(ComposableBlock):
+    """An instance of CompositionSequence is a composite string of representation that contains a sequence of composable elements.
+    """
+
+    def __init__(self, content: (None, list[ComposableBlock, ComposableText]) = None,
+                 start_tag: (None, ComposableText) = None,
+                 end_tag: (None, ComposableText) = None):
+        self._content = list() if content is None else content
+        super().__init__(start_tag=start_tag, end_tag=end_tag)
+
+    def append(self, item: (None, ComposableText, ComposableBlock)) -> None:
+        if item is not None:
+            self._content.append(item)
+
+    def compose(self) -> collections.abc.Generator[Composable, None, None]:
+        """Yields the elements of the representable string, flattening all content."""
+        if self._start_tag is not None:
+            yield self._start_tag
+        if self._content is not None:
+            for sub_element in self._content:
+                if isinstance(sub_element, ComposableBlock):
+                    # Call the sub-generator
+                    yield from sub_element.compose()
+                else:
+                    # This is a leaf (non-composable) element
+                    yield sub_element
+        if self._end_tag is not None:
+            yield self._end_tag
+
+    @property
+    def content(self) -> (None, list):
+        return self._content
+
+    @content.setter
+    def content(self, content: (None, list)) -> None:
+        self._content = content
+
+    def extend(self, iterable: (None, collections.abc.Iterable)):
+        if iterable is not None:
+            self.append(self.prepare_item(item) for item in iterable)
+
+    def rep(self, encoding: (None, Encoding) = None, wrap: (None, bool) = None, **args) -> str:
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
+        # Implement parameter wrap
+        # wrap = get_config(wrap, configuration.wrap,
+        #                  False)
+        return ''.join(item.rep(encoding=encoding) for item in
+                       self.outer_composition)
+
+
+class QuasiQuotation(ComposableBlockSequence):
     """As a convention in Punctilious, quasi quotes are used to denote natural language.
 
     """
@@ -373,19 +464,51 @@ class QuasiQuotation(Block):
         super().__init__(iterable=iterable, start_tag=QuasiQuotation._static_start_tag,
                          end_tag=QuasiQuotation._static_end_tag)
 
-    _static_end_tag = Text(plaintext='"', unicode='⌝')
+    _static_end_tag = ComposableText(plaintext='"', unicode='⌝')
 
-    _static_start_tag = Text(plaintext='"', unicode='⌜')
+    _static_start_tag = ComposableText(plaintext='"', unicode='⌜')
 
 
-class Paragraph(Block):
+class Paragraph(ComposableBlockSequence):
     def __init__(self, iterable: (None, collections.Iterable) = None) -> None:
         super().__init__(iterable=iterable, start_tag=Paragraph._static_start_tag,
                          end_tag=Paragraph._static_end_tag)
 
-    _static_end_tag = Text(plaintext='\n\n', unicode='\n\n')
+    _static_end_tag = ComposableText(plaintext='\n\n', unicode='\n\n')
 
-    _static_start_tag = Text(plaintext='', unicode='')
+    _static_start_tag = ComposableText(plaintext='', unicode='')
+
+
+class Index(ComposableBlockSequence):
+    def __init__(self, iterable: (None, collections.Iterable) = None) -> None:
+        super().__init__(iterable=iterable, start_tag=Paragraph._static_start_tag,
+                         end_tag=Paragraph._static_end_tag)
+
+    _static_end_tag = ComposableText(latex_math='}', plaintext='', unicode='')
+
+    _static_start_tag = ComposableText(latex_math='_{', plaintext='_', unicode='')
+
+    def prepare_item(self, item: (None, str, int, ComposableText)) -> ComposableText:
+        """Force conversion of item to StyledText to assure the internal consistency of the TextComposition."""
+        if item is None:
+            return text_dict.empty_string
+        elif isinstance(item, str):
+            if item == '':
+                return text_dict.empty_string
+            else:
+                return ComposableText(plaintext=item,
+                                      unicode=unicode_utilities.unicode_subscriptify(s=item))
+        elif isinstance(item, ComposableText):
+            return item
+        else:
+            raise TypeError('item is of unsupported type.')
+
+
+class ComposableSansSerifNormal(ComposableTextWithStyle):
+    def __init__(self, plaintext: str, unicode: (None, str) = None,
+                 latex_math: (None, str) = None) -> None:
+        super().__init__(text_style=text_styles.sans_serif_normal, plaintext=plaintext,
+                         unicode=unicode, latex_math=latex_math)
 
 
 def wrap_text(text):
@@ -481,25 +604,67 @@ def equal_not_none(s1: (None, str), s2: (None, str)):
     return False if s1 is None or s2 is None else s1 == s2
 
 
-def subscriptify(text: (str, Text) = '', encoding: Encoding = encodings.plaintext):
-    encoding = get_config(encoding, configuration.encoding,
-                          fallback_value=encodings.plaintext)
+def subscriptify(text: (str, ComposableText) = '', encoding: Encoding = encodings.plaintext):
+    encoding = prioritize_value(encoding, configuration.encoding,
+                                encodings.plaintext)
     if text is None:
         return ''
     match encoding:
         case encodings.plaintext:
             return text
         case encodings.unicode:
-            if isinstance(text, Text):
+            if isinstance(text, ComposableText):
                 # The Unicode set of subscript characters is very limited,
                 # subscriptification must be executed on the plaintext value
                 # of the Unicode string.
                 text = text.rep_as_plaintext()
-            return unicode.unicode_subscriptify(text)
+            return unicode_utilities.unicode_subscriptify(text)
         case encodings.latex_math:
             return f'_{{{text}}}'
         case _:
             return text
+
+
+class Locale:
+    def __init__(self, name: str):
+        self._name = name
+
+    def __hash__(self):
+        return hash(self._name)
+
+    def __repr__(self):
+        return self._name
+
+    def __str__(self):
+        return self._name
+
+    @property
+    def name(self):
+        return self._name
+
+
+class LocaleEnUs(Locale):
+    def __init__(self):
+        super().__init__(name='EN-US')
+
+    def compose_symbolic_objct_symbol(self, o: SymbolicObject):
+        compo = ComposableBlockLeaf()
+        compo.append(SerifItalic(o.nameset.symbol))
+        if o.nameset.index is not None:
+            compo.append(Subscript(o.nameset.index))
+        return compo
+
+    def compose_simple_objct_declaration(self, o: SimpleObjct):
+        compo = ComposableBlockLeaf()
+        compo.append(ComposableSansSerifNormal('Let '))
+        compo.append(o.compose_symbol())
+        compo.append(ComposableSansSerifNormal(' be a simple-object in '))
+        compo.append(o.universe_of_discourse.compose_symbol())
+        compo.append_period()
+        return compo
+
+
+locale = LocaleEnUs()
 
 
 class VerificationSeverity(repm.ValueName):
@@ -556,28 +721,20 @@ class Configuration:
     def __init__(self):
         self.auto_index = None
         self._echo_default = False
-        self.default_note_symbol = Text(plaintext='note',
-                                        text_style=text_styles.serif_italic)
-        self.default_hypothesis_symbol = Text(plaintext='h',
-                                              text_style=text_styles.serif_italic)
-        self.default_relation_symbol = Text(plaintext='r',
-                                            text_style=text_styles.serif_italic)
-        self.default_symbolic_object_symbol = Text(plaintext='o',
-                                                   text_style=text_styles.serif_italic)
-        self.default_formula_symbol = Text(plaintext='phi', unicode='𝜑',
-                                           text_style=text_styles.serif_italic)
-        self.default_free_variable_symbol = Text(plaintext='x',
-                                                 text_style=text_styles.serif_bold)
-        self.default_statement_symbol = Text(plaintext='s',
-                                             text_style=text_styles.serif_italic)
-        self.default_theory_symbol = Text(plaintext='T',
-                                          text_style=text_styles.script_normal)
+        self.default_note_symbol = None
+        self.default_hypothesis_symbol = None
+        self.default_relation_symbol = None
+        self.default_symbolic_object_symbol = None
+        self.default_formula_symbol = None
+        self.default_free_variable_symbol = None
+        self.default_statement_symbol = None
+        self.default_theory_symbol = None
         self.echo_axiom_declaration = None
         self.echo_axiom_inclusion = None
         self.echo_definition_declaration = None
         self.echo_definition_inclusion = None
         self.echo_definition_direct_inference = None
-        self.echo_formula_declaration = False  # In general, this is too verbose.
+        self.echo_formula_declaration = None
         self.echo_hypothesis = None
         self.echo_inferred_statement = None
         self.echo_note = None
@@ -589,15 +746,15 @@ class Configuration:
         self.echo_universe_of_discourse_declaration = None
         self.echo_free_variable_declaration = None
         self.echo_encoding = None
-        self.output_index_if_max_index_equal_1 = False
-        self.raise_exception_on_verification_error = True
-        self.title_text_style = text_styles.sans_serif_bold
-        self.encoding = encodings.unicode
-        self.text_output_indent = 2
-        self.two_columns_proof_left_column_width = 67
-        self.two_columns_proof_right_column_width = 30
-        self.text_output_total_width = 100
-        self.warn_on_inconsistency = True
+        self.output_index_if_max_index_equal_1 = None
+        self.raise_exception_on_verification_error = None
+        self.title_text_style = None
+        self.encoding = None
+        self.text_output_indent = None
+        self.two_columns_proof_left_column_width = None
+        self.two_columns_proof_right_column_width = None
+        self.text_output_total_width = None
+        self.warn_on_inconsistency = None
 
     @property
     def echo_default(self) -> (None, bool):
@@ -611,12 +768,12 @@ class Configuration:
 configuration = Configuration()
 
 
-def get_config(*args, fallback_value):
+def prioritize_value(*args):
     """Return the first not None value."""
     for a in args:
         if a is not None:
             return a
-    return fallback_value
+    return None
 
 
 def unpack_formula(o: (TheoreticalObject, Formula, FormulaStatement)) -> Formula:
@@ -781,14 +938,14 @@ class NameSet:
 
     def __init__(self,
                  s: (None, str) = None,
-                 symbol: (None, str, Text) = None,
-                 index: (None, int, str, Text) = None,
-                 acronym: (None, str, Text) = None,
+                 symbol: (None, str, ComposableText) = None,
+                 index: (None, int, str, ComposableText) = None,
+                 acronym: (None, str, ComposableText) = None,
                  name: (None, str) = None,
                  ref: (None, str) = None,
                  cat: (None, TitleCategory) = None,
-                 subtitle: (None, str, Text) = None,
-                 explicit_name: (None, str, Text) = None):
+                 subtitle: (None, str, ComposableText) = None,
+                 explicit_name: (None, str, ComposableText) = None):
         if s is not None:
             # Shortcut parameter to quickly declare a nameset from a python string,
             # inferring in best-effort mode whether the string represent a symbol,
@@ -801,19 +958,19 @@ class NameSet:
                 explicit_name = s
             elif name is None and len(s) > 1:
                 name = s
-        self._symbol = Text(s=symbol, text_style=text_styles.serif_italic) \
+        self._symbol = ComposableText(s=symbol, text_style=text_styles.serif_italic) \
             if isinstance(symbol, str) else symbol
         verify(self.symbol is not None, msg='The symbol of this nameset is None.', slf=self)
         self._acronym = acronym
         self._name = name
         self._explicit_name = explicit_name
         self._index_as_int = index if isinstance(index, int) else None
-        if isinstance(index, Text):
+        if isinstance(index, ComposableText):
             self._index = index
         elif isinstance(index, str):
-            self._index = Text(s=index, text_style=text_styles.sans_serif_normal)
+            self._index = ComposableText(s=index, text_style=text_styles.sans_serif_normal)
         elif isinstance(index, int):
-            self._index = Text(s=str(index), text_style=text_styles.sans_serif_normal)
+            self._index = ComposableText(s=str(index), text_style=text_styles.sans_serif_normal)
         else:
             self._index = None
         self._ref = ref
@@ -837,7 +994,7 @@ class NameSet:
         return self.rep_symbol()
 
     @property
-    def acronym(self) -> Text:
+    def acronym(self) -> ComposableText:
         return self._acronym
 
     @property
@@ -853,7 +1010,7 @@ class NameSet:
         self._cat = cat
 
     @property
-    def explicit_name(self) -> Text:
+    def explicit_name(self) -> ComposableText:
         return self._explicit_name
 
     @property
@@ -914,9 +1071,9 @@ class NameSet:
     def rep_acronym(self, encoding: (None, Encoding) = None, compose: bool = False) -> (
             None, str):
         """Return a string that represent the object as an acronym."""
-        rep = Block()
+        rep = ComposableBlockSequence()
         if self._acronym is not None:
-            rep.append(Text(s=self._acronym, text_style=text_styles.sans_serif_normal))
+            rep.append(ComposableText(s=self._acronym, text_style=text_styles.sans_serif_normal))
         return rep.rep(encoding=encoding, compose=compose)
 
     def rep_compact(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
@@ -967,8 +1124,8 @@ class NameSet:
 
     def rep_explicit_name(self, encoding: (None, Encoding) = None) -> (None, str):
         """Return a string that represent the object as an explicit name."""
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         if self._explicit_name is None:
             return None
         else:
@@ -981,7 +1138,7 @@ class NameSet:
                                  cap: (None, bool) = None, compose: bool = False):
         conventional = self.rep_conventional(encoding=encoding, cap=cap)
         sym = self.rep_symbol(encoding=encoding)
-        rep = Block()
+        rep = ComposableBlockSequence()
         rep.append(conventional)
         if conventional != sym:
             rep.append('(')
@@ -998,43 +1155,43 @@ class NameSet:
         if self._name is not None:
             rep = rep + self.rep_name(encoding=encoding, cap=cap)
         rep = rep + ' '
-        rep = rep + Text(s='(', text_style=text_styles.sans_serif_bold).rep(
+        rep = rep + ComposableText(s='(', text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding)
         rep = rep + self.rep_symbol(encoding=encoding)
-        rep = rep + Text(s=')', text_style=text_styles.sans_serif_bold).rep(
+        rep = rep + ComposableText(s=')', text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding)
-        rep = '' if self._cat is None else Text(s=self.cat.natural_name,
-                                                text_style=text_styles.sans_serif_bold).rep(
+        rep = '' if self._cat is None else ComposableText(s=self.cat.natural_name,
+                                                          text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding, cap=cap)
         return rep
 
     def rep_name(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> (
             None, str):
         """Return a string that represent the object as a plain name."""
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         if self._name is None:
             return ''
         else:
-            return Text(s=self._name, text_style=text_styles.sans_serif_normal).rep(
+            return ComposableText(s=self._name, text_style=text_styles.sans_serif_normal).rep(
                 encoding=encoding, cap=cap)
 
     def rep_ref(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
-        rep = '' if self._cat is None else Text(s=self._cat.abridged_name,
-                                                text_style=text_styles.sans_serif_bold).rep(
+        rep = '' if self._cat is None else ComposableText(s=self._cat.abridged_name,
+                                                          text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding, cap=cap)
         if self._ref is not None:
             if rep != '':
                 rep = rep + ' '
-            rep = rep + Text(s=self._ref, text_style=text_styles.sans_serif_bold).rep(
+            rep = rep + ComposableText(s=self._ref, text_style=text_styles.sans_serif_bold).rep(
                 encoding=encoding)
         rep = rep + ' (' + self.rep_symbol(encoding=encoding) + ')'
         return rep
 
     def rep_symbol(self, encoding: (None, Encoding) = None) -> (None, str):
         """Return a string that represent the object as a symbol."""
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         if self._symbol is None:
             return None
         else:
@@ -1046,22 +1203,23 @@ class NameSet:
     def rep_title(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         """A title of the form: [unabridged-category] [reference] ([symbol]) - [subtitle]
         """
-        rep = '' if self._cat is None else Text(s=self.cat.natural_name,
-                                                text_style=text_styles.sans_serif_bold).rep(
+        rep = '' if self._cat is None else ComposableText(s=self.cat.natural_name,
+                                                          text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding, cap=cap)
         if self._ref is not None:
             rep = rep + ' '
-            rep = rep + Text(s=self._ref, text_style=text_styles.sans_serif_bold).rep(
+            rep = rep + ComposableText(s=self._ref, text_style=text_styles.sans_serif_bold).rep(
                 encoding=encoding)
         rep = rep + ' '
-        rep = rep + Text(s='(', text_style=text_styles.sans_serif_bold).rep(
+        rep = rep + ComposableText(s='(', text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding)
         rep = rep + self.rep_symbol(encoding=encoding)
-        rep = rep + Text(s=')', text_style=text_styles.sans_serif_bold).rep(
+        rep = rep + ComposableText(s=')', text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding)
         if self._subtitle is not None:
             rep = rep + '- '
-            rep = rep + Text(s=self._subtitle, text_style=text_styles.sans_serif_bold).rep(
+            rep = rep + ComposableText(s=self._subtitle,
+                                       text_style=text_styles.sans_serif_bold).rep(
                 encoding=encoding)
         return rep
 
@@ -1078,7 +1236,7 @@ class NameSet:
         self._subtitle = subtitle
 
     @property
-    def symbol(self) -> Text:
+    def symbol(self) -> ComposableText:
         """The symbol core glyph.
 
         :return: (StyledText) The symbol core glyph.
@@ -1107,19 +1265,19 @@ class TitleOBSOLETE:
         the declarative class of the symbolic-objct.
     """
 
-    def __init__(self, nameset: (None, NameSet) = None, ref: (None, str, Text) = None,
+    def __init__(self, nameset: (None, NameSet) = None, ref: (None, str, ComposableText) = None,
                  cat: (None, TitleCategory) = None,
-                 subtitle: (None, str, Text) = None,
-                 abr: (None, str, Text) = None):
+                 subtitle: (None, str, ComposableText) = None,
+                 abr: (None, str, ComposableText) = None):
         if isinstance(ref, str):
-            ref = Text(s=ref, text_style=text_styles.sans_serif_bold)
+            ref = ComposableText(s=ref, text_style=text_styles.sans_serif_bold)
         self._ref = ref
         if isinstance(abr, str):
-            abr = Text(s=abr, text_style=text_styles.sans_serif_bold)
+            abr = ComposableText(s=abr, text_style=text_styles.sans_serif_bold)
         self._abr = abr
         self._cat = title_categories.uncategorized if cat is None else cat
         if isinstance(subtitle, str):
-            subtitle = Text(s=subtitle, text_style=text_styles.sans_serif_normal)
+            subtitle = ComposableText(s=subtitle, text_style=text_styles.sans_serif_normal)
         self._nameset = nameset
         self._subtitle = subtitle
         self._styled_title = None
@@ -1146,17 +1304,17 @@ class TitleOBSOLETE:
         return self._cat
 
     @property
-    def subtitle(self) -> Text:
+    def subtitle(self) -> ComposableText:
         """A conditional complement to the automatically structured title."""
         return self._subtitle
 
     @property
-    def ref(self) -> Text:
+    def ref(self) -> ComposableText:
         """Unabridged name."""
         return self._ref
 
     @property
-    def abr(self) -> Text:
+    def abr(self) -> ComposableText:
         """Abridged name."""
         return self._abr
 
@@ -1182,12 +1340,13 @@ class TitleOBSOLETE:
         :param cap:
         :return:
         """
-        return f'{Text(s=self.cat.natural_name, text_style=text_styles.sans_serif_bold).rep(encoding=encoding, cap=cap)}' \
+        return f'{ComposableText(s=self.cat.natural_name, text_style=text_styles.sans_serif_bold).rep(encoding=encoding, cap=cap)}' \
                f'{"" if self.ref is None else " " + self.ref.rep(encoding=encoding)}' \
                f'{"" if self.subtitle is None else " - " + self.subtitle.rep(encoding=encoding)}'
 
     def rep_ref(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
-        return Text(s=self._cat.abridged_name, text_style=text_styles.sans_serif_bold).rep(
+        return ComposableText(s=self._cat.abridged_name,
+                              text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding, cap=cap) + \
                '' if self._ref is None else str(' ' + self._ref.rep(encoding=encoding)) + \
                                             '' if self._nameset is None else str(
@@ -1196,7 +1355,7 @@ class TitleOBSOLETE:
 
     def rep_mention(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         return f'{"" if self.ref is None else self.ref.rep(encoding=encoding) + " "}' \
-               f'{Text(s=self.cat.natural_name, text_style=text_styles.sans_serif_normal).rep(encoding=encoding, cap=cap)}'
+               f'{ComposableText(s=self.cat.natural_name, text_style=text_styles.sans_serif_normal).rep(encoding=encoding, cap=cap)}'
 
 
 class DashedName:
@@ -1251,8 +1410,8 @@ class SymbolicObject:
             cat: (None, TitleCategory) = None,
             ref: (None, str) = None,
             echo: bool = False):
-        echo = get_config(echo, configuration.echo_symbolic_objct, configuration.echo_default,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_symbolic_objct, configuration.echo_default,
+                                False)
         self._declarative_classes = frozenset()
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
         is_universe_of_discourse = False if is_universe_of_discourse is None else is_universe_of_discourse
@@ -1266,7 +1425,7 @@ class SymbolicObject:
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         if isinstance(nameset, str):
-            symbol = Text(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = ComposableText(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         nameset.cat = cat
@@ -1808,9 +1967,9 @@ class FreeVariable(TheoreticalObject):
     def __init__(
             self, nameset=None,
             universe_of_discourse=None, status=None, scope=None, echo=None):
-        echo = get_config(echo, configuration.echo_free_variable_declaration,
-                          configuration.echo_default,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_free_variable_declaration,
+                                configuration.echo_default,
+                                False)
         status = FreeVariable.scope_initialization_status if status is None else status
         scope = frozenset() if scope is None else scope
         scope = {scope} if isinstance(scope, Formula) else scope
@@ -1831,7 +1990,7 @@ class FreeVariable(TheoreticalObject):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = Text(plaintext=nameset, text_style=text_styles.serif_bold)
+            symbol = ComposableText(plaintext=nameset, text_style=text_styles.serif_bold)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
@@ -1960,8 +2119,9 @@ class Formula(TheoreticalObject):
             echo: (None, bool) = None):
         """
         """
-        echo = get_config(echo, configuration.echo_formula_declaration, configuration.echo_default,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_formula_declaration,
+                                configuration.echo_default,
+                                False)
         self.free_variables = dict()  # TODO: Check how to make dict immutable after construction.
         # self.formula_index = theory.crossreference_formula(self)
         if nameset is None:
@@ -1972,7 +2132,7 @@ class Formula(TheoreticalObject):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = Text(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = ComposableText(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         self.relation = relation
@@ -2149,31 +2309,31 @@ class Formula(TheoreticalObject):
 
     def rep_as_function_call(self, encoding: (None, Encoding) = None,
                              expand: (None, bool) = None) -> str:
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
         return f'{self.relation.rep_formula(encoding=encoding)}({", ".join([p.rep_formula(encoding=encoding) for p in self.parameters])})'
 
     def rep_as_infix_operator(self, encoding: (None, Encoding) = None,
                               expand=(None, bool)) -> str:
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         expand = True if expand is None else expand
         assert self.relation.arity == 2
         return f'({self.parameters[0].rep(encoding=encoding, expand=expand)} {self.relation.rep_symbol(encoding=encoding)} {self.parameters[1].rep(encoding=encoding, expand=expand)})'
 
     def rep_as_postfix_operator(self, encoding: (None, Encoding) = None, expand=None) -> str:
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         expand = True if expand is None else expand
         assert isinstance(expand, bool)
         assert self.relation.arity == 1
         return f'({self.parameters[0].rep(encoding=encoding, expand=expand)}){self.relation.rep_symbol(encoding=encoding)}'
 
     def rep_as_prefix_operator(self, encoding: (None, Encoding) = None, expand=None) -> str:
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         expand = True if expand is None else expand
         verify(
             isinstance(expand, bool),
@@ -2187,8 +2347,8 @@ class Formula(TheoreticalObject):
         return f'{self.relation.rep_formula(encoding=encoding)}({self.parameters[0].rep_formula(encoding=encoding, expand=expand)})'
 
     def rep_formula(self, encoding: (None, Encoding) = None, expand: bool = True) -> str:
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         if is_in_class(self.relation, classes.free_variable):
             # If the relation of this formula is a free-variable,
             # it has no arity, neither a representation-mode.
@@ -2261,9 +2421,9 @@ class SimpleObjctDict(collections.UserDict):
         if self._falsehood is None:
             self._falsehood = self.declare(
                 nameset=NameSet(
-                    symbol=Text(unicode='⊥', latex_math='\\bot', plaintext='false'),
-                    name=Text(plaintext='false'),
-                    explicit_name=Text(plaintext='falsehood'),
+                    symbol=ComposableText(unicode='⊥', latex_math='\\bot', plaintext='false'),
+                    name=ComposableText(plaintext='false'),
+                    explicit_name=ComposableText(plaintext='falsehood'),
                     index=None))
         return self._falsehood
 
@@ -2290,9 +2450,9 @@ class SimpleObjctDict(collections.UserDict):
         if self._truth is None:
             self._truth = self.declare(nameset=
             NameSet(
-                symbol=Text(unicode='⊤', latex_math='\\top', plaintext='true'),
-                name=Text(plaintext='true'),
-                explicit_name=Text(plaintext='truth'),
+                symbol=ComposableText(unicode='⊤', latex_math='\\top', plaintext='true'),
+                name=ComposableText(plaintext='true'),
+                explicit_name=ComposableText(plaintext='truth'),
                 index=None))
         return self._truth
 
@@ -2334,11 +2494,16 @@ class TitleCategories(repm.ValueName):
     theory_elaboration_sequence = TitleCategory('theory_elaboration_sequence', 't',
                                                 'theory elaboration sequence',
                                                 'theo.')
-    comment = TitleCategory('comment', Text(s='comment', text_style=text_styles.serif_italic),
+    comment = TitleCategory('comment',
+                            ComposableTextWithStyle(s='comment',
+                                                    text_style=text_styles.serif_italic),
                             'comment', 'cmt.')
-    note = TitleCategory('note', Text(s='note', text_style=text_styles.serif_italic), 'note',
+    note = TitleCategory('note',
+                         ComposableTextWithStyle(s='note', text_style=text_styles.serif_italic),
+                         'note',
                          'note')
-    remark = TitleCategory('remark', Text(s='remark', text_style=text_styles.serif_italic),
+    remark = TitleCategory('remark',
+                           ComposableTextWithStyle(s='remark', text_style=text_styles.serif_italic),
                            'remark', 'rmrk.')
     # Special categories
     uncategorized = TitleCategory('uncategorized', 's', 'uncategorized', 'uncat.')
@@ -2373,8 +2538,8 @@ class Statement(TheoreticalObject):
             ref: (None, str) = None,
             echo: bool = False):
         self._theory = theory
-        echo = get_config(echo, configuration.echo_statement, configuration.echo_default,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_statement, configuration.echo_default,
+                                False)
         universe_of_discourse = theory.universe_of_discourse
         self.statement_index = theory.crossreference_statement(self)
         self._cat = cat
@@ -2462,9 +2627,10 @@ class AxiomDeclaration(TheoreticalObject):
         :param nameset:
         :param echo:
         """
-        auto_index = get_config(auto_index, configuration.auto_index, fallback_value=False)
-        echo = get_config(echo, configuration.echo_axiom_declaration, configuration.echo_default,
-                          fallback_value=False)
+        auto_index = prioritize_value(auto_index, configuration.auto_index, False)
+        echo = prioritize_value(echo, configuration.echo_axiom_declaration,
+                                configuration.echo_default,
+                                False)
         natural_language = natural_language.strip()
         verify(natural_language != '',
                'Parameter natural-language is an empty string (after trimming).')
@@ -2485,8 +2651,8 @@ class AxiomDeclaration(TheoreticalObject):
 
     def rep_natural_language(self, encoding: (None, Encoding) = None,
                              wrap: bool = True) -> str:
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         output = self.compose_natural_language().rep(encoding=encoding, wrap=wrap)
         return output
 
@@ -2498,8 +2664,8 @@ class AxiomDeclaration(TheoreticalObject):
         :param output_proofs:
         :return:
         """
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         cap = True
         output = f'{self.rep_title(encoding=encoding, cap=cap)}: ⌜{self.natural_language}⌝'
         output = wrap_text(output) if wrap else output
@@ -2520,8 +2686,9 @@ class AxiomInclusion(Statement):
             echo: (None, bool) = None):
         """Include (postulate) an axiom in a theory-elaboration-sequence.
         """
-        echo = get_config(echo, configuration.echo_axiom_inclusion, configuration.echo_default,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_axiom_inclusion,
+                                configuration.echo_default,
+                                False)
         self._axiom = a
         super().__init__(
             theory=t,
@@ -2559,8 +2726,8 @@ class AxiomInclusion(Statement):
         :param output_proofs:
         :return:
         """
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         cap = True
         output = f'{self.rep_title(encoding=encoding, cap=cap)}: ⌜{self.axiom.natural_language}⌝'
         output = wrap_text(output)
@@ -2675,10 +2842,10 @@ class DefinitionDeclaration(TheoreticalObject):
         :param nameset:
         :param echo:
         """
-        auto_index = get_config(auto_index, configuration.auto_index, fallback_value=False)
-        echo = get_config(echo, configuration.echo_definition_declaration,
-                          configuration.echo_default,
-                          fallback_value=False)
+        auto_index = prioritize_value(auto_index, configuration.auto_index, False)
+        echo = prioritize_value(echo, configuration.echo_definition_declaration,
+                                configuration.echo_default,
+                                False)
         natural_language = natural_language.strip()
         verify(natural_language != '',
                'Parameter natural-language is an empty string (after trimming).')
@@ -2701,8 +2868,8 @@ class DefinitionDeclaration(TheoreticalObject):
         :param output_proofs:
         :return:
         """
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         cap = True
         output = f'{self.rep_title(encoding=encoding, cap=cap)} ({self.rep_name(encoding=encoding)}): {self.natural_language}'
         output = wrap_text(output)
@@ -2723,8 +2890,9 @@ class DefinitionInclusion(Statement):
             echo: (None, bool) = None):
         """Endorsement (aka include, endorse) an definition in a theory-elaboration.
         """
-        echo = get_config(echo, configuration.echo_definition_inclusion, configuration.echo_default,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_definition_inclusion,
+                                configuration.echo_default,
+                                False)
         self.definition = d
         t.crossreference_definition_endorsement(self)
         super().__init__(
@@ -2746,8 +2914,8 @@ class DefinitionInclusion(Statement):
         :param output_proofs:
         :return:
         """
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         cap = True
         output = f'{self.rep_title(encoding=encoding, cap=cap)} ({self.rep_name(encoding=encoding)}): {self.definition.natural_language}'
         output = wrap_text(output)
@@ -2772,8 +2940,8 @@ class FormulaStatement(Statement):
             nameset: (None, NameSet) = None, cat: (None, TitleCategory) = None,
             title: (None, TitleOBSOLETE) = None, dashed_name: (None, DashedName) = None,
             echo=None):
-        echo = get_config(echo, configuration.echo_statement, configuration.echo_default,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_statement, configuration.echo_default,
+                                False)
         verify(
             theory.universe_of_discourse is valid_proposition.universe_of_discourse,
             'The universe-of-discourse of this formula-statement''s theory-elaboration is '
@@ -2960,9 +3128,9 @@ class DirectDefinitionInference(FormulaStatement):
             title: (None, str, TitleOBSOLETE) = None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
-        echo = get_config(echo, configuration.echo_definition_direct_inference,
-                          configuration.echo_default,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_definition_direct_inference,
+                                configuration.echo_default,
+                                False)
         verify(
             t.contains_theoretical_objct(d),
             'The definition-endorsement ⌜d⌝ must be contained '
@@ -3107,12 +3275,12 @@ class InferenceRuleDeclaration(TheoreticalObject):
         :return:
         """
         rep = \
-            Text(s="Proof", text_style=text_styles.sans_serif_italic).rep(
+            ComposableText(s="Proof", text_style=text_styles.sans_serif_italic).rep(
                 encoding=encoding) + \
-            Text(s=" - By the ", text_style=text_styles.sans_serif_normal).rep(
+            ComposableText(s=" - By the ", text_style=text_styles.sans_serif_normal).rep(
                 encoding=encoding) + \
             s.inference_rule.rep_fully_qualified_name(encoding=encoding) + \
-            Text(s=" inference rule:\n", text_style=text_styles.sans_serif_normal).rep(
+            ComposableText(s=" inference rule:\n", text_style=text_styles.sans_serif_normal).rep(
                 encoding=encoding)
         if self._rep_two_columns_proof is None:
             # There is no specific rep_two_columns_proof method
@@ -3122,8 +3290,8 @@ class InferenceRuleDeclaration(TheoreticalObject):
                 parameter = s.parameters[i]
                 rep = rep + rep_two_columns_proof_item(
                     left=parameter.rep_formula(encoding=encoding, expand=True),
-                    right=Text(s='Follows from ',
-                               text_style=text_styles.sans_serif_normal).rep(
+                    right=ComposableText(s='Follows from ',
+                                         text_style=text_styles.sans_serif_normal).rep(
                         encoding=encoding) + parameter.rep_ref(
                         encoding=encoding))
         else:
@@ -3169,8 +3337,8 @@ class Note(AtheoreticalStatement):
             cat: (None, TitleCategory) = None, ref: (None, str) = None,
             subtitle: (None, str) = None,
             echo: (None, bool) = None):
-        echo = get_config(echo, configuration.echo_note, configuration.echo_default,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_note, configuration.echo_default,
+                                False)
         verify(is_in_class(theory, classes.t),
                'theory is not a member of declarative-class theory.', theory=theory,
                slf=self)
@@ -3188,7 +3356,7 @@ class Note(AtheoreticalStatement):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = Text(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = ComposableText(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         ref = nameset.index if ref is None else ref
@@ -3239,8 +3407,8 @@ class Section(AtheoreticalStatement):
             section_number: (None, int) = None,
             section_parent: (None, Section) = None,
             echo: (None, bool) = None):
-        echo = get_config(echo, configuration.echo_note, configuration.echo_default,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_note, configuration.echo_default,
+                                False)
         self._section_title = section_title
         self._section_parent = section_parent
         self._section_level = 1 if section_parent is None else section_parent.section_level + 1
@@ -3324,9 +3492,9 @@ class TheoryElaborationSequence(TheoreticalObject):
             stabilized: bool = False,
             echo: bool = None
     ):
-        echo = get_config(echo, configuration.echo_theory_elaboration_sequence_declaration,
-                          configuration.echo_default,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_theory_elaboration_sequence_declaration,
+                                configuration.echo_default,
+                                False)
         self._max_subsection_number = 0
         self._consistency = consistency_values.undetermined
         self._stabilized = False
@@ -3346,7 +3514,7 @@ class TheoryElaborationSequence(TheoreticalObject):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = Text(plaintext=nameset, text_style=text_styles.script_normal)
+            symbol = ComposableText(plaintext=nameset, text_style=text_styles.script_normal)
             index = u.index_symbol(symbol=symbol)
             nameset = NameSet(s=symbol, index=index)
         nameset.cat = title_categories.theory_elaboration_sequence
@@ -3383,7 +3551,7 @@ class TheoryElaborationSequence(TheoreticalObject):
     def assure_interpretation_disclaimer(self, echo: (None, bool) = None):
         """After the first usage of a contentual interpretation inference-rule,
         warns the user that no semantic verification is performed."""
-        echo = get_config(echo, configuration.echo_default, fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_default, False)
         if not self._interpretation_disclaimer:
             self.take_note(
                 'By design, punctilious assures the syntactical correctness of theories and does not perform any '
@@ -3774,7 +3942,7 @@ class Hypothesis(Statement):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = Text(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = ComposableText(plaintext=nameset, text_style=text_styles.serif_italic)
             index = t.u.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
@@ -3840,8 +4008,8 @@ class Relation(TheoreticalObject):
             implementation=None, universe_of_discourse=None,
             dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
-        echo = get_config(echo, configuration.echo_relation, configuration.echo_default,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_relation, configuration.echo_default,
+                                False)
         assert isinstance(universe_of_discourse, UniverseOfDiscourse)
         signal_proposition = False if signal_proposition is None else signal_proposition
         signal_theoretical_morphism = False if signal_theoretical_morphism is None else signal_theoretical_morphism
@@ -3858,7 +4026,7 @@ class Relation(TheoreticalObject):
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         if isinstance(nameset, str):
-            symbol = Text(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = ComposableText(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
@@ -3907,14 +4075,17 @@ class SimpleObjct(TheoreticalObject):
             self, universe_of_discourse: UniverseOfDiscourse,
             nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
-        echo = get_config(echo, configuration.echo_simple_objct_declaration,
-                          configuration.echo_default,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_simple_objct_declaration,
+                                configuration.echo_default,
+                                False)
         super().__init__(
             universe_of_discourse=universe_of_discourse, nameset=nameset, echo=False)
         self.universe_of_discourse.cross_reference_simple_objct(o=self)
         if echo:
             self.echo()
+
+    def compose_declaration(self):
+        return locale.compose_simple_objct_declaration(o=self)
 
     def echo(self):
         repm.prnt(self.rep_declaration())
@@ -4064,8 +4235,8 @@ class RelationDict(collections.UserDict):
             self._biconditional = self.declare(
                 2,
                 NameSet(
-                    symbol=Text(plaintext='<==>', unicode='⟺', latex_math='\\iff'),
-                    name=Text(plaintext='biconditional'),
+                    symbol=ComposableText(plaintext='<==>', unicode='⟺', latex_math='\\iff'),
+                    name=ComposableText(plaintext='biconditional'),
                     index=None),
                 Formula.infix,
                 signal_proposition=True, dashed_name='biconditional')
@@ -4084,9 +4255,9 @@ class RelationDict(collections.UserDict):
             self._conjunction = self.declare(
                 2,
                 NameSet(
-                    symbol=Text(unicode='∧', latex_math='\\land', plaintext='and'),
-                    name=Text(plaintext='and'),
-                    explicit_name=Text(plaintext='conjunction'),
+                    symbol=ComposableText(unicode='∧', latex_math='\\land', plaintext='and'),
+                    name=ComposableText(plaintext='and'),
+                    explicit_name=ComposableText(plaintext='conjunction'),
                     index=None),
                 Formula.infix,
                 signal_proposition=True)
@@ -4105,9 +4276,9 @@ class RelationDict(collections.UserDict):
             self._disjunction = self.declare(
                 2,
                 NameSet(
-                    symbol=Text(unicode='∨', latex_math='\\lor', plaintext='or'),
-                    name=Text(plaintext='or'),
-                    explicit_name=Text(plaintext='disjunction'),
+                    symbol=ComposableText(unicode='∨', latex_math='\\lor', plaintext='or'),
+                    name=ComposableText(plaintext='or'),
+                    explicit_name=ComposableText(plaintext='disjunction'),
                     index=None),
                 Formula.infix,
                 signal_proposition=True)
@@ -4135,7 +4306,7 @@ class RelationDict(collections.UserDict):
         """
         if self._equality is None:
             self._equality = self.declare(
-                2, NameSet(symbol=Text(plaintext='=')), Formula.infix,
+                2, NameSet(symbol=ComposableText(plaintext='=')), Formula.infix,
                 signal_proposition=True, dashed_name='equality')
         return self._equality
 
@@ -4163,9 +4334,9 @@ class RelationDict(collections.UserDict):
             self._implication = self.declare(
                 2,
                 NameSet(
-                    symbol=Text(plaintext='==>', unicode='⟹', latex_math=r'\implies'),
-                    name=Text(plaintext='implies'),
-                    explicit_name=Text(plaintext='implication'),
+                    symbol=ComposableText(plaintext='==>', unicode='⟹', latex_math=r'\implies'),
+                    name=ComposableText(plaintext='implies'),
+                    explicit_name=ComposableText(plaintext='implication'),
                     index=None),
                 Formula.infix,
                 signal_proposition=True)
@@ -4195,10 +4366,11 @@ class RelationDict(collections.UserDict):
             self._inconsistent = self.declare(
                 1,
                 NameSet(
-                    symbol=Text(plaintext='Inc', text_style=text_styles.serif_italic),
-                    acronym=Text(plaintext='Inc', text_style=text_styles.sans_serif_normal),
-                    name=Text(plaintext='inconsistent',
-                              text_style=text_styles.sans_serif_normal),
+                    symbol=ComposableText(plaintext='Inc', text_style=text_styles.serif_italic),
+                    acronym=ComposableText(plaintext='Inc',
+                                           text_style=text_styles.sans_serif_normal),
+                    name=ComposableText(plaintext='inconsistent',
+                                        text_style=text_styles.sans_serif_normal),
                     index=None),
                 Formula.prefix,
                 signal_proposition=True)
@@ -4217,9 +4389,9 @@ class RelationDict(collections.UserDict):
             self._inequality = self.declare(
                 2,
                 NameSet(
-                    symbol=Text(plaintext='neq', unicode='≠', latex_math='\\neq'),
-                    acronym=Text(plaintext='neq'),
-                    name=Text(plaintext='not equal'),
+                    symbol=ComposableText(plaintext='neq', unicode='≠', latex_math='\\neq'),
+                    acronym=ComposableText(plaintext='neq'),
+                    name=ComposableText(plaintext='not equal'),
                     index=None),
                 Formula.infix,
                 signal_proposition=True)
@@ -4271,9 +4443,9 @@ class RelationDict(collections.UserDict):
             self._negation = self.declare(
                 1,
                 NameSet(
-                    symbol=Text(plaintext='not', unicode='¬', latex_math='\\neg'),
-                    acronym=Text(plaintext='not'),
-                    name=Text(plaintext='negation'),
+                    symbol=ComposableText(plaintext='not', unicode='¬', latex_math='\\neg'),
+                    acronym=ComposableText(plaintext='not'),
+                    name=ComposableText(plaintext='negation'),
                     index=None),
                 Formula.prefix,
                 signal_proposition=True)
@@ -4380,7 +4552,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             self._absorption = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 nameset=NameSet(
-                    symbol=Text(plaintext='absorb', text_style=text_styles.monospace),
+                    symbol=ComposableText(plaintext='absorb', text_style=text_styles.monospace),
                     index=None),
                 name='absorption',
                 dashed_name=DashedName('absorption'),
@@ -4425,13 +4597,13 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             """
             report = rep_two_columns_proof_item(
                 left=a.rep_natural_language(encoding=encoding),
-                right=Text(
+                right=ComposableText(
                     s='Postulated by ',
                     text_style=text_styles.sans_serif_normal).rep(encoding=encoding) + \
                       a.rep_ref(encoding=encoding))
             report = report + rep_two_columns_proof_item(
                 left=p.rep_formula(encoding=encoding, expand=True),
-                right=Text(
+                right=ComposableText(
                     s='Interpreted from natural-language',
                     text_style=text_styles.sans_serif_normal).rep(encoding=encoding))
             return report
@@ -4572,8 +4744,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._biconditional_elimination_left is None:
             self._biconditional_elimination_left = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=Text(plaintext='biconditional-elimination-left',
-                                            text_style=text_styles.monospace),
+                nameset=NameSet(symbol=ComposableText(plaintext='biconditional-elimination-left',
+                                                      text_style=text_styles.monospace),
                                 index=None),
                 name='biconditional elimination (left)',
                 dashed_name=DashedName('biconditional-elimination-left'),
@@ -4632,8 +4804,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._biconditional_elimination_right is None:
             self._biconditional_elimination_right = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=Text(plaintext='biconditional-elimination-right',
-                                            text_style=text_styles.monospace),
+                nameset=NameSet(symbol=ComposableText(plaintext='biconditional-elimination-right',
+                                                      text_style=text_styles.monospace),
                                 index=None),
                 name='biconditional elimination (right)',
                 dashed_name=DashedName('biconditional-elimination-right'),
@@ -4699,8 +4871,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             self._biconditional_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 nameset=NameSet(
-                    symbol=Text(s='biconditional-introduction',
-                                text_style=text_styles.monospace),
+                    symbol=ComposableText(s='biconditional-introduction',
+                                          text_style=text_styles.monospace),
                     index=None),
                 name='biconditional introduction',
                 dashed_name=DashedName('biconditional-introduction'),
@@ -4788,8 +4960,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._conjunction_elimination_left is None:
             self._conjunction_elimination_left = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=Text(plaintext='conjunction-elimination-left',
-                                            text_style=text_styles.monospace),
+                nameset=NameSet(symbol=ComposableText(plaintext='conjunction-elimination-left',
+                                                      text_style=text_styles.monospace),
                                 index=None),
                 name='conjunction elimination (left)',
                 dashed_name=DashedName('conjunction-elimination-left'),
@@ -4844,8 +5016,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._conjunction_elimination_right is None:
             self._conjunction_elimination_right = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=Text(plaintext='conjunction-elimination-right',
-                                            text_style=text_styles.monospace),
+                nameset=NameSet(symbol=ComposableText(plaintext='conjunction-elimination-right',
+                                                      text_style=text_styles.monospace),
                                 index=None),
                 name='conjunction elimination (right)',
                 dashed_name=DashedName('conjunction-elimination-right'),
@@ -4902,8 +5074,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._conjunction_introduction is None:
             self._conjunction_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=Text(plaintext='conjunction-introduction',
-                                            text_style=text_styles.monospace),
+                nameset=NameSet(symbol=ComposableText(plaintext='conjunction-introduction',
+                                                      text_style=text_styles.monospace),
                                 index=None),
                 name='conjunction introduction',
                 dashed_name=DashedName('conjunction-introduction'),
@@ -4972,8 +5144,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._definition_interpretation is None:
             self._definition_interpretation = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=Text(plaintext='definition-interpretation',
-                                            text_style=text_styles.monospace),
+                nameset=NameSet(symbol=ComposableText(plaintext='definition-interpretation',
+                                                      text_style=text_styles.monospace),
                                 index=None),
                 name='definition interpretation',
                 dashed_name=DashedName('definition-interpretation'),
@@ -5042,8 +5214,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._disjunction_introduction is None:
             self._disjunction_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=Text(plaintext='disjunction-introduction',
-                                            text_style=text_styles.monospace),
+                nameset=NameSet(symbol=ComposableText(plaintext='disjunction-introduction',
+                                                      text_style=text_styles.monospace),
                                 index=None),
                 name='disjunction introduction',
                 dashed_name=DashedName('disjunction-introduction'),
@@ -5126,8 +5298,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._double_negation_elimination is None:
             self._double_negation_elimination = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=Text(plaintext='double-negation-elimination',
-                                            text_style=text_styles.monospace),
+                nameset=NameSet(symbol=ComposableText(plaintext='double-negation-elimination',
+                                                      text_style=text_styles.monospace),
                                 index=None),
                 name='double negation elimination',
                 dashed_name=DashedName('double-negation-elimination'),
@@ -5174,8 +5346,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._double_negation_introduction is None:
             self._double_negation_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=Text(plaintext='double-negation-introduction',
-                                            text_style=text_styles.monospace),
+                nameset=NameSet(symbol=ComposableText(plaintext='double-negation-introduction',
+                                                      text_style=text_styles.monospace),
                                 index=None),
                 name='double negation introduction',
                 dashed_name=DashedName('double-negation-introduction'),
@@ -5242,8 +5414,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             self._equality_commutativity = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 nameset=NameSet(
-                    symbol=Text(plaintext='equality-commutativity',
-                                text_style=text_styles.monospace),
+                    symbol=ComposableText(plaintext='equality-commutativity',
+                                          text_style=text_styles.monospace),
                     index=None),
                 name='equality commutativity',
                 dashed_name=DashedName('equality-commutativity'),
@@ -5312,8 +5484,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._inconsistency_introduction is None:
             self._inconsistency_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=Text(plaintext='inconsistency-introduction',
-                                            text_style=text_styles.monospace), index=None),
+                nameset=NameSet(symbol=ComposableText(plaintext='inconsistency-introduction',
+                                                      text_style=text_styles.monospace),
+                                index=None),
                 name='inconsistency introduction',
                 dashed_name=DashedName('inconsistency-introduction'),
                 infer_formula=infer_formula,
@@ -5413,8 +5586,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._modus_ponens is None:
             self._modus_ponens = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=Text(plaintext='modus-ponens',
-                                            text_style=text_styles.monospace), index=None),
+                nameset=NameSet(symbol=ComposableText(plaintext='modus-ponens',
+                                                      text_style=text_styles.monospace),
+                                index=None),
                 name='modus ponens',
                 dashed_name=DashedName('modus-ponens'),
                 infer_formula=infer_formula,
@@ -5493,8 +5667,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._equal_terms_substitution is None:
             self._equal_terms_substitution = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=Text(plaintext='equal-terms-substitution',
-                                            text_style=text_styles.monospace), index=None),
+                nameset=NameSet(symbol=ComposableText(plaintext='equal-terms-substitution',
+                                                      text_style=text_styles.monospace),
+                                index=None),
                 name='equal terms substitution',
                 dashed_name=DashedName('equal-terms-substitution'),
                 infer_formula=infer_formula,
@@ -5588,8 +5763,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._variable_substitution is None:
             self._variable_substitution = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=Text(plaintext='variable-substitution',
-                                            text_style=text_styles.monospace), index=None),
+                nameset=NameSet(symbol=ComposableText(plaintext='variable-substitution',
+                                                      text_style=text_styles.monospace),
+                                index=None),
                 name='variable substitution',
                 dashed_name=DashedName('variable-substitution'),
                 infer_formula=infer_formula,
@@ -6203,11 +6379,11 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
 class UniverseOfDiscourse(SymbolicObject):
     def __init__(self, nameset: (None, str, NameSet) = None,
-                 name: (None, str, Text) = None,
+                 name: (None, str, ComposableText) = None,
                  echo: (None, bool) = None):
-        echo = get_config(echo, configuration.echo_universe_of_discourse_declaration,
-                          configuration.echo_default,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_universe_of_discourse_declaration,
+                                configuration.echo_default,
+                                False)
         self.axioms = dict()
         self.definitions = dict()
         self.formulae = dict()
@@ -6223,7 +6399,7 @@ class UniverseOfDiscourse(SymbolicObject):
         # self.titles = dict()
 
         if nameset is None:
-            symbol = Text(plaintext='U', text_style=text_styles.script_normal)
+            symbol = ComposableText(plaintext='U', text_style=text_styles.script_normal)
             index = index_universe_of_discourse_symbol(base=symbol)
             nameset = NameSet(symbol=symbol, index=index, name=name)
         elif isinstance(nameset, str):
@@ -6528,7 +6704,7 @@ class UniverseOfDiscourse(SymbolicObject):
             relation, *parameters, nameset=nameset,
             lock_variable_scope=lock_variable_scope, echo=echo)
 
-    def get_symbol_max_index(self, symbol: Text) -> int:
+    def get_symbol_max_index(self, symbol: ComposableText) -> int:
         """Return the highest index for that symbol-base in the universe-of-discourse."""
         # if symbol in self.symbol_indexes.keys():
         #    return self.symbol_indexes[symbol]
@@ -6538,14 +6714,14 @@ class UniverseOfDiscourse(SymbolicObject):
                               nameset.symbol == symbol and nameset.index_as_int is not None))
         return max(same_symbols, default=0)
 
-    def index_symbol(self, symbol: Text) -> int:
+    def index_symbol(self, symbol: ComposableText) -> int:
         """Given a symbol-base S (i.e. an unindexed symbol), returns a unique integer n
         such that (S, n) is a unique identifier in this instance of UniverseOfDiscourse.
 
         :param symbol: The symbol-base.
         :return:
         """
-        assert isinstance(symbol, Text)
+        assert isinstance(symbol, ComposableText)
         return self.get_symbol_max_index(symbol) + 1
 
     def declare_definition(
@@ -6588,7 +6764,7 @@ class UniverseOfDiscourse(SymbolicObject):
         return self.simple_objcts
 
     def rep_declaration(self, encoding: (None, Encoding) = None, compose: bool = False) -> (
-            str, Block):
+            str, ComposableBlockSequence):
         rep = Paragraph()
         rep.append('Let')
         rep.append(self.rep_fully_qualified_name())
@@ -6651,7 +6827,7 @@ class UniverseOfDiscourse(SymbolicObject):
 
 
 def declare_universe_of_discourse(nameset: (None, str, NameSet) = None,
-                                  name: (None, str, Text) = None,
+                                  name: (None, str, ComposableText) = None,
                                   echo: (None, bool) = None) -> UniverseOfDiscourse:
     return UniverseOfDiscourse(nameset=nameset, name=name, echo=echo)
 
@@ -6672,8 +6848,9 @@ class InferredStatement(FormulaStatement):
             echo: (None, bool) = None):
         """Include (aka allow) an inference_rule in a theory-elaboration.
         """
-        echo = get_config(echo, configuration.echo_inferred_statement, configuration.echo_statement,
-                          fallback_value=False)
+        echo = prioritize_value(echo, configuration.echo_inferred_statement,
+                                configuration.echo_statement,
+                                False)
         cat = title_categories.proposition if cat is None else cat
         # TODO: Check that cat is a valid statement cat (prop., lem., cor., theorem)
         title = TitleOBSOLETE(ref=ref, cat=cat, subtitle=subtitle)
@@ -6720,8 +6897,8 @@ class InferredStatement(FormulaStatement):
 
     def rep_report(self, encoding: (None, Encoding) = None, output_proofs=True) -> str:
         """Return a representation that expresses and justifies the statement."""
-        encoding = get_config(encoding, configuration.encoding,
-                              fallback_value=encodings.plaintext)
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
         rep = f'{self.rep_title(encoding=encoding, cap=True)}: {self.valid_proposition.rep_formula()}' + '\n\t'
         rep = wrap_text(rep) + '\n'
         if output_proofs:
@@ -6751,10 +6928,10 @@ def rep_two_columns_proof_item(left: str, right: str) -> str:
     """Format a two-columns proof row.
     TODO: Implement logic for plaintext, unicode and latex.
     """
-    left_column_width = get_config(configuration.two_columns_proof_left_column_width,
-                                   fallback_value=67)
-    right_column_width = get_config(configuration.two_columns_proof_right_column_width,
-                                    fallback_value=30)
+    left_column_width = prioritize_value(configuration.two_columns_proof_left_column_width,
+                                         67)
+    right_column_width = prioritize_value(configuration.two_columns_proof_right_column_width,
+                                          30)
     report = textwrap.wrap(text=left, width=left_column_width, break_on_hyphens=False)
     report = [line.ljust(left_column_width, ' ') + ' | ' for line in report]
     report[len(report) - 1] = report[len(report) - 1] + right
@@ -6766,10 +6943,10 @@ def rep_two_columns_proof_end(left: str) -> str:
     """Format the end of a two-columns proof
     TODO: Implement logic for plaintext, unicode and latex.
     """
-    left_column_width = get_config(configuration.two_columns_proof_left_column_width,
-                                   fallback_value=67)
-    right_column_width = get_config(configuration.two_columns_proof_right_column_width,
-                                    fallback_value=30)
+    left_column_width = prioritize_value(configuration.two_columns_proof_left_column_width,
+                                         67)
+    right_column_width = prioritize_value(configuration.two_columns_proof_right_column_width,
+                                          30)
     report = ''.ljust(left_column_width + 1, '─') + '┤ ' + '\n'
     report = report + rep_two_columns_proof_item(left=left, right='∎')
     return report
@@ -6872,5 +7049,54 @@ class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
         a1 = theory.a()
         # TODO: Justify the inclusion of this inference-rule in the theory.
 
+
+def reset_configuration(configuration: Configuration) -> None:
+    configuration.auto_index = None
+    configuration._echo_default = False
+    configuration.default_note_symbol = ComposableTextWithStyle(plaintext='note',
+                                                                text_style=text_styles.serif_italic)
+    configuration.default_hypothesis_symbol = ComposableTextWithStyle(plaintext='h',
+                                                                      text_style=text_styles.serif_italic)
+    configuration.default_relation_symbol = ComposableTextWithStyle(plaintext='r',
+                                                                    text_style=text_styles.serif_italic)
+    configuration.default_symbolic_object_symbol = ComposableTextWithStyle(plaintext='o',
+                                                                           text_style=text_styles.serif_italic)
+    configuration.default_formula_symbol = ComposableTextWithStyle(plaintext='phi', unicode='𝜑',
+                                                                   text_style=text_styles.serif_italic)
+    configuration.default_free_variable_symbol = ComposableTextWithStyle(plaintext='x',
+                                                                         text_style=text_styles.serif_bold)
+    configuration.default_statement_symbol = ComposableTextWithStyle(plaintext='s',
+                                                                     text_style=text_styles.serif_italic)
+    configuration.default_theory_symbol = ComposableTextWithStyle(plaintext='T',
+                                                                  text_style=text_styles.script_normal)
+    configuration.echo_axiom_declaration = None
+    configuration.echo_axiom_inclusion = None
+    configuration.echo_definition_declaration = None
+    configuration.echo_definition_inclusion = None
+    configuration.echo_definition_direct_inference = None
+    configuration.echo_formula_declaration = False  # In general, this is too verbose.
+    configuration.echo_hypothesis = None
+    configuration.echo_inferred_statement = None
+    configuration.echo_note = None
+    configuration.echo_relation = None
+    configuration.echo_simple_objct_declaration = None
+    configuration.echo_statement = None
+    configuration.echo_symbolic_objct = None
+    configuration.echo_theory_elaboration_sequence_declaration = None
+    configuration.echo_universe_of_discourse_declaration = None
+    configuration.echo_free_variable_declaration = None
+    configuration.echo_encoding = None
+    configuration.output_index_if_max_index_equal_1 = False
+    configuration.raise_exception_on_verification_error = True
+    configuration.title_text_style = text_styles.sans_serif_bold
+    configuration.encoding = encodings.unicode
+    configuration.text_output_indent = 2
+    configuration.two_columns_proof_left_column_width = 67
+    configuration.two_columns_proof_right_column_width = 30
+    configuration.text_output_total_width = 100
+    configuration.warn_on_inconsistency = True
+
+
+reset_configuration(configuration=configuration)
 
 pass
