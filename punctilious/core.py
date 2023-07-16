@@ -11,6 +11,23 @@ import unicode_utilities
 import unidecode
 
 
+def rep_composition(composition: collections.abc.Generator[Composable, None, None] = None,
+                    encoding: (None, bool) = None, **kwargs) -> str:
+    encoding = prioritize_value(encoding, configuration.encoding, encodings.plaintext)
+    if composition is None:
+        return ''
+    else:
+        representation = ''
+        for item in composition:
+            if isinstance(item, Composable):
+                representation = representation + item.rep(encoding=encoding, **kwargs)
+            elif isinstance(item, str):
+                representation = representation + item
+            else:
+                raise Exception('Unsupported type')
+        return representation
+
+
 class Encoding:
     """A supported output text format."""
 
@@ -474,14 +491,8 @@ class ComposableBlockSequence(ComposableBlock):
         if iterable is not None:
             self.append(self.prepare_item(item) for item in iterable)
 
-    def rep(self, encoding: (None, Encoding) = None, wrap: (None, bool) = None, **args) -> str:
-        encoding = prioritize_value(encoding, configuration.encoding,
-                                    encodings.plaintext)
-        #  Implement parameter wrap
-        # wrap = get_config(wrap, configuration.wrap,
-        #                  False)
-        return ''.join(item.rep(encoding=encoding) for item in
-                       self.outer_composition)
+    def rep(self, encoding: (None, Encoding) = None, **kwargs) -> str:
+        return rep_composition(self.compose(), encoding=encoding, **kwargs)
 
 
 class QuasiQuotation(ComposableBlockSequence):
@@ -490,7 +501,7 @@ class QuasiQuotation(ComposableBlockSequence):
     """
 
     def __init__(self, iterable: (None, collections.Iterable) = None) -> None:
-        super().__init__(iterable=iterable, start_tag=QuasiQuotation._static_start_tag,
+        super().__init__(content=iterable, start_tag=QuasiQuotation._static_start_tag,
                          end_tag=QuasiQuotation._static_end_tag)
 
     _static_end_tag = ComposableText(plaintext='"', unicode='⌝')
@@ -1144,6 +1155,18 @@ class NameSet(Composable):
             return output
         raise NoNameSolutionException(nameset=self, encoding=encoding)
 
+    def compose_conventional(self):
+        if self._name is not None:
+            yield self._name
+        elif self._acronym is not None:
+            yield self._acronym
+        elif self._symbol is not None:
+            yield self._symbol
+        elif self._explicit_name is not None:
+            yield self._explicit_name
+        else:
+            raise Exception('Failure to generate a conventional designation.')
+
     def rep_conventional(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
         """Returns the most conventional (default) possible name in the nameset for the required text-format.
 
@@ -1153,19 +1176,7 @@ class NameSet(Composable):
         4) symbol
         1) explicit-name
         """
-        output = self.rep_name(encoding=encoding)
-        if output is not None and output != '':
-            return output
-        output = self.rep_acronym(encoding=encoding)
-        if output is not None and output != '':
-            return output
-        output = self.rep_symbol(encoding=encoding)
-        if output is not None and output != '':
-            return output
-        output = self.rep_explicit_name(encoding=encoding)
-        if output is not None and output != '':
-            return output
-        raise NoNameSolutionException(nameset=self, encoding=encoding)
+        return rep_composition(composition=self.compose_conventional(), encoding=encoding, cap=cap)
 
     def rep_explicit_name(self, encoding: (None, Encoding) = None) -> (None, str):
         """Return a string that represent the object as an explicit name."""
@@ -1178,6 +1189,19 @@ class NameSet(Composable):
             index = '' if self._index is None else ' ' + self._index.rep(encoding=encoding)
             output = None if base is None else f'{base}{index}'
             return output
+
+    def compose_fully_qualified_name(self):
+        conventional = self.rep_conventional(encoding=encoding, cap=cap)
+        sym = self.rep_symbol(encoding=encoding)
+        rep = ComposableBlockSequence()
+        rep.append(conventional)
+        if conventional != sym:
+            rep.append('(')
+            rep.append(sym)
+            rep.append(')')
+        if not compose:
+            rep = rep.rep(encoding=encoding)
+        yield rep
 
     def rep_fully_qualified_name(self, encoding: (None, Encoding) = None,
                                  cap: (None, bool) = None, compose: bool = False):
@@ -1563,10 +1587,11 @@ class SymbolicObject:
     def prnt(self, encoding: (None, Encoding) = None, expand=False):
         repm.prnt(self.rep(encoding=encoding, expand=expand))
 
-    def rep(self, encoding: (None, Encoding) = None, expand: (None, bool) = None) -> str:
-        # If a long-name is available, represent the objct as a reference.
-        # Otherwise, represent it as a symbol.
-        return self.nameset.rep(encoding=encoding)
+    def compose(self) -> collections.abc.Generator[Composable, None, None]:
+        yield from self.nameset.compose()
+
+    def rep(self, encoding: (None, Encoding) = None, **kwargs) -> str:
+        return rep_composition(composition=self.compose(), encoding=encoding, **kwargs)
 
     def rep_dashed_name(self, encoding: (None, Encoding) = None) -> str:
         """"""
