@@ -17,20 +17,20 @@ class TestTitle(TestCase):
         self.assertEqual('proposition 1.1.2', title2.rep_title())
         self.assertEqual('Proposition 1.1.2', title2.rep_title(cap=True))
         self.assertEqual('prop. 1.1.2', title2.rep_ref())
-        self.assertEqual('𝗽𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 𝟭.𝟭.𝟮', title2.rep_title(text_format=pu.encodings.unicode))
+        self.assertEqual('𝗽𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 𝟭.𝟭.𝟮', title2.rep_title(encoding=pu.encodings.unicode))
         self.assertEqual('𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 𝟭.𝟭.𝟮',
-                         title2.rep_title(text_format=pu.encodings.unicode, cap=True))
-        self.assertEqual('𝗽𝗿𝗼𝗽. 𝟭.𝟭.𝟮', title2.rep_ref(text_format=pu.encodings.unicode))
+                         title2.rep_title(encoding=pu.encodings.unicode, cap=True))
+        self.assertEqual('𝗽𝗿𝗼𝗽. 𝟭.𝟭.𝟮', title2.rep_ref(encoding=pu.encodings.unicode))
         self.assertEqual('\\boldsymbol\\mathsf{proposition}} \\boldsymbol\\mathsf{1.1.2}}',
-                         title2.rep_title(text_format=pu.encodings.latex_math))
+                         title2.rep_title(encoding=pu.encodings.latex_math))
         self.assertEqual('\\boldsymbol\\mathsf{Proposition}} \\boldsymbol\\mathsf{1.1.2}}',
-                         title2.rep_title(text_format=pu.encodings.latex_math, cap=True))
+                         title2.rep_title(encoding=pu.encodings.latex_math, cap=True))
         self.assertEqual('\\boldsymbol\\mathsf{prop.}} \\boldsymbol\\mathsf{1.1.2}}',
-                         title2.rep_ref(text_format=pu.encodings.latex_math))
+                         title2.rep_ref(encoding=pu.encodings.latex_math))
 
         complement3 = random_data.random_sentence()
         title3 = pu.TitleOBSOLETE(f'1.1.3', pu.title_categories.lemma, subtitle=complement3)
         self.assertEqual(f'lemma 1.1.3 - {complement3}', title3.rep_title())
         self.assertEqual(f'Lemma 1.1.3 - {complement3}', title3.rep_title(cap=True))
         self.assertEqual(f'lem. 1.1.3', title3.rep_ref())
-        self.assertEqual(f'𝗹𝗲𝗺. 𝟭.𝟭.𝟯', title3.rep_ref(text_format=pu.encodings.unicode))
+        self.assertEqual(f'𝗹𝗲𝗺. 𝟭.𝟭.𝟯', title3.rep_ref(encoding=pu.encodings.unicode))

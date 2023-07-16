@@ -145,24 +145,46 @@ class ComposableText(Composable):
 class TextStyle:
     """A supported text style."""
 
-    def __init__(self, font_style_name: str, unicode_table_index: int, start_tag: ComposableText,
-                 end_tag: ComposableText):
-        self.font_style_name = font_style_name
-        self.unicode_table_index = unicode_table_index
-        self.start_tag = start_tag
-        self.end_tag = end_tag
+    def __init__(self, name: str,
+                 start_tag: ComposableText,
+                 end_tag: ComposableText, unicode_map: dict = None,
+                 unicode_table_index: int = None):
+        # TODO: Replace unicode_table_index with new parameter unicode_map,
+        # this will allow to dedicate maps and better manage incomplete character sets,
+        # such as subscript.
+        self._name = name
+        self._unicode_table_index = unicode_table_index
+        self._unicode_map = unicode_map
+        self._start_tag = start_tag
+        self._end_tag = end_tag
 
     def __eq__(self, other):
         return type(other) is type(self) and hash(self) == hash(other)
 
     def __hash__(self):
-        return hash((TextStyle, self.font_style_name))
+        return hash((TextStyle, self._name))
 
     def __repr__(self):
-        return self.font_style_name
+        return self._name
 
     def __str__(self):
-        return self.font_style_name
+        return self._name
+
+    @property
+    def end_tag(self):
+        return self._end_tag
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def start_tag(self):
+        return self._start_tag
+
+    @property
+    def unicode_map(self):
+        return self._unicode_map
 
 
 class TextStyles:
@@ -170,60 +192,65 @@ class TextStyles:
 
     def __init__(self):
         self._no_style = TextStyle(
-            font_style_name='no-style',
+            name='no-style',
             unicode_table_index=unicode_utilities.unicode_sans_serif_normal_index,
             start_tag=ComposableText(plaintext=''),
             end_tag=ComposableText(plaintext=''))
         self.double_struck = TextStyle(
-            font_style_name='double-struck',
+            name='double-struck',
             unicode_table_index=unicode_utilities.unicode_double_struck_index,
             start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathbb{'),
             end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
         self.monospace = TextStyle(
-            font_style_name='fraktur-normal',
+            name='fraktur-normal',
             unicode_table_index=unicode_utilities.unicode_fraktur_normal_index,
             start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathfrak{'),
             end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
         self.monospace = TextStyle(
-            font_style_name='monospace',
+            name='monospace',
             unicode_table_index=unicode_utilities.unicode_monospace_index,
             start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathtt{'),
             end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
         self.sans_serif_bold = TextStyle(
-            font_style_name='sans-serif-bold',
+            name='sans-serif-bold',
             unicode_table_index=unicode_utilities.unicode_sans_serif_bold_index,
             start_tag=ComposableText(plaintext='', unicode='', latex_math='\\boldsymbol\\mathsf{'),
             end_tag=ComposableText(plaintext='', unicode='', latex_math='}}'))
         self.sans_serif_italic = TextStyle(
-            font_style_name='sans-serif-italic',
+            name='sans-serif-italic',
             unicode_table_index=unicode_utilities.unicode_sans_serif_italic_index,
             start_tag=ComposableText(plaintext='', unicode='',
                                      latex_math='\\text{\\sffamily{\\itshape{'),
             end_tag=ComposableText(plaintext='', unicode='', latex_math='}}}'))
         self.sans_serif_normal = TextStyle(
-            font_style_name='sans-serif-normal',
+            name='sans-serif-normal',
             unicode_table_index=unicode_utilities.unicode_sans_serif_normal_index,
             start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathsf{'),
             end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
         self.script_normal = TextStyle(
-            font_style_name='script-normal',
+            name='script-normal',
             unicode_table_index=unicode_utilities.unicode_script_normal_index,
             start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathcal{'),
             end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
         self.serif_bold = TextStyle(
-            font_style_name='serif-bold',
+            name='serif-bold',
             unicode_table_index=unicode_utilities.unicode_serif_bold_index,
             start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathbf{'),
             end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
         self.serif_italic = TextStyle(
-            font_style_name='serif-italic',
+            name='serif-italic',
             unicode_table_index=unicode_utilities.unicode_serif_italic_index,
             start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathit{'),
             end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
         self.serif_normal = TextStyle(
-            font_style_name='serif-normal',
+            name='serif-normal',
             unicode_table_index=unicode_utilities.unicode_serif_normal_index,
             start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathnormal{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+        self.subscript = TextStyle(
+            name='subscript',
+            unicode_map=unicode_utilities.unicode_subscript_dictionary,
+            start_tag=ComposableText(plaintext='_', unicode='', latex_math='_{'),
             end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
 
     @property
@@ -397,7 +424,9 @@ class ComposableTextWithStyle(ComposableBlockLeaf):
     def rep_as_unicode(self, cap: bool = False):
         content = self._content.plaintext if self._content.unicode is None else self._content.unicode
         content = content.capitalize() if cap else content
-        return unicode_utilities.unicode_format(content, self._text_style.unicode_table_index)
+        return unicode_utilities.unicode_format(s=content,
+                                                index=self.text_style._unicode_table_index,
+                                                mapping=self.text_style.unicode_map)
 
     @property
     def text_style(self) -> TextStyle:
@@ -471,7 +500,7 @@ class QuasiQuotation(ComposableBlockSequence):
 
 class Paragraph(ComposableBlockSequence):
     def __init__(self, iterable: (None, collections.Iterable) = None) -> None:
-        super().__init__(iterable=iterable, start_tag=Paragraph._static_start_tag,
+        super().__init__(content=iterable, start_tag=Paragraph._static_start_tag,
                          end_tag=Paragraph._static_end_tag)
 
     _static_end_tag = ComposableText(plaintext='\n\n', unicode='\n\n')
@@ -508,6 +537,13 @@ class ComposableSansSerifNormal(ComposableTextWithStyle):
     def __init__(self, plaintext: str, unicode: (None, str) = None,
                  latex_math: (None, str) = None) -> None:
         super().__init__(text_style=text_styles.sans_serif_normal, plaintext=plaintext,
+                         unicode=unicode, latex_math=latex_math)
+
+
+class Subscript(ComposableTextWithStyle):
+    def __init__(self, plaintext: str, unicode: (None, str) = None,
+                 latex_math: (None, str) = None) -> None:
+        super().__init__(text_style=text_styles.subscript, plaintext=plaintext,
                          unicode=unicode, latex_math=latex_math)
 
 
@@ -929,7 +965,7 @@ class NoNameSolutionException(LookupError):
         return f'The nameset ⌜{repr(self.nameset)}⌝ contains no representation for the ⌜{self.encoding}⌝ text-format.'
 
 
-class NameSet:
+class NameSet(Composable):
     """A set of qualified names used to identify an object.
 
     TODO: Enhancement: for relations in particular, add a verb NameType (e.g. implies).
@@ -958,19 +994,19 @@ class NameSet:
                 explicit_name = s
             elif name is None and len(s) > 1:
                 name = s
-        self._symbol = ComposableText(s=symbol, text_style=text_styles.serif_italic) \
+        self._symbol = ComposableTextWithStyle(s=symbol, text_style=text_styles.serif_italic) \
             if isinstance(symbol, str) else symbol
         verify(self.symbol is not None, msg='The symbol of this nameset is None.', slf=self)
         self._acronym = acronym
         self._name = name
         self._explicit_name = explicit_name
         self._index_as_int = index if isinstance(index, int) else None
-        if isinstance(index, ComposableText):
+        if isinstance(index, Subscript):
             self._index = index
         elif isinstance(index, str):
-            self._index = ComposableText(s=index, text_style=text_styles.sans_serif_normal)
+            self._index = Subscript(plaintext=index)
         elif isinstance(index, int):
-            self._index = ComposableText(s=str(index), text_style=text_styles.sans_serif_normal)
+            self._index = Subscript(plaintext=str(index))
         else:
             self._index = None
         self._ref = ref
@@ -1008,6 +1044,14 @@ class NameSet:
         and make the hash stable. This quick-fix was necessary while migrating from
         the old approach that used the obsolete Title class."""
         self._cat = cat
+
+    def compose(self) -> collections.abc.Generator[Composable, None, None]:
+        yield from self.compose_symbol()
+
+    def compose_symbol(self) -> collections.abc.Generator[Composable, None, None]:
+        yield self._symbol
+        if self._index is not None:
+            yield self._index
 
     @property
     def explicit_name(self) -> ComposableText:
@@ -1073,7 +1117,8 @@ class NameSet:
         """Return a string that represent the object as an acronym."""
         rep = ComposableBlockSequence()
         if self._acronym is not None:
-            rep.append(ComposableText(s=self._acronym, text_style=text_styles.sans_serif_normal))
+            rep.append(
+                ComposableTextWithStyle(s=self._acronym, text_style=text_styles.sans_serif_normal))
         return rep.rep(encoding=encoding, compose=compose)
 
     def rep_compact(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
@@ -1155,13 +1200,13 @@ class NameSet:
         if self._name is not None:
             rep = rep + self.rep_name(encoding=encoding, cap=cap)
         rep = rep + ' '
-        rep = rep + ComposableText(s='(', text_style=text_styles.sans_serif_bold).rep(
+        rep = rep + ComposableTextWithStyle(s='(', text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding)
         rep = rep + self.rep_symbol(encoding=encoding)
-        rep = rep + ComposableText(s=')', text_style=text_styles.sans_serif_bold).rep(
+        rep = rep + ComposableTextWithStyle(s=')', text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding)
-        rep = '' if self._cat is None else ComposableText(s=self.cat.natural_name,
-                                                          text_style=text_styles.sans_serif_bold).rep(
+        rep = '' if self._cat is None else ComposableTextWithStyle(s=self.cat.natural_name,
+                                                                   text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding, cap=cap)
         return rep
 
@@ -1173,53 +1218,53 @@ class NameSet:
         if self._name is None:
             return ''
         else:
-            return ComposableText(s=self._name, text_style=text_styles.sans_serif_normal).rep(
+            return ComposableTextWithStyle(s=self._name,
+                                           text_style=text_styles.sans_serif_normal).rep(
                 encoding=encoding, cap=cap)
 
     def rep_ref(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
-        rep = '' if self._cat is None else ComposableText(s=self._cat.abridged_name,
-                                                          text_style=text_styles.sans_serif_bold).rep(
+        rep = '' if self._cat is None else ComposableTextWithStyle(s=self._cat.abridged_name,
+                                                                   text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding, cap=cap)
         if self._ref is not None:
             if rep != '':
                 rep = rep + ' '
-            rep = rep + ComposableText(s=self._ref, text_style=text_styles.sans_serif_bold).rep(
+            rep = rep + ComposableTextWithStyle(s=self._ref,
+                                                text_style=text_styles.sans_serif_bold).rep(
                 encoding=encoding)
         rep = rep + ' (' + self.rep_symbol(encoding=encoding) + ')'
         return rep
 
-    def rep_symbol(self, encoding: (None, Encoding) = None) -> (None, str):
+    def rep_symbol(self, encoding: (None, Encoding) = None, **args) -> (None, str):
         """Return a string that represent the object as a symbol."""
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
-        if self._symbol is None:
-            return None
-        else:
-            base = self._symbol.rep(encoding=encoding)
-            index = subscriptify(text=self._index, encoding=encoding)
-            output = None if base is None else f'{base}{index}'
-            return output
+        composition = ''
+        for item in self.compose_symbol():
+            composition += item.rep(encoding=encoding, **args)
+        return composition
 
     def rep_title(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         """A title of the form: [unabridged-category] [reference] ([symbol]) - [subtitle]
         """
-        rep = '' if self._cat is None else ComposableText(s=self.cat.natural_name,
-                                                          text_style=text_styles.sans_serif_bold).rep(
+        rep = '' if self._cat is None else ComposableTextWithStyle(s=self.cat.natural_name,
+                                                                   text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding, cap=cap)
         if self._ref is not None:
             rep = rep + ' '
-            rep = rep + ComposableText(s=self._ref, text_style=text_styles.sans_serif_bold).rep(
+            rep = rep + ComposableTextWithStyle(s=self._ref,
+                                                text_style=text_styles.sans_serif_bold).rep(
                 encoding=encoding)
         rep = rep + ' '
-        rep = rep + ComposableText(s='(', text_style=text_styles.sans_serif_bold).rep(
+        rep = rep + ComposableTextWithStyle(s='(', text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding)
         rep = rep + self.rep_symbol(encoding=encoding)
-        rep = rep + ComposableText(s=')', text_style=text_styles.sans_serif_bold).rep(
+        rep = rep + ComposableTextWithStyle(s=')', text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding)
         if self._subtitle is not None:
             rep = rep + '- '
-            rep = rep + ComposableText(s=self._subtitle,
-                                       text_style=text_styles.sans_serif_bold).rep(
+            rep = rep + ComposableTextWithStyle(s=self._subtitle,
+                                                text_style=text_styles.sans_serif_bold).rep(
                 encoding=encoding)
         return rep
 
@@ -1270,14 +1315,14 @@ class TitleOBSOLETE:
                  subtitle: (None, str, ComposableText) = None,
                  abr: (None, str, ComposableText) = None):
         if isinstance(ref, str):
-            ref = ComposableText(s=ref, text_style=text_styles.sans_serif_bold)
+            ref = ComposableTextWithStyle(s=ref, text_style=text_styles.sans_serif_bold)
         self._ref = ref
         if isinstance(abr, str):
-            abr = ComposableText(s=abr, text_style=text_styles.sans_serif_bold)
+            abr = ComposableTextWithStyle(s=abr, text_style=text_styles.sans_serif_bold)
         self._abr = abr
         self._cat = title_categories.uncategorized if cat is None else cat
         if isinstance(subtitle, str):
-            subtitle = ComposableText(s=subtitle, text_style=text_styles.sans_serif_normal)
+            subtitle = ComposableTextWithStyle(s=subtitle, text_style=text_styles.sans_serif_normal)
         self._nameset = nameset
         self._subtitle = subtitle
         self._styled_title = None
@@ -1340,13 +1385,13 @@ class TitleOBSOLETE:
         :param cap:
         :return:
         """
-        return f'{ComposableText(s=self.cat.natural_name, text_style=text_styles.sans_serif_bold).rep(encoding=encoding, cap=cap)}' \
+        return f'{ComposableTextWithStyle(s=self.cat.natural_name, text_style=text_styles.sans_serif_bold).rep(encoding=encoding, cap=cap)}' \
                f'{"" if self.ref is None else " " + self.ref.rep(encoding=encoding)}' \
                f'{"" if self.subtitle is None else " - " + self.subtitle.rep(encoding=encoding)}'
 
     def rep_ref(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
-        return ComposableText(s=self._cat.abridged_name,
-                              text_style=text_styles.sans_serif_bold).rep(
+        return ComposableTextWithStyle(s=self._cat.abridged_name,
+                                       text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding, cap=cap) + \
                '' if self._ref is None else str(' ' + self._ref.rep(encoding=encoding)) + \
                                             '' if self._nameset is None else str(
@@ -1355,7 +1400,7 @@ class TitleOBSOLETE:
 
     def rep_mention(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         return f'{"" if self.ref is None else self.ref.rep(encoding=encoding) + " "}' \
-               f'{ComposableText(s=self.cat.natural_name, text_style=text_styles.sans_serif_normal).rep(encoding=encoding, cap=cap)}'
+               f'{ComposableTextWithStyle(s=self.cat.natural_name, text_style=text_styles.sans_serif_normal).rep(encoding=encoding, cap=cap)}'
 
 
 class DashedName:
@@ -1425,7 +1470,7 @@ class SymbolicObject:
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         if isinstance(nameset, str):
-            symbol = ComposableText(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = ComposableTextWithStyle(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         nameset.cat = cat
@@ -1990,7 +2035,7 @@ class FreeVariable(TheoreticalObject):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = ComposableText(plaintext=nameset, text_style=text_styles.serif_bold)
+            symbol = ComposableTextWithStyle(plaintext=nameset, text_style=text_styles.serif_bold)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
@@ -2132,7 +2177,7 @@ class Formula(TheoreticalObject):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = ComposableText(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = ComposableTextWithStyle(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         self.relation = relation
@@ -2421,7 +2466,9 @@ class SimpleObjctDict(collections.UserDict):
         if self._falsehood is None:
             self._falsehood = self.declare(
                 nameset=NameSet(
-                    symbol=ComposableText(unicode='⊥', latex_math='\\bot', plaintext='false'),
+                    symbol=ComposableTextWithStyle(unicode='⊥', latex_math='\\bot',
+                                                   plaintext='false',
+                                                   text_style=text_styles.serif_normal),
                     name=ComposableText(plaintext='false'),
                     explicit_name=ComposableText(plaintext='falsehood'),
                     index=None))
@@ -2450,7 +2497,8 @@ class SimpleObjctDict(collections.UserDict):
         if self._truth is None:
             self._truth = self.declare(nameset=
             NameSet(
-                symbol=ComposableText(unicode='⊤', latex_math='\\top', plaintext='true'),
+                symbol=ComposableTextWithStyle(unicode='⊤', latex_math='\\top', plaintext='true',
+                                               text_style=text_styles.serif_normal),
                 name=ComposableText(plaintext='true'),
                 explicit_name=ComposableText(plaintext='truth'),
                 index=None))
@@ -3275,12 +3323,13 @@ class InferenceRuleDeclaration(TheoreticalObject):
         :return:
         """
         rep = \
-            ComposableText(s="Proof", text_style=text_styles.sans_serif_italic).rep(
+            ComposableTextWithStyle(s="Proof", text_style=text_styles.sans_serif_italic).rep(
                 encoding=encoding) + \
-            ComposableText(s=" - By the ", text_style=text_styles.sans_serif_normal).rep(
+            ComposableTextWithStyle(s=" - By the ", text_style=text_styles.sans_serif_normal).rep(
                 encoding=encoding) + \
             s.inference_rule.rep_fully_qualified_name(encoding=encoding) + \
-            ComposableText(s=" inference rule:\n", text_style=text_styles.sans_serif_normal).rep(
+            ComposableTextWithStyle(s=" inference rule:\n",
+                                    text_style=text_styles.sans_serif_normal).rep(
                 encoding=encoding)
         if self._rep_two_columns_proof is None:
             # There is no specific rep_two_columns_proof method
@@ -3290,8 +3339,8 @@ class InferenceRuleDeclaration(TheoreticalObject):
                 parameter = s.parameters[i]
                 rep = rep + rep_two_columns_proof_item(
                     left=parameter.rep_formula(encoding=encoding, expand=True),
-                    right=ComposableText(s='Follows from ',
-                                         text_style=text_styles.sans_serif_normal).rep(
+                    right=ComposableTextWithStyle(s='Follows from ',
+                                                  text_style=text_styles.sans_serif_normal).rep(
                         encoding=encoding) + parameter.rep_ref(
                         encoding=encoding))
         else:
@@ -3356,7 +3405,7 @@ class Note(AtheoreticalStatement):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = ComposableText(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = ComposableTextWithStyle(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         ref = nameset.index if ref is None else ref
@@ -3514,7 +3563,8 @@ class TheoryElaborationSequence(TheoreticalObject):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = ComposableText(plaintext=nameset, text_style=text_styles.script_normal)
+            symbol = ComposableTextWithStyle(plaintext=nameset,
+                                             text_style=text_styles.script_normal)
             index = u.index_symbol(symbol=symbol)
             nameset = NameSet(s=symbol, index=index)
         nameset.cat = title_categories.theory_elaboration_sequence
@@ -3942,7 +3992,7 @@ class Hypothesis(Statement):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = ComposableText(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = ComposableTextWithStyle(plaintext=nameset, text_style=text_styles.serif_italic)
             index = t.u.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
@@ -4026,7 +4076,7 @@ class Relation(TheoreticalObject):
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         if isinstance(nameset, str):
-            symbol = ComposableText(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = ComposableTextWithStyle(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
@@ -4235,7 +4285,9 @@ class RelationDict(collections.UserDict):
             self._biconditional = self.declare(
                 2,
                 NameSet(
-                    symbol=ComposableText(plaintext='<==>', unicode='⟺', latex_math='\\iff'),
+                    symbol=ComposableTextWithStyle(plaintext='<==>', unicode='⟺',
+                                                   latex_math='\\iff',
+                                                   text_style=text_styles.serif_normal),
                     name=ComposableText(plaintext='biconditional'),
                     index=None),
                 Formula.infix,
@@ -6399,7 +6451,7 @@ class UniverseOfDiscourse(SymbolicObject):
         # self.titles = dict()
 
         if nameset is None:
-            symbol = ComposableText(plaintext='U', text_style=text_styles.script_normal)
+            symbol = ComposableTextWithStyle(plaintext='U', text_style=text_styles.script_normal)
             index = index_universe_of_discourse_symbol(base=symbol)
             nameset = NameSet(symbol=symbol, index=index, name=name)
         elif isinstance(nameset, str):

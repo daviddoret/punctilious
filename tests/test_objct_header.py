@@ -11,15 +11,15 @@ class TestHeader(TestCase):
         self.assertEqual(f'axiom {header_reference}',
                          header.rep(encoding=pu.encodings.plaintext))
         self.assertEqual(f'axiom {header_reference}',
-                         header.rep_title(text_format=pu.encodings.plaintext))
+                         header.rep_title(encoding=pu.encodings.plaintext))
         self.assertEqual(f'axiom {header_reference}',
-                         header.rep_ref(text_format=pu.encodings.plaintext))
+                         header.rep_ref(encoding=pu.encodings.plaintext))
         self.assertEqual(f'Axiom {header_reference}',
                          header.rep(encoding=pu.encodings.plaintext, cap=True))
         self.assertEqual(f'Axiom {header_reference}',
-                         header.rep_title(text_format=pu.encodings.plaintext, cap=True))
+                         header.rep_title(encoding=pu.encodings.plaintext, cap=True))
         self.assertEqual(f'Axiom {header_reference}',
-                         header.rep_ref(text_format=pu.encodings.plaintext, cap=True))
+                         header.rep_ref(encoding=pu.encodings.plaintext, cap=True))
 
     def test_header_2(self):
         header_reference = random_data.random_word()
@@ -30,12 +30,12 @@ class TestHeader(TestCase):
         self.assertEqual(f'prop. {header_reference}',
                          header.rep(encoding=pu.encodings.plaintext))
         self.assertEqual(f'proposition {header_reference} - {header_title}',
-                         header.rep_title(text_format=pu.encodings.plaintext))
+                         header.rep_title(encoding=pu.encodings.plaintext))
         self.assertEqual(f'prop. {header_reference}',
-                         header.rep_ref(text_format=pu.encodings.plaintext))
+                         header.rep_ref(encoding=pu.encodings.plaintext))
         self.assertEqual(f'Prop. {header_reference}',
                          header.rep(encoding=pu.encodings.plaintext, cap=True))
         self.assertEqual(f'Proposition {header_reference} - {header_title}',
-                         header.rep_title(text_format=pu.encodings.plaintext, cap=True))
+                         header.rep_title(encoding=pu.encodings.plaintext, cap=True))
         self.assertEqual(f'Prop. {header_reference}',
-                         header.rep_ref(text_format=pu.encodings.plaintext, cap=True))
+                         header.rep_ref(encoding=pu.encodings.plaintext, cap=True))

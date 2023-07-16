@@ -37,5 +37,5 @@ class TestNameSet(TestCase):
 
     def test_nameset_title(self):
         n1 = pu.NameSet(symbol='x', index=1, cat=pu.title_categories.proposition)
-        s1 = n1.rep_title(text_format=pu.encodings.plaintext)
+        s1 = n1.rep_title(encoding=pu.encodings.plaintext)
         print(s1)

@@ -81,7 +81,7 @@ unicode_styled_characters = {
 }
 
 
-def unicode_format(s: str = '', index: int = 0) -> str:
+def unicode_format(s: str = '', index: int = 0, mapping: dict = None) -> str:
     """Formats a string with Unicode formatting.
     
     :param s: A string of basic plaintext (visible ASCII characters).
@@ -89,7 +89,11 @@ def unicode_format(s: str = '', index: int = 0) -> str:
     :return: The string formatted with the desired style.
     """
     global unicode_styled_characters
-    return ''.join([unicode_styled_characters.get(c, c * 14)[index] for c in s])
+    if mapping is not None:
+        return ''.join([mapping.get(c, c) for c in s])
+    else:
+        # Obsolete approach
+        return ''.join([unicode_styled_characters.get(c, c * 14)[index] for c in s])
 
 
 def unicode_sans_serif_normal(s: str):
