@@ -477,7 +477,7 @@ class ComposableBlockSequence(ComposableBlock):
     def rep(self, encoding: (None, Encoding) = None, wrap: (None, bool) = None, **args) -> str:
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
-        # Implement parameter wrap
+        #  Implement parameter wrap
         # wrap = get_config(wrap, configuration.wrap,
         #                  False)
         return ''.join(item.rep(encoding=encoding) for item in
