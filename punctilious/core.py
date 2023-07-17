@@ -1,6 +1,7 @@
 from __future__ import annotations
 import collections.abc
 import textwrap
+import typing
 import warnings
 import repm
 import contextlib
@@ -11,6 +12,11 @@ import unicode_utilities
 import unidecode
 
 
+class PunctiliousException(Exception):
+    def __init__(self, msg, **kwargs):
+        pass
+
+
 def rep_composition(composition: collections.abc.Generator[Composable, None, None] = None,
                     encoding: (None, bool) = None, **kwargs) -> str:
     encoding = prioritize_value(encoding, configuration.encoding, encodings.plaintext)
@@ -19,12 +25,18 @@ def rep_composition(composition: collections.abc.Generator[Composable, None, Non
     else:
         representation = ''
         for item in composition:
-            if isinstance(item, Composable):
+            if item is None:
+                return ''
+            elif isinstance(item, typing.Generator):
+                rep_composition(composition=item, encoding=encoding, **kwargs)
+            elif isinstance(item, Composable):
                 representation = representation + item.rep(encoding=encoding, **kwargs)
             elif isinstance(item, str):
                 representation = representation + item
+            elif isinstance(item, int):
+                representation = representation + str(item)
             else:
-                raise Exception('Unsupported type')
+                raise TypeError(f'Type ⌜{str(type(item))}⌝ is not supported in compositions.')
         return representation
 
 
@@ -558,6 +570,13 @@ class ComposableScriptNormal(ComposableTextWithStyle):
                          unicode=unicode, latex_math=latex_math)
 
 
+class ComposableSerifItalic(ComposableTextWithStyle):
+    def __init__(self, plaintext: str, unicode: (None, str) = None,
+                 latex_math: (None, str) = None) -> None:
+        super().__init__(text_style=text_styles.serif_italic, plaintext=plaintext,
+                         unicode=unicode, latex_math=latex_math)
+
+
 class ComposableSerifNormal(ComposableTextWithStyle):
     def __init__(self, plaintext: str, unicode: (None, str) = None,
                  latex_math: (None, str) = None) -> None:
@@ -999,7 +1018,8 @@ class NameSet(Composable):
 
     def __init__(self,
                  s: (None, str) = None,
-                 symbol: (None, str, ComposableText) = None,
+                 symbol: (None, str, ComposableTextWithStyle) = None,
+                 dashed_name: (None, str, ComposableTextWithStyle) = None,
                  index: (None, int, str, ComposableText) = None,
                  acronym: (None, str, ComposableText) = None,
                  name: (None, str) = None,
@@ -1021,6 +1041,10 @@ class NameSet(Composable):
                 name = s
         self._symbol = ComposableTextWithStyle(s=symbol, text_style=text_styles.serif_italic) \
             if isinstance(symbol, str) else symbol
+        self._dashed_name = dashed_name if isinstance(dashed_name,
+                                                      ComposableTextWithStyle) else \
+            ComposableTextWithStyle(s=dashed_name, text_style=text_styles.serif_italic) \
+                if isinstance(dashed_name, str) else None
         verify(self.symbol is not None, msg='The symbol of this nameset is None.', slf=self)
         self._acronym = acronym
         self._name = name
@@ -1072,6 +1096,21 @@ class NameSet(Composable):
 
     def compose(self) -> collections.abc.Generator[Composable, None, None]:
         yield from self.compose_symbol()
+
+    def compose_dashed_name(self) -> collections.abc.Generator[Composable, None, None]:
+        if self._dashed_name is not None:
+            yield self._dashed_name
+
+    def compose_qualified_symbol(self) -> collections.abc.Generator[Composable, None, None]:
+        if self._dashed_name is None:
+            # Representation of the form: [symbol][index]
+            yield from self.compose_dashed_name()
+        else:
+            # Representation of the form: [dashed-named] ([symbol][index])
+            yield self._dashed_name
+            yield ' ('
+            yield from self.compose_symbol()
+            yield ')'
 
     def compose_symbol(self) -> collections.abc.Generator[Composable, None, None]:
         yield self._symbol
@@ -1169,18 +1208,6 @@ class NameSet(Composable):
             return output
         raise NoNameSolutionException(nameset=self, encoding=encoding)
 
-    def compose_conventional(self):
-        if self._name is not None:
-            yield self._name
-        elif self._acronym is not None:
-            yield self._acronym
-        elif self._symbol is not None:
-            yield self._symbol
-        elif self._explicit_name is not None:
-            yield self._explicit_name
-        else:
-            raise Exception('Failure to generate a conventional designation.')
-
     def rep_conventional(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
         """Returns the most conventional (default) possible name in the nameset for the required text-format.
 
@@ -1203,19 +1230,6 @@ class NameSet(Composable):
             index = '' if self._index is None else ' ' + self._index.rep(encoding=encoding)
             output = None if base is None else f'{base}{index}'
             return output
-
-    def compose_fully_qualified_name(self):
-        conventional = self.rep_conventional(encoding=encoding, cap=cap)
-        sym = self.rep_symbol(encoding=encoding)
-        rep = ComposableBlockSequence()
-        rep.append(conventional)
-        if conventional != sym:
-            rep.append('(')
-            rep.append(sym)
-            rep.append(')')
-        if not compose:
-            rep = rep.rep(encoding=encoding)
-        yield rep
 
     def rep_fully_qualified_name(self, encoding: (None, Encoding) = None,
                                  cap: (None, bool) = None, compose: bool = False):
@@ -1273,14 +1287,11 @@ class NameSet(Composable):
         rep = rep + ' (' + self.rep_symbol(encoding=encoding) + ')'
         return rep
 
-    def rep_symbol(self, encoding: (None, Encoding) = None, **args) -> (None, str):
+    def rep_symbol(self, encoding: (None, Encoding) = None, **kwargs) -> (None, str):
         """Return a string that represent the object as a symbol."""
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
-        composition = ''
-        for item in self.compose_symbol():
-            composition += item.rep(encoding=encoding, **args)
-        return composition
+        rep_composition(composition=self.compose_symbol(), encoding=encoding, **kwargs)
 
     def rep_title(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         """A title of the form: [unabridged-category] [reference] ([symbol]) - [subtitle]
@@ -6470,6 +6481,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
 class UniverseOfDiscourse(SymbolicObject):
     def __init__(self, nameset: (None, str, NameSet) = None,
+                 symbol: (None, str, ComposableTextWithStyle) = None,
+                 dashed_name: (None, str, ComposableTextWithStyle) = None,
                  name: (None, str, ComposableText) = None,
                  echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_universe_of_discourse_declaration,
@@ -6490,17 +6503,18 @@ class UniverseOfDiscourse(SymbolicObject):
         # self.titles = dict()
 
         if nameset is None:
-            symbol = ComposableTextWithStyle(plaintext='U', text_style=text_styles.script_normal)
+            symbol = prioritize_value(symbol, ComposableTextWithStyle(
+                plaintext='U', text_style=text_styles.script_normal))
+            dashed_name = prioritize_value(symbol, ComposableTextWithStyle(
+                plaintext='universe-of-discourse-', text_style=text_styles.serif_italic))
             index = index_universe_of_discourse_symbol(base=symbol)
-            nameset = NameSet(symbol=symbol, index=index, name=name)
+            nameset = NameSet(symbol=symbol, dashed_name=dashed_name, index=index, name=name)
         elif isinstance(nameset, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
             index = index_universe_of_discourse_symbol(base=nameset)
             nameset = NameSet(s=nameset, index=index, name=name)
-        # if dashed_name is None:
-        #    dashed_name = f'universe-of-discourse-{str(symbol.index)}'
         super().__init__(
             is_universe_of_discourse=True,
             is_theory_foundation_system=False,
@@ -6512,38 +6526,15 @@ class UniverseOfDiscourse(SymbolicObject):
             self.echo()
 
     def compose_class(self):
-        yield ComposableSerifNormal(plaintext='universe-of-discourse')
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield ComposableSerifItalic(plaintext='universe-of-discourse')
 
     def compose_declaration(self):
         yield ComposableSansSerifNormal(plaintext='Let ')
-        yield self.nameset.compose_fully_qualified_name()
+        yield from self.nameset.compose_symbol()
         yield ComposableSansSerifNormal(plaintext=' be a ')
-        yield self.compose_class()
+        yield from self.compose_class()
         yield ComposableSansSerifNormal(plaintext='.')
-
-    @property
-    def i(self):
-        """A python dictionary of inference-rules contained in this universe-of-discourse,
-        where well-known inference-rules are directly available as properties."""
-        return self.inference_rules
-
-    @property
-    def inference_rules(self):
-        """A python dictionary of inference-rules contained in this universe-of-discourse,
-        where well-known inference-rules are directly available as properties."""
-        return self._inference_rules
-
-    @property
-    def r(self) -> RelationDict:
-        """A python dictionary of relations contained in this universe-of-discourse,
-        where well-known relations are directly available as properties."""
-        return self.relations
-
-    @property
-    def relations(self) -> RelationDict:
-        """A python dictionary of relations contained in this universe-of-discourse,
-        where well-known relations are directly available as properties."""
-        return self._relations
 
     def cross_reference_axiom(self, a: AxiomDeclaration) -> bool:
         """Cross-references an axiom in this universe-of-discourse.
@@ -6765,33 +6756,23 @@ class UniverseOfDiscourse(SymbolicObject):
         return AxiomDeclaration(
             u=self, natural_language=natural_language, nameset=nameset, echo=echo)
 
-    def take_note(
-            self, t: TheoryElaborationSequence, content: str, nameset: (None, str, NameSet) = None,
-            cat: (None, TitleCategory) = None, ref: (None, str) = None,
-            subtitle: (None, str) = None,
+    def declare_definition(
+            self,
+            natural_language: str,
+            nameset: (None, str, NameSet) = None,
+            title: (None, str, TitleOBSOLETE) = None,
+            dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
-        """Take a note, make a comment, or remark.
+        """Pose a new definition in the current universe-of-discourse.
 
-        Shortcut for Note(theory=t, ...)
-
-        :param t:
-        :param content:
-        :param nameset:
-        :param cat:
-        :param ref:
-        :param subtitle:
-        :param echo:
-        :return:
-        """
-        verify(
-            t.universe_of_discourse is self,
-            'This universe-of-discourse 𝑢₁ (self) is distinct from the universe-of-discourse 𝑢₂ of the theory '
-            'parameter 𝑡.')
-        return Note(theory=t, content=content, nameset=nameset,
-                    cat=cat, ref=ref, subtitle=subtitle, echo=echo)
+        Shortcut for: u.pose_definition(...)"""
+        return DefinitionDeclaration(
+            natural_language=natural_language,
+            u=self,
+            nameset=nameset, title=title, dashed_name=dashed_name, echo=echo)
 
     def echo(self):
-        return repm.prnt(self.rep_declaration())
+        return repm.prnt(self.rep_declaration(cap=True))
 
     def f(
             self, relation: (Relation, FreeVariable), *parameters,
@@ -6815,6 +6796,12 @@ class UniverseOfDiscourse(SymbolicObject):
                               nameset.symbol == symbol and nameset.index_as_int is not None))
         return max(same_symbols, default=0)
 
+    @property
+    def i(self):
+        """A python dictionary of inference-rules contained in this universe-of-discourse,
+        where well-known inference-rules are directly available as properties."""
+        return self.inference_rules
+
     def index_symbol(self, symbol: ComposableText) -> int:
         """Given a symbol-base S (i.e. an unindexed symbol), returns a unique integer n
         such that (S, n) is a unique identifier in this instance of UniverseOfDiscourse.
@@ -6825,32 +6812,11 @@ class UniverseOfDiscourse(SymbolicObject):
         assert isinstance(symbol, ComposableText)
         return self.get_symbol_max_index(symbol) + 1
 
-    def declare_definition(
-            self,
-            natural_language: str,
-            nameset: (None, str, NameSet) = None,
-            title: (None, str, TitleOBSOLETE) = None,
-            dashed_name: (None, str, DashedName) = None,
-            echo: (None, bool) = None):
-        """Pose a new definition in the current universe-of-discourse.
-
-        Shortcut for: u.pose_definition(...)"""
-        return DefinitionDeclaration(
-            natural_language=natural_language,
-            u=self,
-            nameset=nameset, title=title, dashed_name=dashed_name, echo=echo)
-
     @property
-    def simple_objcts(self) -> SimpleObjctDict:
-        """The collection of simple-objcts in this universe-of-discourse.
-
-        Abridged version: u.o
-
-        Well-known simple-objcts are exposed as python properties. In general, a well-known simple-objct is declared in the universe-of-discourse the first time its property is accessed.
-
-        :return:
-        """
-        return self._simple_objcts
+    def inference_rules(self):
+        """A python dictionary of inference-rules contained in this universe-of-discourse,
+        where well-known inference-rules are directly available as properties."""
+        return self._inference_rules
 
     @property
     def o(self) -> SimpleObjctDict:
@@ -6864,13 +6830,32 @@ class UniverseOfDiscourse(SymbolicObject):
         """
         return self.simple_objcts
 
-    def rep_declaration(self, encoding: (None, Encoding) = None, compose: bool = False) -> (
-            str, ComposableBlockSequence):
-        rep = Paragraph()
-        rep.append('Let')
-        rep.append(self.rep_fully_qualified_name())
-        rep.append('be a universe-of-discourse.')
-        return rep.rep(encoding=encoding, compose=compose)
+    @property
+    def r(self) -> RelationDict:
+        """A python dictionary of relations contained in this universe-of-discourse,
+        where well-known relations are directly available as properties."""
+        return self.relations
+
+    @property
+    def relations(self) -> RelationDict:
+        """A python dictionary of relations contained in this universe-of-discourse,
+        where well-known relations are directly available as properties."""
+        return self._relations
+
+    def rep_declaration(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
+        return rep_composition(composition=self.compose_declaration(), encoding=encoding, cap=cap)
+
+    @property
+    def simple_objcts(self) -> SimpleObjctDict:
+        """The collection of simple-objcts in this universe-of-discourse.
+
+        Abridged version: u.o
+
+        Well-known simple-objcts are exposed as python properties. In general, a well-known simple-objct is declared in the universe-of-discourse the first time its property is accessed.
+
+        :return:
+        """
+        return self._simple_objcts
 
     def so(self, symbol=None):
         return self.declare_symbolic_objct(
@@ -6902,6 +6887,31 @@ class UniverseOfDiscourse(SymbolicObject):
             extended_theory_limit=extended_theory_limit,
             stabilized=stabilized,
             echo=echo)
+
+    def take_note(
+            self, t: TheoryElaborationSequence, content: str, nameset: (None, str, NameSet) = None,
+            cat: (None, TitleCategory) = None, ref: (None, str) = None,
+            subtitle: (None, str) = None,
+            echo: (None, bool) = None):
+        """Take a note, make a comment, or remark.
+
+        Shortcut for Note(theory=t, ...)
+
+        :param t:
+        :param content:
+        :param nameset:
+        :param cat:
+        :param ref:
+        :param subtitle:
+        :param echo:
+        :return:
+        """
+        verify(
+            t.universe_of_discourse is self,
+            'This universe-of-discourse 𝑢₁ (self) is distinct from the universe-of-discourse 𝑢₂ of the theory '
+            'parameter 𝑡.')
+        return Note(theory=t, content=content, nameset=nameset,
+                    cat=cat, ref=ref, subtitle=subtitle, echo=echo)
 
     # @FreeVariableContext()
     @contextlib.contextmanager
