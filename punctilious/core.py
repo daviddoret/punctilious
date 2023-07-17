@@ -551,6 +551,20 @@ class ComposableSansSerifNormal(ComposableTextWithStyle):
                          unicode=unicode, latex_math=latex_math)
 
 
+class ComposableScriptNormal(ComposableTextWithStyle):
+    def __init__(self, plaintext: str, unicode: (None, str) = None,
+                 latex_math: (None, str) = None) -> None:
+        super().__init__(text_style=text_styles.script_normal, plaintext=plaintext,
+                         unicode=unicode, latex_math=latex_math)
+
+
+class ComposableSerifNormal(ComposableTextWithStyle):
+    def __init__(self, plaintext: str, unicode: (None, str) = None,
+                 latex_math: (None, str) = None) -> None:
+        super().__init__(text_style=text_styles.serif_normal, plaintext=plaintext,
+                         unicode=unicode, latex_math=latex_math)
+
+
 class Subscript(ComposableTextWithStyle):
     def __init__(self, plaintext: str, unicode: (None, str) = None,
                  latex_math: (None, str) = None) -> None:
@@ -6496,6 +6510,16 @@ class UniverseOfDiscourse(SymbolicObject):
         super()._declare_class_membership(classes.universe_of_discourse)
         if echo:
             self.echo()
+
+    def compose_class(self):
+        yield ComposableSerifNormal(plaintext='universe-of-discourse')
+
+    def compose_declaration(self):
+        yield ComposableSansSerifNormal(plaintext='Let ')
+        yield self.nameset.compose_fully_qualified_name()
+        yield ComposableSansSerifNormal(plaintext=' be a ')
+        yield self.compose_class()
+        yield ComposableSansSerifNormal(plaintext='.')
 
     @property
     def i(self):

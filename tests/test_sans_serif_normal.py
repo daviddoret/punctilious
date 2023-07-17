@@ -5,9 +5,12 @@ import random_data
 
 class TestSansSerifNormal(TestCase):
     def test_sans_serif_normal(self):
-        # TODO: Extend testing to latex math
-        compo = pu.ComposableSansSerifNormal(plaintext='hello world')
+        compo = pu.ComposableSansSerifNormal(plaintext=random_data.pangram1)
 
-        self.assertEqual('hello world', compo.rep(encoding=pu.encodings.plaintext))
-        self.assertEqual('𝗁𝖾𝗅𝗅𝗈 𝗐𝗈𝗋𝗅𝖽', compo.rep(encoding=pu.encodings.unicode))
-        self.assertEqual('\\mathsf{hello world}', compo.rep(encoding=pu.encodings.latex_math))
+        self.assertEqual('the quick brown fox jumps over the lazy dog. 0123456789!',
+                         compo.rep(encoding=pu.encodings.plaintext))
+        self.assertEqual(
+            '𝗍𝗁𝖾 𝗊𝗎𝗂𝖼𝗄 𝖻𝗋𝗈𝗐𝗇 𝖿𝗈𝗑 𝗃𝗎𝗆𝗉𝗌 𝗈𝗏𝖾𝗋 𝗍𝗁𝖾 𝗅𝖺𝗓𝗒 𝖽𝗈𝗀. 𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫!',
+            compo.rep(encoding=pu.encodings.unicode))
+        self.assertEqual('\\mathsf{the quick brown fox jumps over the lazy dog. 0123456789!}',
+                         compo.rep(encoding=pu.encodings.latex_math))
