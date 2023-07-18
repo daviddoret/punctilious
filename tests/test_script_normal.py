@@ -5,7 +5,7 @@ import random_data
 
 class TestScriptNormal(TestCase):
     def test_script_normal(self):
-        compo = pu.ComposableScriptNormal(plaintext=random_data.pangram1)
+        compo = pu.ScriptNormal(plaintext=random_data.pangram1)
 
         self.assertEqual('the quick brown fox jumps over the lazy dog. 0123456789!',
                          compo.rep(encoding=pu.encodings.plaintext, cap=False))

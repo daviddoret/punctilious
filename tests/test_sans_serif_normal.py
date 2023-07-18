@@ -5,7 +5,7 @@ import random_data
 
 class TestSansSerifNormal(TestCase):
     def test_sans_serif_normal(self):
-        compo = pu.ComposableSansSerifNormal(plaintext=random_data.pangram1)
+        compo = pu.SansSerifNormal(plaintext=random_data.pangram1)
 
         self.assertEqual('the quick brown fox jumps over the lazy dog. 0123456789!',
                          compo.rep(encoding=pu.encodings.plaintext))
