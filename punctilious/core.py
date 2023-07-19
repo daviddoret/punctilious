@@ -317,7 +317,7 @@ class TextDict:
                                                 latex_math='\\right\\ulcorner')
         self.open_quasi_quote = ComposableText(plaintext='"', unicode='⌜',
                                                latex_math='\\left\\ulcorner')
-        self.close_parenthesis = ComposableText(plaintext=')', latex_math='\\right(')
+        self.close_parenthesis = ComposableText(plaintext=')', latex_math='\\right)')
         self.open_parenthesis = ComposableText(plaintext='(', latex_math='\\left(')
         self.formula_parameter_separator = ComposableText(plaintext=', ')
 
@@ -2483,8 +2483,8 @@ class Formula(TheoreticalObject):
         for p in self.parameters:
             if not first_item:
                 yield text_dict.formula_parameter_separator
-                first_item = False
             yield from p.compose_formula()
+            first_item = False
         yield text_dict.close_parenthesis
 
     def rep_function_call(self, encoding: (None, Encoding) = None,
