@@ -179,6 +179,28 @@ class ComposableText(Composable):
         return self._unicode
 
 
+def yield_composition(*content, pre: (None, str, Composable) = None,
+                      post: (None, str, Composable) = None) -> collections.abc.Generator[
+    Composable, None, None]:
+    """A utility function that simplifies yielding compositions.
+
+    Only yield elements that are not None.
+    Yield ⌜pre⌝ if there is at least one non-None element in ⌜*content⌝.
+    Yield all elements of ⌜*content⌝.
+    Yield ⌜post⌝ if there is at least one non-None element in ⌜*content⌝.
+    """
+    if content is not None and any(element is not None for element in content):
+        yield from yield_composition(pre)
+        for element in content:
+            if isinstance(element, str):
+                yield from ComposableText(s=element).compose()
+            elif isinstance(element, Composable):
+                yield from element.compose()
+            else:
+                raise TypeError('body of unsupported type')
+        yield from yield_composition(post)
+
+
 class TextStyle:
     """A supported text style."""
 
@@ -1050,12 +1072,12 @@ class NameSet(Composable):
     def __init__(self,
                  s: (None, str) = None,
                  symbol: (None, str, StyledText) = None,
-                 dashed_name: (None, str, StyledText) = None,
                  index: (None, int, str, ComposableText) = None,
+                 dashed_name: (None, str, StyledText) = None,
                  acronym: (None, str, ComposableText) = None,
                  name: (None, str) = None,
                  ref: (None, str) = None,
-                 cat: (None, TitleCategory) = None,
+                 cat: (None, TitleCategoryOBSOLETE) = None,
                  subtitle: (None, str, ComposableText) = None,
                  explicit_name: (None, str, ComposableText) = None):
         if s is not None:
@@ -1114,39 +1136,65 @@ class NameSet(Composable):
         return self._acronym
 
     @property
-    def cat(self) -> TitleCategory:
+    def cat(self) -> TitleCategoryOBSOLETE:
         """The category of this statement."""
         return self._cat
 
     @cat.setter
-    def cat(self, cat: TitleCategory):
+    def cat(self, cat: TitleCategoryOBSOLETE):
         """TODO: Remove this property setter to only set property values at init-time,
         and make the hash stable. This quick-fix was necessary while migrating from
         the old approach that used the obsolete Title class."""
         self._cat = cat
 
-    def compose(self) -> collections.abc.Generator[Composable, None, None]:
-        yield from self.compose_symbol()
+    def compose(self, pre: (None, str, Composable) = None,
+                post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, None, None]:
+        yield from self.compose_symbol(pre=pre, post=post)
 
-    def compose_dashed_name(self) -> collections.abc.Generator[Composable, None, None]:
-        if self._dashed_name is not None:
-            yield self._dashed_name
+    def compose_cat(self, pre: (None, str, Composable) = None,
+                    post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, None, None]:
+        yield from yield_composition(self._cat, pre=pre, post=post)
 
-    def compose_qualified_symbol(self) -> collections.abc.Generator[Composable, None, None]:
+    def compose_dashed_name(self, pre: (None, str, Composable) = None,
+                            post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, None, None]:
+        yield from yield_composition(self._dashed_name, pre=pre, post=post)
+
+    def compose_explicit_name(self, pre: (None, str, Composable) = None,
+                              post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, None, None]:
+        yield from yield_composition(self._explicit_name, pre=pre, post=post)
+
+    def compose_name(self, pre: (None, str, Composable) = None,
+                     post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, None, None]:
+        yield from yield_composition(self._name, pre=pre, post=post)
+
+    def compose_qualified_symbol(self, pre: (None, str, Composable) = None,
+                                 post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, None, None]:
+        """Composes: ⌜[dashed-name] ([symbol])⌝, or ⌜[symbol]⌝ if dashed-name is None. The rationale is to enrich the symbol with a more meaningful dashed-name if it is available."""
         if self._dashed_name is None:
             # Representation of the form: [symbol][index]
-            yield from self.compose_dashed_name()
+            yield from self.compose_symbol(pre=pre, post=post)
         else:
             # Representation of the form: [dashed-named] ([symbol][index])
-            yield self._dashed_name
-            yield ' ('
-            yield from self.compose_symbol()
-            yield ')'
+            yield from yield_composition(pre)
+            yield from self.compose_dashed_name()
+            yield from self.compose_symbol(pre=' (', post=')')
+            yield from yield_composition(post)
 
-    def compose_symbol(self) -> collections.abc.Generator[Composable, None, None]:
-        yield self._symbol
-        if self._index is not None:
-            yield self._index
+    def compose_ref(self, pre: (None, str, Composable) = None,
+                    post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, None, None]:
+        yield from yield_composition(self._ref, pre=pre, post=post)
+
+    def compose_symbol(self, pre: (None, str, Composable) = None,
+                       post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, None, None]:
+        yield from yield_composition(self._symbol, self._index, pre=pre, post=post)
 
     @property
     def explicit_name(self) -> ComposableText:
@@ -1298,12 +1346,8 @@ class NameSet(Composable):
         """Return a string that represent the object as a plain name."""
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
-        if self._name is None:
-            return ''
-        else:
-            return StyledText(s=self._name,
-                              text_style=text_styles.sans_serif_normal).rep(
-                encoding=encoding, cap=cap)
+        cap = prioritize_value(cap, False)
+        rep_composition(composition=self.compose_name(), encoding=encoding, cap=cap)
 
     def rep_ref(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         rep = '' if self._cat is None else StyledText(s=self._cat.abridged_name,
@@ -1325,7 +1369,11 @@ class NameSet(Composable):
         rep_composition(composition=self.compose_symbol(), encoding=encoding, **kwargs)
 
     def compose_title(self) -> collections.abc.Generator[Composable, None, None]:
-        pass
+        global text_dict
+        yield from self.compose_category(cap=True, post=text_dict.space)
+        yield from self.compose_ref(post=text_dict.space)
+        yield from self.compose_symbol(pre=' (', post=') ')
+        yield from self.compose_subtitle(pre=' - ')
 
     def rep_title(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         """A title of the form: [unabridged-category] [reference] ([symbol]) - [subtitle]
@@ -1394,7 +1442,7 @@ class TitleOBSOLETE:
     """
 
     def __init__(self, nameset: (None, NameSet) = None, ref: (None, str, ComposableText) = None,
-                 cat: (None, TitleCategory) = None,
+                 cat: (None, TitleCategoryOBSOLETE) = None,
                  subtitle: (None, str, ComposableText) = None,
                  abr: (None, str, ComposableText) = None):
         if isinstance(ref, str):
@@ -1427,7 +1475,7 @@ class TitleOBSOLETE:
         return self.rep(encoding=encodings.plaintext)
 
     @property
-    def cat(self) -> TitleCategory:
+    def cat(self) -> TitleCategoryOBSOLETE:
         """The category of this statement."""
         return self._cat
 
@@ -1535,7 +1583,7 @@ class SymbolicObject:
             universe_of_discourse: (None, UniverseOfDiscourse),
             is_theory_foundation_system: bool = False,
             is_universe_of_discourse: bool = False,
-            cat: (None, TitleCategory) = None,
+            cat: (None, TitleCategoryOBSOLETE) = None,
             ref: (None, str) = None,
             echo: bool = False):
         echo = prioritize_value(echo, configuration.echo_symbolic_objct, configuration.echo_default,
@@ -1585,6 +1633,9 @@ class SymbolicObject:
 
     def compose(self) -> collections.abc.Generator[Composable, None, None]:
         yield from self.nameset.compose()
+
+    def compose_cat(self) -> collections.abc.Generator[Composable, None, None]:
+        yield from self.nameset.compose_cat()
 
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         yield SerifItalic(plaintext='symbolic-object')
@@ -1760,7 +1811,7 @@ class TheoreticalObject(SymbolicObject):
             nameset: (None, str, NameSet),
             universe_of_discourse: UniverseOfDiscourse,
             is_theory_foundation_system: bool = False,
-            cat: (None, TitleCategory) = None,
+            cat: (None, TitleCategoryOBSOLETE) = None,
             ref: (None, str) = None,
             echo: bool = False):
         # pseudo-class properties. these must be overwritten by
@@ -2689,7 +2740,9 @@ class SimpleObjctDict(collections.UserDict):
         return self._truth
 
 
-class TitleCategory(repm.ValueName):
+class TitleCategoryOBSOLETE(repm.ValueName):
+    """TODO: Replace this with ComposableText"""
+
     def __init__(self, name, symbol_base, natural_name, abridged_name):
         self.symbol_base = symbol_base
         self.natural_name = natural_name
@@ -2710,35 +2763,37 @@ class TitleCategory(repm.ValueName):
 
 class TitleCategories(repm.ValueName):
     # axiom = TitleCategory('axiom', 's', 'axiom', 'axiom')
-    axiom_declaration = TitleCategory('axiom_declaration', 's', 'axiom', 'axiom')
-    axiom_inclusion = TitleCategory('axiom_inclusion', 's', 'axiom', 'axiom')
-    corollary = TitleCategory('corollary', 's', 'corollary', 'cor.')
-    definition_declaration = TitleCategory('definition_declaration', 's', 'definition', 'def.')
-    definition_inclusion = TitleCategory('definition_inclusion', 's', 'definition', 'def.')
-    hypothesis = TitleCategory('hypothesis', 's', 'hypothesis', 'hyp.')
-    inference_rule = TitleCategory('inference_rule', 's', 'inference rule', 'inference rule')
-    inference_rule_inclusion = TitleCategory('inference_rule_inclusion', 's',
-                                             'inference rule inclusion', 'i.-r.')
+    axiom_declaration = TitleCategoryOBSOLETE('axiom_declaration', 's', 'axiom', 'axiom')
+    axiom_inclusion = TitleCategoryOBSOLETE('axiom_inclusion', 's', 'axiom', 'axiom')
+    corollary = TitleCategoryOBSOLETE('corollary', 's', 'corollary', 'cor.')
+    definition_declaration = TitleCategoryOBSOLETE('definition_declaration', 's', 'definition',
+                                                   'def.')
+    definition_inclusion = TitleCategoryOBSOLETE('definition_inclusion', 's', 'definition', 'def.')
+    hypothesis = TitleCategoryOBSOLETE('hypothesis', 's', 'hypothesis', 'hyp.')
+    inference_rule = TitleCategoryOBSOLETE('inference_rule', 's', 'inference rule',
+                                           'inference rule')
+    inference_rule_inclusion = TitleCategoryOBSOLETE('inference_rule_inclusion', 's',
+                                                     'inference rule inclusion', 'i.-r.')
     inferred_proposition = ('inferred_proposition', 's', 'inferred-proposition')
-    lemma = TitleCategory('lemma', 's', 'lemma', 'lem.')
-    proposition = TitleCategory('proposition', 's', 'proposition', 'prop.')
-    theorem = TitleCategory('theorem', 's', 'theorem', 'thrm.')
-    theory_elaboration_sequence = TitleCategory('theory_elaboration_sequence', 't',
-                                                'theory elaboration sequence',
-                                                'theo.')
-    comment = TitleCategory('comment',
-                            StyledText(s='comment',
-                                       text_style=text_styles.serif_italic),
-                            'comment', 'cmt.')
-    note = TitleCategory('note',
-                         StyledText(s='note', text_style=text_styles.serif_italic),
-                         'note',
-                         'note')
-    remark = TitleCategory('remark',
-                           StyledText(s='remark', text_style=text_styles.serif_italic),
-                           'remark', 'rmrk.')
+    lemma = TitleCategoryOBSOLETE('lemma', 's', 'lemma', 'lem.')
+    proposition = TitleCategoryOBSOLETE('proposition', 's', 'proposition', 'prop.')
+    theorem = TitleCategoryOBSOLETE('theorem', 's', 'theorem', 'thrm.')
+    theory_elaboration_sequence = TitleCategoryOBSOLETE('theory_elaboration_sequence', 't',
+                                                        'theory elaboration sequence',
+                                                        'theo.')
+    comment = TitleCategoryOBSOLETE('comment',
+                                    StyledText(s='comment',
+                                               text_style=text_styles.serif_italic),
+                                    'comment', 'cmt.')
+    note = TitleCategoryOBSOLETE('note',
+                                 StyledText(s='note', text_style=text_styles.serif_italic),
+                                 'note',
+                                 'note')
+    remark = TitleCategoryOBSOLETE('remark',
+                                   StyledText(s='remark', text_style=text_styles.serif_italic),
+                                   'remark', 'rmrk.')
     # Special categories
-    uncategorized = TitleCategory('uncategorized', 's', 'uncategorized', 'uncat.')
+    uncategorized = TitleCategoryOBSOLETE('uncategorized', 's', 'uncategorized', 'uncat.')
 
 
 title_categories = TitleCategories('title_categories')
@@ -2766,7 +2821,7 @@ class Statement(TheoreticalObject):
             self,
             theory: TheoryElaborationSequence,
             nameset: (None, str, NameSet) = None,
-            cat: (None, TitleCategory) = None,
+            cat: (None, TitleCategoryOBSOLETE) = None,
             ref: (None, str) = None,
             echo: bool = False):
         self._theory = theory
@@ -2786,7 +2841,7 @@ class Statement(TheoreticalObject):
             self.echo()
 
     @property
-    def category(self) -> TitleCategory:
+    def category(self) -> TitleCategoryOBSOLETE:
         """The statement-category assigned to this statement.
 
         :return:
@@ -3018,7 +3073,7 @@ class InferenceRuleInclusion(Statement):
                         *args,
                         nameset: (None, str, NameSet) = None,
                         ref: (None, str) = None,
-                        cat: (None, TitleCategory) = None,
+                        cat: (None, TitleCategoryOBSOLETE) = None,
                         subtitle: (None, str) = None,
                         echo: (None, bool) = None) -> InferredStatement:
         """
@@ -3189,7 +3244,7 @@ class FormulaStatement(Statement):
 
     def __init__(
             self, theory: TheoryElaborationSequence, valid_proposition: Formula,
-            nameset: (None, NameSet) = None, cat: (None, TitleCategory) = None,
+            nameset: (None, NameSet) = None, cat: (None, TitleCategoryOBSOLETE) = None,
             title: (None, TitleOBSOLETE) = None, dashed_name: (None, DashedName) = None,
             echo=None):
         echo = prioritize_value(echo, configuration.echo_statement, configuration.echo_default,
@@ -3517,7 +3572,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
             t: TheoryElaborationSequence,
             nameset: (None, str, NameSet) = None,
             ref: (None, str) = None,
-            cat: (None, TitleCategory) = None,
+            cat: (None, TitleCategoryOBSOLETE) = None,
             subtitle: (None, str) = None,
             echo: (None, bool) = None, **kwargs) -> InferredStatement:
         """Apply this inference-rules on input statements and return the resulting statement."""
@@ -3595,7 +3650,7 @@ class Note(AtheoreticalStatement):
     def __init__(
             self, theory: TheoryElaborationSequence, content: str,
             nameset: (None, str, NameSet) = None,
-            cat: (None, TitleCategory) = None, ref: (None, str) = None,
+            cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str) = None,
             subtitle: (None, str) = None,
             echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_note, configuration.echo_default,
@@ -3653,7 +3708,7 @@ class Note(AtheoreticalStatement):
                 tabsize=4)) + f'\n'
 
 
-section_category = TitleCategory(
+section_category = TitleCategoryOBSOLETE(
     name='section', symbol_base='§', natural_name='section', abridged_name='sect.')
 
 
@@ -4159,7 +4214,7 @@ class TheoryElaborationSequence(TheoreticalObject):
         self._stabilized = True
 
     def take_note(self, content: str, nameset: (None, str, NameSet) = None, ref: (None, str) = None,
-                  cat: (None, TitleCategory) = None, subtitle: (None, str) = None,
+                  cat: (None, TitleCategoryOBSOLETE) = None, subtitle: (None, str) = None,
                   echo: (None, bool) = None) -> Note:
         """Take a note, make a comment, or remark in this theory.
 
@@ -7049,7 +7104,7 @@ class UniverseOfDiscourse(SymbolicObject):
 
     def take_note(
             self, t: TheoryElaborationSequence, content: str, nameset: (None, str, NameSet) = None,
-            cat: (None, TitleCategory) = None, ref: (None, str) = None,
+            cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str) = None,
             subtitle: (None, str) = None,
             echo: (None, bool) = None):
         """Take a note, make a comment, or remark.
@@ -7113,7 +7168,7 @@ class InferredStatement(FormulaStatement):
             t: TheoryElaborationSequence,
             nameset: (None, str, NameSet) = None,
             ref: (None, str) = None,
-            cat: (None, TitleCategory) = None,
+            cat: (None, TitleCategoryOBSOLETE) = None,
             subtitle: (None, str) = None,
             echo: (None, bool) = None):
         """Include (aka allow) an inference_rule in a theory-elaboration.
