@@ -18,5 +18,5 @@ class TestFormula(TestCase):
         self.assertEqual('r1(o1)', str(phi1.rep_formula(encoding=pu.encodings.plaintext)))
         self.assertEqual('𝑟₁(𝑜₁)', str(phi1.rep_formula(encoding=pu.encodings.unicode)))
         self.assertEqual(
-            '\\mathit{r}_{1}(\\mathit{o}_{1})',
+            '\\mathit{r}_{1}\\left(\\mathit{o}_{1}\\right(',
             str(phi1.rep_formula(encoding=pu.encodings.latex_math)))

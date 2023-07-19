@@ -12,6 +12,14 @@ import unicode_utilities
 import unidecode
 
 
+def prioritize_value(*args):
+    """Return the first not None value."""
+    for a in args:
+        if a is not None:
+            return a
+    return None
+
+
 class PunctiliousException(Exception):
     def __init__(self, msg, **kwargs):
         pass
@@ -299,8 +307,19 @@ class TextDict:
     def __init__(self):
         self.comma = ComposableText(plaintext=', ')
         self.empty_string = ComposableText(plaintext='')
+        self.in2 = None
+        self.let = None
+        self.be_a = None
+        self.be_an = None
         self.period = ComposableText(plaintext='.')
         self.space = ComposableText(plaintext=' ')
+        self.close_quasi_quote = ComposableText(plaintext='"', unicode='⌝',
+                                                latex_math='\\right\\ulcorner')
+        self.open_quasi_quote = ComposableText(plaintext='"', unicode='⌜',
+                                               latex_math='\\left\\ulcorner')
+        self.close_parenthesis = ComposableText(plaintext=')', latex_math='\\right(')
+        self.open_parenthesis = ComposableText(plaintext='(', latex_math='\\left(')
+        self.formula_parameter_separator = ComposableText(plaintext=', ')
 
 
 text_dict = TextDict()
@@ -521,6 +540,20 @@ class QuasiQuotation(ComposableBlockSequence):
     _static_start_tag = ComposableText(plaintext='"', unicode='⌜')
 
 
+class ParentheticalExpression(ComposableBlockSequence):
+    """A parenthetical-expression is the representation of a formula or sub-formula where the content is included between an opening and closing parenthesis.
+
+    """
+
+    def __init__(self, iterable: (None, collections.Iterable) = None) -> None:
+        super().__init__(content=iterable, start_tag=QuasiQuotation._static_start_tag,
+                         end_tag=QuasiQuotation._static_end_tag)
+
+    _static_end_tag = ComposableText(plaintext=')', latex_math='\\right)')
+
+    _static_start_tag = ComposableText(plaintext='(', unicode='\\left(')
+
+
 class Paragraph(ComposableBlockSequence):
     def __init__(self, iterable: (None, collections.Iterable) = None) -> None:
         super().__init__(content=iterable, start_tag=Paragraph._static_start_tag,
@@ -561,6 +594,12 @@ class SansSerifNormal(StyledText):
                  latex_math: (None, str) = None) -> None:
         super().__init__(text_style=text_styles.sans_serif_normal, plaintext=plaintext,
                          unicode=unicode, latex_math=latex_math)
+
+
+text_dict.in2 = SansSerifNormal(plaintext='in')
+text_dict.let = SansSerifNormal(plaintext='let')
+text_dict.be_a = SansSerifNormal(plaintext='be a')
+text_dict.be_an = SansSerifNormal(plaintext='be an')
 
 
 class ScriptNormal(StyledText):
@@ -846,14 +885,6 @@ class Configuration:
 
 
 configuration = Configuration()
-
-
-def prioritize_value(*args):
-    """Return the first not None value."""
-    for a in args:
-        if a is not None:
-            return a
-    return None
 
 
 def unpack_formula(o: (TheoreticalObject, Formula, FormulaStatement)) -> Formula:
@@ -1549,6 +1580,34 @@ class SymbolicObject:
     def __str__(self):
         return self.rep_symbol(encoding=encodings.plaintext)
 
+    def compose(self) -> collections.abc.Generator[Composable, None, None]:
+        yield from self.nameset.compose()
+
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
+        yield SerifItalic(plaintext='symbolic-object')
+
+    def compose_declaration(self, close_punctuation: Composable = None, cap: bool = None) -> \
+            collections.abc.Generator[Composable, None, None]:
+        """TODO: _declaration must be reserved to TheoreticalObjcts. SymbolObjcts should use a distinct verb to mean "report".
+        """
+        yield from text_dict.let.compose(cap=cap)  # TODO: Support cap parameter
+        yield text_dict.space
+        yield text_dict.open_quasi_quote
+        yield from self.compose_symbol()
+        yield text_dict.close_quasi_quote
+        yield text_dict.space
+        yield text_dict.be_a
+        yield text_dict.space
+        yield from self.compose_class()
+        yield text_dict.space
+        yield text_dict.in2
+        yield text_dict.space
+        yield from self.universe_of_discourse.compose_symbol()
+        yield prioritize_value(close_punctuation, text_dict.period)
+
+    def compose_symbol(self) -> collections.abc.Generator[Composable, None, None]:
+        yield from self.nameset.compose_symbol()
+
     @property
     def declarative_classes(self) -> frozenset[DeclarativeClass]:
         """The set of declarative-classes this symbolic-objct is a member of."""
@@ -1610,25 +1669,20 @@ class SymbolicObject:
         return True
 
     def prnt(self, encoding: (None, Encoding) = None, expand=False):
-        repm.prnt(self.rep(encoding=encoding, expand=expand))
-
-    def compose(self) -> collections.abc.Generator[Composable, None, None]:
-        yield from self.nameset.compose()
+        repm.prnt(self.nameset.rep(encoding=encoding, expand=expand))
 
     def rep(self, encoding: (None, Encoding) = None, **kwargs) -> str:
         return rep_composition(composition=self.compose(), encoding=encoding, **kwargs)
 
-    def rep_dashed_name(self, encoding: (None, Encoding) = None) -> str:
-        """"""
-        if self.dashed_name is None:
-            return ''
-        return self.dashed_name.rep_dashed_name(encoding=encoding)
-
     def rep_declaration(self, encoding: (None, Encoding) = None) -> str:
+        """TODO: _declaration must be reserved to TheoreticalObjcts. SymbolObjcts should use a distinct verb to mean "report".
+        """
         return f'Let {self.rep_fully_qualified_name(encoding=encoding)} be a symbolic-objct in {self.universe_of_discourse.rep_symbol(encoding=encoding)}.' + '\n'
 
     def rep_formula(self, encoding: (None, Encoding) = None,
                     expand: (None, bool) = None) -> str:
+        """TODO: _formula must be reserved to TheoreticalObjcts. SymbolObjcts should use a distinct verb to mean "report".
+        """
         """If supported, return a formula representation,
         a symbolic representation otherwise.
 
@@ -2032,6 +2086,25 @@ class TheoreticalObject(SymbolicObject):
         """Return True if o is in this theory's hierarchy, False otherwise."""
         return o in self.iterate_theoretical_objcts_references(include_root=True)
 
+    def compose_declaration(self):
+        pass
+
+    def rep_declaration(self, encoding: (None, Encoding) = None) -> str:
+        """TODO: _declaration must be reserved to TheoreticalObjcts. SymbolObjcts should use a distinct verb to mean "report".
+        """
+        return f'Let {self.rep_fully_qualified_name(encoding=encoding)} be a symbolic-objct in {self.universe_of_discourse.rep_symbol(encoding=encoding)}.' + '\n'
+
+    def compose_formula(self) -> collections.abc.Generator[Composable, None, None]:
+        yield from self.compose_symbol()
+
+    def rep_formula(self, encoding: (None, Encoding) = None,
+                    expand: (None, bool) = None) -> str:
+        """Return a formula representation, which is equivalent to a symbolic representation for non-formula objects.
+        """
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
+        return rep_composition(composition=self.compose_formula(), encoding=encoding)
+
 
 def substitute_xy(o, x, y):
     """Return the result of a *substitution* of x with y on o."""
@@ -2402,48 +2475,72 @@ class Formula(TheoreticalObject):
         else:
             return super().rep(encoding=encoding, expand=expand)
 
-    def rep_as_function_call(self, encoding: (None, Encoding) = None,
-                             expand: (None, bool) = None) -> str:
-        encoding = prioritize_value(encoding, configuration.encoding,
-                                    encodings.plaintext)
-        expand = True if expand is None else expand
-        assert isinstance(expand, bool)
-        return f'{self.relation.rep_formula(encoding=encoding)}({", ".join([p.rep_formula(encoding=encoding) for p in self.parameters])})'
+    def compose_function_call(self) -> collections.abc.Generator[Composable, None, None]:
+        global text_dict
+        yield from self.relation.compose_formula()
+        yield text_dict.open_parenthesis
+        first_item = True
+        for p in self.parameters:
+            if not first_item:
+                yield text_dict.formula_parameter_separator
+                first_item = False
+            yield from p.compose_formula()
+        yield text_dict.close_parenthesis
 
-    def rep_as_infix_operator(self, encoding: (None, Encoding) = None,
-                              expand=(None, bool)) -> str:
+    def rep_function_call(self, encoding: (None, Encoding) = None,
+                          expand: (None, bool) = None) -> str:
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
-        expand = True if expand is None else expand
-        assert self.relation.arity == 2
-        return f'({self.parameters[0].rep(encoding=encoding, expand=expand)} {self.relation.rep_symbol(encoding=encoding)} {self.parameters[1].rep(encoding=encoding, expand=expand)})'
+        return rep_composition(composition=self.compose_function_call(), encoding=encoding)
 
-    def rep_as_postfix_operator(self, encoding: (None, Encoding) = None, expand=None) -> str:
+    def compose_infix_operator(self) -> collections.abc.Generator[Composable, None, None]:
+        verify(assertion=self.relation.arity == 2,
+               msg='Relation is not binary, formula-representation-style is infix.',
+               relation=self.relation, slf=self)
+        global text_dict
+        yield text_dict.open_parenthesis
+        yield from self.parameters[0].compose_formula()
+        yield from self.relation.compose_formula()
+        yield from self.parameters[1].compose_formula()
+        yield text_dict.close_parenthesis
+
+    def rep_infix_operator(self, encoding: (None, Encoding) = None,
+                           expand=(None, bool), **kwargs) -> str:
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
-        expand = True if expand is None else expand
-        assert isinstance(expand, bool)
-        assert self.relation.arity == 1
-        return f'({self.parameters[0].rep(encoding=encoding, expand=expand)}){self.relation.rep_symbol(encoding=encoding)}'
+        return rep_composition(composition=self.compose_infix_operator(), encoding=encoding)
+
+    def compose_postfix_operator(self) -> collections.abc.Generator[Composable, None, None]:
+        verify(assertion=len(self.parameters) == 1,
+               msg='Postfix-operator formula representation is used but arity is not equal to 1',
+               slf=self)
+        global text_dict
+        yield text_dict.open_parenthesis
+        yield from self.parameters[0].compose_formula()
+        yield text_dict.close_parenthesis
+        yield from self.relation.compose_formula()
+
+    def rep_postfix_operator(self, encoding: (None, Encoding) = None, expand=None) -> str:
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
+        return rep_composition(composition=self.compose_postfix_operator(), encoding=encoding)
+
+    def compose_prefix_operator(self) -> collections.abc.Generator[Composable, None, None]:
+        verify(assertion=len(self.parameters) == 1,
+               msg='Prefix-operator formula representation is used but arity is not equal to 1',
+               slf=self)
+        global text_dict
+        yield from self.relation.compose_formula()
+        yield text_dict.open_parenthesis
+        yield from self.parameters[0].compose_formula()
+        yield text_dict.close_parenthesis
 
     def rep_as_prefix_operator(self, encoding: (None, Encoding) = None, expand=None) -> str:
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
-        expand = True if expand is None else expand
-        verify(
-            isinstance(expand, bool),
-            'Method parameter "expand" is not an instance of bool.',
-            self=self, expand=expand)
-        verify(
-            self.relation.arity == 1,
-            'Attempt to represent prefix operator, but relation arity is not equal to 1.',
-            self_relation=self.relation,
-            parameters=self.parameters)
-        return f'{self.relation.rep_formula(encoding=encoding)}({self.parameters[0].rep_formula(encoding=encoding, expand=expand)})'
+        return rep_composition(composition=self.compose_prefix_operator(), encoding=encoding)
 
-    def rep_formula(self, encoding: (None, Encoding) = None, expand: bool = True) -> str:
-        encoding = prioritize_value(encoding, configuration.encoding,
-                                    encodings.plaintext)
+    def compose_formula(self) -> collections.abc.Generator[Composable, None, None]:
         if is_in_class(self.relation, classes.free_variable):
             # If the relation of this formula is a free-variable,
             # it has no arity, neither a representation-mode.
@@ -2452,23 +2549,47 @@ class Formula(TheoreticalObject):
             # In future developments, we may choose to allow
             # the "decoration" of free-variables with arity,
             # and presentation-mode to improve readability.
-            return self.rep_as_function_call(encoding=encoding, expand=expand)
+            yield from self.compose_function_call()
         else:
             match self.relation.formula_rep:
                 case Formula.function_call:
-                    return self.rep_as_function_call(encoding=encoding, expand=expand)
+                    yield from self.compose_function_call()
                 case Formula.infix:
-                    return self.rep_as_infix_operator(encoding=encoding, expand=expand)
+                    yield from self.compose_infix_operator()
                 case Formula.prefix:
-                    return self.rep_as_prefix_operator(encoding=encoding, expand=expand)
+                    yield from self.compose_prefix_operator()
                 case Formula.postfix:
-                    return self.rep_as_postfix_operator(encoding=encoding, expand=expand)
+                    yield from self.compose_postfix_operator()
                 case _:
                     # Fallback notation.
-                    return self.rep_as_function_call(encoding=encoding, expand=expand)
+                    yield from self.compose_function_call()
 
-    def rep_declaration(self):
-        return f'Let {self.rep_symbol()} be the formula {self.rep_formula(expand=True)} in {self.universe_of_discourse.rep_symbol()}.' + '\n'
+    def rep_formula(self, encoding: (None, Encoding) = None, expand: bool = True) -> str:
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
+        return rep_composition(composition=self.compose_formula(), encoding=encoding)
+
+    def compose_declaration(self) -> collections.abc.Generator[Composable, None, None]:
+        global text_dict
+        yield text_dict.let
+        yield text_dict.space
+        yield from self.compose_symbol()
+        yield text_dict.space
+        yield text_dict.the
+        yield text_dict.space
+        yield from self.compose_class()
+        yield text_dict.space
+        yield from self.compose_formula()
+        yield text_dict.space
+        yield text_dict.in2
+        yield text_dict.space
+        yield from self.universe_of_discourse.compose_symbol()
+        yield text_dict.period
+
+    def rep_declaration(self, encoding: (None, Encoding) = None) -> str:
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
+        return rep_composition(composition=self.compose_declaration(), encoding=encoding)
 
 
 class SimpleObjctDict(collections.UserDict):
@@ -4436,9 +4557,9 @@ class RelationDict(collections.UserDict):
             self._implication = self.declare(
                 2,
                 NameSet(
-                    symbol=ComposableText(plaintext='==>', unicode='⟹', latex_math=r'\implies'),
-                    name=ComposableText(plaintext='implies'),
-                    explicit_name=ComposableText(plaintext='implication'),
+                    symbol=SerifItalic(plaintext='==>', unicode='⟹', latex_math=r'\implies'),
+                    name=SansSerifNormal(plaintext='implication'),
+                    explicit_name=SansSerifNormal(plaintext='logical implication'),
                     index=None),
                 Formula.infix,
                 signal_proposition=True)
@@ -4654,10 +4775,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             self._absorption = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 nameset=NameSet(
-                    symbol=ComposableText(plaintext='absorb', text_style=text_styles.monospace),
+                    symbol=SerifItalic(plaintext='absorption'),
                     index=None),
-                name='absorption',
-                dashed_name=DashedName('absorption'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._absorption
@@ -5246,11 +5365,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._definition_interpretation is None:
             self._definition_interpretation = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=ComposableText(plaintext='definition-interpretation',
-                                                      text_style=text_styles.monospace),
+                nameset=NameSet(symbol=SerifItalic(plaintext='definition-interpretation'),
                                 index=None),
-                name='definition interpretation',
-                dashed_name=DashedName('definition-interpretation'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._definition_interpretation
@@ -5586,11 +5702,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._inconsistency_introduction is None:
             self._inconsistency_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=ComposableText(plaintext='inconsistency-introduction',
-                                                      text_style=text_styles.monospace),
+                nameset=NameSet(symbol=SerifItalic(plaintext='inconsistency-introduction'),
                                 index=None),
                 name='inconsistency introduction',
-                dashed_name=DashedName('inconsistency-introduction'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._inconsistency_introduction
@@ -5955,8 +6069,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._absorption is None:
             self._absorption = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.absorption,
-                nameset='absorption')
+                i=self.t.u.i.absorption)
         return self._absorption
 
     @property
@@ -6158,9 +6271,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._definition_interpretation is None:
             self._definition_interpretation = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.definition_interpretation,
-                nameset=NameSet(symbol='definition-interpretation',
-                                name='definition interpretation'))
+                i=self.t.u.i.definition_interpretation)
         return self._definition_interpretation
 
     @property
