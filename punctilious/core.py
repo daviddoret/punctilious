@@ -2169,6 +2169,10 @@ class FreeVariable(TheoreticalObject):
         if echo:
             self.echo()
 
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='free-variable')
+
     def echo(self):
         self.rep_declaration()
 
@@ -2571,6 +2575,10 @@ class Formula(TheoreticalObject):
                                     encodings.plaintext)
         return rep_composition(composition=self.compose_formula(), encoding=encoding)
 
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='formula')
+
     def compose_declaration(self) -> collections.abc.Generator[Composable, None, None]:
         global text_dict
         yield text_dict.let
@@ -2865,6 +2873,10 @@ class AxiomDeclaration(TheoreticalObject):
         if echo:
             repm.prnt(self.rep_report())
 
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='axiom')
+
     def compose_natural_language(self):
         compo = QuasiQuotation()
         compo.append(self.natural_language)
@@ -2936,6 +2948,10 @@ class AxiomInclusion(Statement):
         Abridged property: a.a"""
         return self._axiom
 
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='axiom-inclusion')
+
     def rep_natural_language(self, encoding: (None, Encoding) = None,
                              wrap: bool = True) -> str:
         return self._axiom.rep_natural_language(encoding=encoding, wrap=wrap)
@@ -2981,6 +2997,10 @@ class InferenceRuleInclusion(Statement):
         super()._declare_class_membership(declarative_class_list.inference_rule_inclusion)
         if echo:
             repm.prnt(self.rep_report())
+
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='inference-rule-inclusion')
 
     def infer_formula(self, *args, echo: (None, bool) = None):
         """
@@ -3079,6 +3099,10 @@ class DefinitionDeclaration(TheoreticalObject):
         if echo:
             self.echo()
 
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='definition')
+
     def echo(self):
         repm.prnt(self.rep_report())
 
@@ -3124,6 +3148,10 @@ class DefinitionInclusion(Statement):
         super()._declare_class_membership(declarative_class_list.definition_inclusion)
         if echo:
             self.echo()
+
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='definition-inclusion')
 
     def echo(self):
         repm.prnt(self.rep_report())
@@ -3198,6 +3226,10 @@ class FormulaStatement(Statement):
 
     def __str__(self):
         return self.rep(expand=True)
+
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='formula-statement')
 
     @property
     def parameters(self):
@@ -3376,6 +3408,10 @@ class DirectDefinitionInference(FormulaStatement):
         super()._declare_class_membership(declarative_class_list.direct_definition_inference)
         if echo:
             repm.prnt(self.rep_report())
+
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='definition-interpretation')
 
     def rep_report(self, output_proofs=True):
         """Return a representation that expresses and justifies the statement.
@@ -3591,6 +3627,10 @@ class Note(AtheoreticalStatement):
         if echo:
             self.echo()
         super()._declare_class_membership(declarative_class_list.note)
+
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='note')
 
     def echo(self):
         repm.prnt(self.rep_report())
@@ -4188,6 +4228,10 @@ class Hypothesis(Statement):
             self.hypothetical_axiom_inclusion,
             hypothetical_formula)
 
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='hypothesis')
+
 
 class Proof:
     """TODO: Define the proof class"""
@@ -4265,6 +4309,10 @@ class Relation(TheoreticalObject):
     def __hash__(self):
         return hash((Relation, self.nameset, self.arity))
 
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='relation')
+
     def echo(self):
         repm.prnt(self.rep_declaration())
 
@@ -4306,6 +4354,10 @@ class SimpleObjct(TheoreticalObject):
         self.universe_of_discourse.cross_reference_simple_objct(o=self)
         if echo:
             self.echo()
+
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='simple-object')
 
     def compose_declaration(self):
         return locale.compose_simple_objct_declaration(o=self)
@@ -4967,11 +5019,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._biconditional_elimination_left is None:
             self._biconditional_elimination_left = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=ComposableText(plaintext='biconditional-elimination-left',
-                                                      text_style=text_styles.monospace),
-                                index=None),
+                nameset=NameSet(symbol='biconditional-elimination-left', index=None),
                 name='biconditional elimination (left)',
-                dashed_name=DashedName('biconditional-elimination-left'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._biconditional_elimination_left
@@ -5027,11 +5076,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._biconditional_elimination_right is None:
             self._biconditional_elimination_right = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=ComposableText(plaintext='biconditional-elimination-right',
-                                                      text_style=text_styles.monospace),
-                                index=None),
-                name='biconditional elimination (right)',
-                dashed_name=DashedName('biconditional-elimination-right'),
+                nameset=NameSet(symbol='biconditional-elimination-right',
+                                name='biconditional elimination (right)', index=None),
                 infer_formula=infer_formula,
                 verify_args=verify_compatibility)
         return self._biconditional_elimination_right
@@ -5094,11 +5140,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             self._biconditional_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
                 nameset=NameSet(
-                    symbol=ComposableText(s='biconditional-introduction',
-                                          text_style=text_styles.monospace),
-                    index=None),
-                name='biconditional introduction',
-                dashed_name=DashedName('biconditional-introduction'),
+                    symbol='biconditional-introduction',
+                    index=None,
+                    name='biconditional introduction'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._biconditional_introduction
@@ -5135,6 +5179,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         return self.conjunction_introduction
+
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='inference-rule')
 
     @property
     def conjunction_elimination_left(self) -> InferenceRuleDeclaration:
@@ -5183,11 +5231,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._conjunction_elimination_left is None:
             self._conjunction_elimination_left = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=ComposableText(plaintext='conjunction-elimination-left',
-                                                      text_style=text_styles.monospace),
-                                index=None),
-                name='conjunction elimination (left)',
-                dashed_name=DashedName('conjunction-elimination-left'),
+                nameset=NameSet(symbol='conjunction-elimination-left',
+                                index=None,
+                                name='conjunction elimination (left)'),
                 infer_formula=infer_formula,
                 verify_args=verify_compatibility)
         return self._conjunction_elimination_left
@@ -5239,11 +5285,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._conjunction_elimination_right is None:
             self._conjunction_elimination_right = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=ComposableText(plaintext='conjunction-elimination-right',
-                                                      text_style=text_styles.monospace),
-                                index=None),
-                name='conjunction elimination (right)',
-                dashed_name=DashedName('conjunction-elimination-right'),
+                nameset=NameSet(symbol='conjunction-elimination-right',
+                                index=None,
+                                name='conjunction elimination (right)'),
                 infer_formula=infer_formula,
                 verify_args=verify_compatibility)
         return self._conjunction_elimination_right
@@ -5297,11 +5341,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._conjunction_introduction is None:
             self._conjunction_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=ComposableText(plaintext='conjunction-introduction',
-                                                      text_style=text_styles.monospace),
-                                index=None),
-                name='conjunction introduction',
-                dashed_name=DashedName('conjunction-introduction'),
+                nameset=NameSet(symbol='conjunction-introduction',
+                                index=None,
+                                name='conjunction introduction'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._conjunction_introduction
@@ -6139,8 +6181,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._biconditional_elimination_left is None:
             self._biconditional_elimination_left = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.biconditional_elimination_left,
-                title='biconditional elimination (left)')
+                i=self.t.u.i.biconditional_elimination_left)
         return self._biconditional_elimination_left
 
     @property
@@ -6155,8 +6196,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._biconditional_elimination_right is None:
             self._biconditional_elimination_right = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.biconditional_elimination_right,
-                title='biconditional elimination (right)')
+                i=self.t.u.i.biconditional_elimination_right)
         return self._biconditional_elimination_right
 
     @property
@@ -6171,8 +6211,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._biconditional_introduction is None:
             self._biconditional_introduction = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.biconditional_introduction,
-                title='biconditional introduction')
+                i=self.t.u.i.biconditional_introduction)
         return self._biconditional_introduction
 
     @property
@@ -6642,12 +6681,16 @@ class UniverseOfDiscourse(SymbolicObject):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='universe-of-discourse')
 
-    def compose_declaration(self):
-        yield SansSerifNormal(plaintext='Let ')
+    def compose_declaration(self) -> collections.abc.Generator[Composable, None, None]:
+        global text_dict
+        yield text_dict.let
+        yield text_dict.space
         yield from self.nameset.compose_symbol()
-        yield SansSerifNormal(plaintext=' be a ')
+        yield text_dict.space
+        yield text_dict.be_a
+        yield text_dict.space
         yield from self.compose_class()
-        yield SansSerifNormal(plaintext='.')
+        yield text_dict.period
 
     def cross_reference_axiom(self, a: AxiomDeclaration) -> bool:
         """Cross-references an axiom in this universe-of-discourse.
@@ -7105,6 +7148,10 @@ class InferredStatement(FormulaStatement):
         if self.inference_rule is self.t.u.i.axiom_interpretation or \
                 self.inference_rule is self.t.u.i.definition_interpretation:
             t.assure_interpretation_disclaimer(echo=echo)
+
+    def compose_class(self):
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='inferred-statement')
 
     def echo(self):
         repm.prnt(self.rep_report())
