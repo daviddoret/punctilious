@@ -1324,6 +1324,9 @@ class NameSet(Composable):
                                     encodings.plaintext)
         rep_composition(composition=self.compose_symbol(), encoding=encoding, **kwargs)
 
+    def compose_title(self) -> collections.abc.Generator[Composable, None, None]:
+        pass
+
     def rep_title(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         """A title of the form: [unabridged-category] [reference] ([symbol]) - [subtitle]
         """
@@ -2086,7 +2089,7 @@ class TheoreticalObject(SymbolicObject):
         """Return True if o is in this theory's hierarchy, False otherwise."""
         return o in self.iterate_theoretical_objcts_references(include_root=True)
 
-    def compose_declaration(self):
+    def compose_declaration(self) -> collections.abc.Generator[Composable, None, None]:
         pass
 
     def rep_declaration(self, encoding: (None, Encoding) = None) -> str:
@@ -2169,7 +2172,7 @@ class FreeVariable(TheoreticalObject):
         if echo:
             self.echo()
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='free-variable')
 
@@ -2575,7 +2578,7 @@ class Formula(TheoreticalObject):
                                     encodings.plaintext)
         return rep_composition(composition=self.compose_formula(), encoding=encoding)
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='formula')
 
@@ -2873,11 +2876,11 @@ class AxiomDeclaration(TheoreticalObject):
         if echo:
             repm.prnt(self.rep_report())
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='axiom')
 
-    def compose_natural_language(self):
+    def compose_natural_language(self) -> collections.abc.Generator[Composable, None, None]:
         compo = QuasiQuotation()
         compo.append(self.natural_language)
         return compo
@@ -2948,7 +2951,7 @@ class AxiomInclusion(Statement):
         Abridged property: a.a"""
         return self._axiom
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='axiom-inclusion')
 
@@ -2998,7 +3001,7 @@ class InferenceRuleInclusion(Statement):
         if echo:
             repm.prnt(self.rep_report())
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='inference-rule-inclusion')
 
@@ -3099,7 +3102,7 @@ class DefinitionDeclaration(TheoreticalObject):
         if echo:
             self.echo()
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='definition')
 
@@ -3149,7 +3152,7 @@ class DefinitionInclusion(Statement):
         if echo:
             self.echo()
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='definition-inclusion')
 
@@ -3227,7 +3230,7 @@ class FormulaStatement(Statement):
     def __str__(self):
         return self.rep(expand=True)
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='formula-statement')
 
@@ -3409,7 +3412,7 @@ class DirectDefinitionInference(FormulaStatement):
         if echo:
             repm.prnt(self.rep_report())
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='definition-interpretation')
 
@@ -3628,7 +3631,7 @@ class Note(AtheoreticalStatement):
             self.echo()
         super()._declare_class_membership(declarative_class_list.note)
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='note')
 
@@ -4228,7 +4231,7 @@ class Hypothesis(Statement):
             self.hypothetical_axiom_inclusion,
             hypothetical_formula)
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='hypothesis')
 
@@ -4309,7 +4312,7 @@ class Relation(TheoreticalObject):
     def __hash__(self):
         return hash((Relation, self.nameset, self.arity))
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='relation')
 
@@ -4355,7 +4358,7 @@ class SimpleObjct(TheoreticalObject):
         if echo:
             self.echo()
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='simple-object')
 
@@ -5180,7 +5183,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         """
         return self.conjunction_introduction
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='inference-rule')
 
@@ -6677,7 +6680,7 @@ class UniverseOfDiscourse(SymbolicObject):
         if echo:
             self.echo()
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='universe-of-discourse')
 
@@ -7149,7 +7152,7 @@ class InferredStatement(FormulaStatement):
                 self.inference_rule is self.t.u.i.definition_interpretation:
             t.assure_interpretation_disclaimer(echo=echo)
 
-    def compose_class(self):
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='inferred-statement')
 
