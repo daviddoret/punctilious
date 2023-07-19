@@ -2500,7 +2500,9 @@ class Formula(TheoreticalObject):
         global text_dict
         yield text_dict.open_parenthesis
         yield from self.parameters[0].compose_formula()
+        yield text_dict.space
         yield from self.relation.compose_formula()
+        yield text_dict.space
         yield from self.parameters[1].compose_formula()
         yield text_dict.close_parenthesis
 
