@@ -19,8 +19,8 @@ class TestAxiomDeclaration(TestCase):
         a4 = u.declare_axiom(content4, nameset=pu.NameSet(symbol='some-axion',
                                                           name='if something is mysterious, then it is mysterious.'))
         a5 = u.declare_axiom(content5, 'yet-another-axiom')
-        self.assertEqual(f'Axiom (o1): {content1}', a1.rep_report(wrap=False))
-        self.assertEqual(f'Axiom (o2): {content2}', a2.rep_report(wrap=False))
-        self.assertEqual(f'Axiom 1.1.1 (o3): {content3}', a3.rep_report(wrap=False))
-        self.assertEqual(f'Axiom 1.1.2 (o4): {content4}', a4.rep_report(wrap=False))
-        self.assertEqual(f'Axiom 1.1.3 (o5): {content5}', a5.rep_report(wrap=False))
+        self.assertEqual(f'Axiom (o1): ⌜{content1}⌝', a1.rep_report(wrap=False))
+        self.assertEqual(f'Axiom (o2): ⌜{content2}⌝', a2.rep_report(wrap=False))
+        self.assertEqual(f'Axiom 1.1.1 (o3): ⌜{content3}⌝', a3.rep_report(wrap=False))
+        self.assertEqual(f'Axiom 1.1.2 (o4): ⌜{content4}⌝', a4.rep_report(wrap=False))
+        self.assertEqual(f'Axiom 1.1.3 (o5): ⌜{content5}⌝', a5.rep_report(wrap=False))

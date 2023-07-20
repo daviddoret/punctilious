@@ -25,7 +25,7 @@ class PunctiliousException(Exception):
         pass
 
 
-def rep_composition(composition: collections.abc.Generator[Composable, None, None] = None,
+def rep_composition(composition: collections.abc.Generator[Composable, Composable, bool] = None,
                     encoding: (None, bool) = None, **kwargs) -> str:
     encoding = prioritize_value(encoding, configuration.encoding, encodings.plaintext)
     if composition is None:
@@ -36,7 +36,7 @@ def rep_composition(composition: collections.abc.Generator[Composable, None, Non
             if item is None:
                 return ''
             elif isinstance(item, typing.Generator):
-                rep_composition(composition=item, encoding=encoding, **kwargs)
+                representation = rep_composition(composition=item, encoding=encoding, **kwargs)
             elif isinstance(item, Composable):
                 representation = representation + item.rep(encoding=encoding, **kwargs)
             elif isinstance(item, str):
@@ -179,9 +179,9 @@ class ComposableText(Composable):
         return self._unicode
 
 
-def yield_composition(*content, pre: (None, str, Composable) = None,
+def yield_composition(*content, cap: (None, bool) = None, pre: (None, str, Composable) = None,
                       post: (None, str, Composable) = None) -> collections.abc.Generator[
-    Composable, None, None]:
+    Composable, Composable, bool]:
     """A utility function that simplifies yielding compositions.
 
     Only yield elements that are not None.
@@ -199,6 +199,9 @@ def yield_composition(*content, pre: (None, str, Composable) = None,
             else:
                 raise TypeError('body of unsupported type')
         yield from yield_composition(post)
+        return True
+    else:
+        return False
 
 
 class TextStyle:
@@ -1149,52 +1152,123 @@ class NameSet(Composable):
 
     def compose(self, pre: (None, str, Composable) = None,
                 post: (None, str, Composable) = None) -> collections.abc.Generator[
-        Composable, None, None]:
-        yield from self.compose_symbol(pre=pre, post=post)
+        Composable, Composable, bool]:
+        something = yield from self.compose_symbol(pre=pre, post=post)
+        return something
 
-    def compose_cat(self, pre: (None, str, Composable) = None,
-                    post: (None, str, Composable) = None) -> collections.abc.Generator[
-        Composable, None, None]:
-        yield from yield_composition(self._cat, pre=pre, post=post)
+    def compose_accurate(self, pre: (None, str, Composable) = None,
+                         post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """Returns the most accurate (longest) possible name in the nameset for the required text-format.
+        """
+        something = yield from self.compose_explicit_name(pre=pre, post=post)
+        if something:
+            return True
+        something = yield from self.compose_name(pre=pre, post=post)
+        if something:
+            return True
+        something = yield from self.compose_acronym(pre=pre, post=post)
+        if something:
+            return True
+        something = yield from self.compose_symbol(pre=pre, post=post)
+        if something:
+            return True
+        raise NoNameSolutionException(nameset=self)
+
+    def compose_acronym(self, pre: (None, str, Composable) = None,
+                        post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        if self._acronym is None:
+            return False
+        else:
+            something = yield from yield_composition(self._acronym, pre=pre, post=post)
+            return something
+
+    def compose_cat_unabridged(self, cap: (None, bool) = None, pre: (None, str, Composable) = None,
+                               post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        if self._cat is None:
+            return False
+        else:
+            something = yield from yield_composition(self._cat.natural_name, cap=cap, pre=pre,
+                                                     post=post)
+            return something
+
+    def compose_cat_abridged(self, pre: (None, str, Composable) = None,
+                             post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        if self._cat is None:
+            return False
+        else:
+            something = yield from yield_composition(self._cat.abridged_name, pre=pre, post=post)
+            return something
 
     def compose_dashed_name(self, pre: (None, str, Composable) = None,
                             post: (None, str, Composable) = None) -> collections.abc.Generator[
-        Composable, None, None]:
-        yield from yield_composition(self._dashed_name, pre=pre, post=post)
+        Composable, Composable, bool]:
+        if self._dashed_name is None:
+            return False
+        else:
+            something = yield from yield_composition(self._dashed_name, pre=pre, post=post)
+            return something
 
     def compose_explicit_name(self, pre: (None, str, Composable) = None,
                               post: (None, str, Composable) = None) -> collections.abc.Generator[
-        Composable, None, None]:
-        yield from yield_composition(self._explicit_name, pre=pre, post=post)
+        Composable, Composable, bool]:
+        if self._explicit_name is None:
+            return False
+        else:
+            something = yield from yield_composition(self._explicit_name, pre=pre, post=post)
+            return something
 
     def compose_name(self, pre: (None, str, Composable) = None,
                      post: (None, str, Composable) = None) -> collections.abc.Generator[
-        Composable, None, None]:
-        yield from yield_composition(self._name, pre=pre, post=post)
+        Composable, Composable, bool]:
+        if self._acronym is None:
+            return False
+        else:
+            something = yield from yield_composition(self._name, pre=pre, post=post)
+            return something
 
     def compose_qualified_symbol(self, pre: (None, str, Composable) = None,
                                  post: (None, str, Composable) = None) -> collections.abc.Generator[
-        Composable, None, None]:
+        Composable, Composable, bool]:
         """Composes: ⌜[dashed-name] ([symbol])⌝, or ⌜[symbol]⌝ if dashed-name is None. The rationale is to enrich the symbol with a more meaningful dashed-name if it is available."""
         if self._dashed_name is None:
             # Representation of the form: [symbol][index]
             yield from self.compose_symbol(pre=pre, post=post)
+            return True
         else:
             # Representation of the form: [dashed-named] ([symbol][index])
             yield from yield_composition(pre)
             yield from self.compose_dashed_name()
             yield from self.compose_symbol(pre=' (', post=')')
             yield from yield_composition(post)
+            return True
 
     def compose_ref(self, pre: (None, str, Composable) = None,
                     post: (None, str, Composable) = None) -> collections.abc.Generator[
         Composable, None, None]:
-        yield from yield_composition(self._ref, pre=pre, post=post)
+        something = yield from yield_composition(self._ref, pre=pre, post=post)
+        return something
+
+    def compose_subtitle(self, pre: (None, str, Composable) = None,
+                         post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        if self._subtitle is None:
+            return False
+        else:
+            something = yield from yield_composition(self._subtitle, pre=pre, post=post)
+            return something
 
     def compose_symbol(self, pre: (None, str, Composable) = None,
                        post: (None, str, Composable) = None) -> collections.abc.Generator[
-        Composable, None, None]:
-        yield from yield_composition(self._symbol, self._index, pre=pre, post=post)
+        Composable, Composable, bool]:
+        if self._acronym is None:
+            return False
+        else:
+            something = yield from yield_composition(self._symbol, pre=pre, post=post)
+            return something
 
     @property
     def explicit_name(self) -> ComposableText:
@@ -1225,12 +1299,12 @@ class NameSet(Composable):
         the old approach that used the obsolete Title class."""
         self._ref = ref
 
-    def rep(self, encoding: (None, Encoding) = None) -> str:
+    def rep(self, encoding: (None, Encoding) = None, **kwargs) -> str:
         """Return the default representation for this python obje.
 
         :return:
         """
-        return f'{self.rep_compact(encoding=encoding)}'
+        return f'{self.rep_symbol(encoding=encoding)}'
 
     def rep_accurate(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
         """Returns the most accurate (longest) possible name in the nameset for the required text-format.
@@ -1347,7 +1421,7 @@ class NameSet(Composable):
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
         cap = prioritize_value(cap, False)
-        rep_composition(composition=self.compose_name(), encoding=encoding, cap=cap)
+        return rep_composition(composition=self.compose_name(), encoding=encoding, cap=cap)
 
     def rep_ref(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         rep = '' if self._cat is None else StyledText(s=self._cat.abridged_name,
@@ -1366,11 +1440,11 @@ class NameSet(Composable):
         """Return a string that represent the object as a symbol."""
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
-        rep_composition(composition=self.compose_symbol(), encoding=encoding, **kwargs)
+        return rep_composition(composition=self.compose_symbol(), encoding=encoding, **kwargs)
 
     def compose_title(self) -> collections.abc.Generator[Composable, None, None]:
         global text_dict
-        yield from self.compose_category(cap=True, post=text_dict.space)
+        yield from self.compose_cat_unabridged(cap=True, post=text_dict.space)
         yield from self.compose_ref(post=text_dict.space)
         yield from self.compose_symbol(pre=' (', post=') ')
         yield from self.compose_subtitle(pre=' - ')
@@ -1378,26 +1452,29 @@ class NameSet(Composable):
     def rep_title(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         """A title of the form: [unabridged-category] [reference] ([symbol]) - [subtitle]
         """
-        rep = '' if self._cat is None else StyledText(s=self.cat.natural_name,
-                                                      text_style=text_styles.sans_serif_bold).rep(
-            encoding=encoding, cap=cap)
-        if self._ref is not None:
-            rep = rep + ' '
-            rep = rep + StyledText(s=self._ref,
-                                   text_style=text_styles.sans_serif_bold).rep(
-                encoding=encoding)
-        rep = rep + ' '
-        rep = rep + StyledText(s='(', text_style=text_styles.sans_serif_bold).rep(
-            encoding=encoding)
-        rep = rep + self.rep_symbol(encoding=encoding)
-        rep = rep + StyledText(s=')', text_style=text_styles.sans_serif_bold).rep(
-            encoding=encoding)
-        if self._subtitle is not None:
-            rep = rep + '- '
-            rep = rep + StyledText(s=self._subtitle,
-                                   text_style=text_styles.sans_serif_bold).rep(
-                encoding=encoding)
-        return rep
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
+        return rep_composition(composition=self.compose_title(), encoding=encoding, cap=cap)
+        # rep = '' if self._cat is None else StyledText(s=self.cat.natural_name,
+        #                                              text_style=text_styles.sans_serif_bold).rep(
+        #    encoding=encoding, cap=cap)
+        # if self._ref is not None:
+        #    rep = rep + ' '
+        #    rep = rep + StyledText(s=self._ref,
+        #                           text_style=text_styles.sans_serif_bold).rep(
+        #        encoding=encoding)
+        # rep = rep + ' '
+        # rep = rep + StyledText(s='(', text_style=text_styles.sans_serif_bold).rep(
+        #    encoding=encoding)
+        # rep = rep + self.rep_symbol(encoding=encoding)
+        # rep = rep + StyledText(s=')', text_style=text_styles.sans_serif_bold).rep(
+        #    encoding=encoding)
+        # if self._subtitle is not None:
+        #    rep = rep + '- '
+        #    rep = rep + StyledText(s=self._subtitle,
+        #                           text_style=text_styles.sans_serif_bold).rep(
+        #        encoding=encoding)
+        # return rep
 
     @property
     def subtitle(self) -> str:
