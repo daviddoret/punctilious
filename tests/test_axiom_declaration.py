@@ -11,7 +11,8 @@ class TestAxiomDeclaration(TestCase):
         u = pu.UniverseOfDiscourse()
         content1 = random_data.random_sentence()
         a1 = u.declare_axiom(content1)
-        print(a1.rep_title()) !!!!!!!!!!!CORRECT THIS!!!!!!!!!!!!
+        self.assertEqual('axiom (o1)', a1.rep_title(encoding=pu.encodings.plaintext))
+        self.assertEqual('axiom (𝑜₁)', a1.rep_title(encoding=pu.encodings.unicode))
 
     def test_axiom_declaration(self):
         pu.configuration.echo_default = False

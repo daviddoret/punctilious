@@ -35,7 +35,6 @@ def rep_composition(composition: collections.abc.Generator[Composable, Composabl
     else:
         representation = ''
         for item in composition:
-            print(item)
             if item is None:
                 return ''
             elif isinstance(item, typing.Generator):
