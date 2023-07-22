@@ -653,9 +653,10 @@ class ScriptNormal(StyledText):
 
 
 class SerifItalic(StyledText):
-    def __init__(self, plaintext: str, unicode: (None, str) = None,
+    def __init__(self, s: (None, str) = None, plaintext: (None, str) = None,
+                 unicode: (None, str) = None,
                  latex_math: (None, str) = None) -> None:
-        super().__init__(text_style=text_styles.serif_italic, plaintext=plaintext,
+        super().__init__(s=s, text_style=text_styles.serif_italic, plaintext=plaintext,
                          unicode=unicode, latex_math=latex_math)
 
 
@@ -1126,7 +1127,7 @@ class NameSet(Composable):
             index = Subscript(plaintext=str(index))
         self._index = index
         if isinstance(dashed_name, str):
-            dashed_name = SerifItalic()
+            dashed_name = SerifItalic(s=dashed_name)
         self._dashed_name = dashed_name if isinstance(dashed_name,
                                                       StyledText) else \
             StyledText(s=dashed_name, text_style=text_styles.serif_italic) \
@@ -1200,6 +1201,15 @@ class NameSet(Composable):
                              self._acronym),
             cap=cap, pre=pre, post=post)
         return something
+
+    def compose_abridged_name(self, pre: (None, str, Composable) = None,
+                              post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        if self._abridged_name is None:
+            return False
+        else:
+            something = yield from yield_composition(self._abridged_name, pre=pre, post=post)
+            return something
 
     def compose_acronym(self, pre: (None, str, Composable) = None,
                         post: (None, str, Composable) = None) -> collections.abc.Generator[
@@ -1372,6 +1382,11 @@ class NameSet(Composable):
         """
         return f'{self.rep_symbol(encoding=encoding)}'
 
+    def rep_abridged_name(self, cap: (None, bool) = None, encoding: (None, Encoding) = None) -> (
+            None, str):
+        """Return a string that represent the object as an acronym."""
+        return rep_composition(composition=self.compose_abridged_name(), encoding=encoding)
+
     def rep_accurate_name(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
         """Returns the most accurate (longest) possible name in the nameset for the required text-format.
 
@@ -1387,11 +1402,7 @@ class NameSet(Composable):
     def rep_acronym(self, encoding: (None, Encoding) = None, compose: bool = False) -> (
             None, str):
         """Return a string that represent the object as an acronym."""
-        rep = ComposableBlockSequence()
-        if self._acronym is not None:
-            rep.append(
-                StyledText(s=self._acronym, text_style=text_styles.sans_serif_normal))
-        return rep.rep(encoding=encoding, compose=compose)
+        return rep_composition(composition=self.compose_acronym(), encoding=encoding)
 
     def rep_compact_name(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
         """Returns the shortest possible name in the nameset for the required text-format.
@@ -1416,6 +1427,10 @@ class NameSet(Composable):
         """
         return rep_composition(composition=self.compose_conventional_name(), encoding=encoding,
                                cap=cap)
+
+    def rep_dashed_name(self, encoding: (None, Encoding) = None, compose: bool = False) -> (
+            None, str):
+        return rep_composition(composition=self.compose_dashed_name(), encoding=encoding)
 
     def rep_explicit_name(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> (
             None, str):
