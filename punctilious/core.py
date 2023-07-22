@@ -1492,17 +1492,19 @@ class NameSet(Composable):
 
     def compose_title(self) -> collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
-        yield from self.compose_cat_unabridged(cap=True, post=text_dict.space)
-        yield from self.compose_ref(post=text_dict.space)
-        yield from self.compose_symbol(pre=' (', post=') ')
-        yield from self.compose_subtitle(pre=' - ')
+        output1 = yield from self.compose_cat_unabridged(cap=True)
+        pre = text_dict.space if output1 else None
+        output2 = yield from self.compose_ref(pre=pre)
+        pre = ' (' if output1 or output2 else None
+        post = ')' if output1 or output2 else None
+        output3 = yield from self.compose_symbol(pre=pre, post=post)
+        pre = ' - ' if output1 or output2 or output3 else None
+        yield from self.compose_subtitle(pre=pre)
         return True
 
     def rep_title(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         """A title of the form: [unabridged-category] [reference] ([symbol]) - [subtitle]
         """
-        encoding = prioritize_value(encoding, configuration.encoding,
-                                    encodings.plaintext)
         return rep_composition(composition=self.compose_title(), encoding=encoding, cap=cap)
 
     @property
