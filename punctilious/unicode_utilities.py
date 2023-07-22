@@ -1,5 +1,7 @@
 """Unicode text utilities."""
 
+import typing
+
 unicode_serif_normal_index = 0
 unicode_serif_bold_index = 1
 unicode_serif_italic_index = 2
@@ -79,6 +81,14 @@ unicode_styled_characters = {
     '8': '8𝟖8𝟖𝟪𝟴𝟪𝟴𝟪𝟴𝟪𝟴𝟾𝟠',
     '9': '9𝟗9𝟗𝟫𝟵𝟫𝟵𝟫𝟵𝟫𝟵𝟿𝟡'
 }
+
+
+def prioritize_value(*args) -> typing.Any:
+    """Return the first non-None object in ⌜*args⌝."""
+    for a in args:
+        if a is not None:
+            return a
+    return None
 
 
 def unicode_format(s: str = '', index: int = 0, mapping: dict = None) -> str:
@@ -209,3 +219,14 @@ def unicode_subscriptify(s: str = ''):
     if s is None or s == '':
         return ''
     return ''.join([unicode_subscript_dictionary.get(c, c) for c in s])
+
+
+class Unicode2(str):
+    """Just a wrapper around str to distinguish 'rich unicode' from 'plaintext'."""
+
+    def __new__(cls, s: (None, str), empty_if_none: (None, bool) = None):
+        empty_if_none = prioritize_value(empty_if_none, False)
+        if s is None and not empty_if_none:
+            return None
+        instance = super().__new__(cls, s)
+        return instance

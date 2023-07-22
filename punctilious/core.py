@@ -11,6 +11,7 @@ import networkx as nx
 import unicode_utilities
 import unidecode
 from plaintext import Plaintext
+from unicode_utilities import Unicode2
 
 
 def prioritize_value(*args):
@@ -102,7 +103,7 @@ class ComposableText(Composable):
     - may support one or several encodings."""
 
     def __init__(self, s: (None, str) = None,
-                 plaintext: (None, str, Plaintext) = None, unicode: (None, str) = None,
+                 plaintext: (None, str, Plaintext) = None, unicode: (None, str, Unicode2) = None,
                  latex_math: (None, str) = None
                  ):
         """
@@ -112,9 +113,8 @@ class ComposableText(Composable):
         :param unicode:
         :param latex_math:
         """
-        unicode = prioritize_value(unicode, s)
         self._plaintext = Plaintext(prioritize_value(plaintext, s, unicode))
-        self._unicode = unicode
+        self._unicode = Unicode2(prioritize_value(unicode, s))
         self._latex_math = latex_math
 
     def __eq__(self, other: (None, object, ComposableText)) -> bool:
@@ -172,11 +172,12 @@ class ComposableText(Composable):
         return content
 
     @property
-    def unicode(self) -> (None, str):
+    def unicode(self) -> (None, Unicode2):
         return self._unicode
 
 
-def yield_composition(*content, cap: (None, bool) = None, pre: (None, str, Composable) = None,
+def yield_composition(*content, cap: (None, bool) = None,
+                      pre: (None, str, Composable) = None,
                       post: (None, str, Composable) = None) -> collections.abc.Generator[
     Composable, Composable, bool]:
     """A utility function that simplifies yielding compositions.
@@ -201,6 +202,19 @@ def yield_composition(*content, cap: (None, bool) = None, pre: (None, str, Compo
         return True
     else:
         return False
+
+
+def prioritize_composition(*content, cap: (None, bool) = None,
+                           pre: (None, str, Composable) = None,
+                           post: (None, str, Composable) = None) -> collections.abc.Generator[
+    Composable, Composable, bool]:
+    """Yield the composition of the first non-None element of *content.
+    """
+    if content is None:
+        return False
+    first_not_none = next((element for element in content if element is not None), None)
+    something = yield from yield_composition(first_not_none, cap=cap, pre=pre, post=post)
+    return something
 
 
 class TextStyle:
@@ -433,7 +447,7 @@ class StyledText(ComposableBlockLeaf):
     """Enrich ComposableText with a complementary style property."""
 
     def __init__(self, s: (None, str) = None, text_style: (None, TextStyle) = None,
-                 plaintext: (None, str) = None, unicode: (None, str) = None,
+                 plaintext: (None, str, Plaintext) = None, unicode: (None, str, Unicode2) = None,
                  latex_math: (None, str) = None
                  ):
         """
@@ -444,7 +458,7 @@ class StyledText(ComposableBlockLeaf):
         :param latex_math:
         :param text_style:
         """
-        self._text_style = prioritize_value(text_style, text_styles.serif_normal)
+        self._text_style = prioritize_value(text_style, text_styles.sans_serif_normal)
         content = ComposableText(s=s, plaintext=plaintext, unicode=unicode, latex_math=latex_math)
         start_tag = self._text_style.start_tag
         end_tag = self._text_style.end_tag
@@ -618,16 +632,17 @@ class Index(ComposableBlockSequence):
 
 
 class SansSerifNormal(StyledText):
-    def __init__(self, plaintext: str, unicode: (None, str) = None,
+    def __init__(self, s: (str, None), plaintext: (None, str, Plaintext) = None,
+                 unicode: (None, str, Unicode2) = None,
                  latex_math: (None, str) = None) -> None:
-        super().__init__(text_style=text_styles.sans_serif_normal, plaintext=plaintext,
+        super().__init__(s=s, text_style=text_styles.sans_serif_normal, plaintext=plaintext,
                          unicode=unicode, latex_math=latex_math)
 
 
-text_dict.in2 = SansSerifNormal(plaintext='in')
-text_dict.let = SansSerifNormal(plaintext='let')
-text_dict.be_a = SansSerifNormal(plaintext='be a')
-text_dict.be_an = SansSerifNormal(plaintext='be an')
+text_dict.in2 = SansSerifNormal(s='in')
+text_dict.let = SansSerifNormal(s='let')
+text_dict.be_a = SansSerifNormal(s='be a')
+text_dict.be_an = SansSerifNormal(s='be an')
 
 
 class ScriptNormal(StyledText):
@@ -1080,10 +1095,10 @@ class NameSet(Composable):
                  symbol: (None, str, StyledText) = None,
                  index: (None, int, str, ComposableText) = None,
                  dashed_name: (None, str, StyledText) = None,
-                 acronym: (None, str, ComposableText) = None,
-                 abridged_name: (None, str, ComposableText) = None,
-                 name: (None, str) = None,
-                 explicit_name: (None, str, ComposableText) = None,
+                 acronym: (None, str, StyledText) = None,
+                 abridged_name: (None, str, StyledText) = None,
+                 name: (None, str, StyledText) = None,
+                 explicit_name: (None, str, StyledText) = None,
                  cat: (None, TitleCategoryOBSOLETE) = None,
                  ref: (None, str) = None,
                  subtitle: (None, str, ComposableText) = None):
@@ -1118,9 +1133,17 @@ class NameSet(Composable):
                 if isinstance(dashed_name, str) else None
         verify(self.symbol is not None, msg='The symbol of this nameset is None.', slf=self)
         # Natural names
+        if isinstance(acronym, str):
+            acronym = SansSerifNormal(acronym)
         self._acronym = acronym
+        if isinstance(abridged_name, str):
+            abridged_name = SansSerifNormal(abridged_name)
         self._abridged_name = abridged_name
+        if isinstance(name, str):
+            name = SansSerifNormal(name)
         self._name = name
+        if isinstance(explicit_name, str):
+            explicit_name = SansSerifNormal(explicit_name)
         self._explicit_name = explicit_name
         # Section reference names
         self._ref = ref
@@ -1165,24 +1188,18 @@ class NameSet(Composable):
         something = yield from self.compose_symbol(pre=pre, post=post)
         return something
 
-    def compose_accurate(self, pre: (None, str, Composable) = None,
-                         post: (None, str, Composable) = None) -> collections.abc.Generator[
+    def compose_accurate_name(self, cap: (None, bool) = None, pre: (None, str, Composable) = None,
+                              post: (None, str, Composable) = None) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        """Returns the most accurate (longest) possible name in the nameset for the required text-format.
+        """Composes the most least unambiguous natural-language name in the nameset.
         """
-        something = yield from self.compose_explicit_name(pre=pre, post=post)
-        if something:
-            return True
-        something = yield from self.compose_name(pre=pre, post=post)
-        if something:
-            return True
-        something = yield from self.compose_acronym(pre=pre, post=post)
-        if something:
-            return True
-        something = yield from self.compose_symbol(pre=pre, post=post)
-        if something:
-            return True
-        raise NoNameSolutionException(nameset=self)
+        something = yield from yield_composition(
+            prioritize_value(self._explicit_name,
+                             self._name,
+                             self._abridged_name,
+                             self._acronym),
+            cap=cap, pre=pre, post=post)
+        return something
 
     def compose_acronym(self, pre: (None, str, Composable) = None,
                         post: (None, str, Composable) = None) -> collections.abc.Generator[
@@ -1211,6 +1228,36 @@ class NameSet(Composable):
         else:
             something = yield from yield_composition(self._cat.abridged_name, pre=pre, post=post)
             return something
+
+    def compose_compact_name(self, cap: (None, bool) = None,
+                             pre: (None, str, Composable) = None,
+                             post: (None, str, Composable) = None) -> \
+            collections.abc.Generator[
+                Composable, Composable, bool]:
+        """Composes the most compact / shortest name in the nameset.
+        """
+        something = yield from yield_composition(
+            prioritize_value(self._abridged_name,
+                             self._acronym,
+                             self._name,
+                             self._explicit_name),
+            cap=cap, pre=pre, post=post)
+        return something
+
+    def compose_conventional_name(self, cap: (None, bool) = None,
+                                  pre: (None, str, Composable) = None,
+                                  post: (None, str, Composable) = None) -> \
+            collections.abc.Generator[
+                Composable, Composable, bool]:
+        """Composes the most conventional / frequently-used name in the nameset.
+        """
+        something = yield from yield_composition(
+            prioritize_value(self._name,
+                             self._abridged_name,
+                             self._acronym,
+                             self._explicit_name),
+            cap=cap, pre=pre, post=post)
+        return something
 
     def compose_dashed_name(self, pre: (None, str, Composable) = None,
                             post: (None, str, Composable) = None) -> collections.abc.Generator[
@@ -1303,7 +1350,7 @@ class NameSet(Composable):
         return self._index_as_int
 
     @property
-    def name(self) -> str:
+    def name(self) -> StyledText:
         return self._name
 
     @property
@@ -1325,7 +1372,7 @@ class NameSet(Composable):
         """
         return f'{self.rep_symbol(encoding=encoding)}'
 
-    def rep_accurate(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
+    def rep_accurate_name(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
         """Returns the most accurate (longest) possible name in the nameset for the required text-format.
 
         Order of priority:
@@ -1334,19 +1381,8 @@ class NameSet(Composable):
         3) acronym
         4) symbol
         """
-        output = self.rep_explicit_name(encoding=encoding)
-        if output is not None:
-            return output
-        output = self.rep_name(encoding=encoding)
-        if output is not None:
-            return output
-        output = self.rep_acronym(encoding=encoding)
-        if output is not None:
-            return output
-        output = self.rep_symbol(encoding=encoding)
-        if output is not None:
-            return output
-        raise NoNameSolutionException(nameset=self, encoding=encoding)
+        return rep_composition(composition=self.compose_accurate_name(), encoding=encoding,
+                               cap=cap)
 
     def rep_acronym(self, encoding: (None, Encoding) = None, compose: bool = False) -> (
             None, str):
@@ -1357,7 +1393,7 @@ class NameSet(Composable):
                 StyledText(s=self._acronym, text_style=text_styles.sans_serif_normal))
         return rep.rep(encoding=encoding, compose=compose)
 
-    def rep_compact(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
+    def rep_compact_name(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
         """Returns the shortest possible name in the nameset for the required text-format.
 
         Order of priority:
@@ -1366,21 +1402,10 @@ class NameSet(Composable):
         3) name
         4) explicit-name
         """
-        output = self.rep_symbol(encoding=encoding)
-        if output is not None:
-            return output
-        output = self.rep_acronym(encoding=encoding)
-        if output is not None:
-            return output
-        output = self.rep_name(encoding=encoding)
-        if output is not None:
-            return output
-        output = self.rep_explicit_name(encoding=encoding)
-        if output is not None:
-            return output
-        raise NoNameSolutionException(nameset=self, encoding=encoding)
+        return rep_composition(composition=self.compose_compact_name(), encoding=encoding,
+                               cap=cap)
 
-    def rep_conventional(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
+    def rep_conventional_name(self, encoding: (None, Encoding) = None, cap: (None, bool) = None):
         """Returns the most conventional (default) possible name in the nameset for the required text-format.
 
         Order of priority:
@@ -1389,18 +1414,17 @@ class NameSet(Composable):
         4) symbol
         1) explicit-name
         """
-        return rep_composition(composition=self.compose_conventional(), encoding=encoding, cap=cap)
+        return rep_composition(composition=self.compose_conventional_name(), encoding=encoding,
+                               cap=cap)
 
     def rep_explicit_name(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> (
             None, str):
         """Return a string that represent the object as an explicit name."""
-        encoding = prioritize_value(encoding, configuration.encoding,
-                                    encodings.plaintext)
         return rep_composition(composition=self.compose_explicit_name(), encoding=encoding, cap=cap)
 
     def rep_fully_qualified_name(self, encoding: (None, Encoding) = None,
                                  cap: (None, bool) = None, compose: bool = False):
-        conventional = self.rep_conventional(encoding=encoding, cap=cap)
+        conventional = self.rep_conventional_name(encoding=encoding, cap=cap)
         sym = self.rep_symbol(encoding=encoding)
         rep = ComposableBlockSequence()
         rep.append(conventional)
@@ -1432,9 +1456,6 @@ class NameSet(Composable):
     def rep_name(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> (
             None, str):
         """Return a string that represent the object as a plain name."""
-        encoding = prioritize_value(encoding, configuration.encoding,
-                                    encodings.plaintext)
-        cap = prioritize_value(cap, False)
         return rep_composition(composition=self.compose_name(), encoding=encoding, cap=cap)
 
     def rep_ref(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
@@ -1452,8 +1473,6 @@ class NameSet(Composable):
 
     def rep_symbol(self, encoding: (None, Encoding) = None, **kwargs) -> (None, str):
         """Return a string that represent the object as a symbol."""
-        encoding = prioritize_value(encoding, configuration.encoding,
-                                    encodings.plaintext)
         return rep_composition(composition=self.compose_symbol(), encoding=encoding, **kwargs)
 
     def compose_title(self) -> collections.abc.Generator[Composable, Composable, bool]:
