@@ -6,16 +6,17 @@ import random_data
 class TestNameSet(TestCase):
     def test_nameset_1(self):
         n = pu.NameSet(symbol='x', index=1, acronym='xy', name='something',
-                       explicit_name='something precise')
+                       explicit_name='something precise', ref='1.1.1', subtitle='my subtitle')
 
-        pu.configuration.encoding = pu.encodings.unicode
-        self.assertEqual('𝑥₁', n.rep_compact())
-        self.assertEqual('𝗌𝗈𝗆𝖾𝗍𝗁𝗂𝗇𝗀 𝗉𝗋𝖾𝖼𝗂𝗌𝖾 𝟣', n.rep_accurate())
-        self.assertEqual('𝗌𝗈𝗆𝖾𝗍𝗁𝗂𝗇𝗀 𝟣', n.rep_conventional())
+        # Basic representations
         self.assertEqual('𝑥₁', n.rep_symbol())
+        self.assertEqual('𝗌𝗈𝗆𝖾𝗍𝗁𝗂𝗇𝗀', n.rep_name())
+        self.assertEqual('𝗌𝗈𝗆𝖾𝗍𝗁𝗂𝗇𝗀 𝗉𝗋𝖾𝖼𝗂𝗌𝖾', n.rep_explicit_name())
+        # Prioritized representations
+        self.assertEqual('𝑥₁', n.rep_compact())
+        self.assertEqual('𝗌𝗈𝗆𝖾𝗍𝗁𝗂𝗇𝗀 𝗉𝗋𝖾𝖼𝗂𝗌𝖾', n.rep_accurate(encoding=pu.encodings.unicode))
+        self.assertEqual('𝗌𝗈𝗆𝖾𝗍𝗁𝗂𝗇𝗀 𝟣', n.rep_conventional())
         self.assertEqual('𝚡𝚢𝟣', n.rep_acronym())
-        self.assertEqual('𝗌𝗈𝗆𝖾𝗍𝗁𝗂𝗇𝗀 𝟣', n.rep_name())
-        self.assertEqual('𝗌𝗈𝗆𝖾𝗍𝗁𝗂𝗇𝗀 𝗉𝗋𝖾𝖼𝗂𝗌𝖾 𝟣', n.rep_explicit_name())
 
         pu.configuration.encoding = pu.encodings.latex_math
         self.assertEqual('\\mathit{x}_{1}', n.rep_compact())

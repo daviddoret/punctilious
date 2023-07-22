@@ -10,10 +10,11 @@ import collections
 import networkx as nx
 import unicode_utilities
 import unidecode
+from plaintext import Plaintext
 
 
 def prioritize_value(*args):
-    """Return the first not None value."""
+    """Return the first non-None object in ⌜*args⌝."""
     for a in args:
         if a is not None:
             return a
@@ -33,6 +34,7 @@ def rep_composition(composition: collections.abc.Generator[Composable, Composabl
     else:
         representation = ''
         for item in composition:
+            print(item)
             if item is None:
                 return ''
             elif isinstance(item, typing.Generator):
@@ -80,6 +82,9 @@ encodings = Encodings()
 class Composable(abc.ABC):
     """An object that is Composable is an object that may participate in a representation composition and may be represented."""
 
+    def __str__(self):
+        return self.rep(encoding=encodings.plaintext)
+
     @abc.abstractmethod
     def compose(self) -> collections.abc.Generator[Composable, None, None]:
         raise NotImplementedError('This method is not implemented.')
@@ -97,31 +102,20 @@ class ComposableText(Composable):
     - may support one or several encodings."""
 
     def __init__(self, s: (None, str) = None,
-                 plaintext: (None, str) = None, unicode: (None, str) = None,
+                 plaintext: (None, str, Plaintext) = None, unicode: (None, str) = None,
                  latex_math: (None, str) = None
                  ):
         """
 
-        :param s: A string. Leave it to the constructor to interpret if it is plaintext or unicode.
+        :param s: A default undetermined string. Leave it to the constructor to infer its encoding (plaintext, unicode, ...).
         :param plaintext:
         :param unicode:
         :param latex_math:
-        :param text_style:
         """
-        if s is not None and plaintext is None and s == unidecode.unidecode(s):
-            plaintext = s
-        if s is not None and unicode is None and s != unidecode.unidecode(s):
-            unicode = s
-        if unicode is not None and plaintext is None:
-            if str(unicode).isalnum():
-                # This is a best-effort mapping to plaintext.
-                # It may lead to undesirable results,
-                # e.g. symbol '¬' is mapped to '!'.
-                # To avoid this, isalnum() is used as a temporary solution.
-                plaintext = unidecode.unidecode(unicode)
-        self._plaintext = plaintext if plaintext != '' else None
-        self._unicode = unicode if unicode != '' else None
-        self._latex_math = latex_math if latex_math != '' else None
+        unicode = prioritize_value(unicode, s)
+        self._plaintext = Plaintext(prioritize_value(plaintext, s, unicode))
+        self._unicode = unicode
+        self._latex_math = latex_math
 
     def __eq__(self, other: (None, object, ComposableText)) -> bool:
         """Two instances of TextStyle are equal if any of their formatted representation are equal and not None."""
@@ -135,6 +129,9 @@ class ComposableText(Composable):
         return hash(
             (ComposableText, self._plaintext, self._unicode, self._latex_math))
 
+    def __repr__(self):
+        return f'⌜{self.rep(encoding=encodings.plaintext)}⌝'
+
     def compose(self) -> collections.abc.Generator[Composable, None, None]:
         yield self
 
@@ -143,7 +140,7 @@ class ComposableText(Composable):
         return self._latex_math
 
     @property
-    def plaintext(self) -> (None, str):
+    def plaintext(self) -> (None, Plaintext):
         return self._plaintext
 
     def rep(self, encoding: Encoding = encodings.plaintext, cap: bool = False):
@@ -196,8 +193,10 @@ def yield_composition(*content, cap: (None, bool) = None, pre: (None, str, Compo
                 yield from ComposableText(s=element).compose()
             elif isinstance(element, Composable):
                 yield from element.compose()
+            elif isinstance(element, collections.abc.Generator):
+                yield from element
             else:
-                raise TypeError('body of unsupported type')
+                raise TypeError(f'Type ⌜{str(type(element))}⌝ is not supported.')
         yield from yield_composition(post)
         return True
     else:
@@ -336,6 +335,7 @@ class TextDict:
         self.let = None
         self.be_a = None
         self.be_an = None
+        self.colon = ComposableText(plaintext=':')
         self.period = ComposableText(plaintext='.')
         self.space = ComposableText(plaintext=' ')
         self.close_quasi_quote = ComposableText(plaintext='"', unicode='⌝',
@@ -462,6 +462,9 @@ class StyledText(ComposableBlockLeaf):
         style are distinct."""
         return hash(
             (ComposableText, self._content, self._text_style))
+
+    def __repr__(self):
+        return f'⌜{self.rep(encoding=encodings.plaintext)}⌝ [{self._text_style}]'
 
     def compose(self) -> collections.abc.Generator[Composable, None, None]:
         # Override the composition logic.
@@ -1078,11 +1081,12 @@ class NameSet(Composable):
                  index: (None, int, str, ComposableText) = None,
                  dashed_name: (None, str, StyledText) = None,
                  acronym: (None, str, ComposableText) = None,
+                 abridged_name: (None, str, ComposableText) = None,
                  name: (None, str) = None,
-                 ref: (None, str) = None,
+                 explicit_name: (None, str, ComposableText) = None,
                  cat: (None, TitleCategoryOBSOLETE) = None,
-                 subtitle: (None, str, ComposableText) = None,
-                 explicit_name: (None, str, ComposableText) = None):
+                 ref: (None, str) = None,
+                 subtitle: (None, str, ComposableText) = None):
         if s is not None:
             # Shortcut parameter to quickly declare a nameset from a python string,
             # inferring in best-effort mode whether the string represent a symbol,
@@ -1095,25 +1099,30 @@ class NameSet(Composable):
                 explicit_name = s
             elif name is None and len(s) > 1:
                 name = s
-        self._symbol = StyledText(s=symbol, text_style=text_styles.serif_italic) \
-            if isinstance(symbol, str) else symbol
+        # Symbolic names
+        if isinstance(symbol, str):
+            symbol = StyledText(s=symbol, text_style=text_styles.serif_italic)
+        self._symbol = symbol
+        # TODO: In NameSet.__init__, retrieve index_as_int when index is not an int
+        self._index_as_int = index if isinstance(index, int) else None
+        if isinstance(index, str):
+            index = Subscript(plaintext=index)
+        elif isinstance(index, int):
+            index = Subscript(plaintext=str(index))
+        self._index = index
+        if isinstance(dashed_name, str):
+            dashed_name = SerifItalic()
         self._dashed_name = dashed_name if isinstance(dashed_name,
                                                       StyledText) else \
             StyledText(s=dashed_name, text_style=text_styles.serif_italic) \
                 if isinstance(dashed_name, str) else None
         verify(self.symbol is not None, msg='The symbol of this nameset is None.', slf=self)
+        # Natural names
         self._acronym = acronym
+        self._abridged_name = abridged_name
         self._name = name
         self._explicit_name = explicit_name
-        self._index_as_int = index if isinstance(index, int) else None
-        if isinstance(index, Subscript):
-            self._index = index
-        elif isinstance(index, str):
-            self._index = Subscript(plaintext=index)
-        elif isinstance(index, int):
-            self._index = Subscript(plaintext=str(index))
-        else:
-            self._index = None
+        # Section reference names
         self._ref = ref
         self._cat = title_categories.uncategorized if cat is None else cat
         self._subtitle = subtitle
@@ -1221,6 +1230,15 @@ class NameSet(Composable):
             something = yield from yield_composition(self._explicit_name, pre=pre, post=post)
             return something
 
+    def compose_index(self, pre: (None, str, Composable) = None,
+                      post: (None, str, Composable) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        if self._symbol is None:
+            return False
+        else:
+            something = yield from yield_composition(self._index, pre=pre, post=post)
+            return something
+
     def compose_name(self, pre: (None, str, Composable) = None,
                      post: (None, str, Composable) = None) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -1264,10 +1282,11 @@ class NameSet(Composable):
     def compose_symbol(self, pre: (None, str, Composable) = None,
                        post: (None, str, Composable) = None) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        if self._acronym is None:
+        if self._symbol is None:
             return False
         else:
-            something = yield from yield_composition(self._symbol, pre=pre, post=post)
+            something = yield from yield_composition(self._symbol, self.compose_index(), pre=pre,
+                                                     post=post)
             return something
 
     @property
@@ -1372,17 +1391,12 @@ class NameSet(Composable):
         """
         return rep_composition(composition=self.compose_conventional(), encoding=encoding, cap=cap)
 
-    def rep_explicit_name(self, encoding: (None, Encoding) = None) -> (None, str):
+    def rep_explicit_name(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> (
+            None, str):
         """Return a string that represent the object as an explicit name."""
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
-        if self._explicit_name is None:
-            return None
-        else:
-            base = self._explicit_name.rep(encoding=encoding)
-            index = '' if self._index is None else ' ' + self._index.rep(encoding=encoding)
-            output = None if base is None else f'{base}{index}'
-            return output
+        return rep_composition(composition=self.compose_explicit_name(), encoding=encoding, cap=cap)
 
     def rep_fully_qualified_name(self, encoding: (None, Encoding) = None,
                                  cap: (None, bool) = None, compose: bool = False):
@@ -1442,12 +1456,13 @@ class NameSet(Composable):
                                     encodings.plaintext)
         return rep_composition(composition=self.compose_symbol(), encoding=encoding, **kwargs)
 
-    def compose_title(self) -> collections.abc.Generator[Composable, None, None]:
+    def compose_title(self) -> collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         yield from self.compose_cat_unabridged(cap=True, post=text_dict.space)
         yield from self.compose_ref(post=text_dict.space)
         yield from self.compose_symbol(pre=' (', post=') ')
         yield from self.compose_subtitle(pre=' - ')
+        return True
 
     def rep_title(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         """A title of the form: [unabridged-category] [reference] ([symbol]) - [subtitle]
@@ -1455,26 +1470,6 @@ class NameSet(Composable):
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
         return rep_composition(composition=self.compose_title(), encoding=encoding, cap=cap)
-        # rep = '' if self._cat is None else StyledText(s=self.cat.natural_name,
-        #                                              text_style=text_styles.sans_serif_bold).rep(
-        #    encoding=encoding, cap=cap)
-        # if self._ref is not None:
-        #    rep = rep + ' '
-        #    rep = rep + StyledText(s=self._ref,
-        #                           text_style=text_styles.sans_serif_bold).rep(
-        #        encoding=encoding)
-        # rep = rep + ' '
-        # rep = rep + StyledText(s='(', text_style=text_styles.sans_serif_bold).rep(
-        #    encoding=encoding)
-        # rep = rep + self.rep_symbol(encoding=encoding)
-        # rep = rep + StyledText(s=')', text_style=text_styles.sans_serif_bold).rep(
-        #    encoding=encoding)
-        # if self._subtitle is not None:
-        #    rep = rep + '- '
-        #    rep = rep + StyledText(s=self._subtitle,
-        #                           text_style=text_styles.sans_serif_bold).rep(
-        #        encoding=encoding)
-        # return rep
 
     @property
     def subtitle(self) -> str:
@@ -1841,10 +1836,10 @@ class SymbolicObject:
         return self.nameset.rep_ref(encoding=encoding, cap=cap)
 
     def rep_symbol(self, encoding: (None, Encoding) = None) -> str:
-        return self.nameset.rep_symbol(encoding=encoding)
+        return self._nameset.rep_symbol(encoding=encoding)
 
     def rep_title(self, encoding: (None, Encoding) = None, cap: bool = False) -> str:
-        return self.nameset.rep_title(encoding=encoding, cap=cap)
+        return self._nameset.rep_title(encoding=encoding, cap=cap)
 
     @property
     def nameset(self) -> NameSet:
@@ -3012,10 +3007,19 @@ class AxiomDeclaration(TheoreticalObject):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='axiom')
 
-    def compose_natural_language(self) -> collections.abc.Generator[Composable, None, None]:
-        compo = QuasiQuotation()
-        compo.append(self.natural_language)
-        return compo
+    def compose_natural_language(self) -> collections.abc.Generator[Composable, Composable, True]:
+        global text_dict
+        yield text_dict.open_quasi_quote
+        yield self.natural_language
+        yield text_dict.close_quasi_quote
+        return True
+
+    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        yield from self.nameset.compose_title()
+        yield text_dict.colon
+        yield text_dict.space
+        yield from self.compose_natural_language()
+        return True
 
     def rep_natural_language(self, encoding: (None, Encoding) = None,
                              wrap: bool = True) -> str:
@@ -3035,9 +3039,13 @@ class AxiomDeclaration(TheoreticalObject):
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
         cap = True
-        output = f'{self.rep_title(encoding=encoding, cap=cap)}: ⌜{self.natural_language}⌝'
-        output = wrap_text(output) if wrap else output
-        return output + f'\n'
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
+        output = rep_composition(self.compose_report())
+        return output
+        # output = f'{self.rep_title(encoding=encoding, cap=cap)}: ⌜{self.natural_language}⌝'
+        # output = wrap_text(output) if wrap else output
+        # return output + f'\n'
 
 
 class AxiomInclusion(Statement):

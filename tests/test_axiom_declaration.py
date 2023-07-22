@@ -4,6 +4,15 @@ import random_data
 
 
 class TestAxiomDeclaration(TestCase):
+
+    def test_title(self):
+        pu.configuration.echo_default = False
+        pu.configuration.encoding = pu.encodings.plaintext
+        u = pu.UniverseOfDiscourse()
+        content1 = random_data.random_sentence()
+        a1 = u.declare_axiom(content1)
+        print(a1.rep_title()) !!!!!!!!!!!CORRECT THIS!!!!!!!!!!!!
+
     def test_axiom_declaration(self):
         pu.configuration.echo_default = False
         pu.configuration.encoding = pu.encodings.plaintext
