@@ -28,7 +28,7 @@ class PunctiliousException(Exception):
 
 
 def rep_composition(composition: collections.abc.Generator[Composable, Composable, bool] = None,
-                    encoding: (None, bool) = None, **kwargs) -> str:
+                    encoding: (None, bool) = None, cap: (None, bool) = None, **kwargs) -> str:
     encoding = prioritize_value(encoding, configuration.encoding, encodings.plaintext)
     if composition is None:
         return ''
@@ -38,13 +38,18 @@ def rep_composition(composition: collections.abc.Generator[Composable, Composabl
             if item is None:
                 return ''
             elif isinstance(item, typing.Generator):
-                representation = rep_composition(composition=item, encoding=encoding, **kwargs)
+                representation = rep_composition(composition=item, encoding=encoding, cap=cap,
+                                                 **kwargs)
+                cap = False
             elif isinstance(item, Composable):
-                representation = representation + item.rep(encoding=encoding, **kwargs)
+                representation = representation + item.rep(encoding=encoding, cap=cap, **kwargs)
+                cap = False
             elif isinstance(item, str):
                 representation = representation + item
+                cap = False
             elif isinstance(item, int):
                 representation = representation + str(item)
+                cap = False
             else:
                 raise TypeError(f'Type ⌜{str(type(item))}⌝ is not supported in compositions.')
         return representation
@@ -631,7 +636,7 @@ class Index(ComposableBlockSequence):
 
 
 class SansSerifNormal(StyledText):
-    def __init__(self, s: (str, None), plaintext: (None, str, Plaintext) = None,
+    def __init__(self, s: (str, None) = None, plaintext: (None, str, Plaintext) = None,
                  unicode: (None, str, Unicode2) = None,
                  latex_math: (None, str) = None) -> None:
         super().__init__(s=s, text_style=text_styles.sans_serif_normal, plaintext=plaintext,
@@ -883,13 +888,17 @@ class Configuration:
     def __init__(self):
         self.auto_index = None
         self._echo_default = False
-        self.default_note_symbol = None
-        self.default_hypothesis_symbol = None
-        self.default_relation_symbol = None
-        self.default_symbolic_object_symbol = None
+        self.default_axiom_declaration_symbol = None
+        self.default_axiom_inclusion_symbol = None
+        self.default_definition_declaration_symbol = None
+        self.default_definition_inclusion_symbol = None
         self.default_formula_symbol = None
         self.default_free_variable_symbol = None
+        self.default_hypothesis_symbol = None
+        self.default_note_symbol = None
+        self.default_relation_symbol = None
         self.default_statement_symbol = None
+        self.default_symbolic_object_symbol = None
         self.default_theory_symbol = None
         self.echo_axiom_declaration = None
         self.echo_axiom_inclusion = None
@@ -1323,8 +1332,11 @@ class NameSet(Composable):
     def compose_ref(self, pre: (None, str, Composable) = None,
                     post: (None, str, Composable) = None) -> collections.abc.Generator[
         Composable, None, None]:
-        something = yield from yield_composition(self._ref, pre=pre, post=post)
-        return something
+        if self._ref is None:
+            return False
+        else:
+            something = yield from yield_composition(self._ref, pre=pre, post=post)
+            return something
 
     def compose_subtitle(self, pre: (None, str, Composable) = None,
                          post: (None, str, Composable) = None) -> collections.abc.Generator[
@@ -1688,10 +1700,13 @@ class SymbolicObject:
             self,
             nameset: (None, str, NameSet),
             universe_of_discourse: (None, UniverseOfDiscourse),
+            symbol: (None, str, StyledText) = None,
+            dashed_name: (None, str, StyledText) = None,
             is_theory_foundation_system: bool = False,
             is_universe_of_discourse: bool = False,
             cat: (None, TitleCategoryOBSOLETE) = None,
             ref: (None, str) = None,
+            subtitle: (None, str, StyledText) = None,
             echo: bool = False):
         echo = prioritize_value(echo, configuration.echo_symbolic_objct, configuration.echo_default,
                                 False)
@@ -1704,15 +1719,17 @@ class SymbolicObject:
         assert is_universe_of_discourse or is_in_class(
             universe_of_discourse, classes.u)
         if nameset is None:
-            symbol = configuration.default_symbolic_object_symbol
+            symbol = configuration.default_symbolic_object_symbol if symbol is None else symbol
             index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
+            nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name, cat=cat, ref=ref,
+                              subtitle=subtitle)
         if isinstance(nameset, str):
             symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
+            nameset = NameSet(symbol=symbol, index=index, cat=cat, ref=ref, subtitle=subtitle)
         nameset.cat = cat
         nameset.ref = ref
+        nameset.subtitle = subtitle
         self._nameset = nameset
         self.is_theory_foundation_system = is_theory_foundation_system
         self._declare_class_membership(classes.symbolic_objct)
@@ -1915,11 +1932,14 @@ class TheoreticalObject(SymbolicObject):
 
     def __init__(
             self,
+            symbol: (None, str, StyledText),
+            dashed_name: (None, str, StyledText),
             nameset: (None, str, NameSet),
             universe_of_discourse: UniverseOfDiscourse,
             is_theory_foundation_system: bool = False,
             cat: (None, TitleCategoryOBSOLETE) = None,
-            ref: (None, str) = None,
+            ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None,
             echo: bool = False):
         # pseudo-class properties. these must be overwritten by
         # the parent constructor after calling __init__().
@@ -1928,11 +1948,14 @@ class TheoreticalObject(SymbolicObject):
         # thus, implementing explicit functional-types will prove
         # more robust and allow for duck typing.
         super().__init__(
+            symbol=symbol,
+            dashed_name=dashed_name,
             nameset=nameset,
             universe_of_discourse=universe_of_discourse,
             is_theory_foundation_system=is_theory_foundation_system,
             cat=cat,
             ref=ref,
+            subtitle=subtitle,
             echo=False)
         super()._declare_class_membership(classes.theoretical_objct)
         if echo:
@@ -3010,8 +3033,11 @@ class AxiomDeclaration(TheoreticalObject):
             self,
             natural_language: str,
             u: UniverseOfDiscourse,
+            symbol: (None, str, StyledText) = None,
+            dashed_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None,
-            title: (None, str, TitleOBSOLETE) = None,
             auto_index: (None, bool) = None,
             echo: (None, bool) = None):
         """
@@ -3030,9 +3056,11 @@ class AxiomDeclaration(TheoreticalObject):
                'Parameter natural-language is an empty string (after trimming).')
         self.natural_language = natural_language
         cat = title_categories.axiom_declaration
-        # warnings.warn('A new long-name was generated to force its category property to: axiom.')
+        if nameset is None and symbol is None:
+            symbol = configuration.default_axiom_declaration_symbol
         super().__init__(
-            universe_of_discourse=u, nameset=nameset, cat=cat, echo=False)
+            universe_of_discourse=u, symbol=symbol, dashed_name=dashed_name, ref=ref,
+            subtitle=subtitle, nameset=nameset, cat=cat, echo=False)
         super()._declare_class_membership(declarative_class_list.axiom)
         u.cross_reference_axiom(self)
         if echo:
@@ -3074,13 +3102,8 @@ class AxiomDeclaration(TheoreticalObject):
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
         cap = True
-        encoding = prioritize_value(encoding, configuration.encoding,
-                                    encodings.plaintext)
-        output = rep_composition(self.compose_report())
+        output = rep_composition(composition=self.compose_report(), encoding=encoding, cap=cap)
         return output
-        # output = f'{self.rep_title(encoding=encoding, cap=cap)}: ⌜{self.natural_language}⌝'
-        # output = wrap_text(output) if wrap else output
-        # return output + f'\n'
 
 
 class AxiomInclusion(Statement):
@@ -4790,8 +4813,8 @@ class RelationDict(collections.UserDict):
                 2,
                 NameSet(
                     symbol=SerifItalic(plaintext='==>', unicode='⟹', latex_math=r'\implies'),
-                    name=SansSerifNormal(plaintext='implication'),
-                    explicit_name=SansSerifNormal(plaintext='logical implication'),
+                    name=SansSerifNormal(s='implication'),
+                    explicit_name=SansSerifNormal(s='logical implication'),
                     index=None),
                 Formula.infix,
                 signal_proposition=True)
@@ -7084,11 +7107,15 @@ class UniverseOfDiscourse(SymbolicObject):
             echo=echo)
 
     def declare_axiom(
-            self, natural_language: str, nameset: (None, str, NameSet) = None,
+            self, natural_language: str, symbol: (None, str, StyledText) = None,
+            dashed_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+            nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         """Elaborate a new axiom 𝑎 in this universe-of-discourse."""
         return AxiomDeclaration(
-            u=self, natural_language=natural_language, nameset=nameset, echo=echo)
+            u=self, natural_language=natural_language, symbol=symbol, dashed_name=dashed_name,
+            ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
 
     def declare_definition(
             self,
@@ -7143,7 +7170,6 @@ class UniverseOfDiscourse(SymbolicObject):
         :param symbol: The symbol-base.
         :return:
         """
-        assert isinstance(symbol, StyledText)
         return self.get_symbol_max_index(symbol) + 1
 
     @property
@@ -7502,22 +7528,17 @@ class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
 def reset_configuration(configuration: Configuration) -> None:
     configuration.auto_index = None
     configuration._echo_default = False
-    configuration.default_note_symbol = StyledText(plaintext='note',
-                                                   text_style=text_styles.serif_italic)
-    configuration.default_hypothesis_symbol = StyledText(plaintext='h',
-                                                         text_style=text_styles.serif_italic)
-    configuration.default_relation_symbol = StyledText(plaintext='r',
-                                                       text_style=text_styles.serif_italic)
-    configuration.default_symbolic_object_symbol = StyledText(plaintext='o',
-                                                              text_style=text_styles.serif_italic)
-    configuration.default_formula_symbol = StyledText(plaintext='phi', unicode='𝜑',
-                                                      text_style=text_styles.serif_italic)
+    configuration.default_axiom_declaration_symbol = SerifItalic('a')
+    configuration.default_axiom_inclusion_symbol = SerifItalic('p')
+    configuration.default_formula_symbol = SerifItalic(plaintext='phi', unicode='𝜑')
     configuration.default_free_variable_symbol = StyledText(plaintext='x',
                                                             text_style=text_styles.serif_bold)
-    configuration.default_statement_symbol = StyledText(plaintext='s',
-                                                        text_style=text_styles.serif_italic)
-    configuration.default_theory_symbol = StyledText(plaintext='T',
-                                                     text_style=text_styles.script_normal)
+    configuration.default_hypothesis_symbol = SerifItalic('h')
+    configuration.default_note_symbol = SerifItalic('note')
+    configuration.default_relation_symbol = SerifItalic('r')
+    configuration.default_statement_symbol = SerifItalic('p')
+    configuration.default_symbolic_object_symbol = SerifItalic('o')
+    configuration.default_theory_symbol = ScriptNormal('T')
     configuration.echo_axiom_declaration = None
     configuration.echo_axiom_inclusion = None
     configuration.echo_definition_declaration = None
