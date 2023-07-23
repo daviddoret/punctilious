@@ -42,7 +42,7 @@ def rep_composition(composition: collections.abc.Generator[Composable, Composabl
                                                  **kwargs)
                 cap = False
             elif isinstance(item, Composable):
-                representation = representation + item.rep(encoding=encoding, cap=cap, **kwargs)
+                representation = representation + item.rep(encoding=encoding, cap=cap)
                 cap = False
             elif isinstance(item, str):
                 representation = representation + item
@@ -1932,10 +1932,10 @@ class TheoreticalObject(SymbolicObject):
 
     def __init__(
             self,
-            symbol: (None, str, StyledText),
-            dashed_name: (None, str, StyledText),
-            nameset: (None, str, NameSet),
             universe_of_discourse: UniverseOfDiscourse,
+            symbol: (None, str, StyledText) = None,
+            dashed_name: (None, str, StyledText) = None,
+            nameset: (None, str, NameSet) = None,
             is_theory_foundation_system: bool = False,
             cat: (None, TitleCategoryOBSOLETE) = None,
             ref: (None, str, StyledText) = None,
@@ -3085,11 +3085,9 @@ class AxiomDeclaration(TheoreticalObject):
         return True
 
     def rep_natural_language(self, encoding: (None, Encoding) = None,
-                             wrap: bool = True) -> str:
-        encoding = prioritize_value(encoding, configuration.encoding,
-                                    encodings.plaintext)
-        output = self.compose_natural_language().rep(encoding=encoding, wrap=wrap)
-        return output
+                             wrap: bool = None) -> str:
+        return rep_composition(composition=self.compose_natural_language(), encoding=encoding,
+                               wrap=wrap)
 
     def rep_report(self, encoding: (None, Encoding) = None, output_proofs: bool = True,
                    wrap: bool = True) -> str:
@@ -3180,15 +3178,22 @@ class InferenceRuleInclusion(Statement):
             self,
             i: InferenceRuleDeclaration,
             t: TheoryElaborationSequence,
+            symbol: (None, str, StyledText) = None,
+            dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         """Include (aka allow) an inference-rule in a theory-elaboration.
         """
         self._inference_rule = i
         if nameset is None:
-            symbol = configuration.default_statement_symbol
+            symbol = configuration.default_statement_symbol if symbol is None else symbol
             index = t.universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
+            nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name, acronym=acronym,
+                              abridged_name=abridged_name, name=name, explicit_name=explicit_name)
         super().__init__(
             theory=t,
             cat=title_categories.inference_rule_inclusion,
@@ -3680,8 +3685,13 @@ class InferenceRuleDeclaration(TheoreticalObject):
                  infer_formula: collections.abc.Callable,
                  verify_args: collections.abc.Callable,
                  rep_two_columns_proof: (None, collections.abc.Callable) = None,
+                 symbol: (None, str, StyledText) = None,
+                 dashed_name: (None, str, StyledText) = None,
+                 acronym: (None, str, StyledText) = None,
+                 abridged_name: (None, str, StyledText) = None,
+                 name: (None, str, StyledText) = None,
+                 explicit_name: (None, str, StyledText) = None,
                  nameset: (None, str, NameSet) = None,
-                 name: (None, str) = None,
                  echo: (None, bool) = None):
         self._infer_formula = infer_formula
         self._verify_args = verify_args
@@ -5073,15 +5083,11 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             """
             report = rep_two_columns_proof_item(
                 left=a.rep_natural_language(encoding=encoding),
-                right=ComposableText(
-                    s='Postulated by ',
-                    text_style=text_styles.sans_serif_normal).rep(encoding=encoding) + \
+                right=SansSerifNormal('Postulated by ').rep(encoding=encoding) + \
                       a.rep_ref(encoding=encoding))
             report = report + rep_two_columns_proof_item(
                 left=p.rep_formula(encoding=encoding, expand=True),
-                right=ComposableText(
-                    s='Interpreted from natural-language',
-                    text_style=text_styles.sans_serif_normal).rep(encoding=encoding))
+                right=SansSerifNormal('Interpreted from natural-language').rep(encoding=encoding))
             return report
 
         def compose_paragraph_proof(a: AxiomInclusion, p: Formula):
@@ -6224,11 +6230,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._variable_substitution is None:
             self._variable_substitution = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=ComposableText(plaintext='variable-substitution',
-                                                      text_style=text_styles.monospace),
-                                index=None),
-                name='variable substitution',
-                dashed_name=DashedName('variable-substitution'),
+                nameset=NameSet(symbol=SerifItalic('variable-substitution'),
+                                index=None,
+                                dashed_name=SerifItalic('variable-substitution'),
+                                name=SerifNormal('variable substitution')),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._variable_substitution
@@ -6428,7 +6433,10 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._conjunction_elimination_left = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.conjunction_elimination_left,
-                title='conjunction elimination (left)')
+                symbol='conjunction-elimination-left',
+                dashed_name='conjunction-elimination-left',
+                acronym='cel',
+                name='conjunction elimination (left)')
         return self._conjunction_elimination_left
 
     @property
@@ -6444,7 +6452,10 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._conjunction_elimination_right = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.conjunction_elimination_right,
-                title='conjunction elimination (right)')
+                symbol='conjunction-elimination-right',
+                dashed_name='conjunction-elimination-right',
+                acronym='cer',
+                name='conjunction elimination (right)')
         return self._conjunction_elimination_right
 
     @property
@@ -6460,7 +6471,10 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._conjunction_introduction = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.conjunction_introduction,
-                title='conjunction introduction')
+                symbol='conjunction-introduction',
+                dashed_name='conjunction-introduction',
+                acronym='ci',
+                name='conjunction introduction')
         return self._conjunction_introduction
 
     @property
