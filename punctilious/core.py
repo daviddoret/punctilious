@@ -4309,7 +4309,7 @@ class TheoryElaborationSequence(TheoreticalObject):
         """Pose a new hypothesis in the current theory."""
         return Hypothesis(
             t=self, hypothetical_formula=hypothetical_proposition,
-            nameset=nameset, title=title, dashed_name=dashed_name,
+            nameset=nameset, subtitle=title, dashed_name=dashed_name,
             echo=echo)
 
     def rep_theory_report(self, output_proofs=True):
@@ -4450,7 +4450,7 @@ class Hypothesis(Statement):
     def __init__(
             self, t: TheoryElaborationSequence, hypothetical_formula: Formula,
             nameset: (None, NameSet) = None,
-            title: (None, TitleOBSOLETE) = None, dashed_name: (None, DashedName) = None,
+            subtitle: (None, str, StyledText) = None, dashed_name: (None, str, StyledText) = None,
             echo: bool = False):
         category = title_categories.hypothesis
         # TODO: Check that all components of the hypothetical-proposition
@@ -4473,7 +4473,7 @@ class Hypothesis(Statement):
             nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
             theory=t, cat=category, nameset=nameset,
-            title=title, dashed_name=dashed_name, echo=False)
+            subtitle=subtitle, dashed_name=dashed_name, echo=False)
         super()._declare_class_membership(declarative_class_list.hypothesis)
         self.hypothetical_proposition_formula = hypothetical_formula
         self.hypothetical_t = t.universe_of_discourse.t(
@@ -5866,11 +5866,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._double_negation_introduction is None:
             self._double_negation_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=ComposableText(plaintext='double-negation-introduction',
-                                                      text_style=text_styles.monospace),
-                                index=None),
+                symbol='double-negation-introduction',
+                index=None, auto_index=False,
                 name='double negation introduction',
-                dashed_name=DashedName('double-negation-introduction'),
+                dashed_name='double-negation-introduction',
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._double_negation_introduction
@@ -5933,12 +5932,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._equality_commutativity is None:
             self._equality_commutativity = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(
-                    symbol=ComposableText(plaintext='equality-commutativity',
-                                          text_style=text_styles.monospace),
-                    index=None),
+                symbol='equality-commutativity',
+                index=None, auto_index=False,
                 name='equality commutativity',
-                dashed_name=DashedName('equality-commutativity'),
+                dashed_name='equality-commutativity',
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._equality_commutativity
@@ -6104,11 +6101,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._modus_ponens is None:
             self._modus_ponens = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=ComposableText(plaintext='modus-ponens',
-                                                      text_style=text_styles.monospace),
-                                index=None),
+                symbol='modus-ponens',
+                index=None,
                 name='modus ponens',
-                dashed_name=DashedName('modus-ponens'),
+                dashed_name='modus-ponens',
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._modus_ponens
@@ -6185,11 +6181,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._equal_terms_substitution is None:
             self._equal_terms_substitution = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=ComposableText(plaintext='equal-terms-substitution',
-                                                      text_style=text_styles.monospace),
-                                index=None),
+                symbol='equal-terms-substitution',
+                index=None, auto_index=False,
                 name='equal terms substitution',
-                dashed_name=DashedName('equal-terms-substitution'),
+                dashed_name='equal-terms-substitution',
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._equal_terms_substitution
@@ -6659,7 +6654,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._double_negation_introduction = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.double_negation_introduction,
-                title='double negation introduction')
+                name='double negation introduction')
         return self._double_negation_introduction
 
     @property
@@ -6686,7 +6681,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._equality_commutativity = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.equality_commutativity,
-                title='equality commutativity')
+                name='equality commutativity')
         return self._equality_commutativity
 
     @property
@@ -6712,7 +6707,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._equal_terms_substitution = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.equal_terms_substitution,
-                title='equal terms substitution')
+                name='equal terms substitution')
         return self._equal_terms_substitution
 
     @property
