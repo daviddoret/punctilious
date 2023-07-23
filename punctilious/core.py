@@ -2891,8 +2891,8 @@ class TitleCategories(repm.ValueName):
                                                    'def.')
     definition_inclusion = TitleCategoryOBSOLETE('definition_inclusion', 's', 'definition', 'def.')
     hypothesis = TitleCategoryOBSOLETE('hypothesis', 's', 'hypothesis', 'hyp.')
-    inference_rule = TitleCategoryOBSOLETE('inference_rule', 's', 'inference rule',
-                                           'inference rule')
+    inference_rule_declaration = TitleCategoryOBSOLETE('inference_rule', 's', 'inference rule',
+                                                       'inference rule')
     inference_rule_inclusion = TitleCategoryOBSOLETE('inference_rule_inclusion', 's',
                                                      'inference rule inclusion', 'i.-r.')
     inferred_proposition = ('inferred_proposition', 's', 'inferred-proposition')
@@ -3711,22 +3711,29 @@ class InferenceRuleDeclaration(TheoreticalObject):
                  verify_args: collections.abc.Callable,
                  rep_two_columns_proof: (None, collections.abc.Callable) = None,
                  symbol: (None, str, StyledText) = None,
+                 index: (None, int) = None,
+                 auto_index: (None, bool) = None,
                  dashed_name: (None, str, StyledText) = None,
                  acronym: (None, str, StyledText) = None,
                  abridged_name: (None, str, StyledText) = None,
                  name: (None, str, StyledText) = None,
                  explicit_name: (None, str, StyledText) = None,
+                 ref: (None, str, StyledText) = None,
+                 subtitle: (None, str, StyledText) = None,
                  nameset: (None, str, NameSet) = None,
                  echo: (None, bool) = None):
         self._infer_formula = infer_formula
         self._verify_args = verify_args
         self._rep_two_columns_proof = rep_two_columns_proof
-        if nameset is None:
+        if nameset is None and symbol is None:
             symbol = configuration.default_symbolic_object_symbol
-            index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index, name=name)
+        cat = title_categories.inference_rule_declaration
         super().__init__(universe_of_discourse=universe_of_discourse,
                          is_theory_foundation_system=False,
+                         symbol=symbol, index=index, auto_index=auto_index,
+                         acronym=acronym, abridged_name=abridged_name, name=name,
+                         explicit_name=explicit_name,
+                         cat=cat, ref=ref, subtitle=subtitle,
                          nameset=nameset, echo=False)
         super()._declare_class_membership(declarative_class_list.inference_rule)
         universe_of_discourse.cross_reference_inference_rule(self)
@@ -4382,15 +4389,22 @@ class TheoryElaborationSequence(TheoreticalObject):
                proof_parameter=proof.parameters[0], proof=proof, slf=self)
         self._consistency = consistency_values.proved_inconsistent
 
-    def rep_declaration(self, encoding: (None, Encoding) = None, compose: bool = False) -> str:
-        rep = Paragraph()
-        rep.append('Let')
-        rep.append(self.rep_fully_qualified_name(encoding=encoding))
-        rep.append('be a theory-elaboration-sequence in')
-        rep.append(self.u.rep_symbol(encoding=encoding), sep_after=text_dict.period)
-        if not compose:
-            rep = rep.rep(encoding=encoding)
-        return rep
+    def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        yield text_dict.let
+        yield text_dict.space
+        yield from self.nameset.compose_qualified_symbol()
+        yield text_dict.space
+        yield text_dict.be_a
+        yield text_dict.space
+        yield from self.compose_class()
+        yield text_dict.space
+        yield text_dict.in2
+        yield text_dict.space
+        yield from self.u.compose_symbol()
+        yield text_dict.period
+
+    def rep_declaration(self, encoding: (None, Encoding) = None) -> str:
+        return rep_composition(compose=self.compose_declaration(), encoding=encoding)
 
     @property
     def stabilized(self):
@@ -5805,11 +5819,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._double_negation_elimination is None:
             self._double_negation_elimination = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=ComposableText(plaintext='double-negation-elimination',
-                                                      text_style=text_styles.monospace),
-                                index=None),
+                symbol='double-negation-elimination',
+                index=None, auto_index=False,
+                dashed_name='double-negation-elimination',
                 name='double negation elimination',
-                dashed_name=DashedName('double-negation-elimination'),
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._double_negation_elimination
@@ -6630,7 +6643,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._double_negation_elimination = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.double_negation_elimination,
-                title='double negation elimination')
+                name='double negation elimination')
         return self._double_negation_elimination
 
     @property
