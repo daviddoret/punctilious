@@ -2941,10 +2941,13 @@ class Statement(TheoreticalObject):
     def __init__(
             self,
             theory: TheoryElaborationSequence,
-            nameset: (None, str, NameSet) = None,
-            cat: (None, TitleCategoryOBSOLETE) = None,
-            ref: (None, str) = None,
-            echo: bool = False):
+            symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
+            cat: (None, TitleCategoryOBSOLETE) = None, echo: (None, bool) = None):
         self._theory = theory
         echo = prioritize_value(echo, configuration.echo_statement, configuration.echo_default,
                                 False)
@@ -2952,11 +2955,10 @@ class Statement(TheoreticalObject):
         self.statement_index = theory.crossreference_statement(self)
         self._cat = cat
         super().__init__(
-            nameset=nameset,
-            universe_of_discourse=universe_of_discourse,
-            cat=cat,
-            ref=ref,
-            echo=False)
+            universe_of_discourse=universe_of_discourse, symbol=symbol, index=index,
+            auto_index=auto_index, dashed_name=dashed_name,
+            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+            cat=cat, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
         super()._declare_class_membership(declarative_class_list.statement)
         if echo:
             self.echo()
@@ -3023,11 +3025,12 @@ class AxiomDeclaration(TheoreticalObject):
     def __init__(
             self,
             natural_language: str, u: UniverseOfDiscourse, symbol: (None, str, StyledText) = None,
-            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
-            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
-            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
+            echo: (None, bool) = None):
         """
 
         :param natural_language: The axiom's content in natural-language.
@@ -3046,9 +3049,10 @@ class AxiomDeclaration(TheoreticalObject):
         if nameset is None and symbol is None:
             symbol = configuration.default_axiom_declaration_symbol
         super().__init__(
-            universe_of_discourse=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
-            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-            ref=ref, subtitle=subtitle, nameset=nameset, cat=cat, echo=False)
+            universe_of_discourse=u, symbol=symbol, index=index, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, cat=cat,
+            echo=False)
         super()._declare_class_membership(declarative_class_list.axiom)
         u.cross_reference_axiom(self)
         if echo:
@@ -3101,8 +3105,12 @@ class AxiomInclusion(Statement):
             self,
             a: AxiomDeclaration,
             t: TheoryElaborationSequence,
-            nameset: (None, str, NameSet) = None,
-            ref: (None, str) = None,
+            symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         """Include (postulate) an axiom in a theory-elaboration-sequence.
         """
@@ -3110,16 +3118,17 @@ class AxiomInclusion(Statement):
                                 configuration.echo_default,
                                 False)
         self._axiom = a
+        t.crossreference_definition_endorsement(self)
+        cat = title_categories.axiom_inclusion
+        if nameset is None and symbol is None:
+            symbol = configuration.default_axiom_inclusion_symbol
         super().__init__(
-            theory=t,
-            cat=title_categories.axiom_inclusion,
-            ref=ref,
-            nameset=nameset,
-            echo=False)
-        t.crossreference_axiom_inclusion(self)
+            theory=t, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
+            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+            cat=cat, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
         super()._declare_class_membership(declarative_class_list.axiom_inclusion)
         if echo:
-            repm.prnt(self.rep_report())
+            self.echo()
 
     @property
     def a(self) -> AxiomDeclaration:
@@ -3262,13 +3271,14 @@ class DefinitionDeclaration(TheoreticalObject):
     """
 
     def __init__(
-            self, natural_language: str, u: UniverseOfDiscourse,
-            symbol: (None, str, StyledText) = None, index: (None, int) = None,
-            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
-            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
-            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+            self,
+            natural_language: str, u: UniverseOfDiscourse, symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
+            echo: (None, bool) = None):
         """
 
         :param natural_language: The definition's content in natural-language.
@@ -3345,9 +3355,12 @@ class DefinitionInclusion(Statement):
             self,
             d: DefinitionDeclaration,
             t: TheoryElaborationSequence,
-            nameset: (None, str, NameSet) = None,
-            title: (None, str, TitleOBSOLETE) = None,
-            dashed_name: (None, str, DashedName) = None,
+            symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         """Endorsement (aka include, endorse) an definition in a theory-elaboration.
         """
@@ -3356,11 +3369,13 @@ class DefinitionInclusion(Statement):
                                 False)
         self.definition = d
         t.crossreference_definition_endorsement(self)
+        cat = title_categories.definition_inclusion
+        if nameset is None and symbol is None:
+            symbol = configuration.default_definition_inclusion_symbol
         super().__init__(
-            theory=t,
-            cat=title_categories.definition_inclusion,
-            nameset=nameset,
-            echo=False)
+            theory=t, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
+            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+            cat=cat, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
         super()._declare_class_membership(declarative_class_list.definition_inclusion)
         if echo:
             self.echo()
@@ -4176,19 +4191,32 @@ class TheoryElaborationSequence(TheoreticalObject):
                 include_root=False, visited=visited)
 
     def include_axiom(
-            self, a: AxiomDeclaration, nameset: (None, str, NameSet) = None,
-            ref: (None, str) = None, echo: (None, bool) = None) -> AxiomInclusion:
-        """Postulate an axiom in this theory-elaboration (self)."""
+            self, a: AxiomDeclaration,
+            symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+            nameset: (None, str, NameSet) = None, echo: (None, bool) = None) -> AxiomInclusion:
+        """Include an axiom in this theory-elaboration-sequence."""
         return AxiomInclusion(
-            a=a, t=self, nameset=nameset, ref=ref, echo=echo)
+            a=a, t=self, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
+            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+            ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
 
     def include_definition(
-            self, d: DefinitionDeclaration, nameset: (None, str, NameSet) = None,
-            title: (None, str, TitleOBSOLETE) = None,
-            dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
-        """Include (aka endorse) a definition in this theory-elaboration (self)."""
+            self, d: DefinitionDeclaration,
+            symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+            nameset: (None, str, NameSet) = None, echo: (None, bool) = None) -> DefinitionInclusion:
+        """Include a definition in this theory-elaboration-sequence."""
         return DefinitionInclusion(
-            d=d, t=self, nameset=nameset, title=title, dashed_name=dashed_name, echo=echo)
+            d=d, t=self, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
+            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+            ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
 
     def infer_by_substitution_of_equal_terms(
             self, original_expression, equality_statement, symbol=None,
