@@ -1698,38 +1698,34 @@ class SymbolicObject:
 
     def __init__(
             self,
-            nameset: (None, str, NameSet),
-            universe_of_discourse: (None, UniverseOfDiscourse),
-            symbol: (None, str, StyledText) = None,
-            dashed_name: (None, str, StyledText) = None,
-            is_theory_foundation_system: bool = False,
-            is_universe_of_discourse: bool = False,
-            cat: (None, TitleCategoryOBSOLETE) = None,
-            ref: (None, str) = None,
-            subtitle: (None, str, StyledText) = None,
-            echo: bool = False):
+            universe_of_discourse: UniverseOfDiscourse,
+            is_theory_foundation_system: bool = False, is_universe_of_discourse: bool = False,
+            symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
+            echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_symbolic_objct, configuration.echo_default,
                                 False)
+        auto_index = prioritize_value(auto_index, configuration.auto_index, True)
         self._declarative_classes = frozenset()
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
         is_universe_of_discourse = False if is_universe_of_discourse is None else is_universe_of_discourse
-        # By design, every symbolic-objct is a component of a theory,
-        # unless it is itself a theory-foundation-system,
-        # or it is itself a universe-of-discourse.
-        assert is_universe_of_discourse or is_in_class(
-            universe_of_discourse, classes.u)
         if nameset is None:
             symbol = configuration.default_symbolic_object_symbol if symbol is None else symbol
-            index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name, cat=cat, ref=ref,
-                              subtitle=subtitle)
+            index = universe_of_discourse.index_symbol(
+                symbol=symbol) if (index is None and auto_index) else index
+            nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name,
+                              acronym=acronym, abridged_name=abridged_name, name=name,
+                              explicit_name=explicit_name, cat=cat, ref=ref, subtitle=subtitle)
         if isinstance(nameset, str):
             symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index, cat=cat, ref=ref, subtitle=subtitle)
-        nameset.cat = cat
-        nameset.ref = ref
-        nameset.subtitle = subtitle
+            nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name,
+                              acronym=acronym, abridged_name=abridged_name, name=name,
+                              explicit_name=explicit_name, cat=cat, ref=ref, subtitle=subtitle)
         self._nameset = nameset
         self.is_theory_foundation_system = is_theory_foundation_system
         self._declare_class_membership(classes.symbolic_objct)
@@ -1931,16 +1927,15 @@ class TheoreticalObject(SymbolicObject):
     """
 
     def __init__(
-            self,
-            universe_of_discourse: UniverseOfDiscourse,
-            symbol: (None, str, StyledText) = None,
-            dashed_name: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None,
-            is_theory_foundation_system: bool = False,
-            cat: (None, TitleCategoryOBSOLETE) = None,
-            ref: (None, str, StyledText) = None,
-            subtitle: (None, str, StyledText) = None,
-            echo: bool = False):
+            self, universe_of_discourse: UniverseOfDiscourse,
+            is_theory_foundation_system: bool = False, symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None,
+            cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
+            echo: (None, bool) = None):
         # pseudo-class properties. these must be overwritten by
         # the parent constructor after calling __init__().
         # the rationale is that checking python types fails
@@ -1948,15 +1943,11 @@ class TheoreticalObject(SymbolicObject):
         # thus, implementing explicit functional-types will prove
         # more robust and allow for duck typing.
         super().__init__(
-            symbol=symbol,
-            dashed_name=dashed_name,
-            nameset=nameset,
             universe_of_discourse=universe_of_discourse,
             is_theory_foundation_system=is_theory_foundation_system,
-            cat=cat,
-            ref=ref,
-            subtitle=subtitle,
-            echo=False)
+            symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
+            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+            cat=cat, ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
         super()._declare_class_membership(classes.theoretical_objct)
         if echo:
             repm.prnt(self.rep_fully_qualified_name())
@@ -2893,10 +2884,10 @@ class TitleCategoryOBSOLETE(repm.ValueName):
 
 class TitleCategories(repm.ValueName):
     # axiom = TitleCategory('axiom', 's', 'axiom', 'axiom')
-    axiom_declaration = TitleCategoryOBSOLETE('axiom_declaration', 's', 'axiom', 'axiom')
+    axiom_declaration = TitleCategoryOBSOLETE('axiom_declaration', 'a', 'axiom', 'axiom')
     axiom_inclusion = TitleCategoryOBSOLETE('axiom_inclusion', 's', 'axiom', 'axiom')
     corollary = TitleCategoryOBSOLETE('corollary', 's', 'corollary', 'cor.')
-    definition_declaration = TitleCategoryOBSOLETE('definition_declaration', 's', 'definition',
+    definition_declaration = TitleCategoryOBSOLETE('definition_declaration', 'd', 'definition',
                                                    'def.')
     definition_inclusion = TitleCategoryOBSOLETE('definition_inclusion', 's', 'definition', 'def.')
     hypothesis = TitleCategoryOBSOLETE('hypothesis', 's', 'hypothesis', 'hyp.')
@@ -3031,15 +3022,12 @@ class AxiomDeclaration(TheoreticalObject):
 
     def __init__(
             self,
-            natural_language: str,
-            u: UniverseOfDiscourse,
-            symbol: (None, str, StyledText) = None,
-            dashed_name: (None, str, StyledText) = None,
-            ref: (None, str, StyledText) = None,
-            subtitle: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None,
-            auto_index: (None, bool) = None,
-            echo: (None, bool) = None):
+            natural_language: str, u: UniverseOfDiscourse, symbol: (None, str, StyledText) = None,
+            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+            nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
         """
 
         :param natural_language: The axiom's content in natural-language.
@@ -3047,7 +3035,6 @@ class AxiomDeclaration(TheoreticalObject):
         :param nameset:
         :param echo:
         """
-        auto_index = prioritize_value(auto_index, configuration.auto_index, False)
         echo = prioritize_value(echo, configuration.echo_axiom_declaration,
                                 configuration.echo_default,
                                 False)
@@ -3059,8 +3046,9 @@ class AxiomDeclaration(TheoreticalObject):
         if nameset is None and symbol is None:
             symbol = configuration.default_axiom_declaration_symbol
         super().__init__(
-            universe_of_discourse=u, symbol=symbol, dashed_name=dashed_name, ref=ref,
-            subtitle=subtitle, nameset=nameset, cat=cat, echo=False)
+            universe_of_discourse=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
+            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+            ref=ref, subtitle=subtitle, nameset=nameset, cat=cat, echo=False)
         super()._declare_class_membership(declarative_class_list.axiom)
         u.cross_reference_axiom(self)
         if echo:
@@ -3274,14 +3262,13 @@ class DefinitionDeclaration(TheoreticalObject):
     """
 
     def __init__(
-            self,
-            natural_language: str,
-            u: UniverseOfDiscourse,
-            auto_index=None,
-            nameset: (None, str, NameSet) = None,
-            title: (None, str, TitleOBSOLETE) = None,
-            dashed_name: (None, str, DashedName) = None,
-            echo: (None, bool) = None):
+            self, natural_language: str, u: UniverseOfDiscourse,
+            symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+            nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
         """
 
         :param natural_language: The definition's content in natural-language.
@@ -3289,7 +3276,6 @@ class DefinitionDeclaration(TheoreticalObject):
         :param nameset:
         :param echo:
         """
-        auto_index = prioritize_value(auto_index, configuration.auto_index, False)
         echo = prioritize_value(echo, configuration.echo_definition_declaration,
                                 configuration.echo_default,
                                 False)
@@ -3297,9 +3283,14 @@ class DefinitionDeclaration(TheoreticalObject):
         verify(natural_language != '',
                'Parameter natural-language is an empty string (after trimming).')
         self.natural_language = natural_language
+        cat = title_categories.definition_declaration
+        if nameset is None and symbol is None:
+            symbol = configuration.default_definition_declaration_symbol
         super().__init__(
-            universe_of_discourse=u, nameset=nameset, cat=title_categories.definition_declaration,
-            echo=echo)
+            universe_of_discourse=u, symbol=symbol,
+            index=index, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, cat=cat, ref=ref,
+            subtitle=subtitle, nameset=nameset, echo=echo)
         super()._declare_class_membership(declarative_class_list.definition)
         u.cross_reference_definition(self)
         if echo:
@@ -3309,10 +3300,27 @@ class DefinitionDeclaration(TheoreticalObject):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='definition')
 
-    def echo(self):
-        repm.prnt(self.rep_report())
+    def compose_natural_language(self) -> collections.abc.Generator[Composable, Composable, True]:
+        global text_dict
+        yield text_dict.open_quasi_quote
+        yield self.natural_language
+        yield text_dict.close_quasi_quote
+        return True
 
-    def rep_report(self, encoding: (None, Encoding) = None, output_proofs=True) -> str:
+    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        yield from self.nameset.compose_title()
+        yield text_dict.colon
+        yield text_dict.space
+        yield from self.compose_natural_language()
+        return True
+
+    def rep_natural_language(self, encoding: (None, Encoding) = None,
+                             wrap: bool = None) -> str:
+        return rep_composition(composition=self.compose_natural_language(), encoding=encoding,
+                               wrap=wrap)
+
+    def rep_report(self, encoding: (None, Encoding) = None, output_proofs: bool = True,
+                   wrap: bool = True) -> str:
         """Return a representation that expresses and justifies the statement.
 
         :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
@@ -3322,9 +3330,11 @@ class DefinitionDeclaration(TheoreticalObject):
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
         cap = True
-        output = f'{self.rep_title(encoding=encoding, cap=cap)} ({self.rep_name(encoding=encoding)}): {self.natural_language}'
-        output = wrap_text(output)
-        return output + f'\n'
+        output = rep_composition(composition=self.compose_report(), encoding=encoding, cap=cap)
+        return output
+
+    def echo(self):
+        repm.prnt(self.rep_report())
 
 
 class DefinitionInclusion(Statement):
@@ -7121,30 +7131,32 @@ class UniverseOfDiscourse(SymbolicObject):
             echo=echo)
 
     def declare_axiom(
-            self, natural_language: str, symbol: (None, str, StyledText) = None,
-            dashed_name: (None, str, StyledText) = None,
+            self, natural_language: str,
+            symbol: (None, str, StyledText) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None,
-            echo: (None, bool) = None):
+            nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
         """Elaborate a new axiom 𝑎 in this universe-of-discourse."""
         return AxiomDeclaration(
             u=self, natural_language=natural_language, symbol=symbol, dashed_name=dashed_name,
+            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
 
     def declare_definition(
-            self,
-            natural_language: str,
-            nameset: (None, str, NameSet) = None,
-            title: (None, str, TitleOBSOLETE) = None,
-            dashed_name: (None, str, DashedName) = None,
-            echo: (None, bool) = None):
-        """Pose a new definition in the current universe-of-discourse.
-
-        Shortcut for: u.pose_definition(...)"""
+            self, natural_language: str, symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+            nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        """Elaborate a new axiom 𝑎 in this universe-of-discourse."""
         return DefinitionDeclaration(
-            natural_language=natural_language,
-            u=self,
-            nameset=nameset, title=title, dashed_name=dashed_name, echo=echo)
+            u=self, natural_language=natural_language, symbol=symbol, index=index,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
+            subtitle=subtitle, nameset=nameset, echo=echo)
 
     def echo(self):
         return repm.prnt(self.rep_declaration(cap=True))
@@ -7544,6 +7556,8 @@ def reset_configuration(configuration: Configuration) -> None:
     configuration._echo_default = False
     configuration.default_axiom_declaration_symbol = SerifItalic('a')
     configuration.default_axiom_inclusion_symbol = SerifItalic('p')
+    configuration.default_definition_declaration_symbol = SerifItalic('d')
+    configuration.default_definition_inclusion_symbol = SerifItalic('p')
     configuration.default_formula_symbol = SerifItalic(plaintext='phi', unicode='𝜑')
     configuration.default_free_variable_symbol = StyledText(plaintext='x',
                                                             text_style=text_styles.serif_bold)
