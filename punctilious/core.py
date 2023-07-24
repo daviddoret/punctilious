@@ -351,6 +351,7 @@ class TextDict:
         self.empty_string = ComposableText(plaintext='')
         self.in2 = None
         self.let = None
+        self.be = None
         self.be_a = None
         self.be_an = None
         self.colon = ComposableText(plaintext=':')
@@ -363,6 +364,7 @@ class TextDict:
         self.close_parenthesis = ComposableText(plaintext=')', latex_math='\\right)')
         self.open_parenthesis = ComposableText(plaintext='(', latex_math='\\left(')
         self.formula_parameter_separator = ComposableText(plaintext=', ')
+        self.the = None
 
 
 text_dict = TextDict()
@@ -653,8 +655,10 @@ class SansSerifNormal(StyledText):
 
 text_dict.in2 = SansSerifNormal(s='in')
 text_dict.let = SansSerifNormal(s='let')
+text_dict.be = SansSerifNormal(s='be')
 text_dict.be_a = SansSerifNormal(s='be a')
 text_dict.be_an = SansSerifNormal(s='be an')
+text_dict.the = SansSerifNormal(s='the')
 
 
 class ScriptNormal(StyledText):
@@ -2769,6 +2773,8 @@ class Formula(TheoreticalObject):
         yield text_dict.let
         yield text_dict.space
         yield from self.compose_symbol()
+        yield text_dict.space
+        yield text_dict.be
         yield text_dict.space
         yield text_dict.the
         yield text_dict.space

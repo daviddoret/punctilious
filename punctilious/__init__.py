@@ -16,7 +16,7 @@ from core import \
     Paragraph, \
     QuasiQuotation, \
     Relation, rep_two_columns_proof_item, \
-    ScriptNormal, SansSerifNormal, SerifNormal, SimpleObjct, \
+    ScriptNormal, SansSerifBold, SansSerifNormal, SerifNormal, SimpleObjct, \
     Subscript, subscriptify, \
     title_categories, ComposableText, NameSet, SymbolicObject, \
     TextStyle, text_styles, TheoreticalObject, \

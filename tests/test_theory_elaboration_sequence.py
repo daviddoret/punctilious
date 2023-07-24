@@ -9,7 +9,7 @@ class TestTheoryElaborationSequence(TestCase):
         t1 = u1.declare_theory()
         self.assertEqual('T1', t1.rep(encoding=pu.encodings.plaintext))
         self.assertEqual('𝒯₁', t1.rep(encoding=pu.encodings.unicode))
-        self.assertEqual('Let T1 be a theory-elaboration-sequence in U1.\n\n',
+        self.assertEqual('Let T1 be a theory-elaboration-sequence in U1.',
                          t1.rep_declaration(encoding=pu.encodings.plaintext))
-        self.assertEqual('Let 𝒯₁ be a theory-elaboration-sequence in 𝒰₁.\n\n',
+        self.assertEqual('Let 𝒯₁ be a theory-elaboration-sequence in 𝒰₁.',
                          t1.rep_declaration(encoding=pu.encodings.unicode))
