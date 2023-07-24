@@ -13,8 +13,8 @@ class TestAxiomDeclaration(TestCase):
         a1 = u.declare_axiom(content1)
         self.assertEqual('Axiom (a1)', a1.rep_title(cap=True, encoding=pu.encodings.plaintext))
         self.assertEqual('axiom (a1)', a1.rep_title(cap=False, encoding=pu.encodings.plaintext))
-        self.assertEqual('Axiom (𝑎₁)', a1.rep_title(cap=True, encoding=pu.encodings.unicode))
-        self.assertEqual('axiom (𝑎₁)', a1.rep_title(cap=False, encoding=pu.encodings.unicode))
+        self.assertEqual('𝗔𝘅𝗶𝗼𝗺 (𝑎₁)', a1.rep_title(cap=True, encoding=pu.encodings.unicode))
+        self.assertEqual('𝗮𝘅𝗶𝗼𝗺 (𝑎₁)', a1.rep_title(cap=False, encoding=pu.encodings.unicode))
 
     def test_axiom_declaration(self):
         pu.configuration.echo_default = False
@@ -32,13 +32,13 @@ class TestAxiomDeclaration(TestCase):
                              subtitle='the axiom of test')
         a5 = u.declare_axiom(content5, ref='1.1.2', symbol='d',
                              subtitle='the other axiom of test')
-        self.assertEqual(f'Axiom (𝑎₁): ⌜{content1}⌝',
+        self.assertEqual(f'𝗔𝘅𝗶𝗼𝗺 (𝑎₁): ⌜{content1}⌝',
                          a1.rep_report(encoding=pu.encodings.unicode, wrap=False))
-        self.assertEqual(f'Axiom 1.1.1 (𝑎₂): ⌜{content2}⌝',
+        self.assertEqual(f'𝗔𝘅𝗶𝗼𝗺 𝟭.𝟭.𝟭 (𝑎₂): ⌜{content2}⌝',
                          a2.rep_report(encoding=pu.encodings.unicode, wrap=False))
-        self.assertEqual(f'Axiom (𝑏₁): ⌜{content3}⌝',
+        self.assertEqual(f'𝗔𝘅𝗶𝗼𝗺 (𝑏₁): ⌜{content3}⌝',
                          a3.rep_report(encoding=pu.encodings.unicode, wrap=False))
-        self.assertEqual(f'Axiom (𝑐₁) - the axiom of test: ⌜{content4}⌝',
+        self.assertEqual(f'𝗔𝘅𝗶𝗼𝗺 (𝑐₁) - the axiom of test: ⌜{content4}⌝',
                          a4.rep_report(encoding=pu.encodings.unicode, wrap=False))
-        self.assertEqual(f'Axiom 1.1.2 (𝑑₁) - the other axiom of test: ⌜{content5}⌝',
+        self.assertEqual(f'𝗔𝘅𝗶𝗼𝗺 𝟭.𝟭.𝟮 (𝑑₁) - the other axiom of test: ⌜{content5}⌝',
                          a5.rep_report(encoding=pu.encodings.unicode, wrap=False))
