@@ -635,6 +635,14 @@ class Index(ComposableBlockSequence):
             raise TypeError('item is of unsupported type.')
 
 
+class SansSerifBold(StyledText):
+    def __init__(self, s: (str, None) = None, plaintext: (None, str, Plaintext) = None,
+                 unicode: (None, str, Unicode2) = None,
+                 latex_math: (None, str) = None) -> None:
+        super().__init__(s=s, text_style=text_styles.sans_serif_bold, plaintext=plaintext,
+                         unicode=unicode, latex_math=latex_math)
+
+
 class SansSerifNormal(StyledText):
     def __init__(self, s: (str, None) = None, plaintext: (None, str, Plaintext) = None,
                  unicode: (None, str, Unicode2) = None,
@@ -1155,6 +1163,8 @@ class NameSet(Composable):
             explicit_name = SansSerifNormal(explicit_name)
         self._explicit_name = explicit_name
         # Section reference names
+        if isinstance(ref, str):
+            ref = SansSerifBold(ref)
         self._ref = ref
         self._cat = title_categories.uncategorized if cat is None else cat
         self._subtitle = subtitle
@@ -2866,7 +2876,11 @@ class TitleCategoryOBSOLETE(repm.ValueName):
 
     def __init__(self, name, symbol_base, natural_name, abridged_name):
         self.symbol_base = symbol_base
+        if isinstance(natural_name, str):
+            natural_name = SansSerifBold(natural_name)
         self.natural_name = natural_name
+        if isinstance(abridged_name, str):
+            abridged_name = SansSerifBold(abridged_name)
         self.abridged_name = abridged_name
         super().__init__(name)
 
@@ -2903,15 +2917,14 @@ class TitleCategories(repm.ValueName):
                                                         'theory elaboration sequence',
                                                         'theo.')
     comment = TitleCategoryOBSOLETE('comment',
-                                    StyledText(s='comment',
-                                               text_style=text_styles.serif_italic),
+                                    StyledText(plaintext='note', unicode='🗅'),
                                     'comment', 'cmt.')
     note = TitleCategoryOBSOLETE('note',
-                                 StyledText(s='note', text_style=text_styles.serif_italic),
+                                 StyledText(plaintext='note', unicode='🗅'),
                                  'note',
                                  'note')
     remark = TitleCategoryOBSOLETE('remark',
-                                   StyledText(s='remark', text_style=text_styles.serif_italic),
+                                   StyledText(plaintext='note', unicode='🗅'),
                                    'remark', 'rmrk.')
     # Special categories
     uncategorized = TitleCategoryOBSOLETE('uncategorized', 's', 'uncategorized', 'uncat.')
@@ -3863,7 +3876,8 @@ class Note(AtheoreticalStatement):
         self.natural_language = content
         self.category = cat
         if nameset is None and symbol is None:
-            symbol = self.category.symbol_base
+            # symbol = self.category.symbol_base
+            symbol = cat.symbol_base
             index = universe_of_discourse.index_symbol(symbol=symbol) if auto_index else index
         if isinstance(nameset, str):
             # If symbol was passed as a string,
@@ -3885,22 +3899,34 @@ class Note(AtheoreticalStatement):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='note')
 
+    def compose_content(self) -> collections.abc.Generator[Composable, Composable, True]:
+        global text_dict
+        yield self.natural_language
+        return True
+
+    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        yield from self.nameset.compose_title()
+        yield text_dict.colon
+        yield text_dict.space
+        yield from self.compose_content()
+        return True
+
     def echo(self):
         repm.prnt(self.rep_report())
 
-    def rep_title(self, encoding: (None, Encoding) = None, cap=False):
-        return self.nameset.rep_title(encoding=encoding, cap=cap)
+    def rep_report(self, encoding: (None, Encoding) = None, output_proofs: bool = True,
+                   wrap: bool = True) -> str:
+        """Return a representation that expresses and justifies the statement.
 
-    def rep_report(self, output_proofs=True):
-        """Return a representation of the note that may be included as a section in a report."""
-        text = f'{repm.serif_bold(self.rep_title(cap=True))}: {self.natural_language}'
-        return '\n'.join(
-            textwrap.wrap(
-                text=text, width=70,
-                subsequent_indent=f'\t',
-                break_on_hyphens=False,
-                expand_tabs=True,
-                tabsize=4)) + f'\n'
+        :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
+        :param output_proofs:
+        :return:
+        """
+        encoding = prioritize_value(encoding, configuration.encoding,
+                                    encodings.plaintext)
+        cap = True
+        output = rep_composition(composition=self.compose_report(), encoding=encoding, cap=cap)
+        return output
 
 
 section_category = TitleCategoryOBSOLETE(
