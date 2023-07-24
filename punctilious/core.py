@@ -5735,11 +5735,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._disjunction_introduction is None:
             self._disjunction_introduction = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=ComposableText(plaintext='disjunction-introduction',
-                                                      text_style=text_styles.monospace),
-                                index=None),
+                symbol='disjunction-introduction',
+                index=None, auto_index=False,
                 name='disjunction introduction',
-                dashed_name=DashedName('disjunction-introduction'),
+                dashed_name='disjunction-introduction',
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._disjunction_introduction
@@ -6365,7 +6364,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._absorption is None:
             self._absorption = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.absorption)
+                i=self.t.u.i.absorption,
+                name='absorption')
         return self._absorption
 
     @property
@@ -6385,7 +6385,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._axiom_interpretation is None:
             self._axiom_interpretation = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.axiom_interpretation)
+                i=self.t.u.i.axiom_interpretation,
+                name='axiom interpretation')
         return self._axiom_interpretation
 
     @property
@@ -6433,7 +6434,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._biconditional_elimination_left is None:
             self._biconditional_elimination_left = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.biconditional_elimination_left)
+                i=self.t.u.i.biconditional_elimination_left,
+                name='biconditional elimination (left)')
         return self._biconditional_elimination_left
 
     @property
@@ -6448,7 +6450,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._biconditional_elimination_right is None:
             self._biconditional_elimination_right = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.biconditional_elimination_right)
+                i=self.t.u.i.biconditional_elimination_right,
+                name='biconditional elimination (right)')
         return self._biconditional_elimination_right
 
     @property
@@ -6463,7 +6466,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._biconditional_introduction is None:
             self._biconditional_introduction = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.biconditional_introduction)
+                i=self.t.u.i.biconditional_introduction,
+                name='biconditional introduction')
         return self._biconditional_introduction
 
     @property
@@ -6573,7 +6577,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._definition_interpretation is None:
             self._definition_interpretation = InferenceRuleInclusion(
                 t=self.t,
-                i=self.t.u.i.definition_interpretation)
+                i=self.t.u.i.definition_interpretation,
+                name='definition interpretation')
         return self._definition_interpretation
 
     @property
@@ -6600,7 +6605,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._disjunction_introduction = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.disjunction_introduction,
-                title='disjunction introduction')
+                name='disjunction introduction')
         return self._disjunction_introduction
 
     @property
@@ -6755,7 +6760,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._inconsistency_introduction = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.inconsistency_introduction,
-                title='inconsistency introduction')
+                name='inconsistency introduction')
         return self._inconsistency_introduction
 
     @property
@@ -6798,7 +6803,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._modus_ponens = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.modus_ponens,
-                nameset=NameSet(symbol='modus-ponens', name='modus ponens'))
+                acronym='mp',
+                name='modus ponens')
         return self._modus_ponens
 
     @property
@@ -6851,7 +6857,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
             self._variable_substitution = InferenceRuleInclusion(
                 t=self.t,
                 i=self.t.u.i.variable_substitution,
-                nameset=NameSet(symbol='variable-substitution', name='variable substitution'))
+                name='variable substitution')
         return self._variable_substitution
 
     @property
