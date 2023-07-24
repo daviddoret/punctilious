@@ -3818,12 +3818,21 @@ class AtheoreticalStatement(SymbolicObject):
 
     """
 
-    def __init__(self, theory: TheoryElaborationSequence, nameset: (None, str, NameSet) = None,
-                 title: (None, str, TitleOBSOLETE) = None, echo: (None, bool) = None):
-        assert isinstance(theory, TheoryElaborationSequence)
+    def __init__(
+            self, theory: TheoryElaborationSequence, symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
+            echo: (None, bool) = None):
         self.theory = theory
-        super().__init__(universe_of_discourse=theory.universe_of_discourse, nameset=nameset,
-                         echo=echo)
+        super().__init__(universe_of_discourse=theory.universe_of_discourse, symbol=symbol,
+                         index=index, auto_index=auto_index, dashed_name=dashed_name,
+                         acronym=acronym, abridged_name=abridged_name, name=name,
+                         explicit_name=explicit_name, cat=cat, ref=ref, subtitle=subtitle,
+                         nameset=nameset, echo=echo)
         super()._declare_class_membership(classes.atheoretical_statement)
 
 
@@ -3833,40 +3842,41 @@ class Note(AtheoreticalStatement):
     """
 
     def __init__(
-            self, theory: TheoryElaborationSequence, content: str,
-            nameset: (None, str, NameSet) = None,
-            cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str) = None,
-            subtitle: (None, str) = None,
+            self, t: TheoryElaborationSequence, content: str,
+            symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
+
         echo = prioritize_value(echo, configuration.echo_note, configuration.echo_default,
                                 False)
-        verify(is_in_class(theory, classes.t),
-               'theory is not a member of declarative-class theory.', theory=theory,
+        verify(is_in_class(t, classes.t),
+               'theory is not a member of declarative-class theory.', t=t,
                slf=self)
-        universe_of_discourse = theory.universe_of_discourse
+        universe_of_discourse = t.universe_of_discourse
         cat = title_categories.note if cat is None else cat
         #  self.statement_index = theory.crossreference_statement(self)
-        self.theory = theory
+        self.theory = t
         self.natural_language = content
         self.category = cat
-        if nameset is None:
+        if nameset is None and symbol is None:
             symbol = self.category.symbol_base
-            index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
+            index = universe_of_discourse.index_symbol(symbol=symbol) if auto_index else index
         if isinstance(nameset, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
             symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
-            index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
-        ref = nameset.index if ref is None else ref
-        title = TitleOBSOLETE(cat=cat, ref=ref, subtitle=subtitle)
-        super().__init__(
-            nameset=nameset,
-            theory=theory,
-            title=title,
-            echo=False)
+            index = universe_of_discourse.index_symbol(symbol=symbol) if auto_index else index
+        super().__init__(theory=t,
+                         symbol=symbol, index=index, auto_index=auto_index,
+                         dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name,
+                         name=name, explicit_name=explicit_name, cat=cat, ref=ref,
+                         subtitle=subtitle,
+                         nameset=nameset, echo=echo)
         if echo:
             self.echo()
         super()._declare_class_membership(declarative_class_list.note)
@@ -4418,24 +4428,26 @@ class TheoryElaborationSequence(TheoreticalObject):
                severity=verification_severities.warning)
         self._stabilized = True
 
-    def take_note(self, content: str, nameset: (None, str, NameSet) = None, ref: (None, str) = None,
-                  cat: (None, TitleCategoryOBSOLETE) = None, subtitle: (None, str) = None,
+    def take_note(self, content: str,
+                  symbol: (None, str, StyledText) = None,
+                  index: (None, int) = None, auto_index: (None, bool) = None,
+                  dashed_name: (None, str, StyledText) = None,
+                  acronym: (None, str, StyledText) = None,
+                  abridged_name: (None, str, StyledText) = None,
+                  name: (None, str, StyledText) = None,
+                  explicit_name: (None, str, StyledText) = None,
+                  cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str, StyledText) = None,
+                  subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
                   echo: (None, bool) = None) -> Note:
         """Take a note, make a comment, or remark in this theory.
-
-        Shortcut for u.take_note(theory=t, ...)
-
-        :param content: The natural-language content of the note.
-        :param nameset:
-        :param ref:
-        :param cat:
-        :param subtitle:
-        :param echo:
-        :return:
         """
-        return self.universe_of_discourse.take_note(t=self, content=content, nameset=nameset,
-                                                    ref=ref, cat=cat,
-                                                    subtitle=subtitle, echo=echo)
+        return self.universe_of_discourse.take_note(t=self, content=content, symbol=symbol,
+                                                    index=index, auto_index=auto_index,
+                                                    dashed_name=dashed_name, acronym=acronym,
+                                                    abridged_name=abridged_name,
+                                                    name=name, explicit_name=explicit_name, cat=cat,
+                                                    ref=ref, subtitle=subtitle,
+                                                    nameset=nameset, echo=echo)
 
     @property
     def theoretical_objcts(self):
@@ -7317,29 +7329,24 @@ class UniverseOfDiscourse(SymbolicObject):
             echo=echo)
 
     def take_note(
-            self, t: TheoryElaborationSequence, content: str, nameset: (None, str, NameSet) = None,
-            cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str) = None,
-            subtitle: (None, str) = None,
+            self, t: TheoryElaborationSequence, content: str,
+            symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
-        """Take a note, make a comment, or remark.
-
-        Shortcut for Note(theory=t, ...)
-
-        :param t:
-        :param content:
-        :param nameset:
-        :param cat:
-        :param ref:
-        :param subtitle:
-        :param echo:
-        :return:
-        """
+        """Take a note, make a comment, or remark."""
         verify(
             t.universe_of_discourse is self,
             'This universe-of-discourse 𝑢₁ (self) is distinct from the universe-of-discourse 𝑢₂ of the theory '
             'parameter 𝑡.')
-        return Note(theory=t, content=content, nameset=nameset,
-                    cat=cat, ref=ref, subtitle=subtitle, echo=echo)
+
+        return Note(t=t, content=content, symbol=symbol, index=index, auto_index=auto_index,
+                    dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name,
+                    name=name, explicit_name=explicit_name, cat=cat, ref=ref, subtitle=subtitle,
+                    nameset=nameset, echo=echo)
 
     # @FreeVariableContext()
     @contextlib.contextmanager
