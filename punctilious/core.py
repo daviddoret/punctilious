@@ -3973,6 +3973,18 @@ class Section(AtheoreticalStatement):
         if echo:
             self.echo()
 
+    def compose_class(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='section')
+
+    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        yield "#" * self.section_level
+        yield text_dict.space
+        yield from SansSerifBold(self.section_reference).compose()
+        yield text_dict.space
+        yield from SansSerifBold(str(self.section_title).capitalize()).compose()
+        return True
+
     def echo(self):
         repm.prnt(self.rep_report())
 
@@ -3993,10 +4005,8 @@ class Section(AtheoreticalStatement):
         text = f'{prefix}{repm.serif_bold(self.section_reference)}'
         return text
 
-    def rep_report(self, output_proofs=True) -> str:
-        text = f'{"#" * self.section_level} {repm.serif_bold(self.section_reference)} {repm.serif_bold(str(self.section_title).capitalize())}'
-        text = wrap_text(text)
-        return text + f'\n'
+    def rep_report(self, encoding: (None, Encoding) = None) -> str:
+        return rep_composition(composition=self.compose_report(), encoding=encoding)
 
     @property
     def section_level(self) -> int:
