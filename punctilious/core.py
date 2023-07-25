@@ -1499,17 +1499,7 @@ class NameSet(Composable):
         return rep_composition(composition=self.compose_name(), encoding=encoding, cap=cap)
 
     def rep_ref(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
-        rep = '' if self._cat is None else StyledText(s=self._cat.abridged_name,
-                                                      text_style=text_styles.sans_serif_bold).rep(
-            encoding=encoding, cap=cap)
-        if self._ref is not None:
-            if rep != '':
-                rep = rep + ' '
-            rep = rep + StyledText(s=self._ref,
-                                   text_style=text_styles.sans_serif_bold).rep(
-                encoding=encoding)
-        rep = rep + ' (' + self.rep_symbol(encoding=encoding) + ')'
-        return rep
+        return rep_composition(composition=self.compose_ref(), encoding=encoding, cap=cap)
 
     def rep_symbol(self, encoding: (None, Encoding) = None, **kwargs) -> (None, str):
         """Return a string that represent the object as a symbol."""
@@ -2918,6 +2908,8 @@ class TitleCategories(repm.ValueName):
     inferred_proposition = ('inferred_proposition', 's', 'inferred-proposition')
     lemma = TitleCategoryOBSOLETE('lemma', 's', 'lemma', 'lem.')
     proposition = TitleCategoryOBSOLETE('proposition', 's', 'proposition', 'prop.')
+    relation_declaration = TitleCategoryOBSOLETE('relation_declaration', 's', 'proposition',
+                                                 'prop.')
     theorem = TitleCategoryOBSOLETE('theorem', 's', 'theorem', 'thrm.')
     theory_elaboration_sequence = TitleCategoryOBSOLETE('theory_elaboration_sequence', 't',
                                                         'theory elaboration sequence',
@@ -4094,7 +4086,7 @@ class TheoryElaborationSequence(TheoreticalObject):
             # to the constructor.
             self.stabilize()
         if echo:
-            repm.prnt(self.rep_declaration())
+            self.echo()
 
     def assure_interpretation_disclaimer(self, echo: (None, bool) = None):
         """After the first usage of a contentual interpretation inference-rule,
@@ -4130,6 +4122,25 @@ class TheoryElaborationSequence(TheoreticalObject):
             'A theory commutativity-of-equality property can only be set once '
             'to prevent inconsistency.')
         self._commutativity_of_equality = p
+
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='theory-elaboration-sequence')
+
+    def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        yield text_dict.let
+        yield text_dict.space
+        yield from self.nameset.compose_qualified_symbol()
+        yield text_dict.space
+        yield text_dict.be_a
+        yield text_dict.space
+        yield from self.compose_class()
+        yield text_dict.space
+        yield text_dict.in2
+        yield text_dict.space
+        yield from self.u.compose_symbol()
+        yield text_dict.period
+        return True
 
     def crossreference_axiom_inclusion(self, a):
         """During construction, cross-reference an axiom
@@ -4177,6 +4188,9 @@ class TheoryElaborationSequence(TheoreticalObject):
         if s not in self.statements:
             self.statements = self.statements + tuple([s])
         return self.statements.index(s)
+
+    def echo(self):
+        repm.prnt(self.rep_declaration(cap=True))
 
     @property
     def extended_theory(self) -> (None, TheoryElaborationSequence):
@@ -4431,22 +4445,8 @@ class TheoryElaborationSequence(TheoreticalObject):
                proof_parameter=proof.parameters[0], proof=proof, slf=self)
         self._consistency = consistency_values.proved_inconsistent
 
-    def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, bool]:
-        yield text_dict.let
-        yield text_dict.space
-        yield from self.nameset.compose_qualified_symbol()
-        yield text_dict.space
-        yield text_dict.be_a
-        yield text_dict.space
-        yield from self.compose_class()
-        yield text_dict.space
-        yield text_dict.in2
-        yield text_dict.space
-        yield from self.u.compose_symbol()
-        yield text_dict.period
-
-    def rep_declaration(self, encoding: (None, Encoding) = None) -> str:
-        return rep_composition(compose=self.compose_declaration(), encoding=encoding)
+    def rep_declaration(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
+        return rep_composition(composition=self.compose_declaration(), encoding=encoding, cap=cap)
 
     @property
     def stabilized(self):
@@ -4577,18 +4577,24 @@ class Relation(TheoreticalObject):
     """
 
     def __init__(
-            self, arity: int, nameset: (None, str, NameSet) = None, formula_rep=None,
-            signal_proposition=None, signal_theoretical_morphism=None,
-            implementation=None, universe_of_discourse=None,
-            dashed_name: (None, str, DashedName) = None,
+            self, universe_of_discourse: UniverseOfDiscourse, arity: int,
+            symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, formula_rep=None,
+            signal_proposition=None, signal_theoretical_morphism=None, implementation=None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_relation, configuration.echo_default,
                                 False)
+        auto_index = prioritize_value(auto_index, configuration.auto_index, True)
         assert isinstance(universe_of_discourse, UniverseOfDiscourse)
         signal_proposition = False if signal_proposition is None else signal_proposition
         signal_theoretical_morphism = False if signal_theoretical_morphism is None else signal_theoretical_morphism
         assert isinstance(signal_proposition, bool)
         assert isinstance(signal_theoretical_morphism, bool)
+        cat = title_categories.relation_declaration
         self.formula_rep = Formula.function_call if formula_rep is None else formula_rep
         self.signal_proposition = signal_proposition
         self.signal_theoretical_morphism = signal_theoretical_morphism
@@ -4596,13 +4602,11 @@ class Relation(TheoreticalObject):
         assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
         if nameset is None:
-            symbol = configuration.default_relation_symbol
-            index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
-        if isinstance(nameset, str):
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
-            index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
+            symbol = configuration.default_relation_symbol if symbol is None else symbol
+            index = universe_of_discourse.index_symbol(symbol=symbol) if auto_index else index
+            nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name, acronym=acronym,
+                              abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                              cat=cat, ref=ref, subtitle=subtitle)
         super().__init__(
             universe_of_discourse=universe_of_discourse, nameset=nameset, echo=False)
         self.universe_of_discourse.cross_reference_relation(r=self)
@@ -4787,21 +4791,28 @@ class RelationDict(collections.UserDict):
         self._implication = None
         self._negation = None
 
-    def declare(self, arity: int, nameset: (None, str, NameSet) = None, formula_rep=None,
-                signal_proposition=None,
-                signal_theoretical_morphism=None,
-                implementation=None, dashed_name: (None, str, DashedName) = None,
-                echo: (None, bool) = None):
+    def declare(
+            self, arity: int, symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, formula_rep=None,
+            signal_proposition=None, signal_theoretical_morphism=None, implementation=None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
+            echo: (None, bool) = None):
         """Declare a new relation in this universe-of-discourse.
         """
         return Relation(
             arity=arity,
-            nameset=nameset, dashed_name=dashed_name,
             formula_rep=formula_rep,
             signal_proposition=signal_proposition,
             signal_theoretical_morphism=signal_theoretical_morphism,
             implementation=implementation,
             universe_of_discourse=self.u,
+            symbol=symbol, index=index, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, ref=ref, subtitle=subtitle,
+            nameset=nameset,
             echo=echo)
 
     @property
@@ -4948,16 +4959,8 @@ class RelationDict(collections.UserDict):
         """
         if self._inconsistent is None:
             self._inconsistent = self.declare(
-                1,
-                NameSet(
-                    symbol=ComposableText(plaintext='Inc', text_style=text_styles.serif_italic),
-                    acronym=ComposableText(plaintext='Inc',
-                                           text_style=text_styles.sans_serif_normal),
-                    name=ComposableText(plaintext='inconsistent',
-                                        text_style=text_styles.sans_serif_normal),
-                    index=None),
-                Formula.prefix,
-                signal_proposition=True)
+                arity=1, symbol='Inc', acronym='inc.', name='inconsistent', auto_index=False,
+                formula_rep=Formula.prefix, signal_proposition=True)
         return self._inconsistent
 
     @property
@@ -7222,7 +7225,7 @@ class UniverseOfDiscourse(SymbolicObject):
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+            nameset: (None, str, NameSet) = None, echo: (None, bool) = None) -> AxiomDeclaration:
         """Elaborate a new axiom 𝑎 in this universe-of-discourse."""
         return AxiomDeclaration(
             u=self, natural_language=natural_language, symbol=symbol, dashed_name=dashed_name,
@@ -7427,7 +7430,7 @@ class InferredStatement(FormulaStatement):
         """Include (aka allow) an inference_rule in a theory-elaboration.
         """
         echo = prioritize_value(echo, configuration.echo_inferred_statement,
-                                configuration.echo_statement,
+                                configuration.echo_statement, configuration.echo_default,
                                 False)
         cat = title_categories.proposition if cat is None else cat
         # TODO: Check that cat is a valid statement cat (prop., lem., cor., theorem)

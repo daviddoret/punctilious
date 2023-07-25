@@ -16,7 +16,6 @@ class TestHypothesis(TestCase):
         o2 = u.o.declare()
         o3 = u.o.declare()
         r1 = u.r.declare(2, signal_proposition=True)
-        pu.configuration.echo_default = True
         robust_theory = u.t()
         ap1 = robust_theory.include_axiom(a=a1)
         first_proposition = robust_theory.i.axiom_interpretation.infer_statement(
@@ -45,5 +44,5 @@ class TestHypothesis(TestCase):
         conclusion_1 = hypothetical_theory.i.mp.infer_statement(
             proposition_1,
             hypothetical_conjunction)
-        self.assertEqual('𝑟₁(𝑜₂, 𝑜₄)',
+        self.assertEqual('𝑟₁(𝑜₁, 𝑜₃)',
                          conclusion_1.valid_proposition.rep_formula(pu.encodings.unicode))
