@@ -36,9 +36,9 @@ section_2_1 = t.open_section('The Peano axioms', section_parent=section_2)
 
 axiom_2_1_1_declaration = u.declare_axiom(f'0 is a natural number.')
 axiom_2_1_1 = t.include_axiom(axiom_2_1_1_declaration, ref='2.1.1')
-zero = u.o.declare(pu.NameSet('0'))
-natural_number = u.o.declare(pu.NameSet(symbol='natural-number'))
-is_a = u.r.declare(2, pu.NameSet(symbol='is-a'), formula_rep=pu.Formula.infix,
+zero = u.o.declare(symbol='0', auto_index=False)
+natural_number = u.o.declare(symbol='natural-number', auto_index=False)
+is_a = u.r.declare(arity=2, symbol='is-a', auto_index=False, formula_rep=pu.Formula.infix,
                    signal_proposition=True)
 # (0 is-a natural-number):
 proposition_2_1_1_1 = t.i.axiom_interpretation.infer_statement(
@@ -48,7 +48,8 @@ proposition_2_1_1_1 = t.i.axiom_interpretation.infer_statement(
 
 axiom_2_1_2_declaration = u.declare_axiom('If n is a natural number, then n++ is a natural number.')
 axiom_2_1_2 = t.include_axiom(axiom_2_1_2_declaration, ref='2.1.2')
-plusplus = u.r.declare(1, pu.NameSet(symbol='++', name='successor'), formula_rep=pu.Formula.postfix)
+plusplus = u.r.declare(arity=1, symbol='++', auto_index=False, name='successor',
+                       formula_rep=pu.Formula.postfix)
 with u.v('n') as n:
     # ((n₁ is-a natural-number) ⟹ ((n₁)++ is-a natural-number)):
     proposition_2_1_2_1 = t.i.axiom_interpretation.infer_statement(
@@ -63,10 +64,10 @@ proposition_2_1_2_3 = t.i.mp.infer_statement(proposition_2_1_2_2, proposition_2_
 # DEFINITION 2.1.3
 
 definition_2_1_3_declaration = u.declare_definition(
-    'We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number '
-    '((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text '
-    'I use "x := y" to denote the statement that x is defined to equal y.)',
-    title='2.1.3')
+    natural_language='We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number '
+                     '((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text '
+                     'I use "x := y" to denote the statement that x is defined to equal y.)',
+    ref='2.1.3')
 definition_2_1_3 = t.include_definition(d=definition_2_1_3_declaration)
 one = u.o.declare(pu.NameSet('1'))
 proposition_2_1_3_1 = t.i.definition_interpretation.infer_statement(
@@ -90,6 +91,8 @@ p_2_2_4 = t.i.mp.infer_statement(p_2_2_4_1, proposition_2_1_2_3, ref='2.2.4')
 zero_plus_plus_plusplus = u.f(plusplus, zero_plusplus)
 p_2_2_5_1 = t.i.vs.infer_statement(proposition_2_1_2_1, zero_plus_plus_plusplus, ref='2.2.3')
 proposition_2_2_5 = t.i.mp.infer_statement(p_2_2_5_1, p_2_2_4, ref='2.2.5')
+
+print(t.commutativity_of_equality)
 
 proposition_2_1_3_100 = t.i.mp.infer_statement(
     t.commutativity_of_equality, proposition_2_1_3_1)

@@ -14,8 +14,8 @@ class TestDefinitionDeclaration(TestCase):
         self.assertEqual('Definition (d1)', a1.rep_title(cap=True, encoding=pu.encodings.plaintext))
         self.assertEqual('definition (d1)',
                          a1.rep_title(cap=False, encoding=pu.encodings.plaintext))
-        self.assertEqual('Definition (𝑑₁)', a1.rep_title(cap=True, encoding=pu.encodings.unicode))
-        self.assertEqual('definition (𝑑₁)', a1.rep_title(cap=False, encoding=pu.encodings.unicode))
+        self.assertEqual('𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 (𝑑₁)', a1.rep_title(cap=True, encoding=pu.encodings.unicode))
+        self.assertEqual('𝗱𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 (𝑑₁)', a1.rep_title(cap=False, encoding=pu.encodings.unicode))
 
     def test_definition_declaration(self):
         pu.configuration.echo_default = False
@@ -33,13 +33,13 @@ class TestDefinitionDeclaration(TestCase):
                                   subtitle='the definition of test')
         a5 = u.declare_definition(content5, ref='1.1.2', symbol='d',
                                   subtitle='the other definition of test')
-        self.assertEqual(f'Definition (𝑑₁): ⌜{content1}⌝',
+        self.assertEqual(f'𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 (𝑑₁): ⌜{content1}⌝',
                          a1.rep_report(encoding=pu.encodings.unicode, wrap=False))
-        self.assertEqual(f'Definition 1.1.1 (𝑑₂): ⌜{content2}⌝',
+        self.assertEqual(f'𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 𝟭.𝟭.𝟭 (𝑑₂): ⌜{content2}⌝',
                          a2.rep_report(encoding=pu.encodings.unicode, wrap=False))
-        self.assertEqual(f'Definition (𝑏₁): ⌜{content3}⌝',
+        self.assertEqual(f'𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 (𝑏₁): ⌜{content3}⌝',
                          a3.rep_report(encoding=pu.encodings.unicode, wrap=False))
-        self.assertEqual(f'Definition (𝑐₁) - the definition of test: ⌜{content4}⌝',
+        self.assertEqual(f'𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 (𝑐₁) - the definition of test: ⌜{content4}⌝',
                          a4.rep_report(encoding=pu.encodings.unicode, wrap=False))
-        self.assertEqual(f'Definition 1.1.2 (𝑑₁) - the other definition of test: ⌜{content5}⌝',
+        self.assertEqual(f'𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 𝟭.𝟭.𝟮 (𝑑₁) - the other definition of test: ⌜{content5}⌝',
                          a5.rep_report(encoding=pu.encodings.unicode, wrap=False))

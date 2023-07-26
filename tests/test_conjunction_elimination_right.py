@@ -18,4 +18,4 @@ class TestConjunctionEliminationRight(TestCase):
                                                                 u.f(r2, o3)))
         self.assertEqual('(𝑟₁(𝑜₁, 𝑜₂) ∧ 𝑟₂(𝑜₃))', phi1.rep_formula(pu.encodings.unicode))
         phi2 = t.i.cer.infer_statement(phi1)
-        self.assertEqual('𝑟₂(𝑜₃)', phi2.rep_formula())
+        self.assertEqual('𝑟₂(𝑜₃)', phi2.rep_formula(encoding=pu.encodings.unicode))

@@ -823,24 +823,23 @@ class Locale:
 
 
 class LocaleEnUs(Locale):
+    """TODO: Implement localization. This is just a small example to showcase how this could be implemented."""
+
     def __init__(self):
         super().__init__(name='EN-US')
 
-    def compose_symbolic_objct_symbol(self, o: SymbolicObject):
-        compo = ComposableBlockLeaf()
-        compo.append(SerifItalic(o.nameset.symbol))
-        if o.nameset.index is not None:
-            compo.append(Subscript(o.nameset.index))
-        return compo
-
-    def compose_simple_objct_declaration(self, o: SimpleObjct):
-        compo = ComposableBlockLeaf()
-        compo.append(SansSerifNormal('Let '))
-        compo.append(o.compose_symbol())
-        compo.append(SansSerifNormal(' be a simple-object in '))
-        compo.append(o.universe_of_discourse.compose_symbol())
-        compo.append_period()
-        return compo
+    def compose_simple_objct_declaration(self, o: SimpleObjct) -> collections.abc.Generator[
+        Composable, Composable, True]:
+        global text_dict
+        yield SansSerifNormal('Let ')
+        yield text_dict.open_quasi_quote
+        yield from o.compose_symbol()
+        yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' be a ')
+        yield SerifItalic('simple-object')
+        yield SansSerifNormal(' in ')
+        yield from o.universe_of_discourse.compose_symbol()
+        return True
 
 
 locale = LocaleEnUs()
@@ -1053,7 +1052,7 @@ def is_in_class(
     :param c: A declarative-class.
     :return: (bool).
     """
-    # verify(o is not None, 'o is None.', o=o, c=c)
+    verify(o is not None, 'o is None.', o=o, c=c)
     # verify(hasattr(o, 'is_in_class'), 'o does not have attribute is_in_class.', o=o, c=c)
     verify(callable(getattr(o, 'is_in_class')), 'o.is_in_class() is not callable.', o=o, c=c)
     return o.is_in_class(c)
@@ -2796,14 +2795,23 @@ class SimpleObjctDict(collections.UserDict):
         self._truth = None
 
     def declare(self,
-                nameset: (None, str, NameSet) = None,
+                symbol: (None, str, StyledText) = None,
+                index: (None, int) = None, auto_index: (None, bool) = None,
+                dashed_name: (None, str, StyledText) = None,
+                acronym: (None, str, StyledText) = None,
+                abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+                explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
+                subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
                 echo: (None, bool) = None) -> SimpleObjct:
         """Declare a new simple-objct in this universe-of-discourse.
         """
-        return SimpleObjct(
-            nameset=nameset,
-            universe_of_discourse=self.u,
-            echo=echo)
+        return SimpleObjct(symbol=symbol, index=index, auto_index=auto_index,
+                           dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name,
+                           name=name, explicit_name=explicit_name,
+                           ref=ref, subtitle=subtitle,
+                           nameset=nameset,
+                           universe_of_discourse=self.u,
+                           echo=echo)
 
     @property
     def fals(self):
@@ -3136,7 +3144,7 @@ class AxiomInclusion(Statement):
         super().__init__(
             theory=t, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-            cat=cat, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
+            cat=cat, ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
         super()._declare_class_membership(declarative_class_list.axiom_inclusion)
         if echo:
             self.echo()
@@ -4630,17 +4638,39 @@ class Relation(TheoreticalObject):
     def __hash__(self):
         return hash((Relation, self.nameset, self.arity))
 
-    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
+    def compose_class(self) -> collections.abc.Generator[Composable, Composable, bool]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='relation')
+        return True
+
+    def compose_declaration(self) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        global text_dict
+        yield SansSerifNormal('Let ')
+        yield text_dict.open_quasi_quote
+        yield from self.compose_symbol()
+        yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' be a ')
+        yield rep_arity_as_text(self.arity)
+        yield text_dict.space
+        yield SerifItalic('relation')
+        yield SansSerifNormal(' in ')
+        yield from self.universe_of_discourse.compose_symbol()
+        yield SansSerifNormal(' (default notation: ')
+        yield SansSerifNormal(str(self.formula_rep))
+        yield SansSerifNormal(').')
+        return True
 
     def echo(self):
         repm.prnt(self.rep_declaration())
 
-    def rep_declaration(self):
-        output = f'Let {self.rep_fully_qualified_name()} be a {rep_arity_as_text(self.arity)} relation in {self.u.rep_symbol()}'
-        output = output + f' (default notation: {self.formula_rep}).'
-        return output + '\n'
+    # def rep_declaration(self):
+    #    output = f'Let {self.rep_fully_qualified_name()} be a {rep_arity_as_text(self.arity)} relation in {self.u.rep_symbol()}'
+    #    output = output + f' (default notation: {self.formula_rep}).'
+    #    return output + '\n'
+    def rep_declaration(self, encoding: (None, Encoding) = None, wrap: (None, bool) = None):
+        return rep_composition(composition=self.compose_declaration(), encoding=encoding,
+                               wrap=wrap)
 
 
 def rep_arity_as_text(n):
@@ -4665,13 +4695,25 @@ class SimpleObjct(TheoreticalObject):
 
     def __init__(
             self, universe_of_discourse: UniverseOfDiscourse,
-            nameset: (None, str, NameSet) = None,
+            symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_simple_objct_declaration,
                                 configuration.echo_default,
                                 False)
         super().__init__(
-            universe_of_discourse=universe_of_discourse, nameset=nameset, echo=False)
+            universe_of_discourse=universe_of_discourse,
+            symbol=symbol, index=index, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name,
+            name=name, explicit_name=explicit_name,
+            ref=ref, subtitle=subtitle,
+            nameset=nameset,
+            echo=False)
         self.universe_of_discourse.cross_reference_simple_objct(o=self)
         if echo:
             self.echo()
@@ -4715,9 +4757,9 @@ class SimpleObjct(TheoreticalObject):
         # o2 is not a variable.
         return self.is_formula_equivalent_to(o2), _values
 
-    def rep_declaration(self):
-        output = f'Let {self.rep_fully_qualified_name()} be a simple-objct in {self.u.rep_symbol()}.'
-        return output + '\n'
+    def rep_declaration(self, encoding: (None, Encoding) = None, wrap: (None, bool) = None):
+        return rep_composition(composition=self.compose_declaration(), encoding=encoding,
+                               wrap=wrap)
 
 
 class SubstitutionOfEqualTerms(FormulaStatement):
@@ -4836,15 +4878,13 @@ class RelationDict(collections.UserDict):
         """
         if self._biconditional is None:
             self._biconditional = self.declare(
-                2,
-                NameSet(
-                    symbol=StyledText(plaintext='<==>', unicode='⟺',
-                                      latex_math='\\iff',
-                                      text_style=text_styles.serif_normal),
-                    name=ComposableText(plaintext='biconditional'),
-                    index=None),
-                Formula.infix,
-                signal_proposition=True, dashed_name='biconditional')
+                arity=2,
+                formula_rep=Formula.infix,
+                signal_proposition=True,
+                symbol=SerifItalic(plaintext='<==>', unicode='⟺', latex_math='\\iff'),
+                index=None, auto_index=False,
+                dashed_name='biconditional',
+                name='biconditional')
         return self._biconditional
 
     @property
@@ -4858,14 +4898,11 @@ class RelationDict(collections.UserDict):
         """
         if self._conjunction is None:
             self._conjunction = self.declare(
-                2,
-                NameSet(
-                    symbol=ComposableText(unicode='∧', latex_math='\\land', plaintext='and'),
-                    name=ComposableText(plaintext='and'),
-                    explicit_name=ComposableText(plaintext='conjunction'),
-                    index=None),
-                Formula.infix,
-                signal_proposition=True)
+                arity=2, formula_rep=Formula.infix, signal_proposition=True,
+                symbol=SerifItalic(plaintext='and', unicode='∧', latex_math='\\land'),
+                index=None, auto_index=False,
+                name='and',
+                explicit_name='conjunction')
         return self._conjunction
 
     @property
@@ -4879,14 +4916,12 @@ class RelationDict(collections.UserDict):
         """
         if self._disjunction is None:
             self._disjunction = self.declare(
-                2,
-                NameSet(
-                    symbol=ComposableText(unicode='∨', latex_math='\\lor', plaintext='or'),
-                    name=ComposableText(plaintext='or'),
-                    explicit_name=ComposableText(plaintext='disjunction'),
-                    index=None),
-                Formula.infix,
-                signal_proposition=True)
+                arity=2, formula_rep=Formula.infix,
+                signal_proposition=True,
+                index=None, auto_index=False,
+                symbol=SerifItalic(unicode='∨', latex_math='\\lor', plaintext='or'),
+                name='or',
+                explicit_name='disjunction')
         return self._disjunction
 
     @property
@@ -4911,8 +4946,11 @@ class RelationDict(collections.UserDict):
         """
         if self._equality is None:
             self._equality = self.declare(
-                2, NameSet(symbol=ComposableText(plaintext='=')), Formula.infix,
-                signal_proposition=True, dashed_name='equality')
+                arity=2,
+                formula_rep=Formula.infix,
+                signal_proposition=True,
+                symbol='=', auto_index=False, index=None,
+                dashed_name='equality')
         return self._equality
 
     @property
@@ -4937,14 +4975,12 @@ class RelationDict(collections.UserDict):
         """
         if self._implication is None:
             self._implication = self.declare(
-                2,
-                NameSet(
-                    symbol=SerifItalic(plaintext='==>', unicode='⟹', latex_math=r'\implies'),
-                    name=SansSerifNormal(s='implication'),
-                    explicit_name=SansSerifNormal(s='logical implication'),
-                    index=None),
-                Formula.infix,
-                signal_proposition=True)
+                arity=2, formula_rep=Formula.infix,
+                signal_proposition=True,
+                symbol=SerifItalic(plaintext='==>', unicode='⟹', latex_math=r'\implies'),
+                index=None, auto_index=False,
+                name='implication',
+                explicit_name='logical implication')
         return self._implication
 
     @property
@@ -4969,8 +5005,8 @@ class RelationDict(collections.UserDict):
         """
         if self._inconsistent is None:
             self._inconsistent = self.declare(
-                arity=1, symbol='Inc', acronym='inc.', name='inconsistent', auto_index=False,
-                formula_rep=Formula.prefix, signal_proposition=True)
+                arity=1, formula_rep=Formula.prefix, signal_proposition=True, symbol='Inc',
+                index=None, auto_index=False, acronym='inc.', name='inconsistent')
         return self._inconsistent
 
     @property
@@ -4984,14 +5020,13 @@ class RelationDict(collections.UserDict):
         """
         if self._inequality is None:
             self._inequality = self.declare(
-                2,
-                NameSet(
-                    symbol=ComposableText(plaintext='neq', unicode='≠', latex_math='\\neq'),
-                    acronym=ComposableText(plaintext='neq'),
-                    name=ComposableText(plaintext='not equal'),
-                    index=None),
-                Formula.infix,
-                signal_proposition=True)
+                arity=2,
+                formula_rep=Formula.infix,
+                signal_proposition=True,
+                symbol=SerifItalic(plaintext='neq', unicode='≠', latex_math='\\neq'),
+                index=None,
+                acronym='neq',
+                name='not equal')
         return self._inequality
 
     @property
@@ -5038,14 +5073,13 @@ class RelationDict(collections.UserDict):
         """
         if self._negation is None:
             self._negation = self.declare(
-                1,
-                NameSet(
-                    symbol=ComposableText(plaintext='not', unicode='¬', latex_math='\\neg'),
-                    acronym=ComposableText(plaintext='not'),
-                    name=ComposableText(plaintext='negation'),
-                    index=None),
-                Formula.prefix,
-                signal_proposition=True)
+                arity=1,
+                formula_rep=Formula.prefix,
+                signal_proposition=True,
+                symbol=SerifItalic(plaintext='not', unicode='¬', latex_math='\\neg'),
+                auto_index=False, index=None,
+                abridged_name='not',
+                name='negation')
         return self._negation
 
     @property
