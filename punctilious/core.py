@@ -839,6 +839,7 @@ class LocaleEnUs(Locale):
         yield SerifItalic('simple-object')
         yield SansSerifNormal(' in ')
         yield from o.universe_of_discourse.compose_symbol()
+        yield text_dict.period
         return True
 
 
@@ -4146,16 +4147,14 @@ class TheoryElaborationSequence(TheoreticalObject):
         yield SerifItalic(plaintext='theory-elaboration-sequence')
 
     def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, bool]:
-        yield text_dict.let
-        yield text_dict.space
+        global text_dict
+        yield SansSerifNormal('Let ')
+        yield text_dict.open_quasi_quote
         yield from self.nameset.compose_qualified_symbol()
-        yield text_dict.space
-        yield text_dict.be_a
-        yield text_dict.space
+        yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' be a ')
         yield from self.compose_class()
-        yield text_dict.space
-        yield text_dict.in2
-        yield text_dict.space
+        yield SansSerifNormal(' in ')
         yield from self.u.compose_symbol()
         yield text_dict.period
         return True
@@ -7041,12 +7040,11 @@ class UniverseOfDiscourse(SymbolicObject):
 
     def compose_declaration(self) -> collections.abc.Generator[Composable, None, None]:
         global text_dict
-        yield text_dict.let
-        yield text_dict.space
+        yield SansSerifNormal('Let ')
+        yield text_dict.open_quasi_quote
         yield from self.nameset.compose_symbol()
-        yield text_dict.space
-        yield text_dict.be_a
-        yield text_dict.space
+        yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' be a ')
         yield from self.compose_class()
         yield text_dict.period
 
