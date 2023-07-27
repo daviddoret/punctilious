@@ -828,6 +828,24 @@ class LocaleEnUs(Locale):
     def __init__(self):
         super().__init__(name='EN-US')
 
+    def compose_axiom_declaration(self, o: AxiomDeclaration) -> collections.abc.Generator[
+        Composable, Composable, True]:
+        global text_dict
+        yield SansSerifNormal('Let ')
+        yield text_dict.open_quasi_quote
+        yield from o.compose_symbol()
+        yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' be the ')
+        yield SerifItalic('axiom')
+        yield SansSerifNormal(' ')
+        yield text_dict.open_quasi_quote
+        yield o.natural_language
+        yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' in ')
+        yield from o.universe_of_discourse.compose_symbol()
+        yield SansSerifNormal('.')
+        return True
+
     def compose_simple_objct_declaration(self, o: SimpleObjct) -> collections.abc.Generator[
         Composable, Composable, True]:
         global text_dict
@@ -839,7 +857,7 @@ class LocaleEnUs(Locale):
         yield SerifItalic('simple-object')
         yield SansSerifNormal(' in ')
         yield from o.universe_of_discourse.compose_symbol()
-        yield text_dict.period
+        yield SansSerifNormal('.')
         return True
 
 
@@ -3044,7 +3062,8 @@ class AxiomDeclaration(TheoreticalObject):
 
     def __init__(
             self,
-            natural_language: str, u: UniverseOfDiscourse, symbol: (None, str, StyledText) = None,
+            natural_language: (str, StyledText), u: UniverseOfDiscourse,
+            symbol: (None, str, StyledText) = None,
             index: (None, int) = None, auto_index: (None, bool) = None,
             dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
@@ -3061,9 +3080,11 @@ class AxiomDeclaration(TheoreticalObject):
         echo = prioritize_value(echo, configuration.echo_axiom_declaration,
                                 configuration.echo_default,
                                 False)
-        natural_language = natural_language.strip()
-        verify(natural_language != '',
-               'Parameter natural-language is an empty string (after trimming).')
+        if isinstance(natural_language, str):
+            natural_language = natural_language.strip()
+            verify(natural_language != '',
+                   'Parameter natural-language is an empty string (after trimming).')
+            natural_language = ScriptNormal(natural_language)
         self.natural_language = natural_language
         cat = title_categories.axiom_declaration
         if nameset is None and symbol is None:
@@ -3076,11 +3097,15 @@ class AxiomDeclaration(TheoreticalObject):
         super()._declare_class_membership(declarative_class_list.axiom)
         u.cross_reference_axiom(self)
         if echo:
-            repm.prnt(self.rep_report())
+            self.echo()
 
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='axiom')
+
+    def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, True]:
+        output = yield from locale.compose_axiom_declaration(o=self)
+        return output
 
     def compose_natural_language(self) -> collections.abc.Generator[Composable, Composable, True]:
         global text_dict
@@ -3089,12 +3114,13 @@ class AxiomDeclaration(TheoreticalObject):
         yield text_dict.close_quasi_quote
         return True
 
-    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
-        yield from self.nameset.compose_title()
-        yield text_dict.colon
-        yield text_dict.space
-        yield from self.compose_natural_language()
-        return True
+    def echo(self):
+        repm.prnt(self.rep_declaration())
+
+    def rep_declaration(self, encoding: (None, Encoding) = None,
+                        wrap: bool = None) -> str:
+        return rep_composition(composition=self.compose_declaration(), encoding=encoding,
+                               wrap=wrap)
 
     def rep_natural_language(self, encoding: (None, Encoding) = None,
                              wrap: bool = None) -> str:
@@ -4721,8 +4747,9 @@ class SimpleObjct(TheoreticalObject):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='simple-object')
 
-    def compose_declaration(self):
-        return locale.compose_simple_objct_declaration(o=self)
+    def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, True]:
+        output = yield from locale.compose_simple_objct_declaration(o=self)
+        return output
 
     def echo(self):
         repm.prnt(self.rep_declaration())

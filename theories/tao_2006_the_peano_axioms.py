@@ -11,7 +11,7 @@ import punctilious as pu
 # ft = fs1.ft
 
 pu.configuration.echo_default = True
-pu.configuration.echo_axiom_declaration = False
+pu.configuration.echo_axiom_declaration = True
 pu.configuration.echo_axiom_inclusion = True
 pu.configuration.echo_definition_declaration = False
 pu.configuration.echo_definition_inclusion = True
