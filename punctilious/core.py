@@ -450,11 +450,11 @@ class ComposableBlockLeaf(ComposableBlock):
 
 
 class StyledText(ComposableBlockLeaf):
-    """Enrich ComposableText with a complementary style property."""
+    """Text supporting multiple encodings (plaintext, Unicode, LaTeX math) and styles."""
 
     def __init__(self, s: (None, str) = None, text_style: (None, TextStyle) = None,
                  plaintext: (None, str, Plaintext) = None, unicode: (None, str, Unicode2) = None,
-                 latex_math: (None, str) = None
+                 latex_math: (None, str) = None, cap: (None, bool) = None
                  ):
         """
 
@@ -465,10 +465,18 @@ class StyledText(ComposableBlockLeaf):
         :param text_style:
         """
         self._text_style = prioritize_value(text_style, text_styles.sans_serif_normal)
+        self._cap = prioritize_value(cap, False)
+        if self._cap:
+            # Forces capitalization of the first letter during construction.
+            s = s if s is None else s.capitalize()
+            plaintext = plaintext if plaintext is None else plaintext.capitalize()
+            unicode = unicode if unicode is None else unicode.capitalize()
+            latex_math = latex_math if latex_math is None else latex_math.capitalize()
         content = ComposableText(s=s, plaintext=plaintext, unicode=unicode, latex_math=latex_math)
         start_tag = self._text_style.start_tag
         end_tag = self._text_style.end_tag
         super().__init__(content=content, start_tag=start_tag, end_tag=end_tag)
+        self._text_content = content
 
     def __eq__(self, other: (None, object, ComposableText)) -> bool:
         """Two instances of TextStyle are equal if any of their styled representation are equal
@@ -486,11 +494,40 @@ class StyledText(ComposableBlockLeaf):
     def __repr__(self):
         return f'⌜{self.rep(encoding=encodings.plaintext)}⌝ [{self._text_style}]'
 
-    def compose(self) -> collections.abc.Generator[Composable, None, None]:
-        # Override the composition logic.
-        # Like this we yield start_tag, content, and end_tag as an atomic object.
-        # This makes it possible to override the rep() method on content.
-        yield self
+    def compose(self, text_style: (None, TextStyle) = None, cap: (None, bool) = None, **kwargs) -> \
+            collections.abc.Generator[
+                Composable, Composable, bool]:
+        """
+
+        :param text_style: Override the text_style property of the StyledText instance.
+        :param cap: Override the cap property of the StyledText instance.
+        :param kwargs:
+        :return: A composition of the StyledText instance.
+        """
+        if (cap is not None and not self._cap) or \
+                (text_style is not None and self._text_style is not text_style):
+            # Return a close of ⌜self⌝ with the desired properties.
+            latex_math = None if self.latex_math is None else self.latex_math.capitalize()
+            plaintext = None if self.plaintext is None else self.plaintext.capitalize()
+            unicode = None if self.unicode is None else self.unicode.capitalize()
+            yield StyledText(latex_math=latex_math, plaintext=plaintext, unicode=unicode,
+                             text_style=self.text_style)
+            return True
+        else:
+            yield self
+            return True
+
+    @property
+    def latex_math(self) -> (None, str):
+        return self._text_content.latex_math
+
+    @property
+    def plaintext(self) -> (None, Plaintext):
+        return self._text_content.plaintext
+
+    @property
+    def unicode(self) -> (None, str):
+        return self._text_content.unicode
 
     def rep(self, encoding: Encoding = encodings.plaintext, cap: bool = False, **kwargs):
         encoding = prioritize_value(encoding, configuration.encoding,
@@ -507,22 +544,26 @@ class StyledText(ComposableBlockLeaf):
 
     def rep_as_latex_math(self, cap: bool = False):
         start_tag = self.start_tag.rep(encoding=encodings.latex_math)
-        content = self._content.plaintext if self._content.latex_math is None else self._content.latex_math
+        content = self._text_content.plaintext if self._text_content.latex_math is None else self._text_content.latex_math
         content = content.capitalize() if cap else content
         end_tag = self.end_tag.rep(encoding=encodings.latex_math)
         return start_tag + content + end_tag
 
     def rep_as_plaintext(self, cap: bool = False):
-        content = self._content.plaintext
+        content = self._text_content.plaintext
         content = content.capitalize() if cap else content
         return content
 
     def rep_as_unicode(self, cap: bool = False):
-        content = self._content.plaintext if self._content.unicode is None else self._content.unicode
+        content = self._text_content.plaintext if self._text_content.unicode is None else self._text_content.unicode
         content = content.capitalize() if cap else content
         return unicode_utilities.unicode_format(s=content,
                                                 index=self.text_style._unicode_table_index,
                                                 mapping=self.text_style.unicode_map)
+
+    @property
+    def text_content(self) -> ComposableText:
+        return self._text_content
 
     @property
     def text_style(self) -> TextStyle:
@@ -635,6 +676,13 @@ class Index(ComposableBlockSequence):
             return item
         else:
             raise TypeError('item is of unsupported type.')
+
+    @property
+    def content(self) -> StyledText:
+        return self._content
+
+    def rep(self, encoding: (None, Encoding) = None, **kwargs):
+        return self.content.rep(encoding=encoding, cap=True)
 
 
 class SansSerifBold(StyledText):
@@ -843,6 +891,59 @@ class LocaleEnUs(Locale):
         yield text_dict.close_quasi_quote
         yield SansSerifNormal(' in ')
         yield from o.universe_of_discourse.compose_symbol()
+        yield SansSerifNormal('.')
+        return True
+
+    def compose_axiom_inclusion_report(self, o: AxiomInclusion) -> collections.abc.Generator[
+        Composable, Composable, True]:
+        global text_dict
+        yield from o.compose_title()
+        yield SansSerifNormal(': Let ')
+        yield SerifItalic('axiom')
+        yield SansSerifNormal(' ')
+        yield from o.axiom.compose_symbol()
+        yield SansSerifNormal(' ')
+        yield text_dict.open_quasi_quote
+        yield o.axiom.natural_language
+        yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' be included (postulated) in ')
+        yield from o.theory.compose_symbol()
+        yield SansSerifNormal('.')
+        return True
+
+    def compose_definition_declaration(self, o: DefinitionDeclaration) -> collections.abc.Generator[
+        Composable, Composable, True]:
+        global text_dict
+        yield SansSerifNormal('Let ')
+        yield text_dict.open_quasi_quote
+        yield from o.compose_symbol()
+        yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' be the ')
+        yield SerifItalic('definition')
+        yield SansSerifNormal(' ')
+        yield text_dict.open_quasi_quote
+        yield o.natural_language
+        yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' in ')
+        yield from o.universe_of_discourse.compose_symbol()
+        yield SansSerifNormal('.')
+        return True
+
+    def compose_definition_inclusion_report(self, o: DefinitionInclusion) -> \
+            collections.abc.Generator[
+                Composable, Composable, True]:
+        global text_dict
+        yield from o.compose_title()
+        yield SansSerifNormal(': Let ')
+        yield SerifItalic('definition')
+        yield SansSerifNormal(' ')
+        yield from o.definition.compose_symbol()
+        yield SansSerifNormal(' ')
+        yield text_dict.open_quasi_quote
+        yield o.definition.natural_language
+        yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' be included (postulated) in ')
+        yield from o.theory.compose_symbol()
         yield SansSerifNormal('.')
         return True
 
@@ -1389,6 +1490,19 @@ class NameSet(Composable):
                                                      post=post)
             return something
 
+    def compose_title(self, cap: (None, bool) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        global text_dict
+        output1 = yield from self.compose_cat_unabridged(cap=cap)
+        pre = text_dict.space if output1 else None
+        output2 = yield from self.compose_ref(pre=pre)
+        pre = ' (' if output1 or output2 else None
+        post = ')' if output1 or output2 else None
+        output3 = yield from self.compose_symbol(pre=pre, post=post)
+        pre = ' - ' if output1 or output2 or output3 else None
+        yield from self.compose_subtitle(pre=pre)
+        return True
+
     @property
     def explicit_name(self) -> ComposableText:
         return self._explicit_name
@@ -1522,18 +1636,6 @@ class NameSet(Composable):
     def rep_symbol(self, encoding: (None, Encoding) = None, **kwargs) -> (None, str):
         """Return a string that represent the object as a symbol."""
         return rep_composition(composition=self.compose_symbol(), encoding=encoding, **kwargs)
-
-    def compose_title(self) -> collections.abc.Generator[Composable, Composable, bool]:
-        global text_dict
-        output1 = yield from self.compose_cat_unabridged(cap=True)
-        pre = text_dict.space if output1 else None
-        output2 = yield from self.compose_ref(pre=pre)
-        pre = ' (' if output1 or output2 else None
-        post = ')' if output1 or output2 else None
-        output3 = yield from self.compose_symbol(pre=pre, post=post)
-        pre = ' - ' if output1 or output2 or output3 else None
-        yield from self.compose_subtitle(pre=pre)
-        return True
 
     def rep_title(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         """A title of the form: [unabridged-category] [reference] ([symbol]) - [subtitle]
@@ -1773,17 +1875,20 @@ class SymbolicObject:
     def __str__(self):
         return self.rep_symbol(encoding=encodings.plaintext)
 
-    def compose(self) -> collections.abc.Generator[Composable, None, None]:
-        yield from self.nameset.compose()
+    def compose(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        output = yield from self.nameset.compose()
+        return True
 
-    def compose_cat(self) -> collections.abc.Generator[Composable, None, None]:
-        yield from self.nameset.compose_cat()
+    def compose_cat(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        output = yield from self.nameset.compose_cat()
+        return True
 
-    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
-        yield SerifItalic(plaintext='symbolic-object')
+    def compose_class(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        output = yield SerifItalic(plaintext='symbolic-object')
+        return True
 
     def compose_declaration(self, close_punctuation: Composable = None, cap: bool = None) -> \
-            collections.abc.Generator[Composable, None, None]:
+            collections.abc.Generator[Composable, Composable, bool]:
         """TODO: _declaration must be reserved to TheoreticalObjcts. SymbolObjcts should use a distinct verb to mean "report".
         """
         yield from text_dict.let.compose(cap=cap)  # TODO: Support cap parameter
@@ -1800,9 +1905,16 @@ class SymbolicObject:
         yield text_dict.space
         yield from self.universe_of_discourse.compose_symbol()
         yield prioritize_value(close_punctuation, text_dict.period)
+        return True
 
-    def compose_symbol(self) -> collections.abc.Generator[Composable, None, None]:
-        yield from self.nameset.compose_symbol()
+    def compose_symbol(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        output = yield from self.nameset.compose_symbol()
+        return output
+
+    def compose_title(self, cap: (None, bool) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from self.nameset.compose_title()
+        return output
 
     @property
     def declarative_classes(self) -> frozenset[DeclarativeClass]:
@@ -3194,23 +3306,25 @@ class AxiomInclusion(Statement):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='axiom-inclusion')
 
+    def compose_report(self) -> collections.abc.Generator[Composable, Composable, True]:
+        output = yield from locale.compose_axiom_inclusion_report(o=self)
+        return output
+
     def rep_natural_language(self, encoding: (None, Encoding) = None,
                              wrap: bool = True) -> str:
         return self._axiom.rep_natural_language(encoding=encoding, wrap=wrap)
 
-    def rep_report(self, encoding: (None, Encoding) = None, output_proofs=True) -> str:
+    def rep_report(self, encoding: (None, Encoding) = None) -> str:
         """Return a representation that expresses and justifies the statement.
+
+        Sample with unicode encoding:
+        𝗔𝘅𝗶𝗼𝗺 𝟮.𝟭.𝟭 (𝑝₁): ⌜0 is a natural number.⌝
 
         :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
         :param output_proofs:
         :return:
         """
-        encoding = prioritize_value(encoding, configuration.encoding,
-                                    encodings.plaintext)
-        cap = True
-        output = f'{self.rep_title(encoding=encoding, cap=cap)}: ⌜{self.axiom.natural_language}⌝'
-        output = wrap_text(output)
-        return output + f'\n'
+        return rep_composition(composition=self.compose_report(), encoding=encoding)
 
 
 class InferenceRuleInclusion(Statement):
@@ -3338,7 +3452,7 @@ class DefinitionDeclaration(TheoreticalObject):
         natural_language = natural_language.strip()
         verify(natural_language != '',
                'Parameter natural-language is an empty string (after trimming).')
-        self.natural_language = natural_language
+        self._natural_language = natural_language
         cat = title_categories.definition_declaration
         if nameset is None and symbol is None:
             symbol = configuration.default_definition_declaration_symbol
@@ -3356,6 +3470,10 @@ class DefinitionDeclaration(TheoreticalObject):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='definition')
 
+    def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, True]:
+        output = yield from locale.compose_definition_declaration(o=self)
+        return output
+
     def compose_natural_language(self) -> collections.abc.Generator[Composable, Composable, True]:
         global text_dict
         yield text_dict.open_quasi_quote
@@ -3369,6 +3487,19 @@ class DefinitionDeclaration(TheoreticalObject):
         yield text_dict.space
         yield from self.compose_natural_language()
         return True
+
+    def echo(self):
+        repm.prnt(self.rep_report())
+
+    @property
+    def natural_language(self) -> (None, str):
+        """The content of the axiom in natural-language."""
+        return self._natural_language
+
+    def rep_declaration(self, encoding: (None, Encoding) = None,
+                        wrap: bool = None) -> str:
+        return rep_composition(composition=self.compose_declaration(), encoding=encoding,
+                               wrap=wrap)
 
     def rep_natural_language(self, encoding: (None, Encoding) = None,
                              wrap: bool = None) -> str:
@@ -3388,9 +3519,6 @@ class DefinitionDeclaration(TheoreticalObject):
         cap = True
         output = rep_composition(composition=self.compose_report(), encoding=encoding, cap=cap)
         return output
-
-    def echo(self):
-        repm.prnt(self.rep_report())
 
 
 class DefinitionInclusion(Statement):
@@ -3413,7 +3541,7 @@ class DefinitionInclusion(Statement):
         echo = prioritize_value(echo, configuration.echo_definition_inclusion,
                                 configuration.echo_default,
                                 False)
-        self.definition = d
+        self._definition = d
         t.crossreference_definition_endorsement(self)
         cat = title_categories.definition_inclusion
         if nameset is None and symbol is None:
@@ -3430,22 +3558,21 @@ class DefinitionInclusion(Statement):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='definition-inclusion')
 
+    def compose_report(self) -> collections.abc.Generator[Composable, Composable, True]:
+        output = yield from locale.compose_definition_inclusion_report(o=self)
+        return output
+
+    @property
+    def definition(self):
+        return self._definition
+
     def echo(self):
         repm.prnt(self.rep_report())
 
-    def rep_report(self, encoding: (None, Encoding) = None, output_proofs=True) -> str:
+    def rep_report(self, encoding: (None, Encoding) = None) -> str:
         """Return a representation that expresses and justifies the statement.
-
-        :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
-        :param output_proofs:
-        :return:
         """
-        encoding = prioritize_value(encoding, configuration.encoding,
-                                    encodings.plaintext)
-        cap = True
-        output = f'{self.rep_title(encoding=encoding, cap=cap)} ({self.rep_name(encoding=encoding)}): {self.definition.natural_language}'
-        output = wrap_text(output)
-        return output + f'\n'
+        return rep_composition(composition=self.compose_report(), encoding=encoding)
 
 
 class FormulaStatement(Statement):
@@ -3906,7 +4033,7 @@ class Note(AtheoreticalStatement):
         cat = title_categories.note if cat is None else cat
         #  self.statement_index = theory.crossreference_statement(self)
         self.theory = t
-        self.natural_language = content
+        self._natural_language = content
         self.category = cat
         if nameset is None and symbol is None:
             # symbol = self.category.symbol_base
@@ -3946,6 +4073,11 @@ class Note(AtheoreticalStatement):
 
     def echo(self):
         repm.prnt(self.rep_report())
+
+    @property
+    def natural_language(self) -> str:
+        """Return the content of the note in natural-language."""
+        return self._natural_language
 
     def rep_report(self, encoding: (None, Encoding) = None, output_proofs: bool = True,
                    wrap: bool = True) -> str:
