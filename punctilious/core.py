@@ -196,6 +196,8 @@ def yield_composition(*content, cap: (None, bool) = None,
         for element in content:
             if isinstance(element, str):
                 yield from ComposableText(s=element).compose()
+            elif isinstance(element, StyledText):
+                yield from element.compose(cap=cap)
             elif isinstance(element, Composable):
                 yield from element.compose()
             elif isinstance(element, collections.abc.Generator):
@@ -1546,7 +1548,7 @@ class NameSet(Composable):
     def rep_title(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         """A title of the form: [unabridged-category] [reference] ([symbol]) - [subtitle]
         """
-        return rep_composition(composition=self.compose_title(), encoding=encoding, cap=cap)
+        return rep_composition(composition=self.compose_title(cap=cap), encoding=encoding)
 
     @property
     def subtitle(self) -> str:
@@ -2939,12 +2941,15 @@ class TitleCategoryOBSOLETE(repm.ValueName):
 
 class TitleCategories(repm.ValueName):
     # axiom = TitleCategory('axiom', 's', 'axiom', 'axiom')
-    axiom_declaration = TitleCategoryOBSOLETE('axiom_declaration', 'a', 'axiom', 'axiom')
-    axiom_inclusion = TitleCategoryOBSOLETE('axiom_inclusion', 's', 'axiom', 'axiom')
+    axiom_declaration = TitleCategoryOBSOLETE('axiom_declaration', 'a', SansSerifBold('axiom'),
+                                              'axiom')
+    axiom_inclusion = TitleCategoryOBSOLETE('axiom_inclusion', 's', SansSerifBold('axiom'), 'axiom')
     corollary = TitleCategoryOBSOLETE('corollary', 's', 'corollary', 'cor.')
-    definition_declaration = TitleCategoryOBSOLETE('definition_declaration', 'd', 'definition',
+    definition_declaration = TitleCategoryOBSOLETE('definition_declaration', 'd',
+                                                   SansSerifBold('definition'),
                                                    'def.')
-    definition_inclusion = TitleCategoryOBSOLETE('definition_inclusion', 's', 'definition', 'def.')
+    definition_inclusion = TitleCategoryOBSOLETE('definition_inclusion', 's',
+                                                 SansSerifBold('definition'), 'def.')
     hypothesis = TitleCategoryOBSOLETE('hypothesis', 's', 'hypothesis', 'hyp.')
     inference_rule_declaration = TitleCategoryOBSOLETE('inference_rule', 's', 'inference rule',
                                                        'inference rule')
