@@ -1,3 +1,4 @@
+import core
 from core import *
 
 
@@ -6,6 +7,7 @@ class LocaleEnUs(Locale):
 
     def __init__(self):
         super().__init__(name='EN-US')
+        self._qed = None
 
     def compose_axiom_declaration(self, o: AxiomDeclaration) -> collections.abc.Generator[
         Composable, Composable, True]:
@@ -42,6 +44,23 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal(' be included (postulated) in ')
         yield from o.theory.compose_symbol()
         yield SansSerifNormal('.')
+        return True
+
+    def compose_axiom_interpretation_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[
+                Composable, Composable, True]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        a = o.parameters[0]
+        a: AxiomInclusion
+        p = o.parameters[1]
+        p: Formula
+        yield from a.axiom.compose_natural_language()
+        yield SansSerifNormal(' is postulated by ')
+        yield from a.compose_ref_link()
+        yield SansSerifNormal('. ')
+        yield from p.compose_formula()
+        yield SansSerifNormal(' is an interpretation of that axiom.')
         return True
 
     def compose_definition_declaration(self, o: DefinitionDeclaration) -> collections.abc.Generator[
@@ -82,6 +101,44 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         return True
 
+    def compose_inferred_statement_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, True]:
+        yield SansSerifItalic('Proof')
+        yield SansSerifNormal(': ')
+        # Proof premises
+        if o.inference_rule.compose_paragraph_proof_method is None:
+            # There is no specific proof composition method
+            # linked to this inference-rule,
+            # make a best-effort to write a readable proof.
+            for i in range(len(o.parameters)):
+                parameter = o.parameters[i]
+                yield from parameter.compose_formula()
+                yield SansSerifNormal(' follows from ')
+                yield from parameter.compose_ref()
+                yield SansSerifNormal('.')
+        else:
+            yield from o.inference_rule.compose_paragraph_proof_method(o=o)
+        # Proof conclusion
+        yield SansSerifNormal(' Therefore, by the ')
+        yield from o.inference_rule.compose_dashed_name()
+        yield SansSerifNormal(' inference rule, it follows that ')
+        yield from o.valid_proposition.compose_formula()
+        yield SansSerifNormal('. ')
+        yield self.qed
+        return True
+
+    def compose_inferred_statement_report(self, o: InferredStatement,
+                                          output_proof: (None, bool) = None) -> \
+            collections.abc.Generator[
+                Composable, Composable, True]:
+        output_proof = prioritize_value(output_proof, True)
+        yield from o.compose_title(cap=True)
+        yield SansSerifNormal('.')
+        if output_proof:
+            yield SansSerifNormal(' ')
+            yield from self.compose_inferred_statement_paragraph_proof(o=o)
+        return True
+
     def compose_simple_objct_declaration(self, o: SimpleObjct) -> collections.abc.Generator[
         Composable, Composable, True]:
         global text_dict
@@ -95,6 +152,12 @@ class LocaleEnUs(Locale):
         yield from o.universe_of_discourse.compose_symbol()
         yield SansSerifNormal('.')
         return True
+
+    @property
+    def qed(self) -> StyledText:
+        if self._qed is None:
+            self._qed = SansSerifNormal(plaintext='QED', unicode='∎', latex_math='\\qed')
+        return self._qed
 
 
 locale_en_us = LocaleEnUs()

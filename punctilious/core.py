@@ -703,6 +703,14 @@ class SansSerifNormal(StyledText):
                          unicode=unicode, latex_math=latex_math)
 
 
+class SansSerifItalic(StyledText):
+    def __init__(self, s: (str, None) = None, plaintext: (None, str, Plaintext) = None,
+                 unicode: (None, str, Unicode2) = None,
+                 latex_math: (None, str) = None) -> None:
+        super().__init__(s=s, text_style=text_styles.sans_serif_italic, plaintext=plaintext,
+                         unicode=unicode, latex_math=latex_math)
+
+
 text_dict.in2 = SansSerifNormal(s='in')
 text_dict.let = SansSerifNormal(s='let')
 text_dict.be = SansSerifNormal(s='be')
@@ -870,6 +878,11 @@ class Locale:
     @property
     def name(self):
         return self._name
+
+    @property
+    @abc.abstractmethod
+    def qed(self) -> StyledText:
+        raise NotImplementedError()
 
 
 class VerificationSeverity(repm.ValueName):
@@ -1279,13 +1292,15 @@ class NameSet(Composable):
                                                      post=post)
             return something
 
-    def compose_cat_abridged(self, pre: (None, str, Composable) = None,
-                             post: (None, str, Composable) = None) -> collections.abc.Generator[
-        Composable, Composable, bool]:
+    def compose_cat_abridged(self, cap: (None, bool) = None, pre: (None, str, Composable) = None,
+                             post: (None, str, Composable) = None) -> \
+            collections.abc.Generator[
+                Composable, Composable, bool]:
         if self._cat is None:
             return False
         else:
-            something = yield from yield_composition(self._cat.abridged_name, pre=pre, post=post)
+            something = yield from yield_composition(self._cat.abridged_name, cap=cap, pre=pre,
+                                                     post=post)
             return something
 
     def compose_compact_name(self, cap: (None, bool) = None,
@@ -1378,6 +1393,17 @@ class NameSet(Composable):
         else:
             something = yield from yield_composition(self._ref, pre=pre, post=post)
             return something
+
+    def compose_ref_link(self, cap: (None, bool) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        global text_dict
+        output1 = yield from self.compose_cat_abridged(cap=cap)
+        pre = text_dict.space if output1 else None
+        output2 = yield from self.compose_ref(pre=pre)
+        pre = ' (' if output1 or output2 else None
+        post = ')' if output1 or output2 else None
+        output3 = yield from self.compose_symbol(pre=pre, post=post)
+        return True
 
     def compose_subtitle(self, pre: (None, str, Composable) = None,
                          post: (None, str, Composable) = None) -> collections.abc.Generator[
@@ -1795,6 +1821,10 @@ class SymbolicObject:
         output = yield SerifItalic(plaintext='symbolic-object')
         return True
 
+    def compose_dashed_name(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        output = yield from self.nameset.compose_dashed_name()
+        return output
+
     def compose_declaration(self, close_punctuation: Composable = None, cap: bool = None) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         """TODO: _declaration must be reserved to TheoreticalObjcts. SymbolObjcts should use a distinct verb to mean "report".
@@ -1814,6 +1844,15 @@ class SymbolicObject:
         yield from self.universe_of_discourse.compose_symbol()
         yield prioritize_value(close_punctuation, text_dict.period)
         return True
+
+    def compose_ref(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        output = yield from self.nameset.compose_ref()
+        return output
+
+    def compose_ref_link(self, cap: (None, bool) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from self.nameset.compose_ref_link(cap=cap)
+        return output
 
     def compose_symbol(self) -> collections.abc.Generator[Composable, Composable, bool]:
         output = yield from self.nameset.compose_symbol()
@@ -3805,7 +3844,8 @@ class InferenceRuleDeclaration(TheoreticalObject):
                  universe_of_discourse: UniverseOfDiscourse,
                  infer_formula: collections.abc.Callable,
                  verify_args: collections.abc.Callable,
-                 rep_two_columns_proof: (None, collections.abc.Callable) = None,
+                 rep_two_columns_proof_OBSOLETE: (None, collections.abc.Callable) = None,
+                 compose_paragraph_proof_method: (None, collections.abc.Callable) = None,
                  symbol: (None, str, StyledText) = None,
                  index: (None, int) = None,
                  auto_index: (None, bool) = None,
@@ -3820,13 +3860,15 @@ class InferenceRuleDeclaration(TheoreticalObject):
                  echo: (None, bool) = None):
         self._infer_formula = infer_formula
         self._verify_args = verify_args
-        self._rep_two_columns_proof = rep_two_columns_proof
+        self._rep_two_columns_proof = rep_two_columns_proof_OBSOLETE
+        self._compose_paragraph_proof_method = compose_paragraph_proof_method
         if nameset is None and symbol is None:
             symbol = configuration.default_symbolic_object_symbol
         cat = title_categories.inference_rule_declaration
         super().__init__(universe_of_discourse=universe_of_discourse,
                          is_theory_foundation_system=False,
                          symbol=symbol, index=index, auto_index=auto_index,
+                         dashed_name=dashed_name,
                          acronym=acronym, abridged_name=abridged_name, name=name,
                          explicit_name=explicit_name,
                          cat=cat, ref=ref, subtitle=subtitle,
@@ -3835,6 +3877,10 @@ class InferenceRuleDeclaration(TheoreticalObject):
         universe_of_discourse.cross_reference_inference_rule(self)
         if echo:
             self.echo()
+
+    @property
+    def compose_paragraph_proof_method(self):
+        return self._compose_paragraph_proof_method
 
     def echo(self):
         repm.prnt(self.rep_report())
@@ -3862,8 +3908,8 @@ class InferenceRuleDeclaration(TheoreticalObject):
                                  echo=echo,
                                  **kwargs)
 
-    def rep_two_columns_proof(self, s: InferredStatement,
-                              encoding: (None, Encoding) = None) -> str:
+    def rep_two_columns_proof_OBSOLETE(self, s: InferredStatement,
+                                       encoding: (None, Encoding) = None) -> str:
         """Given an inferred-statement 𝑠 based on this inference-rule,
         return a two-column proof
 
@@ -4488,7 +4534,7 @@ class TheoryElaborationSequence(TheoreticalObject):
                 output += '\n ⁃ ' + r_long_name
         output += f'\n\n{repm.serif_bold("Theory elaboration:")}'
         output = output + '\n\n' + '\n\n'.join(
-            s.rep_report(output_proofs=output_proofs) for s in
+            s.rep_report(output_proof=output_proofs) for s in
             self.statements)
         return str(output)
 
@@ -5263,9 +5309,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._absorption is None:
             self._absorption = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(
-                    symbol=SerifItalic(plaintext='absorption'),
-                    index=None),
+                symbol='absorption', index=None, auto_index=False,
+                dashed_name='absorption',
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._absorption
@@ -5314,16 +5359,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
                 right=SansSerifNormal('Interpreted from natural-language').rep(encoding=encoding))
             return report
 
-        def compose_paragraph_proof(a: AxiomInclusion, p: Formula):
-            c = Paragraph()
-            c.append(a.compose_quasi_quote())
-            c.append('is postulated by')
-            c.append(a.compose_reference())
-            c.append_period()
-            c.append(p.compose_formula())
-            c.append('is an interpreted translation of that axiom.')
-            c.append_period()
-            return c
+        def compose_paragraph_proof(o: InferredStatement):
+            output = yield from configuration.locale.compose_axiom_interpretation_paragraph_proof(
+                o=o)
+            return output
 
         def verify_args(a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence) -> bool:
             """Verify if the arguments comply syntactically with the inference-rule.
@@ -5359,11 +5398,12 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
         if self._axiom_interpretation is None:
             self._axiom_interpretation = InferenceRuleDeclaration(
-                nameset=NameSet(symbol='axiom-interpretation'),
+                symbol='axiom-interpretation', index=None, auto_index=False,
+                dashed_name='axiom-interpretation',
                 universe_of_discourse=self.u,
                 infer_formula=infer_formula,
                 verify_args=verify_args,
-                rep_two_columns_proof=compose_two_column_proof)
+                compose_paragraph_proof_method=compose_paragraph_proof)
         return self._axiom_interpretation
 
     @property
@@ -7593,6 +7633,11 @@ class InferredStatement(FormulaStatement):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='inferred-statement')
 
+    def compose_report(self, output_proof: (None, bool) = None):
+        output = yield from configuration.locale.compose_inferred_statement_report(
+            o=self, output_proof=output_proof)
+        return output
+
     def echo(self):
         repm.prnt(self.rep_report())
 
@@ -7606,13 +7651,17 @@ class InferredStatement(FormulaStatement):
         """
         return self._inference_rule
 
-    def rep_report(self, encoding: (None, Encoding) = None, output_proofs=True) -> str:
+    def rep_report(self, encoding: (None, Encoding) = None, output_proof=True) -> str:
+        return rep_composition(composition=self.compose_report(output_proof=output_proof),
+                               encoding=encoding)
+
+    def rep_report_OBSOLETE(self, encoding: (None, Encoding) = None, output_proof=True) -> str:
         """Return a representation that expresses and justifies the statement."""
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
         rep = f'{self.rep_title(encoding=encoding, cap=True)}: {self.valid_proposition.rep_formula()}' + '\n\t'
         rep = wrap_text(rep) + '\n'
-        if output_proofs:
+        if output_proof:
             if self.inference_rule is self.u.inference_rules.variable_substitution:
                 # TODO: MOVE THIS TO THE NEW INFERENCE_RULE LOGIC
                 # This is a special case for the variable-substitution inference-rule,
@@ -7627,11 +7676,11 @@ class InferredStatement(FormulaStatement):
                     f'{k.rep_symbol()} ↦ {v.rep_formula()}' for k, v in mapping) + ')'
                 rep = rep + f'\n\t{mapping_text:<70} │ Given as parameters.'
             else:
-                rep = rep + self.rep_two_columns_proof(encoding=encoding)
+                rep = rep + self.rep_two_columns_proof_OBSOLETE(encoding=encoding)
         return rep
 
-    def rep_two_columns_proof(self, encoding: (None, Encoding) = None):
-        rep = self.inference_rule.rep_two_columns_proof(s=self, encoding=encoding)
+    def rep_two_columns_proof_OBSOLETE(self, encoding: (None, Encoding) = None):
+        rep = self.inference_rule.rep_two_columns_proof_OBSOLETE(s=self, encoding=encoding)
         return rep
 
 
