@@ -870,101 +870,6 @@ class Locale:
         return self._name
 
 
-class LocaleEnUs(Locale):
-    """TODO: Implement localization. This is just a small example to showcase how this could be implemented."""
-
-    def __init__(self):
-        super().__init__(name='EN-US')
-
-    def compose_axiom_declaration(self, o: AxiomDeclaration) -> collections.abc.Generator[
-        Composable, Composable, True]:
-        global text_dict
-        yield SansSerifNormal('Let ')
-        yield text_dict.open_quasi_quote
-        yield from o.compose_symbol()
-        yield text_dict.close_quasi_quote
-        yield SansSerifNormal(' be the ')
-        yield SerifItalic('axiom')
-        yield SansSerifNormal(' ')
-        yield text_dict.open_quasi_quote
-        yield o.natural_language
-        yield text_dict.close_quasi_quote
-        yield SansSerifNormal(' in ')
-        yield from o.universe_of_discourse.compose_symbol()
-        yield SansSerifNormal('.')
-        return True
-
-    def compose_axiom_inclusion_report(self, o: AxiomInclusion) -> collections.abc.Generator[
-        Composable, Composable, True]:
-        global text_dict
-        yield from o.compose_title()
-        yield SansSerifNormal(': Let ')
-        yield SerifItalic('axiom')
-        yield SansSerifNormal(' ')
-        yield from o.axiom.compose_symbol()
-        yield SansSerifNormal(' ')
-        yield text_dict.open_quasi_quote
-        yield o.axiom.natural_language
-        yield text_dict.close_quasi_quote
-        yield SansSerifNormal(' be included (postulated) in ')
-        yield from o.theory.compose_symbol()
-        yield SansSerifNormal('.')
-        return True
-
-    def compose_definition_declaration(self, o: DefinitionDeclaration) -> collections.abc.Generator[
-        Composable, Composable, True]:
-        global text_dict
-        yield SansSerifNormal('Let ')
-        yield text_dict.open_quasi_quote
-        yield from o.compose_symbol()
-        yield text_dict.close_quasi_quote
-        yield SansSerifNormal(' be the ')
-        yield SerifItalic('definition')
-        yield SansSerifNormal(' ')
-        yield text_dict.open_quasi_quote
-        yield o.natural_language
-        yield text_dict.close_quasi_quote
-        yield SansSerifNormal(' in ')
-        yield from o.universe_of_discourse.compose_symbol()
-        yield SansSerifNormal('.')
-        return True
-
-    def compose_definition_inclusion_report(self, o: DefinitionInclusion) -> \
-            collections.abc.Generator[
-                Composable, Composable, True]:
-        global text_dict
-        yield from o.compose_title()
-        yield SansSerifNormal(': Let ')
-        yield SerifItalic('definition')
-        yield SansSerifNormal(' ')
-        yield from o.definition.compose_symbol()
-        yield SansSerifNormal(' ')
-        yield text_dict.open_quasi_quote
-        yield o.definition.natural_language
-        yield text_dict.close_quasi_quote
-        yield SansSerifNormal(' be included (postulated) in ')
-        yield from o.theory.compose_symbol()
-        yield SansSerifNormal('.')
-        return True
-
-    def compose_simple_objct_declaration(self, o: SimpleObjct) -> collections.abc.Generator[
-        Composable, Composable, True]:
-        global text_dict
-        yield SansSerifNormal('Let ')
-        yield text_dict.open_quasi_quote
-        yield from o.compose_symbol()
-        yield text_dict.close_quasi_quote
-        yield SansSerifNormal(' be a ')
-        yield SerifItalic('simple-object')
-        yield SansSerifNormal(' in ')
-        yield from o.universe_of_discourse.compose_symbol()
-        yield SansSerifNormal('.')
-        return True
-
-
-locale = LocaleEnUs()
-
-
 class VerificationSeverity(repm.ValueName):
     def __init__(self, name):
         super().__init__(name)
@@ -1048,6 +953,7 @@ class Configuration:
         self.echo_universe_of_discourse_declaration = None
         self.echo_free_variable_declaration = None
         self.echo_encoding = None
+        self.locale = None
         self.output_index_if_max_index_equal_1 = None
         self.raise_exception_on_verification_error = None
         self.title_text_style = None
@@ -1440,7 +1346,7 @@ class NameSet(Composable):
     def compose_name(self, pre: (None, str, Composable) = None,
                      post: (None, str, Composable) = None) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        if self._acronym is None:
+        if self._name is None:
             return False
         else:
             something = yield from yield_composition(self._name, pre=pre, post=post)
@@ -1913,7 +1819,7 @@ class SymbolicObject:
 
     def compose_title(self, cap: (None, bool) = None) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from self.nameset.compose_title()
+        output = yield from self.nameset.compose_title(cap=cap)
         return output
 
     @property
@@ -3179,8 +3085,9 @@ class AxiomDeclaration(TheoreticalObject):
             index: (None, int) = None, auto_index: (None, bool) = None,
             dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
-            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
-            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
+            explicit_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+            nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         """
 
@@ -3197,14 +3104,16 @@ class AxiomDeclaration(TheoreticalObject):
             verify(natural_language != '',
                    'Parameter natural-language is an empty string (after trimming).')
             natural_language = ScriptNormal(natural_language)
-        self.natural_language = natural_language
+        self._natural_language = natural_language
         cat = title_categories.axiom_declaration
         if nameset is None and symbol is None:
             symbol = configuration.default_axiom_declaration_symbol
         super().__init__(
             universe_of_discourse=u, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, cat=cat,
+            explicit_name=explicit_name,
+            ref=ref, subtitle=subtitle,
+            nameset=nameset, cat=cat,
             echo=False)
         super()._declare_class_membership(declarative_class_list.axiom)
         u.cross_reference_axiom(self)
@@ -3216,7 +3125,7 @@ class AxiomDeclaration(TheoreticalObject):
         yield SerifItalic(plaintext='axiom')
 
     def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, True]:
-        output = yield from locale.compose_axiom_declaration(o=self)
+        output = yield from configuration.locale.compose_axiom_declaration(o=self)
         return output
 
     def compose_natural_language(self) -> collections.abc.Generator[Composable, Composable, True]:
@@ -3228,6 +3137,10 @@ class AxiomDeclaration(TheoreticalObject):
 
     def echo(self):
         repm.prnt(self.rep_declaration())
+
+    @property
+    def natural_language(self) -> StyledText:
+        return self._natural_language
 
     def rep_declaration(self, encoding: (None, Encoding) = None,
                         wrap: bool = None) -> str:
@@ -3307,7 +3220,7 @@ class AxiomInclusion(Statement):
         yield SerifItalic(plaintext='axiom-inclusion')
 
     def compose_report(self) -> collections.abc.Generator[Composable, Composable, True]:
-        output = yield from locale.compose_axiom_inclusion_report(o=self)
+        output = yield from configuration.locale.compose_axiom_inclusion_report(o=self)
         return output
 
     def rep_natural_language(self, encoding: (None, Encoding) = None,
@@ -3436,8 +3349,9 @@ class DefinitionDeclaration(TheoreticalObject):
             index: (None, int) = None, auto_index: (None, bool) = None,
             dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
-            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
-            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
+            explicit_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+            nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         """
 
@@ -3449,18 +3363,22 @@ class DefinitionDeclaration(TheoreticalObject):
         echo = prioritize_value(echo, configuration.echo_definition_declaration,
                                 configuration.echo_default,
                                 False)
-        natural_language = natural_language.strip()
-        verify(natural_language != '',
-               'Parameter natural-language is an empty string (after trimming).')
+        if isinstance(natural_language, str):
+            natural_language = natural_language.strip()
+            verify(natural_language != '',
+                   'Parameter natural-language is an empty string (after trimming).')
+            natural_language = ScriptNormal(natural_language)
         self._natural_language = natural_language
+
         cat = title_categories.definition_declaration
         if nameset is None and symbol is None:
             symbol = configuration.default_definition_declaration_symbol
         super().__init__(
             universe_of_discourse=u, symbol=symbol,
             index=index, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, cat=cat, ref=ref,
-            subtitle=subtitle, nameset=nameset, echo=echo)
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, cat=cat,
+            ref=ref, subtitle=subtitle,
+            nameset=nameset, echo=echo)
         super()._declare_class_membership(declarative_class_list.definition)
         u.cross_reference_definition(self)
         if echo:
@@ -3471,7 +3389,7 @@ class DefinitionDeclaration(TheoreticalObject):
         yield SerifItalic(plaintext='definition')
 
     def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, True]:
-        output = yield from locale.compose_definition_declaration(o=self)
+        output = yield from configuration.locale.compose_definition_declaration(o=self)
         return output
 
     def compose_natural_language(self) -> collections.abc.Generator[Composable, Composable, True]:
@@ -3559,7 +3477,7 @@ class DefinitionInclusion(Statement):
         yield SerifItalic(plaintext='definition-inclusion')
 
     def compose_report(self) -> collections.abc.Generator[Composable, Composable, True]:
-        output = yield from locale.compose_definition_inclusion_report(o=self)
+        output = yield from configuration.locale.compose_definition_inclusion_report(o=self)
         return output
 
     @property
@@ -4880,7 +4798,7 @@ class SimpleObjct(TheoreticalObject):
         yield SerifItalic(plaintext='simple-object')
 
     def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, True]:
-        output = yield from locale.compose_simple_objct_declaration(o=self)
+        output = yield from configuration.locale.compose_simple_objct_declaration(o=self)
         return output
 
     def echo(self):
@@ -7431,7 +7349,8 @@ class UniverseOfDiscourse(SymbolicObject):
         return AxiomDeclaration(
             u=self, natural_language=natural_language, symbol=symbol, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-            ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
+            ref=ref, subtitle=subtitle,
+            nameset=nameset, echo=echo)
 
     def declare_definition(
             self, natural_language: str, symbol: (None, str, StyledText) = None,
@@ -7445,8 +7364,9 @@ class UniverseOfDiscourse(SymbolicObject):
         return DefinitionDeclaration(
             u=self, natural_language=natural_language, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
-            subtitle=subtitle, nameset=nameset, echo=echo)
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+            ref=ref, subtitle=subtitle,
+            nameset=nameset, echo=echo)
 
     def echo(self):
         return repm.prnt(self.rep_declaration(cap=True))

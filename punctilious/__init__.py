@@ -26,4 +26,9 @@ from core import \
 
 # from foundation_system_1 import foundation_system_1, ft, u
 
+from locale_en_us import locale_en_us
+
+# Configure the default locale
+configuration.locale = locale_en_us
+
 print('Punctilious package: initialized.')
