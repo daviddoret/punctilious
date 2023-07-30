@@ -103,7 +103,7 @@ class LocaleEnUs(Locale):
 
     def compose_inferred_statement_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, True]:
-        yield SansSerifItalic('Proof')
+        yield SansSerifBold('Proof')
         yield SansSerifNormal(': ')
         # Proof premises
         if o.inference_rule.compose_paragraph_proof_method is None:
@@ -132,7 +132,9 @@ class LocaleEnUs(Locale):
             collections.abc.Generator[
                 Composable, Composable, True]:
         output_proof = prioritize_value(output_proof, True)
-        yield from o.compose_title(cap=True)
+        yield o.compose_title(cap=True)
+        yield SansSerifNormal(': ')
+        yield from o.valid_proposition.compose_formula()
         yield SansSerifNormal('.')
         if output_proof:
             yield SansSerifNormal(' ')

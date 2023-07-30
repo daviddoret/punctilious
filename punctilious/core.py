@@ -346,7 +346,9 @@ text_styles = TextStyles()
 
 
 class TextDict:
-    """Predefined texts are exposed in the TextDict. This should facilite internatiolization at a later stage."""
+    """Predefined texts are exposed in the TextDict. This should facilite internatiolization at a later stage.
+    TODO: Merge this into the Locale.
+    """
 
     def __init__(self):
         self.comma = ComposableText(plaintext=', ')
@@ -3013,6 +3015,9 @@ class TitleCategories(repm.ValueName):
     remark = TitleCategoryOBSOLETE('remark',
                                    StyledText(plaintext='note', unicode='🗅'),
                                    'remark', 'rmrk.')
+    warning = TitleCategoryOBSOLETE('warning',
+                                    StyledText(plaintext='warning', unicode='🗅'),
+                                    'warning', 'warning')
     # Special categories
     uncategorized = TitleCategoryOBSOLETE('uncategorized', 's', 'uncategorized', 'uncat.')
 
@@ -3147,7 +3152,7 @@ class AxiomDeclaration(TheoreticalObject):
             natural_language = natural_language.strip()
             verify(natural_language != '',
                    'Parameter natural-language is an empty string (after trimming).')
-            natural_language = ScriptNormal(natural_language)
+            natural_language = SansSerifItalic(natural_language)
         self._natural_language = natural_language
         cat = title_categories.axiom_declaration
         if nameset is None and symbol is None:
@@ -3411,7 +3416,7 @@ class DefinitionDeclaration(TheoreticalObject):
             natural_language = natural_language.strip()
             verify(natural_language != '',
                    'Parameter natural-language is an empty string (after trimming).')
-            natural_language = ScriptNormal(natural_language)
+            natural_language = SansSerifItalic(natural_language)
         self._natural_language = natural_language
 
         cat = title_categories.definition_declaration
@@ -3978,7 +3983,7 @@ class AtheoreticalStatement(SymbolicObject):
         super()._declare_class_membership(classes.atheoretical_statement)
 
 
-class Note(AtheoreticalStatement):
+class NoteInclusion(AtheoreticalStatement):
     """The Note pythonic-class models a note, comment, or remark in a theory.
 
     """
@@ -4002,6 +4007,8 @@ class Note(AtheoreticalStatement):
         cat = title_categories.note if cat is None else cat
         #  self.statement_index = theory.crossreference_statement(self)
         self.theory = t
+        if isinstance(content, str):
+            content = SansSerifNormal(content)
         self._natural_language = content
         self.category = cat
         if nameset is None and symbol is None:
@@ -4019,7 +4026,7 @@ class Note(AtheoreticalStatement):
                          dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name,
                          name=name, explicit_name=explicit_name, cat=cat, ref=ref,
                          subtitle=subtitle,
-                         nameset=nameset, echo=echo)
+                         nameset=nameset, echo=False)
         if echo:
             self.echo()
         super()._declare_class_membership(declarative_class_list.note)
@@ -4240,12 +4247,12 @@ class TheoryElaborationSequence(TheoreticalObject):
         echo = prioritize_value(echo, configuration.echo_default, False)
         if not self._interpretation_disclaimer:
             self.take_note(
-                'By design, punctilious assures the syntactical correctness of theories and does not perform any '
-                'semantic verification. Consequently, the usage of inference-rules that interpret content (i.e. '
+                'By design, punctilious assures the syntactical correctness of theories, but does not perform any '
+                'semantic verification. Therefore, the usage of inference-rules that interpret content (i.e. '
                 'axiom-interpretation and definition-interpretation) is critically dependent on the correctness of '
                 'the content translation performed by the theory author, from axiom or definition natural language, '
                 'to formulae.',
-                subtitle='warning on content interpretation',
+                cat=title_categories.warning,
                 echo=echo)
             self._interpretation_disclaimer = True
 
@@ -4318,7 +4325,7 @@ class TheoryElaborationSequence(TheoreticalObject):
         """During construction, cross-reference a statement 𝒮
         with its parent theory if it is not already cross-referenced,
         and return its 0-based index in Theory.statements."""
-        assert isinstance(s, (Statement, Note, Section))
+        assert isinstance(s, (Statement, NoteInclusion, Section))
         # During construction (__init__()), the _theory property
         # may not be already set.
         # And calling crossreference_statement()
@@ -4614,7 +4621,7 @@ class TheoryElaborationSequence(TheoreticalObject):
                   explicit_name: (None, str, StyledText) = None,
                   cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str, StyledText) = None,
                   subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
-                  echo: (None, bool) = None) -> Note:
+                  echo: (None, bool) = None) -> NoteInclusion:
         """Take a note, make a comment, or remark in this theory.
         """
         return self.universe_of_discourse.take_note(t=self, content=content, symbol=symbol,
@@ -7544,10 +7551,12 @@ class UniverseOfDiscourse(SymbolicObject):
             'This universe-of-discourse 𝑢₁ (self) is distinct from the universe-of-discourse 𝑢₂ of the theory '
             'parameter 𝑡.')
 
-        return Note(t=t, content=content, symbol=symbol, index=index, auto_index=auto_index,
-                    dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name,
-                    name=name, explicit_name=explicit_name, cat=cat, ref=ref, subtitle=subtitle,
-                    nameset=nameset, echo=echo)
+        return NoteInclusion(t=t, content=content, symbol=symbol, index=index,
+                             auto_index=auto_index,
+                             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name,
+                             name=name, explicit_name=explicit_name, cat=cat, ref=ref,
+                             subtitle=subtitle,
+                             nameset=nameset, echo=echo)
 
     # @FreeVariableContext()
     @contextlib.contextmanager

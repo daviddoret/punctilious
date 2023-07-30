@@ -12,7 +12,7 @@ from core import \
     Encoding, encodings, \
     FailedVerificationException, Formula, FreeVariable, \
     InconsistencyWarning, is_in_class, \
-    Note, \
+    NoteInclusion, \
     Paragraph, \
     QuasiQuotation, \
     Relation, rep_two_columns_proof_item, \

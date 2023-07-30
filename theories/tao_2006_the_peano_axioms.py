@@ -92,8 +92,6 @@ zero_plus_plus_plusplus = u.f(plusplus, zero_plusplus)
 p_2_2_5_1 = t.i.vs.infer_statement(proposition_2_1_2_1, zero_plus_plus_plusplus, ref='2.2.3')
 proposition_2_2_5 = t.i.mp.infer_statement(p_2_2_5_1, p_2_2_4, ref='2.2.5')
 
-print(t.commutativity_of_equality)
-
 proposition_2_1_3_100 = t.i.mp.infer_statement(
     t.commutativity_of_equality, proposition_2_1_3_1)
 
