@@ -51,10 +51,10 @@ class LocaleEnUs(Locale):
                 Composable, Composable, True]:
         global text_dict
         # Retrieve the parameters from the statement
-        a = o.parameters[0]
         a: AxiomInclusion
-        p = o.parameters[1]
         p: Formula
+        a = o.parameters[0]
+        p = o.parameters[1]
         yield from a.axiom.compose_natural_language()
         yield SansSerifNormal(' is postulated by ')
         yield from a.compose_ref_link()
@@ -99,6 +99,23 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal(' be included (postulated) in ')
         yield from o.theory.compose_symbol()
         yield SansSerifNormal('.')
+        return True
+
+    def compose_definition_interpretation_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[
+                Composable, Composable, True]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        a: DefinitionInclusion
+        p: Formula
+        a = o.parameters[0]
+        p = o.parameters[1]
+        yield from a.definition.compose_natural_language()
+        yield SansSerifNormal(' is postulated by ')
+        yield from a.compose_ref_link()
+        yield SansSerifNormal('. ')
+        yield from p.compose_formula()
+        yield SansSerifNormal(' is an interpretation of that definition.')
         return True
 
     def compose_inferred_statement_paragraph_proof(self, o: InferredStatement) -> \

@@ -1775,6 +1775,8 @@ class SymbolicObject:
         is_universe_of_discourse = False if is_universe_of_discourse is None else is_universe_of_discourse
         if nameset is None:
             symbol = configuration.default_symbolic_object_symbol if symbol is None else symbol
+            if isinstance(symbol, str):
+                symbol = SerifItalic(symbol)
             index = universe_of_discourse.index_symbol(
                 symbol=symbol) if (index is None and auto_index) else index
             nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name,
@@ -3418,7 +3420,6 @@ class DefinitionDeclaration(TheoreticalObject):
                    'Parameter natural-language is an empty string (after trimming).')
             natural_language = SansSerifItalic(natural_language)
         self._natural_language = natural_language
-
         cat = title_categories.definition_declaration
         if nameset is None and symbol is None:
             symbol = configuration.default_definition_declaration_symbol
@@ -3427,7 +3428,7 @@ class DefinitionDeclaration(TheoreticalObject):
             index=index, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, cat=cat,
             ref=ref, subtitle=subtitle,
-            nameset=nameset, echo=echo)
+            nameset=nameset, echo=False)
         super()._declare_class_membership(declarative_class_list.definition)
         u.cross_reference_definition(self)
         if echo:
@@ -3446,13 +3447,6 @@ class DefinitionDeclaration(TheoreticalObject):
         yield text_dict.open_quasi_quote
         yield self.natural_language
         yield text_dict.close_quasi_quote
-        return True
-
-    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
-        yield from self.nameset.compose_title()
-        yield text_dict.colon
-        yield text_dict.space
-        yield from self.compose_natural_language()
         return True
 
     def echo(self):
@@ -3516,7 +3510,7 @@ class DefinitionInclusion(Statement):
         super().__init__(
             theory=t, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-            cat=cat, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
+            cat=cat, ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
         super()._declare_class_membership(declarative_class_list.definition_inclusion)
         if echo:
             self.echo()
@@ -5898,11 +5892,18 @@ class InferenceRuleDeclarationDict(collections.UserDict):
                 p_equal_q_relation=p_equal_q.relation, p_equal_q=p_equal_q, d=d, t=t, slf=self)
             return True
 
+        def compose_paragraph_proof(o: InferredStatement):
+            output = yield from configuration.locale.compose_definition_interpretation_paragraph_proof(
+                o=o)
+            return output
+
         if self._definition_interpretation is None:
             self._definition_interpretation = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=SerifItalic(plaintext='definition-interpretation'),
-                                index=None),
+                compose_paragraph_proof_method=compose_paragraph_proof,
+                symbol='definition-interpretation', auto_index=False,
+                dashed_name='definition-interpretation',
+                name='definition interpretation',
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._definition_interpretation

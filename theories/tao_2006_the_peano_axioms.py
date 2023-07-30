@@ -13,7 +13,7 @@ import punctilious as pu
 pu.configuration.echo_default = True
 pu.configuration.echo_axiom_declaration = True
 pu.configuration.echo_axiom_inclusion = True
-pu.configuration.echo_definition_declaration = False
+pu.configuration.echo_definition_declaration = True
 pu.configuration.echo_definition_inclusion = True
 pu.configuration.echo_inferred_statement = True
 pu.configuration.echo_simple_objct_declaration = True
