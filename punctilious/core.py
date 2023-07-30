@@ -6491,13 +6491,18 @@ class InferenceRuleDeclarationDict(collections.UserDict):
                        y=y, y_u=y.u, slf=self, slf_u=self.u)
             return True
 
+        def compose_paragraph_proof(o: InferredStatement):
+            output = yield from configuration.locale.compose_variable_substitution_paragraph_proof(
+                o=o)
+            return output
+
         if self._variable_substitution is None:
             self._variable_substitution = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                nameset=NameSet(symbol=SerifItalic('variable-substitution'),
-                                index=None,
-                                dashed_name=SerifItalic('variable-substitution'),
-                                name=SerifNormal('variable substitution')),
+                symbol='variable-substitution', index=None, auto_index=False,
+                dashed_name='variable-substitution',
+                name='variable substitution',
+                compose_paragraph_proof_method=compose_paragraph_proof,
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._variable_substitution
@@ -7671,21 +7676,7 @@ class InferredStatement(FormulaStatement):
         rep = f'{self.rep_title(encoding=encoding, cap=True)}: {self.valid_proposition.rep_formula()}' + '\n\t'
         rep = wrap_text(rep) + '\n'
         if output_proof:
-            if self.inference_rule is self.u.inference_rules.variable_substitution:
-                # TODO: MOVE THIS TO THE NEW INFERENCE_RULE LOGIC
-                # This is a special case for the variable-substitution inference-rule,
-                # which receives arbitrary theoretical-objcts as the 2nd and
-                # following parameters, to constitute a free-variable mappings.
-                parameter = self.parameters[0]
-                rep = rep + f'\n\t{parameter.rep_formula(encoding=encoding, expand=True):<70} │ Follows from {repm.serif_bold(parameter.rep_ref(encoding=encoding))}.'
-                # Display the free-variables mapping.
-                free_variables = self.parameters[0].get_variable_ordered_set()
-                mapping = zip(free_variables, self.parameters[1:])
-                mapping_text = '(' + ','.join(
-                    f'{k.rep_symbol()} ↦ {v.rep_formula()}' for k, v in mapping) + ')'
-                rep = rep + f'\n\t{mapping_text:<70} │ Given as parameters.'
-            else:
-                rep = rep + self.rep_two_columns_proof_OBSOLETE(encoding=encoding)
+            rep = rep + self.rep_two_columns_proof_OBSOLETE(encoding=encoding)
         return rep
 
     def rep_two_columns_proof_OBSOLETE(self, encoding: (None, Encoding) = None):

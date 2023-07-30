@@ -155,6 +155,36 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         return True
 
+    def compose_variable_substitution_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[
+                Composable, Composable, True]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        parameter = o.parameters[0]
+        yield from parameter.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from parameter.compose_ref_link()
+        yield SansSerifNormal('.')
+        yield SansSerifNormal(' Let ')
+        free_variables = parameter.get_variable_ordered_set()
+        mapping = zip(free_variables, o.parameters[1:])
+        first_pair = True
+        for k, v in mapping:
+            if not first_pair:
+                yield SansSerifNormal(', ')
+            yield from k.compose_symbol()
+            yield ' = '
+            yield from v.rep_formula()
+            first_pair = False
+        yield SansSerifNormal('.')
+        return True
+
+    @property
+    def maps_to(self) -> StyledText:
+        if self._maps_to is None:
+            self._maps_to = SansSerifNormal(plaintext='|-->', unicode='↦', latex_math='\\mapsto')
+        return self._maps_to
+
     @property
     def qed(self) -> StyledText:
         if self._qed is None:
