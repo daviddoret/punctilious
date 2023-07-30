@@ -87,7 +87,7 @@ class LocaleEnUs(Locale):
             collections.abc.Generator[
                 Composable, Composable, True]:
         global text_dict
-        yield from o.compose_title()
+        yield from o.compose_title(cap=True)
         yield SansSerifNormal(': Let ')
         yield SerifItalic('definition')
         yield SansSerifNormal(' ')

@@ -69,16 +69,16 @@ definition_2_1_3_declaration = u.declare_definition(
                      'I use "x := y" to denote the statement that x is defined to equal y.)',
     ref='2.1.3')
 definition_2_1_3 = t.include_definition(d=definition_2_1_3_declaration)
-one = u.o.declare(pu.NameSet('1'))
+one = u.o.declare(symbol='1', auto_index=False)
 proposition_2_1_3_1 = t.i.definition_interpretation.infer_statement(
     definition_2_1_3, u.f(u.r.equal, one, u.f(plusplus, zero)))
-two = u.o.declare(pu.NameSet('2'))
+two = u.o.declare(symbol='2', auto_index=False)
 proposition_2_1_3_2 = t.i.definition_interpretation.infer_statement(
     definition_2_1_3, u.f(u.r.equal, two, u.f(plusplus, u.f(plusplus, zero))))
-three = u.o.declare(pu.NameSet('3'))
+three = u.o.declare(symbol='3', auto_index=False)
 proposition_2_1_3_3 = t.i.definition_interpretation.infer_statement(
     definition_2_1_3, u.f(u.r.equal, three, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero)))))
-four = u.o.declare(pu.NameSet('4'))
+four = u.o.declare(symbol='4', auto_index=False)
 proposition_2_1_3_4 = t.i.definition_interpretation.infer_statement(
     definition_2_1_3,
     u.f(u.r.equal, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))))

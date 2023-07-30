@@ -61,4 +61,4 @@ class ValueName:
 
 
 def prnt(s):
-    print(s)
+    print(s + '\n')

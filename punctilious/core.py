@@ -3456,7 +3456,7 @@ class DefinitionDeclaration(TheoreticalObject):
         return True
 
     def echo(self):
-        repm.prnt(self.rep_report())
+        repm.prnt(self.rep_declaration())
 
     @property
     def natural_language(self) -> (None, str):
@@ -3557,9 +3557,15 @@ class FormulaStatement(Statement):
 
     def __init__(
             self, theory: TheoryElaborationSequence, valid_proposition: Formula,
-            nameset: (None, NameSet) = None, cat: (None, TitleCategoryOBSOLETE) = None,
-            title: (None, TitleOBSOLETE) = None, dashed_name: (None, DashedName) = None,
-            echo=None):
+            symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+            cat: (None, TitleCategoryOBSOLETE) = None,
+            nameset: (None, str, NameSet) = None,
+            echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_statement, configuration.echo_default,
                                 False)
         verify(
@@ -3576,9 +3582,17 @@ class FormulaStatement(Statement):
         #  are elements of the source theory-branch.
         self.valid_proposition = valid_proposition
         self.statement_index = theory.crossreference_statement(self)
-        cat = title_categories.proposition if cat is None else cat
+        cat = prioritize_value(cat, title_categories.proposition)
+        # TODO: Check that cat is a valid statement cat (prop., lem., cor., theorem)
+        if nameset is None and symbol is None:
+            symbol = configuration.default_statement_symbol
         super().__init__(
-            theory=theory, nameset=nameset, cat=cat,
+            theory=theory,
+            symbol=symbol, index=index, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name,
+            ref=ref, subtitle=subtitle,
+            nameset=nameset, cat=cat,
             echo=False)
         # manage theoretical-morphisms
         self.morphism_output = None
@@ -7607,19 +7621,20 @@ class InferredStatement(FormulaStatement):
             *parameters,
             i: InferenceRuleDeclaration,  # TODO: DESIGN-FLAW: PASS InferenceRuleInclusion instead
             t: TheoryElaborationSequence,
-            nameset: (None, str, NameSet) = None,
-            ref: (None, str) = None,
+            symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
             cat: (None, TitleCategoryOBSOLETE) = None,
-            subtitle: (None, str) = None,
+            nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         """Include (aka allow) an inference_rule in a theory-elaboration.
         """
         echo = prioritize_value(echo, configuration.echo_inferred_statement,
                                 configuration.echo_statement, configuration.echo_default,
                                 False)
-        cat = title_categories.proposition if cat is None else cat
-        # TODO: Check that cat is a valid statement cat (prop., lem., cor., theorem)
-        title = TitleOBSOLETE(ref=ref, cat=cat, subtitle=subtitle)
         self._inference_rule = i
         self._parameters = tuple(parameters)
         verify(
@@ -7630,11 +7645,12 @@ class InferredStatement(FormulaStatement):
         super().__init__(
             theory=t,
             valid_proposition=valid_proposition,
-            nameset=nameset,
-            cat=cat,
-            title=title,
+            symbol=symbol, index=index, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name,
+            ref=ref, subtitle=subtitle,
+            nameset=nameset, cat=cat,
             echo=False)
-        # t.crossreference_inferred_proposition(self)
         super()._declare_class_membership(declarative_class_list.inferred_proposition)
         if self.inference_rule is self.t.u.i.inconsistency_introduction and \
                 self.valid_proposition.relation is self.t.u.r.inconsistent and \
