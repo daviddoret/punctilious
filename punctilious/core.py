@@ -4419,18 +4419,18 @@ class TheoryElaborationSequence(TheoreticalObject):
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
 
-    def infer_by_substitution_of_equal_terms(
-            self, original_expression, equality_statement, symbol=None,
-            category=None, reference=None, title=None):
-        """Infer a statement by applying the substitution-of-equal-terms (
-        SoET) inference-rule.
-
-        Let
-        """
-        return SubstitutionOfEqualTerms(
-            original_expression=original_expression,
-            equality_statement=equality_statement, nameset=symbol,
-            cat=category, theory=self, reference=reference, title=title)
+    # def infer_by_substitution_of_equal_terms(
+    #        self, original_expression, equality_statement, symbol=None,
+    #        category=None, reference=None, title=None):
+    #    """Infer a statement by applying the substitution-of-equal-terms (
+    #    SoET) inference-rule.#
+    #
+    #    Let
+    #    """
+    #    return SubstitutionOfEqualTerms(
+    #        original_expression=original_expression,
+    #        equality_statement=equality_statement, nameset=symbol,
+    #        cat=category, theory=self, reference=reference, title=title)
 
     def iterate_statements_in_theory_chain(self):
         """Iterate through the (proven or sound) statements in the current theory-chain."""
@@ -4532,15 +4532,15 @@ class TheoryElaborationSequence(TheoreticalObject):
             self.statements)
         return str(output)
 
-    def soet(
-            self, original_expression, equality_statement, symbol=None,
-            category=None, reference=None, title=None):
-        """Elaborate a new modus-ponens statement in the theory. Shortcut for
-        ModusPonens(theory=t, ...)"""
-        return self.infer_by_substitution_of_equal_terms(
-            original_expression=original_expression,
-            equality_statement=equality_statement, symbol=symbol,
-            category=category, reference=reference, title=title)
+    # def soet(
+    #        self, original_expression, equality_statement, symbol=None,
+    #        category=None, reference=None, title=None):
+    #    """Elaborate a new modus-ponens statement in the theory. Shortcut for
+    #    ModusPonens(theory=t, ...)"""
+    #    return self.infer_by_substitution_of_equal_terms(
+    #        original_expression=original_expression,
+    #        equality_statement=equality_statement, symbol=symbol,
+    #        category=category, reference=reference, title=title)
 
     def prnt(self, output_proofs=True):
         repm.prnt(self.rep_theory_report(output_proofs=output_proofs))
@@ -5003,7 +5003,7 @@ class RelationDict(collections.UserDict):
                 formula_rep=Formula.infix,
                 signal_proposition=True,
                 symbol=SerifItalic(plaintext='<==>', unicode='⟺', latex_math='\\iff'),
-                index=None, auto_index=False,
+                auto_index=False,
                 dashed_name='biconditional',
                 name='biconditional')
         return self._biconditional
@@ -5021,7 +5021,7 @@ class RelationDict(collections.UserDict):
             self._conjunction = self.declare(
                 arity=2, formula_rep=Formula.infix, signal_proposition=True,
                 symbol=SerifItalic(plaintext='and', unicode='∧', latex_math='\\land'),
-                index=None, auto_index=False,
+                auto_index=False,
                 name='and',
                 explicit_name='conjunction')
         return self._conjunction
@@ -5039,7 +5039,7 @@ class RelationDict(collections.UserDict):
             self._disjunction = self.declare(
                 arity=2, formula_rep=Formula.infix,
                 signal_proposition=True,
-                index=None, auto_index=False,
+                auto_index=False,
                 symbol=SerifItalic(unicode='∨', latex_math='\\lor', plaintext='or'),
                 name='or',
                 explicit_name='disjunction')
@@ -5070,7 +5070,7 @@ class RelationDict(collections.UserDict):
                 arity=2,
                 formula_rep=Formula.infix,
                 signal_proposition=True,
-                symbol='=', auto_index=False, index=None,
+                symbol='=', auto_index=False,
                 dashed_name='equality')
         return self._equality
 
@@ -5099,7 +5099,7 @@ class RelationDict(collections.UserDict):
                 arity=2, formula_rep=Formula.infix,
                 signal_proposition=True,
                 symbol=SerifItalic(plaintext='==>', unicode='⟹', latex_math=r'\implies'),
-                index=None, auto_index=False,
+                auto_index=False,
                 name='implication',
                 explicit_name='logical implication')
         return self._implication
@@ -5127,7 +5127,7 @@ class RelationDict(collections.UserDict):
         if self._inconsistent is None:
             self._inconsistent = self.declare(
                 arity=1, formula_rep=Formula.prefix, signal_proposition=True, symbol='Inc',
-                index=None, auto_index=False, acronym='inc.', name='inconsistent')
+                auto_index=False, acronym='inc.', name='inconsistent')
         return self._inconsistent
 
     @property
@@ -5145,7 +5145,7 @@ class RelationDict(collections.UserDict):
                 formula_rep=Formula.infix,
                 signal_proposition=True,
                 symbol=SerifItalic(plaintext='neq', unicode='≠', latex_math='\\neq'),
-                index=None,
+                auto_index=False,
                 acronym='neq',
                 name='not equal')
         return self._inequality
@@ -5198,7 +5198,7 @@ class RelationDict(collections.UserDict):
                 formula_rep=Formula.prefix,
                 signal_proposition=True,
                 symbol=SerifItalic(plaintext='not', unicode='¬', latex_math='\\neg'),
-                auto_index=False, index=None,
+                auto_index=False,
                 abridged_name='not',
                 name='negation')
         return self._negation
