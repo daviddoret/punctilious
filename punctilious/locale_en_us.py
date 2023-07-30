@@ -141,6 +141,25 @@ class LocaleEnUs(Locale):
             yield from self.compose_inferred_statement_paragraph_proof(o=o)
         return True
 
+    def compose_modus_ponens_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[
+                Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p_implies_q = o.parameters[0]
+        p_implies_q: FormulaStatement
+        p = o.parameters[1]
+        p: FormulaStatement
+        yield from p_implies_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from p_implies_q.compose_ref_link()
+        yield SansSerifNormal('.')
+        yield from p.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from p.compose_ref_link()
+        yield SansSerifNormal('.')
+        return True
+
     def compose_simple_objct_declaration(self, o: SimpleObjct) -> collections.abc.Generator[
         Composable, Composable, True]:
         global text_dict

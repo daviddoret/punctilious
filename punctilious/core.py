@@ -6316,13 +6316,18 @@ class InferenceRuleDeclarationDict(collections.UserDict):
                 slf=self)
             return True
 
+        def compose_paragraph_proof(o: InferredStatement):
+            output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(
+                o=o)
+            return output
+
         if self._modus_ponens is None:
             self._modus_ponens = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                symbol='modus-ponens',
-                index=None,
+                symbol='modus-ponens', index=None, auto_index=False,
                 name='modus ponens',
                 dashed_name='modus-ponens',
+                compose_paragraph_proof_method=compose_paragraph_proof,
                 infer_formula=infer_formula,
                 verify_args=verify_args)
         return self._modus_ponens
