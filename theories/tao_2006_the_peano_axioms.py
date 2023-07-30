@@ -93,20 +93,20 @@ p_2_2_5_1 = t.i.vs.infer_statement(proposition_2_1_2_1, zero_plus_plus_plusplus,
 proposition_2_2_5 = t.i.mp.infer_statement(p_2_2_5_1, p_2_2_4, ref='2.2.5')
 
 proposition_2_1_3_100 = t.i.mp.infer_statement(
-    t.commutativity_of_equality, proposition_2_1_3_1)
+    t.i.equality_commutativity, proposition_2_1_3_1)
 
 p_2_1_3_2_b = t.soet(
     proposition_2_1_3_2, proposition_2_1_3_100)
 
 p_2_1_3_2_c = t.i.mp.infer_statement(
-    t.commutativity_of_equality, proposition_2_1_3_2)
+    t.i.equality_commutativity, proposition_2_1_3_2)
 
 p_2_1_3_2_d = t.soet(p_2_1_3_2_c, proposition_2_1_3_100)
 
 p_2_1_3_3_b = t.soet(proposition_2_1_3_3, p_2_1_3_2_c)
 
 p_2_1_3_3_c = t.i.mp.infer_statement(
-    t.commutativity_of_equality, proposition_2_1_3_3)
+    t.i.equality_commutativity, proposition_2_1_3_3)
 
 p_2_1_3_3_d = t.soet(p_2_1_3_3_c, p_2_1_3_2_c)
 

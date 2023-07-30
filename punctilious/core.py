@@ -6162,11 +6162,16 @@ class InferenceRuleDeclarationDict(collections.UserDict):
                 p_equal_q_relation=p_equal_q.relation, p_equal_q=p_equal_q, t=t, slf=self)
             return True
 
+        def compose_paragraph_proof(o: InferredStatement):
+            output = yield from configuration.locale.compose_equality_commutativity_paragraph_proof(
+                o=o)
+            return output
+
         if self._equality_commutativity is None:
             self._equality_commutativity = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                symbol='equality-commutativity',
-                index=None, auto_index=False,
+                compose_paragraph_proof_method=compose_paragraph_proof,
+                symbol='equality-commutativity', auto_index=False,
                 name='equality commutativity',
                 dashed_name='equality-commutativity',
                 infer_formula=infer_formula,
