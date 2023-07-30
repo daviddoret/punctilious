@@ -125,10 +125,29 @@ class LocaleEnUs(Locale):
         # Retrieve the parameters from the statement
         p_equal_q: FormulaStatement
         p_equal_q = o.parameters[0]
-        yield from p_equal_q.compose_formula()
+        yield from p_equal_q.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
         yield from p_equal_q.compose_ref_link()
         yield SansSerifNormal('. ')
+        return True
+
+    def compose_equal_terms_substitution_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[
+                Composable, Composable, True]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p: FormulaStatement
+        p_equal_q: FormulaStatement
+        p = o.parameters[0]
+        p_equal_q = o.parameters[1]
+        yield from p.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from p.compose_ref_link()
+        yield SansSerifNormal('. ')
+        yield from p_equal_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from p_equal_q.compose_ref_link()
+        yield SansSerifNormal('.')
         return True
 
     def compose_inferred_statement_paragraph_proof(self, o: InferredStatement) -> \

@@ -4204,7 +4204,6 @@ class TheoryElaborationSequence(TheoreticalObject):
         self.statements = tuple()
         self._extended_theory = extended_theory
         self._extended_theory_limit = extended_theory_limit
-        self._commutativity_of_equality = None
         self._interpretation_disclaimer = False
         if nameset is None:
             symbol = configuration.default_theory_symbol
@@ -4263,26 +4262,6 @@ class TheoryElaborationSequence(TheoreticalObject):
                 cat=title_categories.warning,
                 echo=echo)
             self._interpretation_disclaimer = True
-
-    @property
-    def commutativity_of_equality(self):
-        """Commutativity-of-equality is a fundamental theory property that enables
-        support for SoET. None if the property is not equipped on
-        the theory. An instance of FormalAxiom otherwise."""
-        if self._commutativity_of_equality is not None:
-            return self._commutativity_of_equality
-        elif self.extended_theory is not None:
-            return self.extended_theory.commutativity_of_equality
-        else:
-            return None
-
-    @commutativity_of_equality.setter
-    def commutativity_of_equality(self, p):
-        verify(
-            self._commutativity_of_equality is None,
-            'A theory commutativity-of-equality property can only be set once '
-            'to prevent inconsistency.')
-        self._commutativity_of_equality = p
 
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
@@ -6366,9 +6345,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
     @property
     def equal_terms_substitution(self) -> InferenceRuleDeclaration:
         """The equal-terms-substitution inference-rule: P, Q=R ⊢ P' where:
-         - P is an input statement,
+         - P is a statement,
          - Q=R is an equality statement,
-         - P' is a new formula identical to P except that occurrences of Q in P
+         - P' is a new statement identical to P except that all occurrences of Q in P
            are substituted with R.
 
         Abridged property: u.i.eqs
@@ -6377,7 +6356,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         - canonical-order (top-down, depth-first, left-to-right)
         - replace all occurrences until end of formula is reached
 
-        TODO: QUESTION: substitution_of_equal_terms: Should we forbid the presence of Q in R or R in Q?
+        TODO: QUESTION: equal_terms_substitution: Should we forbid the presence of Q in R or R in Q?
+
+        TODO: QUESTION: equal_terms_substitution: This version of the inference-rule replaces all occurences of Q in R. We may wish to enrich this inference-rule and make it possible to only replace a subset of occurences of Q in R. Let's keep this aside for future improvements.
 
         If the inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
@@ -6391,6 +6372,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
             :param q_equal_r: a formula-statement of the form: (Q = R).
             :return: (FormulaStatement) A formula-statement P' where occurrences of Q are replaced with R.
             """
+            p: Formula
+            q_equal_r: Formula
             p = unpack_formula(p)
             q_equal_r = unpack_formula(q_equal_r)
             q = q_equal_r.parameters[0]
@@ -6421,11 +6404,16 @@ class InferenceRuleDeclarationDict(collections.UserDict):
                    q_equal_r=q_equal_r, slf=self, t=t)
             return True
 
+        def compose_paragraph_proof(o: InferredStatement):
+            output = yield from configuration.locale.compose_equal_terms_substitution_paragraph_proof(
+                o=o)
+            return output
+
         if self._equal_terms_substitution is None:
             self._equal_terms_substitution = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                symbol='equal-terms-substitution',
-                index=None, auto_index=False,
+                compose_paragraph_proof_method=compose_paragraph_proof,
+                symbol='equal-terms-substitution', auto_index=False,
                 name='equal terms substitution',
                 dashed_name='equal-terms-substitution',
                 infer_formula=infer_formula,
@@ -7840,17 +7828,17 @@ class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
 def reset_configuration(configuration: Configuration) -> None:
     configuration.auto_index = None
     configuration._echo_default = False
-    configuration.default_axiom_declaration_symbol = SerifItalic('a')
-    configuration.default_axiom_inclusion_symbol = SerifItalic('p')
-    configuration.default_definition_declaration_symbol = SerifItalic('d')
-    configuration.default_definition_inclusion_symbol = SerifItalic('p')
+    configuration.default_axiom_declaration_symbol = SerifNormal('A')
+    configuration.default_axiom_inclusion_symbol = SerifNormal('A')
+    configuration.default_definition_declaration_symbol = SerifNormal('D')
+    configuration.default_definition_inclusion_symbol = SerifNormal('D')
     configuration.default_formula_symbol = SerifItalic(plaintext='phi', unicode='𝜑')
     configuration.default_free_variable_symbol = StyledText(plaintext='x',
                                                             text_style=text_styles.serif_bold)
-    configuration.default_hypothesis_symbol = SerifItalic('h')
+    configuration.default_hypothesis_symbol = SerifNormal('H')
     configuration.default_note_symbol = SerifItalic('note')
     configuration.default_relation_symbol = SerifItalic('r')
-    configuration.default_statement_symbol = SerifItalic('p')
+    configuration.default_statement_symbol = SerifNormal('P')
     configuration.default_symbolic_object_symbol = SerifItalic('o')
     configuration.default_theory_symbol = ScriptNormal('T')
     configuration.echo_axiom_declaration = None
