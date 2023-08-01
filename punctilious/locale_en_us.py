@@ -28,8 +28,9 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         return True
 
-    def compose_axiom_inclusion_report(self, o: AxiomInclusion) -> collections.abc.Generator[
-        Composable, Composable, True]:
+    def compose_axiom_inclusion_report(self, o: AxiomInclusion, proof: (None, bool) = None) -> \
+            collections.abc.Generator[
+                Composable, Composable, True]:
         global text_dict
         yield from o.compose_title(cap=True)
         yield SansSerifNormal(': Let ')
@@ -82,7 +83,8 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         return True
 
-    def compose_definition_inclusion_report(self, o: DefinitionInclusion) -> \
+    def compose_definition_inclusion_report(self, o: DefinitionInclusion,
+                                            proof: (None, bool) = None) -> \
             collections.abc.Generator[
                 Composable, Composable, True]:
         global text_dict
@@ -163,6 +165,23 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         return True
 
+    def compose_inference_rule_inclusion_report(self, i: InferenceRuleInclusion,
+                                                proof: (None, bool) = None) -> \
+            collections.abc.Generator[
+                Composable, Composable, True]:
+        global text_dict
+        yield from i.compose_title(cap=True)
+        yield SansSerifNormal(': Let ')
+        yield SerifItalic('inference-rule')
+        yield SansSerifNormal(' ')
+        yield from i.inference_rule.compose_symbol()
+        yield SansSerifNormal(' TODO: COMPLETE')
+        # TODO: yield i.inference_rule.definition
+        yield SansSerifNormal(' be included (considered valid) in ')
+        yield from i.theory.compose_symbol()
+        yield SansSerifNormal('.')
+        return True
+
     def compose_inferred_statement_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, True]:
         yield SansSerifBold('Proof')
@@ -190,15 +209,15 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_inferred_statement_report(self, o: InferredStatement,
-                                          output_proof: (None, bool) = None) -> \
+                                          proof: (None, bool) = None) -> \
             collections.abc.Generator[
                 Composable, Composable, True]:
-        output_proof = prioritize_value(output_proof, True)
+        proof = prioritize_value(proof, True)
         yield o.compose_title(cap=True)
         yield SansSerifNormal(': ')
         yield from o.valid_proposition.compose_formula()
         yield SansSerifNormal('.')
-        if output_proof:
+        if proof:
             yield SansSerifNormal(' ')
             yield from self.compose_inferred_statement_paragraph_proof(o=o)
         return True
@@ -250,8 +269,10 @@ class LocaleEnUs(Locale):
         yield text_dict.period
         return True
 
-    def compose_theory_report(self, t: TheoryElaborationSequence) -> collections.abc.Generator[
-        Composable, Composable, bool]:
+    def compose_theory_report(self, t: TheoryElaborationSequence, proof: (None, bool) = None) -> \
+            collections.abc.Generator[
+                Composable, Composable, bool]:
+
         yield self.paragraph_start
         yield from t.rep_name()
         yield self.paragraph_end
@@ -332,13 +353,12 @@ class LocaleEnUs(Locale):
             yield self.paragraph_end
 
         yield Header(plaintext='Theory elaboration sequence', level=1)
-
+        for s in t.statements:
+            s: Statement
+            yield self.paragraph_start
+            yield from s.compose_report(proof=proof)
+            yield self.paragraph_end
         return True
-
-        output += f'\n\n{repm.serif_bold("Theory elaboration:")}'
-        output = output + '\n\n' + '\n\n'.join(
-            s.rep_report(output_proof=output_proofs) for s in
-            t.statements)
 
     def compose_variable_substitution_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[

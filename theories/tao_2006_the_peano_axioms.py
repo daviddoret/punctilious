@@ -133,6 +133,5 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
                     u.f(u.r.neq, u.f(plusplus, n), u.f(plusplus, m)))
                 , ref='2.4.1')
 
-
-test = Tao2006ThePeanoAxioms()
-test.develop()
+# test = Tao2006ThePeanoAxioms()
+# test.develop()

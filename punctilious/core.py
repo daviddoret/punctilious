@@ -3132,6 +3132,11 @@ class Statement(TheoreticalObject):
         """
         return self._cat
 
+    @abc.abstractmethod
+    def compose_report(self, proof: (None, bool) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        raise NotImplementedError('This is an abstract method.')
+
     def echo(self):
         repm.prnt(self.rep_report())
 
@@ -3257,18 +3262,19 @@ class AxiomDeclaration(TheoreticalObject):
         return rep_composition(composition=self.compose_natural_language(), encoding=encoding,
                                wrap=wrap)
 
-    def rep_report(self, encoding: (None, Encoding) = None, output_proofs: bool = True,
+    def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None,
                    wrap: bool = True) -> str:
         """Return a representation that expresses and justifies the statement.
 
         :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
-        :param output_proofs:
+        :param proof:
         :return:
         """
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
         cap = True
-        output = rep_composition(composition=self.compose_report(), encoding=encoding, cap=cap)
+        output = rep_composition(composition=self.compose_report(proof=proof), encoding=encoding,
+                                 cap=cap)
         return output
 
 
@@ -3324,25 +3330,26 @@ class AxiomInclusion(Statement):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='axiom-inclusion')
 
-    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_axiom_inclusion_report(o=self)
+    def compose_report(self, proof: (None, bool) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_axiom_inclusion_report(o=self, proof=proof)
         return output
 
     def rep_natural_language(self, encoding: (None, Encoding) = None,
                              wrap: bool = True) -> str:
         return self._axiom.rep_natural_language(encoding=encoding, wrap=wrap)
 
-    def rep_report(self, encoding: (None, Encoding) = None) -> str:
+    def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None) -> str:
         """Return a representation that expresses and justifies the statement.
 
         Sample with unicode encoding:
         𝗔𝘅𝗶𝗼𝗺 𝟮.𝟭.𝟭 (𝑝₁): ⌜0 is a natural number.⌝
 
         :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
-        :param output_proofs:
+        :param proof:
         :return:
         """
-        return rep_composition(composition=self.compose_report(), encoding=encoding)
+        return rep_composition(composition=self.compose_report(proof=proof), encoding=encoding)
 
 
 class InferenceRuleInclusion(Statement):
@@ -3361,7 +3368,7 @@ class InferenceRuleInclusion(Statement):
             explicit_name: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None,
-            echo_proof: (None, bool) = None):
+            proof: (None, bool) = None):
         """Include (aka allow) an inference-rule in a theory-elaboration.
         """
         self._inference_rule = i
@@ -3378,15 +3385,17 @@ class InferenceRuleInclusion(Statement):
         t.crossreference_inference_rule_inclusion(self)
         super()._declare_class_membership(declarative_class_list.inference_rule_inclusion)
         if echo:
-            echo_proof = prioritize_value(echo_proof, configuration.echo_proof, True)
-            repm.prnt(self.rep_report(output_proofs=echo_proof))
+            proof = prioritize_value(proof, configuration.echo_proof, True)
+            repm.prnt(self.rep_report(proof=proof))
 
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='inference-rule')
 
-    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_inference_rule_inclusion_report(o=self)
+    def compose_report(self, proof: (None, bool) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_inference_rule_inclusion_report(
+            i=self, proof=proof)
         return output
 
     def infer_formula(self, *args, echo: (None, bool) = None):
@@ -3437,7 +3446,7 @@ class InferenceRuleInclusion(Statement):
     def verify_compatibility(self, *args):
         return self.inference_rule.verify_args(*args, t=self.theory)
 
-    def rep_report(self, output_proofs=True) -> str:
+    def rep_report(self, proof=True) -> str:
         """Return a representation that expresses and justifies the statement."""
         text = f'Let allow the {repm.serif_bold(self.inference_rule.title.reference)} inference-rule in {self.theory.rep_ref()}.'
         return '\n'.join(
@@ -3527,18 +3536,19 @@ class DefinitionDeclaration(TheoreticalObject):
         return rep_composition(composition=self.compose_natural_language(), encoding=encoding,
                                wrap=wrap)
 
-    def rep_report(self, encoding: (None, Encoding) = None, output_proofs: bool = True,
+    def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None,
                    wrap: bool = True) -> str:
         """Return a representation that expresses and justifies the statement.
 
         :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
-        :param output_proofs:
+        :param proof:
         :return:
         """
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
         cap = True
-        output = rep_composition(composition=self.compose_report(), encoding=encoding, cap=cap)
+        output = rep_composition(composition=self.compose_report(proof=proof), encoding=encoding,
+                                 cap=cap)
         return output
 
 
@@ -3579,8 +3589,10 @@ class DefinitionInclusion(Statement):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='definition-inclusion')
 
-    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_definition_inclusion_report(o=self)
+    def compose_report(self, proof: (None, bool) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_definition_inclusion_report(
+            o=self, proof=proof)
         return output
 
     @property
@@ -3590,10 +3602,10 @@ class DefinitionInclusion(Statement):
     def echo(self):
         repm.prnt(self.rep_report())
 
-    def rep_report(self, encoding: (None, Encoding) = None) -> str:
+    def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None) -> str:
         """Return a representation that expresses and justifies the statement.
         """
-        return rep_composition(composition=self.compose_report(), encoding=encoding)
+        return rep_composition(composition=self.compose_report(proof=proof), encoding=encoding)
 
 
 class FormulaStatement(Statement):
@@ -3751,14 +3763,14 @@ class Morphism(FormulaStatement):
             theory=theory, valid_proposition=valid_proposition,
             nameset=nameset, cat=cat)
 
-    def rep_report(self, output_proofs=True):
+    def rep_report(self, proof: (None, bool) = None):
         """Return a representation that expresses and justifies the statement.
 
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
         output = f'{repm.serif_bold(self.rep_name())}: {self.valid_proposition.rep_formula(expand=True)}'
-        if output_proofs:
+        if proof:
             output = output + self.rep_subreport()
         return output + f'\n'
 
@@ -3852,14 +3864,14 @@ class DirectDefinitionInference(FormulaStatement):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='definition-interpretation')
 
-    def rep_report(self, output_proofs=True):
+    def rep_report(self, proof: (None, bool) = None):
         """Return a representation that expresses and justifies the statement.
 
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
         output = f'{self.rep_title(cap=True)}: {self.valid_proposition.rep_formula(expand=True)}'
-        if output_proofs:
+        if proof:
             output = output + f'\n\t{repm.serif_bold("Derivation from natural language definition")}'
             output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ Follows from {self.definition.rep_ref()}.'
         return output + f'\n'
@@ -4112,7 +4124,8 @@ class NoteInclusion(AtheoreticalStatement):
         yield self.natural_language
         return True
 
-    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
+    def compose_report(self, proof: (None, bool) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
         yield from self.nameset.compose_title()
         yield text_dict.colon
         yield text_dict.space
@@ -4127,18 +4140,19 @@ class NoteInclusion(AtheoreticalStatement):
         """Return the content of the note in natural-language."""
         return self._natural_language
 
-    def rep_report(self, encoding: (None, Encoding) = None, output_proofs: bool = True,
+    def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None,
                    wrap: bool = True) -> str:
         """Return a representation that expresses and justifies the statement.
 
         :param declaration: (bool) Default: True. Whether the report will include the definition-declaration.
-        :param output_proofs:
+        :param proof:
         :return:
         """
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
         cap = True
-        output = rep_composition(composition=self.compose_report(), encoding=encoding, cap=cap)
+        output = rep_composition(composition=self.compose_report(proof=proof), encoding=encoding,
+                                 cap=cap)
         return output
 
 
@@ -4192,7 +4206,8 @@ class Section(AtheoreticalStatement):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='section')
 
-    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
+    def compose_report(self, proof: (None, bool) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
         yield "#" * self.section_level
         yield text_dict.space
         yield from SansSerifBold(self.section_reference).compose()
@@ -4335,9 +4350,10 @@ class TheoryElaborationSequence(TheoreticalObject):
         output = yield from configuration.locale.compose_theory_declaration(t=self)
         return output
 
-    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
+    def compose_report(self, proof: (None, bool) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
         """Return a representation that expresses and justifies the theory."""
-        output = yield from configuration.locale.compose_theory_report(t=self)
+        output = yield from configuration.locale.compose_theory_report(t=self, proof=proof)
         return output
 
     def crossreference_axiom_inclusion(self, a):
@@ -4554,12 +4570,12 @@ class TheoryElaborationSequence(TheoreticalObject):
             echo=echo)
 
     def rep_report(self, encoding: (None, Encoding) = None,
-                   output_proofs: (None, bool) = None):
-        output = rep_composition(composition=self.compose_report(), encoding=encoding)
+                   proof: (None, bool) = None):
+        output = rep_composition(composition=self.compose_report(proof=proof), encoding=encoding)
         return output
 
-    def prnt(self, output_proofs=True):
-        repm.prnt(self.rep_report(output_proofs=output_proofs))
+    def prnt(self, proof: (None, bool) = None):
+        repm.prnt(self.rep_report(proof=proof))
 
     def prove_inconsistent(self, ii):
         verify(isinstance(ii, InconsistencyIntroductionStatement),
@@ -4569,11 +4585,11 @@ class TheoryElaborationSequence(TheoreticalObject):
                'The ii statement is not a statement of this theory.', ii=ii, theory=self)
         self._consistency = consistency_values.proved_inconsistent
 
-    def export_report_to_file(self, file_path, output_proofs: (None, bool) = None,
+    def export_report_to_file(self, file_path, proof: (None, bool) = None,
                               encoding: (None, Encoding) = None):
         """Export this theory to a Unicode textfile."""
         text_file = open(file_path, 'w', encoding='utf-8')
-        n = text_file.write(self.rep_report(encoding=encoding, output_proofs=output_proofs))
+        n = text_file.write(self.rep_report(encoding=encoding, proof=proof))
         text_file.close()
 
     def open_section(self,
@@ -4940,14 +4956,14 @@ class SubstitutionOfEqualTerms(FormulaStatement):
             cat=cat,
             nameset=nameset)
 
-    def rep_report(self, output_proofs=True):
+    def rep_report(self, proof: (None, bool) = None):
         """Return a representation that expresses and justifies the statement.
 
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
         output = f'{self.rep_title(cap=True)}: {self.valid_proposition.rep_formula()}'
-        if output_proofs:
+        if proof:
             output = output + f'\n\t{repm.serif_bold("Substitution of equal terms")}'
             output = output + f'\n\t{self.original_expression.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.original_expression.rep_ref())}.'
             output = output + f'\n\t{self.equality_statement.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.equality_statement.rep_ref())}.'
@@ -7678,7 +7694,7 @@ class InferredStatement(FormulaStatement):
             # of the current theory-elaboration-sequence.
             t.report_inconsistency_proof(proof=self)
         if echo:
-            self.echo(echo_proof=echo_proof)
+            self.echo(proof=echo_proof)
         if self.inference_rule is self.t.u.i.axiom_interpretation or \
                 self.inference_rule is self.t.u.i.definition_interpretation:
             t.assure_interpretation_disclaimer(echo=echo)
@@ -7687,14 +7703,14 @@ class InferredStatement(FormulaStatement):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='inferred-statement')
 
-    def compose_report(self, output_proof: (None, bool) = None):
+    def compose_report(self, proof: (None, bool) = None):
         output = yield from configuration.locale.compose_inferred_statement_report(
-            o=self, output_proof=output_proof)
+            o=self, proof=proof)
         return output
 
-    def echo(self, echo_proof: (None, bool) = None):
-        echo_proof = prioritize_value(echo_proof, configuration.echo_proof, True)
-        repm.prnt(self.rep_report(output_proof=echo_proof))
+    def echo(self, proof: (None, bool) = None):
+        proof = prioritize_value(proof, configuration.echo_proof, True)
+        repm.prnt(self.rep_report(proof=proof))
 
     @property
     def parameters(self) -> tuple:
@@ -7706,17 +7722,17 @@ class InferredStatement(FormulaStatement):
         """
         return self._inference_rule
 
-    def rep_report(self, encoding: (None, Encoding) = None, output_proof=True) -> str:
-        return rep_composition(composition=self.compose_report(output_proof=output_proof),
+    def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None) -> str:
+        return rep_composition(composition=self.compose_report(proof=proof),
                                encoding=encoding)
 
-    def rep_report_OBSOLETE(self, encoding: (None, Encoding) = None, output_proof=True) -> str:
+    def rep_report_OBSOLETE(self, encoding: (None, Encoding) = None, proof=True) -> str:
         """Return a representation that expresses and justifies the statement."""
         encoding = prioritize_value(encoding, configuration.encoding,
                                     encodings.plaintext)
         rep = f'{self.rep_title(encoding=encoding, cap=True)}: {self.valid_proposition.rep_formula()}' + '\n\t'
         rep = wrap_text(rep) + '\n'
-        if output_proof:
+        if proof:
             rep = rep + self.rep_two_columns_proof_OBSOLETE(encoding=encoding)
         return rep
 
@@ -7788,16 +7804,16 @@ class InconsistencyIntroductionStatement(FormulaStatement):
         # The theory is proved inconsistent!
         theory.prove_inconsistent(self)
         if configuration.warn_on_inconsistency:
-            warnings.warn(f'{self.rep_report(output_proofs=True)}', InconsistencyWarning)
+            warnings.warn(f'{self.rep_report(proof=True)}', InconsistencyWarning)
 
-    def rep_report(self, output_proofs=True):
+    def rep_report(self, proof=True):
         """Return a representation that expresses and justifies the statement.
 
         The representation is in two parts:
         - The formula that is being stated,
         - The justification for the formula."""
         output = f'{self.rep_title(cap=True)}: {self.valid_proposition.rep_formula()}'
-        if output_proofs:
+        if proof:
             output = output + f'\n\t{repm.serif_bold("Proof of inconsistency")}'
             output = output + f'\n\t{self.p.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.p.rep_ref())}.'
             output = output + f'\n\t{self.not_p.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.not_p.rep_ref())}.'
