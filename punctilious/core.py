@@ -697,6 +697,34 @@ class SansSerifBold(StyledText):
                          unicode=unicode, latex_math=latex_math)
 
 
+class Header(ComposableBlockSequence):
+    def __init__(self, s: (str, None) = None, plaintext: (None, str, Plaintext) = None,
+                 unicode: (None, str, Unicode2) = None,
+                 latex_math: (None, str) = None, level: (None, int) = None) -> None:
+        content = SansSerifBold(s=s, plaintext=plaintext, unicode=unicode, latex_math=latex_math)
+        level = prioritize_value(level, 1)
+        verify(assertion=0 < level < 4, msg='level is only supported between 1 and 3 inclusive.')
+        self._level = level
+        start_tag = None
+        end_tag = None
+        if level == 1:
+            start_tag = ComposableText(plaintext='\n# ', unicode='\n# ', latex_math='\\section{')
+            end_tag = ComposableText(plaintext='\n', unicode='\n', latex_math='}')
+        elif level == 2:
+            start_tag = ComposableText(plaintext='\n## ', unicode='\n## ',
+                                       latex_math='\\subsection{')
+            end_tag = ComposableText(plaintext='\n', unicode='\n', latex_math='}')
+        elif level == 3:
+            start_tag = ComposableText(plaintext='\n### ', unicode='\n### ',
+                                       latex_math='\\subsubsection{')
+            end_tag = ComposableText(plaintext='\n', unicode='\n', latex_math='}')
+        super().__init__(content=[content], start_tag=start_tag, end_tag=end_tag)
+
+    @property
+    def level(self) -> int:
+        return self.level
+
+
 class SansSerifNormal(StyledText):
     def __init__(self, s: (str, None) = None, plaintext: (None, str, Plaintext) = None,
                  unicode: (None, str, Unicode2) = None,

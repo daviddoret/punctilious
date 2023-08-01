@@ -11,6 +11,7 @@ from core import \
     DashedName, declare_universe_of_discourse, DefinitionInclusion, DirectDefinitionInference, \
     Encoding, encodings, \
     FailedVerificationException, Formula, FreeVariable, \
+    Header, \
     InconsistencyWarning, is_in_class, \
     NoteInclusion, \
     Paragraph, \

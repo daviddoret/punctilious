@@ -241,6 +241,8 @@ class LocaleEnUs(Locale):
         yield self.paragraph_start
         yield from t.rep_name()
         yield self.paragraph_end
+
+        yield Header(plaintext='Theory properties', level=1)
         yield self.paragraph_start
         yield SansSerifBold('Consistency: ')
         yield str(t.consistency)
@@ -253,9 +255,8 @@ class LocaleEnUs(Locale):
         yield SansSerifBold('Extended theory: ')
         yield 'N/A' if t.extended_theory is None else t.extended_theory.rep_fully_qualified_name()
         yield self.paragraph_end
-        yield self.paragraph_start
-        yield SansSerifBold('Simple-objects declarations')
-        yield self.paragraph_end
+
+        yield Header(plaintext='Simple-objects declarations', level=1)
         yield self.paragraph_start
         yield SansSerifNormal('Let ')
         first_item = True
@@ -274,16 +275,41 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         yield self.paragraph_end
 
+        yield Header(plaintext='Relations', level=1)
+        arities = frozenset(r.arity for r in t.iterate_relations())
+        for a in arities:
+            yield self.paragraph_start
+            yield SansSerifNormal('Let ')
+            first_item = True
+            plural = False
+            for r in (r for r in t.iterate_relations() if r.arity == a):
+                r: Relation
+                if not first_item:
+                    yield SansSerifNormal(', ')
+                    plural = True
+                yield text_dict.open_quasi_quote
+                yield from r.compose_symbol()
+                yield text_dict.close_quasi_quote
+                first_item = False
+            yield SansSerifNormal(' be ')
+            if plural:
+                yield SerifItalic(rep_arity_as_text(a))
+                yield SerifItalic('-relations')
+            else:
+                yield SansSerifNormal('a ')
+                yield SerifItalic(rep_arity_as_text(a))
+                yield SerifItalic('-relation')
+            yield SansSerifNormal(' in ')
+            yield from t.universe_of_discourse.compose_symbol()
+            yield SansSerifNormal('.')
+            yield self.paragraph_end
+
+        yield Header(plaintext='Inference rules', level=1)
+
+        yield Header(plaintext='Theory elaboration sequence', level=1)
+
         return True
 
-        # Relation declarations
-        relations = t.iterate_relations()
-        arities = frozenset(r.arity for r in relations)
-        for a in arities:
-            output += repm.serif_bold(f'\n\n{rep_arity_as_text(a).capitalize()} relations:')
-            for r_long_name in frozenset(
-                    r.rep_fully_qualified_name() for r in relations if r.arity == a):
-                output += '\n ⁃ ' + r_long_name
         output += f'\n\n{repm.serif_bold("Theory elaboration:")}'
         output = output + '\n\n' + '\n\n'.join(
             s.rep_report(output_proof=output_proofs) for s in
