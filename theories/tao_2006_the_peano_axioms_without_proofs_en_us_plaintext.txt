@@ -6,12 +6,19 @@ Stabilized: False
 Extended theory: N/A
 
 # Simple-objects declarations
-Let "0", "natural-number", "1", "2", "3", "4" be simple-objects in U1.
+Let "0", "natural-number", "1", "2", "3", "4" be simple-objects in U2.
 
 # Relations
-Let "++" be a unary-relation in U1.
-Let "==>", "is-a", "=", "neq", "and" be binary-relations in U1.
+Let "++" be a unary-relation in U2.
+Let "==>", "neq", "is-a", "=", "and" be binary-relations in U2.
 
 # Inference rules
+The following inference rules are considered valid under this theory:
+Let "axiom-interpretation" be the inference-rule TODO: COMPLETE HERE.
+Let "definition-interpretation" be the inference-rule TODO: COMPLETE HERE.
+Let "equal-terms-substitution" be the inference-rule TODO: COMPLETE HERE.
+Let "equality-commutativity" be the inference-rule TODO: COMPLETE HERE.
+Let "modus-ponens" be the inference-rule TODO: COMPLETE HERE.
+Let "variable-substitution" be the inference-rule TODO: COMPLETE HERE.
 
 # Theory elaboration sequence

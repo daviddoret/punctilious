@@ -149,6 +149,20 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         return True
 
+    def compose_inference_rule_declaration(self, i: InferenceRuleDeclaration) -> \
+            collections.abc.Generator[
+                Composable, Composable, True]:
+        global text_dict
+        yield SansSerifNormal('Let ')
+        yield text_dict.open_quasi_quote
+        yield from i.compose_symbol()
+        yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' be the ')
+        yield SerifItalic('inference-rule')
+        yield SansSerifNormal(' TODO: COMPLETE HERE')
+        yield SansSerifNormal('.')
+        return True
+
     def compose_inferred_statement_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, True]:
         yield SansSerifBold('Proof')
@@ -305,6 +319,17 @@ class LocaleEnUs(Locale):
             yield self.paragraph_end
 
         yield Header(plaintext='Inference rules', level=1)
+        yield self.paragraph_start
+        yield SansSerifNormal(
+            'The following inference rules are considered valid under this theory:')
+        yield self.paragraph_end
+        for inference_rule in sorted(t.i.values(),
+                                     key=lambda i: i.inference_rule.rep_dashed_name(
+                                         encoding=encodings.plaintext)):
+            inference_rule: InferenceRuleInclusion
+            yield self.paragraph_start
+            yield from inference_rule.inference_rule.compose_declaration()
+            yield self.paragraph_end
 
         yield Header(plaintext='Theory elaboration sequence', level=1)
 

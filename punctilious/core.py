@@ -1851,6 +1851,10 @@ class SymbolicObject:
         return hash(self.nameset) if is_in_class(self, classes.u) else hash(
             (self.universe_of_discourse, self.nameset))
 
+    # def __lt__(self, other):
+    #    """WARNING: Only used for support with the sorted() function, no intention to transmit any mathematical meaning."""
+    #    return str(self) < str(other)
+
     def __repr__(self):
         return self.rep_symbol(encoding=encodings.plaintext)
 
@@ -1976,6 +1980,9 @@ class SymbolicObject:
 
     def rep(self, encoding: (None, Encoding) = None, **kwargs) -> str:
         return rep_composition(composition=self.compose(), encoding=encoding, **kwargs)
+
+    def rep_dashed_name(self, encoding: (None, Encoding) = None) -> str:
+        return self.nameset.rep_dashed_name(encoding=encoding)
 
     def rep_declaration(self, encoding: (None, Encoding) = None) -> str:
         """TODO: _declaration must be reserved to TheoreticalObjcts. SymbolObjcts should use a distinct verb to mean "report".
@@ -3222,11 +3229,11 @@ class AxiomDeclaration(TheoreticalObject):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='axiom')
 
-    def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, True]:
+    def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, bool]:
         output = yield from configuration.locale.compose_axiom_declaration(o=self)
         return output
 
-    def compose_natural_language(self) -> collections.abc.Generator[Composable, Composable, True]:
+    def compose_natural_language(self) -> collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         yield text_dict.open_quasi_quote
         yield self.natural_language
@@ -3317,7 +3324,7 @@ class AxiomInclusion(Statement):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='axiom-inclusion')
 
-    def compose_report(self) -> collections.abc.Generator[Composable, Composable, True]:
+    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
         output = yield from configuration.locale.compose_axiom_inclusion_report(o=self)
         return output
 
@@ -3376,7 +3383,11 @@ class InferenceRuleInclusion(Statement):
 
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
-        yield SerifItalic(plaintext='inference-rule-inclusion')
+        yield SerifItalic(plaintext='inference-rule')
+
+    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_inference_rule_inclusion_report(o=self)
+        return output
 
     def infer_formula(self, *args, echo: (None, bool) = None):
         """
@@ -3487,11 +3498,11 @@ class DefinitionDeclaration(TheoreticalObject):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='definition')
 
-    def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, True]:
+    def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, bool]:
         output = yield from configuration.locale.compose_definition_declaration(o=self)
         return output
 
-    def compose_natural_language(self) -> collections.abc.Generator[Composable, Composable, True]:
+    def compose_natural_language(self) -> collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         yield text_dict.open_quasi_quote
         yield self.natural_language
@@ -3568,7 +3579,7 @@ class DefinitionInclusion(Statement):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='definition-inclusion')
 
-    def compose_report(self) -> collections.abc.Generator[Composable, Composable, True]:
+    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
         output = yield from configuration.locale.compose_definition_inclusion_report(o=self)
         return output
 
@@ -3940,6 +3951,10 @@ class InferenceRuleDeclaration(TheoreticalObject):
         if echo:
             self.echo()
 
+    def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_inference_rule_declaration(i=self)
+        return output
+
     @property
     def compose_paragraph_proof_method(self):
         return self._compose_paragraph_proof_method
@@ -4092,7 +4107,7 @@ class NoteInclusion(AtheoreticalStatement):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='note')
 
-    def compose_content(self) -> collections.abc.Generator[Composable, Composable, True]:
+    def compose_content(self) -> collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         yield self.natural_language
         return True
@@ -4844,7 +4859,7 @@ class SimpleObjct(TheoreticalObject):
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='simple-object')
 
-    def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, True]:
+    def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, bool]:
         output = yield from configuration.locale.compose_simple_objct_declaration(o=self)
         return output
 
