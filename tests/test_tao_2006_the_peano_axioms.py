@@ -16,32 +16,32 @@ class TestTao2006ThePeanoAxioms(unittest.TestCase):
             tpa.natural_number)
 
         self.assertTrue(
-            tpa.proposition_2_1_2_3.valid_proposition.is_formula_equivalent_to(phi1))
+            tpa.p004.valid_proposition.is_formula_equivalent_to(phi1))
         self.assertFalse(
-            tpa.proposition_2_1_2_3.valid_proposition.is_formula_equivalent_to(phi2))
+            tpa.p004.valid_proposition.is_formula_equivalent_to(phi2))
         self.assertFalse(
-            tpa.proposition_2_1_2_3.valid_proposition.is_formula_equivalent_to(phi3))
+            tpa.p004.valid_proposition.is_formula_equivalent_to(phi3))
 
         self.assertTrue(
-            tpa.p_2_2_4.valid_proposition.is_formula_equivalent_to(phi2))
+            tpa.p010.valid_proposition.is_formula_equivalent_to(phi2))
         self.assertFalse(
-            tpa.p_2_2_4.valid_proposition.is_formula_equivalent_to(phi1))
+            tpa.p010.valid_proposition.is_formula_equivalent_to(phi1))
         self.assertFalse(
-            tpa.p_2_2_4.valid_proposition.is_formula_equivalent_to(phi3))
+            tpa.p010.valid_proposition.is_formula_equivalent_to(phi3))
 
         self.assertTrue(
-            tpa.proposition_2_2_5.valid_proposition.is_formula_equivalent_to(
+            tpa.p012.valid_proposition.is_formula_equivalent_to(
                 phi3))
         self.assertFalse(
-            tpa.proposition_2_2_5.valid_proposition.is_formula_equivalent_to(
+            tpa.p012.valid_proposition.is_formula_equivalent_to(
                 phi1))
         self.assertFalse(
-            tpa.proposition_2_2_5.valid_proposition.is_formula_equivalent_to(
+            tpa.p012.valid_proposition.is_formula_equivalent_to(
                 phi2))
 
         phi4 = u.f(tpa.is_a, tpa.three, tpa.natural_number)
         self.assertTrue(
-            tpa.p_2_1_4.valid_proposition.is_formula_equivalent_to(phi4))
+            tpa.p022.valid_proposition.is_formula_equivalent_to(phi4))
 
 
 if __name__ == '__main__':

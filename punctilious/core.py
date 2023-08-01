@@ -948,6 +948,8 @@ class Configuration:
         self.default_formula_symbol = None
         self.default_free_variable_symbol = None
         self.default_hypothesis_symbol = None
+        self.default_inference_rule_declaration_symbol = None
+        self.default_inference_rule_inclusion_symbol = None
         self.default_note_symbol = None
         self.default_relation_symbol = None
         self.default_statement_symbol = None
@@ -965,6 +967,7 @@ class Configuration:
         self.echo_relation = None
         self.echo_simple_objct_declaration = None
         self.echo_statement = None
+        self.echo_proof = None
         self.echo_symbolic_objct = None
         self.echo_theory_elaboration_sequence_declaration = None
         self.echo_universe_of_discourse_declaration = None
@@ -3306,12 +3309,13 @@ class InferenceRuleInclusion(Statement):
             name: (None, str, StyledText) = None,
             explicit_name: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None,
-            echo: (None, bool) = None):
+            echo: (None, bool) = None,
+            echo_proof: (None, bool) = None):
         """Include (aka allow) an inference-rule in a theory-elaboration.
         """
         self._inference_rule = i
         if nameset is None:
-            symbol = configuration.default_statement_symbol if symbol is None else symbol
+            symbol = configuration.default_inference_rule_inclusion_symbol if symbol is None else symbol
             index = t.universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name, acronym=acronym,
                               abridged_name=abridged_name, name=name, explicit_name=explicit_name)
@@ -3323,7 +3327,8 @@ class InferenceRuleInclusion(Statement):
         t.crossreference_inference_rule_inclusion(self)
         super()._declare_class_membership(declarative_class_list.inference_rule_inclusion)
         if echo:
-            repm.prnt(self.rep_report())
+            echo_proof = prioritize_value(echo_proof, configuration.echo_proof, True)
+            repm.prnt(self.rep_report(output_proofs=echo_proof))
 
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
@@ -3876,7 +3881,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
         self._rep_two_columns_proof = rep_two_columns_proof_OBSOLETE
         self._compose_paragraph_proof_method = compose_paragraph_proof_method
         if nameset is None and symbol is None:
-            symbol = configuration.default_symbolic_object_symbol
+            symbol = configuration.default_inference_rule_symbol
         cat = title_categories.inference_rule_declaration
         super().__init__(universe_of_discourse=universe_of_discourse,
                          is_theory_foundation_system=False,
@@ -7155,7 +7160,7 @@ class UniverseOfDiscourse(SymbolicObject):
         self.theories = dict()
         # self.variables = dict()
         # Unique name indexes
-        self.symbol_indexes = dict()
+        # self.symbol_indexes = dict()
         # self.titles = dict()
 
         if nameset is None:
@@ -7374,11 +7379,18 @@ class UniverseOfDiscourse(SymbolicObject):
         return x
 
     def declare_symbolic_objct(
-            self, symbol=None):
+            self, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
+            auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
+            echo: (None, bool) = None) -> SymbolicObject:
         """"""
         return SymbolicObject(
-            nameset=symbol,
-            universe_of_discourse=self)
+            universe_of_discourse=self, symbol=symbol, index=index, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, ref=ref, subtitle=subtitle, echo=echo)
 
     def declare_theory(
             self,
@@ -7623,7 +7635,8 @@ class InferredStatement(FormulaStatement):
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
             cat: (None, TitleCategoryOBSOLETE) = None,
             nameset: (None, str, NameSet) = None,
-            echo: (None, bool) = None):
+            echo: (None, bool) = None,
+            echo_proof: (None, bool) = None):
         """Include (aka allow) an inference_rule in a theory-elaboration.
         """
         echo = prioritize_value(echo, configuration.echo_inferred_statement,
@@ -7653,7 +7666,7 @@ class InferredStatement(FormulaStatement):
             # of the current theory-elaboration-sequence.
             t.report_inconsistency_proof(proof=self)
         if echo:
-            self.echo()
+            self.echo(echo_proof=echo_proof)
         if self.inference_rule is self.t.u.i.axiom_interpretation or \
                 self.inference_rule is self.t.u.i.definition_interpretation:
             t.assure_interpretation_disclaimer(echo=echo)
@@ -7667,8 +7680,9 @@ class InferredStatement(FormulaStatement):
             o=self, output_proof=output_proof)
         return output
 
-    def echo(self):
-        repm.prnt(self.rep_report())
+    def echo(self, echo_proof: (None, bool) = None):
+        echo_proof = prioritize_value(echo_proof, configuration.echo_proof, True)
+        repm.prnt(self.rep_report(output_proof=echo_proof))
 
     @property
     def parameters(self) -> tuple:
@@ -7836,6 +7850,8 @@ def reset_configuration(configuration: Configuration) -> None:
     configuration.default_free_variable_symbol = StyledText(plaintext='x',
                                                             text_style=text_styles.serif_bold)
     configuration.default_hypothesis_symbol = SerifNormal('H')
+    configuration.default_inference_rule_declaration_symbol = SerifNormal('I')
+    configuration.default_inference_rule_inclusion_symbol = SerifNormal('I')
     configuration.default_note_symbol = SerifItalic('note')
     configuration.default_relation_symbol = SerifItalic('r')
     configuration.default_statement_symbol = SerifNormal('P')
