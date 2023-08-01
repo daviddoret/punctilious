@@ -1,0 +1,68 @@
+
+
+# Theory properties
+Consistency: undetermined
+Stabilized: False
+Extended theory: N/A
+
+# Simple-objects declarations
+Let "0", "natural-number", "1", "2", "3", "4" be simple-objects in U1.
+
+# Relations
+Let "++" be a unary-relation in U1.
+Let "=", "==>", "is-a", "neq", "and" be binary-relations in U1.
+
+# Inference rules
+The following inference rules are considered valid under this theory:
+Let "axiom-interpretation" be the inference-rule TODO: COMPLETE HERE.
+Let "definition-interpretation" be the inference-rule TODO: COMPLETE HERE.
+Let "equal-terms-substitution" be the inference-rule TODO: COMPLETE HERE.
+Let "equality-commutativity" be the inference-rule TODO: COMPLETE HERE.
+Let "modus-ponens" be the inference-rule TODO: COMPLETE HERE.
+Let "variable-substitution" be the inference-rule TODO: COMPLETE HERE.
+
+# Theory elaboration sequence
+# 2 The natural numbers
+## 2.1 The peano axioms
+Axiom 2.1.1 (A2): Let axiom A1 "0 is a natural number." be included (postulated) in T1.
+Uncategorized (I1): Let inference-rule axiom-interpretation TODO: COMPLETE be included (considered valid) in T1.
+Proposition (P1): (0 is-a natural-number).
+Axiom 2.1.2 (A4): Let axiom A3 "If n is a natural number, then n++ is a natural number." be included (postulated) in T1.
+Proposition (P2): ((n1 is-a natural-number) ==> ((n1)++ is-a natural-number)).
+Uncategorized (I2): Let inference-rule variable-substitution TODO: COMPLETE be included (considered valid) in T1.
+Proposition (P3): ((0 is-a natural-number) ==> ((0)++ is-a natural-number)).
+Uncategorized (I3): Let inference-rule modus-ponens TODO: COMPLETE be included (considered valid) in T1.
+Proposition 2.2.3 (P4): ((0)++ is-a natural-number).
+Definition (D2): Let definition D1 "We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that x is defined to equal y.)" be included (postulated) in T1.
+Uncategorized (I4): Let inference-rule definition-interpretation TODO: COMPLETE be included (considered valid) in T1.
+Proposition (P5): (1 = (0)++).
+Proposition (P6): (2 = ((0)++)++).
+Proposition (P7): (3 = (((0)++)++)++).
+Proposition (P8): (4 = ((((0)++)++)++)++).
+Proposition 2.2.3 (P9): (((0)++ is-a natural-number) ==> (((0)++)++ is-a natural-number)).
+Proposition 2.2.4 (P10): (((0)++)++ is-a natural-number).
+Proposition 2.2.3 (P11): ((((0)++)++ is-a natural-number) ==> ((((0)++)++)++ is-a natural-number)).
+Proposition 2.2.5 (P12): ((((0)++)++)++ is-a natural-number).
+Proposition 2.2.3 (P13): (((((0)++)++)++ is-a natural-number) ==> (((((0)++)++)++)++ is-a natural-number)).
+Proposition 2.2.5 (P14): (((((0)++)++)++)++ is-a natural-number).
+Uncategorized (I5): Let inference-rule equality-commutativity TODO: COMPLETE be included (considered valid) in T1.
+Proposition (P15): ((0)++ = 1).
+Uncategorized (I6): Let inference-rule equal-terms-substitution TODO: COMPLETE be included (considered valid) in T1.
+Proposition (P16): (2 = (1)++).
+Proposition (P17): (((0)++)++ = 2).
+Proposition (P18): ((1)++ = 2).
+Proposition (P19): (3 = (2)++).
+Proposition (P20): ((((0)++)++)++ = 3).
+Proposition (P21): ((2)++ = 3).
+Proposition (P22): (3 is-a natural-number).
+Proposition (P23): (4 = ((((0)++)++)++)++).
+Proposition (P24): (((((0)++)++)++)++ = 4).
+Proposition (P25): ((3)++ = 4).
+Proposition (P26): (((((0)++)++)++ is-a natural-number) ==> (((((0)++)++)++)++ is-a natural-number)).
+Axiom 2.3 (A6): Let axiom A5 "0 is not the successor of any natural number; i.e., we have n++  0 for every natural number n." be included (postulated) in T1.
+Proposition 2.3.1 (P27): ((n2 is-a natural-number) ==> ((n2)++ neq 0)).
+Proposition (P28): ((3 is-a natural-number) ==> ((3)++ neq 0)).
+Proposition (P29): ((3)++ neq 0).
+Proposition 2.1.6 (P30): (4 neq 0).
+Axiom 2.4 (A8): Let axiom A7 "Different natural numbers must have different successors; i.e., if n, m are natural numbers and n  m, then n++  m++. Equivalently, if n++ = m++, then we must have n = m." be included (postulated) in T1.
+Proposition 2.4.1 (P31): ((((n3 is-a natural-number) and (m1 is-a natural-number)) and (n3 neq m1)) ==> ((n3)++ neq (m1)++)).

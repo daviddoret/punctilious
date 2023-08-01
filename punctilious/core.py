@@ -38,8 +38,9 @@ def rep_composition(composition: collections.abc.Generator[Composable, Composabl
             if item is None:
                 return ''
             elif isinstance(item, typing.Generator):
-                representation = rep_composition(composition=item, encoding=encoding, cap=cap,
-                                                 **kwargs)
+                representation = representation + rep_composition(composition=item,
+                                                                  encoding=encoding, cap=cap,
+                                                                  **kwargs)
                 cap = False
             elif isinstance(item, Composable):
                 representation = representation + item.rep(encoding=encoding, cap=cap)

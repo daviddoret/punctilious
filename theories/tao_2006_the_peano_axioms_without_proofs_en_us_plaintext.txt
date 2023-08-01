@@ -1,1 +1,0 @@
-Proposition 2.4.1 (P31): ((((n3 is-a natural-number) and (m1 is-a natural-number)) and (n3 neq m1)) ==> ((n3)++ neq (m1)++)).
