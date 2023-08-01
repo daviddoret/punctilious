@@ -7,7 +7,6 @@ class LocaleEnUs(Locale):
 
     def __init__(self):
         super().__init__(name='EN-US')
-        self._qed = None
 
     def compose_axiom_declaration(self, o: AxiomDeclaration) -> collections.abc.Generator[
         Composable, Composable, True]:
@@ -223,6 +222,73 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         return True
 
+    def compose_theory_declaration(self, t: TheoryElaborationSequence) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        global text_dict
+        yield SansSerifNormal('Let ')
+        yield text_dict.open_quasi_quote
+        yield from t.nameset.compose_qualified_symbol()
+        yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' be a ')
+        yield from t.compose_class()
+        yield SansSerifNormal(' in ')
+        yield from t.u.compose_symbol()
+        yield text_dict.period
+        return True
+
+    def compose_theory_report(self, t: TheoryElaborationSequence) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        yield self.paragraph_start
+        yield from t.rep_name()
+        yield self.paragraph_end
+        yield self.paragraph_start
+        yield SansSerifBold('Consistency: ')
+        yield str(t.consistency)
+        yield self.paragraph_end
+        yield self.paragraph_start
+        yield SansSerifBold('Stabilized: ')
+        yield str(t.stabilized)
+        yield self.paragraph_end
+        yield self.paragraph_start
+        yield SansSerifBold('Extended theory: ')
+        yield 'N/A' if t.extended_theory is None else t.extended_theory.rep_fully_qualified_name()
+        yield self.paragraph_end
+        yield self.paragraph_start
+        yield SansSerifBold('Simple-objects declarations')
+        yield self.paragraph_end
+        yield self.paragraph_start
+        yield SansSerifNormal('Let ')
+        first_item = True
+        for o in t.universe_of_discourse.simple_objcts.values():
+            # TODO: Filter on simple-objects that are effectively present in the theory.
+            if not first_item:
+                yield ', '
+            yield text_dict.open_quasi_quote
+            yield from o.compose_symbol()
+            yield text_dict.close_quasi_quote
+            first_item = False
+        yield SansSerifNormal(' be ')
+        yield SerifItalic('simple-objects')
+        yield SansSerifNormal(' in ')
+        yield from t.universe_of_discourse.compose_symbol()
+        yield SansSerifNormal('.')
+        yield self.paragraph_end
+
+        return True
+
+        # Relation declarations
+        relations = t.iterate_relations()
+        arities = frozenset(r.arity for r in relations)
+        for a in arities:
+            output += repm.serif_bold(f'\n\n{rep_arity_as_text(a).capitalize()} relations:')
+            for r_long_name in frozenset(
+                    r.rep_fully_qualified_name() for r in relations if r.arity == a):
+                output += '\n ⁃ ' + r_long_name
+        output += f'\n\n{repm.serif_bold("Theory elaboration:")}'
+        output = output + '\n\n' + '\n\n'.join(
+            s.rep_report(output_proof=output_proofs) for s in
+            t.statements)
+
     def compose_variable_substitution_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[
                 Composable, Composable, True]:
@@ -252,6 +318,18 @@ class LocaleEnUs(Locale):
         if self._maps_to is None:
             self._maps_to = SansSerifNormal(plaintext='|-->', unicode='↦', latex_math='\\mapsto')
         return self._maps_to
+
+    @property
+    def paragraph_end(self) -> StyledText:
+        if self._paragraph_end is None:
+            self._paragraph_end = SansSerifNormal(plaintext='\n', unicode='\n', latex_math='')
+        return self._paragraph_end
+
+    @property
+    def paragraph_start(self) -> StyledText:
+        if self._paragraph_start is None:
+            self._paragraph_start = SansSerifNormal(plaintext='', unicode='', latex_math='')
+        return self._paragraph_start
 
     @property
     def qed(self) -> StyledText:

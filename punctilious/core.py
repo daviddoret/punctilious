@@ -867,6 +867,9 @@ def subscriptify(text: (str, ComposableText) = '', encoding: Encoding = encoding
 class Locale:
     def __init__(self, name: str):
         self._name = name
+        self._paragraph_end = None
+        self._paragraph_start = None
+        self._qed = None
 
     def __hash__(self):
         return hash(self._name)
@@ -880,6 +883,16 @@ class Locale:
     @property
     def name(self):
         return self._name
+
+    @property
+    @abc.abstractmethod
+    def paragraph_end(self) -> StyledText:
+        raise NotImplementedError()
+
+    @property
+    @abc.abstractmethod
+    def paragraph_start(self) -> StyledText:
+        raise NotImplementedError()
 
     @property
     @abc.abstractmethod
@@ -3010,6 +3023,9 @@ class TitleCategories(repm.ValueName):
     theory_elaboration_sequence = TitleCategoryOBSOLETE('theory_elaboration_sequence', 't',
                                                         'theory elaboration sequence',
                                                         'theo.')
+    informal_definition = TitleCategoryOBSOLETE('informal definition',
+                                                StyledText(plaintext='note', unicode='🗅'),
+                                                'informal definition', 'inf. def.')
     comment = TitleCategoryOBSOLETE('comment',
                                     StyledText(plaintext='note', unicode='🗅'),
                                     'comment', 'cmt.')
@@ -4273,17 +4289,13 @@ class TheoryElaborationSequence(TheoreticalObject):
         yield SerifItalic(plaintext='theory-elaboration-sequence')
 
     def compose_declaration(self) -> collections.abc.Generator[Composable, Composable, bool]:
-        global text_dict
-        yield SansSerifNormal('Let ')
-        yield text_dict.open_quasi_quote
-        yield from self.nameset.compose_qualified_symbol()
-        yield text_dict.close_quasi_quote
-        yield SansSerifNormal(' be a ')
-        yield from self.compose_class()
-        yield SansSerifNormal(' in ')
-        yield from self.u.compose_symbol()
-        yield text_dict.period
-        return True
+        output = yield from configuration.locale.compose_theory_declaration(t=self)
+        return output
+
+    def compose_report(self) -> collections.abc.Generator[Composable, Composable, bool]:
+        """Return a representation that expresses and justifies the theory."""
+        output = yield from configuration.locale.compose_theory_report(t=self)
+        return output
 
     def crossreference_axiom_inclusion(self, a):
         """During construction, cross-reference an axiom
@@ -4424,19 +4436,6 @@ class TheoryElaborationSequence(TheoreticalObject):
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
 
-    # def infer_by_substitution_of_equal_terms(
-    #        self, original_expression, equality_statement, symbol=None,
-    #        category=None, reference=None, title=None):
-    #    """Infer a statement by applying the substitution-of-equal-terms (
-    #    SoET) inference-rule.#
-    #
-    #    Let
-    #    """
-    #    return SubstitutionOfEqualTerms(
-    #        original_expression=original_expression,
-    #        equality_statement=equality_statement, nameset=symbol,
-    #        cat=category, theory=self, reference=reference, title=title)
-
     def iterate_statements_in_theory_chain(self):
         """Iterate through the (proven or sound) statements in the current theory-chain."""
         for t in self.iterate_theory_chain():
@@ -4511,44 +4510,13 @@ class TheoryElaborationSequence(TheoreticalObject):
             nameset=nameset, subtitle=title, dashed_name=dashed_name,
             echo=echo)
 
-    def rep_theory_report(self, output_proofs=True):
-        """Return a representation that expresses and justifies the theory."""
-        output = f'\n{repm.serif_bold(self.rep_name())}'
-        output += f'\n{repm.serif_bold("Consistency:")} {str(self.consistency)}'
-        output += f'\n{repm.serif_bold("Stabilized:")} {str(self.stabilized)}'
-        output += f'\n{repm.serif_bold("Extended theory:")} {"N/A" if self.extended_theory is None else self.extended_theory.rep_fully_qualified_name()}'
-        output += f'\n\n{repm.serif_bold("Simple-objct declarations:")}'
-        # TODO: Limit the listed objects to those that are referenced by the theory,
-        #   instead of outputting all objects in the universe-of-discourse.
-        output = output + '\n' + '\n'.join(
-            o.rep_declaration() for o in
-            self.universe_of_discourse.simple_objcts.values())
-        # Relation declarations
-        relations = self.iterate_relations()
-        arities = frozenset(r.arity for r in relations)
-        for a in arities:
-            output += repm.serif_bold(f'\n\n{rep_arity_as_text(a).capitalize()} relations:')
-            for r_long_name in frozenset(
-                    r.rep_fully_qualified_name() for r in relations if r.arity == a):
-                output += '\n ⁃ ' + r_long_name
-        output += f'\n\n{repm.serif_bold("Theory elaboration:")}'
-        output = output + '\n\n' + '\n\n'.join(
-            s.rep_report(output_proof=output_proofs) for s in
-            self.statements)
-        return str(output)
-
-    # def soet(
-    #        self, original_expression, equality_statement, symbol=None,
-    #        category=None, reference=None, title=None):
-    #    """Elaborate a new modus-ponens statement in the theory. Shortcut for
-    #    ModusPonens(theory=t, ...)"""
-    #    return self.infer_by_substitution_of_equal_terms(
-    #        original_expression=original_expression,
-    #        equality_statement=equality_statement, symbol=symbol,
-    #        category=category, reference=reference, title=title)
+    def rep_report(self, encoding: (None, Encoding) = None,
+                   output_proofs: (None, bool) = None):
+        output = rep_composition(composition=self.compose_report(), encoding=encoding)
+        return output
 
     def prnt(self, output_proofs=True):
-        repm.prnt(self.rep_theory_report(output_proofs=output_proofs))
+        repm.prnt(self.rep_report(output_proofs=output_proofs))
 
     def prove_inconsistent(self, ii):
         verify(isinstance(ii, InconsistencyIntroductionStatement),
@@ -4558,10 +4526,11 @@ class TheoryElaborationSequence(TheoreticalObject):
                'The ii statement is not a statement of this theory.', ii=ii, theory=self)
         self._consistency = consistency_values.proved_inconsistent
 
-    def export_to_text(self, file_path, output_proofs=True):
+    def export_report_to_file(self, file_path, output_proofs: (None, bool) = None,
+                              encoding: (None, Encoding) = None):
         """Export this theory to a Unicode textfile."""
         text_file = open(file_path, 'w', encoding='utf-8')
-        n = text_file.write(self.rep_theory_report(output_proofs=output_proofs))
+        n = text_file.write(self.rep_report(encoding=encoding, output_proofs=output_proofs))
         text_file.close()
 
     def open_section(self,
@@ -7886,5 +7855,35 @@ def reset_configuration(configuration: Configuration) -> None:
 
 
 reset_configuration(configuration=configuration)
+
+
+class TheoryPackage:
+    def __init__(self):
+        pass
+
+    def develop(self) -> TheoryElaborationSequence:
+        """Elaborate a new theory in a new universe with the content of the package.
+
+        """
+        u = declare_universe_of_discourse()
+        t = u.declare_theory()
+        self.develop_theory(t=t)
+        return t
+
+    @abc.abstractmethod
+    def develop_theory(self, t: TheoryElaborationSequence) -> TheoryElaborationSequence:
+        """Given a theory t, pursue the elaboration of that theory with the content of the package.
+
+        This is the key method that must be implemented by the non-abstract package."""
+        raise NotImplementedError()
+
+    def develop_universe(self, u: UniverseOfDiscourse) -> TheoryElaborationSequence:
+        """Given a universe u, elaborate a new theory with the content of the package in that universe.
+
+        """
+        t = u.declare_theory()
+        t = self.develop_theory(t=t)
+        return t
+
 
 pass

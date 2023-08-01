@@ -20,7 +20,7 @@ from core import \
     Subscript, subscriptify, \
     title_categories, ComposableText, NameSet, SymbolicObject, \
     TextStyle, text_styles, TheoreticalObject, \
-    TheoryElaborationSequence, \
+    TheoryElaborationSequence, TheoryPackage, \
     title_categories, \
     UniverseOfDiscourse
 
