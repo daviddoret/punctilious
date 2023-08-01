@@ -1,0 +1,17 @@
+
+
+# Theory properties
+Consistency: undetermined
+Stabilized: False
+Extended theory: N/A
+
+# Simple-objects declarations
+Let "0", "natural-number", "1", "2", "3", "4" be simple-objects in U1.
+
+# Relations
+Let "++" be a unary-relation in U1.
+Let "==>", "is-a", "=", "neq", "and" be binary-relations in U1.
+
+# Inference rules
+
+# Theory elaboration sequence
