@@ -1,16 +1,17 @@
 """"""
 import punctilious as pu
 
-pu.configuration.echo_default = True
-pu.configuration.echo_axiom_declaration = True
-pu.configuration.echo_axiom_inclusion = True
-pu.configuration.echo_definition_declaration = True
-pu.configuration.echo_definition_inclusion = True
-pu.configuration.echo_inferred_statement = True
-pu.configuration.echo_proof = False
-pu.configuration.echo_simple_objct_declaration = True
-pu.configuration.echo_statement = True
-pu.configuration.echo_relation = True
+
+# pu.configuration.echo_default = True
+# pu.configuration.echo_axiom_declaration = True
+# pu.configuration.echo_axiom_inclusion = True
+# pu.configuration.echo_definition_declaration = True
+# pu.configuration.echo_definition_inclusion = True
+# pu.configuration.echo_inferred_statement = True
+# pu.configuration.echo_proof = False
+# pu.configuration.echo_simple_objct_declaration = True
+# pu.configuration.echo_statement = True
+# pu.configuration.echo_relation = True
 
 
 class Tao2006ThePeanoAxioms(pu.TheoryPackage):
@@ -209,9 +210,15 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p055 = t.i.conjunction_introduction.infer_statement(p044, p054)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₅₆): (((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (5 ≠ 1)).
         p056 = t.i.conjunction_introduction.infer_statement(p055, p048)
-        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₅₇): (6 ≠ 2).
+
+        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 2.1.8: (6 ≠ 2).
+        # Direct proof:
         p057 = t.i.modus_ponens.infer_statement(p053, p056, ref='2.1.8')
+        t.take_note(
+            content='Proposition 2.1.8 was demonstrated by direct proof. But (Tap 2006) proposes a proof by contradiction which seem simpler. So let us provide a second proof, by contradiction this time.')
 
+        # Proof by contradiction:
+        # TODO: Implement proof by contradiction.
 
-test = Tao2006ThePeanoAxioms()
-test.develop()
+# test = Tao2006ThePeanoAxioms()
+# test.develop()

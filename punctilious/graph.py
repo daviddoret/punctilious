@@ -9,7 +9,7 @@ t = pet.t1
 u = pet.u
 
 
-def graph_theoretical_objct(g: nx.MultiDiGraph, o: pu.TheoryElaborationSequence):
+def graph_symbolic_object(g: nx.MultiDiGraph, o: pu.SymbolicObject):
     if pu.is_in_class(o, pu.classes.simple_objct):
         graph_simpl_objct(g, o)
     elif pu.is_in_class(o, pu.classes.theory_elaboration):
@@ -27,12 +27,12 @@ def graph_theoretical_objct(g: nx.MultiDiGraph, o: pu.TheoryElaborationSequence)
 def graph_theory(g: nx.MultiDiGraph, t: pu.TheoryElaborationSequence):
     g.add_node(t.rep_name())
     for s in t.statements:
-        graph_theoretical_objct(g, s)
+        graph_symbolic_object(g, s)
 
 
 def graph_formula_statement(g: nx.MultiDiGraph, s: pu.TheoryElaborationSequence):
     g.add_node(t.rep_name())
-    graph_theoretical_objct(g, s.valid_proposition)
+    graph_symbolic_object(g, s.valid_proposition)
     g.add_edge(s.valid_proposition.rep_name(), t.rep_name())
 
 
@@ -51,16 +51,16 @@ def graph_relation(g: nx.MultiDiGraph, r: pu.Relation):
 def graph_formula(g: nx.MultiDiGraph, f: pu.Formula):
     g.add_node(f.rep_name())
     if f.relation.arity == 1:
-        graph_theoretical_objct(g, f.relation)
+        graph_symbolic_object(g, f.relation)
         g.add_edge(f.relation.rep_name(), f.rep_name())
-        graph_theoretical_objct(g, f.parameters[0])
+        graph_symbolic_object(g, f.parameters[0])
         g.add_edge(f.parameters[0].rep_name(), f.rep_name())
     if f.relation.arity == 2:
-        graph_theoretical_objct(g, f.relation)
+        graph_symbolic_object(g, f.relation)
         g.add_edge(f.relation.rep_name(), f.rep_name())
-        graph_theoretical_objct(g, f.parameters[0])
+        graph_symbolic_object(g, f.parameters[0])
         g.add_edge(f.parameters[0].rep_name(), f.rep_name())
-        graph_theoretical_objct(g, f.parameters[1])
+        graph_symbolic_object(g, f.parameters[1])
         g.add_edge(f.parameters[1].rep_name(), f.rep_name())
 
 

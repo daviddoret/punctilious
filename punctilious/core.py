@@ -1979,6 +1979,10 @@ class SymbolicObject:
     def prnt(self, encoding: (None, Encoding) = None, expand=False):
         repm.prnt(self.nameset.rep(encoding=encoding, expand=expand))
 
+    @property
+    def ref(self) -> (None, str):
+        return self.nameset.ref
+
     def rep(self, encoding: (None, Encoding) = None, **kwargs) -> str:
         return rep_composition(composition=self.compose(), encoding=encoding, **kwargs)
 

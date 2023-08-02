@@ -12,13 +12,13 @@ from core import \
     Encoding, encodings, \
     FailedVerificationException, Formula, FreeVariable, \
     Header, \
-    InconsistencyWarning, is_in_class, \
+    InconsistencyWarning, is_in_class, InferredStatement, \
     NoteInclusion, \
-    Paragraph, \
+    Paragraph, prioritize_value, \
     QuasiQuotation, \
     Relation, rep_two_columns_proof_item, \
     ScriptNormal, SansSerifBold, SansSerifNormal, SerifNormal, SimpleObjct, \
-    Subscript, subscriptify, \
+    Statement, Subscript, subscriptify, \
     title_categories, ComposableText, NameSet, SymbolicObject, \
     TextStyle, text_styles, TheoreticalObject, \
     TheoryElaborationSequence, TheoryPackage, \
