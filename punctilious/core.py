@@ -3607,6 +3607,10 @@ class DefinitionInclusion(Statement):
     def echo(self):
         repm.prnt(self.rep_report())
 
+    def rep_natural_language(self, encoding: (None, Encoding) = None,
+                             wrap: bool = True) -> str:
+        return self._definition.rep_natural_language(encoding=encoding, wrap=wrap)
+
     def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None) -> str:
         """Return a representation that expresses and justifies the statement.
         """
