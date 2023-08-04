@@ -50,24 +50,21 @@ class TestNameSet(TestCase):
                          n.rep_title(encoding=pu.encodings.unicode))
 
         # LaTeX math basic representations
-        self.assertEqual('\\mathit{x}_{1}', n.rep_symbol(encoding=pu.encodings.latex_math))
+        self.assertEqual('\\mathit{x}_{1}', n.rep_symbol(encoding=pu.encodings.latex))
         self.assertEqual('\\mathit{something-precise}',
-                         n.rep_dashed_name(encoding=pu.encodings.latex_math))
+                         n.rep_dashed_name(encoding=pu.encodings.latex))
         # LaTeX math natural language representations
-        self.assertEqual('\\mathsf{smthng}', n.rep_acronym(encoding=pu.encodings.latex_math))
-        self.assertEqual('\\mathsf{someth.}', n.rep_abridged_name(encoding=pu.encodings.latex_math))
-        self.assertEqual('\\mathsf{something}', n.rep_name(encoding=pu.encodings.latex_math))
+        self.assertEqual('\\mathsf{smthng}', n.rep_acronym(encoding=pu.encodings.latex))
+        self.assertEqual('\\mathsf{someth.}', n.rep_abridged_name(encoding=pu.encodings.latex))
+        self.assertEqual('\\mathsf{something}', n.rep_name(encoding=pu.encodings.latex))
         self.assertEqual('\\mathsf{something precise}',
-                         n.rep_explicit_name(encoding=pu.encodings.latex_math))
+                         n.rep_explicit_name(encoding=pu.encodings.latex))
         # LaTeX math prioritized name representations
-        self.assertEqual('\\mathsf{someth.}', n.rep_compact_name(encoding=pu.encodings.latex_math))
+        self.assertEqual('\\mathsf{someth.}', n.rep_compact_name(encoding=pu.encodings.latex))
         self.assertEqual('\\mathsf{something precise}',
-                         n.rep_accurate_name(encoding=pu.encodings.latex_math))
+                         n.rep_accurate_name(encoding=pu.encodings.latex))
         self.assertEqual('\\mathsf{something}',
-                         n.rep_conventional_name(encoding=pu.encodings.latex_math))
-        # LaTeX math section title
-        # self.assertEqual('note 1.1.1 (\\mathit{x}_{1}) - about something',
-        #                 n.rep_title(encoding=pu.encodings.latex_math))
+                         n.rep_conventional_name(encoding=pu.encodings.latex))
 
     def test_nameset_title(self):
         n1 = pu.NameSet(symbol='x', index=1, cat=pu.title_categories.proposition)

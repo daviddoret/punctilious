@@ -9,4 +9,4 @@ class TestSubscriptNormal(TestCase):
 
         self.assertEqual('hello world 0123456789', compo.rep(encoding=pu.encodings.plaintext))
         self.assertEqual('ₕₑₗₗₒ wₒᵣₗd ₀₁₂₃₄₅₆₇₈₉', compo.rep(encoding=pu.encodings.unicode))
-        self.assertEqual('_{hello world 0123456789}', compo.rep(encoding=pu.encodings.latex_math))
+        self.assertEqual('_{hello world 0123456789}', compo.rep(encoding=pu.encodings.latex))

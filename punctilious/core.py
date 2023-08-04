@@ -77,7 +77,7 @@ class Encoding:
 
 class Encodings:
     def __init__(self):
-        self.latex_math = Encoding('latex-math')
+        self.latex = Encoding('latex')
         self.plaintext = Encoding('plaintext')
         self.unicode = Encoding('unicode')
 
@@ -109,30 +109,30 @@ class ComposableText(Composable):
 
     def __init__(self, s: (None, str) = None,
                  plaintext: (None, str, Plaintext) = None, unicode: (None, str, Unicode2) = None,
-                 latex_math: (None, str) = None
+                 latex: (None, str) = None
                  ):
         """
 
         :param s: A default undetermined string. Leave it to the constructor to infer its encoding (plaintext, unicode, ...).
         :param plaintext:
         :param unicode:
-        :param latex_math:
+        :param latex:
         """
         self._plaintext = Plaintext(prioritize_value(plaintext, s, unicode))
         self._unicode = Unicode2(prioritize_value(unicode, s))
-        self._latex_math = latex_math
+        self._latex = latex
 
     def __eq__(self, other: (None, object, ComposableText)) -> bool:
         """Two instances of TextStyle are equal if any of their formatted representation are equal and not None."""
         return type(self) is type(other) and \
             self.plaintext == other.plaintext and \
             self.unicode == other.unicode and \
-            self.latex_math == other.latex_math
+            self.latex == other.latex
 
     def __hash__(self):
         """Two styled-texts are considered distinct if either their plaintext content or their style are distinct."""
         return hash(
-            (ComposableText, self._plaintext, self._unicode, self._latex_math))
+            (ComposableText, self._plaintext, self._unicode, self._latex))
 
     def __repr__(self):
         return f'⌜{self.rep(encoding=encodings.plaintext)}⌝'
@@ -141,8 +141,8 @@ class ComposableText(Composable):
         yield self
 
     @property
-    def latex_math(self) -> (None, str):
-        return self._latex_math
+    def latex(self) -> (None, str):
+        return self._latex
 
     @property
     def plaintext(self) -> (None, Plaintext):
@@ -154,15 +154,15 @@ class ComposableText(Composable):
         match encoding:
             case encodings.plaintext:
                 return self.rep_as_plaintext(cap=cap)
-            case encodings.latex_math:
-                return self.rep_as_latex_math(cap=cap)
+            case encodings.latex:
+                return self.rep_as_latexmath(cap=cap)
             case encodings.unicode:
                 return self.rep_as_unicode(cap=cap)
             case _:
                 return self.rep_as_plaintext(cap=cap)
 
-    def rep_as_latex_math(self, cap: bool = False):
-        content = self._plaintext if self._latex_math is None else self._latex_math
+    def rep_as_latexmath(self, cap: bool = False):
+        content = self._plaintext if self._latex is None else self._latex
         content = content.capitalize() if cap else content
         return content
 
@@ -281,59 +281,59 @@ class TextStyles:
         self.double_struck = TextStyle(
             name='double-struck',
             unicode_table_index=unicode_utilities.unicode_double_struck_index,
-            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathbb{'),
-            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+            start_tag=ComposableText(plaintext='', unicode='', latex='\\mathbb{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex='}'))
         self.monospace = TextStyle(
             name='fraktur-normal',
             unicode_table_index=unicode_utilities.unicode_fraktur_normal_index,
-            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathfrak{'),
-            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+            start_tag=ComposableText(plaintext='', unicode='', latex='\\mathfrak{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex='}'))
         self.monospace = TextStyle(
             name='monospace',
             unicode_table_index=unicode_utilities.unicode_monospace_index,
-            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathtt{'),
-            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+            start_tag=ComposableText(plaintext='', unicode='', latex='\\mathtt{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex='}'))
         self.sans_serif_bold = TextStyle(
             name='sans-serif-bold',
             unicode_table_index=unicode_utilities.unicode_sans_serif_bold_index,
-            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\boldsymbol\\mathsf{'),
-            end_tag=ComposableText(plaintext='', unicode='', latex_math='}}'))
+            start_tag=ComposableText(plaintext='', unicode='', latex='\\boldsymbol\\mathsf{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex='}}'))
         self.sans_serif_italic = TextStyle(
             name='sans-serif-italic',
             unicode_table_index=unicode_utilities.unicode_sans_serif_italic_index,
             start_tag=ComposableText(plaintext='', unicode='',
-                                     latex_math='\\text{\\sffamily{\\itshape{'),
-            end_tag=ComposableText(plaintext='', unicode='', latex_math='}}}'))
+                                     latex='\\text{\\sffamily{\\itshape{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex='}}}'))
         self.sans_serif_normal = TextStyle(
             name='sans-serif-normal',
             unicode_table_index=unicode_utilities.unicode_sans_serif_normal_index,
-            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathsf{'),
-            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+            start_tag=ComposableText(plaintext='', unicode='', latex='\\mathsf{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex='}'))
         self.script_normal = TextStyle(
             name='script-normal',
             unicode_table_index=unicode_utilities.unicode_script_normal_index,
-            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathcal{'),
-            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+            start_tag=ComposableText(plaintext='', unicode='', latex='\\mathcal{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex='}'))
         self.serif_bold = TextStyle(
             name='serif-bold',
             unicode_table_index=unicode_utilities.unicode_serif_bold_index,
-            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathbf{'),
-            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+            start_tag=ComposableText(plaintext='', unicode='', latex='\\mathbf{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex='}'))
         self.serif_italic = TextStyle(
             name='serif-italic',
             unicode_table_index=unicode_utilities.unicode_serif_italic_index,
-            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathit{'),
-            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+            start_tag=ComposableText(plaintext='', unicode='', latex='\\mathit{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex='}'))
         self.serif_normal = TextStyle(
             name='serif-normal',
             unicode_table_index=unicode_utilities.unicode_serif_normal_index,
-            start_tag=ComposableText(plaintext='', unicode='', latex_math='\\mathnormal{'),
-            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+            start_tag=ComposableText(plaintext='', unicode='', latex='\\mathnormal{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex='}'))
         self.subscript = TextStyle(
             name='subscript',
             unicode_map=unicode_utilities.unicode_subscript_dictionary,
-            start_tag=ComposableText(plaintext='_', unicode='', latex_math='_{'),
-            end_tag=ComposableText(plaintext='', unicode='', latex_math='}'))
+            start_tag=ComposableText(plaintext='_', unicode='', latex='_{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex='}'))
 
     @property
     def no_style(self):
@@ -363,11 +363,11 @@ class TextDict:
         self.period = ComposableText(plaintext='.')
         self.space = ComposableText(plaintext=' ')
         self.close_quasi_quote = ComposableText(plaintext='"', unicode='⌝',
-                                                latex_math='\\right\\ulcorner')
+                                                latex='\\right\\ulcorner')
         self.open_quasi_quote = ComposableText(plaintext='"', unicode='⌜',
-                                               latex_math='\\left\\ulcorner')
-        self.close_parenthesis = ComposableText(plaintext=')', latex_math='\\right)')
-        self.open_parenthesis = ComposableText(plaintext='(', latex_math='\\left(')
+                                               latex='\\left\\ulcorner')
+        self.close_parenthesis = ComposableText(plaintext=')', latex='\\right)')
+        self.open_parenthesis = ComposableText(plaintext='(', latex='\\left(')
         self.formula_parameter_separator = ComposableText(plaintext=', ')
         self.the = None
 
@@ -459,14 +459,14 @@ class StyledText(ComposableBlockLeaf):
 
     def __init__(self, s: (None, str) = None, text_style: (None, TextStyle) = None,
                  plaintext: (None, str, Plaintext) = None, unicode: (None, str, Unicode2) = None,
-                 latex_math: (None, str) = None, cap: (None, bool) = None
+                 latex: (None, str) = None, cap: (None, bool) = None
                  ):
         """
 
         :param s: A string. Leave it to the constructor to interpret if it is plaintext or unicode.
         :param plaintext:
         :param unicode:
-        :param latex_math:
+        :param latex:
         :param text_style:
         """
         self._text_style = prioritize_value(text_style, text_styles.sans_serif_normal)
@@ -476,8 +476,8 @@ class StyledText(ComposableBlockLeaf):
             s = s if s is None else s.capitalize()
             plaintext = plaintext if plaintext is None else plaintext.capitalize()
             unicode = unicode if unicode is None else unicode.capitalize()
-            latex_math = latex_math if latex_math is None else latex_math.capitalize()
-        content = ComposableText(s=s, plaintext=plaintext, unicode=unicode, latex_math=latex_math)
+            latex = latex if latex is None else latex.capitalize()
+        content = ComposableText(s=s, plaintext=plaintext, unicode=unicode, latex=latex)
         start_tag = self._text_style.start_tag
         end_tag = self._text_style.end_tag
         super().__init__(content=content, start_tag=start_tag, end_tag=end_tag)
@@ -512,10 +512,10 @@ class StyledText(ComposableBlockLeaf):
         if (cap is not None and not self._cap) or \
                 (text_style is not None and self._text_style is not text_style):
             # Return a close of ⌜self⌝ with the desired properties.
-            latex_math = None if self.latex_math is None else self.latex_math.capitalize()
+            latex = None if self.latex is None else self.latex.capitalize()
             plaintext = None if self.plaintext is None else self.plaintext.capitalize()
             unicode = None if self.unicode is None else self.unicode.capitalize()
-            yield StyledText(latex_math=latex_math, plaintext=plaintext, unicode=unicode,
+            yield StyledText(latex=latex, plaintext=plaintext, unicode=unicode,
                              text_style=self.text_style)
             return True
         else:
@@ -523,8 +523,8 @@ class StyledText(ComposableBlockLeaf):
             return True
 
     @property
-    def latex_math(self) -> (None, str):
-        return self._text_content.latex_math
+    def latex(self) -> (None, str):
+        return self._text_content.latex
 
     @property
     def plaintext(self) -> (None, Plaintext):
@@ -540,18 +540,18 @@ class StyledText(ComposableBlockLeaf):
         match encoding:
             case encodings.plaintext:
                 return self.rep_as_plaintext(cap=cap)
-            case encodings.latex_math:
-                return self.rep_as_latex_math(cap=cap)
+            case encodings.latex:
+                return self.rep_as_latex(cap=cap)
             case encodings.unicode:
                 return self.rep_as_unicode(cap=cap)
             case _:
                 return self.rep_as_plaintext(cap=cap)
 
-    def rep_as_latex_math(self, cap: bool = False):
-        start_tag = self.start_tag.rep(encoding=encodings.latex_math)
-        content = self._text_content.plaintext if self._text_content.latex_math is None else self._text_content.latex_math
+    def rep_as_latex(self, cap: bool = False):
+        start_tag = self.start_tag.rep(encoding=encodings.latex)
+        content = self._text_content.plaintext if self._text_content.latex is None else self._text_content.latex
         content = content.capitalize() if cap else content
-        end_tag = self.end_tag.rep(encoding=encodings.latex_math)
+        end_tag = self.end_tag.rep(encoding=encodings.latex)
         return start_tag + content + end_tag
 
     def rep_as_plaintext(self, cap: bool = False):
@@ -643,7 +643,7 @@ class ParentheticalExpression(ComposableBlockSequence):
         super().__init__(content=iterable, start_tag=QuasiQuotation._static_start_tag,
                          end_tag=QuasiQuotation._static_end_tag)
 
-    _static_end_tag = ComposableText(plaintext=')', latex_math='\\right)')
+    _static_end_tag = ComposableText(plaintext=')', latex='\\right)')
 
     _static_start_tag = ComposableText(plaintext='(', unicode='\\left(')
 
@@ -663,9 +663,9 @@ class Index(ComposableBlockSequence):
         super().__init__(iterable=iterable, start_tag=Paragraph._static_start_tag,
                          end_tag=Paragraph._static_end_tag)
 
-    _static_end_tag = ComposableText(latex_math='}', plaintext='', unicode='')
+    _static_end_tag = ComposableText(latex='}', plaintext='', unicode='')
 
-    _static_start_tag = ComposableText(latex_math='_{', plaintext='_', unicode='')
+    _static_start_tag = ComposableText(latex='_{', plaintext='_', unicode='')
 
     def prepare_item(self, item: (None, str, int, ComposableText)) -> ComposableText:
         """Force conversion of item to StyledText to assure the internal consistency of the TextComposition."""
@@ -693,32 +693,32 @@ class Index(ComposableBlockSequence):
 class SansSerifBold(StyledText):
     def __init__(self, s: (str, None) = None, plaintext: (None, str, Plaintext) = None,
                  unicode: (None, str, Unicode2) = None,
-                 latex_math: (None, str) = None) -> None:
+                 latex: (None, str) = None) -> None:
         super().__init__(s=s, text_style=text_styles.sans_serif_bold, plaintext=plaintext,
-                         unicode=unicode, latex_math=latex_math)
+                         unicode=unicode, latex=latex)
 
 
 class Header(ComposableBlockSequence):
     def __init__(self, s: (str, None) = None, plaintext: (None, str, Plaintext) = None,
                  unicode: (None, str, Unicode2) = None,
-                 latex_math: (None, str) = None, level: (None, int) = None) -> None:
-        content = SansSerifBold(s=s, plaintext=plaintext, unicode=unicode, latex_math=latex_math)
+                 latex: (None, str) = None, level: (None, int) = None) -> None:
+        content = SansSerifBold(s=s, plaintext=plaintext, unicode=unicode, latex=latex)
         level = prioritize_value(level, 1)
         verify(assertion=0 < level < 4, msg='level is only supported between 1 and 3 inclusive.')
         self._level = level
         start_tag = None
         end_tag = None
         if level == 1:
-            start_tag = ComposableText(plaintext='\n# ', unicode='\n# ', latex_math='\\section{')
-            end_tag = ComposableText(plaintext='\n', unicode='\n', latex_math='}')
+            start_tag = ComposableText(plaintext='\n# ', unicode='\n# ', latex='\\section{')
+            end_tag = ComposableText(plaintext='\n', unicode='\n', latex='}')
         elif level == 2:
             start_tag = ComposableText(plaintext='\n## ', unicode='\n## ',
-                                       latex_math='\\subsection{')
-            end_tag = ComposableText(plaintext='\n', unicode='\n', latex_math='}')
+                                       latex='\\subsection{')
+            end_tag = ComposableText(plaintext='\n', unicode='\n', latex='}')
         elif level == 3:
             start_tag = ComposableText(plaintext='\n### ', unicode='\n### ',
-                                       latex_math='\\subsubsection{')
-            end_tag = ComposableText(plaintext='\n', unicode='\n', latex_math='}')
+                                       latex='\\subsubsection{')
+            end_tag = ComposableText(plaintext='\n', unicode='\n', latex='}')
         super().__init__(content=[content], start_tag=start_tag, end_tag=end_tag)
 
     @property
@@ -729,17 +729,17 @@ class Header(ComposableBlockSequence):
 class SansSerifNormal(StyledText):
     def __init__(self, s: (str, None) = None, plaintext: (None, str, Plaintext) = None,
                  unicode: (None, str, Unicode2) = None,
-                 latex_math: (None, str) = None) -> None:
+                 latex: (None, str) = None) -> None:
         super().__init__(s=s, text_style=text_styles.sans_serif_normal, plaintext=plaintext,
-                         unicode=unicode, latex_math=latex_math)
+                         unicode=unicode, latex=latex)
 
 
 class SansSerifItalic(StyledText):
     def __init__(self, s: (str, None) = None, plaintext: (None, str, Plaintext) = None,
                  unicode: (None, str, Unicode2) = None,
-                 latex_math: (None, str) = None) -> None:
+                 latex: (None, str) = None) -> None:
         super().__init__(s=s, text_style=text_styles.sans_serif_italic, plaintext=plaintext,
-                         unicode=unicode, latex_math=latex_math)
+                         unicode=unicode, latex=latex)
 
 
 text_dict.in2 = SansSerifNormal(s='in')
@@ -752,31 +752,31 @@ text_dict.the = SansSerifNormal(s='the')
 
 class ScriptNormal(StyledText):
     def __init__(self, plaintext: str, unicode: (None, str) = None,
-                 latex_math: (None, str) = None) -> None:
+                 latex: (None, str) = None) -> None:
         super().__init__(text_style=text_styles.script_normal, plaintext=plaintext,
-                         unicode=unicode, latex_math=latex_math)
+                         unicode=unicode, latex=latex)
 
 
 class SerifItalic(StyledText):
     def __init__(self, s: (None, str) = None, plaintext: (None, str) = None,
                  unicode: (None, str) = None,
-                 latex_math: (None, str) = None) -> None:
+                 latex: (None, str) = None) -> None:
         super().__init__(s=s, text_style=text_styles.serif_italic, plaintext=plaintext,
-                         unicode=unicode, latex_math=latex_math)
+                         unicode=unicode, latex=latex)
 
 
 class SerifNormal(StyledText):
     def __init__(self, plaintext: str, unicode: (None, str) = None,
-                 latex_math: (None, str) = None) -> None:
+                 latex: (None, str) = None) -> None:
         super().__init__(text_style=text_styles.serif_normal, plaintext=plaintext,
-                         unicode=unicode, latex_math=latex_math)
+                         unicode=unicode, latex=latex)
 
 
 class Subscript(StyledText):
     def __init__(self, plaintext: str, unicode: (None, str) = None,
-                 latex_math: (None, str) = None) -> None:
+                 latex: (None, str) = None) -> None:
         super().__init__(text_style=text_styles.subscript, plaintext=plaintext,
-                         unicode=unicode, latex_math=latex_math)
+                         unicode=unicode, latex=latex)
 
 
 def wrap_text(text):
@@ -887,7 +887,7 @@ def subscriptify(text: (str, ComposableText) = '', encoding: Encoding = encoding
                 # of the Unicode string.
                 text = text.rep_as_plaintext()
             return unicode_utilities.unicode_subscriptify(text)
-        case encodings.latex_math:
+        case encodings.latex:
             return f'_{{{text}}}'
         case _:
             return text
@@ -1949,7 +1949,7 @@ class SymbolicObject:
         Definition:
         -----------
         Two symbolic-objects o₁ and o₂ are symbol-equivalent if and only if:
-         1. o₁ and o₂ have symbol-equivalent theories.¹
+         1. o₁ and o₂ have symbol-equivalent theory_packages.¹
          2. o₁ and o₂ have equal symbols.²
 
         ¹. Theories are symbolic-objects. This recursive condition
@@ -1960,7 +1960,7 @@ class SymbolicObject:
         -----
         The symbol-equivalence relation allows to compare any pair of symbolic-objcts, including:
          * Both theoretical and atheoretical objects.
-         * Symbolic-objcts linked to distinct theories.
+         * Symbolic-objcts linked to distinct theory_packages.
         """
         # A theoretical-object can only be compared with a theoretical-object
         assert isinstance(o2, SymbolicObject)
@@ -2150,7 +2150,7 @@ class TheoreticalObject(SymbolicObject):
          1. o1 and o₂ are symbolic-equivalent.
         Unnecessary but valid conditions:
          2. o1 and o₂ are of the same theory class (simple-objct, relation, etc.)
-         3. o1 and o₂ are constitutive of symbolic-equivalent theories.
+         3. o1 and o₂ are constitutive of symbolic-equivalent theory_packages.
          4. o1 and o₂ have equal defining-properties (e.g. arity for a relation).
 
         For the special case when o1 and o₂ are both formulae,
@@ -2729,8 +2729,8 @@ class Formula(TheoreticalObject):
         To do list
         ----------
         We would not need the concept of formula-equivalence if we would
-        forbid the instantiation of "duplicate" formulae in theories.
-        TODO: Consider the pros and cons of forbiding "duplicate" formulae in theories
+        forbid the instantiation of "duplicate" formulae in theory_packages.
+        TODO: Consider the pros and cons of forbiding "duplicate" formulae in theory_packages
             and removing formula-equivalence as a concept from Punctilious.
 
         """
@@ -2974,7 +2974,7 @@ class SimpleObjctDict(collections.UserDict):
         if self._falsehood is None:
             self._falsehood = self.declare(
                 nameset=NameSet(
-                    symbol=StyledText(unicode='⊥', latex_math='\\bot',
+                    symbol=StyledText(unicode='⊥', latex='\\bot',
                                       plaintext='false',
                                       text_style=text_styles.serif_normal),
                     name=ComposableText(plaintext='false'),
@@ -3005,7 +3005,7 @@ class SimpleObjctDict(collections.UserDict):
         if self._truth is None:
             self._truth = self.declare(nameset=
             NameSet(
-                symbol=StyledText(unicode='⊤', latex_math='\\top', plaintext='true',
+                symbol=StyledText(unicode='⊤', latex='\\top', plaintext='true',
                                   text_style=text_styles.serif_normal),
                 name=ComposableText(plaintext='true'),
                 explicit_name=ComposableText(plaintext='truth'),
@@ -3163,7 +3163,7 @@ class Statement(TheoreticalObject):
         Abridged property: s.t
 
         This property may only be set once. In effect, moving statements
-        between theories would lead to unstable theories."""
+        between theory_packages would lead to unstable theory_packages."""
         return self._theory
 
     @theory.setter
@@ -3827,7 +3827,7 @@ class DirectDefinitionInference(FormulaStatement):
     Definition:
     A theoretical-statement that states that x = some other theoretical-object.
     When an object is defined like this, it means that for every formula
-    where x is present, the same formula with the substitution of x by x' can be substituted in all theories.
+    where x is present, the same formula with the substitution of x by x' can be substituted in all theory_packages.
     TODO: QUESTION: Should we create a base "Alias" object that is distinct from simple-objct???
     XXXXXXX
     """
@@ -4342,7 +4342,7 @@ class TheoryElaborationSequence(TheoreticalObject):
         echo = prioritize_value(echo, configuration.echo_default, False)
         if not self._interpretation_disclaimer:
             self.take_note(
-                'By design, punctilious assures the syntactical correctness of theories, but does not perform any '
+                'By design, punctilious assures the syntactical correctness of theory_packages, but does not perform any '
                 'semantic verification. Therefore, the usage of inference-rules that interpret content (i.e. '
                 'axiom-interpretation and definition-interpretation) is critically dependent on the correctness of '
                 'the content translation performed by the theory author, from axiom or definition natural language, '
@@ -4519,8 +4519,8 @@ class TheoryElaborationSequence(TheoreticalObject):
         Note:
         -----
         The theory-chain set is distinct from theory-dependency set.
-        The theory-chain informs of the parent theories whose statements are considered valid in the current theory.
-        Distinctively, theories may be referenced by meta-theorizing, or in hypothesis, or possibly other use cases.
+        The theory-chain informs of the parent theory_packages whose statements are considered valid in the current theory.
+        Distinctively, theory_packages may be referenced by meta-theorizing, or in hypothesis, or possibly other use cases.
         """
         visited = set() if visited is None else visited
         t = self
@@ -5044,7 +5044,7 @@ class RelationDict(collections.UserDict):
                 arity=2,
                 formula_rep=Formula.infix,
                 signal_proposition=True,
-                symbol=SerifItalic(plaintext='<==>', unicode='⟺', latex_math='\\iff'),
+                symbol=SerifItalic(plaintext='<==>', unicode='⟺', latex='\\iff'),
                 auto_index=False,
                 dashed_name='biconditional',
                 name='biconditional')
@@ -5062,7 +5062,7 @@ class RelationDict(collections.UserDict):
         if self._conjunction is None:
             self._conjunction = self.declare(
                 arity=2, formula_rep=Formula.infix, signal_proposition=True,
-                symbol=SerifItalic(plaintext='and', unicode='∧', latex_math='\\land'),
+                symbol=SerifItalic(plaintext='and', unicode='∧', latex='\\land'),
                 auto_index=False,
                 name='and',
                 explicit_name='conjunction')
@@ -5082,7 +5082,7 @@ class RelationDict(collections.UserDict):
                 arity=2, formula_rep=Formula.infix,
                 signal_proposition=True,
                 auto_index=False,
-                symbol=SerifItalic(unicode='∨', latex_math='\\lor', plaintext='or'),
+                symbol=SerifItalic(unicode='∨', latex='\\lor', plaintext='or'),
                 name='or',
                 explicit_name='disjunction')
         return self._disjunction
@@ -5140,7 +5140,7 @@ class RelationDict(collections.UserDict):
             self._implication = self.declare(
                 arity=2, formula_rep=Formula.infix,
                 signal_proposition=True,
-                symbol=SerifItalic(plaintext='==>', unicode='⟹', latex_math=r'\implies'),
+                symbol=SerifItalic(plaintext='==>', unicode='⟹', latex=r'\implies'),
                 auto_index=False,
                 name='implication',
                 explicit_name='logical implication')
@@ -5186,7 +5186,7 @@ class RelationDict(collections.UserDict):
                 arity=2,
                 formula_rep=Formula.infix,
                 signal_proposition=True,
-                symbol=SerifItalic(plaintext='neq', unicode='≠', latex_math='\\neq'),
+                symbol=SerifItalic(plaintext='neq', unicode='≠', latex='\\neq'),
                 auto_index=False,
                 acronym='neq',
                 name='not equal')
@@ -5239,7 +5239,7 @@ class RelationDict(collections.UserDict):
                 arity=1,
                 formula_rep=Formula.prefix,
                 signal_proposition=True,
-                symbol=SerifItalic(plaintext='not', unicode='¬', latex_math='\\neg'),
+                symbol=SerifItalic(plaintext='not', unicode='¬', latex='\\neg'),
                 auto_index=False,
                 abridged_name='not',
                 name='negation')
@@ -6507,7 +6507,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         replaced by their corresponding substitution values in O.
 
         Warning:
-        To avoid inconsistent theories, one must be cautious
+        To avoid inconsistent theory_packages, one must be cautious
         with variable manipulations. In effect, the proposition:
             ((2n + 4) = 2(n + 2))
         may lead to inconsistencies following variable-substitution
@@ -6578,7 +6578,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         replaced by their corresponding substitution values in O.
 
         Warning:
-        To avoid inconsistent theories, one must be cautious
+        To avoid inconsistent theory_packages, one must be cautious
         with variable manipulations. In effect, the proposition:
             ((2n + 4) = 2(n + 2))
         may lead to inconsistencies following variable-substitution
@@ -7121,7 +7121,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         replaced by their corresponding substitution values in O.
 
         Warning:
-        To avoid inconsistent theories, one must be cautious
+        To avoid inconsistent theory_packages, one must be cautious
         with variable manipulations. In effect, the proposition:
             ((2n + 4) = 2(n + 2))
         may lead to inconsistencies following variable-substitution
@@ -7163,7 +7163,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         replaced by their corresponding substitution values in O.
 
         Warning:
-        To avoid inconsistent theories, one must be cautious
+        To avoid inconsistent theory_packages, one must be cautious
         with variable manipulations. In effect, the proposition:
             ((2n + 4) = 2(n + 2))
         may lead to inconsistencies following variable-substitution

@@ -14,4 +14,4 @@ class TestSansSerifBold(TestCase):
             compo.rep(encoding=pu.encodings.unicode))
         self.assertEqual(
             '\\boldsymbol\\mathsf{the quick brown fox jumps over the lazy dog. 0123456789!}}',
-            compo.rep(encoding=pu.encodings.latex_math))
+            compo.rep(encoding=pu.encodings.latex))

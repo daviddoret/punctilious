@@ -23,7 +23,7 @@ element_of = u.r.declare(
 fa1 = ft.i.axiom_interpretation.infer_statement(axiom_02,
                                                 u.f(element_of, class_of_classes, class_of_classes))
 
-nla_04 = ft.include_axiom(u.declare_axiom('The theory-class is the class of all theories'))
+nla_04 = ft.include_axiom(u.declare_axiom('The theory-class is the class of all theory_packages'))
 theory_class = u.o.declare('theory-class')
 fa2b = ft.i.axiom_interpretation.infer_statement(axiom_02,
                                                  u.f(element_of, theory_class, class_of_classes))
@@ -164,8 +164,8 @@ define_biconditional()
 
 nla_40 = ft.include_axiom(u.declare_axiom(natural_language=
                                           'If T is a theory, and both P is valid and ¬P is valid in T, '
-                                          'then this theory is an element of contradictory-theories class.'))
-contradictory_theories = u.o.declare('contradictory-theories')
+                                          'then this theory is an element of contradictory-theory_packages class.'))
+contradictory_theories = u.o.declare('contradictory-theory_packages')
 contradictory_statements = u.o.declare('contradictory-statement')
 with u.v('φ') as phi:
     ft.i.axiom_interpretation.infer_statement(nla_40,

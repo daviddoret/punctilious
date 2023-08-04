@@ -21,10 +21,10 @@ class TestText(TestCase):
         self.assertEqual(
             '𝐓𝐡𝐞 𝐪𝐮𝐢𝐜𝐤 𝐛𝐫𝐨𝐰𝐧 𝐟𝐨𝐱 𝐣𝐮𝐦𝐩𝐬 𝐨𝐯𝐞𝐫 𝐭𝐡𝐞 𝐥𝐚𝐳𝐲 𝐝𝐨𝐠 𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗!',
             x_unicode)
-        x_latex_math = x.rep(encoding=pu.encodings.latex_math)
+        x_latex = x.rep(encoding=pu.encodings.latex)
         self.assertEqual(
             '\\mathbf{The quick brown fox jumps over the lazy dog 0123456789!}',
-            x_latex_math)
+            x_latex)
         x = pu.ComposableText(pangram, text_style=pu.text_styles.serif_normal)
         self.assertEqual(
             'The quick brown fox jumps over the lazy dog 0123456789!',
@@ -34,7 +34,7 @@ class TestText(TestCase):
             x.rep(pu.encodings.unicode))
         self.assertEqual(
             '\\mathnormal{The quick brown fox jumps over the lazy dog 0123456789!}',
-            x.rep(pu.encodings.latex_math))
+            x.rep(pu.encodings.latex))
         x = pu.ComposableText(pangram, pu.text_styles.double_struck)
         self.assertEqual(
             'The quick brown fox jumps over the lazy dog 0123456789!',
@@ -44,7 +44,7 @@ class TestText(TestCase):
             x.rep(pu.encodings.unicode))
         self.assertEqual(
             '\\mathbb{The quick brown fox jumps over the lazy dog 0123456789!}',
-            x.rep(pu.encodings.latex_math))
+            x.rep(pu.encodings.latex))
 
     def test_equality(self):
         t1 = pu.ComposableText(plaintext='foo')

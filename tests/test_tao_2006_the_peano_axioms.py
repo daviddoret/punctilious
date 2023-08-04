@@ -1,7 +1,7 @@
 import unittest
-import theories.tao_2006_the_peano_axioms as tpa
+import theory_packages.tao_2006_the_peano_axioms as tpa
 
-# from theories.tao_2006_the_peano_axioms import p
+# from theory_packages.tao_2006_the_peano_axioms import p
 
 u = tpa.u
 t = tpa.t

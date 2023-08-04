@@ -22,11 +22,11 @@ class TestTitle(TestCase):
                          title2.rep_title(encoding=pu.encodings.unicode, cap=True))
         self.assertEqual('𝗽𝗿𝗼𝗽. 𝟭.𝟭.𝟮', title2.rep_ref(encoding=pu.encodings.unicode))
         self.assertEqual('\\boldsymbol\\mathsf{proposition}} \\boldsymbol\\mathsf{1.1.2}}',
-                         title2.rep_title(encoding=pu.encodings.latex_math))
+                         title2.rep_title(encoding=pu.encodings.latex))
         self.assertEqual('\\boldsymbol\\mathsf{Proposition}} \\boldsymbol\\mathsf{1.1.2}}',
-                         title2.rep_title(encoding=pu.encodings.latex_math, cap=True))
+                         title2.rep_title(encoding=pu.encodings.latex, cap=True))
         self.assertEqual('\\boldsymbol\\mathsf{prop.}} \\boldsymbol\\mathsf{1.1.2}}',
-                         title2.rep_ref(encoding=pu.encodings.latex_math))
+                         title2.rep_ref(encoding=pu.encodings.latex))
 
         complement3 = random_data.random_sentence()
         title3 = pu.TitleOBSOLETE(f'1.1.3', pu.title_categories.lemma, subtitle=complement3)

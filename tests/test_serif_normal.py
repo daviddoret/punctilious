@@ -14,4 +14,4 @@ class TestSerifNormal(TestCase):
         self.assertEqual('the quick brown fox jumps over the lazy dog. 0123456789!',
                          compo.rep(encoding=pu.encodings.unicode))
         self.assertEqual('\\mathnormal{the quick brown fox jumps over the lazy dog. 0123456789!}',
-                         compo.rep(encoding=pu.encodings.latex_math))
+                         compo.rep(encoding=pu.encodings.latex))

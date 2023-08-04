@@ -25,24 +25,24 @@ class TestFormula(TestCase):
         self.assertEqual('𝑟₁(𝑜₁)', str(phi1.rep_formula(encoding=pu.encodings.unicode)))
         self.assertEqual(
             '\\mathit{r}_{1}\\left(\\mathit{o}_{1}\\right)',
-            str(phi1.rep_formula(encoding=pu.encodings.latex_math)))
+            str(phi1.rep_formula(encoding=pu.encodings.latex)))
         self.assertEqual('r2(o1)', str(phi2.rep_formula(encoding=pu.encodings.plaintext)))
         self.assertEqual('𝑟₂(𝑜₁)', str(phi2.rep_formula(encoding=pu.encodings.unicode)))
         self.assertEqual(
             '\\mathit{r}_{2}\\left(\\mathit{o}_{1}\\right)',
-            str(phi2.rep_formula(encoding=pu.encodings.latex_math)))
+            str(phi2.rep_formula(encoding=pu.encodings.latex)))
         self.assertEqual('(o1)r3', str(phi3.rep_formula(encoding=pu.encodings.plaintext)))
         self.assertEqual('(𝑜₁)𝑟₃', str(phi3.rep_formula(encoding=pu.encodings.unicode)))
         self.assertEqual(
             '\\left(\\mathit{o}_{1}\\right)\\mathit{r}_{3}',
-            str(phi3.rep_formula(encoding=pu.encodings.latex_math)))
+            str(phi3.rep_formula(encoding=pu.encodings.latex)))
         self.assertEqual('r4(o1, o2)', str(phi4.rep_formula(encoding=pu.encodings.plaintext)))
         self.assertEqual('𝑟₄(𝑜₁, 𝑜₂)', str(phi4.rep_formula(encoding=pu.encodings.unicode)))
         self.assertEqual(
             '\\mathit{r}_{4}\\left(\\mathit{o}_{1}, \\mathit{o}_{2}\\right)',
-            str(phi4.rep_formula(encoding=pu.encodings.latex_math)))
+            str(phi4.rep_formula(encoding=pu.encodings.latex)))
         self.assertEqual('(o1 r5 o2)', str(phi5.rep_formula(encoding=pu.encodings.plaintext)))
         self.assertEqual('(𝑜₁ 𝑟₅ 𝑜₂)', str(phi5.rep_formula(encoding=pu.encodings.unicode)))
         self.assertEqual(
             '\\left(\\mathit{o}_{1} \\mathit{r}_{5} \\mathit{o}_{2}\\right)',
-            str(phi5.rep_formula(encoding=pu.encodings.latex_math)))
+            str(phi5.rep_formula(encoding=pu.encodings.latex)))

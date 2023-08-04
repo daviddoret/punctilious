@@ -388,25 +388,25 @@ class LocaleEnUs(Locale):
     @property
     def maps_to(self) -> StyledText:
         if self._maps_to is None:
-            self._maps_to = SansSerifNormal(plaintext='|-->', unicode='↦', latex_math='\\mapsto')
+            self._maps_to = SansSerifNormal(plaintext='|-->', unicode='↦', latex='\\mapsto')
         return self._maps_to
 
     @property
     def paragraph_end(self) -> StyledText:
         if self._paragraph_end is None:
-            self._paragraph_end = SansSerifNormal(plaintext='\n', unicode='\n', latex_math='')
+            self._paragraph_end = SansSerifNormal(plaintext='\n', unicode='\n', latex='')
         return self._paragraph_end
 
     @property
     def paragraph_start(self) -> StyledText:
         if self._paragraph_start is None:
-            self._paragraph_start = SansSerifNormal(plaintext='', unicode='', latex_math='')
+            self._paragraph_start = SansSerifNormal(plaintext='', unicode='', latex='')
         return self._paragraph_start
 
     @property
     def qed(self) -> StyledText:
         if self._qed is None:
-            self._qed = SansSerifNormal(plaintext='QED', unicode='∎', latex_math='\\qed')
+            self._qed = SansSerifNormal(plaintext='QED', unicode='∎', latex='\\qed')
         return self._qed
 
 

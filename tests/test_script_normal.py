@@ -15,4 +15,4 @@ class TestScriptNormal(TestCase):
             '𝓉𝒽ℯ 𝓆𝓊𝒾𝒸𝓀 𝒷𝓇ℴ𝓌𝓃 𝒻ℴ𝓍 𝒿𝓊𝓂𝓅𝓈 ℴ𝓋ℯ𝓇 𝓉𝒽ℯ 𝓁𝒶𝓏𝓎 𝒹ℴℊ. 𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫!',
             compo.rep(encoding=pu.encodings.unicode))
         self.assertEqual('\\mathcal{the quick brown fox jumps over the lazy dog. 0123456789!}',
-                         compo.rep(encoding=pu.encodings.latex_math))
+                         compo.rep(encoding=pu.encodings.latex))

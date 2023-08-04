@@ -5,7 +5,7 @@
 import pyvis
 import textwrap
 import punctilious as pu
-import theories.tao_2006_the_peano_axioms as tao_2006
+import theory_packages.tao_2006_the_peano_axioms as tao_2006
 
 t = tao_2006.Tao2006ThePeanoAxioms().develop()
 pu.configuration.encoding = pu.encodings.plaintext
@@ -88,7 +88,8 @@ g = pyvis.network.Network(directed=True)
 export_pyvis_graph(pyvis_graph=g, o=t, encoding=pu.encodings.unicode)
 g.toggle_physics(True)
 g.show_buttons(filter_=['physics'])
-g.show('test.html', notebook=False)
+g.save_graph()
+g.show('tao_2006_the_peano_axioms_graph_statement_dependencies.html', notebook=False)
 # subax1 = plt.subplot(121)
 # nx.draw(g, with_labels=True, font_weight='bold')
 # plt.show()
