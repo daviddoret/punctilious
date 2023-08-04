@@ -1047,7 +1047,7 @@ class PyvisConfiguration:
         self.axiom_inclusion_args = {'shape': 'box', 'color': '#81C784'}
         self.definition_inclusion_args = {'shape': 'box', 'color': '#90CAF9'}
         self.inferred_statement_args = {'shape': 'box', 'color': '#FFF59D'}
-        self.label_wrap_size = 16
+        self.label_wrap_size = 20
         self.title_wrap_size = 32
 
 
@@ -2483,8 +2483,15 @@ class TheoreticalObject(SymbolicObject):
                                                        label_wrap_size=label_wrap_size,
                                                        title_wrap_size=title_wrap_size)
         if output_path is not None:
+            pyvis_graph.options.physics.solver = 'barnesHut'
+            pyvis_graph.options.physics.barnesHut.gravitationalConstant = -5900
+            pyvis_graph.options.physics.barnesHut.centralGravity = 0.35
+            pyvis_graph.options.physics.barnesHut.springLength = 50
+            pyvis_graph.options.physics.barnesHut.springConstant = 0.08
+            pyvis_graph.options.physics.barnesHut.damping = 0.38
+            pyvis_graph.options.physics.barnesHut.avoidOverlap = 0.49
             pyvis_graph.toggle_physics(True)
-            pyvis_graph.show_buttons(filter_=['physics'])
+            # pyvis_graph.show_buttons(filter_=['physics'])
             pyvis_graph.save_graph(output_path)
 
     def rep_declaration(self, encoding: (None, Encoding) = None) -> str:

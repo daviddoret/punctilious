@@ -15,7 +15,9 @@ pu.configuration.echo_default = False
 # graph_symbolic_object(g, t)
 
 # g = pyvis.network.Network(directed=True)
-output_path = '../theory_exports/tao_2006_the_peano_axioms_interactive_graph_statement_dependencies.html'
+output_path = '../theory_exports/tao_2006_the_peano_axioms_interactive_graph_plaintext.html'
+t1.export_interactive_graph(encoding=pu.encodings.plaintext, output_path=output_path)
+output_path = '../theory_exports/tao_2006_the_peano_axioms_interactive_graph_unicode.html'
 t1.export_interactive_graph(encoding=pu.encodings.unicode, output_path=output_path)
 # g.show('../theory_exports/tao_2006_the_peano_axioms_interactive_graph_statement_dependencies.html',notebook=False)
 # subax1 = plt.subplot(121)
