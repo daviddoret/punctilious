@@ -14,9 +14,9 @@ pu.configuration.echo_default = False
 
 class NewConf:
     def __init__(self):
-        self.axiom_inclusion_args = {'shape': 'box', 'color': '#ddee00'}
-        self.definition_inclusion_args = {'shape': 'box', 'color': '#dd00ee'}
-        self.inferred_statement_args = {'shape': 'box', 'color': '#eedd00'}
+        self.axiom_inclusion_args = {'shape': 'box', 'color': '#81C784'}
+        self.definition_inclusion_args = {'shape': 'box', 'color': '#90CAF9'}
+        self.inferred_statement_args = {'shape': 'box', 'color': '#FFF59D'}
         self.label_wrap_size = 16
         self.title_wrap_size = 32
 
