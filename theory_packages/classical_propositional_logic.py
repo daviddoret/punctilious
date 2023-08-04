@@ -1,3 +1,8 @@
+"""
+
+Status: Restart from scratch.
+"""
+
 import core
 
 t = core.TheoryElaborationSequence('classical propositional logic')

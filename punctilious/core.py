@@ -7,6 +7,7 @@ import repm
 import contextlib
 import abc
 import collections
+import pyvis
 import networkx as nx
 import unicode_utilities
 import unidecode
@@ -1036,6 +1037,21 @@ class Configuration:
 
 
 configuration = Configuration()
+
+
+class PyvisConfiguration:
+    """pyvis package is used to export graphs as interactive HTML pages.
+    This class stores the corresponding configuration settings."""
+
+    def __init__(self):
+        self.axiom_inclusion_args = {'shape': 'box', 'color': '#81C784'}
+        self.definition_inclusion_args = {'shape': 'box', 'color': '#90CAF9'}
+        self.inferred_statement_args = {'shape': 'box', 'color': '#FFF59D'}
+        self.label_wrap_size = 16
+        self.title_wrap_size = 32
+
+
+pyvis_configuration = PyvisConfiguration()
 
 
 def unpack_formula(o: (TheoreticalObject, Formula, FormulaStatement)) -> Formula:
@@ -2404,6 +2420,72 @@ class TheoreticalObject(SymbolicObject):
 
     def compose_declaration(self) -> collections.abc.Generator[Composable, None, None]:
         pass
+
+    def export_interactive_graph(self, output_path: str, pyvis_graph: (None, pyvis.network) = None,
+                                 encoding: (None, Encoding) = None,
+                                 label_wrap_size: (None, int) = None,
+                                 title_wrap_size: (None, int) = None) -> None:
+        """Export a theoretical-object as a statement dependency graph in an HTML page with visJS, thanks to the pyvis package."""
+        pyvis_graph = prioritize_value(pyvis_graph, pyvis.network.Network(directed=True))
+        label_wrap_size = prioritize_value(label_wrap_size, pyvis_configuration.label_wrap_size)
+        title_wrap_size = prioritize_value(title_wrap_size, pyvis_configuration.title_wrap_size)
+        pyvis_graph: pyvis.network.Network
+        node_id = self.rep_symbol(encoding=encodings.plaintext)
+        if node_id not in pyvis_graph.get_nodes():
+            kwargs = None
+            if is_in_class(self, classes.axiom_inclusion):
+                self: AxiomInclusion
+                kwargs = pyvis_configuration.axiom_inclusion_args
+                ref = '' if self.ref is None else f'({self.rep_ref(encoding=encoding)}) '
+                bold = True if ref != '' else False
+                node_label = f'{self.rep_symbol(encoding=encoding)} {ref}: {self.rep_natural_language(encoding=encoding)}'
+                if label_wrap_size is not None:
+                    node_label = '\n'.join(textwrap.wrap(text=node_label, width=label_wrap_size))
+                pyvis_graph.add_node(node_id, label=node_label, **kwargs)
+            elif is_in_class(self, classes.definition_inclusion):
+                self: DefinitionInclusion
+                kwargs = pyvis_configuration.definition_inclusion_args
+                ref = '' if self.ref is None else f'({self.rep_ref(encoding=encoding)}) '
+                bold = True if ref != '' else False
+                node_label = f'{self.rep_symbol(encoding=encoding)} {ref}: {self.rep_natural_language(encoding=encoding)}'
+                if label_wrap_size is not None:
+                    node_label = '\n'.join(textwrap.wrap(text=node_label, width=label_wrap_size))
+                pyvis_graph.add_node(node_id, label=node_label, **kwargs)
+            elif is_in_class(self, classes.inferred_proposition):
+                self: InferredStatement
+                kwargs = pyvis_configuration.inferred_statement_args
+                ref = '' if self.ref is None else f'({self.rep_ref(encoding=encoding)}) '
+                bold = True if ref != '' else False
+                node_label = f'{self.rep_symbol(encoding=encoding)} {ref}: {self.rep_formula(encoding=encoding)}'
+                if label_wrap_size is not None:
+                    node_label = '\n'.join(textwrap.wrap(text=node_label, width=label_wrap_size))
+                node_title = self.rep_report(encoding=encoding, proof=True)
+                if title_wrap_size is not None:
+                    node_title = '\n'.join(textwrap.wrap(text=node_title, width=title_wrap_size))
+                pyvis_graph.add_node(node_id, label=node_label, title=node_title,
+                                     labelHighlightBold=bold, **kwargs)
+                for parameter in self.parameters:
+                    parameter.export_interactive_graph(output_path=None, pyvis_graph=pyvis_graph,
+                                                       encoding=encoding,
+                                                       label_wrap_size=label_wrap_size,
+                                                       title_wrap_size=title_wrap_size)
+                    parameter_node_id = parameter.rep_symbol(encoding=encodings.plaintext)
+                    if parameter_node_id in pyvis_graph.get_nodes():
+                        pyvis_graph.add_edge(source=parameter_node_id, to=node_id)
+        if is_in_class(self, classes.theory_elaboration):
+            self: TheoryElaborationSequence
+            for statement in self.statements:
+                # Bug fix: sections should not be TheoreticalObjects but DecorativeObjects!
+                if not isinstance(statement, Section):
+                    statement.export_interactive_graph(output_path=None,
+                                                       pyvis_graph=pyvis_graph,
+                                                       encoding=encoding,
+                                                       label_wrap_size=label_wrap_size,
+                                                       title_wrap_size=title_wrap_size)
+        if output_path is not None:
+            pyvis_graph.toggle_physics(True)
+            pyvis_graph.show_buttons(filter_=['physics'])
+            pyvis_graph.save_graph(output_path)
 
     def rep_declaration(self, encoding: (None, Encoding) = None) -> str:
         """TODO: _declaration must be reserved to TheoreticalObjcts. SymbolObjcts should use a distinct verb to mean "report".

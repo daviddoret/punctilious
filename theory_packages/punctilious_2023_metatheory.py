@@ -1,3 +1,8 @@
+"""
+
+Status: Restart from scratch.
+"""
+
 """foundation-system-1 is one possible foundation system for Punctilious."""
 import core
 import repm
