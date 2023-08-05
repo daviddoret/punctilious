@@ -10,7 +10,7 @@ Let "0", "natural-number", "1", "2", "3", "4", "5", "6" be simple-objects in U1.
 
 # Relations
 Let "++" be a unary-relation in U1.
-Let "=", "and", "is-a", "neq", "==>" be binary-relations in U1.
+Let "neq", "=", "is-a", "==>", "and" be binary-relations in U1.
 
 # Inference rules
 The following inference rules are considered valid under this theory:

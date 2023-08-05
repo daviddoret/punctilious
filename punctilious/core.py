@@ -6681,8 +6681,49 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.variable_substitution
 
 
+class AxiomInterpretationInclusion(InferenceRuleInclusion):
+    """
+
+    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
+    is sufficient to do the job. The key advantage of specializing this class is to provide
+    user-friendly type hints and method parameters documentation for that particular
+    inference-rule. This may be justified for well-known inference-rules.
+    """
+
+    def __init__(self,
+                 t: TheoryElaborationSequence,
+                 echo: (None, bool) = None,
+                 proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.axiom_interpretation
+        dashed_name = 'axiom-interpretation'
+        acronym = 'ai'
+        abridged_name = 'ax.-inter.'
+        name = 'axiom interpretation'
+        explicit_name = 'axiom interpretation inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo, proof=proof)
+
+    def infer_formula(self, axiom: AxiomInclusion = None, *args, echo: (None, bool) = None):
+        return super().infer_formula(axiom, *args, echo=echo)
+
+    def infer_statement(self, axiom: AxiomInclusion = None,
+                        *args,
+                        nameset: (None, str, NameSet) = None,
+                        ref: (None, str) = None,
+                        cat: (None, TitleCategoryOBSOLETE) = None,
+                        subtitle: (None, str) = None,
+                        echo: (None, bool) = None) -> InferredStatement:
+        return super().infer_statement(axiom, *args, nameset=nameset, ref=ref, cat=cat,
+                                       subtitle=subtitle,
+                                       echo=echo)
+
+
 class InferenceRuleInclusionDict(collections.UserDict):
-    """A dictionary that exposes well-known objects as properties.
+    """The repository of inference-rules included in a theory. In complement, this object exposes
+    well-known inference-rules as easily accessible python properties. Accessing these properties
+    automatically include (aka recognizes as well-founded and valid) the corresponding
+    inference-rule in the current theory.
 
     """
 
@@ -6751,10 +6792,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
                formula-statement complies / interprets properly its related contentual-axiom.
                """
         if self._axiom_interpretation is None:
-            self._axiom_interpretation = InferenceRuleInclusion(
-                t=self.t,
-                i=self.t.u.i.axiom_interpretation,
-                name='axiom interpretation')
+            self._axiom_interpretation = AxiomInterpretationInclusion(t=self.t)
         return self._axiom_interpretation
 
     @property
