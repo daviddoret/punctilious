@@ -41,4 +41,4 @@ class TestTheoryElaboration(TestCase):
 
         hypothesis = robust_theory.pose_hypothesis(
             hypothetical_proposition=u.f(r1, o2, o3))
-        hypothesis_theory = hypothesis.hypothetical_t
+        hypothesis_theory = hypothesis.hypothetical_theory

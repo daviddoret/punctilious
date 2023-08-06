@@ -4788,25 +4788,73 @@ class Hypothesis(Statement):
             theory=t, cat=category, nameset=nameset,
             subtitle=subtitle, dashed_name=dashed_name, echo=False)
         super()._declare_class_membership(declarative_class_list.hypothesis)
-        self.hypothetical_proposition_formula = hypothetical_formula
-        self.hypothetical_t = t.universe_of_discourse.t(
+        self._hypothetical_formula = hypothetical_formula
+        # When a hypothesis is posed in a theory 𝒯₁,
+        # ...the hypothesis is declared (aka postulated) as an axiom in the universe-of-discourse,
+        self._hypothetical_axiom_declaration = self.universe_of_discourse.declare_axiom(
+            f'By this hypothesis, assume {hypothetical_formula.rep_formula()} is true.')
+        # ...a hypothetical-theory 𝒯₂ is created to store the hypothesis elaboration,
+        self._hypothetical_theory = t.universe_of_discourse.t(
             extended_theory=t,
             extended_theory_limit=self
         )
-        # Declare the hypothesis as an axiom in the universe-of-discourse.
-        self.hypothetical_axiom_declaration = self.universe_of_discourse.declare_axiom(
-            f'By this hypothesis, assume {hypothetical_formula.rep_formula()} is true.')
-        # Postulate that axiom in the hypothetical-theory.
-        self.hypothetical_axiom_inclusion = self.hypothetical_t.include_axiom(
+        # ...the axiom is included in 𝒯₂,
+        self._hypothetical_axiom_inclusion = self.hypothetical_theory.include_axiom(
             self.hypothetical_axiom_declaration)
-        # Interpret the hypothesis formula from the axiom.
-        self.proposition = self.hypothetical_t.i.axiom_interpretation.infer_statement(
-            self.hypothetical_axiom_inclusion,
-            hypothetical_formula)
+        # ...and the hypothetical-proposition is posed as an interpretation of that axiom in 𝒯₂.
+        self._hypothetical_proposition = \
+            self.hypothetical_theory.i.axiom_interpretation.infer_statement(
+                self.hypothetical_axiom_inclusion,
+                hypothetical_formula)
 
-    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
+    def compose_class(self) -> collections.abc.Generator[Composable, Composable, True]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='hypothesis')
+
+    @property
+    def hypothetical_axiom_declaration(self) -> AxiomDeclaration:
+        """When a hypothesis is posed in a theory 𝒯₁,
+        the hypothesis is declared (aka postulated) as an axiom in the universe-of-discourse,
+        a hypothetical-theory 𝒯₂ is created to store the hypothesis elaboration,
+        the axiom is included in 𝒯₂,
+        and the hypothetical-proposition is posed as an interpretation of that axiom in 𝒯₂."""
+        return self._hypothetical_axiom_declaration
+
+    @property
+    def hypothetical_axiom_inclusion(self) -> AxiomInclusion:
+        """When a hypothesis is posed in a theory 𝒯₁,
+        the hypothesis is declared (aka postulated) as an axiom in the universe-of-discourse,
+        a hypothetical-theory 𝒯₂ is created to store the hypothesis elaboration,
+        the axiom is included in 𝒯₂,
+        and the hypothetical-proposition is posed as an interpretation of that axiom in 𝒯₂."""
+        return self._hypothetical_axiom_inclusion
+
+    @property
+    def hypothetical_formula(self) -> Formula:
+        """When a hypothesis is posed in a theory 𝒯₁,
+        the hypothesis is declared (aka postulated) as an axiom in the universe-of-discourse,
+        a hypothetical-theory 𝒯₂ is created to store the hypothesis elaboration,
+        the axiom is included in 𝒯₂,
+        and the hypothetical-proposition is posed as an interpretation of that axiom in 𝒯₂."""
+        return self._hypothetical_formula
+
+    @property
+    def hypothetical_proposition(self) -> InferredStatement:
+        """When a hypothesis is posed in a theory 𝒯₁,
+        the hypothesis is declared (aka postulated) as an axiom in the universe-of-discourse,
+        a hypothetical-theory 𝒯₂ is created to store the hypothesis elaboration,
+        the axiom is included in 𝒯₂,
+        and the hypothetical-proposition is posed as an interpretation of that axiom in 𝒯₂."""
+        return self._hypothetical_proposition
+
+    @property
+    def hypothetical_theory(self) -> TheoryElaborationSequence:
+        """When a hypothesis is posed in a theory 𝒯₁,
+        the hypothesis is declared (aka postulated) as an axiom in the universe-of-discourse,
+        a hypothetical-theory 𝒯₂ is created to store the hypothesis elaboration,
+        the axiom is included in 𝒯₂,
+        and the hypothetical-proposition is posed as an interpretation of that axiom in 𝒯₂."""
+        return self._hypothetical_theory
 
 
 class Proof:

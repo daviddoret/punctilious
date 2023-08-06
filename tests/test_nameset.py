@@ -67,6 +67,6 @@ class TestNameSet(TestCase):
                          n.rep_conventional_name(encoding=pu.encodings.latex))
 
     def test_nameset_title(self):
-        n1 = pu.NameSet(symbol='x', index=1, cat=pu.title_categories.proposition)
+        n1 = pu.NameSet(symbol='x', index=1, cat=pu.title_categories._hypothetical_proposition)
         s1 = n1.rep_title(encoding=pu.encodings.plaintext)
         print(s1)

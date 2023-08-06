@@ -13,7 +13,7 @@ class TestTitle(TestCase):
         self.assertEqual('Uncategorized 1.1.1', title1.rep_title(cap=True))
         self.assertEqual('uncat. 1.1.1', title1.rep_ref())
 
-        title2 = pu.TitleOBSOLETE('1.1.2', pu.title_categories.proposition)
+        title2 = pu.TitleOBSOLETE('1.1.2', pu.title_categories._hypothetical_proposition)
         self.assertEqual('proposition 1.1.2', title2.rep_title())
         self.assertEqual('Proposition 1.1.2', title2.rep_title(cap=True))
         self.assertEqual('prop. 1.1.2', title2.rep_ref())
