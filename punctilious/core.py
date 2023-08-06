@@ -4025,8 +4025,8 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
     def __init__(self,
                  universe_of_discourse: UniverseOfDiscourse,
-                 infer_formula: collections.abc.Callable,
-                 verify_args: collections.abc.Callable,
+                 infer_formula: (None, collections.abc.Callable) = None,
+                 verify_args: (None, collections.abc.Callable) = None,
                  rep_two_columns_proof_OBSOLETE: (None, collections.abc.Callable) = None,
                  compose_paragraph_proof_method: (None, collections.abc.Callable) = None,
                  symbol: (None, str, StyledText) = None,
@@ -4134,6 +4134,79 @@ class InferenceRuleDeclaration(TheoreticalObject):
         """Verify the syntactical-compatibility of input statements and return True
         if they are compatible, False otherwise."""
         return self._verify_args(*args, t=t)
+
+
+class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
+    def __init__(self,
+                 universe_of_discourse: UniverseOfDiscourse,
+                 echo: (None, bool) = None):
+        symbol = 'axiom-interpretation'
+        acronym = 'ai'
+        abridged_name = 'ax.-int.'
+        auto_index = False
+        dashed_name = 'axiom-interpretation'
+        explicit_name = 'axiom interpretation inference rule'
+        name = 'axiom interpretation'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = AxiomInterpretationDeclaration.infer_formula
+        verify_args = AxiomInterpretationDeclaration.verify_args
+        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
+                         universe_of_discourse=universe_of_discourse, symbol=symbol,
+                         auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo)
+
+    def infer_formula(self, a: AxiomInclusion, p: Formula, *args, t: TheoryElaborationSequence,
+                      echo: (None, bool) = None) -> Formula:
+        """Compute the formula that results from applying this inference-rule with those arguments.
+
+        :param a: An axiom-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
+        :param p: A propositional formula: P.
+        :param t: The current theory-elaboration-sequence.
+        :return: (Formula) The inferred formula: P.
+        """
+        p = unpack_formula(p)
+        return p
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_axiom_interpretation_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, a: AxiomInclusion, p: Formula, *args,
+                    t: TheoryElaborationSequence) -> bool:
+        """Verify if the arguments comply syntactically with the inference-rule.
+
+        WARNING:
+        --------
+        No semantic operation is performed.
+
+       :param a: An axiom-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
+        :param p: A propositional formula: P.
+        :param t: The current theory-elaboration-sequence.
+        :return: (bool) True if the inference-rule arguments comply syntactically
+            with the inference-rule, False otherwise.
+        """
+        verify(
+            is_in_class(a, classes.axiom_inclusion),
+            '⌜a⌝ is not of declarative-class axiom-inclusion.',
+            a=a, t=t, slf=self)
+        verify(
+            t.contains_theoretical_objct(a),
+            '⌜a⌝ is not contained in ⌜t⌝.',
+            a=a, t=t, slf=self)
+        verify(
+            is_in_class(p, classes.formula),
+            '⌜p⌝ is not of declarative-class formula.',
+            p=p, t=t, slf=self)
+        verify(
+            p.is_proposition,
+            '⌜p⌝ is not propositional.',
+            p=p, t=t, slf=self)
+        # TODO: Add a verification step: the axiom is not locked.
+        return True
 
 
 class AtheoreticalStatement(SymbolicObject):
@@ -4810,6 +4883,7 @@ class Hypothesis(Statement):
     def compose_class(self) -> collections.abc.Generator[Composable, Composable, True]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='hypothesis')
+        return True
 
     @property
     def hypothetical_axiom_declaration(self) -> AxiomDeclaration:
@@ -5502,81 +5576,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         one must be very attentive when applying this inference-rule to assure the resulting
         formula-statement complies / interprets properly its related contentual-axiom.
         """
-
-        def infer_formula(a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence) -> Formula:
-            """Compute the formula that results from applying this inference-rule with those arguments.
-
-            :param a: An axiom-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
-            :param p: A propositional formula: P.
-            :param t: The current theory-elaboration-sequence.
-            :return: (Formula) The inferred formula: P.
-            """
-            p = unpack_formula(p)
-            return p
-
-        def compose_two_column_proof(a: AxiomInclusion, p: Formula,
-                                     encoding: (None, Encoding) = None) -> str:
-            """Return
-
-            :param a: An axiom-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
-            :param p: A propositional formula: P.
-            :param encoding:
-            :return:
-            """
-            report = rep_two_columns_proof_item(
-                left=a.rep_natural_language(encoding=encoding),
-                right=SansSerifNormal('Postulated by ').rep(encoding=encoding) + \
-                      a.rep_ref(encoding=encoding))
-            report = report + rep_two_columns_proof_item(
-                left=p.rep_formula(encoding=encoding, expand=True),
-                right=SansSerifNormal('Interpreted from natural-language').rep(encoding=encoding))
-            return report
-
-        def compose_paragraph_proof(o: InferredStatement):
-            output = yield from configuration.locale.compose_axiom_interpretation_paragraph_proof(
-                o=o)
-            return output
-
-        def verify_args(a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence) -> bool:
-            """Verify if the arguments comply syntactically with the inference-rule.
-
-            WARNING:
-            --------
-            No semantic operation is performed.
-
-           :param a: An axiom-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
-            :param p: A propositional formula: P.
-            :param t: The current theory-elaboration-sequence.
-            :return: (bool) True if the inference-rule arguments comply syntactically
-                with the inference-rule, False otherwise.
-            """
-            verify(
-                is_in_class(a, classes.axiom_inclusion),
-                '⌜a⌝ is not of declarative-class axiom-inclusion.',
-                a=a, t=t, slf=self)
-            verify(
-                t.contains_theoretical_objct(a),
-                '⌜a⌝ is not contained in ⌜t⌝.',
-                a=a, t=t, slf=self)
-            verify(
-                is_in_class(p, classes.formula),
-                '⌜p⌝ is not of declarative-class formula.',
-                p=p, t=t, slf=self)
-            verify(
-                p.is_proposition,
-                '⌜p⌝ is not propositional.',
-                p=p, t=t, slf=self)
-            # TODO: Add a verification step: the axiom is not locked.
-            return True
-
         if self._axiom_interpretation is None:
-            self._axiom_interpretation = InferenceRuleDeclaration(
-                symbol='axiom-interpretation', index=None, auto_index=False,
-                dashed_name='axiom-interpretation',
-                universe_of_discourse=self.u,
-                infer_formula=infer_formula,
-                verify_args=verify_args,
-                compose_paragraph_proof_method=compose_paragraph_proof)
+            self._axiom_interpretation = AxiomInterpretationDeclaration(
+                universe_of_discourse=self.u)
         return self._axiom_interpretation
 
     @property
