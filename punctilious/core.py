@@ -6754,19 +6754,31 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
                          abridged_name=abridged_name, name=name, explicit_name=explicit_name,
                          echo=echo, proof=proof)
 
-    def infer_formula(self, axiom: AxiomInclusion = None, *args, echo: (None, bool) = None):
-        return super().infer_formula(axiom, *args, echo=echo)
+    def infer_formula(self, axiom: (None, AxiomInclusion) = None, formula: (None, Formula) = None,
+                      echo: (None, bool) = None):
+        """Apply the axiom-interpretation inference-rule and return the inferred-formula.
 
-    def infer_statement(self, axiom: AxiomInclusion = None,
-                        *args,
+        :param axiom: (mandatory) The axiom-inclusion statement. This proves that the axiom is part of the theory.
+        :param formula: (mandatory) The interpretation of the axiom as a formula.
+        :return: An inferred-statement proving the formula in the current theory.
+        """
+        return super().infer_formula(axiom, formula, echo=echo)
+
+    def infer_statement(self, axiom: (None, AxiomInclusion) = None,
+                        formula: (None, Formula) = None,
                         nameset: (None, str, NameSet) = None,
                         ref: (None, str) = None,
                         cat: (None, TitleCategoryOBSOLETE) = None,
                         subtitle: (None, str) = None,
                         echo: (None, bool) = None) -> InferredStatement:
-        return super().infer_statement(axiom, *args, nameset=nameset, ref=ref, cat=cat,
-                                       subtitle=subtitle,
-                                       echo=echo)
+        """Apply the axiom-interpretation inference-rule and return the inferred-statement.
+
+        :param axiom: (mandatory) The axiom-inclusion statement. This proves that the axiom is part of the theory.
+        :param formula: (mandatory) The interpretation of the axiom as a formula.
+        :return: An inferred-statement proving the formula in the current theory.
+        """
+        return super().infer_statement(axiom, formula, nameset=nameset, ref=ref, cat=cat,
+                                       subtitle=subtitle, echo=echo)
 
 
 class InferenceRuleInclusionDict(collections.UserDict):
@@ -6828,7 +6840,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._absorption
 
     @property
-    def axiom_interpretation(self) -> InferenceRuleInclusion:
+    def axiom_interpretation(self) -> AxiomInterpretationInclusion:
         """The axiom_interpretation inference-rule: 𝒜 ⊢ P.
 
                If the well-known inference-rule does not exist in the universe-of-discourse,
