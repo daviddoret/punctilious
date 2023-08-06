@@ -18,6 +18,6 @@ class TestInconsistencyIntroduction(TestCase):
         p = t.i.axiom_interpretation.infer_statement(ap, u.f(r1, o1, o2), echo=True)
         not_p = t.i.axiom_interpretation.infer_statement(ap, u.f(u.r.lnot, u.f(r1, o1, o2)),
                                                          echo=True)
-        inc = t.i.inconsistency_introduction.infer_statement(p, not_p, echo=True)
+        inc = t.i.inconsistency_introduction.infer_statement(p=p, not_p=not_p, echo=True)
         self.assertEqual('𝐼𝑛𝑐(𝒯₁)', inc.rep_formula(encoding=pu.encodings.unicode))
         self.assertIs(pu.consistency_values.proved_inconsistent, t.consistency)
