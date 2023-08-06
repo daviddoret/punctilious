@@ -4157,7 +4157,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
                          abridged_name=abridged_name, name=name, explicit_name=explicit_name,
                          echo=echo)
 
-    def infer_formula(self, a: AxiomInclusion, p: Formula, *args, t: TheoryElaborationSequence,
+    def infer_formula(self, a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence,
                       echo: (None, bool) = None) -> Formula:
         """Compute the formula that results from applying this inference-rule with those arguments.
 
@@ -4175,8 +4175,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, a: AxiomInclusion, p: Formula, *args,
-                    t: TheoryElaborationSequence) -> bool:
+    def verify_args(self, a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence) -> bool:
         """Verify if the arguments comply syntactically with the inference-rule.
 
         WARNING:
@@ -4206,6 +4205,88 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
             '⌜p⌝ is not propositional.',
             p=p, t=t, slf=self)
         # TODO: Add a verification step: the axiom is not locked.
+        return True
+
+
+class ModusPonensDeclaration(InferenceRuleDeclaration):
+    def __init__(self,
+                 universe_of_discourse: UniverseOfDiscourse,
+                 echo: (None, bool) = None):
+        symbol = 'modus-ponens'
+        acronym = 'mp'
+        abridged_name = 'mod.-pon.'
+        auto_index = False
+        dashed_name = 'modus-ponens'
+        explicit_name = 'modus ponens inference rule'
+        name = 'modus ponens'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = AxiomInterpretationDeclaration.infer_formula
+        verify_args = AxiomInterpretationDeclaration.verify_args
+        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
+                         universe_of_discourse=universe_of_discourse, symbol=symbol,
+                         auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo)
+
+    def infer_formula(self, p_implies_q: FormulaStatement,
+                      p: FormulaStatement,
+                      t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        """
+
+        :param args: A statement (P ⟹ Q), and a statement P
+        :param t:
+        :return: A formula Q
+        """
+        p_implies_q = unpack_formula(p_implies_q)
+        # p_prime = unpack_formula(p_implies_q.parameters[0])
+        q = unpack_formula(p_implies_q.parameters[1])
+        # p_prime = unpack_formula(p_prime)  # Received as a statement-parameter to prove that p is true in t.
+        return q  # TODO: Provide support for statements that are atomic propositional formula, that is
+        # without relation or where the objct is a 0-ary relation.
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p_implies_q: FormulaStatement,
+                    p: FormulaStatement, t: TheoryElaborationSequence) -> bool:
+        """
+
+        :param args: A statement (P ⟹ Q), and a statement P
+        :param t:
+        :return: A formula Q
+        """
+        verify(is_in_class(p_implies_q, classes.formula_statement),
+               '⌜p_implies_q⌝ is not a formula-statement.',
+               p_implies_q=p_implies_q, slf=self)
+        verify(is_in_class(p, classes.formula_statement),
+               '⌜p⌝ is not a formula-statement.',
+               p=p, slf=self)
+        verify(
+            t.contains_theoretical_objct(p_implies_q),
+            'Statement ⌜p_implies_q⌝ is not contained in theory ⌜t⌝''s hierarchy.',
+            p_implies_q=p_implies_q, t=t, slf=self)
+        p_implies_q = unpack_formula(p_implies_q)
+        verify(
+            p_implies_q.relation is t.u.r.implication,
+            'The relation of formula ⌜p_implies_q⌝ is not an implication.',
+            p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
+        verify(
+            t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+            p_prime=p, t=t, slf=self)
+        p = unpack_formula(p)
+        p_prime = unpack_formula(p_implies_q.parameters[0])
+        # The antecedant of the implication may contain free-variables,
+        # store these in a mask for masked-formula-similitude comparison.
+        verify(
+            p.is_formula_equivalent_to(p_prime),
+            'Formula ⌜p_prime⌝ in statement ⌜p_implies_q⌝ must be formula-equivalent to statement ⌜p⌝.',
+            p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t,
+            slf=self)
         return True
 
 
@@ -6429,7 +6510,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.inconsistency_introduction
 
     @property
-    def modus_ponens(self) -> InferenceRuleDeclaration:
+    def modus_ponens(self) -> ModusPonensDeclaration:
         """The well-known modus-ponens inference-rule: (P ⟹ Q), P' ⊢ Q'.
 
         Abridged property: u.i.mp
@@ -6441,76 +6522,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-
-        def infer_formula(p_implies_q: FormulaStatement,
-                          p: FormulaStatement,
-                          t: TheoryElaborationSequence) -> Formula:
-            """
-
-            :param args: A statement (P ⟹ Q), and a statement P
-            :param t:
-            :return: A formula Q
-            """
-            p_implies_q = unpack_formula(p_implies_q)
-            # p_prime = unpack_formula(p_implies_q.parameters[0])
-            q = unpack_formula(p_implies_q.parameters[1])
-            # p_prime = unpack_formula(p_prime)  # Received as a statement-parameter to prove that p is true in t.
-            return q  # TODO: Provide support for statements that are atomic propositional formula, that is
-            # without relation or where the objct is a 0-ary relation.
-
-        def verify_args(p_implies_q: FormulaStatement,
-                        p: FormulaStatement, t: TheoryElaborationSequence) -> bool:
-            """
-
-            :param args: A statement (P ⟹ Q), and a statement P
-            :param t:
-            :return: A formula Q
-            """
-            verify(is_in_class(p_implies_q, classes.formula_statement),
-                   '⌜p_implies_q⌝ is not a formula-statement.',
-                   p_implies_q=p_implies_q, slf=self)
-            verify(is_in_class(p, classes.formula_statement),
-                   '⌜p⌝ is not a formula-statement.',
-                   p=p, slf=self)
-            verify(
-                t.contains_theoretical_objct(p_implies_q),
-                'Statement ⌜p_implies_q⌝ is not contained in theory ⌜t⌝''s hierarchy.',
-                p_implies_q=p_implies_q, t=t, slf=self)
-            p_implies_q = unpack_formula(p_implies_q)
-            verify(
-                p_implies_q.relation is t.u.r.implication,
-                'The relation of formula ⌜p_implies_q⌝ is not an implication.',
-                p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
-            verify(
-                t.contains_theoretical_objct(p),
-                'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-                p_prime=p, t=t, slf=self)
-            p = unpack_formula(p)
-            p_prime = unpack_formula(p_implies_q.parameters[0])
-            # The antecedant of the implication may contain free-variables,
-            # store these in a mask for masked-formula-similitude comparison.
-            verify(
-                p.is_formula_equivalent_to(p_prime),
-                'Formula ⌜p_prime⌝ in statement ⌜p_implies_q⌝ must be formula-equivalent to statement ⌜p⌝.',
-                p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t,
-                slf=self)
-            return True
-
-        def compose_paragraph_proof(o: InferredStatement):
-            output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(
-                o=o)
-            return output
-
-        if self._modus_ponens is None:
-            self._modus_ponens = InferenceRuleDeclaration(
-                universe_of_discourse=self.u,
-                symbol='modus-ponens', index=None, auto_index=False,
-                name='modus ponens',
-                dashed_name='modus-ponens',
-                compose_paragraph_proof_method=compose_paragraph_proof,
-                infer_formula=infer_formula,
-                verify_args=verify_args)
-        return self._modus_ponens
+        if self._axiom_interpretation is None:
+            self._axiom_interpretation = ModusPonensDeclaration(
+                universe_of_discourse=self.u)
+        return self._axiom_interpretation
 
     @property
     def mp(self) -> InferenceRuleDeclaration:
@@ -6735,7 +6750,7 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
     """
 
     Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. The key advantage of specializing this class is to provide
+    is sufficient to do the job. But the advantage of specializing this class is to provide
     user-friendly type hints and method parameters documentation for that particular
     inference-rule. This may be justified for well-known inference-rules.
     """
@@ -6778,6 +6793,57 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         :return: An inferred-statement proving the formula in the current theory.
         """
         return super().infer_statement(axiom, formula, nameset=nameset, ref=ref, cat=cat,
+                                       subtitle=subtitle, echo=echo)
+
+
+class ModusPonensInclusion(InferenceRuleInclusion):
+    """
+
+    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
+    is sufficient to do the job. But the advantage of specializing this class is to provide
+    user-friendly type hints and method parameters documentation for that particular
+    inference-rule. This may be justified for well-known inference-rules.
+    """
+
+    def __init__(self,
+                 t: TheoryElaborationSequence,
+                 echo: (None, bool) = None,
+                 proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.axiom_interpretation
+        dashed_name = 'modus-ponens'
+        acronym = 'mp'
+        abridged_name = 'mod.-pon.'
+        name = 'modus ponens'
+        explicit_name = 'modus ponens inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo, proof=proof)
+
+    def infer_formula(self, p_implies_q: (None, FormulaStatement) = None,
+                      p: (None, FormulaStatement) = None,
+                      echo: (None, bool) = None):
+        """Apply the modus-ponens inference-rule and return the inferred-formula.
+
+        :param p_implies_q: (mandatory) The implication statement.
+        :param p: (mandatory) The p statement, proving that p is true in the current theory.
+        :return: The inferred formula q.
+        """
+        return super().infer_formula(p_implies_q, p, echo=echo)
+
+    def infer_statement(self, p_implies_q: (None, FormulaStatement) = None,
+                        p: (None, FormulaStatement) = None,
+                        nameset: (None, str, NameSet) = None,
+                        ref: (None, str) = None,
+                        cat: (None, TitleCategoryOBSOLETE) = None,
+                        subtitle: (None, str) = None,
+                        echo: (None, bool) = None) -> InferredStatement:
+        """Apply the modus-ponens inference-rule and return the inferred-statement.
+
+        :param p_implies_q: (mandatory) The implication statement.
+        :param p: (mandatory) The p statement, proving that p is true in the current theory.
+        :return: An inferred-statement proving p in the current theory.
+        """
+        return super().infer_statement(p_implies_q, p, nameset=nameset, ref=ref, cat=cat,
                                        subtitle=subtitle, echo=echo)
 
 
@@ -7254,7 +7320,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.inconsistency_introduction
 
     @property
-    def modus_ponens(self) -> InferenceRuleInclusion:
+    def modus_ponens(self) -> ModusPonensInclusion:
         """The well-known modus-ponens inference-rule: (P ⟹ Q), P ⊢ Q.
 
         Abridged property: u.i.mp
@@ -7268,15 +7334,11 @@ class InferenceRuleInclusionDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         if self._modus_ponens is None:
-            self._modus_ponens = InferenceRuleInclusion(
-                t=self.t,
-                i=self.t.u.i.modus_ponens,
-                acronym='mp',
-                name='modus ponens')
+            self._modus_ponens = ModusPonensInclusion(t=self.t)
         return self._modus_ponens
 
     @property
-    def mp(self) -> InferenceRuleInclusion:
+    def mp(self) -> ModusPonensInclusion:
         """The well-known modus-ponens inference-rule: (P ⟹ Q), P ⊢ Q.
 
         Unabridged property: u.i.modus_ponens
