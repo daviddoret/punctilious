@@ -4208,6 +4208,53 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         return True
 
 
+class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
+    def __init__(self,
+                 universe_of_discourse: UniverseOfDiscourse,
+                 echo: (None, bool) = None):
+        symbol = 'conjunction-introduction'
+        acronym = 'ci'
+        abridged_name = 'conj.-intro.'
+        auto_index = False
+        dashed_name = 'conjunction-introduction'
+        explicit_name = 'conjunction introduction inference rule'
+        name = 'conjunction introduction'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = AxiomInterpretationDeclaration.infer_formula
+        verify_args = AxiomInterpretationDeclaration.verify_args
+        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
+                         universe_of_discourse=universe_of_discourse, symbol=symbol,
+                         auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo)
+
+    def infer_formula(self, p: FormulaStatement,
+                      q: FormulaStatement,
+                      t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        p = unpack_formula(p)
+        q = unpack_formula(q)
+        return t.u.f(t.u.r.land, p, q)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p: FormulaStatement,
+                    q: FormulaStatement, t: TheoryElaborationSequence) -> bool:
+        verify(
+            t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+            p=p, t=t, slf=self)
+        verify(
+            t.contains_theoretical_objct(q),
+            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+            q=q, t=t, slf=self)
+        return True
+
+
 class ModusPonensDeclaration(InferenceRuleDeclaration):
     def __init__(self,
                  universe_of_discourse: UniverseOfDiscourse,
@@ -6039,7 +6086,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._conjunction_elimination_right
 
     @property
-    def conjunction_introduction(self) -> InferenceRuleDeclaration:
+    def conjunction_introduction(self) -> ConjunctionIntroductionDeclaration:
         """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
         Abridged property: u.i.ci
@@ -6047,51 +6094,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-
-        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            p = unpack_formula(args[0])
-            q = unpack_formula(args[1])
-            return t.u.f(t.u.r.land, p, q)
-
-        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            verify(
-                len(args) == 2,
-                'Exactly 2 items are expected in ⌜*args⌝ .',
-                args=args, t=t, slf=self)
-            p = args[0]
-            verify(
-                t.contains_theoretical_objct(p),
-                'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-                p=p, t=t, slf=self)
-            p = unpack_formula(p)
-            q = args[1]
-            verify(
-                t.contains_theoretical_objct(q),
-                'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-                q=q, t=t, slf=self)
-            q = unpack_formula(q)
-            return True
-
         if self._conjunction_introduction is None:
-            self._conjunction_introduction = InferenceRuleDeclaration(
-                universe_of_discourse=self.u,
-                nameset=NameSet(symbol='conjunction-introduction',
-                                index=None,
-                                name='conjunction introduction'),
-                infer_formula=infer_formula,
-                verify_args=verify_args)
+            self._conjunction_introduction = ConjunctionIntroductionDeclaration(
+                universe_of_discourse=self.u)
         return self._conjunction_introduction
 
     @property
@@ -6815,6 +6820,53 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
                                        subtitle=subtitle, echo=echo)
 
 
+class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
+    """
+
+    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
+    is sufficient to do the job. But the advantage of specializing this class is to provide
+    user-friendly type hints and method parameters documentation for that particular
+    inference-rule. This may be justified for well-known inference-rules.
+    """
+
+    def __init__(self,
+                 t: TheoryElaborationSequence,
+                 echo: (None, bool) = None,
+                 proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.conjunction_introduction
+        dashed_name = 'conjunction-introduction'
+        acronym = 'ci'
+        abridged_name = 'conj.-intro.'
+        name = 'conjunction introduction'
+        explicit_name = 'conjunction introduction inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo, proof=proof)
+
+    def infer_formula(self, p: (None, FormulaStatement) = None,
+                      q: (None, FormulaStatement) = None,
+                      echo: (None, bool) = None):
+        """Apply the conjunction-introduction inference-rule and return the inferred-formula.
+        """
+        return super().infer_formula(p, q, echo=echo)
+
+    def infer_statement(self, p: (None, FormulaStatement) = None,
+                        q: (None, FormulaStatement) = None,
+                        nameset: (None, str, NameSet) = None,
+                        ref: (None, str) = None,
+                        cat: (None, TitleCategoryOBSOLETE) = None,
+                        subtitle: (None, str) = None,
+                        echo: (None, bool) = None) -> InferredStatement:
+        """Apply the conjunction-introduction inference-rule and return the inferred-statement.
+
+        :param p_implies_q: (mandatory) The implication statement.
+        :param p: (mandatory) The p statement, proving that p is true in the current theory.
+        :return: An inferred-statement proving p in the current theory.
+        """
+        return super().infer_statement(p, q, nameset=nameset, ref=ref, cat=cat,
+                                       subtitle=subtitle, echo=echo)
+
+
 class ModusPonensInclusion(InferenceRuleInclusion):
     """
 
@@ -7062,25 +7114,6 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._conjunction_elimination_right
 
     @property
-    def conjunction_introduction(self) -> InferenceRuleInclusion:
-        """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
-
-        Abridged property: t.i.ci()
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
-        if self._conjunction_introduction is None:
-            self._conjunction_introduction = InferenceRuleInclusion(
-                t=self.t,
-                i=self.t.u.i.conjunction_introduction,
-                symbol='conjunction-introduction',
-                dashed_name='conjunction-introduction',
-                acronym='ci',
-                name='conjunction introduction')
-        return self._conjunction_introduction
-
-    @property
     def cel(self) -> InferenceRuleInclusion:
         """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
@@ -7103,7 +7136,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.conjunction_elimination_right
 
     @property
-    def ci(self) -> InferenceRuleInclusion:
+    def ci(self) -> ConjunctionIntroductionInclusion:
         """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
         Unabridged property: universe_of_discourse.inference_rules.conjunction_introduction()
@@ -7112,6 +7145,19 @@ class InferenceRuleInclusionDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         return self.conjunction_introduction
+
+    @property
+    def conjunction_introduction(self) -> ConjunctionIntroductionInclusion:
+        """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
+
+        Abridged property: t.i.ci()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        if self._conjunction_introduction is None:
+            self._conjunction_introduction = ConjunctionIntroductionInclusion(t=self.t)
+        return self._conjunction_introduction
 
     @property
     def definition_interpretation(self) -> InferenceRuleInclusion:
