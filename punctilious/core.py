@@ -4136,6 +4136,61 @@ class InferenceRuleDeclaration(TheoreticalObject):
         return self._verify_args(*args, t=t)
 
 
+class AbsorptionDeclaration(InferenceRuleDeclaration):
+    def __init__(self,
+                 universe_of_discourse: UniverseOfDiscourse,
+                 echo: (None, bool) = None):
+        symbol = 'absorption'
+        abridged_name = 'absorp.'
+        auto_index = False
+        dashed_name = 'absorption'
+        explicit_name = 'absorption inference rule'
+        name = 'absorption'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = AxiomInterpretationDeclaration.infer_formula
+        verify_args = AxiomInterpretationDeclaration.verify_args
+        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
+                         universe_of_discourse=universe_of_discourse, symbol=symbol,
+                         auto_index=auto_index, dashed_name=dashed_name,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo)
+
+    def infer_formula(self, p_implies_q: FormulaStatement = None,
+                      t: TheoryElaborationSequence = None,
+                      echo: (None, bool) = None) -> Formula:
+        """
+
+        :param p_implies_q: A formula-statement of the form: (P ⟹ Q).
+        :param t: The current theory-elaboration-sequence.
+        :return: The (proven) formula: (P ⟹ (P ∧ Q)).
+        """
+        p_implies_q = unpack_formula(p_implies_q)
+        p = unpack_formula(p_implies_q.parameters[0])
+        q = unpack_formula(p_implies_q.parameters[1])
+        p_implies_p_and_q = t.u.f(t.u.r.implication, p, t.u.f(t.u.r.conjunction, p, q))
+        return p_implies_p_and_q
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_absorption_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p_implies_q: FormulaStatement = None,
+                    t: TheoryElaborationSequence = None) -> bool:
+        verify(
+            t.contains_theoretical_objct(p_implies_q),
+            'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝.',
+            phi=p_implies_q, t=t, slf=self)
+        p_implies_q = unpack_formula(p_implies_q)
+        verify(
+            p_implies_q.relation is t.u.r.implication,
+            'The relation of formula ⌜p_implies_q⌝ must be an implication.',
+            phi_relation=p_implies_q.relation, phi=p_implies_q, t=t, slf=self)
+        return True
+
+
 class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
     def __init__(self,
                  universe_of_discourse: UniverseOfDiscourse,
@@ -5705,7 +5760,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         self._variable_substitution = None
 
     @property
-    def absorb(self) -> InferenceRuleDeclaration:
+    def absorb(self) -> AbsorptionDeclaration:
         """The well-known absorption inference-rule: (P ⟹ Q) ⊢ (P ⟹ (P ∧ Q)).
 
         Unabridged property: u.i.absorption
@@ -5716,7 +5771,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.absorption
 
     @property
-    def absorption(self) -> InferenceRuleDeclaration:
+    def absorption(self) -> AbsorptionDeclaration:
         """The well-known absorption inference-rule: (P ⟹ Q) ⊢ (P ⟹ (P ∧ Q)).
 
         Abridged property: u.i.absorb
@@ -5725,49 +5780,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
-        def infer_formula(p_implies_q: FormulaStatement, t: TheoryElaborationSequence) -> Formula:
-            """
-
-            :param p_implies_q: A formula-statement of the form: (P ⟹ Q).
-            :param t: The current theory-elaboration-sequence.
-            :return: The (proven) formula: (P ⟹ (P ∧ Q)).
-            """
-            p_implies_q = unpack_formula(p_implies_q)
-            p = unpack_formula(p_implies_q.parameters[0])
-            q = unpack_formula(p_implies_q.parameters[1])
-            p_implies_p_and_q = t.u.f(t.u.r.implication, p, t.u.f(t.u.r.conjunction, p, q))
-            return p_implies_p_and_q
-
-        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            verify(
-                len(args) == 1,
-                'Exactly 1 item is expected in ⌜*args⌝ .',
-                args=args, t=t, slf=self)
-            phi = args[0]
-            verify(
-                t.contains_theoretical_objct(phi),
-                'Statement ⌜phi⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-                phi=phi, t=t, slf=self)
-            phi = unpack_formula(phi)
-            verify(
-                phi.relation is t.u.r.implication,
-                'The relation of formula ⌜phi⌝ must be an implication.',
-                phi_relation=phi.relation, phi=phi, t=t, slf=self)
-            return True
-
         if self._absorption is None:
-            self._absorption = InferenceRuleDeclaration(
-                universe_of_discourse=self.u,
-                symbol='absorption', index=None, auto_index=False,
-                dashed_name='absorption',
-                infer_formula=infer_formula,
-                verify_args=verify_args)
+            self._absorption = AbsorptionDeclaration(
+                universe_of_discourse=self.u)
         return self._absorption
 
     @property
@@ -6789,6 +6804,52 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.variable_substitution
 
 
+class AbsorptionInclusion(InferenceRuleInclusion):
+    """
+
+    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
+    is sufficient to do the job. But the advantage of specializing this class is to provide
+    user-friendly type hints and method parameters documentation for that particular
+    inference-rule. This may be justified for well-known inference-rules.
+    """
+
+    def __init__(self,
+                 t: TheoryElaborationSequence,
+                 echo: (None, bool) = None,
+                 proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.absorption
+        dashed_name = 'absorption'
+        abridged_name = 'absorp.'
+        name = 'absorption'
+        explicit_name = 'absorption inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo, proof=proof)
+
+    def infer_formula(self, p_implies_q: (None, FormulaStatement) = None,
+                      echo: (None, bool) = None):
+        """Apply the absorption inference-rule and return the inferred-formula.
+
+        :param p_implies_q: (mandatory) The implication statement.
+        :return: The inferred formula q.
+        """
+        return super().infer_formula(p_implies_q, echo=echo)
+
+    def infer_statement(self, p_implies_q: (None, FormulaStatement) = None,
+                        nameset: (None, str, NameSet) = None,
+                        ref: (None, str) = None,
+                        cat: (None, TitleCategoryOBSOLETE) = None,
+                        subtitle: (None, str) = None,
+                        echo: (None, bool) = None) -> InferredStatement:
+        """Apply the absorption inference-rule and return the inferred-statement.
+
+        :param p_implies_q: (mandatory) The implication statement.
+        :return: An inferred-statement proving p implies p and q in the current theory.
+        """
+        return super().infer_statement(p_implies_q, nameset=nameset, ref=ref, cat=cat,
+                                       subtitle=subtitle, echo=echo)
+
+
 class AxiomInterpretationInclusion(InferenceRuleInclusion):
     """
 
@@ -7025,7 +7086,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         self._variable_substitution = None
 
     @property
-    def absorb(self) -> InferenceRuleInclusion:
+    def absorb(self) -> AbsorptionInclusion:
         """The well-known absorption inference-rule: (P ⟹ Q) ⊢ (P ⟹ (P ∧ Q)).
 
         Unabridged property: u.i.absorption
@@ -7036,7 +7097,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.absorption
 
     @property
-    def absorption(self) -> InferenceRuleInclusion:
+    def absorption(self) -> AbsorptionInclusion:
         """The well-known absorption inference-rule: (P ⟹ Q) ⊢ (P ⟹ (P ∧ Q)).
 
         Abridged property: u.i.absorb
@@ -7045,10 +7106,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         if self._absorption is None:
-            self._absorption = InferenceRuleInclusion(
-                t=self.t,
-                i=self.t.u.i.absorption,
-                name='absorption')
+            self._absorption = AbsorptionInclusion(t=self.t)
         return self._absorption
 
     @property
