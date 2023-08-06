@@ -4255,6 +4255,67 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         return True
 
 
+class InconsistencyIntroductionDeclaration(InferenceRuleDeclaration):
+    def __init__(self,
+                 universe_of_discourse: UniverseOfDiscourse,
+                 echo: (None, bool) = None):
+        symbol = 'inconsistency-introduction'
+        acronym = 'ii'
+        abridged_name = 'inc.-intro.'
+        auto_index = False
+        dashed_name = 'inconsistency-introduction'
+        explicit_name = 'inconsistency introduction inference rule'
+        name = 'inconsistency introduction'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = AxiomInterpretationDeclaration.infer_formula
+        verify_args = AxiomInterpretationDeclaration.verify_args
+        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
+                         universe_of_discourse=universe_of_discourse, symbol=symbol,
+                         auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo)
+
+    def infer_formula(self, p: FormulaStatement = None,
+                      not_p: FormulaStatement = None,
+                      inconsistent_theory: TheoryElaborationSequence = None,
+                      t: TheoryElaborationSequence = None,
+                      echo: (None, bool) = None) -> Formula:
+        p = unpack_formula(p)
+        not_p = unpack_formula(not_p)
+        return t.u.f(t.u.r.inconsistent, inconsistent_theory)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_inconsistency_introduction_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p: FormulaStatement = None,
+                    not_p: FormulaStatement = None,
+                    inconsistent_theory: TheoryElaborationSequence = None,
+                    t: TheoryElaborationSequence = None) -> bool:
+        verify(
+            inconsistent_theory.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜inconsistent_theory⌝''s hierarchy.',
+            p=p, inconsistent_theory=inconsistent_theory, slf=self)
+        verify(
+            inconsistent_theory.contains_theoretical_objct(not_p),
+            'Statement ⌜not_p⌝ must be contained in theory ⌜inconsistent_theory⌝''s hierarchy.',
+            not_p=not_p, inconsistent_theory=inconsistent_theory, slf=self)
+        verify(
+            not_p.relation is not_p.theory.universe_of_discourse.relations.negation,
+            'The relation of statement ⌜not_p⌝ must be ⌜negation⌝.',
+            not_p=not_p, inconsistent_theory=inconsistent_theory, slf=self)
+        not_p_formula = not_p.valid_proposition
+        p_in_not_p = not_p_formula.parameters[0]
+        verify(
+            p_in_not_p.is_formula_equivalent_to(p),
+            'The sub-formula (parameter) ⌜p⌝ in ⌜not_p⌝ must be formula-equivalent to ⌜p⌝.',
+            not_p=not_p, p_in_not_p=p_in_not_p, p=p, slf=self)
+        return True
+
+
 class ModusPonensDeclaration(InferenceRuleDeclaration):
     def __init__(self,
                  universe_of_discourse: UniverseOfDiscourse,
@@ -6444,7 +6505,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._equality_commutativity
 
     @property
-    def inconsistency_introduction(self) -> InferenceRuleDeclaration:
+    def inconsistency_introduction(self) -> InconsistencyIntroductionDeclaration:
         """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
 
         Abridged property: u.i.ii
@@ -6464,55 +6525,13 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
-        def infer_formula(p: FormulaStatement, not_p: FormulaStatement,
-                          t: TheoryElaborationSequence) -> Formula:
-            """
-            :param p: a formula-statement of the form: (P).
-            :param not_p: a formula-statement of the form: (¬P).
-
-            """
-            inc = t.u.f(t.u.r.inconsistent, t)
-            return inc
-
-        def verify_args(p: FormulaStatement, not_p: FormulaStatement,
-                        t: TheoryElaborationSequence) -> bool:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            verify(is_in_class(p, classes.formula_statement),
-                   '⌜p⌝ is not of declarative-class formula-statement.',
-                   p=p, t=t, slf=self)
-            p = unpack_formula(p)
-            verify(is_in_class(not_p, classes.formula_statement),
-                   '⌜not_p⌝ is not of declarative-class formula-statement.',
-                   not_p=not_p, t=t, slf=self)
-            not_p_r = unpack_formula(not_p)
-            verify(
-                not_p_r.relation is t.u.r.negation,
-                'The relation of formula ⌜not_p_r⌝ is not a negation.',
-                not_p_r_relation=not_p_r.relation, not_p_r=not_p_r, t=t, slf=self)
-            p_in_not_p = unpack_formula(not_p_r.parameters[0])
-            verify(
-                p_in_not_p.is_formula_equivalent_to(p),
-                'The sub-formula ⌜p⌝ in ⌜not_p⌝ is not formula-equivalent to formula ⌜p⌝.',
-                p_in_not_p=p_in_not_p.relation, not_p_r=not_p_r, t=t, slf=self)
-            return True
-
         if self._inconsistency_introduction is None:
-            self._inconsistency_introduction = InferenceRuleDeclaration(
-                universe_of_discourse=self.u,
-                nameset=NameSet(symbol=SerifItalic(plaintext='inconsistency-introduction'),
-                                index=None),
-                name='inconsistency introduction',
-                infer_formula=infer_formula,
-                verify_args=verify_args)
+            self._inconsistency_introduction = InconsistencyIntroductionDeclaration(
+                universe_of_discourse=self.u)
         return self._inconsistency_introduction
 
     @property
-    def ii(self) -> InferenceRuleDeclaration:
+    def ii(self) -> InconsistencyIntroductionDeclaration:
         """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
 
             Unabridged property: universe_of_discourse.inference_rules.inconsistency_introduction
@@ -6864,6 +6883,62 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
         :return: An inferred-statement proving p in the current theory.
         """
         return super().infer_statement(p, q, nameset=nameset, ref=ref, cat=cat,
+                                       subtitle=subtitle, echo=echo)
+
+
+class InconsistencyIntroductionInclusion(InferenceRuleInclusion):
+    """
+
+    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
+    is sufficient to do the job. But the advantage of specializing this class is to provide
+    user-friendly type hints and method parameters documentation for that particular
+    inference-rule. This may be justified for well-known inference-rules.
+    """
+
+    def __init__(self,
+                 t: TheoryElaborationSequence,
+                 echo: (None, bool) = None,
+                 proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.inconsistency_introduction
+        dashed_name = 'inconsistency-introduction'
+        acronym = 'ii'
+        abridged_name = 'inc.-intro.'
+        name = 'inconsistency introduction'
+        explicit_name = 'inconsistency introduction inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo, proof=proof)
+
+    def infer_formula(self, p: (None, FormulaStatement) = None,
+                      not_p: (None, FormulaStatement) = None,
+                      inconsistent_theory: (None, TheoryElaborationSequence) = None,
+                      t: (None, TheoryElaborationSequence) = None,
+                      echo: (None, bool) = None):
+        """Apply the inconsistency-introduction inference-rule and return the inferred-formula.
+        """
+        return super().infer_formula(p, not_p, inconsistent_theory, echo=echo)
+
+    def infer_statement(self, p: (None, FormulaStatement) = None,
+                        not_p: (None, FormulaStatement) = None,
+                        inconsistent_theory: (None, TheoryElaborationSequence) = None,
+                        nameset: (None, str, NameSet) = None,
+                        ref: (None, str) = None,
+                        cat: (None, TitleCategoryOBSOLETE) = None,
+                        subtitle: (None, str) = None,
+                        echo: (None, bool) = None) -> InferredStatement:
+        """Apply the inconsistency-introduction inference-rule and return the inferred-statement.
+
+        :param p: (mandatory) .
+        :param not_p: (mandatory) .
+        :param inconsistent_theory: (conditional) .
+        :return: An inferred-statement proving p in the current theory.
+        """
+        if inconsistent_theory is None and p.t is not_p.t:
+            # The inconsistent_theory can be safely defaulted
+            # when both p and not_p are contained in the same theory.
+            inconsistent_theory = p.t
+        return super().infer_statement(p, not_p, inconsistent_theory, nameset=nameset, ref=ref,
+                                       cat=cat,
                                        subtitle=subtitle, echo=echo)
 
 
@@ -7336,7 +7411,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.equal_terms_substitution
 
     @property
-    def inconsistency_introduction(self) -> InferenceRuleInclusion:
+    def inconsistency_introduction(self) -> InconsistencyIntroductionInclusion:
         """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
 
                 Abridged property: t.i.ii
@@ -7356,14 +7431,11 @@ class InferenceRuleInclusionDict(collections.UserDict):
                 the inference-rule is automatically declared.
                 """
         if self._inconsistency_introduction is None:
-            self._inconsistency_introduction = InferenceRuleInclusion(
-                t=self.t,
-                i=self.t.u.i.inconsistency_introduction,
-                name='inconsistency introduction')
+            self._inconsistency_introduction = InconsistencyIntroductionInclusion(t=self.t)
         return self._inconsistency_introduction
 
     @property
-    def ii(self) -> InferenceRuleInclusion:
+    def ii(self) -> InconsistencyIntroductionInclusion:
         """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
 
                 Unabridged property: theory_elaboration_sequence.inference_rules.inconsistency_introduction

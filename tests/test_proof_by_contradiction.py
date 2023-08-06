@@ -39,6 +39,6 @@ class TestProofByContradiction(TestCase):
         p5 = hypothetical_theory.i.conjunction_introduction.infer_statement(p=p1, q=p2)
         p6 = hypothetical_theory.i.variable_substitution.infer_statement(p3_implication, o1, o2, o3)
         # p7: 𝑟₁(𝑜₁, 𝑜₃) by modus ponens
-        p7 = hypothetical_theory.i.mp.infer_statement(p6, p5)
+        p7 = hypothetical_theory.i.modus_ponens.infer_statement(p_implies_q=p6, p=p5)
         # p7 is in contradiction with the hypothetical_formula
         # hypothetical_theory.i.inconsistency_introduction(!!!!!)
