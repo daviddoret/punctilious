@@ -6522,10 +6522,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._axiom_interpretation is None:
-            self._axiom_interpretation = ModusPonensDeclaration(
+        if self._modus_ponens is None:
+            self._modus_ponens = ModusPonensDeclaration(
                 universe_of_discourse=self.u)
-        return self._axiom_interpretation
+        return self._modus_ponens
 
     @property
     def mp(self) -> InferenceRuleDeclaration:
@@ -6809,7 +6809,7 @@ class ModusPonensInclusion(InferenceRuleInclusion):
                  t: TheoryElaborationSequence,
                  echo: (None, bool) = None,
                  proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.axiom_interpretation
+        i = t.universe_of_discourse.inference_rules.modus_ponens
         dashed_name = 'modus-ponens'
         acronym = 'mp'
         abridged_name = 'mod.-pon.'
