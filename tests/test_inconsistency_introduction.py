@@ -6,6 +6,7 @@ import random_data
 
 class TestInconsistencyIntroduction(TestCase):
     def test_inconsistency_introduction(self):
+        """Simple inconsistency introduction"""
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
         o2 = u.o.declare()
@@ -21,6 +22,7 @@ class TestInconsistencyIntroduction(TestCase):
         self.assertIs(pu.consistency_values.proved_inconsistent, t1.consistency)
 
     def test_inconsistency_introduction_2(self):
+        """Inconsistency introduction in a hypothesis"""
         pu.configuration.echo_default = True
         # Prepare the universe of discourse
         u = pu.UniverseOfDiscourse()
@@ -46,16 +48,12 @@ class TestInconsistencyIntroduction(TestCase):
         hypothetical_formula = u.f(u.r.lnot, u.f(r1, o1, o3))
         # H1: ¬(𝑟₁(𝑜₁, 𝑜₃))
         t1_h1 = t1.pose_hypothesis(hypothetical_proposition=hypothetical_formula)
-        # TODO: The hypothetical-theory must be stabilized immediately,
-        #   otherwise new axioms or definitions may be introduced,
-        #   leading to inconsistent results from the perspective of the
-        #   base theory.
         t2 = t1_h1.hypothetical_theory
         t2_p5 = t1_h1.hypothetical_proposition
         t2_p6 = t2.i.conjunction_introduction.infer_statement(p=t1_p1, q=t1_p2)
         t2_p7 = t2.i.variable_substitution.infer_statement(t1_p3_implication, o1, o2, o3)
-        # p7: 𝑟₁(𝑜₁, 𝑜₃) by modus ponens
+        # t2_p8: 𝑟₁(𝑜₁, 𝑜₃) by modus ponens
         t2_p8 = t2.i.modus_ponens.infer_statement(p_implies_q=t2_p7, p=t2_p6)
-        # p7 is in contradiction with the hypothetical_formula
+        # p5 is the negation of p8, which is a contradiction in t2
         p9 = t1.i.inconsistency_introduction.infer_statement(p=t2_p8, not_p=t2_p5,
                                                              inconsistent_theory=t2)
