@@ -1211,7 +1211,6 @@ class NameSet(Composable):
     """A set of qualified names used to identify an object.
 
     TODO: Enhancement: for relations in particular, add a verb NameType (e.g. implies).
-    TODO: Enhancement: add dashed-name here, and a repr_symbolic (i.e. to support plaintext for non-ASCII symbols).
     """
 
     def __init__(self,
@@ -1223,7 +1222,7 @@ class NameSet(Composable):
                  abridged_name: (None, str, StyledText) = None,
                  name: (None, str, StyledText) = None,
                  explicit_name: (None, str, StyledText) = None,
-                 cat: (None, TitleCategoryOBSOLETE) = None,
+                 paragraph_header: (None, ParagraphHeader) = None,
                  ref: (None, str) = None,
                  subtitle: (None, str, ComposableText) = None):
         if s is not None:
@@ -1273,7 +1272,7 @@ class NameSet(Composable):
         if isinstance(ref, str):
             ref = SansSerifBold(ref)
         self._ref = ref
-        self._cat = title_categories.uncategorized if cat is None else cat
+        self._paragraph_header = paragraph_headers.uncategorized if paragraph_header is None else paragraph_header
         self._subtitle = subtitle
 
     def __eq__(self, other):
@@ -1297,16 +1296,16 @@ class NameSet(Composable):
         return self._acronym
 
     @property
-    def cat(self) -> TitleCategoryOBSOLETE:
+    def paragraph_header(self) -> ParagraphHeader:
         """The category of this statement."""
-        return self._cat
+        return self._paragraph_header
 
-    @cat.setter
-    def cat(self, cat: TitleCategoryOBSOLETE):
+    @paragraph_header.setter
+    def paragraph_header(self, paragraph_header: ParagraphHeader):
         """TODO: Remove this property setter to only set property values at init-time,
         and make the hash stable. This quick-fix was necessary while migrating from
         the old approach that used the obsolete Title class."""
-        self._cat = cat
+        self._paragraph_header = paragraph_header
 
     def compose(self, pre: (None, str, Composable) = None,
                 post: (None, str, Composable) = None) -> collections.abc.Generator[
@@ -1348,10 +1347,11 @@ class NameSet(Composable):
     def compose_cat_unabridged(self, cap: (None, bool) = None, pre: (None, str, Composable) = None,
                                post: (None, str, Composable) = None) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        if self._cat is None:
+        if self._paragraph_header is None:
             return False
         else:
-            something = yield from yield_composition(self._cat.natural_name, cap=cap, pre=pre,
+            something = yield from yield_composition(self._paragraph_header.natural_name, cap=cap,
+                                                     pre=pre,
                                                      post=post)
             return something
 
@@ -1359,10 +1359,11 @@ class NameSet(Composable):
                              post: (None, str, Composable) = None) -> \
             collections.abc.Generator[
                 Composable, Composable, bool]:
-        if self._cat is None:
+        if self._paragraph_header is None:
             return False
         else:
-            something = yield from yield_composition(self._cat.abridged_name, cap=cap, pre=pre,
+            something = yield from yield_composition(self._paragraph_header.abridged_name, cap=cap,
+                                                     pre=pre,
                                                      post=post)
             return something
 
@@ -1617,8 +1618,9 @@ class NameSet(Composable):
         rep = rep + self.rep_symbol(encoding=encoding)
         rep = rep + StyledText(s=')', text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding)
-        rep = '' if self._cat is None else StyledText(s=self.cat.natural_name,
-                                                      text_style=text_styles.sans_serif_bold).rep(
+        rep = '' if self._paragraph_header is None else StyledText(
+            s=self.paragraph_header.natural_name,
+            text_style=text_styles.sans_serif_bold).rep(
             encoding=encoding, cap=cap)
         return rep
 
@@ -1682,7 +1684,7 @@ class TitleOBSOLETE:
     """
 
     def __init__(self, nameset: (None, NameSet) = None, ref: (None, str, ComposableText) = None,
-                 cat: (None, TitleCategoryOBSOLETE) = None,
+                 paragrapha_header: (None, ParagraphHeader) = None,
                  subtitle: (None, str, ComposableText) = None,
                  abr: (None, str, ComposableText) = None):
         if isinstance(ref, str):
@@ -1691,7 +1693,7 @@ class TitleOBSOLETE:
         if isinstance(abr, str):
             abr = StyledText(s=abr, text_style=text_styles.sans_serif_bold)
         self._abr = abr
-        self._cat = title_categories.uncategorized if cat is None else cat
+        self._cat = paragraph_headers.uncategorized if paragrapha_header is None else paragrapha_header
         if isinstance(subtitle, str):
             subtitle = StyledText(s=subtitle, text_style=text_styles.sans_serif_normal)
         self._nameset = nameset
@@ -1715,7 +1717,7 @@ class TitleOBSOLETE:
         return self.rep(encoding=encodings.plaintext)
 
     @property
-    def cat(self) -> TitleCategoryOBSOLETE:
+    def cat(self) -> ParagraphHeader:
         """The category of this statement."""
         return self._cat
 
@@ -1825,7 +1827,7 @@ class SymbolicObject:
             auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-            cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str, StyledText) = None,
+            paragraph_header: (None, ParagraphHeader) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_symbolic_objct, configuration.echo_default,
@@ -1842,13 +1844,15 @@ class SymbolicObject:
                 symbol=symbol) if (index is None and auto_index) else index
             nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name,
                               acronym=acronym, abridged_name=abridged_name, name=name,
-                              explicit_name=explicit_name, cat=cat, ref=ref, subtitle=subtitle)
+                              explicit_name=explicit_name, paragraph_header=paragraph_header,
+                              ref=ref, subtitle=subtitle)
         if isinstance(nameset, str):
             symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name,
                               acronym=acronym, abridged_name=abridged_name, name=name,
-                              explicit_name=explicit_name, cat=cat, ref=ref, subtitle=subtitle)
+                              explicit_name=explicit_name, paragraph_header=paragraph_header,
+                              ref=ref, subtitle=subtitle)
         self._nameset = nameset
         self.is_theory_foundation_system = is_theory_foundation_system
         self._declare_class_membership(classes.symbolic_objct)
@@ -2090,7 +2094,7 @@ class TheoreticalObject(SymbolicObject):
             dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
             explicit_name: (None, str, StyledText) = None,
-            cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str, StyledText) = None,
+            paragraph_header: (None, ParagraphHeader) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         # pseudo-class properties. these must be overwritten by
@@ -2104,7 +2108,8 @@ class TheoreticalObject(SymbolicObject):
             is_theory_foundation_system=is_theory_foundation_system,
             symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-            cat=cat, ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
+            paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
+            echo=False)
         super()._declare_class_membership(classes.theoretical_objct)
         if echo:
             repm.prnt(self.rep_fully_qualified_name())
@@ -3102,7 +3107,7 @@ class SimpleObjctDict(collections.UserDict):
         return self._truth
 
 
-class TitleCategoryOBSOLETE(repm.ValueName):
+class ParagraphHeader(repm.ValueName):
     """TODO: Replace this with ComposableText"""
 
     def __init__(self, name, symbol_base, natural_name, abridged_name):
@@ -3127,52 +3132,52 @@ class TitleCategoryOBSOLETE(repm.ValueName):
         return self.natural_name
 
 
-class TitleCategories(repm.ValueName):
+class ParagraphHeaders(repm.ValueName):
     # axiom = TitleCategory('axiom', 's', 'axiom', 'axiom')
-    axiom_declaration = TitleCategoryOBSOLETE('axiom_declaration', 'a', SansSerifBold('axiom'),
-                                              'axiom')
-    axiom_inclusion = TitleCategoryOBSOLETE('axiom_inclusion', 's', SansSerifBold('axiom'), 'axiom')
-    corollary = TitleCategoryOBSOLETE('corollary', 's', 'corollary', 'cor.')
-    definition_declaration = TitleCategoryOBSOLETE('definition_declaration', 'd',
-                                                   SansSerifBold('definition'),
-                                                   'def.')
-    definition_inclusion = TitleCategoryOBSOLETE('definition_inclusion', 's',
-                                                 SansSerifBold('definition'), 'def.')
-    hypothesis = TitleCategoryOBSOLETE('hypothesis', 's', 'hypothesis', 'hyp.')
-    inference_rule_declaration = TitleCategoryOBSOLETE('inference_rule', 's', 'inference rule',
-                                                       'inference rule')
-    inference_rule_inclusion = TitleCategoryOBSOLETE('inference_rule_inclusion', 's',
-                                                     'inference rule inclusion', 'i.-r.')
+    axiom_declaration = ParagraphHeader('axiom_declaration', 'a', SansSerifBold('axiom'),
+                                        'axiom')
+    axiom_inclusion = ParagraphHeader('axiom_inclusion', 's', SansSerifBold('axiom'), 'axiom')
+    corollary = ParagraphHeader('corollary', 's', 'corollary', 'cor.')
+    definition_declaration = ParagraphHeader('definition_declaration', 'd',
+                                             SansSerifBold('definition'),
+                                             'def.')
+    definition_inclusion = ParagraphHeader('definition_inclusion', 's',
+                                           SansSerifBold('definition'), 'def.')
+    hypothesis = ParagraphHeader('hypothesis', 's', 'hypothesis', 'hyp.')
+    inference_rule_declaration = ParagraphHeader('inference_rule', 's', 'inference rule',
+                                                 'inference rule')
+    inference_rule_inclusion = ParagraphHeader('inference_rule_inclusion', 's',
+                                               'inference rule inclusion', 'i.-r.')
     inferred_proposition = ('inferred_proposition', 's', 'inferred-proposition')
-    lemma = TitleCategoryOBSOLETE('lemma', 's', 'lemma', 'lem.')
-    proposition = TitleCategoryOBSOLETE('proposition', 's', 'proposition', 'prop.')
-    relation_declaration = TitleCategoryOBSOLETE('relation_declaration', 's', 'proposition',
-                                                 'prop.')
-    theorem = TitleCategoryOBSOLETE('theorem', 's', 'theorem', 'thrm.')
-    theory_elaboration_sequence = TitleCategoryOBSOLETE('theory_elaboration_sequence', 't',
-                                                        'theory elaboration sequence',
-                                                        'theo.')
-    informal_definition = TitleCategoryOBSOLETE('informal definition',
-                                                StyledText(plaintext='note', unicode='🗅'),
-                                                'informal definition', 'inf. def.')
-    comment = TitleCategoryOBSOLETE('comment',
-                                    StyledText(plaintext='note', unicode='🗅'),
-                                    'comment', 'cmt.')
-    note = TitleCategoryOBSOLETE('note',
-                                 StyledText(plaintext='note', unicode='🗅'),
-                                 'note',
-                                 'note')
-    remark = TitleCategoryOBSOLETE('remark',
-                                   StyledText(plaintext='note', unicode='🗅'),
-                                   'remark', 'rmrk.')
-    warning = TitleCategoryOBSOLETE('warning',
-                                    StyledText(plaintext='warning', unicode='🗅'),
-                                    'warning', 'warning')
+    lemma = ParagraphHeader('lemma', 's', 'lemma', 'lem.')
+    proposition = ParagraphHeader('proposition', 's', 'proposition', 'prop.')
+    relation_declaration = ParagraphHeader('relation_declaration', 's', 'proposition',
+                                           'prop.')
+    theorem = ParagraphHeader('theorem', 's', 'theorem', 'thrm.')
+    theory_elaboration_sequence = ParagraphHeader('theory_elaboration_sequence', 't',
+                                                  'theory elaboration sequence',
+                                                  'theo.')
+    informal_definition = ParagraphHeader('informal definition',
+                                          StyledText(plaintext='note', unicode='🗅'),
+                                          'informal definition', 'inf. def.')
+    comment = ParagraphHeader('comment',
+                              StyledText(plaintext='note', unicode='🗅'),
+                              'comment', 'cmt.')
+    note = ParagraphHeader('note',
+                           StyledText(plaintext='note', unicode='🗅'),
+                           'note',
+                           'note')
+    remark = ParagraphHeader('remark',
+                             StyledText(plaintext='note', unicode='🗅'),
+                             'remark', 'rmrk.')
+    warning = ParagraphHeader('warning',
+                              StyledText(plaintext='warning', unicode='🗅'),
+                              'warning', 'warning')
     # Special categories
-    uncategorized = TitleCategoryOBSOLETE('uncategorized', 's', 'uncategorized', 'uncat.')
+    uncategorized = ParagraphHeader('uncategorized', 's', 'uncategorized', 'uncat.')
 
 
-title_categories = TitleCategories('title_categories')
+paragraph_headers = ParagraphHeaders('title_categories')
 
 
 class Statement(TheoreticalObject):
@@ -3202,24 +3207,25 @@ class Statement(TheoreticalObject):
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
             explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
-            cat: (None, TitleCategoryOBSOLETE) = None, echo: (None, bool) = None):
+            paragraph_header: (None, ParagraphHeader) = None, echo: (None, bool) = None):
         self._theory = theory
         echo = prioritize_value(echo, configuration.echo_statement, configuration.echo_default,
                                 False)
         universe_of_discourse = theory.universe_of_discourse
         self.statement_index = theory.crossreference_statement(self)
-        self._cat = cat
+        self._cat = paragraph_header
         super().__init__(
             universe_of_discourse=universe_of_discourse, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-            cat=cat, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
+            paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
+            echo=echo)
         super()._declare_class_membership(declarative_class_list.statement)
         if echo:
             self.echo()
 
     @property
-    def category(self) -> TitleCategoryOBSOLETE:
+    def category(self) -> ParagraphHeader:
         """The statement-category assigned to this statement.
 
         :return:
@@ -3309,7 +3315,7 @@ class AxiomDeclaration(TheoreticalObject):
                    'Parameter natural-language is an empty string (after trimming).')
             natural_language = SansSerifItalic(natural_language)
         self._natural_language = natural_language
-        cat = title_categories.axiom_declaration
+        cat = paragraph_headers.axiom_declaration
         if nameset is None and symbol is None:
             symbol = configuration.default_axiom_declaration_symbol
         super().__init__(
@@ -3317,7 +3323,7 @@ class AxiomDeclaration(TheoreticalObject):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name,
             ref=ref, subtitle=subtitle,
-            nameset=nameset, cat=cat,
+            nameset=nameset, paragraph_header=cat,
             echo=False)
         super()._declare_class_membership(declarative_class_list.axiom)
         u.cross_reference_axiom(self)
@@ -3395,13 +3401,13 @@ class AxiomInclusion(Statement):
                                 False)
         self._axiom = a
         t.crossreference_definition_endorsement(self)
-        cat = title_categories.axiom_inclusion
+        cat = paragraph_headers.axiom_inclusion
         if nameset is None and symbol is None:
             symbol = configuration.default_axiom_inclusion_symbol
         super().__init__(
             theory=t, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-            cat=cat, ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
+            paragraph_header=cat, ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
         super()._declare_class_membership(declarative_class_list.axiom_inclusion)
         if echo:
             self.echo()
@@ -3473,7 +3479,7 @@ class InferenceRuleInclusion(Statement):
                               abridged_name=abridged_name, name=name, explicit_name=explicit_name)
         super().__init__(
             theory=t,
-            cat=title_categories.inference_rule_inclusion,
+            paragraph_header=paragraph_headers.inference_rule_inclusion,
             nameset=nameset,
             echo=False)
         t.crossreference_inference_rule_inclusion(self)
@@ -3505,7 +3511,7 @@ class InferenceRuleInclusion(Statement):
                         *args,
                         nameset: (None, str, NameSet) = None,
                         ref: (None, str) = None,
-                        cat: (None, TitleCategoryOBSOLETE) = None,
+                        paragraph_header: (None, ParagraphHeader) = None,
                         subtitle: (None, str) = None,
                         echo: (None, bool) = None) -> InferredStatement:
         """
@@ -3515,7 +3521,9 @@ class InferenceRuleInclusion(Statement):
         :return:
         """
         return self.inference_rule.infer_statement(*args, t=self.theory, nameset=nameset,
-                                                   ref=ref, cat=cat, subtitle=subtitle, echo=echo)
+                                                   ref=ref, paragraph_header=paragraph_header,
+                                                   subtitle=subtitle,
+                                                   echo=echo)
 
     def verify_args(self, *args):
         """
@@ -3583,13 +3591,14 @@ class DefinitionDeclaration(TheoreticalObject):
                    'Parameter natural-language is an empty string (after trimming).')
             natural_language = SansSerifItalic(natural_language)
         self._natural_language = natural_language
-        cat = title_categories.definition_declaration
+        cat = paragraph_headers.definition_declaration
         if nameset is None and symbol is None:
             symbol = configuration.default_definition_declaration_symbol
         super().__init__(
             universe_of_discourse=u, symbol=symbol,
             index=index, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, cat=cat,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+            paragraph_header=cat,
             ref=ref, subtitle=subtitle,
             nameset=nameset, echo=False)
         super()._declare_class_membership(declarative_class_list.definition)
@@ -3668,13 +3677,13 @@ class DefinitionInclusion(Statement):
                                 False)
         self._definition = d
         t.crossreference_definition_endorsement(self)
-        cat = title_categories.definition_inclusion
+        cat = paragraph_headers.definition_inclusion
         if nameset is None and symbol is None:
             symbol = configuration.default_definition_inclusion_symbol
         super().__init__(
             theory=t, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-            cat=cat, ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
+            paragraph_header=cat, ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
         super()._declare_class_membership(declarative_class_list.definition_inclusion)
         if echo:
             self.echo()
@@ -3727,7 +3736,7 @@ class FormulaStatement(Statement):
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
             explicit_name: (None, str, StyledText) = None,
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-            cat: (None, TitleCategoryOBSOLETE) = None,
+            paragraphe_header: (None, ParagraphHeader) = None,
             nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_statement, configuration.echo_default,
@@ -3746,7 +3755,7 @@ class FormulaStatement(Statement):
         #  are elements of the source theory-branch.
         self.valid_proposition = valid_proposition
         self.statement_index = theory.crossreference_statement(self)
-        cat = prioritize_value(cat, title_categories.proposition)
+        paragraphe_header = prioritize_value(paragraphe_header, paragraph_headers.proposition)
         # TODO: Check that cat is a valid statement cat (prop., lem., cor., theorem)
         if nameset is None and symbol is None:
             symbol = configuration.default_statement_symbol
@@ -3756,7 +3765,7 @@ class FormulaStatement(Statement):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name,
             ref=ref, subtitle=subtitle,
-            nameset=nameset, cat=cat,
+            nameset=nameset, paragraph_header=paragraphe_header,
             echo=False)
         # manage theoretical-morphisms
         self.morphism_output = None
@@ -3848,7 +3857,7 @@ class Morphism(FormulaStatement):
 
     def __init__(
             self, source_statement, nameset=None, theory=None,
-            cat=None):
+            paragraphe_header=None):
         assert isinstance(theory, TheoryElaborationSequence)
         assert isinstance(source_statement, FormulaStatement)
         assert theory.contains_theoretical_objct(source_statement)
@@ -3859,7 +3868,7 @@ class Morphism(FormulaStatement):
             self.source_statement.valid_proposition)
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
-            nameset=nameset, cat=cat)
+            nameset=nameset, paragraphe_header=paragraphe_header)
 
     def rep_report(self, proof: (None, bool) = None):
         """Return a representation that expresses and justifies the statement.
@@ -3951,7 +3960,7 @@ class DirectDefinitionInference(FormulaStatement):
         self.definition = d
         super().__init__(
             theory=t, valid_proposition=p,
-            nameset=nameset, cat=title_categories.formal_definition,
+            nameset=nameset, paragraphe_header=paragraph_headers.formal_definition,
             title=title, dashed_name=dashed_name, echo=False)
         assert d.statement_index < self.statement_index
         super()._declare_class_membership(declarative_class_list.direct_definition_inference)
@@ -4047,14 +4056,14 @@ class InferenceRuleDeclaration(TheoreticalObject):
         self._compose_paragraph_proof_method = compose_paragraph_proof_method
         if nameset is None and symbol is None:
             symbol = configuration.default_inference_rule_symbol
-        cat = title_categories.inference_rule_declaration
+        cat = paragraph_headers.inference_rule_declaration
         super().__init__(universe_of_discourse=universe_of_discourse,
                          is_theory_foundation_system=False,
                          symbol=symbol, index=index, auto_index=auto_index,
                          dashed_name=dashed_name,
                          acronym=acronym, abridged_name=abridged_name, name=name,
                          explicit_name=explicit_name,
-                         cat=cat, ref=ref, subtitle=subtitle,
+                         paragraph_header=cat, ref=ref, subtitle=subtitle,
                          nameset=nameset, echo=False)
         super()._declare_class_membership(declarative_class_list.inference_rule)
         universe_of_discourse.cross_reference_inference_rule(self)
@@ -4086,11 +4095,12 @@ class InferenceRuleDeclaration(TheoreticalObject):
             t: TheoryElaborationSequence,
             nameset: (None, str, NameSet) = None,
             ref: (None, str) = None,
-            cat: (None, TitleCategoryOBSOLETE) = None,
+            paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None,
             echo: (None, bool) = None, **kwargs) -> InferredStatement:
         """Apply this inference-rules on input statements and return the resulting statement."""
-        return InferredStatement(*args, i=self, t=t, nameset=nameset, ref=ref, cat=cat,
+        return InferredStatement(*args, i=self, t=t, nameset=nameset, ref=ref,
+                                 paragraph_header=paragraph_header,
                                  subtitle=subtitle,
                                  echo=echo,
                                  **kwargs)
@@ -4470,14 +4480,15 @@ class AtheoreticalStatement(SymbolicObject):
             dashed_name: (None, str, StyledText) = None,
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-            cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str, StyledText) = None,
+            paragraph_header: (None, ParagraphHeader) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         self.theory = theory
         super().__init__(universe_of_discourse=theory.universe_of_discourse, symbol=symbol,
                          index=index, auto_index=auto_index, dashed_name=dashed_name,
                          acronym=acronym, abridged_name=abridged_name, name=name,
-                         explicit_name=explicit_name, cat=cat, ref=ref, subtitle=subtitle,
+                         explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref,
+                         subtitle=subtitle,
                          nameset=nameset, echo=echo)
         super()._declare_class_membership(classes.atheoretical_statement)
 
@@ -4493,7 +4504,7 @@ class NoteInclusion(AtheoreticalStatement):
             auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-            cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str, StyledText) = None,
+            paragraph_header: (None, ParagraphHeader) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
 
@@ -4503,16 +4514,16 @@ class NoteInclusion(AtheoreticalStatement):
                'theory is not a member of declarative-class theory.', t=t,
                slf=self)
         universe_of_discourse = t.universe_of_discourse
-        cat = title_categories.note if cat is None else cat
+        paragraph_header = paragraph_headers.note if paragraph_header is None else paragraph_header
         #  self.statement_index = theory.crossreference_statement(self)
         self.theory = t
         if isinstance(content, str):
             content = SansSerifNormal(content)
         self._natural_language = content
-        self.category = cat
+        self.category = paragraph_header
         if nameset is None and symbol is None:
             # symbol = self.category.symbol_base
-            symbol = cat.symbol_base
+            symbol = paragraph_header.symbol_base
             index = universe_of_discourse.index_symbol(symbol=symbol) if auto_index else index
         if isinstance(nameset, str):
             # If symbol was passed as a string,
@@ -4523,7 +4534,8 @@ class NoteInclusion(AtheoreticalStatement):
         super().__init__(theory=t,
                          symbol=symbol, index=index, auto_index=auto_index,
                          dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name,
-                         name=name, explicit_name=explicit_name, cat=cat, ref=ref,
+                         name=name, explicit_name=explicit_name, paragraph_header=paragraph_header,
+                         ref=ref,
                          subtitle=subtitle,
                          nameset=nameset, echo=False)
         if echo:
@@ -4571,7 +4583,7 @@ class NoteInclusion(AtheoreticalStatement):
         return output
 
 
-section_category = TitleCategoryOBSOLETE(
+section_category = ParagraphHeader(
     name='section', symbol_base='§', natural_name='section', abridged_name='sect.')
 
 
@@ -4607,7 +4619,7 @@ class Section(AtheoreticalStatement):
         self.category = section_category
         symbol = NameSet(
             symbol=self.category.symbol_base, index=self.statement_index)
-        title = TitleOBSOLETE(ref=self._section_reference, cat=section_category,
+        title = TitleOBSOLETE(ref=self._section_reference, paragrapha_header=section_category,
                               subtitle=section_title)
         super().__init__(
             nameset=symbol,
@@ -4711,12 +4723,12 @@ class TheoryElaborationSequence(TheoreticalObject):
                                 text_style=text_styles.script_normal)
             index = u.index_symbol(symbol=symbol)
             nameset = NameSet(s=symbol, index=index)
-        nameset.cat = title_categories.theory_elaboration_sequence
+        nameset.paragraph_header = paragraph_headers.theory_elaboration_sequence
         nameset.ref = ref
         nameset.subtitle = subtitle
         super().__init__(
             nameset=nameset,
-            cat=nameset.cat,
+            paragraph_header=nameset.paragraph_header,
             is_theory_foundation_system=True if extended_theory is None else False,
             universe_of_discourse=u,
             echo=False)
@@ -4753,7 +4765,7 @@ class TheoryElaborationSequence(TheoreticalObject):
                 'axiom-interpretation and definition-interpretation) is critically dependent on the correctness of '
                 'the content translation performed by the theory author, from axiom or definition natural language, '
                 'to formulae.',
-                cat=title_categories.warning,
+                paragraph_header=paragraph_headers.warning,
                 echo=echo)
             self._interpretation_disclaimer = True
 
@@ -5065,7 +5077,8 @@ class TheoryElaborationSequence(TheoreticalObject):
                   abridged_name: (None, str, StyledText) = None,
                   name: (None, str, StyledText) = None,
                   explicit_name: (None, str, StyledText) = None,
-                  cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str, StyledText) = None,
+                  paragraph_header: (None, ParagraphHeader) = None,
+                  ref: (None, str, StyledText) = None,
                   subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
                   echo: (None, bool) = None) -> NoteInclusion:
         """Take a note, make a comment, or remark in this theory.
@@ -5074,7 +5087,8 @@ class TheoryElaborationSequence(TheoreticalObject):
                                                     index=index, auto_index=auto_index,
                                                     dashed_name=dashed_name, acronym=acronym,
                                                     abridged_name=abridged_name,
-                                                    name=name, explicit_name=explicit_name, cat=cat,
+                                                    name=name, explicit_name=explicit_name,
+                                                    paragraph_header=paragraph_header,
                                                     ref=ref, subtitle=subtitle,
                                                     nameset=nameset, echo=echo)
 
@@ -5101,7 +5115,7 @@ class Hypothesis(Statement):
             subtitle: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
-        category = title_categories.hypothesis
+        category = paragraph_headers.hypothesis
         # TODO: Check that all components of the hypothetical-proposition
         #  are elements of the source theory-branch.
         verify(
@@ -5121,7 +5135,7 @@ class Hypothesis(Statement):
             index = t.u.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         super().__init__(
-            theory=t, cat=category, nameset=nameset,
+            theory=t, paragraph_header=category, nameset=nameset,
             subtitle=subtitle, dashed_name=dashed_name, echo=False)
         super()._declare_class_membership(declarative_class_list.hypothesis)
         self._hypothetical_formula = hypothetical_formula
@@ -5248,7 +5262,7 @@ class Relation(TheoreticalObject):
         signal_theoretical_morphism = False if signal_theoretical_morphism is None else signal_theoretical_morphism
         assert isinstance(signal_proposition, bool)
         assert isinstance(signal_theoretical_morphism, bool)
-        cat = title_categories.relation_declaration
+        cat = paragraph_headers.relation_declaration
         self.formula_rep = Formula.function_call if formula_rep is None else formula_rep
         self.signal_proposition = signal_proposition
         self.signal_theoretical_morphism = signal_theoretical_morphism
@@ -5260,7 +5274,7 @@ class Relation(TheoreticalObject):
             index = universe_of_discourse.index_symbol(symbol=symbol) if auto_index else index
             nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name, acronym=acronym,
                               abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-                              cat=cat, ref=ref, subtitle=subtitle)
+                              paragraph_header=cat, ref=ref, subtitle=subtitle)
         super().__init__(
             universe_of_discourse=universe_of_discourse, nameset=nameset, echo=False)
         self.universe_of_discourse.cross_reference_relation(r=self)
@@ -5415,8 +5429,8 @@ class SubstitutionOfEqualTerms(FormulaStatement):
 
     def __init__(
             self, original_expression, equality_statement, nameset=None,
-            cat=None, theory=None, reference=None, title=None):
-        cat = title_categories.proposition if cat is None else cat
+            paragraphe_header=None, theory=None, reference=None, title=None):
+        paragraphe_header = paragraph_headers.proposition if paragraphe_header is None else paragraphe_header
         # Check p_implies_q consistency
         assert isinstance(theory, TheoryElaborationSequence)
         assert isinstance(original_expression, FormulaStatement)
@@ -5436,7 +5450,7 @@ class SubstitutionOfEqualTerms(FormulaStatement):
         #   if there are no occurrences of left_term in original_expression.
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
-            cat=cat,
+            paragraphe_header=paragraphe_header,
             nameset=nameset)
 
     def rep_report(self, proof: (None, bool) = None):
@@ -6838,7 +6852,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
     def infer_statement(self, p_implies_q: (None, FormulaStatement) = None,
                         nameset: (None, str, NameSet) = None,
                         ref: (None, str) = None,
-                        cat: (None, TitleCategoryOBSOLETE) = None,
+                        paragraph_header: (None, ParagraphHeader) = None,
                         subtitle: (None, str) = None,
                         echo: (None, bool) = None) -> InferredStatement:
         """Apply the absorption inference-rule and return the inferred-statement.
@@ -6846,7 +6860,8 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         :param p_implies_q: (mandatory) The implication statement.
         :return: An inferred-statement proving p implies p and q in the current theory.
         """
-        return super().infer_statement(p_implies_q, nameset=nameset, ref=ref, cat=cat,
+        return super().infer_statement(p_implies_q, nameset=nameset, ref=ref,
+                                       paragraph_header=paragraph_header,
                                        subtitle=subtitle, echo=echo)
 
 
@@ -6887,7 +6902,7 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
                         formula: (None, Formula) = None,
                         nameset: (None, str, NameSet) = None,
                         ref: (None, str) = None,
-                        cat: (None, TitleCategoryOBSOLETE) = None,
+                        paragraph_header: (None, ParagraphHeader) = None,
                         subtitle: (None, str) = None,
                         echo: (None, bool) = None) -> InferredStatement:
         """Apply the axiom-interpretation inference-rule and return the inferred-statement.
@@ -6896,7 +6911,8 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         :param formula: (mandatory) The interpretation of the axiom as a formula.
         :return: An inferred-statement proving the formula in the current theory.
         """
-        return super().infer_statement(axiom, formula, nameset=nameset, ref=ref, cat=cat,
+        return super().infer_statement(axiom, formula, nameset=nameset, ref=ref,
+                                       paragraph_header=paragraph_header,
                                        subtitle=subtitle, echo=echo)
 
 
@@ -6934,7 +6950,7 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
                         q: (None, FormulaStatement) = None,
                         nameset: (None, str, NameSet) = None,
                         ref: (None, str) = None,
-                        cat: (None, TitleCategoryOBSOLETE) = None,
+                        paragraph_header: (None, ParagraphHeader) = None,
                         subtitle: (None, str) = None,
                         echo: (None, bool) = None) -> InferredStatement:
         """Apply the conjunction-introduction inference-rule and return the inferred-statement.
@@ -6943,7 +6959,8 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
         :param p: (mandatory) The p statement, proving that p is true in the current theory.
         :return: An inferred-statement proving p in the current theory.
         """
-        return super().infer_statement(p, q, nameset=nameset, ref=ref, cat=cat,
+        return super().infer_statement(p, q, nameset=nameset, ref=ref,
+                                       paragraph_header=paragraph_header,
                                        subtitle=subtitle, echo=echo)
 
 
@@ -6984,7 +7001,7 @@ class InconsistencyIntroductionInclusion(InferenceRuleInclusion):
                         inconsistent_theory: (None, TheoryElaborationSequence) = None,
                         nameset: (None, str, NameSet) = None,
                         ref: (None, str) = None,
-                        cat: (None, TitleCategoryOBSOLETE) = None,
+                        paragraph_header: (None, ParagraphHeader) = None,
                         subtitle: (None, str) = None,
                         echo: (None, bool) = None) -> InferredStatement:
         """Apply the inconsistency-introduction inference-rule and return the inferred-statement.
@@ -6999,7 +7016,7 @@ class InconsistencyIntroductionInclusion(InferenceRuleInclusion):
             # when both p and not_p are contained in the same theory.
             inconsistent_theory = p.t
         return super().infer_statement(p, not_p, inconsistent_theory, nameset=nameset, ref=ref,
-                                       cat=cat,
+                                       paragraph_header=paragraph_header,
                                        subtitle=subtitle, echo=echo)
 
 
@@ -7041,7 +7058,7 @@ class ModusPonensInclusion(InferenceRuleInclusion):
                         p: (None, FormulaStatement) = None,
                         nameset: (None, str, NameSet) = None,
                         ref: (None, str) = None,
-                        cat: (None, TitleCategoryOBSOLETE) = None,
+                        paragraph_header: (None, ParagraphHeader) = None,
                         subtitle: (None, str) = None,
                         echo: (None, bool) = None) -> InferredStatement:
         """Apply the modus-ponens inference-rule and return the inferred-statement.
@@ -7050,7 +7067,8 @@ class ModusPonensInclusion(InferenceRuleInclusion):
         :param p: (mandatory) The p statement, proving that p is true in the current theory.
         :return: An inferred-statement proving p in the current theory.
         """
-        return super().infer_statement(p_implies_q, p, nameset=nameset, ref=ref, cat=cat,
+        return super().infer_statement(p_implies_q, p, nameset=nameset, ref=ref,
+                                       paragraph_header=paragraph_header,
                                        subtitle=subtitle, echo=echo)
 
 
@@ -8055,7 +8073,7 @@ class UniverseOfDiscourse(SymbolicObject):
             auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-            cat: (None, TitleCategoryOBSOLETE) = None, ref: (None, str, StyledText) = None,
+            paragraph_header: (None, ParagraphHeader) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         """Take a note, make a comment, or remark."""
@@ -8067,7 +8085,8 @@ class UniverseOfDiscourse(SymbolicObject):
         return NoteInclusion(t=t, content=content, symbol=symbol, index=index,
                              auto_index=auto_index,
                              dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name,
-                             name=name, explicit_name=explicit_name, cat=cat, ref=ref,
+                             name=name, explicit_name=explicit_name,
+                             paragraph_header=paragraph_header, ref=ref,
                              subtitle=subtitle,
                              nameset=nameset, echo=echo)
 
@@ -8116,7 +8135,7 @@ class InferredStatement(FormulaStatement):
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
             explicit_name: (None, str, StyledText) = None,
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-            cat: (None, TitleCategoryOBSOLETE) = None,
+            paragraph_header: (None, ParagraphHeader) = None,
             nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None,
             echo_proof: (None, bool) = None):
@@ -8139,7 +8158,7 @@ class InferredStatement(FormulaStatement):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name,
             ref=ref, subtitle=subtitle,
-            nameset=nameset, cat=cat,
+            nameset=nameset, paragraphe_header=paragraph_header,
             echo=False)
         super()._declare_class_membership(declarative_class_list.inferred_proposition)
         if self.inference_rule is self.t.u.i.inconsistency_introduction and \
@@ -8243,18 +8262,18 @@ class InconsistencyIntroductionStatement(FormulaStatement):
     """
 
     def __init__(
-            self, p, not_p, nameset=None, cat=None, theory=None,
+            self, p, not_p, nameset=None, paragraphe_header=None, theory=None,
             title=None):
         if title is None:
             title = 'THEORY INCONSISTENCY'
-        cat = title_categories.proposition if cat is None else cat
+        paragraphe_header = paragraph_headers.proposition if paragraphe_header is None else paragraphe_header
         self.p = p
         self.not_p = not_p
         valid_proposition = InconsistencyIntroductionInferenceRuleOBSOLETE.execute_algorithm(
             theory=theory, p=p, not_p=not_p)
         super().__init__(
             theory=theory, valid_proposition=valid_proposition,
-            cat=cat, title=title,
+            paragraphe_header=paragraphe_header, title=title,
             nameset=nameset)
         # The theory is proved inconsistent!
         theory.prove_inconsistent(self)
@@ -8282,12 +8301,12 @@ class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
 
     @staticmethod
     def infer(
-            theory, p, not_p, symbol=None, category=None,
+            theory, p, not_p, symbol=None, paragraph_header=None,
             title=None):
         """"""
         return InconsistencyIntroductionStatement(
             p=p, not_p=not_p, nameset=symbol,
-            cat=category, theory=theory, title=title)
+            paragraphe_header=paragraph_header, theory=theory, title=title)
 
     @staticmethod
     def execute_algorithm(theory, p, not_p):
@@ -8325,10 +8344,10 @@ class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
 def reset_configuration(configuration: Configuration) -> None:
     configuration.auto_index = None
     configuration._echo_default = False
-    configuration.default_axiom_declaration_symbol = SerifNormal('A')
-    configuration.default_axiom_inclusion_symbol = SerifNormal('A')
-    configuration.default_definition_declaration_symbol = SerifNormal('D')
-    configuration.default_definition_inclusion_symbol = SerifNormal('D')
+    configuration.default_axiom_declaration_symbol = ScriptNormal('A')
+    configuration.default_axiom_inclusion_symbol = SerifItalic('A')
+    configuration.default_definition_declaration_symbol = ScriptNormal('D')
+    configuration.default_definition_inclusion_symbol = SerifItalic('D')
     configuration.default_formula_symbol = SerifItalic(plaintext='phi', unicode='𝜑')
     configuration.default_free_variable_symbol = StyledText(plaintext='x',
                                                             text_style=text_styles.serif_bold)

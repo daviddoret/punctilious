@@ -19,10 +19,10 @@ from core import \
     Relation, rep_two_columns_proof_item, \
     ScriptNormal, SansSerifBold, SansSerifNormal, SerifNormal, SimpleObjct, \
     Statement, Subscript, subscriptify, \
-    title_categories, ComposableText, NameSet, SymbolicObject, \
+    paragraph_headers, ComposableText, NameSet, SymbolicObject, \
     TextStyle, text_styles, TheoreticalObject, \
     TheoryElaborationSequence, TheoryPackage, \
-    title_categories, \
+    paragraph_headers, \
     UniverseOfDiscourse
 
 # from foundation_system_1 import foundation_system_1, ft, u

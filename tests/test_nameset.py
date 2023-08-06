@@ -14,7 +14,7 @@ class TestNameSet(TestCase):
             acronym='smthng', abridged_name='someth.', name='something',
             explicit_name='something precise',
             # section names
-            cat=pu.title_categories.note,
+            paragraph_header=pu.paragraph_headers.note,
             ref='1.1.1', subtitle='about something')
 
         # Plaintext symbolic representations
@@ -67,6 +67,7 @@ class TestNameSet(TestCase):
                          n.rep_conventional_name(encoding=pu.encodings.latex))
 
     def test_nameset_title(self):
-        n1 = pu.NameSet(symbol='x', index=1, cat=pu.title_categories._hypothetical_proposition)
+        n1 = pu.NameSet(symbol='x', index=1,
+                        paragraph_header=pu.paragraph_headers._hypothetical_proposition)
         s1 = n1.rep_title(encoding=pu.encodings.plaintext)
         print(s1)

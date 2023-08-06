@@ -22,12 +22,12 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         t.take_note(
             content='A natural number is any element of the set 𝐍 := { 0, 1, 2, 3, 4, ... }, which is the set of all the numbers created by starting with 0 and then counting forward indefinitely. We call 𝐍 the set of natural numbers.',
-            cat=pu.title_categories.informal_definition,
+            paragraph_header=pu.paragraph_headers.informal_definition,
             ref='2.1.1')
 
         t.take_note(
             content='In some texts the natural numbers start at 1 instead of 0, but this is a matter of notational convention more than anything else. In this text we shall refer to the set { 1, 2, 3, ... } as the positive integers 𝐙⁺ rather than the natural numbers. Natural numbers are sometimes also known as whole numbers.',
-            cat=pu.title_categories.remark,
+            paragraph_header=pu.paragraph_headers.remark,
             ref='2.1.2')
 
         # AXIOM 2.1.1
