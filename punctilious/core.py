@@ -6934,7 +6934,7 @@ class InconsistencyIntroductionInclusion(InferenceRuleInclusion):
         :return: An inferred-statement proving p in the current theory.
         """
         if inconsistent_theory is None and p.t is not_p.t:
-            # The inconsistent_theory can be safely defaulted
+            # The inconsistent_theory can be unambiguously defaulted
             # when both p and not_p are contained in the same theory.
             inconsistent_theory = p.t
         return super().infer_statement(p, not_p, inconsistent_theory, nameset=nameset, ref=ref,
