@@ -4812,14 +4812,25 @@ class TheoryElaborationSequence(TheoreticalObject):
 
     def pose_hypothesis(
             self,
-            hypothetical_proposition: Formula, nameset: (None, str, NameSet) = None,
-            title: (None, str, TitleOBSOLETE) = None, dashed_name: (None, str, DashedName) = None,
-            echo: bool = False) -> Hypothesis:
+            hypothetical_proposition: Formula,
+            symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None,
+            nameset: (None, str, NameSet) = None,
+            echo: (None, bool) = None) -> Hypothesis:
         """Pose a new hypothesis in the current theory."""
         return Hypothesis(
             t=self, hypothetical_formula=hypothetical_proposition,
-            nameset=nameset, subtitle=title, dashed_name=dashed_name,
-            echo=echo)
+            symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
+            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+            ref=ref, subtitle=subtitle,
+            nameset=nameset, echo=echo)
 
     def rep_report(self, encoding: (None, Encoding) = None,
                    proof: (None, bool) = None):
@@ -4916,9 +4927,17 @@ class TheoryElaborationSequence(TheoreticalObject):
 class Hypothesis(Statement):
     def __init__(
             self, t: TheoryElaborationSequence, hypothetical_formula: Formula,
-            nameset: (None, NameSet) = None,
-            subtitle: (None, str, StyledText) = None, dashed_name: (None, str, StyledText) = None,
-            echo: bool = False):
+            symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None,
+            nameset: (None, str, NameSet) = None,
+            echo: (None, bool) = None):
         category = title_categories.hypothesis
         # TODO: Check that all components of the hypothetical-proposition
         #  are elements of the source theory-branch.
@@ -4928,7 +4947,7 @@ class Hypothesis(Statement):
             hypothetical_formula=hypothetical_formula,
             slf=self)
         if nameset is None:
-            symbol = configuration.default_hypothesis_symbol
+            symbol = prioritize_value(symbol, configuration.default_hypothesis_symbol)
             index = t.u.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         if isinstance(nameset, str):

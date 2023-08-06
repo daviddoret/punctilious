@@ -21,7 +21,7 @@ class TestProofByContradiction(TestCase):
         p1 = t1.i.axiom_interpretation.infer_statement(a2, u.f(r1, o1, o2))
         p2 = t1.i.axiom_interpretation.infer_statement(a2, u.f(r1, o2, o3))
         with u.v() as x, u.v() as y, u.v() as z:
-            p3 = t1.i.axiom_interpretation.infer_statement(
+            p3_implication = t1.i.axiom_interpretation.infer_statement(
                 a2,
                 u.f(u.r.implies,
                     u.f(u.r.land, u.f(r1, x, y),
@@ -29,12 +29,16 @@ class TestProofByContradiction(TestCase):
                     u.f(r1, x, z)))
         t1.stabilize()
         hypothetical_formula = u.f(u.r.lnot, u.f(r1, o1, o3))
+        # H1: ¬(𝑟₁(𝑜₁, 𝑜₃))
         hypothesis = t1.pose_hypothesis(hypothetical_proposition=hypothetical_formula)
         # TODO: The hypothetical-theory must be stabilized immediately,
         #   otherwise new axioms or definitions may be introduced,
         #   leading to inconsistent results from the perspective of the
         #   base theory.
-        p4_hypothesis = hypothesis.hypothetical_proposition
         hypothetical_theory = hypothesis.hypothetical_theory
         p5 = hypothetical_theory.i.conjunction_introduction.infer_statement(p1, p2)
-        p6 = hypothetical_theory.i.mp.infer_statement(p3, p5)
+        p6 = hypothetical_theory.i.variable_substitution.infer_statement(p3_implication, o1, o2, o3)
+        # p7: 𝑟₁(𝑜₁, 𝑜₃) by modus ponens
+        p7 = hypothetical_theory.i.mp.infer_statement(p6, p5)
+        # p7 is in contradiction with the hypothetical_formula
+        # hypothetical_theory.i.inconsistency_introduction(!!!!!)
