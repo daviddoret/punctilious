@@ -4273,6 +4273,70 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         return True
 
 
+class BiconditionalEliminationLeftDeclaration(InferenceRuleDeclaration):
+    """The well-known biconditional elimination (left) inference rule: P ⟺ Q ⊢ P ⟹ Q.
+
+    Acronym: bel.
+    """
+
+    def __init__(self,
+                 universe_of_discourse: UniverseOfDiscourse,
+                 echo: (None, bool) = None):
+        symbol = 'biconditional-elimination-left'
+        auto_index = False
+        dashed_name = 'biconditional-elimination-left'
+        acronym = 'bel'
+        abridged_name = 'bicond. elim. (left)'
+        explicit_name = 'biconditional elimination (left) inference rule'
+        name = 'biconditional elimination (left)'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = BiconditionalEliminationLeftDeclaration.infer_formula
+        verify_args = BiconditionalEliminationLeftDeclaration.verify_args
+        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
+                         universe_of_discourse=universe_of_discourse, symbol=symbol,
+                         auto_index=auto_index, dashed_name=dashed_name,
+                         acronym=acronym, abridged_name=abridged_name, name=name,
+                         explicit_name=explicit_name,
+                         echo=echo)
+
+    def infer_formula(self, p_iff_q: FormulaStatement = None,
+                      t: TheoryElaborationSequence = None,
+                      echo: (None, bool) = None) -> Formula:
+        """
+
+        :param p_implies_q: A formula-statement of the form: (P ⟹ Q).
+        :param t: The current theory-elaboration-sequence.
+        :return: The (proven) formula: (P ⟹ (P ∧ Q)).
+        """
+        p_iff_q = unpack_formula(p_iff_q)
+        p: Formula
+        q: Formula
+        p = unpack_formula(p_iff_q.parameters[0])
+        q = unpack_formula(p_iff_q.parameters[1])
+        output = t.u.f(t.u.r.implication, p, q)
+        return output
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_biconditional_elimination_left_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p_iff_q: FormulaStatement = None,
+                    t: TheoryElaborationSequence = None) -> bool:
+        verify(
+            t.contains_theoretical_objct(p_iff_q),
+            'Formula-statement ⌜p_iff_q⌝ must be contained in theory ⌜t⌝.',
+            phi=p_iff_q, t=t, slf=self)
+        p_iff_q = unpack_formula(p_iff_q)
+        verify(
+            p_iff_q.relation is t.u.r.biconditional,
+            'The relation of formula ⌜p_iff_q⌝ must be a biconditional.',
+            phi_relation=p_iff_q.relation, phi=p_iff_q, t=t, slf=self)
+        return True
+
+
 class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
     def __init__(self,
                  universe_of_discourse: UniverseOfDiscourse,
@@ -5830,7 +5894,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.biconditional_introduction
 
     @property
-    def bel(self) -> InferenceRuleDeclaration:
+    def bel(self) -> BiconditionalEliminationLeftDeclaration:
         """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
         Abridged property: u.i.bel
@@ -5852,7 +5916,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.biconditional_elimination_right
 
     @property
-    def biconditional_elimination_left(self) -> InferenceRuleDeclaration:
+    def biconditional_elimination_left(self) -> BiconditionalEliminationLeftDeclaration:
         """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
         Abridged property: u.i.bel
@@ -5861,51 +5925,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
-        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            phi = unpack_formula(args[0])
-            # phi is a formula of the form P ⟺ Q
-            # unpack the embedded formulae
-            p = unpack_formula(phi.parameters[0])
-            q = unpack_formula(phi.parameters[1])
-            psi = t.u.f(t.u.r.implication, p, q)
-            return psi
-
-        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            verify(
-                len(args) == 1,
-                'Exactly 1 item is expected in ⌜*args⌝ .',
-                args=args, t=t, slf=self)
-            phi = args[0]
-            verify(
-                t.contains_theoretical_objct(phi),
-                'Statement ⌜phi⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-                phi=phi, t=t, slf=self)
-            phi = unpack_formula(phi)
-            verify(
-                phi.relation is t.u.r.biconditional,
-                'The relation of formula ⌜phi⌝ must be a biconditional.',
-                phi_relation=phi.relation, phi=phi, t=t, slf=self)
-            return True
-
         if self._biconditional_elimination_left is None:
-            self._biconditional_elimination_left = InferenceRuleDeclaration(
-                universe_of_discourse=self.u,
-                nameset=NameSet(symbol='biconditional-elimination-left', index=None),
-                name='biconditional elimination (left)',
-                infer_formula=infer_formula,
-                verify_args=verify_args)
+            self._biconditional_elimination_left = BiconditionalEliminationLeftDeclaration(
+                universe_of_discourse=self.u)
         return self._biconditional_elimination_left
 
     @property
@@ -6916,6 +6938,49 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
                                        subtitle=subtitle, echo=echo)
 
 
+class BiconditionalEliminationLeftInclusion(InferenceRuleInclusion):
+    """
+
+    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
+    is sufficient to do the job. But the advantage of specializing this class is to provide
+    user-friendly type hints and method parameters documentation for that particular
+    inference-rule. This may be justified for well-known inference-rules.
+    """
+
+    def __init__(self,
+                 t: TheoryElaborationSequence,
+                 echo: (None, bool) = None,
+                 proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.biconditional_elimination_left
+        dashed_name = 'biconditional-elimination-left'
+        acronym = 'bel'
+        abridged_name = 'bicond. elim. left'
+        name = 'biconditional elimination (left)'
+        explicit_name = 'biconditional elimination (left) inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo, proof=proof)
+
+    def infer_formula(self, p_iff_q: (None, FormulaStatement) = None,
+                      echo: (None, bool) = None):
+        return super().infer_formula(p_iff_q, echo=echo)
+
+    def infer_statement(self, p_iff_q: (None, FormulaStatement) = None,
+                        nameset: (None, str, NameSet) = None,
+                        ref: (None, str) = None,
+                        paragraph_header: (None, ParagraphHeader) = None,
+                        subtitle: (None, str) = None,
+                        echo: (None, bool) = None) -> InferredStatement:
+        """Apply the biconditional elimination (left) inference-rule and return the inferred-statement.
+
+        :param p_iff_q: (mandatory) The biconditional statement.
+        :return: The proven inferred-statement p implies q in the current theory.
+        """
+        return super().infer_statement(p_iff_q, nameset=nameset, ref=ref,
+                                       paragraph_header=paragraph_header,
+                                       subtitle=subtitle, echo=echo)
+
+
 class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
     """
 
@@ -7146,7 +7211,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._axiom_interpretation
 
     @property
-    def bel(self) -> InferenceRuleInclusion:
+    def bel(self) -> BiconditionalEliminationLeftInclusion:
         """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
         Unabridged property: u.i.biconditional_elimination_left
@@ -7179,7 +7244,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.biconditional_introduction
 
     @property
-    def biconditional_elimination_left(self) -> InferenceRuleInclusion:
+    def biconditional_elimination_left(self) -> BiconditionalEliminationLeftInclusion:
         """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
         Abridged property: u.i.bel
@@ -7188,10 +7253,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         if self._biconditional_elimination_left is None:
-            self._biconditional_elimination_left = InferenceRuleInclusion(
-                t=self.t,
-                i=self.t.u.i.biconditional_elimination_left,
-                name='biconditional elimination (left)')
+            self._biconditional_elimination_left = BiconditionalEliminationLeftInclusion(t=self.t)
         return self._biconditional_elimination_left
 
     @property
