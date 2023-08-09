@@ -4512,12 +4512,12 @@ class ConjunctionEliminationLeftDeclaration(InferenceRuleDeclaration):
                       echo: (None, bool) = None) -> Formula:
         """
 
-        :param p_implies_q: A formula-statement of the form: (P ⟹ Q).
+        :param p_land_q: A formula-statement of the form: (P ⋀ Q).
         :param t: The current theory-elaboration-sequence.
-        :return: The (proven) formula: (P ⟹ (P ∧ Q)).
+        :return: The (proven) formula: P.
         """
-        q = unpack_formula(p_land_q).parameters[1]
-        return q
+        p = unpack_formula(p_land_q).parameters[0]
+        return p
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -4541,7 +4541,11 @@ class ConjunctionEliminationLeftDeclaration(InferenceRuleDeclaration):
 class ConjunctionEliminationRightDeclaration(InferenceRuleDeclaration):
     """The well-known conjunction elimination (left) inference rule: P ⟺ Q ⊢ Q ⟹ P.
 
-    Acronym: ber.
+    Acronym: cer.
+
+    :param p_land_q: A formula-statement of the form: (P ⋀ Q).
+    :param t: The current theory-elaboration-sequence.
+    :return: The (proven) formula: Q.
     """
 
     def __init__(self,
@@ -4570,12 +4574,12 @@ class ConjunctionEliminationRightDeclaration(InferenceRuleDeclaration):
                       echo: (None, bool) = None) -> Formula:
         """
 
-        :param p_implies_q: A formula-statement of the form: (P ⟹ Q).
+        :param p_land_q: A formula-statement of the form: (P ∧ Q).
         :param t: The current theory-elaboration-sequence.
-        :return: The (proven) formula: (P ⟹ (P ∧ Q)).
+        :return: The (proven) formula: Q.
         """
-        p = unpack_formula(p_land_q).parameters[0]
-        return p
+        q = unpack_formula(p_land_q).parameters[1]
+        return q
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -6176,7 +6180,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def biconditional_elimination_left(self) -> BiconditionalEliminationLeftDeclaration:
-        """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
+        """The well-known biconditional-elimination (left) inference-rule: ((P ⟺ Q) ⊢ (P ⟹ Q)).
+
+        The ⌜left⌝ suffix is non-standard and used to mean that among the two possible results of biconditional-elimination, i.e.: (P ⟹ Q) and (Q ⟹ P), we pick the first one, i.e.: (P ⟹ Q).
 
         Abridged property: u.i.bel
 
@@ -6192,6 +6198,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
     @property
     def biconditional_elimination_right(self) -> BiconditionalEliminationRightDeclaration:
         """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
+
+        The ⌜right⌝ suffix is non-standard and used to mean that among the two possible results of biconditional-elimination, i.e.: (P ⟹ Q) and (Q ⟹ P), we pick the second one, i.e.: (Q ⟹ P).
 
         Abridged property: u.i.ber()
 
@@ -6220,7 +6228,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def cel(self) -> InferenceRuleDeclaration:
-        """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
+        """The well-known conjunction-elimination (left) inference-rule: ((P ∧ Q) ⊢ P).
+
+        The ⌜left⌝ suffix is non-standard and used to mean that among the two possible results of conjunction-elimination, i.e.: P and Q, we pick the first one, i.e.: P.
 
         Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_left
 
@@ -6232,6 +6242,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
     @property
     def cer(self) -> InferenceRuleDeclaration:
         """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
+
+        The ⌜right⌝ suffix is non-standard and used to mean that among the two possible results of conjunction-elimination, i.e.: P and Q, we pick the second one, i.e.: Q.
 
         Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_right
 
@@ -6257,7 +6269,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def conjunction_elimination_left(self) -> ConjunctionEliminationLeftDeclaration:
-        """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
+        """The well-known conjunction-elimination (left) inference-rule: ((P ∧ Q) ⊢ P).
+
+        The ⌜left⌝ suffix is non-standard and used to mean that among the two possible results of conjunction-elimination, i.e.: P and Q, we pick the first one, i.e.: P.
 
         Abridged property: u.i.cel()
 
@@ -6276,6 +6290,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
     def conjunction_elimination_right(self) -> InferenceRuleDeclaration:
         """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
+        The ⌜right⌝ suffix is non-standard and used to mean that among the two possible results of conjunction-elimination, i.e.: P and Q, we pick the second one, i.e.: Q.
+
         Abridged property: u.i.cer()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
@@ -6288,7 +6304,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def conjunction_introduction(self) -> ConjunctionIntroductionDeclaration:
-        """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
+        """The well-known conjunction-introduction inference-rule: P, Q ⊢ (P ∧ Q).
 
         Abridged property: u.i.ci
 
@@ -7587,7 +7603,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def cel(self) -> InferenceRuleInclusion:
-        """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
+        """The well-known conjunction-elimination (left) inference-rule: (P ∧ Q) ⊢ P.
 
         Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_left()
 
