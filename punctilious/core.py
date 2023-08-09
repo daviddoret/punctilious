@@ -4480,6 +4480,122 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
         return True
 
 
+class ConjunctionEliminationLeftDeclaration(InferenceRuleDeclaration):
+    """The well-known conjunction elimination (left) inference rule: P ⟺ Q ⊢ P ⟹ Q.
+
+    Acronym: cel.
+    """
+
+    def __init__(self,
+                 universe_of_discourse: UniverseOfDiscourse,
+                 echo: (None, bool) = None):
+        symbol = 'conjunction-elimination-left'
+        auto_index = False
+        dashed_name = 'conjunction-elimination-left'
+        acronym = 'bel'
+        abridged_name = 'conj. elim. (left)'
+        explicit_name = 'conjunction elimination (left) inference rule'
+        name = 'conjunction elimination (left)'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = ConjunctionEliminationLeftDeclaration.infer_formula
+        verify_args = ConjunctionEliminationLeftDeclaration.verify_args
+        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
+                         universe_of_discourse=universe_of_discourse, symbol=symbol,
+                         auto_index=auto_index, dashed_name=dashed_name,
+                         acronym=acronym, abridged_name=abridged_name, name=name,
+                         explicit_name=explicit_name,
+                         echo=echo)
+
+    def infer_formula(self, p_land_q: FormulaStatement = None,
+                      t: TheoryElaborationSequence = None,
+                      echo: (None, bool) = None) -> Formula:
+        """
+
+        :param p_implies_q: A formula-statement of the form: (P ⟹ Q).
+        :param t: The current theory-elaboration-sequence.
+        :return: The (proven) formula: (P ⟹ (P ∧ Q)).
+        """
+        q = unpack_formula(p_land_q).parameters[1]
+        return q
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_conjunction_elimination_left_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p_land_q: FormulaStatement = None,
+                    t: TheoryElaborationSequence = None) -> bool:
+        verify(
+            t.contains_theoretical_objct(p_land_q),
+            'Statement ⌜p_land_q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+            p_land_q=p_land_q, t=t, slf=self)
+        verify(
+            p_land_q.relation is t.u.r.conjunction,
+            'The relation of formula ⌜p_land_q⌝ must be a conjunction.',
+            p_land_q_relation=p_land_q.relation, p_land_q=p_land_q, t=t, slf=self)
+        return True
+
+
+class ConjunctionEliminationRightDeclaration(InferenceRuleDeclaration):
+    """The well-known conjunction elimination (left) inference rule: P ⟺ Q ⊢ Q ⟹ P.
+
+    Acronym: ber.
+    """
+
+    def __init__(self,
+                 universe_of_discourse: UniverseOfDiscourse,
+                 echo: (None, bool) = None):
+        symbol = 'conjunction-elimination-right'
+        auto_index = False
+        dashed_name = 'conjunction-elimination-right'
+        acronym = 'ber'
+        abridged_name = 'conj. elim. (right)'
+        explicit_name = 'conjunction elimination (right) inference rule'
+        name = 'conjunction elimination (right)'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = BiconditionalEliminationRightDeclaration.infer_formula
+        verify_args = BiconditionalEliminationRightDeclaration.verify_args
+        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
+                         universe_of_discourse=universe_of_discourse, symbol=symbol,
+                         auto_index=auto_index, dashed_name=dashed_name,
+                         acronym=acronym, abridged_name=abridged_name, name=name,
+                         explicit_name=explicit_name,
+                         echo=echo)
+
+    def infer_formula(self, p_land_q: FormulaStatement = None,
+                      t: TheoryElaborationSequence = None,
+                      echo: (None, bool) = None) -> Formula:
+        """
+
+        :param p_implies_q: A formula-statement of the form: (P ⟹ Q).
+        :param t: The current theory-elaboration-sequence.
+        :return: The (proven) formula: (P ⟹ (P ∧ Q)).
+        """
+        p = unpack_formula(p_land_q).parameters[0]
+        return p
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_conjunction_elimination_right_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p_land_q: FormulaStatement = None,
+                    t: TheoryElaborationSequence = None) -> bool:
+        verify(
+            t.contains_theoretical_objct(p_land_q),
+            'Statement ⌜p_land_q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+            p_land_q=p_land_q, t=t, slf=self)
+        verify(
+            p_land_q.relation is t.u.r.conjunction,
+            'The relation of formula ⌜p_land_q⌝ must be a conjunction.',
+            p_land_q_relation=p_land_q.relation, p_land_q=p_land_q, t=t, slf=self)
+        return True
+
+
 class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
     def __init__(self,
                  universe_of_discourse: UniverseOfDiscourse,
@@ -6140,7 +6256,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         yield SerifItalic(plaintext='inference-rule')
 
     @property
-    def conjunction_elimination_left(self) -> InferenceRuleDeclaration:
+    def conjunction_elimination_left(self) -> ConjunctionEliminationLeftDeclaration:
         """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
         Abridged property: u.i.cel()
@@ -6151,48 +6267,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
         # TODO: inference-rule: conjunction_elimination_left: Migrate to specialized classes
 
-        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            p = unpack_formula(args[0])
-            q = unpack_formula(p.parameters[0])
-            return q
-
-        def verify_compatibility(*args, t: TheoryElaborationSequence) -> bool:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            verify(
-                len(args) == 1,
-                'Exactly 1 item is expected in ⌜*args⌝ .',
-                args=args, t=t, slf=self)
-            p = args[0]
-            verify(
-                t.contains_theoretical_objct(p),
-                'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-                args=args, t=t, slf=self)
-            p = unpack_formula(p)
-            verify(
-                p.relation is t.u.r.conjunction,
-                'The relation of formula ⌜p⌝ must be a conjunction.',
-                p_relation=p.relation, p=p, t=t, slf=self)
-            return True
-
         if self._conjunction_elimination_left is None:
-            self._conjunction_elimination_left = InferenceRuleDeclaration(
-                universe_of_discourse=self.u,
-                nameset=NameSet(symbol='conjunction-elimination-left',
-                                index=None,
-                                name='conjunction elimination (left)'),
-                infer_formula=infer_formula,
-                verify_args=verify_compatibility)
+            self._conjunction_elimination_left = ConjunctionEliminationLeftDeclaration(
+                universe_of_discourse=self.u)
         return self._conjunction_elimination_left
 
     @property
@@ -6204,51 +6281,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-
-        # TODO: inference-rule: conjunction_elimination_right: Migrate to specialized classes
-
-        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            p = unpack_formula(args[0])
-            r = unpack_formula(p.parameters[1])
-            return r
-
-        def verify_compatibility(*args, t: TheoryElaborationSequence) -> bool:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            verify(
-                len(args) == 1,
-                'Exactly 1 item is expected in ⌜*args⌝ .',
-                args=args, t=t, slf=self)
-            p = args[0]
-            verify(
-                t.contains_theoretical_objct(p),
-                'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-                args=args, t=t, slf=self)
-            p = unpack_formula(p)
-            verify(
-                p.relation is t.u.r.conjunction,
-                'The relation of formula ⌜p⌝ must be a conjunction.',
-                p_relation=p.relation, p=p, t=t, slf=self)
-            return True
-
         if self._conjunction_elimination_right is None:
-            self._conjunction_elimination_right = InferenceRuleDeclaration(
-                universe_of_discourse=self.u,
-                nameset=NameSet(symbol='conjunction-elimination-right',
-                                index=None,
-                                name='conjunction elimination (right)'),
-                infer_formula=infer_formula,
-                verify_args=verify_compatibility)
+            self._conjunction_elimination_right = ConjunctionEliminationRightDeclaration(
+                universe_of_discourse=self.u)
         return self._conjunction_elimination_right
 
     @property
@@ -7137,6 +7172,92 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
                                        subtitle=subtitle, echo=echo)
 
 
+class ConjunctionEliminationLeftInclusion(InferenceRuleInclusion):
+    """
+
+    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
+    is sufficient to do the job. But the advantage of specializing this class is to provide
+    user-friendly type hints and method parameters documentation for that particular
+    inference-rule. This may be justified for well-known inference-rules.
+    """
+
+    def __init__(self,
+                 t: TheoryElaborationSequence,
+                 echo: (None, bool) = None,
+                 proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.conjunction_elimination_left
+        dashed_name = 'conjunction-elimination-left'
+        acronym = 'bel'
+        abridged_name = 'conj. elim. left'
+        name = 'conjunction elimination (left)'
+        explicit_name = 'conjunction elimination (left) inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo, proof=proof)
+
+    def infer_formula(self, p_land_q: (None, FormulaStatement) = None,
+                      echo: (None, bool) = None):
+        return super().infer_formula(p_land_q, echo=echo)
+
+    def infer_statement(self, p_land_q: (None, FormulaStatement) = None,
+                        nameset: (None, str, NameSet) = None,
+                        ref: (None, str) = None,
+                        paragraph_header: (None, ParagraphHeader) = None,
+                        subtitle: (None, str) = None,
+                        echo: (None, bool) = None) -> InferredStatement:
+        """Apply the conjunction elimination (left) inference-rule and return the inferred-statement.
+
+        :param p_iff_q: (mandatory) The conjunction statement.
+        :return: The proven inferred-statement p implies q in the current theory.
+        """
+        return super().infer_statement(p_land_q, nameset=nameset, ref=ref,
+                                       paragraph_header=paragraph_header,
+                                       subtitle=subtitle, echo=echo)
+
+
+class ConjunctionEliminationRightInclusion(InferenceRuleInclusion):
+    """
+
+    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
+    is sufficient to do the job. But the advantage of specializing this class is to provide
+    user-friendly type hints and method parameters documentation for that particular
+    inference-rule. This may be justified for well-known inference-rules.
+    """
+
+    def __init__(self,
+                 t: TheoryElaborationSequence,
+                 echo: (None, bool) = None,
+                 proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.conjunction_elimination_right
+        dashed_name = 'conjunction-elimination-right'
+        acronym = 'bel'
+        abridged_name = 'conj. elim. right'
+        name = 'conjunction elimination (right)'
+        explicit_name = 'conjunction elimination (right) inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo, proof=proof)
+
+    def infer_formula(self, p_iff_q: (None, FormulaStatement) = None,
+                      echo: (None, bool) = None):
+        return super().infer_formula(p_iff_q, echo=echo)
+
+    def infer_statement(self, p_iff_q: (None, FormulaStatement) = None,
+                        nameset: (None, str, NameSet) = None,
+                        ref: (None, str) = None,
+                        paragraph_header: (None, ParagraphHeader) = None,
+                        subtitle: (None, str) = None,
+                        echo: (None, bool) = None) -> InferredStatement:
+        """Apply the conjunction elimination (right) inference-rule and return the inferred-statement.
+
+        :param p_iff_q: (mandatory) The conjunction statement.
+        :return: The proven inferred-statement p implies q in the current theory.
+        """
+        return super().infer_statement(p_iff_q, nameset=nameset, ref=ref,
+                                       paragraph_header=paragraph_header,
+                                       subtitle=subtitle, echo=echo)
+
+
 class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
     """
 
@@ -7439,7 +7560,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._biconditional_introduction
 
     @property
-    def conjunction_elimination_left(self) -> InferenceRuleInclusion:
+    def conjunction_elimination_left(self) -> ConjunctionEliminationLeftDeclaration:
         """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
         Abridged property: t.i.cel()
@@ -7448,13 +7569,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         if self._conjunction_elimination_left is None:
-            self._conjunction_elimination_left = InferenceRuleInclusion(
-                t=self.t,
-                i=self.t.u.i.conjunction_elimination_left,
-                symbol='conjunction-elimination-left',
-                dashed_name='conjunction-elimination-left',
-                acronym='cel',
-                name='conjunction elimination (left)')
+            self._conjunction_elimination_left = ConjunctionEliminationLeftInclusion(t=self.t)
         return self._conjunction_elimination_left
 
     @property
@@ -7467,13 +7582,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         if self._conjunction_elimination_right is None:
-            self._conjunction_elimination_right = InferenceRuleInclusion(
-                t=self.t,
-                i=self.t.u.i.conjunction_elimination_right,
-                symbol='conjunction-elimination-right',
-                dashed_name='conjunction-elimination-right',
-                acronym='cer',
-                name='conjunction elimination (right)')
+            self._conjunction_elimination_right = ConjunctionEliminationRightInclusion(t=self.t)
         return self._conjunction_elimination_right
 
     @property
