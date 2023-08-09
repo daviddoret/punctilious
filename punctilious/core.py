@@ -900,6 +900,7 @@ class Locale:
         self._paragraph_end = None
         self._paragraph_start = None
         self._qed = None
+        self.compose_axiom_interpretation_paragraph_proof = None
 
     def __hash__(self):
         return hash(self._name)
@@ -4222,6 +4223,14 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
                          abridged_name=abridged_name, name=name, explicit_name=explicit_name,
                          echo=echo)
 
+    # def compose_inferred_statement_paragraph_proof(self, o: InferredStatement,
+    #                                                proof: (None, bool) = None) -> \
+    #         collections.abc.Generator[
+    #             Composable, Composable, bool]:
+    #     output = yield from configuration.locale.compose_axiom_interpretation_paragraph_proof(
+    #         o=o)
+    #     return output
+
     def infer_formula(self, a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence,
                       echo: (None, bool) = None) -> Formula:
         """Compute the formula that results from applying this inference-rule with those arguments.
@@ -6811,15 +6820,15 @@ class InferenceRuleDeclarationDict(collections.UserDict):
                    q_equal_r=q_equal_r, slf=self, t=t)
             return True
 
-        def compose_paragraph_proof(o: InferredStatement):
-            output = yield from configuration.locale.compose_equal_terms_substitution_paragraph_proof(
-                o=o)
-            return output
+        # def compose_paragraph_proof(o: InferredStatement):
+        #     output = yield from configuration.locale.compose_equal_terms_substitution_paragraph_proof(
+        #         o=o)
+        #     return output
 
         if self._equal_terms_substitution is None:
             self._equal_terms_substitution = InferenceRuleDeclaration(
                 universe_of_discourse=self.u,
-                compose_paragraph_proof_method=compose_paragraph_proof,
+                # compose_paragraph_proof_method=compose_paragraph_proof,
                 symbol='equal-terms-substitution', auto_index=False,
                 name='equal terms substitution',
                 dashed_name='equal-terms-substitution',

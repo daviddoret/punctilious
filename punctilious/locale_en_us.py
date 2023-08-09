@@ -132,24 +132,25 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('. ')
         return True
 
-    def compose_equal_terms_substitution_paragraph_proof(self, o: InferredStatement) -> \
-            collections.abc.Generator[
-                Composable, Composable, bool]:
-        global text_dict
-        # Retrieve the parameters from the statement
-        p: FormulaStatement
-        p_equal_q: FormulaStatement
-        p = o.parameters[0]
-        p_equal_q = o.parameters[1]
-        yield from p.valid_proposition.compose_formula()
-        yield SansSerifNormal(' follows from ')
-        yield from p.compose_ref_link()
-        yield SansSerifNormal('. ')
-        yield from p_equal_q.valid_proposition.compose_formula()
-        yield SansSerifNormal(' follows from ')
-        yield from p_equal_q.compose_ref_link()
-        yield SansSerifNormal('.')
-        return True
+    #
+    # def compose_equal_terms_substitution_paragraph_proof(self, o: InferredStatement) -> \
+    #         collections.abc.Generator[
+    #             Composable, Composable, bool]:
+    #     global text_dict
+    #     # Retrieve the parameters from the statement
+    #     p: FormulaStatement
+    #     p_equal_q: FormulaStatement
+    #     p = o.parameters[0]
+    #     p_equal_q = o.parameters[1]
+    #     yield from p.valid_proposition.compose_formula()
+    #     yield SansSerifNormal(' follows from ')
+    #     yield from p.compose_ref_link()
+    #     yield SansSerifNormal('. ')
+    #     yield from p_equal_q.valid_proposition.compose_formula()
+    #     yield SansSerifNormal(' follows from ')
+    #     yield from p_equal_q.compose_ref_link()
+    #     yield SansSerifNormal('.')
+    #     return True
 
     def compose_inference_rule_declaration(self, i: InferenceRuleDeclaration) -> \
             collections.abc.Generator[
@@ -195,12 +196,12 @@ class LocaleEnUs(Locale):
                 parameter = o.parameters[i]
                 yield from parameter.compose_formula()
                 yield SansSerifNormal(' follows from ')
-                yield from parameter.compose_ref()
-                yield SansSerifNormal('.')
+                yield from parameter.compose_ref_link()
+                yield SansSerifNormal('. ')
         else:
             yield from o.inference_rule.compose_paragraph_proof_method(o=o)
         # Proof conclusion
-        yield SansSerifNormal(' Therefore, by the ')
+        yield SansSerifNormal('Therefore, by the ')
         yield from o.inference_rule.compose_dashed_name()
         yield SansSerifNormal(' inference rule, it follows that ')
         yield from o.valid_proposition.compose_formula()
@@ -222,24 +223,24 @@ class LocaleEnUs(Locale):
             yield from self.compose_inferred_statement_paragraph_proof(o=o)
         return True
 
-    def compose_modus_ponens_paragraph_proof(self, o: InferredStatement) -> \
-            collections.abc.Generator[
-                Composable, Composable, bool]:
-        global text_dict
-        # Retrieve the parameters from the statement
-        p_implies_q = o.parameters[0]
-        p_implies_q: FormulaStatement
-        p = o.parameters[1]
-        p: FormulaStatement
-        yield from p_implies_q.valid_proposition.compose_formula()
-        yield SansSerifNormal(' follows from ')
-        yield from p_implies_q.compose_ref_link()
-        yield SansSerifNormal('.')
-        yield from p.valid_proposition.compose_formula()
-        yield SansSerifNormal(' follows from ')
-        yield from p.compose_ref_link()
-        yield SansSerifNormal('.')
-        return True
+    # def compose_modus_ponens_paragraph_proof(self, o: InferredStatement) -> \
+    #         collections.abc.Generator[
+    #             Composable, Composable, bool]:
+    #     global text_dict
+    #     # Retrieve the parameters from the statement
+    #     p_implies_q = o.parameters[0]
+    #     p_implies_q: FormulaStatement
+    #     p = o.parameters[1]
+    #     p: FormulaStatement
+    #     yield from p_implies_q.valid_proposition.compose_formula()
+    #     yield SansSerifNormal(' follows from ')
+    #     yield from p_implies_q.compose_ref_link()
+    #     yield SansSerifNormal('.')
+    #     yield from p.valid_proposition.compose_formula()
+    #     yield SansSerifNormal(' follows from ')
+    #     yield from p.compose_ref_link()
+    #     yield SansSerifNormal('.')
+    #     return True
 
     def compose_simple_objct_declaration(self, o: SimpleObjct) -> collections.abc.Generator[
         Composable, Composable, bool]:
