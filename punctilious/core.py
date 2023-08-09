@@ -4401,6 +4401,85 @@ class BiconditionalEliminationRightDeclaration(InferenceRuleDeclaration):
         return True
 
 
+class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
+    """The well-known biconditional introduction inference rule: (P ⟹ Q), (Q ⟹ P) ⊢ (P ⟺ Q)
+
+    Acronym: bi.
+    """
+
+    def __init__(self,
+                 universe_of_discourse: UniverseOfDiscourse,
+                 echo: (None, bool) = None):
+        symbol = 'biconditional-introduction'
+        auto_index = False
+        dashed_name = 'biconditional-introduction'
+        acronym = 'bi'
+        abridged_name = 'bicond. intro.'
+        explicit_name = 'biconditional introduction inference rule'
+        name = 'biconditional introduction'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = BiconditionalIntroductionDeclaration.infer_formula
+        verify_args = BiconditionalIntroductionDeclaration.verify_args
+        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
+                         universe_of_discourse=universe_of_discourse, symbol=symbol,
+                         auto_index=auto_index, dashed_name=dashed_name,
+                         acronym=acronym, abridged_name=abridged_name, name=name,
+                         explicit_name=explicit_name,
+                         echo=echo)
+
+    def infer_formula(self, p_implies_q: FormulaStatement = None,
+                      q_implies_p: FormulaStatement = None,
+                      t: TheoryElaborationSequence = None,
+                      echo: (None, bool) = None) -> Formula:
+        """Infer formula (P ⟺ Q) from formulae (P ⟹ Q), and (Q ⟹ P).
+        """
+        p_implies_q = unpack_formula(p_implies_q)
+        p = p_implies_q.parameters[0]
+        q = p_implies_q.parameters[1]
+        return t.u.f(t.u.r.biconditional, p, q)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_biconditional_introduction_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p_implies_q: FormulaStatement = None,
+                    q_implies_p: FormulaStatement = None,
+                    t: TheoryElaborationSequence = None) -> bool:
+        verify(
+            t.contains_theoretical_objct(p_implies_q),
+            'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+            p_implies_q=p_implies_q, t=t, slf=self)
+        verify(
+            t.contains_theoretical_objct(q_implies_p),
+            'Statement ⌜q_implies_p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+            q_implies_p=q_implies_p, t=t, slf=self)
+        p_implies_q: Formula
+        q_implies_p: Formula
+        p_implies_q = unpack_formula(p_implies_q)
+        q_implies_p = unpack_formula(q_implies_p)
+        verify(
+            p_implies_q.relation is t.u.r.implication,
+            'The relation of formula ⌜p_implies_q⌝ must be an implication.',
+            p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
+        verify(
+            q_implies_p.relation is t.u.r.implication,
+            'The relation of formula ⌜q_implies_p⌝ must be an implication.',
+            q_implies_p_relation=p_implies_q.relation, q_implies_p=q_implies_p, t=t, slf=self)
+
+        verify(
+            p_implies_q.parameters[0].is_formula_equivalent_to(q_implies_p.parameters[1]),
+            'The p of the ⌜p_implies_q⌝ formula must be formula-equivalent to the p of ⌜q_implies_p⌝ formula.',
+            p_implies_q=p_implies_q, q_implies_p=q_implies_p, t=t, slf=self)
+        verify(
+            p_implies_q.parameters[1].is_formula_equivalent_to(q_implies_p.parameters[0]),
+            'The q of the ⌜p_implies_q⌝ formula must be formula-equivalent to the q of ⌜q_implies_p⌝ formula.',
+            p_implies_q=p_implies_q, q_implies_p=q_implies_p, t=t, slf=self)
+        return True
+
+
 class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
     def __init__(self,
                  universe_of_discourse: UniverseOfDiscourse,
@@ -5947,17 +6026,6 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._axiom_interpretation
 
     @property
-    def bi(self) -> InferenceRuleDeclaration:
-        """The well-known biconditional-introduction inference-rule: : P ⟹ Q, Q ⟹ P ⊢ P ⟺ Q.
-
-        Unabridged property: u.i.biconditional_introduction
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
-        return self.biconditional_introduction
-
-    @property
     def bel(self) -> BiconditionalEliminationLeftDeclaration:
         """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
@@ -5978,6 +6046,17 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         return self.biconditional_elimination_right
+
+    @property
+    def bi(self) -> BiconditionalIntroductionDeclaration:
+        """The well-known biconditional-introduction inference-rule: : P ⟹ Q, Q ⟹ P ⊢ P ⟺ Q.
+
+        Unabridged property: u.i.biconditional_introduction
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        return self.biconditional_introduction
 
     @property
     def biconditional_elimination_left(self) -> BiconditionalEliminationLeftDeclaration:
@@ -6009,7 +6088,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._biconditional_elimination_right
 
     @property
-    def biconditional_introduction(self) -> InferenceRuleDeclaration:
+    def biconditional_introduction(self) -> BiconditionalIntroductionDeclaration:
         """The well-known biconditional-introduction inference-rule: : P ⟹ Q, Q ⟹ P ⊢ P ⟺ Q.
 
         Abridged property: u.i.bi
@@ -6018,59 +6097,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
-        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            p = unpack_formula(args[0])
-            q = unpack_formula(args[1])
-            return t.u.f(t.u.r.biconditional, p, q)
-
-        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            verify(
-                len(args) == 2,
-                'Exactly 2 items are expected in ⌜*args⌝ .',
-                args=args, t=t, slf=self)
-            p_implies_q = args[0]
-            verify(
-                t.contains_theoretical_objct(p_implies_q),
-                'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-                p_implies_q=p_implies_q, t=t, slf=self)
-            p_implies_q = unpack_formula(p_implies_q)
-            verify(
-                p_implies_q.relation is t.u.r.implication,
-                'The relation of formula ⌜p_implies_q⌝ must be an implication.',
-                p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
-            q_implies_p = args[1]
-            verify(
-                t.contains_theoretical_objct(q_implies_p),
-                'Statement ⌜q_implies_p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-                q_implies_p=q_implies_p, t=t, slf=self)
-            q_implies_p = unpack_formula(q_implies_p)
-            verify(
-                q_implies_p.relation is t.u.r.implication,
-                'The relation of formula ⌜q_implies_p⌝ must be an implication.',
-                q_implies_p_relation=p_implies_q.relation, q_implies_p=q_implies_p, t=t, slf=self)
-            return True
-
         if self._biconditional_introduction is None:
-            self._biconditional_introduction = InferenceRuleDeclaration(
-                universe_of_discourse=self.u,
-                nameset=NameSet(
-                    symbol='biconditional-introduction',
-                    index=None,
-                    name='biconditional introduction'),
-                infer_formula=infer_formula,
-                verify_args=verify_args)
+            self._biconditional_introduction = BiconditionalIntroductionDeclaration(
+                universe_of_discourse=self.u)
         return self._biconditional_introduction
 
     @property
@@ -6119,6 +6148,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
+
+        # TODO: inference-rule: conjunction_elimination_left: Migrate to specialized classes
 
         def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
@@ -6173,6 +6204,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
+
+        # TODO: inference-rule: conjunction_elimination_right: Migrate to specialized classes
 
         def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
@@ -6246,6 +6279,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         one must be very attentive when applying this inference-rule to assure the resulting
         formula-statement complies / interprets properly its related contentual-definition.
         """
+
+        # TODO: inference-rule: definition_interpretation: Migrate to specialized classes
 
         def infer_formula(d: DefinitionInclusion, p_equal_q: Formula,
                           t: TheoryElaborationSequence) -> Formula:
@@ -6327,6 +6362,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
+        # TODO: inference-rule: disjunction_introduction: Migrate to specialized classes
+
         def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
 
@@ -6407,6 +6444,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
+        # TODO: inference-rule: double_negation_elimination: Migrate to specialized classes
+
         def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
             """
 
@@ -6468,6 +6507,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
+        # TODO: inference-rule: double_negation_introduction: Migrate to specialized classes
+
         def infer_formula(p: FormulaStatement, t: TheoryElaborationSequence) -> Formula:
             """
 
@@ -6525,6 +6566,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
+
+        # TODO: inference-rule: equality_commutativity: Migrate to specialized classes
 
         def infer_formula(p_equal_q: FormulaStatement, t: TheoryElaborationSequence) -> Formula:
             """
@@ -6675,6 +6718,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
+        # TODO: inference-rule: equal_terms_substitution: Migrate to specialized classes
+
         def infer_formula(p: FormulaStatement, q_equal_r: FormulaStatement,
                           t: TheoryElaborationSequence) -> Formula:
             """
@@ -6787,6 +6832,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
+
+        # TODO: inference-rule: variable_substitution: Migrate to specialized classes
 
         def infer_formula(p, *y_sequence, t: TheoryElaborationSequence) -> Formula:
             """
@@ -7045,6 +7092,51 @@ class BiconditionalEliminationRightInclusion(InferenceRuleInclusion):
                                        subtitle=subtitle, echo=echo)
 
 
+class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
+    """
+
+    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
+    is sufficient to do the job. But the advantage of specializing this class is to provide
+    user-friendly type hints and method parameters documentation for that particular
+    inference-rule. This may be justified for well-known inference-rules.
+    """
+
+    def __init__(self,
+                 t: TheoryElaborationSequence,
+                 echo: (None, bool) = None,
+                 proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.biconditional_introduction
+        dashed_name = 'biconditional-introduction'
+        acronym = 'bi'
+        abridged_name = 'bicond. intro.'
+        name = 'biconditional introduction'
+        explicit_name = 'biconditional introduction inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo, proof=proof)
+
+    def infer_formula(self, p_implies_q: FormulaStatement = None,
+                      q_implies_p: FormulaStatement = None,
+                      echo: (None, bool) = None):
+        return super().infer_formula(p_iff_q, echo=echo)
+
+    def infer_statement(self, p_implies_q: FormulaStatement = None,
+                        q_implies_p: FormulaStatement = None,
+                        nameset: (None, str, NameSet) = None,
+                        ref: (None, str) = None,
+                        paragraph_header: (None, ParagraphHeader) = None,
+                        subtitle: (None, str) = None,
+                        echo: (None, bool) = None) -> InferredStatement:
+        """Apply the biconditional elimination (right) inference-rule and return the inferred-statement.
+
+        :param p_iff_q: (mandatory) The biconditional statement.
+        :return: The proven inferred-statement p implies q in the current theory.
+        """
+        return super().infer_statement(p_implies_q, q_implies_p, nameset=nameset, ref=ref,
+                                       paragraph_header=paragraph_header,
+                                       subtitle=subtitle, echo=echo)
+
+
 class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
     """
 
@@ -7297,7 +7389,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.biconditional_elimination_right
 
     @property
-    def bi(self) -> InferenceRuleInclusion:
+    def bi(self) -> BiconditionalIntroductionInclusion:
         """The well-known biconditional-introduction inference-rule: : P ⟹ Q, Q ⟹ P ⊢ P ⟺ Q.
 
         Unabridged property: u.i.biconditional_introduction
@@ -7334,7 +7426,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._biconditional_elimination_left
 
     @property
-    def biconditional_introduction(self) -> InferenceRuleInclusion:
+    def biconditional_introduction(self) -> BiconditionalIntroductionInclusion:
         """The well-known biconditional-introduction inference-rule: : P ⟹ Q, Q ⟹ P ⊢ P ⟺ Q.
 
         Abridged property: u.i.bi
@@ -7343,10 +7435,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         if self._biconditional_introduction is None:
-            self._biconditional_introduction = InferenceRuleInclusion(
-                t=self.t,
-                i=self.t.u.i.biconditional_introduction,
-                name='biconditional introduction')
+            self._biconditional_introduction = BiconditionalIntroductionInclusion(t=self.t)
         return self._biconditional_introduction
 
     @property

@@ -22,4 +22,4 @@ class TestBiconditionalIntroduction(TestCase):
                                                                 u.f(r1, o1, o2)))
         phi3 = t.i.bi.infer_statement(phi1, phi2, echo=True)
         self.assertEqual(
-            '((r1(o1, o2) ==> r2(o3)) <==> (r2(o3) ==> r1(o1, o2)))', phi3.rep_formula())
+            '(r1(o1, o2) <==> r2(o3))', phi3.rep_formula())
