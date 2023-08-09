@@ -991,7 +991,8 @@ class Configuration:
         self.default_definition_inclusion_symbol = None
         self.default_formula_symbol = None
         self.default_free_variable_symbol = None
-        self.default_hypothesis_symbol = None
+        self.default_parent_hypothesis_statement_symbol = None
+        self.default_child_hypothesis_theory_symbol = None
         self.default_inference_rule_declaration_symbol = None
         self.default_inference_rule_inclusion_symbol = None
         self.default_note_symbol = None
@@ -1218,6 +1219,7 @@ class NameSet(Composable):
                  s: (None, str) = None,
                  symbol: (None, str, StyledText) = None,
                  index: (None, int, str, ComposableText) = None,
+                 namespace: (None, SymbolicObject) = None,
                  dashed_name: (None, str, StyledText) = None,
                  acronym: (None, str, StyledText) = None,
                  abridged_name: (None, str, StyledText) = None,
@@ -1249,6 +1251,7 @@ class NameSet(Composable):
         elif isinstance(index, int):
             index = Subscript(plaintext=str(index))
         self._index = index
+        self._namespace = namespace
         if isinstance(dashed_name, str):
             dashed_name = SerifItalic(s=dashed_name)
         self._dashed_name = dashed_name if isinstance(dashed_name,
@@ -1489,17 +1492,20 @@ class NameSet(Composable):
                                                      post=post)
             return something
 
-    def compose_title(self, cap: (None, bool) = None) -> collections.abc.Generator[
-        Composable, Composable, bool]:
+    def compose_title(self, cap: (None, bool) = None) -> \
+            collections.abc.Generator[
+                Composable, Composable, bool]:
         global text_dict
         output1 = yield from self.compose_cat_unabridged(cap=cap)
         pre = text_dict.space if output1 else None
         output2 = yield from self.compose_ref(pre=pre)
-        pre = ' (' if output1 or output2 else None
-        post = ')' if output1 or output2 else None
-        output3 = yield from self.compose_symbol(pre=pre, post=post)
-        pre = ' - ' if output1 or output2 or output3 else None
-        yield from self.compose_subtitle(pre=pre)
+        yield SansSerifNormal(' (')
+        if self.namespace is not None:
+            yield from self.namespace.compose_symbol()
+            yield SansSerifNormal('.')
+        yield from self.compose_symbol()
+        yield SansSerifNormal(')')
+        yield from self.compose_subtitle(pre=' - ')
         return True
 
     @property
@@ -1518,6 +1524,14 @@ class NameSet(Composable):
     @property
     def name(self) -> StyledText:
         return self._name
+
+    @property
+    def namespace(self) -> SymbolicObject:
+        """TODO: Cross-referencing the parent object in the nameset attribute is ugly, the approach is wrong, correct this.
+
+        :return:
+        """
+        return self._namespace
 
     @property
     def ref(self) -> str:
@@ -1825,7 +1839,8 @@ class SymbolicObject:
             universe_of_discourse: UniverseOfDiscourse,
             is_theory_foundation_system: bool = False, is_universe_of_discourse: bool = False,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
-            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+            auto_index: (None, bool) = None, namespace: (None, SymbolicObject) = None,
+            dashed_name: (None, str, StyledText) = None,
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             paragraph_header: (None, ParagraphHeader) = None, ref: (None, str, StyledText) = None,
@@ -1843,14 +1858,16 @@ class SymbolicObject:
                 symbol = SerifItalic(symbol)
             index = universe_of_discourse.index_symbol(
                 symbol=symbol) if (index is None and auto_index) else index
-            nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name,
+            nameset = NameSet(symbol=symbol, index=index, namespace=namespace,
+                              dashed_name=dashed_name,
                               acronym=acronym, abridged_name=abridged_name, name=name,
                               explicit_name=explicit_name, paragraph_header=paragraph_header,
                               ref=ref, subtitle=subtitle)
         if isinstance(nameset, str):
             symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
             index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name,
+            nameset = NameSet(symbol=symbol, index=index, namespace=namespace,
+                              dashed_name=dashed_name,
                               acronym=acronym, abridged_name=abridged_name, name=name,
                               explicit_name=explicit_name, paragraph_header=paragraph_header,
                               ref=ref, subtitle=subtitle)
@@ -2092,6 +2109,7 @@ class TheoreticalObject(SymbolicObject):
             self, universe_of_discourse: UniverseOfDiscourse,
             is_theory_foundation_system: bool = False, symbol: (None, str, StyledText) = None,
             index: (None, int) = None, auto_index: (None, bool) = None,
+            namespace: (None, SymbolicObject) = None,
             dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
             explicit_name: (None, str, StyledText) = None,
@@ -2107,7 +2125,8 @@ class TheoreticalObject(SymbolicObject):
         super().__init__(
             universe_of_discourse=universe_of_discourse,
             is_theory_foundation_system=is_theory_foundation_system,
-            symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
+            symbol=symbol, index=index, auto_index=auto_index, namespace=namespace,
+            dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
             echo=False)
@@ -3144,7 +3163,7 @@ class ParagraphHeaders(repm.ValueName):
                                              'def.')
     definition_inclusion = ParagraphHeader('definition_inclusion', 's',
                                            SansSerifBold('definition'), 'def.')
-    hypothesis = ParagraphHeader('hypothesis', 's', 'hypothesis', 'hyp.')
+    hypothesis = ParagraphHeader('hypothesis', 'H', 'hypothesis', 'hyp.')
     inference_rule_declaration = ParagraphHeader('inference_rule', 's', 'inference rule',
                                                  'inference rule')
     inference_rule_inclusion = ParagraphHeader('inference_rule_inclusion', 's',
@@ -3214,10 +3233,11 @@ class Statement(TheoreticalObject):
                                 False)
         universe_of_discourse = theory.universe_of_discourse
         self.statement_index = theory.crossreference_statement(self)
-        self._cat = paragraph_header
+        self._paragraph_header = paragraph_header
+        namespace = self._theory  # TODO: Cross-referencing the theory symbol as the nameset of the statement is ugly, there's something wrong with the data model, correct it.
         super().__init__(
             universe_of_discourse=universe_of_discourse, symbol=symbol, index=index,
-            auto_index=auto_index, dashed_name=dashed_name,
+            auto_index=auto_index, namespace=namespace, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
             echo=echo)
@@ -3226,12 +3246,12 @@ class Statement(TheoreticalObject):
             self.echo()
 
     @property
-    def category(self) -> ParagraphHeader:
+    def paragraph_header(self) -> ParagraphHeader:
         """The statement-category assigned to this statement.
 
         :return:
         """
-        return self._cat
+        return self._paragraph_header
 
     @abc.abstractmethod
     def compose_report(self, proof: (None, bool) = None) -> collections.abc.Generator[
@@ -4730,8 +4750,8 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         name = 'modus ponens'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
-        infer_formula = AxiomInterpretationDeclaration.infer_formula
-        verify_args = AxiomInterpretationDeclaration.verify_args
+        infer_formula = ModusPonensDeclaration.infer_formula
+        verify_args = ModusPonensDeclaration.verify_args
         super().__init__(infer_formula=infer_formula, verify_args=verify_args,
                          universe_of_discourse=universe_of_discourse, symbol=symbol,
                          auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
@@ -4798,6 +4818,58 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
             slf=self)
         return True
 
+
+class ProofByContradictionDeclaration(InferenceRuleDeclaration):
+    def __init__(self,
+                 universe_of_discourse: UniverseOfDiscourse,
+                 echo: (None, bool) = None):
+        symbol = 'proof-by-contradiction'
+        acronym = 'pbc'
+        auto_index = False
+        dashed_name = 'proof-by-contradiction'
+        explicit_name = 'proof by contradiction inference rule'
+        name = 'proof by contradiction'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = ProofByContradictionDeclaration.infer_formula
+        verify_args = ProofByContradictionDeclaration.verify_args
+        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
+                         universe_of_discourse=universe_of_discourse, symbol=symbol,
+                         auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+                         name=name, explicit_name=explicit_name,
+                         echo=echo)
+
+    def infer_formula(self, hypothesis: Hypothesis,
+                      contradiction: FormulaStatement,
+                      t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        not_p = hypothesis.hypothetical_formula
+        p = not_p.parameters[0]
+        return p
+
+    # def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+    #     Composable, Composable, bool]:
+    #     output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(
+    #         o=o)
+    #     return output
+
+    def verify_args(self, hypothesis: Hypothesis,
+                    contradiction: InferredStatement,
+                    t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
+        verify(is_in_class(hypothesis, classes.hypothesis),
+               '⌜hypothesis⌝ is not an hypothesis.',
+               hypothesis=hypothesis, slf=self)
+        verify(is_in_class(contradiction, classes.inferred_proposition),
+               '⌜contradiction⌝ is not an inferred-statement.',
+               p=p, slf=self)
+        verify(
+            t.contains_theoretical_objct(hypothesis),
+            '⌜hypothesis⌝ is not contained in theory ⌜t⌝.',
+            hypothesis=hypothesis, t=t, slf=self)
+        TODO: COMPLETE PROOF BY CONTRADICTION
+        return True
+
+class ProofByRefutationDeclaration(InferenceRuleDeclaration):
+    TODO: IMPLEMENT PROOF BY REFUTATION (cf. https://ncatlab.org/nlab/show/proof+by+contradiction)
 
 class AtheoreticalStatement(SymbolicObject):
     """
@@ -5026,6 +5098,7 @@ class TheoryElaborationSequence(TheoreticalObject):
     def __init__(
             self,
             u: UniverseOfDiscourse,
+            symbol: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None,
             ref: (None, str) = None,
             subtitle: (None, str) = None,
@@ -5048,7 +5121,7 @@ class TheoryElaborationSequence(TheoreticalObject):
         self._extended_theory_limit = extended_theory_limit
         self._interpretation_disclaimer = False
         if nameset is None:
-            symbol = configuration.default_theory_symbol
+            symbol = prioritize_value(symbol, configuration.default_theory_symbol)
             index = u.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         elif isinstance(nameset, str):
@@ -5451,7 +5524,7 @@ class Hypothesis(Statement):
             subtitle: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
-        category = paragraph_headers.hypothesis
+        paragraph_header = paragraph_headers.hypothesis
         # TODO: Check that all components of the hypothetical-proposition
         #  are elements of the source theory-branch.
         verify(
@@ -5459,19 +5532,19 @@ class Hypothesis(Statement):
             'The hypothetical-formula is not a proposition.',
             hypothetical_formula=hypothetical_formula,
             slf=self)
-        if nameset is None:
-            symbol = prioritize_value(symbol, configuration.default_hypothesis_symbol)
-            index = t.u.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
-        if isinstance(nameset, str):
+        if isinstance(symbol, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
+            symbol = StyledText(plaintext=symbol, text_style=text_styles.serif_italic)
             index = t.u.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
+        elif symbol is None:
+            symbol = configuration.default_parent_hypothesis_statement_symbol
+            index = t.u.index_symbol(symbol=symbol)
+
         super().__init__(
-            theory=t, paragraph_header=category, nameset=nameset,
+            theory=t, symbol=symbol, index=index, paragraph_header=paragraph_header,
+            nameset=nameset,
             subtitle=subtitle, dashed_name=dashed_name, echo=False)
         super()._declare_class_membership(declarative_class_list.hypothesis)
         self._hypothetical_formula = hypothetical_formula
@@ -5482,21 +5555,36 @@ class Hypothesis(Statement):
         # ...a hypothetical-theory 𝒯₂ is created to store the hypothesis elaboration,
         self._hypothetical_theory = t.universe_of_discourse.t(
             extended_theory=t,
-            extended_theory_limit=self
+            extended_theory_limit=self,
+            symbol=configuration.default_child_hypothesis_theory_symbol,
+            echo=False
         )
         # ...the axiom is included in 𝒯₂,
         self._hypothetical_axiom_inclusion = self.hypothetical_theory.include_axiom(
-            self.hypothetical_axiom_declaration)
+            self.hypothetical_axiom_declaration, echo=False)
         # ...and the hypothetical-proposition is posed as an interpretation of that axiom in 𝒯₂.
         self._hypothetical_proposition = \
             self.hypothetical_theory.i.axiom_interpretation.infer_statement(
                 self.hypothetical_axiom_inclusion,
-                hypothetical_formula)
+                hypothetical_formula, echo=False)
+        echo = prioritize_value(echo, configuration.echo_hypothesis,
+                                configuration.echo_inferred_statement,
+                                False)
+        if echo:
+            self.echo()
 
     def compose_class(self) -> collections.abc.Generator[Composable, Composable, True]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='hypothesis')
         return True
+
+    def compose_report(self, proof: (None, bool) = None):
+        output = yield from configuration.locale.compose_parent_hypothesis_statement_report(
+            o=self, proof=proof)
+        return output
+
+    def echo(self):
+        repm.prnt(self.rep_report())
 
     @property
     def hypothetical_axiom_declaration(self) -> AxiomDeclaration:
@@ -5542,6 +5630,10 @@ class Hypothesis(Statement):
         the axiom is included in 𝒯₂,
         and the hypothetical-proposition is posed as an interpretation of that axiom in 𝒯₂."""
         return self._hypothetical_theory
+
+    def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None) -> str:
+        return rep_composition(composition=self.compose_report(proof=proof),
+                               encoding=encoding)
 
 
 class Proof:
@@ -8241,6 +8333,7 @@ class UniverseOfDiscourse(SymbolicObject):
 
     def declare_theory(
             self,
+            symbol: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None,
             ref: (None, str) = None,
             subtitle: (None, str) = None,
@@ -8259,6 +8352,7 @@ class UniverseOfDiscourse(SymbolicObject):
         """
         return TheoryElaborationSequence(
             u=self,
+            symbol=symbol,
             nameset=nameset,
             ref=ref,
             subtitle=subtitle,
@@ -8388,6 +8482,7 @@ class UniverseOfDiscourse(SymbolicObject):
 
     def t(
             self,
+            symbol: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None,
             ref: (None, str) = None,
             subtitle: (None, str) = None,
@@ -8405,6 +8500,7 @@ class UniverseOfDiscourse(SymbolicObject):
         :return:
         """
         return self.declare_theory(
+            symbol=symbol,
             nameset=nameset,
             ref=ref,
             subtitle=subtitle,
@@ -8697,12 +8793,13 @@ def reset_configuration(configuration: Configuration) -> None:
     configuration.default_formula_symbol = SerifItalic(plaintext='phi', unicode='𝜑')
     configuration.default_free_variable_symbol = StyledText(plaintext='x',
                                                             text_style=text_styles.serif_bold)
-    configuration.default_hypothesis_symbol = SerifNormal('H')
-    configuration.default_inference_rule_declaration_symbol = SerifNormal('I')
-    configuration.default_inference_rule_inclusion_symbol = SerifNormal('I')
+    configuration.default_parent_hypothesis_statement_symbol = SerifItalic('H')
+    configuration.default_child_hypothesis_theory_symbol = ScriptNormal('H')
+    configuration.default_inference_rule_declaration_symbol = SerifItalic('I')
+    configuration.default_inference_rule_inclusion_symbol = SerifItalic('I')
     configuration.default_note_symbol = SerifItalic('note')
     configuration.default_relation_symbol = SerifItalic('r')
-    configuration.default_statement_symbol = SerifNormal('P')
+    configuration.default_statement_symbol = SerifItalic('P')
     configuration.default_symbolic_object_symbol = SerifItalic('o')
     configuration.default_theory_symbol = ScriptNormal('T')
     configuration.echo_axiom_declaration = None

@@ -223,6 +223,21 @@ class LocaleEnUs(Locale):
             yield from self.compose_inferred_statement_paragraph_proof(o=o)
         return True
 
+    def compose_parent_hypothesis_statement_report(self, o: Hypothesis,
+                                                   proof: (None, bool) = None) -> \
+            collections.abc.Generator[
+                Composable, Composable, bool]:
+        proof = prioritize_value(proof, True)
+        yield o.compose_title(cap=True)
+        yield SansSerifNormal(': ')
+        yield from o.hypothetical_formula.compose_formula()
+        yield SansSerifNormal('.')
+        if proof:
+            yield SansSerifNormal(' This hypothesis is elaborated in theory ')
+            yield from o.hypothetical_theory.compose_symbol()
+            yield SansSerifNormal('.')
+        return True
+
     # def compose_modus_ponens_paragraph_proof(self, o: InferredStatement) -> \
     #         collections.abc.Generator[
     #             Composable, Composable, bool]:
