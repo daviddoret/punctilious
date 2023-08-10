@@ -68,6 +68,6 @@ class TestNameSet(TestCase):
 
     def test_nameset_title(self):
         n1 = pu.NameSet(symbol='x', index=1,
-                        paragraph_header=pu.paragraph_headers._hypothetical_proposition)
+                        paragraph_header=pu.paragraph_headers._hypothesis_statement_in_child_theory)
         s1 = n1.rep_title(encoding=pu.encodings.plaintext)
         print(s1)

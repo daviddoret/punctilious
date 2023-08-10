@@ -230,11 +230,11 @@ class LocaleEnUs(Locale):
         proof = prioritize_value(proof, True)
         yield o.compose_title(cap=True)
         yield SansSerifNormal(': ')
-        yield from o.hypothetical_formula.compose_formula()
+        yield from o.hypothesis_formula.compose_formula()
         yield SansSerifNormal('.')
         if proof:
             yield SansSerifNormal(' This hypothesis is elaborated in theory ')
-            yield from o.hypothetical_theory.compose_symbol()
+            yield from o.hypothesis_child_theory.compose_symbol()
             yield SansSerifNormal('.')
         return True
 

@@ -31,13 +31,13 @@ class TestProofByRefutation(TestCase):
         t1.stabilize()
         hypothetical_formula = u.f(r1, o1, o3)
         # H1: ¬(𝑟₁(𝑜₁, 𝑜₃))
-        t1_h1 = t1.pose_hypothesis(hypothetical_proposition=hypothetical_formula)
+        t1_h1 = t1.pose_hypothesis(hypothesis_formula=hypothetical_formula)
         # TODO: The hypothetical-theory must be stabilized immediately,
         #   otherwise new axioms or definitions may be introduced,
         #   leading to inconsistent results from the perspective of the
         #   base theory.
-        t2 = t1_h1.hypothetical_theory
-        t2_a1 = t1_h1.hypothetical_proposition
+        t2 = t1_h1.hypothesis_child_theory
+        t2_a1 = t1_h1.hypothesis_statement_in_child_theory
         t2_p5 = t2.i.conjunction_introduction.infer_statement(p=t1_p1, q=t1_p2)
         t2_p6 = t2.i.variable_substitution.infer_statement(t1_p3_implication, o1, o2, o3)
         # p7: 𝑟₁(𝑜₁, 𝑜₃) by modus ponens

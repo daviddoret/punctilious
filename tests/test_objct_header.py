@@ -25,7 +25,7 @@ class TestHeader(TestCase):
         header_reference = random_data.random_word()
         header_title = random_data.random_sentence()
         header = pu.TitleOBSOLETE(header_reference,
-                                  cat=pu.paragraph_headers._hypothetical_proposition,
+                                  cat=pu.paragraph_headers._hypothesis_statement_in_child_theory,
                                   subtitle=header_title)
         self.assertEqual(f'prop. {header_reference}', str(header))
         self.assertEqual(f'prop. {header_reference}',

@@ -31,9 +31,9 @@ class TestHypothesis(TestCase):
         self.assertTrue(robust_theory.stabilized,
                         'The stabilized property of the original-theory is not True.')
         hypothesis = robust_theory.pose_hypothesis(
-            hypothetical_proposition=u.f(r1, o2, o3))
-        hypothetical_proposition = hypothesis._hypothetical_proposition
-        hypothetical_theory = hypothesis.hypothetical_theory
+            hypothesis_formula=u.f(r1, o2, o3))
+        hypothetical_proposition = hypothesis._hypothesis_statement_in_child_theory
+        hypothetical_theory = hypothesis.hypothesis_child_theory
         hypothetical_conjunction = hypothetical_theory.i.ci.infer_statement(first_proposition,
                                                                             hypothetical_proposition)
         proposition_1 = hypothetical_theory.i.vs.infer_statement(

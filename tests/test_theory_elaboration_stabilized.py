@@ -40,5 +40,5 @@ class TestTheoryElaboration(TestCase):
                         'The stabilized property of the original-theory is not True.')
 
         hypothesis = robust_theory.pose_hypothesis(
-            hypothetical_proposition=u.f(r1, o2, o3))
-        hypothesis_theory = hypothesis.hypothetical_theory
+            hypothesis_formula=u.f(r1, o2, o3))
+        hypothesis_theory = hypothesis.hypothesis_child_theory

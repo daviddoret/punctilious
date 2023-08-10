@@ -47,9 +47,9 @@ class TestInconsistencyIntroduction(TestCase):
         t1.stabilize()
         hypothetical_formula = u.f(u.r.lnot, u.f(r1, o1, o3))
         # H1: ¬(𝑟₁(𝑜₁, 𝑜₃))
-        t1_h1 = t1.pose_hypothesis(hypothetical_proposition=hypothetical_formula)
-        t2 = t1_h1.hypothetical_theory
-        t2_p5 = t1_h1.hypothetical_proposition
+        t1_h1 = t1.pose_hypothesis(hypothesis_formula=hypothetical_formula)
+        t2 = t1_h1.hypothesis_child_theory
+        t2_p5 = t1_h1.hypothesis_statement_in_child_theory
         t2_p6 = t2.i.conjunction_introduction.infer_statement(inc_p=t1_p1, q=t1_p2)
         t2_p7 = t2.i.variable_substitution.infer_statement(t1_p3_implication, o1, o2, o3)
         # t2_p8: 𝑟₁(𝑜₁, 𝑜₃) by modus ponens

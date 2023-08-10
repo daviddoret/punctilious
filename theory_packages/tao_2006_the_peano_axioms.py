@@ -201,6 +201,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
                                                                                           zero))))))))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (((((((0)++)++)++)++)++)++ = 6).
         p050 = t.i.equality_commutativity.infer_statement(p049)
+        # ((5)++ = 6).
         p051 = t.i.equal_terms_substitution.infer_statement(p050, p038)
         p052 = t.i.equal_terms_substitution.infer_statement(p045, p051)
         p053 = t.i.equal_terms_substitution.infer_statement(p052, p018)
@@ -216,10 +217,11 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         # Proof.
         # Suppose for sake of contradiction that 6 = 2.
-        h1 = t.pose_hypothesis(hypothetical_proposition=u.f(u.r.equality, six, two))
+        h1 = t.pose_hypothesis(hypothesis_formula=u.f(u.r.equality, six, two))
         # Then 5++ = 1++,
-
-        h1.t.i.equal_terms_substitution.infer_statement(h1.hypothetical_proposition, p051)
+        p057 = t.i.equality_commutativity.infer_statement(p_equal_q=p051)
+        h1.t.i.equal_terms_substitution.infer_statement(p=h1.hypothesis_statement_in_child_theory,
+                                                        q_equal_r=p057)
         pass
         # so by Axiom 2.4 we have 5 = 1,
         # so that 4++ = 0++.

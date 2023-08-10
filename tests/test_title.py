@@ -13,7 +13,8 @@ class TestTitle(TestCase):
         self.assertEqual('Uncategorized 1.1.1', title1.rep_title(cap=True))
         self.assertEqual('uncat. 1.1.1', title1.rep_ref())
 
-        title2 = pu.TitleOBSOLETE('1.1.2', pu.paragraph_headers._hypothetical_proposition)
+        title2 = pu.TitleOBSOLETE('1.1.2',
+                                  pu.paragraph_headers._hypothesis_statement_in_child_theory)
         self.assertEqual('proposition 1.1.2', title2.rep_title())
         self.assertEqual('Proposition 1.1.2', title2.rep_title(cap=True))
         self.assertEqual('prop. 1.1.2', title2.rep_ref())
