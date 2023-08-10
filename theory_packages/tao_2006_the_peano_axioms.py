@@ -22,13 +22,11 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         t.take_note(
             content='A natural number is any element of the set 𝐍 := { 0, 1, 2, 3, 4, ... }, which is the set of all the numbers created by starting with 0 and then counting forward indefinitely. We call 𝐍 the set of natural numbers.',
-            paragraph_header=pu.paragraph_headers.informal_definition,
-            ref='2.1.1')
+            paragraph_header=pu.paragraph_headers.informal_definition, ref='2.1.1')
 
         t.take_note(
             content='In some texts the natural numbers start at 1 instead of 0, but this is a matter of notational convention more than anything else. In this text we shall refer to the set { 1, 2, 3, ... } as the positive integers 𝐙⁺ rather than the natural numbers. Natural numbers are sometimes also known as whole numbers.',
-            paragraph_header=pu.paragraph_headers.remark,
-            ref='2.1.2')
+            paragraph_header=pu.paragraph_headers.remark, ref='2.1.2')
 
         # AXIOM 2.1.1
         a01 = u.declare_axiom(f'0 is a natural number.')
@@ -36,7 +34,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         zero = u.o.declare(symbol='0', auto_index=False)
         natural_number = u.o.declare(symbol='natural-number', auto_index=False)
         is_a = u.r.declare(arity=2, symbol='is-a', auto_index=False, formula_rep=pu.Formula.infix,
-                           signal_proposition=True)
+            signal_proposition=True)
         # (0 is-a natural-number):
         p001 = t.i.axiom_interpretation.infer_statement(a02, u.f(is_a, zero, natural_number))
 
@@ -45,10 +43,9 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         a03 = u.declare_axiom('If n is a natural number, then n++ is a natural number.')
         a04 = t.include_axiom(a03, ref='2.2')
         plusplus = u.r.declare(arity=1, symbol='++', auto_index=False, name='successor',
-                               formula_rep=pu.Formula.postfix)
+            formula_rep=pu.Formula.postfix)
         with u.v('n') as n:
-            p002 = t.i.axiom_interpretation.infer_statement(
-                a04,
+            p002 = t.i.axiom_interpretation.infer_statement(a04,
                 u.f(u.r.implies, u.f(is_a, n, natural_number),
                     u.f(is_a, u.f(plusplus, n), natural_number)))
         p003 = t.i.variable_substitution.infer_statement(p002, zero)
@@ -63,17 +60,16 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
             ref='2.1.3')
         d02 = t.include_definition(d=d01)
         one = u.o.declare(symbol='1', auto_index=False)
-        p005 = t.i.definition_interpretation.infer_statement(
-            d02, u.f(u.r.equal, one, u.f(plusplus, zero)))
+        p005 = t.i.definition_interpretation.infer_statement(d02,
+            u.f(u.r.equal, one, u.f(plusplus, zero)))
         two = u.o.declare(symbol='2', auto_index=False)
-        p006 = t.i.definition_interpretation.infer_statement(
-            d02, u.f(u.r.equal, two, u.f(plusplus, u.f(plusplus, zero))))
+        p006 = t.i.definition_interpretation.infer_statement(d02,
+            u.f(u.r.equal, two, u.f(plusplus, u.f(plusplus, zero))))
         three = u.o.declare(symbol='3', auto_index=False)
-        p007 = t.i.definition_interpretation.infer_statement(
-            d02, u.f(u.r.equal, three, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero)))))
+        p007 = t.i.definition_interpretation.infer_statement(d02,
+            u.f(u.r.equal, three, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero)))))
         four = u.o.declare(symbol='4', auto_index=False)
-        p008 = t.i.definition_interpretation.infer_statement(
-            d02,
+        p008 = t.i.definition_interpretation.infer_statement(d02,
             u.f(u.r.equal, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))))
 
         zero_plusplus = u.f(plusplus, zero)
@@ -99,8 +95,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # Proposition 2.1.4. 3 is a natural number.
         p022 = t.i.equal_terms_substitution.infer_statement(p012, p020, ref='2.1.4')
 
-        p023 = t.i.definition_interpretation.infer_statement(
-            d02,
+        p023 = t.i.definition_interpretation.infer_statement(d02,
             u.f(u.r.equal, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻(P₂₄): (((((0) + +) + +) + +) + + = 4).
         p024 = t.i.equality_commutativity.infer_statement(p008)
@@ -116,9 +111,9 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         with u.v('n') as n:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₂₈): ((𝐧₂ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((𝐧₂)++ ≠ 0)).
-            p028 = t.i.axiom_interpretation.infer_statement(
-                a05, u.f(u.r.implies, u.f(is_a, n, natural_number),
-                         u.f(u.r.neq, u.f(plusplus, n), zero)))
+            p028 = t.i.axiom_interpretation.infer_statement(a05,
+                u.f(u.r.implies, u.f(is_a, n, natural_number),
+                    u.f(u.r.neq, u.f(plusplus, n), zero)))
 
         # Proposition 2.1.6. 4 is not equal to 0.
         t.take_note('We want to prove that 4 is not equal to 0, i.e. (4 ≠ 0).')
@@ -129,25 +124,17 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 𝟮.𝟭.𝟲 (P₃₁): (4 ≠ 0).
         p031 = t.i.equal_terms_substitution.infer_statement(p030, p025, ref='2.1.6')
 
-        axiom_2_4 = t.include_axiom(u.declare_axiom(
-            'Different natural numbers must have different successors; i.e., if n, '
-            'm are natural numbers and n ≠ m, then n++ ≠ m++. Equivalently, '
-            'if n++ = m++, then we must have n = m.'), ref='2.4')
+        axiom_2_4 = t.include_axiom(
+            u.declare_axiom('Different natural numbers must have different successors; i.e., if n, '
+                            'm are natural numbers and n ≠ m, then n++ ≠ m++. Equivalently, '
+                            'if n++ = m++, then we must have n = m.'), ref='2.4')
 
         with u.v('n') as n, u.v('m') as m:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₂): ((((𝐧₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐦₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (𝐧₃ ≠ 𝐦₁)) ⟹ ((𝐧₃)++ ≠ (𝐦₁)++)).
-            p032 = t.i.axiom_interpretation.infer_statement(
-                axiom_2_4,
-                u.f(
-                    u.r.implies,
-                    u.f(
-                        u.r.land,
-                        u.f(
-                            u.r.land,
-                            u.f(is_a, n, natural_number),
-                            u.f(is_a, m, natural_number)),
-                        u.f(u.r.neq, n, m)),
-                    u.f(u.r.neq, u.f(plusplus, n), u.f(plusplus, m))))
+            p032 = t.i.axiom_interpretation.infer_statement(axiom_2_4, u.f(u.r.implies,
+                u.f(u.r.land,
+                    u.f(u.r.land, u.f(is_a, n, natural_number), u.f(is_a, m, natural_number)),
+                    u.f(u.r.neq, n, m)), u.f(u.r.neq, u.f(plusplus, n), u.f(plusplus, m))))
 
         # Proposition 2.1.8. 6 is not equal to 2.
         # We know that 4 is not equal to 0 from 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 𝟮.𝟭.𝟲 (P₃₀): (4 ≠ 0).
@@ -166,10 +153,8 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p036 = t.i.modus_ponens.infer_statement(p033, p035)
         five = u.o.declare(symbol='5', auto_index=False)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₇): (5 = (((((0)++)++)++)++)++).
-        p037 = t.i.definition_interpretation.infer_statement(
-            d02,
-            u.f(u.r.equal, five,
-                u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero)))))))
+        p037 = t.i.definition_interpretation.infer_statement(d02, u.f(u.r.equal, five,
+            u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero)))))))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₈): ((((((0)++)++)++)++)++ = 5).
         p038 = t.i.equality_commutativity.infer_statement(p037)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₉): ((4)++ = 5).
@@ -194,11 +179,8 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p048 = t.i.equal_terms_substitution.infer_statement(p047, p015)
         six = u.o.declare(symbol='6', auto_index=False)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (6 = ((((((0)++)++)++)++)++)++).
-        p049 = t.i.definition_interpretation.infer_statement(
-            d02,
-            u.f(u.r.equal, six,
-                u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus,
-                                                                                          zero))))))))
+        p049 = t.i.definition_interpretation.infer_statement(d02, u.f(u.r.equal, six, u.f(plusplus,
+            u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))))))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (((((((0)++)++)++)++)++)++ = 6).
         p050 = t.i.equality_commutativity.infer_statement(p049)
         # ((5)++ = 6).
@@ -220,8 +202,8 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         h1 = t.pose_hypothesis(hypothesis_formula=u.f(u.r.equality, six, two))
         # Then 5++ = 1++,
         p057 = t.i.equality_commutativity.infer_statement(p_equal_q=p051)
-        h1.t.i.equal_terms_substitution.infer_statement(p=h1.hypothesis_statement_in_child_theory,
-                                                        q_equal_r=p057)
+        # TODO: RESUME HERE: !!!!! h1.t.i.equal_terms_substitution.infer_statement(p=h1.hypothesis_statement_in_child_theory,
+        #                                                q_equal_r=p057)
         pass
         # so by Axiom 2.4 we have 5 = 1,
         # so that 4++ = 0++.
@@ -232,5 +214,4 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # TODO: Tao 2006: Bring back direct proof dependent propositions here
         p057 = t.i.modus_ponens.infer_statement(p053, p056, ref='2.1.8')
 
-        # Proof by contradiction:
-        # TODO: Implement proof by contradiction.
+        # Proof by contradiction:  # TODO: Implement proof by contradiction.
