@@ -27,9 +27,9 @@ class TestProofByRefutation(TestCase):
                 formula=u.f(u.r.implies,
                             u.f(u.r.land, u.f(r1, x, y),
                                 u.f(r1, y, z)),
-                            u.f(r1, x, z)))
+                            u.f(u.r.lnot, u.f(r1, x, z))))
         t1.stabilize()
-        hypothetical_formula = u.f(u.r.lnot, u.f(r1, o1, o3))
+        hypothetical_formula = u.f(r1, o1, o3)
         # H1: ¬(𝑟₁(𝑜₁, 𝑜₃))
         t1_h1 = t1.pose_hypothesis(hypothetical_proposition=hypothetical_formula)
         # TODO: The hypothetical-theory must be stabilized immediately,
@@ -43,7 +43,7 @@ class TestProofByRefutation(TestCase):
         # p7: 𝑟₁(𝑜₁, 𝑜₃) by modus ponens
         t2_p7 = t2.i.modus_ponens.infer_statement(p_implies_q=t2_p6, p=t2_p5)
         # p7 is in refutation with the hypothetical_formula
-        t1_p8 = t1.i.inconsistency_introduction.infer_statement(p=t2_p7, not_p=t2_a1,
+        t1_p8 = t1.i.inconsistency_introduction.infer_statement(p=t2_a1, not_p=t2_p7,
                                                                 inconsistent_theory=t2)
-        t1_p9 = t1.i.proof_by_refutation.infer_statement(not_p=t1_h1, inc_not_p=t1_p8)
+        t1_p9 = t1.i.proof_by_refutation.infer_statement(p=t1_h1, inc_p=t1_p8)
         pass

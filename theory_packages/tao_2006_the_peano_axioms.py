@@ -211,14 +211,24 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₅₆): (((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (5 ≠ 1)).
         p056 = t.i.conjunction_introduction.infer_statement(p055, p048)
 
-        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 2.1.8: (6 ≠ 2).
-        # Direct proof:
+        section_2_1_8 = t.open_section('6 is not equal to 2', section_parent=section_2_1)
+        t.take_note(content='First, we follow (Tao 2006)''s proof by contradiction.')
+
+        # Proof.
+        # Suppose for sake of contradiction that 6 = 2.
+        h1 = t.pose_hypothesis(hypothetical_proposition=u.f(u.r.equality, six, two))
+        # Then 5++ = 1++,
+
+        h1.t.i.equal_terms_substitution.infer_statement(h1.hypothetical_proposition, p051)
+        pass
+        # so by Axiom 2.4 we have 5 = 1,
+        # so that 4++ = 0++.
+        # By Axiom 2.4 again we then have 4 = 0,
+        # which contradicts our previous proposition.
+
+        t.take_note(content='Second, we complement the theory with a direct proof.')
+        # TODO: Tao 2006: Bring back direct proof dependent propositions here
         p057 = t.i.modus_ponens.infer_statement(p053, p056, ref='2.1.8')
-        t.take_note(
-            content='Proposition 2.1.8 was demonstrated by direct proof. But (Tap 2006) proposes a proof by contradiction which seem simpler. So let us provide a second proof, by contradiction this time.')
 
         # Proof by contradiction:
         # TODO: Implement proof by contradiction.
-
-# test = Tao2006ThePeanoAxioms()
-# test.develop()
