@@ -45,4 +45,5 @@ class TestProofByContradiction(TestCase):
         # p7 is in contradiction with the hypothetical_formula
         t1_p8 = t1.i.inconsistency_introduction.infer_statement(p=t2_p7, not_p=t2_a1,
                                                                 inconsistent_theory=t2)
-        t1_p9 = t1.i.proof_by_contradiction.infer_statement(contradiction=t1_p8)
+        t1_p9 = t1.i.proof_by_contradiction.infer_statement(not_p=t1_h1, inc_not_p=t1_p8)
+        pass

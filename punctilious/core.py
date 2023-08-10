@@ -4704,7 +4704,7 @@ class InconsistencyIntroductionDeclaration(InferenceRuleDeclaration):
                       echo: (None, bool) = None) -> Formula:
         p = unpack_formula(p)
         not_p = unpack_formula(not_p)
-        return t.u.f(t.u.r.inconsistent, inconsistent_theory)
+        return t.u.f(t.u.r.inconsistency, inconsistent_theory)
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -4839,10 +4839,10 @@ class ProofByContradictionDeclaration(InferenceRuleDeclaration):
                          name=name, explicit_name=explicit_name,
                          echo=echo)
 
-    def infer_formula(self, hypothesis: Hypothesis,
-                      contradiction: FormulaStatement,
+    def infer_formula(self, not_p: Hypothesis,
+                      inc_not_p: FormulaStatement,
                       t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        not_p = hypothesis.hypothetical_formula
+        not_p = not_p.hypothetical_formula
         p = not_p.parameters[0]
         return p
 
@@ -4852,24 +4852,51 @@ class ProofByContradictionDeclaration(InferenceRuleDeclaration):
     #         o=o)
     #     return output
 
-    def verify_args(self, hypothesis: Hypothesis,
-                    contradiction: InferredStatement,
+    def verify_args(self, not_p: Hypothesis,
+                    inc_not_p: InferredStatement,
                     t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
-        verify(is_in_class(hypothesis, classes.hypothesis),
-               '⌜hypothesis⌝ is not an hypothesis.',
-               hypothesis=hypothesis, slf=self)
-        verify(is_in_class(contradiction, classes.inferred_proposition),
-               '⌜contradiction⌝ is not an inferred-statement.',
-               p=p, slf=self)
+        """
+
+        :param not_p: The hypothesis-statement in the parent theory.
+        :param inc_not_p: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param t: The current (parent) theory.
+        :param echo:
+        :return:
+        """
+        verify(is_in_class(not_p, classes.hypothesis),
+               '⌜not_p⌝ must be an hypothesis.',
+               not_p=not_p, slf=self)
+        verify(is_in_class(inc_not_p, classes.inferred_proposition),
+               '⌜inc_not_p⌝ must be an inferred-statement.',
+               inc_not_p=inc_not_p, slf=self)
         verify(
-            t.contains_theoretical_objct(hypothesis),
-            '⌜hypothesis⌝ is not contained in theory ⌜t⌝.',
-            hypothesis=hypothesis, t=t, slf=self)
-        TODO: COMPLETE PROOF BY CONTRADICTION
+            t.contains_theoretical_objct(not_p),
+            '⌜not_p⌝ must be in theory ⌜t⌝.',
+            not_p=not_p, t=t, slf=self)
+        verify(
+            not_p.hypothetical_theory.extended_theory is t,
+            '⌜not_p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
+            not_p_hypothetical_theory=not_p.hypothetical_theory, not_p=not_p,
+            t=t, slf=self)
+        verify(
+            inc_not_p.relation is t.u.relations.inconsistency,
+            '⌜inc_not_p.relation⌝ must be of form (Inc(Hn)).',
+            inc_not_p_relation=inc_not_p.relation, inc_not_p=inc_not_p, t=t,
+            slf=self)
+        verify(
+            inc_not_p.valid_proposition.parameters[0] is not_p.hypothetical_theory,
+            '⌜inc_not_p⌝ must be of form (Inc(Hn)) where parameter[0] Hn is the hypothetical-theory.',
+            inc_not_p_parameters_0=inc_not_p.valid_proposition.parameters[0],
+            not_p_hypothetical_theory=not_p.hypothetical_theory, t=t, slf=self)
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is stable???
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory is stable
         return True
 
+
 class ProofByRefutationDeclaration(InferenceRuleDeclaration):
-    TODO: IMPLEMENT PROOF BY REFUTATION (cf. https://ncatlab.org/nlab/show/proof+by+contradiction)
+    # TODO: IMPLEMENT PROOF BY REFUTATION (cf. https://ncatlab.org/nlab/show/proof+by+contradiction)
+    pass
+
 
 class AtheoreticalStatement(SymbolicObject):
     """
@@ -5455,7 +5482,7 @@ class TheoryElaborationSequence(TheoreticalObject):
                'The theory of the ⌜proof⌝ is not the current theory ⌜self⌝.',
                proof_t=proof.t, proof=proof, slf=self)
         proof = unpack_formula(proof)
-        verify(proof.relation is self.u.r.inconsistent,
+        verify(proof.relation is self.u.r.inconsistency,
                'The relation of the ⌜proof⌝ formula is not ⌜inconsistency⌝.',
                proof_relation=proof.relation, proof=proof, slf=self)
         verify(proof.parameters[0] is self,
@@ -5917,7 +5944,7 @@ class RelationDict(collections.UserDict):
         self._conjunction = None
         self._disjunction = None
         self._equality = None
-        self._inconsistent = None
+        self._inconsistency = None
         self._inequality = None
         self._implication = None
         self._negation = None
@@ -6041,7 +6068,7 @@ class RelationDict(collections.UserDict):
         If it does not exist in the universe-of-discourse,
         declares it automatically.
         """
-        return self.inconsistent
+        return self.inconsistency
 
     @property
     def implication(self):
@@ -6074,7 +6101,7 @@ class RelationDict(collections.UserDict):
         return self.implication
 
     @property
-    def inconsistent(self):
+    def inconsistency(self):
         """The well-known (theory-)inconsistent relation.
 
         Abridged property: u.r.inc
@@ -6082,11 +6109,11 @@ class RelationDict(collections.UserDict):
         If it does not exist in the universe-of-discourse,
         declares it automatically.
         """
-        if self._inconsistent is None:
-            self._inconsistent = self.declare(
+        if self._inconsistency is None:
+            self._inconsistency = self.declare(
                 arity=1, formula_rep=Formula.prefix, signal_proposition=True, symbol='Inc',
                 auto_index=False, acronym='inc.', name='inconsistent')
-        return self._inconsistent
+        return self._inconsistency
 
     @property
     def inequality(self):
@@ -6199,6 +6226,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         self._equal_terms_substitution = None
         self._inconsistency_introduction = None
         self._modus_ponens = None
+        self._proof_by_contradiction = None
+        self._proof_by_refutation = None
         self._variable_substitution = None
 
     @property
@@ -6847,6 +6876,58 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         return self.modus_ponens
+
+    @property
+    def pbc(self) -> ProofByContradictionDeclaration:
+        """
+
+        Unabridged property: u.i.proof_by_contradiction
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        return self.proof_by_contradiction
+
+    @property
+    def pbr(self) -> ProofByRefutationDeclaration:
+        """
+
+        Unabridged property: u.i.proof_by_refutation
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        return self.proof_by_refutation
+
+    @property
+    def proof_by_contradiction(self) -> ProofByContradictionDeclaration:
+        """
+
+        Abridged property: u.i.pbc
+
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        if self._proof_by_contradiction is None:
+            self._proof_by_contradiction = ProofByContradictionDeclaration(
+                universe_of_discourse=self.u)
+        return self._proof_by_contradiction
+
+    @property
+    def proof_by_refutation(self) -> ProofByContradictionDeclaration:
+        """
+
+        Abridged property: u.i.pbc
+
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        if self._proof_by_refutation is None:
+            self._proof_by_refutation = ProofByContradictionDeclaration(
+                universe_of_discourse=self.u)
+        return self._proof_by_refutation
 
     @property
     def equal_terms_substitution(self) -> InferenceRuleDeclaration:
@@ -7531,6 +7612,58 @@ class ModusPonensInclusion(InferenceRuleInclusion):
                                        subtitle=subtitle, echo=echo)
 
 
+class ProofByContradictionInclusion(InferenceRuleInclusion):
+    """
+
+    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
+    is sufficient to do the job. But the advantage of specializing this class is to provide
+    user-friendly type hints and method parameters documentation for that particular
+    inference-rule. This may be justified for well-known inference-rules.
+    """
+
+    def __init__(self,
+                 t: TheoryElaborationSequence,
+                 echo: (None, bool) = None,
+                 proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.proof_by_contradiction
+        dashed_name = 'proof-by-contradiction'
+        acronym = 'pbc'
+        abridged_name = None
+        name = 'proof by contradiction'
+        explicit_name = 'proof by contradiction inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo, proof=proof)
+
+    def infer_formula(self, not_p: (None, Hypothesis) = None,
+                      inc_not_p: (None, FormulaStatement) = None,
+                      echo: (None, bool) = None):
+        """Apply the proof-by-contradiction inference-rule and return the inferred-formula.
+
+        :param not_p: (mandatory) The (¬P) hypothesis-statement.
+        :param inc_not_p: (mandatory) The proof of inconsistency of the not_p hypothetical-theory: Inc(¬P).
+        :return: The inferred formula .
+        """
+        return super().infer_formula(not_p, inc_not_p, echo=echo)
+
+    def infer_statement(self, not_p: (None, FormulaStatement) = None,
+                        inc_not_p: (None, FormulaStatement) = None,
+                        nameset: (None, str, NameSet) = None,
+                        ref: (None, str) = None,
+                        paragraph_header: (None, ParagraphHeader) = None,
+                        subtitle: (None, str) = None,
+                        echo: (None, bool) = None) -> InferredStatement:
+        """Apply the modus-ponens inference-rule and return the inferred-statement.
+
+        :param not_p: (mandatory) The implication statement.
+        :param inc_not_p: (mandatory) The p statement, proving that p is true in the current theory.
+        :return: An inferred-statement proving p in the current theory.
+        """
+        return super().infer_statement(not_p, inc_not_p, nameset=nameset, ref=ref,
+                                       paragraph_header=paragraph_header,
+                                       subtitle=subtitle, echo=echo)
+
+
 class InferenceRuleInclusionDict(collections.UserDict):
     """The repository of inference-rules included in a theory. In complement, this object exposes
     well-known inference-rules as easily accessible python properties. Accessing these properties
@@ -7560,6 +7693,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         self._equal_terms_substitution = None
         self._inconsistency_introduction = None
         self._modus_ponens = None
+        self._proof_by_contradiction = None
+        self._proof_by_refutation = None
         self._variable_substitution = None
 
     @property
@@ -7998,6 +8133,54 @@ class InferenceRuleInclusionDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         return self.modus_ponens
+
+    @property
+    def pbc(self) -> ProofByContradictionInclusion:
+        """
+
+        Unabridged property: u.i.proof_by_contradiction
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        return self.proof_by_contradiction
+
+    @property
+    def pbr(self) -> ProofByRefutationInclusion:
+        """
+
+        Unabridged property: u.i.proof_by_refutation
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        return self.proof_by_refutation
+
+    @property
+    def proof_by_contradiction(self) -> ProofByContradictionInclusion:
+        """
+
+        Abridged property: u.i.pbc
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        if self._proof_by_contradiction is None:
+            self._proof_by_contradiction = ProofByContradictionInclusion(t=self.t)
+        return self._proof_by_contradiction
+
+    @property
+    def proof_by_refutation(self) -> ProofByRefutationInclusion:
+        """
+
+        Abridged property: u.i.pbr
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        if self._proof_by_refutation is None:
+            self._proof_by_refutation = ProofByRefutationInclusion(t=self.t)
+        return self._proof_by_refutation
 
     @property
     def variable_substitution(self) -> InferenceRuleInclusion:
@@ -8604,7 +8787,7 @@ class InferredStatement(FormulaStatement):
             echo=False)
         super()._declare_class_membership(declarative_class_list.inferred_proposition)
         if self.inference_rule is self.t.u.i.inconsistency_introduction and \
-                self.valid_proposition.relation is self.t.u.r.inconsistent and \
+                self.valid_proposition.relation is self.t.u.r.inconsistency and \
                 self.valid_proposition.parameters[0] is self.t:
             # This inferred-statement proves the inconsistency
             # of the current theory-elaboration-sequence.
@@ -8774,7 +8957,7 @@ class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
                p=p, not_p=not_p, not_p_prime=not_p_prime)
         # Build q by variable substitution
         valid_proposition = theory.universe_of_discourse.f(
-            theory.universe_of_discourse.relations.inconsistent, theory)
+            theory.universe_of_discourse.relations.inconsistency, theory)
         return valid_proposition
 
     @staticmethod

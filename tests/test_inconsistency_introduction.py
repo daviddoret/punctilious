@@ -17,7 +17,7 @@ class TestInconsistencyIntroduction(TestCase):
         p = t1.i.axiom_interpretation.infer_statement(ap, u.f(r1, o1, o2))
         not_p = t1.i.axiom_interpretation.infer_statement(ap, u.f(u.r.lnot, u.f(r1, o1, o2)))
         t2 = u.t()
-        inc = t2.i.inconsistency_introduction.infer_statement(p=p, not_p=not_p)
+        inc = t2.i.inconsistency_introduction.infer_statement(inc_not_p=p, not_p=not_p)
         self.assertEqual('𝐼𝑛𝑐(𝒯₁)', inc.rep_formula(encoding=pu.encodings.unicode))
         self.assertIs(pu.consistency_values.proved_inconsistent, t1.consistency)
 
@@ -50,10 +50,10 @@ class TestInconsistencyIntroduction(TestCase):
         t1_h1 = t1.pose_hypothesis(hypothetical_proposition=hypothetical_formula)
         t2 = t1_h1.hypothetical_theory
         t2_p5 = t1_h1.hypothetical_proposition
-        t2_p6 = t2.i.conjunction_introduction.infer_statement(p=t1_p1, q=t1_p2)
+        t2_p6 = t2.i.conjunction_introduction.infer_statement(inc_not_p=t1_p1, q=t1_p2)
         t2_p7 = t2.i.variable_substitution.infer_statement(t1_p3_implication, o1, o2, o3)
         # t2_p8: 𝑟₁(𝑜₁, 𝑜₃) by modus ponens
-        t2_p8 = t2.i.modus_ponens.infer_statement(p_implies_q=t2_p7, p=t2_p6)
+        t2_p8 = t2.i.modus_ponens.infer_statement(not_p=t2_p7, inc_not_p=t2_p6)
         # p5 is the negation of p8, which is a contradiction in t2
-        p9 = t1.i.inconsistency_introduction.infer_statement(p=t2_p8, not_p=t2_p5,
+        p9 = t1.i.inconsistency_introduction.infer_statement(inc_not_p=t2_p8, not_p=t2_p5,
                                                              inconsistent_theory=t2)
