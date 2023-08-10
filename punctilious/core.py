@@ -4894,8 +4894,77 @@ class ProofByContradictionDeclaration(InferenceRuleDeclaration):
 
 
 class ProofByRefutationDeclaration(InferenceRuleDeclaration):
-    # TODO: IMPLEMENT PROOF BY REFUTATION (cf. https://ncatlab.org/nlab/show/proof+by+contradiction)
-    pass
+    def __init__(self,
+                 universe_of_discourse: UniverseOfDiscourse,
+                 echo: (None, bool) = None):
+        symbol = 'proof-by-refutation'
+        acronym = 'pbr'
+        auto_index = False
+        dashed_name = 'proof-by-refutation'
+        explicit_name = 'proof by refutation inference rule'
+        name = 'proof by refutation'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = ProofByContradictionDeclaration.infer_formula
+        verify_args = ProofByContradictionDeclaration.verify_args
+        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
+                         universe_of_discourse=universe_of_discourse, symbol=symbol,
+                         auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+                         name=name, explicit_name=explicit_name,
+                         echo=echo)
+
+    def infer_formula(self, p: Hypothesis,
+                      inc_p: FormulaStatement,
+                      t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        p = p.hypothetical_formula
+        not_p = t.u.f(t.u.r.negation, p)
+        return not_p
+
+        # def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        #     Composable, Composable, bool]:
+        #     output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(
+        #         o=o)
+        #     return output
+
+    def verify_args(self, p: Hypothesis,
+                    inc_p: InferredStatement,
+                    t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
+        """
+
+        :param p: The hypothesis-statement in the parent theory.
+        :param inc_p: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param t: The current (parent) theory.
+        :param echo:
+        :return:
+        """
+        verify(is_in_class(p, classes.hypothesis),
+               '⌜p⌝ must be an hypothesis.',
+               p=p, slf=self)
+        verify(is_in_class(inc_p, classes.inferred_proposition),
+               '⌜inc_p⌝ must be an inferred-statement.',
+               inc_p=inc_p, slf=self)
+        verify(
+            t.contains_theoretical_objct(p),
+            '⌜p⌝ must be in theory ⌜t⌝.',
+            p=p, t=t, slf=self)
+        verify(
+            p.hypothetical_theory.extended_theory is t,
+            '⌜p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
+            p_hypothetical_theory=p.hypothetical_theory, p=p,
+            t=t, slf=self)
+        verify(
+            inc_p.relation is t.u.relations.inconsistency,
+            '⌜inc_p.relation⌝ must be of form (Inc(Hn)).',
+            inc_p_relation=inc_p.relation, inc_p=inc_p, t=t,
+            slf=self)
+        verify(
+            inc_p.valid_proposition.parameters[0] is p.hypothetical_theory,
+            '⌜inc_p⌝ must be of form (Inc(Hn)) where parameter[0] Hn is the hypothetical-theory.',
+            inc_p_parameters_0=inc_p.valid_proposition.parameters[0],
+            p_hypothetical_theory=p.hypothetical_theory, t=t, slf=self)
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is stable???
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory is stable
+        return True
 
 
 class AtheoreticalStatement(SymbolicObject):
@@ -7660,6 +7729,58 @@ class ProofByContradictionInclusion(InferenceRuleInclusion):
         :return: An inferred-statement proving p in the current theory.
         """
         return super().infer_statement(not_p, inc_not_p, nameset=nameset, ref=ref,
+                                       paragraph_header=paragraph_header,
+                                       subtitle=subtitle, echo=echo)
+
+
+class ProofByRefutationInclusion(InferenceRuleInclusion):
+    """
+
+    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
+    is sufficient to do the job. But the advantage of specializing this class is to provide
+    user-friendly type hints and method parameters documentation for that particular
+    inference-rule. This may be justified for well-known inference-rules.
+    """
+
+    def __init__(self,
+                 t: TheoryElaborationSequence,
+                 echo: (None, bool) = None,
+                 proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.proof_by_refutation
+        dashed_name = 'proof-by-refutation'
+        acronym = 'pbr'
+        abridged_name = None
+        name = 'proof by refutation'
+        explicit_name = 'proof by refutation inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+                         abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+                         echo=echo, proof=proof)
+
+    def infer_formula(self, p: (None, Hypothesis) = None,
+                      inc_p: (None, FormulaStatement) = None,
+                      echo: (None, bool) = None):
+        """Apply the proof-by-refutation inference-rule and return the inferred-formula.
+
+        :param p: (mandatory) The (¬P) hypothesis-statement.
+        :param inc_p: (mandatory) The proof of inconsistency of the not_p hypothetical-theory: Inc(¬P).
+        :return: The inferred formula .
+        """
+        return super().infer_formula(p, inc_p, echo=echo)
+
+    def infer_statement(self, p: (None, FormulaStatement) = None,
+                        inc_p: (None, FormulaStatement) = None,
+                        nameset: (None, str, NameSet) = None,
+                        ref: (None, str) = None,
+                        paragraph_header: (None, ParagraphHeader) = None,
+                        subtitle: (None, str) = None,
+                        echo: (None, bool) = None) -> InferredStatement:
+        """Apply the modus-ponens inference-rule and return the inferred-statement.
+
+        :param p: (mandatory) The implication statement.
+        :param inc_p: (mandatory) The p statement, proving that p is true in the current theory.
+        :return: An inferred-statement proving p in the current theory.
+        """
+        return super().infer_statement(p, inc_p, nameset=nameset, ref=ref,
                                        paragraph_header=paragraph_header,
                                        subtitle=subtitle, echo=echo)
 
