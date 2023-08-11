@@ -4528,6 +4528,9 @@ class InconsistencyIntroductionDeclaration(InferenceRuleDeclaration):
         return True
 
 
+class InconsistencyOfEqualityIntroductionDeclaration(InferenceRuleDeclaration):
+    APPLY THE SAME LOGIC BUT FOR P=Q and P NOT= Q
+
 class ModusPonensDeclaration(InferenceRuleDeclaration):
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'modus-ponens'
