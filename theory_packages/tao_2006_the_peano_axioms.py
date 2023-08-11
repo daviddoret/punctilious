@@ -135,7 +135,12 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
                 u.f(u.r.land,
                     u.f(u.r.land, u.f(is_a, n, natural_number), u.f(is_a, m, natural_number)),
                     u.f(u.r.neq, n, m)), u.f(u.r.neq, u.f(plusplus, n), u.f(plusplus, m))))
-
+        with u.v('n') as n, u.v('m') as m:
+            # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₂): ((((𝐧₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐦₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (𝐧₃ ≠ 𝐦₁)) ⟹ ((𝐧₃)++ ≠ (𝐦₁)++)).
+            p032b = t.i.axiom_interpretation.infer_statement(axiom_2_4, u.f(u.r.implies,
+                u.f(u.r.land,
+                    u.f(u.r.land, u.f(is_a, n, natural_number), u.f(is_a, m, natural_number)),
+                    u.f(u.r.equal, u.f(plusplus, n), u.f(plusplus, m))), u.f(u.r.equal, n, m)))
         # Proposition 2.1.8. 6 is not equal to 2.
         # We know that 4 is not equal to 0 from 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 𝟮.𝟭.𝟲 (P₃₀): (4 ≠ 0).
         # With axiom 2.4 we can demonstrate that 5 is not equal to 1.
@@ -193,6 +198,8 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p055 = t.i.conjunction_introduction.infer_statement(p044, p054)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₅₆): (((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (5 ≠ 1)).
         p056 = t.i.conjunction_introduction.infer_statement(p055, p048)
+        # (6 = (5)++)
+        p057 = t.i.equality_commutativity.infer_statement(p_equal_q=p051)
 
         section_2_1_8 = t.open_section('6 is not equal to 2', section_parent=section_2_1)
         t.take_note(content='First, we follow (Tao 2006)''s proof by contradiction.')
@@ -200,18 +207,52 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # Proof.
         # Suppose for sake of contradiction that 6 = 2.
         h1 = t.pose_hypothesis(hypothesis_formula=u.f(u.r.equality, six, two))
+        hypothesis_statement = h1.hypothesis_statement_in_child_theory
         # Then 5++ = 1++,
-        p057 = t.i.equality_commutativity.infer_statement(p_equal_q=p051)
-        # TODO: RESUME HERE: !!!!! h1.t.i.equal_terms_substitution.infer_statement(p=h1.hypothesis_statement_in_child_theory,
-        #                                                q_equal_r=p057)
-        pass
-        # so by Axiom 2.4 we have 5 = 1,
+        # ((5)++ = 2)
+        h1_p2 = h1.hypothesis_child_theory.i.equal_terms_substitution.infer_statement(
+            p=hypothesis_statement, q_equal_r=p057)
+        # ((5)++ = (1)++)
+        h1_p3 = h1.hypothesis_child_theory.i.equal_terms_substitution.infer_statement(p=h1_p2,
+            q_equal_r=p016)
+        # so by Axiom 2.4 we have 5 = 1
+        # ((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟))
+        h1_p4 = h1.hypothesis_child_theory.i.conjunction_introduction.infer_statement(p=p044,
+            q=p054)
+        # (((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ ((5)++ = (1)++))
+        h1_p5 = h1.hypothesis_child_theory.i.conjunction_introduction.infer_statement(p=h1_p4,
+            q=h1_p3)
+        # ((((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ ((5)++ = (1)++)) ⟹ (5 = 1))
+        h1_p6 = h1.hypothesis_child_theory.i.variable_substitution.infer_statement(p032b, five, one)
+        # (5 = 1)
+        h1_p7 = h1.hypothesis_child_theory.i.modus_ponens.infer_statement(p_implies_q=h1_p6,
+            p=h1_p5)
         # so that 4++ = 0++.
-        # By Axiom 2.4 again we then have 4 = 0,
-        # which contradicts our previous proposition.
+        # ((4)++ = 1)
+        h1_p8 = h1.hypothesis_child_theory.i.equal_terms_substitution.infer_statement(p=h1_p7,
+            q_equal_r=p040)
+        # ((4)++ = (0)++)
+        h1_p9 = h1.hypothesis_child_theory.i.equal_terms_substitution.infer_statement(p=h1_p8,
+            q_equal_r=p005)
+
+        # ((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟))
+        h1_p10 = h1.hypothesis_child_theory.i.conjunction_introduction.infer_statement(p=p027,
+            q=p001)
+        # (((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ ((4)++ = (0)++))
+        h1_p11 = h1.hypothesis_child_theory.i.conjunction_introduction.infer_statement(p=h1_p10,
+            q=h1_p9)
+        # ((((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ ((4)++ = (0)++)) ⟹ (4 = 0))
+        h1_p12 = h1.hypothesis_child_theory.i.variable_substitution.infer_statement(p032b, four,
+            zero)
+        # (4 = 0)
+        # By Axiom 2.4 again we then have 4 = 0, which contradicts our previous proposition.
+        h1_p13 = h1.hypothesis_child_theory.i.modus_ponens.infer_statement(p_implies_q=h1_p12,
+            p=h1_p11)
+        p200 = t.i.inconsistency_introduction.infer_statement(p=)
 
         t.take_note(content='Second, we complement the theory with a direct proof.')
         # TODO: Tao 2006: Bring back direct proof dependent propositions here
-        p057 = t.i.modus_ponens.infer_statement(p053, p056, ref='2.1.8')
+        p057 = t.i.modus_ponens.infer_statement(h1_p3, p056, ref='2.1.8')
 
         # Proof by contradiction:  # TODO: Implement proof by contradiction.
+        pass

@@ -1,5 +1,7 @@
 # Proof by Contradiction
 
+Assume
+
 ## Quotes
 
 ## Bibliography

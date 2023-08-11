@@ -4481,7 +4481,7 @@ class InconsistencyIntroductionDeclaration(InferenceRuleDeclaration):
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'inconsistency-introduction'
         acronym = 'ii'
-        abridged_name = 'inc.-intro.'
+        abridged_name = None
         auto_index = False
         dashed_name = 'inconsistency-introduction'
         explicit_name = 'inconsistency introduction inference rule'
@@ -4660,6 +4660,65 @@ class ProofByContradictionDeclaration(InferenceRuleDeclaration):
         return True
 
 
+class ProofByContradictionOfNonEqualityDeclaration(InferenceRuleDeclaration):
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        symbol = 'proof-by-contradiction-of-non-equality'
+        acronym = 'pbcne'
+        auto_index = False
+        dashed_name = 'proof-by-contradiction-of-non-equality'
+        explicit_name = 'proof by contradiction of non-equality inference rule'
+        name = 'proof by contradiction of non-equality'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = ProofByContradictionOfNonEqualityDeclaration.infer_formula
+        verify_args = ProofByContradictionOfNonEqualityDeclaration.verify_args
+        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
+            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
+            echo=echo)
+
+    def infer_formula(self, p_neq_q: Hypothesis, inc_p_neq_q: FormulaStatement,
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        p_neq_q = p_neq_q.hypothesis_formula
+        p = p_neq_q.parameters[0]
+        q = p_neq_q.parameters[1]
+        return t.u.f(t.u.r.equality, p, q)
+
+    def verify_args(self, p_neq_q: Hypothesis, inc_p_neq_q: InferredStatement,
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
+        """
+
+        :param p_neq_q: The hypothesis-statement in the parent theory.
+        :param inc_p_neq_q: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param t: The current (parent) theory.
+        :param echo:
+        :return:
+        """
+        verify(is_in_class(p_neq_q, classes.hypothesis), '⌜p_neq_q⌝ must be an hypothesis.',
+            p_neq_q=p_neq_q, slf=self)
+        verify(is_in_class(inc_p_neq_q, classes.inferred_proposition),
+            '⌜inc_p_neq_q⌝ must be an inferred-statement.', inc_p_neq_q=inc_p_neq_q, slf=self)
+        verify(t.contains_theoretical_objct(p_neq_q), '⌜p_neq_q⌝ must be in theory ⌜t⌝.',
+            p_neq_q=p_neq_q, t=t, slf=self)
+        verify(p_neq_q.hypothesis_child_theory.extended_theory is t,
+            '⌜p_neq_q.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
+            p_neq_q_hypothetical_theory=p_neq_q.hypothesis_child_theory, p_neq_q=p_neq_q, t=t,
+            slf=self)
+        verify(inc_p_neq_q.relation is t.u.relations.inequality,
+            '⌜inc_p_neq_q.relation⌝ must be the inequality relation.',
+            inc_p_neq_q_relation=inc_p_neq_q.relation, inc_p_neq_q=inc_p_neq_q, t=t, slf=self)
+        p_neq_q_prime: FormulaStatement
+        p_neq_q_prime = inc_p_neq_q.parameters[0]
+        verify(p_neq_q.is_formula_equivalent_to(p_neq_q_prime),
+            '⌜p_neq_q⌝ must be formula-equivalent to ⌜p_neq_q⌝ in ⌜inc_p_neq_q⌝.', p_neq_q=p_neq_q,
+            p_neq_q_prime=p_neq_q_prime, t=t, slf=self)
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
+        #  stable???
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
+        #  is stable
+        return True
+
+
 class ProofByRefutationDeclaration(InferenceRuleDeclaration):
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'proof-by-refutation'
@@ -4709,6 +4768,63 @@ class ProofByRefutationDeclaration(InferenceRuleDeclaration):
             '⌜inc_p⌝ must be of form (Inc(Hn)) where parameter[0] Hn is the hypothetical-theory.',
             inc_p_parameters_0=inc_p.valid_proposition.parameters[0],
             p_hypothetical_theory=p.hypothesis_child_theory, t=t, slf=self)
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
+        #  stable???
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
+        #  is stable
+        return True
+
+
+class ProofByRefutationOfEqualityDeclaration(InferenceRuleDeclaration):
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        symbol = 'proof-by-refutation-of-equality'
+        acronym = 'pbre'
+        auto_index = False
+        dashed_name = 'proof-by-refutation-of-equality'
+        explicit_name = 'proof by refutation of equality inference rule'
+        name = 'proof by refutation of equality'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = ProofByRefutationOfEqualityDeclaration.infer_formula
+        verify_args = ProofByRefutationOfEqualityDeclaration.verify_args
+        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
+            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
+            echo=echo)
+
+    def infer_formula(self, p_equal_q: Hypothesis, inc_p_equal_q: FormulaStatement,
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        p_equal_q = p_equal_q.hypothesis_formula
+        p_neq_q = t.u.f(t.u.r.inequality, p_equal_q.parameters[0], p_equal_q.parameters[1])
+        return p_neq_q
+
+        # def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[  #     Composable, Composable, bool]:  #     output = yield from  #  #  #  #  #  #     configuration.locale.compose_modus_ponens_paragraph_proof(  #         o=o)  #  #  #  #     return output
+
+    def verify_args(self, p_eq_q: Hypothesis, inc_p_eq_q: InferredStatement,
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
+        """
+
+        :param p_eq_q: The hypothesis-statement in the parent theory.
+        :param inc_p_eq_q: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param t: The current (parent) theory.
+        :param echo:
+        :return:
+        """
+        verify(is_in_class(p_eq_q, classes.hypothesis), '⌜p⌝ must be an hypothesis.', p=p_eq_q,
+            slf=self)
+        verify(is_in_class(inc_p_eq_q, classes.inferred_proposition),
+            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_p_eq_q, slf=self)
+        verify(t.contains_theoretical_objct(p_eq_q), '⌜p⌝ must be in theory ⌜t⌝.', p=p_eq_q, t=t,
+            slf=self)
+        verify(p_eq_q.hypothesis_child_theory.extended_theory is t,
+            '⌜p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
+            p_hypothetical_theory=p_eq_q.hypothesis_child_theory, p=p_eq_q, t=t, slf=self)
+        verify(inc_p_eq_q.relation is t.u.relations.inconsistency,
+            '⌜inc_p.relation⌝ must be of form (Inc(Hn)).', inc_p_relation=inc_p_eq_q.relation,
+            inc_p=inc_p_eq_q, t=t, slf=self)
+        verify(p_eq_q.is_formula_equivalent_to(inc_p_eq_q.parameters[0]),
+            '⌜p_eq_q⌝ must be formula-equivalent to ⌜p_eq_q⌝ in ⌜inc_p_eq_q⌝.', p_eq_q=p_eq_q,
+            inc_p_eq_q=inc_p_eq_q, t=t, slf=self)
         # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
         #  stable???
         # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
@@ -5929,7 +6045,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         self._inconsistency_introduction = None
         self._modus_ponens = None
         self._proof_by_contradiction = None
+        self._proof_by_contradiction_of_non_equality = None
         self._proof_by_refutation = None
+        self._proof_by_refutation_of_equality = None
         self._variable_substitution = None
 
     @property
@@ -6562,6 +6680,14 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._proof_by_contradiction
 
     @property
+    def proof_by_contradiction_of_non_equality(
+            self) -> ProofByContradictionOfNonEqualityDeclaration:
+        if self._proof_by_contradiction_of_non_equality is None:
+            self._proof_by_contradiction_of_non_equality = ProofByContradictionOfNonEqualityDeclaration(
+                universe_of_discourse=self.u)
+        return self._proof_by_contradiction_of_non_equality
+
+    @property
     def proof_by_refutation(self) -> ProofByRefutationDeclaration:
         """
 
@@ -6574,6 +6700,13 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         if self._proof_by_refutation is None:
             self._proof_by_refutation = ProofByRefutationDeclaration(universe_of_discourse=self.u)
         return self._proof_by_refutation
+
+    @property
+    def proof_by_refutation_of_equality(self) -> ProofByRefutationOfEqualityDeclaration:
+        if self._proof_by_refutation_of_equality is None:
+            self._proof_by_refutation_of_equality = ProofByRefutationOfEqualityDeclaration(
+                universe_of_discourse=self.u)
+        return self._proof_by_refutation_of_equality
 
     @property
     def variable_substitution(self) -> InferenceRuleDeclaration:
@@ -7230,6 +7363,39 @@ hypothetical-theory: Inc(¬P).
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
+class ProofByContradictionOfNonEqualityInclusion(InferenceRuleInclusion):
+    """
+
+    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
+    is sufficient to do the job. But the advantage of specializing this class is to provide
+    user-friendly type hints and method parameters documentation for that particular
+    inference-rule. This may be justified for well-known inference-rules.
+    """
+
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.proof_by_contradiction_of_non_equality
+        dashed_name = 'proof-by-contradiction-of-non-equality'
+        acronym = 'pbcne'
+        abridged_name = None
+        name = 'proof by contradiction of non-equality'
+        explicit_name = 'proof by contradiction of non-equality inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def infer_formula(self, p_neq_q: (None, Hypothesis) = None,
+            inc_p_neq_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        return super().infer_formula(p_neq_q, inc_p_neq_q, echo=echo)
+
+    def infer_statement(self, p_neq_q: (None, FormulaStatement) = None,
+            inc_p_neq_q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+        return super().infer_statement(p_neq_q, inc_p_neq_q, nameset=nameset, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
 class ProofByRefutationInclusion(InferenceRuleInclusion):
     """
 
@@ -7276,6 +7442,52 @@ Inc(¬P).
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
+class ProofByRefutationOfEqualityInclusion(InferenceRuleInclusion):
+    """
+
+    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
+    is sufficient to do the job. But the advantage of specializing this class is to provide
+    user-friendly type hints and method parameters documentation for that particular
+    inference-rule. This may be justified for well-known inference-rules.
+    """
+
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.proof_by_refutation_of_equality
+        dashed_name = 'proof-by-refutation-of-equality'
+        acronym = 'pbre'
+        abridged_name = None
+        name = 'proof by refutation of equality'
+        explicit_name = 'proof by refutation of equality inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def infer_formula(self, p_eq_q: (None, Hypothesis) = None,
+            inc_p_eq_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """Apply the proof-by-refutation inference-rule and return the inferred-formula.
+
+        :param p_eq_q: (mandatory) The (¬P) hypothesis-statement.
+        :param inc_p_eq_q: (mandatory) The proof of inconsistency of the not_p hypothetical-theory:
+Inc(¬P).
+        :return: The inferred formula .
+        """
+        return super().infer_formula(p_eq_q, inc_p_eq_q, echo=echo)
+
+    def infer_statement(self, p_eq_q: (None, FormulaStatement) = None,
+            inc_p_eq_q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+        """Apply the modus-ponens inference-rule and return the inferred-statement.
+
+        :param p: (mandatory) The implication statement.
+        :param inc_p: (mandatory) The p statement, proving that p is true in the current theory.
+        :return: An inferred-statement proving p in the current theory.
+        """
+        return super().infer_statement(p_eq_q, inc_p_eq_q, nameset=nameset, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
 class InferenceRuleInclusionDict(collections.UserDict):
     """The repository of inference-rules included in a theory. In complement, this object exposes
     well-known inference-rules as easily accessible python properties. Accessing these properties
@@ -7306,7 +7518,9 @@ class InferenceRuleInclusionDict(collections.UserDict):
         self._inconsistency_introduction = None
         self._modus_ponens = None
         self._proof_by_contradiction = None
+        self._proof_by_contradiction_of_non_equality = None
         self._proof_by_refutation = None
+        self._proof_by_refutation_of_equality = None
         self._variable_substitution = None
 
     @property
@@ -7742,6 +7956,13 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._proof_by_contradiction
 
     @property
+    def proof_by_contradiction_of_non_equality(self) -> ProofByContradictionOfNonEqualityInclusion:
+        if self._proof_by_contradiction_of_non_equality is None:
+            self._proof_by_contradiction_of_non_equality = ProofByContradictionOfNonEqualityInclusion(
+                t=self.t)
+        return self._proof_by_contradiction_of_non_equality
+
+    @property
     def proof_by_refutation(self) -> ProofByRefutationInclusion:
         """
 
@@ -7753,6 +7974,12 @@ class InferenceRuleInclusionDict(collections.UserDict):
         if self._proof_by_refutation is None:
             self._proof_by_refutation = ProofByRefutationInclusion(t=self.t)
         return self._proof_by_refutation
+
+    @property
+    def proof_by_refutation_of_equality(self) -> ProofByRefutationOfEqualityInclusion:
+        if self._proof_by_refutation_of_equality is None:
+            self._proof_by_refutation_of_equality = ProofByRefutationOfEqualityInclusion(t=self.t)
+        return self._proof_by_refutation_of_equality
 
     @property
     def variable_substitution(self) -> InferenceRuleInclusion:
