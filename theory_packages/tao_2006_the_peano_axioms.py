@@ -246,13 +246,17 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
             zero)
         # (4 = 0)
         # By Axiom 2.4 again we then have 4 = 0, which contradicts our previous proposition.
-        h1_p13 = h1.hypothesis_child_theory.i.modus_ponens.infer_statement(p_implies_q=h1_p12,
+        h1_p071 = h1.hypothesis_child_theory.i.modus_ponens.infer_statement(p_implies_q=h1_p12,
             p=h1_p11)
-        p200 = t.i.inconsistency_by_negation_introduction.infer_statement(p=)
-
-        t.take_note(content='Second, we complement the theory with a direct proof.')
+        p072 = t.i.inconsistency_by_inequality_introduction.infer_statement(p_eq_q=h1_p071,
+            p_neq_q=p031, inconsistent_theory=h1.hypothesis_child_theory)
+        p073 = t.i.proof_by_refutation_of_equality.infer_statement(p_eq_q=h1, inc_p_eq_q=p072,
+            ref='2.1.8')
+        pass
+        t.take_note(
+            content='In (Tao, 2006), proposition 2.1.8 uses proof by contradiction. Note that in punctilious, this specific proof method is called a proof by refutation of equality. Nevertheless, proofs by contradictions are somehow indirect proofs. As an alternative, we now propose a direct proof.')
         # TODO: Tao 2006: Bring back direct proof dependent propositions here
-        p057 = t.i.modus_ponens.infer_statement(h1_p3, p056, ref='2.1.8')
+        p057 = t.i.modus_ponens.infer_statement(p_implies_q=p053, p=p056)
 
         # Proof by contradiction:  # TODO: Implement proof by contradiction.
         pass

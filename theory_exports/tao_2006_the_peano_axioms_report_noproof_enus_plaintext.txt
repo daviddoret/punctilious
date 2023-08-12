@@ -9,8 +9,8 @@ Extended theory: N/A
 Let "0", "natural-number", "1", "2", "3", "4", "5", "6" be simple-objects in U1.
 
 # Relations
-Let "++" be a unary-relation in U1.
-Let "==>", "neq", "is-a", "=", "and" be binary-relations in U1.
+Let "++", "Inc" be unary-relations in U1.
+Let "is-a", "==>", "=", "and", "neq" be binary-relations in U1.
 
 # Inference rules
 The following inference rules are considered valid under this theory:
@@ -19,7 +19,9 @@ Let "conjunction-introduction" be the inference-rule TODO: COMPLETE HERE.
 Let "definition-interpretation" be the inference-rule TODO: COMPLETE HERE.
 Let "equal-terms-substitution" be the inference-rule TODO: COMPLETE HERE.
 Let "equality-commutativity" be the inference-rule TODO: COMPLETE HERE.
+Let "inconsistency-by-inequality-introduction" be the inference-rule TODO: COMPLETE HERE.
 Let "modus-ponens" be the inference-rule TODO: COMPLETE HERE.
+Let "proof-by-refutation-of-equality" be the inference-rule TODO: COMPLETE HERE.
 Let "variable-substitution" be the inference-rule TODO: COMPLETE HERE.
 
 # Theory elaboration sequence
@@ -68,32 +70,37 @@ Proposition (T1.P30): ((3)++ neq 0).
 Proposition 2.1.6 (T1.P31): (4 neq 0).
 Axiom 2.4 (T1.A4): Let axiom A4 "Different natural numbers must have different successors; i.e., if n, m are natural numbers and n  m, then n++  m++. Equivalently, if n++ = m++, then we must have n = m." be included (postulated) in T1.
 Proposition (T1.P32): ((((n3 is-a natural-number) and (m1 is-a natural-number)) and (n3 neq m1)) ==> ((n3)++ neq (m1)++)).
-Proposition (T1.P33): ((((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)) ==> ((4)++ neq (0)++)).
+Proposition (T1.P33): ((((n4 is-a natural-number) and (m2 is-a natural-number)) and ((n4)++ = (m2)++)) ==> (n4 = m2)).
+Proposition (T1.P34): ((((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)) ==> ((4)++ neq (0)++)).
 Uncategorized (I7): Let inference-rule conjunction-introduction TODO: COMPLETE be included (considered valid) in T1.
-Proposition (T1.P34): ((4 is-a natural-number) and (0 is-a natural-number)).
-Proposition (T1.P35): (((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)).
-Proposition (T1.P36): ((4)++ neq (0)++).
-Proposition (T1.P37): (5 = (((((0)++)++)++)++)++).
-Proposition (T1.P38): ((((((0)++)++)++)++)++ = 5).
-Proposition (T1.P39): ((4)++ = 5).
-Proposition (T1.P40): (5 = (4)++).
-Proposition (T1.P41): ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> ((5)++ neq (1)++)).
-Proposition (T1.P42): ((4 is-a natural-number) ==> ((4)++ is-a natural-number)).
-Proposition (T1.P43): ((4 is-a natural-number) ==> (5 is-a natural-number)).
-Proposition (T1.P44): (5 is-a natural-number).
-Proposition (T1.P45): ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> ((5)++ neq (1)++)).
-Proposition (T1.P46): ((4)++ neq (0)++).
-Proposition (T1.P47): (5 neq (0)++).
-Proposition (T1.P48): (5 neq 1).
-Proposition (T1.P49): (6 = ((((((0)++)++)++)++)++)++).
-Proposition (T1.P50): (((((((0)++)++)++)++)++)++ = 6).
-Proposition (T1.P51): ((5)++ = 6).
-Proposition (T1.P52): ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> (6 neq (1)++)).
-Proposition (T1.P53): ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> (6 neq 2)).
-Proposition (T1.P54): (1 is-a natural-number).
-Proposition (T1.P55): ((5 is-a natural-number) and (1 is-a natural-number)).
-Proposition (T1.P56): (((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)).
+Proposition (T1.P35): ((4 is-a natural-number) and (0 is-a natural-number)).
+Proposition (T1.P36): (((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)).
+Proposition (T1.P37): ((4)++ neq (0)++).
+Proposition (T1.P38): (5 = (((((0)++)++)++)++)++).
+Proposition (T1.P39): ((((((0)++)++)++)++)++ = 5).
+Proposition (T1.P40): ((4)++ = 5).
+Proposition (T1.P41): (5 = (4)++).
+Proposition (T1.P42): ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> ((5)++ neq (1)++)).
+Proposition (T1.P43): ((4 is-a natural-number) ==> ((4)++ is-a natural-number)).
+Proposition (T1.P44): ((4 is-a natural-number) ==> (5 is-a natural-number)).
+Proposition (T1.P45): (5 is-a natural-number).
+Proposition (T1.P46): ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> ((5)++ neq (1)++)).
+Proposition (T1.P47): ((4)++ neq (0)++).
+Proposition (T1.P48): (5 neq (0)++).
+Proposition (T1.P49): (5 neq 1).
+Proposition (T1.P50): (6 = ((((((0)++)++)++)++)++)++).
+Proposition (T1.P51): (((((((0)++)++)++)++)++)++ = 6).
+Proposition (T1.P52): ((5)++ = 6).
+Proposition (T1.P53): ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> (6 neq (1)++)).
+Proposition (T1.P54): ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> (6 neq 2)).
+Proposition (T1.P55): (1 is-a natural-number).
+Proposition (T1.P56): ((5 is-a natural-number) and (1 is-a natural-number)).
+Proposition (T1.P57): (((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)).
+Proposition (T1.P58): (6 = (5)++).
 ### 2.1.1 6 is not equal to 2
 Hypothesis (T1.H1): (6 = 2).
-Proposition (T1.P58): (6 = (5)++).
-Proposition 2.1.8 (T1.P59): (6 neq 2).
+Uncategorized (I13): Let inference-rule inconsistency-by-inequality-introduction TODO: COMPLETE be included (considered valid) in T1.
+Proposition (T1.P72): Inc(H1).
+Uncategorized (I14): Let inference-rule proof-by-refutation-of-equality TODO: COMPLETE be included (considered valid) in T1.
+Proposition 2.1.8 (T1.P73): (6 neq 2).
+Proposition (T1.P74): (6 neq 2).

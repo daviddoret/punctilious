@@ -29,8 +29,7 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_axiom_inclusion_report(self, o: AxiomInclusion, proof: (None, bool) = None) -> \
-            collections.abc.Generator[
-                Composable, Composable, bool]:
+            collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         yield from o.compose_title(cap=True)
         yield SansSerifNormal(': Let ')
@@ -47,8 +46,7 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_axiom_interpretation_paragraph_proof(self, o: InferredStatement) -> \
-            collections.abc.Generator[
-                Composable, Composable, bool]:
+            collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
         a: AxiomInclusion
@@ -84,9 +82,7 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_definition_inclusion_report(self, o: DefinitionInclusion,
-                                            proof: (None, bool) = None) -> \
-            collections.abc.Generator[
-                Composable, Composable, bool]:
+            proof: (None, bool) = None) -> collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         yield from o.compose_title(cap=True)
         yield SansSerifNormal(': Let ')
@@ -103,8 +99,7 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_definition_interpretation_paragraph_proof(self, o: InferredStatement) -> \
-            collections.abc.Generator[
-                Composable, Composable, bool]:
+            collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
         a: DefinitionInclusion
@@ -120,15 +115,14 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_equality_commutativity_paragraph_proof(self, o: InferredStatement) -> \
-            collections.abc.Generator[
-                Composable, Composable, bool]:
+            collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
-        p_equal_q: FormulaStatement
-        p_equal_q = o.parameters[0]
-        yield from p_equal_q.valid_proposition.compose_formula()
+        p_eq_q: FormulaStatement
+        p_eq_q = o.parameters[0]
+        yield from p_eq_q.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
-        yield from p_equal_q.compose_ref_link()
+        yield from p_eq_q.compose_ref_link()
         yield SansSerifNormal('. ')
         return True
 
@@ -139,22 +133,21 @@ class LocaleEnUs(Locale):
     #     global text_dict
     #     # Retrieve the parameters from the statement
     #     p: FormulaStatement
-    #     p_equal_q: FormulaStatement
+    #     p_eq_q: FormulaStatement
     #     p = o.parameters[0]
-    #     p_equal_q = o.parameters[1]
+    #     p_eq_q = o.parameters[1]
     #     yield from p.valid_proposition.compose_formula()
     #     yield SansSerifNormal(' follows from ')
     #     yield from p.compose_ref_link()
     #     yield SansSerifNormal('. ')
-    #     yield from p_equal_q.valid_proposition.compose_formula()
+    #     yield from p_eq_q.valid_proposition.compose_formula()
     #     yield SansSerifNormal(' follows from ')
-    #     yield from p_equal_q.compose_ref_link()
+    #     yield from p_eq_q.compose_ref_link()
     #     yield SansSerifNormal('.')
     #     return True
 
     def compose_inference_rule_declaration(self, i: InferenceRuleDeclaration) -> \
-            collections.abc.Generator[
-                Composable, Composable, bool]:
+            collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         yield SansSerifNormal('Let ')
         yield text_dict.open_quasi_quote
@@ -167,9 +160,7 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_inference_rule_inclusion_report(self, i: InferenceRuleInclusion,
-                                                proof: (None, bool) = None) -> \
-            collections.abc.Generator[
-                Composable, Composable, bool]:
+            proof: (None, bool) = None) -> collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         yield from i.compose_title(cap=True)
         yield SansSerifNormal(': Let ')
@@ -209,10 +200,8 @@ class LocaleEnUs(Locale):
         yield self.qed
         return True
 
-    def compose_inferred_statement_report(self, o: InferredStatement,
-                                          proof: (None, bool) = None) -> \
-            collections.abc.Generator[
-                Composable, Composable, bool]:
+    def compose_inferred_statement_report(self, o: InferredStatement, proof: (None, bool) = None) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
         proof = prioritize_value(proof, True)
         yield o.compose_title(cap=True)
         yield SansSerifNormal(': ')
@@ -224,9 +213,7 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_parent_hypothesis_statement_report(self, o: Hypothesis,
-                                                   proof: (None, bool) = None) -> \
-            collections.abc.Generator[
-                Composable, Composable, bool]:
+            proof: (None, bool) = None) -> collections.abc.Generator[Composable, Composable, bool]:
         proof = prioritize_value(proof, True)
         yield o.compose_title(cap=True)
         yield SansSerifNormal(': ')
@@ -286,8 +273,7 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_theory_report(self, t: TheoryElaborationSequence, proof: (None, bool) = None) -> \
-            collections.abc.Generator[
-                Composable, Composable, bool]:
+            collections.abc.Generator[Composable, Composable, bool]:
 
         yield self.paragraph_start
         yield from t.rep_name()
@@ -362,8 +348,7 @@ class LocaleEnUs(Locale):
             'The following inference rules are considered valid under this theory:')
         yield self.paragraph_end
         for inference_rule in sorted(t.i.values(),
-                                     key=lambda i: i.inference_rule.rep_dashed_name(
-                                         encoding=encodings.plaintext)):
+                key=lambda i: i.inference_rule.rep_dashed_name(encoding=encodings.plaintext)):
             inference_rule: InferenceRuleInclusion
             yield self.paragraph_start
             yield from inference_rule.inference_rule.compose_declaration()
@@ -378,8 +363,7 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_variable_substitution_paragraph_proof(self, o: InferredStatement) -> \
-            collections.abc.Generator[
-                Composable, Composable, bool]:
+            collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
         parameter = o.parameters[0]

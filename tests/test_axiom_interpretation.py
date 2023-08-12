@@ -20,5 +20,6 @@ class TestAxiomInterpretation(TestCase):
         t = u.t()
         a2 = t.include_axiom(a1)
         p1 = t.i.axiom_interpretation.infer_statement(a2, phi1)
-        self.assertTrue(p1.valid_proposition.is_syntactic_equivalent_to(u.f(r1, o1, o2)))
+        self.assertTrue(
+            p1.valid_proposition.is_formula_syntactically_equivalent_to(u.f(r1, o1, o2)))
         print(p1.rep_report())

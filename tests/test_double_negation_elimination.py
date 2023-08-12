@@ -20,4 +20,4 @@ class TestDoubleNegationElimination(TestCase):
         phi2 = t.i.dne.infer_statement(phi1)
         self.assertEqual('r1(o1, o2)', phi2.rep_formula(pu.encodings.plaintext))
         self.assertEqual('𝑟₁(𝑜₁, 𝑜₂)', phi2.rep_formula(pu.encodings.unicode))
-        self.assertTrue(phi2.is_syntactic_equivalent_to(phi0))
+        self.assertTrue(phi2.is_formula_syntactically_equivalent_to(phi0))
