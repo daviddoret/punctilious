@@ -199,7 +199,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₅₆): (((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (5 ≠ 1)).
         p056 = t.i.conjunction_introduction.infer_statement(p055, p048)
         # (6 = (5)++)
-        p057 = t.i.equality_commutativity.infer_statement(p_equal_q=p051)
+        p057 = t.i.equality_commutativity.infer_statement(p_eq_q=p051)
 
         section_2_1_8 = t.open_section('6 is not equal to 2', section_parent=section_2_1)
         t.take_note(content='First, we follow (Tao 2006)''s proof by contradiction.')
@@ -248,7 +248,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # By Axiom 2.4 again we then have 4 = 0, which contradicts our previous proposition.
         h1_p13 = h1.hypothesis_child_theory.i.modus_ponens.infer_statement(p_implies_q=h1_p12,
             p=h1_p11)
-        p200 = t.i.inconsistency_introduction.infer_statement(p=)
+        p200 = t.i.inconsistency_by_negation_introduction.infer_statement(p=)
 
         t.take_note(content='Second, we complement the theory with a direct proof.')
         # TODO: Tao 2006: Bring back direct proof dependent propositions here
