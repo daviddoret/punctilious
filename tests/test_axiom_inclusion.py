@@ -36,5 +36,5 @@ class TestAxiomInclusion(TestCase):
         r1 = u.r.declare(1, nameset='r', signal_proposition=True)
         r2 = u.r.declare(2, nameset='r', signal_proposition=True)
         aii1 = t.i.axiom_interpretation.infer_statement(ai1, u.f(r1, o1))
-        self.assertTrue(aii1.valid_proposition.is_formula_equivalent_to(u.f(r1, o1)))
+        self.assertTrue(aii1.valid_proposition.is_syntactic_equivalent_to(u.f(r1, o1)))
         print(aii1.rep_report())

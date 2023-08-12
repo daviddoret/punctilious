@@ -2102,33 +2102,16 @@ class TheoreticalObject(SymbolicObject):
             if self not in ordered_set:
                 ordered_set.append(self)
 
-    def is_formula_equivalent_to(self, o2):
-        """Returns true if this theoretical-obct and theoretical-obct o2 are formula-equivalent.
+    def is_syntactic_equivalent_to(self, o2: TheoreticalObject) -> bool:
+        """Returns true if ⌜self⌝ is syntactic-equivalent to ⌜o2⌝.
 
         Parameters:
         -----------
         o2 : TheoreticalObject
             The theoretical-object with which to verify formula-equivalence.
 
-        Definition:
-        -----------
-        Two theoretical-obcts o1 and o₂ that are not both formulae,
-        are formula-equivalent if and only if:
-        Necessary conditions:
-         1. o1 and o₂ are symbolic-equivalent.
-        Unnecessary but valid conditions:
-         2. o1 and o₂ are of the same theory class (simple-objct, relation, etc.)
-         3. o1 and o₂ are constitutive of symbolic-equivalent theory_packages.
-         4. o1 and o₂ have equal defining-properties (e.g. arity for a relation).
+        .. include: /docs/syntactic-equivalence.rst
 
-        For the special case when o1 and o₂ are both formulae,
-        cf. the overridden method Formula.is_formula_equivalent_to.
-
-        Note:
-        -----
-        o1 and o₂ may be subject to identical theoretical constraints,
-        that is to say they are theoretically-equivalent,
-        but if they are defined with distinct symbols, they are not formula-equivalent.
         """
         return self.is_symbol_equivalent(o2)
 
@@ -2144,12 +2127,12 @@ class TheoreticalObject(SymbolicObject):
         Given two theoretical-objects o₁ (self) and o₂,
         and a finite set of variables 𝐌,
         o₁ and o₂ are masked-formula-similar if and only if:
-         1. o₁ is formula-equivalent to o₂, including the special case
+         1. o₁ is syntactic-equivalent to o₂, including the special case
             when both o₁ and o₂ are symbolic-equivalent to a variable 𝐱 in 𝐌,
          2. or the weaker condition that strictly one theoretical-object o₁ or o₂
             is symbolic-equivalent to a variable 𝐱 in 𝐌,
             and, denoting the other object the variable-observed-value,
-            every variable-observed-value of 𝐱 are formula-equivalent.
+            every variable-observed-value of 𝐱 are syntactic-equivalent.
          3. or, if o₁ or o₂ are both formula, their components are masked-formula-similar.
 
         Note
@@ -2204,7 +2187,7 @@ class TheoreticalObject(SymbolicObject):
         if o1 is o2:
             # Trivial case.
             return True, _values
-        if o1.is_formula_equivalent_to(o2):
+        if o1.is_syntactic_equivalent_to(o2):
             # Sufficient condition.
             return True, _values
         if isinstance(o1, (Formula, FormulaStatement)) and isinstance(o2,
@@ -2223,7 +2206,7 @@ class TheoreticalObject(SymbolicObject):
                     return False, _values
             return True, _values
         if o1 not in mask and o2 not in mask:
-            # We know o1 and o2 are not formula-equivalent,
+            # We know o1 and o2 are not syntactic-equivalent,
             # and we know they are not in the mask.
             return False, _values
         if o1 in mask:
@@ -2231,7 +2214,7 @@ class TheoreticalObject(SymbolicObject):
             newly_observed_value = o1
             if variable in _values:
                 already_observed_value = _values[variable]
-                if not newly_observed_value.is_formula_equivalent_to(already_observed_value):
+                if not newly_observed_value.is_syntactic_equivalent_to(already_observed_value):
                     return False, _values
             else:
                 _values[variable] = newly_observed_value
@@ -2240,7 +2223,7 @@ class TheoreticalObject(SymbolicObject):
             newly_observed_value = o2
             if variable in _values:
                 already_observed_value = _values[variable]
-                if not newly_observed_value.is_formula_equivalent_to(already_observed_value):
+                if not newly_observed_value.is_syntactic_equivalent_to(already_observed_value):
                     return False, _values
             else:
                 _values[variable] = newly_observed_value
@@ -2302,7 +2285,7 @@ class TheoreticalObject(SymbolicObject):
             #   we must check for formula-equivalence,
             #   rather than python-object-equality.
             for k, v in substitution_map.items():
-                if self.is_formula_equivalent_to(k):
+                if self.is_syntactic_equivalent_to(k):
                     return v
 
             # If the formula itself is not matched,
@@ -2551,7 +2534,7 @@ class FreeVariable(TheoreticalObject):
             # in consequence, masked-formula-similitude is no longer preserved.
             return False, _values
         # o2 is not a variable.
-        return self.is_formula_equivalent_to(o2), _values
+        return self.is_syntactic_equivalent_to(o2), _values
 
     def rep_declaration(self, encoding: (None, Encoding) = None):
         return f'Let {self.rep_name(encoding=encoding)} be a free-variable in ' \
@@ -2680,38 +2663,15 @@ class Formula(TheoreticalObject):
         attribute of the formula's relation."""
         return self.relation.signal_proposition
 
-    def is_formula_equivalent_to(self, o2: (TheoreticalObject, Statement, Formula)) -> bool:
-        """Returns true if this formula and o2 are formula-equivalent.
+    def is_syntactic_equivalent_to(self, o2: TheoreticalObject) -> bool:
+        """Return true if ⌜self⌝ is syntactic-equivalent to ⌜o2⌝.
 
-        Definition:
+        Parameters:
         -----------
-        A formula φ and a theoretical-object o₂ are formula-equivalent if and only if:
-         1. o₂ is a formula.
-         2. The relations of φ and o₂ are formula-equivalent.
-         3. The parameter ordered tuples of φ and o₂ are pair-wise formula-equivalent.ᵃ
+        o2 : TheoreticalObject
+            The theoretical-object with which to verify formula-equivalence.
 
-        ᵃ. See the special case of variables formula-equivalence.
-
-        Note:
-        -----
-        Intuitively, formula-equivalence state that two formula express the
-        same thing with the same symbols.
-        For instance, formula (¬(True)) and (False) are not formula-equivalent,
-        because the former expresses the negation of truth (which is equal to false),
-        and the latter expresses falsehood "directly". Both formulae yield
-        the same value, but are formulated in a different manned.
-        It follows that two formula may yield equal values and not be formula-equivalent.
-        But two formula that are formula-equivalent necessarily yield the same value.
-        Finally, two formula may not be symbolically-equivalent while
-        being formula-equivalent. Because formulae are theoretical-objects.
-        and theoretical-objects are symbolic-objcts, formulae have unique symbols.
-
-        To do list
-        ----------
-        We would not need the concept of formula-equivalence if we would
-        forbid the instantiation of "duplicate" formulae in theory_packages.
-        TODO: Consider the pros and cons of forbiding "duplicate" formulae in theory_packages
-            and removing formula-equivalence as a concept from Punctilious.
+        .. include: /docs/syntactic-equivalence.rst
 
         """
         # if o2 is a statement, unpack its embedded formula
@@ -2721,11 +2681,11 @@ class Formula(TheoreticalObject):
             return True
         if not isinstance(o2, Formula):
             return False
-        if not self.relation.is_formula_equivalent_to(o2.relation):
+        if not self.relation.is_syntactic_equivalent_to(o2.relation):
             return False
         # Arities are necessarily equal.
         for i in range(len(self.parameters)):
-            if not self.parameters[i].is_formula_equivalent_to(o2.parameters[i]):
+            if not self.parameters[i].is_syntactic_equivalent_to(o2.parameters[i]):
                 return False
         return True
 
@@ -3595,11 +3555,11 @@ class FormulaStatement(Statement):
         is the relation of the valid-proposition-formula it contains."""
         return self.valid_proposition.relation
 
-    def is_formula_equivalent_to(self, o2):
+    def is_syntactic_equivalent_to(self, o2: TheoreticalObject) -> bool:
         """Considering this formula-statement as a formula,
         that is the valid-proposition-formula it contains,
-        check if it is formula-equivalent to o2."""
-        return self.valid_proposition.is_formula_equivalent_to(o2)
+        check if it is syntactic-equivalent to o2."""
+        return self.valid_proposition.is_syntactic_equivalent_to(o2)
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
             visited: (None, set) = None):
@@ -4193,12 +4153,12 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
             'The relation of formula ⌜q_implies_p⌝ must be an implication.',
             q_implies_p_relation=p_implies_q.relation, q_implies_p=q_implies_p, t=t, slf=self)
 
-        verify(p_implies_q.parameters[0].is_formula_equivalent_to(q_implies_p.parameters[1]),
-            'The p of the ⌜p_implies_q⌝ formula must be formula-equivalent to the p of '
+        verify(p_implies_q.parameters[0].is_syntactic_equivalent_to(q_implies_p.parameters[1]),
+            'The p of the ⌜p_implies_q⌝ formula must be syntactic-equivalent to the p of '
             '⌜q_implies_p⌝ formula.', p_implies_q=p_implies_q, q_implies_p=q_implies_p, t=t,
             slf=self)
-        verify(p_implies_q.parameters[1].is_formula_equivalent_to(q_implies_p.parameters[0]),
-            'The q of the ⌜p_implies_q⌝ formula must be formula-equivalent to the q of '
+        verify(p_implies_q.parameters[1].is_syntactic_equivalent_to(q_implies_p.parameters[0]),
+            'The q of the ⌜p_implies_q⌝ formula must be syntactic-equivalent to the q of '
             '⌜q_implies_p⌝ formula.', p_implies_q=p_implies_q, q_implies_p=q_implies_p, t=t,
             slf=self)
         return True
@@ -4524,8 +4484,8 @@ class InconsistencyByNegationIntroductionDeclaration(InferenceRuleDeclaration):
             inconsistent_theory=inconsistent_theory, slf=self)
         not_p_formula = not_p.valid_proposition
         p_in_not_p = not_p_formula.parameters[0]
-        verify(p_in_not_p.is_formula_equivalent_to(p),
-            'The sub-formula (parameter) ⌜p⌝ in ⌜not_p⌝ must be formula-equivalent to ⌜p⌝.',
+        verify(p_in_not_p.is_syntactic_equivalent_to(p),
+            'The sub-formula (parameter) ⌜p⌝ in ⌜not_p⌝ must be syntactic-equivalent to ⌜p⌝.',
             not_p=not_p, p_in_not_p=p_in_not_p, p=p, slf=self)
         return True
 
@@ -4578,13 +4538,13 @@ class InconsistencyByInequalityIntroductionDeclaration(InferenceRuleDeclaration)
         verify(p_neq_q.relation is p_neq_q.theory.universe_of_discourse.relations.inequality,
             'The relation of statement ⌜p_neq_q⌝ must be ⌜inequality⌝.', p_neq_q=p_neq_q,
             inconsistent_theory=inconsistent_theory, slf=self)
-        verify(p_eq_q.valid_proposition.parameters[0].is_formula_equivalent(
+        verify(p_eq_q.valid_proposition.parameters[0].is_syntactic_equivalent_to(
             p_neq_q.valid_proposition.parameters[0]),
-            'The ⌜p⌝ in ⌜p_equal_q⌝ must be formula-equivalent to the ⌜p⌝ in ⌜p_neq_q⌝.',
+            'The ⌜p⌝ in ⌜p_equal_q⌝ must be syntactic-equivalent to the ⌜p⌝ in ⌜p_neq_q⌝.',
             p_equal_q=p_eq_q, p_neq_q=p_neq_q, inconsistent_theory=inconsistent_theory, slf=self)
-        verify(p_eq_q.valid_proposition.parameters[1].is_formula_equivalent(
+        verify(p_eq_q.valid_proposition.parameters[1].is_syntactic_equivalent_to(
             p_neq_q.valid_proposition.parameters[1]),
-            'The ⌜q⌝ in ⌜p_equal_q⌝ must be formula-equivalent to the ⌜q⌝ in ⌜p_neq_q⌝.',
+            'The ⌜q⌝ in ⌜p_equal_q⌝ must be syntactic-equivalent to the ⌜q⌝ in ⌜p_neq_q⌝.',
             p_equal_q=p_eq_q, p_neq_q=p_neq_q, inconsistent_theory=inconsistent_theory, slf=self)
         return True
 
@@ -4652,8 +4612,8 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         p_prime = unpack_formula(p_implies_q.parameters[0])
         # The antecedant of the implication may contain free-variables,
         # store these in a mask for masked-formula-similitude comparison.
-        verify(p.is_formula_equivalent_to(p_prime),
-            'Formula ⌜p_prime⌝ in statement ⌜p_implies_q⌝ must be formula-equivalent to statement '
+        verify(p.is_syntactic_equivalent_to(p_prime),
+            'Formula ⌜p_prime⌝ in statement ⌜p_implies_q⌝ must be syntactic-equivalent to statement '
             '⌜p⌝.', p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t, slf=self)
         return True
 
@@ -4770,9 +4730,9 @@ class ProofByContradictionOfNonEqualityDeclaration(InferenceRuleDeclaration):
             inc_p_neq_q_relation=inc_p_neq_q.relation, inc_p_neq_q=inc_p_neq_q, t=t, slf=self)
         p_neq_q_prime: FormulaStatement
         p_neq_q_prime = inc_p_neq_q.parameters[0]
-        verify(p_neq_q.is_formula_equivalent_to(p_neq_q_prime),
-            '⌜p_neq_q⌝ must be formula-equivalent to ⌜p_neq_q⌝ in ⌜inc_p_neq_q⌝.', p_neq_q=p_neq_q,
-            p_neq_q_prime=p_neq_q_prime, t=t, slf=self)
+        verify(p_neq_q.is_syntactic_equivalent_to(p_neq_q_prime),
+            '⌜p_neq_q⌝ must be syntactic-equivalent to ⌜p_neq_q⌝ in ⌜inc_p_neq_q⌝.',
+            p_neq_q=p_neq_q, p_neq_q_prime=p_neq_q_prime, t=t, slf=self)
         # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
         #  stable???
         # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
@@ -4883,8 +4843,8 @@ class ProofByRefutationOfEqualityDeclaration(InferenceRuleDeclaration):
         verify(inc_p_eq_q.relation is t.u.relations.inconsistency,
             '⌜inc_p.relation⌝ must be of form (Inc(Hn)).', inc_p_relation=inc_p_eq_q.relation,
             inc_p=inc_p_eq_q, t=t, slf=self)
-        verify(p_eq_q.is_formula_equivalent_to(inc_p_eq_q.parameters[0]),
-            '⌜p_eq_q⌝ must be formula-equivalent to ⌜p_eq_q⌝ in ⌜inc_p_eq_q⌝.', p_eq_q=p_eq_q,
+        verify(p_eq_q.is_syntactic_equivalent_to(inc_p_eq_q.parameters[0]),
+            '⌜p_eq_q⌝ must be syntactic-equivalent to ⌜p_eq_q⌝ in ⌜inc_p_eq_q⌝.', p_eq_q=p_eq_q,
             inc_p_eq_q=inc_p_eq_q, t=t, slf=self)
         # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
         #  stable???
@@ -5721,6 +5681,8 @@ class SimpleObjct(TheoreticalObject):
     ----------
     A simple-objct-component ℴ is a theoretical-object that has no special attribute,
     and whose sole function is to provide the meaning of being itself.
+
+    TODO: SimpleObjct: By design, a SimpleObjct should also be a Formula. As an immediate measure, I implement the method is_syntactic_equivalent() to make it compatible, but the data model should be improved.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse,
@@ -5778,7 +5740,7 @@ class SimpleObjct(TheoreticalObject):
             # in consequence, masked-formula-similitude is no longer preserved.
             return False, _values
         # o2 is not a variable.
-        return self.is_formula_equivalent_to(o2), _values
+        return self.is_syntactic_equivalent_to(o2), _values
 
     def rep_declaration(self, encoding: (None, Encoding) = None, wrap: (None, bool) = None):
         return rep_composition(composition=self.compose_declaration(), encoding=encoding, wrap=wrap)
@@ -5815,7 +5777,7 @@ class SubstitutionOfEqualTerms(FormulaStatement):
         substitution_map = {left_term: right_term}
         valid_proposition = original_expression.valid_proposition.substitute(
             substitution_map=substitution_map, target_theory=theory, lock_variable_scope=True)
-        # Note: valid_proposition will be formula-equivalent to self,
+        # Note: valid_proposition will be syntactic-equivalent to self,
         #   if there are no occurrences of left_term in original_expression.
         super().__init__(theory=theory, valid_proposition=valid_proposition,
             paragraphe_header=paragraphe_header, nameset=nameset)
@@ -5926,6 +5888,17 @@ class RelationDict(collections.UserDict):
                 symbol=SerifItalic(unicode='∨', latex='\\lor', plaintext='or'), name='or',
                 explicit_name='disjunction')
         return self._disjunction
+
+    @property
+    def eq(self):
+        """The well-known equality relation.
+
+        Unabridged property: universe_of_discourse.relations.equality
+
+        If it does not exist in the universe-of-discourse,
+        declares it automatically.
+        """
+        return self.equality
 
     @property
     def equal(self):
@@ -7308,11 +7281,11 @@ class InconsistencyByNegationIntroductionInclusion(InferenceRuleInclusion):
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
         i = t.universe_of_discourse.inference_rules.inconsistency_by_negation_introduction
-        dashed_name = 'inconsistency-introduction'
-        acronym = 'ii'
-        abridged_name = 'inc.-intro.'
-        name = 'inconsistency introduction'
-        explicit_name = 'inconsistency introduction inference rule'
+        dashed_name = 'inconsistency-by-negation-introduction'
+        acronym = None
+        abridged_name = None
+        name = 'inconsistency by negation introduction'
+        explicit_name = 'inconsistency by negation introduction inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
@@ -7357,9 +7330,9 @@ class InconsistencyByInequalityIntroductionInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.inconsistency_by_negation_introduction
+        i = t.universe_of_discourse.inference_rules.inconsistency_by_inequality_introduction
         dashed_name = 'inconsistency-by-inequality-introduction'
-        acronym = 'iii'
+        acronym = None
         abridged_name = None
         name = 'inconsistency by inequality introduction'
         explicit_name = 'inconsistency by inequality introduction inference rule'
@@ -7970,7 +7943,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.equal_terms_substitution
 
     @property
-    def inconsistency_by_equality_introduction(
+    def inconsistency_by_inequality_introduction(
             self) -> InconsistencyByInequalityIntroductionInclusion:
         if self._inconsistency_by_inequality_introduction is None:
             self._inconsistency_by_inequality_introduction = InconsistencyByInequalityIntroductionInclusion(
@@ -8738,7 +8711,7 @@ class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
             'The relation of not_p is not the negation relation.')
         not_p_prime = theory.universe_of_discourse.f(
             theory.universe_of_discourse.relations.negation, p.valid_proposition)
-        verify(not_p_prime.is_formula_equivalent_to(not_p.valid_proposition),
+        verify(not_p_prime.is_syntactic_equivalent_to(not_p.valid_proposition),
             'not_p is not formula-equialent to ¬(P).', p=p, not_p=not_p, not_p_prime=not_p_prime)
         # Build q by variable substitution
         valid_proposition = theory.universe_of_discourse.f(
