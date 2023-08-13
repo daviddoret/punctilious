@@ -88,12 +88,14 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p017 = t.i.equality_commutativity.infer_statement(p006)
         p018 = t.i.equal_terms_substitution.infer_statement(p017, p015)
         p019 = t.i.equal_terms_substitution.infer_statement(p007, p017)
+
+        t.open_section('3 is a natural number', section_parent=section_2_1, section_number=3)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₂₀): ((((0)++)++)++ = 3).
         p020 = t.i.equality_commutativity.infer_statement(p007)
-        p021 = t.i.equal_terms_substitution.infer_statement(p020, p017)
-
         # Proposition 2.1.4. 3 is a natural number.
         p022 = t.i.equal_terms_substitution.infer_statement(p012, p020, ref='2.1.4')
+
+        p021 = t.i.equal_terms_substitution.infer_statement(p020, p017)
 
         p023 = t.i.definition_interpretation.infer_statement(d02,
             u.f(u.r.equal, four, u.f(plusplus, u.f(plusplus, u.f(plusplus, u.f(plusplus, zero))))))
@@ -201,7 +203,9 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # (6 = (5)++)
         p057 = t.i.equality_commutativity.infer_statement(p_eq_q=p051)
 
-        section_2_1_8 = t.open_section('6 is not equal to 2', section_parent=section_2_1)
+        section_2_1_8 = t.open_section('6 is not equal to 2', section_parent=section_2_1,
+            section_number=8)
+
         t.take_note(content='First, we follow (Tao 2006)''s proof by contradiction.')
 
         # Proof.

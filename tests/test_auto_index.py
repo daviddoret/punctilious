@@ -5,7 +5,7 @@ import random_data
 
 class TestAutoIndex(TestCase):
     def test_auto_index(self):
-        u1 = pu.declare_universe_of_discourse()
+        u1 = pu.create_universe_of_discourse()
         a1 = u1.declare_symbolic_objct(symbol='a', auto_index=True)
         self.assertEqual(1, a1.nameset.index_as_int)
         b1 = u1.declare_symbolic_objct(symbol='b', auto_index=True)

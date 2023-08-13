@@ -1,8 +1,11 @@
+.. _mp:
+.. _modus-ponens:
+
 # Modus ponens
 
 ## Definition
 
-_Modus ponens_ is a well-known _inference rule_.
+_modus_ponens is a well-known _inference-rule.
 
 ## Formal definition
 

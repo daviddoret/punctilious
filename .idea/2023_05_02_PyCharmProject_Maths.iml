@@ -10,7 +10,10 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="PackageRequirementsSettings">
+    <option name="requirementsPath" value="" />
+  </component>
   <component name="ReSTService">
-    <option name="DOC_DIR" value="$MODULE_DIR$" />
+    <option name="DOC_DIR" value="C:\Users\David\PycharmProjects\punctilious\docs" />
   </component>
 </module>

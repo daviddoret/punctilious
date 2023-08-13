@@ -1,8 +1,11 @@
+.. _absorption:
+.. _absorption-inference-rule:
+
 # absorption (inference-rule)
 
 ## Definition
 
-_Absorption_ is a well-known _inference rule_.
+absorption_ is a well-known and valid inference-rule_ of propositional-logic.
 
 ## Formal definition
 

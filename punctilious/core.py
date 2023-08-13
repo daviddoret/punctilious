@@ -1233,7 +1233,9 @@ class NameSet(Composable):
         if isinstance(ref, str):
             ref = SansSerifBold(ref)
         self._ref = ref
-        self._paragraph_header = paragraph_headers.uncategorized if paragraph_header is None else paragraph_header
+        if paragraph_header is None:
+            paragraph_header = paragraph_headers.uncategorized
+        self._paragraph_header = paragraph_header
         self._subtitle = subtitle
 
     def __eq__(self, other):
@@ -1300,19 +1302,19 @@ class NameSet(Composable):
             something = yield from yield_composition(self._acronym, pre=pre, post=post)
             return something
 
-    def compose_cat_unabridged(self, cap: (None, bool) = None, pre: (None, str, Composable) = None,
-            post: (None, str, Composable) = None) -> collections.abc.Generator[
-        Composable, Composable, bool]:
+    def compose_paragraph_header_unabridged(self, cap: (None, bool) = None,
+            pre: (None, str, Composable) = None, post: (None, str, Composable) = None) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
         if self._paragraph_header is None:
             return False
         else:
-            something = yield from yield_composition(self._paragraph_header.natural_name, cap=cap,
+            something = yield from yield_composition(self.paragraph_header.natural_name, cap=cap,
                 pre=pre, post=post)
             return something
 
-    def compose_cat_abridged(self, cap: (None, bool) = None, pre: (None, str, Composable) = None,
-            post: (None, str, Composable) = None) -> collections.abc.Generator[
-        Composable, Composable, bool]:
+    def compose_paragraph_header_abridged(self, cap: (None, bool) = None,
+            pre: (None, str, Composable) = None, post: (None, str, Composable) = None) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
         if self._paragraph_header is None:
             return False
         else:
@@ -1405,7 +1407,7 @@ class NameSet(Composable):
     def compose_ref_link(self, cap: (None, bool) = None) -> collections.abc.Generator[
         Composable, Composable, bool]:
         global text_dict
-        output1 = yield from self.compose_cat_abridged(cap=cap)
+        output1 = yield from self.compose_paragraph_header_abridged(cap=cap)
         pre = text_dict.space if output1 else None
         output2 = yield from self.compose_ref(pre=pre)
         pre = ' (' if output1 or output2 else None
@@ -1435,7 +1437,7 @@ class NameSet(Composable):
     def compose_title(self, cap: (None, bool) = None) -> collections.abc.Generator[
         Composable, Composable, bool]:
         global text_dict
-        output1 = yield from self.compose_cat_unabridged(cap=cap)
+        output1 = yield from self.compose_paragraph_header_unabridged(cap=cap)
         pre = text_dict.space if output1 else None
         output2 = yield from self.compose_ref(pre=pre)
         yield SansSerifNormal(' (')
@@ -1639,7 +1641,7 @@ class TitleOBSOLETE:
         if isinstance(abr, str):
             abr = StyledText(s=abr, text_style=text_styles.sans_serif_bold)
         self._abr = abr
-        self._cat = paragraph_headers.uncategorized if paragrapha_header is None else paragrapha_header
+        self._paragraph_header = paragraph_headers.uncategorized if paragrapha_header is None else paragrapha_header
         if isinstance(subtitle, str):
             subtitle = StyledText(s=subtitle, text_style=text_styles.sans_serif_normal)
         self._nameset = nameset
@@ -1665,7 +1667,7 @@ class TitleOBSOLETE:
     @property
     def cat(self) -> ParagraphHeader:
         """The category of this statement."""
-        return self._cat
+        return self._paragraph_header
 
     @property
     def subtitle(self) -> ComposableText:
@@ -1709,8 +1711,9 @@ class TitleOBSOLETE:
                f'{"" if self.subtitle is None else " - " + self.subtitle.rep(encoding=encoding)}'
 
     def rep_ref(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
-        return StyledText(s=self._cat.abridged_name, text_style=text_styles.sans_serif_bold).rep(
-            encoding=encoding, cap=cap) + '' if self._ref is None else str(
+        return StyledText(s=self._paragraph_header.abridged_name,
+            text_style=text_styles.sans_serif_bold).rep(encoding=encoding,
+            cap=cap) + '' if self._ref is None else str(
             ' ' + self._ref.rep(encoding=encoding)) + '' if self._nameset is None else str(
             ' (' + self._nameset.rep_symbol(encoding=encoding) + ')')
 
@@ -1786,6 +1789,8 @@ class SymbolicObject:
                 symbol = SerifItalic(symbol)
             index = universe_of_discourse.index_symbol(symbol=symbol) if (
                     index is None and auto_index) else index
+            if paragraph_header is None:
+                paragraph_header = paragraph_headers.uncategorized
             nameset = NameSet(symbol=symbol, index=index, namespace=namespace,
                 dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
                 explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref,
@@ -1831,9 +1836,10 @@ class SymbolicObject:
         output = yield from self.nameset.compose()
         return True
 
-    def compose_cat(self) -> collections.abc.Generator[Composable, Composable, bool]:
-        output = yield from self.nameset.compose_cat()
-        return True
+    def compose_paragraph_header_unabridged(self) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from self.nameset.compose_paragraph_header_unabridged()
+        return output
 
     def compose_class(self) -> collections.abc.Generator[Composable, Composable, bool]:
         output = yield SerifItalic(plaintext='symbolic-object')
@@ -2970,10 +2976,10 @@ class ParagraphHeaders(repm.ValueName):
     definition_inclusion = ParagraphHeader('definition_inclusion', 's', SansSerifBold('definition'),
         'def.')
     hypothesis = ParagraphHeader('hypothesis', 'H', 'hypothesis', 'hyp.')
-    inference_rule_declaration = ParagraphHeader('inference_rule', 's', 'inference rule',
+    inference_rule_declaration = ParagraphHeader('inference_rule', 'I', 'inference rule',
         'inference rule')
-    inference_rule_inclusion = ParagraphHeader('inference_rule_inclusion', 's',
-        'inference rule inclusion', 'i.-r.')
+    inference_rule_inclusion = ParagraphHeader('inference_rule_inclusion', 'I', 'inference rule',
+        'inference rule')
     inferred_proposition = ('inferred_proposition', 's', 'inferred-proposition')
     lemma = ParagraphHeader('lemma', 's', 'lemma', 'lem.')
     proposition = ParagraphHeader('proposition', 's', 'proposition', 'prop.')
@@ -2993,7 +2999,7 @@ class ParagraphHeaders(repm.ValueName):
     uncategorized = ParagraphHeader('uncategorized', 's', 'uncategorized', 'uncat.')
 
 
-paragraph_headers = ParagraphHeaders('title_categories')
+paragraph_headers = ParagraphHeaders('paragraph_headers')
 
 
 class Statement(TheoreticalObject):
@@ -3263,15 +3269,16 @@ class InferenceRuleInclusion(Statement):
         """Include (aka allow) an inference-rule in a theory-elaboration.
         """
         self._inference_rule = i
-        if nameset is None:
+        paragraph_header = paragraph_headers.inference_rule_inclusion
+        if symbol is None:
             symbol = configuration.default_inference_rule_inclusion_symbol if symbol is None else symbol
             index = t.universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name, acronym=acronym,
-                abridged_name=abridged_name, name=name, explicit_name=explicit_name)
-        super().__init__(theory=t, paragraph_header=paragraph_headers.inference_rule_inclusion,
+        super().__init__(theory=t, paragraph_header=paragraph_headers, symbol=symbol, index=index,
             nameset=nameset, echo=False)
         t.crossreference_inference_rule_inclusion(self)
         super()._declare_class_membership(declarative_class_list.inference_rule_inclusion)
+        echo = prioritize_value(echo, configuration.echo_inference_rule_inclusion,
+            configuration.echo_inclusion, configuration.echo_default, False)
         if echo:
             proof = prioritize_value(proof, configuration.echo_proof, True)
             repm.prnt(self.rep_report(proof=proof))
@@ -3307,6 +3314,9 @@ class InferenceRuleInclusion(Statement):
         return self.inference_rule.infer_statement(*args, t=self.theory, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
+    def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None) -> str:
+        return rep_composition(composition=self.compose_report(proof=proof), encoding=encoding)
+
     def verify_args(self, *args):
         """
 
@@ -3329,14 +3339,6 @@ class InferenceRuleInclusion(Statement):
 
     def verify_compatibility(self, *args):
         return self.inference_rule.verify_args(*args, t=self.theory)
-
-    def rep_report(self, proof=True) -> str:
-        """Return a representation that expresses and justifies the statement."""
-        text = f'Let allow the {repm.serif_bold(self.inference_rule.title.reference)} ' \
-               f'inference-rule in {self.theory.rep_ref()}.'
-        return '\n'.join(
-            textwrap.wrap(text=text, width=70, subsequent_indent=f'\t', break_on_hyphens=False,
-                expand_tabs=True, tabsize=4)) + f'\n'
 
 
 class DefinitionDeclaration(TheoreticalObject):
@@ -3754,28 +3756,6 @@ def index_universe_of_discourse_symbol(base):
     return universe_of_discourse_symbol_indexes[base]
 
 
-class InferenceRuleOBSOLETE:
-    """
-    TODO: Complete the implementation of InferenceRule, and make ModusPonens a subclass of it.
-    TODO: Make InferenceRule itself a Formula with the Sequent operator ⊢.
-
-    Attributes:
-    -----------
-        premises : tuple
-            A tuple of formulae.
-        conclusion: Formula
-            The conclusion to be derived from the premises if they are true.
-    """
-
-    def __init__(self, premises, conclusion):
-        self._premises = premises
-        self._conclusion = conclusion
-
-    @staticmethod
-    def infer(*args, **kwargs):
-        pass
-
-
 class InferenceRuleDeclaration(TheoreticalObject):
     """An inference-rule object.
 
@@ -3784,7 +3764,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
     of certain shapes,
     and infer a new statement C."""
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse,
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, definition: (None, str) = None,
             infer_formula: (None, collections.abc.Callable) = None,
             verify_args: (None, collections.abc.Callable) = None,
             rep_two_columns_proof_OBSOLETE: (None, collections.abc.Callable) = None,
@@ -3795,20 +3775,23 @@ class InferenceRuleDeclaration(TheoreticalObject):
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        self._definition = definition
         self._infer_formula = infer_formula
         self._verify_args = verify_args
         self._rep_two_columns_proof = rep_two_columns_proof_OBSOLETE
         self._compose_paragraph_proof_method = compose_paragraph_proof_method
         if nameset is None and symbol is None:
             symbol = configuration.default_inference_rule_symbol
-        cat = paragraph_headers.inference_rule_declaration
+        paragraph_header = paragraph_headers.inference_rule_declaration
         super().__init__(universe_of_discourse=universe_of_discourse,
             is_theory_foundation_system=False, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, paragraph_header=cat, ref=ref, subtitle=subtitle,
-            nameset=nameset, echo=False)
+            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref,
+            subtitle=subtitle, nameset=nameset, echo=False)
         super()._declare_class_membership(declarative_class_list.inference_rule)
         universe_of_discourse.cross_reference_inference_rule(self)
+        echo = prioritize_value(echo, configuration.echo_inference_rule_declaration,
+            configuration.echo_declaration, configuration.echo_default, False)
         if echo:
             self.echo()
 
@@ -3820,8 +3803,12 @@ class InferenceRuleDeclaration(TheoreticalObject):
     def compose_paragraph_proof_method(self):
         return self._compose_paragraph_proof_method
 
+    @property
+    def definition(self) -> (None, str):
+        return self._definition
+
     def echo(self):
-        repm.prnt(self.rep_report())
+        repm.prnt(self.rep_declaration())
 
     def infer_formula(self, *args, t: TheoryElaborationSequence, echo: (None, bool) = None,
             **kwargs) -> Formula:
@@ -3838,6 +3825,9 @@ class InferenceRuleDeclaration(TheoreticalObject):
         """Apply this inference-rules on input statements and return the resulting statement."""
         return InferredStatement(*args, i=self, t=t, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo, **kwargs)
+
+    def rep_declaration(self, encoding: (None, Encoding) = None) -> str:
+        return rep_composition(composition=self.compose_declaration(), encoding=encoding)
 
     def rep_two_columns_proof_OBSOLETE(self, s: InferredStatement,
             encoding: (None, Encoding) = None) -> str:
@@ -3877,6 +3867,10 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
 
 class AbsorptionDeclaration(InferenceRuleDeclaration):
+    """
+        .. include:: /docs/absorption.rst
+    """
+
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'absorption'
         abridged_name = 'absorp.'
@@ -3884,13 +3878,14 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
         dashed_name = 'absorption'
         explicit_name = 'absorption inference rule'
         name = 'absorption'
+        definition = 'P ⟹ Q ⊢ P ⟹ (P ∧ Q)'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = AxiomInterpretationDeclaration.infer_formula
         verify_args = AxiomInterpretationDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, abridged_name=abridged_name, name=name,
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_implies_q: FormulaStatement = None,
@@ -3933,14 +3928,15 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         dashed_name = 'axiom-interpretation'
         explicit_name = 'axiom interpretation inference rule'
         name = 'axiom interpretation'
+        definition = '𝒜 ⊢ P'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = AxiomInterpretationDeclaration.infer_formula
         verify_args = AxiomInterpretationDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     # def compose_inferred_statement_paragraph_proof(self, o: InferredStatement,
     #                                                proof: (None, bool) = None) -> \
@@ -4288,14 +4284,15 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         dashed_name = 'conjunction-introduction'
         explicit_name = 'conjunction introduction inference rule'
         name = 'conjunction introduction'
+        definition = '(P, Q) ⊢ (P ⋀ Q)'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = AxiomInterpretationDeclaration.infer_formula
         verify_args = AxiomInterpretationDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
@@ -5014,10 +5011,10 @@ class Section(AtheoreticalStatement):
 
     def compose_report(self, proof: (None, bool) = None) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        yield "#" * self.section_level
+        yield '#' * self.section_level
         yield text_dict.space
         yield from SansSerifBold(self.section_reference).compose()
-        yield text_dict.space
+        yield ': '
         yield from SansSerifBold(str(self.section_title).capitalize()).compose()
         return True
 
@@ -8131,6 +8128,12 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
 
 class UniverseOfDiscourse(SymbolicObject):
+    """
+
+    .. include: universe-of-discourse
+
+    """
+
     def __init__(self, nameset: (None, str, NameSet) = None, symbol: (None, str, StyledText) = None,
             dashed_name: (None, str, StyledText) = None, name: (None, str, ComposableText) = None,
             echo: (None, bool) = None):
@@ -8169,11 +8172,11 @@ class UniverseOfDiscourse(SymbolicObject):
         if echo:
             self.echo()
 
-    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
-        # TODO: Instead of hard-coding the class name, use a meta-theory.
+    def compose_class(self) -> collections.abc.Generator[Composable, Composable, bool]:
         yield SerifItalic(plaintext='universe-of-discourse')
+        return True
 
-    def compose_declaration(self) -> collections.abc.Generator[Composable, None, None]:
+    def compose_creation(self) -> collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         yield SansSerifNormal('Let ')
         yield text_dict.open_quasi_quote
@@ -8181,7 +8184,9 @@ class UniverseOfDiscourse(SymbolicObject):
         yield text_dict.close_quasi_quote
         yield SansSerifNormal(' be a ')
         yield from self.compose_class()
+        # TODO: UniverseOfDiscourse.compose_creation: adapt the method for universe declaration to add "in Ux", referencing the parent / meta universe.
         yield text_dict.period
+        return True
 
     def cross_reference_axiom(self, a: AxiomDeclaration) -> bool:
         """Cross-references an axiom in this universe-of-discourse.
@@ -8380,7 +8385,7 @@ class UniverseOfDiscourse(SymbolicObject):
             subtitle=subtitle, nameset=nameset, echo=echo)
 
     def echo(self):
-        return repm.prnt(self.rep_declaration(cap=True))
+        return repm.prnt(self.rep_creation(cap=True))
 
     def f(self, relation: (Relation, FreeVariable), *parameters,
             nameset: (None, str, NameSet) = None, lock_variable_scope: (None, bool) = None,
@@ -8448,8 +8453,8 @@ class UniverseOfDiscourse(SymbolicObject):
         where well-known relations are directly available as properties."""
         return self._relations
 
-    def rep_declaration(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
-        return rep_composition(composition=self.compose_declaration(), encoding=encoding, cap=cap)
+    def rep_creation(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
+        return rep_composition(composition=self.compose_creation(), encoding=encoding, cap=cap)
 
     @property
     def simple_objcts(self) -> SimpleObjctDict:
@@ -8528,8 +8533,10 @@ class UniverseOfDiscourse(SymbolicObject):
         x.lock_scope()
 
 
-def declare_universe_of_discourse(nameset: (None, str, NameSet) = None,
+def create_universe_of_discourse(nameset: (None, str, NameSet) = None,
         name: (None, str, ComposableText) = None, echo: (None, bool) = None) -> UniverseOfDiscourse:
+    """Create_ a new universe-of-discourse_.
+    """
     return UniverseOfDiscourse(nameset=nameset, name=name, echo=echo)
 
 
@@ -8691,42 +8698,6 @@ class InconsistencyIntroductionStatement(FormulaStatement):
         return output + f'\n'
 
 
-class InconsistencyIntroductionInferenceRuleOBSOLETE(InferenceRuleOBSOLETE):
-    """An implementation of the inconsistency-introduction inference-rule."""
-
-    @staticmethod
-    def infer(theory, p, not_p, symbol=None, paragraph_header=None, title=None):
-        """"""
-        return InconsistencyIntroductionStatement(p=p, not_p=not_p, nameset=symbol,
-            paragraphe_header=paragraph_header, theory=theory, title=title)
-
-    @staticmethod
-    def execute_algorithm(theory, p, not_p):
-        """Execute the theory-inconsistency algorithm."""
-        assert isinstance(theory, TheoryElaborationSequence)
-        assert isinstance(p, FormulaStatement)
-        verify(theory.contains_theoretical_objct(p),
-            'The p of the theory-inconsistency is not contained in the '
-            'theory hierarchy.', conditional=p, theory=theory)
-        verify(theory.contains_theoretical_objct(not_p),
-            'The not-p of the theory-inconsistency is not contained in the '
-            'theory hierarchy.', antecedent=not_p, theory=theory)
-        verify(not_p.valid_proposition.relation is theory.universe_of_discourse.relations.negation,
-            'The relation of not_p is not the negation relation.')
-        not_p_prime = theory.universe_of_discourse.f(
-            theory.universe_of_discourse.relations.negation, p.valid_proposition)
-        verify(not_p_prime.is_formula_syntactically_equivalent_to(not_p.valid_proposition),
-            'not_p is not formula-equialent to ¬(P).', p=p, not_p=not_p, not_p_prime=not_p_prime)
-        # Build q by variable substitution
-        valid_proposition = theory.universe_of_discourse.f(
-            theory.universe_of_discourse.relations.inconsistency, theory)
-        return valid_proposition
-
-    @staticmethod
-    def initialize(theory):
-        a1 = theory.a()  # TODO: Justify the inclusion of this inference-rule in the theory.
-
-
 def reset_configuration(configuration: Configuration) -> None:
     configuration.auto_index = None
     configuration._echo_default = False
@@ -8748,11 +8719,17 @@ def reset_configuration(configuration: Configuration) -> None:
     configuration.default_theory_symbol = ScriptNormal('T')
     configuration.echo_axiom_declaration = None
     configuration.echo_axiom_inclusion = None
+    configuration.echo_declaration = None
     configuration.echo_definition_declaration = None
     configuration.echo_definition_inclusion = None
     configuration.echo_definition_direct_inference = None
+    configuration.echo_encoding = None
     configuration.echo_formula_declaration = False  # In general, this is too verbose.
+    configuration.echo_free_variable_declaration = None
     configuration.echo_hypothesis = None
+    configuration.echo_inclusion = None
+    configuration.echo_inference_rule_declaration = None
+    configuration.echo_inference_rule_inclusion = None
     configuration.echo_inferred_statement = None
     configuration.echo_note = None
     configuration.echo_relation = None
@@ -8761,8 +8738,6 @@ def reset_configuration(configuration: Configuration) -> None:
     configuration.echo_symbolic_objct = None
     configuration.echo_theory_elaboration_sequence_declaration = None
     configuration.echo_universe_of_discourse_declaration = None
-    configuration.echo_free_variable_declaration = None
-    configuration.echo_encoding = None
     configuration.output_index_if_max_index_equal_1 = False
     configuration.raise_exception_on_verification_error = True
     configuration.title_text_style = text_styles.sans_serif_bold
@@ -8785,7 +8760,7 @@ class TheoryPackage:
         """Elaborate a new theory in a new universe with the content of the package.
 
         """
-        u = declare_universe_of_discourse()
+        u = create_universe_of_discourse()
         t = u.declare_theory()
         self.develop_theory(t=t)
         return t

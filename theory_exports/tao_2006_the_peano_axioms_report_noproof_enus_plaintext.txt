@@ -10,34 +10,34 @@ Let "0", "natural-number", "1", "2", "3", "4", "5", "6" be simple-objects in U1.
 
 # Relations
 Let "++", "Inc" be unary-relations in U1.
-Let "is-a", "==>", "=", "and", "neq" be binary-relations in U1.
+Let "is-a", "=", "==>", "neq", "and" be binary-relations in U1.
 
 # Inference rules
 The following inference rules are considered valid under this theory:
-Let "axiom-interpretation" be the inference-rule TODO: COMPLETE HERE.
-Let "conjunction-introduction" be the inference-rule TODO: COMPLETE HERE.
-Let "definition-interpretation" be the inference-rule TODO: COMPLETE HERE.
-Let "equal-terms-substitution" be the inference-rule TODO: COMPLETE HERE.
-Let "equality-commutativity" be the inference-rule TODO: COMPLETE HERE.
-Let "inconsistency-by-inequality-introduction" be the inference-rule TODO: COMPLETE HERE.
-Let "modus-ponens" be the inference-rule TODO: COMPLETE HERE.
-Let "proof-by-refutation-of-equality" be the inference-rule TODO: COMPLETE HERE.
-Let "variable-substitution" be the inference-rule TODO: COMPLETE HERE.
+Let "axiom-interpretation" be an inference-rule defined as "𝒜 ⊢ P" in U1.
+Let "conjunction-introduction" be an inference-rule defined as "(P, Q) ⊢ (P ⋀ Q)" in U1.
+Let "definition-interpretation" be an inference-rule defined as (missing definition) in U1.
+Let "equal-terms-substitution" be an inference-rule defined as (missing definition) in U1.
+Let "equality-commutativity" be an inference-rule defined as (missing definition) in U1.
+Let "inconsistency-by-inequality-introduction" be an inference-rule defined as (missing definition) in U1.
+Let "modus-ponens" be an inference-rule defined as (missing definition) in U1.
+Let "proof-by-refutation-of-equality" be an inference-rule defined as (missing definition) in U1.
+Let "variable-substitution" be an inference-rule defined as (missing definition) in U1.
 
 # Theory elaboration sequence
-# 2 The natural numbers
-## 2.1 The peano axioms
+# 2: The natural numbers
+## 2.1: The peano axioms
 Axiom 2.1 (T1.A1): Let axiom A1 "0 is a natural number." be included (postulated) in T1.
-Uncategorized (I1): Let inference-rule axiom-interpretation TODO: COMPLETE be included (considered valid) in T1.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "𝒜 ⊢ P" be included and considered valid in T1.
 Proposition (T1.P1): (0 is-a natural-number).
 Axiom 2.2 (T1.A2): Let axiom A2 "If n is a natural number, then n++ is a natural number." be included (postulated) in T1.
 Proposition (T1.P2): ((n1 is-a natural-number) ==> ((n1)++ is-a natural-number)).
-Uncategorized (I2): Let inference-rule variable-substitution TODO: COMPLETE be included (considered valid) in T1.
+Inference rule (variable-substitution): Let inference-rule variable-substitution defined as (missing definition) be included and considered valid in T1.
 Proposition (T1.P3): ((0 is-a natural-number) ==> ((0)++ is-a natural-number)).
-Uncategorized (I3): Let inference-rule modus-ponens TODO: COMPLETE be included (considered valid) in T1.
+Inference rule (modus-ponens): Let inference-rule modus-ponens defined as (missing definition) be included and considered valid in T1.
 Proposition 2.2.3 (T1.P4): ((0)++ is-a natural-number).
 Definition (T1.D1): Let definition D1 "We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that x is defined to equal y.)" be included (postulated) in T1.
-Uncategorized (I4): Let inference-rule definition-interpretation TODO: COMPLETE be included (considered valid) in T1.
+Inference rule (definition-interpretation): Let inference-rule definition-interpretation defined as (missing definition) be included and considered valid in T1.
 Proposition (T1.P5): (1 = (0)++).
 Proposition (T1.P6): (2 = ((0)++)++).
 Proposition (T1.P7): (3 = (((0)++)++)++).
@@ -48,16 +48,17 @@ Proposition (T1.P11): ((((0)++)++ is-a natural-number) ==> ((((0)++)++)++ is-a n
 Proposition (T1.P12): ((((0)++)++)++ is-a natural-number).
 Proposition (T1.P13): (((((0)++)++)++ is-a natural-number) ==> (((((0)++)++)++)++ is-a natural-number)).
 Proposition (T1.P14): (((((0)++)++)++)++ is-a natural-number).
-Uncategorized (I5): Let inference-rule equality-commutativity TODO: COMPLETE be included (considered valid) in T1.
+Inference rule (equality-commutativity): Let inference-rule equality-commutativity defined as (missing definition) be included and considered valid in T1.
 Proposition (T1.P15): ((0)++ = 1).
-Uncategorized (I6): Let inference-rule equal-terms-substitution TODO: COMPLETE be included (considered valid) in T1.
+Inference rule (equal-terms-substitution): Let inference-rule equal-terms-substitution defined as (missing definition) be included and considered valid in T1.
 Proposition (T1.P16): (2 = (1)++).
 Proposition (T1.P17): (((0)++)++ = 2).
 Proposition (T1.P18): ((1)++ = 2).
 Proposition (T1.P19): (3 = (2)++).
+### 2.1.3: 3 is a natural number
 Proposition (T1.P20): ((((0)++)++)++ = 3).
-Proposition (T1.P21): ((2)++ = 3).
-Proposition 2.1.4 (T1.P22): (3 is-a natural-number).
+Proposition 2.1.4 (T1.P21): (3 is-a natural-number).
+Proposition (T1.P22): ((2)++ = 3).
 Proposition (T1.P23): (4 = ((((0)++)++)++)++).
 Proposition (T1.P24): (((((0)++)++)++)++ = 4).
 Proposition (T1.P25): ((3)++ = 4).
@@ -72,7 +73,7 @@ Axiom 2.4 (T1.A4): Let axiom A4 "Different natural numbers must have different s
 Proposition (T1.P32): ((((n3 is-a natural-number) and (m1 is-a natural-number)) and (n3 neq m1)) ==> ((n3)++ neq (m1)++)).
 Proposition (T1.P33): ((((n4 is-a natural-number) and (m2 is-a natural-number)) and ((n4)++ = (m2)++)) ==> (n4 = m2)).
 Proposition (T1.P34): ((((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)) ==> ((4)++ neq (0)++)).
-Uncategorized (I7): Let inference-rule conjunction-introduction TODO: COMPLETE be included (considered valid) in T1.
+Inference rule (conjunction-introduction): Let inference-rule conjunction-introduction defined as "(P, Q) ⊢ (P ⋀ Q)" be included and considered valid in T1.
 Proposition (T1.P35): ((4 is-a natural-number) and (0 is-a natural-number)).
 Proposition (T1.P36): (((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)).
 Proposition (T1.P37): ((4)++ neq (0)++).
@@ -97,10 +98,10 @@ Proposition (T1.P55): (1 is-a natural-number).
 Proposition (T1.P56): ((5 is-a natural-number) and (1 is-a natural-number)).
 Proposition (T1.P57): (((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)).
 Proposition (T1.P58): (6 = (5)++).
-### 2.1.1 6 is not equal to 2
+### 2.1.8: 6 is not equal to 2
 Hypothesis (T1.H1): (6 = 2).
-Uncategorized (I13): Let inference-rule inconsistency-by-inequality-introduction TODO: COMPLETE be included (considered valid) in T1.
+Inference rule (inconsistency-by-inequality-introduction): Let inference-rule inconsistency-by-inequality-introduction defined as (missing definition) be included and considered valid in T1.
 Proposition (T1.P72): Inc(H1).
-Uncategorized (I14): Let inference-rule proof-by-refutation-of-equality TODO: COMPLETE be included (considered valid) in T1.
+Inference rule (proof-by-refutation-of-equality): Let inference-rule proof-by-refutation-of-equality defined as (missing definition) be included and considered valid in T1.
 Proposition 2.1.8 (T1.P73): (6 neq 2).
 Proposition (T1.P74): (6 neq 2).

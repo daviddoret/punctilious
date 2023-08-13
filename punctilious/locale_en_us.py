@@ -153,23 +153,36 @@ class LocaleEnUs(Locale):
         yield text_dict.open_quasi_quote
         yield from i.compose_symbol()
         yield text_dict.close_quasi_quote
-        yield SansSerifNormal(' be the ')
+        yield SansSerifNormal(' be an ')
         yield SerifItalic('inference-rule')
-        yield SansSerifNormal(' TODO: COMPLETE HERE')
+        yield SansSerifNormal(' defined as ')
+        if i.definition is None:
+            yield '(missing definition)'
+        else:
+            yield text_dict.open_quasi_quote
+            yield i.definition
+            yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' in ')
+        yield from i.u.compose_symbol()
         yield SansSerifNormal('.')
         return True
 
     def compose_inference_rule_inclusion_report(self, i: InferenceRuleInclusion,
             proof: (None, bool) = None) -> collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
-        yield from i.compose_title(cap=True)
+        yield from i.inference_rule.compose_title(cap=True)
         yield SansSerifNormal(': Let ')
         yield SerifItalic('inference-rule')
         yield SansSerifNormal(' ')
         yield from i.inference_rule.compose_symbol()
-        yield SansSerifNormal(' TODO: COMPLETE')
-        # TODO: yield i.inference_rule.definition
-        yield SansSerifNormal(' be included (considered valid) in ')
+        yield SansSerifNormal(' defined as ')
+        if i.inference_rule.definition is None:
+            yield '(missing definition)'
+        else:
+            yield text_dict.open_quasi_quote
+            yield i.inference_rule.definition
+            yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' be included and considered valid in ')
         yield from i.theory.compose_symbol()
         yield SansSerifNormal('.')
         return True
