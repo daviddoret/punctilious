@@ -13,6 +13,12 @@ Formal definition
 
     \left(P \implies Q\right) \vdash \left(P \implies P \land Q\right)
 
+Python implementation
+---------------------
+
+* :doc:`absorption_declaration_python_class`
+* :doc:`absorption_inclusion_python_class`
+
 Bibliography
 ------------
 

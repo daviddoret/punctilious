@@ -10,11 +10,13 @@ Welcome to punctilious's documentation!
 =======================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
-   absorption
-   inference_rule
+   absorption_math_object
+   absorption_declaration_python_class
+   absorption_inclusion_python_class
+   inference_rule_math_object
 
 Indices and tables
 ==================

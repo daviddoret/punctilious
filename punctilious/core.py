@@ -3867,8 +3867,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
 
 class AbsorptionDeclaration(InferenceRuleDeclaration):
-    """
-        .. include:: /docs/absorption.rst
+    """The declaration of the :doc:`absorption<absorption_math_object>` :doc:`inference-rule<inference_rule_math_object>` in a universe-of-discourse.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):

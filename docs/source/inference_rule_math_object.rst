@@ -1,10 +1,10 @@
-inference-rule
-==============
+inference-rule (mathematical object)
+====================================
 
 Definition
 ----------
 
-An *inference-rule* is a syntactic transformation rule which allow to infer a valid statement
+An *inference-rule* is a syntactic transformation rule which allows to infer a valid statement
 from some premises.
 
 Synonyms
@@ -15,7 +15,7 @@ Synonyms
 List of well-known inference-rules
 ----------------------------------
 
-* :doc:`absorption`
+* :doc:`absorption_math_object`
 
 See also
 --------
