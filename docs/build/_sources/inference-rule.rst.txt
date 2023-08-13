@@ -1,20 +1,28 @@
-# Inference rule
+.. _inference-rule:
+.. _inference-rules:
 
-## Definition
+inference-rule
+==============
 
-An _inference-rule_ is a syntactical transform rule which allow to infer a valid-statement
+Definition
+----------
+
+An inference-rule_ is a syntactical transform rule which allow to infer a valid-statement
 from
 some premises.
 
-## Synonyms
+Synonyms
+--------
 
 - Derivation rule
 
-## See also
+See also
+--------
 
 - Derivation rule
 
-## Bibliography
+Bibliography
+------------
 
 - Derivation rule. Encyclopedia of Mathematics.
   URL: http://encyclopediaofmath.org/index.php?title=Derivation_rule&oldid=33737

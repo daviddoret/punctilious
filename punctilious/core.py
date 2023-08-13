@@ -1007,7 +1007,7 @@ configuration = Configuration()
 
 
 class PyvisConfiguration:
-    """pyvis package is used to export graphs as interactive HTML pages.
+    """pyvis package is used to build graphs as interactive HTML pages.
     This class stores the corresponding configuration settings."""
 
     def __init__(self):
@@ -1922,7 +1922,7 @@ class SymbolicObject:
         Definition:
         -----------
         Two symbolic-objects o₁ and o₂ are symbol-equivalent if and only if:
-         1. o₁ and o₂ have symbol-equivalent theory_packages.¹
+         1. o₁ and o₂ have symbol-equivalent package.¹
          2. o₁ and o₂ have equal symbols.²
 
         ¹. Theories are symbolic-objects. This recursive condition
@@ -1933,7 +1933,7 @@ class SymbolicObject:
         -----
         The symbol-equivalence relation allows to compare any pair of symbolic-objcts, including:
          * Both theoretical and atheoretical objects.
-         * Symbolic-objcts linked to distinct theory_packages.
+         * Symbolic-objcts linked to distinct package.
         """
         # A theoretical-object can only be compared with a theoretical-object
         assert isinstance(o2, SymbolicObject)
@@ -3078,7 +3078,7 @@ class Statement(TheoreticalObject):
         Abridged property: s.t
 
         This property may only be set once. In effect, moving statements
-        between theory_packages would lead to unstable theory_packages."""
+        between package would lead to unstable package."""
         return self._theory
 
     @theory.setter
@@ -3690,7 +3690,7 @@ class DirectDefinitionInference(FormulaStatement):
     A theoretical-statement that states that x = some other theoretical-object.
     When an object is defined like this, it means that for every formula
     where x is present, the same formula with the substitution of x by x' can be substituted in
-    all theory_packages.
+    all package.
     TODO: QUESTION: Should we create a base "Alias" object that is distinct from simple-objct???
     XXXXXXX
     """
@@ -5122,16 +5122,15 @@ class TheoryElaborationSequence(TheoreticalObject):
         warns the user that no semantic verification is performed."""
         echo = prioritize_value(echo, configuration.echo_default, False)
         if not self._interpretation_disclaimer:
-            self.take_note(
-                'By design, punctilious assures the syntactical correctness of theory_packages, '
-                'but does not perform any '
-                'semantic verification. Therefore, the usage of inference-rules that interpret '
-                'content (i.e. '
-                'axiom-interpretation and definition-interpretation) is critically dependent on '
-                'the correctness of '
-                'the content translation performed by the theory author, from axiom or definition '
-                'natural language, '
-                'to formulae.', paragraph_header=paragraph_headers.warning, echo=echo)
+            self.take_note('By design, punctilious assures the syntactical correctness of package, '
+                           'but does not perform any '
+                           'semantic verification. Therefore, the usage of inference-rules that interpret '
+                           'content (i.e. '
+                           'axiom-interpretation and definition-interpretation) is critically dependent on '
+                           'the correctness of '
+                           'the content translation performed by the theory author, from axiom or definition '
+                           'natural language, '
+                           'to formulae.', paragraph_header=paragraph_headers.warning, echo=echo)
             self._interpretation_disclaimer = True
 
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
@@ -5299,9 +5298,9 @@ theory-elaboration."""
         Note:
         -----
         The theory-chain set is distinct from theory-dependency set.
-        The theory-chain informs of the parent theory_packages whose statements are considered
+        The theory-chain informs of the parent package whose statements are considered
         valid in the current theory.
-        Distinctively, theory_packages may be referenced by meta-theorizing, or in hypothesis,
+        Distinctively, package may be referenced by meta-theorizing, or in hypothesis,
  or possibly other use cases.
         """
         visited = set() if visited is None else visited
@@ -6780,7 +6779,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         replaced by their corresponding substitution values in O.
 
         Warning:
-        To avoid inconsistent theory_packages, one must be cautious
+        To avoid inconsistent package, one must be cautious
         with variable manipulations. In effect, the proposition:
             ((2n + 4) = 2(n + 2))
         may lead to inconsistencies following variable-substitution
@@ -6849,7 +6848,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         replaced by their corresponding substitution values in O.
 
         Warning:
-        To avoid inconsistent theory_packages, one must be cautious
+        To avoid inconsistent package, one must be cautious
         with variable manipulations. In effect, the proposition:
             ((2n + 4) = 2(n + 2))
         may lead to inconsistencies following variable-substitution
@@ -8073,7 +8072,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         replaced by their corresponding substitution values in O.
 
         Warning:
-        To avoid inconsistent theory_packages, one must be cautious
+        To avoid inconsistent package, one must be cautious
         with variable manipulations. In effect, the proposition:
             ((2n + 4) = 2(n + 2))
         may lead to inconsistencies following variable-substitution
@@ -8113,7 +8112,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         replaced by their corresponding substitution values in O.
 
         Warning:
-        To avoid inconsistent theory_packages, one must be cautious
+        To avoid inconsistent package, one must be cautious
         with variable manipulations. In effect, the proposition:
             ((2n + 4) = 2(n + 2))
         may lead to inconsistencies following variable-substitution
