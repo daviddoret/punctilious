@@ -3791,7 +3791,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
 
 class AbsorptionDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`absorption<absorption_math_object>` :doc:`inference-rule<inference_rule_math_object>` in a universe-of-discourse.
+    """The declaration of the :doc:`absorption` :doc:`inference_rule` in a universe-of-discourse.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -6736,12 +6736,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
 
 class AbsorptionInclusion(InferenceRuleInclusion):
-    """
-
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
+    """The inclusion of :doc:`absorption` as a valid :doc:`inference_rule` in the theory-elaboration-sequence.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6779,10 +6774,6 @@ class AbsorptionInclusion(InferenceRuleInclusion):
 class AxiomInterpretationInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6826,10 +6817,6 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
 class BiconditionalEliminationLeftInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6864,10 +6851,6 @@ class BiconditionalEliminationLeftInclusion(InferenceRuleInclusion):
 class BiconditionalEliminationRightInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6902,10 +6885,6 @@ class BiconditionalEliminationRightInclusion(InferenceRuleInclusion):
 class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6941,10 +6920,6 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
 class ConjunctionEliminationLeftInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6979,10 +6954,6 @@ class ConjunctionEliminationLeftInclusion(InferenceRuleInclusion):
 class ConjunctionEliminationRightInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7017,10 +6988,6 @@ class ConjunctionEliminationRightInclusion(InferenceRuleInclusion):
 class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7058,13 +7025,6 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
 class EqualityCommutativityInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
-
-    .. include:: docs/equality_commutativity_inference_rule.md
-
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7100,13 +7060,6 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
 
 class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
     """
-
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
-
-    .. include:: docs/equal_terms_substitution_inference_rule.md
 
     """
 
@@ -7145,10 +7098,6 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
 class InconsistencyByNegationIntroductionInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7195,10 +7144,6 @@ class InconsistencyByNegationIntroductionInclusion(InferenceRuleInclusion):
 class InconsistencyByInequalityIntroductionInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7245,10 +7190,6 @@ class InconsistencyByInequalityIntroductionInclusion(InferenceRuleInclusion):
 class ModusPonensInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7290,10 +7231,6 @@ class ModusPonensInclusion(InferenceRuleInclusion):
 class ProofByContradictionInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7336,10 +7273,6 @@ hypothetical-theory: Inc(¬P).
 class ProofByContradictionOfInequalityInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7369,10 +7302,6 @@ class ProofByContradictionOfInequalityInclusion(InferenceRuleInclusion):
 class ProofByRefutationInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7415,10 +7344,6 @@ Inc(¬P).
 class ProofByRefutationOfEqualityInclusion(InferenceRuleInclusion):
     """
 
-    Note: designing a specialized inclusion class is superfluous because InferenceRuleInclusion
-    is sufficient to do the job. But the advantage of specializing this class is to provide
-    user-friendly type hints and method parameters documentation for that particular
-    inference-rule. This may be justified for well-known inference-rules.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,

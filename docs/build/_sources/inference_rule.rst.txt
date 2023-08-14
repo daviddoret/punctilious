@@ -15,7 +15,8 @@ Synonyms
 List of well-known inference-rules
 ----------------------------------
 
-* :doc:`absorption_math_object`
+* :doc:`absorption`
+* :doc:`inconsistency_by_inequality_introduction`
 
 See also
 --------

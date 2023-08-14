@@ -14,10 +14,8 @@ Welcome to punctilious's documentation!
    :caption: Contents:
 
    absorption
-   absorption_declaration_python_class
-   absorption_inclusion_python_class
    bibliography
-   inconsistency_by_inequality
+   inconsistency_by_inequality_introduction
    inference_rule
    paragraph_proof
 

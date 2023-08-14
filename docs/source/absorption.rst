@@ -1,5 +1,5 @@
-absorption (inference-rule)
-===========================
+absorption
+==========
 
 Definition
 ----------
@@ -13,8 +13,14 @@ Definition
 Python implementation
 ---------------------
 
-* :doc:`absorption_declaration_python_class`
-* :doc:`absorption_inclusion_python_class`
+.. module:: core
+    :noindex:
+.. autoclass:: AbsorptionDeclaration
+    :members:
+    :special-members: __init__
+.. autoclass:: AbsorptionInclusion
+    :members:
+    :special-members: __init__
 
 Bibliography
 ------------

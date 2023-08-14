@@ -17,7 +17,8 @@ release = '1.0.0'
 # Bibliography configuration:
 # https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html
 # https://pypi.org/project/sphinxcontrib-bibtex/
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinxcontrib.bibtex']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinxcontrib.bibtex',
+    'sphinx_autodoc_typehints']
 bibtex_bibfiles = ['bibliography_bibtex.bib']
 bibtex_encoding = 'utf-8-sig'
 
