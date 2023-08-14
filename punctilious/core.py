@@ -866,7 +866,6 @@ class Locale:
         self._paragraph_end = None
         self._paragraph_start = None
         self._qed = None
-        self.compose_axiom_interpretation_paragraph_proof = None
 
     def __hash__(self):
         return hash(self._name)
@@ -1960,16 +1959,7 @@ class SymbolicObject:
     def rep_dashed_name(self, encoding: (None, Encoding) = None) -> str:
         return self.nameset.rep_dashed_name(encoding=encoding)
 
-    def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None,
-            wrap: (None, bool) = None) -> str:
-        encoding = prioritize_value(encoding, configuration.encoding, encodings.plaintext)
-        output = rep_composition(composition=self.compose_report(proof=proof), encoding=encoding)
-        return output
-
     def rep_formula(self, encoding: (None, Encoding) = None, expand: (None, bool) = None) -> str:
-        """TODO: _formula must be reserved to TheoreticalObjcts. SymbolObjcts should use a
-        distinct verb to mean "report".
-        """
         """If supported, return a formula representation,
         a symbolic representation otherwise.
 
@@ -1994,6 +1984,12 @@ class SymbolicObject:
 
     def rep_ref(self, encoding: (None, Encoding) = None, cap: bool = False) -> str:
         return self.nameset.rep_ref(encoding=encoding, cap=cap)
+
+    def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None,
+            wrap: (None, bool) = None) -> str:
+        encoding = prioritize_value(encoding, configuration.encoding, encodings.plaintext)
+        output = rep_composition(composition=self.compose_report(proof=proof), encoding=encoding)
+        return output
 
     def rep_symbol(self, encoding: (None, Encoding) = None) -> str:
         return self._nameset.rep_symbol(encoding=encoding)
@@ -3829,10 +3825,10 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
         p_implies_p_and_q = t.u.f(t.u.r.implication, p, t.u.f(t.u.r.conjunction, p, q))
         return p_implies_p_and_q
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_absorption_paragraph_proof(o=o)
-        return output
+    # def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+    #    Composable, Composable, bool]:
+    #    output = yield from configuration.locale.compose_absorption_paragraph_proof(o=o)
+    #    return output
 
     def verify_args(self, p_implies_q: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
@@ -3865,13 +3861,10 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    # def compose_inferred_statement_paragraph_proof(self, o: InferredStatement,
-    #                                                proof: (None, bool) = None) -> \
-    #         collections.abc.Generator[
-    #             Composable, Composable, bool]:
-    #     output = yield from configuration.locale.compose_axiom_interpretation_paragraph_proof(
-    #         o=o)
-    #     return output
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_axiom_interpretation_paragraph_proof(o=o)
+        return output
 
     def infer_formula(self, a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
@@ -3884,11 +3877,6 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         """
         p = unpack_formula(p)
         return p
-
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_axiom_interpretation_paragraph_proof(o=o)
-        return output
 
     def verify_args(self, a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence) -> bool:
         """Verify if the arguments comply syntactically with the inference-rule.
@@ -5054,6 +5042,7 @@ class TheoryElaborationSequence(TheoreticalObject):
     def compose_article(self, proof: (None, bool) = None) -> collections.abc.Generator[
         Composable, Composable, bool]:
         """Return a representation that expresses and justifies the theory."""
+        # TODO: compose_article: move this outside of the theory
         output = yield from configuration.locale.compose_theory_report(t=self, proof=proof)
         return output
 
@@ -5449,13 +5438,6 @@ class Hypothesis(Statement):
         the axiom is included in 𝒯₂,
         and the hypothetical-proposition is posed as an interpretation of that axiom in 𝒯₂."""
         return self._hypothesis_child_theory
-
-
-class Proof:
-    """TODO: Define the proof class"""
-
-    def __init__(self):
-        self.is_valid = True  # TODO: Develop the is_valid attribute
 
 
 class Relation(TheoreticalObject):

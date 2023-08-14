@@ -8,6 +8,25 @@ class LocaleEnUs(Locale):
     def __init__(self):
         super().__init__(name='EN-US')
 
+    def compose_absorption_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        o: InferredStatement
+        p: FormulaStatement
+        p = o.parameters[0]
+        yield from p.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from o.compose_ref_link()
+        yield SansSerifNormal('. ')
+        yield from o.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from the application of the ')
+        yield from o.inference_rule.compose_symbol()
+        yield SansSerifNormal(' inference-rule: ')
+        yield o.inference_rule.definition
+        yield SansSerifNormal('.')
+        return True
+
     def compose_axiom_declaration(self, o: AxiomDeclaration) -> collections.abc.Generator[
         Composable, Composable, bool]:
         global text_dict
@@ -198,7 +217,11 @@ class LocaleEnUs(Locale):
             # make a best-effort to write a readable proof.
             for i in range(len(o.parameters)):
                 parameter = o.parameters[i]
-                yield from parameter.compose_formula()
+                if isinstance(parameter, FormulaStatement):
+                    parameter: FormulaStatement
+                    yield from parameter.valid_proposition.compose_formula()
+                else:
+                    yield from parameter.compose_formula()
                 yield SansSerifNormal(' follows from ')
                 yield from parameter.compose_ref_link()
                 yield SansSerifNormal('. ')
@@ -222,6 +245,10 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         if proof:
             yield SansSerifNormal(' ')
+            # if hasattr(o.inference_rule, 'compose_paragraph_proof') and callable(
+            #        o.inference_rule.compose_paragraph_proof):
+            #    yield from o.inference_rule.compose_paragraph_proof(o=o)
+            # else:
             yield from self.compose_inferred_statement_paragraph_proof(o=o)
         return True
 
