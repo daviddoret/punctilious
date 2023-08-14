@@ -4,10 +4,7 @@ absorption (inference-rule)
 Definition
 ----------
 
-*absorption* is a well-known and valid :doc:`inference_rule` in propositional-logic.
-
-Formal definition
------------------
+*absorption* is the well-known and valid :doc:`inference_rule_math_object` in propositional-logic:
 
 .. math::
 

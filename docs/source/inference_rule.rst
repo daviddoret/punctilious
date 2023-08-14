@@ -1,5 +1,5 @@
-inference-rule (mathematical object)
-====================================
+inference-rule
+==============
 
 Definition
 ----------

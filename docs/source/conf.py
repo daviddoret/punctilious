@@ -14,7 +14,12 @@ release = '1.0.0'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax']
+# Bibliography configuration:
+# https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html
+# https://pypi.org/project/sphinxcontrib-bibtex/
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinxcontrib.bibtex']
+bibtex_bibfiles = ['bibliography_bibtex.bib']
+bibtex_encoding = 'utf-8-sig'
 
 templates_path = ['_templates']
 exclude_patterns = []

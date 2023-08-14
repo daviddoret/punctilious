@@ -13,10 +13,13 @@ Welcome to punctilious's documentation!
    :maxdepth: 1
    :caption: Contents:
 
-   absorption_math_object
+   absorption
    absorption_declaration_python_class
    absorption_inclusion_python_class
-   inference_rule_math_object
+   bibliography
+   inconsistency_by_inequality
+   inference_rule
+   paragraph_proof
 
 Indices and tables
 ==================
