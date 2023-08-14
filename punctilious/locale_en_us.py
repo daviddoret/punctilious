@@ -364,7 +364,7 @@ class LocaleEnUs(Locale):
                 key=lambda i: i.inference_rule.rep_dashed_name(encoding=encodings.plaintext)):
             inference_rule: InferenceRuleInclusion
             yield self.paragraph_start
-            yield from inference_rule.inference_rule.compose_declaration()
+            yield from inference_rule.inference_rule.compose_report()
             yield self.paragraph_end
 
         yield Header(plaintext='Theory elaboration sequence', level=1)
