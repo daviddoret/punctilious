@@ -15,6 +15,9 @@ from plaintext import Plaintext
 from unicode_utilities import Unicode2
 
 
+# import infixed
+
+
 def prioritize_value(*args):
     """Return the first non-None object in ⌜*args⌝."""
     for a in args:
@@ -2014,6 +2017,35 @@ class SymbolicObject:
         return self._universe_of_discourse
 
 
+class InfixPartialFormula:
+    """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
+    This is accomplished by re-purposing the | operator,
+    overloading the __or__() method that is called when | is used,
+    and glueing all this together with the InfixPartialFormula class.
+    """
+
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
+
+    def __or__(self, other=None):
+        """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
+        This is accomplished by re-purposing the | operator,
+        overloading the __or__() method that is called when | is used,
+        and glueing all this together with the InfixPartialFormula class.
+        """
+        # print(f'IPF.__or__: self = {self}, other = {other}')
+        relation = self.b
+        first_parameter = self.a
+        second_parameter = other
+        return self.a.u.f(relation, first_parameter, second_parameter)
+
+    def __str__(self):
+        return f'IPF(a = {self.a}, b = {self.b})'
+
+    # def __ror__(self, other=None):  #    """Hack to provide support for pseudo-infix notation, as in: p |implies| q.  #    """  #    print(f'IPF.__ror__: self = {self}, other = {other}')  #    if not isinstance(other, InfixPartialFormula):  #        return InfixPartialFormula(a=self, b=other)  # return self.a.u.f(self.b, self.a, other)  #    else:  #        verify(assertion=1 == 2, msg='failed infix notation', slf_a=self.a, slf_b=self.b)  #        return self.a.u.f(self.a, self.b, self)
+
+
 class TheoreticalObject(SymbolicObject):
     """
     Definition
@@ -2060,6 +2092,18 @@ class TheoreticalObject(SymbolicObject):
         super()._declare_class_membership(classes.theoretical_objct)
         if echo:
             repm.prnt(self.rep_fully_qualified_name())
+
+    def __or__(self, other=None):
+        """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
+        This is accomplished by re-purposing the | operator,
+        overloading the __or__() method that is called when | is used,
+        and glueing all this together with the InfixPartialFormula class.
+        """
+        # print(f'TO.__or__: self = {self}, other = {other}')
+        if not isinstance(other, InfixPartialFormula):
+            return InfixPartialFormula(a=self, b=other)
+        else:
+            return self.u.f(self, other.a, other.b)
 
     def add_to_graph(self, g):
         """Add this theoretical object as a node in the target graph g.
@@ -5917,6 +5961,39 @@ class RelationDict(collections.UserDict):
         return self.inequality
 
 
+FlexibleStatementFormula = typing.Union[FormulaStatement, Formula, tuple, list]
+"""See validate_flexible_statement_formula() for details."""
+
+
+def validate_flexible_statement_formula(t: TheoryElaborationSequence, arity: int,
+        argument: FlexibleStatementFormula):
+    """Many punctilious pythonic methods expect some FormulaStatement as input parameters (e.g. the infer_statement() of inference-rules). This is syntactically robust, but it may read theory code less readable. In effect, one must store all formula-statements in variables to reuse them in formula. If the number of formula-statements get large, readability suffers. To provide a friendler interface for humans, we allow passing formula-statements as formula, tuple, and lists and apply the following interpretation rules:
+
+    If ⌜argument⌝ is of type iterable, such as tuple, e.g.: (implies, q, p), we assume it is a formula in the form (relation, a1, a2, ... an) where ai are arguments.
+
+    Note that this is complementary with the pseudo-infix notation, which transforms: p |implies| q into a formula.
+
+    :param t:
+    :param arity:
+    :param argument:
+    :return:
+    """
+    if isinstance(argument, tuple):
+        verify(assertion=len(argument) == arity + 1,
+            msg='⌜argument⌝ passed as a tuple must be of length ⌜arity⌝ +1 (the +1 is the relation).',
+            argument=argument, arity=arity)
+        argument = t.u.f(argument[0], *argument[1:])
+        return validate_flexible_statement_formula(t=t, arity=arity, argument=argument)
+    if isinstance(argument, Formula):
+        argument = t.get_first_syntactically_equivalent_statement(formula=argument)
+        verify(assertion=argument is not None,
+            msg='No syntactically-equivalent formula-statement found for ⌜argument⌝.',
+            argument=argument)
+        return argument
+    if isinstance(argument, FormulaStatement):
+        return argument
+
+
 class InferenceRuleDeclarationDict(collections.UserDict):
     """A dictionary that exposes well-known objects as properties.
 
@@ -6745,7 +6822,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         """
         return super().infer_formula(p_implies_q, echo=echo)
 
-    def infer_statement(self, p_implies_q: (None, Formula, FormulaStatement) = None,
+    def infer_statement(self, p_implies_q: (None, tuple, list, Formula, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
@@ -6754,10 +6831,19 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         :param p_implies_q: (mandatory) The implication statement.
         :return: An inferred-statement proving p implies p and q in the current theory.
         """
-        if isinstance(p_implies_q, Formula):
-            p_implies_q = self.t.get_first_syntactically_equivalent_statement(formula=p_implies_q)
-            verify(assertion=p_implies_q is not None,
-                msg='No syntactically-equivalent formula-statement found ⌜p_implies_q⌝.')
+        p_implies_q = validate_flexible_statement_formula(t=self.t, arity=2, argument=p_implies_q)
+        # arity: int
+        # arity = 3
+        # if isinstance(p_implies_q, tuple):
+        #    verify(assertion=len(p_implies_q) == arity,
+        #        msg='⌜p_implies_q⌝ passed as a tuple must be of length ⌜arity⌝.',
+        #        p_implies_q=p_implies_q, arity=arity)
+        #    p_implies_q = self.t.u.f(p_implies_q[0], *p_implies_q[1:])
+        # if isinstance(p_implies_q, Formula):
+        #    p_implies_q = self.t.get_first_syntactically_equivalent_statement(formula=p_implies_q)
+        #    verify(assertion=p_implies_q is not None,
+        #        msg='No syntactically-equivalent formula-statement found for ⌜p_implies_q⌝.',
+        #        p_implies_q=p_implies_q)
         return super().infer_statement(p_implies_q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 

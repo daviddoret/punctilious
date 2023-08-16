@@ -26,3 +26,9 @@ class TestAbsorption(TestCase):
         # Pass formula as parameter
         p5 = t.i.absorb.infer_statement(p_implies_q=phi2, echo=True)
         self.assertEqual('(o1 ==> (o1 and o2))', p5.rep_formula(expand=True))
+        # Pass formula as tuple
+        p6 = t.i.absorb.infer_statement(p_implies_q=(u.r.implies, o1, o2), echo=True)
+        self.assertEqual('(o1 ==> (o1 and o2))', p6.rep_formula(expand=True))
+        # Pass formula with pseudo-infix notation
+        p7 = t.i.absorb.infer_statement(p_implies_q=o1 | u.r.implies | o2, echo=True)
+        self.assertEqual('(o1 ==> (o1 and o2))', p7.rep_formula(expand=True))
