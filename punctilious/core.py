@@ -3753,37 +3753,6 @@ class InferenceRuleDeclaration(TheoreticalObject):
         return InferredStatement(*args, i=self, t=t, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo, **kwargs)
 
-    def rep_two_columns_proof_OBSOLETE(self, s: InferredStatement,
-            encoding: (None, Encoding) = None) -> str:
-        """Given an inferred-statement 𝑠 based on this inference-rule,
-        return a two-column proof
-
-        :param inferred_statement:
-        :return:
-        """
-        rep = StyledText(s="Proof", text_style=text_styles.sans_serif_italic).rep(
-            encoding=encoding) + StyledText(s=" - By the ",
-            text_style=text_styles.sans_serif_normal).rep(
-            encoding=encoding) + s.inference_rule.rep_fully_qualified_name(
-            encoding=encoding) + StyledText(s=" inference rule:\n",
-            text_style=text_styles.sans_serif_normal).rep(encoding=encoding)
-        if self._rep_two_columns_proof is None:
-            # There is no specific rep_two_columns_proof method
-            # linked to this inference-rule,
-            # make a best-effort to write a readable proof.
-            for i in range(len(s.parameters)):
-                parameter = s.parameters[i]
-                rep = rep + rep_two_columns_proof_item(
-                    left=parameter.rep_formula(encoding=encoding, expand=True),
-                    right=StyledText(s='Follows from ',
-                        text_style=text_styles.sans_serif_normal).rep(
-                        encoding=encoding) + parameter.rep_ref(encoding=encoding))
-        else:
-            rep = rep + self._rep_two_columns_proof(*s.parameters, encoding=encoding)
-        rep = rep + rep_two_columns_proof_end(
-            left=s.valid_proposition.rep_formula(encoding=encoding))
-        return rep
-
     def verify_args(self, *args, t: TheoryElaborationSequence):
         """Verify the syntactical-compatibility of input statements and return True
         if they are compatible, False otherwise."""
@@ -3791,7 +3760,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
 
 class AbsorptionDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`absorption` :doc:`inference_rule` in a universe-of-discourse.
+    """The declaration of the :doc:`absorption` :doc:`inference_rule` in a :doc:`universe_of_discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4471,6 +4440,9 @@ class InconsistencyByInequalityIntroductionDeclaration(InferenceRuleDeclaration)
 
 
 class ModusPonensDeclaration(InferenceRuleDeclaration):
+    """The declaration of the :doc:`modus_ponens` :doc:`inference_rule` in a :doc:`universe_of_discourse`.
+    """
+
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'modus-ponens'
         acronym = 'mp'
@@ -5181,11 +5153,18 @@ theory-elaboration."""
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
 
-    def iterate_statements_in_theory_chain(self):
-        """Iterate through the (proven or sound) statements in the current theory-chain."""
+    def iterate_statements_in_theory_chain(self, formula: (None, Formula) = None):
+        """Iterate through the (proven or sound) statements in the current theory-chain.
+
+        :param formula: (conditional) Filters on formula-statements that are formula-syntactically-equivalent.
+        :return:
+        """
         for t in self.iterate_theory_chain():
             for s in t.statements:
-                yield s
+                if formula is None or (is_in_class(s,
+                        classes.formula_statement) and s.is_formula_syntactically_equivalent_to(
+                    formula)):
+                    yield s
 
     def iterate_theory_chain(self, visited: (None, set) = None):
         """Iterate over the theory-chain of this theory.
@@ -5246,6 +5225,14 @@ theory-elaboration."""
         t.elaborate_definition(...)."""
         return self.include_definition(natural_language=natural_language, nameset=symbol,
             reference=reference, title=title)
+
+    def get_first_syntactically_equivalent_statement(self, formula: (None, Formula) = None):
+        """Given a formula, return the first statement that is syntactically-equivalent with it, or None if none are found.
+
+        :param formula:
+        :return:
+        """
+        return next(self.iterate_statements_in_theory_chain(formula=formula), None)
 
     def pose_hypothesis(self, hypothesis_formula: Formula, symbol: (None, str, StyledText) = None,
             index: (None, int) = None, auto_index: (None, bool) = None,
@@ -6736,7 +6723,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
 
 class AbsorptionInclusion(InferenceRuleInclusion):
-    """The inclusion of :doc:`absorption` as a valid :doc:`inference_rule` in the theory-elaboration-sequence.
+    """The inclusion of :doc:`absorption` as a valid :doc:`inference_rule` in a :doc:`theory_elaboration_sequence`.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6749,7 +6736,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def infer_formula(self, p_implies_q: (None, FormulaStatement) = None,
+    def infer_formula(self, p_implies_q: (None, Formula, FormulaStatement) = None,
             echo: (None, bool) = None):
         """Apply the absorption inference-rule and return the inferred-formula.
 
@@ -6758,7 +6745,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         """
         return super().infer_formula(p_implies_q, echo=echo)
 
-    def infer_statement(self, p_implies_q: (None, FormulaStatement) = None,
+    def infer_statement(self, p_implies_q: (None, Formula, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
@@ -6767,6 +6754,10 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         :param p_implies_q: (mandatory) The implication statement.
         :return: An inferred-statement proving p implies p and q in the current theory.
         """
+        if isinstance(p_implies_q, Formula):
+            p_implies_q = self.t.get_first_syntactically_equivalent_statement(formula=p_implies_q)
+            verify(assertion=p_implies_q is not None,
+                msg='No syntactically-equivalent formula-statement found ⌜p_implies_q⌝.')
         return super().infer_statement(p_implies_q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7188,8 +7179,7 @@ class InconsistencyByInequalityIntroductionInclusion(InferenceRuleInclusion):
 
 
 class ModusPonensInclusion(InferenceRuleInclusion):
-    """
-
+    """The inclusion of :doc:`modus_ponens` as a valid :doc:`inference_rule` in a :doc:`theory_elaboration_sequence`.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,

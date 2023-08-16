@@ -13,11 +13,18 @@ Definition
 Python implementation
 ---------------------
 
+AbsorptionDeclaration
+^^^^^^^^^^^^^^^^^^^^^
+
 .. module:: core
     :noindex:
 .. autoclass:: AbsorptionDeclaration
     :members:
     :special-members: __init__
+
+AbsorptionInclusion
+^^^^^^^^^^^^^^^^^^^
+
 .. autoclass:: AbsorptionInclusion
     :members:
     :special-members: __init__
