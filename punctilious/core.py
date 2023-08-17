@@ -5965,8 +5965,40 @@ FlexibleStatementFormula = typing.Union[FormulaStatement, Formula, tuple, list]
 """See validate_flexible_statement_formula() for details."""
 
 
-def validate_flexible_statement_formula(t: TheoryElaborationSequence, arity: int,
-        argument: FlexibleStatementFormula):
+def interpret_formula(u: UniverseOfDiscourse, arity: int,
+        argument: FlexibleStatementFormula) -> Formula:
+    """Many punctilious pythonic methods expect some Formula as input parameters. This is programmatically robust, but it may render theory code less readable for humans. In effect, one must store all formulae in variables to reuse them in composite formulae. If the number of formulae gets large, readability suffers and maintenability of variable names becomes cumbersome. To provide a friendler interface for humans, we allow passing formulae as formula, formula-statement, tuple, and lists and apply the following interpretation rules:
+
+    If ⌜argument⌝ is of type formula, return it directly.
+
+    If ⌜argument⌝ is of type statement-variable, retrieve its valid-proposition property.
+
+    If ⌜argument⌝ is of type iterable, such as tuple, e.g.: (implies, q, p), we assume it is a formula in the form (relation, a1, a2, ... an) where ai are arguments.
+
+    Note that this is complementary with the pseudo-infix notation, which uses the __or__ method and | operator to transform: p |r| q to (r, p, q).
+
+    :param t:
+    :param arity:
+    :param argument:
+    :return:
+    """
+    if isinstance(argument, Formula):
+        return argument
+    elif isinstance(argument, FormulaStatement):
+        return argument.valid_proposition
+    elif isinstance(argument, tuple):
+        verify(assertion=len(argument) == arity + 1,
+            msg='⌜argument⌝ passed as a tuple must be of length ⌜arity⌝ +1 (the +1 is the relation).',
+            argument=argument, arity=arity)
+        argument = u.f(argument[0], *argument[1:])
+        return argument
+    else:
+        raise PunctiliousException('⌜argument⌝ could not be interpreted as a formula.',
+            argument=argument, arity=arity, u=u)
+
+
+def interpret_statement_formula(t: TheoryElaborationSequence, arity: int,
+        flexible_formula: FlexibleStatementFormula):
     """Many punctilious pythonic methods expect some FormulaStatement as input parameters (e.g. the infer_statement() of inference-rules). This is syntactically robust, but it may read theory code less readable. In effect, one must store all formula-statements in variables to reuse them in formula. If the number of formula-statements get large, readability suffers. To provide a friendler interface for humans, we allow passing formula-statements as formula, tuple, and lists and apply the following interpretation rules:
 
     If ⌜argument⌝ is of type iterable, such as tuple, e.g.: (implies, q, p), we assume it is a formula in the form (relation, a1, a2, ... an) where ai are arguments.
@@ -5975,23 +6007,25 @@ def validate_flexible_statement_formula(t: TheoryElaborationSequence, arity: int
 
     :param t:
     :param arity:
-    :param argument:
+    :param flexible_formula:
     :return:
     """
-    if isinstance(argument, tuple):
-        verify(assertion=len(argument) == arity + 1,
-            msg='⌜argument⌝ passed as a tuple must be of length ⌜arity⌝ +1 (the +1 is the relation).',
-            argument=argument, arity=arity)
-        argument = t.u.f(argument[0], *argument[1:])
-        return validate_flexible_statement_formula(t=t, arity=arity, argument=argument)
-    if isinstance(argument, Formula):
-        argument = t.get_first_syntactically_equivalent_statement(formula=argument)
-        verify(assertion=argument is not None,
+    if isinstance(flexible_formula, FormulaStatement):
+        return flexible_formula
+    else:
+        # ⌜argument⌝ is not a statement-formula.
+        # But it is expected to be interpretable as a formula.
+        formula = interpret_formula(u=t.u, arity=arity, argument=flexible_formula)
+        # We only received a formula, not a formula-statement.
+        # Since we require a formula-statement,
+        # we attempt to automatically retrieve the first occurrence
+        # of a formula-statement in ⌜t⌝ that is
+        # syntactically-equivalent to ⌜argument⌝.
+        flexible_formula = t.get_first_syntactically_equivalent_statement(formula=flexible_formula)
+        verify(assertion=flexible_formula is not None,
             msg='No syntactically-equivalent formula-statement found for ⌜argument⌝.',
-            argument=argument)
-        return argument
-    if isinstance(argument, FormulaStatement):
-        return argument
+            argument=flexible_formula, arity=arity, t=t)
+        return flexible_formula
 
 
 class InferenceRuleDeclarationDict(collections.UserDict):
@@ -6831,7 +6865,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         :param p_implies_q: (mandatory) The implication statement.
         :return: An inferred-statement proving p implies p and q in the current theory.
         """
-        p_implies_q = validate_flexible_statement_formula(t=self.t, arity=2, argument=p_implies_q)
+        p_implies_q = interpret_statement_formula(t=self.t, arity=2, flexible_formula=p_implies_q)
         # arity: int
         # arity = 3
         # if isinstance(p_implies_q, tuple):
