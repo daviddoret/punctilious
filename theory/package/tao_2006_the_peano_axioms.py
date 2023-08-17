@@ -36,7 +36,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         is_a = u.r.declare(arity=2, symbol='is-a', auto_index=False, formula_rep=pu.Formula.infix,
             signal_proposition=True)
         # (0 is-a natural-number):
-        p001 = t.i.axiom_interpretation.infer_statement(a02, u.f(is_a, zero, natural_number))
+        p001 = t.i.axiom_interpretation.infer_statement(a02, zero | is_a | natural_number)
 
         # AXIOM 2.1.2
 
@@ -45,9 +45,9 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         plusplus = u.r.declare(arity=1, symbol='++', auto_index=False, name='successor',
             formula_rep=pu.Formula.postfix)
         with u.v('n') as n:
-            p002 = t.i.axiom_interpretation.infer_statement(a04,
-                u.f(u.r.implies, u.f(is_a, n, natural_number),
-                    u.f(is_a, u.f(plusplus, n), natural_number)))
+            p002 = t.i.axiom_interpretation.infer_statement(a04, (
+                        (n | is_a | natural_number) | u.r.implies | (
+                            (n & plusplus) | is_a | natural_number)))
         p003 = t.i.variable_substitution.infer_statement(p002, zero)
         p004 = t.i.mp.infer_statement(p003, p001, ref='2.2.3')
 

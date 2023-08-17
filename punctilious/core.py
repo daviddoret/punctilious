@@ -2041,7 +2041,7 @@ class InfixPartialFormula:
         return self.a.u.f(relation, first_parameter, second_parameter)
 
     def __str__(self):
-        return f'IPF(a = {self.a}, b = {self.b})'
+        return f'InfixPartialFormula(a = {self.a}, b = {self.b})'
 
     # def __ror__(self, other=None):  #    """Hack to provide support for pseudo-infix notation, as in: p |implies| q.  #    """  #    print(f'IPF.__ror__: self = {self}, other = {other}')  #    if not isinstance(other, InfixPartialFormula):  #        return InfixPartialFormula(a=self, b=other)  # return self.a.u.f(self.b, self.a, other)  #    else:  #        verify(assertion=1 == 2, msg='failed infix notation', slf_a=self.a, slf_b=self.b)  #        return self.a.u.f(self.a, self.b, self)
 
@@ -2093,17 +2093,36 @@ class TheoreticalObject(SymbolicObject):
         if echo:
             repm.prnt(self.rep_fully_qualified_name())
 
+    def __and__(self, other=None):
+        """Hack to provide support for pseudo-postfix notation, as in: p & ++.
+        This is accomplished by re-purposing the & operator,
+        overloading the __and__() method that is called when & is used,
+        and gluing all this together.
+        """
+        # print(f'TO.__and__: self = {self}, other = {other}')
+        return interpret_formula(u=self.u, arity=1, flexible_formula=(other, self))
+
+    def __xor__(self, other=None):
+        """Hack to provide support for pseudo-prefix notation, as in: neg ^ p.
+        This is accomplished by re-purposing the ^ operator,
+        overloading the __xor__() method that is called when ^ is used,
+        and gluing all this together.
+        """
+        # print(f'TO.__xor__: self = {self}, other = {other}')
+        return interpret_formula(u=self.u, arity=1, flexible_formula=(self, other))
+
     def __or__(self, other=None):
         """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
         This is accomplished by re-purposing the | operator,
         overloading the __or__() method that is called when | is used,
-        and glueing all this together with the InfixPartialFormula class.
+        and gluing all this together with the InfixPartialFormula class.
         """
         # print(f'TO.__or__: self = {self}, other = {other}')
         if not isinstance(other, InfixPartialFormula):
             return InfixPartialFormula(a=self, b=other)
         else:
-            return self.u.f(self, other.a, other.b)
+            # return self.u.f(self, other.a, other.b)
+            return interpret_formula(u=self.u, arity=2, flexible_formula=(self, other.a, other.b))
 
     def add_to_graph(self, g):
         """Add this theoretical object as a node in the target graph g.
@@ -5961,12 +5980,12 @@ class RelationDict(collections.UserDict):
         return self.inequality
 
 
-FlexibleStatementFormula = typing.Union[FormulaStatement, Formula, tuple, list]
+FlexibleFormula = typing.Union[FormulaStatement, Formula, tuple, list]
 """See validate_flexible_statement_formula() for details."""
 
 
-def interpret_formula(u: UniverseOfDiscourse, arity: int,
-        argument: FlexibleStatementFormula) -> Formula:
+def interpret_formula(u: UniverseOfDiscourse, arity: (None, int),
+        flexible_formula: FlexibleFormula) -> Formula:
     """Many punctilious pythonic methods expect some Formula as input parameters. This is programmatically robust, but it may render theory code less readable for humans. In effect, one must store all formulae in variables to reuse them in composite formulae. If the number of formulae gets large, readability suffers and maintenability of variable names becomes cumbersome. To provide a friendler interface for humans, we allow passing formulae as formula, formula-statement, tuple, and lists and apply the following interpretation rules:
 
     If ⌜argument⌝ is of type formula, return it directly.
@@ -5978,27 +5997,29 @@ def interpret_formula(u: UniverseOfDiscourse, arity: int,
     Note that this is complementary with the pseudo-infix notation, which uses the __or__ method and | operator to transform: p |r| q to (r, p, q).
 
     :param t:
-    :param arity:
-    :param argument:
+    :param arity: (conditional) If provided, verify the arity of the formula to assure consistency with whatever we are expecting.
+    :param flexible_formula:
     :return:
     """
-    if isinstance(argument, Formula):
-        return argument
-    elif isinstance(argument, FormulaStatement):
-        return argument.valid_proposition
-    elif isinstance(argument, tuple):
-        verify(assertion=len(argument) == arity + 1,
+    if isinstance(flexible_formula, Formula):
+        return flexible_formula
+    elif isinstance(flexible_formula, FormulaStatement):
+        return flexible_formula.valid_proposition
+    elif isinstance(flexible_formula, tuple):
+        if arity is None:
+            arity: int = len(flexible_formula) - 1
+        verify(assertion=len(flexible_formula) == arity + 1,
             msg='⌜argument⌝ passed as a tuple must be of length ⌜arity⌝ +1 (the +1 is the relation).',
-            argument=argument, arity=arity)
-        argument = u.f(argument[0], *argument[1:])
-        return argument
+            argument=flexible_formula, arity=arity)
+        flexible_formula = u.f(flexible_formula[0], *flexible_formula[1:])
+        return flexible_formula
     else:
         raise PunctiliousException('⌜argument⌝ could not be interpreted as a formula.',
-            argument=argument, arity=arity, u=u)
+            argument=flexible_formula, arity=arity, u=u)
 
 
 def interpret_statement_formula(t: TheoryElaborationSequence, arity: int,
-        flexible_formula: FlexibleStatementFormula):
+        flexible_formula: FlexibleFormula):
     """Many punctilious pythonic methods expect some FormulaStatement as input parameters (e.g. the infer_statement() of inference-rules). This is syntactically robust, but it may read theory code less readable. In effect, one must store all formula-statements in variables to reuse them in formula. If the number of formula-statements get large, readability suffers. To provide a friendler interface for humans, we allow passing formula-statements as formula, tuple, and lists and apply the following interpretation rules:
 
     If ⌜argument⌝ is of type iterable, such as tuple, e.g.: (implies, q, p), we assume it is a formula in the form (relation, a1, a2, ... an) where ai are arguments.
@@ -6015,7 +6036,7 @@ def interpret_statement_formula(t: TheoryElaborationSequence, arity: int,
     else:
         # ⌜argument⌝ is not a statement-formula.
         # But it is expected to be interpretable as a formula.
-        formula = interpret_formula(u=t.u, arity=arity, argument=flexible_formula)
+        formula = interpret_formula(u=t.u, arity=arity, flexible_formula=flexible_formula)
         # We only received a formula, not a formula-statement.
         # Since we require a formula-statement,
         # we attempt to automatically retrieve the first occurrence
@@ -6866,18 +6887,6 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         :return: An inferred-statement proving p implies p and q in the current theory.
         """
         p_implies_q = interpret_statement_formula(t=self.t, arity=2, flexible_formula=p_implies_q)
-        # arity: int
-        # arity = 3
-        # if isinstance(p_implies_q, tuple):
-        #    verify(assertion=len(p_implies_q) == arity,
-        #        msg='⌜p_implies_q⌝ passed as a tuple must be of length ⌜arity⌝.',
-        #        p_implies_q=p_implies_q, arity=arity)
-        #    p_implies_q = self.t.u.f(p_implies_q[0], *p_implies_q[1:])
-        # if isinstance(p_implies_q, Formula):
-        #    p_implies_q = self.t.get_first_syntactically_equivalent_statement(formula=p_implies_q)
-        #    verify(assertion=p_implies_q is not None,
-        #        msg='No syntactically-equivalent formula-statement found for ⌜p_implies_q⌝.',
-        #        p_implies_q=p_implies_q)
         return super().infer_statement(p_implies_q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -6921,6 +6930,7 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         :param formula: (mandatory) The interpretation of the axiom as a formula.
         :return: An inferred-statement proving the formula in the current theory.
         """
+        formula = interpret_formula(u=self.u, arity=None, flexible_formula=formula)
         return super().infer_statement(axiom, formula, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
