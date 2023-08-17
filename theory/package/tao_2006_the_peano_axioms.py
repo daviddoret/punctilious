@@ -70,7 +70,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
             u.f(u.r.equal, three, (((zero & plusplus) & plusplus) & plusplus)))
         four = u.o.declare(symbol='4', auto_index=False)
         p008 = t.i.definition_interpretation.infer_statement(d02,
-            u.f(u.r.equal, four, u.f(plusplus, (((zero & plusplus) & plusplus) & plusplus))))
+            u.f(u.r.equal, four, ((((zero & plusplus) & plusplus) & plusplus) & plusplus)))
 
         zero_plusplus = (zero & plusplus)
         p009 = t.i.variable_substitution.infer_statement(p002, zero_plusplus)
@@ -98,7 +98,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p021 = t.i.equal_terms_substitution.infer_statement(p020, p017)
 
         p023 = t.i.definition_interpretation.infer_statement(d02,
-            u.f(u.r.equal, four, u.f(plusplus, (((zero & plusplus) & plusplus) & plusplus))))
+            u.f(u.r.equal, four, ((((zero & plusplus) & plusplus) & plusplus) & plusplus)))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻(P₂₄): (((((0) + +) + +) + +) + + = 4).
         p024 = t.i.equality_commutativity.infer_statement(p008)
         p025 = t.i.equal_terms_substitution.infer_statement(p024, p020)
@@ -161,7 +161,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         five = u.o.declare(symbol='5', auto_index=False)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₇): (5 = (((((0)++)++)++)++)++).
         p037 = t.i.definition_interpretation.infer_statement(d02, u.f(u.r.equal, five,
-            u.f(plusplus, u.f(plusplus, (((zero & plusplus) & plusplus) & plusplus)))))
+            u.f(plusplus, ((((zero & plusplus) & plusplus) & plusplus) & plusplus))))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₈): ((((((0)++)++)++)++)++ = 5).
         p038 = t.i.equality_commutativity.infer_statement(p037)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₉): ((4)++ = 5).
@@ -186,8 +186,8 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p048 = t.i.equal_terms_substitution.infer_statement(p047, p015)
         six = u.o.declare(symbol='6', auto_index=False)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (6 = ((((((0)++)++)++)++)++)++).
-        p049 = t.i.definition_interpretation.infer_statement(d02, u.f(u.r.equal, six, u.f(plusplus,
-            u.f(plusplus, u.f(plusplus, (((zero & plusplus) & plusplus) & plusplus))))))
+        p049 = t.i.definition_interpretation.infer_statement(d02, u.f(u.r.equal, six,
+            u.f(plusplus, u.f(plusplus, ((((zero & plusplus) & plusplus) & plusplus) & plusplus)))))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (((((((0)++)++)++)++)++)++ = 6).
         p050 = t.i.equality_commutativity.infer_statement(p049)
         # ((5)++ = 6).
