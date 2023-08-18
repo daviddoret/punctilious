@@ -346,7 +346,7 @@ class LocaleEnUs(Locale):
         yield text_dict.period
         return True
 
-    def compose_theory_report(self, t: TheoryElaborationSequence, proof: (None, bool) = None) -> \
+    def compose_theory_article(self, t: TheoryElaborationSequence, proof: (None, bool) = None) -> \
             collections.abc.Generator[Composable, Composable, bool]:
 
         yield self.paragraph_start

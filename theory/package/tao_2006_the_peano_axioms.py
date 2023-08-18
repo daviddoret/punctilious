@@ -15,8 +15,10 @@ import punctilious as pu
 
 
 class Tao2006ThePeanoAxioms(pu.TheoryPackage):
+
     def develop_theory(self, t: pu.TheoryElaborationSequence) -> pu.TheoryElaborationSequence:
         u = t.u
+
         section_2 = t.open_section('The natural numbers', section_number=2)
         section_2_1 = t.open_section('The Peano axioms', section_parent=section_2)
 

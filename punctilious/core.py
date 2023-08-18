@@ -5198,6 +5198,13 @@ class TheoryElaborationSequence(TheoreticalObject):
                            'to formulae.', paragraph_header=paragraph_headers.warning, echo=echo)
             self._interpretation_disclaimer = True
 
+    def compose_article(self, proof: (None, bool) = None) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """Return a representation that expresses and justifies the theory."""
+        # TODO: compose_article: move this outside of the theory
+        output = yield from configuration.locale.compose_theory_article(t=self, proof=proof)
+        return output
+
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='theory-elaboration-sequence')
@@ -5205,13 +5212,6 @@ class TheoryElaborationSequence(TheoreticalObject):
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
         output = yield from configuration.locale.compose_theory_declaration(t=self)
-        return output
-
-    def compose_article(self, proof: (None, bool) = None) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        """Return a representation that expresses and justifies the theory."""
-        # TODO: compose_article: move this outside of the theory
-        output = yield from configuration.locale.compose_theory_report(t=self, proof=proof)
         return output
 
     def crossreference_axiom_inclusion(self, a):
@@ -5454,11 +5454,11 @@ theory-elaboration."""
             theory=self)
         self._consistency = consistency_values.proved_inconsistent
 
-    def export_report_to_file(self, file_path, proof: (None, bool) = None,
+    def export_article_to_file(self, file_path, proof: (None, bool) = None,
             encoding: (None, Encoding) = None):
         """Export this theory to a Unicode textfile."""
         text_file = open(file_path, 'w', encoding='utf-8')
-        n = text_file.write(self.rep_report(encoding=encoding, proof=proof))
+        n = text_file.write(self.rep_article(encoding=encoding, proof=proof))
         text_file.close()
 
     def open_section(self, section_title: str, section_number: (None, int) = None,
@@ -5466,6 +5466,10 @@ theory-elaboration."""
         """Open a new section in the current theory-elaboration-sequence."""
         return Section(section_title=section_title, section_number=section_number,
             section_parent=section_parent, t=self, echo=echo)
+
+    def rep_article(self, encoding: (None, Encoding) = None, proof: (None, bool) = None) -> str:
+        encoding = prioritize_value(encoding, configuration.encoding, encodings.plaintext)
+        return rep_composition(composition=self.compose_article(proof=proof), encoding=encoding)
 
     def report_inconsistency_proof(self, proof: InferredStatement):
         """This method is called by InferredStatement.__init__() when the inferred-statement
@@ -8777,6 +8781,16 @@ class TheoryPackage:
         t = u.declare_theory()
         t = self.develop_theory(t=t)
         return t
+
+
+class Article:
+    """TODO: Article: for future development."""
+
+    def __init__(self):
+        self._elements = []
+
+    def write_element(self, element: SymbolicObject):
+        self._elements.append(element)
 
 
 pass
