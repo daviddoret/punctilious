@@ -4351,14 +4351,15 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
         dashed_name = 'equality-commutativity'
         explicit_name = 'equality commutativity inference rule'
         name = 'equality commutativity'
+        definition = '(x = y) ⊢ (y = x)'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = AxiomInterpretationDeclaration.infer_formula
         verify_args = AxiomInterpretationDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_eq_q: (None, FormulaStatement) = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
@@ -4409,14 +4410,15 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
         dashed_name = 'equal-terms-substitution'
         explicit_name = 'equal terms substitution inference rule'
         name = 'equal terms substitution'
+        definition = '(P, (Q = R)) ⊢ P\''
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = AxiomInterpretationDeclaration.infer_formula
         verify_args = AxiomInterpretationDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p: FormulaStatement = None, q_equal_r: FormulaStatement = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
@@ -4527,14 +4529,15 @@ class InconsistencyByInequalityIntroductionDeclaration(InferenceRuleDeclaration)
         dashed_name = 'inconsistency-by-inequality-introduction'
         explicit_name = 'inconsistency by inequality introduction inference rule'
         name = 'inconsistency by inequality introduction'
+        definition = '((P = Q), (P ≠ Q)) ⊢ Inc(𝒯)'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = InconsistencyByInequalityIntroductionDeclaration.infer_formula
         verify_args = InconsistencyByInequalityIntroductionDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_eq_q: FormulaStatement = None, p_neq_q: FormulaStatement = None,
             inconsistent_theory: TheoryElaborationSequence = None,
@@ -4592,10 +4595,10 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         # which received these methods as __init__ arguments.
         infer_formula = ModusPonensDeclaration.infer_formula
         verify_args = ModusPonensDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_implies_q: FormulaStatement, p: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
@@ -4896,7 +4899,7 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         dashed_name = 'variable-substitution'
         explicit_name = 'variable substitution inference rule'
         name = 'variable substitution'
-        definition = 'P,𝛷 ⊢ P'''
+        definition = '(P, 𝛷) ⊢ P\''
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = VariableSubstitutionDeclaration.infer_formula

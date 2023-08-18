@@ -30,7 +30,6 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
             content='In some texts the natural numbers start at 1 instead of 0, but this is a matter of notational convention more than anything else. In this text we shall refer to the set { 1, 2, 3, ... } as the positive integers 𝐙⁺ rather than the natural numbers. Natural numbers are sometimes also known as whole numbers.',
             paragraph_header=pu.paragraph_headers.remark, ref='2.1.2')
 
-        # AXIOM 2.1.1
         a01 = u.declare_axiom(f'0 is a natural number.')
         a02 = t.include_axiom(a01, ref='2.1')
         zero = u.o.declare(symbol='0', auto_index=False)
@@ -88,16 +87,15 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p015 = t.i.equality_commutativity.infer_statement(p005)
         p016 = t.i.equal_terms_substitution.infer_statement(p006, p015)
         p017 = t.i.equality_commutativity.infer_statement(p006)
-        p018 = t.i.equal_terms_substitution.infer_statement(p017, p015)
         p019 = t.i.equal_terms_substitution.infer_statement(p007, p017)
 
         t.open_section('3 is a natural number', section_parent=section_2_1, section_number=3)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₂₀): ((((0)++)++)++ = 3).
         p020 = t.i.equality_commutativity.infer_statement(p007)
-        # Proposition 2.1.4. 3 is a natural number.
-        p022 = t.i.equal_terms_substitution.infer_statement(p012, p020, ref='2.1.4')
 
         p021 = t.i.equal_terms_substitution.infer_statement(p020, p017)
+        # Proposition 2.1.4. 3 is a natural number.
+        p022 = t.i.equal_terms_substitution.infer_statement(p012, p020, ref='2.1.4')
 
         p023 = t.i.definition_interpretation.infer_statement(d02,
             u.f(u.r.equal, four, ((((zero & plusplus) & plusplus) & plusplus) & plusplus)))
@@ -119,13 +117,14 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
                 u.f(u.r.implies, u.f(is_a, n, natural_number),
                     u.f(u.r.neq, u.f(plusplus, n), zero)))
 
+        t.open_section('4 is not equal to 0.', section_parent=section_2_1, section_number=6)
         # Proposition 2.1.6. 4 is not equal to 0.
         t.take_note('We want to prove that 4 is not equal to 0, i.e. (4 ≠ 0).')
-        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₂₉): ((3 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((3)++ ≠ 0)).
+        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: ((3 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((3)++ ≠ 0)).
         p029 = t.i.variable_substitution.infer_statement(p028, three)
-        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻(P₃₀): ((3)++ ≠ 0).
+        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: ((3)++ ≠ 0).
         p030 = t.i.modus_ponens.infer_statement(p029, p022)
-        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 𝟮.𝟭.𝟲 (P₃₁): (4 ≠ 0).
+        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (4 ≠ 0).
         p031 = t.i.equal_terms_substitution.infer_statement(p030, p025, ref='2.1.6')
 
         axiom_2_4 = t.include_axiom(
@@ -184,31 +183,25 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p046 = t.i.modus_ponens.infer_statement(p033, p035)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₇): (5 ≠ (0)++).
         p047 = t.i.equal_terms_substitution.infer_statement(p=p046, q_equal_r=p039)
-        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₈): (5 ≠ 1).
-        p048 = t.i.equal_terms_substitution.infer_statement(p047, p015)
         six = u.o.declare(symbol='6', auto_index=False)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (6 = ((((((0)++)++)++)++)++)++).
         p049 = t.i.definition_interpretation.infer_statement(d02, u.f(u.r.equal, six,
             u.f(plusplus, u.f(plusplus, ((((zero & plusplus) & plusplus) & plusplus) & plusplus)))))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (((((((0)++)++)++)++)++)++ = 6).
         p050 = t.i.equality_commutativity.infer_statement(p049)
-        # ((5)++ = 6).
-        p051 = t.i.equal_terms_substitution.infer_statement(p050, p038)
-        p052 = t.i.equal_terms_substitution.infer_statement(p045, p051)
-        p053 = t.i.equal_terms_substitution.infer_statement(p052, p018)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₅₄): (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).
         p054 = t.i.equal_terms_substitution.infer_statement(p004, p015)
-        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₅₅): ((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)).
-        p055 = t.i.conjunction_introduction.infer_statement(p044, p054)
-        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₅₆): (((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (5 ≠ 1)).
-        p056 = t.i.conjunction_introduction.infer_statement(p055, p048)
+        p051 = t.i.equal_terms_substitution.infer_statement(p050, p038)
         # (6 = (5)++)
         p057 = t.i.equality_commutativity.infer_statement(p_eq_q=p051)
 
         section_2_1_8 = t.open_section('6 is not equal to 2', section_parent=section_2_1,
             section_number=8)
+        section_2_1_8_1 = t.open_section('Proof by contradiction', section_parent=section_2_1_8,
+            section_number=1)
 
-        t.take_note(content='First, we follow (Tao 2006)''s proof by contradiction.')
+        t.take_note(
+            content='First, we follow (Tao 2006)''s proof by contradiction. In punctilious, we use the term proof-by-refutation-of-equality to designate this specific method of proof.')
 
         # Proof.
         # Suppose for sake of contradiction that 6 = 2.
@@ -259,10 +252,21 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
             p_neq_q=p031, inconsistent_theory=h1.hypothesis_child_theory)
         p073 = t.i.proof_by_refutation_of_equality.infer_statement(p_eq_q=h1, inc_p_eq_q=p072,
             ref='2.1.8')
-        pass
+
+        t.open_section('Direct proof', section_parent=section_2_1_8, section_number=2)
+
         t.take_note(
             content='In (Tao, 2006), proposition 2.1.8 uses proof by contradiction. Note that in punctilious, this specific proof method is called a proof by refutation of equality. Nevertheless, proofs by contradictions are somehow indirect proofs. As an alternative, we now propose a direct proof.')
-        # TODO: Tao 2006: Bring back direct proof dependent propositions here
+        p018 = t.i.equal_terms_substitution.infer_statement(p017, p015)
+        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (5 ≠ 1).
+        p048 = t.i.equal_terms_substitution.infer_statement(p047, p015)
+        # ((5)++ = 6).
+        p052 = t.i.equal_terms_substitution.infer_statement(p045, p051)
+        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (5 ≠ 1)).
+        p053 = t.i.equal_terms_substitution.infer_statement(p052, p018)
+        # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: ((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)).
+        p055 = t.i.conjunction_introduction.infer_statement(p044, p054)
+        p056 = t.i.conjunction_introduction.infer_statement(p055, p048)
         p057 = t.i.modus_ponens.infer_statement(p_implies_q=p053, p=p056)
 
         # Proof by contradiction:  # TODO: Implement proof by contradiction.
