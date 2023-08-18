@@ -133,22 +133,6 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         return True
 
-    def compose_inconsistency_by_inequality_introduction_paragraph_proof(self,
-            o: InferredStatement) -> collections.abc.Generator[Composable, Composable, bool]:
-        global text_dict
-        # Retrieve the parameters from the statement
-        p_eq_q: FormulaStatement = o.parameters[0]
-        p_neq_q: FormulaStatement = o.parameters[1]
-        yield from p_eq_q.compose_formula()
-        yield SansSerifNormal(' follows from ')
-        yield from p_eq_q.compose_ref_link()
-        yield SansSerifNormal('. ')
-        yield from p_neq_q.compose_formula()
-        yield SansSerifNormal(' follows from ')
-        yield from p_neq_q.compose_ref_link()
-        yield SansSerifNormal('. ')
-        return True
-
     def compose_definition_interpretation_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
@@ -191,6 +175,22 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal(' follows from ')
         yield from p_eq_q.compose_ref_link()
         yield SansSerifNormal('.')
+        return True
+
+    def compose_inconsistency_by_inequality_introduction_paragraph_proof(self,
+            o: InferredStatement) -> collections.abc.Generator[Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p_eq_q: FormulaStatement = o.parameters[0]
+        p_neq_q: FormulaStatement = o.parameters[1]
+        yield from p_eq_q.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from p_eq_q.compose_ref_link()
+        yield SansSerifNormal('. ')
+        yield from p_neq_q.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from p_neq_q.compose_ref_link()
+        yield SansSerifNormal('. ')
         return True
 
     def compose_inference_rule_declaration(self, i: InferenceRuleDeclaration) -> \
