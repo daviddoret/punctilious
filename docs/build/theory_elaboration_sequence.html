@@ -13,6 +13,7 @@
     <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="universe-of-discourse" href="universe_of_discourse.html" />
     <link rel="prev" title="paragraph-proof (proof-style)" href="paragraph_proof.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -117,8 +118,8 @@ t.elaborate_definition(…).</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.export_report_to_file">
-<span class="sig-name descname"><span class="pre">export_report_to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.export_report_to_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="core.TheoryElaborationSequence.export_article_to_file">
+<span class="sig-name descname"><span class="pre">export_article_to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.export_article_to_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Export this theory to a Unicode textfile.</p>
 </dd></dl>
 
@@ -132,6 +133,20 @@ t.elaborate_definition(…).</p>
 <dt class="sig sig-object py" id="core.TheoryElaborationSequence.extended_theory_limit">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extended_theory_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Statement</span></em><a class="headerlink" href="#core.TheoryElaborationSequence.extended_theory_limit" title="Permalink to this definition">¶</a></dt>
 <dd><p>If this is a limited extended-theory, the inclusive statement-limit of the inclusion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.TheoryElaborationSequence.get_first_syntactically_equivalent_statement">
+<span class="sig-name descname"><span class="pre">get_first_syntactically_equivalent_statement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formula</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.get_first_syntactically_equivalent_statement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a formula, return the first statement that is syntactically-equivalent with it, or None if none are found.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>formula</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
@@ -169,34 +184,50 @@ theory-elaboration.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="core.TheoryElaborationSequence.iterate_statements_in_theory_chain">
-<span class="sig-name descname"><span class="pre">iterate_statements_in_theory_chain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.iterate_statements_in_theory_chain" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">iterate_statements_in_theory_chain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formula</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.iterate_statements_in_theory_chain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate through the (proven or sound) statements in the current theory-chain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>formula</strong> – (conditional) Filters on formula-statements that are formula-syntactically-equivalent.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="core.TheoryElaborationSequence.iterate_theoretical_objcts_references">
 <span class="sig-name descname"><span class="pre">iterate_theoretical_objcts_references</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visited</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.iterate_theoretical_objcts_references" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate through this and all the theoretical-objcts it references recursively.</p>
-<blockquote>
-<div><p>Theoretical-objcts may contain references to multiple and diverse other
-theoretical-objcts. Do not confuse this iteration of all references with iterations of</p>
-</div></blockquote>
-<p>objects in the theory-chain.</p>
+<p>Theoretical-objcts may contain references to multiple and diverse other theoretical-objcts. Do not confuse this iteration of all references with iterations of objects in the theory-chain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>include_root</strong> – </p></li>
+<li><p><strong>visited</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="core.TheoryElaborationSequence.iterate_theory_chain">
 <span class="sig-name descname"><span class="pre">iterate_theory_chain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visited</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.iterate_theory_chain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over the theory-chain of this theory.</p>
-<blockquote>
-<div><p>The sequence is: this theory, this theory’s extended-theory, the extended-theory’s
+<p>The sequence is : this theory, this theory’s extended-theory, the extended-theory’s
 extended-theory, etc. until the root-theory is processes.</p>
+<section id="note">
+<h4>Note<a class="headerlink" href="#note" title="Permalink to this heading">¶</a></h4>
 <p>The theory-chain set is distinct from theory-dependency set.
 The theory-chain informs of the parent package whose statements are considered
 valid in the current theory.
-Distinctively, package may be referenced by meta-theorizing, or in hypothesis,</p>
-</div></blockquote>
-<p>or possibly other use cases.</p>
+Distinctively, package may be referenced by meta-theorizing, or in hypothesis,
+or possibly other use cases.</p>
+</section>
 </dd></dl>
 
 <dl class="py method">
@@ -271,9 +302,11 @@ proves the inconsistency of a theory.</p>
 <li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inconsistency_by_inequality_introduction.html">inconsistency-by-inequality-introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inference_rule.html">inference-rule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="is_a.html">is-a</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modus_ponens.html">modus-ponens</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paragraph_proof.html">paragraph-proof (proof-style)</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">theory-elaboration-sequence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="universe_of_discourse.html">universe-of-discourse</a></li>
 </ul>
 
 <div class="relations">
@@ -281,6 +314,7 @@ proves the inconsistency of a theory.</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="paragraph_proof.html" title="previous chapter">paragraph-proof (proof-style)</a></li>
+      <li>Next: <a href="universe_of_discourse.html" title="next chapter">universe-of-discourse</a></li>
   </ul></li>
 </ul>
 </div>

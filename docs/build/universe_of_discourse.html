@@ -13,6 +13,7 @@
     <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="theory-elaboration-sequence" href="theory_elaboration_sequence.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -42,7 +43,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="core.UniverseOfDiscourse">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">UniverseOfDiscourse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>The UniverseOfDiscourse pythonic class models a universe-of-discourse.</p>
+<dl class="py method">
 <dt class="sig sig-object py" id="core.UniverseOfDiscourse.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -53,7 +55,7 @@
 <dd><p>Cross-references an axiom in this universe-of-discourse.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>a</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">AxiomDeclaration</span></code>) – an axiom.</p>
+<dd class="field-odd"><p><strong>a</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">AxiomDeclaration</span></code>) – an axiom-declaration.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
@@ -159,8 +161,8 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="core.UniverseOfDiscourse.declare_formula">
 <span class="sig-name descname"><span class="pre">declare_formula</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relation</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lock_variable_scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.declare_formula" title="Permalink to this definition">¶</a></dt>
-<dd><p>Declare a new <span class="xref std std-term">formula</span> in this universe-of-discourse.</p>
-<p>This method is a shortcut for Formula(universe_of_discourse=self, …).</p>
+<dd><p>Declare a new formula in this universe-of-discourse.</p>
+<p>This method is a shortcut for Formula(universe_of_discourse=self, . . d.).</p>
 <p>A formula is <em>declared</em> in a theory, and not <em>stated</em>, because it is not a statement,
 i.e. it is not necessarily true in this theory.</p>
 </dd></dl>
@@ -257,23 +259,18 @@ where well-known inference-rules are directly available as properties.</p>
 <p>Well-known simple-objcts are exposed as python properties. In general, a well-known
 simple-objct is declared in the universe-of-discourse the first time its property is
 accessed.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="core.UniverseOfDiscourse.r">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">r</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">RelationDict</span></em><a class="headerlink" href="#core.UniverseOfDiscourse.r" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">r</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="is_a.html#core.RelationDict" title="core.RelationDict"><span class="pre">RelationDict</span></a></em><a class="headerlink" href="#core.UniverseOfDiscourse.r" title="Permalink to this definition">¶</a></dt>
 <dd><p>A python dictionary of relations contained in this universe-of-discourse,
 where well-known relations are directly available as properties.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="core.UniverseOfDiscourse.relations">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">relations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">RelationDict</span></em><a class="headerlink" href="#core.UniverseOfDiscourse.relations" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">relations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="is_a.html#core.RelationDict" title="core.RelationDict"><span class="pre">RelationDict</span></a></em><a class="headerlink" href="#core.UniverseOfDiscourse.relations" title="Permalink to this definition">¶</a></dt>
 <dd><p>A python dictionary of relations contained in this universe-of-discourse,
 where well-known relations are directly available as properties.</p>
 </dd></dl>
@@ -324,14 +321,9 @@ accessed.</p>
 <dd><p>Declare a free-variable in this universe-of-discourse.</p>
 <p>This method is expected to be as in a with statement,
 it yields an instance of FreeVariable,
-and automatically lock the variable scope when the with left.
-Example:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>with u.v(‘x’) as x, u.v(‘y’) as y:</dt><dd><p># some code…</p>
-</dd>
-</dl>
-</div></blockquote>
+and automatically lock the variable scope when the with left.</p>
+<p>Example: with u.v(‘x’) as x, u.v(‘y’) as y:
+some code…</p>
 <p>To manage variable scope extensions and locking expressly,
 use declare_free_variable() instead.</p>
 </dd></dl>
@@ -366,20 +358,23 @@ use declare_free_variable() instead.</p>
 
 <h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="absorption.html">absorption</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inconsistency_by_inequality_introduction.html">inconsistency-by-inequality-introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inference_rule.html">inference-rule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="is_a.html">is-a</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modus_ponens.html">modus-ponens</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paragraph_proof.html">paragraph-proof (proof-style)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory_elaboration_sequence.html">theory-elaboration-sequence</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">universe-of-discourse</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="theory_elaboration_sequence.html" title="previous chapter">theory-elaboration-sequence</a></li>
   </ul></li>
 </ul>
 </div>

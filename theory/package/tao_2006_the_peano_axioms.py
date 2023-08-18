@@ -34,8 +34,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         a02 = t.include_axiom(a01, ref='2.1')
         zero = u.o.declare(symbol='0', auto_index=False)
         natural_number = u.o.declare(symbol='natural-number', auto_index=False)
-        is_a = u.r.declare(arity=2, symbol='is-a', auto_index=False, formula_rep=pu.Formula.infix,
-            signal_proposition=True)
+
         # (0 is-a natural-number):
         p001 = t.i.axiom_interpretation.infer_statement(a02, zero | is_a | natural_number)
 
@@ -269,5 +268,27 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p056 = t.i.conjunction_introduction.infer_statement(p055, p048)
         p057 = t.i.modus_ponens.infer_statement(p_implies_q=p053, p=p056)
 
-        # Proof by contradiction:  # TODO: Implement proof by contradiction.
+        a_2_5 = u.declare_axiom(subtitle='Principle of mathematical induction',
+            natural_language='Let P(n) be any property pertaining to a natural number n. Suppose that P(O) is true, and suppose that whenever P(n) is true, P(n++) is also true. Then P(n) is true for every natural number n.')
+
+        a_2_5b = t.include_axiom(a=a_2_5, subtitle='Principle of mathematical induction')
+
+        unary_relation = u.o.declare(symbol='unary-relation', auto_index=False)
+
+        with u.v('P') as p, u.v('n') as n:
+            # P is-a unary-relation
+            phi1 = (p | u.r.is_a | unary_relation)
+            # n is-a natural-number
+            phi2 = (n | u.r.is_a | natural_number)
+            # P(0)
+            phi3 = P(zero)  # TODO: Implement this syntax
+            # P(n) ⟹ P(n++)
+            phi4 = (P(n) | u.r.implies | P(n & plusplus))
+            phi5 = ((phi1 | u.r.land | phi2) | u.r.land | (phi3 | u.r.land | phi4))
+            # ⟹
+            # ((m is-a natural-number) ⟹ P(m))
+            phi6 = (m | is_a | natural_number) | u.r.implies | (P(m))
+            phi7 = phi5 | u.r.implies | phi6
+            p100 = t.i.axiom_interpretation.infer_statement(axiom=a_2_5b, formula=phi7)
+
         pass

@@ -10,7 +10,7 @@ Let "0", "natural-number", "1", "2", "3", "4", "5", "6" be simple-objects in U1.
 
 # Relations
 Let "++", "Inc" be unary-relations in U1.
-Let "neq", "==>", "is-a", "=", "and" be binary-relations in U1.
+Let "neq", "is-a", "=", "==>", "and" be binary-relations in U1.
 
 # Inference rules
 The following inference rules are considered valid under this theory:
@@ -108,3 +108,4 @@ Proposition (T1.P71): ((((5 is-a natural-number) and (1 is-a natural-number)) an
 Proposition (T1.P72): ((5 is-a natural-number) and (1 is-a natural-number)). Proof: (5 is-a natural-number) follows from prop. (P44). (1 is-a natural-number) follows from prop. (P50). Therefore, by the conjunction-introduction inference rule, it follows that ((5 is-a natural-number) and (1 is-a natural-number)). QED
 Proposition (T1.P73): (((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)). Proof: ((5 is-a natural-number) and (1 is-a natural-number)) follows from prop. (P72). (5 neq 1) follows from prop. (P69). Therefore, by the conjunction-introduction inference rule, it follows that (((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)). QED
 Proposition (T1.P74): (6 neq 2). Proof: ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> (6 neq 2)) follows from prop. (P71).(((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) follows from prop. (P73). Therefore, by the modus-ponens inference rule, it follows that (6 neq 2). QED
+Axiom (T1.A6) - Principle of mathematical induction: Let axiom A6 "Let P(n) be any property pertaining to a natural number n. Suppose that P(O) is true, and suppose that whenever P(n) is true, P(n++) is also true. Then P(n) is true for every natural number n." be included (postulated) in T1.

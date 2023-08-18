@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="paragraph-proof (proof-style)" href="paragraph_proof.html" />
-    <link rel="prev" title="inference-rule" href="inference_rule.html" />
+    <link rel="prev" title="is-a" href="is_a.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -52,6 +52,17 @@
 <dt class="sig sig-object py" id="core.ModusPonensDeclaration.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">universe_of_discourse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.ModusPonensDeclaration.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.ModusPonensDeclaration.compose_paragraph_proof">
+<span class="sig-name descname"><span class="pre">compose_paragraph_proof</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.ModusPonensDeclaration.compose_paragraph_proof" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method should be overridden by specialized inference-rule classes to provide accurate proofs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Composable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Composable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="core.ModusPonensDeclaration.infer_formula">
@@ -172,16 +183,18 @@
 <li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inconsistency_by_inequality_introduction.html">inconsistency-by-inequality-introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inference_rule.html">inference-rule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="is_a.html">is-a</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">modus-ponens</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paragraph_proof.html">paragraph-proof (proof-style)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory_elaboration_sequence.html">theory-elaboration-sequence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="universe_of_discourse.html">universe-of-discourse</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="inference_rule.html" title="previous chapter">inference-rule</a></li>
+      <li>Previous: <a href="is_a.html" title="previous chapter">is-a</a></li>
       <li>Next: <a href="paragraph_proof.html" title="next chapter">paragraph-proof (proof-style)</a></li>
   </ul></li>
 </ul>

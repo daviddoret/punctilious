@@ -2102,6 +2102,13 @@ class TheoreticalObject(SymbolicObject):
         # print(f'TO.__and__: self = {self}, other = {other}')
         return interpret_formula(u=self.u, arity=1, flexible_formula=(other, self))
 
+    def __call__(self, *parameters):
+        """Hack to provide support for direct function-call notation, as in: p(x).
+        """
+        # print(f'TO.__call__: self = {self}, parameters = {parameters}')
+        arity = len(parameters)
+        return interpret_formula(u=self.u, arity=arity, flexible_formula=(self, *parameters))
+
     def __xor__(self, other=None):
         """Hack to provide support for pseudo-prefix notation, as in: neg ^ p.
         This is accomplished by re-purposing the ^ operator,
@@ -2376,7 +2383,8 @@ class TheoreticalObject(SymbolicObject):
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
             visited: (None, set) = None):
-        """Iterate through this and all the theoretical-objcts it contains recursively."""
+        """Iterate through this and all the theoretical-objcts it contains recursively.
+        """
         visited = set() if visited is None else visited
         if include_root and self not in visited:
             yield self
@@ -5304,9 +5312,11 @@ theory-elaboration."""
             visited: (None, set) = None):
         """Iterate through this and all the theoretical-objcts it references recursively.
 
-        Theoretical-objcts may contain references to multiple and diverse other
-        theoretical-objcts. Do not confuse this iteration of all references with iterations of
- objects in the theory-chain.
+        Theoretical-objcts may contain references to multiple and diverse other theoretical-objcts. Do not confuse this iteration of all references with iterations of objects in the theory-chain.
+
+        :parameter include_root:
+        :parameter visited:
+        :return:
         """
         visited = set() if visited is None else visited
         if include_root and self not in visited:
@@ -5374,17 +5384,17 @@ theory-elaboration."""
     def iterate_theory_chain(self, visited: (None, set) = None):
         """Iterate over the theory-chain of this theory.
 
-
-        The sequence is: this theory, this theory's extended-theory, the extended-theory's
+        The sequence is : this theory, this theory's extended-theory, the extended-theory's
         extended-theory, etc. until the root-theory is processes.
 
-        Note:
+        Note
         -----
+
         The theory-chain set is distinct from theory-dependency set.
         The theory-chain informs of the parent package whose statements are considered
         valid in the current theory.
         Distinctively, package may be referenced by meta-theorizing, or in hypothesis,
- or possibly other use cases.
+        or possibly other use cases.
         """
         visited = set() if visited is None else visited
         t = self
@@ -5894,6 +5904,7 @@ class RelationDict(collections.UserDict):
         self._inconsistency = None
         self._inequality = None
         self._implication = None
+        self._is_a = None
         self._negation = None
 
     def declare(self, arity: int, symbol: (None, str, StyledText) = None, index: (None, int) = None,
@@ -6064,6 +6075,16 @@ class RelationDict(collections.UserDict):
                 symbol=SerifItalic(plaintext='neq', unicode='≠', latex='\\neq'), auto_index=False,
                 acronym='neq', name='not equal')
         return self._inequality
+
+    @property
+    def is_a(self):
+        """XXXXXXX
+        """
+        if self._is_a is None:
+            self._is_a = self.declare(arity=2, formula_rep=Formula.infix, signal_proposition=True,
+                symbol=SerifItalic(plaintext='is-a', unicode='is-a', latex='is-a'),
+                auto_index=False, acronym=None, name='is a')
+        return self._is_a
 
     @property
     def land(self):
@@ -7574,9 +7595,6 @@ Inc(¬P).
 
 
 class VariableSubstitutionInclusion(InferenceRuleInclusion):
-    """
-
-    """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
@@ -7601,10 +7619,14 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
             echo: (None, bool) = None) -> InferredStatement:
         """Apply the variable-substitution inference-rule and return the inferred-statement.
 
-        :param variable: (mandatory) The variable-inclusion statement. This proves that the variable is
-        part of the theory.
-        :param formula: (mandatory) The substitution of the variable as a formula.
-        :return: An inferred-statement proving the formula in the current theory.
+        :param p:
+        :param phi:
+        :param nameset:
+        :param ref:
+        :param paragraph_header:
+        :param subtitle:
+        :param echo:
+        :return:
         """
         p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
         if isinstance(phi, TheoreticalObject):
@@ -8079,38 +8101,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def variable_substitution(self) -> VariableSubstitutionInclusion:
-        """An inference-rule: P, X→Y ⊢ P' where:
-         - P is an input statement,
-         - X→Y is a mapping between the free-variables in P and their substitution values,
-         - P' is a new formula identical to P except that free-variables have been
-           substituted according to the X→Y mapping.
-
-        In practice, the mapping X→Y is implicit. A sequence Y' of substitution values
-        is provided as an input, where substitution values are indexed by the canonical-order
-        of their corresponding free-variables in the ordered set of free-variables in P.
-
-        Abridged property: u.i.vs
-
-        Formal definition:
-        Given a statement P whose formula contains an ordered set
-        of n free-variables, ordered by their canonical order of
-        appearance in the formula,
-        given an ordered set of theoretical-objcts O of cardinality n,
-        the _variable substitution_ _inference rule_ returns a new
-        statement P' where all occurrences of variables in P were
-        replaced by their corresponding substitution values in O.
-
-        Warning:
-        To avoid inconsistent package, one must be cautious
-        with variable manipulations. In effect, the proposition:
-            ((2n + 4) = 2(n + 2))
-        may lead to inconsistencies following variable-substitution
-        because the variable n is not typed. On the contrary:
-            (n ∈ ℕ) ⟹ ((2n + 4) = 2(n + 2))
-        where n is constrained leads to consistent results.
-
-        If the inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
+        """
         """
         if self._variable_substitution is None:
             self._variable_substitution = VariableSubstitutionInclusion(t=self.t)
@@ -8118,47 +8109,12 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def vs(self) -> InferenceRuleInclusion:
-        """An inference-rule: P, X→Y ⊢ P' where:
-         - P is an input statement,
-         - X→Y is a mapping between the free-variables in P and their substitution values,
-         - P' is a new formula identical to P except that free-variables have been
-           substituted according to the X→Y mapping.
-
-        In practice, the mapping X→Y is implicit. A sequence Y' of substitution values
-        is provided as an input, where substitution values are indexed by the canonical-order
-        of their corresponding free-variables in the ordered set of free-variables in P.
-
-        Unabridged property: universe_of_discourse.inference_rules.variable_substitution
-
-        Formal definition:
-        Given a statement P whose formula contains an ordered set
-        of n free-variables, ordered by their canonical order of
-        appearance in the formula,
-        given an ordered set of theoretical-objcts O of cardinality n,
-        the _variable substitution_ _inference rule_ returns a new
-        statement P' where all occurrences of variables in P were
-        replaced by their corresponding substitution values in O.
-
-        Warning:
-        To avoid inconsistent package, one must be cautious
-        with variable manipulations. In effect, the proposition:
-            ((2n + 4) = 2(n + 2))
-        may lead to inconsistencies following variable-substitution
-        because the variable n is not typed. On the contrary:
-            (n ∈ ℕ) ⟹ ((2n + 4) = 2(n + 2))
-        where n is constrained leads to consistent results.
-
-        If the inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
+       
         return self.variable_substitution
 
 
 class UniverseOfDiscourse(SymbolicObject):
-    """
-
-    .. include: universe-of-discourse
-
+    """The UniverseOfDiscourse pythonic class models a universe-of-discourse.
     """
 
     def __init__(self, nameset: (None, str, NameSet) = None, symbol: (None, str, StyledText) = None,
@@ -8218,7 +8174,7 @@ class UniverseOfDiscourse(SymbolicObject):
     def cross_reference_axiom(self, a: AxiomDeclaration) -> bool:
         """Cross-references an axiom in this universe-of-discourse.
 
-        :param a: an axiom.
+        :parameter a: an axiom-declaration.
         """
         verify(a.nameset not in self.axioms.keys() or a is self.axioms[a.nameset],
             'The symbol of parameter ⌜a⌝ is already referenced as a distinct axiom in this '
@@ -8232,7 +8188,7 @@ class UniverseOfDiscourse(SymbolicObject):
     def cross_reference_definition(self, d: DefinitionDeclaration) -> bool:
         """Cross-references a definition in this universe-of-discourse.
 
-        :param d: a definition.
+        :parameter d: a definition.
         """
         verify(d.nameset not in self.definitions.keys() or d is self.definitions[d.nameset],
             'The symbol of parameter ⌜d⌝ is already referenced as a distinct definition in this '
@@ -8333,9 +8289,9 @@ class UniverseOfDiscourse(SymbolicObject):
 
     def declare_formula(self, relation: Relation, *parameters, nameset: (None, str, NameSet) = None,
             lock_variable_scope: (None, bool) = None, echo: (None, bool) = None):
-        """Declare a new :term:`formula` in this universe-of-discourse.
+        """Declare a new formula in this universe-of-discourse.
 
-        This method is a shortcut for Formula(universe_of_discourse=self, ...).
+        This method is a shortcut for Formula(universe_of_discourse=self, . . d.).
 
         A formula is *declared* in a theory, and not *stated*, because it is not a statement,
         i.e. it is not necessarily true in this theory.
@@ -8363,7 +8319,6 @@ class UniverseOfDiscourse(SymbolicObject):
             explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None) -> SymbolicObject:
-        """"""
         return SymbolicObject(universe_of_discourse=self, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
@@ -8393,7 +8348,8 @@ class UniverseOfDiscourse(SymbolicObject):
             explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None) -> AxiomDeclaration:
-        """Elaborate a new axiom 𝑎 in this universe-of-discourse."""
+        """Elaborate a new axiom 𝑎 in this universe-of-discourse.
+        """
         return AxiomDeclaration(u=self, natural_language=natural_language, symbol=symbol,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
@@ -8405,7 +8361,8 @@ class UniverseOfDiscourse(SymbolicObject):
             explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
-        """Elaborate a new axiom 𝑎 in this universe-of-discourse."""
+        """Elaborate a new axiom 𝑎 in this universe-of-discourse.
+        """
         return DefinitionDeclaration(u=self, natural_language=natural_language, symbol=symbol,
             index=index, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
@@ -8419,7 +8376,7 @@ class UniverseOfDiscourse(SymbolicObject):
             echo: (None, bool) = None):
         """Declare a new formula in this universe-of-discourse.
 
-        Shortcut for self.elaborate_formula(...)."""
+        Shortcut for self.elaborate_formula(. . .)."""
         return self.declare_formula(relation, *parameters, nameset=nameset,
             lock_variable_scope=lock_variable_scope, echo=echo)
 
@@ -8463,8 +8420,6 @@ class UniverseOfDiscourse(SymbolicObject):
         Well-known simple-objcts are exposed as python properties. In general, a well-known
         simple-objct is declared in the universe-of-discourse the first time its property is
         accessed.
-
-        :return:
         """
         return self.simple_objcts
 
@@ -8546,9 +8501,9 @@ class UniverseOfDiscourse(SymbolicObject):
         This method is expected to be as in a with statement,
         it yields an instance of FreeVariable,
         and automatically lock the variable scope when the with left.
-        Example:
-            with u.v('x') as x, u.v('y') as y:
-                # some code...
+
+        Example: with u.v('x') as x, u.v('y') as y:
+        some code...
 
         To manage variable scope extensions and locking expressly,
         use declare_free_variable() instead.

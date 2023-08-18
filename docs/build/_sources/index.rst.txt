@@ -17,10 +17,12 @@ Welcome to punctilious's documentation!
    bibliography
    inconsistency_by_inequality_introduction
    inference_rule
+   is_a
    modus_ponens
    paragraph_proof
    theory_elaboration_sequence
    universe_of_discourse
+   variable_substitution
 
 Indices and tables
 ==================

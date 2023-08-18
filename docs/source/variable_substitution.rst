@@ -19,7 +19,7 @@ Python implementation
 ---------------------
 
 VariableSubstitutionDeclaration
-^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. module:: core
     :noindex:
@@ -28,7 +28,7 @@ VariableSubstitutionDeclaration
     :special-members: __init__
 
 VariableSubstitutionInclusion
-^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: VariableSubstitutionInclusion
     :members:
