@@ -288,6 +288,14 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         return True
 
+    def compose_note_report(self, o: InferredStatement, **kwargs) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        yield o.compose_title(cap=True)
+        yield SansSerifNormal(': ')
+        yield from o.compose_content()
+        yield SansSerifNormal('.')
+        return True
+
     def compose_parent_hypothesis_statement_report(self, o: Hypothesis,
             proof: (None, bool) = None) -> collections.abc.Generator[Composable, Composable, bool]:
         proof = prioritize_value(proof, True)

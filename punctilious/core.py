@@ -2438,12 +2438,22 @@ class TheoreticalObject(SymbolicObject):
                 pyvis_graph.add_node(node_id, label=node_label, title=node_title,
                     labelHighlightBold=bold, **kwargs)
                 for parameter in self.parameters:
-                    parameter.export_interactive_graph(output_path=None, pyvis_graph=pyvis_graph,
-                        encoding=encoding, label_wrap_size=label_wrap_size,
-                        title_wrap_size=title_wrap_size)
-                    parameter_node_id = parameter.rep_symbol(encoding=encodings.plaintext)
-                    if parameter_node_id in pyvis_graph.get_nodes():
-                        pyvis_graph.add_edge(source=parameter_node_id, to=node_id)
+                    if isinstance(parameter, tuple):
+                        # variable-substitution uses a tuple as parameter.
+                        for x in parameter:
+                            x.export_interactive_graph(output_path=None, pyvis_graph=pyvis_graph,
+                                encoding=encoding, label_wrap_size=label_wrap_size,
+                                title_wrap_size=title_wrap_size)
+                            parameter_node_id = x.rep_symbol(encoding=encodings.plaintext)
+                            if parameter_node_id in pyvis_graph.get_nodes():
+                                pyvis_graph.add_edge(source=parameter_node_id, to=node_id)
+                    else:
+                        parameter.export_interactive_graph(output_path=None,
+                            pyvis_graph=pyvis_graph, encoding=encoding,
+                            label_wrap_size=label_wrap_size, title_wrap_size=title_wrap_size)
+                        parameter_node_id = parameter.rep_symbol(encoding=encodings.plaintext)
+                        if parameter_node_id in pyvis_graph.get_nodes():
+                            pyvis_graph.add_edge(source=parameter_node_id, to=node_id)
         if is_in_class(self, classes.theory_elaboration):
             self: TheoryElaborationSequence
             for statement in self.statements:
@@ -5019,13 +5029,9 @@ class NoteInclusion(AtheoreticalStatement):
         yield self.natural_language
         return True
 
-    def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        yield from self.nameset.compose_title()
-        yield text_dict.colon
-        yield text_dict.space
-        yield from self.compose_content()
-        return True
+    def compose_report(self, proof: (None, bool) = None, **kwargs):
+        output = yield from configuration.locale.compose_note_report(o=self, proof=proof)
+        return output
 
     def echo(self):
         repm.prnt(self.rep_report())
