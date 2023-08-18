@@ -77,7 +77,7 @@ class LocaleEnUs(Locale):
         yield from a.compose_ref_link()
         yield SansSerifNormal('. ')
         yield from p.compose_formula()
-        yield SansSerifNormal(' is an interpretation of that axiom.')
+        yield SansSerifNormal(' is a valid formula statement interpreted from that axiom.')
         return True
 
     def compose_definition_declaration(self, o: DefinitionDeclaration) -> collections.abc.Generator[
@@ -208,32 +208,19 @@ class LocaleEnUs(Locale):
 
     def compose_inferred_statement_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        yield SansSerifBold('Proof')
-        yield SansSerifNormal(': ')
-        # Proof premises
-        if o.inference_rule.compose_paragraph_proof_method is None:
-            # There is no specific proof composition method
-            # linked to this inference-rule,
-            # make a best-effort to write a readable proof.
-            for i in range(len(o.parameters)):
-                parameter = o.parameters[i]
-                if isinstance(parameter, FormulaStatement):
-                    parameter: FormulaStatement
-                    yield from parameter.valid_proposition.compose_formula()
-                else:
-                    yield from parameter.compose_formula()
-                yield SansSerifNormal(' follows from ')
-                yield from parameter.compose_ref_link()
-                yield SansSerifNormal('. ')
-        else:
-            yield from o.inference_rule.compose_paragraph_proof_method(o=o)
-        # Proof conclusion
-        yield SansSerifNormal('Therefore, by the ')
-        yield from o.inference_rule.compose_dashed_name()
-        yield SansSerifNormal(' inference rule, it follows that ')
-        yield from o.valid_proposition.compose_formula()
-        yield SansSerifNormal('. ')
-        yield self.qed
+        """Generic paragraph proof composition for inferred-statements.
+        This method makes a best effort at composing a paragraph proof,
+        but should rather be overridden by the inference-rule specialized class."""
+        for i in range(len(o.parameters)):
+            parameter = o.parameters[i]
+            if isinstance(parameter, FormulaStatement):
+                parameter: FormulaStatement
+                yield from parameter.valid_proposition.compose_formula()
+            else:
+                yield from parameter.compose_formula()
+            yield SansSerifNormal(' follows from ')
+            yield from parameter.compose_ref_link()
+            yield SansSerifNormal('. ')
         return True
 
     def compose_inferred_statement_report(self, o: InferredStatement, proof: (None, bool) = None) -> \
@@ -245,11 +232,16 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         if proof:
             yield SansSerifNormal(' ')
-            # if hasattr(o.inference_rule, 'compose_paragraph_proof') and callable(
-            #        o.inference_rule.compose_paragraph_proof):
-            #    yield from o.inference_rule.compose_paragraph_proof(o=o)
-            # else:
-            yield from self.compose_inferred_statement_paragraph_proof(o=o)
+            yield SansSerifBold('Proof')
+            yield SansSerifNormal(': ')
+            yield from o.inference_rule.compose_paragraph_proof(o=o)
+            # Proof conclusion
+            yield SansSerifNormal(' Therefore, by the ')
+            yield from o.inference_rule.compose_dashed_name()
+            yield SansSerifNormal(' inference rule, it follows that ')
+            yield from o.valid_proposition.compose_formula()
+            yield SansSerifNormal('. ')
+            yield self.qed
         return True
 
     def compose_parent_hypothesis_statement_report(self, o: Hypothesis,

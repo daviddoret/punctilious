@@ -3789,9 +3789,11 @@ class InferenceRuleDeclaration(TheoreticalObject):
         output = yield from configuration.locale.compose_inference_rule_declaration(i=self)
         return output
 
-    @property
-    def compose_paragraph_proof_method(self):
-        return self._compose_paragraph_proof_method
+    def compose_paragraph_proof(self, **kwargs) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """This method should be overridden by specialized inference-rule classes to provide accurate proofs."""
+        output = yield from configuration.locale.compose_inference_rule_paragraph_proof(i=self)
+        return output
 
     @property
     def definition(self) -> (None, str):
@@ -3895,6 +3897,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """Overrides the generic paragraph proof method."""
         output = yield from configuration.locale.compose_axiom_interpretation_paragraph_proof(o=o)
         return output
 
@@ -4259,6 +4262,66 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         verify(t.contains_theoretical_objct(q),
             'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
+        return True
+
+
+class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        symbol = 'definition-interpretation'
+        acronym = 'di'
+        abridged_name = None
+        auto_index = False
+        dashed_name = 'definition-interpretation'
+        explicit_name = 'definition interpretation inference rule'
+        name = 'definition interpretation'
+        definition = '𝒟 ⊢ P'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = DefinitionInterpretationDeclaration.infer_formula
+        verify_args = DefinitionInterpretationDeclaration.verify_args
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_definition_interpretation_paragraph_proof(
+            o=o)
+        return output
+
+    def infer_formula(self, d: DefinitionInclusion, p: Formula, t: TheoryElaborationSequence,
+            echo: (None, bool) = None) -> Formula:
+        """Compute the formula that results from applying this inference-rule with those arguments.
+
+        :param d: An definition-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
+        :param p: A propositional formula: P.
+        :param t: The current theory-elaboration-sequence.
+        :return: (Formula) The inferred formula: P.
+        """
+        p = unpack_formula(p)
+        return p
+
+    def verify_args(self, d: DefinitionInclusion, p: Formula, t: TheoryElaborationSequence) -> bool:
+        """Verify if the arguments comply syntactically with the inference-rule.
+
+        WARNING:
+        --------
+        No semantic operation is performed.
+
+       :param d: An definition-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
+        :param p: A propositional formula: P.
+        :param t: The current theory-elaboration-sequence.
+        :return: (bool) True if the inference-rule arguments comply syntactically
+            with the inference-rule, False otherwise.
+        """
+        verify(is_in_class(d, classes.definition_inclusion),
+            '⌜d⌝ is not of declarative-class definition-inclusion.', d=d, t=t, slf=self)
+        verify(t.contains_theoretical_objct(d), '⌜d⌝ is not contained in ⌜t⌝.', d=d, t=t, slf=self)
+        verify(is_in_class(p, classes.formula), '⌜p⌝ is not of declarative-class formula.', p=p,
+            t=t, slf=self)
+        verify(p.is_proposition, '⌜p⌝ is not propositional.', p=p, t=t, slf=self)
+        # TODO: Add a verification step: the definition is not locked.
         return True
 
 
@@ -6108,7 +6171,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._absorption
 
     @property
-    def axiom_interpretation(self) -> InferenceRuleDeclaration:
+    def axiom_interpretation(self) -> AxiomInterpretationDeclaration:
         """The axiom_interpretation inference-rule: 𝒜 ⊢ P.
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
@@ -6305,7 +6368,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._conjunction_introduction
 
     @property
-    def definition_interpretation(self) -> InferenceRuleDeclaration:
+    def definition_interpretation(self) -> DefinitionInterpretationDeclaration:
         """The definition_interpretation inference-rule: 𝒟 ⊢ (P = Q).
 
         If the inference-rule does not exist in the universe-of-discourse,
@@ -6318,59 +6381,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         one must be very attentive when applying this inference-rule to assure the resulting
         formula-statement complies / interprets properly its related contentual-definition.
         """
-
-        # TODO: inference-rule: definition_interpretation: Migrate to specialized classes
-
-        def infer_formula(d: DefinitionInclusion, p_eq_q: Formula,
-                t: TheoryElaborationSequence) -> Formula:
-            """Compute the formula that results from applying this inference-rule with those
-            arguments.
-
-            :param d: A definition-inclusion in the theory-elaboration-sequence under
-            consideration: 𝒟.
-            :param p_eq_q: A propositional formula of the form: (P = Q)
-            :param t: The current theory-elaboration-sequence.
-            :return: (Formula) The inferred formula: (P = Q).
-            """
-            p_eq_q = unpack_formula(p_eq_q)
-            return p_eq_q
-
-        def verify_args(d: DefinitionInclusion, p_eq_q: Formula,
-                t: TheoryElaborationSequence) -> bool:
-            """Verify if the arguments comply syntactically with the inference-rule.
-
-            WARNING:
-            --------
-            No semantic operation is performed.
-
-            :param d: A definition-inclusion in the theory-elaboration-sequence under
-            consideration: 𝒟.
-            :param p_eq_q: A propositional formula of the form: (P = Q)
-            :param t: The current theory-elaboration-sequence.
-            :return: (Formula) The inferred formula: (P = Q).
-            """
-            verify(is_in_class(d, classes.definition_inclusion),
-                '⌜d⌝ is not of declarative-class definition-inclusion.', d=d, t=t, slf=self)
-            verify(t.contains_theoretical_objct(d), '⌜d⌝ is not contained in ⌜t⌝.', d=d, t=t,
-                slf=self)
-            verify(is_in_class(p_eq_q, classes.formula),
-                '⌜p_eq_q⌝ is not of declarative-class formula.', p_eq_q=p_eq_q, d=d, t=t, slf=self)
-            verify(p_eq_q.relation is t.u.r.equality,
-                'The root relation of ⌜p_eq_q⌝ is not the equality relation.',
-                p_eq_q_relation=p_eq_q.relation, p_eq_q=p_eq_q, d=d, t=t, slf=self)
-            return True
-
-        def compose_paragraph_proof(o: InferredStatement):
-            output = yield from configuration.locale.compose_definition_interpretation_paragraph_proof(
-                o=o)
-            return output
-
         if self._definition_interpretation is None:
-            self._definition_interpretation = InferenceRuleDeclaration(universe_of_discourse=self.u,
-                compose_paragraph_proof_method=compose_paragraph_proof,
-                symbol='definition-interpretation', auto_index=False,
-                dashed_name='definition-interpretation', name='definition interpretation',
-                infer_formula=infer_formula, verify_args=verify_args)
+            self._definition_interpretation = DefinitionInterpretationDeclaration(
+                universe_of_discourse=self.u)
         return self._definition_interpretation
 
     @property
@@ -7143,6 +7156,50 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
+class DefinitionInterpretationInclusion(InferenceRuleInclusion):
+    """
+
+    """
+
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.definition_interpretation
+        dashed_name = 'definition-interpretation'
+        acronym = 'di'
+        abridged_name = None
+        name = 'definition interpretation'
+        explicit_name = 'definition interpretation inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def infer_formula(self, definition: (None, DefinitionInclusion) = None,
+            formula: (None, Formula) = None, echo: (None, bool) = None):
+        """Apply the definition-interpretation inference-rule and return the inferred-formula.
+
+        :param definition: (mandatory) The definition-inclusion statement. This proves that the definition is
+        part of the theory.
+        :param formula: (mandatory) The interpretation of the definition as a formula.
+        :return: An inferred-statement proving the formula in the current theory.
+        """
+        return super().infer_formula(definition, formula, echo=echo)
+
+    def infer_statement(self, definition: (None, DefinitionInclusion) = None,
+            formula: (None, FlexibleFormula) = None, nameset: (None, str, NameSet) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+        """Apply the definition-interpretation inference-rule and return the inferred-statement.
+
+        :param definition: (mandatory) The definition-inclusion statement. This proves that the definition is
+        part of the theory.
+        :param formula: (mandatory) The interpretation of the definition as a formula.
+        :return: An inferred-statement proving the formula in the current theory.
+        """
+        formula = interpret_formula(u=self.u, arity=None, flexible_formula=formula)
+        return super().infer_statement(definition, formula, nameset=nameset, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
 class EqualityCommutativityInclusion(InferenceRuleInclusion):
     """
 
@@ -7727,7 +7784,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._conjunction_introduction
 
     @property
-    def definition_interpretation(self) -> InferenceRuleInclusion:
+    def definition_interpretation(self) -> DefinitionInterpretationInclusion:
         """The definition_interpretation inference-rule: 𝒟 ⊢ (P = Q).
 
         If the inference-rule does not exist in the universe-of-discourse,
@@ -7741,8 +7798,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         formula-statement complies / interprets properly its related contentual-definition.
         """
         if self._definition_interpretation is None:
-            self._definition_interpretation = InferenceRuleInclusion(t=self.t,
-                i=self.t.u.i.definition_interpretation, name='definition interpretation')
+            self._definition_interpretation = DefinitionInterpretationInclusion(t=self.t)
         return self._definition_interpretation
 
     @property
