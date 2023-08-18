@@ -405,7 +405,8 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         yield SansSerifNormal(' Let ')
         free_variables = parameter.get_variable_ordered_set()
-        mapping = zip(free_variables, o.parameters[1:])
+        substitution_values = o.parameters[1]
+        mapping = zip(free_variables, substitution_values)
         first_pair = True
         for k, v in mapping:
             if not first_pair:

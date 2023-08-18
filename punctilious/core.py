@@ -3880,7 +3880,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'axiom-interpretation'
         acronym = 'ai'
-        abridged_name = 'ax.-int.'
+        abridged_name = None
         auto_index = False
         dashed_name = 'axiom-interpretation'
         explicit_name = 'axiom interpretation inference rule'
@@ -4866,6 +4866,68 @@ class ProofByRefutationOfEqualityDeclaration(InferenceRuleDeclaration):
         #  stable???
         # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
         #  is stable
+        return True
+
+
+class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        symbol = 'variable-substitution'
+        acronym = 'vs'
+        abridged_name = None
+        auto_index = False
+        dashed_name = 'variable-substitution'
+        explicit_name = 'variable substitution inference rule'
+        name = 'variable substitution'
+        definition = 'P,𝛷 ⊢ P'''
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = VariableSubstitutionDeclaration.infer_formula
+        verify_args = VariableSubstitutionDeclaration.verify_args
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """Overrides the generic paragraph proof method."""
+        output = yield from configuration.locale.compose_variable_substitution_paragraph_proof(o=o)
+        return output
+
+    def infer_formula(self, p: FormulaStatement, phi: (None, tuple[TheoreticalObject]),
+            t: TheoryElaborationSequence, echo: (None, bool) = None, **kwargs) -> Formula:
+        """Compute the formula that results from applying this inference-rule with those arguments.
+
+        :param p: A formula statement that may contain n variables.
+        :param phi: A sequence of n well-formed formulae.
+        :param t: The current theory-elaboration-sequence.
+        :return: (Formula) The inferred formula.
+        """
+        x_oset = unpack_formula(p).get_variable_ordered_set()
+        x_y_map = dict((x, y) for x, y in zip(x_oset, phi))
+        p_prime = p.valid_proposition.substitute(substitution_map=x_y_map, target_theory=t)
+        return p_prime
+
+    def verify_args(self, p: FormulaStatement, phi: (None, tuple[TheoreticalObject]),
+            t: TheoryElaborationSequence, echo: (None, bool) = None, **kwargs) -> bool:
+        """Verify if the arguments comply syntactically with the inference-rule.
+        """
+        verify(is_in_class(p, classes.formula_statement), '⌜p⌝ must be a formula-statement.', p=p,
+            t=t, slf=self)
+        verify(t.contains_theoretical_objct(p), '⌜p⌝ must be contained in ⌜t⌝.', p=p, t=t, slf=self)
+        verify(isinstance(phi, tuple), '⌜phi⌝ must be a tuple.', phi=phi, t=t, slf=self)
+        x_oset = unpack_formula(p).get_variable_ordered_set()
+        verify(len(x_oset) == len(phi),
+            'The cardinality of the canonically ordered free-variables.')
+        # Substitution objects in Y must be declared in U,
+        # but they may not be referenced yet in T's extension.
+        for y in phi:
+            verify(isinstance(y, TheoreticalObject), '⌜y⌝ in ⌜phi⌝ must be a theoretical-object.',
+                y=y, t=t, slf=self)
+            verify(y.u is self.u, '⌜y⌝ and ⌜self⌝ do not share the same universe-of-discourse.',
+                y=y, y_u=y.u, slf=self, slf_u=self.u)
+
+        # TODO: Add a verification step: the variable is not locked.
         return True
 
 
@@ -6761,80 +6823,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._proof_by_refutation_of_equality
 
     @property
-    def variable_substitution(self) -> InferenceRuleDeclaration:
-        """An inference-rule: P, X→Y ⊢ P' where:
-         - P is an input statement,
-         - X→Y is a mapping between the free-variables in P and their substitution values,
-         - P' is a new formula identical to P except that free-variables have been
-           substituted according to the X→Y mapping.
-
-        In practice, the mapping X→Y is implicit. A sequence Y' of substitution values
-        is provided as an input, where substitution values are indexed by the canonical-order
-        of their corresponding free-variables in the ordered set of free-variables in P.
-
-        Abridged property: u.i.vs
-
-        Formal definition:
-        Given a statement P whose formula contains an ordered set
-        of n free-variables, ordered by their canonical order of
-        appearance in the formula,
-        given an ordered set of theoretical-objcts O of cardinality n,
-        the _variable substitution_ _inference rule_ returns a new
-        statement P' where all occurrences of variables in P were
-        replaced by their corresponding substitution values in O.
-
-        Warning:
-        To avoid inconsistent package, one must be cautious
-        with variable manipulations. In effect, the proposition:
-            ((2n + 4) = 2(n + 2))
-        may lead to inconsistencies following variable-substitution
-        because the variable n is not typed. On the contrary:
-            (n ∈ ℕ) ⟹ ((2n + 4) = 2(n + 2))
-        where n is constrained leads to consistent results.
-
-        If the inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
-
-        # TODO: inference-rule: variable_substitution: Migrate to specialized classes
-
-        def infer_formula(p, *y_sequence, t: TheoryElaborationSequence) -> Formula:
-            """
-
-            :param args: ⌜ P ⌝  a statement, o1, o2, ... theoretical-objcts in canonical order.
-            :param t:
-            :return: A formula P'
-            """
-            x_oset = unpack_formula(p).get_variable_ordered_set()
-            x_y_map = dict((x, y) for x, y in zip(x_oset, y_sequence))
-            p_prime = p.valid_proposition.substitute(substitution_map=x_y_map, target_theory=t)
-            return p_prime  # TODO: Provide support for statements that are atomic propositional  # formula, that is without relation or where the objct is a 0-ary relation.
-
-        def verify_args(p: FormulaStatement, *y_sequence, t: TheoryElaborationSequence) -> bool:
-            verify(t.contains_theoretical_objct(p),
-                '⌜p⌝ is not contained in theoretical-elaboration-sequence ⌜t⌝.', p=p,
-                y_sequence=y_sequence, slf=self, t=t)
-            x_oset = unpack_formula(p).get_variable_ordered_set()
-            verify(len(x_oset) == len(y_sequence),
-                'The cardinality of the canonically ordered free-variables.')
-            # Substitution objects in Y must be declared in U,
-            # but they may not be referenced yet in T's extension.
-            for y in y_sequence:
-                verify(y.u is self.u, '⌜y⌝ and ⌜self⌝ do not share the same universe-of-discourse.',
-                    y=y, y_u=y.u, slf=self, slf_u=self.u)
-            return True
-
-        def compose_paragraph_proof(o: InferredStatement):
-            output = yield from configuration.locale.compose_variable_substitution_paragraph_proof(
-                o=o)
-            return output
-
+    def variable_substitution(self) -> VariableSubstitutionDeclaration:
         if self._variable_substitution is None:
-            self._variable_substitution = InferenceRuleDeclaration(universe_of_discourse=self.u,
-                symbol='variable-substitution', index=None, auto_index=False,
-                dashed_name='variable-substitution', name='variable substitution',
-                compose_paragraph_proof_method=compose_paragraph_proof, infer_formula=infer_formula,
-                verify_args=verify_args)
+            self._variable_substitution = VariableSubstitutionDeclaration(
+                universe_of_discourse=self.u)
         return self._variable_substitution
 
     @property
@@ -6914,7 +6906,7 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         i = t.universe_of_discourse.inference_rules.axiom_interpretation
         dashed_name = 'axiom-interpretation'
         acronym = 'ai'
-        abridged_name = 'ax.-inter.'
+        abridged_name = None
         name = 'axiom interpretation'
         explicit_name = 'axiom interpretation inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
@@ -7560,6 +7552,43 @@ Inc(¬P).
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
+class VariableSubstitutionInclusion(InferenceRuleInclusion):
+    """
+
+    """
+
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.variable_substitution
+        dashed_name = 'variable-substitution'
+        acronym = 'vs'
+        abridged_name = None
+        name = 'variable substitution'
+        explicit_name = 'variable substitution inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def infer_formula(self, p: (None, FormulaStatement) = None,
+            phi: (None, tuple[TheoreticalObject]) = None, echo: (None, bool) = None):
+        return super().infer_formula(p, phi, echo=echo)
+
+    def infer_statement(self, p: (None, FormulaStatement) = None,
+            phi: (None, tuple[TheoreticalObject]) = None, nameset: (None, str, NameSet) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+        """Apply the variable-substitution inference-rule and return the inferred-statement.
+
+        :param variable: (mandatory) The variable-inclusion statement. This proves that the variable is
+        part of the theory.
+        :param formula: (mandatory) The substitution of the variable as a formula.
+        :return: An inferred-statement proving the formula in the current theory.
+        """
+        p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        return super().infer_statement(p, phi, nameset=nameset, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
 class InferenceRuleInclusionDict(collections.UserDict):
     """The repository of inference-rules included in a theory. In complement, this object exposes
     well-known inference-rules as easily accessible python properties. Accessing these properties
@@ -8023,7 +8052,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._proof_by_refutation_of_equality
 
     @property
-    def variable_substitution(self) -> InferenceRuleInclusion:
+    def variable_substitution(self) -> VariableSubstitutionInclusion:
         """An inference-rule: P, X→Y ⊢ P' where:
          - P is an input statement,
          - X→Y is a mapping between the free-variables in P and their substitution values,
@@ -8058,8 +8087,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         if self._variable_substitution is None:
-            self._variable_substitution = InferenceRuleInclusion(t=self.t,
-                i=self.t.u.i.variable_substitution, name='variable substitution')
+            self._variable_substitution = VariableSubstitutionInclusion(t=self.t)
         return self._variable_substitution
 
     @property

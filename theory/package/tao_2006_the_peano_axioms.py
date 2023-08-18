@@ -48,7 +48,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
             p002 = t.i.axiom_interpretation.infer_statement(a04, (
                     (n | is_a | natural_number) | u.r.implies | (
                     (n & plusplus) | is_a | natural_number)))
-        p003 = t.i.variable_substitution.infer_statement(p002, zero)
+        p003 = t.i.variable_substitution.infer_statement(p=p002, phi=tuple([zero]))
         p004 = t.i.mp.infer_statement(p003, p001, ref='2.2.3')
 
         # DEFINITION 2.1.3
