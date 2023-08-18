@@ -4535,7 +4535,7 @@ class InconsistencyByInequalityIntroductionDeclaration(InferenceRuleDeclaration)
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_inconsistency_introduction_paragraph_proof(
+        output = yield from configuration.locale.compose_inconsistency_by_inequality_introduction_paragraph_proof(
             o=o)
         return output
 
@@ -4572,11 +4572,12 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'modus-ponens'
         acronym = 'mp'
-        abridged_name = 'mod.-pon.'
+        abridged_name = None
         auto_index = False
         dashed_name = 'modus-ponens'
         explicit_name = 'modus ponens inference rule'
         name = 'modus ponens'
+        definition = '((P ⟹ Q), P) ⊢ Q'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = ModusPonensDeclaration.infer_formula
@@ -4823,14 +4824,21 @@ class ProofByRefutationOfEqualityDeclaration(InferenceRuleDeclaration):
         dashed_name = 'proof-by-refutation-of-equality'
         explicit_name = 'proof by refutation of equality inference rule'
         name = 'proof by refutation of equality'
+        definition = '(ℋ(P=Q), Inc(ℋ)) ⊢ (P ≠ Q)'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = ProofByRefutationOfEqualityDeclaration.infer_formula
         verify_args = ProofByRefutationOfEqualityDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
-            echo=echo)
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
+            explicit_name=explicit_name, echo=echo)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_proof_by_reputation_of_equality_paragraph_proof(
+            o=o)
+        return output
 
     def infer_formula(self, p_eq_q: Hypothesis, inc_p_eq_q: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
@@ -7574,9 +7582,10 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
         return super().infer_formula(p, phi, echo=echo)
 
     def infer_statement(self, p: (None, FormulaStatement) = None,
-            phi: (None, tuple[TheoreticalObject]) = None, nameset: (None, str, NameSet) = None,
-            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
-            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+            phi: (None, TheoreticalObject, tuple[TheoreticalObject]) = None,
+            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
+            echo: (None, bool) = None) -> InferredStatement:
         """Apply the variable-substitution inference-rule and return the inferred-statement.
 
         :param variable: (mandatory) The variable-inclusion statement. This proves that the variable is
@@ -7585,6 +7594,10 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
         :return: An inferred-statement proving the formula in the current theory.
         """
         p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        if isinstance(phi, TheoreticalObject):
+            # If phi is passed as an theoretical-object,
+            # embed it into a tuple as we expect tuple[TheoreticalObject] as input type.
+            phi = tuple([phi])
         return super().infer_statement(p, phi, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
