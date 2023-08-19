@@ -18,7 +18,9 @@ Welcome to punctilious's documentation!
    inconsistency_by_inequality_introduction
    inference_rule
    is_a
+   meta_object
    modus_ponens
+   notation_form
    paragraph_proof
    relation
    theory_elaboration_sequence

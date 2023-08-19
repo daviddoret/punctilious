@@ -39,6 +39,24 @@
 <h2>Definition<a class="headerlink" href="#definition" title="Permalink to this heading">¶</a></h2>
 <p>A <em>relation</em> is a set of ordered pairs <a class="footnote-reference brackets" href="#footcite-downing-dictionary-2009" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.
 Equivalently, it is a property of sets such that, for any two members of sets <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span>, <span class="math notranslate nohighlight">\(aRb\)</span> is either true or false <a class="footnote-reference brackets" href="#footcite-mcadams-all-2014" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<dl class="simple">
+<dt>Syntactically, a <em>relation</em> is represented with a</dt><dd><p>A relation ◆ is a theoretical-object for formula.
+It assigns the following meaning to its composite formula 𝜑:
+𝜑 establishes a relation between its parameters.
+A relation ◆ has a fixed arity.</p>
+</dd>
+</dl>
+</section>
+<section id="key-properties">
+<h2>Key properties<a class="headerlink" href="#key-properties" title="Permalink to this heading">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>arity</p></li>
+<li><p><a class="reference internal" href="notation_form.html"><span class="doc">notation-form</span></a></p></li>
+<li><p>signal-proposition (TODO: rename to propositional)</p></li>
+<li><p>symbolic-representation</p></li>
+</ul>
+</div></blockquote>
 </section>
 <section id="punctilious-data-model">
 <h2>Punctilious data model<a class="headerlink" href="#punctilious-data-model" title="Permalink to this heading">¶</a></h2>
@@ -56,37 +74,7 @@ Equivalently, it is a property of sets such that, for any two members of sets <s
 <dl class="py class">
 <dt class="sig sig-object py" id="core.Relation">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">Relation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">universe_of_discourse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formula_rep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_proposition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_theoretical_morphism</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implementation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acronym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.Relation" title="Permalink to this definition">¶</a></dt>
-<dd><section id="id4">
-<h4>Definition<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h4>
-<p>A relation ◆ is a theoretical-object for formula.
-It assigns the following meaning to its composite formula 𝜑:
-𝜑 establishes a relation between its parameters.
-A relation ◆ has a fixed arity.</p>
-</section>
-<section id="defining-properties">
-<h4>Defining properties<a class="headerlink" href="#defining-properties" title="Permalink to this heading">¶</a></h4>
-<blockquote>
-<div><ul class="simple">
-<li><p>Arity</p></li>
-<li><p>Symbol</p></li>
-</ul>
-</div></blockquote>
-</section>
-<section id="attributes">
-<h4>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading">¶</a></h4>
-<dl class="simple">
-<dt>signal_proposition<span class="classifier">bool</span></dt><dd><p>True if the relation instance signals that formulae based on this relation are
-logical-propositions,
-i.e. the relation is a function whose domain is the set of truth values {True, False}.
-False otherwise.
-When True, the formula may be used as a theory-statement.</p>
-</dd>
-<dt>signal_theoretical_morphism<span class="classifier">bool</span></dt><dd><p>True if the relation instance signals that formulae based on this relation are
-theoretical-morphisms.</p>
-</dd>
-<dt>implementation<span class="classifier">bool</span></dt><dd><p>If the relation has an implementation, a reference to the python function.</p>
-</dd>
-</dl>
+<dd><p>The Relation pythonic class is the implementation of the relation theoretical-object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="core.Relation.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">universe_of_discourse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formula_rep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_proposition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_theoretical_morphism</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implementation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acronym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.Relation.__init__" title="Permalink to this definition">¶</a></dt>
@@ -98,14 +86,28 @@ theoretical-morphisms.</p>
 <dd><p>Composes a report that describes this object.</p>
 </dd></dl>
 
+</dd></dl>
+
 </section>
+<section id="meta-object">
+<h3>meta-object<a class="headerlink" href="#meta-object" title="Permalink to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="core.SimpleObjctDict">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">SimpleObjctDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.SimpleObjctDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary that exposes well-known simple-objcts as properties.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="core.SimpleObjctDict.relation">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">relation</span></span><a class="headerlink" href="#core.SimpleObjctDict.relation" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#"><span class="doc">relation</span></a> <span class="xref std std-doc">meta_object</span>.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
 </section>
 <section id="bibliography">
 <h2>Bibliography<a class="headerlink" href="#bibliography" title="Permalink to this heading">¶</a></h2>
-<div class="docutils container" id="id5">
+<div class="docutils container" id="id4">
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="footcite-downing-dictionary-2009" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
@@ -145,6 +147,7 @@ theoretical-morphisms.</p>
 <li class="toctree-l1"><a class="reference internal" href="inference_rule.html">inference-rule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="is_a.html">is-a</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modus_ponens.html">modus-ponens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notation_form.html">notation-form</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paragraph_proof.html">paragraph-proof (proof-style)</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">relation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory_elaboration_sequence.html">theory-elaboration-sequence</a></li>

@@ -2937,6 +2937,7 @@ class SimpleObjctDict(collections.UserDict):
         super().__init__()
         # Well-known objects
         self._falsehood = None
+        self._relation = None
         self._truth = None
 
     def declare(self, symbol: (None, str, StyledText) = None, index: (None, int) = None,
@@ -2978,6 +2979,17 @@ class SimpleObjctDict(collections.UserDict):
                     text_style=text_styles.serif_normal), name=ComposableText(plaintext='false'),
                 explicit_name=ComposableText(plaintext='falsehood'), index=None))
         return self._falsehood
+
+    @property
+    def relation(self):
+        """The :doc:`relation` :doc:`meta_object`.
+
+        TODO: relation meta-object: Move this to a specialized class and dictionary?
+        """
+        if self._relation is None:
+            self._relation = self.declare(symbol='relation', name='relation', auto_index=False,
+                abridged_name='rel.')
+        return self._relation
 
     @property
     def tru(self):
@@ -3036,6 +3048,10 @@ class ParagraphHeaders(repm.ValueName):
     # axiom = TitleCategory('axiom', 's', 'axiom', 'axiom')
     axiom_declaration = ParagraphHeader('axiom_declaration', 'a', SansSerifBold('axiom'), 'axiom')
     axiom_inclusion = ParagraphHeader('axiom_inclusion', 's', SansSerifBold('axiom'), 'axiom')
+    axiom_schema_declaration = ParagraphHeader('axiom_schema_declaration', 'a',
+        SansSerifBold('axiom schema'), 'axiom schema')
+    axiom_schema_inclusion = ParagraphHeader('axiom_schema_inclusion', 's',
+        SansSerifBold('axiom schema'), 'axiom schema')
     corollary = ParagraphHeader('corollary', 's', 'corollary', 'cor.')
     definition_declaration = ParagraphHeader('definition_declaration', 'd',
         SansSerifBold('definition'), 'def.')
@@ -3176,7 +3192,8 @@ class AxiomDeclaration(TheoreticalObject):
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+            paragraph_header: (None, ParagraphHeader) = None, nameset: (None, str, NameSet) = None,
+            echo: (None, bool) = None):
         """
 
         :param natural_language: The axiom's content in natural-language.
@@ -3192,13 +3209,17 @@ class AxiomDeclaration(TheoreticalObject):
                 'Parameter natural-language is an empty string (after trimming).')
             natural_language = SansSerifItalic(natural_language)
         self._natural_language = natural_language
-        cat = paragraph_headers.axiom_declaration
+        paragraph_header = prioritize_value(paragraph_header, paragraph_headers.axiom_declaration)
+        verify(
+            assertion=paragraph_header is paragraph_headers.axiom_declaration or paragraph_header is paragraph_headers.axiom_schema_declaration,
+            msg='paragraph-header must be either axiom-declaration, or axiom-schema-declaration.',
+            paragraph_header=paragraph_header)
         if nameset is None and symbol is None:
             symbol = configuration.default_axiom_declaration_symbol
         super().__init__(universe_of_discourse=u, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset,
-            paragraph_header=cat, echo=False)
+            explicit_name=explicit_name, ref=ref, subtitle=subtitle,
+            paragraph_header=paragraph_header, nameset=nameset, echo=False)
         super()._declare_class_membership(declarative_class_list.axiom)
         u.cross_reference_axiom(self)
         if echo:
@@ -3243,20 +3264,25 @@ class AxiomInclusion(Statement):
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+            paragraph_header: (None, ParagraphHeader) = None, nameset: (None, str, NameSet) = None,
+            echo: (None, bool) = None):
         """Include (postulate) an axiom in a theory-elaboration-sequence.
         """
         echo = prioritize_value(echo, configuration.echo_axiom_inclusion,
             configuration.echo_default, False)
         self._axiom = a
         t.crossreference_definition_endorsement(self)
-        cat = paragraph_headers.axiom_inclusion
+        paragraph_header = prioritize_value(paragraph_header, paragraph_headers.axiom_inclusion)
+        verify(
+            assertion=paragraph_header is paragraph_headers.axiom_inclusion or paragraph_header is paragraph_headers.axiom_schema_inclusion,
+            msg='paragraph-header must be either axiom-inclusion, or axiom-schema-inclusion.',
+            paragraph_header=paragraph_header)
         if nameset is None and symbol is None:
             symbol = configuration.default_axiom_inclusion_symbol
         super().__init__(theory=t, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, paragraph_header=cat, ref=ref, subtitle=subtitle,
-            nameset=nameset, echo=False)
+            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref,
+            subtitle=subtitle, nameset=nameset, echo=False)
         super()._declare_class_membership(declarative_class_list.axiom_inclusion)
         if echo:
             self.echo()
@@ -5350,11 +5376,13 @@ theory-elaboration."""
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
             explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
+            paragraph_header: (None, ParagraphHeader) = None,
             echo: (None, bool) = None) -> AxiomInclusion:
         """Include an axiom in this theory-elaboration-sequence."""
         return AxiomInclusion(a=a, t=self, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
+            explicit_name=explicit_name, ref=ref, subtitle=subtitle,
+            paragraph_header=paragraph_header, nameset=nameset, echo=echo)
 
     def include_definition(self, d: DefinitionDeclaration, symbol: (None, str, StyledText) = None,
             index: (None, int) = None, auto_index: (None, bool) = None,
@@ -5647,34 +5675,7 @@ class Hypothesis(Statement):
 
 
 class Relation(TheoreticalObject):
-    """
-    Definition
-    ----------
-    A relation ◆ is a theoretical-object for formula.
-    It assigns the following meaning to its composite formula 𝜑:
-    𝜑 establishes a relation between its parameters.
-    A relation ◆ has a fixed arity.
-
-    Defining properties
-    -------------------
-     - Arity
-     - Symbol
-
-    Attributes
-    ----------
-    signal_proposition : bool
-        True if the relation instance signals that formulae based on this relation are
-        logical-propositions,
-        i.e. the relation is a function whose domain is the set of truth values {True, False}.
-        False otherwise.
-        When True, the formula may be used as a theory-statement.
-
-    signal_theoretical_morphism : bool
-        True if the relation instance signals that formulae based on this relation are
-        theoretical-morphisms.
-
-    implementation : bool
-        If the relation has an implementation, a reference to the python function.
+    """The Relation pythonic class is the implementation of the relation theoretical-object.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, arity: int,
@@ -8109,7 +8110,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def vs(self) -> InferenceRuleInclusion:
-       
+
         return self.variable_substitution
 
 
@@ -8346,13 +8347,15 @@ class UniverseOfDiscourse(SymbolicObject):
             dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
             explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
-            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
+            subtitle: (None, str, StyledText) = None,
+            paragraph_header: (None, ParagraphHeader) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None) -> AxiomDeclaration:
         """Elaborate a new axiom 𝑎 in this universe-of-discourse.
         """
         return AxiomDeclaration(u=self, natural_language=natural_language, symbol=symbol,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
+            explicit_name=explicit_name, ref=ref, subtitle=subtitle,
+            paragraph_header=paragraph_header, nameset=nameset, echo=echo)
 
     def declare_definition(self, natural_language: str, symbol: (None, str, StyledText) = None,
             index: (None, int) = None, auto_index: (None, bool) = None,

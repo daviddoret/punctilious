@@ -36,7 +36,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         natural_number = u.o.declare(symbol='natural-number', auto_index=False)
 
         # (0 is-a natural-number):
-        p001 = t.i.axiom_interpretation.infer_statement(a02, zero | is_a | natural_number)
+        p001 = t.i.axiom_interpretation.infer_statement(a02, zero | u.r.is_a | natural_number)
 
         # AXIOM 2.1.2
 
@@ -46,8 +46,8 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
             formula_rep=pu.Formula.postfix)
         with u.v('n') as n:
             p002 = t.i.axiom_interpretation.infer_statement(a04, (
-                    (n | is_a | natural_number) | u.r.implies | (
-                    (n & plusplus) | is_a | natural_number)))
+                    (n | u.r.is_a | natural_number) | u.r.implies | (
+                    (n & plusplus) | u.r.is_a | natural_number)))
         p003 = t.i.variable_substitution.infer_statement(p=p002, phi=tuple([zero]))
         p004 = t.i.mp.infer_statement(p003, p001, ref='2.2.3')
 
@@ -113,7 +113,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         with u.v('n') as n:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₂₈): ((𝐧₂ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((𝐧₂)++ ≠ 0)).
             p028 = t.i.axiom_interpretation.infer_statement(a05,
-                u.f(u.r.implies, u.f(is_a, n, natural_number),
+                u.f(u.r.implies, (n | u.r.is_a | natural_number),
                     u.f(u.r.neq, u.f(plusplus, n), zero)))
 
         t.open_section('4 is not equal to 0.', section_parent=section_2_1, section_number=6)
@@ -134,14 +134,14 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         with u.v('n') as n, u.v('m') as m:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₂): ((((𝐧₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐦₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (𝐧₃ ≠ 𝐦₁)) ⟹ ((𝐧₃)++ ≠ (𝐦₁)++)).
             p032 = t.i.axiom_interpretation.infer_statement(axiom_2_4, u.f(u.r.implies,
-                u.f(u.r.land,
-                    u.f(u.r.land, u.f(is_a, n, natural_number), u.f(is_a, m, natural_number)),
-                    u.f(u.r.neq, n, m)), u.f(u.r.neq, u.f(plusplus, n), u.f(plusplus, m))))
+                u.f(u.r.land, u.f(u.r.land, u.f(u.r.is_a, n, natural_number),
+                    u.f(u.r.is_a, m, natural_number)), u.f(u.r.neq, n, m)),
+                u.f(u.r.neq, u.f(plusplus, n), u.f(plusplus, m))))
         with u.v('n') as n, u.v('m') as m:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₂): ((((𝐧₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐦₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (𝐧₃ ≠ 𝐦₁)) ⟹ ((𝐧₃)++ ≠ (𝐦₁)++)).
             p032b = t.i.axiom_interpretation.infer_statement(axiom_2_4, u.f(u.r.implies,
-                u.f(u.r.land,
-                    u.f(u.r.land, u.f(is_a, n, natural_number), u.f(is_a, m, natural_number)),
+                u.f(u.r.land, u.f(u.r.land, u.f(u.r.is_a, n, natural_number),
+                    u.f(u.r.is_a, m, natural_number)),
                     u.f(u.r.equal, u.f(plusplus, n), u.f(plusplus, m))), u.f(u.r.equal, n, m)))
         # Proposition 2.1.8. 6 is not equal to 2.
         # We know that 4 is not equal to 0 from 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 𝟮.𝟭.𝟲 (P₃₀): (4 ≠ 0).
@@ -268,27 +268,33 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p056 = t.i.conjunction_introduction.infer_statement(p055, p048)
         p057 = t.i.modus_ponens.infer_statement(p_implies_q=p053, p=p056)
 
-        a_2_5 = u.declare_axiom(subtitle='Principle of mathematical induction',
+        t.open_section('The principle of mathematical induction', section_parent=section_2_1)
+
+        a_2_5 = u.declare_axiom(paragraph_header=pu.paragraph_headers.axiom_schema_declaration,
+            subtitle='Principle of mathematical induction',
             natural_language='Let P(n) be any property pertaining to a natural number n. Suppose that P(O) is true, and suppose that whenever P(n) is true, P(n++) is also true. Then P(n) is true for every natural number n.')
 
-        a_2_5b = t.include_axiom(a=a_2_5, subtitle='Principle of mathematical induction')
+        a_2_5b = t.include_axiom(a=a_2_5,
+            paragraph_header=pu.paragraph_headers.axiom_schema_inclusion,
+            subtitle='Principle of mathematical induction')
 
-        unary_relation = u.o.declare(symbol='unary-relation', auto_index=False)
-
-        with u.v('P') as p, u.v('n') as n:
+        with u.v('P') as p, u.v('n') as n, u.v('m') as m:
             # P is-a unary-relation
-            phi1 = (p | u.r.is_a | unary_relation)
+            phi1 = (p | u.r.is_a | u.o.relation)
             # n is-a natural-number
             phi2 = (n | u.r.is_a | natural_number)
             # P(0)
-            phi3 = P(zero)  # TODO: Implement this syntax
+            phi3 = p(zero)  # TODO: Implement this syntax
             # P(n) ⟹ P(n++)
-            phi4 = (P(n) | u.r.implies | P(n & plusplus))
+            phi4 = (p(n) | u.r.implies | p(n & plusplus))
             phi5 = ((phi1 | u.r.land | phi2) | u.r.land | (phi3 | u.r.land | phi4))
             # ⟹
             # ((m is-a natural-number) ⟹ P(m))
-            phi6 = (m | is_a | natural_number) | u.r.implies | (P(m))
+            phi6 = (m | u.r.is_a | natural_number) | u.r.implies | p(m)
             phi7 = phi5 | u.r.implies | phi6
             p100 = t.i.axiom_interpretation.infer_statement(axiom=a_2_5b, formula=phi7)
+
+        t.take_note(paragraph_header=pu.paragraph_headers.remark, ref='2.1.10',
+            content='We are a little vague on what "property" means at this point, but some possible examples of P(n) might be "n is even"; "n is equal to 3"; "n solves the equation (n + 1)2 = n2 + 2n + 1"; and so forth. Of course we haven\'t defined many of these concepts yet, but when we do, Axiom 2.5 will apply to these properties. (A logical remark: Because this axiom refers not just to variables, but also properties, it is of a different nature than the other four axioms; indeed, Axiom 2.5 should technically be called an axiom schema rather than an axiom - it is a template for producing an (infinite) number of axioms, rather than being a single axiom in its own right. To discuss this distinction further is far beyond the scope of this text, though, and falls in the realm of logic.) [Tao, 2006, p. 22]')
 
         pass
