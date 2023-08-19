@@ -20,6 +20,7 @@ Welcome to punctilious's documentation!
    is_a
    modus_ponens
    paragraph_proof
+   relation
    theory_elaboration_sequence
    universe_of_discourse
    variable_substitution
