@@ -22,6 +22,9 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         section_2 = t.open_section('The natural numbers', section_number=2)
         section_2_1 = t.open_section('The Peano axioms', section_parent=section_2)
 
+        t.open_section('Informal definition of natural number', section_parent=section_2_1,
+            numbering=False)
+
         t.take_note(
             content='A natural number is any element of the set 𝐍 := { 0, 1, 2, 3, 4, ... }, which is the set of all the numbers created by starting with 0 and then counting forward indefinitely. We call 𝐍 the set of natural numbers.',
             paragraph_header=pu.paragraph_headers.informal_definition, ref='2.1.1')
@@ -29,6 +32,8 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         t.take_note(
             content='In some texts the natural numbers start at 1 instead of 0, but this is a matter of notational convention more than anything else. In this text we shall refer to the set { 1, 2, 3, ... } as the positive integers 𝐙⁺ rather than the natural numbers. Natural numbers are sometimes also known as whole numbers.',
             paragraph_header=pu.paragraph_headers.remark, ref='2.1.2')
+
+        t.open_section('Axiom 2.1', section_parent=section_2_1, numbering=False)
 
         a01 = u.declare_axiom(f'0 is a natural number.')
         a02 = t.include_axiom(a01, ref='2.1')
@@ -38,7 +43,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # (0 is-a natural-number):
         p001 = t.i.axiom_interpretation.infer_statement(a02, zero | u.r.is_a | natural_number)
 
-        # AXIOM 2.1.2
+        t.open_section('Axiom 2.2', section_parent=section_2_1, numbering=False)
 
         a03 = u.declare_axiom('If n is a natural number, then n++ is a natural number.')
         a04 = t.include_axiom(a03, ref='2.2')
@@ -88,7 +93,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p017 = t.i.equality_commutativity.infer_statement(p006)
         p019 = t.i.equal_terms_substitution.infer_statement(p007, p017)
 
-        t.open_section('3 is a natural number', section_parent=section_2_1, section_number=3)
+        t.open_section('3 is a natural number', section_parent=section_2_1, numbering=False)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₂₀): ((((0)++)++)++ = 3).
         p020 = t.i.equality_commutativity.infer_statement(p007)
 
@@ -106,6 +111,8 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₂₇): (4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).
         p027 = t.i.equal_terms_substitution.infer_statement(p014, p024)
 
+        t.open_section('Axiom 2.3', section_parent=section_2_1, numbering=False)
+
         a05 = t.include_axiom(u.declare_axiom(
             '0 is not the successor of any natural number; i.e., we have n++ ≠ 0 for '
             'every natural number n.'), ref='2.3')
@@ -116,7 +123,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
                 u.f(u.r.implies, (n | u.r.is_a | natural_number),
                     u.f(u.r.neq, u.f(plusplus, n), zero)))
 
-        t.open_section('4 is not equal to 0.', section_parent=section_2_1, section_number=6)
+        t.open_section('4 is not equal to 0.', section_parent=section_2_1, numbering=False)
         # Proposition 2.1.6. 4 is not equal to 0.
         t.take_note('We want to prove that 4 is not equal to 0, i.e. (4 ≠ 0).')
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: ((3 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((3)++ ≠ 0)).
@@ -125,6 +132,8 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p030 = t.i.modus_ponens.infer_statement(p029, p022)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (4 ≠ 0).
         p031 = t.i.equal_terms_substitution.infer_statement(p030, p025, ref='2.1.6')
+
+        t.open_section('Axiom 2.4', section_parent=section_2_1, numbering=False)
 
         axiom_2_4 = t.include_axiom(
             u.declare_axiom('Different natural numbers must have different successors; i.e., if n, '
@@ -143,6 +152,9 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
                 u.f(u.r.land, u.f(u.r.land, u.f(u.r.is_a, n, natural_number),
                     u.f(u.r.is_a, m, natural_number)),
                     u.f(u.r.equal, u.f(plusplus, n), u.f(plusplus, m))), u.f(u.r.equal, n, m)))
+
+        s55 = t.open_section('6 is not equal to 2.', section_parent=section_2_1, numbering=False)
+
         # Proposition 2.1.8. 6 is not equal to 2.
         # We know that 4 is not equal to 0 from 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 𝟮.𝟭.𝟲 (P₃₀): (4 ≠ 0).
         # With axiom 2.4 we can demonstrate that 5 is not equal to 1.
@@ -194,10 +206,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # (6 = (5)++)
         p057 = t.i.equality_commutativity.infer_statement(p_eq_q=p051)
 
-        section_2_1_8 = t.open_section('6 is not equal to 2', section_parent=section_2_1,
-            section_number=8)
-        section_2_1_8_1 = t.open_section('Proof by contradiction', section_parent=section_2_1_8,
-            section_number=1)
+        t.open_section('Proof by contradiction', section_parent=s55, numbering=False)
 
         t.take_note(
             content='First, we follow (Tao 2006)''s proof by contradiction. In punctilious, we use the term proof-by-refutation-of-equality to designate this specific method of proof.')
@@ -252,7 +261,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p073 = t.i.proof_by_refutation_of_equality.infer_statement(p_eq_q=h1, inc_p_eq_q=p072,
             ref='2.1.8')
 
-        t.open_section('Direct proof', section_parent=section_2_1_8, section_number=2)
+        t.open_section('Direct proof', section_parent=s55, numbering=False)
 
         t.take_note(
             content='In (Tao, 2006), proposition 2.1.8 uses proof by contradiction. Note that in punctilious, this specific proof method is called a proof by refutation of equality. Nevertheless, proofs by contradictions are somehow indirect proofs. As an alternative, we now propose a direct proof.')
@@ -268,7 +277,8 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p056 = t.i.conjunction_introduction.infer_statement(p055, p048)
         p057 = t.i.modus_ponens.infer_statement(p_implies_q=p053, p=p056)
 
-        t.open_section('The principle of mathematical induction', section_parent=section_2_1)
+        t.open_section('Axiom 2.5: The principle of mathematical induction',
+            section_parent=section_2_1, numbering=False)
 
         a_2_5 = u.declare_axiom(paragraph_header=pu.paragraph_headers.axiom_schema_declaration,
             subtitle='Principle of mathematical induction',
@@ -299,12 +309,12 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         # TODO: Include sample proposition 2.1.11 (Tao 2006, p. 23) in an hypothesis.
 
-        t.open_section('The number system N', section_parent=section_2_1)
+        t.open_section('The number system N', section_parent=section_2_1, numbering=False)
 
         t.take_note(paragraph_header=pu.paragraph_headers.informal_assumption, ref='2.6',
             content='There exists a number system N, whose elements we will call natural numbers, for which Axioms 2.1-2.5 are true.')
 
-        t.open_section('Recursive definitions', section_parent=section_2_1)
+        t.open_section('Recursive definitions', section_parent=section_2_1, numbering=False)
 
         t.take_note(paragraph_header=pu.paragraph_headers.informal_proposition, ref='2.1.16',
             subtitle='recursive definitions',

@@ -10,7 +10,7 @@ Let "0", "natural-number", "1", "2", "3", "4", "5", "6" be simple-objects in U1.
 
 # Relations
 Let "++", "Inc" be unary-relations in U1.
-Let "=", "neq", "==>", "is-a", "and" be binary-relations in U1.
+Let "=", "and", "is-a", "neq", "==>" be binary-relations in U1.
 
 # Inference rules
 The following inference rules are considered valid under this theory:
@@ -27,9 +27,12 @@ Let "variable-substitution" be an inference-rule defined as "(P, 𝛷) ⊢ P'" i
 # Theory elaboration sequence
 # 2: The natural numbers
 ## 2.1: The peano axioms
+### Informal definition of natural number
+### Axiom 2.1
 Axiom 2.1 (T1.A1): Let axiom A1 "0 is a natural number." be included (postulated) in T1.
 Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "𝒜 ⊢ P" be included and considered valid in T1.
 Proposition (T1.P1): (0 is-a natural-number).
+### Axiom 2.2
 Axiom 2.2 (T1.A2): Let axiom A2 "If n is a natural number, then n++ is a natural number." be included (postulated) in T1.
 Proposition (T1.P2): ((n1 is-a natural-number) ==> ((n1)++ is-a natural-number)).
 Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P, 𝛷) ⊢ P'" be included and considered valid in T1.
@@ -54,7 +57,7 @@ Inference rule (equal-terms-substitution): Let inference-rule equal-terms-substi
 Proposition (T1.P16): (2 = (1)++).
 Proposition (T1.P17): (((0)++)++ = 2).
 Proposition (T1.P18): (3 = (2)++).
-### 2.1.3: 3 is a natural number
+### 3 is a natural number
 Proposition (T1.P19): ((((0)++)++)++ = 3).
 Proposition (T1.P20): ((2)++ = 3).
 Proposition 2.1.4 (T1.P21): (3 is-a natural-number).
@@ -63,15 +66,18 @@ Proposition (T1.P23): (((((0)++)++)++)++ = 4).
 Proposition (T1.P24): ((3)++ = 4).
 Proposition (T1.P25): (((((0)++)++)++ is-a natural-number) ==> (((((0)++)++)++)++ is-a natural-number)).
 Proposition (T1.P26): (4 is-a natural-number).
+### Axiom 2.3
 Axiom 2.3 (T1.A3): Let axiom A3 "0 is not the successor of any natural number; i.e., we have n++  0 for every natural number n." be included (postulated) in T1.
 Proposition (T1.P27): ((n2 is-a natural-number) ==> ((n2)++ neq 0)).
-### 2.1.6: 4 is not equal to 0.
+### 4 is not equal to 0.
 Proposition (T1.P28): ((3 is-a natural-number) ==> ((3)++ neq 0)).
 Proposition (T1.P29): ((3)++ neq 0).
 Proposition 2.1.6 (T1.P30): (4 neq 0).
+### Axiom 2.4
 Axiom 2.4 (T1.A4): Let axiom A4 "Different natural numbers must have different successors; i.e., if n, m are natural numbers and n  m, then n++  m++. Equivalently, if n++ = m++, then we must have n = m." be included (postulated) in T1.
 Proposition (T1.P31): ((((n3 is-a natural-number) and (m1 is-a natural-number)) and (n3 neq m1)) ==> ((n3)++ neq (m1)++)).
 Proposition (T1.P32): ((((n4 is-a natural-number) and (m2 is-a natural-number)) and ((n4)++ = (m2)++)) ==> (n4 = m2)).
+### 6 is not equal to 2.
 Proposition (T1.P33): ((((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)) ==> ((4)++ neq (0)++)).
 Inference rule (conjunction-introduction): Let inference-rule conjunction-introduction defined as "(P, Q) ⊢ (P ⋀ Q)" be included and considered valid in T1.
 Proposition (T1.P34): ((4 is-a natural-number) and (0 is-a natural-number)).
@@ -93,14 +99,13 @@ Proposition (T1.P49): (((((((0)++)++)++)++)++)++ = 6).
 Proposition (T1.P50): (1 is-a natural-number).
 Proposition (T1.P51): ((5)++ = 6).
 Proposition (T1.P52): (6 = (5)++).
-### 2.1.8: 6 is not equal to 2
-#### 2.1.8.1: Proof by contradiction
+#### Proof by contradiction
 Hypothesis (T1.H1): (6 = 2).
 Inference rule (inconsistency-by-inequality-introduction): Let inference-rule inconsistency-by-inequality-introduction defined as "((P = Q), (P ≠ Q)) ⊢ Inc(𝒯)" be included and considered valid in T1.
 Proposition (T1.P66): Inc(H1).
 Inference rule (proof-by-refutation-of-equality): Let inference-rule proof-by-refutation-of-equality defined as "(ℋ(P=Q), Inc(ℋ)) ⊢ (P ≠ Q)" be included and considered valid in T1.
 Proposition 2.1.8 (T1.P67): (6 neq 2).
-#### 2.1.8.2: Direct proof
+#### Direct proof
 Proposition (T1.P68): ((1)++ = 2).
 Proposition (T1.P69): (5 neq 1).
 Proposition (T1.P70): ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> (6 neq (1)++)).
@@ -108,8 +113,8 @@ Proposition (T1.P71): ((((5 is-a natural-number) and (1 is-a natural-number)) an
 Proposition (T1.P72): ((5 is-a natural-number) and (1 is-a natural-number)).
 Proposition (T1.P73): (((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)).
 Proposition (T1.P74): (6 neq 2).
-### 2.1.9: The principle of mathematical induction
+### Axiom 2.5: the principle of mathematical induction
 Axiom schema (T1.A6) - Principle of mathematical induction: Let axiom A6 "Let P(n) be any property pertaining to a natural number n. Suppose that P(O) is true, and suppose that whenever P(n) is true, P(n++) is also true. Then P(n) is true for every natural number n." be included (postulated) in T1.
 Proposition (T1.P75): (((n5 is-a natural-number) and (P1(0) and (P1(n5) ==> P1((n5)++)))) ==> ((m3 is-a natural-number) ==> P1(m3))).
-### 2.1.10: The number system n
-### 2.1.11: Recursive definitions
+### The number system n
+### Recursive definitions
