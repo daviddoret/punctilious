@@ -6,7 +6,7 @@
   </a>
 </div>
 <p align="center">
-    A human-friendly math proof library.
+    A human-friendly math proof assistant library.
 </p>
 
 ## About The Project
