@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/daviddoret/punctilious">
-    <img src="logo/punctilious-logo-600x600-transparent.png" alt="Logo" width="80" height="80">
+    <img src="logo/punctilious-logo-600x600-transparent.png" alt="Logo" width="300" height="300">
   </a>
 </div>
 <p align="center">
