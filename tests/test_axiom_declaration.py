@@ -13,8 +13,8 @@ class TestAxiomDeclaration(TestCase):
         a1 = u.declare_axiom(content1)
         self.assertEqual('Axiom (A1)', a1.rep_title(cap=True, encoding=pu.encodings.plaintext))
         self.assertEqual('axiom (A1)', a1.rep_title(cap=False, encoding=pu.encodings.plaintext))
-        self.assertEqual('𝗔𝘅𝗶𝗼𝗺 (𝑎₁)', a1.rep_title(cap=True, encoding=pu.encodings.unicode))
-        self.assertEqual('𝗮𝘅𝗶𝗼𝗺 (𝑎₁)', a1.rep_title(cap=False, encoding=pu.encodings.unicode))
+        self.assertEqual('𝗔𝘅𝗶𝗼𝗺 (𝒜₁)', a1.rep_title(cap=True, encoding=pu.encodings.unicode))
+        self.assertEqual('𝗮𝘅𝗶𝗼𝗺 (𝒜₁)', a1.rep_title(cap=False, encoding=pu.encodings.unicode))
 
     def test_axiom_declaration(self):
         pu.configuration.echo_default = False

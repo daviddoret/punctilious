@@ -488,12 +488,15 @@ class StyledText(ComposableBlockLeaf):
         :param kwargs:
         :return: A composition of the StyledText instance.
         """
-        if (cap is not None and not self._cap) or (
+        if (cap is not None and cap != self._cap) or (
                 text_style is not None and self._text_style is not text_style):
             # Return a close of ⌜self⌝ with the desired properties.
-            latex = None if self.latex is None else self.latex.capitalize()
-            plaintext = None if self.plaintext is None else self.plaintext.capitalize()
-            unicode = None if self.unicode is None else self.unicode.capitalize()
+            # TODO: StyledText composition: possible bug in LaTeX rendering here.
+            latex = None if self.latex is None else (self.latex.capitalize() if cap else self.latex)
+            plaintext = None if self.plaintext is None else (
+                self.plaintext.capitalize() if cap else self.plaintext)
+            unicode = None if self.unicode is None else (
+                self.unicode.capitalize() if cap else self.unicode)
             yield StyledText(latex=latex, plaintext=plaintext, unicode=unicode,
                 text_style=self.text_style)
             return True
@@ -3844,7 +3847,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
     def compose_paragraph_proof(self, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
         """This method should be overridden by specialized inference-rule classes to provide accurate proofs."""
-        output = yield from configuration.locale.compose_inference_rule_paragraph_proof(i=self)
+        output = yield from configuration.locale.compose_inferred_statement_paragraph_proof(o=self)
         return output
 
     @property
@@ -3911,10 +3914,10 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
         p_implies_p_and_q = t.u.f(t.u.r.implication, p, t.u.f(t.u.r.conjunction, p, q))
         return p_implies_p_and_q
 
-    # def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-    #    Composable, Composable, bool]:
-    #    output = yield from configuration.locale.compose_absorption_paragraph_proof(o=o)
-    #    return output
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_absorption_paragraph_proof(o=o)
+        return output
 
     def verify_args(self, p_implies_q: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
@@ -4160,11 +4163,13 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
             'The relation of formula ⌜q_implies_p⌝ must be an implication.',
             q_implies_p_relation=p_implies_q.relation, q_implies_p=q_implies_p, t=t, slf=self)
 
-        verify(p_implies_q.parameters[0].is_syntactic_equivalent_to(q_implies_p.parameters[1]),
+        verify(p_implies_q.parameters[0].is_formula_syntactically_equivalent_to(
+            q_implies_p.parameters[1]),
             'The p of the ⌜p_implies_q⌝ formula must be formula-syntactically-equivalent to the p of '
             '⌜q_implies_p⌝ formula.', p_implies_q=p_implies_q, q_implies_p=q_implies_p, t=t,
             slf=self)
-        verify(p_implies_q.parameters[1].is_syntactic_equivalent_to(q_implies_p.parameters[0]),
+        verify(p_implies_q.parameters[1].is_formula_syntactically_equivalent_to(
+            q_implies_p.parameters[0]),
             'The q of the ⌜p_implies_q⌝ formula must be formula-syntactically-equivalent to the q of '
             '⌜q_implies_p⌝ formula.', p_implies_q=p_implies_q, q_implies_p=q_implies_p, t=t,
             slf=self)
@@ -4554,7 +4559,7 @@ class InconsistencyByNegationIntroductionDeclaration(InferenceRuleDeclaration):
             inconsistent_theory=inconsistent_theory, slf=self)
         not_p_formula = not_p.valid_proposition
         p_in_not_p = not_p_formula.parameters[0]
-        verify(p_in_not_p.is_syntactic_equivalent_to(p),
+        verify(p_in_not_p.is_formula_syntactically_equivalent_to(p),
             'The sub-formula (parameter) ⌜p⌝ in ⌜not_p⌝ must be formula-syntactically-equivalent to ⌜p⌝.',
             not_p=not_p, p_in_not_p=p_in_not_p, p=p, slf=self)
         return True
@@ -5417,6 +5422,8 @@ theory-elaboration."""
         :param formula: (conditional) Filters on formula-statements that are formula-syntactically-equivalent.
         :return:
         """
+        if formula is not None:
+            formula = interpret_formula(u=self.u, arity=None, flexible_formula=formula)
         for t in self.iterate_theory_chain():
             for s in t.statements:
                 if formula is None or (is_in_class(s,
