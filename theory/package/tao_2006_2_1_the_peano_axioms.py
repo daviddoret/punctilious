@@ -280,14 +280,14 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         with u.v('P') as p, u.v('n') as n, u.v('m') as m:
             # P is-a unary-relation
-            phi1 = (p | u.r.is_a | u.o.relation)
+            # phi1 = (p | u.r.is_a | u.o.relation)
             # n is-a natural-number
             phi2 = (n | u.r.is_a | natural_number)
             # P(0)
             phi3 = p(zero)  # TODO: Implement this syntax
             # P(n) ⟹ P(n++)
             phi4 = (p(n) | u.r.implies | p(n & plusplus))
-            phi5 = ((phi1 | u.r.land | phi2) | u.r.land | (phi3 | u.r.land | phi4))
+            phi5 = (phi2 | u.r.land | (phi3 | u.r.land | phi4))
             # ⟹
             # ((m is-a natural-number) ⟹ P(m))
             phi6 = (m | u.r.is_a | natural_number) | u.r.implies | p(m)
@@ -297,4 +297,20 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         t.take_note(paragraph_header=pu.paragraph_headers.remark, ref='2.1.10',
             content='We are a little vague on what "property" means at this point, but some possible examples of P(n) might be "n is even"; "n is equal to 3"; "n solves the equation (n + 1)2 = n2 + 2n + 1"; and so forth. Of course we haven\'t defined many of these concepts yet, but when we do, Axiom 2.5 will apply to these properties. (A logical remark: Because this axiom refers not just to variables, but also properties, it is of a different nature than the other four axioms; indeed, Axiom 2.5 should technically be called an axiom schema rather than an axiom - it is a template for producing an (infinite) number of axioms, rather than being a single axiom in its own right. To discuss this distinction further is far beyond the scope of this text, though, and falls in the realm of logic.) [Tao, 2006, p. 22]')
 
-        pass
+        # TODO: Include sample proposition 2.1.11 (Tao 2006, p. 23) in an hypothesis.
+
+        t.open_section('The number system N', section_parent=section_2_1)
+
+        t.take_note(paragraph_header=pu.paragraph_headers.informal_assumption, ref='2.6',
+            content='There exists a number system N, whose elements we will call natural numbers, for which Axioms 2.1-2.5 are true.')
+
+        t.open_section('Recursive definitions', section_parent=section_2_1)
+
+        t.take_note(paragraph_header=pu.paragraph_headers.informal_proposition, ref='2.1.16',
+            subtitle='recursive definitions',
+            content='Suppose for each natural number n, we have some function fₙ : N -> N from the natural numbers to the natural numbers. Let c be a natural number. Then we can assign a unique natural number an to each natural number n, such that a₀ = c and aₙ₊₊ = fₙ(aₙ) for each natural number n.')
+
+        t.take_note(paragraph_header=pu.paragraph_headers.informal_proof,
+            content='We use induction. We first observe that this procedure gives a single value to a₀, namely c. (None of the other definitions aₙ₊₊ := fₙ(aₙ) will redefine the value of a₀, because of Axiom 2.3.) Now suppose inductively that the procedure gives a single value to aₙ. Then it gives a single value to aₙ₊₊, namely aₙ₊₊ := fₙ(aₙ). (None of the other definitions aₘ₊₊ := fₘ(aₘ) will redefine the value of aₙ₊₊, because of Axiom 2.4.) This completes the induction, and so aₙ is defined for each natural number n, with a single value assigned to each aₙ.')
+
+        # TODO: Provide a formal proof of recursive definitions.

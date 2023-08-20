@@ -1,5 +1,5 @@
 import unittest
-import theory.package.tao_2006_the_peano_axioms as tpa
+import theory.package.tao_2006_2_1_the_peano_axioms as tpa
 
 # from package.tao_2006_the_peano_axioms import p
 

@@ -3079,6 +3079,14 @@ class ParagraphHeaders(repm.ValueName):
         'warning')
     # Special categories
     uncategorized = ParagraphHeader('uncategorized', 's', 'uncategorized', 'uncat.')
+    informal_assumption = ParagraphHeader('informal assumption',
+        StyledText(plaintext='informal assumption', unicode='🗅'), 'informal assumption',
+        'informal assumption')
+    informal_proposition = ParagraphHeader('informal proposition',
+        StyledText(plaintext='informal proposition', unicode='🗅'), 'informal proposition',
+        'informal proposition')
+    informal_proof = ParagraphHeader('informal proof',
+        StyledText(plaintext='informal proof', unicode='🗅'), 'informal proof', 'informal proof')
 
 
 paragraph_headers = ParagraphHeaders('paragraph_headers')
