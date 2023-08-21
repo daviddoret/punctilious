@@ -13,9 +13,9 @@ class TestAbsorption(TestCase):
         t = u.t()
         a1 = u.declare_axiom(random_data.random_sentence())
         a2 = t.include_axiom(a1)
-        phi1_useless_noise = u.f(u.r.implies, o2, o1)
-        phi2 = u.f(u.r.implies, o1, o2)
-        phi3_useless_noise = u.f(u.r.implies, o2, o2)
+        phi1_useless_noise = (o2 | u.r.implies | o1)
+        phi2 = (o1 | u.r.implies | o2)
+        phi3_useless_noise = (o2 | u.r.implies | o2)
         p1_useless_noise = t.i.axiom_interpretation.infer_statement(axiom=a2,
             formula=phi1_useless_noise)
         p2 = t.i.axiom_interpretation.infer_statement(axiom=a2, formula=phi2)
@@ -28,6 +28,8 @@ class TestAbsorption(TestCase):
         self.assertEqual('(o1 ==> (o1 and o2))', p5.rep_formula(expand=True))
         # Pass formula as tuple
         p6 = t.i.absorb.infer_statement(p_implies_q=(u.r.implies, o1, o2), echo=True)
+        self.assertTrue(
+            p6.is_formula_syntactically_equivalent_to((o1 | u.r.implies | (o1 | u.r.land | o2))))
         self.assertEqual('(o1 ==> (o1 and o2))', p6.rep_formula(expand=True))
         # Pass formula with pseudo-infix notation
         p7 = t.i.absorb.infer_statement(p_implies_q=o1 | u.r.implies | o2, echo=True)

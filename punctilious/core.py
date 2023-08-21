@@ -4382,6 +4382,71 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
         return True
 
 
+class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
+    """The well-known double negation elimination (left) inference rule: ¬(¬(P)) ⊢ P.
+
+    Acronym: cer.
+
+    :param p_land_q: A formula-statement of the form: (P ⋀ Q).
+    :param t: The current theory-elaboration-sequence.
+    :return: The (proven) formula: Q.
+    """
+
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        symbol = 'double-negation-elimination'
+        auto_index = False
+        dashed_name = 'double-negation-elimination'
+        acronym = 'dne'
+        abridged_name = 'double neg. elim.'
+        explicit_name = 'double negation elimination inference rule'
+        name = 'double negation elimination'
+        definition = '¬(¬(P)) ⊢ P'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = DoubleNegationEliminationDeclaration.infer_formula
+        verify_args = DoubleNegationEliminationDeclaration.verify_args
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def infer_formula(self, not_not_p: (None, Formula) = None, t: TheoryElaborationSequence = None,
+            echo: (None, bool) = None) -> Formula:
+        """
+
+        :param not_not_p: A formula-statement of the form: ¬(¬(P)).
+        :param t: The current theory-elaboration-sequence.
+        :return: The (proven) formula: P.
+        """
+        not_not_p: Formula = interpret_formula(u=t.u, arity=1, flexible_formula=not_not_p)
+        not_p: Formula = not_not_p.parameters[0]
+        p: Formula = not_p.parameters[0]
+        return p
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_double_negation_elimination_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, not_not_p: FormulaStatement = None,
+            t: TheoryElaborationSequence = None) -> bool:
+        verify(assertion=t.contains_theoretical_objct(not_not_p),
+            msg='Statement ⌜not_not_p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
+            not_not_p=not_not_p, t=t, slf=self)
+        not_not_p: FormulaStatement = interpret_statement_formula(t=t, arity=1,
+            flexible_formula=not_not_p)
+        verify(assertion=not_not_p.valid_proposition.relation is t.u.r.negation,
+            msg='The parent formula in ⌜not_not_p⌝ must have ⌜negation⌝ relation.',
+            not_not_p=not_not_p, t=t, slf=self)
+        not_p: Formula = not_not_p.valid_proposition.parameters[0]
+        not_p: Formula = interpret_formula(u=t.u, arity=1, flexible_formula=not_p)
+        verify(assertion=not_p.relation is t.u.r.negation,
+            msg='The child formula in ⌜not_not_p⌝ must have ⌜negation⌝ relation.', not_not_p=not_p,
+            t=t, slf=self)
+        return True
+
+
 class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
     """
 
@@ -6599,7 +6664,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.double_negation_introduction
 
     @property
-    def double_negation_elimination(self) -> InferenceRuleDeclaration:
+    def double_negation_elimination(self) -> DoubleNegationEliminationDeclaration:
         """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
         Abridged property: u.i.dne
@@ -6607,48 +6672,9 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-
-        # TODO: inference-rule: double_negation_elimination: Migrate to specialized classes
-
-        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            p = unpack_formula(args[0])
-            q = unpack_formula(p.parameters[0])
-            r = unpack_formula(q.parameters[0])
-            return r
-
-        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
-            """
-
-            :param args:
-            :param t:
-            :return:
-            """
-            verify(len(args) == 1, 'Exactly 1 item is expected in ⌜*args⌝ .', args=args, t=t,
-                slf=self)
-            p = args[0]
-            verify(t.contains_theoretical_objct(p),
-                'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', args=args, t=t,
-                slf=self)
-            p = unpack_formula(p)
-            verify(p.relation is t.u.r.lnot, 'The relation of formula ⌜p⌝ must be a negation.',
-                p_relation=p.relation, p=p, t=t, slf=self)
-            q = unpack_formula(p.parameters[0])
-            verify(q.relation is t.u.r.lnot, 'The relation of formula ⌜q⌝ must be a negation.',
-                q_relation=q.relation, q=q, p=p, t=t, slf=self)
-            return True
-
         if self._double_negation_elimination is None:
-            self._double_negation_elimination = InferenceRuleDeclaration(
-                universe_of_discourse=self.u, symbol='double-negation-elimination', index=None,
-                auto_index=False, dashed_name='double-negation-elimination',
-                name='double negation elimination', infer_formula=infer_formula,
-                verify_args=verify_args)
+            self._double_negation_elimination = DoubleNegationEliminationDeclaration(
+                universe_of_discourse=self.u)
         return self._double_negation_elimination
 
     @property
@@ -7255,6 +7281,41 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
         """
         formula = interpret_formula(u=self.u, arity=None, flexible_formula=formula)
         return super().infer_statement(definition, formula, nameset=nameset, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
+class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
+    """
+
+    """
+
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.double_negation_elimination
+        dashed_name = 'double-negation-elimination'
+        acronym = 'dne'
+        abridged_name = 'double neg. elim.'
+        name = 'double negation elimination'
+        explicit_name = 'double negation elimination inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def infer_formula(self, not_not_p: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """Apply the double-negation-elimination inference-rule and return the inferred-formula.
+        """
+        return super().infer_formula(not_not_p, echo=echo)
+
+    def infer_statement(self, not_not_p: (None, FormulaStatement) = None,
+            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
+            echo: (None, bool) = None) -> InferredStatement:
+        """Apply the double-negation-elimination inference-rule and return the inferred-statement.
+
+        :param not_not_p: (mandatory)
+        :return: An inferred-statement proving p in the current theory.
+        """
+        return super().infer_statement(not_not_p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7950,7 +8011,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.double_negation_introduction
 
     @property
-    def double_negation_elimination(self) -> InferenceRuleInclusion:
+    def double_negation_elimination(self) -> DoubleNegationEliminationInclusion:
         """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
         Abridged property: t.i.dne()
@@ -7959,8 +8020,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         if self._double_negation_elimination is None:
-            self._double_negation_elimination = InferenceRuleInclusion(t=self.t,
-                i=self.t.u.i.double_negation_elimination, name='double negation elimination')
+            self._double_negation_elimination = DoubleNegationEliminationInclusion(t=self.t)
         return self._double_negation_elimination
 
     @property
