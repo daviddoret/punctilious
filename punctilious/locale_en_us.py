@@ -207,6 +207,23 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         return True
 
+    def compose_double_negation_introduction_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p: FormulaStatement = o.parameters[0]
+        yield from p.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from p.compose_ref_link()
+        yield SansSerifNormal('. ')
+        yield from o.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from the application of the ')
+        yield from o.inference_rule.compose_symbol()
+        yield SansSerifNormal(' inference-rule: ')
+        yield o.inference_rule.definition
+        yield SansSerifNormal('.')
+        return True
+
     def compose_equality_commutativity_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict

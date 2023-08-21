@@ -32,4 +32,4 @@ ModusPonensInclusion
 Bibliography
 ------------
 
-* ...
+.. footbibliography::
