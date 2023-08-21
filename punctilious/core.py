@@ -4448,13 +4448,7 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
 
 
 class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
-    """The well-known double negation introduction (left) inference rule: P ⊢ ¬(¬(P)).
-
-    Acronym: cer.
-
-    :param p: A formula-statement of the form: P.
-    :param t: The current theory-elaboration-sequence.
-    :return: The (proven) formula: Q.
+    """The declaration of the :doc:`double_negation_introduction` :doc:`inference_rule` as valid in the target :doc:`universe_of_discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4475,13 +4469,14 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p: (None, Formula) = None, t: TheoryElaborationSequence = None,
-            echo: (None, bool) = None) -> Formula:
-        """
+    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
+            t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
+        """Apply the :doc:`double_negation_introduction` :doc:`inference_rule` and return the resulting formula.
 
-        :param p: A formula-statement of the form: P.
-        :param t: The current theory-elaboration-sequence.
-        :return: The (proven) formula: ¬(¬(P)).
+        :param p: (mandatory) A formula-statement of the form :math:`P` .
+        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
+        :param echo:
+        :return: The resulting formula :math:`\\lnot \\left( \\lnot \\left( P \\right) \\right)` .
         """
         p: Formula = interpret_formula(u=t.u, arity=1, flexible_formula=p)
         not_not_p: Formula = t.u.r.lnot(t.u.r.lnot(p))
@@ -4489,12 +4484,19 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """Composes the paragraph-proof of inferred-statements based on the :doc:`double_negation_introduction` :doc:`inference_rule` ."""
         output = yield from configuration.locale.compose_double_negation_introduction_paragraph_proof(
             o=o)
         return output
 
     def verify_args(self, p: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
         p: FormulaStatement = interpret_statement_formula(t=t, arity=1, flexible_formula=p)
+        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :doc:`inference_rule` .
+        
+        :param p: (mandatory) A formula-statement of the form: :math:`P` .
+        
+        :return: True (bool) if the parameters are correct.
+        """
         verify(assertion=t.contains_theoretical_objct(p),
             msg='Statement ⌜p⌝ must be contained in ⌜t⌝.', p=p, t=t, slf=self)
         return True
@@ -7344,8 +7346,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
 
 
 class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
-    """
-
+    """The inclusion of the :doc:`double_negation_introduction` :doc:`inference_rule` as valid in the target :doc:`theory_elaboration_sequence`.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7360,8 +7361,12 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the double-negation-introduction inference-rule and return the inferred-formula.
+    def infer_formula(self, p: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
+        """Apply the :doc:`double_negation_introduction` :doc:`inference_rule` and return the resulting formula.
+
+        :param p: (mandatory) A formula or formula-statement of the form: :math:`P` .
+        :param echo:
+        :return: The resulting formula: :math:`\\lnot \\left( \\lnot \\left( P \\right) \\right)` .
         """
         return super().infer_formula(p, echo=echo)
 
@@ -7369,10 +7374,15 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the double-negation-introduction inference-rule and return the inferred-statement.
+        """Apply the :doc:`double_negation_introduction` :doc:`inference_rule` and return the resulting inferred-statement.
 
-        :param p: (mandatory)
-        :return: An inferred-statement proving p in the current theory.
+        :param p: (mandatory) A formula-statement of the form: :math:`P`.
+        :param nameset:
+        :param ref:
+        :param paragraph_header:
+        :param subtitle:
+        :param echo:
+        :return: The resulting inferred-statement: :math:`\\lnot \\left( \\lnot \\left( P \\right) \\right)`.
         """
         p = interpret_statement_formula(t=self.t, arity=1, flexible_formula=p)
         return super().infer_statement(p, nameset=nameset, ref=ref,

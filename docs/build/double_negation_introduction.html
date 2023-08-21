@@ -109,19 +109,7 @@ the inference-rule is automatically declared.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="core.DoubleNegationIntroductionDeclaration">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">DoubleNegationIntroductionDeclaration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">universe_of_discourse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.DoubleNegationIntroductionDeclaration" title="Permalink to this definition">¶</a></dt>
-<dd><p>The well-known double negation introduction (left) inference rule: P ⊢ ¬(¬(P)).</p>
-<p>Acronym: cer.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>p</strong> – A formula-statement of the form: P.</p></li>
-<li><p><strong>t</strong> – The current theory-elaboration-sequence.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The (proven) formula: Q.</p>
-</dd>
-</dl>
+<dd><p>The declaration of the <a class="reference internal" href="#"><span class="doc">double-negation-introduction</span></a> <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a> as valid in the target <a class="reference internal" href="universe_of_discourse.html"><span class="doc">universe-of-discourse</span></a>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="core.DoubleNegationIntroductionDeclaration.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">universe_of_discourse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.DoubleNegationIntroductionDeclaration.__init__" title="Permalink to this definition">¶</a></dt>
@@ -130,7 +118,7 @@ the inference-rule is automatically declared.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="core.DoubleNegationIntroductionDeclaration.compose_paragraph_proof">
 <span class="sig-name descname"><span class="pre">compose_paragraph_proof</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.DoubleNegationIntroductionDeclaration.compose_paragraph_proof" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method should be overridden by specialized inference-rule classes to provide accurate proofs.</p>
+<dd><p>Composes the paragraph-proof of inferred-statements based on the <a class="reference internal" href="#"><span class="doc">double-negation-introduction</span></a> <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a> .</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Composable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Composable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
@@ -141,15 +129,17 @@ the inference-rule is automatically declared.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="core.DoubleNegationIntroductionDeclaration.infer_formula">
 <span class="sig-name descname"><span class="pre">infer_formula</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.DoubleNegationIntroductionDeclaration.infer_formula" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Apply the <a class="reference internal" href="#"><span class="doc">double-negation-introduction</span></a> <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a> and return the resulting formula.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>p</strong> – A formula-statement of the form: P.</p></li>
-<li><p><strong>t</strong> – The current theory-elaboration-sequence.</p></li>
+<li><p><strong>p</strong> – (mandatory) A formula-statement of the form <span class="math notranslate nohighlight">\(P\)</span> .</p></li>
+<li><p><strong>t</strong> – (mandatory) The target theory-elaboration-sequence that must contain <span class="math notranslate nohighlight">\(P\)</span> .</p></li>
+<li><p><strong>echo</strong> – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The (proven) formula: ¬(¬(P)).</p>
+<dd class="field-even"><p>The resulting formula <span class="math notranslate nohighlight">\(\lnot \left( \lnot \left( P \right) \right)\)</span> .</p>
 </dd>
 </dl>
 </dd></dl>
@@ -171,7 +161,8 @@ if they are compatible, False otherwise.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="core.DoubleNegationIntroductionInclusion">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">DoubleNegationIntroductionInclusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.DoubleNegationIntroductionInclusion" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>The inclusion of the <a class="reference internal" href="#"><span class="doc">double-negation-introduction</span></a> <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a> as valid in the target <a class="reference internal" href="theory_elaboration_sequence.html"><span class="doc">theory-elaboration-sequence</span></a>.</p>
+<dl class="py method">
 <dt class="sig sig-object py" id="core.DoubleNegationIntroductionInclusion.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.DoubleNegationIntroductionInclusion.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Include (aka allow) an inference-rule in a theory-elaboration.</p>
@@ -180,19 +171,37 @@ if they are compatible, False otherwise.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="core.DoubleNegationIntroductionInclusion.infer_formula">
 <span class="sig-name descname"><span class="pre">infer_formula</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.DoubleNegationIntroductionInclusion.infer_formula" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply the double-negation-introduction inference-rule and return the inferred-formula.</p>
+<dd><p>Apply the <a class="reference internal" href="#"><span class="doc">double-negation-introduction</span></a> <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a> and return the resulting formula.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – (mandatory) A formula or formula-statement of the form: <span class="math notranslate nohighlight">\(P\)</span> .</p></li>
+<li><p><strong>echo</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The resulting formula: <span class="math notranslate nohighlight">\(\lnot \left( \lnot \left( P \right) \right)\)</span> .</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="core.DoubleNegationIntroductionInclusion.infer_statement">
 <span class="sig-name descname"><span class="pre">infer_statement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paragraph_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.DoubleNegationIntroductionInclusion.infer_statement" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply the double-negation-introduction inference-rule and return the inferred-statement.</p>
+<dd><p>Apply the <a class="reference internal" href="#"><span class="doc">double-negation-introduction</span></a> <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a> and return the resulting inferred-statement.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>p</strong> – (mandatory)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – (mandatory) A formula-statement of the form: <span class="math notranslate nohighlight">\(P\)</span>.</p></li>
+<li><p><strong>nameset</strong> – </p></li>
+<li><p><strong>ref</strong> – </p></li>
+<li><p><strong>paragraph_header</strong> – </p></li>
+<li><p><strong>subtitle</strong> – </p></li>
+<li><p><strong>echo</strong> – </p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>An inferred-statement proving p in the current theory.</p>
+<dd class="field-even"><p>The resulting inferred-statement: <span class="math notranslate nohighlight">\(\lnot \left( \lnot \left( P \right) \right)\)</span>.</p>
 </dd>
 </dl>
 </dd></dl>
