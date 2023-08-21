@@ -4431,11 +4431,11 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
 
     def verify_args(self, not_not_p: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
-        verify(assertion=t.contains_theoretical_objct(not_not_p),
-            msg='Statement ⌜not_not_p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-            not_not_p=not_not_p, t=t, slf=self)
         not_not_p: FormulaStatement = interpret_statement_formula(t=t, arity=1,
             flexible_formula=not_not_p)
+        verify(assertion=t.contains_theoretical_objct(not_not_p),
+            msg='Statement ⌜not_not_p⌝ must be contained in ⌜t⌝.', not_not_p=not_not_p, t=t,
+            slf=self)
         verify(assertion=not_not_p.valid_proposition.relation is t.u.r.negation,
             msg='The parent formula in ⌜not_not_p⌝ must have ⌜negation⌝ relation.',
             not_not_p=not_not_p, t=t, slf=self)
@@ -7315,6 +7315,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
         :param not_not_p: (mandatory)
         :return: An inferred-statement proving p in the current theory.
         """
+        not_not_p = interpret_statement_formula(t=self.t, arity=1, flexible_formula=not_not_p)
         return super().infer_statement(not_not_p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7989,7 +7990,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._disjunction_introduction
 
     @property
-    def dne(self) -> InferenceRuleInclusion:
+    def dne(self) -> DoubleNegationEliminationInclusion:
         """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
         Original method: universe_of_discourse.inference_rules.double_negation_elimination()
