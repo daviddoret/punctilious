@@ -4,7 +4,7 @@ import random_data
 
 
 class TestDoubleNegationIntroduction(TestCase):
-    def test_dni_positive(self):
+    def test_dni_success(self):
         pu.configuration.echo_default = True
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
@@ -23,8 +23,7 @@ class TestDoubleNegationIntroduction(TestCase):
         self.assertEqual('¬(¬(𝑟₁(𝑜₁, 𝑜₂)))', phi2.rep_formula(encoding=pu.encodings.unicode))
         self.assertTrue(phi2.is_formula_syntactically_equivalent_to(u.r.lnot(u.r.lnot(r1(o1, o2)))))
 
-    def test_dni_invalid_inputs(self):
-        """Trying to pass a formula that is not a valid formula-statement must raise an Exception"""
+    def test_dni_failure(self):
         pu.configuration.echo_default = True
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
@@ -39,5 +38,6 @@ class TestDoubleNegationIntroduction(TestCase):
         self.assertEqual('𝑟₁(𝑜₁, 𝑜₂)', phi1.rep_formula(encoding=pu.encodings.unicode))
         print(u.inference_rules.double_negation_introduction)
         print(t.inference_rule_inclusions.double_negation_introduction)
+        # Trying to pass a formula that is not a valid formula-statement must raise an Exception
         with self.assertRaises(pu.FailedVerificationException):
             phi2 = t.i.dni.infer_statement(p=r1(o1, o3))
