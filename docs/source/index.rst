@@ -15,6 +15,7 @@ Welcome to punctilious's documentation!
 
    absorption
    bibliography
+   conjunction_introduction
    double_negation_introduction
    inconsistency_by_inequality_introduction
    inference_rule

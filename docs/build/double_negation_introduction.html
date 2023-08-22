@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="inconsistency-by-inequality-introduction" href="inconsistency_by_inequality_introduction.html" />
-    <link rel="prev" title="Bibliography" href="bibliography.html" />
+    <link rel="prev" title="conjunction-introduction" href="conjunction_introduction.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -58,7 +58,7 @@ If we can conclude ϕ, then we may infer ¬¬ϕ.”
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">InferenceRuleDeclarationDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>A dictionary that exposes well-known objects as properties.</p>
+<dd><p>A universe-of-discourse property, that is a specialized dictionary, and that exposes well-known inference-rules as properties.</p>
 <dl class="py property">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dni</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#core.DoubleNegationIntroductionDeclaration" title="core.DoubleNegationIntroductionDeclaration"><span class="pre">DoubleNegationIntroductionDeclaration</span></a></em></dt>
@@ -71,7 +71,7 @@ the inference-rule is automatically declared.</p>
 <dl class="py property">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">double_negation_introduction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#core.DoubleNegationIntroductionDeclaration" title="core.DoubleNegationIntroductionDeclaration"><span class="pre">DoubleNegationIntroductionDeclaration</span></a></em></dt>
-<dd><p>The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.</p>
+<dd><p>The well-known double-negation-introduction inference-rule: P ⊢ ¬(¬(P)).</p>
 <p>Abridged property: u.i.dni</p>
 <p>If the well-known inference-rule does not exist in the universe-of-discourse,
 the inference-rule is automatically declared.</p>
@@ -82,7 +82,7 @@ the inference-rule is automatically declared.</p>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">InferenceRuleDeclarationDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>A dictionary that exposes well-known objects as properties.</p>
+<dd><p>A universe-of-discourse property, that is a specialized dictionary, and that exposes well-known inference-rules as properties.</p>
 <dl class="py property">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dni</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#core.DoubleNegationIntroductionDeclaration" title="core.DoubleNegationIntroductionDeclaration"><span class="pre">DoubleNegationIntroductionDeclaration</span></a></em></dt>
@@ -95,7 +95,7 @@ the inference-rule is automatically declared.</p>
 <dl class="py property">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">double_negation_introduction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#core.DoubleNegationIntroductionDeclaration" title="core.DoubleNegationIntroductionDeclaration"><span class="pre">DoubleNegationIntroductionDeclaration</span></a></em></dt>
-<dd><p>The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.</p>
+<dd><p>The well-known double-negation-introduction inference-rule: P ⊢ ¬(¬(P)).</p>
 <p>Abridged property: u.i.dni</p>
 <p>If the well-known inference-rule does not exist in the universe-of-discourse,
 the inference-rule is automatically declared.</p>
@@ -244,6 +244,7 @@ if they are compatible, False otherwise.</p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="absorption.html">absorption</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conjunction_introduction.html">conjunction-introduction</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">double-negation-introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inconsistency_by_inequality_introduction.html">inconsistency-by-inequality-introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inference_rule.html">inference-rule</a></li>
@@ -262,7 +263,7 @@ if they are compatible, False otherwise.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="bibliography.html" title="previous chapter">Bibliography</a></li>
+      <li>Previous: <a href="conjunction_introduction.html" title="previous chapter">conjunction-introduction</a></li>
       <li>Next: <a href="inconsistency_by_inequality_introduction.html" title="next chapter">inconsistency-by-inequality-introduction</a></li>
   </ul></li>
 </ul>

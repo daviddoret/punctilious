@@ -4283,6 +4283,9 @@ class ConjunctionEliminationRightDeclaration(InferenceRuleDeclaration):
 
 
 class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
+    """The declaration of the :doc:`conjunction_introduction` :doc:`inference_rule` as valid in the target :doc:`universe_of_discourse`.
+    """
+
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'conjunction-introduction'
         acronym = 'ci'
@@ -4303,18 +4306,37 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
-        p = unpack_formula(p)
-        q = unpack_formula(q)
-        return t.u.f(t.u.r.land, p, q)
+        """Apply the :doc:`conjunction_introduction` :doc:`inference_rule` and return the resulting formula.
+
+        :param p: (mandatory) A formula-statement of the form :math:`P` .
+        :param q: (mandatory) A formula-statement of the form :math:`Q` .
+        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
+        :param echo:
+        :return: The resulting formula :math:`\\left( P \\land Q \\right)` .
+        """
+        p = interpret_formula(u=t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=t.u, arity=None, flexible_formula=q)
+        return p | t.u.r.land | q
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """Composes the paragraph-proof of inferred-statements based on the :doc:`conjunction_introduction` :doc:`inference_rule` ."""
         output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
             o=o)
         return output
 
     def verify_args(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
+        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :doc:`inference_rule` .
+
+        :param p: (mandatory) A formula-statement of the form :math:`P` .
+        :param q: (mandatory) A formula-statement of the form :math:`Q` .
+        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
+
+        :return: True (bool) if the parameters are correct.
+        """
+        p = interpret_statement_formula(t=t, arity=None, flexible_formula=p)
+        q = interpret_statement_formula(t=t, arity=None, flexible_formula=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         verify(t.contains_theoretical_objct(q),
@@ -5627,6 +5649,8 @@ theory-elaboration."""
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None) -> Hypothesis:
         """Pose a new hypothesis in the current theory."""
+        hypothesis_formula = interpret_formula(u=self.u, arity=None,
+            flexible_formula=hypothesis_formula)
         return Hypothesis(t=self, hypothesis_formula=hypothesis_formula, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
@@ -6329,7 +6353,7 @@ def interpret_formula(u: UniverseOfDiscourse, arity: (None, int),
             argument=flexible_formula, arity=arity, u=u)
 
 
-def interpret_statement_formula(t: TheoryElaborationSequence, arity: int,
+def interpret_statement_formula(t: TheoryElaborationSequence, arity: (None, int),
         flexible_formula: FlexibleFormula):
     """Many punctilious pythonic methods expect some FormulaStatement as input parameters (e.g. the infer_statement() of inference-rules). This is syntactically robust, but it may read theory code less readable. In effect, one must store all formula-statements in variables to reuse them in formula. If the number of formula-statements get large, readability suffers. To provide a friendler interface for humans, we allow passing formula-statements as formula, tuple, and lists and apply the following interpretation rules:
 
@@ -6361,7 +6385,7 @@ def interpret_statement_formula(t: TheoryElaborationSequence, arity: int,
 
 
 class InferenceRuleDeclarationDict(collections.UserDict):
-    """A dictionary that exposes well-known objects as properties.
+    """A universe-of-discourse property, that is a specialized dictionary, and that exposes well-known inference-rules as properties.
 
     """
 
@@ -6522,7 +6546,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._biconditional_introduction
 
     @property
-    def cel(self) -> InferenceRuleDeclaration:
+    def cel(self) -> ConjunctionEliminationLeftDeclaration:
         """The well-known conjunction-elimination (left) inference-rule: ((P ∧ Q) ⊢ P).
 
         The ⌜left⌝ suffix is non-standard and used to mean that among the two possible results of
@@ -6536,7 +6560,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.conjunction_elimination_left
 
     @property
-    def cer(self) -> InferenceRuleDeclaration:
+    def cer(self) -> ConjunctionEliminationRightDeclaration:
         """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
         The ⌜right⌝ suffix is non-standard and used to mean that among the two possible results
@@ -6550,7 +6574,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.conjunction_elimination_right
 
     @property
-    def ci(self) -> InferenceRuleDeclaration:
+    def ci(self) -> ConjunctionIntroductionDeclaration:
         """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
         Unabridged property: universe_of_discourse.inference_rules.conjunction_introduction
@@ -6585,7 +6609,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._conjunction_elimination_left
 
     @property
-    def conjunction_elimination_right(self) -> InferenceRuleDeclaration:
+    def conjunction_elimination_right(self) -> ConjunctionEliminationRightDeclaration:
         """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
         The ⌜right⌝ suffix is non-standard and used to mean that among the two possible results
@@ -6635,7 +6659,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._definition_interpretation
 
     @property
-    def di(self) -> InferenceRuleDeclaration:
+    def di(self) -> DisjunctionIntroductionDeclaration:
         """The well-known disjunction-introduction inference-rule: P ⊢ (P ∨ Q).
 
         Unabridged property: u.i.disjunction_introduction
@@ -6646,7 +6670,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.disjunction_introduction
 
     @property
-    def disjunction_introduction(self) -> InferenceRuleDeclaration:
+    def disjunction_introduction(self) -> DisjunctionIntroductionDeclaration:
         """The well-known disjunction-introduction inference-rule: P ⊢ (P ∨ Q).
 
         Abridged property: u.i.di
@@ -6697,7 +6721,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._disjunction_introduction
 
     @property
-    def dne(self) -> InferenceRuleDeclaration:
+    def dne(self) -> DoubleNegationEliminationDeclaration:
         """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
         Original method: universe_of_discourse.inference_rules.double_negation_elimination
@@ -6734,7 +6758,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def double_negation_introduction(self) -> DoubleNegationIntroductionDeclaration:
-        """The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.
+        """The well-known double-negation-introduction inference-rule: P ⊢ ¬(¬(P)).
 
         Abridged property: u.i.dni
 
@@ -7245,22 +7269,36 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p: (None, FormulaStatement) = None, q: (None, FormulaStatement) = None,
-            echo: (None, bool) = None):
-        """Apply the conjunction-introduction inference-rule and return the inferred-formula.
+    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
+            q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """Apply the :doc:`conjunction_introduction` :doc:`inference_rule` and return the resulting formula.
+
+        :param p: (mandatory) A formula-statement of the form :math:`P` .
+        :param q: (mandatory) A formula-statement of the form :math:`Q` .
+        :param echo:
+        :return: The resulting formula :math:`\\left( P \\land Q \\right)` .
         """
+        p = interpret_formula(u=self.t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=self.t.u, arity=None, flexible_formula=q)
         return super().infer_formula(p, q, echo=echo)
 
     def infer_statement(self, p: (None, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the conjunction-introduction inference-rule and return the inferred-statement.
+        """Apply the :doc:`conjunction_introduction` :doc:`inference_rule` and return the resulting inferred-statement.
 
-        :param p_implies_q: (mandatory) The implication statement.
-        :param p: (mandatory) The p statement, proving that p is true in the current theory.
-        :return: An inferred-statement proving p in the current theory.
-        """
+                :param p: (mandatory) A formula-statement of the form: :math:`P`.
+                :param q: (mandatory) A formula-statement of the form: :math:`Q`.
+                :param nameset:
+                :param ref:
+                :param paragraph_header:
+                :param subtitle:
+                :param echo:
+                :return: The resulting inferred-statement: :math:`\\left( P \\land Q \\right)` .
+                """
+        p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        q = interpret_statement_formula(t=self.t, arity=None, flexible_formula=q)
         return super().infer_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 

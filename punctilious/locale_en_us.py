@@ -128,11 +128,15 @@ class LocaleEnUs(Locale):
         p: FormulaStatement = o.parameters[0]
         q: FormulaStatement = o.parameters[1]
         yield from p.valid_proposition.compose_formula()
-        yield SansSerifNormal(' follows from ')
+        yield SansSerifNormal(' (')
+        yield SerifItalic('P')
+        yield SansSerifNormal(') follows from ')
         yield from p.compose_ref_link()
         yield SansSerifNormal('. ')
         yield from q.valid_proposition.compose_formula()
-        yield SansSerifNormal(' follows from ')
+        yield SansSerifNormal(' (')
+        yield SerifItalic('Q')
+        yield SansSerifNormal(') follows from ')
         yield from q.compose_ref_link()
         yield SansSerifNormal('.')
         return True
