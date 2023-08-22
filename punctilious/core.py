@@ -4404,6 +4404,126 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
         return True
 
 
+class DisjunctionIntroductionLeftDeclaration(InferenceRuleDeclaration):
+    """The declaration of the :doc:`disjunction_introduction_left` :doc:`inference_rule` as valid in the target :doc:`universe_of_discourse`.
+    """
+
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        symbol = 'disjunction-introduction-left'
+        acronym = 'dil'
+        abridged_name = 'disjunc. intro. (left)'
+        auto_index = False
+        dashed_name = 'disjunction-introduction-left'
+        explicit_name = 'disjunction introduction (left) inference rule'
+        name = 'disjunction introduction (left)'
+        definition = 'P ⊢ (Q ∨ P)'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = DisjunctionIntroductionLeftDeclaration.infer_formula
+        verify_args = DisjunctionIntroductionLeftDeclaration.verify_args
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        """Apply the :doc:`disjunction_introduction_left` :doc:`inference_rule` and return the resulting formula.
+
+        :param p: (mandatory) A formula-statement of the form :math:`P` .
+        :param q: (mandatory) A formula of the form :math:`Q` .
+        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
+        :param echo:
+        :return: The resulting formula :math:`\\left( Q \\lor P \\right)` .
+        """
+        p = interpret_formula(u=t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=t.u, arity=None, flexible_formula=q)
+        return q | t.u.r.lor | p
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """Composes the paragraph-proof of inferred-statements based on the :doc:`disjunction_introduction_left` :doc:`inference_rule` ."""
+        output = yield from configuration.locale.compose_disjunction_introduction_left_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p: FormulaStatement, q: (Formula, FormulaStatement),
+            t: TheoryElaborationSequence) -> bool:
+        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :doc:`inference_rule` .
+
+        :param p: (mandatory) A formula-statement of the form :math:`P` .
+        :param q: (mandatory) A formula of the form :math:`Q` .
+        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
+
+        :return: True (bool) if the parameters are correct.
+        """
+        p = interpret_statement_formula(t=t, arity=None, flexible_formula=p)
+        q = interpret_formula(u=t.u, arity=None, flexible_formula=q)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        return True
+
+
+class DisjunctionIntroductionRightDeclaration(InferenceRuleDeclaration):
+    """The declaration of the :doc:`disjunction_introduction_right` :doc:`inference_rule` as valid in the target :doc:`universe_of_discourse`.
+    """
+
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        symbol = 'disjunction-introduction-right'
+        acronym = 'dil'
+        abridged_name = 'disjunc. intro. (right)'
+        auto_index = False
+        dashed_name = 'disjunction-introduction-right'
+        explicit_name = 'disjunction introduction (right) inference rule'
+        name = 'disjunction introduction (right)'
+        definition = 'P ⊢ (P ∨ Q)'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = DisjunctionIntroductionRightDeclaration.infer_formula
+        verify_args = DisjunctionIntroductionRightDeclaration.verify_args
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        """Apply the :doc:`disjunction_introduction_right` :doc:`inference_rule` and return the resulting formula.
+
+        :param p: (mandatory) A formula-statement of the form :math:`P` .
+        :param q: (mandatory) A formula of the form :math:`Q` .
+        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
+        :param echo:
+        :return: The resulting formula :math:`\\left( P \\lor Q \\right)` .
+        """
+        p = interpret_formula(u=t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=t.u, arity=None, flexible_formula=q)
+        return p | t.u.r.lor | q
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """Composes the paragraph-proof of inferred-statements based on the :doc:`disjunction_introduction_right` :doc:`inference_rule` ."""
+        output = yield from configuration.locale.compose_disjunction_introduction_right_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p: FormulaStatement, q: (Formula, FormulaStatement),
+            t: TheoryElaborationSequence) -> bool:
+        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :doc:`inference_rule` .
+
+        :param p: (mandatory) A formula-statement of the form :math:`P` .
+        :param q: (mandatory) A formula of the form :math:`Q` .
+        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
+
+        :return: True (bool) if the parameters are correct.
+        """
+        p = interpret_statement_formula(t=t, arity=None, flexible_formula=p)
+        q = interpret_formula(u=t.u, arity=None, flexible_formula=q)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        return True
+
+
 class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
     """The well-known double negation elimination (left) inference rule: ¬(¬(P)) ⊢ P.
 
@@ -6403,7 +6523,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         self._conjunction_introduction = None
         self._definition_interpretation = None
         self._disjunction_elimination = None  # TODO: IMPLEMENT disjunction_elimination
-        self._disjunction_introduction = None
+        self._disjunction_introduction_left = None
+        self._disjunction_introduction_right = None
         self._double_negation_elimination = None
         self._double_negation_introduction = None
         self._equality_commutativity = None
@@ -6659,66 +6780,40 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._definition_interpretation
 
     @property
-    def di(self) -> DisjunctionIntroductionDeclaration:
-        """The well-known disjunction-introduction inference-rule: P ⊢ (P ∨ Q).
-
-        Unabridged property: u.i.disjunction_introduction
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
-        return self.disjunction_introduction
+    def dil(self) -> DisjunctionIntroductionLeftDeclaration:
+        return self.disjunction_introduction_left
 
     @property
-    def disjunction_introduction(self) -> DisjunctionIntroductionDeclaration:
-        """The well-known disjunction-introduction inference-rule: P ⊢ (P ∨ Q).
+    def dir(self) -> DisjunctionIntroductionRightDeclaration:
+        return self.disjunction_introduction_right
+
+    @property
+    def disjunction_introduction_left(self) -> DisjunctionIntroductionLeftDeclaration:
+        """The well-known disjunction-introduction-left inference-rule: P ⊢ (P ∨ Q).
 
         Abridged property: u.i.di
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
+        if self._disjunction_introduction_left is None:
+            self._disjunction_introduction_left = DisjunctionIntroductionLeftDeclaration(
+                universe_of_discourse=self.u)
+        return self._disjunction_introduction_left
 
-        # TODO: inference-rule: disjunction_introduction: Migrate to specialized classes
+    @property
+    def disjunction_introduction_right(self) -> DisjunctionIntroductionRightDeclaration:
+        """The well-known disjunction-introduction-right inference-rule: P ⊢ (P ∨ Q).
 
-        def infer_formula(*args, t: TheoryElaborationSequence) -> Formula:
-            """
+        Abridged property: u.i.di
 
-            :param args:
-            :param t:
-            :return:
-            """
-            p = unpack_formula(args[0])
-            q = unpack_formula(args[1])  # Note: q may be a formula, because q may be false.
-            return t.u.f(t.u.r.disjunction, p, q)
-
-        def verify_args(*args, t: TheoryElaborationSequence) -> bool:
-            """
-
-            :param args: A statement P, and a propositional-formula Q
-            :param t:
-            :return: The statement (P ∨ Q)
-            """
-            verify(len(args) == 2, 'Exactly 2 items are expected in ⌜*args⌝ .', args=args, t=t,
-                slf=self)
-            p = args[0]
-            verify(t.contains_theoretical_objct(p),
-                'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
-            p = unpack_formula(p)
-            # Q may be a formula (i.e. it is not necessarily a statement),
-            # because Q may be any propositional formula (i.e it may be false).
-            q = unpack_formula(args[1])
-            verify(q.is_proposition,
-                'Statement ⌜q⌝ must be a logical-proposition formula (and not necessarily a '
-                'statement).', q_is_proposition=q.is_proposition, q=q, p=p, t=t, slf=self)
-            return True
-
-        if self._disjunction_introduction is None:
-            self._disjunction_introduction = InferenceRuleDeclaration(universe_of_discourse=self.u,
-                symbol='disjunction-introduction', index=None, auto_index=False,
-                name='disjunction introduction', dashed_name='disjunction-introduction',
-                infer_formula=infer_formula, verify_args=verify_args)
-        return self._disjunction_introduction
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        if self._disjunction_introduction_right is None:
+            self._disjunction_introduction_right = DisjunctionIntroductionRightDeclaration(
+                universe_of_discourse=self.u)
+        return self._disjunction_introduction_right
 
     @property
     def dne(self) -> DoubleNegationEliminationDeclaration:
@@ -7347,6 +7442,108 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
+class DisjunctionIntroductionLeftInclusion(InferenceRuleInclusion):
+    """
+
+    """
+
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.disjunction_introduction_left
+        dashed_name = 'disjunction-introduction-left'
+        acronym = 'dil'
+        abridged_name = 'disjunc. intro. left'
+        name = 'disjunction introduction (left)'
+        explicit_name = 'disjunction introduction (left) inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
+            q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
+        """Apply the :doc:`disjunction_introduction_left` :doc:`inference_rule` and return the resulting formula.
+
+        :param p: (mandatory) A formula-statement of the form :math:`P` .
+        :param q: (mandatory) A formula of the form :math:`Q` .
+        :param echo:
+        :return: The resulting formula :math:`\\left( P \\lor Q \\right)` .
+        """
+        p = interpret_formula(u=self.t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=self.t.u, arity=None, flexible_formula=q)
+        return super().infer_formula(p, q, echo=echo)
+
+    def infer_statement(self, p: (None, FormulaStatement) = None,
+            q: (None, Formula, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+        """Apply the :doc:`disjunction_introduction_left` :doc:`inference_rule` and return the resulting inferred-statement.
+
+                :param p: (mandatory) A formula-statement of the form: :math:`P`.
+                :param q: (mandatory) A formula of the form: :math:`Q`.
+                :param nameset:
+                :param ref:
+                :param paragraph_header:
+                :param subtitle:
+                :param echo:
+                :return: The resulting inferred-statement: :math:`\\left( P \\lor Q \\right)` .
+                """
+        p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        q = interpret_formula(u=self.u, arity=None, flexible_formula=q)
+        return super().infer_statement(p, q, nameset=nameset, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
+class DisjunctionIntroductionRightInclusion(InferenceRuleInclusion):
+    """
+
+    """
+
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.disjunction_introduction_right
+        dashed_name = 'disjunction-introduction-right'
+        acronym = 'dil'
+        abridged_name = 'disjunc. intro. right'
+        name = 'disjunction introduction (right)'
+        explicit_name = 'disjunction introduction (right) inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
+            q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
+        """Apply the :doc:`disjunction_introduction_right` :doc:`inference_rule` and return the resulting formula.
+
+        :param p: (mandatory) A formula-statement of the form :math:`P` .
+        :param q: (mandatory) A formula of the form :math:`Q` .
+        :param echo:
+        :return: The resulting formula :math:`\\left( P \\lor Q \\right)` .
+        """
+        p = interpret_formula(u=self.t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=self.t.u, arity=None, flexible_formula=q)
+        return super().infer_formula(p, q, echo=echo)
+
+    def infer_statement(self, p: (None, FormulaStatement) = None,
+            q: (None, Formula, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+        """Apply the :doc:`disjunction_introduction_right` :doc:`inference_rule` and return the resulting inferred-statement.
+
+                :param p: (mandatory) A formula-statement of the form: :math:`P`.
+                :param q: (mandatory) A formula of the form: :math:`Q`.
+                :param nameset:
+                :param ref:
+                :param paragraph_header:
+                :param subtitle:
+                :param echo:
+                :return: The resulting inferred-statement: :math:`\\left( P \\lor Q \\right)` .
+                """
+        p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        q = interpret_formula(u=self.u, arity=None, flexible_formula=q)
+        return super().infer_statement(p, q, nameset=nameset, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
 class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
     """
 
@@ -7852,7 +8049,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         self._conjunction_introduction = None
         self._definition_interpretation = None
         self._disjunction_elimination = None  # TODO: IMPLEMENT disjunction_elimination
-        self._disjunction_introduction = None
+        self._disjunction_introduction_left = None
+        self._disjunction_introduction_right = None
         self._double_negation_elimination = None
         self._double_negation_introduction = None
         self._equality_commutativity = None
@@ -8072,50 +8270,31 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._definition_interpretation
 
     @property
-    def di(self) -> InferenceRuleInclusion:
-        """The well-known disjunction-introduction inference-rule: P ⊢ (P ∨ Q).
-
-        Unabridged property: u.i.disjunction_introduction
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
-        return self.disjunction_introduction
+    def dil(self) -> DisjunctionIntroductionLeftInclusion:
+        return self.disjunction_introduction_left
 
     @property
-    def disjunction_introduction(self) -> InferenceRuleInclusion:
-        """The well-known disjunction-introduction inference-rule: P ⊢ (P ∨ Q).
+    def dir(self) -> DisjunctionIntroductionRightInclusion:
+        return self.disjunction_introduction_right
 
-        Abridged property: u.i.di
+    @property
+    def disjunction_introduction_left(self) -> DisjunctionIntroductionLeftInclusion:
+        if self._disjunction_introduction_left is None:
+            self._disjunction_introduction_left = DisjunctionIntroductionLeftInclusion(t=self.t)
+        return self._disjunction_introduction_left
 
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
-        if self._disjunction_introduction is None:
-            self._disjunction_introduction = InferenceRuleInclusion(t=self.t,
-                i=self.t.u.i.disjunction_introduction, name='disjunction introduction')
-        return self._disjunction_introduction
+    @property
+    def disjunction_introduction_right(self) -> DisjunctionIntroductionRightInclusion:
+        if self._disjunction_introduction_right is None:
+            self._disjunction_introduction_right = DisjunctionIntroductionRightInclusion(t=self.t)
+        return self._disjunction_introduction_right
 
     @property
     def dne(self) -> DoubleNegationEliminationInclusion:
-        """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
-
-        Original method: universe_of_discourse.inference_rules.double_negation_elimination()
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.double_negation_elimination
 
     @property
     def dni(self) -> DoubleNegationIntroductionInclusion:
-        """The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.
-
-        Original method: universe_of_discourse.inference_rules.double_negation_introduction()
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.double_negation_introduction
 
     @property

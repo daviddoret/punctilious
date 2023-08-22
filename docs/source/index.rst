@@ -15,10 +15,17 @@ Welcome to punctilious's documentation!
 
    absorption
    bibliography
+   conjunction_elimination_left
+   conjunction_elimination_right
    conjunction_introduction
+   disjunction_introduction_left
+   disjunction_introduction_right
+   double_negation_elimination
    double_negation_introduction
+   elimination_rule
    inconsistency_by_inequality_introduction
    inference_rule
+   introduction_rule
    is_a
    meta_object
    modus_ponens
