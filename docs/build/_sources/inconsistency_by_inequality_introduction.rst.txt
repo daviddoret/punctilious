@@ -14,7 +14,7 @@ Quotes
 ------
 
    "A proof of consistency will have to show, by appealing to contentual considerations which are completely unproblematic, that in the formalism in question it is never possible to derive the formula 𝑎 ≠ 𝑎, or alternatively it is not possible to prove both 𝑎 = 𝑏 and 𝑎 ≠ 𝑏."
-   - :footcite:p:`mancosu_2021`
+   - :footcite:p:`proofwiki_2022_doublenegation`
 
 
 Bibliography
