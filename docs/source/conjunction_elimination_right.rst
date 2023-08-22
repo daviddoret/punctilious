@@ -1,0 +1,2 @@
+conjunction-elimination-right
+===============================

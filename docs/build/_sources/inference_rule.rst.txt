@@ -21,7 +21,8 @@ List of well-known inference-rules
 See also
 --------
 
-* Derivation rule
+* :doc:`elimination_rule`
+* :doc:`introduction_rule`
 
 Bibliography
 ------------

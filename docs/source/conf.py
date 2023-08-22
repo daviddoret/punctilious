@@ -18,7 +18,7 @@ release = '1.0.0'
 # https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html
 # https://pypi.org/project/sphinxcontrib-bibtex/
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinxcontrib.bibtex',
-    'sphinx_autodoc_typehints', 'sphinx.ext.graphviz']
+    'sphinx_autodoc_typehints', 'sphinx.ext.graphviz', 'sphinxawesome_theme']
 bibtex_bibfiles = ['bibliography_bibtex.bib']
 bibtex_encoding = 'utf-8-sig'
 
@@ -28,5 +28,6 @@ exclude_patterns = []
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+# html_theme = 'alabaster'
+html_theme = 'sphinxawesome_theme'
 html_static_path = ['_static']
