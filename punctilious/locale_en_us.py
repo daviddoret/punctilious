@@ -194,6 +194,44 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal(' is an interpretation of that definition.')
         return True
 
+    def compose_disjunction_introduction_left_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p: FormulaStatement = o.parameters[0]
+        q: FormulaStatement = o.parameters[1]
+        yield from p.valid_proposition.compose_formula()
+        yield SansSerifNormal(' (')
+        yield SerifItalic('P')
+        yield SansSerifNormal(') follows from ')
+        yield from p.compose_ref_link()
+        yield SansSerifNormal('. ')
+        yield from q.compose_formula()
+        yield SansSerifNormal(' (')
+        yield SerifItalic('Q')
+        yield SansSerifNormal(') is chosen')
+        yield SansSerifNormal('.')
+        return True
+
+    def compose_disjunction_introduction_right_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p: FormulaStatement = o.parameters[0]
+        q: FormulaStatement = o.parameters[1]
+        yield from p.valid_proposition.compose_formula()
+        yield SansSerifNormal(' (')
+        yield SerifItalic('P')
+        yield SansSerifNormal(') follows from ')
+        yield from p.compose_ref_link()
+        yield SansSerifNormal('. ')
+        yield from q.compose_formula()
+        yield SansSerifNormal(' (')
+        yield SerifItalic('Q')
+        yield SansSerifNormal(') is chosen')
+        yield SansSerifNormal('.')
+        return True
+
     def compose_double_negation_elimination_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
