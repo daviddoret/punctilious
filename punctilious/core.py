@@ -5507,6 +5507,8 @@ theory-elaboration."""
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None) -> Hypothesis:
         """Pose a new hypothesis in the current theory."""
+        hypothesis_formula = interpret_formula(u=self.u, arity=None,
+            flexible_formula=hypothesis_formula)
         return Hypothesis(t=self, hypothesis_formula=hypothesis_formula, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,

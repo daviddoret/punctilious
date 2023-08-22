@@ -18,31 +18,22 @@ class TestHypothesis(TestCase):
         r1 = u.r.declare(2, signal_proposition=True)
         robust_theory = u.t()
         ap1 = robust_theory.include_axiom(a=a1)
-        first_proposition = robust_theory.i.axiom_interpretation.infer_statement(
-            ap1, u.f(r1, o1, o2))
+        robust_theory.i.axiom_interpretation.infer_statement(axiom=ap1, formula=(o1 | r1 | o2))
         with u.v() as x, u.v() as y, u.v() as z:
-            conditional = robust_theory.i.axiom_interpretation.infer_statement(
-                ap1,
-                u.f(u.r.implies,
-                    u.f(u.r.land, u.f(r1, x, y),
-                        u.f(r1, y, z)),
-                    u.f(r1, x, z)))
+            conditional = robust_theory.i.axiom_interpretation.infer_statement(axiom=ap1,
+                formula=(((x | r1 | y) | u.r.land | (y | r1 | z)) | u.r.implies | (x | r1 | z)))
         robust_theory.stabilize()
         self.assertTrue(robust_theory.stabilized,
-                        'The stabilized property of the original-theory is not True.')
-        hypothesis = robust_theory.pose_hypothesis(
-            hypothesis_formula=u.f(r1, o2, o3))
+            'The stabilized property of the original-theory is not True.')
+        hypothesis = robust_theory.pose_hypothesis(hypothesis_formula=(o2 | r1 | o3))
         hypothetical_proposition = hypothesis._hypothesis_statement_in_child_theory
         hypothetical_theory = hypothesis.hypothesis_child_theory
-        hypothetical_conjunction = hypothetical_theory.i.ci.infer_statement(first_proposition,
-                                                                            hypothetical_proposition)
-        proposition_1 = hypothetical_theory.i.vs.infer_statement(
-            conditional,
-            o1,  # x
+        hypothetical_conjunction = hypothetical_theory.i.ci.infer_statement((o1 | r1 | o2),
+            hypothetical_proposition)
+        proposition_1 = hypothetical_theory.i.vs.infer_statement(conditional, o1,  # x
             o2,  # y
             o3)  # z
-        conclusion_1 = hypothetical_theory.i.mp.infer_statement(
-            proposition_1,
+        conclusion_1 = hypothetical_theory.i.mp.infer_statement(proposition_1,
             hypothetical_conjunction)
         self.assertEqual('𝑟₁(𝑜₁, 𝑜₃)',
-                         conclusion_1.valid_proposition.rep_formula(pu.encodings.unicode))
+            conclusion_1.valid_proposition.rep_formula(pu.encodings.unicode))
