@@ -6699,7 +6699,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._disjunction_introduction
 
     @property
-    def dne(self) -> InferenceRuleDeclaration:
+    def dne(self) -> DoubleNegationEliminationDeclaration:
         """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
 
         Original method: universe_of_discourse.inference_rules.double_negation_elimination
