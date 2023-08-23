@@ -1623,111 +1623,6 @@ class NameSet(Composable):
             'explicit_name': self._explicit_name}
 
 
-class TitleOBSOLETE:
-    """A title to introduce some symbolic-objcts in reports.
-
-    TODO: QUESTION: rename Title to Name, Category to Nature, Reference to Abridged and
-    Unabridged Name.
-
-
-    Features:
-    - long-names have a short (reference) and long (long-name) version.
-    - long-names do not have an index.
-    - long-names comprise a category that must be consistent with
-        the declarative class of the symbolic-objct.
-    """
-
-    def __init__(self, nameset: (None, NameSet) = None, ref: (None, str, ComposableText) = None,
-            paragrapha_header: (None, ParagraphHeader) = None,
-            subtitle: (None, str, ComposableText) = None, abr: (None, str, ComposableText) = None):
-        if isinstance(ref, str):
-            ref = StyledText(s=ref, text_style=text_styles.sans_serif_bold)
-        self._ref = ref
-        if isinstance(abr, str):
-            abr = StyledText(s=abr, text_style=text_styles.sans_serif_bold)
-        self._abr = abr
-        self._paragraph_header = paragraph_headers.uncategorized if paragrapha_header is None else paragrapha_header
-        if isinstance(subtitle, str):
-            subtitle = StyledText(s=subtitle, text_style=text_styles.sans_serif_normal)
-        self._nameset = nameset
-        self._subtitle = subtitle
-        self._styled_title = None
-        self._styled_ref = None
-
-    def __eq__(self, other):
-        return hash(self) == hash(other)
-
-    def __hash__(self):
-        """Note that the title attribute is not hashed,
-        because title is considered purely decorative.
-        """
-        return hash((self.cat, self.ref))
-
-    def __repr__(self) -> str:
-        return self.rep(encoding=encodings.plaintext)
-
-    def __str__(self) -> str:
-        return self.rep(encoding=encodings.plaintext)
-
-    @property
-    def cat(self) -> ParagraphHeader:
-        """The category of this statement."""
-        return self._paragraph_header
-
-    @property
-    def subtitle(self) -> ComposableText:
-        """A conditional complement to the automatically structured title."""
-        return self._subtitle
-
-    @property
-    def ref(self) -> ComposableText:
-        """Unabridged name."""
-        return self._ref
-
-    @property
-    def abr(self) -> ComposableText:
-        """Abridged name."""
-        return self._abr
-
-    @property
-    def nameset(self) -> NameSet:
-        return self._nameset
-
-    @nameset.setter
-    def nameset(self, nameset: NameSet):
-        self._nameset = nameset
-
-    def rep(self, encoding: (None, Encoding) = None, cap: bool = False) -> str:
-        """Return the default representation for this long-name.
-
-        :param cap: Whether the representation must be capitalized (default: False).
-        :return: str
-        """
-        return self.rep_ref(encoding=encoding, cap=cap)
-
-    def rep_title(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
-        """
-
-        :param cap:
-        :return:
-        """
-        return f'{StyledText(s=self.cat.natural_name, text_style=text_styles.sans_serif_bold).rep(encoding=encoding, cap=cap)}' \
-               f'{"" if self.ref is None else " " + self.ref.rep(encoding=encoding)}' \
-               f'{"" if self.subtitle is None else " - " + self.subtitle.rep(encoding=encoding)}'
-
-    def rep_ref(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
-        return StyledText(s=self._paragraph_header.abridged_name,
-            text_style=text_styles.sans_serif_bold).rep(encoding=encoding,
-            cap=cap) + '' if self._ref is None else str(
-            ' ' + self._ref.rep(encoding=encoding)) + '' if self._nameset is None else str(
-            ' (' + self._nameset.rep_symbol(encoding=encoding) + ')')
-
-    def rep_mention(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
-        return f'{"" if self.ref is None else self.ref.rep(encoding=encoding) + " "}' + StyledText(
-            s=self.cat.natural_name, text_style=text_styles.sans_serif_normal).rep(
-            encoding=encoding, cap=cap)
-
-
 class DashedName:
     """A dashed-name to provide more semantically meaningful names to symbolic-objcts in reports
     than symbols.
@@ -3733,61 +3628,6 @@ class PropositionStatement:
         self.proof = proof
 
 
-class DirectDefinitionInference(FormulaStatement):
-    """
-
-    Definition:
-    A theoretical-statement that states that x = some other theoretical-object.
-    When an object is defined like this, it means that for every formula
-    where x is present, the same formula with the substitution of x by x' can be substituted in
-    all package.
-    TODO: QUESTION: Should we create a base "Alias" object that is distinct from simple-objct???
-    XXXXXXX
-    """
-
-    def __init__(self, p: Formula, d: DefinitionInclusion, t: TheoryElaborationSequence,
-            nameset: (None, str, NameSet) = None, title: (None, str, TitleOBSOLETE) = None,
-            dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
-        echo = prioritize_value(echo, configuration.echo_definition_direct_inference,
-            configuration.echo_default, False)
-        verify(t.contains_theoretical_objct(d), 'The definition-endorsement ⌜d⌝ must be contained '
-                                                'in the hierarchy of theory-elaboration ⌜t⌝.', d=d,
-            t=t)
-        verify(p.universe_of_discourse is t.universe_of_discourse,
-            'The universe-of-discourse of the valid-proposition ⌜p⌝ must be '
-            'consistent with the universe-of-discourse of theory-elaboration ⌜t⌝.', p=p, t=t)
-        verify(p.relation is t.universe_of_discourse.r.equality,
-            'The root relation of the valid-proposition ⌜p⌝ must be '
-            'the well-known equality-relation ⌜=⌝ in the universe-of-discourse.', p=p,
-            p_relation=p.relation)
-        self.definition = d
-        super().__init__(theory=t, valid_proposition=p, nameset=nameset,
-            paragraphe_header=paragraph_headers.formal_definition, title=title,
-            dashed_name=dashed_name, echo=False)
-        assert d.statement_index < self.statement_index
-        super()._declare_class_membership(declarative_class_list.direct_definition_inference)
-        if echo:
-            repm.prnt(self.rep_report())
-
-    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
-        # TODO: Instead of hard-coding the class name, use a meta-theory.
-        yield SerifItalic(plaintext='definition-interpretation')
-
-    def rep_report(self, proof: (None, bool) = None):
-        """Return a representation that expresses and justifies the statement.
-
-        The representation is in two parts:
-        - The formula that is being stated,
-        - The justification for the formula."""
-        output = f'{self.rep_title(cap=True)}: {self.valid_proposition.rep_formula(expand=True)}'
-        if proof:
-            output = output + f'\n\t' \
-                              f'{repm.serif_bold("Derivation from natural language definition")}'
-            output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ ' \
-                              f'Follows from {self.definition.rep_ref()}.'
-        return output + f'\n'
-
-
 universe_of_discourse_symbol_indexes = dict()
 
 
@@ -5392,8 +5232,6 @@ class Section(AtheoreticalStatement):
         self._max_subsection_number = 0
         self.category = section_category
         symbol = NameSet(symbol=self.category.symbol_base, index=self.statement_index)
-        title = TitleOBSOLETE(ref=self._section_reference, paragrapha_header=section_category,
-            subtitle=section_title)
         super().__init__(nameset=symbol, theory=t, echo=False)
         super()._declare_class_membership(declarative_class_list.note)
         if echo:
