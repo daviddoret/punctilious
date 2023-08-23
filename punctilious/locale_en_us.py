@@ -300,13 +300,35 @@ class LocaleEnUs(Locale):
         # Retrieve the parameters from the statement
         p_eq_q: FormulaStatement = o.parameters[0]
         p_neq_q: FormulaStatement = o.parameters[1]
-        yield from p_eq_q.compose_formula()
+        yield from p_eq_q.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
         yield from p_eq_q.compose_ref_link()
         yield SansSerifNormal('. ')
-        yield from p_neq_q.compose_formula()
+        yield from p_neq_q.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
         yield from p_neq_q.compose_ref_link()
+        yield SansSerifNormal('. ')
+        return True
+
+    def compose_inconsistency_introduction_by_negation_introduction_paragraph_proof(self,
+            o: InferredStatement) -> collections.abc.Generator[Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p: FormulaStatement = o.parameters[0]
+        not_p: FormulaStatement = o.parameters[1]
+        yield SansSerifNormal('Let ')
+        yield SerifBoldItalic('𝑷')
+        yield SerifItalic(' := ')
+        yield from p.valid_proposition.compose_formula()
+        yield SansSerifNormal(', which follows from ')
+        yield from p.compose_ref_link()
+        yield SansSerifNormal('. ')
+        yield SansSerifNormal('Let ')
+        yield SerifBoldItalic('¬(𝑷)')
+        yield SerifItalic(' := ')
+        yield from not_p.valid_proposition.compose_formula()
+        yield SansSerifNormal(', which follows from ')
+        yield from not_p.compose_ref_link()
         yield SansSerifNormal('. ')
         return True
 
@@ -381,9 +403,11 @@ class LocaleEnUs(Locale):
             yield SansSerifNormal(': ')
             yield from o.inference_rule.compose_paragraph_proof(o=o)
             # Proof conclusion
-            yield SansSerifNormal(' Therefore, by the ')
+            yield SansSerifNormal('Therefore, by the ')
             yield from o.inference_rule.compose_dashed_name()
-            yield SansSerifNormal(' inference rule, it follows that ')
+            yield SansSerifNormal(' inference rule: ')
+            yield o.inference_rule.definition
+            yield SansSerifNormal(', it follows that ')
             yield from o.valid_proposition.compose_formula()
             yield SansSerifNormal('. ')
             yield self.qed

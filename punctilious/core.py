@@ -306,6 +306,10 @@ class TextStyles:
             unicode_table_index=unicode_utilities.unicode_serif_bold_index,
             start_tag=ComposableText(plaintext='', unicode='', latex='\\mathbf{'),
             end_tag=ComposableText(plaintext='', unicode='', latex='}'))
+        self.serif_bold_italic = TextStyle(name='serif-bold-italic',
+            unicode_table_index=unicode_utilities.unicode_serif_bold_italic_index,
+            start_tag=ComposableText(plaintext='', unicode='', latex='\\mathbold{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex='}'))
         self.serif_italic = TextStyle(name='serif-italic',
             unicode_table_index=unicode_utilities.unicode_serif_italic_index,
             start_tag=ComposableText(plaintext='', unicode='', latex='\\mathit{'),
@@ -733,6 +737,13 @@ class ScriptNormal(StyledText):
             latex: (None, str) = None) -> None:
         super().__init__(text_style=text_styles.script_normal, plaintext=plaintext, unicode=unicode,
             latex=latex)
+
+
+class SerifBoldItalic(StyledText):
+    def __init__(self, s: (None, str) = None, plaintext: (None, str) = None,
+            unicode: (None, str) = None, latex: (None, str) = None) -> None:
+        super().__init__(s=s, text_style=text_styles.serif_bold_italic, plaintext=plaintext,
+            unicode=unicode, latex=latex)
 
 
 class SerifItalic(StyledText):
@@ -4631,14 +4642,15 @@ class InconsistencyByNegationIntroductionDeclaration(InferenceRuleDeclaration):
         dashed_name = 'inconsistency-by-negation-introduction'
         explicit_name = 'inconsistency by negation introduction inference rule'
         name = 'inconsistency by negation introduction'
+        definition = '𝓣.𝑷, 𝓣.¬(𝑷) ⊢ 𝐼𝑛𝑐(𝓣)'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = InconsistencyByNegationIntroductionDeclaration.infer_formula
         verify_args = InconsistencyByNegationIntroductionDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p: FormulaStatement = None, not_p: FormulaStatement = None,
             inconsistent_theory: TheoryElaborationSequence = None,
@@ -4649,7 +4661,7 @@ class InconsistencyByNegationIntroductionDeclaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_inconsistency_introduction_paragraph_proof(
+        output = yield from configuration.locale.compose_inconsistency_introduction_by_negation_introduction_paragraph_proof(
             o=o)
         return output
 

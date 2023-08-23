@@ -48,7 +48,7 @@ class TestInconsistencyByNegationIntroduction(TestCase):
         t2 = t1_h1.hypothesis_child_theory
         t2_p5 = t1_h1.hypothesis_statement_in_child_theory
         t2_p6 = t2.i.conjunction_introduction.infer_statement(p=t1_p1, q=t1_p2)
-        t2_p7 = t2.i.variable_substitution.infer_statement(t1_p3_implication, o1, o2, o3)
+        t2_p7 = t2.i.variable_substitution.infer_statement(p=t1_p3_implication, phi=(o1, o2, o3))
         # t2_p8: 𝑟₁(𝑜₁, 𝑜₃) by modus ponens
         t2_p8 = t2.i.modus_ponens.infer_statement(p_implies_q=t2_p7, p=t2_p6)
         # p5 is the negation of p8, which is a contradiction in t2
