@@ -2522,12 +2522,17 @@ class FreeVariable(TheoreticalObject):
     scope_initialization_status = Status('scope_initialization_status')
     closed_scope_status = Status('closed_scope_status')
 
-    def __init__(self, nameset=None, universe_of_discourse=None, status=None, scope=None,
-            echo=None):
+    def __init__(self, u: UniverseOfDiscourse, status: (None, FreeVariable.Status) = None,
+            scope: (None, Formula, typing.FrozenSet[Formula]) = None,
+            symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            nameset: (None, str, NameSet) = None, echo: (None, bool) = None) -> None:
         echo = prioritize_value(echo, configuration.echo_free_variable_declaration,
             configuration.echo_default, False)
-        status = FreeVariable.scope_initialization_status if status is None else status
-        scope = frozenset() if scope is None else scope
+        status = prioritize_value(status, FreeVariable.scope_initialization_status)
+        scope = prioritize_value(scope, frozenset())
         scope = {scope} if isinstance(scope, Formula) else scope
         verify(isinstance(scope, frozenset),
             'The scope of a FreeVariable must be of python type frozenset.')
@@ -2535,19 +2540,20 @@ class FreeVariable(TheoreticalObject):
             'The status of a FreeVariable must be of the FreeVariable.Status type.')
         self._status = status
         self._scope = scope
-        assert isinstance(universe_of_discourse, UniverseOfDiscourse)
-        if nameset is None:
+        assert isinstance(u, UniverseOfDiscourse)
+        if symbol is None:
             symbol = configuration.default_free_variable_symbol
-            index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
-        if isinstance(nameset, str):
+            index = u.index_symbol(symbol=symbol)
+        if isinstance(symbol, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_bold)
-            index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
-        super().__init__(nameset=nameset, universe_of_discourse=universe_of_discourse, echo=False)
+            symbol = StyledText(plaintext=symbol, text_style=text_styles.serif_bold)
+            if index is None and auto_index:
+                index = u.index_symbol(symbol=symbol)
+        super().__init__(universe_of_discourse=u, symbol=symbol, index=index, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, nameset=nameset, echo=False)
         # self.universe_of_discourse.cross_reference_variable(x=self)
         super()._declare_class_membership(declarative_class_list.free_variable)
         if echo:
@@ -7066,7 +7072,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._variable_substitution
 
     @property
-    def vs(self) -> InferenceRuleDeclaration:
+    def vs(self) -> VariableSubstitutionDeclaration:
         """An inference-rule: P ⊢ P'
 
         Abridged property: u.i.vs
@@ -8478,7 +8484,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._variable_substitution
 
     @property
-    def vs(self) -> InferenceRuleInclusion:
+    def vs(self) -> VariableSubstitutionInclusion:
 
         return self.variable_substitution
 
@@ -8629,18 +8635,18 @@ class UniverseOfDiscourse(SymbolicObject):
         if o not in self.simple_objcts:
             self.simple_objcts[o.nameset] = o
 
-    def cross_reference_symbolic_objct(self, o: SymbolicObject):
+    def cross_reference_symbolic_objct(self, o: TheoreticalObject):
         """Cross-references a symbolic-objct in this universe-of-discourse.
 
         :param o: a symbolic-objct.
         """
-        verify(is_in_class(o, classes.symbolic_objct),
+        verify(is_in_class(o=o, c=classes.symbolic_objct),
             'Cross-referencing a symbolic-objct in a universe-of-discourse requires '
             'an object of type SymbolicObjct.', o=o, slf=self)
         duplicate = self.symbolic_objcts.get(o.nameset)
-        verify(duplicate is None,
-            'A symbolic-object already exists in the current universe-of-discourse with a '
-            'duplicate (symbol, index) pair.', o=o, duplicate=duplicate, slf=self)
+        verify(severity=verification_severities.warning, assertion=duplicate is None,
+            msg='A symbolic-object already exists in the current universe-of-discourse with a '
+                'duplicate (symbol, index) pair.', o=o, duplicate=duplicate, slf=self)
         self.symbolic_objcts[o.nameset] = o
 
     def cross_reference_theory(self, t: TheoryElaborationSequence):
@@ -8670,7 +8676,10 @@ class UniverseOfDiscourse(SymbolicObject):
             nameset=nameset, lock_variable_scope=lock_variable_scope, echo=echo)
         return phi
 
-    def declare_free_variable(self, symbol=None, echo=None):
+    def declare_free_variable(self, symbol: (None, str, StyledText) = None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None, echo: (None, bool) = None):
         """Declare a free-variable in this universe-of-discourse.
 
         A shortcut function for FreeVariable(universe_of_discourse=u, ...)
@@ -8867,7 +8876,11 @@ class UniverseOfDiscourse(SymbolicObject):
 
     # @FreeVariableContext()
     @contextlib.contextmanager
-    def v(self, symbol=None, echo=None):
+    def v(self, symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            echo: (None, bool) = None):
         """Declare a free-variable in this universe-of-discourse.
 
         This method is expected to be as in a with statement,
@@ -8881,8 +8894,10 @@ class UniverseOfDiscourse(SymbolicObject):
         use declare_free_variable() instead.
         """
         # return self.declare_free_variable(symbol=symbol)
-        x = FreeVariable(universe_of_discourse=self, nameset=symbol,
-            status=FreeVariable.scope_initialization_status, echo=echo)
+        status = FreeVariable.scope_initialization_status
+        x = FreeVariable(u=self, status=status, symbol=symbol, index=index, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
         yield x
         x.lock_scope()
 
