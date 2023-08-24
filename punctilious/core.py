@@ -7734,28 +7734,28 @@ class ProofByContradiction1Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, not_p: (None, Hypothesis) = None,
-            inc_not_p: (None, FormulaStatement) = None, echo: (None, bool) = None) -> Formula:
+    def infer_formula(self, not_p_hypothesis: (None, Hypothesis) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None) -> Formula:
         """Apply the proof-by-contradiction inference-rule and return the inferred-formula.
 
-        :param not_p: (mandatory) The (¬P) hypothesis-statement.
-        :param inc_not_p: (mandatory) The proof of inconsistency of the not_p
+        :param not_p_hypothesis: (mandatory) The (¬P) hypothesis-statement.
+        :param inc_hypothesis: (mandatory) The proof of inconsistency of the not_p
 hypothetical-theory: Inc(¬P).
         :return: The inferred formula .
         """
-        return super().infer_formula(not_p, inc_not_p, echo=echo)
+        return super().infer_formula(not_p_hypothesis, inc_hypothesis, echo=echo)
 
-    def infer_statement(self, not_p: (None, FormulaStatement) = None,
-            inc_not_p: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_statement(self, not_p_hypothesis: (None, FormulaStatement) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """Apply the modus-ponens inference-rule and return the inferred-statement.
 
-        :param not_p: (mandatory) The implication statement.
-        :param inc_not_p: (mandatory) The p statement, proving that p is true in the current theory.
+        :param not_p_hypothesis: (mandatory) The implication statement.
+        :param inc_hypothesis: (mandatory) The p statement, proving that p is true in the current theory.
         :return: An inferred-statement proving p in the current theory.
         """
-        return super().infer_statement(not_p, inc_not_p, nameset=nameset, ref=ref,
+        return super().infer_statement(not_p_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7776,15 +7776,15 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_neq_q: (None, Hypothesis) = None,
-            inc_p_neq_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        return super().infer_formula(p_neq_q, inc_p_neq_q, echo=echo)
+    def infer_formula(self, p_neq_q_hypothesis: (None, Hypothesis) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        return super().infer_formula(p_neq_q_hypothesis, inc_hypothesis, echo=echo)
 
-    def infer_statement(self, p_neq_q: (None, FormulaStatement) = None,
-            inc_p_neq_q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_statement(self, p_neq_q_hypothesis: (None, FormulaStatement) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        return super().infer_statement(p_neq_q, inc_p_neq_q, nameset=nameset, ref=ref,
+        return super().infer_statement(p_neq_q_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7805,28 +7805,28 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p: (None, Hypothesis) = None, inc_p: (None, FormulaStatement) = None,
-            echo: (None, bool) = None):
+    def infer_formula(self, p_hypothesis: (None, Hypothesis) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """Apply the proof-by-refutation inference-rule and return the inferred-formula.
 
-        :param p: (mandatory) The (¬P) hypothesis-statement.
-        :param inc_p: (mandatory) The proof of inconsistency of the not_p hypothetical-theory:
+        :param p_hypothesis: (mandatory) The (¬P) hypothesis-statement.
+        :param inc_hypothesis: (mandatory) The proof of inconsistency of the not_p hypothetical-theory:
 Inc(¬P).
         :return: The inferred formula .
         """
-        return super().infer_formula(p, inc_p, echo=echo)
+        return super().infer_formula(p_hypothesis, inc_hypothesis, echo=echo)
 
-    def infer_statement(self, p: (None, FormulaStatement) = None,
-            inc_p: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_statement(self, p_hypothesis: (None, FormulaStatement) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """Apply the modus-ponens inference-rule and return the inferred-statement.
 
-        :param p: (mandatory) The implication statement.
-        :param inc_p: (mandatory) The p statement, proving that p is true in the current theory.
+        :param p_hypothesis: (mandatory) The implication statement.
+        :param inc_hypothesis: (mandatory) The p statement, proving that p is true in the current theory.
         :return: An inferred-statement proving p in the current theory.
         """
-        return super().infer_statement(p, inc_p, nameset=nameset, ref=ref,
+        return super().infer_statement(p_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7847,19 +7847,19 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_eq_q: (None, Hypothesis) = None,
-            inc_p_eq_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def infer_formula(self, p_eq_q_hypothesis: (None, Hypothesis) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """Apply the proof-by-refutation inference-rule and return the inferred-formula.
 
-        :param p_eq_q: (mandatory) The (¬P) hypothesis-statement.
-        :param inc_p_eq_q: (mandatory) The proof of inconsistency of the not_p hypothetical-theory:
+        :param p_eq_q_hypothesis: (mandatory) The (¬P) hypothesis-statement.
+        :param inc_hypothesis: (mandatory) The proof of inconsistency of the not_p hypothetical-theory:
 Inc(¬P).
         :return: The inferred formula .
         """
-        return super().infer_formula(p_eq_q, inc_p_eq_q, echo=echo)
+        return super().infer_formula(p_eq_q_hypothesis, inc_hypothesis, echo=echo)
 
-    def infer_statement(self, p_eq_q: (None, FormulaStatement) = None,
-            inc_p_eq_q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_statement(self, p_eq_q_hypothesis: (None, FormulaStatement) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """Apply the modus-ponens inference-rule and return the inferred-statement.
@@ -7868,7 +7868,7 @@ Inc(¬P).
         :param inc_p: (mandatory) The p statement, proving that p is true in the current theory.
         :return: An inferred-statement proving p in the current theory.
         """
-        return super().infer_statement(p_eq_q, inc_p_eq_q, nameset=nameset, ref=ref,
+        return super().infer_statement(p_eq_q_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
