@@ -4769,6 +4769,11 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(o=o)
+        return output
+
     def infer_formula(self, p_implies_q: FormulaStatement, p: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
@@ -4783,11 +4788,6 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         # p_prime = unpack_formula(p_prime)  # Received as a statement-parameter to prove that p
         # is true in t.
         return q  # TODO: Provide support for statements that are atomic propositional formula,  # that is  # without relation or where the objct is a 0-ary relation.
-
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(o=o)
-        return output
 
     def verify_args(self, p_implies_q: FormulaStatement, p: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
@@ -4828,54 +4828,57 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
         dashed_name = 'proof-by-contradiction'
         explicit_name = 'proof by contradiction inference rule'
         name = 'proof by contradiction'
+        definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 ¬𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ 𝑷'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = ProofByContradiction1Declaration.infer_formula
         verify_args = ProofByContradiction1Declaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
-            echo=echo)
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
+            explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, not_p: Hypothesis, inc_not_p: FormulaStatement,
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_proof_by_contradiction_1_paragraph_proof(
+            o=o)
+        return output
+
+    def infer_formula(self, not_p_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        not_p = not_p.hypothesis_formula
+        not_p = not_p_hypothesis.hypothesis_formula
         p = not_p.parameters[0]
         return p
 
-    # def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-    #     Composable, Composable, bool]:
-    #     output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(
-    #         o=o)
-    #     return output
-
-    def verify_args(self, not_p: Hypothesis, inc_not_p: InferredStatement,
+    def verify_args(self, not_p_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
         """
 
-        :param not_p: The hypothesis-statement in the parent theory.
-        :param inc_not_p: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param not_p_hypothesis: The hypothesis-statement in the parent theory.
+        :param inc_hypothesis: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
         :param t: The current (parent) theory.
         :param echo:
         :return:
         """
-        verify(is_in_class(not_p, classes.hypothesis), '⌜not_p⌝ must be an hypothesis.',
-            not_p=not_p, slf=self)
-        verify(is_in_class(inc_not_p, classes.inferred_proposition),
-            '⌜inc_not_p⌝ must be an inferred-statement.', inc_not_p=inc_not_p, slf=self)
-        verify(t.contains_theoretical_objct(not_p), '⌜not_p⌝ must be in theory ⌜t⌝.', not_p=not_p,
-            t=t, slf=self)
-        verify(not_p.hypothesis_child_theory.extended_theory is t,
+        verify(is_in_class(not_p_hypothesis, classes.hypothesis), '⌜not_p⌝ must be an hypothesis.',
+            not_p=not_p_hypothesis, slf=self)
+        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
+            '⌜inc_not_p⌝ must be an inferred-statement.', inc_not_p=inc_hypothesis, slf=self)
+        verify(t.contains_theoretical_objct(not_p_hypothesis), '⌜not_p⌝ must be in theory ⌜t⌝.',
+            not_p=not_p_hypothesis, t=t, slf=self)
+        verify(not_p_hypothesis.hypothesis_child_theory.extended_theory is t,
             '⌜not_p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
-            not_p_hypothetical_theory=not_p.hypothesis_child_theory, not_p=not_p, t=t, slf=self)
-        verify(inc_not_p.relation is t.u.relations.inconsistency,
+            not_p_hypothetical_theory=not_p_hypothesis.hypothesis_child_theory,
+            not_p=not_p_hypothesis, t=t, slf=self)
+        verify(inc_hypothesis.relation is t.u.relations.inconsistency,
             '⌜inc_not_p.relation⌝ must be of form (Inc(Hn)).',
-            inc_not_p_relation=inc_not_p.relation, inc_not_p=inc_not_p, t=t, slf=self)
-        verify(inc_not_p.valid_proposition.parameters[0] is not_p.hypothesis_child_theory,
+            inc_not_p_relation=inc_hypothesis.relation, inc_not_p=inc_hypothesis, t=t, slf=self)
+        verify(inc_hypothesis.valid_proposition.parameters[
+                   0] is not_p_hypothesis.hypothesis_child_theory,
             '⌜inc_not_p⌝ must be of form (Inc(Hn)) where parameter[0] Hn is the '
             'hypothetical-theory.',
-            inc_not_p_parameters_0=inc_not_p.valid_proposition.parameters[0],
-            not_p_hypothetical_theory=not_p.hypothesis_child_theory, t=t, slf=self)
+            inc_not_p_parameters_0=inc_hypothesis.valid_proposition.parameters[0],
+            not_p_hypothetical_theory=not_p_hypothesis.hypothesis_child_theory, t=t, slf=self)
         # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
         #  stable???
         # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
@@ -4885,56 +4888,63 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
 
 class ProofByContradiction2Declaration(InferenceRuleDeclaration):
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'proof-by-contradiction-of-inequality'
-        acronym = 'pbci'
+        symbol = 'proof-by-contradiction-2'
+        acronym = 'pbc2'
         auto_index = False
-        dashed_name = 'proof-by-contradiction-of-inequality'
-        explicit_name = 'proof by contradiction of inequality inference rule'
-        name = 'proof by contradiction of inequality'
+        dashed_name = 'proof-by-contradiction-2'
+        explicit_name = 'proof by contradiction #2 inference rule'
+        name = 'proof by contradiction #2'
+        definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 ≠ 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 = 𝑸)'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = ProofByContradiction2Declaration.infer_formula
         verify_args = ProofByContradiction2Declaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
-            echo=echo)
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
+            explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_neq_q: Hypothesis, inc_p_neq_q: FormulaStatement,
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_proof_by_contradiction_2_paragraph_proof(
+            o=o)
+        return output
+
+    def infer_formula(self, p_neq_q_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        p_neq_q = p_neq_q.hypothesis_formula
+        p_neq_q = p_neq_q_hypothesis.hypothesis_formula
         p = p_neq_q.parameters[0]
         q = p_neq_q.parameters[1]
         return t.u.f(t.u.r.equality, p, q)
 
-    def verify_args(self, p_neq_q: Hypothesis, inc_p_neq_q: InferredStatement,
+    def verify_args(self, p_neq_q_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
         """
 
-        :param p_neq_q: The hypothesis-statement in the parent theory.
-        :param inc_p_neq_q: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param p_neq_q_hypothesis: The hypothesis-statement in the parent theory.
+        :param inc_hypothesis: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
         :param t: The current (parent) theory.
         :param echo:
         :return:
         """
-        verify(is_in_class(p_neq_q, classes.hypothesis), '⌜p_neq_q⌝ must be an hypothesis.',
-            p_neq_q=p_neq_q, slf=self)
-        verify(is_in_class(inc_p_neq_q, classes.inferred_proposition),
-            '⌜inc_p_neq_q⌝ must be an inferred-statement.', inc_p_neq_q=inc_p_neq_q, slf=self)
-        verify(t.contains_theoretical_objct(p_neq_q), '⌜p_neq_q⌝ must be in theory ⌜t⌝.',
-            p_neq_q=p_neq_q, t=t, slf=self)
-        verify(p_neq_q.hypothesis_child_theory.extended_theory is t,
+        verify(is_in_class(p_neq_q_hypothesis, classes.hypothesis),
+            '⌜p_neq_q⌝ must be an hypothesis.', p_neq_q=p_neq_q_hypothesis, slf=self)
+        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
+            '⌜inc_p_neq_q⌝ must be an inferred-statement.', inc_p_neq_q=inc_hypothesis, slf=self)
+        verify(t.contains_theoretical_objct(p_neq_q_hypothesis), '⌜p_neq_q⌝ must be in theory ⌜t⌝.',
+            p_neq_q=p_neq_q_hypothesis, t=t, slf=self)
+        verify(p_neq_q_hypothesis.hypothesis_child_theory.extended_theory is t,
             '⌜p_neq_q.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
-            p_neq_q_hypothetical_theory=p_neq_q.hypothesis_child_theory, p_neq_q=p_neq_q, t=t,
-            slf=self)
-        verify(inc_p_neq_q.relation is t.u.relations.inequality,
+            p_neq_q_hypothetical_theory=p_neq_q_hypothesis.hypothesis_child_theory,
+            p_neq_q=p_neq_q_hypothesis, t=t, slf=self)
+        verify(inc_hypothesis.relation is t.u.relations.inequality,
             '⌜inc_p_neq_q.relation⌝ must be the inequality relation.',
-            inc_p_neq_q_relation=inc_p_neq_q.relation, inc_p_neq_q=inc_p_neq_q, t=t, slf=self)
+            inc_p_neq_q_relation=inc_hypothesis.relation, inc_p_neq_q=inc_hypothesis, t=t, slf=self)
         p_neq_q_prime: FormulaStatement
-        p_neq_q_prime = inc_p_neq_q.parameters[0]
-        verify(p_neq_q.is_formula_syntactically_equivalent_to(p_neq_q_prime),
+        p_neq_q_prime = inc_hypothesis.parameters[0]
+        verify(p_neq_q_hypothesis.is_formula_syntactically_equivalent_to(p_neq_q_prime),
             '⌜p_neq_q⌝ must be formula-syntactically-equivalent to ⌜p_neq_q⌝ in ⌜inc_p_neq_q⌝.',
-            p_neq_q=p_neq_q, p_neq_q_prime=p_neq_q_prime, t=t, slf=self)
+            p_neq_q=p_neq_q_hypothesis, p_neq_q_prime=p_neq_q_prime, t=t, slf=self)
         # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
         #  stable???
         # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
@@ -4950,47 +4960,55 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
         dashed_name = 'proof-by-refutation'
         explicit_name = 'proof by refutation inference rule'
         name = 'proof by refutation'
+        definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ ¬𝑷'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = ProofByContradiction1Declaration.infer_formula
         verify_args = ProofByContradiction1Declaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
-            echo=echo)
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
+            explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p: Hypothesis, inc_p: FormulaStatement, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> Formula:
-        p = p.hypothesis_formula
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_proof_by_refutation_1_paragraph_proof(o=o)
+        return output
+
+    def infer_formula(self, p_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        p = p_hypothesis.hypothesis_formula
         not_p = t.u.f(t.u.r.negation, p)
         return not_p
 
-        # def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[  #     Composable, Composable, bool]:  #     output = yield from  #  #  #  #  #  #     configuration.locale.compose_modus_ponens_paragraph_proof(  #         o=o)  #  #  #  #     return output
-
-    def verify_args(self, p: Hypothesis, inc_p: InferredStatement, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> bool:
+    def verify_args(self, p_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
         """
 
-        :param p: The hypothesis-statement in the parent theory.
-        :param inc_p: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param p_hypothesis: The hypothesis-statement in the parent theory.
+        :param inc_hypothesis: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
         :param t: The current (parent) theory.
         :param echo:
         :return:
         """
-        verify(is_in_class(p, classes.hypothesis), '⌜p⌝ must be an hypothesis.', p=p, slf=self)
-        verify(is_in_class(inc_p, classes.inferred_proposition),
-            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_p, slf=self)
-        verify(t.contains_theoretical_objct(p), '⌜p⌝ must be in theory ⌜t⌝.', p=p, t=t, slf=self)
-        verify(p.hypothesis_child_theory.extended_theory is t,
+        verify(is_in_class(p_hypothesis, classes.hypothesis), '⌜p⌝ must be an hypothesis.',
+            p=p_hypothesis, slf=self)
+        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
+            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_hypothesis, slf=self)
+        verify(t.contains_theoretical_objct(p_hypothesis), '⌜p⌝ must be in theory ⌜t⌝.',
+            p=p_hypothesis, t=t, slf=self)
+        verify(p_hypothesis.hypothesis_child_theory.extended_theory is t,
             '⌜p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
-            p_hypothetical_theory=p.hypothesis_child_theory, p=p, t=t, slf=self)
-        verify(inc_p.relation is t.u.relations.inconsistency,
-            '⌜inc_p.relation⌝ must be of form (Inc(Hn)).', inc_p_relation=inc_p.relation,
-            inc_p=inc_p, t=t, slf=self)
-        verify(inc_p.valid_proposition.parameters[0] is p.hypothesis_child_theory,
+            p_hypothetical_theory=p_hypothesis.hypothesis_child_theory, p=p_hypothesis, t=t,
+            slf=self)
+        verify(inc_hypothesis.relation is t.u.relations.inconsistency,
+            '⌜inc_p.relation⌝ must be of form (Inc(Hn)).', inc_p_relation=inc_hypothesis.relation,
+            inc_p=inc_hypothesis, t=t, slf=self)
+        verify(
+            inc_hypothesis.valid_proposition.parameters[0] is p_hypothesis.hypothesis_child_theory,
             '⌜inc_p⌝ must be of form (Inc(Hn)) where parameter[0] Hn is the hypothetical-theory.',
-            inc_p_parameters_0=inc_p.valid_proposition.parameters[0],
-            p_hypothetical_theory=p.hypothesis_child_theory, t=t, slf=self)
+            inc_p_parameters_0=inc_hypothesis.valid_proposition.parameters[0],
+            p_hypothetical_theory=p_hypothesis.hypothesis_child_theory, t=t, slf=self)
         # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
         #  stable???
         # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
@@ -5000,13 +5018,13 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
 
 class ProofByRefutation2Declaration(InferenceRuleDeclaration):
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'proof-by-refutation-of-equality'
-        acronym = 'pbre'
+        symbol = 'proof-by-refutation-2'
+        acronym = 'pbr2'
         auto_index = False
-        dashed_name = 'proof-by-refutation-of-equality'
-        explicit_name = 'proof by refutation of equality inference rule'
-        name = 'proof by refutation of equality'
-        definition = '(ℋ(P=Q), Inc(ℋ)) ⊢ (P ≠ Q)'
+        dashed_name = 'proof-by-refutation-2'
+        explicit_name = 'proof by refutation #2 inference rule'
+        name = 'proof by refutation #2'
+        definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 = 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 ≠ 𝑸)'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = ProofByRefutation2Declaration.infer_formula
@@ -5018,40 +5036,41 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_proof_by_reputation_of_equality_paragraph_proof(
-            o=o)
+        output = yield from configuration.locale.compose_proof_by_refutation_2_paragraph_proof(o=o)
         return output
 
-    def infer_formula(self, p_eq_q: Hypothesis, inc_p_eq_q: FormulaStatement,
+    def infer_formula(self, p_eq_q_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        p_eq_q = p_eq_q.hypothesis_formula
+        p_eq_q = p_eq_q_hypothesis.hypothesis_formula
         p_neq_q = t.u.f(t.u.r.inequality, p_eq_q.parameters[0], p_eq_q.parameters[1])
         return p_neq_q
 
         # def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[  #     Composable, Composable, bool]:  #     output = yield from  #  #  #  #  #  #     configuration.locale.compose_modus_ponens_paragraph_proof(  #         o=o)  #  #  #  #     return output
 
-    def verify_args(self, p_eq_q: Hypothesis, inc_p_eq_q: InferredStatement,
+    def verify_args(self, p_eq_q_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
         """
 
-        :param p_eq_q: The hypothesis-statement in the parent theory.
-        :param inc_p_eq_q: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param p_eq_q_hypothesis: The hypothesis-statement in the parent theory.
+        :param inc_hypothesis: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
         :param t: The current (parent) theory.
         :param echo:
         :return:
         """
-        verify(is_in_class(p_eq_q, classes.hypothesis), '⌜p⌝ must be an hypothesis.', p=p_eq_q,
-            slf=self)
-        verify(is_in_class(inc_p_eq_q, classes.inferred_proposition),
-            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_p_eq_q, slf=self)
-        verify(t.contains_theoretical_objct(p_eq_q), '⌜p⌝ must be in theory ⌜t⌝.', p=p_eq_q, t=t,
-            slf=self)
-        verify(p_eq_q.hypothesis_child_theory.extended_theory is t,
+        verify(is_in_class(p_eq_q_hypothesis, classes.hypothesis), '⌜p⌝ must be an hypothesis.',
+            p=p_eq_q_hypothesis, slf=self)
+        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
+            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_hypothesis, slf=self)
+        verify(t.contains_theoretical_objct(p_eq_q_hypothesis), '⌜p⌝ must be in theory ⌜t⌝.',
+            p=p_eq_q_hypothesis, t=t, slf=self)
+        verify(p_eq_q_hypothesis.hypothesis_child_theory.extended_theory is t,
             '⌜p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
-            p_hypothetical_theory=p_eq_q.hypothesis_child_theory, p=p_eq_q, t=t, slf=self)
-        verify(inc_p_eq_q.valid_proposition.relation is t.u.relations.inconsistency,
+            p_hypothetical_theory=p_eq_q_hypothesis.hypothesis_child_theory, p=p_eq_q_hypothesis,
+            t=t, slf=self)
+        verify(inc_hypothesis.valid_proposition.relation is t.u.relations.inconsistency,
             '⌜inc_p.relation⌝ must be of form (Inc(Hn)).',
-            inc_p_relation=inc_p_eq_q.valid_proposition.relation, inc_p=inc_p_eq_q, t=t, slf=self)
+            inc_p_relation=inc_hypothesis.valid_proposition.relation, inc_p=inc_hypothesis, t=t,
+            slf=self)
         # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
         #  stable???
         # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
@@ -6852,7 +6871,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.modus_ponens
 
     @property
-    def pbc(self) -> ProofByContradiction1Declaration:
+    def pbc1(self) -> ProofByContradiction1Declaration:
         """
 
         Unabridged property: u.i.proof_by_contradiction
@@ -6861,6 +6880,17 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         return self.proof_by_contradiction_1
+
+    @property
+    def pbc2(self) -> ProofByContradiction2Declaration:
+        """
+
+        Unabridged property: u.i.proof_by_contradiction
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        return self.proof_by_contradiction_2
 
     @property
     def pbr(self) -> ProofByRefutation1Declaration:
@@ -7758,7 +7788,7 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class ProofByRefutationInclusion(InferenceRuleInclusion):
+class ProofByRefutation1Inclusion(InferenceRuleInclusion):
     """
 
     """
@@ -7800,7 +7830,7 @@ Inc(¬P).
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class ProofByRefutationOfEqualityInclusion(InferenceRuleInclusion):
+class ProofByRefutation2Inclusion(InferenceRuleInclusion):
     """
 
     """
@@ -8278,7 +8308,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.proof_by_contradiction_1
 
     @property
-    def pbr(self) -> ProofByRefutationInclusion:
+    def pbr(self) -> ProofByRefutation1Inclusion:
         """
 
         Unabridged property: u.i.proof_by_refutation
@@ -8286,7 +8316,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.proof_by_refutation
+        return self.proof_by_refutation_1
 
     @property
     def proof_by_contradiction_1(self) -> ProofByContradiction1Inclusion:
@@ -8302,13 +8332,13 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._proof_by_contradiction_1
 
     @property
-    def proof_by_contradiction_of_non_equality(self) -> ProofByContradiction2Inclusion:
+    def proof_by_contradiction_2(self) -> ProofByContradiction2Inclusion:
         if self._proof_by_contradiction_of_non_equality is None:
             self._proof_by_contradiction_of_non_equality = ProofByContradiction2Inclusion(t=self.t)
         return self._proof_by_contradiction_of_non_equality
 
     @property
-    def proof_by_refutation(self) -> ProofByRefutationInclusion:
+    def proof_by_refutation_1(self) -> ProofByRefutation1Inclusion:
         """
 
         Abridged property: u.i.pbr
@@ -8317,13 +8347,13 @@ class InferenceRuleInclusionDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         if self._proof_by_refutation is None:
-            self._proof_by_refutation = ProofByRefutationInclusion(t=self.t)
+            self._proof_by_refutation = ProofByRefutation1Inclusion(t=self.t)
         return self._proof_by_refutation
 
     @property
-    def proof_by_refutation_of_equality(self) -> ProofByRefutationOfEqualityInclusion:
+    def proof_by_refutation_2(self) -> ProofByRefutation2Inclusion:
         if self._proof_by_refutation_of_equality is None:
-            self._proof_by_refutation_of_equality = ProofByRefutationOfEqualityInclusion(t=self.t)
+            self._proof_by_refutation_of_equality = ProofByRefutation2Inclusion(t=self.t)
         return self._proof_by_refutation_of_equality
 
     @property

@@ -475,7 +475,58 @@ class LocaleEnUs(Locale):
             yield SansSerifNormal('.')
         return True
 
-    def compose_proof_by_reputation_of_equality_paragraph_proof(self, o: InferredStatement) -> \
+    def compose_proof_by_contradiction_1_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p_eq_q: Hypothesis = o.parameters[0]
+        yield SansSerifNormal('Let ')
+        yield from p_eq_q.compose_ref_link()
+        yield SansSerifNormal(' be the hypothesis ')
+        yield from p_eq_q.hypothesis_formula.compose_formula()
+        yield SansSerifNormal('. ')
+        inc_p_eq_q: FormulaStatement = o.parameters[1]
+        yield from inc_p_eq_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from inc_p_eq_q.compose_ref_link()
+        yield SansSerifNormal('.')
+        return True
+
+    def compose_proof_by_contradiction_2_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p_eq_q: Hypothesis = o.parameters[0]
+        yield SansSerifNormal('Let ')
+        yield from p_eq_q.compose_ref_link()
+        yield SansSerifNormal(' be the hypothesis ')
+        yield from p_eq_q.hypothesis_formula.compose_formula()
+        yield SansSerifNormal('. ')
+        inc_p_eq_q: FormulaStatement = o.parameters[1]
+        yield from inc_p_eq_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from inc_p_eq_q.compose_ref_link()
+        yield SansSerifNormal('.')
+        return True
+
+    def compose_proof_by_refutation_1_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p_eq_q: Hypothesis = o.parameters[0]
+        yield SansSerifNormal('Let ')
+        yield from p_eq_q.compose_ref_link()
+        yield SansSerifNormal(' be the hypothesis ')
+        yield from p_eq_q.hypothesis_formula.compose_formula()
+        yield SansSerifNormal('. ')
+        inc_p_eq_q: FormulaStatement = o.parameters[1]
+        yield from inc_p_eq_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from inc_p_eq_q.compose_ref_link()
+        yield SansSerifNormal('.')
+        return True
+
+    def compose_proof_by_refutation_2_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
