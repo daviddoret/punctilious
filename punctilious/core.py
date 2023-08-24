@@ -2571,8 +2571,8 @@ class Formula(TheoreticalObject):
 
     def __init__(self, relation: (Relation, FreeVariable), parameters: tuple,
             universe_of_discourse: UniverseOfDiscourse, nameset: (None, str, NameSet) = None,
-            lock_variable_scope: bool = False, title: (None, str, TitleOBSOLETE) = None,
-            dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
+            lock_variable_scope: bool = False, dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
         """
         """
         echo = prioritize_value(echo, configuration.echo_formula_declaration,
@@ -4105,8 +4105,8 @@ class ConjunctionEliminationRightDeclaration(InferenceRuleDeclaration):
         name = 'conjunction elimination (right)'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
-        infer_formula = BiconditionalEliminationRightDeclaration.infer_formula
-        verify_args = BiconditionalEliminationRightDeclaration.verify_args
+        infer_formula = ConjunctionEliminationRightDeclaration.infer_formula
+        verify_args = ConjunctionEliminationRightDeclaration.verify_args
         super().__init__(infer_formula=infer_formula, verify_args=verify_args,
             universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
@@ -4120,7 +4120,8 @@ class ConjunctionEliminationRightDeclaration(InferenceRuleDeclaration):
         :param t: The current theory-elaboration-sequence.
         :return: The (proven) formula: Q.
         """
-        q = unpack_formula(p_land_q).parameters[1]
+        p_land_q = interpret_formula(u=t.u, arity=2, flexible_formula=p_land_q)
+        q = p_land_q.parameters[1]
         return q
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
@@ -4819,7 +4820,7 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         return True
 
 
-class ProofByContradictionDeclaration(InferenceRuleDeclaration):
+class ProofByContradiction1Declaration(InferenceRuleDeclaration):
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'proof-by-contradiction'
         acronym = 'pbc'
@@ -4829,8 +4830,8 @@ class ProofByContradictionDeclaration(InferenceRuleDeclaration):
         name = 'proof by contradiction'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
-        infer_formula = ProofByContradictionDeclaration.infer_formula
-        verify_args = ProofByContradictionDeclaration.verify_args
+        infer_formula = ProofByContradiction1Declaration.infer_formula
+        verify_args = ProofByContradiction1Declaration.verify_args
         super().__init__(infer_formula=infer_formula, verify_args=verify_args,
             universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
@@ -4882,7 +4883,7 @@ class ProofByContradictionDeclaration(InferenceRuleDeclaration):
         return True
 
 
-class ProofByContradictionOfInequalityDeclaration(InferenceRuleDeclaration):
+class ProofByContradiction2Declaration(InferenceRuleDeclaration):
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'proof-by-contradiction-of-inequality'
         acronym = 'pbci'
@@ -4892,8 +4893,8 @@ class ProofByContradictionOfInequalityDeclaration(InferenceRuleDeclaration):
         name = 'proof by contradiction of inequality'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
-        infer_formula = ProofByContradictionOfInequalityDeclaration.infer_formula
-        verify_args = ProofByContradictionOfInequalityDeclaration.verify_args
+        infer_formula = ProofByContradiction2Declaration.infer_formula
+        verify_args = ProofByContradiction2Declaration.verify_args
         super().__init__(infer_formula=infer_formula, verify_args=verify_args,
             universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
@@ -4941,7 +4942,7 @@ class ProofByContradictionOfInequalityDeclaration(InferenceRuleDeclaration):
         return True
 
 
-class ProofByRefutationDeclaration(InferenceRuleDeclaration):
+class ProofByRefutation1Declaration(InferenceRuleDeclaration):
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'proof-by-refutation'
         acronym = 'pbr'
@@ -4951,8 +4952,8 @@ class ProofByRefutationDeclaration(InferenceRuleDeclaration):
         name = 'proof by refutation'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
-        infer_formula = ProofByContradictionDeclaration.infer_formula
-        verify_args = ProofByContradictionDeclaration.verify_args
+        infer_formula = ProofByContradiction1Declaration.infer_formula
+        verify_args = ProofByContradiction1Declaration.verify_args
         super().__init__(infer_formula=infer_formula, verify_args=verify_args,
             universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
@@ -4997,7 +4998,7 @@ class ProofByRefutationDeclaration(InferenceRuleDeclaration):
         return True
 
 
-class ProofByRefutationOfEqualityDeclaration(InferenceRuleDeclaration):
+class ProofByRefutation2Declaration(InferenceRuleDeclaration):
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'proof-by-refutation-of-equality'
         acronym = 'pbre'
@@ -5008,8 +5009,8 @@ class ProofByRefutationOfEqualityDeclaration(InferenceRuleDeclaration):
         definition = '(ℋ(P=Q), Inc(ℋ)) ⊢ (P ≠ Q)'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
-        infer_formula = ProofByRefutationOfEqualityDeclaration.infer_formula
-        verify_args = ProofByRefutationOfEqualityDeclaration.verify_args
+        infer_formula = ProofByRefutation2Declaration.infer_formula
+        verify_args = ProofByRefutation2Declaration.verify_args
         super().__init__(definition=definition, infer_formula=infer_formula,
             verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
@@ -6389,10 +6390,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         self._inconsistency_by_inequality_introduction = None
         self._inconsistency_by_negation_introduction = None
         self._modus_ponens = None
-        self._proof_by_contradiction = None
-        self._proof_by_contradiction_of_non_equality = None
-        self._proof_by_refutation = None
-        self._proof_by_refutation_of_equality = None
+        self._proof_by_contradiction_1 = None
+        self._proof_by_contradiction_2 = None
+        self._proof_by_refutation_1 = None
+        self._proof_by_refutation_2 = None
         self._variable_substitution = None
 
     @property
@@ -6851,7 +6852,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.modus_ponens
 
     @property
-    def pbc(self) -> ProofByContradictionDeclaration:
+    def pbc(self) -> ProofByContradiction1Declaration:
         """
 
         Unabridged property: u.i.proof_by_contradiction
@@ -6859,10 +6860,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.proof_by_contradiction
+        return self.proof_by_contradiction_1
 
     @property
-    def pbr(self) -> ProofByRefutationDeclaration:
+    def pbr(self) -> ProofByRefutation1Declaration:
         """
 
         Unabridged property: u.i.proof_by_refutation
@@ -6870,10 +6871,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.proof_by_refutation
+        return self.proof_by_refutation_1
 
     @property
-    def proof_by_contradiction(self) -> ProofByContradictionDeclaration:
+    def proof_by_contradiction_1(self) -> ProofByContradiction1Declaration:
         """
 
         Abridged property: u.i.pbc
@@ -6882,20 +6883,20 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._proof_by_contradiction is None:
-            self._proof_by_contradiction = ProofByContradictionDeclaration(
+        if self._proof_by_contradiction_1 is None:
+            self._proof_by_contradiction_1 = ProofByContradiction1Declaration(
                 universe_of_discourse=self.u)
-        return self._proof_by_contradiction
+        return self._proof_by_contradiction_1
 
     @property
-    def proof_by_contradiction_of_non_equality(self) -> ProofByContradictionOfInequalityDeclaration:
-        if self._proof_by_contradiction_of_non_equality is None:
-            self._proof_by_contradiction_of_non_equality = ProofByContradictionOfInequalityDeclaration(
+    def proof_by_contradiction_2(self) -> ProofByContradiction2Declaration:
+        if self._proof_by_contradiction_2 is None:
+            self._proof_by_contradiction_2 = ProofByContradiction2Declaration(
                 universe_of_discourse=self.u)
-        return self._proof_by_contradiction_of_non_equality
+        return self._proof_by_contradiction_2
 
     @property
-    def proof_by_refutation(self) -> ProofByRefutationDeclaration:
+    def proof_by_refutation_1(self) -> ProofByRefutation1Declaration:
         """
 
         Abridged property: u.i.pbr
@@ -6904,16 +6905,17 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._proof_by_refutation is None:
-            self._proof_by_refutation = ProofByRefutationDeclaration(universe_of_discourse=self.u)
-        return self._proof_by_refutation
+        if self._proof_by_refutation_1 is None:
+            self._proof_by_refutation_1 = ProofByRefutation1Declaration(
+                universe_of_discourse=self.u)
+        return self._proof_by_refutation_1
 
     @property
-    def proof_by_refutation_of_equality(self) -> ProofByRefutationOfEqualityDeclaration:
-        if self._proof_by_refutation_of_equality is None:
-            self._proof_by_refutation_of_equality = ProofByRefutationOfEqualityDeclaration(
+    def proof_by_refutation_2(self) -> ProofByRefutation2Declaration:
+        if self._proof_by_refutation_2 is None:
+            self._proof_by_refutation_2 = ProofByRefutation2Declaration(
                 universe_of_discourse=self.u)
-        return self._proof_by_refutation_of_equality
+        return self._proof_by_refutation_2
 
     @property
     def variable_substitution(self) -> VariableSubstitutionDeclaration:
@@ -7153,19 +7155,19 @@ class ConjunctionEliminationLeftInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_land_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        return super().infer_formula(p_land_q, echo=echo)
+    def infer_formula(self, p_and_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        return super().infer_formula(p_and_q, echo=echo)
 
-    def infer_statement(self, p_land_q: (None, FormulaStatement) = None, ref: (None, str) = None,
+    def infer_statement(self, p_and_q: (None, FormulaStatement) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """Apply the conjunction elimination (left) inference-rule and return the
         inferred-statement.
 
-        :param p_land_q:
+        :param p_and_q:
         :return: The proven inferred-statement p implies q in the current theory.
         """
-        return super().infer_statement(p_land_q, ref=ref, paragraph_header=paragraph_header,
+        return super().infer_statement(p_and_q, ref=ref, paragraph_header=paragraph_header,
             subtitle=subtitle, echo=echo)
 
 
@@ -7186,20 +7188,20 @@ class ConjunctionEliminationRightInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_iff_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        return super().infer_formula(p_iff_q, echo=echo)
+    def infer_formula(self, p_and_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        return super().infer_formula(p_and_q, echo=echo)
 
-    def infer_statement(self, p_iff_q: (None, FormulaStatement) = None,
+    def infer_statement(self, p_and_q: (None, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """Apply the conjunction elimination (right) inference-rule and return the
         inferred-statement.
 
-        :param p_iff_q: (mandatory) The conjunction statement.
+        :param p_and_q: (mandatory) The conjunction statement.
         :return: The proven inferred-statement p implies q in the current theory.
         """
-        return super().infer_statement(p_iff_q, nameset=nameset, ref=ref,
+        return super().infer_statement(p_and_q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7685,25 +7687,25 @@ class ModusPonensInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class ProofByContradictionInclusion(InferenceRuleInclusion):
+class ProofByContradiction1Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.proof_by_contradiction
-        dashed_name = 'proof-by-contradiction'
-        acronym = 'pbc'
+        i = t.universe_of_discourse.inference_rules.proof_by_contradiction_1
+        dashed_name = 'proof-by-contradiction-1'
+        acronym = 'pbc1'
         abridged_name = None
-        name = 'proof by contradiction'
-        explicit_name = 'proof by contradiction inference rule'
+        name = 'proof by contradiction #1'
+        explicit_name = 'proof by contradiction #1 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
     def infer_formula(self, not_p: (None, Hypothesis) = None,
-            inc_not_p: (None, FormulaStatement) = None, echo: (None, bool) = None):
+            inc_not_p: (None, FormulaStatement) = None, echo: (None, bool) = None) -> Formula:
         """Apply the proof-by-contradiction inference-rule and return the inferred-formula.
 
         :param not_p: (mandatory) The (¬P) hypothesis-statement.
@@ -7727,19 +7729,19 @@ hypothetical-theory: Inc(¬P).
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class ProofByContradictionOfInequalityInclusion(InferenceRuleInclusion):
+class ProofByContradiction2Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.proof_by_contradiction_of_non_equality
-        dashed_name = 'proof-by-contradiction-of-inequality'
-        acronym = 'pbci'
+        i = t.universe_of_discourse.inference_rules.proof_by_contradiction_2
+        dashed_name = 'proof-by-contradiction-2'
+        acronym = 'pbc2'
         abridged_name = None
-        name = 'proof by contradiction of inequality'
-        explicit_name = 'proof by contradiction of inequality inference rule'
+        name = 'proof by contradiction #2'
+        explicit_name = 'proof by contradiction #2 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
@@ -7763,7 +7765,7 @@ class ProofByRefutationInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.proof_by_refutation
+        i = t.universe_of_discourse.inference_rules.proof_by_refutation_1
         dashed_name = 'proof-by-refutation'
         acronym = 'pbr'
         abridged_name = None
@@ -7805,7 +7807,7 @@ class ProofByRefutationOfEqualityInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.proof_by_refutation_of_equality
+        i = t.universe_of_discourse.inference_rules.proof_by_refutation_2
         dashed_name = 'proof-by-refutation-of-equality'
         acronym = 'pbre'
         abridged_name = None
@@ -7914,7 +7916,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         self._inconsistency_by_inequality_introduction = None
         self._inconsistency_by_negation_introduction = None
         self._modus_ponens = None
-        self._proof_by_contradiction = None
+        self._proof_by_contradiction_1 = None
         self._proof_by_contradiction_of_non_equality = None
         self._proof_by_refutation = None
         self._proof_by_refutation_of_equality = None
@@ -8036,7 +8038,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._biconditional_introduction
 
     @property
-    def conjunction_elimination_left(self) -> ConjunctionEliminationLeftDeclaration:
+    def conjunction_elimination_left(self) -> ConjunctionEliminationLeftInclusion:
         """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
         Abridged property: t.i.cel()
@@ -8265,7 +8267,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.modus_ponens
 
     @property
-    def pbc(self) -> ProofByContradictionInclusion:
+    def pbc(self) -> ProofByContradiction1Inclusion:
         """
 
         Unabridged property: u.i.proof_by_contradiction
@@ -8273,7 +8275,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.proof_by_contradiction
+        return self.proof_by_contradiction_1
 
     @property
     def pbr(self) -> ProofByRefutationInclusion:
@@ -8287,7 +8289,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.proof_by_refutation
 
     @property
-    def proof_by_contradiction(self) -> ProofByContradictionInclusion:
+    def proof_by_contradiction_1(self) -> ProofByContradiction1Inclusion:
         """
 
         Abridged property: u.i.pbc
@@ -8295,15 +8297,14 @@ class InferenceRuleInclusionDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._proof_by_contradiction is None:
-            self._proof_by_contradiction = ProofByContradictionInclusion(t=self.t)
-        return self._proof_by_contradiction
+        if self._proof_by_contradiction_1 is None:
+            self._proof_by_contradiction_1 = ProofByContradiction1Inclusion(t=self.t)
+        return self._proof_by_contradiction_1
 
     @property
-    def proof_by_contradiction_of_non_equality(self) -> ProofByContradictionOfInequalityInclusion:
+    def proof_by_contradiction_of_non_equality(self) -> ProofByContradiction2Inclusion:
         if self._proof_by_contradiction_of_non_equality is None:
-            self._proof_by_contradiction_of_non_equality = ProofByContradictionOfInequalityInclusion(
-                t=self.t)
+            self._proof_by_contradiction_of_non_equality = ProofByContradiction2Inclusion(t=self.t)
         return self._proof_by_contradiction_of_non_equality
 
     @property

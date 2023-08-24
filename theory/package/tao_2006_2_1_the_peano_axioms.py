@@ -258,8 +258,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
             p=h1_p11)
         p072 = t.i.inconsistency_by_inequality_introduction.infer_statement(p_eq_q=h1_p071,
             p_neq_q=p031, inconsistent_theory=h1.hypothesis_child_theory)
-        p073 = t.i.proof_by_refutation_of_equality.infer_statement(p_eq_q=h1, inc_p_eq_q=p072,
-            ref='2.1.8')
+        p073 = t.i.proof_by_refutation_2.infer_statement(p_eq_q=h1, inc_p_eq_q=p072, ref='2.1.8')
 
         t.open_section('Direct proof', section_parent=s55, numbering=False)
 

@@ -134,6 +134,19 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('. ')
         return True
 
+    def compose_conjunction_elimination_right_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p_and_q: FormulaStatement = o.parameters[0]
+        yield from p_and_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(', is of the form ')
+        yield '(𝑷 ∧ 𝑸)'  # TODO: Replace hardcoded formula with real formula
+        yield SansSerifNormal(', and follows from ')
+        yield from p_and_q.compose_ref_link()
+        yield SansSerifNormal('. ')
+        return True
+
     def compose_conjunction_introduction_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict

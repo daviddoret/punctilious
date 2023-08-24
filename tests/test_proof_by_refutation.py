@@ -42,5 +42,5 @@ class TestProofByRefutation(TestCase):
         # p7 is in refutation with the hypothetical_formula
         t1_p8 = t1.i.inconsistency_by_negation_introduction.infer_statement(p=t2_a1, not_p=t2_p7,
             inconsistent_theory=t2)
-        t1_p9 = t1.i.proof_by_refutation.infer_statement(p=t1_h1, inc_p=t1_p8)
+        t1_p9 = t1.i.proof_by_refutation_1.infer_statement(p=t1_h1, inc_p=t1_p8)
         pass
