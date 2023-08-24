@@ -5,7 +5,10 @@ import random_data
 
 class TestConjunctionEliminationLeft(TestCase):
     def test_cel(self):
+        pu.configuration.echo_default = True
         u = pu.UniverseOfDiscourse()
+        u_plaintext = u.nameset.rep_symbol(encoding=pu.encodings.plaintext)
+        u_unicode = u.nameset.rep_symbol(encoding=pu.encodings.unicode)
         o1 = u.o.declare()
         o2 = u.o.declare()
         o3 = u.o.declare()
@@ -14,8 +17,8 @@ class TestConjunctionEliminationLeft(TestCase):
         t = u.t()
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
-        phi1 = t.i.axiom_interpretation.infer_statement(ap, u.f(u.r.conjunction, u.f(r1, o1, o2),
-                                                                u.f(r2, o3)))
+        phi1 = t.i.axiom_interpretation.infer_statement(axiom=ap,
+            formula=u.f(u.r.conjunction, u.f(r1, o1, o2), u.f(r2, o3)))
         self.assertEqual('(𝑟₁(𝑜₁, 𝑜₂) ∧ 𝑟₂(𝑜₃))', phi1.rep_formula(pu.encodings.unicode))
-        phi2 = t.i.cel.infer_statement(phi1)
+        phi2 = t.i.conjunction_elimination_left.infer_statement(p_and_q=phi1)
         self.assertEqual('𝑟₁(𝑜₁, 𝑜₂)', phi2.rep_formula(pu.encodings.unicode))

@@ -4057,11 +4057,12 @@ class ConjunctionEliminationLeftDeclaration(InferenceRuleDeclaration):
             explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_land_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
-            echo: (None, bool) = None) -> Formula:
+            echo: (None, bool) = None, **kwargs) -> Formula:
         """
 
         :param p_land_q: A formula-statement of the form: (P ⋀ Q).
         :param t: The current theory-elaboration-sequence.
+        :param echo:
         :return: The (proven) formula: P.
         """
         p = unpack_formula(p_land_q).parameters[0]
@@ -7155,18 +7156,17 @@ class ConjunctionEliminationLeftInclusion(InferenceRuleInclusion):
     def infer_formula(self, p_land_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         return super().infer_formula(p_land_q, echo=echo)
 
-    def infer_statement(self, p_land_q: (None, FormulaStatement) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+    def infer_statement(self, p_land_q: (None, FormulaStatement) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """Apply the conjunction elimination (left) inference-rule and return the
         inferred-statement.
 
-        :param p_iff_q: (mandatory) The conjunction statement.
+        :param p_land_q:
         :return: The proven inferred-statement p implies q in the current theory.
         """
-        return super().infer_statement(p_land_q, nameset=nameset, ref=ref,
-            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        return super().infer_statement(p_land_q, ref=ref, paragraph_header=paragraph_header,
+            subtitle=subtitle, echo=echo)
 
 
 class ConjunctionEliminationRightInclusion(InferenceRuleInclusion):
@@ -8049,7 +8049,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._conjunction_elimination_left
 
     @property
-    def conjunction_elimination_right(self) -> InferenceRuleInclusion:
+    def conjunction_elimination_right(self) -> ConjunctionEliminationRightInclusion:
         """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
         Abridged property: t.i.cer
@@ -8062,7 +8062,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._conjunction_elimination_right
 
     @property
-    def cel(self) -> InferenceRuleInclusion:
+    def cel(self) -> ConjunctionEliminationLeftDeclaration:
         """The well-known conjunction-elimination (left) inference-rule: (P ∧ Q) ⊢ P.
 
         Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_left()
@@ -8073,7 +8073,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.conjunction_elimination_left
 
     @property
-    def cer(self) -> InferenceRuleInclusion:
+    def cer(self) -> ConjunctionEliminationRightInclusion:
         """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
         Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_right()
