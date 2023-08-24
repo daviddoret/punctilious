@@ -434,7 +434,6 @@ class LocaleEnUs(Locale):
         yield o.compose_title(cap=True)
         yield SansSerifNormal(': ')
         yield from o.compose_content()
-        yield SansSerifNormal('.')
         return True
 
     def compose_parent_hypothesis_statement_report(self, o: Hypothesis,
