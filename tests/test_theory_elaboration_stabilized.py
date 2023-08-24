@@ -22,10 +22,9 @@ class TestTheoryElaboration(TestCase):
         r1o1o2 = robust_theory.i.axiom_interpretation.infer_statement(ap1, u.f(r1, o1, o2))
         r1o2o3 = robust_theory.i.axiom_interpretation.infer_statement(ap1, u.f(r1, o2, o3))
         r1o1o2_and_r1o2o3 = robust_theory.i.ci.infer_statement(r1o1o2, r1o2o3)
-        implication_2 = robust_theory.i.variable_substitution.infer_statement(
-            p_hypothesis=implication, phi=(o1, o2, o3))
-        robust_theory.i.mp.infer_statement(p_implies_q=implication_2,
-            p_hypothesis=r1o1o2_and_r1o2o3)
+        implication_2 = robust_theory.i.variable_substitution.infer_statement(p=implication,
+            phi=(o1, o2, o3))
+        robust_theory.i.mp.infer_statement(p_implies_q=implication_2, p=r1o1o2_and_r1o2o3)
         robust_theory.stabilize()
         self.assertTrue(robust_theory.stabilized,
             'The stabilized property of the original-theory is not True.')
