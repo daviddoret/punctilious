@@ -1,10 +1,10 @@
-proof-by-contradiction-1
+proof-by-contradiction-2
 =========================
 
 Definition
 ----------
 
-*proof-by-contradiction-1* is the :doc:`inference_rule`:
+*proof-by-contradiction-2* is the :doc:`inference_rule`:
 
 .. math::
 
@@ -13,19 +13,19 @@ Definition
 Python implementation
 ---------------------
 
-ProofByContradiction1Declaration
+ProofByContradiction2Declaration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. module:: core
     :noindex:
-.. autoclass:: ProofByContradiction1Declaration
+.. autoclass:: ProofByContradiction2Declaration
     :members:
     :special-members: __init__
 
-ProofByContradiction1Inclusion
+ProofByContradiction2Inclusion
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: ProofByContradiction1Inclusion
+.. autoclass:: ProofByContradiction2Inclusion
     :members:
     :special-members: __init__
 

@@ -1,0 +1,35 @@
+proof-by-refutation-1
+=========================
+
+Definition
+----------
+
+*proof-by-refutation-1* is the :doc:`inference_rule`:
+
+.. math::
+
+    \left( \boldsymbol{\mathcal{H}} \: \textit{assume} \: \neg \, \boldsymbol{P}, Inc\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \mathbf{P}
+
+Python implementation
+---------------------
+
+ProofByRefutation1Declaration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. module:: core
+    :noindex:
+.. autoclass:: ProofByRefutation1Declaration
+    :members:
+    :special-members: __init__
+
+ProofByRefutation1Inclusion
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: ProofByRefutation1Inclusion
+    :members:
+    :special-members: __init__
+
+Bibliography
+------------
+
+.. footbibliography::

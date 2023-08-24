@@ -15,9 +15,13 @@ Welcome to punctilious's documentation!
 
    absorption
    bibliography
+   biconditional_elimination_left
+   biconditional_elimination_right
+   biconditional_introduction
    conjunction_elimination_left
    conjunction_elimination_right
    conjunction_introduction
+   disjunction_elimination
    disjunction_introduction_left
    disjunction_introduction_right
    double_negation_elimination
@@ -31,6 +35,10 @@ Welcome to punctilious's documentation!
    modus_ponens
    notation_form
    paragraph_proof
+   proof_by_contradiction_1
+   proof_by_contradiction_2
+   proof_by_refutation_1
+   proof_by_refutation_2
    relation
    theory_elaboration_sequence
    universe_of_discourse
