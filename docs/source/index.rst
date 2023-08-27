@@ -31,7 +31,8 @@ Welcome to punctilious's documentation!
    elimination_rule
    formula_statement
    hypothesis
-   inconsistency_by_inequality_introduction
+   inconsistency_introduction_1
+   inconsistency_introduction_2
    inference_rule
    introduction_rule
    is_a

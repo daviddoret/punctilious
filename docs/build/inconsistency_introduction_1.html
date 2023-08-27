@@ -6,7 +6,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>proof-by-contradiction-2 | punctilious 1.0.0 documentation</title>
+<title>inconsistency-introduction-1 | punctilious 1.0.0 documentation</title>
 <link href="_static/pygments.css" rel="stylesheet"/>
 <link href="_static/theme.c973b470ab69573097f3.css" rel="stylesheet"/>
 <link href="_static/graphviz.css" rel="stylesheet"/>
@@ -14,12 +14,12 @@
 <link href="_static/css/custom.css" rel="stylesheet"/>
 <link href="search.html" rel="search" title="Search"/>
 <link href="genindex.html" rel="index" title="Index"/>
-<link href="proof_by_refutation_1.html" rel="next" title="proof-by-refutation-1"/>
-<link href="proof_by_contradiction_1.html" rel="prev" title="proof-by-contradiction-1"/>
+<link href="inconsistency_introduction_2.html" rel="next" title="inconsistency-introduction-2"/>
+<link href="hypothesis.html" rel="prev" title="hypothesis"/>
 </head>
 <body class="antialiased text-gray">
 <div class="min-h-screen xl:h-screen flex flex-col xl:grid xl:grid-layout print:block print:h-auto" data-action="keydown@window-&gt;search#focus " data-controller="sidebar search scroll " id="page">
-<a class="block transition -translate-x-full focus:translate-x-0 opacity-0 focus:opacity-100 text-xl bg-white p-4 z-20 absolute top-0 left-0 h-14" href="#proof-by-contradiction-2" title="Skip navigation links">Skip to content</a>
+<a class="block transition -translate-x-full focus:translate-x-0 opacity-0 focus:opacity-100 text-xl bg-white p-4 z-20 absolute top-0 left-0 h-14" href="#inconsistency-introduction-1" title="Skip navigation links">Skip to content</a>
 <header class="grid-area-header z-10 h-14 fixed w-full top-0 print:hidden">
 <div class="bg-gray-dark shadow-md flex items-center h-full xl:px-2 relative"><div class="flex items-center">
 <button class="xl:hidden h-14 w-14 leading-14 text-gray-100 hover:bg-gray-700 hover:text-brand focus:outline-none focus:bg-gray-700 focus:text-brand" data-action="sidebar#open" data-sidebar-target="hamburger">
@@ -112,11 +112,11 @@
 </li>
 <li class="toctree-l1"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="formula_statement.html">formula-statement</a></div></li>
 <li class="toctree-l1"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="hypothesis.html">hypothesis</a></div></li>
-<li class="toctree-l1"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html">inconsistency-introduction-1</a></div><ul>
-<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html#definition">Definition</a></div></li>
-<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html#quotes">Quotes</a></div></li>
-<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html#python-sample-usage">Python sample usage</a></div></li>
-<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html#bibliography">Bibliography</a></div></li>
+<li class="toctree-l1 current expanded"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="current reference internal" data-action="click-&gt;sidebar#close" href="#">inconsistency-introduction-1</a></div><ul>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#definition">Definition</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#quotes">Quotes</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#python-sample-usage">Python sample usage</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#bibliography">Bibliography</a></div></li>
 </ul>
 </li>
 <li class="toctree-l1"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_2.html">inconsistency-introduction-2</a></div><ul>
@@ -187,14 +187,14 @@
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="proof_by_contradiction_1.html#bibliography">Bibliography</a></div></li>
 </ul>
 </li>
-<li class="toctree-l1 current expanded"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="current reference internal" data-action="click-&gt;sidebar#close" href="#">proof-by-contradiction-2</a></div><ul>
-<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#definition">Definition</a></div></li>
-<li class="toctree-l2"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="#python-implementation">Python implementation</a></div><ul>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#proofbycontradiction2declaration">ProofByContradiction2Declaration</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#proofbycontradiction2inclusion">ProofByContradiction2Inclusion</a></div></li>
+<li class="toctree-l1"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="proof_by_contradiction_2.html">proof-by-contradiction-2</a></div><ul>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="proof_by_contradiction_2.html#definition">Definition</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="proof_by_contradiction_2.html#python-implementation">Python implementation</a></div><ul>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="proof_by_contradiction_2.html#proofbycontradiction2declaration">ProofByContradiction2Declaration</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="proof_by_contradiction_2.html#proofbycontradiction2inclusion">ProofByContradiction2Inclusion</a></div></li>
 </ul>
 </li>
-<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#bibliography">Bibliography</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="proof_by_contradiction_2.html#bibliography">Bibliography</a></div></li>
 </ul>
 </li>
 <li class="toctree-l1"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="proof_by_refutation_1.html">proof-by-refutation-1</a></div><ul>
@@ -267,107 +267,91 @@
 </aside>
 <main class="px-4 pt-14 xl:ml-fluid grid-area-main overflow-y-auto flex flex-col flex-1 h-full mx-0 md:mx-auto xl:mr-0"><nav aria-label="breadcrumbs" class="print:hidden mt-12 text-sm text-gray-light" role="navigation">
 <a class="text-gray-light text-sm hover:text-gray-dark font-medium focus:text-gray-dark" href="index.html">punctilious 1.0.0 documentation</a>
-<span class="mr-1">/</span><span aria-current="page">proof-by-contradiction-2</span>
+<span class="mr-1">/</span><span aria-current="page">inconsistency-introduction-1</span>
 </nav>
 <article class="flex-1 prose" role="main">
-<section id="proof-by-contradiction-2">
-<h1>proof-by-contradiction-2<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#proof-by-contradiction-2">¶</a></h1>
+<section id="inconsistency-introduction-1">
+<h1>inconsistency-introduction-1<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#inconsistency-introduction-1">¶</a></h1>
 <section id="definition">
-<h2>Definition<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#definition">¶</a></h2>
-<p><em>proof-by-contradiction-2</em> is the <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a>:</p>
+<h2>Definition<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#definition">¶</a></h2>
+<p><em>inconsistency-introduction-1</em> is the <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a>:</p>
 <div class="math notranslate nohighlight">
-\[\left( \mathcal{H} assume \not \mathbf{P}, Inc\left(\mathcal{H}\right)  \right) \vdash \mathbf{P}\]</div>
+\[\left( P, \neq \left(P\right) \right) \vdash Inc\left(\mathcal{T}\right)\]</div>
 </section>
-<section id="python-implementation">
-<h2>Python implementation<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#python-implementation">¶</a></h2>
-<section id="proofbycontradiction2declaration">
-<h3>ProofByContradiction2Declaration<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#proofbycontradiction2declaration">¶</a></h3>
-<dl class="py class">
-<dt class="sig sig-object py" id="core.ProofByContradiction2Declaration">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">ProofByContradiction2Declaration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">universe_of_discourse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#core.ProofByContradiction2Declaration">¶</a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="core.ProofByContradiction2Declaration.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">universe_of_discourse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#core.ProofByContradiction2Declaration.__init__">¶</a></dt>
-<dd></dd></dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="core.ProofByContradiction2Declaration.compose_paragraph_proof">
-<span class="sig-name descname"><span class="pre">compose_paragraph_proof</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em><span class="sig-paren">)</span><a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#core.ProofByContradiction2Declaration.compose_paragraph_proof">¶</a></dt>
-<dd><p>This method should be overridden by specialized inference-rule classes to provide accurate proofs.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Composable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Composable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
-</dd>
-</dl>
-</dd></dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="core.ProofByContradiction2Declaration.infer_formula">
-<span class="sig-name descname"><span class="pre">infer_formula</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_neq_q_hypothesis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_hypothesis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#core.ProofByContradiction2Declaration.infer_formula">¶</a></dt>
-<dd><p>Apply this inference-rules on input statements and return the resulting statement.</p>
-</dd></dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="core.ProofByContradiction2Declaration.verify_args">
-<span class="sig-name descname"><span class="pre">verify_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_neq_q_hypothesis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_hypothesis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#core.ProofByContradiction2Declaration.verify_args">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>p_neq_q_hypothesis</strong> – The hypothesis-statement in the parent theory.</p></li>
-<li><p><strong>inc_hypothesis</strong> – The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.</p></li>
-<li><p><strong>t</strong> – The current (parent) theory.</p></li>
-<li><p><strong>echo</strong> – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-</dd></dl>
+<section id="quotes">
+<h2>Quotes<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#quotes">¶</a></h2>
 </section>
-<section id="proofbycontradiction2inclusion">
-<h3>ProofByContradiction2Inclusion<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#proofbycontradiction2inclusion">¶</a></h3>
-<dl class="py class">
-<dt class="sig sig-object py" id="core.ProofByContradiction2Inclusion">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">ProofByContradiction2Inclusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#core.ProofByContradiction2Inclusion">¶</a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="core.ProofByContradiction2Inclusion.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#core.ProofByContradiction2Inclusion.__init__">¶</a></dt>
-<dd><p>Include (aka allow) an inference-rule in a theory-elaboration.</p>
-</dd></dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="core.ProofByContradiction2Inclusion.infer_formula">
-<span class="sig-name descname"><span class="pre">infer_formula</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_neq_q_hypothesis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_hypothesis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#core.ProofByContradiction2Inclusion.infer_formula">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>args</strong> – </p></li>
-<li><p><strong>echo</strong> – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="core.ProofByContradiction2Inclusion.infer_statement">
-<span class="sig-name descname"><span class="pre">infer_statement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_neq_q_hypothesis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_hypothesis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paragraph_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#core.ProofByContradiction2Inclusion.infer_statement">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>args</strong> – </p></li>
-<li><p><strong>echo</strong> – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-</dd></dl>
-</section>
+<section id="python-sample-usage">
+<h2>Python sample usage<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#python-sample-usage">¶</a></h2>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Source code</p>
+<blockquote>
+<div><div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">python</span></div><div class="highlight-python notranslate"><div class="highlight" data-controller="code"><pre><span></span><code><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">punctilious</span> <span class="k">as</span> <span class="nn">pu</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_default</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="linenos"> 4</span><span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_inferred_statement</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="linenos"> 5</span><span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_axiom_inclusion</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="linenos"> 6</span><span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_proof</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="n">u</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">UniverseOfDiscourse</span><span class="p">(</span><span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos"> 9</span><span class="n">o1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">o</span><span class="o">.</span><span class="n">declare</span><span class="p">()</span>
+<span class="linenos">10</span><span class="n">o2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">o</span><span class="o">.</span><span class="n">declare</span><span class="p">()</span>
+<span class="linenos">11</span><span class="n">r1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">signal_proposition</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos">12</span><span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos">13</span><span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_axiom</span><span class="p">(</span><span class="n">natural_language</span><span class="o">=</span><span class="s1">'Dummy axiom for demonstration purposes'</span><span class="p">)</span>
+<span class="linenos">14</span><span class="n">theory_axiom</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">include_axiom</span><span class="p">(</span><span class="n">axiom</span><span class="p">)</span>
+<span class="linenos">15</span><span class="n">p</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">theory_axiom</span><span class="p">,</span> <span class="n">r1</span><span class="p">(</span><span class="n">o1</span><span class="p">,</span> <span class="n">o2</span><span class="p">))</span>
+<span class="linenos">16</span><span class="n">not_p</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">theory_axiom</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">lnot</span><span class="p">(</span><span class="n">r1</span><span class="p">(</span><span class="n">o1</span><span class="p">,</span> <span class="n">o2</span><span class="p">)))</span>
+<span class="linenos">17</span><span class="n">t1</span><span class="o">.</span><span class="n">stabilize</span><span class="p">()</span>
+<span class="linenos">18</span><span class="c1"># Use a distinct theory T2 to demonstrate the inconsistency of T1,</span>
+<span class="linenos">19</span><span class="c1"># otherwise the demonstration will immediately become invalid,</span>
+<span class="linenos">20</span><span class="c1"># because T1 is inconsistent!</span>
+<span class="linenos">21</span><span class="n">t2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
+<span class="linenos">22</span><span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_proof</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="linenos">23</span><span class="n">inc</span> <span class="o">=</span> <span class="n">t2</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">inconsistency_introduction_1</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">not_p</span><span class="o">=</span><span class="n">not_p</span><span class="p">,</span> <span class="n">inconsistent_theory</span><span class="o">=</span><span class="n">t1</span><span class="p">)</span>
+</code></pre></div>
+</div></div>
+</div></blockquote>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Unicode output</p>
+<div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">text</span></div><div class="highlight-text notranslate"><div class="highlight" data-controller="code"><pre><span></span><code>𝖫𝖾𝗍 ⌜𝒰₁⌝ 𝖻𝖾 𝖺 𝑢𝑛𝑖𝑣𝑒𝑟𝑠𝑒-𝑜𝑓-𝑑𝑖𝑠𝑐𝑜𝑢𝑟𝑠𝑒.
+
+𝖫𝖾𝗍 ⌜𝒯₁⌝ 𝖻𝖾 𝖺 𝑡ℎ𝑒𝑜𝑟𝑦-𝑒𝑙𝑎𝑏𝑜𝑟𝑎𝑡𝑖𝑜𝑛-𝑠𝑒𝑞𝑢𝑒𝑛𝑐𝑒 𝗂𝗇 𝒰₁.
+
+𝗔𝘅𝗶𝗼𝗺 (𝒯₁.𝐴₁): 𝖫𝖾𝗍 𝑎𝑥𝑖𝑜𝑚 𝒜₁ ⌜𝘋𝘶𝘮𝘮𝘺 𝘢𝘹𝘪𝘰𝘮 𝘧𝘰𝘳 𝘥𝘦𝘮𝘰𝘯𝘴𝘵𝘳𝘢𝘵𝘪𝘰𝘯 𝘱𝘶𝘳𝘱𝘰𝘴𝘦𝘴⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 (𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽) 𝗂𝗇 𝒯₁.
+
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₁): 𝑟₁(𝑜₁, 𝑜₂). 𝗣𝗿𝗼𝗼𝗳: ⌜𝘋𝘶𝘮𝘮𝘺 𝘢𝘹𝘪𝘰𝘮 𝘧𝘰𝘳 𝘥𝘦𝘮𝘰𝘯𝘴𝘵𝘳𝘢𝘵𝘪𝘰𝘯 𝘱𝘶𝘳𝘱𝘰𝘴𝘦𝘴⌝ 𝗂𝗌 𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽 𝖻𝗒 𝗮𝘅𝗶𝗼𝗺 (𝐴₁). 𝑟₁(𝑜₁, 𝑜₂) 𝗂𝗌 𝖺 𝗏𝖺𝗅𝗂𝖽 𝖿𝗈𝗋𝗆𝗎𝗅𝖺 𝗌𝗍𝖺𝗍𝖾𝗆𝖾𝗇𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖾𝖽 𝖿𝗋𝗈𝗆 𝗍𝗁𝖺𝗍 𝖺𝗑𝗂𝗈𝗆.𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: 𝒜 ⊢ 𝖯, 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 𝑟₁(𝑜₁, 𝑜₂). ∎
+
+𝗪𝗮𝗿𝗻𝗶𝗻𝗴 (🗅₁): 𝖡𝗒 𝖽𝖾𝗌𝗂𝗀𝗇, 𝗉𝗎𝗇𝖼𝗍𝗂𝗅𝗂𝗈𝗎𝗌 𝖺𝗌𝗌𝗎𝗋𝖾𝗌 𝗍𝗁𝖾 𝗌𝗒𝗇𝗍𝖺𝖼𝗍𝗂𝖼𝖺𝗅 𝖼𝗈𝗋𝗋𝖾𝖼𝗍𝗇𝖾𝗌𝗌 𝗈𝖿 𝗉𝖺𝖼𝗄𝖺𝗀𝖾, 𝖻𝗎𝗍 𝖽𝗈𝖾𝗌 𝗇𝗈𝗍 𝗉𝖾𝗋𝖿𝗈𝗋𝗆 𝖺𝗇𝗒 𝗌𝖾𝗆𝖺𝗇𝗍𝗂𝖼 𝗏𝖾𝗋𝗂𝖿𝗂𝖼𝖺𝗍𝗂𝗈𝗇. 𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝗍𝗁𝖾 𝗎𝗌𝖺𝗀𝖾 𝗈𝖿 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾-𝗋𝗎𝗅𝖾𝗌 𝗍𝗁𝖺𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍 𝖼𝗈𝗇𝗍𝖾𝗇𝗍 (𝗂.𝖾. 𝖺𝗑𝗂𝗈𝗆-𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖺𝗍𝗂𝗈𝗇 𝖺𝗇𝖽 𝖽𝖾𝖿𝗂𝗇𝗂𝗍𝗂𝗈𝗇-𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖺𝗍𝗂𝗈𝗇) 𝗂𝗌 𝖼𝗋𝗂𝗍𝗂𝖼𝖺𝗅𝗅𝗒 𝖽𝖾𝗉𝖾𝗇𝖽𝖾𝗇𝗍 𝗈𝗇 𝗍𝗁𝖾 𝖼𝗈𝗋𝗋𝖾𝖼𝗍𝗇𝖾𝗌𝗌 𝗈𝖿 𝗍𝗁𝖾 𝖼𝗈𝗇𝗍𝖾𝗇𝗍 𝗍𝗋𝖺𝗇𝗌𝗅𝖺𝗍𝗂𝗈𝗇 𝗉𝖾𝗋𝖿𝗈𝗋𝗆𝖾𝖽 𝖻𝗒 𝗍𝗁𝖾 𝗍𝗁𝖾𝗈𝗋𝗒 𝖺𝗎𝗍𝗁𝗈𝗋, 𝖿𝗋𝗈𝗆 𝖺𝗑𝗂𝗈𝗆 𝗈𝗋 𝖽𝖾𝖿𝗂𝗇𝗂𝗍𝗂𝗈𝗇 𝗇𝖺𝗍𝗎𝗋𝖺𝗅 𝗅𝖺𝗇𝗀𝗎𝖺𝗀𝖾, 𝗍𝗈 𝖿𝗈𝗋𝗆𝗎𝗅𝖺𝖾.
+
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₂): ¬(𝑟₁(𝑜₁, 𝑜₂)). 𝗣𝗿𝗼𝗼𝗳: ⌜𝘋𝘶𝘮𝘮𝘺 𝘢𝘹𝘪𝘰𝘮 𝘧𝘰𝘳 𝘥𝘦𝘮𝘰𝘯𝘴𝘵𝘳𝘢𝘵𝘪𝘰𝘯 𝘱𝘶𝘳𝘱𝘰𝘴𝘦𝘴⌝ 𝗂𝗌 𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽 𝖻𝗒 𝗮𝘅𝗶𝗼𝗺 (𝐴₁). ¬(𝑟₁(𝑜₁, 𝑜₂)) 𝗂𝗌 𝖺 𝗏𝖺𝗅𝗂𝖽 𝖿𝗈𝗋𝗆𝗎𝗅𝖺 𝗌𝗍𝖺𝗍𝖾𝗆𝖾𝗇𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖾𝖽 𝖿𝗋𝗈𝗆 𝗍𝗁𝖺𝗍 𝖺𝗑𝗂𝗈𝗆.𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: 𝒜 ⊢ 𝖯, 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 ¬(𝑟₁(𝑜₁, 𝑜₂)). ∎
+
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₂.𝑃₃): 𝐼𝑛𝑐(𝒯₁). 𝗣𝗿𝗼𝗼𝗳: 𝖫𝖾𝗍 𝑷 := 𝑟₁(𝑜₁, 𝑜₂), 𝗐𝗁𝗂𝖼𝗁 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₁). 𝖫𝖾𝗍 ¬(𝑷) := ¬(𝑟₁(𝑜₁, 𝑜₂)), 𝗐𝗁𝗂𝖼𝗁 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₂). 𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑖𝑛𝑐𝑜𝑛𝑠𝑖𝑠𝑡𝑒𝑛𝑐𝑦-𝑖𝑛𝑡𝑟𝑜𝑑𝑢𝑐𝑡𝑖𝑜𝑛-1 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: 𝑷, ¬(𝑷) ⊢ 𝐼𝑛𝑐(𝓣), 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 𝐼𝑛𝑐(𝒯₁). ∎
+</code></pre></div>
+</div></div>
+</div>
+<div class="note dropdown admonition">
+<p class="admonition-title">Plaintext output</p>
+<div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">text</span></div><div class="highlight-text notranslate"><div class="highlight" data-controller="code"><pre><span></span><code>Let "U2" be a universe-of-discourse.
+
+Let "T1" be a theory-elaboration-sequence in U2.
+
+Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
+
+Proposition (T1.P1): r1(o1, o2). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). r1(o1, o2) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that r1(o1, o2). QED
+
+Warning (warning1): By design, punctilious assures the syntactical correctness of package, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
+
+Proposition (T1.P2): not(r1(o1, o2)). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). not(r1(o1, o2)) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that not(r1(o1, o2)). QED
+
+Proposition (T2.P3): Inc(T1). Proof: Let P := r1(o1, o2), which follows from prop. (P1). Let !(P) := not(r1(o1, o2)), which follows from prop. (P2). Therefore, by the inconsistency-introduction-1 inference rule: (P, not(P)) |-(T), it follows that Inc(T1). QED
+</code></pre></div>
+</div></div>
+</div>
 </section>
 <section id="bibliography">
-<h2>Bibliography<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#bibliography">¶</a></h2>
+<h2>Bibliography<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#bibliography">¶</a></h2>
 </section>
 </section>
 </article>

@@ -10,10 +10,12 @@
 <link href="_static/pygments.css" rel="stylesheet"/>
 <link href="_static/theme.c973b470ab69573097f3.css" rel="stylesheet"/>
 <link href="_static/graphviz.css" rel="stylesheet"/>
+<link href="_static/togglebutton.css" rel="stylesheet"/>
+<link href="_static/css/custom.css" rel="stylesheet"/>
 <link href="search.html" rel="search" title="Search"/>
 <link href="genindex.html" rel="index" title="Index"/>
 <link href="introduction_rule.html" rel="next" title="introduction-rule"/>
-<link href="inconsistency_by_inequality_introduction.html" rel="prev" title="inconsistency-by-inequality-introduction"/>
+<link href="inconsistency_introduction_2.html" rel="prev" title="inconsistency-introduction-2"/>
 </head>
 <body class="antialiased text-gray">
 <div class="min-h-screen xl:h-screen flex flex-col xl:grid xl:grid-layout print:block print:h-auto" data-action="keydown@window-&gt;search#focus " data-controller="sidebar search scroll " id="page">
@@ -110,10 +112,17 @@
 </li>
 <li class="toctree-l1"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="formula_statement.html">formula-statement</a></div></li>
 <li class="toctree-l1"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="hypothesis.html">hypothesis</a></div></li>
-<li class="toctree-l1"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_by_inequality_introduction.html">inconsistency-by-inequality-introduction</a></div><ul>
-<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_by_inequality_introduction.html#definition">Definition</a></div></li>
-<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_by_inequality_introduction.html#quotes">Quotes</a></div></li>
-<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_by_inequality_introduction.html#bibliography">Bibliography</a></div></li>
+<li class="toctree-l1"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html">inconsistency-introduction-1</a></div><ul>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html#definition">Definition</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html#quotes">Quotes</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html#python-sample-usage">Python sample usage</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html#bibliography">Bibliography</a></div></li>
+</ul>
+</li>
+<li class="toctree-l1"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_2.html">inconsistency-introduction-2</a></div><ul>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_2.html#definition">Definition</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_2.html#quotes">Quotes</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_2.html#bibliography">Bibliography</a></div></li>
 </ul>
 </li>
 <li class="toctree-l1 current expanded"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="current reference internal" data-action="click-&gt;sidebar#close" href="#">inference-rule</a></div><ul>
@@ -262,34 +271,34 @@
 </nav>
 <article class="flex-1 prose" role="main">
 <section id="inference-rule">
-<h1>inference-rule<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#inference-rule">¶</a></h1>
+<h1>inference-rule<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#inference-rule">¶</a></h1>
 <section id="definition">
-<h2>Definition<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#definition">¶</a></h2>
+<h2>Definition<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#definition">¶</a></h2>
 <p>An <em>inference-rule</em> is a syntactic transformation rule which allows to infer a valid statement
 from some premises.</p>
 </section>
 <section id="synonyms">
-<h2>Synonyms<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#synonyms">¶</a></h2>
+<h2>Synonyms<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#synonyms">¶</a></h2>
 <ul class="simple">
 <li><p>Derivation rule</p></li>
 </ul>
 </section>
 <section id="list-of-well-known-inference-rules">
-<h2>List of well-known inference-rules<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#list-of-well-known-inference-rules">¶</a></h2>
+<h2>List of well-known inference-rules<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#list-of-well-known-inference-rules">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="absorption.html"><span class="doc">absorption</span></a></p></li>
-<li><p><a class="reference internal" href="inconsistency_by_inequality_introduction.html"><span class="doc">inconsistency-by-inequality-introduction</span></a></p></li>
+<li><p><span class="xref std std-doc">inconsistency_by_inequality_introduction</span></p></li>
 </ul>
 </section>
 <section id="see-also">
-<h2>See also<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#see-also">¶</a></h2>
+<h2>See also<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#see-also">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="elimination_rule.html"><span class="doc">elimination-rule</span></a></p></li>
 <li><p><a class="reference internal" href="introduction_rule.html"><span class="doc">introduction-rule</span></a></p></li>
 </ul>
 </section>
 <section id="bibliography">
-<h2>Bibliography<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#bibliography">¶</a></h2>
+<h2>Bibliography<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#bibliography">¶</a></h2>
 <ul class="simple">
 <li><p>Derivation rule. Encyclopedia of Mathematics.
 URL: <a class="reference external" href="http://encyclopediaofmath.org/index.php?title=Derivation_rule&amp;oldid=33737" rel="nofollow noopener">http://encyclopediaofmath.org/index.php?title=Derivation_rule&amp;oldid=33737</a></p></li>
@@ -309,6 +318,11 @@ URL: <a class="reference external" href="http://encyclopediaofmath.org/index.php
 <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=af2ce170"></script>
 <script src="_static/doctools.js?v=888ff710"></script>
 <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+<script>let toggleHintShow = 'Click to show';</script>
+<script>let toggleHintHide = 'Click to hide';</script>
+<script>let toggleOpenOnPrint = 'true';</script>
+<script src="_static/togglebutton.js?v=4a39c7ea"></script>
+<script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
 <script src="_static/theme.c8991bd7bb6e57cbeea8.js"></script>
 </body>
 </html>

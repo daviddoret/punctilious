@@ -18,7 +18,7 @@ release = '1.0.0'
 # https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html
 # https://pypi.org/project/sphinxcontrib-bibtex/
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinxcontrib.bibtex',
-    'sphinx_autodoc_typehints', 'sphinx.ext.graphviz', 'sphinxawesome_theme']
+    'sphinx_autodoc_typehints', 'sphinx.ext.graphviz', 'sphinxawesome_theme', 'sphinx_togglebutton']
 # 'sphinx_exec_code',
 bibtex_bibfiles = ['bibliography_bibtex.bib']
 bibtex_encoding = 'utf-8-sig'
@@ -33,9 +33,11 @@ exclude_patterns = []
 html_theme = 'sphinxawesome_theme'
 html_static_path = ['_static']
 
+html_css_files = ['css/custom.css', ]
+
 # sphinx-exec-code
 # URL: https://sphinx-exec-code.readthedocs.io/en/latest/configuration.html#installation
 # exec_code_set_utf8_encoding: True  # enforces utf-8 encoding (can fix encoding errors). Default is False except on Windows where it is True.
-exec_code_working_dir = '../../sample/working_dir'
-exec_code_source_folders = ['../..']
-exec_code_example_dir = '../../sample'
+# exec_code_working_dir = '../../sample/working_dir'
+# exec_code_source_folders = ['../..']
+# exec_code_example_dir = '../../sample'
