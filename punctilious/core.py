@@ -8,9 +8,9 @@ import contextlib
 import abc
 import collections
 import pyvis
-import networkx as nx
+# import networkx as nx
 import unicode_utilities
-import unidecode
+# import unidecode
 from plaintext import Plaintext
 from unicode_utilities import Unicode2
 

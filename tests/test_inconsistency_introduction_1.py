@@ -6,24 +6,10 @@ import random_data
 
 class TestInconsistencyIntroduction1(TestCase):
     def test_inconsistency_introduction_1(self):
-        """Simple inconsistency introduction"""
-        u = pu.UniverseOfDiscourse()
-        o1 = u.o.declare()
-        o2 = u.o.declare()
-        r1 = u.r.declare(2, signal_proposition=True)
-        t1 = u.t()
-        axiom = u.declare_axiom(natural_language='Dummy axiom for testing purposes')
-        theory_axiom = t1.include_axiom(axiom)
-        p = t1.i.axiom_interpretation.infer_statement(theory_axiom, u.f(r1, o1, o2))
-        not_p = t1.i.axiom_interpretation.infer_statement(theory_axiom,
-            u.f(u.r.lnot, u.f(r1, o1, o2)))
-        t1.stabilize()
-        # Use a distinct theory T2 to demonstrate the inconsistency of T1,
-        # otherwise the demonstration will immediately become invalid,
-        # because T1 is inconsistent!
-        t2 = u.t()
-        inc = t2.i.inconsistency_introduction_1.infer_statement(p=p, not_p=not_p,
-            inconsistent_theory=t1)
+        import sample.code.inconsistency_introduction_1 as test
+        u: pu.UniverseOfDiscourse = test.u
+        t1: pu.TheoryElaborationSequence = test.t1
+        inc: pu.InferredStatement = test.inc
         self.assertIs(pu.consistency_values.proved_inconsistent, t1.consistency)
         self.assertTrue(inc.is_formula_syntactically_equivalent_to(u.r.inc(t1)))
         self.assertEqual('𝐼𝑛𝑐(𝒯₁)', inc.rep_formula(encoding=pu.encodings.unicode))

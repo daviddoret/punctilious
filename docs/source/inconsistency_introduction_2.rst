@@ -1,10 +1,10 @@
-inconsistency-by-inequality-introduction
+inconsistency-introduction-2
 ========================================
 
 Definition
 ----------
 
-*inconsistency-by-inequality-introduction* is the :doc:`inference_rule`:
+*inconsistency-introduction-2* is the :doc:`inference_rule`:
 
 .. math::
 
