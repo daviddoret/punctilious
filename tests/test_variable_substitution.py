@@ -10,15 +10,17 @@ class TestVariableSubstitution(TestCase):
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
         o2 = u.o.declare()
-        r1 = u.r.declare(1, signal_proposition=True)
-        r2 = u.r.declare(2, signal_proposition=True)
+        r1 = u.r.declare(arity=1, signal_proposition=True)
+        r2 = u.r.declare(arity=2, signal_proposition=True)
         t = u.t()
-        a = u.declare_axiom(random_data.random_sentence())
-        ap = t.include_axiom(a)
-        p_formula = u.f(r1, u.f(r2, o1, o2))
-        p_statement = t.i.axiom_interpretation.infer_statement(ap, p_formula, echo=True)
+        a = u.declare_axiom(natural_language=random_data.random_sentence())
+        ap = t.include_axiom(a=a)
+        p_formula = r1(r2(o1, o2))
+        p_statement = t.i.axiom_interpretation.infer_statement(axiom=ap, formula=p_formula,
+            echo=True)
         # y_sequence = tuple()
-        p_prime = t.i.vs.infer_statement(p_statement, echo=True)
+        p_prime = t.i.vs.infer_statement(p=p_statement, phi=(), echo=True)
+        self.assertTrue(p_prime.is_formula_syntactically_equivalent_to(p_statement))
         self.assertEqual('𝑟₁(𝑟₂(𝑜₁, 𝑜₂))', p_prime.rep_formula(encoding=pu.encodings.unicode))
 
     def test_variable_substitution_with_free_variables(self):
@@ -30,14 +32,18 @@ class TestVariableSubstitution(TestCase):
         o4 = u.o.declare()
         o5 = u.o.declare()
         o6 = u.o.declare()
-        r1 = u.r.declare(1, signal_proposition=True)
-        r2 = u.r.declare(2, signal_proposition=True)
-        t = u.t('test_variable_substitution_with_free_variables')
+        f = u.r.declare(arity=1, signal_proposition=True, symbol='f', auto_index=False)
+        g = u.r.declare(arity=2, signal_proposition=True, symbol='g', auto_index=False)
+        t = u.t()
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
-        with u.v() as x, u.v() as y, u.v() as z:
-            p_formula = u.f(r1, u.f(r2, u.f(r2, z, u.f(r2, u.f(r1, x), y)), u.f(r2, x, y)))
-        p_statement = t.i.axiom_interpretation.infer_statement(ap, p_formula, echo=True)
-        y_sequence = (o4, o6, o5)  # sequence: (z, x, y)
-        p_prime = t.i.vs.infer_statement(p_statement, *y_sequence, echo=True)
-        self.assertEqual('◆₁(◆₂(◆₂(ℴ₄, ◆₂(◆₁(ℴ₆), ℴ₅)), ◆₂(ℴ₆, ℴ₅)))', p_prime.rep_formula())
+        with u.v(symbol='x', auto_index=False) as x, u.v(symbol='y', auto_index=False) as y, u.v(
+                symbol='z', auto_index=False) as z:
+            p_statement = t.i.axiom_interpretation.infer_statement(axiom=ap,
+                formula=f(g(g(z, g(f(x), y)), g(x, y))), echo=True)
+        self.assertEqual('𝑓(𝑔(𝑔(𝐳, 𝑔(𝑓(𝐱), 𝐲)), 𝑔(𝐱, 𝐲)))',
+            p_statement.rep_formula(encoding=pu.encodings.unicode))
+        p_prime = t.i.vs.infer_statement(p=p_statement, phi=(o4, o6, o5), echo=True)
+        self.assertEqual('𝑓(𝑔(𝑔(𝑜₄, 𝑔(𝑓(𝑜₆), 𝑜₅)), 𝑔(𝑜₆, 𝑜₅)))',
+            p_prime.rep_formula(encoding=pu.encodings.unicode))
+        p_prime.is_formula_syntactically_equivalent_to(o2=f(g(g(o4, g(f(o6), o5)), g(o6, o5))))

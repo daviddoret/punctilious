@@ -1,9 +1,8 @@
 import punctilious as pu
 import networkx as nx
-import sample.pet_theory_1 as pet
-import matplotlib.pyplot as plt
+import sample.code.pet_theory_1 as pet
+
 # import pygraphviz
-import pydot
 
 t = pet.t1
 u = pet.u

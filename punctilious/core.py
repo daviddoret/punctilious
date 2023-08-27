@@ -8,9 +8,9 @@ import contextlib
 import abc
 import collections
 import pyvis
-import networkx as nx
+# import networkx as nx
 import unicode_utilities
-import unidecode
+# import unidecode
 from plaintext import Plaintext
 from unicode_utilities import Unicode2
 
@@ -305,6 +305,10 @@ class TextStyles:
         self.serif_bold = TextStyle(name='serif-bold',
             unicode_table_index=unicode_utilities.unicode_serif_bold_index,
             start_tag=ComposableText(plaintext='', unicode='', latex='\\mathbf{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex='}'))
+        self.serif_bold_italic = TextStyle(name='serif-bold-italic',
+            unicode_table_index=unicode_utilities.unicode_serif_bold_italic_index,
+            start_tag=ComposableText(plaintext='', unicode='', latex='\\mathbold{'),
             end_tag=ComposableText(plaintext='', unicode='', latex='}'))
         self.serif_italic = TextStyle(name='serif-italic',
             unicode_table_index=unicode_utilities.unicode_serif_italic_index,
@@ -733,6 +737,13 @@ class ScriptNormal(StyledText):
             latex: (None, str) = None) -> None:
         super().__init__(text_style=text_styles.script_normal, plaintext=plaintext, unicode=unicode,
             latex=latex)
+
+
+class SerifBoldItalic(StyledText):
+    def __init__(self, s: (None, str) = None, plaintext: (None, str) = None,
+            unicode: (None, str) = None, latex: (None, str) = None) -> None:
+        super().__init__(s=s, text_style=text_styles.serif_bold_italic, plaintext=plaintext,
+            unicode=unicode, latex=latex)
 
 
 class SerifItalic(StyledText):
@@ -1623,111 +1634,6 @@ class NameSet(Composable):
             'explicit_name': self._explicit_name}
 
 
-class TitleOBSOLETE:
-    """A title to introduce some symbolic-objcts in reports.
-
-    TODO: QUESTION: rename Title to Name, Category to Nature, Reference to Abridged and
-    Unabridged Name.
-
-
-    Features:
-    - long-names have a short (reference) and long (long-name) version.
-    - long-names do not have an index.
-    - long-names comprise a category that must be consistent with
-        the declarative class of the symbolic-objct.
-    """
-
-    def __init__(self, nameset: (None, NameSet) = None, ref: (None, str, ComposableText) = None,
-            paragrapha_header: (None, ParagraphHeader) = None,
-            subtitle: (None, str, ComposableText) = None, abr: (None, str, ComposableText) = None):
-        if isinstance(ref, str):
-            ref = StyledText(s=ref, text_style=text_styles.sans_serif_bold)
-        self._ref = ref
-        if isinstance(abr, str):
-            abr = StyledText(s=abr, text_style=text_styles.sans_serif_bold)
-        self._abr = abr
-        self._paragraph_header = paragraph_headers.uncategorized if paragrapha_header is None else paragrapha_header
-        if isinstance(subtitle, str):
-            subtitle = StyledText(s=subtitle, text_style=text_styles.sans_serif_normal)
-        self._nameset = nameset
-        self._subtitle = subtitle
-        self._styled_title = None
-        self._styled_ref = None
-
-    def __eq__(self, other):
-        return hash(self) == hash(other)
-
-    def __hash__(self):
-        """Note that the title attribute is not hashed,
-        because title is considered purely decorative.
-        """
-        return hash((self.cat, self.ref))
-
-    def __repr__(self) -> str:
-        return self.rep(encoding=encodings.plaintext)
-
-    def __str__(self) -> str:
-        return self.rep(encoding=encodings.plaintext)
-
-    @property
-    def cat(self) -> ParagraphHeader:
-        """The category of this statement."""
-        return self._paragraph_header
-
-    @property
-    def subtitle(self) -> ComposableText:
-        """A conditional complement to the automatically structured title."""
-        return self._subtitle
-
-    @property
-    def ref(self) -> ComposableText:
-        """Unabridged name."""
-        return self._ref
-
-    @property
-    def abr(self) -> ComposableText:
-        """Abridged name."""
-        return self._abr
-
-    @property
-    def nameset(self) -> NameSet:
-        return self._nameset
-
-    @nameset.setter
-    def nameset(self, nameset: NameSet):
-        self._nameset = nameset
-
-    def rep(self, encoding: (None, Encoding) = None, cap: bool = False) -> str:
-        """Return the default representation for this long-name.
-
-        :param cap: Whether the representation must be capitalized (default: False).
-        :return: str
-        """
-        return self.rep_ref(encoding=encoding, cap=cap)
-
-    def rep_title(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
-        """
-
-        :param cap:
-        :return:
-        """
-        return f'{StyledText(s=self.cat.natural_name, text_style=text_styles.sans_serif_bold).rep(encoding=encoding, cap=cap)}' \
-               f'{"" if self.ref is None else " " + self.ref.rep(encoding=encoding)}' \
-               f'{"" if self.subtitle is None else " - " + self.subtitle.rep(encoding=encoding)}'
-
-    def rep_ref(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
-        return StyledText(s=self._paragraph_header.abridged_name,
-            text_style=text_styles.sans_serif_bold).rep(encoding=encoding,
-            cap=cap) + '' if self._ref is None else str(
-            ' ' + self._ref.rep(encoding=encoding)) + '' if self._nameset is None else str(
-            ' (' + self._nameset.rep_symbol(encoding=encoding) + ')')
-
-    def rep_mention(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
-        return f'{"" if self.ref is None else self.ref.rep(encoding=encoding) + " "}' + StyledText(
-            s=self.cat.natural_name, text_style=text_styles.sans_serif_normal).rep(
-            encoding=encoding, cap=cap)
-
-
 class DashedName:
     """A dashed-name to provide more semantically meaningful names to symbolic-objcts in reports
     than symbols.
@@ -2522,12 +2428,17 @@ class FreeVariable(TheoreticalObject):
     scope_initialization_status = Status('scope_initialization_status')
     closed_scope_status = Status('closed_scope_status')
 
-    def __init__(self, nameset=None, universe_of_discourse=None, status=None, scope=None,
-            echo=None):
+    def __init__(self, u: UniverseOfDiscourse, status: (None, FreeVariable.Status) = None,
+            scope: (None, Formula, typing.FrozenSet[Formula]) = None,
+            symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            nameset: (None, str, NameSet) = None, echo: (None, bool) = None) -> None:
         echo = prioritize_value(echo, configuration.echo_free_variable_declaration,
             configuration.echo_default, False)
-        status = FreeVariable.scope_initialization_status if status is None else status
-        scope = frozenset() if scope is None else scope
+        status = prioritize_value(status, FreeVariable.scope_initialization_status)
+        scope = prioritize_value(scope, frozenset())
         scope = {scope} if isinstance(scope, Formula) else scope
         verify(isinstance(scope, frozenset),
             'The scope of a FreeVariable must be of python type frozenset.')
@@ -2535,19 +2446,20 @@ class FreeVariable(TheoreticalObject):
             'The status of a FreeVariable must be of the FreeVariable.Status type.')
         self._status = status
         self._scope = scope
-        assert isinstance(universe_of_discourse, UniverseOfDiscourse)
-        if nameset is None:
+        assert isinstance(u, UniverseOfDiscourse)
+        if symbol is None:
             symbol = configuration.default_free_variable_symbol
-            index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
-        if isinstance(nameset, str):
+            index = u.index_symbol(symbol=symbol)
+        if isinstance(symbol, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_bold)
-            index = universe_of_discourse.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
-        super().__init__(nameset=nameset, universe_of_discourse=universe_of_discourse, echo=False)
+            symbol = StyledText(plaintext=symbol, text_style=text_styles.serif_bold)
+            if index is None and auto_index:
+                index = u.index_symbol(symbol=symbol)
+        super().__init__(universe_of_discourse=u, symbol=symbol, index=index, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, nameset=nameset, echo=False)
         # self.universe_of_discourse.cross_reference_variable(x=self)
         super()._declare_class_membership(declarative_class_list.free_variable)
         if echo:
@@ -2659,8 +2571,8 @@ class Formula(TheoreticalObject):
 
     def __init__(self, relation: (Relation, FreeVariable), parameters: tuple,
             universe_of_discourse: UniverseOfDiscourse, nameset: (None, str, NameSet) = None,
-            lock_variable_scope: bool = False, title: (None, str, TitleOBSOLETE) = None,
-            dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
+            lock_variable_scope: bool = False, dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
         """
         """
         echo = prioritize_value(echo, configuration.echo_formula_declaration,
@@ -3727,61 +3639,6 @@ class PropositionStatement:
         self.proof = proof
 
 
-class DirectDefinitionInference(FormulaStatement):
-    """
-
-    Definition:
-    A theoretical-statement that states that x = some other theoretical-object.
-    When an object is defined like this, it means that for every formula
-    where x is present, the same formula with the substitution of x by x' can be substituted in
-    all package.
-    TODO: QUESTION: Should we create a base "Alias" object that is distinct from simple-objct???
-    XXXXXXX
-    """
-
-    def __init__(self, p: Formula, d: DefinitionInclusion, t: TheoryElaborationSequence,
-            nameset: (None, str, NameSet) = None, title: (None, str, TitleOBSOLETE) = None,
-            dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
-        echo = prioritize_value(echo, configuration.echo_definition_direct_inference,
-            configuration.echo_default, False)
-        verify(t.contains_theoretical_objct(d), 'The definition-endorsement ⌜d⌝ must be contained '
-                                                'in the hierarchy of theory-elaboration ⌜t⌝.', d=d,
-            t=t)
-        verify(p.universe_of_discourse is t.universe_of_discourse,
-            'The universe-of-discourse of the valid-proposition ⌜p⌝ must be '
-            'consistent with the universe-of-discourse of theory-elaboration ⌜t⌝.', p=p, t=t)
-        verify(p.relation is t.universe_of_discourse.r.equality,
-            'The root relation of the valid-proposition ⌜p⌝ must be '
-            'the well-known equality-relation ⌜=⌝ in the universe-of-discourse.', p=p,
-            p_relation=p.relation)
-        self.definition = d
-        super().__init__(theory=t, valid_proposition=p, nameset=nameset,
-            paragraphe_header=paragraph_headers.formal_definition, title=title,
-            dashed_name=dashed_name, echo=False)
-        assert d.statement_index < self.statement_index
-        super()._declare_class_membership(declarative_class_list.direct_definition_inference)
-        if echo:
-            repm.prnt(self.rep_report())
-
-    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
-        # TODO: Instead of hard-coding the class name, use a meta-theory.
-        yield SerifItalic(plaintext='definition-interpretation')
-
-    def rep_report(self, proof: (None, bool) = None):
-        """Return a representation that expresses and justifies the statement.
-
-        The representation is in two parts:
-        - The formula that is being stated,
-        - The justification for the formula."""
-        output = f'{self.rep_title(cap=True)}: {self.valid_proposition.rep_formula(expand=True)}'
-        if proof:
-            output = output + f'\n\t' \
-                              f'{repm.serif_bold("Derivation from natural language definition")}'
-            output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ ' \
-                              f'Follows from {self.definition.rep_ref()}.'
-        return output + f'\n'
-
-
 universe_of_discourse_symbol_indexes = dict()
 
 
@@ -3940,7 +3797,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         dashed_name = 'axiom-interpretation'
         explicit_name = 'axiom interpretation inference rule'
         name = 'axiom interpretation'
-        definition = '𝒜 ⊢ P'
+        definition = StyledText(plaintext='A |- P', unicode='𝒜 ⊢ P')
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = AxiomInterpretationDeclaration.infer_formula
@@ -4200,11 +4057,12 @@ class ConjunctionEliminationLeftDeclaration(InferenceRuleDeclaration):
             explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_land_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
-            echo: (None, bool) = None) -> Formula:
+            echo: (None, bool) = None, **kwargs) -> Formula:
         """
 
         :param p_land_q: A formula-statement of the form: (P ⋀ Q).
         :param t: The current theory-elaboration-sequence.
+        :param echo:
         :return: The (proven) formula: P.
         """
         p = unpack_formula(p_land_q).parameters[0]
@@ -4247,8 +4105,8 @@ class ConjunctionEliminationRightDeclaration(InferenceRuleDeclaration):
         name = 'conjunction elimination (right)'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
-        infer_formula = BiconditionalEliminationRightDeclaration.infer_formula
-        verify_args = BiconditionalEliminationRightDeclaration.verify_args
+        infer_formula = ConjunctionEliminationRightDeclaration.infer_formula
+        verify_args = ConjunctionEliminationRightDeclaration.verify_args
         super().__init__(infer_formula=infer_formula, verify_args=verify_args,
             universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
@@ -4262,7 +4120,8 @@ class ConjunctionEliminationRightDeclaration(InferenceRuleDeclaration):
         :param t: The current theory-elaboration-sequence.
         :return: The (proven) formula: Q.
         """
-        q = unpack_formula(p_land_q).parameters[1]
+        p_land_q = interpret_formula(u=t.u, arity=2, flexible_formula=p_land_q)
+        q = p_land_q.parameters[1]
         return q
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
@@ -4294,7 +4153,7 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         dashed_name = 'conjunction-introduction'
         explicit_name = 'conjunction introduction inference rule'
         name = 'conjunction introduction'
-        definition = '(P, Q) ⊢ (P ⋀ Q)'
+        definition = StyledText(plaintext='(P, Q) |- (P and Q)', unicode='(P, Q) ⊢ (P ⋀ Q)')
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = AxiomInterpretationDeclaration.infer_formula
@@ -4774,25 +4633,26 @@ Q in P are replaced with R.
         return True
 
 
-class InconsistencyByNegationIntroductionDeclaration(InferenceRuleDeclaration):
+class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
     """P ⋀ not P: inconsistency"""
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'inconsistency-by-negation-introduction'
-        acronym = None
+        symbol = 'inconsistency-introduction-1'
+        acronym = 'ii1'
         abridged_name = None
         auto_index = False
-        dashed_name = 'inconsistency-by-negation-introduction'
-        explicit_name = 'inconsistency by negation introduction inference rule'
-        name = 'inconsistency by negation introduction'
+        dashed_name = 'inconsistency-introduction-1'
+        explicit_name = 'inconsistency introduction #1 inference rule'
+        name = 'inconsistency introduction #1'
+        definition = StyledText(plaintext='(P, not(P)) |- (T)', unicode='(𝑷, ¬(𝑷)) ⊢ 𝐼𝑛𝑐(𝓣)')
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
-        infer_formula = InconsistencyByNegationIntroductionDeclaration.infer_formula
-        verify_args = InconsistencyByNegationIntroductionDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        infer_formula = InconsistencyIntroduction1Declaration.infer_formula
+        verify_args = InconsistencyIntroduction1Declaration.verify_args
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p: FormulaStatement = None, not_p: FormulaStatement = None,
             inconsistent_theory: TheoryElaborationSequence = None,
@@ -4803,7 +4663,7 @@ class InconsistencyByNegationIntroductionDeclaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_inconsistency_introduction_paragraph_proof(
+        output = yield from configuration.locale.compose_inconsistency_introduction_1_paragraph_proof(
             o=o)
         return output
 
@@ -4827,22 +4687,23 @@ class InconsistencyByNegationIntroductionDeclaration(InferenceRuleDeclaration):
         return True
 
 
-class InconsistencyByInequalityIntroductionDeclaration(InferenceRuleDeclaration):
+class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
     """P = Q ⋀ P neq Q: inconsistency """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'inconsistency-by-inequality-introduction'
-        acronym = 'iei'
+        symbol = 'inconsistency-introduction-2'
+        acronym = 'ii2'
         abridged_name = None
         auto_index = False
-        dashed_name = 'inconsistency-by-inequality-introduction'
-        explicit_name = 'inconsistency by inequality introduction inference rule'
-        name = 'inconsistency by inequality introduction'
-        definition = '((P = Q), (P ≠ Q)) ⊢ Inc(𝒯)'
+        dashed_name = 'inconsistency-introduction-2'
+        explicit_name = 'inconsistency introduction #2 inference rule'
+        name = 'inconsistency introduction #2'
+        definition = StyledText(plaintext='((P = Q), (P neq Q)) |- Inc(T)',
+            unicode='((𝑷 = 𝑸), (𝑷 ≠ 𝑸)) ⊢ 𝐼𝑛𝑐(𝒯)')
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
-        infer_formula = InconsistencyByInequalityIntroductionDeclaration.infer_formula
-        verify_args = InconsistencyByInequalityIntroductionDeclaration.verify_args
+        infer_formula = InconsistencyIntroduction2Declaration.infer_formula
+        verify_args = InconsistencyIntroduction2Declaration.verify_args
         super().__init__(definition=definition, infer_formula=infer_formula,
             verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
@@ -4857,7 +4718,7 @@ class InconsistencyByInequalityIntroductionDeclaration(InferenceRuleDeclaration)
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_inconsistency_by_inequality_introduction_paragraph_proof(
+        output = yield from configuration.locale.compose_inconsistency_introduction_2_paragraph_proof(
             o=o)
         return output
 
@@ -4887,6 +4748,55 @@ class InconsistencyByInequalityIntroductionDeclaration(InferenceRuleDeclaration)
         return True
 
 
+class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
+    """P neq P: inconsistency """
+
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        symbol = 'inconsistency-introduction-3'
+        acronym = 'ii3'
+        abridged_name = None
+        auto_index = False
+        dashed_name = 'inconsistency-introduction-3'
+        explicit_name = 'inconsistency introduction #3 inference rule'
+        name = 'inconsistency introduction #3'
+        definition = StyledText(plaintext='(P neq P) |- Inc(T)', unicode='(𝑷 ≠ 𝑷) ⊢ Inc(𝒯)')
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = InconsistencyIntroduction3Declaration.infer_formula
+        verify_args = InconsistencyIntroduction3Declaration.verify_args
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def infer_formula(self, p_neq_p: FormulaStatement = None,
+            inconsistent_theory: TheoryElaborationSequence = None,
+            t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
+        p_neq_p = interpret_formula(u=self.u, arity=2, flexible_formula=p_neq_p)
+        return t.u.f(t.u.r.inconsistency, inconsistent_theory)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_inconsistency_introduction_3_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p_neq_p: FormulaStatement = None,
+            inconsistent_theory: TheoryElaborationSequence = None,
+            t: TheoryElaborationSequence = None) -> bool:
+        verify(inconsistent_theory.contains_theoretical_objct(p_neq_p),
+            'Statement ⌜p_neq_p⌝ must be contained in theory ⌜inconsistent_theory⌝''s hierarchy.',
+            p_neq_p=p_neq_p, inconsistent_theory=inconsistent_theory, slf=self)
+        verify(p_neq_p.relation is p_neq_p.theory.universe_of_discourse.relations.inequality,
+            'The relation of statement ⌜p_neq_p⌝ must be ⌜inequality⌝.', p_neq_p=p_neq_p,
+            inconsistent_theory=inconsistent_theory, slf=self)
+        verify(p_neq_p.valid_proposition.parameters[0].is_formula_syntactically_equivalent_to(
+            p_neq_p.valid_proposition.parameters[1]),
+            'The two ⌜p⌝ terms in  ⌜p_neq_p⌝ must be formula-syntactically-equivalent.',
+            p_neq_p=p_neq_p, inconsistent_theory=inconsistent_theory, slf=self)
+        return True
+
+
 class ModusPonensDeclaration(InferenceRuleDeclaration):
     """The declaration of the :doc:`modus_ponens` :doc:`inference_rule` in a :doc:`universe_of_discourse`.
     """
@@ -4899,7 +4809,7 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         dashed_name = 'modus-ponens'
         explicit_name = 'modus ponens inference rule'
         name = 'modus ponens'
-        definition = '((P ⟹ Q), P) ⊢ Q'
+        definition = StyledText(plaintext='(P ==> Q), P) |- Q', unicode='((P ⟹ Q), P) ⊢ Q')
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = ModusPonensDeclaration.infer_formula
@@ -4908,6 +4818,11 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
             verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(o=o)
+        return output
 
     def infer_formula(self, p_implies_q: FormulaStatement, p: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
@@ -4923,11 +4838,6 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         # p_prime = unpack_formula(p_prime)  # Received as a statement-parameter to prove that p
         # is true in t.
         return q  # TODO: Provide support for statements that are atomic propositional formula,  # that is  # without relation or where the objct is a 0-ary relation.
-
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(o=o)
-        return output
 
     def verify_args(self, p_implies_q: FormulaStatement, p: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
@@ -4960,7 +4870,7 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         return True
 
 
-class ProofByContradictionDeclaration(InferenceRuleDeclaration):
+class ProofByContradiction1Declaration(InferenceRuleDeclaration):
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'proof-by-contradiction'
         acronym = 'pbc'
@@ -4968,189 +4878,12 @@ class ProofByContradictionDeclaration(InferenceRuleDeclaration):
         dashed_name = 'proof-by-contradiction'
         explicit_name = 'proof by contradiction inference rule'
         name = 'proof by contradiction'
+        definition = StyledText(plaintext='(H assume not(P), P, Inc(H)) |- P',
+            unicode='(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 ¬𝑷, 𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ 𝑷')
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
-        infer_formula = ProofByContradictionDeclaration.infer_formula
-        verify_args = ProofByContradictionDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
-            echo=echo)
-
-    def infer_formula(self, not_p: Hypothesis, inc_not_p: FormulaStatement,
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        not_p = not_p.hypothesis_formula
-        p = not_p.parameters[0]
-        return p
-
-    # def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-    #     Composable, Composable, bool]:
-    #     output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(
-    #         o=o)
-    #     return output
-
-    def verify_args(self, not_p: Hypothesis, inc_not_p: InferredStatement,
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
-        """
-
-        :param not_p: The hypothesis-statement in the parent theory.
-        :param inc_not_p: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
-        :param t: The current (parent) theory.
-        :param echo:
-        :return:
-        """
-        verify(is_in_class(not_p, classes.hypothesis), '⌜not_p⌝ must be an hypothesis.',
-            not_p=not_p, slf=self)
-        verify(is_in_class(inc_not_p, classes.inferred_proposition),
-            '⌜inc_not_p⌝ must be an inferred-statement.', inc_not_p=inc_not_p, slf=self)
-        verify(t.contains_theoretical_objct(not_p), '⌜not_p⌝ must be in theory ⌜t⌝.', not_p=not_p,
-            t=t, slf=self)
-        verify(not_p.hypothesis_child_theory.extended_theory is t,
-            '⌜not_p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
-            not_p_hypothetical_theory=not_p.hypothesis_child_theory, not_p=not_p, t=t, slf=self)
-        verify(inc_not_p.relation is t.u.relations.inconsistency,
-            '⌜inc_not_p.relation⌝ must be of form (Inc(Hn)).',
-            inc_not_p_relation=inc_not_p.relation, inc_not_p=inc_not_p, t=t, slf=self)
-        verify(inc_not_p.valid_proposition.parameters[0] is not_p.hypothesis_child_theory,
-            '⌜inc_not_p⌝ must be of form (Inc(Hn)) where parameter[0] Hn is the '
-            'hypothetical-theory.',
-            inc_not_p_parameters_0=inc_not_p.valid_proposition.parameters[0],
-            not_p_hypothetical_theory=not_p.hypothesis_child_theory, t=t, slf=self)
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
-        #  stable???
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
-        #  is stable
-        return True
-
-
-class ProofByContradictionOfInequalityDeclaration(InferenceRuleDeclaration):
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'proof-by-contradiction-of-inequality'
-        acronym = 'pbci'
-        auto_index = False
-        dashed_name = 'proof-by-contradiction-of-inequality'
-        explicit_name = 'proof by contradiction of inequality inference rule'
-        name = 'proof by contradiction of inequality'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = ProofByContradictionOfInequalityDeclaration.infer_formula
-        verify_args = ProofByContradictionOfInequalityDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
-            echo=echo)
-
-    def infer_formula(self, p_neq_q: Hypothesis, inc_p_neq_q: FormulaStatement,
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        p_neq_q = p_neq_q.hypothesis_formula
-        p = p_neq_q.parameters[0]
-        q = p_neq_q.parameters[1]
-        return t.u.f(t.u.r.equality, p, q)
-
-    def verify_args(self, p_neq_q: Hypothesis, inc_p_neq_q: InferredStatement,
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
-        """
-
-        :param p_neq_q: The hypothesis-statement in the parent theory.
-        :param inc_p_neq_q: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
-        :param t: The current (parent) theory.
-        :param echo:
-        :return:
-        """
-        verify(is_in_class(p_neq_q, classes.hypothesis), '⌜p_neq_q⌝ must be an hypothesis.',
-            p_neq_q=p_neq_q, slf=self)
-        verify(is_in_class(inc_p_neq_q, classes.inferred_proposition),
-            '⌜inc_p_neq_q⌝ must be an inferred-statement.', inc_p_neq_q=inc_p_neq_q, slf=self)
-        verify(t.contains_theoretical_objct(p_neq_q), '⌜p_neq_q⌝ must be in theory ⌜t⌝.',
-            p_neq_q=p_neq_q, t=t, slf=self)
-        verify(p_neq_q.hypothesis_child_theory.extended_theory is t,
-            '⌜p_neq_q.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
-            p_neq_q_hypothetical_theory=p_neq_q.hypothesis_child_theory, p_neq_q=p_neq_q, t=t,
-            slf=self)
-        verify(inc_p_neq_q.relation is t.u.relations.inequality,
-            '⌜inc_p_neq_q.relation⌝ must be the inequality relation.',
-            inc_p_neq_q_relation=inc_p_neq_q.relation, inc_p_neq_q=inc_p_neq_q, t=t, slf=self)
-        p_neq_q_prime: FormulaStatement
-        p_neq_q_prime = inc_p_neq_q.parameters[0]
-        verify(p_neq_q.is_formula_syntactically_equivalent_to(p_neq_q_prime),
-            '⌜p_neq_q⌝ must be formula-syntactically-equivalent to ⌜p_neq_q⌝ in ⌜inc_p_neq_q⌝.',
-            p_neq_q=p_neq_q, p_neq_q_prime=p_neq_q_prime, t=t, slf=self)
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
-        #  stable???
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
-        #  is stable
-        return True
-
-
-class ProofByRefutationDeclaration(InferenceRuleDeclaration):
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'proof-by-refutation'
-        acronym = 'pbr'
-        auto_index = False
-        dashed_name = 'proof-by-refutation'
-        explicit_name = 'proof by refutation inference rule'
-        name = 'proof by refutation'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = ProofByContradictionDeclaration.infer_formula
-        verify_args = ProofByContradictionDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
-            echo=echo)
-
-    def infer_formula(self, p: Hypothesis, inc_p: FormulaStatement, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> Formula:
-        p = p.hypothesis_formula
-        not_p = t.u.f(t.u.r.negation, p)
-        return not_p
-
-        # def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[  #     Composable, Composable, bool]:  #     output = yield from  #  #  #  #  #  #     configuration.locale.compose_modus_ponens_paragraph_proof(  #         o=o)  #  #  #  #     return output
-
-    def verify_args(self, p: Hypothesis, inc_p: InferredStatement, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> bool:
-        """
-
-        :param p: The hypothesis-statement in the parent theory.
-        :param inc_p: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
-        :param t: The current (parent) theory.
-        :param echo:
-        :return:
-        """
-        verify(is_in_class(p, classes.hypothesis), '⌜p⌝ must be an hypothesis.', p=p, slf=self)
-        verify(is_in_class(inc_p, classes.inferred_proposition),
-            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_p, slf=self)
-        verify(t.contains_theoretical_objct(p), '⌜p⌝ must be in theory ⌜t⌝.', p=p, t=t, slf=self)
-        verify(p.hypothesis_child_theory.extended_theory is t,
-            '⌜p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
-            p_hypothetical_theory=p.hypothesis_child_theory, p=p, t=t, slf=self)
-        verify(inc_p.relation is t.u.relations.inconsistency,
-            '⌜inc_p.relation⌝ must be of form (Inc(Hn)).', inc_p_relation=inc_p.relation,
-            inc_p=inc_p, t=t, slf=self)
-        verify(inc_p.valid_proposition.parameters[0] is p.hypothesis_child_theory,
-            '⌜inc_p⌝ must be of form (Inc(Hn)) where parameter[0] Hn is the hypothetical-theory.',
-            inc_p_parameters_0=inc_p.valid_proposition.parameters[0],
-            p_hypothetical_theory=p.hypothesis_child_theory, t=t, slf=self)
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
-        #  stable???
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
-        #  is stable
-        return True
-
-
-class ProofByRefutationOfEqualityDeclaration(InferenceRuleDeclaration):
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'proof-by-refutation-of-equality'
-        acronym = 'pbre'
-        auto_index = False
-        dashed_name = 'proof-by-refutation-of-equality'
-        explicit_name = 'proof by refutation of equality inference rule'
-        name = 'proof by refutation of equality'
-        definition = '(ℋ(P=Q), Inc(ℋ)) ⊢ (P ≠ Q)'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = ProofByRefutationOfEqualityDeclaration.infer_formula
-        verify_args = ProofByRefutationOfEqualityDeclaration.verify_args
+        infer_formula = ProofByContradiction1Declaration.infer_formula
+        verify_args = ProofByContradiction1Declaration.verify_args
         super().__init__(definition=definition, infer_formula=infer_formula,
             verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
@@ -5158,40 +4891,237 @@ class ProofByRefutationOfEqualityDeclaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_proof_by_reputation_of_equality_paragraph_proof(
+        output = yield from configuration.locale.compose_proof_by_contradiction_1_paragraph_proof(
             o=o)
         return output
 
-    def infer_formula(self, p_eq_q: Hypothesis, inc_p_eq_q: FormulaStatement,
+    def infer_formula(self, not_p_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        p_eq_q = p_eq_q.hypothesis_formula
+        not_p = not_p_hypothesis.hypothesis_formula
+        p = not_p.parameters[0]
+        return p
+
+    def verify_args(self, not_p_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
+        """
+
+        :param not_p_hypothesis: The hypothesis-statement in the parent theory.
+        :param inc_hypothesis: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param t: The current (parent) theory.
+        :param echo:
+        :return:
+        """
+        verify(is_in_class(not_p_hypothesis, classes.hypothesis), '⌜not_p⌝ must be an hypothesis.',
+            not_p=not_p_hypothesis, slf=self)
+        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
+            '⌜inc_not_p⌝ must be an inferred-statement.', inc_not_p=inc_hypothesis, slf=self)
+        verify(t.contains_theoretical_objct(not_p_hypothesis), '⌜not_p⌝ must be in theory ⌜t⌝.',
+            not_p=not_p_hypothesis, t=t, slf=self)
+        verify(not_p_hypothesis.hypothesis_child_theory.extended_theory is t,
+            '⌜not_p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
+            not_p_hypothetical_theory=not_p_hypothesis.hypothesis_child_theory,
+            not_p=not_p_hypothesis, t=t, slf=self)
+        verify(inc_hypothesis.relation is t.u.relations.inconsistency,
+            '⌜inc_not_p.relation⌝ must be of form (Inc(Hn)).',
+            inc_not_p_relation=inc_hypothesis.relation, inc_not_p=inc_hypothesis, t=t, slf=self)
+        verify(inc_hypothesis.valid_proposition.parameters[
+                   0] is not_p_hypothesis.hypothesis_child_theory,
+            '⌜inc_not_p⌝ must be of form (Inc(Hn)) where parameter[0] Hn is the '
+            'hypothetical-theory.',
+            inc_not_p_parameters_0=inc_hypothesis.valid_proposition.parameters[0],
+            not_p_hypothetical_theory=not_p_hypothesis.hypothesis_child_theory, t=t, slf=self)
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
+        #  stable???
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
+        #  is stable
+        return True
+
+
+class ProofByContradiction2Declaration(InferenceRuleDeclaration):
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        symbol = 'proof-by-contradiction-2'
+        acronym = 'pbc2'
+        auto_index = False
+        dashed_name = 'proof-by-contradiction-2'
+        explicit_name = 'proof by contradiction #2 inference rule'
+        name = 'proof by contradiction #2'
+        definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 ≠ 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 = 𝑸)'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = ProofByContradiction2Declaration.infer_formula
+        verify_args = ProofByContradiction2Declaration.verify_args
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
+            explicit_name=explicit_name, echo=echo)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_proof_by_contradiction_2_paragraph_proof(
+            o=o)
+        return output
+
+    def infer_formula(self, p_neq_q_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        p_neq_q = p_neq_q_hypothesis.hypothesis_formula
+        p = p_neq_q.parameters[0]
+        q = p_neq_q.parameters[1]
+        return t.u.f(t.u.r.equality, p, q)
+
+    def verify_args(self, p_neq_q_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
+        """
+
+        :param p_neq_q_hypothesis: The hypothesis-statement in the parent theory.
+        :param inc_hypothesis: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param t: The current (parent) theory.
+        :param echo:
+        :return:
+        """
+        verify(is_in_class(p_neq_q_hypothesis, classes.hypothesis),
+            '⌜p_neq_q⌝ must be an hypothesis.', p_neq_q=p_neq_q_hypothesis, slf=self)
+        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
+            '⌜inc_p_neq_q⌝ must be an inferred-statement.', inc_p_neq_q=inc_hypothesis, slf=self)
+        verify(t.contains_theoretical_objct(p_neq_q_hypothesis), '⌜p_neq_q⌝ must be in theory ⌜t⌝.',
+            p_neq_q=p_neq_q_hypothesis, t=t, slf=self)
+        verify(p_neq_q_hypothesis.hypothesis_child_theory.extended_theory is t,
+            '⌜p_neq_q.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
+            p_neq_q_hypothetical_theory=p_neq_q_hypothesis.hypothesis_child_theory,
+            p_neq_q=p_neq_q_hypothesis, t=t, slf=self)
+        verify(inc_hypothesis.relation is t.u.relations.inequality,
+            '⌜inc_p_neq_q.relation⌝ must be the inequality relation.',
+            inc_p_neq_q_relation=inc_hypothesis.relation, inc_p_neq_q=inc_hypothesis, t=t, slf=self)
+        p_neq_q_prime: FormulaStatement
+        p_neq_q_prime = inc_hypothesis.parameters[0]
+        verify(p_neq_q_hypothesis.is_formula_syntactically_equivalent_to(p_neq_q_prime),
+            '⌜p_neq_q⌝ must be formula-syntactically-equivalent to ⌜p_neq_q⌝ in ⌜inc_p_neq_q⌝.',
+            p_neq_q=p_neq_q_hypothesis, p_neq_q_prime=p_neq_q_prime, t=t, slf=self)
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
+        #  stable???
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
+        #  is stable
+        return True
+
+
+class ProofByRefutation1Declaration(InferenceRuleDeclaration):
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        symbol = 'proof-by-refutation'
+        acronym = 'pbr'
+        auto_index = False
+        dashed_name = 'proof-by-refutation'
+        explicit_name = 'proof by refutation inference rule'
+        name = 'proof by refutation'
+        definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ ¬𝑷'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = ProofByContradiction1Declaration.infer_formula
+        verify_args = ProofByContradiction1Declaration.verify_args
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
+            explicit_name=explicit_name, echo=echo)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_proof_by_refutation_1_paragraph_proof(o=o)
+        return output
+
+    def infer_formula(self, p_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        p = p_hypothesis.hypothesis_formula
+        not_p = t.u.f(t.u.r.negation, p)
+        return not_p
+
+    def verify_args(self, p_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
+        """
+
+        :param p_hypothesis: The hypothesis-statement in the parent theory.
+        :param inc_hypothesis: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param t: The current (parent) theory.
+        :param echo:
+        :return:
+        """
+        verify(is_in_class(p_hypothesis, classes.hypothesis), '⌜p⌝ must be an hypothesis.',
+            p=p_hypothesis, slf=self)
+        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
+            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_hypothesis, slf=self)
+        verify(t.contains_theoretical_objct(p_hypothesis), '⌜p⌝ must be in theory ⌜t⌝.',
+            p=p_hypothesis, t=t, slf=self)
+        verify(p_hypothesis.hypothesis_child_theory.extended_theory is t,
+            '⌜p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
+            p_hypothetical_theory=p_hypothesis.hypothesis_child_theory, p=p_hypothesis, t=t,
+            slf=self)
+        verify(inc_hypothesis.relation is t.u.relations.inconsistency,
+            '⌜inc_p.relation⌝ must be of form (Inc(Hn)).', inc_p_relation=inc_hypothesis.relation,
+            inc_p=inc_hypothesis, t=t, slf=self)
+        verify(
+            inc_hypothesis.valid_proposition.parameters[0] is p_hypothesis.hypothesis_child_theory,
+            '⌜inc_p⌝ must be of form (Inc(Hn)) where parameter[0] Hn is the hypothetical-theory.',
+            inc_p_parameters_0=inc_hypothesis.valid_proposition.parameters[0],
+            p_hypothetical_theory=p_hypothesis.hypothesis_child_theory, t=t, slf=self)
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
+        #  stable???
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
+        #  is stable
+        return True
+
+
+class ProofByRefutation2Declaration(InferenceRuleDeclaration):
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        symbol = 'proof-by-refutation-2'
+        acronym = 'pbr2'
+        auto_index = False
+        dashed_name = 'proof-by-refutation-2'
+        explicit_name = 'proof by refutation #2 inference rule'
+        name = 'proof by refutation #2'
+        definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 = 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 ≠ 𝑸)'
+        # Assure backward-compatibility with the parent class,
+        # which received these methods as __init__ arguments.
+        infer_formula = ProofByRefutation2Declaration.infer_formula
+        verify_args = ProofByRefutation2Declaration.verify_args
+        super().__init__(definition=definition, infer_formula=infer_formula,
+            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
+            explicit_name=explicit_name, echo=echo)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_proof_by_refutation_2_paragraph_proof(o=o)
+        return output
+
+    def infer_formula(self, p_eq_q_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        p_eq_q = p_eq_q_hypothesis.hypothesis_formula
         p_neq_q = t.u.f(t.u.r.inequality, p_eq_q.parameters[0], p_eq_q.parameters[1])
         return p_neq_q
 
         # def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[  #     Composable, Composable, bool]:  #     output = yield from  #  #  #  #  #  #     configuration.locale.compose_modus_ponens_paragraph_proof(  #         o=o)  #  #  #  #     return output
 
-    def verify_args(self, p_eq_q: Hypothesis, inc_p_eq_q: InferredStatement,
+    def verify_args(self, p_eq_q_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
         """
 
-        :param p_eq_q: The hypothesis-statement in the parent theory.
-        :param inc_p_eq_q: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param p_eq_q_hypothesis: The hypothesis-statement in the parent theory.
+        :param inc_hypothesis: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
         :param t: The current (parent) theory.
         :param echo:
         :return:
         """
-        verify(is_in_class(p_eq_q, classes.hypothesis), '⌜p⌝ must be an hypothesis.', p=p_eq_q,
-            slf=self)
-        verify(is_in_class(inc_p_eq_q, classes.inferred_proposition),
-            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_p_eq_q, slf=self)
-        verify(t.contains_theoretical_objct(p_eq_q), '⌜p⌝ must be in theory ⌜t⌝.', p=p_eq_q, t=t,
-            slf=self)
-        verify(p_eq_q.hypothesis_child_theory.extended_theory is t,
+        verify(is_in_class(p_eq_q_hypothesis, classes.hypothesis), '⌜p⌝ must be an hypothesis.',
+            p=p_eq_q_hypothesis, slf=self)
+        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
+            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_hypothesis, slf=self)
+        verify(t.contains_theoretical_objct(p_eq_q_hypothesis), '⌜p⌝ must be in theory ⌜t⌝.',
+            p=p_eq_q_hypothesis, t=t, slf=self)
+        verify(p_eq_q_hypothesis.hypothesis_child_theory.extended_theory is t,
             '⌜p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
-            p_hypothetical_theory=p_eq_q.hypothesis_child_theory, p=p_eq_q, t=t, slf=self)
-        verify(inc_p_eq_q.valid_proposition.relation is t.u.relations.inconsistency,
+            p_hypothetical_theory=p_eq_q_hypothesis.hypothesis_child_theory, p=p_eq_q_hypothesis,
+            t=t, slf=self)
+        verify(inc_hypothesis.valid_proposition.relation is t.u.relations.inconsistency,
             '⌜inc_p.relation⌝ must be of form (Inc(Hn)).',
-            inc_p_relation=inc_p_eq_q.valid_proposition.relation, inc_p=inc_p_eq_q, t=t, slf=self)
+            inc_p_relation=inc_hypothesis.valid_proposition.relation, inc_p=inc_hypothesis, t=t,
+            slf=self)
         # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
         #  stable???
         # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
@@ -5208,7 +5138,7 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         dashed_name = 'variable-substitution'
         explicit_name = 'variable substitution inference rule'
         name = 'variable substitution'
-        definition = '(P, 𝛷) ⊢ P\''
+        definition = StyledText(plaintext='(P, Phi) |- P\'', unicode='(P, 𝛷) ⊢ P\'')
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = VariableSubstitutionDeclaration.infer_formula
@@ -5386,8 +5316,6 @@ class Section(AtheoreticalStatement):
         self._max_subsection_number = 0
         self.category = section_category
         symbol = NameSet(symbol=self.category.symbol_base, index=self.statement_index)
-        title = TitleOBSOLETE(ref=self._section_reference, paragrapha_header=section_category,
-            subtitle=section_title)
         super().__init__(nameset=symbol, theory=t, echo=False)
         super()._declare_class_membership(declarative_class_list.note)
         if echo:
@@ -5901,6 +5829,16 @@ class Hypothesis(Statement):
             configuration.echo_inferred_statement, False)
         if echo:
             self.echo()
+
+    @property
+    def child_theory(self) -> TheoryElaborationSequence:
+        """A shortcut for self.hypothesis_child_theory"""
+        return self.hypothesis_child_theory
+
+    @property
+    def child_statement(self) -> InferredStatement:
+        """A shortcut for self.hypothesis_statement_in_child_theory"""
+        return self._hypothesis_statement_in_child_theory
 
     def compose_class(self) -> collections.abc.Generator[Composable, Composable, True]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
@@ -6529,13 +6467,14 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         self._double_negation_introduction = None
         self._equality_commutativity = None
         self._equal_terms_substitution = None
-        self._inconsistency_by_inequality_introduction = None
-        self._inconsistency_by_negation_introduction = None
+        self._inconsistency_introduction_1 = None
+        self._inconsistency_introduction_2 = None
+        self._inconsistency_introduction_3 = None
         self._modus_ponens = None
-        self._proof_by_contradiction = None
-        self._proof_by_contradiction_of_non_equality = None
-        self._proof_by_refutation = None
-        self._proof_by_refutation_of_equality = None
+        self._proof_by_contradiction_1 = None
+        self._proof_by_contradiction_2 = None
+        self._proof_by_refutation_1 = None
+        self._proof_by_refutation_2 = None
         self._variable_substitution = None
 
     @property
@@ -6909,16 +6848,37 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.equal_terms_substitution
 
     @property
-    def inconsistency_by_inequality_introduction(
-            self) -> InconsistencyByInequalityIntroductionDeclaration:
-        if self._inconsistency_by_inequality_introduction is None:
-            self._inconsistency_by_inequality_introduction = InconsistencyByInequalityIntroductionDeclaration(
-                universe_of_discourse=self.u)
-        return self._inconsistency_by_inequality_introduction
+    def ii1(self) -> InconsistencyIntroduction1Declaration:
+        """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
+
+            Unabridged property: universe_of_discourse.inference_rules.inconsistency_introduction
+
+            Inconsistency-introduction is an extraordinary inference-rule
+            because it proves that the theory is inconsistent. It follows
+            that the corresponding statement: ⌜Inc(t)⌝ becomes paradoxically
+            invalid as soon as it is expressed in the current theory. In
+            fact, ⌜Inc(t)⌝ should rather be understood as a meta-statement
+            about the theory. In future versions of punctilious we will consider
+            stating ⌜Inc(t)⌝ in a distinct meta-theory.
+
+            Once ⌜Inc(t)⌝ is stated, the ⌜consistency⌝ property of the
+            current theory is automatically changed to ⌜inconsistent⌝.
+
+            If the inference-rule does not exist in the universe-of-discourse,
+            the inference-rule is automatically declared.
+            """
+        return self.inconsistency_introduction_1
 
     @property
-    def inconsistency_by_negation_introduction(
-            self) -> InconsistencyByNegationIntroductionDeclaration:
+    def ii2(self) -> InconsistencyIntroduction2Declaration:
+        return self.inconsistency_introduction_2
+
+    @property
+    def ii3(self) -> InconsistencyIntroduction3Declaration:
+        return self.inconsistency_introduction_3
+
+    @property
+    def inconsistency_introduction_1(self) -> InconsistencyIntroduction1Declaration:
         """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
 
         Abridged property: u.i.ii
@@ -6938,32 +6898,24 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
-        if self._inconsistency_by_negation_introduction is None:
-            self._inconsistency_by_negation_introduction = InconsistencyByNegationIntroductionDeclaration(
+        if self._inconsistency_introduction_1 is None:
+            self._inconsistency_introduction_1 = InconsistencyIntroduction1Declaration(
                 universe_of_discourse=self.u)
-        return self._inconsistency_by_negation_introduction
+        return self._inconsistency_introduction_1
 
     @property
-    def ii(self) -> InconsistencyByNegationIntroductionDeclaration:
-        """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
+    def inconsistency_introduction_2(self) -> InconsistencyIntroduction2Declaration:
+        if self._inconsistency_introduction_2 is None:
+            self._inconsistency_introduction_2 = InconsistencyIntroduction2Declaration(
+                universe_of_discourse=self.u)
+        return self._inconsistency_introduction_2
 
-            Unabridged property: universe_of_discourse.inference_rules.inconsistency_introduction
-
-            Inconsistency-introduction is an extraordinary inference-rule
-            because it proves that the theory is inconsistent. It follows
-            that the corresponding statement: ⌜Inc(t)⌝ becomes paradoxically
-            invalid as soon as it is expressed in the current theory. In
-            fact, ⌜Inc(t)⌝ should rather be understood as a meta-statement
-            about the theory. In future versions of punctilious we will consider
-            stating ⌜Inc(t)⌝ in a distinct meta-theory.
-
-            Once ⌜Inc(t)⌝ is stated, the ⌜consistency⌝ property of the
-            current theory is automatically changed to ⌜inconsistent⌝.
-
-            If the inference-rule does not exist in the universe-of-discourse,
-            the inference-rule is automatically declared.
-            """
-        return self.inconsistency_by_negation_introduction
+    @property
+    def inconsistency_introduction_3(self) -> InconsistencyIntroduction3Declaration:
+        if self._inconsistency_introduction_3 is None:
+            self._inconsistency_introduction_3 = InconsistencyIntroduction3Declaration(
+                universe_of_discourse=self.u)
+        return self._inconsistency_introduction_3
 
     @property
     def modus_ponens(self) -> ModusPonensDeclaration:
@@ -6994,7 +6946,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.modus_ponens
 
     @property
-    def pbc(self) -> ProofByContradictionDeclaration:
+    def pbc1(self) -> ProofByContradiction1Declaration:
         """
 
         Unabridged property: u.i.proof_by_contradiction
@@ -7002,10 +6954,21 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.proof_by_contradiction
+        return self.proof_by_contradiction_1
 
     @property
-    def pbr(self) -> ProofByRefutationDeclaration:
+    def pbc2(self) -> ProofByContradiction2Declaration:
+        """
+
+        Unabridged property: u.i.proof_by_contradiction
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        return self.proof_by_contradiction_2
+
+    @property
+    def pbr(self) -> ProofByRefutation1Declaration:
         """
 
         Unabridged property: u.i.proof_by_refutation
@@ -7013,10 +6976,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.proof_by_refutation
+        return self.proof_by_refutation_1
 
     @property
-    def proof_by_contradiction(self) -> ProofByContradictionDeclaration:
+    def proof_by_contradiction_1(self) -> ProofByContradiction1Declaration:
         """
 
         Abridged property: u.i.pbc
@@ -7025,20 +6988,20 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._proof_by_contradiction is None:
-            self._proof_by_contradiction = ProofByContradictionDeclaration(
+        if self._proof_by_contradiction_1 is None:
+            self._proof_by_contradiction_1 = ProofByContradiction1Declaration(
                 universe_of_discourse=self.u)
-        return self._proof_by_contradiction
+        return self._proof_by_contradiction_1
 
     @property
-    def proof_by_contradiction_of_non_equality(self) -> ProofByContradictionOfInequalityDeclaration:
-        if self._proof_by_contradiction_of_non_equality is None:
-            self._proof_by_contradiction_of_non_equality = ProofByContradictionOfInequalityDeclaration(
+    def proof_by_contradiction_2(self) -> ProofByContradiction2Declaration:
+        if self._proof_by_contradiction_2 is None:
+            self._proof_by_contradiction_2 = ProofByContradiction2Declaration(
                 universe_of_discourse=self.u)
-        return self._proof_by_contradiction_of_non_equality
+        return self._proof_by_contradiction_2
 
     @property
-    def proof_by_refutation(self) -> ProofByRefutationDeclaration:
+    def proof_by_refutation_1(self) -> ProofByRefutation1Declaration:
         """
 
         Abridged property: u.i.pbr
@@ -7047,16 +7010,17 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._proof_by_refutation is None:
-            self._proof_by_refutation = ProofByRefutationDeclaration(universe_of_discourse=self.u)
-        return self._proof_by_refutation
+        if self._proof_by_refutation_1 is None:
+            self._proof_by_refutation_1 = ProofByRefutation1Declaration(
+                universe_of_discourse=self.u)
+        return self._proof_by_refutation_1
 
     @property
-    def proof_by_refutation_of_equality(self) -> ProofByRefutationOfEqualityDeclaration:
-        if self._proof_by_refutation_of_equality is None:
-            self._proof_by_refutation_of_equality = ProofByRefutationOfEqualityDeclaration(
+    def proof_by_refutation_2(self) -> ProofByRefutation2Declaration:
+        if self._proof_by_refutation_2 is None:
+            self._proof_by_refutation_2 = ProofByRefutation2Declaration(
                 universe_of_discourse=self.u)
-        return self._proof_by_refutation_of_equality
+        return self._proof_by_refutation_2
 
     @property
     def variable_substitution(self) -> VariableSubstitutionDeclaration:
@@ -7066,7 +7030,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._variable_substitution
 
     @property
-    def vs(self) -> InferenceRuleDeclaration:
+    def vs(self) -> VariableSubstitutionDeclaration:
         """An inference-rule: P ⊢ P'
 
         Abridged property: u.i.vs
@@ -7296,21 +7260,20 @@ class ConjunctionEliminationLeftInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_land_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        return super().infer_formula(p_land_q, echo=echo)
+    def infer_formula(self, p_and_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        return super().infer_formula(p_and_q, echo=echo)
 
-    def infer_statement(self, p_land_q: (None, FormulaStatement) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+    def infer_statement(self, p_and_q: (None, FormulaStatement) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """Apply the conjunction elimination (left) inference-rule and return the
         inferred-statement.
 
-        :param p_iff_q: (mandatory) The conjunction statement.
+        :param p_and_q:
         :return: The proven inferred-statement p implies q in the current theory.
         """
-        return super().infer_statement(p_land_q, nameset=nameset, ref=ref,
-            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        return super().infer_statement(p_and_q, ref=ref, paragraph_header=paragraph_header,
+            subtitle=subtitle, echo=echo)
 
 
 class ConjunctionEliminationRightInclusion(InferenceRuleInclusion):
@@ -7330,20 +7293,20 @@ class ConjunctionEliminationRightInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_iff_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        return super().infer_formula(p_iff_q, echo=echo)
+    def infer_formula(self, p_and_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        return super().infer_formula(p_and_q, echo=echo)
 
-    def infer_statement(self, p_iff_q: (None, FormulaStatement) = None,
+    def infer_statement(self, p_and_q: (None, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """Apply the conjunction elimination (right) inference-rule and return the
         inferred-statement.
 
-        :param p_iff_q: (mandatory) The conjunction statement.
+        :param p_and_q: (mandatory) The conjunction statement.
         :return: The proven inferred-statement p implies q in the current theory.
         """
-        return super().infer_statement(p_iff_q, nameset=nameset, ref=ref,
+        return super().infer_statement(p_and_q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7697,19 +7660,19 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class InconsistencyByNegationIntroductionInclusion(InferenceRuleInclusion):
+class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.inconsistency_by_negation_introduction
-        dashed_name = 'inconsistency-by-negation-introduction'
-        acronym = None
+        i = t.universe_of_discourse.inference_rules.inconsistency_introduction_1
+        dashed_name = 'inconsistency-introduction-1'
+        acronym = 'ii1'
         abridged_name = None
-        name = 'inconsistency by negation introduction'
-        explicit_name = 'inconsistency by negation introduction inference rule'
+        name = 'inconsistency introduction #1'
+        explicit_name = 'inconsistency introduction #1 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
@@ -7743,19 +7706,19 @@ class InconsistencyByNegationIntroductionInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class InconsistencyByInequalityIntroductionInclusion(InferenceRuleInclusion):
+class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.inconsistency_by_inequality_introduction
-        dashed_name = 'inconsistency-by-inequality-introduction'
-        acronym = None
+        i = t.universe_of_discourse.inference_rules.inconsistency_introduction_2
+        dashed_name = 'inconsistency-introduction-2'
+        acronym = 'ii2'
         abridged_name = None
-        name = 'inconsistency by inequality introduction'
-        explicit_name = 'inconsistency by inequality introduction inference rule'
+        name = 'inconsistency introduction #2'
+        explicit_name = 'inconsistency introduction #2 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
@@ -7787,6 +7750,50 @@ class InconsistencyByInequalityIntroductionInclusion(InferenceRuleInclusion):
             inconsistent_theory = p_eq_q.t
         return super().infer_statement(p_eq_q, p_neq_q, inconsistent_theory, nameset=nameset,
             ref=ref, paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
+class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
+    """
+
+    """
+
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.inconsistency_introduction_3
+        dashed_name = 'inconsistency-introduction-3'
+        acronym = 'ii3'
+        abridged_name = None
+        name = 'inconsistency introduction #3'
+        explicit_name = 'inconsistency introduction #3 inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def infer_formula(self, p_neq_p: (None, FormulaStatement) = None,
+            inconsistent_theory: (None, TheoryElaborationSequence) = None,
+            t: (None, TheoryElaborationSequence) = None, echo: (None, bool) = None):
+        """Apply the inconsistency-introduction inference-rule and return the inferred-formula.
+        """
+        return super().infer_formula(p_neq_p, inconsistent_theory, echo=echo)
+
+    def infer_statement(self, p_neq_p: (None, FormulaStatement) = None,
+            inconsistent_theory: (None, TheoryElaborationSequence) = None,
+            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
+            echo: (None, bool) = None) -> InferredStatement:
+        """Apply the inconsistency-introduction inference-rule and return the inferred-statement.
+
+        :param p: (mandatory) .
+        :param not_p: (mandatory) .
+        :param inconsistent_theory: (conditional) .
+        :return: An inferred-statement proving p in the current theory.
+        """
+        if inconsistent_theory is None:
+            # The inconsistent_theory can be unambiguously defaulted
+            # when all terms are contained in the same theory.
+            inconsistent_theory = p_neq_p.t
+        return super().infer_statement(p_neq_p, inconsistent_theory, nameset=nameset, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
 class ModusPonensInclusion(InferenceRuleInclusion):
@@ -7829,85 +7836,85 @@ class ModusPonensInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class ProofByContradictionInclusion(InferenceRuleInclusion):
+class ProofByContradiction1Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.proof_by_contradiction
-        dashed_name = 'proof-by-contradiction'
-        acronym = 'pbc'
+        i = t.universe_of_discourse.inference_rules.proof_by_contradiction_1
+        dashed_name = 'proof-by-contradiction-1'
+        acronym = 'pbc1'
         abridged_name = None
-        name = 'proof by contradiction'
-        explicit_name = 'proof by contradiction inference rule'
+        name = 'proof by contradiction #1'
+        explicit_name = 'proof by contradiction #1 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, not_p: (None, Hypothesis) = None,
-            inc_not_p: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def infer_formula(self, not_p_hypothesis: (None, Hypothesis) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None) -> Formula:
         """Apply the proof-by-contradiction inference-rule and return the inferred-formula.
 
-        :param not_p: (mandatory) The (¬P) hypothesis-statement.
-        :param inc_not_p: (mandatory) The proof of inconsistency of the not_p
+        :param not_p_hypothesis: (mandatory) The (¬P) hypothesis-statement.
+        :param inc_hypothesis: (mandatory) The proof of inconsistency of the not_p
 hypothetical-theory: Inc(¬P).
         :return: The inferred formula .
         """
-        return super().infer_formula(not_p, inc_not_p, echo=echo)
+        return super().infer_formula(not_p_hypothesis, inc_hypothesis, echo=echo)
 
-    def infer_statement(self, not_p: (None, FormulaStatement) = None,
-            inc_not_p: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_statement(self, not_p_hypothesis: (None, FormulaStatement) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """Apply the modus-ponens inference-rule and return the inferred-statement.
 
-        :param not_p: (mandatory) The implication statement.
-        :param inc_not_p: (mandatory) The p statement, proving that p is true in the current theory.
+        :param not_p_hypothesis: (mandatory) The implication statement.
+        :param inc_hypothesis: (mandatory) The p statement, proving that p is true in the current theory.
         :return: An inferred-statement proving p in the current theory.
         """
-        return super().infer_statement(not_p, inc_not_p, nameset=nameset, ref=ref,
+        return super().infer_statement(not_p_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class ProofByContradictionOfInequalityInclusion(InferenceRuleInclusion):
+class ProofByContradiction2Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.proof_by_contradiction_of_non_equality
-        dashed_name = 'proof-by-contradiction-of-inequality'
-        acronym = 'pbci'
+        i = t.universe_of_discourse.inference_rules.proof_by_contradiction_2
+        dashed_name = 'proof-by-contradiction-2'
+        acronym = 'pbc2'
         abridged_name = None
-        name = 'proof by contradiction of inequality'
-        explicit_name = 'proof by contradiction of inequality inference rule'
+        name = 'proof by contradiction #2'
+        explicit_name = 'proof by contradiction #2 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_neq_q: (None, Hypothesis) = None,
-            inc_p_neq_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        return super().infer_formula(p_neq_q, inc_p_neq_q, echo=echo)
+    def infer_formula(self, p_neq_q_hypothesis: (None, Hypothesis) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        return super().infer_formula(p_neq_q_hypothesis, inc_hypothesis, echo=echo)
 
-    def infer_statement(self, p_neq_q: (None, FormulaStatement) = None,
-            inc_p_neq_q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_statement(self, p_neq_q_hypothesis: (None, FormulaStatement) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        return super().infer_statement(p_neq_q, inc_p_neq_q, nameset=nameset, ref=ref,
+        return super().infer_statement(p_neq_q_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class ProofByRefutationInclusion(InferenceRuleInclusion):
+class ProofByRefutation1Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.proof_by_refutation
+        i = t.universe_of_discourse.inference_rules.proof_by_refutation_1
         dashed_name = 'proof-by-refutation'
         acronym = 'pbr'
         abridged_name = None
@@ -7917,39 +7924,39 @@ class ProofByRefutationInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p: (None, Hypothesis) = None, inc_p: (None, FormulaStatement) = None,
-            echo: (None, bool) = None):
-        """Apply the proof-by-refutation inference-rule and return the inferred-formula.
+    def infer_formula(self, p_hypothesis: (None, Hypothesis) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """Apply the :doc:`proof_by_refutation_1` :doc:`inference_rule` and return the inferred-formula.
 
-        :param p: (mandatory) The (¬P) hypothesis-statement.
-        :param inc_p: (mandatory) The proof of inconsistency of the not_p hypothetical-theory:
-Inc(¬P).
-        :return: The inferred formula .
+        :param p_hypothesis: (mandatory) The :math:`\\neg \\mathbf{P}` hypothesis.
+        :param inc_hypothesis: (mandatory) The proof of inconsistency of the :math:`\\neg \\mathbf{P}` hypothesis :math:`Inc\\left(\\mathcal{H}\\right)` .
+        :param echo:
+        :return: The inferred formula: :math:`\\mathbf{P}` .
         """
-        return super().infer_formula(p, inc_p, echo=echo)
+        return super().infer_formula(p_hypothesis, inc_hypothesis, echo=echo)
 
-    def infer_statement(self, p: (None, FormulaStatement) = None,
-            inc_p: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_statement(self, p_hypothesis: (None, FormulaStatement) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """Apply the modus-ponens inference-rule and return the inferred-statement.
 
-        :param p: (mandatory) The implication statement.
-        :param inc_p: (mandatory) The p statement, proving that p is true in the current theory.
+        :param p_hypothesis: (mandatory) The implication statement.
+        :param inc_hypothesis: (mandatory) The p statement, proving that p is true in the current theory.
         :return: An inferred-statement proving p in the current theory.
         """
-        return super().infer_statement(p, inc_p, nameset=nameset, ref=ref,
+        return super().infer_statement(p_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class ProofByRefutationOfEqualityInclusion(InferenceRuleInclusion):
+class ProofByRefutation2Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.proof_by_refutation_of_equality
+        i = t.universe_of_discourse.inference_rules.proof_by_refutation_2
         dashed_name = 'proof-by-refutation-of-equality'
         acronym = 'pbre'
         abridged_name = None
@@ -7959,19 +7966,19 @@ class ProofByRefutationOfEqualityInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_eq_q: (None, Hypothesis) = None,
-            inc_p_eq_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def infer_formula(self, p_eq_q_hypothesis: (None, Hypothesis) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """Apply the proof-by-refutation inference-rule and return the inferred-formula.
 
-        :param p_eq_q: (mandatory) The (¬P) hypothesis-statement.
-        :param inc_p_eq_q: (mandatory) The proof of inconsistency of the not_p hypothetical-theory:
+        :param p_eq_q_hypothesis: (mandatory) The (¬P) hypothesis-statement.
+        :param inc_hypothesis: (mandatory) The proof of inconsistency of the not_p hypothetical-theory:
 Inc(¬P).
         :return: The inferred formula .
         """
-        return super().infer_formula(p_eq_q, inc_p_eq_q, echo=echo)
+        return super().infer_formula(p_eq_q_hypothesis, inc_hypothesis, echo=echo)
 
-    def infer_statement(self, p_eq_q: (None, FormulaStatement) = None,
-            inc_p_eq_q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_statement(self, p_eq_q_hypothesis: (None, FormulaStatement) = None,
+            inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """Apply the modus-ponens inference-rule and return the inferred-statement.
@@ -7980,7 +7987,7 @@ Inc(¬P).
         :param inc_p: (mandatory) The p statement, proving that p is true in the current theory.
         :return: An inferred-statement proving p in the current theory.
         """
-        return super().infer_statement(p_eq_q, inc_p_eq_q, nameset=nameset, ref=ref,
+        return super().infer_statement(p_eq_q_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -8055,10 +8062,11 @@ class InferenceRuleInclusionDict(collections.UserDict):
         self._double_negation_introduction = None
         self._equality_commutativity = None
         self._equal_terms_substitution = None
-        self._inconsistency_by_inequality_introduction = None
-        self._inconsistency_by_negation_introduction = None
+        self._inconsistency_introduction_1 = None
+        self._inconsistency_introduction_2 = None
+        self._inconsistency_introduction_3 = None
         self._modus_ponens = None
-        self._proof_by_contradiction = None
+        self._proof_by_contradiction_1 = None
         self._proof_by_contradiction_of_non_equality = None
         self._proof_by_refutation = None
         self._proof_by_refutation_of_equality = None
@@ -8180,7 +8188,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._biconditional_introduction
 
     @property
-    def conjunction_elimination_left(self) -> ConjunctionEliminationLeftDeclaration:
+    def conjunction_elimination_left(self) -> ConjunctionEliminationLeftInclusion:
         """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
 
         Abridged property: t.i.cel()
@@ -8193,7 +8201,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._conjunction_elimination_left
 
     @property
-    def conjunction_elimination_right(self) -> InferenceRuleInclusion:
+    def conjunction_elimination_right(self) -> ConjunctionEliminationRightInclusion:
         """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
         Abridged property: t.i.cer
@@ -8206,7 +8214,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._conjunction_elimination_right
 
     @property
-    def cel(self) -> InferenceRuleInclusion:
+    def cel(self) -> ConjunctionEliminationLeftDeclaration:
         """The well-known conjunction-elimination (left) inference-rule: (P ∧ Q) ⊢ P.
 
         Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_left()
@@ -8217,7 +8225,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.conjunction_elimination_left
 
     @property
-    def cer(self) -> InferenceRuleInclusion:
+    def cer(self) -> ConjunctionEliminationRightInclusion:
         """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
 
         Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_right()
@@ -8364,20 +8372,34 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.equal_terms_substitution
 
     @property
-    def inconsistency_by_inequality_introduction(
-            self) -> InconsistencyByInequalityIntroductionInclusion:
-        if self._inconsistency_by_inequality_introduction is None:
-            self._inconsistency_by_inequality_introduction = InconsistencyByInequalityIntroductionInclusion(
-                t=self.t)
-        return self._inconsistency_by_inequality_introduction
+    def inconsistency_introduction_1(self) -> InconsistencyIntroduction1Inclusion:
+        if self._inconsistency_introduction_1 is None:
+            self._inconsistency_introduction_1 = InconsistencyIntroduction1Inclusion(t=self.t)
+        return self._inconsistency_introduction_1
 
     @property
-    def inconsistency_by_negation_introduction(
-            self) -> InconsistencyByNegationIntroductionInclusion:
-        if self._inconsistency_by_negation_introduction is None:
-            self._inconsistency_by_negation_introduction = InconsistencyByNegationIntroductionInclusion(
-                t=self.t)
-        return self._inconsistency_by_negation_introduction
+    def inconsistency_introduction_2(self) -> InconsistencyIntroduction2Inclusion:
+        if self._inconsistency_introduction_2 is None:
+            self._inconsistency_introduction_2 = InconsistencyIntroduction2Inclusion(t=self.t)
+        return self._inconsistency_introduction_2
+
+    @property
+    def inconsistency_introduction_3(self) -> InconsistencyIntroduction3Inclusion:
+        if self._inconsistency_introduction_3 is None:
+            self._inconsistency_introduction_3 = InconsistencyIntroduction3Inclusion(t=self.t)
+        return self._inconsistency_introduction_3
+
+    @property
+    def ii1(self) -> InconsistencyIntroduction1Inclusion:
+        return self.inconsistency_introduction_1
+
+    @property
+    def ii2(self) -> InconsistencyIntroduction2Inclusion:
+        return self.inconsistency_introduction_2
+
+    @property
+    def ii3(self) -> InconsistencyIntroduction3Inclusion:
+        return self.inconsistency_introduction_3
 
     @property
     def modus_ponens(self) -> ModusPonensInclusion:
@@ -8409,7 +8431,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.modus_ponens
 
     @property
-    def pbc(self) -> ProofByContradictionInclusion:
+    def pbc(self) -> ProofByContradiction1Inclusion:
         """
 
         Unabridged property: u.i.proof_by_contradiction
@@ -8417,10 +8439,10 @@ class InferenceRuleInclusionDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.proof_by_contradiction
+        return self.proof_by_contradiction_1
 
     @property
-    def pbr(self) -> ProofByRefutationInclusion:
+    def pbr(self) -> ProofByRefutation1Inclusion:
         """
 
         Unabridged property: u.i.proof_by_refutation
@@ -8428,10 +8450,10 @@ class InferenceRuleInclusionDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.proof_by_refutation
+        return self.proof_by_refutation_1
 
     @property
-    def proof_by_contradiction(self) -> ProofByContradictionInclusion:
+    def proof_by_contradiction_1(self) -> ProofByContradiction1Inclusion:
         """
 
         Abridged property: u.i.pbc
@@ -8439,19 +8461,18 @@ class InferenceRuleInclusionDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._proof_by_contradiction is None:
-            self._proof_by_contradiction = ProofByContradictionInclusion(t=self.t)
-        return self._proof_by_contradiction
+        if self._proof_by_contradiction_1 is None:
+            self._proof_by_contradiction_1 = ProofByContradiction1Inclusion(t=self.t)
+        return self._proof_by_contradiction_1
 
     @property
-    def proof_by_contradiction_of_non_equality(self) -> ProofByContradictionOfInequalityInclusion:
+    def proof_by_contradiction_2(self) -> ProofByContradiction2Inclusion:
         if self._proof_by_contradiction_of_non_equality is None:
-            self._proof_by_contradiction_of_non_equality = ProofByContradictionOfInequalityInclusion(
-                t=self.t)
+            self._proof_by_contradiction_of_non_equality = ProofByContradiction2Inclusion(t=self.t)
         return self._proof_by_contradiction_of_non_equality
 
     @property
-    def proof_by_refutation(self) -> ProofByRefutationInclusion:
+    def proof_by_refutation_1(self) -> ProofByRefutation1Inclusion:
         """
 
         Abridged property: u.i.pbr
@@ -8460,13 +8481,13 @@ class InferenceRuleInclusionDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         if self._proof_by_refutation is None:
-            self._proof_by_refutation = ProofByRefutationInclusion(t=self.t)
+            self._proof_by_refutation = ProofByRefutation1Inclusion(t=self.t)
         return self._proof_by_refutation
 
     @property
-    def proof_by_refutation_of_equality(self) -> ProofByRefutationOfEqualityInclusion:
+    def proof_by_refutation_2(self) -> ProofByRefutation2Inclusion:
         if self._proof_by_refutation_of_equality is None:
-            self._proof_by_refutation_of_equality = ProofByRefutationOfEqualityInclusion(t=self.t)
+            self._proof_by_refutation_of_equality = ProofByRefutation2Inclusion(t=self.t)
         return self._proof_by_refutation_of_equality
 
     @property
@@ -8478,7 +8499,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._variable_substitution
 
     @property
-    def vs(self) -> InferenceRuleInclusion:
+    def vs(self) -> VariableSubstitutionInclusion:
 
         return self.variable_substitution
 
@@ -8629,18 +8650,18 @@ class UniverseOfDiscourse(SymbolicObject):
         if o not in self.simple_objcts:
             self.simple_objcts[o.nameset] = o
 
-    def cross_reference_symbolic_objct(self, o: SymbolicObject):
+    def cross_reference_symbolic_objct(self, o: TheoreticalObject):
         """Cross-references a symbolic-objct in this universe-of-discourse.
 
         :param o: a symbolic-objct.
         """
-        verify(is_in_class(o, classes.symbolic_objct),
+        verify(is_in_class(o=o, c=classes.symbolic_objct),
             'Cross-referencing a symbolic-objct in a universe-of-discourse requires '
             'an object of type SymbolicObjct.', o=o, slf=self)
         duplicate = self.symbolic_objcts.get(o.nameset)
-        verify(duplicate is None,
-            'A symbolic-object already exists in the current universe-of-discourse with a '
-            'duplicate (symbol, index) pair.', o=o, duplicate=duplicate, slf=self)
+        verify(severity=verification_severities.warning, assertion=duplicate is None,
+            msg='A symbolic-object already exists in the current universe-of-discourse with a '
+                'duplicate (symbol, index) pair.', o=o, duplicate=duplicate, slf=self)
         self.symbolic_objcts[o.nameset] = o
 
     def cross_reference_theory(self, t: TheoryElaborationSequence):
@@ -8670,7 +8691,10 @@ class UniverseOfDiscourse(SymbolicObject):
             nameset=nameset, lock_variable_scope=lock_variable_scope, echo=echo)
         return phi
 
-    def declare_free_variable(self, symbol=None, echo=None):
+    def declare_free_variable(self, symbol: (None, str, StyledText) = None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None, echo: (None, bool) = None):
         """Declare a free-variable in this universe-of-discourse.
 
         A shortcut function for FreeVariable(universe_of_discourse=u, ...)
@@ -8867,7 +8891,11 @@ class UniverseOfDiscourse(SymbolicObject):
 
     # @FreeVariableContext()
     @contextlib.contextmanager
-    def v(self, symbol=None, echo=None):
+    def v(self, symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            echo: (None, bool) = None):
         """Declare a free-variable in this universe-of-discourse.
 
         This method is expected to be as in a with statement,
@@ -8881,8 +8909,10 @@ class UniverseOfDiscourse(SymbolicObject):
         use declare_free_variable() instead.
         """
         # return self.declare_free_variable(symbol=symbol)
-        x = FreeVariable(universe_of_discourse=self, nameset=symbol,
-            status=FreeVariable.scope_initialization_status, echo=echo)
+        status = FreeVariable.scope_initialization_status
+        x = FreeVariable(u=self, status=status, symbol=symbol, index=index, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
         yield x
         x.lock_scope()
 

@@ -30,10 +30,10 @@ class TestHypothesis(TestCase):
         hypothetical_theory = hypothesis.hypothesis_child_theory
         hypothetical_conjunction = hypothetical_theory.i.ci.infer_statement((o1 | r1 | o2),
             hypothetical_proposition)
-        proposition_1 = hypothetical_theory.i.vs.infer_statement(conditional, o1,  # x
-            o2,  # y
-            o3)  # z
-        conclusion_1 = hypothetical_theory.i.mp.infer_statement(proposition_1,
-            hypothetical_conjunction)
+        proposition_1 = hypothetical_theory.i.vs.infer_statement(p=conditional, phi=(o1,  # x
+        o2,  # y
+        o3))  # z
+        conclusion_1 = hypothetical_theory.i.mp.infer_statement(p_implies_q=proposition_1,
+            p=hypothetical_conjunction)
         self.assertEqual('𝑟₁(𝑜₁, 𝑜₃)',
             conclusion_1.valid_proposition.rep_formula(pu.encodings.unicode))

@@ -3,8 +3,8 @@ import theory.package.tao_2006_2_1_the_peano_axioms as tpa
 
 # from package.tao_2006_the_peano_axioms import p
 
-u = tpa.u
-t = tpa.t
+t = tpa.Tao2006ThePeanoAxioms().develop()
+u = t.u
 
 
 class TestTao2006ThePeanoAxioms(unittest.TestCase):

@@ -53,7 +53,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
             p002 = t.i.axiom_interpretation.infer_statement(a04, (
                     (n | u.r.is_a | natural_number) | u.r.implies | (
                     (n & plusplus) | u.r.is_a | natural_number)))
-        p003 = t.i.variable_substitution.infer_statement(p=p002, phi=tuple([zero]))
+        p003 = t.i.variable_substitution.infer_statement(p_hypothesis=p002, phi=tuple([zero]))
         p004 = t.i.mp.infer_statement(p003, p001, ref='2.2.3')
 
         # DEFINITION 2.1.3
@@ -78,7 +78,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
             u.f(u.r.equal, four, ((((zero & plusplus) & plusplus) & plusplus) & plusplus)))
 
         zero_plusplus = (zero & plusplus)
-        p009 = t.i.variable_substitution.infer_statement(p=p002, phi=zero_plusplus)
+        p009 = t.i.variable_substitution.infer_statement(p_hypothesis=p002, phi=zero_plusplus)
         p010 = t.i.mp.infer_statement(p009, p004)
         zero_plus_plus_plusplus = u.f(plusplus, zero_plusplus)
         p011 = t.i.variable_substitution.infer_statement(p002, zero_plus_plus_plusplus)
@@ -161,13 +161,13 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # Take 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₁): ((((𝐧₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐦₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (𝐧₃ ≠ 𝐦₁)) ⟹ ((𝐧₃)++ ≠ (𝐦₁)++)).
         # Substitute 𝐧₃ with 4, and 𝐦₁ with 0.
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₂): ((((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (4 ≠ 0)) ⟹ ((4)++ ≠ (0)++)).
-        p033 = t.i.variable_substitution.infer_statement(p=p032, phi=(four, zero))
+        p033 = t.i.variable_substitution.infer_statement(p_hypothesis=p032, phi=(four, zero))
         # It follows that ((((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (4 ≠ 0)) ⟹ ((4)++ ≠ (0)++)).
         # Pair two true propositions (4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) and (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻(P₃₄): ((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)).
-        p034 = t.i.conjunction_introduction.infer_statement(p=p027, q=p001)
+        p034 = t.i.conjunction_introduction.infer_statement(p_hypothesis=p027, q=p001)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₅): (((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (4 ≠ 0)).
-        p035 = t.i.conjunction_introduction.infer_statement(p=p034, q=p031)
+        p035 = t.i.conjunction_introduction.infer_statement(p_hypothesis=p034, q=p031)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₆): ((4)++ ≠ (0)++).
         p036 = t.i.modus_ponens.infer_statement(p033, p035)
         five = u.o.declare(symbol='5', auto_index=False)
@@ -181,7 +181,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₀): (5 = (4)++).
         p040 = t.i.equality_commutativity.infer_statement(p039)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₁): ((((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (5 ≠ 1)) ⟹ ((5)++ ≠ (1)++)).
-        p041 = t.i.variable_substitution.infer_statement(p=p032, phi=(five, one))
+        p041 = t.i.variable_substitution.infer_statement(p_hypothesis=p032, phi=(five, one))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₂): ((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((4)++ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)).
         p042 = t.i.variable_substitution.infer_statement(p002, four)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₃): ((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ (5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)).
@@ -189,11 +189,11 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻(P₄₄): (5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).
         p044 = t.i.modus_ponens.infer_statement(p043, p027)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₅): ((((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (5 ≠ 1)) ⟹ ((5)++ ≠ (1)++)).
-        p045 = t.i.variable_substitution.infer_statement(p=p032, phi=(five, one))
+        p045 = t.i.variable_substitution.infer_statement(p_hypothesis=p032, phi=(five, one))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₆): ((4)++ ≠ (0)++).
         p046 = t.i.modus_ponens.infer_statement(p033, p035)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₇): (5 ≠ (0)++).
-        p047 = t.i.equal_terms_substitution.infer_statement(p=p046, q_equal_r=p039)
+        p047 = t.i.equal_terms_substitution.infer_statement(p_hypothesis=p046, q_equal_r=p039)
         six = u.o.declare(symbol='6', auto_index=False)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (6 = ((((((0)++)++)++)++)++)++).
         p049 = t.i.definition_interpretation.infer_statement(d02, u.f(u.r.equal, six,
@@ -204,7 +204,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         p054 = t.i.equal_terms_substitution.infer_statement(p004, p015)
         p051 = t.i.equal_terms_substitution.infer_statement(p050, p038)
         # (6 = (5)++)
-        p057 = t.i.equality_commutativity.infer_statement(p_eq_q=p051)
+        p057 = t.i.equality_commutativity.infer_statement(p_eq_q_hypothesis=p051)
 
         t.open_section('Proof by contradiction', section_parent=s55, numbering=False)
 
@@ -218,47 +218,47 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # Then 5++ = 1++,
         # ((5)++ = 2)
         h1_p2 = h1.hypothesis_child_theory.i.equal_terms_substitution.infer_statement(
-            p=hypothesis_statement, q_equal_r=p057)
+            p_hypothesis=hypothesis_statement, q_equal_r=p057)
         # ((5)++ = (1)++)
-        h1_p3 = h1.hypothesis_child_theory.i.equal_terms_substitution.infer_statement(p=h1_p2,
-            q_equal_r=p016)
+        h1_p3 = h1.hypothesis_child_theory.i.equal_terms_substitution.infer_statement(
+            p_hypothesis=h1_p2, q_equal_r=p016)
         # so by Axiom 2.4 we have 5 = 1
         # ((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟))
-        h1_p4 = h1.hypothesis_child_theory.i.conjunction_introduction.infer_statement(p=p044,
-            q=p054)
+        h1_p4 = h1.hypothesis_child_theory.i.conjunction_introduction.infer_statement(
+            p_hypothesis=p044, q=p054)
         # (((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ ((5)++ = (1)++))
-        h1_p5 = h1.hypothesis_child_theory.i.conjunction_introduction.infer_statement(p=h1_p4,
-            q=h1_p3)
+        h1_p5 = h1.hypothesis_child_theory.i.conjunction_introduction.infer_statement(
+            p_hypothesis=h1_p4, q=h1_p3)
         # ((((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ ((5)++ = (1)++)) ⟹ (5 = 1))
-        h1_p6 = h1.hypothesis_child_theory.i.variable_substitution.infer_statement(p=p032b,
-            phi=tuple([five, one]))
+        h1_p6 = h1.hypothesis_child_theory.i.variable_substitution.infer_statement(
+            p_hypothesis=p032b, phi=tuple([five, one]))
         # (5 = 1)
         h1_p7 = h1.hypothesis_child_theory.i.modus_ponens.infer_statement(p_implies_q=h1_p6,
-            p=h1_p5)
+            p_hypothesis=h1_p5)
         # so that 4++ = 0++.
         # ((4)++ = 1)
-        h1_p8 = h1.hypothesis_child_theory.i.equal_terms_substitution.infer_statement(p=h1_p7,
-            q_equal_r=p040)
+        h1_p8 = h1.hypothesis_child_theory.i.equal_terms_substitution.infer_statement(
+            p_hypothesis=h1_p7, q_equal_r=p040)
         # ((4)++ = (0)++)
-        h1_p9 = h1.hypothesis_child_theory.i.equal_terms_substitution.infer_statement(p=h1_p8,
-            q_equal_r=p005)
+        h1_p9 = h1.hypothesis_child_theory.i.equal_terms_substitution.infer_statement(
+            p_hypothesis=h1_p8, q_equal_r=p005)
 
         # ((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟))
-        h1_p10 = h1.hypothesis_child_theory.i.conjunction_introduction.infer_statement(p=p027,
-            q=p001)
+        h1_p10 = h1.hypothesis_child_theory.i.conjunction_introduction.infer_statement(
+            p_hypothesis=p027, q=p001)
         # (((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ ((4)++ = (0)++))
-        h1_p11 = h1.hypothesis_child_theory.i.conjunction_introduction.infer_statement(p=h1_p10,
-            q=h1_p9)
+        h1_p11 = h1.hypothesis_child_theory.i.conjunction_introduction.infer_statement(
+            p_hypothesis=h1_p10, q=h1_p9)
         # ((((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ ((4)++ = (0)++)) ⟹ (4 = 0))
-        h1_p12 = h1.hypothesis_child_theory.i.variable_substitution.infer_statement(p=p032b,
-            phi=tuple([four, zero]))
+        h1_p12 = h1.hypothesis_child_theory.i.variable_substitution.infer_statement(
+            p_hypothesis=p032b, phi=tuple([four, zero]))
         # (4 = 0)
         # By Axiom 2.4 again we then have 4 = 0, which contradicts our previous proposition.
         h1_p071 = h1.hypothesis_child_theory.i.modus_ponens.infer_statement(p_implies_q=h1_p12,
-            p=h1_p11)
-        p072 = t.i.inconsistency_by_inequality_introduction.infer_statement(p_eq_q=h1_p071,
-            p_neq_q=p031, inconsistent_theory=h1.hypothesis_child_theory)
-        p073 = t.i.proof_by_refutation_of_equality.infer_statement(p_eq_q=h1, inc_p_eq_q=p072,
+            p_hypothesis=h1_p11)
+        p072 = t.i.inconsistency_introduction_1.infer_statement(p_eq_q_hypothesis=h1_p071,
+            p_neq_q_hypothesis=p031, inconsistent_theory=h1.hypothesis_child_theory)
+        p073 = t.i.proof_by_refutation_2.infer_statement(p_eq_q_hypothesis=h1, inc_hypothesis=p072,
             ref='2.1.8')
 
         t.open_section('Direct proof', section_parent=s55, numbering=False)
@@ -275,7 +275,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: ((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)).
         p055 = t.i.conjunction_introduction.infer_statement(p044, p054)
         p056 = t.i.conjunction_introduction.infer_statement(p055, p048)
-        p057 = t.i.modus_ponens.infer_statement(p_implies_q=p053, p=p056)
+        p057 = t.i.modus_ponens.infer_statement(p_implies_q=p053, p_hypothesis=p056)
 
         t.open_section('Axiom 2.5: The principle of mathematical induction',
             section_parent=section_2_1, numbering=False)
