@@ -25,4 +25,5 @@ t2 = u.t()
 pu.configuration.echo_proof = True
 
 # And finally, use the inconsistency-introduction-1 inference-rule:
-t2.i.inconsistency_introduction_1.infer_statement(p=p, not_p=not_p, inconsistent_theory=t1)
+inc_proof = t2.i.inconsistency_introduction_1.infer_statement(p=p, not_p=not_p,
+    inconsistent_theory=t1)

@@ -319,7 +319,8 @@
 <span class="linenos">25</span><span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_proof</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="linenos">26</span>
 <span class="linenos">27</span><span class="c1"># And finally, use the inconsistency-introduction-1 inference-rule:</span>
-<span class="linenos">28</span><span class="n">t2</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">inconsistency_introduction_1</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">not_p</span><span class="o">=</span><span class="n">not_p</span><span class="p">,</span> <span class="n">inconsistent_theory</span><span class="o">=</span><span class="n">t1</span><span class="p">)</span>
+<span class="linenos">28</span><span class="n">inc_proof</span> <span class="o">=</span> <span class="n">t2</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">inconsistency_introduction_1</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">not_p</span><span class="o">=</span><span class="n">not_p</span><span class="p">,</span>
+<span class="linenos">29</span>    <span class="n">inconsistent_theory</span><span class="o">=</span><span class="n">t1</span><span class="p">)</span>
 </code></pre></div>
 </div></div>
 </div></blockquote>
