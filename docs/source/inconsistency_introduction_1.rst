@@ -8,7 +8,7 @@ Definition
 
 .. math::
 
-   \left( P, \neq \left(P\right) \right) \vdash Inc\left(\mathcal{T}\right)
+   \left( P, \neg \left(P\right) \right) \vdash Inc\left(\mathcal{T}\right)
 
 Quotes
 ------
