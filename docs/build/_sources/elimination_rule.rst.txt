@@ -7,7 +7,7 @@ Definition
 An *introduction-rule* is an :doc:`inference_rule` that allows to derive a formula-statement of some syntactic form from some define premises.
 
 List of well-known *introduction-rules*
---------------------------------------
+------------------------------------------
 
 * :doc:`biconditional_elimination_left`
 * :doc:`biconditional_elimination_right`

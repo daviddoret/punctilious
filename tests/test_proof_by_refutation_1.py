@@ -4,8 +4,8 @@ import random_data
 
 
 # TODO: Proof by refutation: design test
-class TestProofByRefutation(TestCase):
-    def test_proof_by_refutation(self):
+class TestProofByRefutation1(TestCase):
+    def test_proof_by_refutation_1(self):
         pu.configuration.echo_default = False
         pu.configuration.echo_inferred_statement = True
         # Prepare the universe of discourse
@@ -36,11 +36,11 @@ class TestProofByRefutation(TestCase):
         t2 = t1_h1.hypothesis_child_theory
         t2_a1 = t1_h1.hypothesis_statement_in_child_theory
         t2_p5 = t2.i.conjunction_introduction.infer_statement(p=t1_p1, q=t1_p2)
-        t2_p6 = t2.i.variable_substitution.infer_statement(t1_p3_implication, o1, o2, o3)
+        t2_p6 = t2.i.variable_substitution.infer_statement(p=t1_p3_implication, phi=(o1, o2, o3))
         # p7: 𝑟₁(𝑜₁, 𝑜₃) by modus ponens
         t2_p7 = t2.i.modus_ponens.infer_statement(p_implies_q=t2_p6, p=t2_p5)
         # p7 is in refutation with the hypothetical_formula
-        t1_p8 = t1.i.inconsistency_by_negation_introduction.infer_statement(p=t2_a1, not_p=t2_p7,
+        t1_p8 = t1.i.inconsistency_introduction_1.infer_statement(p=t2_a1, not_p=t2_p7,
             inconsistent_theory=t2)
-        t1_p9 = t1.i.proof_by_refutation.infer_statement(p=t1_h1, inc_p=t1_p8)
+        t1_p9 = t1.i.proof_by_refutation_1.infer_statement(p_hypothesis=t1_h1, inc_hypothesis=t1_p8)
         pass

@@ -5,4 +5,4 @@
     ************
 
 .. bibliography:: bibliography_bibtex.bib
-   :style: plain
+   :cited:
