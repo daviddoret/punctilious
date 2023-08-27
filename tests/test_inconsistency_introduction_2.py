@@ -4,8 +4,8 @@ import punctilious as pu
 import random_data
 
 
-class TestInconsistencyByInequalityIntroduction(TestCase):
-    def test_inconsistency_introduction(self):
+class TestInconsistencyIntroduction2(TestCase):
+    def test_inconsistency_introduction_2(self):
         """Simple inconsistency introduction"""
         pu.configuration.echo_default = True
         u = pu.UniverseOfDiscourse()
@@ -17,7 +17,6 @@ class TestInconsistencyByInequalityIntroduction(TestCase):
         p_eq_q = t1.i.axiom_interpretation.infer_statement(ap, u.f(u.r.eq, o1, o2))
         p_neq_q = t1.i.axiom_interpretation.infer_statement(ap, u.f(u.r.neq, o1, o2))
         t2 = u.t()
-        inc = t2.i.inconsistency_by_inequality_introduction.infer_statement(p_eq_q=p_eq_q,
-            p_neq_q=p_neq_q)
+        inc = t2.i.inconsistency_introduction_1.infer_statement(p_eq_q=p_eq_q, p_neq_q=p_neq_q)
         self.assertEqual('𝐼𝑛𝑐(𝒯₁)', inc.rep_formula(encoding=pu.encodings.unicode))
         self.assertIs(pu.consistency_values.proved_inconsistent, t1.consistency)

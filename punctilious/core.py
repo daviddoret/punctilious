@@ -3797,7 +3797,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         dashed_name = 'axiom-interpretation'
         explicit_name = 'axiom interpretation inference rule'
         name = 'axiom interpretation'
-        definition = '𝒜 ⊢ P'
+        definition = StyledText(plaintext='A |- P', unicode='𝒜 ⊢ P')
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = AxiomInterpretationDeclaration.infer_formula
@@ -4153,7 +4153,7 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         dashed_name = 'conjunction-introduction'
         explicit_name = 'conjunction introduction inference rule'
         name = 'conjunction introduction'
-        definition = '(P, Q) ⊢ (P ⋀ Q)'
+        definition = StyledText(plaintext='(P, Q) |- (P and Q)', unicode='(P, Q) ⊢ (P ⋀ Q)')
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = AxiomInterpretationDeclaration.infer_formula
@@ -4633,22 +4633,22 @@ Q in P are replaced with R.
         return True
 
 
-class InconsistencyByNegationIntroductionDeclaration(InferenceRuleDeclaration):
+class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
     """P ⋀ not P: inconsistency"""
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'inconsistency-by-negation-introduction'
-        acronym = None
+        symbol = 'inconsistency-introduction-1'
+        acronym = 'ii1'
         abridged_name = None
         auto_index = False
-        dashed_name = 'inconsistency-by-negation-introduction'
-        explicit_name = 'inconsistency by negation introduction inference rule'
-        name = 'inconsistency by negation introduction'
-        definition = '𝓣.𝑷, 𝓣.¬(𝑷) ⊢ 𝐼𝑛𝑐(𝓣)'
+        dashed_name = 'inconsistency-introduction-1'
+        explicit_name = 'inconsistency introduction #1 inference rule'
+        name = 'inconsistency introduction #1'
+        definition = StyledText(plaintext='(P, not(P)) |-(T)', unicode='𝑷, ¬(𝑷) ⊢ 𝐼𝑛𝑐(𝓣)')
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
-        infer_formula = InconsistencyByNegationIntroductionDeclaration.infer_formula
-        verify_args = InconsistencyByNegationIntroductionDeclaration.verify_args
+        infer_formula = InconsistencyIntroduction1Declaration.infer_formula
+        verify_args = InconsistencyIntroduction1Declaration.verify_args
         super().__init__(definition=definition, infer_formula=infer_formula,
             verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
@@ -4687,22 +4687,22 @@ class InconsistencyByNegationIntroductionDeclaration(InferenceRuleDeclaration):
         return True
 
 
-class InconsistencyByInequalityIntroductionDeclaration(InferenceRuleDeclaration):
+class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
     """P = Q ⋀ P neq Q: inconsistency """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'inconsistency-by-inequality-introduction'
-        acronym = 'iei'
+        symbol = 'inconsistency-introduction-2'
+        acronym = 'ii2'
         abridged_name = None
         auto_index = False
-        dashed_name = 'inconsistency-by-inequality-introduction'
-        explicit_name = 'inconsistency by inequality introduction inference rule'
-        name = 'inconsistency by inequality introduction'
+        dashed_name = 'inconsistency-introduction-2'
+        explicit_name = 'inconsistency introduction #2 inference rule'
+        name = 'inconsistency introduction #2'
         definition = '((P = Q), (P ≠ Q)) ⊢ Inc(𝒯)'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
-        infer_formula = InconsistencyByInequalityIntroductionDeclaration.infer_formula
-        verify_args = InconsistencyByInequalityIntroductionDeclaration.verify_args
+        infer_formula = InconsistencyIntroduction2Declaration.infer_formula
+        verify_args = InconsistencyIntroduction2Declaration.verify_args
         super().__init__(definition=definition, infer_formula=infer_formula,
             verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
@@ -4759,7 +4759,7 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         dashed_name = 'modus-ponens'
         explicit_name = 'modus ponens inference rule'
         name = 'modus ponens'
-        definition = '((P ⟹ Q), P) ⊢ Q'
+        definition = StyledText(plaintext='(P ==> Q), P) |- Q', unicode='((P ⟹ Q), P) ⊢ Q')
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = ModusPonensDeclaration.infer_formula
@@ -4828,7 +4828,8 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
         dashed_name = 'proof-by-contradiction'
         explicit_name = 'proof by contradiction inference rule'
         name = 'proof by contradiction'
-        definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 ¬𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ 𝑷'
+        definition = StyledText(plaintext='(H assume not(P), P, Inc(H)) |- P',
+            unicode='(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 ¬𝑷, 𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ 𝑷')
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = ProofByContradiction1Declaration.infer_formula
@@ -5087,7 +5088,7 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         dashed_name = 'variable-substitution'
         explicit_name = 'variable substitution inference rule'
         name = 'variable substitution'
-        definition = '(P, 𝛷) ⊢ P\''
+        definition = StyledText(plaintext='(P, Phi) |- P\'', unicode='(P, 𝛷) ⊢ P\'')
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
         infer_formula = VariableSubstitutionDeclaration.infer_formula
@@ -5779,6 +5780,16 @@ class Hypothesis(Statement):
         if echo:
             self.echo()
 
+    @property
+    def child_theory(self) -> TheoryElaborationSequence:
+        """A shortcut for self.hypothesis_child_theory"""
+        return self.hypothesis_child_theory
+
+    @property
+    def child_statement(self) -> InferredStatement:
+        """A shortcut for self.hypothesis_statement_in_child_theory"""
+        return self._hypothesis_statement_in_child_theory
+
     def compose_class(self) -> collections.abc.Generator[Composable, Composable, True]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='hypothesis')
@@ -6406,8 +6417,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         self._double_negation_introduction = None
         self._equality_commutativity = None
         self._equal_terms_substitution = None
-        self._inconsistency_by_inequality_introduction = None
-        self._inconsistency_by_negation_introduction = None
+        self._inconsistency_introduction_2 = None
+        self._inconsistency_introduction_1 = None
         self._modus_ponens = None
         self._proof_by_contradiction_1 = None
         self._proof_by_contradiction_2 = None
@@ -6786,16 +6797,33 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.equal_terms_substitution
 
     @property
-    def inconsistency_by_inequality_introduction(
-            self) -> InconsistencyByInequalityIntroductionDeclaration:
-        if self._inconsistency_by_inequality_introduction is None:
-            self._inconsistency_by_inequality_introduction = InconsistencyByInequalityIntroductionDeclaration(
-                universe_of_discourse=self.u)
-        return self._inconsistency_by_inequality_introduction
+    def ii1(self) -> InconsistencyIntroduction1Declaration:
+        """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
+
+            Unabridged property: universe_of_discourse.inference_rules.inconsistency_introduction
+
+            Inconsistency-introduction is an extraordinary inference-rule
+            because it proves that the theory is inconsistent. It follows
+            that the corresponding statement: ⌜Inc(t)⌝ becomes paradoxically
+            invalid as soon as it is expressed in the current theory. In
+            fact, ⌜Inc(t)⌝ should rather be understood as a meta-statement
+            about the theory. In future versions of punctilious we will consider
+            stating ⌜Inc(t)⌝ in a distinct meta-theory.
+
+            Once ⌜Inc(t)⌝ is stated, the ⌜consistency⌝ property of the
+            current theory is automatically changed to ⌜inconsistent⌝.
+
+            If the inference-rule does not exist in the universe-of-discourse,
+            the inference-rule is automatically declared.
+            """
+        return self.inconsistency_introduction_1
 
     @property
-    def inconsistency_by_negation_introduction(
-            self) -> InconsistencyByNegationIntroductionDeclaration:
+    def ii2(self) -> InconsistencyIntroduction2Declaration:
+        return self.inconsistency_introduction_2
+
+    @property
+    def inconsistency_introduction_1(self) -> InconsistencyIntroduction1Declaration:
         """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
 
         Abridged property: u.i.ii
@@ -6815,32 +6843,17 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
-        if self._inconsistency_by_negation_introduction is None:
-            self._inconsistency_by_negation_introduction = InconsistencyByNegationIntroductionDeclaration(
+        if self._inconsistency_introduction_1 is None:
+            self._inconsistency_introduction_1 = InconsistencyIntroduction1Declaration(
                 universe_of_discourse=self.u)
-        return self._inconsistency_by_negation_introduction
+        return self._inconsistency_introduction_1
 
     @property
-    def ii(self) -> InconsistencyByNegationIntroductionDeclaration:
-        """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
-
-            Unabridged property: universe_of_discourse.inference_rules.inconsistency_introduction
-
-            Inconsistency-introduction is an extraordinary inference-rule
-            because it proves that the theory is inconsistent. It follows
-            that the corresponding statement: ⌜Inc(t)⌝ becomes paradoxically
-            invalid as soon as it is expressed in the current theory. In
-            fact, ⌜Inc(t)⌝ should rather be understood as a meta-statement
-            about the theory. In future versions of punctilious we will consider
-            stating ⌜Inc(t)⌝ in a distinct meta-theory.
-
-            Once ⌜Inc(t)⌝ is stated, the ⌜consistency⌝ property of the
-            current theory is automatically changed to ⌜inconsistent⌝.
-
-            If the inference-rule does not exist in the universe-of-discourse,
-            the inference-rule is automatically declared.
-            """
-        return self.inconsistency_by_negation_introduction
+    def inconsistency_introduction_2(self) -> InconsistencyIntroduction2Declaration:
+        if self._inconsistency_introduction_2 is None:
+            self._inconsistency_introduction_2 = InconsistencyIntroduction2Declaration(
+                universe_of_discourse=self.u)
+        return self._inconsistency_introduction_2
 
     @property
     def modus_ponens(self) -> ModusPonensDeclaration:
@@ -7585,19 +7598,19 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class InconsistencyByNegationIntroductionInclusion(InferenceRuleInclusion):
+class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.inconsistency_by_negation_introduction
-        dashed_name = 'inconsistency-by-negation-introduction'
-        acronym = None
+        i = t.universe_of_discourse.inference_rules.inconsistency_introduction_1
+        dashed_name = 'inconsistency-introduction-1'
+        acronym = 'ii1'
         abridged_name = None
-        name = 'inconsistency by negation introduction'
-        explicit_name = 'inconsistency by negation introduction inference rule'
+        name = 'inconsistency introduction #1'
+        explicit_name = 'inconsistency introduction #1 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
@@ -7631,19 +7644,19 @@ class InconsistencyByNegationIntroductionInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class InconsistencyByInequalityIntroductionInclusion(InferenceRuleInclusion):
+class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.inconsistency_by_inequality_introduction
-        dashed_name = 'inconsistency-by-inequality-introduction'
-        acronym = None
+        i = t.universe_of_discourse.inference_rules.inconsistency_introduction_1
+        dashed_name = 'inconsistency-introduction-2'
+        acronym = 'ii2'
         abridged_name = None
-        name = 'inconsistency by inequality introduction'
-        explicit_name = 'inconsistency by inequality introduction inference rule'
+        name = 'inconsistency introduction #2'
+        explicit_name = 'inconsistency introduction #2 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
@@ -7807,12 +7820,12 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the proof-by-refutation inference-rule and return the inferred-formula.
+        """Apply the :doc:`proof_by_refutation_1` :doc:`inference_rule` and return the inferred-formula.
 
-        :param p_hypothesis: (mandatory) The (¬P) hypothesis-statement.
-        :param inc_hypothesis: (mandatory) The proof of inconsistency of the not_p hypothetical-theory:
-Inc(¬P).
-        :return: The inferred formula .
+        :param p_hypothesis: (mandatory) The :math:`\\neg \\mathbf{P}` hypothesis.
+        :param inc_hypothesis: (mandatory) The proof of inconsistency of the :math:`\\neg \\mathbf{P}` hypothesis :math:`Inc\\left(\\mathcal{H}\\right)` .
+        :param echo:
+        :return: The inferred formula: :math:`\\mathbf{P}` .
         """
         return super().infer_formula(p_hypothesis, inc_hypothesis, echo=echo)
 
@@ -7943,8 +7956,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         self._double_negation_introduction = None
         self._equality_commutativity = None
         self._equal_terms_substitution = None
-        self._inconsistency_by_inequality_introduction = None
-        self._inconsistency_by_negation_introduction = None
+        self._inconsistency_introduction_2 = None
+        self._inconsistency_introduction_1 = None
         self._modus_ponens = None
         self._proof_by_contradiction_1 = None
         self._proof_by_contradiction_of_non_equality = None
@@ -8252,20 +8265,24 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.equal_terms_substitution
 
     @property
-    def inconsistency_by_inequality_introduction(
-            self) -> InconsistencyByInequalityIntroductionInclusion:
-        if self._inconsistency_by_inequality_introduction is None:
-            self._inconsistency_by_inequality_introduction = InconsistencyByInequalityIntroductionInclusion(
-                t=self.t)
-        return self._inconsistency_by_inequality_introduction
+    def inconsistency_introduction_2(self) -> InconsistencyIntroduction2Inclusion:
+        if self._inconsistency_introduction_2 is None:
+            self._inconsistency_introduction_2 = InconsistencyIntroduction2Inclusion(t=self.t)
+        return self._inconsistency_introduction_2
 
     @property
-    def inconsistency_by_negation_introduction(
-            self) -> InconsistencyByNegationIntroductionInclusion:
-        if self._inconsistency_by_negation_introduction is None:
-            self._inconsistency_by_negation_introduction = InconsistencyByNegationIntroductionInclusion(
-                t=self.t)
-        return self._inconsistency_by_negation_introduction
+    def inconsistency_introduction_1(self) -> InconsistencyIntroduction1Inclusion:
+        if self._inconsistency_introduction_1 is None:
+            self._inconsistency_introduction_1 = InconsistencyIntroduction1Inclusion(t=self.t)
+        return self._inconsistency_introduction_1
+
+    @property
+    def ii1(self) -> InconsistencyIntroduction1Inclusion:
+        return self.inconsistency_introduction_1
+
+    @property
+    def ii2(self) -> InconsistencyIntroduction2Inclusion:
+        return self.inconsistency_introduction_2
 
     @property
     def modus_ponens(self) -> ModusPonensInclusion:

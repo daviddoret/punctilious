@@ -3,7 +3,7 @@ import theory.package.tao_2006_2_1_the_peano_axioms as tpa
 
 # from package.tao_2006_the_peano_axioms import p
 
-t = tpa.Tao2006ThePeanoAxioms.develop_theory()
+t = tpa.Tao2006ThePeanoAxioms().develop()
 u = t.u
 
 

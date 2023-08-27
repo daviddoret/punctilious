@@ -13,6 +13,8 @@ Welcome to punctilious's documentation!
    :maxdepth: 1
    :caption: Contents:
 
+   test
+
    absorption
    bibliography
    biconditional_elimination_left
@@ -27,6 +29,8 @@ Welcome to punctilious's documentation!
    double_negation_elimination
    double_negation_introduction
    elimination_rule
+   formula_statement
+   hypothesis
    inconsistency_by_inequality_introduction
    inference_rule
    introduction_rule

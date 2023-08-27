@@ -40,7 +40,7 @@ class TestProofByContradiction(TestCase):
         # p7: 𝑟₁(𝑜₁, 𝑜₃) by modus ponens
         t2_p7 = t2.i.modus_ponens.infer_statement(p_implies_q=t2_p6, p=t2_p5)
         # p7 is in contradiction with the hypothetical_formula
-        t1_p8 = t1.i.inconsistency_by_negation_introduction.infer_statement(p=t2_p7, not_p=t2_a1,
+        t1_p8 = t1.i.inconsistency_introduction_1.infer_statement(p=t2_p7, not_p=t2_a1,
             inconsistent_theory=t2)
         t1_p9 = t1.i.proof_by_contradiction_1.infer_statement(not_p_hypothesis=t1_h1,
             inc_hypothesis=t1_p8)

@@ -2,7 +2,6 @@
 
 """
 
-print('Punctilious package (punctilious/__init__.py)')
 from repm import monospace, prnt, serif_bold
 from core import Article, AxiomDeclaration, AxiomInclusion, ComposableBlockSequence, classes, \
     configuration, consistency_values, DashedName, create_universe_of_discourse, \
@@ -22,4 +21,4 @@ from locale_en_us import locale_en_us
 # Configure the default locale
 configuration.locale = locale_en_us
 
-print('Punctilious package: initialized.')
+print('punctilious: package initialized. welcome!')
