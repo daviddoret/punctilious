@@ -22,6 +22,8 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinxcontrib.bibtex'
 # 'sphinx_exec_code',
 bibtex_bibfiles = ['bibliography_bibtex.bib']
 bibtex_encoding = 'utf-8-sig'
+# https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html#bibliography-style
+bibtex_default_style = 'alpha'
 
 templates_path = ['_templates']
 exclude_patterns = []

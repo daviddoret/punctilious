@@ -320,41 +320,66 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         return True
 
-    def compose_inconsistency_by_inequality_introduction_paragraph_proof(self,
-            o: InferredStatement) -> collections.abc.Generator[Composable, Composable, bool]:
+    def compose_inconsistency_introduction_1_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
-        p_eq_q: FormulaStatement = o.parameters[0]
-        p_neq_q: FormulaStatement = o.parameters[1]
-        yield from p_eq_q.valid_proposition.compose_formula()
-        yield SansSerifNormal(' follows from ')
-        yield from p_eq_q.compose_ref_link()
-        yield SansSerifNormal('. ')
-        yield from p_neq_q.valid_proposition.compose_formula()
-        yield SansSerifNormal(' follows from ')
-        yield from p_neq_q.compose_ref_link()
-        yield SansSerifNormal('. ')
-        return True
-
-    def compose_inconsistency_introduction_by_negation_introduction_paragraph_proof(self,
-            o: InferredStatement) -> collections.abc.Generator[Composable, Composable, bool]:
-        global text_dict
-        # Retrieve the parameters from the statement
+        p0 = StyledText(plaintext='P', unicode='𝑷')
+        p1 = StyledText(plaintext='not(P)', unicode='¬(𝑷)')
         p: FormulaStatement = o.parameters[0]
         not_p: FormulaStatement = o.parameters[1]
         yield SansSerifNormal('Let ')
-        yield SerifBoldItalic('𝑷')
+        yield p0
         yield SerifItalic(' := ')
         yield from p.valid_proposition.compose_formula()
         yield SansSerifNormal(', which follows from ')
         yield from p.compose_ref_link()
         yield SansSerifNormal('. ')
         yield SansSerifNormal('Let ')
-        yield SerifBoldItalic('¬(𝑷)')
+        yield p1
         yield SerifItalic(' := ')
         yield from not_p.valid_proposition.compose_formula()
         yield SansSerifNormal(', which follows from ')
         yield from not_p.compose_ref_link()
+        yield SansSerifNormal('. ')
+        return True
+
+    def compose_inconsistency_introduction_2_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p0: StyledText = StyledText(plaintext='(P = Q)', unicode='(𝑷 = 𝑸)')
+        p1: StyledText = StyledText(plaintext='(P neq Q))', unicode='(𝑷 ≠ 𝑸)')
+        p_eq_q: FormulaStatement = o.parameters[0]
+        p_neq_q: FormulaStatement = o.parameters[1]
+        yield SansSerifNormal('Let ')
+        yield p0
+        yield SerifItalic(' := ')
+        yield from p_eq_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from p_eq_q.compose_ref_link()
+        yield SansSerifNormal('. ')
+        yield SansSerifNormal('Let ')
+        yield p1
+        yield SerifItalic(' := ')
+        yield from p_neq_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from p_neq_q.compose_ref_link()
+        yield SansSerifNormal('. ')
+        return True
+
+    def compose_inconsistency_introduction_3_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p0: StyledText = StyledText(plaintext='(P neq P)', unicode='(𝑷 ≠ 𝑷)')
+        p_neq_p: FormulaStatement = o.parameters[0]
+        yield SansSerifNormal('Let ')
+        yield p0
+        yield SerifItalic(' := ')
+        yield from p_neq_p.valid_proposition.compose_formula()
+        yield SansSerifNormal(', which follows from ')
+        yield from p_neq_p.compose_ref_link()
         yield SansSerifNormal('. ')
         return True
 

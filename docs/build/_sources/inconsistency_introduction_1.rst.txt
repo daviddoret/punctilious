@@ -10,6 +10,8 @@ Definition
 
    \left( P, \neg \left(P\right) \right) \vdash Inc\left(\mathcal{T}\right)
 
+In straightforward language, if we prove a proposition and its negation, it follows that the theory is inconsistent.
+
 Quotes
 ------
 
@@ -34,7 +36,3 @@ Python sample usage
 
    .. literalinclude :: ../../sample/output/inconsistency_introduction_1_plaintext.txt
       :language: text
-
-Bibliography
---------------
-.. footbibliography::

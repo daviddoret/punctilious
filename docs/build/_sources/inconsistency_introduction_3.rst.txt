@@ -1,16 +1,16 @@
-inconsistency-introduction-2
+inconsistency-introduction-3
 ========================================
 
 Definition
 ----------
 
-*inconsistency-introduction-2* is the :doc:`inference_rule`:
+*inconsistency-introduction-3* is the :doc:`inference_rule`:
 
 .. math::
 
-   \left(\left(x = y\right), \left(x \neq y\right)\right) \vdash Inc\left(\mathcal{T}\right)
+   \left( P \neq P \right) \vdash Inc\left(\mathcal{T}\right)
 
-In straightforward language, if we prove both the equality and inequality of two terms, it follows that the theory is inconsistent.
+In straightforward language, if we prove that an object is not equal to itself, it follows that the theory is inconsistent.
 
 Quotes
 ----------
@@ -24,18 +24,18 @@ Python sample usage
 .. admonition:: Source code
   :class: tip, dropdown
 
-   .. literalinclude :: ../../sample/code/inconsistency_introduction_2.py
+   .. literalinclude :: ../../sample/code/inconsistency_introduction_3.py
       :language: python
       :linenos:
 
 .. admonition:: Unicode output
    :class: note, dropdown
 
-   .. literalinclude :: ../../sample/output/inconsistency_introduction_2_unicode.txt
+   .. literalinclude :: ../../sample/output/inconsistency_introduction_3_unicode.txt
       :language: text
 
 .. admonition:: Plaintext output
    :class: note, dropdown
 
-   .. literalinclude :: ../../sample/output/inconsistency_introduction_2_plaintext.txt
+   .. literalinclude :: ../../sample/output/inconsistency_introduction_3_plaintext.txt
       :language: text

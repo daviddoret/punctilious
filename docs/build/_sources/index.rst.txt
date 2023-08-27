@@ -33,6 +33,7 @@ Welcome to punctilious's documentation!
    hypothesis
    inconsistency_introduction_1
    inconsistency_introduction_2
+   inconsistency_introduction_3
    inference_rule
    introduction_rule
    is_a

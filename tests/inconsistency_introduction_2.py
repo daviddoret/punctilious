@@ -6,7 +6,6 @@ import random_data
 
 class TestInconsistencyIntroduction2(TestCase):
     def test_inconsistency_introduction_2(self):
-        """Simple inconsistency introduction"""
         pu.configuration.echo_default = True
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
