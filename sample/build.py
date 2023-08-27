@@ -1,15 +1,4 @@
-# with open('../sample/code/inconsistency_introduction_1.py') as f:
-#    output = exec(f.read())
-# pass
-
-# import subprocess
-
-# result = subprocess.run(['python', '../sample/code/inconsistency_introduction_1.py'],
-#    capture_output=True, text=True)
-
-# print(result.stdout)
 import punctilious as pu
-
 import contextlib
 
 with open('../sample/code/inconsistency_introduction_1.py', mode='r',
