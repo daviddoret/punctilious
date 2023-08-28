@@ -22,5 +22,5 @@ phi1 = t1.i.axiom_interpretation.infer_statement(theory_axiom,
 
 # And finally, use the biconditional-elimination-left inference-rule:
 pu.configuration.echo_proof = True
-proposition_of_interest = t1.i.biconditional_elimination_left.infer_statement(p_iff_q=phi1,
+proposition_of_interest = t1.i.biconditional_elimination_1.infer_statement(p_iff_q=phi1,
     subtitle='The proposition of interest', echo=True)

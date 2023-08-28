@@ -1,10 +1,10 @@
-biconditional-elimination-left
+biconditional-elimination-1
 ========================================
 
 Definition
 ----------
 
-*biconditional-elimination-left* is the :doc:`inference_rule`:
+*biconditional-elimination-1* is the :doc:`inference_rule`:
 
 .. math::
 
@@ -21,18 +21,18 @@ Python sample usage
 .. admonition:: Source code
   :class: tip, dropdown
 
-   .. literalinclude :: ../../sample/code/biconditional_elimination_left.py
+   .. literalinclude :: ../../sample/code/biconditional_elimination_1.py
       :language: python
       :linenos:
 
 .. admonition:: Unicode output
    :class: note, dropdown
 
-   .. literalinclude :: ../../sample/output/biconditional_elimination_left_unicode.txt
+   .. literalinclude :: ../../sample/output/biconditional_elimination_1_unicode.txt
       :language: text
 
 .. admonition:: Plaintext output
    :class: note, dropdown
 
-   .. literalinclude :: ../../sample/output/biconditional_elimination_left_plaintext.txt
+   .. literalinclude :: ../../sample/output/biconditional_elimination_1_plaintext.txt
       :language: text

@@ -3851,7 +3851,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         return True
 
 
-class BiconditionalEliminationLeftDeclaration(InferenceRuleDeclaration):
+class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
     """The well-known biconditional elimination (left) inference rule: P ⟺ Q ⊢ P ⟹ Q.
 
     Acronym: bel.
@@ -3859,13 +3859,13 @@ class BiconditionalEliminationLeftDeclaration(InferenceRuleDeclaration):
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
-        symbol = 'biconditional-elimination-left'
+        symbol = 'biconditional-elimination-1'
         auto_index = False
-        dashed_name = 'biconditional-elimination-left'
-        acronym = 'bel'
-        abridged_name = 'bicond. elim. (left)'
-        explicit_name = 'biconditional elimination (left) inference rule'
-        name = 'biconditional elimination (left)'
+        dashed_name = 'biconditional-elimination-1'
+        acronym = 'be1'
+        abridged_name = None
+        explicit_name = 'biconditional elimination #1 inference rule'
+        name = 'biconditional elimination #1'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             definition = ((p | u.r.iff | q) | u.r.proves | (p | u.r.implies | q))
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
@@ -3906,24 +3906,24 @@ class BiconditionalEliminationLeftDeclaration(InferenceRuleDeclaration):
         return True
 
 
-class BiconditionalEliminationRightDeclaration(InferenceRuleDeclaration):
+class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
     """The well-known biconditional elimination (left) inference rule: P ⟺ Q ⊢ Q ⟹ P.
 
     Acronym: ber.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'biconditional-elimination-right'
+        symbol = 'biconditional-elimination-2'
         auto_index = False
-        dashed_name = 'biconditional-elimination-right'
-        acronym = 'ber'
-        abridged_name = 'bicond. elim. (right)'
-        explicit_name = 'biconditional elimination (right) inference rule'
-        name = 'biconditional elimination (right)'
+        dashed_name = 'biconditional-elimination-2'
+        acronym = 'be2'
+        abridged_name = None
+        explicit_name = 'biconditional elimination #2 inference rule'
+        name = 'biconditional elimination #2'
         # Assure backward-compatibility with the parent class,
         # which received these methods as __init__ arguments.
-        infer_formula = BiconditionalEliminationRightDeclaration.infer_formula
-        verify_args = BiconditionalEliminationRightDeclaration.verify_args
+        infer_formula = BiconditionalElimination2Declaration.infer_formula
+        verify_args = BiconditionalElimination2Declaration.verify_args
         super().__init__(infer_formula=infer_formula, verify_args=verify_args,
             universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
@@ -6487,8 +6487,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         # Well-known objects
         self._absorption = None
         self._axiom_interpretation = None
-        self._biconditional_elimination_left = None
-        self._biconditional_elimination_right = None
+        self._biconditional_elimination_1 = None
+        self._biconditional_elimination_2 = None
         self._biconditional_introduction = None
         self._conjunction_elimination_left = None
         self._conjunction_elimination_right = None
@@ -6556,7 +6556,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._axiom_interpretation
 
     @property
-    def bel(self) -> BiconditionalEliminationLeftDeclaration:
+    def bel(self) -> BiconditionalElimination1Declaration:
         """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
         Abridged property: u.i.bel
@@ -6564,10 +6564,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.biconditional_elimination_left
+        return self.biconditional_elimination_1
 
     @property
-    def ber(self) -> BiconditionalEliminationRightDeclaration:
+    def ber(self) -> BiconditionalElimination2Declaration:
         """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
 
         Abridged property: u.i.ber()
@@ -6575,7 +6575,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.biconditional_elimination_right
+        return self.biconditional_elimination_2
 
     @property
     def bi(self) -> BiconditionalIntroductionDeclaration:
@@ -6589,7 +6589,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.biconditional_introduction
 
     @property
-    def biconditional_elimination_left(self) -> BiconditionalEliminationLeftDeclaration:
+    def biconditional_elimination_1(self) -> BiconditionalElimination1Declaration:
         """The well-known biconditional-elimination (left) inference-rule: ((P ⟺ Q) ⊢ (P ⟹ Q)).
 
         The ⌜left⌝ suffix is non-standard and used to mean that among the two possible results of
@@ -6601,13 +6601,13 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
-        if self._biconditional_elimination_left is None:
-            self._biconditional_elimination_left = BiconditionalEliminationLeftDeclaration(
+        if self._biconditional_elimination_1 is None:
+            self._biconditional_elimination_1 = BiconditionalElimination1Declaration(
                 universe_of_discourse=self.u)
-        return self._biconditional_elimination_left
+        return self._biconditional_elimination_1
 
     @property
-    def biconditional_elimination_right(self) -> BiconditionalEliminationRightDeclaration:
+    def biconditional_elimination_2(self) -> BiconditionalElimination2Declaration:
         """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
 
         The ⌜right⌝ suffix is non-standard and used to mean that among the two possible results
@@ -6619,10 +6619,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._biconditional_elimination_right is None:
-            self._biconditional_elimination_right = BiconditionalEliminationRightDeclaration(
+        if self._biconditional_elimination_2 is None:
+            self._biconditional_elimination_2 = BiconditionalElimination2Declaration(
                 universe_of_discourse=self.u)
-        return self._biconditional_elimination_right
+        return self._biconditional_elimination_2
 
     @property
     def biconditional_introduction(self) -> BiconditionalIntroductionDeclaration:
@@ -7174,19 +7174,19 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class BiconditionalEliminationLeftInclusion(InferenceRuleInclusion):
+class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.biconditional_elimination_left
-        dashed_name = 'biconditional-elimination-left'
-        acronym = 'bel'
-        abridged_name = 'bicond. elim. left'
-        name = 'biconditional elimination (left)'
-        explicit_name = 'biconditional elimination (left) inference rule'
+        i = t.universe_of_discourse.inference_rules.biconditional_elimination_1
+        dashed_name = 'biconditional-elimination-1'
+        acronym = 'be1'
+        abridged_name = None
+        name = 'biconditional elimination #1'
+        explicit_name = 'biconditional elimination #1 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
@@ -7208,19 +7208,19 @@ class BiconditionalEliminationLeftInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class BiconditionalEliminationRightInclusion(InferenceRuleInclusion):
+class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.biconditional_elimination_right
-        dashed_name = 'biconditional-elimination-right'
-        acronym = 'bel'
-        abridged_name = 'bicond. elim. right'
-        name = 'biconditional elimination (right)'
-        explicit_name = 'biconditional elimination (right) inference rule'
+        i = t.universe_of_discourse.inference_rules.biconditional_elimination_2
+        dashed_name = 'biconditional-elimination-2'
+        acronym = 'be2'
+        abridged_name = None
+        name = 'biconditional elimination #2'
+        explicit_name = 'biconditional elimination #2 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
@@ -8082,8 +8082,8 @@ class InferenceRuleInclusionDict(collections.UserDict):
         # Well-known objects
         self._absorption = None
         self._axiom_interpretation = None
-        self._biconditional_elimination_left = None
-        self._biconditional_elimination_right = None
+        self._biconditional_elimination_1 = None
+        self._biconditional_elimination_2 = None
         self._biconditional_introduction = None
         self._conjunction_elimination_left = None
         self._conjunction_elimination_right = None
@@ -8150,7 +8150,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._axiom_interpretation
 
     @property
-    def bel(self) -> BiconditionalEliminationLeftInclusion:
+    def bel(self) -> BiconditionalElimination1Inclusion:
         """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
         Unabridged property: u.i.biconditional_elimination_left
@@ -8158,7 +8158,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.biconditional_elimination_left
+        return self.biconditional_elimination_1
 
     @property
     def ber(self) -> InferenceRuleInclusion:
@@ -8169,7 +8169,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.biconditional_elimination_right
+        return self.biconditional_elimination_2
 
     @property
     def bi(self) -> BiconditionalIntroductionInclusion:
@@ -8183,7 +8183,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.biconditional_introduction
 
     @property
-    def biconditional_elimination_left(self) -> BiconditionalEliminationLeftInclusion:
+    def biconditional_elimination_1(self) -> BiconditionalElimination1Inclusion:
         """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
         Abridged property: u.i.bel
@@ -8191,12 +8191,12 @@ class InferenceRuleInclusionDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._biconditional_elimination_left is None:
-            self._biconditional_elimination_left = BiconditionalEliminationLeftInclusion(t=self.t)
-        return self._biconditional_elimination_left
+        if self._biconditional_elimination_1 is None:
+            self._biconditional_elimination_1 = BiconditionalElimination1Inclusion(t=self.t)
+        return self._biconditional_elimination_1
 
     @property
-    def biconditional_elimination_right(self) -> BiconditionalEliminationRightInclusion:
+    def biconditional_elimination_2(self) -> BiconditionalElimination2Inclusion:
         """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
 
         Abridged property: u.i.ber()
@@ -8204,9 +8204,9 @@ class InferenceRuleInclusionDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._biconditional_elimination_left is None:
-            self._biconditional_elimination_left = BiconditionalEliminationRightInclusion(t=self.t)
-        return self._biconditional_elimination_left
+        if self._biconditional_elimination_1 is None:
+            self._biconditional_elimination_1 = BiconditionalElimination2Inclusion(t=self.t)
+        return self._biconditional_elimination_1
 
     @property
     def biconditional_introduction(self) -> BiconditionalIntroductionInclusion:
