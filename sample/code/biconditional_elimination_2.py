@@ -20,7 +20,7 @@ theory_axiom = t1.include_axiom(axiom)
 phi1 = t1.i.axiom_interpretation.infer_statement(theory_axiom,
     (r1(o1, o2) | u.r.biconditional | r2(o3)))
 
-# And finally, use the biconditional-elimination-1 inference-rule:
+# And finally, use the biconditional-elimination-2 inference-rule:
 pu.configuration.echo_proof = True
-proposition_of_interest = t1.i.biconditional_elimination_1.infer_statement(p_iff_q=phi1,
+proposition_of_interest = t1.i.biconditional_elimination_2.infer_statement(p_iff_q=phi1,
     subtitle='The proposition of interest', echo=True)

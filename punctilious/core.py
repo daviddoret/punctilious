@@ -3913,6 +3913,7 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'biconditional-elimination-2'
         auto_index = False
         dashed_name = 'biconditional-elimination-2'
@@ -3920,14 +3921,17 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
         abridged_name = None
         explicit_name = 'biconditional elimination #2 inference rule'
         name = 'biconditional elimination #2'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = BiconditionalElimination2Declaration.infer_formula
-        verify_args = BiconditionalElimination2Declaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.iff | q) | u.r.proves | (q | u.r.implies | p))
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_biconditional_elimination_right_paragraph_proof(
+            o=o)
+        return output
 
     def infer_formula(self, p_iff_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
@@ -3937,26 +3941,20 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
         :param t: The current theory-elaboration-sequence.
         :return: The (proven) formula: (Q ⟹ P).
         """
-        p_iff_q = unpack_formula(p_iff_q)
-        p: Formula
-        q: Formula
-        p = unpack_formula(p_iff_q.parameters[0])
-        q = unpack_formula(p_iff_q.parameters[1])
-        output = t.u.f(t.u.r.implication, q, p)
-        return output
-
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_biconditional_elimination_right_paragraph_proof(
-            o=o)
+        p_iff_q: Formula = interpret_formula(u=self.u, arity=2, flexible_formula=p_iff_q)
+        p: Formula = interpret_formula(u=self.u, arity=None, flexible_formula=p_iff_q.parameters[0])
+        q: Formula = interpret_formula(u=self.u, arity=None, flexible_formula=p_iff_q.parameters[1])
+        output = (q | t.u.r.implies | p)
         return output
 
     def verify_args(self, p_iff_q: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
+        p_iff_q: FormulaStatement = interpret_statement_formula(t=t, arity=None,
+            flexible_formula=p_iff_q)
         verify(t.contains_theoretical_objct(p_iff_q),
             'Formula-statement ⌜p_iff_q⌝ must be contained in theory ⌜t⌝.', phi=p_iff_q, t=t,
             slf=self)
-        p_iff_q = unpack_formula(p_iff_q)
+        p_iff_q: Formula = interpret_formula(u=self.u, arity=None, flexible_formula=p_iff_q)
         verify(p_iff_q.relation is t.u.r.biconditional,
             'The relation of formula ⌜p_iff_q⌝ must be a biconditional.',
             phi_relation=p_iff_q.relation, phi=p_iff_q, t=t, slf=self)

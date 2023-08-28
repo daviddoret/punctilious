@@ -94,13 +94,13 @@ class LocaleEnUs(Locale):
     def compose_biconditional_elimination_right_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
-        # Retrieve the parameters from the statement
-        o: InferredStatement
-        p: FormulaStatement
-        p = o.parameters[0]
-        yield from p.valid_proposition.compose_formula()
-        yield SansSerifNormal(' follows from ')
-        yield from p.compose_ref_link()
+        p0 = o.inference_rule.definition.parameters[0]
+        q_iff_p: FormulaStatement = o.parameters[0]
+        yield from q_iff_p.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield p0
+        yield SansSerifNormal(', follows from ')
+        yield from q_iff_p.compose_ref_link()
         yield SansSerifNormal('. ')
         return True
 
