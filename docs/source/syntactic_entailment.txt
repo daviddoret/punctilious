@@ -1,0 +1,15 @@
+
+
+In mathematical logic and computer science the symbol ⊢ (
+⊢\vdash ) has taken the name turnstile because of its resemblance to a typical turnstile if viewed from above. It is also referred to as tee and is often read as "yields", "proves", "satisfies" or "entails".
+https://en.wikipedia.org/wiki/Turnstile_(symbol)
+
+In metalogic, the study of formal languages; the turnstile represents syntactic consequence (or "derivability"). This is to say, that it shows that one string can be derived from another in a single step, according to the transformation rules (i.e. the syntax) of some given formal system.[3] As such, the expression
+� ⊢ � P\vdash Q means that Q is derivable from P in the system.
+https://en.wikipedia.org/wiki/Turnstile_(symbol)
+
+In proof theory, the turnstile is used to denote "provability" or "derivability". For example, if T is a formal theory and S is a particular sentence in the language of the theory then�⊢�T\vdash Smeans that S is provable from T.[4] This usage is demonstrated in the article on propositional calculus. The syntactic consequence of provability should be contrasted to semantic consequence, denoted by the double turnstile symbol ⊨\models . One says that �S is a semantic consequence of �T, or �⊨�{\displaystyle T\models S}, when all possible valuations in which �T is true, �S is also true. For propositional logic, it may be shown that semantic consequence ⊨\models  and derivability ⊢\vdash  are equivalent to one-another. That is, propositional logic is sound (⊢\vdash  implies ⊨\models ) and complete (⊨\models  implies ⊢\vdash )[5]
+https://en.wikipedia.org/wiki/Turnstile_(symbol)
+
+Syntactic consequence See also: ∴ and ⊢ A formula  � A is a syntactic consequence[5][6][7][8][9] within some formal system  � � {\mathcal {FS}} of a set  Γ\Gamma  of formulas if there is a formal proof in  � � {\mathcal {FS}} of  � A from the set  Γ\Gamma . This is denoted  Γ ⊢ � � � \Gamma \vdash _{\mathcal {FS}}A. The turnstile symbol  ⊢\vdash  was originally introduced by Frege in 1879, but its current use only dates back to Rosser and Kleene (1934--1935). [9] Syntactic consequence does not depend on any interpretation of the formal system.[10]
+https://en.wikipedia.org/wiki/Logical_consequence

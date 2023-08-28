@@ -54,6 +54,9 @@ def rep_composition(composition: collections.abc.Generator[Composable, Composabl
             elif isinstance(item, int):
                 representation = representation + str(item)
                 cap = False
+            elif isinstance(item, Formula):
+                representation = representation + item.rep_formula(encoding=encoding)
+                cap = False
             else:
                 raise TypeError(f'Type ⌜{str(type(item))}⌝ is not supported in compositions.')
         return representation
@@ -3855,6 +3858,7 @@ class BiconditionalEliminationLeftDeclaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'biconditional-elimination-left'
         auto_index = False
         dashed_name = 'biconditional-elimination-left'
@@ -3862,14 +3866,11 @@ class BiconditionalEliminationLeftDeclaration(InferenceRuleDeclaration):
         abridged_name = 'bicond. elim. (left)'
         explicit_name = 'biconditional elimination (left) inference rule'
         name = 'biconditional elimination (left)'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = BiconditionalEliminationLeftDeclaration.infer_formula
-        verify_args = BiconditionalEliminationLeftDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.iff | q) | u.r.proves | (p | u.r.implies | q))
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_iff_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
@@ -3879,12 +3880,10 @@ class BiconditionalEliminationLeftDeclaration(InferenceRuleDeclaration):
         :param t: The current theory-elaboration-sequence.
         :return: The (proven) formula: (P ⟹ (P ∧ Q)).
         """
-        p_iff_q = unpack_formula(p_iff_q)
-        p: Formula
-        q: Formula
-        p = unpack_formula(p_iff_q.parameters[0])
-        q = unpack_formula(p_iff_q.parameters[1])
-        output = t.u.f(t.u.r.implication, p, q)
+        p_iff_q: Formula = interpret_formula(u=self.u, arity=2, flexible_formula=p_iff_q)
+        p: Formula = interpret_formula(u=self.u, arity=None, flexible_formula=p_iff_q.parameters[0])
+        q: Formula = interpret_formula(u=self.u, arity=None, flexible_formula=p_iff_q.parameters[1])
+        output = (p | t.u.r.implies | q)
         return output
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
@@ -3895,10 +3894,12 @@ class BiconditionalEliminationLeftDeclaration(InferenceRuleDeclaration):
 
     def verify_args(self, p_iff_q: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
+        p_iff_q: FormulaStatement = interpret_statement_formula(t=t, arity=None,
+            flexible_formula=p_iff_q)
         verify(t.contains_theoretical_objct(p_iff_q),
             'Formula-statement ⌜p_iff_q⌝ must be contained in theory ⌜t⌝.', phi=p_iff_q, t=t,
             slf=self)
-        p_iff_q = unpack_formula(p_iff_q)
+        p_iff_q: Formula = interpret_formula(u=self.u, arity=None, flexible_formula=p_iff_q)
         verify(p_iff_q.relation is t.u.r.biconditional,
             'The relation of formula ⌜p_iff_q⌝ must be a biconditional.',
             phi_relation=p_iff_q.relation, phi=p_iff_q, t=t, slf=self)
@@ -6132,6 +6133,7 @@ class RelationDict(collections.UserDict):
         self._implication = None
         self._is_a = None
         self._negation = None
+        self._syntactic_entailment = None
 
     def declare(self, arity: int, symbol: (None, str, StyledText) = None, index: (None, int) = None,
             auto_index: (None, bool) = None, formula_rep=None, signal_proposition=None,
@@ -6243,6 +6245,10 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         return self.inconsistency
+
+    @property
+    def iff(self):
+        return self.biconditional
 
     @property
     def implication(self):
@@ -6371,6 +6377,34 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         return self.inequality
+
+    @property
+    def proves(self):
+        """The well-known syntactic-entailment relation.
+
+        Unabridged property: u.r.syntactic_entailment
+
+        If it does not exist in the universe-of-discourse,
+        declares it automatically.
+        """
+        return self.syntactic_entailment
+
+    @property
+    def syntactic_entailment(self):
+        """The well-known syntactic-entailment relation.
+
+        Abridged property: u.r.proves
+
+        If it does not exist in the universe-of-discourse,
+        declares it automatically.
+        """
+        if self._syntactic_entailment is None:
+            self._syntactic_entailment = self.declare(arity=2, formula_rep=Formula.infix,
+                signal_proposition=True,
+                symbol=SerifItalic(plaintext='|-', unicode='⊢', latex='\\vdash'), auto_index=False,
+                dashed_name='syntactic-entailment', abridged_name='proves',
+                name='syntactic entailment')
+        return self._syntactic_entailment
 
 
 FlexibleFormula = typing.Union[FormulaStatement, Formula, tuple, list]
