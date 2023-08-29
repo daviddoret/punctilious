@@ -85,7 +85,7 @@ class LocaleEnUs(Locale):
         p_iff_q: FormulaStatement = o.parameters[0]
         yield from p_iff_q.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield p0
+        yield p0.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from p_iff_q.compose_ref_link()
         yield SansSerifNormal('. ')
@@ -98,7 +98,7 @@ class LocaleEnUs(Locale):
         q_iff_p: FormulaStatement = o.parameters[0]
         yield from q_iff_p.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield p0
+        yield from p0.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from q_iff_p.compose_ref_link()
         yield SansSerifNormal('. ')

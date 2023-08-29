@@ -22,4 +22,4 @@ phi2 = t1.i.axiom_interpretation.infer_statement(theory_axiom, (r2(o3) | u.r.imp
 
 # And finally, use the biconditional-introduction inference-rule:
 pu.configuration.echo_proof = True
-biconditional_inference = t1.i.bi.infer_statement(phi1, phi2)
+biconditional_inference = t1.i.bi.infer_statement(p_implies_q=phi1, q_implies_p=phi2)
