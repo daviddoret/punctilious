@@ -78,9 +78,8 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal(' is a valid formula statement interpreted from that axiom.')
         return True
 
-    def compose_biconditional_elimination_left_paragraph_proof(self, o: InferredStatement) -> \
+    def compose_biconditional_elimination_1_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        global text_dict
         p0 = o.inference_rule.definition.parameters[0]
         p_iff_q: FormulaStatement = o.parameters[0]
         yield from p_iff_q.valid_proposition.compose_formula()
@@ -91,9 +90,8 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('. ')
         return True
 
-    def compose_biconditional_elimination_right_paragraph_proof(self, o: InferredStatement) -> \
+    def compose_biconditional_elimination_2_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        global text_dict
         p0 = o.inference_rule.definition.parameters[0]
         q_iff_p: FormulaStatement = o.parameters[0]
         yield from q_iff_p.valid_proposition.compose_formula()
@@ -108,16 +106,21 @@ class LocaleEnUs(Locale):
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
-        o: InferredStatement
-        p1: FormulaStatement = o.parameters[0]
-        yield from p1.valid_proposition.compose_formula()
-        yield SansSerifNormal(' follows from ')
-        yield from p1.compose_ref_link()
+        parameter_p_implies_q: Formula = o.inference_rule.definition.parameters[0].parameters[0]
+        p_implies_q: FormulaStatement = o.parameters[0]
+        yield from p_implies_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_p_implies_q.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from p_implies_q.compose_ref_link()
         yield SansSerifNormal('. ')
-        p2: FormulaStatement = o.parameters[1]
-        yield from p2.valid_proposition.compose_formula()
-        yield SansSerifNormal(' follows from ')
-        yield from p2.compose_ref_link()
+        parameter_q_implies_p: Formula = o.inference_rule.definition.parameters[0].parameters[1]
+        q_implies_p: FormulaStatement = o.parameters[1]
+        yield from q_implies_p.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_q_implies_p.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from q_implies_p.compose_ref_link()
         yield SansSerifNormal('. ')
         return True
 

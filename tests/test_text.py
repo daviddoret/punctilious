@@ -40,7 +40,7 @@ class TestText(TestCase):
     def test_equality(self):
         t1 = pu.ComposableText(plaintext='foo')
         t2 = pu.ComposableText(plaintext='foo', unicode='bar')
-        self.assertEqual(t1, t2)
+        self.assertNotEqual(t1, t2)
         self.assertEqual(t2, t2)
         t3 = pu.ComposableText(unicode='bar')
         self.assertNotEqual(t1, t3)

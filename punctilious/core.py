@@ -3888,7 +3888,7 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_biconditional_elimination_left_paragraph_proof(
+        output = yield from configuration.locale.compose_biconditional_elimination_1_paragraph_proof(
             o=o)
         return output
 
@@ -3929,7 +3929,7 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_biconditional_elimination_right_paragraph_proof(
+        output = yield from configuration.locale.compose_biconditional_elimination_2_paragraph_proof(
             o=o)
         return output
 
@@ -3968,31 +3968,30 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'biconditional-introduction'
         auto_index = False
         dashed_name = 'biconditional-introduction'
         acronym = 'bi'
-        abridged_name = 'bicond. intro.'
+        abridged_name = None
         explicit_name = 'biconditional introduction inference rule'
         name = 'biconditional introduction'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = BiconditionalIntroductionDeclaration.infer_formula
-        verify_args = BiconditionalIntroductionDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = (((p | u.r.implies | q) | u.r.sequent_comma | (
+                    q | u.r.implies | p)) | u.r.proves | (p | u.r.iff | q))
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_implies_q: FormulaStatement = None,
-            q_implies_p: FormulaStatement = None, t: TheoryElaborationSequence = None,
-            echo: (None, bool) = None) -> Formula:
+    def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
+            q_implies_p: (tuple, Formula, FormulaStatement) = None,
+            t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
         """Infer formula (P ⟺ Q) from formulae (P ⟹ Q), and (Q ⟹ P).
         """
-        p_implies_q = unpack_formula(p_implies_q)
+        p_implies_q = interpret_formula(u=t.u, arity=2, flexible_formula=p_implies_q)
         p = p_implies_q.parameters[0]
         q = p_implies_q.parameters[1]
-        return t.u.f(t.u.r.biconditional, p, q)
+        return p | t.u.r.iff | q
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -4002,16 +4001,16 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
 
     def verify_args(self, p_implies_q: FormulaStatement = None,
             q_implies_p: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
+        p_implies_q = interpret_statement_formula(t=t, arity=2, flexible_formula=p_implies_q)
         verify(t.contains_theoretical_objct(p_implies_q),
-            'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-            p_implies_q=p_implies_q, t=t, slf=self)
+            'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝.', p_implies_q=p_implies_q,
+            t=t, slf=self)
+        q_implies_p = interpret_statement_formula(t=t, arity=2, flexible_formula=q_implies_p)
         verify(t.contains_theoretical_objct(q_implies_p),
-            'Statement ⌜q_implies_p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-            q_implies_p=q_implies_p, t=t, slf=self)
-        p_implies_q: Formula
-        q_implies_p: Formula
-        p_implies_q = unpack_formula(p_implies_q)
-        q_implies_p = unpack_formula(q_implies_p)
+            'Statement ⌜q_implies_p⌝ must be contained in theory ⌜t⌝.', q_implies_p=q_implies_p,
+            t=t, slf=self)
+        p_implies_q: Formula = interpret_formula(u=t.u, arity=2, flexible_formula=p_implies_q)
+        q_implies_p: Formula = interpret_formula(u=t.u, arity=2, flexible_formula=q_implies_p)
         verify(p_implies_q.relation is t.u.r.implication,
             'The relation of formula ⌜p_implies_q⌝ must be an implication.',
             p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
@@ -6123,6 +6122,7 @@ class RelationDict(collections.UserDict):
         super().__init__()
         # Well-known objects
         self._biconditional = None
+        self._sequent_comma = None
         self._conjunction = None
         self._disjunction = None
         self._equality = None
@@ -6164,6 +6164,21 @@ class RelationDict(collections.UserDict):
                 symbol=SerifItalic(plaintext='<==>', unicode='⟺', latex='\\iff'), auto_index=False,
                 dashed_name='biconditional', name='biconditional')
         return self._biconditional
+
+    @property
+    def sequent_comma(self):
+        """Initially needed to express the collection of premises in inference-rule formula definitions.
+
+        For the time being it is sufficient to implement it as a binary relation,
+        because our initial catalog of inference rules have one or two premises.
+        But at a later point, we will need to implement (0-n)-ary relations.
+        """
+        if self._sequent_comma is None:
+            self._sequent_comma = self.declare(arity=2, formula_rep=Formula.infix,
+                signal_proposition=True, symbol=SerifItalic(plaintext=',', unicode=',', latex=','),
+                auto_index=False, dashed_name='sequent-comma', name='sequent comma',
+                explicit_name='sequent calculus comma')
+        return self._sequent_comma
 
     @property
     def conjunction(self):
@@ -7250,21 +7265,22 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
         i = t.universe_of_discourse.inference_rules.biconditional_introduction
         dashed_name = 'biconditional-introduction'
         acronym = 'bi'
-        abridged_name = 'bicond. intro.'
+        abridged_name = None
         name = 'biconditional introduction'
         explicit_name = 'biconditional introduction inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_implies_q: FormulaStatement = None,
-            q_implies_p: FormulaStatement = None, echo: (None, bool) = None):
+    def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
+            q_implies_p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         return super().infer_formula(p_iff_q, echo=echo)
 
-    def infer_statement(self, p_implies_q: FormulaStatement = None,
-            q_implies_p: FormulaStatement = None, nameset: (None, str, NameSet) = None,
-            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
-            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+    def infer_statement(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
+            q_implies_p: (tuple, Formula, FormulaStatement) = None,
+            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
+            echo: (None, bool) = None) -> InferredStatement:
         """Apply the biconditional elimination (right) inference-rule and return the
         inferred-statement.
 
