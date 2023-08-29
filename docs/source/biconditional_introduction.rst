@@ -1,3 +1,6 @@
+.. role:: python(code)
+    :language: py
+
 biconditional-introduction
 ========================================
 
@@ -17,6 +20,31 @@ In straightforward language, if P implies Q and Q implies P, it follows that P i
 
 Quotes
 ------
+
+
+Python implementation
+----------------------
+
+The simplest way to use this inference-rule is to access it via the :python:`inference_rules` (abridged :python:`i` ) property of the :doc:`theory_elaboration_sequence`:
+
+.. code-block:: python
+
+   u = pu.create_universe()
+   t = u.t()
+   ...
+   # some theory elaboration code
+   ...
+   t.i.biconditional_introduction.infer_statement(p_iff_q = ...)
+
+If the :doc:`inference_rule` was not yet declared in the :doc:`universe_of_discourse` , it will be automatically declared. If the :doc:`inference_rule` was not yet included in the :doc:`theory_elaboration_sequence` , it will be automatically included.
+
+This calls the following method:
+
+.. module:: core
+    :noindex:
+.. autoclass:: BiconditionalIntroductionInclusion
+    :noindex:
+    :members: infer_statement
 
 Python sample usage
 ----------------------

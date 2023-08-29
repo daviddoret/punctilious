@@ -62,12 +62,14 @@
 <li class="toctree-l1"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="biconditional_elimination_2.html">biconditional-elimination-2</a></div><ul>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="biconditional_elimination_2.html#definition">Definition</a></div></li>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="biconditional_elimination_2.html#quotes">Quotes</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="biconditional_elimination_2.html#python-implementation">Python implementation</a></div></li>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="biconditional_elimination_2.html#python-sample-usage">Python sample usage</a></div></li>
 </ul>
 </li>
 <li class="toctree-l1 current expanded"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="current reference internal" data-action="click-&gt;sidebar#close" href="#">biconditional-introduction</a></div><ul>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#definition">Definition</a></div></li>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#quotes">Quotes</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#python-implementation">Python implementation</a></div></li>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#python-sample-usage">Python sample usage</a></div></li>
 </ul>
 </li>
@@ -292,27 +294,59 @@
 </nav>
 <article class="flex-1 prose" role="main">
 <section id="biconditional-introduction">
-<h1>biconditional-introduction<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#biconditional-introduction">¶</a></h1>
+<h1>biconditional-introduction<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#biconditional-introduction">¶</a></h1>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="biconditional_elimination_1.html"><span class="doc">biconditional-elimination-1</span></a> | <a class="reference internal" href="biconditional_elimination_2.html"><span class="doc">biconditional-elimination-2</span></a></p>
 </div>
 <section id="definition">
-<h2>Definition<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#definition">¶</a></h2>
+<h2>Definition<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#definition">¶</a></h2>
 <p><em>biconditional-introduction</em> is the <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a>:</p>
 <div class="math notranslate nohighlight">
 \[\left( \left( P \implies Q \right), \left( Q \implies P \right) \right) \vdash \left( Q \iff P \right)\]</div>
 <p>In straightforward language, if P implies Q and Q implies P, it follows that P if and only if Q.</p>
 </section>
 <section id="quotes">
-<h2>Quotes<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#quotes">¶</a></h2>
+<h2>Quotes<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#quotes">¶</a></h2>
+</section>
+<section id="python-implementation">
+<h2>Python implementation<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#python-implementation">¶</a></h2>
+<p>The simplest way to use this inference-rule is to access it via the <code class="code highlight python py docutils literal highlight-py"><span class="n">inference_rules</span></code> (abridged <code class="code highlight python py docutils literal highlight-py"><span class="n">i</span></code> ) property of the <a class="reference internal" href="theory_elaboration_sequence.html"><span class="doc">theory-elaboration-sequence</span></a>:</p>
+<div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">python</span></div><div class="highlight-python notranslate"><div class="highlight" data-controller="code"><pre><span></span><code><span class="n">u</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">create_universe</span><span class="p">()</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
+<span class="o">...</span>
+<span class="c1"># some theory elaboration code</span>
+<span class="o">...</span>
+<span class="n">t</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">biconditional_introduction</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p_iff_q</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span>
+</code></pre></div>
+</div></div>
+<p>If the <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a> was not yet declared in the <a class="reference internal" href="universe_of_discourse.html"><span class="doc">universe-of-discourse</span></a> , it will be automatically declared. If the <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a> was not yet included in the <a class="reference internal" href="theory_elaboration_sequence.html"><span class="doc">theory-elaboration-sequence</span></a> , it will be automatically included.</p>
+<p>This calls the following method:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">BiconditionalIntroductionInclusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">infer_statement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_implies_q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_implies_p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paragraph_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Apply the biconditional elimination (right) inference-rule and return the
+inferred-statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>p_iff_q</strong> – (mandatory) The biconditional statement.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The proven inferred-statement p implies q in the current theory.</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
 </section>
 <section id="python-sample-usage">
-<h2>Python sample usage<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#python-sample-usage">¶</a></h2>
+<h2>Python sample usage<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#python-sample-usage">¶</a></h2>
 <div class="tip dropdown admonition">
 <p class="admonition-title">Source code</p>
 <blockquote>
-<div><div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span></div><div class="highlight-python notranslate"><div class="highlight" data-controller="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">punctilious</span> <span class="k">as</span> <span class="nn">pu</span>
+<div><div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">python</span></div><div class="highlight-python notranslate"><div class="highlight" data-controller="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">punctilious</span> <span class="k">as</span> <span class="nn">pu</span>
 
 <span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_default</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_inferred_statement</span> <span class="o">=</span> <span class="kc">True</span>
@@ -343,7 +377,7 @@
 </div>
 <div class="note dropdown admonition">
 <p class="admonition-title">Unicode output</p>
-<div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span></div><div class="highlight-text notranslate"><div class="highlight" data-controller="code"><pre><span></span><code>𝖫𝖾𝗍 ⌜𝒰₅⌝ 𝖻𝖾 𝖺 𝑢𝑛𝑖𝑣𝑒𝑟𝑠𝑒-𝑜𝑓-𝑑𝑖𝑠𝑐𝑜𝑢𝑟𝑠𝑒.
+<div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">text</span></div><div class="highlight-text notranslate"><div class="highlight" data-controller="code"><pre><span></span><code>𝖫𝖾𝗍 ⌜𝒰₅⌝ 𝖻𝖾 𝖺 𝑢𝑛𝑖𝑣𝑒𝑟𝑠𝑒-𝑜𝑓-𝑑𝑖𝑠𝑐𝑜𝑢𝑟𝑠𝑒.
 
 𝖫𝖾𝗍 ⌜𝒯₁⌝ 𝖻𝖾 𝖺 𝑡ℎ𝑒𝑜𝑟𝑦-𝑒𝑙𝑎𝑏𝑜𝑟𝑎𝑡𝑖𝑜𝑛-𝑠𝑒𝑞𝑢𝑒𝑛𝑐𝑒 𝗂𝗇 𝒰₅.
 
@@ -361,7 +395,7 @@
 </div>
 <div class="note dropdown admonition">
 <p class="admonition-title">Plaintext output</p>
-<div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span></div><div class="highlight-text notranslate"><div class="highlight" data-controller="code"><pre><span></span><code>Let "U6" be a universe-of-discourse.
+<div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">text</span></div><div class="highlight-text notranslate"><div class="highlight" data-controller="code"><pre><span></span><code>Let "U6" be a universe-of-discourse.
 
 Let "T1" be a theory-elaboration-sequence in U6.
 

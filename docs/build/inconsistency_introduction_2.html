@@ -292,30 +292,30 @@
 </nav>
 <article class="flex-1 prose" role="main">
 <section id="inconsistency-introduction-2">
-<h1>inconsistency-introduction-2<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#inconsistency-introduction-2">¶</a></h1>
+<h1>inconsistency-introduction-2<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#inconsistency-introduction-2">¶</a></h1>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="inconsistency_introduction_1.html"><span class="doc">inconsistency-introduction-1</span></a> | <a class="reference internal" href="inconsistency_introduction_3.html"><span class="doc">inconsistency-introduction-3</span></a></p>
 </div>
 <section id="definition">
-<h2>Definition<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#definition">¶</a></h2>
+<h2>Definition<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#definition">¶</a></h2>
 <p><em>inconsistency-introduction-2</em> is the <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a>:</p>
 <div class="math notranslate nohighlight">
 \[\left(\left(x = y\right), \left(x \neq y\right)\right) \vdash Inc\left(\mathcal{T}\right)\]</div>
 <p>In straightforward language, if we prove both the equality and inequality of two terms, it follows that the theory is inconsistent.</p>
 </section>
 <section id="quotes">
-<h2>Quotes<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#quotes">¶</a></h2>
+<h2>Quotes<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#quotes">¶</a></h2>
 <blockquote>
 <div><p>A proof of consistency will have to show, by appealing to contentual considerations which are completely unproblematic, that in the formalism in question it is never possible to derive the formula 𝑎 ≠ 𝑎, or alternatively it is not possible to prove both 𝑎 = 𝑏 and 𝑎 ≠ 𝑏. <span id="id1">[<a class="reference internal" href="bibliography.html#id5" title="Paolo Mancosu, Sergio Galvan, and Richard Zach. An Introduction to Proof Theory: Normalization, Cut-Elimination, and Consistency Proofs. Oxford University PressOxford, 1 edition, 2021. doi:10.1093/oso/9780192895936.001.0001.">MGZ21</a>, p. 5]</span></p>
 </div></blockquote>
 </section>
 <section id="python-sample-usage">
-<h2>Python sample usage<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#python-sample-usage">¶</a></h2>
+<h2>Python sample usage<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#python-sample-usage">¶</a></h2>
 <div class="tip dropdown admonition">
 <p class="admonition-title">Source code</p>
 <blockquote>
-<div><div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span></div><div class="highlight-python notranslate"><div class="highlight" data-controller="code"><pre><span></span><code><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">punctilious</span> <span class="k">as</span> <span class="nn">pu</span>
+<div><div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span><span class="code-lang">python</span></div><div class="highlight-python notranslate"><div class="highlight" data-controller="code"><pre><span></span><code><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">punctilious</span> <span class="k">as</span> <span class="nn">pu</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_default</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="linenos"> 4</span><span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_inferred_statement</span> <span class="o">=</span> <span class="kc">True</span>
@@ -349,7 +349,7 @@
 </div>
 <div class="note dropdown admonition">
 <p class="admonition-title">Unicode output</p>
-<div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span></div><div class="highlight-text notranslate"><div class="highlight" data-controller="code"><pre><span></span><code>𝖫𝖾𝗍 ⌜𝒰₉⌝ 𝖻𝖾 𝖺 𝑢𝑛𝑖𝑣𝑒𝑟𝑠𝑒-𝑜𝑓-𝑑𝑖𝑠𝑐𝑜𝑢𝑟𝑠𝑒.
+<div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span></div><div class="highlight-text notranslate"><div class="highlight" data-controller="code"><pre><span></span><code>𝖫𝖾𝗍 ⌜𝒰₉⌝ 𝖻𝖾 𝖺 𝑢𝑛𝑖𝑣𝑒𝑟𝑠𝑒-𝑜𝑓-𝑑𝑖𝑠𝑐𝑜𝑢𝑟𝑠𝑒.
 
 𝖫𝖾𝗍 ⌜𝒯₁⌝ 𝖻𝖾 𝖺 𝑡ℎ𝑒𝑜𝑟𝑦-𝑒𝑙𝑎𝑏𝑜𝑟𝑎𝑡𝑖𝑜𝑛-𝑠𝑒𝑞𝑢𝑒𝑛𝑐𝑒 𝗂𝗇 𝒰₉.
 
@@ -369,7 +369,7 @@
 </div>
 <div class="note dropdown admonition">
 <p class="admonition-title">Plaintext output</p>
-<div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span></div><div class="highlight-text notranslate"><div class="highlight" data-controller="code"><pre><span></span><code>Let "U10" be a universe-of-discourse.
+<div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span><span class="code-lang">text</span></div><div class="highlight-text notranslate"><div class="highlight" data-controller="code"><pre><span></span><code>Let "U10" be a universe-of-discourse.
 
 Let "T1" be a theory-elaboration-sequence in U10.
 
