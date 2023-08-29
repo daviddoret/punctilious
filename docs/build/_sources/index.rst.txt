@@ -17,8 +17,8 @@ Welcome to punctilious's documentation!
 
    absorption
    bibliography
-   biconditional_elimination_left
-   biconditional_elimination_right
+   biconditional_elimination_1
+   biconditional_elimination_2
    biconditional_introduction
    conjunction_elimination_left
    conjunction_elimination_right

@@ -1,2 +1,0 @@
-biconditional-elimination-left
-===============================
