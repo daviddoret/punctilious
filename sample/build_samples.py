@@ -20,8 +20,8 @@ def export_sample_output(sample_file_name: str):
 
 
 sample_filenames = (
-    'biconditional_elimination_1', 'biconditional_elimination_2', 'inconsistency_introduction_1',
-    'inconsistency_introduction_2', 'inconsistency_introduction_3')
+    'biconditional_elimination_1', 'biconditional_elimination_2', 'biconditional_introduction',
+    'inconsistency_introduction_1', 'inconsistency_introduction_2', 'inconsistency_introduction_3')
 
 for sample_filename in sample_filenames:
     export_sample_output(sample_file_name=sample_filename)

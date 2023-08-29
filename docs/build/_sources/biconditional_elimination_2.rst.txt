@@ -2,7 +2,7 @@ biconditional-elimination-2
 ========================================
 
 .. seealso::
-   :doc:`biconditional_elimination_1`
+   :doc:`biconditional_elimination_1` | :doc:`biconditional_introduction`
 
 Definition
 ----------

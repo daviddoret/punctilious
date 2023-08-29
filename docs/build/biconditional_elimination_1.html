@@ -55,6 +55,7 @@
 <li class="toctree-l1 current expanded"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="current reference internal" data-action="click-&gt;sidebar#close" href="#">biconditional-elimination-1</a></div><ul>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#definition">Definition</a></div></li>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#quotes">Quotes</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#python-implementation">Python implementation</a></div></li>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="#python-sample-usage">Python sample usage</a></div></li>
 </ul>
 </li>
@@ -64,7 +65,12 @@
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="biconditional_elimination_2.html#python-sample-usage">Python sample usage</a></div></li>
 </ul>
 </li>
-<li class="toctree-l1"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="biconditional_introduction.html">biconditional-introduction</a></div></li>
+<li class="toctree-l1"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="biconditional_introduction.html">biconditional-introduction</a></div><ul>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="biconditional_introduction.html#definition">Definition</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="biconditional_introduction.html#quotes">Quotes</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="biconditional_introduction.html#python-sample-usage">Python sample usage</a></div></li>
+</ul>
+</li>
 <li class="toctree-l1"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="conjunction_elimination_left.html">conjunction-elimination-left</a></div></li>
 <li class="toctree-l1"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="conjunction_elimination_right.html">conjunction-elimination-right</a></div></li>
 <li class="toctree-l1"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="conjunction_introduction.html">conjunction-introduction</a></div><ul>
@@ -289,7 +295,7 @@
 <h1>biconditional-elimination-1<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#biconditional-elimination-1">¶</a></h1>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="biconditional_elimination_2.html"><span class="doc">biconditional-elimination-2</span></a></p>
+<p><a class="reference internal" href="biconditional_elimination_2.html"><span class="doc">biconditional-elimination-2</span></a> | <a class="reference internal" href="biconditional_introduction.html"><span class="doc">biconditional-introduction</span></a></p>
 </div>
 <section id="definition">
 <h2>Definition<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#definition">¶</a></h2>
@@ -301,37 +307,69 @@
 <section id="quotes">
 <h2>Quotes<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#quotes">¶</a></h2>
 </section>
+<section id="python-implementation">
+<h2>Python implementation<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#python-implementation">¶</a></h2>
+<p>The simplest way to use this inference-rule is to access it via the <code class="code highlight python py docutils literal highlight-py"><span class="n">inference_rules</span></code> (abridged <code class="code highlight python py docutils literal highlight-py"><span class="n">i</span></code> ) property of the <a class="reference internal" href="theory_elaboration_sequence.html"><span class="doc">theory-elaboration-sequence</span></a>:</p>
+<div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">python</span></div><div class="highlight-python notranslate"><div class="highlight" data-controller="code"><pre><span></span><code><span class="n">u</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">create_universe</span><span class="p">()</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
+<span class="o">...</span>
+<span class="c1"># some theory elaboration code</span>
+<span class="o">...</span>
+<span class="n">t</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">biconditional_elimination_1</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p_iff_q</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span>
+</code></pre></div>
+</div></div>
+<p>If the <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a> was not yet declared in the <a class="reference internal" href="universe_of_discourse.html"><span class="doc">universe-of-discourse</span></a> , it will be automatically declared. If the <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a> was not yet included in the <a class="reference internal" href="theory_elaboration_sequence.html"><span class="doc">theory-elaboration-sequence</span></a> , it will be automatically included.</p>
+<p>This calls the following method:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">BiconditionalElimination1Inclusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">infer_statement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_iff_q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paragraph_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Apply the biconditional elimination (left) inference-rule and return the
+inferred-statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>p_iff_q</strong> – (mandatory) The biconditional statement.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The proven inferred-statement p implies q in the current theory.</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
 <section id="python-sample-usage">
 <h2>Python sample usage<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#python-sample-usage">¶</a></h2>
 <div class="tip dropdown admonition">
 <p class="admonition-title">Source code</p>
 <blockquote>
-<div><div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">python</span></div><div class="highlight-python notranslate"><div class="highlight" data-controller="code"><pre><span></span><code><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">punctilious</span> <span class="k">as</span> <span class="nn">pu</span>
-<span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_default</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="linenos"> 4</span><span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_inferred_statement</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="linenos"> 5</span><span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_axiom_inclusion</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="linenos"> 6</span><span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_proof</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="linenos"> 7</span>
-<span class="linenos"> 8</span><span class="c1"># Create a universe-of-discourse with basic objects for the sake of this demonstration.</span>
-<span class="linenos"> 9</span><span class="n">u</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">UniverseOfDiscourse</span><span class="p">(</span><span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="linenos">10</span><span class="n">o1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">o</span><span class="o">.</span><span class="n">declare</span><span class="p">()</span>
-<span class="linenos">11</span><span class="n">o2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">o</span><span class="o">.</span><span class="n">declare</span><span class="p">()</span>
-<span class="linenos">12</span><span class="n">o3</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">o</span><span class="o">.</span><span class="n">declare</span><span class="p">()</span>
-<span class="linenos">13</span><span class="n">r1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">signal_proposition</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="linenos">14</span><span class="n">r2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">signal_proposition</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="linenos">15</span><span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_axiom</span><span class="p">(</span><span class="n">natural_language</span><span class="o">=</span><span class="s1">'Dummy axiom for demonstration purposes'</span><span class="p">)</span>
-<span class="linenos">16</span>
-<span class="linenos">17</span><span class="c1"># Elaborate a dummy theory with a set of propositions necessary for our demonstration</span>
-<span class="linenos">18</span><span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="linenos">19</span><span class="n">theory_axiom</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">include_axiom</span><span class="p">(</span><span class="n">axiom</span><span class="p">)</span>
-<span class="linenos">20</span><span class="n">phi1</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">theory_axiom</span><span class="p">,</span>
-<span class="linenos">21</span>    <span class="p">(</span><span class="n">r1</span><span class="p">(</span><span class="n">o1</span><span class="p">,</span> <span class="n">o2</span><span class="p">)</span> <span class="o">|</span> <span class="n">u</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">biconditional</span> <span class="o">|</span> <span class="n">r2</span><span class="p">(</span><span class="n">o3</span><span class="p">)))</span>
-<span class="linenos">22</span>
-<span class="linenos">23</span><span class="c1"># And finally, use the biconditional-elimination-1 inference-rule:</span>
-<span class="linenos">24</span><span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_proof</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="linenos">25</span><span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">biconditional_elimination_1</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p_iff_q</span><span class="o">=</span><span class="n">phi1</span><span class="p">,</span>
-<span class="linenos">26</span>    <span class="n">subtitle</span><span class="o">=</span><span class="s1">'The proposition of interest'</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div><div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">python</span></div><div class="highlight-python notranslate"><div class="highlight" data-controller="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">punctilious</span> <span class="k">as</span> <span class="nn">pu</span>
+
+<span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_default</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_inferred_statement</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_axiom_inclusion</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_proof</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1"># Create a universe-of-discourse with basic objects for the sake of this demonstration.</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">UniverseOfDiscourse</span><span class="p">(</span><span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">o1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">o</span><span class="o">.</span><span class="n">declare</span><span class="p">()</span>
+<span class="n">o2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">o</span><span class="o">.</span><span class="n">declare</span><span class="p">()</span>
+<span class="n">o3</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">o</span><span class="o">.</span><span class="n">declare</span><span class="p">()</span>
+<span class="n">r1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">signal_proposition</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">signal_proposition</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_axiom</span><span class="p">(</span><span class="n">natural_language</span><span class="o">=</span><span class="s1">'Dummy axiom for demonstration purposes'</span><span class="p">)</span>
+
+<span class="c1"># Elaborate a dummy theory with a set of propositions necessary for our demonstration</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">theory_axiom</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">include_axiom</span><span class="p">(</span><span class="n">axiom</span><span class="p">)</span>
+<span class="n">phi1</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">theory_axiom</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">r1</span><span class="p">(</span><span class="n">o1</span><span class="p">,</span> <span class="n">o2</span><span class="p">)</span> <span class="o">|</span> <span class="n">u</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">biconditional</span> <span class="o">|</span> <span class="n">r2</span><span class="p">(</span><span class="n">o3</span><span class="p">)))</span>
+
+<span class="c1"># And finally, use the biconditional-elimination-1 inference-rule:</span>
+<span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">echo_proof</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">biconditional_elimination_1</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p_iff_q</span><span class="o">=</span><span class="n">phi1</span><span class="p">,</span>
+    <span class="n">subtitle</span><span class="o">=</span><span class="s1">'The proposition of interest'</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 </div></div>
 </div></blockquote>
