@@ -1,4 +1,4 @@
-disjunction-introduction-left
+disjunction-introduction-1
 ===============================
 
 Definition

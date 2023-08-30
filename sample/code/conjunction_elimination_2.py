@@ -16,11 +16,11 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
 t1 = u.t(echo=True)
-theory_axiom = t1.include_axiom(a=axiom)
+theory_axiom = t1.include_axiom(axiom)
 phi1 = t1.i.axiom_interpretation.infer_statement(axiom=theory_axiom,
-    formula=r1(o1, o2) | u.r.biconditional | r2(o3))
+    formula=r1(o1, o2) | u.r.land | r2(o3))
 
-# And finally, use the biconditional-elimination-1 inference-rule:
+# And finally, use the biconditional-elimination-2 inference-rule:
 pu.configuration.echo_proof = True
-proposition_of_interest = t1.i.biconditional_elimination_1.infer_statement(p_iff_q=phi1,
+proposition_of_interest = t1.i.conjunction_elimination_2.infer_statement(p_and_q=phi1,
     subtitle='The proposition of interest', echo=True)

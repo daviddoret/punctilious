@@ -3,22 +3,13 @@ import punctilious as pu
 import random_data
 
 
-class TestConjunctionEliminationLeft(TestCase):
-    def test_cel(self):
-        pu.configuration.echo_default = True
-        u = pu.UniverseOfDiscourse()
-        u_plaintext = u.nameset.rep_symbol(encoding=pu.encodings.plaintext)
-        u_unicode = u.nameset.rep_symbol(encoding=pu.encodings.unicode)
-        o1 = u.o.declare()
-        o2 = u.o.declare()
-        o3 = u.o.declare()
-        r1 = u.r.declare(2, signal_proposition=True)
-        r2 = u.r.declare(1, signal_proposition=True)
-        t = u.t()
-        a = u.declare_axiom(random_data.random_sentence())
-        ap = t.include_axiom(a)
-        phi1 = t.i.axiom_interpretation.infer_statement(axiom=ap,
-            formula=u.f(u.r.conjunction, u.f(r1, o1, o2), u.f(r2, o3)))
-        self.assertEqual('(𝑟₁(𝑜₁, 𝑜₂) ∧ 𝑟₂(𝑜₃))', phi1.rep_formula(pu.encodings.unicode))
-        phi2 = t.i.conjunction_elimination_1.infer_statement(p_and_q=phi1)
-        self.assertEqual('𝑟₁(𝑜₁, 𝑜₂)', phi2.rep_formula(pu.encodings.unicode))
+class TestConjunctionElimination1(TestCase):
+    def test_ce1(self):
+        import sample.code.conjunction_elimination_1 as test
+        o1: pu.SimpleObjct = test.o1
+        o2: pu.SimpleObjct = test.o2
+        r1: pu.Relation = test.r1
+        proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
+        self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(r1(o1, o2)))
+        self.assertEqual('r1(o1, o2)', proposition_of_interest.rep_formula(pu.encodings.plaintext))
+        self.assertEqual('𝑟₁(𝑜₁, 𝑜₂)', proposition_of_interest.rep_formula(pu.encodings.unicode))

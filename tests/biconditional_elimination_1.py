@@ -7,7 +7,6 @@ class TestBiconditionalEliminationLeft(TestCase):
     def test_be1(self):
         import sample.code.biconditional_elimination_1 as test
         u: pu.UniverseOfDiscourse = test.u
-        t1: pu.TheoryElaborationSequence = test.t1
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         o3: pu.SimpleObjct = test.o3

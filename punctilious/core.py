@@ -6565,7 +6565,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.conjunction_elimination_left
+        return self.conjunction_elimination_1
 
     @property
     def cer(self) -> ConjunctionElimination2Declaration:
@@ -6579,7 +6579,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.conjunction_elimination_right
+        return self.conjunction_elimination_2
 
     @property
     def ci(self) -> ConjunctionIntroductionDeclaration:
@@ -6597,7 +6597,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         yield SerifItalic(plaintext='inference-rule')
 
     @property
-    def conjunction_elimination_left(self) -> ConjunctionElimination1Declaration:
+    def conjunction_elimination_1(self) -> ConjunctionElimination1Declaration:
         """The well-known conjunction-elimination #1 inference-rule: ((P ∧ Q) ⊢ P).
 
         The ⌜left⌝ suffix is non-standard and used to mean that among the two possible results of
@@ -6617,7 +6617,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._conjunction_elimination_1
 
     @property
-    def conjunction_elimination_right(self) -> ConjunctionElimination2Declaration:
+    def conjunction_elimination_2(self) -> ConjunctionElimination2Declaration:
         """The well-known conjunction-elimination #2 inference-rule: P ∧ Q ⊢ Q.
 
         The ⌜right⌝ suffix is non-standard and used to mean that among the two possible results
@@ -6668,14 +6668,14 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def dil(self) -> DisjunctionIntroductionLeftDeclaration:
-        return self.disjunction_introduction_left
+        return self.disjunction_introduction_1
 
     @property
     def dir(self) -> DisjunctionIntroductionRightDeclaration:
-        return self.disjunction_introduction_right
+        return self.disjunction_introduction_2
 
     @property
-    def disjunction_introduction_left(self) -> DisjunctionIntroductionLeftDeclaration:
+    def disjunction_introduction_1(self) -> DisjunctionIntroductionLeftDeclaration:
         """The well-known disjunction-introduction-1 inference-rule: P ⊢ (P ∨ Q).
 
         Abridged property: u.i.di
@@ -6689,7 +6689,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._disjunction_introduction_1
 
     @property
-    def disjunction_introduction_right(self) -> DisjunctionIntroductionRightDeclaration:
+    def disjunction_introduction_2(self) -> DisjunctionIntroductionRightDeclaration:
         """The well-known disjunction-introduction-2 inference-rule: P ⊢ (P ∨ Q).
 
         Abridged property: u.i.di
@@ -7232,7 +7232,7 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.conjunction_elimination_right
+        i = t.universe_of_discourse.inference_rules.conjunction_elimination_2
         dashed_name = 'conjunction-elimination-2'
         acronym = 'bel'
         abridged_name = 'conj. elim. right'
@@ -7412,7 +7412,7 @@ class DisjunctionIntroductionRightInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.disjunction_introduction_right
+        i = t.universe_of_discourse.inference_rules.disjunction_introduction_2
         dashed_name = 'disjunction-introduction-2'
         acronym = 'dil'
         abridged_name = 'disjunc. intro. right'
@@ -8150,7 +8150,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._conjunction_elimination_1
 
     @property
-    def conjunction_elimination_right(self) -> ConjunctionElimination2Inclusion:
+    def conjunction_elimination_2(self) -> ConjunctionElimination2Inclusion:
         """The well-known conjunction-elimination #2 inference-rule: P ∧ Q ⊢ Q.
 
         Abridged property: t.i.cer
@@ -8182,7 +8182,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.conjunction_elimination_right
+        return self.conjunction_elimination_2
 
     @property
     def ci(self) -> ConjunctionIntroductionInclusion:

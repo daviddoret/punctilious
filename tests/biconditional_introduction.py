@@ -8,7 +8,6 @@ class TestBiconditionalIntroduction(TestCase):
     def test_biconditional_introduction(self):
         import sample.code.biconditional_introduction as test
         u: pu.UniverseOfDiscourse = test.u
-        t1: pu.TheoryElaborationSequence = test.t1
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         o3: pu.SimpleObjct = test.o3
