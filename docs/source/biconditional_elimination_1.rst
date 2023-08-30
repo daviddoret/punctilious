@@ -5,7 +5,7 @@ biconditional-elimination-1
 ========================================
 
 .. seealso::
-   :doc:`biconditional_elimination_2` | :doc:`biconditional_introduction`
+   :doc:`biconditional_elimination_2` | :doc:`biconditional_introduction` | :doc:`inference_rule`
 
 Definition
 ----------

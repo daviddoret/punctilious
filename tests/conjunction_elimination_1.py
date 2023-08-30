@@ -20,5 +20,5 @@ class TestConjunctionEliminationLeft(TestCase):
         phi1 = t.i.axiom_interpretation.infer_statement(axiom=ap,
             formula=u.f(u.r.conjunction, u.f(r1, o1, o2), u.f(r2, o3)))
         self.assertEqual('(𝑟₁(𝑜₁, 𝑜₂) ∧ 𝑟₂(𝑜₃))', phi1.rep_formula(pu.encodings.unicode))
-        phi2 = t.i.conjunction_elimination_left.infer_statement(p_and_q=phi1)
+        phi2 = t.i.conjunction_elimination_1.infer_statement(p_and_q=phi1)
         self.assertEqual('𝑟₁(𝑜₁, 𝑜₂)', phi2.rep_formula(pu.encodings.unicode))
