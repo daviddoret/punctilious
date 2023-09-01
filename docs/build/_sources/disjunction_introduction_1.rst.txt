@@ -5,7 +5,7 @@ disjunction-introduction-1
 ===============================
 
 .. seealso::
-   :doc:`disjunction_elimination_2` | :doc:`inference_rule`
+   :doc:`disjunction_introduction_2` | :doc:`inference_rule`
 
 Definition
 ----------
