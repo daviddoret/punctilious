@@ -1,5 +1,11 @@
+.. role:: python(code)
+    :language: py
+
 conjunction-introduction
 =============================
+
+.. seealso::
+   :doc:`conjunction_elimination_1` | :doc:`conjunction_elimination_2` | :doc:`inference_rule`
 
 Definition
 ----------

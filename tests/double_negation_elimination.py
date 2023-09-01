@@ -5,18 +5,13 @@ import random_data
 
 class TestDoubleNegationElimination(TestCase):
     def test_dne(self):
-        pu.configuration.echo_default = True
-        u = pu.UniverseOfDiscourse()
-        o1 = u.o.declare()
-        o2 = u.o.declare()
-        r1 = u.r.declare(2, signal_proposition=True)
-        t = u.t()
-        a = u.declare_axiom(random_data.random_sentence())
-        ap = t.include_axiom(a)
-        phi1 = t.i.axiom_interpretation.infer_statement(ap, u.r.lnot(u.r.lnot((o1 | r1 | o2))))
-        self.assertEqual('not(not(r1(o1, o2)))', phi1.rep_formula(pu.encodings.plaintext))
-        self.assertEqual('¬(¬(𝑟₁(𝑜₁, 𝑜₂)))', phi1.rep_formula(pu.encodings.unicode))
-        phi2 = t.i.dne.infer_statement(not_not_p=u.r.lnot(u.r.lnot((o1 | r1 | o2))))
-        self.assertTrue(phi2.is_formula_syntactically_equivalent_to(o1 | r1 | o2))
-        self.assertEqual('r1(o1, o2)', phi2.rep_formula(pu.encodings.plaintext))
-        self.assertEqual('𝑟₁(𝑜₁, 𝑜₂)', phi2.rep_formula(pu.encodings.unicode))
+        import sample.code.double_negation_elimination as test
+        u: pu.UniverseOfDiscourse = test.u
+        o1: pu.SimpleObjct = test.o1
+        o2: pu.SimpleObjct = test.o2
+        r1: pu.Relation = test.r1
+        proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
+        self.assertTrue(
+            proposition_of_interest.is_formula_syntactically_equivalent_to(o2=r1(o1, o2)))
+        self.assertEqual('r1(o1, o2)', proposition_of_interest.rep_formula(pu.encodings.plaintext))
+        self.assertEqual('𝑟₁(𝑜₁, 𝑜₂)', proposition_of_interest.rep_formula(pu.encodings.unicode))

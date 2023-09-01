@@ -1,5 +1,11 @@
+.. role:: python(code)
+    :language: py
+
 disjunction-introduction-1
 ===============================
+
+.. seealso::
+   :doc:`disjunction_elimination_2` | :doc:`inference_rule`
 
 Definition
 ----------
@@ -16,38 +22,48 @@ Quotes
     "Addition (or disjunction introduction, or or introduction) is the rule of inference that allows one to infer a disjunction from either of the disjuncts."
     - :footcite:p:`cook_2009_dictionaryphilosophicallogic`, p8
 
+
 Python implementation
---------------------------
+----------------------
 
-Properties
-^^^^^^^^^^^^^^^
+The simplest way to use this inference-rule is to access it via the :python:`inference_rules` (abridged :python:`i` ) property of the :doc:`theory_elaboration_sequence`:
 
-.. module:: core
-    :noindex:
-.. autoclass:: InferenceRuleDeclarationDict
-    :noindex:
-    :members: disjunction_introduction_left
+.. code-block:: python
 
-.. module:: core
-    :noindex:
-.. autoclass:: InferenceRuleDeclarationDict
-    :noindex:
-    :members: disjunction_introduction_left
+   u = pu.create_universe()
+   t = u.t()
+   ...
+   # some theory elaboration code
+   ...
+   t.i.disjunction_introduction_1.infer_statement(p = ...)
 
-Classes
-^^^^^^^^^^
+If the :doc:`inference_rule` was not yet declared in the :doc:`universe_of_discourse` , it will be automatically declared. If the :doc:`inference_rule` was not yet included in the :doc:`theory_elaboration_sequence` , it will be automatically included.
+
+This calls the following method:
 
 .. module:: core
     :noindex:
-.. autoclass:: DisjunctionIntroductionLeftDeclaration
-    :members:
-    :special-members: __init__
+.. autoclass:: DisjunctionIntroduction1Inclusion
+    :noindex:
+    :members: infer_statement
 
-.. autoclass:: DisjunctionIntroductionLeftInclusion
-    :members:
-    :special-members: __init__
+Python sample usage
+----------------------
 
-Bibliography
-------------
+.. admonition:: Source code
+  :class: tip, dropdown
 
-.. footbibliography::
+   .. literalinclude :: ../../sample/code/disjunction_introduction_1.py
+      :language: python
+
+.. admonition:: Unicode output
+   :class: note, dropdown
+
+   .. literalinclude :: ../../sample/output/disjunction_introduction_1_unicode.txt
+      :language: text
+
+.. admonition:: Plaintext output
+   :class: note, dropdown
+
+   .. literalinclude :: ../../sample/output/disjunction_introduction_1_plaintext.txt
+      :language: text

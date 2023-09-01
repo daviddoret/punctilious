@@ -1,5 +1,11 @@
+.. role:: python(code)
+    :language: py
+
 double-negation-introduction
 =============================
+
+.. seealso::
+   :doc:`double_negation_elimination` | :doc:`inference_rule`
 
 Definition
 ----------
@@ -19,38 +25,48 @@ Quotes
     If we can conclude ϕ, then we may infer ¬¬ϕ."
     - :footcite:p:`proofwiki_2022_doublenegation`
 
+
 Python implementation
---------------------------
+----------------------
 
-Properties
-^^^^^^^^^^^^^^^
+The simplest way to use this inference-rule is to access it via the :python:`inference_rules` (abridged :python:`i` ) property of the :doc:`theory_elaboration_sequence`:
 
-.. module:: core
-    :noindex:
-.. autoclass:: InferenceRuleDeclarationDict
-    :noindex:
-    :members: dni, double_negation_introduction
+.. code-block:: python
 
-.. module:: core
-    :noindex:
-.. autoclass:: InferenceRuleDeclarationDict
-    :noindex:
-    :members: dni, double_negation_introduction
+   u = pu.create_universe()
+   t = u.t()
+   ...
+   # some theory elaboration code
+   ...
+   t.i.double_negation_introduction.infer_statement(p = ...)
 
-Classes
-^^^^^^^^^^
+If the :doc:`inference_rule` was not yet declared in the :doc:`universe_of_discourse` , it will be automatically declared. If the :doc:`inference_rule` was not yet included in the :doc:`theory_elaboration_sequence` , it will be automatically included.
+
+This calls the following method:
 
 .. module:: core
     :noindex:
-.. autoclass:: DoubleNegationIntroductionDeclaration
-    :members:
-    :special-members: __init__
-
 .. autoclass:: DoubleNegationIntroductionInclusion
-    :members:
-    :special-members: __init__
+    :noindex:
+    :members: infer_statement
 
-Bibliography
-------------
+Python sample usage
+----------------------
 
-.. footbibliography::
+.. admonition:: Source code
+  :class: tip, dropdown
+
+   .. literalinclude :: ../../sample/code/double_negation_introduction.py
+      :language: python
+
+.. admonition:: Unicode output
+   :class: note, dropdown
+
+   .. literalinclude :: ../../sample/output/double_negation_introduction_unicode.txt
+      :language: text
+
+.. admonition:: Plaintext output
+   :class: note, dropdown
+
+   .. literalinclude :: ../../sample/output/double_negation_introduction_plaintext.txt
+      :language: text

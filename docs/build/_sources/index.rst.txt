@@ -23,7 +23,6 @@ Welcome to punctilious's documentation!
    conjunction_elimination_1
    conjunction_elimination_2
    conjunction_introduction
-   disjunction_elimination
    disjunction_introduction_1
    disjunction_introduction_2
    double_negation_elimination

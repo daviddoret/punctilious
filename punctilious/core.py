@@ -4243,26 +4243,28 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
         return True
 
 
-class DisjunctionIntroductionLeftDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`disjunction_introduction_left` :doc:`inference_rule` as valid in the target :doc:`universe_of_discourse`.
+class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
+    """The declaration of the :doc:`disjunction_introduction_1` :doc:`inference_rule` as valid in the target :doc:`universe_of_discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'disjunction-introduction-1'
-        acronym = 'dil'
-        abridged_name = 'disjunc. intro. #1'
+        acronym = 'di1'
+        abridged_name = None
         auto_index = False
         dashed_name = 'disjunction-introduction-1'
         explicit_name = 'disjunction introduction #1 inference rule'
         name = 'disjunction introduction #1'
-        definition = 'P ⊢ (Q ∨ P)'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = (p | u.r.proves | (q | u.r.lor | p))
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        """Apply the :doc:`disjunction_introduction_left` :doc:`inference_rule` and return the resulting formula.
+        """Apply the :doc:`disjunction_introduction_1` :doc:`inference_rule` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -4276,8 +4278,8 @@ class DisjunctionIntroductionLeftDeclaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :doc:`disjunction_introduction_left` :doc:`inference_rule` ."""
-        output = yield from configuration.locale.compose_disjunction_introduction_left_paragraph_proof(
+        """Composes the paragraph-proof of inferred-statements based on the :doc:`disjunction_introduction_1` :doc:`inference_rule` ."""
+        output = yield from configuration.locale.compose_disjunction_introduction_1_paragraph_proof(
             o=o)
         return output
 
@@ -4298,26 +4300,28 @@ class DisjunctionIntroductionLeftDeclaration(InferenceRuleDeclaration):
         return True
 
 
-class DisjunctionIntroductionRightDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`disjunction_introduction_right` :doc:`inference_rule` as valid in the target :doc:`universe_of_discourse`.
+class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
+    """The declaration of the :doc:`disjunction_introduction_2` :doc:`inference_rule` as valid in the target :doc:`universe_of_discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'disjunction-introduction-2'
-        acronym = 'dil'
+        acronym = 'di2'
         abridged_name = None
         auto_index = False
         dashed_name = 'disjunction-introduction-2'
         explicit_name = 'disjunction introduction #2 inference rule'
         name = 'disjunction introduction #2'
-        definition = 'P ⊢ (P ∨ Q)'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = (p | u.r.proves | (p | u.r.lor | q))
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        """Apply the :doc:`disjunction_introduction_right` :doc:`inference_rule` and return the resulting formula.
+        """Apply the :doc:`disjunction_introduction_2` :doc:`inference_rule` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -4331,8 +4335,8 @@ class DisjunctionIntroductionRightDeclaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :doc:`disjunction_introduction_right` :doc:`inference_rule` ."""
-        output = yield from configuration.locale.compose_disjunction_introduction_right_paragraph_proof(
+        """Composes the paragraph-proof of inferred-statements based on the :doc:`disjunction_introduction_2` :doc:`inference_rule` ."""
+        output = yield from configuration.locale.compose_disjunction_introduction_2_paragraph_proof(
             o=o)
         return output
 
@@ -4364,6 +4368,7 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'double-negation-elimination'
         auto_index = False
         dashed_name = 'double-negation-elimination'
@@ -4371,7 +4376,8 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
         abridged_name = None
         explicit_name = 'double negation elimination inference rule'
         name = 'double negation elimination'
-        definition = '¬(¬(P)) ⊢ P'
+        with u.v(symbol='P') as p:
+            definition = (u.r.lnot(u.r.lnot(p)) | u.r.proves | p)
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4418,14 +4424,16 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'double-negation-introduction'
         auto_index = False
         dashed_name = 'double-negation-introduction'
         acronym = 'dni'
-        abridged_name = 'double neg. intro.'
+        abridged_name = None
         explicit_name = 'double negation introduction inference rule'
         name = 'double negation introduction'
-        definition = 'P ⊢ ¬(¬(P))'
+        with u.v(symbol='P') as p:
+            definition = (p | u.r.proves | u.r.lnot(u.r.lnot(p)))
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -6567,7 +6575,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         The ⌜left⌝ suffix is non-standard and used to mean that among the two possible results of
         conjunction-elimination, i.e.: P and Q, we pick the first one, i.e.: P.
 
-        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_left
+        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_1
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
@@ -6581,7 +6589,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         The ⌜right⌝ suffix is non-standard and used to mean that among the two possible results
         of conjunction-elimination, i.e.: P and Q, we pick the second one, i.e.: Q.
 
-        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_right
+        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_2
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
@@ -6616,7 +6624,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
-        # TODO: inference-rule: conjunction_elimination_left: Migrate to specialized classes
+        # TODO: inference-rule: conjunction_elimination_1: Migrate to specialized classes
 
         if self._conjunction_elimination_1 is None:
             self._conjunction_elimination_1 = ConjunctionElimination1Declaration(
@@ -6674,15 +6682,15 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._definition_interpretation
 
     @property
-    def dil(self) -> DisjunctionIntroductionLeftDeclaration:
+    def dil(self) -> DisjunctionIntroduction1Declaration:
         return self.disjunction_introduction_1
 
     @property
-    def dir(self) -> DisjunctionIntroductionRightDeclaration:
+    def dir(self) -> DisjunctionIntroduction2Declaration:
         return self.disjunction_introduction_2
 
     @property
-    def disjunction_introduction_1(self) -> DisjunctionIntroductionLeftDeclaration:
+    def disjunction_introduction_1(self) -> DisjunctionIntroduction1Declaration:
         """The well-known disjunction-introduction-1 inference-rule: P ⊢ (P ∨ Q).
 
         Abridged property: u.i.di
@@ -6691,12 +6699,12 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         if self._disjunction_introduction_1 is None:
-            self._disjunction_introduction_1 = DisjunctionIntroductionLeftDeclaration(
+            self._disjunction_introduction_1 = DisjunctionIntroduction1Declaration(
                 universe_of_discourse=self.u)
         return self._disjunction_introduction_1
 
     @property
-    def disjunction_introduction_2(self) -> DisjunctionIntroductionRightDeclaration:
+    def disjunction_introduction_2(self) -> DisjunctionIntroduction2Declaration:
         """The well-known disjunction-introduction-2 inference-rule: P ⊢ (P ∨ Q).
 
         Abridged property: u.i.di
@@ -6705,7 +6713,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
         if self._disjunction_introduction_2 is None:
-            self._disjunction_introduction_2 = DisjunctionIntroductionRightDeclaration(
+            self._disjunction_introduction_2 = DisjunctionIntroduction2Declaration(
                 universe_of_discourse=self.u)
         return self._disjunction_introduction_2
 
@@ -7361,7 +7369,7 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class DisjunctionIntroductionLeftInclusion(InferenceRuleInclusion):
+class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
     """
 
     """
@@ -7370,7 +7378,7 @@ class DisjunctionIntroductionLeftInclusion(InferenceRuleInclusion):
             proof: (None, bool) = None):
         i = t.universe_of_discourse.inference_rules.disjunction_introduction_1
         dashed_name = 'disjunction-introduction-1'
-        acronym = 'dil'
+        acronym = 'di1'
         abridged_name = None
         name = 'disjunction introduction #1'
         explicit_name = 'disjunction introduction #1 inference rule'
@@ -7380,7 +7388,7 @@ class DisjunctionIntroductionLeftInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :doc:`disjunction_introduction_left` :doc:`inference_rule` and return the resulting formula.
+        """Apply the :doc:`disjunction_introduction_1` :doc:`inference_rule` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -7395,7 +7403,7 @@ class DisjunctionIntroductionLeftInclusion(InferenceRuleInclusion):
             q: (None, Formula, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the :doc:`disjunction_introduction_left` :doc:`inference_rule` and return the resulting inferred-statement.
+        """Apply the :doc:`disjunction_introduction_1` :doc:`inference_rule` and return the resulting inferred-statement.
 
                 :param p: (mandatory) A formula-statement of the form: :math:`P`.
                 :param q: (mandatory) A formula of the form: :math:`Q`.
@@ -7412,7 +7420,7 @@ class DisjunctionIntroductionLeftInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class DisjunctionIntroductionRightInclusion(InferenceRuleInclusion):
+class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
     """
 
     """
@@ -7421,8 +7429,8 @@ class DisjunctionIntroductionRightInclusion(InferenceRuleInclusion):
             proof: (None, bool) = None):
         i = t.universe_of_discourse.inference_rules.disjunction_introduction_2
         dashed_name = 'disjunction-introduction-2'
-        acronym = 'dil'
-        abridged_name = 'disjunc. intro. right'
+        acronym = 'di2'
+        abridged_name = None
         name = 'disjunction introduction #2'
         explicit_name = 'disjunction introduction #2 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
@@ -7431,7 +7439,7 @@ class DisjunctionIntroductionRightInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :doc:`disjunction_introduction_right` :doc:`inference_rule` and return the resulting formula.
+        """Apply the :doc:`disjunction_introduction_2` :doc:`inference_rule` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -7446,7 +7454,7 @@ class DisjunctionIntroductionRightInclusion(InferenceRuleInclusion):
             q: (None, Formula, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the :doc:`disjunction_introduction_right` :doc:`inference_rule` and return the resulting inferred-statement.
+        """Apply the :doc:`disjunction_introduction_2` :doc:`inference_rule` and return the resulting inferred-statement.
 
                 :param p: (mandatory) A formula-statement of the form: :math:`P`.
                 :param q: (mandatory) A formula of the form: :math:`Q`.
@@ -8075,7 +8083,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
     def bel(self) -> BiconditionalElimination1Inclusion:
         """The well-known biconditional-elimination #1 inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
-        Unabridged property: u.i.biconditional_elimination_left
+        Unabridged property: u.i.biconditional_elimination_1
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
@@ -8086,7 +8094,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
     def ber(self) -> InferenceRuleInclusion:
         """The well-known biconditional-elimination #2 inference-rule: P ⟺ Q ⊢ Q ⟹ P.
 
-        Unabridged property: u.i.biconditional_elimination_right
+        Unabridged property: u.i.biconditional_elimination_2
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
@@ -8173,7 +8181,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
     def cel(self) -> ConjunctionElimination1Declaration:
         """The well-known conjunction-elimination #1 inference-rule: (P ∧ Q) ⊢ P.
 
-        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_left()
+        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_1()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
@@ -8184,7 +8192,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
     def cer(self) -> ConjunctionElimination2Inclusion:
         """The well-known conjunction-elimination #2 inference-rule: P ∧ Q ⊢ Q.
 
-        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_right()
+        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_2()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
@@ -8234,23 +8242,23 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._definition_interpretation
 
     @property
-    def dil(self) -> DisjunctionIntroductionLeftInclusion:
+    def di1(self) -> DisjunctionIntroduction1Inclusion:
         return self.disjunction_introduction_1
 
     @property
-    def dir(self) -> DisjunctionIntroductionRightInclusion:
-        return self.disjunction_introduction_right
+    def di2(self) -> DisjunctionIntroduction2Inclusion:
+        return self.disjunction_introduction_2
 
     @property
-    def disjunction_introduction_1(self) -> DisjunctionIntroductionLeftInclusion:
+    def disjunction_introduction_1(self) -> DisjunctionIntroduction1Inclusion:
         if self._disjunction_introduction_1 is None:
-            self._disjunction_introduction_1 = DisjunctionIntroductionLeftInclusion(t=self.t)
+            self._disjunction_introduction_1 = DisjunctionIntroduction1Inclusion(t=self.t)
         return self._disjunction_introduction_1
 
     @property
-    def disjunction_introduction_right(self) -> DisjunctionIntroductionRightInclusion:
+    def disjunction_introduction_2(self) -> DisjunctionIntroduction2Inclusion:
         if self._disjunction_introduction_2 is None:
-            self._disjunction_introduction_2 = DisjunctionIntroductionRightInclusion(t=self.t)
+            self._disjunction_introduction_2 = DisjunctionIntroduction2Inclusion(t=self.t)
         return self._disjunction_introduction_2
 
     @property
