@@ -54,6 +54,9 @@ def rep_composition(composition: collections.abc.Generator[Composable, Composabl
             elif isinstance(item, int):
                 representation = representation + str(item)
                 cap = False
+            elif isinstance(item, Formula):
+                representation = representation + item.rep_formula(encoding=encoding)
+                cap = False
             else:
                 raise TypeError(f'Type ⌜{str(type(item))}⌝ is not supported in compositions.')
         return representation
@@ -3666,8 +3669,6 @@ class InferenceRuleDeclaration(TheoreticalObject):
     and infer a new statement C."""
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, definition: (None, str) = None,
-            infer_formula: (None, collections.abc.Callable) = None,
-            verify_args: (None, collections.abc.Callable) = None,
             rep_two_columns_proof_OBSOLETE: (None, collections.abc.Callable) = None,
             compose_paragraph_proof_method: (None, collections.abc.Callable) = None,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
@@ -3677,8 +3678,6 @@ class InferenceRuleDeclaration(TheoreticalObject):
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
         self._definition = definition
-        self._infer_formula = infer_formula
-        self._verify_args = verify_args
         self._rep_two_columns_proof = rep_two_columns_proof_OBSOLETE
         self._compose_paragraph_proof_method = compose_paragraph_proof_method
         if nameset is None and symbol is None:
@@ -3714,13 +3713,12 @@ class InferenceRuleDeclaration(TheoreticalObject):
     def echo(self):
         repm.prnt(self.rep_report())
 
+    @property
+    @abc.abstractmethod
     def infer_formula(self, *args, t: TheoryElaborationSequence, echo: (None, bool) = None,
             **kwargs) -> Formula:
         """Apply this inference-rules on input statements and return the resulting statement."""
-        phi = self._infer_formula(*args, t=t, **kwargs)
-        if echo:
-            repm.prnt(phi.rep_report())
-        return phi
+        raise NotImplementedError('infer_formula is an abstract method and must be implemented')
 
     def infer_statement(self, *args, t: TheoryElaborationSequence,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
@@ -3802,9 +3800,8 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         # which received these methods as __init__ arguments.
         infer_formula = AxiomInterpretationDeclaration.infer_formula
         verify_args = AxiomInterpretationDeclaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
@@ -3848,28 +3845,26 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         return True
 
 
-class BiconditionalEliminationLeftDeclaration(InferenceRuleDeclaration):
-    """The well-known biconditional elimination (left) inference rule: P ⟺ Q ⊢ P ⟹ Q.
+class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
+    """The well-known biconditional elimination #1 inference rule: P ⟺ Q ⊢ P ⟹ Q.
 
-    Acronym: bel.
+    Acronym: be1.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'biconditional-elimination-left'
+        u: UniverseOfDiscourse = universe_of_discourse
+        symbol = 'biconditional-elimination-1'
         auto_index = False
-        dashed_name = 'biconditional-elimination-left'
-        acronym = 'bel'
-        abridged_name = 'bicond. elim. (left)'
-        explicit_name = 'biconditional elimination (left) inference rule'
-        name = 'biconditional elimination (left)'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = BiconditionalEliminationLeftDeclaration.infer_formula
-        verify_args = BiconditionalEliminationLeftDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        dashed_name = 'biconditional-elimination-1'
+        acronym = 'be1'
+        abridged_name = None
+        explicit_name = 'biconditional elimination #1 inference rule'
+        name = 'biconditional elimination #1'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.iff | q) | u.r.proves | (p | u.r.implies | q))
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_iff_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
@@ -3879,54 +3874,58 @@ class BiconditionalEliminationLeftDeclaration(InferenceRuleDeclaration):
         :param t: The current theory-elaboration-sequence.
         :return: The (proven) formula: (P ⟹ (P ∧ Q)).
         """
-        p_iff_q = unpack_formula(p_iff_q)
-        p: Formula
-        q: Formula
-        p = unpack_formula(p_iff_q.parameters[0])
-        q = unpack_formula(p_iff_q.parameters[1])
-        output = t.u.f(t.u.r.implication, p, q)
+        p_iff_q: Formula = interpret_formula(u=self.u, arity=2, flexible_formula=p_iff_q)
+        p: Formula = interpret_formula(u=self.u, arity=None, flexible_formula=p_iff_q.parameters[0])
+        q: Formula = interpret_formula(u=self.u, arity=None, flexible_formula=p_iff_q.parameters[1])
+        output = (p | t.u.r.implies | q)
         return output
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_biconditional_elimination_left_paragraph_proof(
+        output = yield from configuration.locale.compose_biconditional_elimination_1_paragraph_proof(
             o=o)
         return output
 
     def verify_args(self, p_iff_q: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
+        p_iff_q: FormulaStatement = interpret_statement_formula(t=t, arity=None,
+            flexible_formula=p_iff_q)
         verify(t.contains_theoretical_objct(p_iff_q),
             'Formula-statement ⌜p_iff_q⌝ must be contained in theory ⌜t⌝.', phi=p_iff_q, t=t,
             slf=self)
-        p_iff_q = unpack_formula(p_iff_q)
+        p_iff_q: Formula = interpret_formula(u=self.u, arity=None, flexible_formula=p_iff_q)
         verify(p_iff_q.relation is t.u.r.biconditional,
             'The relation of formula ⌜p_iff_q⌝ must be a biconditional.',
             phi_relation=p_iff_q.relation, phi=p_iff_q, t=t, slf=self)
         return True
 
 
-class BiconditionalEliminationRightDeclaration(InferenceRuleDeclaration):
-    """The well-known biconditional elimination (left) inference rule: P ⟺ Q ⊢ Q ⟹ P.
+class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
+    """The well-known biconditional elimination #1 inference rule: P ⟺ Q ⊢ Q ⟹ P.
 
     Acronym: ber.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'biconditional-elimination-right'
+        u: UniverseOfDiscourse = universe_of_discourse
+        symbol = 'biconditional-elimination-2'
         auto_index = False
-        dashed_name = 'biconditional-elimination-right'
-        acronym = 'ber'
-        abridged_name = 'bicond. elim. (right)'
-        explicit_name = 'biconditional elimination (right) inference rule'
-        name = 'biconditional elimination (right)'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = BiconditionalEliminationRightDeclaration.infer_formula
-        verify_args = BiconditionalEliminationRightDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        dashed_name = 'biconditional-elimination-2'
+        acronym = 'be2'
+        abridged_name = None
+        explicit_name = 'biconditional elimination #2 inference rule'
+        name = 'biconditional elimination #2'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.iff | q) | u.r.proves | (q | u.r.implies | p))
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_biconditional_elimination_2_paragraph_proof(
+            o=o)
+        return output
 
     def infer_formula(self, p_iff_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
@@ -3936,26 +3935,20 @@ class BiconditionalEliminationRightDeclaration(InferenceRuleDeclaration):
         :param t: The current theory-elaboration-sequence.
         :return: The (proven) formula: (Q ⟹ P).
         """
-        p_iff_q = unpack_formula(p_iff_q)
-        p: Formula
-        q: Formula
-        p = unpack_formula(p_iff_q.parameters[0])
-        q = unpack_formula(p_iff_q.parameters[1])
-        output = t.u.f(t.u.r.implication, q, p)
-        return output
-
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_biconditional_elimination_right_paragraph_proof(
-            o=o)
+        p_iff_q: Formula = interpret_formula(u=self.u, arity=2, flexible_formula=p_iff_q)
+        p: Formula = interpret_formula(u=self.u, arity=None, flexible_formula=p_iff_q.parameters[0])
+        q: Formula = interpret_formula(u=self.u, arity=None, flexible_formula=p_iff_q.parameters[1])
+        output = (q | t.u.r.implies | p)
         return output
 
     def verify_args(self, p_iff_q: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
+        p_iff_q: FormulaStatement = interpret_statement_formula(t=t, arity=None,
+            flexible_formula=p_iff_q)
         verify(t.contains_theoretical_objct(p_iff_q),
             'Formula-statement ⌜p_iff_q⌝ must be contained in theory ⌜t⌝.', phi=p_iff_q, t=t,
             slf=self)
-        p_iff_q = unpack_formula(p_iff_q)
+        p_iff_q: Formula = interpret_formula(u=self.u, arity=None, flexible_formula=p_iff_q)
         verify(p_iff_q.relation is t.u.r.biconditional,
             'The relation of formula ⌜p_iff_q⌝ must be a biconditional.',
             phi_relation=p_iff_q.relation, phi=p_iff_q, t=t, slf=self)
@@ -3969,31 +3962,30 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'biconditional-introduction'
         auto_index = False
         dashed_name = 'biconditional-introduction'
         acronym = 'bi'
-        abridged_name = 'bicond. intro.'
+        abridged_name = None
         explicit_name = 'biconditional introduction inference rule'
         name = 'biconditional introduction'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = BiconditionalIntroductionDeclaration.infer_formula
-        verify_args = BiconditionalIntroductionDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = (((p | u.r.implies | q) | u.r.sequent_comma | (
+                    q | u.r.implies | p)) | u.r.proves | (p | u.r.iff | q))
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_implies_q: FormulaStatement = None,
-            q_implies_p: FormulaStatement = None, t: TheoryElaborationSequence = None,
-            echo: (None, bool) = None) -> Formula:
+    def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
+            q_implies_p: (tuple, Formula, FormulaStatement) = None,
+            t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
         """Infer formula (P ⟺ Q) from formulae (P ⟹ Q), and (Q ⟹ P).
         """
-        p_implies_q = unpack_formula(p_implies_q)
+        p_implies_q = interpret_formula(u=t.u, arity=2, flexible_formula=p_implies_q)
         p = p_implies_q.parameters[0]
         q = p_implies_q.parameters[1]
-        return t.u.f(t.u.r.biconditional, p, q)
+        return p | t.u.r.iff | q
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -4003,16 +3995,16 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
 
     def verify_args(self, p_implies_q: FormulaStatement = None,
             q_implies_p: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
+        p_implies_q = interpret_statement_formula(t=t, arity=2, flexible_formula=p_implies_q)
         verify(t.contains_theoretical_objct(p_implies_q),
-            'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-            p_implies_q=p_implies_q, t=t, slf=self)
+            'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝.', p_implies_q=p_implies_q,
+            t=t, slf=self)
+        q_implies_p = interpret_statement_formula(t=t, arity=2, flexible_formula=q_implies_p)
         verify(t.contains_theoretical_objct(q_implies_p),
-            'Statement ⌜q_implies_p⌝ must be contained in theory ⌜t⌝''s hierarchy.',
-            q_implies_p=q_implies_p, t=t, slf=self)
-        p_implies_q: Formula
-        q_implies_p: Formula
-        p_implies_q = unpack_formula(p_implies_q)
-        q_implies_p = unpack_formula(q_implies_p)
+            'Statement ⌜q_implies_p⌝ must be contained in theory ⌜t⌝.', q_implies_p=q_implies_p,
+            t=t, slf=self)
+        p_implies_q: Formula = interpret_formula(u=t.u, arity=2, flexible_formula=p_implies_q)
+        q_implies_p: Formula = interpret_formula(u=t.u, arity=2, flexible_formula=q_implies_p)
         verify(p_implies_q.relation is t.u.r.implication,
             'The relation of formula ⌜p_implies_q⌝ must be an implication.',
             p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
@@ -4033,28 +4025,26 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
         return True
 
 
-class ConjunctionEliminationLeftDeclaration(InferenceRuleDeclaration):
-    """The well-known conjunction elimination (left) inference rule: P ⟺ Q ⊢ P ⟹ Q.
+class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
+    """The well-known conjunction elimination #1 inference rule: P ⟺ Q ⊢ P ⟹ Q.
 
     Acronym: cel.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'conjunction-elimination-left'
+        u: UniverseOfDiscourse = universe_of_discourse
+        symbol = 'conjunction-elimination-1'
         auto_index = False
-        dashed_name = 'conjunction-elimination-left'
-        acronym = 'bel'
-        abridged_name = 'conj. elim. (left)'
-        explicit_name = 'conjunction elimination (left) inference rule'
-        name = 'conjunction elimination (left)'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = ConjunctionEliminationLeftDeclaration.infer_formula
-        verify_args = ConjunctionEliminationLeftDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        dashed_name = 'conjunction-elimination-1'
+        acronym = 'ce1'
+        abridged_name = None
+        explicit_name = 'conjunction elimination #1 inference rule'
+        name = 'conjunction elimination #1'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.land | q) | u.r.proves | p)
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_land_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None, **kwargs) -> Formula:
@@ -4070,7 +4060,7 @@ class ConjunctionEliminationLeftDeclaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_conjunction_elimination_left_paragraph_proof(
+        output = yield from configuration.locale.compose_conjunction_elimination_1_paragraph_proof(
             o=o)
         return output
 
@@ -4085,8 +4075,8 @@ class ConjunctionEliminationLeftDeclaration(InferenceRuleDeclaration):
         return True
 
 
-class ConjunctionEliminationRightDeclaration(InferenceRuleDeclaration):
-    """The well-known conjunction elimination (left) inference rule: P ⟺ Q ⊢ Q ⟹ P.
+class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
+    """The well-known conjunction elimination #2 inference rule: P ⟺ Q ⊢ Q ⟹ P.
 
     Acronym: cer.
 
@@ -4096,21 +4086,19 @@ class ConjunctionEliminationRightDeclaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'conjunction-elimination-right'
+        u: UniverseOfDiscourse = universe_of_discourse
+        symbol = 'conjunction-elimination-2'
         auto_index = False
-        dashed_name = 'conjunction-elimination-right'
-        acronym = 'ber'
-        abridged_name = 'conj. elim. (right)'
-        explicit_name = 'conjunction elimination (right) inference rule'
-        name = 'conjunction elimination (right)'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = ConjunctionEliminationRightDeclaration.infer_formula
-        verify_args = ConjunctionEliminationRightDeclaration.verify_args
-        super().__init__(infer_formula=infer_formula, verify_args=verify_args,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        dashed_name = 'conjunction-elimination-2'
+        acronym = 'ce2'
+        abridged_name = None
+        explicit_name = 'conjunction elimination #2 inference rule'
+        name = 'conjunction elimination #2'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.land | q) | u.r.proves | q)
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_land_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
@@ -4126,7 +4114,7 @@ class ConjunctionEliminationRightDeclaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_conjunction_elimination_right_paragraph_proof(
+        output = yield from configuration.locale.compose_conjunction_elimination_2_paragraph_proof(
             o=o)
         return output
 
@@ -4146,21 +4134,18 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'conjunction-introduction'
         acronym = 'ci'
-        abridged_name = 'conj.-intro.'
+        abridged_name = None
         auto_index = False
         dashed_name = 'conjunction-introduction'
         explicit_name = 'conjunction introduction inference rule'
         name = 'conjunction introduction'
-        definition = StyledText(plaintext='(P, Q) |- (P and Q)', unicode='(P, Q) ⊢ (P ⋀ Q)')
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = AxiomInterpretationDeclaration.infer_formula
-        verify_args = AxiomInterpretationDeclaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.sequent_comma | q) | u.r.proves | (p | u.r.land | q))
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
@@ -4213,13 +4198,8 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
         explicit_name = 'definition interpretation inference rule'
         name = 'definition interpretation'
         definition = '𝒟 ⊢ P'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = DefinitionInterpretationDeclaration.infer_formula
-        verify_args = DefinitionInterpretationDeclaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
@@ -4268,21 +4248,16 @@ class DisjunctionIntroductionLeftDeclaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'disjunction-introduction-left'
+        symbol = 'disjunction-introduction-1'
         acronym = 'dil'
-        abridged_name = 'disjunc. intro. (left)'
+        abridged_name = 'disjunc. intro. #1'
         auto_index = False
-        dashed_name = 'disjunction-introduction-left'
-        explicit_name = 'disjunction introduction (left) inference rule'
-        name = 'disjunction introduction (left)'
+        dashed_name = 'disjunction-introduction-1'
+        explicit_name = 'disjunction introduction #1 inference rule'
+        name = 'disjunction introduction #1'
         definition = 'P ⊢ (Q ∨ P)'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = DisjunctionIntroductionLeftDeclaration.infer_formula
-        verify_args = DisjunctionIntroductionLeftDeclaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
@@ -4328,21 +4303,16 @@ class DisjunctionIntroductionRightDeclaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        symbol = 'disjunction-introduction-right'
+        symbol = 'disjunction-introduction-2'
         acronym = 'dil'
-        abridged_name = 'disjunc. intro. (right)'
+        abridged_name = None
         auto_index = False
-        dashed_name = 'disjunction-introduction-right'
-        explicit_name = 'disjunction introduction (right) inference rule'
-        name = 'disjunction introduction (right)'
+        dashed_name = 'disjunction-introduction-2'
+        explicit_name = 'disjunction introduction #2 inference rule'
+        name = 'disjunction introduction #2'
         definition = 'P ⊢ (P ∨ Q)'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = DisjunctionIntroductionRightDeclaration.infer_formula
-        verify_args = DisjunctionIntroductionRightDeclaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
@@ -4384,7 +4354,7 @@ class DisjunctionIntroductionRightDeclaration(InferenceRuleDeclaration):
 
 
 class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
-    """The well-known double negation elimination (left) inference rule: ¬(¬(P)) ⊢ P.
+    """The well-known double negation elimination #1 inference rule: ¬(¬(P)) ⊢ P.
 
     Acronym: cer.
 
@@ -4398,17 +4368,12 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
         auto_index = False
         dashed_name = 'double-negation-elimination'
         acronym = 'dne'
-        abridged_name = 'double neg. elim.'
+        abridged_name = None
         explicit_name = 'double negation elimination inference rule'
         name = 'double negation elimination'
         definition = '¬(¬(P)) ⊢ P'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = DoubleNegationEliminationDeclaration.infer_formula
-        verify_args = DoubleNegationEliminationDeclaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, not_not_p: (None, Formula) = None, t: TheoryElaborationSequence = None,
@@ -4461,13 +4426,8 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'double negation introduction inference rule'
         name = 'double negation introduction'
         definition = 'P ⊢ ¬(¬(P))'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = DoubleNegationIntroductionDeclaration.infer_formula
-        verify_args = DoubleNegationIntroductionDeclaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
@@ -4520,13 +4480,8 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
         explicit_name = 'equality commutativity inference rule'
         name = 'equality commutativity'
         definition = '(x = y) ⊢ (y = x)'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = AxiomInterpretationDeclaration.infer_formula
-        verify_args = AxiomInterpretationDeclaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_eq_q: (None, FormulaStatement) = None,
@@ -4579,13 +4534,8 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'equal terms substitution inference rule'
         name = 'equal terms substitution'
         definition = '(P, (Q = R)) ⊢ P\''
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = AxiomInterpretationDeclaration.infer_formula
-        verify_args = AxiomInterpretationDeclaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p: FormulaStatement = None, q_equal_r: FormulaStatement = None,
@@ -4645,13 +4595,8 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
         explicit_name = 'inconsistency introduction #1 inference rule'
         name = 'inconsistency introduction #1'
         definition = StyledText(plaintext='(P, not(P)) |- (T)', unicode='(𝑷, ¬(𝑷)) ⊢ 𝐼𝑛𝑐(𝓣)')
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = InconsistencyIntroduction1Declaration.infer_formula
-        verify_args = InconsistencyIntroduction1Declaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p: FormulaStatement = None, not_p: FormulaStatement = None,
@@ -4700,13 +4645,8 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
         name = 'inconsistency introduction #2'
         definition = StyledText(plaintext='((P = Q), (P neq Q)) |- Inc(T)',
             unicode='((𝑷 = 𝑸), (𝑷 ≠ 𝑸)) ⊢ 𝐼𝑛𝑐(𝒯)')
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = InconsistencyIntroduction2Declaration.infer_formula
-        verify_args = InconsistencyIntroduction2Declaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_eq_q: FormulaStatement = None, p_neq_q: FormulaStatement = None,
@@ -4760,13 +4700,8 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
         explicit_name = 'inconsistency introduction #3 inference rule'
         name = 'inconsistency introduction #3'
         definition = StyledText(plaintext='(P neq P) |- Inc(T)', unicode='(𝑷 ≠ 𝑷) ⊢ Inc(𝒯)')
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = InconsistencyIntroduction3Declaration.infer_formula
-        verify_args = InconsistencyIntroduction3Declaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_neq_p: FormulaStatement = None,
@@ -4810,13 +4745,8 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         explicit_name = 'modus ponens inference rule'
         name = 'modus ponens'
         definition = StyledText(plaintext='(P ==> Q), P) |- Q', unicode='((P ⟹ Q), P) ⊢ Q')
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = ModusPonensDeclaration.infer_formula
-        verify_args = ModusPonensDeclaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
@@ -4880,14 +4810,9 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
         name = 'proof by contradiction'
         definition = StyledText(plaintext='(H assume not(P), P, Inc(H)) |- P',
             unicode='(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 ¬𝑷, 𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ 𝑷')
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = ProofByContradiction1Declaration.infer_formula
-        verify_args = ProofByContradiction1Declaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            name=name, explicit_name=explicit_name, echo=echo)
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -4946,14 +4871,9 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
         explicit_name = 'proof by contradiction #2 inference rule'
         name = 'proof by contradiction #2'
         definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 ≠ 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 = 𝑸)'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = ProofByContradiction2Declaration.infer_formula
-        verify_args = ProofByContradiction2Declaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            name=name, explicit_name=explicit_name, echo=echo)
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -5012,14 +4932,9 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
         explicit_name = 'proof by refutation inference rule'
         name = 'proof by refutation'
         definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ ¬𝑷'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = ProofByContradiction1Declaration.infer_formula
-        verify_args = ProofByContradiction1Declaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            name=name, explicit_name=explicit_name, echo=echo)
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -5076,14 +4991,9 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
         explicit_name = 'proof by refutation #2 inference rule'
         name = 'proof by refutation #2'
         definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 = 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 ≠ 𝑸)'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = ProofByRefutation2Declaration.infer_formula
-        verify_args = ProofByRefutation2Declaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            name=name, explicit_name=explicit_name, echo=echo)
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -5139,13 +5049,8 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'variable substitution inference rule'
         name = 'variable substitution'
         definition = StyledText(plaintext='(P, Phi) |- P\'', unicode='(P, 𝛷) ⊢ P\'')
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = VariableSubstitutionDeclaration.infer_formula
-        verify_args = VariableSubstitutionDeclaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
@@ -5440,15 +5345,16 @@ class TheoryElaborationSequence(TheoreticalObject):
         warns the user that no semantic verification is performed."""
         echo = prioritize_value(echo, configuration.echo_default, False)
         if not self._interpretation_disclaimer:
-            self.take_note('By design, punctilious assures the syntactical correctness of package, '
-                           'but does not perform any '
-                           'semantic verification. Therefore, the usage of inference-rules that interpret '
-                           'content (i.e. '
-                           'axiom-interpretation and definition-interpretation) is critically dependent on '
-                           'the correctness of '
-                           'the content translation performed by the theory author, from axiom or definition '
-                           'natural language, '
-                           'to formulae.', paragraph_header=paragraph_headers.warning, echo=echo)
+            self.take_note(
+                'By design, punctilious assures the syntactical correctness of theories, '
+                'but does not perform any '
+                'semantic verification. Therefore, the usage of inference-rules that interpret '
+                'natural content (i.e. '
+                'axiom-interpretation and definition-interpretation) is critically dependent on '
+                'the correctness of '
+                'the content translation performed by the theory author, from axiom or definition '
+                'natural language, '
+                'to formulae.', paragraph_header=paragraph_headers.warning, echo=echo)
             self._interpretation_disclaimer = True
 
     def compose_article(self, proof: (None, bool) = None) -> collections.abc.Generator[
@@ -6124,6 +6030,7 @@ class RelationDict(collections.UserDict):
         super().__init__()
         # Well-known objects
         self._biconditional = None
+        self._sequent_comma = None
         self._conjunction = None
         self._disjunction = None
         self._equality = None
@@ -6132,6 +6039,7 @@ class RelationDict(collections.UserDict):
         self._implication = None
         self._is_a = None
         self._negation = None
+        self._syntactic_entailment = None
 
     def declare(self, arity: int, symbol: (None, str, StyledText) = None, index: (None, int) = None,
             auto_index: (None, bool) = None, formula_rep=None, signal_proposition=None,
@@ -6164,6 +6072,21 @@ class RelationDict(collections.UserDict):
                 symbol=SerifItalic(plaintext='<==>', unicode='⟺', latex='\\iff'), auto_index=False,
                 dashed_name='biconditional', name='biconditional')
         return self._biconditional
+
+    @property
+    def sequent_comma(self):
+        """Initially needed to express the collection of premises in inference-rule formula definitions.
+
+        For the time being it is sufficient to implement it as a binary relation,
+        because our initial catalog of inference rules have one or two premises.
+        But at a later point, we will need to implement (0-n)-ary relations.
+        """
+        if self._sequent_comma is None:
+            self._sequent_comma = self.declare(arity=2, formula_rep=Formula.infix,
+                signal_proposition=True, symbol=SerifItalic(plaintext=',', unicode=',', latex=','),
+                auto_index=False, dashed_name='sequent-comma', name='sequent comma',
+                explicit_name='sequent calculus comma')
+        return self._sequent_comma
 
     @property
     def conjunction(self):
@@ -6243,6 +6166,10 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         return self.inconsistency
+
+    @property
+    def iff(self):
+        return self.biconditional
 
     @property
     def implication(self):
@@ -6372,6 +6299,34 @@ class RelationDict(collections.UserDict):
         """
         return self.inequality
 
+    @property
+    def proves(self):
+        """The well-known syntactic-entailment relation.
+
+        Unabridged property: u.r.syntactic_entailment
+
+        If it does not exist in the universe-of-discourse,
+        declares it automatically.
+        """
+        return self.syntactic_entailment
+
+    @property
+    def syntactic_entailment(self):
+        """The well-known syntactic-entailment relation.
+
+        Abridged property: u.r.proves
+
+        If it does not exist in the universe-of-discourse,
+        declares it automatically.
+        """
+        if self._syntactic_entailment is None:
+            self._syntactic_entailment = self.declare(arity=2, formula_rep=Formula.infix,
+                signal_proposition=True,
+                symbol=SerifItalic(plaintext='|-', unicode='⊢', latex='\\vdash'), auto_index=False,
+                dashed_name='syntactic-entailment', abridged_name='proves',
+                name='syntactic entailment')
+        return self._syntactic_entailment
+
 
 FlexibleFormula = typing.Union[FormulaStatement, Formula, tuple, list]
 """See validate_flexible_statement_formula() for details."""
@@ -6453,16 +6408,16 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         # Well-known objects
         self._absorption = None
         self._axiom_interpretation = None
-        self._biconditional_elimination_left = None
-        self._biconditional_elimination_right = None
+        self._biconditional_elimination_1 = None
+        self._biconditional_elimination_2 = None
         self._biconditional_introduction = None
-        self._conjunction_elimination_left = None
-        self._conjunction_elimination_right = None
+        self._conjunction_elimination_1 = None
+        self._conjunction_elimination_2 = None
         self._conjunction_introduction = None
         self._definition_interpretation = None
         self._disjunction_elimination = None  # TODO: IMPLEMENT disjunction_elimination
-        self._disjunction_introduction_left = None
-        self._disjunction_introduction_right = None
+        self._disjunction_introduction_1 = None
+        self._disjunction_introduction_2 = None
         self._double_negation_elimination = None
         self._double_negation_introduction = None
         self._equality_commutativity = None
@@ -6522,26 +6477,26 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._axiom_interpretation
 
     @property
-    def bel(self) -> BiconditionalEliminationLeftDeclaration:
-        """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
+    def bel(self) -> BiconditionalElimination1Declaration:
+        """The well-known biconditional-elimination #1 inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
         Abridged property: u.i.bel
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.biconditional_elimination_left
+        return self.biconditional_elimination_1
 
     @property
-    def ber(self) -> BiconditionalEliminationRightDeclaration:
-        """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
+    def ber(self) -> BiconditionalElimination2Declaration:
+        """The well-known biconditional-elimination #2 inference-rule: P ⟺ Q ⊢ Q ⟹ P.
 
         Abridged property: u.i.ber()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.biconditional_elimination_right
+        return self.biconditional_elimination_2
 
     @property
     def bi(self) -> BiconditionalIntroductionDeclaration:
@@ -6555,8 +6510,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self.biconditional_introduction
 
     @property
-    def biconditional_elimination_left(self) -> BiconditionalEliminationLeftDeclaration:
-        """The well-known biconditional-elimination (left) inference-rule: ((P ⟺ Q) ⊢ (P ⟹ Q)).
+    def biconditional_elimination_1(self) -> BiconditionalElimination1Declaration:
+        """The well-known biconditional-elimination #1 inference-rule: ((P ⟺ Q) ⊢ (P ⟹ Q)).
 
         The ⌜left⌝ suffix is non-standard and used to mean that among the two possible results of
         biconditional-elimination, i.e.: (P ⟹ Q) and (Q ⟹ P), we pick the first one, i.e.: (P ⟹ Q).
@@ -6567,14 +6522,14 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         the inference-rule is automatically declared.
         """
 
-        if self._biconditional_elimination_left is None:
-            self._biconditional_elimination_left = BiconditionalEliminationLeftDeclaration(
+        if self._biconditional_elimination_1 is None:
+            self._biconditional_elimination_1 = BiconditionalElimination1Declaration(
                 universe_of_discourse=self.u)
-        return self._biconditional_elimination_left
+        return self._biconditional_elimination_1
 
     @property
-    def biconditional_elimination_right(self) -> BiconditionalEliminationRightDeclaration:
-        """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
+    def biconditional_elimination_2(self) -> BiconditionalElimination2Declaration:
+        """The well-known biconditional-elimination #2 inference-rule: P ⟺ Q ⊢ Q ⟹ P.
 
         The ⌜right⌝ suffix is non-standard and used to mean that among the two possible results
         of biconditional-elimination, i.e.: (P ⟹ Q) and (Q ⟹ P), we pick the second one,
@@ -6585,10 +6540,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._biconditional_elimination_right is None:
-            self._biconditional_elimination_right = BiconditionalEliminationRightDeclaration(
+        if self._biconditional_elimination_2 is None:
+            self._biconditional_elimination_2 = BiconditionalElimination2Declaration(
                 universe_of_discourse=self.u)
-        return self._biconditional_elimination_right
+        return self._biconditional_elimination_2
 
     @property
     def biconditional_introduction(self) -> BiconditionalIntroductionDeclaration:
@@ -6606,8 +6561,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         return self._biconditional_introduction
 
     @property
-    def cel(self) -> ConjunctionEliminationLeftDeclaration:
-        """The well-known conjunction-elimination (left) inference-rule: ((P ∧ Q) ⊢ P).
+    def cel(self) -> ConjunctionElimination1Declaration:
+        """The well-known conjunction-elimination #1 inference-rule: ((P ∧ Q) ⊢ P).
 
         The ⌜left⌝ suffix is non-standard and used to mean that among the two possible results of
         conjunction-elimination, i.e.: P and Q, we pick the first one, i.e.: P.
@@ -6617,11 +6572,11 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.conjunction_elimination_left
+        return self.conjunction_elimination_1
 
     @property
-    def cer(self) -> ConjunctionEliminationRightDeclaration:
-        """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
+    def cer(self) -> ConjunctionElimination2Declaration:
+        """The well-known conjunction-elimination #2 inference-rule: P ∧ Q ⊢ Q.
 
         The ⌜right⌝ suffix is non-standard and used to mean that among the two possible results
         of conjunction-elimination, i.e.: P and Q, we pick the second one, i.e.: Q.
@@ -6631,7 +6586,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.conjunction_elimination_right
+        return self.conjunction_elimination_2
 
     @property
     def ci(self) -> ConjunctionIntroductionDeclaration:
@@ -6649,8 +6604,8 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         yield SerifItalic(plaintext='inference-rule')
 
     @property
-    def conjunction_elimination_left(self) -> ConjunctionEliminationLeftDeclaration:
-        """The well-known conjunction-elimination (left) inference-rule: ((P ∧ Q) ⊢ P).
+    def conjunction_elimination_1(self) -> ConjunctionElimination1Declaration:
+        """The well-known conjunction-elimination #1 inference-rule: ((P ∧ Q) ⊢ P).
 
         The ⌜left⌝ suffix is non-standard and used to mean that among the two possible results of
         conjunction-elimination, i.e.: P and Q, we pick the first one, i.e.: P.
@@ -6663,14 +6618,14 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
         # TODO: inference-rule: conjunction_elimination_left: Migrate to specialized classes
 
-        if self._conjunction_elimination_left is None:
-            self._conjunction_elimination_left = ConjunctionEliminationLeftDeclaration(
+        if self._conjunction_elimination_1 is None:
+            self._conjunction_elimination_1 = ConjunctionElimination1Declaration(
                 universe_of_discourse=self.u)
-        return self._conjunction_elimination_left
+        return self._conjunction_elimination_1
 
     @property
-    def conjunction_elimination_right(self) -> ConjunctionEliminationRightDeclaration:
-        """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
+    def conjunction_elimination_2(self) -> ConjunctionElimination2Declaration:
+        """The well-known conjunction-elimination #2 inference-rule: P ∧ Q ⊢ Q.
 
         The ⌜right⌝ suffix is non-standard and used to mean that among the two possible results
         of conjunction-elimination, i.e.: P and Q, we pick the second one, i.e.: Q.
@@ -6680,10 +6635,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._conjunction_elimination_right is None:
-            self._conjunction_elimination_right = ConjunctionEliminationRightDeclaration(
+        if self._conjunction_elimination_2 is None:
+            self._conjunction_elimination_2 = ConjunctionElimination2Declaration(
                 universe_of_discourse=self.u)
-        return self._conjunction_elimination_right
+        return self._conjunction_elimination_2
 
     @property
     def conjunction_introduction(self) -> ConjunctionIntroductionDeclaration:
@@ -6720,39 +6675,39 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def dil(self) -> DisjunctionIntroductionLeftDeclaration:
-        return self.disjunction_introduction_left
+        return self.disjunction_introduction_1
 
     @property
     def dir(self) -> DisjunctionIntroductionRightDeclaration:
-        return self.disjunction_introduction_right
+        return self.disjunction_introduction_2
 
     @property
-    def disjunction_introduction_left(self) -> DisjunctionIntroductionLeftDeclaration:
-        """The well-known disjunction-introduction-left inference-rule: P ⊢ (P ∨ Q).
+    def disjunction_introduction_1(self) -> DisjunctionIntroductionLeftDeclaration:
+        """The well-known disjunction-introduction-1 inference-rule: P ⊢ (P ∨ Q).
 
         Abridged property: u.i.di
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._disjunction_introduction_left is None:
-            self._disjunction_introduction_left = DisjunctionIntroductionLeftDeclaration(
+        if self._disjunction_introduction_1 is None:
+            self._disjunction_introduction_1 = DisjunctionIntroductionLeftDeclaration(
                 universe_of_discourse=self.u)
-        return self._disjunction_introduction_left
+        return self._disjunction_introduction_1
 
     @property
-    def disjunction_introduction_right(self) -> DisjunctionIntroductionRightDeclaration:
-        """The well-known disjunction-introduction-right inference-rule: P ⊢ (P ∨ Q).
+    def disjunction_introduction_2(self) -> DisjunctionIntroductionRightDeclaration:
+        """The well-known disjunction-introduction-2 inference-rule: P ⊢ (P ∨ Q).
 
         Abridged property: u.i.di
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._disjunction_introduction_right is None:
-            self._disjunction_introduction_right = DisjunctionIntroductionRightDeclaration(
+        if self._disjunction_introduction_2 is None:
+            self._disjunction_introduction_2 = DisjunctionIntroductionRightDeclaration(
                 universe_of_discourse=self.u)
-        return self._disjunction_introduction_right
+        return self._disjunction_introduction_2
 
     @property
     def dne(self) -> DoubleNegationEliminationDeclaration:
@@ -7140,19 +7095,19 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class BiconditionalEliminationLeftInclusion(InferenceRuleInclusion):
+class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.biconditional_elimination_left
-        dashed_name = 'biconditional-elimination-left'
-        acronym = 'bel'
-        abridged_name = 'bicond. elim. left'
-        name = 'biconditional elimination (left)'
-        explicit_name = 'biconditional elimination (left) inference rule'
+        i = t.universe_of_discourse.inference_rules.biconditional_elimination_1
+        dashed_name = 'biconditional-elimination-1'
+        acronym = 'be1'
+        abridged_name = None
+        name = 'biconditional elimination #1'
+        explicit_name = 'biconditional elimination #1 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
@@ -7164,7 +7119,7 @@ class BiconditionalEliminationLeftInclusion(InferenceRuleInclusion):
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the biconditional elimination (left) inference-rule and return the
+        """Apply the biconditional elimination #1 inference-rule and return the
         inferred-statement.
 
         :param p_iff_q: (mandatory) The biconditional statement.
@@ -7174,19 +7129,19 @@ class BiconditionalEliminationLeftInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class BiconditionalEliminationRightInclusion(InferenceRuleInclusion):
+class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.biconditional_elimination_right
-        dashed_name = 'biconditional-elimination-right'
-        acronym = 'bel'
-        abridged_name = 'bicond. elim. right'
-        name = 'biconditional elimination (right)'
-        explicit_name = 'biconditional elimination (right) inference rule'
+        i = t.universe_of_discourse.inference_rules.biconditional_elimination_2
+        dashed_name = 'biconditional-elimination-2'
+        acronym = 'be2'
+        abridged_name = None
+        name = 'biconditional elimination #2'
+        explicit_name = 'biconditional elimination #2 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
@@ -7198,7 +7153,7 @@ class BiconditionalEliminationRightInclusion(InferenceRuleInclusion):
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the biconditional elimination (right) inference-rule and return the
+        """Apply the biconditional elimination #2 inference-rule and return the
         inferred-statement.
 
         :param p_iff_q: (mandatory) The biconditional statement.
@@ -7218,22 +7173,23 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
         i = t.universe_of_discourse.inference_rules.biconditional_introduction
         dashed_name = 'biconditional-introduction'
         acronym = 'bi'
-        abridged_name = 'bicond. intro.'
+        abridged_name = None
         name = 'biconditional introduction'
         explicit_name = 'biconditional introduction inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_implies_q: FormulaStatement = None,
-            q_implies_p: FormulaStatement = None, echo: (None, bool) = None):
+    def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
+            q_implies_p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         return super().infer_formula(p_iff_q, echo=echo)
 
-    def infer_statement(self, p_implies_q: FormulaStatement = None,
-            q_implies_p: FormulaStatement = None, nameset: (None, str, NameSet) = None,
-            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
-            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the biconditional elimination (right) inference-rule and return the
+    def infer_statement(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
+            q_implies_p: (tuple, Formula, FormulaStatement) = None,
+            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
+            echo: (None, bool) = None) -> InferredStatement:
+        """Apply the biconditional elimination #2 inference-rule and return the
         inferred-statement.
 
         :param p_iff_q: (mandatory) The biconditional statement.
@@ -7243,19 +7199,19 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class ConjunctionEliminationLeftInclusion(InferenceRuleInclusion):
+class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.conjunction_elimination_left
-        dashed_name = 'conjunction-elimination-left'
-        acronym = 'bel'
-        abridged_name = 'conj. elim. left'
-        name = 'conjunction elimination (left)'
-        explicit_name = 'conjunction elimination (left) inference rule'
+        i = t.universe_of_discourse.inference_rules.conjunction_elimination_1
+        dashed_name = 'conjunction-elimination-1'
+        acronym = 'ce1'
+        abridged_name = None
+        name = 'conjunction elimination #1'
+        explicit_name = 'conjunction elimination #1 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
@@ -7266,7 +7222,7 @@ class ConjunctionEliminationLeftInclusion(InferenceRuleInclusion):
     def infer_statement(self, p_and_q: (None, FormulaStatement) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the conjunction elimination (left) inference-rule and return the
+        """Apply the conjunction elimination #1 inference-rule and return the
         inferred-statement.
 
         :param p_and_q:
@@ -7276,19 +7232,19 @@ class ConjunctionEliminationLeftInclusion(InferenceRuleInclusion):
             subtitle=subtitle, echo=echo)
 
 
-class ConjunctionEliminationRightInclusion(InferenceRuleInclusion):
+class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
     """
 
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.conjunction_elimination_right
-        dashed_name = 'conjunction-elimination-right'
+        i = t.universe_of_discourse.inference_rules.conjunction_elimination_2
+        dashed_name = 'conjunction-elimination-2'
         acronym = 'bel'
         abridged_name = 'conj. elim. right'
-        name = 'conjunction elimination (right)'
-        explicit_name = 'conjunction elimination (right) inference rule'
+        name = 'conjunction elimination #2'
+        explicit_name = 'conjunction elimination #2 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
@@ -7300,7 +7256,7 @@ class ConjunctionEliminationRightInclusion(InferenceRuleInclusion):
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the conjunction elimination (right) inference-rule and return the
+        """Apply the conjunction elimination #2 inference-rule and return the
         inferred-statement.
 
         :param p_and_q: (mandatory) The conjunction statement.
@@ -7412,12 +7368,12 @@ class DisjunctionIntroductionLeftInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.disjunction_introduction_left
-        dashed_name = 'disjunction-introduction-left'
+        i = t.universe_of_discourse.inference_rules.disjunction_introduction_1
+        dashed_name = 'disjunction-introduction-1'
         acronym = 'dil'
-        abridged_name = 'disjunc. intro. left'
-        name = 'disjunction introduction (left)'
-        explicit_name = 'disjunction introduction (left) inference rule'
+        abridged_name = None
+        name = 'disjunction introduction #1'
+        explicit_name = 'disjunction introduction #1 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
@@ -7463,12 +7419,12 @@ class DisjunctionIntroductionRightInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.disjunction_introduction_right
-        dashed_name = 'disjunction-introduction-right'
+        i = t.universe_of_discourse.inference_rules.disjunction_introduction_2
+        dashed_name = 'disjunction-introduction-2'
         acronym = 'dil'
         abridged_name = 'disjunc. intro. right'
-        name = 'disjunction introduction (right)'
-        explicit_name = 'disjunction introduction (right) inference rule'
+        name = 'disjunction introduction #2'
+        explicit_name = 'disjunction introduction #2 inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
@@ -8048,16 +8004,16 @@ class InferenceRuleInclusionDict(collections.UserDict):
         # Well-known objects
         self._absorption = None
         self._axiom_interpretation = None
-        self._biconditional_elimination_left = None
-        self._biconditional_elimination_right = None
+        self._biconditional_elimination_1 = None
+        self._biconditional_elimination_2 = None
         self._biconditional_introduction = None
-        self._conjunction_elimination_left = None
-        self._conjunction_elimination_right = None
+        self._conjunction_elimination_1 = None
+        self._conjunction_elimination_2 = None
         self._conjunction_introduction = None
         self._definition_interpretation = None
         self._disjunction_elimination = None  # TODO: IMPLEMENT disjunction_elimination
-        self._disjunction_introduction_left = None
-        self._disjunction_introduction_right = None
+        self._disjunction_introduction_1 = None
+        self._disjunction_introduction_2 = None
         self._double_negation_elimination = None
         self._double_negation_introduction = None
         self._equality_commutativity = None
@@ -8067,9 +8023,9 @@ class InferenceRuleInclusionDict(collections.UserDict):
         self._inconsistency_introduction_3 = None
         self._modus_ponens = None
         self._proof_by_contradiction_1 = None
-        self._proof_by_contradiction_of_non_equality = None
-        self._proof_by_refutation = None
-        self._proof_by_refutation_of_equality = None
+        self._proof_by_contradiction_2 = None
+        self._proof_by_refutation_1 = None
+        self._proof_by_refutation_2 = None
         self._variable_substitution = None
 
     @property
@@ -8116,26 +8072,26 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._axiom_interpretation
 
     @property
-    def bel(self) -> BiconditionalEliminationLeftInclusion:
-        """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
+    def bel(self) -> BiconditionalElimination1Inclusion:
+        """The well-known biconditional-elimination #1 inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
         Unabridged property: u.i.biconditional_elimination_left
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.biconditional_elimination_left
+        return self.biconditional_elimination_1
 
     @property
     def ber(self) -> InferenceRuleInclusion:
-        """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
+        """The well-known biconditional-elimination #2 inference-rule: P ⟺ Q ⊢ Q ⟹ P.
 
         Unabridged property: u.i.biconditional_elimination_right
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.biconditional_elimination_right
+        return self.biconditional_elimination_2
 
     @property
     def bi(self) -> BiconditionalIntroductionInclusion:
@@ -8149,30 +8105,30 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self.biconditional_introduction
 
     @property
-    def biconditional_elimination_left(self) -> BiconditionalEliminationLeftInclusion:
-        """The well-known biconditional-elimination (left) inference-rule: P ⟺ Q ⊢ P ⟹ Q.
+    def biconditional_elimination_1(self) -> BiconditionalElimination1Inclusion:
+        """The well-known biconditional-elimination #1 inference-rule: P ⟺ Q ⊢ P ⟹ Q.
 
         Abridged property: u.i.bel
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._biconditional_elimination_left is None:
-            self._biconditional_elimination_left = BiconditionalEliminationLeftInclusion(t=self.t)
-        return self._biconditional_elimination_left
+        if self._biconditional_elimination_1 is None:
+            self._biconditional_elimination_1 = BiconditionalElimination1Inclusion(t=self.t)
+        return self._biconditional_elimination_1
 
     @property
-    def biconditional_elimination_right(self) -> BiconditionalEliminationRightInclusion:
-        """The well-known biconditional-elimination (right) inference-rule: P ⟺ Q ⊢ Q ⟹ P.
+    def biconditional_elimination_2(self) -> BiconditionalElimination2Inclusion:
+        """The well-known biconditional-elimination #2 inference-rule: P ⟺ Q ⊢ Q ⟹ P.
 
         Abridged property: u.i.ber()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._biconditional_elimination_left is None:
-            self._biconditional_elimination_left = BiconditionalEliminationRightInclusion(t=self.t)
-        return self._biconditional_elimination_left
+        if self._biconditional_elimination_1 is None:
+            self._biconditional_elimination_1 = BiconditionalElimination2Inclusion(t=self.t)
+        return self._biconditional_elimination_1
 
     @property
     def biconditional_introduction(self) -> BiconditionalIntroductionInclusion:
@@ -8188,52 +8144,52 @@ class InferenceRuleInclusionDict(collections.UserDict):
         return self._biconditional_introduction
 
     @property
-    def conjunction_elimination_left(self) -> ConjunctionEliminationLeftInclusion:
-        """The well-known conjunction-elimination (left) inference-rule: P ∧ Q ⊢ P.
+    def conjunction_elimination_1(self) -> ConjunctionElimination1Inclusion:
+        """The well-known conjunction-elimination #1 inference-rule: P ∧ Q ⊢ P.
 
         Abridged property: t.i.cel()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._conjunction_elimination_left is None:
-            self._conjunction_elimination_left = ConjunctionEliminationLeftInclusion(t=self.t)
-        return self._conjunction_elimination_left
+        if self._conjunction_elimination_1 is None:
+            self._conjunction_elimination_1 = ConjunctionElimination1Inclusion(t=self.t)
+        return self._conjunction_elimination_1
 
     @property
-    def conjunction_elimination_right(self) -> ConjunctionEliminationRightInclusion:
-        """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
+    def conjunction_elimination_2(self) -> ConjunctionElimination2Inclusion:
+        """The well-known conjunction-elimination #2 inference-rule: P ∧ Q ⊢ Q.
 
         Abridged property: t.i.cer
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._conjunction_elimination_right is None:
-            self._conjunction_elimination_right = ConjunctionEliminationRightInclusion(t=self.t)
-        return self._conjunction_elimination_right
+        if self._conjunction_elimination_2 is None:
+            self._conjunction_elimination_2 = ConjunctionElimination2Inclusion(t=self.t)
+        return self._conjunction_elimination_2
 
     @property
-    def cel(self) -> ConjunctionEliminationLeftDeclaration:
-        """The well-known conjunction-elimination (left) inference-rule: (P ∧ Q) ⊢ P.
+    def cel(self) -> ConjunctionElimination1Declaration:
+        """The well-known conjunction-elimination #1 inference-rule: (P ∧ Q) ⊢ P.
 
         Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_left()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.conjunction_elimination_left
+        return self.conjunction_elimination_1
 
     @property
-    def cer(self) -> ConjunctionEliminationRightInclusion:
-        """The well-known conjunction-elimination (right) inference-rule: P ∧ Q ⊢ Q.
+    def cer(self) -> ConjunctionElimination2Inclusion:
+        """The well-known conjunction-elimination #2 inference-rule: P ∧ Q ⊢ Q.
 
         Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_right()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        return self.conjunction_elimination_right
+        return self.conjunction_elimination_2
 
     @property
     def ci(self) -> ConjunctionIntroductionInclusion:
@@ -8279,23 +8235,23 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def dil(self) -> DisjunctionIntroductionLeftInclusion:
-        return self.disjunction_introduction_left
+        return self.disjunction_introduction_1
 
     @property
     def dir(self) -> DisjunctionIntroductionRightInclusion:
         return self.disjunction_introduction_right
 
     @property
-    def disjunction_introduction_left(self) -> DisjunctionIntroductionLeftInclusion:
-        if self._disjunction_introduction_left is None:
-            self._disjunction_introduction_left = DisjunctionIntroductionLeftInclusion(t=self.t)
-        return self._disjunction_introduction_left
+    def disjunction_introduction_1(self) -> DisjunctionIntroductionLeftInclusion:
+        if self._disjunction_introduction_1 is None:
+            self._disjunction_introduction_1 = DisjunctionIntroductionLeftInclusion(t=self.t)
+        return self._disjunction_introduction_1
 
     @property
     def disjunction_introduction_right(self) -> DisjunctionIntroductionRightInclusion:
-        if self._disjunction_introduction_right is None:
-            self._disjunction_introduction_right = DisjunctionIntroductionRightInclusion(t=self.t)
-        return self._disjunction_introduction_right
+        if self._disjunction_introduction_2 is None:
+            self._disjunction_introduction_2 = DisjunctionIntroductionRightInclusion(t=self.t)
+        return self._disjunction_introduction_2
 
     @property
     def dne(self) -> DoubleNegationEliminationInclusion:
@@ -8467,9 +8423,9 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def proof_by_contradiction_2(self) -> ProofByContradiction2Inclusion:
-        if self._proof_by_contradiction_of_non_equality is None:
-            self._proof_by_contradiction_of_non_equality = ProofByContradiction2Inclusion(t=self.t)
-        return self._proof_by_contradiction_of_non_equality
+        if self._proof_by_contradiction_2 is None:
+            self._proof_by_contradiction_2 = ProofByContradiction2Inclusion(t=self.t)
+        return self._proof_by_contradiction_2
 
     @property
     def proof_by_refutation_1(self) -> ProofByRefutation1Inclusion:
@@ -8480,15 +8436,15 @@ class InferenceRuleInclusionDict(collections.UserDict):
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._proof_by_refutation is None:
-            self._proof_by_refutation = ProofByRefutation1Inclusion(t=self.t)
-        return self._proof_by_refutation
+        if self._proof_by_refutation_1 is None:
+            self._proof_by_refutation_1 = ProofByRefutation1Inclusion(t=self.t)
+        return self._proof_by_refutation_1
 
     @property
     def proof_by_refutation_2(self) -> ProofByRefutation2Inclusion:
-        if self._proof_by_refutation_of_equality is None:
-            self._proof_by_refutation_of_equality = ProofByRefutation2Inclusion(t=self.t)
-        return self._proof_by_refutation_of_equality
+        if self._proof_by_refutation_2 is None:
+            self._proof_by_refutation_2 = ProofByRefutation2Inclusion(t=self.t)
+        return self._proof_by_refutation_2
 
     @property
     def variable_substitution(self) -> VariableSubstitutionInclusion:

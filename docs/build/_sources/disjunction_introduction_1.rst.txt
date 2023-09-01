@@ -1,14 +1,14 @@
-disjunction-introduction-right
+disjunction-introduction-1
 ===============================
 
 Definition
 ----------
 
-*disjunction-introduction-right* is the well-known and valid :doc:`inference_rule`:
+*disjunction-introduction-left* is the well-known and valid :doc:`inference_rule`:
 
 .. math::
 
-    P \vdash \left( P \lor Q \right)
+    P \vdash \left( Q \lor P \right)
 
 Quotes
 ------
@@ -26,24 +26,24 @@ Properties
     :noindex:
 .. autoclass:: InferenceRuleDeclarationDict
     :noindex:
-    :members: disjunction_introduction_right
+    :members: disjunction_introduction_left
 
 .. module:: core
     :noindex:
 .. autoclass:: InferenceRuleDeclarationDict
     :noindex:
-    :members: disjunction_introduction_right
+    :members: disjunction_introduction_left
 
 Classes
 ^^^^^^^^^^
 
 .. module:: core
     :noindex:
-.. autoclass:: DisjunctionIntroductionRightDeclaration
+.. autoclass:: DisjunctionIntroductionLeftDeclaration
     :members:
     :special-members: __init__
 
-.. autoclass:: DisjunctionIntroductionRightInclusion
+.. autoclass:: DisjunctionIntroductionLeftInclusion
     :members:
     :special-members: __init__
 

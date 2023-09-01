@@ -1,2 +1,0 @@
-conjunction-elimination-left
-===============================

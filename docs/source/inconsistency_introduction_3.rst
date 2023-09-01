@@ -1,6 +1,9 @@
 inconsistency-introduction-3
 ========================================
 
+.. seealso::
+   :doc:`inconsistency_introduction_1` | :doc:`inconsistency_introduction_2`
+
 Definition
 ----------
 
