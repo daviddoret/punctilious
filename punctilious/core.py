@@ -4032,6 +4032,7 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'conjunction-elimination-1'
         auto_index = False
         dashed_name = 'conjunction-elimination-1'
@@ -4039,7 +4040,8 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
         abridged_name = None
         explicit_name = 'conjunction elimination #1 inference rule'
         name = 'conjunction elimination #1'
-        definition = '# MISSING DEFINITION'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.land | q) | u.r.proves | p)
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4058,7 +4060,7 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_conjunction_elimination_left_paragraph_proof(
+        output = yield from configuration.locale.compose_conjunction_elimination_1_paragraph_proof(
             o=o)
         return output
 
@@ -4084,6 +4086,7 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'conjunction-elimination-2'
         auto_index = False
         dashed_name = 'conjunction-elimination-2'
@@ -4091,7 +4094,8 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
         abridged_name = None
         explicit_name = 'conjunction elimination #2 inference rule'
         name = 'conjunction elimination #2'
-        definition = '# MISSING DEFINITION'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.land | q) | u.r.proves | q)
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4110,7 +4114,7 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_conjunction_elimination_right_paragraph_proof(
+        output = yield from configuration.locale.compose_conjunction_elimination_2_paragraph_proof(
             o=o)
         return output
 
@@ -4130,14 +4134,16 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'conjunction-introduction'
         acronym = 'ci'
-        abridged_name = 'conj.-intro.'
+        abridged_name = None
         auto_index = False
         dashed_name = 'conjunction-introduction'
         explicit_name = 'conjunction introduction inference rule'
         name = 'conjunction introduction'
-        definition = StyledText(plaintext='(P, Q) |- (P and Q)', unicode='(P, Q) ⊢ (P ⋀ Q)')
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.sequent_comma | q) | u.r.proves | (p | u.r.land | q))
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -5339,15 +5345,16 @@ class TheoryElaborationSequence(TheoreticalObject):
         warns the user that no semantic verification is performed."""
         echo = prioritize_value(echo, configuration.echo_default, False)
         if not self._interpretation_disclaimer:
-            self.take_note('By design, punctilious assures the syntactical correctness of package, '
-                           'but does not perform any '
-                           'semantic verification. Therefore, the usage of inference-rules that interpret '
-                           'content (i.e. '
-                           'axiom-interpretation and definition-interpretation) is critically dependent on '
-                           'the correctness of '
-                           'the content translation performed by the theory author, from axiom or definition '
-                           'natural language, '
-                           'to formulae.', paragraph_header=paragraph_headers.warning, echo=echo)
+            self.take_note(
+                'By design, punctilious assures the syntactical correctness of theories, '
+                'but does not perform any '
+                'semantic verification. Therefore, the usage of inference-rules that interpret '
+                'natural content (i.e. '
+                'axiom-interpretation and definition-interpretation) is critically dependent on '
+                'the correctness of '
+                'the content translation performed by the theory author, from axiom or definition '
+                'natural language, '
+                'to formulae.', paragraph_header=paragraph_headers.warning, echo=echo)
             self._interpretation_disclaimer = True
 
     def compose_article(self, proof: (None, bool) = None) -> collections.abc.Generator[

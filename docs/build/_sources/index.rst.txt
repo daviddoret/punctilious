@@ -20,12 +20,12 @@ Welcome to punctilious's documentation!
    biconditional_elimination_1
    biconditional_elimination_2
    biconditional_introduction
-   conjunction_elimination_left
-   conjunction_elimination_right
+   conjunction_elimination_1
+   conjunction_elimination_2
    conjunction_introduction
    disjunction_elimination
-   disjunction_introduction_left
-   disjunction_introduction_right
+   disjunction_introduction_1
+   disjunction_introduction_2
    double_negation_elimination
    double_negation_introduction
    elimination_rule

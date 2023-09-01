@@ -104,8 +104,6 @@ class LocaleEnUs(Locale):
 
     def compose_biconditional_introduction_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        global text_dict
-        # Retrieve the parameters from the statement
         parameter_p_implies_q: Formula = o.inference_rule.definition.parameters[0].parameters[0]
         p_implies_q: FormulaStatement = o.parameters[0]
         yield from p_implies_q.valid_proposition.compose_formula()
@@ -124,50 +122,48 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('. ')
         return True
 
-    def compose_conjunction_elimination_left_paragraph_proof(self, o: InferredStatement) -> \
+    def compose_conjunction_elimination_1_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        global text_dict
-        # Retrieve the parameters from the statement
+        p0 = o.inference_rule.definition.parameters[0]
         p_and_q: FormulaStatement = o.parameters[0]
         yield from p_and_q.valid_proposition.compose_formula()
-        yield SansSerifNormal(', is of the form ')
-        yield '(𝑷 ∧ 𝑸)'  # TODO: Replace hardcoded formula with real formula
-        yield SansSerifNormal(', and follows from ')
+        yield SansSerifNormal(', of the form ')
+        yield p0.compose_formula()
+        yield SansSerifNormal(', follows from ')
         yield from p_and_q.compose_ref_link()
         yield SansSerifNormal('. ')
         return True
 
-    def compose_conjunction_elimination_right_paragraph_proof(self, o: InferredStatement) -> \
+    def compose_conjunction_elimination_2_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        global text_dict
-        # Retrieve the parameters from the statement
+        p0 = o.inference_rule.definition.parameters[0]
         p_and_q: FormulaStatement = o.parameters[0]
         yield from p_and_q.valid_proposition.compose_formula()
-        yield SansSerifNormal(', is of the form ')
-        yield '(𝑷 ∧ 𝑸)'  # TODO: Replace hardcoded formula with real formula
-        yield SansSerifNormal(', and follows from ')
+        yield SansSerifNormal(', of the form ')
+        yield p0.compose_formula()
+        yield SansSerifNormal(', follows from ')
         yield from p_and_q.compose_ref_link()
         yield SansSerifNormal('. ')
         return True
 
     def compose_conjunction_introduction_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        global text_dict
-        # Retrieve the parameters from the statement
+        parameter_p: Formula = o.inference_rule.definition.parameters[0].parameters[0]
         p: FormulaStatement = o.parameters[0]
-        q: FormulaStatement = o.parameters[1]
         yield from p.valid_proposition.compose_formula()
-        yield SansSerifNormal(' (')
-        yield SerifItalic('P')
-        yield SansSerifNormal(') follows from ')
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_p.compose_formula()
+        yield SansSerifNormal(', follows from ')
         yield from p.compose_ref_link()
         yield SansSerifNormal('. ')
+        parameter_q: Formula = o.inference_rule.definition.parameters[0].parameters[1]
+        q: FormulaStatement = o.parameters[1]
         yield from q.valid_proposition.compose_formula()
-        yield SansSerifNormal(' (')
-        yield SerifItalic('Q')
-        yield SansSerifNormal(') follows from ')
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_q.compose_formula()
+        yield SansSerifNormal(', follows from ')
         yield from q.compose_ref_link()
-        yield SansSerifNormal('.')
+        yield SansSerifNormal('. ')
         return True
 
     def compose_definition_declaration(self, o: DefinitionDeclaration) -> collections.abc.Generator[
