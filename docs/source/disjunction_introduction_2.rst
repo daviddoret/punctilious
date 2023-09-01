@@ -35,6 +35,9 @@ The simplest way to use this inference-rule is to access it via the :python:`inf
    ...
    # some theory elaboration code
    ...
+   p = ... # some inferred-statement
+   q = ... # any formula
+   ...
    t.i.disjunction_introduction_2.infer_statement(p = ...)
 
 If the :doc:`inference_rule` was not yet declared in the :doc:`universe_of_discourse` , it will be automatically declared. If the :doc:`inference_rule` was not yet included in the :doc:`theory_elaboration_sequence` , it will be automatically included.

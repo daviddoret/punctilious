@@ -321,7 +321,10 @@
 <span class="o">...</span>
 <span class="c1"># some theory elaboration code</span>
 <span class="o">...</span>
-<span class="n">t</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">disjunction_introduction_1</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="o">...</span> <span class="c1"># some inferred-statement</span>
+<span class="n">q</span> <span class="o">=</span> <span class="o">...</span> <span class="c1"># any formula</span>
+<span class="o">...</span>
+<span class="n">t</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">disjunction_introduction_1</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span>
 </code></pre></div>
 </div></div>
 <p>If the <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a> was not yet declared in the <a class="reference internal" href="universe_of_discourse.html"><span class="doc">universe-of-discourse</span></a> , it will be automatically declared. If the <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a> was not yet included in the <a class="reference internal" href="theory_elaboration_sequence.html"><span class="doc">theory-elaboration-sequence</span></a> , it will be automatically included.</p>
