@@ -5,6 +5,19 @@ import random_data
 
 class TestDoubleNegationIntroduction(TestCase):
     def test_dni_success(self):
+        import sample.code.double_negation_introduction as test
+        u: pu.UniverseOfDiscourse = test.u
+        o1: pu.SimpleObjct = test.o1
+        o2: pu.SimpleObjct = test.o2
+        r1: pu.Relation = test.r1
+        proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
+        self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
+            o2=u.r.lnot(u.r.lnot(r1(o1, o2)))))
+        self.assertEqual('not(not(r1(o1, o2)))',
+            proposition_of_interest.rep_formula(pu.encodings.plaintext))
+        self.assertEqual('¬(¬(𝑟₁(𝑜₁, 𝑜₂)))',
+            proposition_of_interest.rep_formula(pu.encodings.unicode))
+
         pu.configuration.echo_default = True
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
