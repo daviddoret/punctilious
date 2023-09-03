@@ -15,9 +15,11 @@ Definition
 
 Where:
 
-* :math:`P` is a :doc:`formula_statement`
-* :math:`Q` is a :doc:`formula_statement`
+* :math:`P \implies Q` is a :doc:`formula_statement`
+* :math:`P` is a propositional :doc:`formula`
+* :math:`Q` is a propositional :doc:`formula`
 
+In straightforward language, if P implies Q, it follows that P implies both P and Q.
 
 Python implementation
 ----------------------

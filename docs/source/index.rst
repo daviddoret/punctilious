@@ -30,6 +30,7 @@ Welcome to punctilious's documentation!
    elimination_rule
    equal_terms_substitution
    equality_commutativity
+   formula
    formula_statement
    hypothesis
    inconsistency_introduction_1

@@ -16,6 +16,12 @@ Definition
 
    \left( P \iff Q \right) \vdash \left( P \implies Q \right)
 
+Where:
+
+* :math:`P \iff Q` is a :doc:`formula_statement`
+* :math:`P` is a propositional :doc:`formula`
+* :math:`Q` is a propositional :doc:`formula`
+
 In straightforward language, if P is true if and only if Q is true, it follows that P implies Q.
 
 Quotes
