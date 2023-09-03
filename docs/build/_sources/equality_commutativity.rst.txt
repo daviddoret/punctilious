@@ -16,6 +16,10 @@ Definition
 
     \left( x = y \right) \vdash \left( y = x \right)
 
+Where:
+
+* :math:`x = y` is a :doc:`formula_statement` of the form :math:`x = y`
+
 Quotes
 ------
 

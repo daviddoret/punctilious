@@ -19,12 +19,12 @@ def export_sample_output(sample_file_name: str):
             exec(source_code)
 
 
-sample_filenames = (
-    'biconditional_elimination_1', 'biconditional_elimination_2', 'biconditional_introduction',
-    'conjunction_elimination_1', 'conjunction_elimination_2', 'conjunction_introduction',
-    'disjunction_introduction_1', 'disjunction_introduction_2', 'double_negation_elimination',
-    'double_negation_introduction', 'equal_terms_substitution', 'equality_commutativity',
-    'inconsistency_introduction_1', 'inconsistency_introduction_2', 'inconsistency_introduction_3')
+sample_filenames = ('absorption', 'biconditional_elimination_1', 'biconditional_elimination_2',
+'biconditional_introduction', 'conjunction_elimination_1', 'conjunction_elimination_2',
+'conjunction_introduction', 'disjunction_introduction_1', 'disjunction_introduction_2',
+'double_negation_elimination', 'double_negation_introduction', 'equal_terms_substitution',
+'equality_commutativity', 'inconsistency_introduction_1', 'inconsistency_introduction_2',
+'inconsistency_introduction_3')
 
 for sample_filename in sample_filenames:
     export_sample_output(sample_file_name=sample_filename)

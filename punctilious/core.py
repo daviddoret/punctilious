@@ -3739,21 +3739,18 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'absorption'
-        abridged_name = 'absorp.'
+        abridged_name = None
         auto_index = False
         dashed_name = 'absorption'
         explicit_name = 'absorption inference rule'
         name = 'absorption'
-        definition = 'P ⟹ Q ⊢ P ⟹ (P ∧ Q)'
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = AxiomInterpretationDeclaration.infer_formula
-        verify_args = AxiomInterpretationDeclaration.verify_args
-        super().__init__(definition=definition, infer_formula=infer_formula,
-            verify_args=verify_args, universe_of_discourse=universe_of_discourse, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = (p | u.r.implies | q) | u.r.proves | (p | u.r.implies | (p | u.r.land | q))
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_implies_q: FormulaStatement = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
