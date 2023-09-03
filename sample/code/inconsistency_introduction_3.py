@@ -15,6 +15,6 @@ t1.stabilize()
 # because T1 could not prove its own inconsistency because it is inconsistent!
 t2 = u.t(echo=True)
 
-# And finally, use the inconsistency-introduction-2 inference-rule:
-inc_proof = t2.i.inconsistency_introduction_3.infer_statement(p_neq_p=p_neq_p,
-    inconsistent_theory=t1)
+# And finally, use the inconsistency-introduction-3 inference-rule:
+proposition_of_interest = t2.i.inconsistency_introduction_3.infer_statement(p_neq_p=p_neq_p,
+    inconsistent_theory=t1, subtitle='The proposition of interest')

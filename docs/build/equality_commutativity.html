@@ -146,18 +146,21 @@
 <li class="toctree-l1"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html">inconsistency-introduction-1</a></div><ul>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html#definition">Definition</a></div></li>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html#quotes">Quotes</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html#python-implementation">Python implementation</a></div></li>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_1.html#python-sample-usage">Python sample usage</a></div></li>
 </ul>
 </li>
 <li class="toctree-l1"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_2.html">inconsistency-introduction-2</a></div><ul>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_2.html#definition">Definition</a></div></li>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_2.html#quotes">Quotes</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_2.html#python-implementation">Python implementation</a></div></li>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_2.html#python-sample-usage">Python sample usage</a></div></li>
 </ul>
 </li>
 <li class="toctree-l1"><div class="nav-link"><svg class="expand" data-action="click-&gt;sidebar#expand keydown-&gt;sidebar#expandKeyPressed" height="1.2rem" style="display: inline;" tabindex="0" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_3.html">inconsistency-introduction-3</a></div><ul>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_3.html#definition">Definition</a></div></li>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_3.html#quotes">Quotes</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_3.html#python-implementation">Python implementation</a></div></li>
 <li class="toctree-l2"><div class="nav-link"><a class="reference internal" data-action="click-&gt;sidebar#close" href="inconsistency_introduction_3.html#python-sample-usage">Python sample usage</a></div></li>
 </ul>
 </li>
@@ -380,8 +383,9 @@
 <span class="n">p</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">axiom</span><span class="o">=</span><span class="n">theory_axiom</span><span class="p">,</span>
     <span class="n">formula</span><span class="o">=</span><span class="n">r1</span><span class="p">(</span><span class="n">o1</span><span class="p">,</span> <span class="n">o2</span><span class="p">)</span> <span class="o">|</span> <span class="n">u</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">equal</span> <span class="o">|</span> <span class="n">r2</span><span class="p">(</span><span class="n">o3</span><span class="p">))</span>
 
-<span class="c1"># And finally, use the biconditional-introduction inference-rule:</span>
-<span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">equality_commutativity</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">x_equal_y</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+<span class="c1"># And finally, use the equality-commutativity inference-rule:</span>
+<span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">equality_commutativity</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">x_equal_y</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+    <span class="n">subtitle</span><span class="o">=</span><span class="s1">'The proposition of interest'</span><span class="p">)</span>
 </code></pre></div>
 </div></div>
 </div></blockquote>
@@ -391,6 +395,18 @@
 <div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">text</span></div><div class="highlight-text notranslate"><div class="highlight" data-controller="code"><pre><span></span><code>𝖫𝖾𝗍 ⌜𝒰₂₅⌝ 𝖻𝖾 𝖺 𝑢𝑛𝑖𝑣𝑒𝑟𝑠𝑒-𝑜𝑓-𝑑𝑖𝑠𝑐𝑜𝑢𝑟𝑠𝑒.
 
 𝖫𝖾𝗍 ⌜𝒯₁⌝ 𝖻𝖾 𝖺 𝑡ℎ𝑒𝑜𝑟𝑦-𝑒𝑙𝑎𝑏𝑜𝑟𝑎𝑡𝑖𝑜𝑛-𝑠𝑒𝑞𝑢𝑒𝑛𝑐𝑒 𝗂𝗇 𝒰₂₅.
+
+𝗔𝘅𝗶𝗼𝗺 (𝒯₁.𝐴₁): 𝖫𝖾𝗍 𝑎𝑥𝑖𝑜𝑚 𝒜₁ ⌜𝘋𝘶𝘮𝘮𝘺 𝘢𝘹𝘪𝘰𝘮 𝘧𝘰𝘳 𝘥𝘦𝘮𝘰𝘯𝘴𝘵𝘳𝘢𝘵𝘪𝘰𝘯 𝘱𝘶𝘳𝘱𝘰𝘴𝘦𝘴⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 (𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽) 𝗂𝗇 𝒯₁.
+
+𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜𝒜 ⊢ 𝖯⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝒯₁.
+
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₁): (𝑟₁(𝑜₁, 𝑜₂) = 𝑟₂(𝑜₃)). 𝗣𝗿𝗼𝗼𝗳: ⌜𝘋𝘶𝘮𝘮𝘺 𝘢𝘹𝘪𝘰𝘮 𝘧𝘰𝘳 𝘥𝘦𝘮𝘰𝘯𝘴𝘵𝘳𝘢𝘵𝘪𝘰𝘯 𝘱𝘶𝘳𝘱𝘰𝘴𝘦𝘴⌝ 𝗂𝗌 𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽 𝖻𝗒 𝗮𝘅𝗶𝗼𝗺 (𝐴₁). (𝑟₁(𝑜₁, 𝑜₂) = 𝑟₂(𝑜₃)) 𝗂𝗌 𝖺 𝗏𝖺𝗅𝗂𝖽 𝖿𝗈𝗋𝗆𝗎𝗅𝖺 𝗌𝗍𝖺𝗍𝖾𝗆𝖾𝗇𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖾𝖽 𝖿𝗋𝗈𝗆 𝗍𝗁𝖺𝗍 𝖺𝗑𝗂𝗈𝗆.𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: 𝒜 ⊢ 𝖯, 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 (𝑟₁(𝑜₁, 𝑜₂) = 𝑟₂(𝑜₃)). ∎
+
+𝗪𝗮𝗿𝗻𝗶𝗻𝗴 (🗅₁): 𝖡𝗒 𝖽𝖾𝗌𝗂𝗀𝗇, 𝗉𝗎𝗇𝖼𝗍𝗂𝗅𝗂𝗈𝗎𝗌 𝖺𝗌𝗌𝗎𝗋𝖾𝗌 𝗍𝗁𝖾 𝗌𝗒𝗇𝗍𝖺𝖼𝗍𝗂𝖼𝖺𝗅 𝖼𝗈𝗋𝗋𝖾𝖼𝗍𝗇𝖾𝗌𝗌 𝗈𝖿 𝗍𝗁𝖾𝗈𝗋𝗂𝖾𝗌, 𝖻𝗎𝗍 𝖽𝗈𝖾𝗌 𝗇𝗈𝗍 𝗉𝖾𝗋𝖿𝗈𝗋𝗆 𝖺𝗇𝗒 𝗌𝖾𝗆𝖺𝗇𝗍𝗂𝖼 𝗏𝖾𝗋𝗂𝖿𝗂𝖼𝖺𝗍𝗂𝗈𝗇. 𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝗍𝗁𝖾 𝗎𝗌𝖺𝗀𝖾 𝗈𝖿 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾-𝗋𝗎𝗅𝖾𝗌 𝗍𝗁𝖺𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍 𝗇𝖺𝗍𝗎𝗋𝖺𝗅 𝖼𝗈𝗇𝗍𝖾𝗇𝗍 (𝗂.𝖾. 𝖺𝗑𝗂𝗈𝗆-𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖺𝗍𝗂𝗈𝗇 𝖺𝗇𝖽 𝖽𝖾𝖿𝗂𝗇𝗂𝗍𝗂𝗈𝗇-𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖺𝗍𝗂𝗈𝗇) 𝗂𝗌 𝖼𝗋𝗂𝗍𝗂𝖼𝖺𝗅𝗅𝗒 𝖽𝖾𝗉𝖾𝗇𝖽𝖾𝗇𝗍 𝗈𝗇 𝗍𝗁𝖾 𝖼𝗈𝗋𝗋𝖾𝖼𝗍𝗇𝖾𝗌𝗌 𝗈𝖿 𝗍𝗁𝖾 𝖼𝗈𝗇𝗍𝖾𝗇𝗍 𝗍𝗋𝖺𝗇𝗌𝗅𝖺𝗍𝗂𝗈𝗇 𝗉𝖾𝗋𝖿𝗈𝗋𝗆𝖾𝖽 𝖻𝗒 𝗍𝗁𝖾 𝗍𝗁𝖾𝗈𝗋𝗒 𝖺𝗎𝗍𝗁𝗈𝗋, 𝖿𝗋𝗈𝗆 𝖺𝗑𝗂𝗈𝗆 𝗈𝗋 𝖽𝖾𝖿𝗂𝗇𝗂𝗍𝗂𝗈𝗇 𝗇𝖺𝗍𝗎𝗋𝖺𝗅 𝗅𝖺𝗇𝗀𝗎𝖺𝗀𝖾, 𝗍𝗈 𝖿𝗈𝗋𝗆𝗎𝗅𝖺𝖾.
+
+𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑒𝑞𝑢𝑎𝑙𝑖𝑡𝑦-𝑐𝑜𝑚𝑚𝑢𝑡𝑎𝑡𝑖𝑣𝑖𝑡𝑦): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑒𝑞𝑢𝑎𝑙𝑖𝑡𝑦-𝑐𝑜𝑚𝑚𝑢𝑡𝑎𝑡𝑖𝑣𝑖𝑡𝑦 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜((𝐱₁ = 𝐲₁) ⊢ (𝐲₁ = 𝐱₁))⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝒯₁.
+
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₂) - The proposition of interest: (𝑟₂(𝑜₃) = 𝑟₁(𝑜₁, 𝑜₂)). 𝗣𝗿𝗼𝗼𝗳: (𝑟₁(𝑜₁, 𝑜₂) = 𝑟₂(𝑜₃)) 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₁). 𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑒𝑞𝑢𝑎𝑙𝑖𝑡𝑦-𝑐𝑜𝑚𝑚𝑢𝑡𝑎𝑡𝑖𝑣𝑖𝑡𝑦 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: ((𝐱₁ = 𝐲₁) ⊢ (𝐲₁ = 𝐱₁)), 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 (𝑟₂(𝑜₃) = 𝑟₁(𝑜₁, 𝑜₂)). ∎
 </code></pre></div>
 </div></div>
 </div>
@@ -399,6 +415,18 @@
 <div class="literal-block-wrapper"><div class="code-block-caption"><span class="code-lang">text</span></div><div class="highlight-text notranslate"><div class="highlight" data-controller="code"><pre><span></span><code>Let "U26" be a universe-of-discourse.
 
 Let "T1" be a theory-elaboration-sequence in U26.
+
+Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
+
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "A |- P" be included and considered valid in T1.
+
+Proposition (T1.P1): (r1(o1, o2) = r2(o3)). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). (r1(o1, o2) = r2(o3)) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that (r1(o1, o2) = r2(o3)). QED
+
+Warning (warning1): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
+
+Inference rule (equality-commutativity): Let inference-rule equality-commutativity defined as "((x1 = y1) |- (y1 = x1))" be included and considered valid in T1.
+
+Proposition (T1.P2) - The proposition of interest: (r2(o3) = r1(o1, o2)). Proof: (r1(o1, o2) = r2(o3)) follows from prop. (P1). Therefore, by the equality-commutativity inference rule: ((x1 = y1) |- (y1 = x1)), it follows that (r2(o3) = r1(o1, o2)). QED
 </code></pre></div>
 </div></div>
 </div>

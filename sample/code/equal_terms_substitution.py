@@ -18,6 +18,6 @@ dummy_proposition = t1.i.axiom_interpretation.infer_statement(axiom=theory_axiom
     formula=u.f(r1, u.f(r1, u.f(r1, u.f(r1, o1, o2), u.f(r1, o1, o2)), o2),
         u.f(r2, u.f(r1, o1, o2))))
 
-# And finally, use the biconditional-introduction inference-rule:
+# And finally, use the equal-terms-substitution inference-rule:
 proposition_of_interest = t1.i.ets.infer_statement(p=dummy_proposition,
-    x_equal_y=proposition_x_equal_y)
+    x_equal_y=proposition_x_equal_y, subtitle='The proposition of interest')

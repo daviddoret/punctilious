@@ -15,5 +15,6 @@ theory_axiom = t1.include_axiom(a=axiom)
 phi1 = t1.i.axiom_interpretation.infer_statement(axiom=theory_axiom, formula=r1(o1, o2))
 phi2 = t1.i.axiom_interpretation.infer_statement(axiom=theory_axiom, formula=r2(o3))
 
-# And finally, use the biconditional-introduction inference-rule:
-proposition_of_interest = t1.i.conjunction_introduction.infer_statement(p=phi1, q=phi2)
+# And finally, use the conjunction-introduction inference-rule:
+proposition_of_interest = t1.i.conjunction_introduction.infer_statement(p=phi1, q=phi2,
+    subtitle='The proposition of interest')

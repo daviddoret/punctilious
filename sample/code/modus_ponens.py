@@ -16,5 +16,6 @@ p_implies_q = t1.i.axiom_interpretation.infer_statement(axiom=theory_axiom,
     formula=r1(o1, o2) | u.r.implies | r2(o3))
 p = t1.i.axiom_interpretation.infer_statement(axiom=theory_axiom, formula=r1(o1, o2))
 
-# And finally, use the biconditional-introduction inference-rule:
-proposition_of_interest = t1.i.modus_ponens.infer_statement(p_implies_q=p_implies_q, p=p)
+# And finally, use the modus-ponens inference-rule:
+proposition_of_interest = t1.i.modus_ponens.infer_statement(p_implies_q=p_implies_q, p=p,
+    subtitle='The proposition of interest')
