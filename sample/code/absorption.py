@@ -15,6 +15,6 @@ theory_axiom = t1.include_axiom(a=axiom)
 p_implies_q = t1.i.axiom_interpretation.infer_statement(axiom=theory_axiom,
     formula=r1(o1, o2) | u.r.implies | r2(o3))
 
-# And finally, use the biconditional-elimination-1 inference-rule:
+# And finally, use the absorption inference-rule:
 proposition_of_interest = t1.i.absorption.infer_statement(p_implies_q=p_implies_q,
-    subtitle='The proposition of interest', echo=True)
+    subtitle='The proposition of interest')

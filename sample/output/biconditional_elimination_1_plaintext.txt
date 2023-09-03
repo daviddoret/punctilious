@@ -2,5 +2,15 @@ Let "U4" be a universe-of-discourse.
 
 Let "T1" be a theory-elaboration-sequence in U4.
 
+Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
+
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "A |- P" be included and considered valid in T1.
+
+Proposition (T1.P1): (r1(o1, o2) <==> r2(o3)). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). (r1(o1, o2) <==> r2(o3)) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that (r1(o1, o2) <==> r2(o3)). QED
+
+Warning (warning1): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
+
+Inference rule (biconditional-elimination-1): Let inference-rule biconditional-elimination-1 defined as "((P1 <==> Q1) |- (P1 ==> Q1))" be included and considered valid in T1.
+
 Proposition (T1.P2) - The proposition of interest: (r1(o1, o2) ==> r2(o3)). Proof: (r1(o1, o2) <==> r2(o3)), of the form (P1 <==> Q1), follows from prop. (P1). Therefore, by the biconditional-elimination-1 inference rule: ((P1 <==> Q1) |- (P1 ==> Q1)), it follows that (r1(o1, o2) ==> r2(o3)). QED
 

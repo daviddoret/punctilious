@@ -18,5 +18,5 @@ t1.stabilize()
 t2 = u.t(echo=True)
 
 # And finally, use the inconsistency-introduction-2 inference-rule:
-inc_proof = t2.i.inconsistency_introduction_2.infer_statement(p_eq_q=p_eq_q, p_neq_q=p_neq_q,
-    inconsistent_theory=t1)
+proposition_of_interest = t2.i.inconsistency_introduction_2.infer_statement(p_eq_q=p_eq_q,
+    p_neq_q=p_neq_q, inconsistent_theory=t1, subtitle='The proposition of interest')
