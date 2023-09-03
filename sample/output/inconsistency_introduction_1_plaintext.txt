@@ -1,8 +1,10 @@
-Let "U22" be a universe-of-discourse.
+Let "U30" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U22.
+Let "T1" be a theory-elaboration-sequence in U30.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
+
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "A |- P" be included and considered valid in T1.
 
 Proposition (T1.P1): r1(o1, o2). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). r1(o1, o2) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that r1(o1, o2). QED
 
@@ -10,5 +12,7 @@ Warning (warning1): By design, punctilious assures the syntactical correctness o
 
 Proposition (T1.P2): not(r1(o1, o2)). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). not(r1(o1, o2)) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that not(r1(o1, o2)). QED
 
-Proposition (T2.P3): Inc(T1). Proof: Let P := r1(o1, o2), which follows from prop. (P1). Let not(P) := not(r1(o1, o2)), which follows from prop. (P2). Therefore, by the inconsistency-introduction-1 inference rule: (P, not(P)) |- (T), it follows that Inc(T1). QED
+Inference rule (inconsistency-introduction-1): Let inference-rule inconsistency-introduction-1 defined as "(P, not(P)) |- (T)" be included and considered valid in T2.
+
+Proposition (T2.P3) - The proposition of interest: Inc(T1). Proof: Let P := r1(o1, o2), which follows from prop. (P1). Let not(P) := not(r1(o1, o2)), which follows from prop. (P2). Therefore, by the inconsistency-introduction-1 inference rule: (P, not(P)) |- (T), it follows that Inc(T1). QED
 

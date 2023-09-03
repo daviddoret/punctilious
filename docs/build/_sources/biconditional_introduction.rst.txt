@@ -16,6 +16,13 @@ Definition
 
    \left( \left( P \implies Q \right), \left( Q \implies P \right) \right) \vdash \left( Q \iff P \right)
 
+Where:
+
+* :math:`P \implies Q` is a :doc:`formula_statement`
+* :math:`Q \implies P` is a :doc:`formula_statement`
+* :math:`P` is a propositional :doc:`formula`
+* :math:`Q` is a propositional :doc:`formula`
+
 In straightforward language, if P implies Q and Q implies P, it follows that P if and only if Q.
 
 Quotes

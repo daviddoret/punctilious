@@ -1,11 +1,6 @@
 import punctilious as pu
 
-pu.configuration.echo_default = False
-pu.configuration.echo_inferred_statement = True
-pu.configuration.echo_axiom_inclusion = True
-pu.configuration.echo_proof = True
-
-# Create a universe-of-discourse with basic objects for the sake of this demonstration.
+# Create a universe-of-discourse with basic objects for the sake of this example.
 u = pu.UniverseOfDiscourse(echo=True)
 o1 = u.o.declare()
 o2 = u.o.declare()
@@ -19,6 +14,6 @@ t1 = u.t(echo=True)
 theory_axiom = t1.include_axiom(a=axiom)
 phi1 = t1.i.axiom_interpretation.infer_statement(axiom=theory_axiom, formula=r1(o1, o2))
 
-# And finally, use the biconditional-introduction inference-rule:
-pu.configuration.echo_proof = True
-proposition_of_interest = t1.i.disjunction_introduction_1.infer_statement(p=phi1, q=r2(o3))
+# And finally, use the disjunction-introduction-1 inference-rule:
+proposition_of_interest = t1.i.disjunction_introduction_1.infer_statement(p=phi1, q=r2(o3),
+    subtitle='The proposition of interest')

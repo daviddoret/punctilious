@@ -1,11 +1,6 @@
 import punctilious as pu
 
-pu.configuration.echo_default = False
-pu.configuration.echo_inferred_statement = True
-pu.configuration.echo_axiom_inclusion = True
-pu.configuration.echo_proof = True
-
-# Create a universe-of-discourse with basic objects for the sake of this demonstration.
+# Create a universe-of-discourse with basic objects for the sake of this example.
 u = pu.UniverseOfDiscourse(echo=True)
 o1 = u.o.declare()
 t1 = u.t(echo=True)
@@ -19,8 +14,7 @@ t1.stabilize()
 # Use a distinct theory T2 to demonstrate the inconsistency of T1
 # because T1 could not prove its own inconsistency because it is inconsistent!
 t2 = u.t(echo=True)
-pu.configuration.echo_proof = True
 
-# And finally, use the inconsistency-introduction-2 inference-rule:
-inc_proof = t2.i.inconsistency_introduction_3.infer_statement(p_neq_p=p_neq_p,
-    inconsistent_theory=t1)
+# And finally, use the inconsistency-introduction-3 inference-rule:
+proposition_of_interest = t2.i.inconsistency_introduction_3.infer_statement(p_neq_p=p_neq_p,
+    inconsistent_theory=t1, subtitle='The proposition of interest')

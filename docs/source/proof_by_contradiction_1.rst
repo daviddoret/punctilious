@@ -8,7 +8,13 @@ Definition
 
 .. math::
 
-    \left( \mathcal{H} assume \not \mathbf{P}, Inc\left(\mathcal{H}\right)  \right) \vdash \mathbf{P}
+    \left( \mathcal{H} \; \text{assume} \; \neg \mathbf{P}, \mathit{Inc}\left(\mathcal{H}\right)  \right) \vdash \mathbf{P}
+
+Where:
+
+* :math:`\mathcal{H}` is an :doc:`hypothesis`
+* :math:`\mathbf{P}` is a propositional :doc:`formula`
+* :math:`\mathit{Inc}` is the inconsistency function
 
 Python implementation
 ----------------------
