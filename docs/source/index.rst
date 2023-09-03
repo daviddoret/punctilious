@@ -28,6 +28,8 @@ Welcome to punctilious's documentation!
    double_negation_elimination
    double_negation_introduction
    elimination_rule
+   equal_terms_substitution
+   equality_commutativity
    formula_statement
    hypothesis
    inconsistency_introduction_1

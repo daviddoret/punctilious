@@ -1,6 +1,6 @@
-Let "U24" be a universe-of-discourse.
+Let "U28" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U24.
+Let "T1" be a theory-elaboration-sequence in U28.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 
@@ -10,7 +10,7 @@ Warning (warning1): By design, punctilious assures the syntactical correctness o
 
 Proposition (T1.P2): (o1 neq o2). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). (o1 neq o2) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that (o1 neq o2). QED
 
-Let "T2" be a theory-elaboration-sequence in U24.
+Let "T2" be a theory-elaboration-sequence in U28.
 
 Proposition (T2.P3): Inc(T1). Proof: Let (P = Q) := (o1 = o2) follows from prop. (P1). Let (P neq Q)) := (o1 neq o2) follows from prop. (P2). Therefore, by the inconsistency-introduction-2 inference rule: ((P = Q), (P neq Q)) |- Inc(T), it follows that Inc(T1). QED
 
