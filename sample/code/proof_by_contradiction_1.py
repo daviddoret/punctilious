@@ -34,5 +34,5 @@ h_inconsistency = t1.i.inconsistency_introduction_1.infer_statement(p=modus_pone
     subtitle='Proof of the hypothesis inconsistency')
 
 # And finally, use the proof-by-contradiction-1 inference-rule:
-t1.i.proof_by_contradiction_1.infer_statement(not_p_hypothesis=h, inc_hypothesis=h_inconsistency,
-    subtitle='The proposition of interest')
+proposition_of_interest = t1.i.proof_by_contradiction_1.infer_statement(not_p_hypothesis=h,
+    inc_hypothesis=h_inconsistency, subtitle='The proposition of interest')

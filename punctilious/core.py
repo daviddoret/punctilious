@@ -4849,10 +4849,6 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
             'hypothetical-theory.',
             inc_not_p_parameters_0=inc_hypothesis.valid_proposition.parameters[0],
             not_p_hypothetical_theory=not_p_hypothesis.hypothesis_child_theory, t=t, slf=self)
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
-        #  stable???
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
-        #  is stable
         return True
 
 
@@ -4875,45 +4871,45 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def infer_formula(self, p_neq_q_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
+    def infer_formula(self, x_neq_y_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        p_neq_q = p_neq_q_hypothesis.hypothesis_formula
-        p = p_neq_q.parameters[0]
-        q = p_neq_q.parameters[1]
-        return t.u.f(t.u.r.equality, p, q)
+        x_neq_y = x_neq_y_hypothesis.hypothesis_formula
+        x = x_neq_y.parameters[0]
+        y = x_neq_y.parameters[1]
+        return t.u.f(t.u.r.equality, x, y)
 
-    def verify_args(self, p_neq_q_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
+    def verify_args(self, x_neq_y_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
         """
 
-        :param p_neq_q_hypothesis: The hypothesis-statement in the parent theory.
+        :param x_neq_y_hypothesis: The hypothesis-statement in the parent theory.
         :param inc_hypothesis: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
         :param t: The current (parent) theory.
         :param echo:
         :return:
+
+        TODO: ProofByContradiction2Declaration.verify_args(): Make systematic verifications. I doubt it is still possible to call the method with wrong parameters.
         """
-        verify(is_in_class(p_neq_q_hypothesis, classes.hypothesis),
-            '⌜p_neq_q⌝ must be an hypothesis.', p_neq_q=p_neq_q_hypothesis, slf=self)
-        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
-            '⌜inc_p_neq_q⌝ must be an inferred-statement.', inc_p_neq_q=inc_hypothesis, slf=self)
-        verify(t.contains_theoretical_objct(p_neq_q_hypothesis), '⌜p_neq_q⌝ must be in theory ⌜t⌝.',
-            p_neq_q=p_neq_q_hypothesis, t=t, slf=self)
-        verify(p_neq_q_hypothesis.hypothesis_child_theory.extended_theory is t,
-            '⌜p_neq_q.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
-            p_neq_q_hypothetical_theory=p_neq_q_hypothesis.hypothesis_child_theory,
-            p_neq_q=p_neq_q_hypothesis, t=t, slf=self)
-        verify(inc_hypothesis.relation is t.u.relations.inequality,
-            '⌜inc_p_neq_q.relation⌝ must be the inequality relation.',
-            inc_p_neq_q_relation=inc_hypothesis.relation, inc_p_neq_q=inc_hypothesis, t=t, slf=self)
-        p_neq_q_prime: FormulaStatement
-        p_neq_q_prime = inc_hypothesis.parameters[0]
-        verify(p_neq_q_hypothesis.is_formula_syntactically_equivalent_to(p_neq_q_prime),
-            '⌜p_neq_q⌝ must be formula-syntactically-equivalent to ⌜p_neq_q⌝ in ⌜inc_p_neq_q⌝.',
-            p_neq_q=p_neq_q_hypothesis, p_neq_q_prime=p_neq_q_prime, t=t, slf=self)
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
-        #  stable???
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
-        #  is stable
+        inc_hypothesis: InferredStatement = interpret_statement_formula(t=t, arity=1,
+            flexible_formula=inc_hypothesis)
+        verify(is_in_class(x_neq_y_hypothesis, classes.hypothesis),
+            '⌜x_neq_y_hypothesis⌝ must be an hypothesis.', p_neq_q=x_neq_y_hypothesis, slf=self)
+        verify(t.contains_theoretical_objct(x_neq_y_hypothesis), '⌜x_neq_y⌝ must be in theory ⌜t⌝.',
+            p_neq_q=x_neq_y_hypothesis, t=t, slf=self)
+        verify(x_neq_y_hypothesis.hypothesis_child_theory.extended_theory is t,
+            '⌜x_neq_y_hypothesis.hypothesis_child_theory⌝ must extend the parent theory ⌜t⌝.',
+            p_neq_q_hypothetical_theory=x_neq_y_hypothesis.hypothesis_child_theory,
+            p_neq_q=x_neq_y_hypothesis, t=t, slf=self)
+        verify(inc_hypothesis.valid_proposition.relation is t.u.relations.inconsistency,
+            '⌜inc_hypothesis.relation⌝ must be the inconsistency relation.',
+            inc_hypothesis_relation=inc_hypothesis.relation, inc_hypothesis=inc_hypothesis, t=t,
+            slf=self)
+        inc_hypothesis_hypothesis: Hypothesis = inc_hypothesis.valid_proposition.parameters[0]
+        x_neq_y_prime: FormulaStatement = inc_hypothesis.parameters[1]
+        verify(x_neq_y_hypothesis.child_statement.is_formula_syntactically_equivalent_to(
+            x_neq_y_prime),
+            '⌜x_neq_y⌝ must be formula-syntactically-equivalent to ⌜x_neq_y⌝ in ⌜inc_x_neq_y⌝.',
+            x_neq_y_hypothesis=x_neq_y_hypothesis, x_neq_y_prime=x_neq_y_prime, t=t, slf=self)
         return True
 
 
@@ -7855,15 +7851,15 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_neq_q_hypothesis: (None, Hypothesis) = None,
+    def infer_formula(self, x_neq_y_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        return super().infer_formula(p_neq_q_hypothesis, inc_hypothesis, echo=echo)
+        return super().infer_formula(x_neq_y_hypothesis, inc_hypothesis, echo=echo)
 
-    def infer_statement(self, p_neq_q_hypothesis: (None, FormulaStatement) = None,
+    def infer_statement(self, x_neq_y_hypothesis: (None, FormulaStatement) = None,
             inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        return super().infer_statement(p_neq_q_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
+        return super().infer_statement(x_neq_y_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7928,25 +7924,12 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p_eq_q_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the proof-by-refutation inference-rule and return the inferred-formula.
-
-        :param p_eq_q_hypothesis: (mandatory) The (¬P) hypothesis-statement.
-        :param inc_hypothesis: (mandatory) The proof of inconsistency of the not_p hypothetical-theory:
-Inc(¬P).
-        :return: The inferred formula .
-        """
         return super().infer_formula(p_eq_q_hypothesis, inc_hypothesis, echo=echo)
 
     def infer_statement(self, p_eq_q_hypothesis: (None, FormulaStatement) = None,
             inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the modus-ponens inference-rule and return the inferred-statement.
-
-        :param p: (mandatory) The implication statement.
-        :param inc_p: (mandatory) The p statement, proving that p is true in the current theory.
-        :return: An inferred-statement proving p in the current theory.
-        """
         return super().infer_statement(p_eq_q_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 

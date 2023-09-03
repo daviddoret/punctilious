@@ -26,15 +26,11 @@ equality = h.child_theory.i.modus_ponens.infer_statement(p_implies_q=substitutio
 # because T1 could not prove its own inconsistency because it is inconsistent!
 t2 = u.t(echo=True)
 
-# And finally, use the inconsistency-introduction-2 inference-rule:
-proposition_of_interest = t2.i.inconsistency_introduction_2.infer_statement(x_eq_y=equality,
-    x_neq_y=h.child_statement, inconsistent_theory=t1, subtitle='The proposition of interest')
-
 # Prove hypothesis inconsistency
-h_inconsistency = t1.i.inconsistency_introduction_1.infer_statement(p=modus_ponens,
-    not_p=h.child_statement, inconsistent_theory=h.child_theory,
-    subtitle='Proof of the hypothesis inconsistency')
-
-# And finally, use the proof-by-contradiction-1 inference-rule:
-t1.i.proof_by_contradiction_1.infer_statement(not_p_hypothesis=h, inc_hypothesis=h_inconsistency,
+h_inconsistency = t2.i.inconsistency_introduction_2.infer_statement(x_eq_y=equality,
+    x_neq_y=h.child_statement, inconsistent_theory=h.child_theory,
     subtitle='The proposition of interest')
+
+# And finally, use the proof-by-contradiction-2 inference-rule:
+proposition_of_interest = t1.i.proof_by_contradiction_2.infer_statement(x_neq_y_hypothesis=h,
+    inc_hypothesis=h_inconsistency, subtitle='The proposition of interest')

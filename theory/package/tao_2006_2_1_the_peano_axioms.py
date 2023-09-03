@@ -257,7 +257,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         h1_p071 = h1.hypothesis_child_theory.i.modus_ponens.infer_statement(p_implies_q=h1_p12,
             p_hypothesis=h1_p11)
         p072 = t.i.inconsistency_introduction_1.infer_statement(p_eq_q_hypothesis=h1_p071,
-            p_neq_q_hypothesis=p031, inconsistent_theory=h1.hypothesis_child_theory)
+            x_neq_y_hypothesis=p031, inconsistent_theory=h1.hypothesis_child_theory)
         p073 = t.i.proof_by_refutation_2.infer_statement(p_eq_q_hypothesis=h1, inc_hypothesis=p072,
             ref='2.1.8')
 
