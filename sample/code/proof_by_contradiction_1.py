@@ -17,8 +17,10 @@ with u.v('x') as x, u.v('y') as y, u.v('z') as z:
     implication = t1.i.axiom_interpretation.infer_statement(axiom=a,
         formula=(f(x, y) | u.r.land | f(y, z)) | u.r.implies | f(x, z))
 t1.stabilize()
+
+# Pose the negation hypothesis
 h = t1.pose_hypothesis(hypothesis_formula=u.r.lnot(f(o1, o3)),
-    subtitle='We pose the hypothesis of the negation')
+    subtitle='We pose the negation hypothesis')
 conjunction_introduction = h.child_theory.i.conjunction_introduction.infer_statement(p=f(o1, o2),
     q=f(o2, o3))
 variable_substitution = h.child_theory.i.variable_substitution.infer_statement(p=implication,

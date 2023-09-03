@@ -4646,11 +4646,11 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_eq_q: FormulaStatement = None, p_neq_q: FormulaStatement = None,
+    def infer_formula(self, x_eq_y: FormulaStatement = None, x_neq_y: FormulaStatement = None,
             inconsistent_theory: TheoryElaborationSequence = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
-        p_eq_q = unpack_formula(p_eq_q)
-        p_neq_q = unpack_formula(p_neq_q)
+        x_eq_y = unpack_formula(x_eq_y)
+        x_neq_y = unpack_formula(x_neq_y)
         return t.u.f(t.u.r.inconsistency, inconsistent_theory)
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
@@ -4659,29 +4659,29 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, p_eq_q: FormulaStatement = None, p_neq_q: FormulaStatement = None,
+    def verify_args(self, x_eq_y: FormulaStatement = None, x_neq_y: FormulaStatement = None,
             inconsistent_theory: TheoryElaborationSequence = None,
             t: TheoryElaborationSequence = None) -> bool:
-        verify(inconsistent_theory.contains_theoretical_objct(p_eq_q),
-            'Statement ⌜p_eq_q⌝ must be contained in theory ⌜inconsistent_theory⌝''s hierarchy.',
-            p_eq_q=p_eq_q, inconsistent_theory=inconsistent_theory, slf=self)
-        verify(inconsistent_theory.contains_theoretical_objct(p_neq_q),
-            'Statement ⌜p_neq_q⌝ must be contained in theory ⌜inconsistent_theory⌝''s hierarchy.',
-            p_neq_q=p_neq_q, inconsistent_theory=inconsistent_theory, slf=self)
-        verify(p_eq_q.relation is p_eq_q.theory.universe_of_discourse.relations.equality,
-            'The relation of statement ⌜p_eq_q⌝ must be ⌜equality⌝.', p_neq_q=p_neq_q,
+        verify(inconsistent_theory.contains_theoretical_objct(x_eq_y),
+            'Statement ⌜x_eq_y⌝ must be contained in ⌜inconsistent_theory⌝.', p_eq_q=x_eq_y,
             inconsistent_theory=inconsistent_theory, slf=self)
-        verify(p_neq_q.relation is p_neq_q.theory.universe_of_discourse.relations.inequality,
-            'The relation of statement ⌜p_neq_q⌝ must be ⌜inequality⌝.', p_neq_q=p_neq_q,
+        verify(inconsistent_theory.contains_theoretical_objct(x_neq_y),
+            'Statement ⌜x_neq_y⌝ must be contained in ⌜inconsistent_theory⌝.', p_neq_q=x_neq_y,
             inconsistent_theory=inconsistent_theory, slf=self)
-        verify(p_eq_q.valid_proposition.parameters[0].is_formula_syntactically_equivalent_to(
-            p_neq_q.valid_proposition.parameters[0]),
-            'The ⌜p⌝ in ⌜p_eq_q⌝ must be formula-syntactically-equivalent to the ⌜p⌝ in ⌜p_neq_q⌝.',
-            p_eq_q=p_eq_q, p_neq_q=p_neq_q, inconsistent_theory=inconsistent_theory, slf=self)
-        verify(p_eq_q.valid_proposition.parameters[1].is_formula_syntactically_equivalent_to(
-            p_neq_q.valid_proposition.parameters[1]),
-            'The ⌜q⌝ in ⌜p_eq_q⌝ must be formula-syntactically-equivalent to the ⌜q⌝ in ⌜p_neq_q⌝.',
-            p_eq_q=p_eq_q, p_neq_q=p_neq_q, inconsistent_theory=inconsistent_theory, slf=self)
+        verify(x_eq_y.relation is x_eq_y.theory.universe_of_discourse.relations.equality,
+            'The relation of statement ⌜x_eq_y⌝ must be ⌜equality⌝.', p_neq_q=x_neq_y,
+            inconsistent_theory=inconsistent_theory, slf=self)
+        verify(x_neq_y.relation is x_neq_y.theory.universe_of_discourse.relations.inequality,
+            'The relation of statement ⌜x_neq_y⌝ must be ⌜inequality⌝.', p_neq_q=x_neq_y,
+            inconsistent_theory=inconsistent_theory, slf=self)
+        verify(x_eq_y.valid_proposition.parameters[0].is_formula_syntactically_equivalent_to(
+            x_neq_y.valid_proposition.parameters[0]),
+            'The ⌜x⌝ in ⌜x_eq_y⌝ must be formula-syntactically-equivalent to the ⌜x⌝ in ⌜x_neq_y⌝.',
+            p_eq_q=x_eq_y, p_neq_q=x_neq_y, inconsistent_theory=inconsistent_theory, slf=self)
+        verify(x_eq_y.valid_proposition.parameters[1].is_formula_syntactically_equivalent_to(
+            x_neq_y.valid_proposition.parameters[1]),
+            'The ⌜y⌝ in ⌜x_eq_y⌝ must be formula-syntactically-equivalent to the ⌜y⌝ in ⌜x_neq_y⌝.',
+            p_eq_q=x_eq_y, p_neq_q=x_neq_y, inconsistent_theory=inconsistent_theory, slf=self)
         return True
 
 
@@ -4761,12 +4761,9 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         :param t:
         :return: A formula Q
         """
-        p_implies_q = unpack_formula(p_implies_q)
-        # p_prime = unpack_formula(p_implies_q.parameters[0])
-        q = unpack_formula(p_implies_q.parameters[1])
-        # p_prime = unpack_formula(p_prime)  # Received as a statement-parameter to prove that p
-        # is true in t.
-        return q  # TODO: Provide support for statements that are atomic propositional formula,  # that is  # without relation or where the objct is a 0-ary relation.
+        p_implies_q = interpret_formula(u=self.u, arity=2, flexible_formula=p_implies_q)
+        q = interpret_formula(u=self.u, arity=2, flexible_formula=p_implies_q.parameters[1])
+        return q
 
     def verify_args(self, p_implies_q: FormulaStatement, p: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
@@ -4776,10 +4773,8 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         :param t:
         :return: A formula Q
         """
-        verify(is_in_class(p_implies_q, classes.formula_statement),
-            '⌜p_implies_q⌝ is not a formula-statement.', p_implies_q=p_implies_q, slf=self)
-        verify(is_in_class(p, classes.formula_statement), '⌜p⌝ is not a formula-statement.', p=p,
-            slf=self)
+        p_implies_q = interpret_statement_formula(t=t, arity=2, flexible_formula=p_implies_q)
+        p = interpret_statement_formula(t=t, arity=2, flexible_formula=p)
         verify(t.contains_theoretical_objct(p_implies_q),
             'Statement ⌜p_implies_q⌝ is not contained in theory ⌜t⌝''s hierarchy.',
             p_implies_q=p_implies_q, t=t, slf=self)
@@ -7682,16 +7677,16 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_eq_q: (None, FormulaStatement) = None,
-            p_neq_q: (None, FormulaStatement) = None,
+    def infer_formula(self, x_eq_y: (None, FormulaStatement) = None,
+            x_neq_y: (None, FormulaStatement) = None,
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
             t: (None, TheoryElaborationSequence) = None, echo: (None, bool) = None):
         """Apply the inconsistency-introduction inference-rule and return the inferred-formula.
         """
-        return super().infer_formula(p_eq_q, p_neq_q, inconsistent_theory, echo=echo)
+        return super().infer_formula(x_eq_y, x_neq_y, inconsistent_theory, echo=echo)
 
-    def infer_statement(self, p_eq_q: (None, FormulaStatement) = None,
-            p_neq_q: (None, FormulaStatement) = None,
+    def infer_statement(self, x_eq_y: (None, FormulaStatement) = None,
+            x_neq_y: (None, FormulaStatement) = None,
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
@@ -7703,11 +7698,15 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
         :param inconsistent_theory: (conditional) .
         :return: An inferred-statement proving p in the current theory.
         """
-        if inconsistent_theory is None and p_eq_q.t is p_neq_q.t:
+        if inconsistent_theory is None and x_eq_y.t is x_neq_y.t:
             # The inconsistent_theory can be unambiguously defaulted
             # when both p and not_p are contained in the same theory.
-            inconsistent_theory = p_eq_q.t
-        return super().infer_statement(p_eq_q, p_neq_q, inconsistent_theory, nameset=nameset,
+            inconsistent_theory = x_eq_y.t
+        x_eq_y = interpret_statement_formula(t=inconsistent_theory, arity=2,
+            flexible_formula=x_eq_y)
+        x_neq_y = interpret_statement_formula(t=inconsistent_theory, arity=2,
+            flexible_formula=x_neq_y)
+        return super().infer_statement(x_eq_y, x_neq_y, inconsistent_theory, nameset=nameset,
             ref=ref, paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7764,15 +7763,15 @@ class ModusPonensInclusion(InferenceRuleInclusion):
         i = t.universe_of_discourse.inference_rules.modus_ponens
         dashed_name = 'modus-ponens'
         acronym = 'mp'
-        abridged_name = 'mod.-pon.'
+        abridged_name = None
         name = 'modus ponens'
         explicit_name = 'modus ponens inference rule'
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_implies_q: (None, FormulaStatement) = None,
-            p: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
+            p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         """Apply the modus-ponens inference-rule and return the inferred-formula.
 
         :param p_implies_q: (mandatory) The implication statement.
@@ -7791,6 +7790,8 @@ class ModusPonensInclusion(InferenceRuleInclusion):
         :param p: (mandatory) The p statement, proving that p is true in the current theory.
         :return: An inferred-statement proving p in the current theory.
         """
+        p_implies_q = interpret_statement_formula(t=self.t, arity=2, flexible_formula=p_implies_q)
+        p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
         return super().infer_statement(p_implies_q, p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 

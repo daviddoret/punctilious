@@ -315,7 +315,13 @@
 <h2>Definition<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#definition">¶</a></h2>
 <p><em>proof-by-contradiction-1</em> is the <a class="reference internal" href="inference_rule.html"><span class="doc">inference-rule</span></a>:</p>
 <div class="math notranslate nohighlight">
-\[\left( \mathcal{H} assume \not \mathbf{P}, Inc\left(\mathcal{H}\right)  \right) \vdash \mathbf{P}\]</div>
+\[\left( \mathcal{H} \; \text{assume} \; \neg \mathbf{P}, \mathit{Inc}\left(\mathcal{H}\right)  \right) \vdash \mathbf{P}\]</div>
+<p>Where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mathcal{H}\)</span> is an <a class="reference internal" href="hypothesis.html"><span class="doc">hypothesis</span></a></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{P}\)</span> is a propositional <a class="reference internal" href="formula.html"><span class="doc">formula</span></a></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathit{Inc}\)</span> is the inconsistency function</p></li>
+</ul>
 </section>
 <section id="python-implementation">
 <h2>Python implementation<a aria-label="Click to copy this link" class="headerlink tooltipped tooltipped-ne" data-action="click-&gt;clipboard#copyHeaderLink" data-controller="clipboard" href="#python-implementation">¶</a></h2>
@@ -340,8 +346,10 @@
     <span class="n">implication</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">axiom</span><span class="o">=</span><span class="n">a</span><span class="p">,</span>
         <span class="n">formula</span><span class="o">=</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">|</span> <span class="n">u</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">land</span> <span class="o">|</span> <span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">))</span> <span class="o">|</span> <span class="n">u</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">implies</span> <span class="o">|</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">))</span>
 <span class="n">t1</span><span class="o">.</span><span class="n">stabilize</span><span class="p">()</span>
+
+<span class="c1"># Pose the negation hypothesis</span>
 <span class="n">h</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">pose_hypothesis</span><span class="p">(</span><span class="n">hypothesis_formula</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">lnot</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">o1</span><span class="p">,</span> <span class="n">o3</span><span class="p">)),</span>
-    <span class="n">subtitle</span><span class="o">=</span><span class="s1">'We pose the hypothesis of the negation'</span><span class="p">)</span>
+    <span class="n">subtitle</span><span class="o">=</span><span class="s1">'We pose the negation hypothesis'</span><span class="p">)</span>
 <span class="n">conjunction_introduction</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">child_theory</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">conjunction_introduction</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">f</span><span class="p">(</span><span class="n">o1</span><span class="p">,</span> <span class="n">o2</span><span class="p">),</span>
     <span class="n">q</span><span class="o">=</span><span class="n">f</span><span class="p">(</span><span class="n">o2</span><span class="p">,</span> <span class="n">o3</span><span class="p">))</span>
 <span class="n">variable_substitution</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">child_theory</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">variable_substitution</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">implication</span><span class="p">,</span>
