@@ -19,6 +19,7 @@ Where:
 * :math:`P` is a propositional :doc:`formula`
 * :math:`Q` is a propositional :doc:`formula`
 
+In straightforward language, if P implies Q, it follows that P implies both P and Q.
 
 Python implementation
 ----------------------

@@ -985,18 +985,18 @@ class Configuration:
         self.default_symbolic_object_symbol = None
         self.default_theory_symbol = None
         self.echo_axiom_declaration = None
-        self.echo_axiom_inclusion = None
+        self.echo_axiom_inclusion = True
         self.echo_definition_declaration = None
         self.echo_definition_inclusion = None
         self.echo_definition_direct_inference = None
         self.echo_formula_declaration = None
         self.echo_hypothesis = None
-        self.echo_inferred_statement = None
+        self.echo_inferred_statement = True
         self.echo_note = None
         self.echo_relation = None
         self.echo_simple_objct_declaration = None
         self.echo_statement = None
-        self.echo_proof = None
+        self.echo_proof = True
         self.echo_symbolic_objct = None
         self.echo_theory_elaboration_sequence_declaration = None
         self.echo_universe_of_discourse_declaration = None
@@ -4734,6 +4734,7 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'modus-ponens'
         acronym = 'mp'
         abridged_name = None
@@ -4741,7 +4742,8 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         dashed_name = 'modus-ponens'
         explicit_name = 'modus ponens inference rule'
         name = 'modus ponens'
-        definition = StyledText(plaintext='(P ==> Q), P) |- Q', unicode='((P ⟹ Q), P) ⊢ Q')
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.implies | p) | u.r.sequent_comma | p) | u.r.proves | q
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
