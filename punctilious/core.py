@@ -4472,14 +4472,9 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
 
 
 class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
-    """
-
-    .. include:: docs/equality_commutativity_inference_rule.md
-
-
-    """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'equality-commutativity'
         acronym = 'ec'
         abridged_name = None
@@ -4487,22 +4482,23 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
         dashed_name = 'equality-commutativity'
         explicit_name = 'equality commutativity inference rule'
         name = 'equality commutativity'
-        definition = '(x = y) ⊢ (y = x)'
+        with u.v(symbol='x') as x, u.v(symbol='y') as y:
+            definition = (x | u.r.equal | y) | u.r.proves | (y | u.r.equal | x)
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_eq_q: (None, FormulaStatement) = None,
+    def infer_formula(self, x_equal_y: (None, FormulaStatement) = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
         """Apply the inference-rule equality-commutativity and return the inferred formula.
 
-        :param p_eq_q: an equality formula-statement of the form: (P = Q).
+        :param x_equal_y: an equality formula-statement of the form: (P = Q).
         :return: (FormulaStatement) The inferred-statement (Q = P).
         """
-        p_eq_q: Formula
-        p_eq_q = unpack_formula(p_eq_q)
-        p = p_eq_q.parameters[0]
-        q = p_eq_q.parameters[1]
+        x_equal_y: Formula
+        x_equal_y = unpack_formula(x_equal_y)
+        p = x_equal_y.parameters[0]
+        q = x_equal_y.parameters[1]
         return t.u.f(t.u.r.equality, q, p)
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
@@ -4510,30 +4506,25 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
         output = yield from configuration.locale.compose_equality_commutativity_paragraph_proof(o=o)
         return output
 
-    def verify_args(self, p_eq_q: (None, FormulaStatement) = None,
+    def verify_args(self, x_equal_y: (None, FormulaStatement) = None,
             t: TheoryElaborationSequence = None) -> bool:
-        verify(is_in_class(p_eq_q, classes.formula_statement),
-            '⌜p_eq_q⌝ is not of the declarative-class formula-statement.', p_eq_q=p_eq_q, t=t,
+        verify(is_in_class(x_equal_y, classes.formula_statement),
+            '⌜x_equal_y⌝ is not of the declarative-class formula-statement.', p_eq_q=x_equal_y, t=t,
             slf=self)
-        verify(t.contains_theoretical_objct(p_eq_q),
-            'Statement ⌜p_eq_q⌝ is not contained in ⌜t⌝''s hierarchy.', p_eq_q=p_eq_q, t=t,
+        verify(t.contains_theoretical_objct(x_equal_y),
+            'Statement ⌜x_equal_y⌝ is not contained in ⌜t⌝''s hierarchy.', p_eq_q=x_equal_y, t=t,
             slf=self)
-        p_eq_q = unpack_formula(p_eq_q)
-        verify(p_eq_q.relation is self.u.r.equality,
-            'The root relation of formula ⌜p_eq_q⌝ is not the equality relation.',
-            p_eq_q_relation=p_eq_q.relation, p_eq_q=p_eq_q, t=t, slf=self)
+        x_equal_y = unpack_formula(x_equal_y)
+        verify(x_equal_y.relation is self.u.r.equality,
+            'The root relation of formula ⌜x_equal_y⌝ is not the equality relation.',
+            p_eq_q_relation=x_equal_y.relation, p_eq_q=x_equal_y, t=t, slf=self)
         return True
 
 
 class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
-    """
-
-    .. include:: docs/equal_terms_substitution_inference_rule.md
-
-
-    """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'equal-terms-substitution'
         acronym = 'ets'
         abridged_name = None
@@ -4541,26 +4532,27 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
         dashed_name = 'equal-terms-substitution'
         explicit_name = 'equal terms substitution inference rule'
         name = 'equal terms substitution'
-        definition = '(P, (Q = R)) ⊢ P\''
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q, u.v(symbol='x') as x, u.v(symbol='y') as y:
+            definition = (p | u.r.sequent_comma | (x | u.r.equal | y)) | u.r.proves | q
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p: FormulaStatement = None, q_equal_r: FormulaStatement = None,
+    def infer_formula(self, p: FormulaStatement = None, x_equal_y: FormulaStatement = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
         """Apply the inference-rule equal-terms-substitution and return the inferred formula.
 
         :param p: a formula-statement of the form: P.
-        :param q_equal_r: an equality formula-statement of the form: (Q = R).
+        :param x_equal_y: an equality formula-statement of the form: (Q = R).
         :return: (FormulaStatement) The formula-statement P modified such that all occurrences of
 Q in P are replaced with R.
         """
         p: Formula
-        q_equal_r: Formula
+        x_equal_y: Formula
         p = unpack_formula(p)
-        q_equal_r = unpack_formula(q_equal_r)
-        q = q_equal_r.parameters[0]
-        r = q_equal_r.parameters[1]
+        x_equal_y = unpack_formula(x_equal_y)
+        q = x_equal_y.parameters[0]
+        r = x_equal_y.parameters[1]
         substitution_map = {q: r}
         p_prime = p.substitute(substitution_map=substitution_map, target_theory=t,
             lock_variable_scope=True)
@@ -4572,21 +4564,21 @@ Q in P are replaced with R.
             o=o)
         return output
 
-    def verify_args(self, p: FormulaStatement = None, q_equal_r: FormulaStatement = None,
+    def verify_args(self, p: FormulaStatement = None, x_equal_y: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
         verify(is_in_class(p, classes.formula_statement), '⌜p⌝ must be a formula-statement.', p=p,
             slf=self, t=t)
         verify(t.contains_theoretical_objct(p), '⌜p⌝ must be in theory-elaboration-sequence ⌜t⌝.',
             p=p, slf=self, t=t)
-        verify(is_in_class(q_equal_r, classes.formula_statement),
-            '⌜q_equal_r⌝ is not of the formula-statement declarative-class.', q_equal_r=q_equal_r,
+        verify(is_in_class(x_equal_y, classes.formula_statement),
+            '⌜x_equal_y⌝ is not of the formula-statement declarative-class.', q_equal_r=x_equal_y,
             slf=self, t=t)
-        verify(t.contains_theoretical_objct(q_equal_r),
-            '⌜q_equal_r⌝ is not contained in theoretical-elaboration-sequence ⌜t⌝.',
-            q_equal_r=q_equal_r, slf=self, t=t)
-        q_equal_r = unpack_formula(q_equal_r)
-        verify(q_equal_r.relation is self.u.r.equality,
-            'The root relation of ⌜q_equal_r⌝ is not the equality relation.', q_equal_r=q_equal_r,
+        verify(t.contains_theoretical_objct(x_equal_y),
+            '⌜x_equal_y⌝ is not contained in theoretical-elaboration-sequence ⌜t⌝.',
+            q_equal_r=x_equal_y, slf=self, t=t)
+        x_equal_y = unpack_formula(x_equal_y)
+        verify(x_equal_y.relation is self.u.r.equality,
+            'The root relation of ⌜x_equal_y⌝ is not the equality relation.', q_equal_r=x_equal_y,
             slf=self, t=t)
         return True
 
@@ -6046,6 +6038,7 @@ class RelationDict(collections.UserDict):
         self._inequality = None
         self._implication = None
         self._is_a = None
+        self._map = None
         self._negation = None
         self._syntactic_entailment = None
 
@@ -6080,21 +6073,6 @@ class RelationDict(collections.UserDict):
                 symbol=SerifItalic(plaintext='<==>', unicode='⟺', latex='\\iff'), auto_index=False,
                 dashed_name='biconditional', name='biconditional')
         return self._biconditional
-
-    @property
-    def sequent_comma(self):
-        """Initially needed to express the collection of premises in inference-rule formula definitions.
-
-        For the time being it is sufficient to implement it as a binary relation,
-        because our initial catalog of inference rules have one or two premises.
-        But at a later point, we will need to implement (0-n)-ary relations.
-        """
-        if self._sequent_comma is None:
-            self._sequent_comma = self.declare(arity=2, formula_rep=Formula.infix,
-                signal_proposition=True, symbol=SerifItalic(plaintext=',', unicode=',', latex=','),
-                auto_index=False, dashed_name='sequent-comma', name='sequent comma',
-                explicit_name='sequent calculus comma')
-        return self._sequent_comma
 
     @property
     def conjunction(self):
@@ -6281,6 +6259,21 @@ class RelationDict(collections.UserDict):
         return self.disjunction
 
     @property
+    def map(self):
+        """The well-known map relation.
+
+        Abridged property: u.r.map
+
+        If it does not exist in the universe-of-discourse,
+        declares it automatically.
+        """
+        if self._map is None:
+            self._map = self.declare(arity=1, formula_rep=Formula.prefix, signal_proposition=True,
+                symbol=SerifItalic(plaintext='-->', unicode='\u2192', latex='\\rightarrow'),
+                auto_index=False, name='map')
+        return self._map
+
+    @property
     def negation(self):
         """The well-known negation relation.
 
@@ -6317,6 +6310,21 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         return self.syntactic_entailment
+
+    @property
+    def sequent_comma(self):
+        """Initially needed to express the collection of premises in inference-rule formula definitions.
+
+        For the time being it is sufficient to implement it as a binary relation,
+        because our initial catalog of inference rules have one or two premises.
+        But at a later point, we will need to implement (0-n)-ary relations.
+        """
+        if self._sequent_comma is None:
+            self._sequent_comma = self.declare(arity=2, formula_rep=Formula.infix,
+                signal_proposition=True, symbol=SerifItalic(plaintext=',', unicode=',', latex=','),
+                auto_index=False, dashed_name='sequent-comma', name='sequent comma',
+                explicit_name='sequent calculus comma')
+        return self._sequent_comma
 
     @property
     def syntactic_entailment(self):
@@ -7568,22 +7576,16 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_eq_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def infer_formula(self, x_equal_y: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """Apply the equality-commutativity inference-rule and return the inferred-formula.
         """
-        return super().infer_formula(p_eq_q, echo=echo)
+        return super().infer_formula(x_equal_y, echo=echo)
 
-    def infer_statement(self, p_eq_q: (None, FormulaStatement) = None,
+    def infer_statement(self, x_equal_y: (None, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the equality-commutativity inference-rule and return the inferred-statement.
-
-        :param p_implies_q: (mandatory) The implication statement.
-        :param p: (mandatory) The p statement, proving that p is true in the current theory.
-        :return: An inferred-statement proving p in the current theory.
-        """
-        return super().infer_statement(p_eq_q, nameset=nameset, ref=ref,
+        return super().infer_statement(x_equal_y, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7611,16 +7613,10 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
         return super().infer_formula(p, q_equal_r, echo=echo)
 
     def infer_statement(self, p: (None, FormulaStatement) = None,
-            q_equal_r: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+            x_equal_y: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the equal-terms-substitution inference-rule and return the inferred-statement.
-
-        :param p_implies_q: (mandatory) The implication statement.
-        :param p: (mandatory) The p statement, proving that p is true in the current theory.
-        :return: An inferred-statement proving p in the current theory.
-        """
-        return super().infer_statement(p, q_equal_r, nameset=nameset, ref=ref,
+        return super().infer_statement(p, x_equal_y, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
