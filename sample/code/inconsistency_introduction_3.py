@@ -1,6 +1,6 @@
 import punctilious as pu
 
-# Create a universe-of-discourse with basic objects for the sake of this demonstration.
+# Create a universe-of-discourse with basic objects for the sake of this example.
 u = pu.UniverseOfDiscourse(echo=True)
 o1 = u.o.declare()
 t1 = u.t(echo=True)

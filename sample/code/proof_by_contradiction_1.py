@@ -1,6 +1,6 @@
 import punctilious as pu
 
-# Create a universe-of-discourse with basic objects for the sake of this demonstration.
+# Create a universe-of-discourse with basic objects for the sake of this example.
 u = pu.create_universe_of_discourse(echo=True)
 a1 = u.declare_axiom(natural_language='Dummy axiom to establish some ground propositions.')
 o1 = u.o.declare()
