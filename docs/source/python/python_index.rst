@@ -7,5 +7,5 @@ Python index
    :caption: Contents:
 
    classes<class/python_class_index>
-   functions<class/python_function_index>
+   functions<function/python_function_index>
 

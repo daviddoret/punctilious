@@ -6,4 +6,5 @@ Python class index
    :caption: Contents:
 
    InferenceRuleDeclarationDict
+   UniverseOfDiscourse
 

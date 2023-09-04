@@ -10,11 +10,12 @@ Welcome to punctilious's documentation!
 =======================================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 0
    :caption: Contents:
 
    /math/math_index
    /python/python_index
+   bibliography
 
 Indices and tables
 ==================
