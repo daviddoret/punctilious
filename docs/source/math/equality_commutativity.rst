@@ -1,0 +1,70 @@
+.. role:: python(code)
+    :language: py
+
+equality-commutativity
+=============================
+
+.. seealso::
+   :doc:`equal_terms_substitution` | :doc:`inference_rule`
+
+Definition
+----------
+
+*equality-commutativity* is the well-known and valid :doc:`inference_rule`:
+
+.. math::
+
+    \left( x = y \right) \vdash \left( y = x \right)
+
+Where:
+
+* :math:`x = y` is a :doc:`formula_statement` of the form :math:`x = y`
+
+Quotes
+------
+
+
+Python implementation
+----------------------
+
+The simplest way to use this inference-rule is to access it via the :python:`inference_rules` (abridged :python:`i` ) property of the :doc:`theory_elaboration_sequence`:
+
+.. code-block:: python
+
+   u = pu.create_universe()
+   t = u.t()
+   ...
+   # some theory elaboration code
+   ...
+   t.i.equality_commutativity.infer_statement(p = ...)
+
+If the :doc:`inference_rule` was not yet declared in the :doc:`universe_of_discourse` , it will be automatically declared. If the :doc:`inference_rule` was not yet included in the :doc:`theory_elaboration_sequence` , it will be automatically included.
+
+This calls the following method:
+
+.. module:: core
+    :noindex:
+.. autoclass:: EqualityCommutativityInclusion
+    :noindex:
+    :members: infer_statement
+
+Python sample usage
+----------------------
+
+.. admonition:: Source code
+  :class: tip, dropdown
+
+   .. literalinclude :: ../../../sample/code/equality_commutativity.py
+      :language: python
+
+.. admonition:: Unicode output
+   :class: note, dropdown
+
+   .. literalinclude :: ../../sample/output/equality_commutativity_unicode.txt
+      :language: text
+
+.. admonition:: Plaintext output
+   :class: note, dropdown
+
+   .. literalinclude :: ../../sample/output/equality_commutativity_plaintext.txt
+      :language: text

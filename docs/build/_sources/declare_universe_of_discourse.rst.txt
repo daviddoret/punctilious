@@ -1,0 +1,3 @@
+.. module:: core
+    :noindex:
+.. autofunction:: declare_universe_of_discourse

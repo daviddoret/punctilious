@@ -1,0 +1,11 @@
+Python index
+========================
+
+
+.. toctree::
+   :maxdepth: 0
+   :caption: Contents:
+
+   classes<python_class_index>
+   functions<python_function_index>
+

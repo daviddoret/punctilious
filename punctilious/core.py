@@ -6404,8 +6404,7 @@ def interpret_statement_formula(t: TheoryElaborationSequence, arity: (None, int)
 
 
 class InferenceRuleDeclarationDict(collections.UserDict):
-    """A universe-of-discourse property, that is a specialized dictionary, and that exposes well-known inference-rules as properties.
-
+    """A (possibly empty) collection of inference-rule declarations.
     """
 
     def __init__(self, u: UniverseOfDiscourse):
@@ -6440,23 +6439,21 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def absorb(self) -> AbsorptionDeclaration:
-        """The well-known absorption inference-rule: (P ⟹ Q) ⊢ (P ⟹ (P ∧ Q)).
+        """The well-known :doc:`absorption` :doc:`inference-rule<inference_rule>`.
 
         Unabridged property: u.i.absorption
 
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
+        If not yet declared in the :doc:`universe-of-discourse<universe_of_discourse>`, this :doc:`inference-rule<inference_rule>` will be automatically declared when this python property is accessed.
         """
         return self.absorption
 
     @property
     def absorption(self) -> AbsorptionDeclaration:
-        """The well-known absorption inference-rule: (P ⟹ Q) ⊢ (P ⟹ (P ∧ Q)).
+        """The well-known :doc:`absorption` :doc:`inference-rule<inference_rule>`.
 
         Abridged property: u.i.absorb
 
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
+        If not yet declared in the :doc:`universe-of-discourse<universe_of_discourse>`, this :doc:`inference-rule<inference_rule>` will be automatically declared when this python property is accessed.
         """
 
         if self._absorption is None:
@@ -8730,9 +8727,11 @@ class UniverseOfDiscourse(SymbolicObject):
         return max(same_symbols, default=0)
 
     @property
-    def i(self):
-        """A python dictionary of inference-rules contained in this universe-of-discourse,
-        where well-known inference-rules are directly available as properties."""
+    def i(self) -> InferenceRuleDeclarationDict:
+        """The (possibly empty) collection of :doc:`inference-rules<inference_rule>` declared in this in this :doc:`universe-of-discourse<universe_of_discourse>`.
+
+        Unabridged name: inference_rules
+        """
         return self.inference_rules
 
     def index_symbol(self, symbol: StyledText) -> int:
@@ -8745,16 +8744,18 @@ class UniverseOfDiscourse(SymbolicObject):
         return self.get_symbol_max_index(symbol) + 1
 
     @property
-    def inference_rules(self):
-        """A python dictionary of inference-rules contained in this universe-of-discourse,
-        where well-known inference-rules are directly available as properties."""
+    def inference_rules(self) -> InferenceRuleDeclarationDict:
+        """The (possibly empty) collection of :doc:`inference-rules<inference_rule>` declared in this in this :doc:`universe-of-discourse<universe_of_discourse>`.
+
+        Abridged name: i
+        """
         return self._inference_rules
 
     @property
     def o(self) -> SimpleObjctDict:
-        """The collection of simple-objcts in this universe-of-discourse.
+        """The (possibly empty) collection of simple-objects declared in this in this universe-of-discourse.
 
-        Unabridged version: universe_of_discourse.simple_objcts
+        Unabridged name: simple_objcts
 
         Well-known simple-objcts are exposed as python properties. In general, a well-known
         simple-objct is declared in the universe-of-discourse the first time its property is
@@ -8860,11 +8861,11 @@ class UniverseOfDiscourse(SymbolicObject):
         x.lock_scope()
 
 
-def create_universe_of_discourse(nameset: (None, str, NameSet) = None,
-        name: (None, str, ComposableText) = None, echo: (None, bool) = None) -> UniverseOfDiscourse:
-    """Create_ a new universe-of-discourse_.
+def create_universe_of_discourse(name: (None, str, ComposableText) = None,
+        echo: (None, bool) = None) -> UniverseOfDiscourse:
+    """Create a new universe of discourse.
     """
-    return UniverseOfDiscourse(nameset=nameset, name=name, echo=echo)
+    return UniverseOfDiscourse(name=name, echo=echo)
 
 
 class InferredStatement(FormulaStatement):
