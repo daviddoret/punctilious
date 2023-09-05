@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>proof-by-contradiction-2 &mdash; punctilious 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=af2ce170"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="proof-by-refutation-1" href="proof_by_refutation_1.html" />
+    <link rel="prev" title="proof-by-contradiction-1" href="proof_by_contradiction_1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            punctilious
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../welcome.html">Welcome to punctilious</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../math_index.html">Math</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="math_concept_index.html">Concept</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="absorption_math_concept.html">absorption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="axiom_math_concept.html">axiom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biconditional_elimination_1.html">biconditional-elimination-1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biconditional_elimination_2.html">biconditional-elimination-2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biconditional_introduction.html">biconditional-introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="conjunction_elimination_1.html">conjunction-elimination-1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="conjunction_elimination_2.html">conjunction-elimination-2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="conjunction_introduction.html">conjunction-introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="disjunction_introduction_1.html">disjunction-introduction-1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="disjunction_introduction_2.html">disjunction-introduction-2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="double_negation_elimination.html">double-negation-elimination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="double_negation_introduction.html">double-negation-introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elimination_rule.html">elimination-rule</a></li>
+<li class="toctree-l3"><a class="reference internal" href="equal_terms_substitution.html">equal-terms-substitution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="equality_commutativity.html">equality-commutativity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="formula.html">formula</a></li>
+<li class="toctree-l3"><a class="reference internal" href="formula_statement.html">formula-statement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hypothesis.html">hypothesis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inconsistency_introduction_1.html">inconsistency-introduction-1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inconsistency_introduction_2.html">inconsistency-introduction-2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inconsistency_introduction_3.html">inconsistency-introduction-3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inference_rule_math_concept.html">inference-rule</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction_rule.html">introduction-rule</a></li>
+<li class="toctree-l3"><a class="reference internal" href="is_a.html">is-a</a></li>
+<li class="toctree-l3"><a class="reference internal" href="meta_object.html">meta-object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modus_ponens.html">modus-ponens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notation_form.html">notation-form</a></li>
+<li class="toctree-l3"><a class="reference internal" href="object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="object_creation.html">object-creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="object_declaration_math_concept.html">object_declaration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="object_inclusion.html">object-inclusion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="paragraph_proof.html">paragraph-proof (proof-style)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="proof_by_contradiction_1.html">proof-by-contradiction-1</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">proof-by-contradiction-2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#definition">Definition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-implementation">Python implementation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bibliography">Bibliography</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="proof_by_refutation_1.html">proof-by-refutation-1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="proof_by_refutation_2.html">proof-by-refutation-2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="relation.html">relation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="statement.html">statement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theory_elaboration_sequence_math_concept.html">theory-elaboration-sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="universe_of_discourse_math_concept.html">universe-of-discourse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="variable_substitution.html">variable-substitution</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../theory/math_theory_index.html">Theory</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_index.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bibliography.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">punctilious</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../math_index.html">Math</a></li>
+          <li class="breadcrumb-item"><a href="math_concept_index.html">Math concept</a></li>
+      <li class="breadcrumb-item active">proof-by-contradiction-2</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/math/concept/proof_by_contradiction_2.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="proof-by-contradiction-2">
+<h1>proof-by-contradiction-2<a class="headerlink" href="#proof-by-contradiction-2" title="Permalink to this heading"></a></h1>
+<section id="definition">
+<h2>Definition<a class="headerlink" href="#definition" title="Permalink to this heading"></a></h2>
+<p><em>proof-by-contradiction-2</em> is the <a class="reference internal" href="inference_rule_math_concept.html#inference-rule-math-concept"><span class="std std-ref">inference-rule</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[\left( \mathcal{H} assume \not \mathbf{P}, Inc\left(\mathcal{H}\right)  \right) \vdash \mathbf{P}\]</div>
+</section>
+<section id="python-implementation">
+<h2>Python implementation<a class="headerlink" href="#python-implementation" title="Permalink to this heading"></a></h2>
+<section id="proofbycontradiction2declaration">
+<h3>ProofByContradiction2Declaration<a class="headerlink" href="#proofbycontradiction2declaration" title="Permalink to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="core.ProofByContradiction2Declaration">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">ProofByContradiction2Declaration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">universe_of_discourse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.ProofByContradiction2Declaration" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="core.ProofByContradiction2Declaration.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">universe_of_discourse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.ProofByContradiction2Declaration.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.ProofByContradiction2Declaration.compose_paragraph_proof">
+<span class="sig-name descname"><span class="pre">compose_paragraph_proof</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.ProofByContradiction2Declaration.compose_paragraph_proof" title="Permalink to this definition"></a></dt>
+<dd><p>This method should be overridden by specialized inference-rule classes to provide accurate proofs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Composable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Composable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.ProofByContradiction2Declaration.infer_formula">
+<span class="sig-name descname"><span class="pre">infer_formula</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_neq_y_hypothesis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_hypothesis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.ProofByContradiction2Declaration.infer_formula" title="Permalink to this definition"></a></dt>
+<dd><p>Apply this inference-rules on input statements and return the resulting statement.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.ProofByContradiction2Declaration.verify_args">
+<span class="sig-name descname"><span class="pre">verify_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_neq_y_hypothesis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_hypothesis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.ProofByContradiction2Declaration.verify_args" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_neq_y_hypothesis</strong> – The hypothesis-statement in the parent theory.</p></li>
+<li><p><strong>inc_hypothesis</strong> – The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.</p></li>
+<li><p><strong>t</strong> – The current (parent) theory.</p></li>
+<li><p><strong>echo</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+<p>TODO: ProofByContradiction2Declaration.verify_args(): Make systematic verifications. I doubt it is still possible to call the method with wrong parameters.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="proofbycontradiction2inclusion">
+<h3>ProofByContradiction2Inclusion<a class="headerlink" href="#proofbycontradiction2inclusion" title="Permalink to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="core.ProofByContradiction2Inclusion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">ProofByContradiction2Inclusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.ProofByContradiction2Inclusion" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="core.ProofByContradiction2Inclusion.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.ProofByContradiction2Inclusion.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Include (aka allow) an inference-rule in a theory-elaboration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.ProofByContradiction2Inclusion.infer_formula">
+<span class="sig-name descname"><span class="pre">infer_formula</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_neq_y_hypothesis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_hypothesis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.ProofByContradiction2Inclusion.infer_formula" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – </p></li>
+<li><p><strong>echo</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.ProofByContradiction2Inclusion.infer_statement">
+<span class="sig-name descname"><span class="pre">infer_statement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_neq_y_hypothesis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_hypothesis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paragraph_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.ProofByContradiction2Inclusion.infer_statement" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – </p></li>
+<li><p><strong>echo</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="bibliography">
+<h2>Bibliography<a class="headerlink" href="#bibliography" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="proof_by_contradiction_1.html" class="btn btn-neutral float-left" title="proof-by-contradiction-1" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="proof_by_refutation_1.html" class="btn btn-neutral float-right" title="proof-by-refutation-1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, David Doret.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
