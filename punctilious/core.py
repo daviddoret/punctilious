@@ -2092,8 +2092,6 @@ class TheoreticalObject(SymbolicObject):
         o2 : TheoreticalObject
             The theoretical-object with which to verify formula-equivalence.
 
-        .. include: /docs/formula-syntactic-equivalence.rst
-
         """
         return self is o2
 
@@ -2665,8 +2663,6 @@ class Formula(TheoreticalObject):
         -----------
         o2 : TheoreticalObject
             The theoretical-object with which to verify formula-equivalence.
-
-        .. include: /docs/formula-syntactic-equivalence.rst
 
         """
         # if o2 is a formula-statement, retrieve its formula.
@@ -3526,8 +3522,6 @@ class FormulaStatement(Statement):
         o2 : TheoreticalObject
             The theoretical-object with which to verify formula-equivalence.
 
-        .. include: /docs/formula-syntactic-equivalence.rst
-
         """
         return self.valid_proposition.is_formula_syntactically_equivalent_to(o2)
 
@@ -3735,7 +3729,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
 
 class AbsorptionDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`absorption` :doc:`inference_rule` in a :doc:`universe_of_discourse`.
+    """The declaration of the :ref:`absorption_math_concept` :ref:`inference_rule_math_concept` in a :ref:`universe_of_discourse_math_concept`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4127,7 +4121,7 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
 
 
 class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`conjunction_introduction` :doc:`inference_rule` as valid in the target :doc:`universe_of_discourse`.
+    """The declaration of the :doc:`conjunction_introduction` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe_of_discourse_math_concept`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4147,7 +4141,7 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
-        """Apply the :doc:`conjunction_introduction` :doc:`inference_rule` and return the resulting formula.
+        """Apply the :doc:`conjunction_introduction` :ref:`inference_rule_math_concept` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula-statement of the form :math:`Q` .
@@ -4161,14 +4155,14 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :doc:`conjunction_introduction` :doc:`inference_rule` ."""
+        """Composes the paragraph-proof of inferred-statements based on the :doc:`conjunction_introduction` :ref:`inference_rule_math_concept` ."""
         output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
             o=o)
         return output
 
     def verify_args(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
-        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :doc:`inference_rule` .
+        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` .
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula-statement of the form :math:`Q` .
@@ -4241,7 +4235,7 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
 
 
 class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`disjunction_introduction_1` :doc:`inference_rule` as valid in the target :doc:`universe_of_discourse`.
+    """The declaration of the :doc:`disjunction_introduction_1` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe_of_discourse_math_concept`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4261,7 +4255,7 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        """Apply the :doc:`disjunction_introduction_1` :doc:`inference_rule` and return the resulting formula.
+        """Apply the :doc:`disjunction_introduction_1` :ref:`inference_rule_math_concept` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -4275,14 +4269,14 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :doc:`disjunction_introduction_1` :doc:`inference_rule` ."""
+        """Composes the paragraph-proof of inferred-statements based on the :doc:`disjunction_introduction_1` :ref:`inference_rule_math_concept` ."""
         output = yield from configuration.locale.compose_disjunction_introduction_1_paragraph_proof(
             o=o)
         return output
 
     def verify_args(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence) -> bool:
-        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :doc:`inference_rule` .
+        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` .
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -4298,7 +4292,7 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
 
 
 class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`disjunction_introduction_2` :doc:`inference_rule` as valid in the target :doc:`universe_of_discourse`.
+    """The declaration of the :doc:`disjunction_introduction_2` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe_of_discourse_math_concept`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4318,7 +4312,7 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        """Apply the :doc:`disjunction_introduction_2` :doc:`inference_rule` and return the resulting formula.
+        """Apply the :doc:`disjunction_introduction_2` :ref:`inference_rule_math_concept` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -4332,14 +4326,14 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :doc:`disjunction_introduction_2` :doc:`inference_rule` ."""
+        """Composes the paragraph-proof of inferred-statements based on the :doc:`disjunction_introduction_2` :ref:`inference_rule_math_concept` ."""
         output = yield from configuration.locale.compose_disjunction_introduction_2_paragraph_proof(
             o=o)
         return output
 
     def verify_args(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence) -> bool:
-        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :doc:`inference_rule` .
+        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` .
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -4417,7 +4411,7 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
 
 
 class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`double_negation_introduction` :doc:`inference_rule` as valid in the target :doc:`universe_of_discourse`.
+    """The declaration of the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe_of_discourse_math_concept`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4437,7 +4431,7 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
-        """Apply the :doc:`double_negation_introduction` :doc:`inference_rule` and return the resulting formula.
+        """Apply the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
@@ -4450,14 +4444,14 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :doc:`double_negation_introduction` :doc:`inference_rule` ."""
+        """Composes the paragraph-proof of inferred-statements based on the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` ."""
         output = yield from configuration.locale.compose_double_negation_introduction_paragraph_proof(
             o=o)
         return output
 
     def verify_args(self, p: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
         p: FormulaStatement = interpret_statement_formula(t=t, arity=1, flexible_formula=p)
-        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :doc:`inference_rule` .
+        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` .
         
         :param p: (mandatory) A formula-statement of the form: :math:`P` .
         
@@ -4730,7 +4724,7 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
 
 
 class ModusPonensDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`modus_ponens` :doc:`inference_rule` in a :doc:`universe_of_discourse`.
+    """The declaration of the :doc:`modus_ponens` :ref:`inference_rule_math_concept` in a :ref:`universe_of_discourse_math_concept`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -6420,7 +6414,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
         self._conjunction_elimination_2 = None
         self._conjunction_introduction = None
         self._definition_interpretation = None
-        self._disjunction_elimination = None  # TODO: IMPLEMENT disjunction_elimination
+        self._disjunction_elimination = None
         self._disjunction_introduction_1 = None
         self._disjunction_introduction_2 = None
         self._double_negation_elimination = None
@@ -6439,41 +6433,16 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def absorb(self) -> AbsorptionDeclaration:
-        """The well-known :doc:`absorption` :doc:`inference-rule<inference_rule>`.
-
-        Unabridged property: u.i.absorption
-
-        If not yet declared in the :doc:`universe-of-discourse<universe_of_discourse>`, this :doc:`inference-rule<inference_rule>` will be automatically declared when this python property is accessed.
-        """
         return self.absorption
 
     @property
     def absorption(self) -> AbsorptionDeclaration:
-        """The well-known :doc:`absorption` :doc:`inference-rule<inference_rule>`.
-
-        Abridged property: u.i.absorb
-
-        If not yet declared in the :doc:`universe-of-discourse<universe_of_discourse>`, this :doc:`inference-rule<inference_rule>` will be automatically declared when this python property is accessed.
-        """
-
         if self._absorption is None:
             self._absorption = AbsorptionDeclaration(universe_of_discourse=self.u)
         return self._absorption
 
     @property
     def axiom_interpretation(self) -> AxiomInterpretationDeclaration:
-        """The axiom_interpretation inference-rule: 𝒜 ⊢ P.
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-
-        Warning
-        -------
-        Axiom-interpretation is especially dangerous because, contrary to most inference-rules,
-        it allows the introduction of arbitrary truthes in the theory. For this reason,
-        one must be very attentive when applying this inference-rule to assure the resulting
-        formula-statement complies / interprets properly its related contentual-axiom.
-        """
         if self._axiom_interpretation is None:
             self._axiom_interpretation = AxiomInterpretationDeclaration(
                 universe_of_discourse=self.u)
@@ -6481,50 +6450,18 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def bel(self) -> BiconditionalElimination1Declaration:
-        """The well-known biconditional-elimination #1 inference-rule: P ⟺ Q ⊢ P ⟹ Q.
-
-        Abridged property: u.i.bel
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.biconditional_elimination_1
 
     @property
     def ber(self) -> BiconditionalElimination2Declaration:
-        """The well-known biconditional-elimination #2 inference-rule: P ⟺ Q ⊢ Q ⟹ P.
-
-        Abridged property: u.i.ber()
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.biconditional_elimination_2
 
     @property
     def bi(self) -> BiconditionalIntroductionDeclaration:
-        """The well-known biconditional-introduction inference-rule: : P ⟹ Q, Q ⟹ P ⊢ P ⟺ Q.
-
-        Unabridged property: u.i.biconditional_introduction
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.biconditional_introduction
 
     @property
     def biconditional_elimination_1(self) -> BiconditionalElimination1Declaration:
-        """The well-known biconditional-elimination #1 inference-rule: ((P ⟺ Q) ⊢ (P ⟹ Q)).
-
-        The ⌜left⌝ suffix is non-standard and used to mean that among the two possible results of
-        biconditional-elimination, i.e.: (P ⟹ Q) and (Q ⟹ P), we pick the first one, i.e.: (P ⟹ Q).
-
-        Abridged property: u.i.bel
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
-
         if self._biconditional_elimination_1 is None:
             self._biconditional_elimination_1 = BiconditionalElimination1Declaration(
                 universe_of_discourse=self.u)
@@ -6532,17 +6469,6 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def biconditional_elimination_2(self) -> BiconditionalElimination2Declaration:
-        """The well-known biconditional-elimination #2 inference-rule: P ⟺ Q ⊢ Q ⟹ P.
-
-        The ⌜right⌝ suffix is non-standard and used to mean that among the two possible results
-        of biconditional-elimination, i.e.: (P ⟹ Q) and (Q ⟹ P), we pick the second one,
-        i.e.: (Q ⟹ P).
-
-        Abridged property: u.i.ber()
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         if self._biconditional_elimination_2 is None:
             self._biconditional_elimination_2 = BiconditionalElimination2Declaration(
                 universe_of_discourse=self.u)
@@ -6550,14 +6476,6 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def biconditional_introduction(self) -> BiconditionalIntroductionDeclaration:
-        """The well-known biconditional-introduction inference-rule: : P ⟹ Q, Q ⟹ P ⊢ P ⟺ Q.
-
-        Abridged property: u.i.bi
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
-
         if self._biconditional_introduction is None:
             self._biconditional_introduction = BiconditionalIntroductionDeclaration(
                 universe_of_discourse=self.u)
@@ -6565,41 +6483,14 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def cel(self) -> ConjunctionElimination1Declaration:
-        """The well-known conjunction-elimination #1 inference-rule: ((P ∧ Q) ⊢ P).
-
-        The ⌜left⌝ suffix is non-standard and used to mean that among the two possible results of
-        conjunction-elimination, i.e.: P and Q, we pick the first one, i.e.: P.
-
-        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_1
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.conjunction_elimination_1
 
     @property
     def cer(self) -> ConjunctionElimination2Declaration:
-        """The well-known conjunction-elimination #2 inference-rule: P ∧ Q ⊢ Q.
-
-        The ⌜right⌝ suffix is non-standard and used to mean that among the two possible results
-        of conjunction-elimination, i.e.: P and Q, we pick the second one, i.e.: Q.
-
-        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_2
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.conjunction_elimination_2
 
     @property
     def ci(self) -> ConjunctionIntroductionDeclaration:
-        """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
-
-        Unabridged property: universe_of_discourse.inference_rules.conjunction_introduction
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.conjunction_introduction
 
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
@@ -6608,17 +6499,6 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def conjunction_elimination_1(self) -> ConjunctionElimination1Declaration:
-        """The well-known conjunction-elimination #1 inference-rule: ((P ∧ Q) ⊢ P).
-
-        The ⌜left⌝ suffix is non-standard and used to mean that among the two possible results of
-        conjunction-elimination, i.e.: P and Q, we pick the first one, i.e.: P.
-
-        Abridged property: u.i.cel()
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
-
         # TODO: inference-rule: conjunction_elimination_1: Migrate to specialized classes
 
         if self._conjunction_elimination_1 is None:
@@ -6628,16 +6508,6 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def conjunction_elimination_2(self) -> ConjunctionElimination2Declaration:
-        """The well-known conjunction-elimination #2 inference-rule: P ∧ Q ⊢ Q.
-
-        The ⌜right⌝ suffix is non-standard and used to mean that among the two possible results
-        of conjunction-elimination, i.e.: P and Q, we pick the second one, i.e.: Q.
-
-        Abridged property: u.i.cer()
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         if self._conjunction_elimination_2 is None:
             self._conjunction_elimination_2 = ConjunctionElimination2Declaration(
                 universe_of_discourse=self.u)
@@ -6645,13 +6515,6 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def conjunction_introduction(self) -> ConjunctionIntroductionDeclaration:
-        """The well-known conjunction-introduction inference-rule: P, Q ⊢ (P ∧ Q).
-
-        Abridged property: u.i.ci
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         if self._conjunction_introduction is None:
             self._conjunction_introduction = ConjunctionIntroductionDeclaration(
                 universe_of_discourse=self.u)
@@ -6659,18 +6522,6 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def definition_interpretation(self) -> DefinitionInterpretationDeclaration:
-        """The definition_interpretation inference-rule: 𝒟 ⊢ (P = Q).
-
-        If the inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-
-        Warning
-        -------
-        Definition-interpretation is especially dangerous because, contrary to most inference-rules,
-        it allows the introduction of arbitrary truthes in the theory. For this reason,
-        one must be very attentive when applying this inference-rule to assure the resulting
-        formula-statement complies / interprets properly its related contentual-definition.
-        """
         if self._definition_interpretation is None:
             self._definition_interpretation = DefinitionInterpretationDeclaration(
                 universe_of_discourse=self.u)
@@ -6686,13 +6537,6 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def disjunction_introduction_1(self) -> DisjunctionIntroduction1Declaration:
-        """The well-known disjunction-introduction-1 inference-rule: P ⊢ (P ∨ Q).
-
-        Abridged property: u.i.di
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         if self._disjunction_introduction_1 is None:
             self._disjunction_introduction_1 = DisjunctionIntroduction1Declaration(
                 universe_of_discourse=self.u)
@@ -6700,13 +6544,6 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def disjunction_introduction_2(self) -> DisjunctionIntroduction2Declaration:
-        """The well-known disjunction-introduction-2 inference-rule: P ⊢ (P ∨ Q).
-
-        Abridged property: u.i.di
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         if self._disjunction_introduction_2 is None:
             self._disjunction_introduction_2 = DisjunctionIntroduction2Declaration(
                 universe_of_discourse=self.u)
@@ -6714,35 +6551,14 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def dne(self) -> DoubleNegationEliminationDeclaration:
-        """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
-
-        Original method: universe_of_discourse.inference_rules.double_negation_elimination
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.double_negation_elimination
 
     @property
     def dni(self) -> DoubleNegationIntroductionDeclaration:
-        """The well-known double-negation-introduction inference-rule: P ⊢ ¬¬P.
-
-        Original method: universe_of_discourse.inference_rules.double_negation_introduction()
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.double_negation_introduction
 
     @property
     def double_negation_elimination(self) -> DoubleNegationEliminationDeclaration:
-        """The well-known double-negation-elimination inference-rule: ¬¬P ⊢ P.
-
-        Abridged property: u.i.dne
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         if self._double_negation_elimination is None:
             self._double_negation_elimination = DoubleNegationEliminationDeclaration(
                 universe_of_discourse=self.u)
@@ -6750,14 +6566,6 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def double_negation_introduction(self) -> DoubleNegationIntroductionDeclaration:
-        """The well-known double-negation-introduction inference-rule: P ⊢ ¬(¬(P)).
-
-        Abridged property: u.i.dni
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
-
         if self._double_negation_introduction is None:
             self._double_negation_introduction = DoubleNegationIntroductionDeclaration(
                 universe_of_discourse=self.u)
@@ -6765,20 +6573,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def ec(self) -> EqualityCommutativityDeclaration:
-        """
-
-        .. include: docs/equality_commutativity_rule.md
-
-        """
         return self.equality_commutativity
 
     @property
     def equality_commutativity(self) -> EqualityCommutativityDeclaration:
-        """
-
-        .. include: docs/equality_commutativity_rule.md
-
-        """
         if self._equality_commutativity is None:
             self._equality_commutativity = EqualityCommutativityDeclaration(
                 universe_of_discourse=self.u)
@@ -6786,11 +6584,6 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def equal_terms_substitution(self) -> EqualTermsSubstitutionDeclaration:
-        """
-
-           .. include:: docs/equal_terms_substitution_inference_rule.md
-
-        """
         if self._equal_terms_substitution is None:
             self._equal_terms_substitution = EqualTermsSubstitutionDeclaration(
                 universe_of_discourse=self.u)
@@ -6798,33 +6591,10 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def ets(self) -> EqualTermsSubstitutionDeclaration:
-        """
-
-        .. include:: docs/equal_terms_substitution_inference_rule.md
-
-        """
         return self.equal_terms_substitution
 
     @property
     def ii1(self) -> InconsistencyIntroduction1Declaration:
-        """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
-
-            Unabridged property: universe_of_discourse.inference_rules.inconsistency_introduction
-
-            Inconsistency-introduction is an extraordinary inference-rule
-            because it proves that the theory is inconsistent. It follows
-            that the corresponding statement: ⌜Inc(t)⌝ becomes paradoxically
-            invalid as soon as it is expressed in the current theory. In
-            fact, ⌜Inc(t)⌝ should rather be understood as a meta-statement
-            about the theory. In future versions of punctilious we will consider
-            stating ⌜Inc(t)⌝ in a distinct meta-theory.
-
-            Once ⌜Inc(t)⌝ is stated, the ⌜consistency⌝ property of the
-            current theory is automatically changed to ⌜inconsistent⌝.
-
-            If the inference-rule does not exist in the universe-of-discourse,
-            the inference-rule is automatically declared.
-            """
         return self.inconsistency_introduction_1
 
     @property
@@ -6837,25 +6607,6 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def inconsistency_introduction_1(self) -> InconsistencyIntroduction1Declaration:
-        """The inconsistency-introduction inference-rule: (P ∧ ¬P) ⊢ Inc(t).
-
-        Abridged property: u.i.ii
-
-        Inconsistency-introduction is an extraordinary inference-rule
-        because it proves that the theory is inconsistent. It follows
-        that the corresponding statement: ⌜Inc(t)⌝ becomes paradoxically
-        invalid as soon as it is expressed in the current theory. In
-        fact, ⌜Inc(t)⌝ should rather be understood as a meta-statement
-        about the theory. In future versions of punctilious we will consider
-        stating ⌜Inc(t)⌝ in a distinct meta-theory.
-        
-        Once ⌜Inc(t)⌝ is stated, the ⌜consistency⌝ property of the 
-        current theory is automatically changed to ⌜inconsistent⌝.
-
-        If the inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
-
         if self._inconsistency_introduction_1 is None:
             self._inconsistency_introduction_1 = InconsistencyIntroduction1Declaration(
                 universe_of_discourse=self.u)
@@ -6877,75 +6628,28 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def modus_ponens(self) -> ModusPonensDeclaration:
-        """The well-known modus-ponens inference-rule: (P ⟹ Q), P' ⊢ Q'.
-
-        Abridged property: u.i.mp
-
-        The implication (P ⟹ Q) may contain free-variables. If such is the
-        case, the resulting Q' is computed by extracting variable-values
-        from P' and applying variable-substitution.
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         if self._modus_ponens is None:
             self._modus_ponens = ModusPonensDeclaration(universe_of_discourse=self.u)
         return self._modus_ponens
 
     @property
     def mp(self) -> InferenceRuleDeclaration:
-        """The well-known modus-ponens inference-rule: (P ⟹ Q), P ⊢ Q.
-
-        Unabridged property: u.i.modus_ponens
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.modus_ponens
 
     @property
     def pbc1(self) -> ProofByContradiction1Declaration:
-        """
-
-        Unabridged property: u.i.proof_by_contradiction
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.proof_by_contradiction_1
 
     @property
     def pbc2(self) -> ProofByContradiction2Declaration:
-        """
-
-        Unabridged property: u.i.proof_by_contradiction
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.proof_by_contradiction_2
 
     @property
     def pbr(self) -> ProofByRefutation1Declaration:
-        """
-
-        Unabridged property: u.i.proof_by_refutation
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.proof_by_refutation_1
 
     @property
     def proof_by_contradiction_1(self) -> ProofByContradiction1Declaration:
-        """
-
-        Abridged property: u.i.pbc
-
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         if self._proof_by_contradiction_1 is None:
             self._proof_by_contradiction_1 = ProofByContradiction1Declaration(
                 universe_of_discourse=self.u)
@@ -6960,14 +6664,6 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def proof_by_refutation_1(self) -> ProofByRefutation1Declaration:
-        """
-
-        Abridged property: u.i.pbr
-
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         if self._proof_by_refutation_1 is None:
             self._proof_by_refutation_1 = ProofByRefutation1Declaration(
                 universe_of_discourse=self.u)
@@ -6989,36 +6685,11 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
     @property
     def vs(self) -> VariableSubstitutionDeclaration:
-        """An inference-rule: P ⊢ P'
-
-        Abridged property: u.i.vs
-
-        Formal definition:
-        Given a statement P whose formula contains an ordered set
-        of n free-variables, ordered by their canonical order of
-        appearance in the formula,
-        given an ordered set of theoretical-objcts O of cardinality n,
-        the _variable substitution_ _inference rule_ returns a new
-        statement P' where all occurrences of variables in P were
-        replaced by their corresponding substitution values in O.
-
-        Warning:
-        To avoid inconsistent package, one must be cautious
-        with variable manipulations. In effect, the proposition:
-            ((2n + 4) = 2(n + 2))
-        may lead to inconsistencies following variable-substitution
-        because the variable n is not typed. On the contrary:
-            (n ∈ ℕ) ⟹ ((2n + 4) = 2(n + 2))
-        where n is constrained leads to consistent results.
-
-        If the inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
         return self.variable_substitution
 
 
 class AbsorptionInclusion(InferenceRuleInclusion):
-    """The inclusion of :doc:`absorption` as a valid :doc:`inference_rule` in a :doc:`theory_elaboration_sequence`.
+    """The inclusion of :ref:`absorption_math_concept` as a valid :ref:`inference_rule_math_concept` in the :ref:`theory_elaboration_sequence_math_concept`.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7288,7 +6959,7 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :doc:`conjunction_introduction` :doc:`inference_rule` and return the resulting formula.
+        """Apply the :doc:`conjunction_introduction` :ref:`inference_rule_math_concept` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula-statement of the form :math:`Q` .
@@ -7303,7 +6974,7 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
             q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the :doc:`conjunction_introduction` :doc:`inference_rule` and return the resulting inferred-statement.
+        """Apply the :doc:`conjunction_introduction` :ref:`inference_rule_math_concept` and return the resulting inferred-statement.
 
                 :param p: (mandatory) A formula-statement of the form: :math:`P`.
                 :param q: (mandatory) A formula-statement of the form: :math:`Q`.
@@ -7383,7 +7054,7 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :doc:`disjunction_introduction_1` :doc:`inference_rule` and return the resulting formula.
+        """Apply the :doc:`disjunction_introduction_1` :ref:`inference_rule_math_concept` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -7398,7 +7069,7 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
             q: (None, Formula, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the :doc:`disjunction_introduction_1` :doc:`inference_rule` and return the resulting inferred-statement.
+        """Apply the :doc:`disjunction_introduction_1` :ref:`inference_rule_math_concept` and return the resulting inferred-statement.
 
                 :param p: (mandatory) A formula-statement of the form: :math:`P`.
                 :param q: (mandatory) A formula of the form: :math:`Q`.
@@ -7434,7 +7105,7 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :doc:`disjunction_introduction_2` :doc:`inference_rule` and return the resulting formula.
+        """Apply the :doc:`disjunction_introduction_2` :ref:`inference_rule_math_concept` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -7449,7 +7120,7 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
             q: (None, Formula, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the :doc:`disjunction_introduction_2` :doc:`inference_rule` and return the resulting inferred-statement.
+        """Apply the :doc:`disjunction_introduction_2` :ref:`inference_rule_math_concept` and return the resulting inferred-statement.
 
                 :param p: (mandatory) A formula-statement of the form: :math:`P`.
                 :param q: (mandatory) A formula of the form: :math:`Q`.
@@ -7503,7 +7174,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
 
 
 class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
-    """The inclusion of the :doc:`double_negation_introduction` :doc:`inference_rule` as valid in the target :doc:`theory_elaboration_sequence`.
+    """The inclusion of the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` as valid in the target :ref:`theory_elaboration_sequence_math_concept`.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7519,7 +7190,7 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
             proof=proof)
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :doc:`double_negation_introduction` :doc:`inference_rule` and return the resulting formula.
+        """Apply the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` and return the resulting formula.
 
         :param p: (mandatory) A formula or formula-statement of the form: :math:`P` .
         :param echo:
@@ -7531,7 +7202,7 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the :doc:`double_negation_introduction` :doc:`inference_rule` and return the resulting inferred-statement.
+        """Apply the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` and return the resulting inferred-statement.
 
         :param p: (mandatory) A formula-statement of the form: :math:`P`.
         :param nameset:
@@ -7748,7 +7419,7 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
 
 
 class ModusPonensInclusion(InferenceRuleInclusion):
-    """The inclusion of :doc:`modus_ponens` as a valid :doc:`inference_rule` in a :doc:`theory_elaboration_sequence`.
+    """The inclusion of :doc:`modus_ponens` as a valid :ref:`inference_rule_math_concept` in a :ref:`theory_elaboration_sequence_math_concept`.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7879,7 +7550,7 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :doc:`proof_by_refutation_1` :doc:`inference_rule` and return the inferred-formula.
+        """Apply the :doc:`proof_by_refutation_1` :ref:`inference_rule_math_concept` and return the inferred-formula.
 
         :param p_hypothesis: (mandatory) The :math:`\\neg \\mathbf{P}` hypothesis.
         :param inc_hypothesis: (mandatory) The proof of inconsistency of the :math:`\\neg \\mathbf{P}` hypothesis :math:`Inc\\left(\\mathcal{H}\\right)` .
@@ -8273,42 +7944,22 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
     @property
     def ec(self) -> EqualityCommutativityInclusion:
-        """
-
-        .. include:: docs/equal_terms_substitution_inference_rule.md
-
-        """
         return self.equality_commutativity
 
     @property
     def equality_commutativity(self) -> EqualityCommutativityInclusion:
-        """
-
-        .. include:: docs/equal_terms_substitution_inference_rule.md
-
-        """
         if self._equality_commutativity is None:
             self._equality_commutativity = EqualityCommutativityInclusion(t=self.t)
         return self._equality_commutativity
 
     @property
     def equal_terms_substitution(self) -> EqualTermsSubstitutionInclusion:
-        """
-
-        .. include:: docs/equal_terms_substitution_inference_rule.md
-
-        """
         if self._equal_terms_substitution is None:
             self._equal_terms_substitution = EqualTermsSubstitutionInclusion(t=self.t)
         return self._equal_terms_substitution
 
     @property
     def ets(self) -> EqualTermsSubstitutionInclusion:
-        """
-
-        .. include:: docs/equal_terms_substitution_inference_rule.md
-
-        """
         return self.equal_terms_substitution
 
     @property
@@ -8445,7 +8096,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
 
 class UniverseOfDiscourse(SymbolicObject):
-    """The UniverseOfDiscourse pythonic class models a universe-of-discourse.
+    """The :ref:`universe_of_discourse_python_class` models a :ref:`universe_of_discourse_math_concept`.
     """
 
     def __init__(self, nameset: (None, str, NameSet) = None, symbol: (None, str, StyledText) = None,
@@ -8683,7 +8334,7 @@ class UniverseOfDiscourse(SymbolicObject):
             subtitle: (None, str, StyledText) = None,
             paragraph_header: (None, ParagraphHeader) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None) -> AxiomDeclaration:
-        """Elaborate a new axiom 𝑎 in this universe-of-discourse.
+        """:ref:`Declare` a new axiom in this universe-of-discourse.
         """
         return AxiomDeclaration(u=self, natural_language=natural_language, symbol=symbol,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
@@ -8728,7 +8379,7 @@ class UniverseOfDiscourse(SymbolicObject):
 
     @property
     def i(self) -> InferenceRuleDeclarationDict:
-        """The (possibly empty) collection of :doc:`inference-rules<inference_rule>` declared in this in this :doc:`universe-of-discourse<universe_of_discourse>`.
+        """The (possibly empty) collection of :ref:`inference-rules` declared in this in this :doc:`universe-of-discourse<universe_of_discourse>`.
 
         Unabridged name: inference_rules
         """

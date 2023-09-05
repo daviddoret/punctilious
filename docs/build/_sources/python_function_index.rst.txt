@@ -1,9 +1,0 @@
-Python function index
-========================
-
-.. toctree::
-   :maxdepth: 0
-   :caption: Contents:
-
-   python/function/create_universe_of_discourse
-
