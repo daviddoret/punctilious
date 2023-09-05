@@ -20,7 +20,7 @@ release = '1.0.0'
 extensions = [  # 'sphinxcontrib-inlinesyntaxhighlight',
     'sphinx.ext.autodoc',  # 'sphinx-autodoc-typehints',
     'sphinx.ext.mathjax', 'sphinxcontrib.bibtex', 'sphinx_autodoc_typehints', 'sphinx.ext.graphviz',
-    'sphinx_togglebutton', 'sphinx_rtd_theme']
+    'sphinx_togglebutton', 'sphinx_rtd_theme', 'sphinx_favicon']
 # 'sphinxawesome_theme',
 # 'sphinx_exec_code',
 bibtex_bibfiles = ['bibliography_bibtex.bib']
@@ -47,3 +47,8 @@ html_css_files = ['css/custom.css', ]
 # exec_code_working_dir = '../../sample/working_dir'
 # exec_code_source_folders = ['../..']
 # exec_code_example_dir = '../../sample'
+
+favicons = [{'href': 'punctilious-minilogo.svg'},  # => use `_static/icon.svg`
+    {'href': 'punctilious-minilogo-16x16-white.png'},
+    {'href': 'punctilious-minilogo-32x32-white.png'},
+    {'rel': 'apple-touch-icon', 'href': 'punctilious-minilogo-180x180-white.png', }, ]

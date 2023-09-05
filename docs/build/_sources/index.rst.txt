@@ -5,7 +5,7 @@ Index
    :maxdepth: 1
    :caption: Front matter
 
-   Welcome<welcome>
+   Title<title>
 
 .. toctree::
    :maxdepth: 1
