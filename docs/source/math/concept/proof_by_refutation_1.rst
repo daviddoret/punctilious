@@ -11,8 +11,8 @@ Definition
     \left( \boldsymbol{\mathcal{H}} \: \textit{assume} \: \neg \boldsymbol{P}, \boldsymbol{P}, Inc\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \boldsymbol{P}
 
 Where:
- * :math:`\boldsymbol{\mathcal{H}}` is an :doc:`hypothesis`
- * :math:`\boldsymbol{P}` is a :doc:`formula_statement`
+ * :math:`\boldsymbol{\mathcal{H}}` is an :ref:`hypothesis`
+ * :math:`\boldsymbol{P}` is a :ref:`formula_statement`
 
 In plain language, it consists in posing the hypothesis that a proposition :math:`\boldsymbol{P}` is not true, refuting that hypothesis by proving :math:`\boldsymbol{P}`, inferring the inconsistency of that hypothesis from this contradiction, and finally inferring :math:`\boldsymbol{P}`.
 

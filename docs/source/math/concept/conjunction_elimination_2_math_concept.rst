@@ -1,3 +1,6 @@
+.. _conjunction_elimination_2_math_concept:
+.. _conjunction-elimination-2:
+
 .. role:: python(code)
     :language: py
 
@@ -5,7 +8,7 @@ conjunction-elimination-2
 ========================================
 
 .. seealso::
-   :doc:`conjunction_elimination_1` | :doc:`conjunction_introduction` | :ref:`inference_rule_math_concept`
+   :ref:`conjunction_elimination_1` | :ref:`conjunction_introduction` | :ref:`inference_rule_math_concept`
 
 Definition
 ----------
@@ -25,7 +28,7 @@ Quotes
 Python implementation
 ----------------------
 
-The simplest way to use this inference-rule is to access it via the :python:`inference_rules` (abridged :python:`i` ) property of the :ref:`theory_elaboration_sequence_math_concept`:
+The simplest way to use this inference-rule is to access it via the :python:`inference_rules` (abridged :python:`i` ) property of the :ref:`theory-elaboration-sequence`:
 
 .. code-block:: python
 
@@ -36,7 +39,7 @@ The simplest way to use this inference-rule is to access it via the :python:`inf
    ...
    t.i.conjunction_elimination_2.infer_statement(p_and_q = ...)
 
-If the :ref:`inference_rule_math_concept` was not yet declared in the :ref:`universe_of_discourse_math_concept` , it will be automatically declared. If the :ref:`inference_rule_math_concept` was not yet included in the :ref:`theory_elaboration_sequence_math_concept` , it will be automatically included.
+If the :ref:`inference_rule_math_concept` was not yet declared in the :ref:`universe-of-discourse` , it will be automatically declared. If the :ref:`inference_rule_math_concept` was not yet included in the :ref:`theory-elaboration-sequence` , it will be automatically included.
 
 This calls the following method:
 

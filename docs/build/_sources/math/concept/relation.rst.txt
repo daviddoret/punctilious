@@ -16,7 +16,7 @@ Syntactically, a *relation* is represented with a
 Key properties
 -------------------
  - arity
- - :doc:`notation_form`
+ - :ref:`notation_form`
  - signal-proposition (TODO: rename to propositional)
  - symbolic-representation
 

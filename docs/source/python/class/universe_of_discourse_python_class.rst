@@ -7,7 +7,7 @@ UniverseOfDiscourse (python class)
 =====================================
 
 .. seealso::
-   :ref:`universe_of_discourse_math_concept`
+   :ref:`universe-of-discourse`
 
 
 .. module:: core

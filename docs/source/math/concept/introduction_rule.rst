@@ -9,11 +9,11 @@ An *introduction-rule* is an :ref:`inference_rule_math_concept` that allows to d
 List of well-known *introduction-rules*
 -----------------------------------------
 
-* :doc:`biconditional_introduction`
-* :doc:`conjunction_introduction`
-* :doc:`disjunction_introduction_left`
-* :doc:`disjunction_introduction_right`
-* :doc:`double_negation_introduction`
+* :ref:`biconditional_introduction`
+* :ref:`conjunction_introduction`
+* :ref:`disjunction_introduction_left`
+* :ref:`disjunction_introduction_right`
+* :ref:`double_negation_introduction`
 
 Quotes
 -------
@@ -24,7 +24,7 @@ Quotes
 See also
 ---------
 
-* :doc:`elimination_rule`
+* :ref:`elimination_rule`
 * :ref:`inference_rule_math_concept`
 
 Bibliography

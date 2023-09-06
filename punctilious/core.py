@@ -3729,7 +3729,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
 
 class AbsorptionDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :ref:`absorption_math_concept` :ref:`inference_rule_math_concept` in a :ref:`universe_of_discourse_math_concept`.
+    """The declaration of the :ref:`absorption_math_concept` :ref:`inference_rule_math_concept` in a :ref:`universe-of-discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4121,7 +4121,7 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
 
 
 class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`conjunction_introduction` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe_of_discourse_math_concept`.
+    """The declaration of the :doc:`conjunction_introduction` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe-of-discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4235,7 +4235,7 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
 
 
 class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`disjunction_introduction_1` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe_of_discourse_math_concept`.
+    """The declaration of the :doc:`disjunction_introduction_1` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe-of-discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4292,7 +4292,7 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
 
 
 class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`disjunction_introduction_2` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe_of_discourse_math_concept`.
+    """The declaration of the :doc:`disjunction_introduction_2` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe-of-discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4411,7 +4411,7 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
 
 
 class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe_of_discourse_math_concept`.
+    """The declaration of the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe-of-discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4724,7 +4724,7 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
 
 
 class ModusPonensDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`modus_ponens` :ref:`inference_rule_math_concept` in a :ref:`universe_of_discourse_math_concept`.
+    """The declaration of the :doc:`modus_ponens` :ref:`inference_rule_math_concept` in a :ref:`universe-of-discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -6689,7 +6689,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
 
 class AbsorptionInclusion(InferenceRuleInclusion):
-    """The inclusion of :ref:`absorption_math_concept` as a valid :ref:`inference_rule_math_concept` in the :ref:`theory_elaboration_sequence_math_concept`.
+    """The inclusion of :ref:`absorption_math_concept` as a valid :ref:`inference_rule_math_concept` in the :ref:`theory-elaboration-sequence`.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7174,7 +7174,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
 
 
 class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
-    """The inclusion of the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` as valid in the target :ref:`theory_elaboration_sequence_math_concept`.
+    """The inclusion of the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` as valid in the target :ref:`theory-elaboration-sequence`.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7419,7 +7419,7 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
 
 
 class ModusPonensInclusion(InferenceRuleInclusion):
-    """The inclusion of :doc:`modus_ponens` as a valid :ref:`inference_rule_math_concept` in a :ref:`theory_elaboration_sequence_math_concept`.
+    """The inclusion of :doc:`modus_ponens` as a valid :ref:`inference_rule_math_concept` in a :ref:`theory-elaboration-sequence`.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -8096,7 +8096,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
 
 
 class UniverseOfDiscourse(SymbolicObject):
-    """The :ref:`universe_of_discourse_python_class` models a :ref:`universe_of_discourse_math_concept`.
+    """The :ref:`universe_of_discourse_python_class` models a :ref:`universe-of-discourse`.
     """
 
     def __init__(self, nameset: (None, str, NameSet) = None, symbol: (None, str, StyledText) = None,

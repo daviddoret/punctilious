@@ -7,7 +7,7 @@ universe-of-discourse
 ======================
 
 .. seealso::
-   :doc:`object_creation` | :ref:`theory_elaboration_sequence_math_concept`
+   :ref:`object-creation` | :ref:`theory-elaboration-sequence`
 
 Definition
 ----------
@@ -20,7 +20,7 @@ A *universe-of-discourse* is a (possibly empty) collection of objects.
 
 Where:
 
-* :math:`o_i` is an :doc:`object`
+* :math:`o_i` is an :ref:`object`
 
 If we organize objects in (desirably mutually exclusive but necessarily exhaustive) categories [#category_footnote]_ , a *universe-of-discourse* is equivalently defined as a tuple:
 
@@ -51,7 +51,7 @@ Where:
 
 .. note:: The lifecycle of objects
 
-    For :doc:`objects<object>` (including *universes-of-discourse*) to exist, they are :doc:`created<object_creation>`. For :doc:`objects<object>` to be contained in *universes-of-discourse*, they are :doc:`declared<object_creation>`. And finally, for :doc:`objects<object>` to be contained in :doc:`theory-elaboration-sequences<theory_elaboration_sequence>`, they are :doc:`included (or postulated)<object_inclusion>`.
+    For :ref:`objects<object>` (including *universes-of-discourse*) to exist, they are :ref:`created<object_creation>`. For :ref:`objects<object>` to be contained in *universes-of-discourse*, they are :ref:`declared<object_creation>`. And finally, for :ref:`objects<object>` to be contained in :ref:`theory-elaboration-sequences<theory_elaboration_sequence>`, they are :ref:`included (or postulated)<object_inclusion>`.
 
 Python implementation
 ---------------------

@@ -48,7 +48,7 @@ html_css_files = ['css/custom.css', ]
 # exec_code_source_folders = ['../..']
 # exec_code_example_dir = '../../sample'
 
-favicons = [{'href': 'punctilious-minilogo.svg'},  # => use `_static/icon.svg`
-    {'href': 'punctilious-minilogo-16x16-white.png'},
-    {'href': 'punctilious-minilogo-32x32-white.png'},
-    {'rel': 'apple-touch-icon', 'href': 'punctilious-minilogo-180x180-white.png', }, ]
+favicons = [{'href': 'punctilious-logo-compact-light.svg'},  # => use `_static/icon.svg`
+    {'href': 'punctilious-logo-compact-light-16x16-white.png'},
+    {'href': 'punctilious-logo-compact-light-32x32-white.png'},
+    {'rel': 'apple-touch-icon', 'href': 'punctilious-logo-compact-light-180x180-white.png', }, ]

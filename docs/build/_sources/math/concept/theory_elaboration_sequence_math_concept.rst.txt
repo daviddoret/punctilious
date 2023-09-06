@@ -1,4 +1,5 @@
 .. _theory_elaboration_sequence_math_concept:
+.. _theory-elaboration-sequence:
 
 .. role:: python(code)
     :language: py

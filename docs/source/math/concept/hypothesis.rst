@@ -5,12 +5,12 @@ hypothesis
 ========================================
 
 .. seealso::
-   :ref:`theory_elaboration_sequence_math_concept`
+   :ref:`theory-elaboration-sequence`
 
 Definition
 ----------
 
-An *hypothesis* is a special statement, that branches out a child :ref:`theory_elaboration_sequence_math_concept` from a parent :ref:`theory_elaboration_sequence_math_concept`, and postulates a new :doc:`formula_statement` as true.
+An *hypothesis* is a special statement, that branches out a child :ref:`theory-elaboration-sequence` from a parent :ref:`theory-elaboration-sequence`, and postulates a new :ref:`formula_statement` as true.
 
 Note that an *hypothesis* is part of the theory sequence. It follows that its predecessor statements are contained in the hypothesis, and its successors are not.
 
@@ -23,7 +23,7 @@ Quotes
 Python implementation
 ----------------------
 
-The simplest way to pose an hypothesis is to call the :python:`pose_hypothesis` method of the :ref:`theory_elaboration_sequence_math_concept`:
+The simplest way to pose an hypothesis is to call the :python:`pose_hypothesis` method of the :ref:`theory-elaboration-sequence`:
 
 .. code-block:: python
 

@@ -5,7 +5,7 @@ equal-terms-substitution
 =============================
 
 .. seealso::
-   :doc:`equality_commutativity` | :ref:`inference_rule_math_concept`
+   :ref:`equality_commutativity` | :ref:`inference_rule_math_concept`
 
 Definition
 ----------
@@ -18,9 +18,9 @@ Definition
 
 Where:
 
-* :math:`P` is a :doc:`formula_statement`
-* :math:`x = y` is a :doc:`formula_statement` of the form :math:`x = y`
-* :math:`Q` is a :doc:`formula_statement` identical to :math:`P` except that every occurrences of :math:`x` in :math:`P` are substituted with :math:`y`
+* :math:`P` is a :ref:`formula_statement`
+* :math:`x = y` is a :ref:`formula_statement` of the form :math:`x = y`
+* :math:`Q` is a :ref:`formula_statement` identical to :math:`P` except that every occurrences of :math:`x` in :math:`P` are substituted with :math:`y`
 
 Quotes
 ------
@@ -29,7 +29,7 @@ Quotes
 Python implementation
 ----------------------
 
-The simplest way to use this inference-rule is to access it via the :python:`inference_rules` (abridged :python:`i` ) property of the :ref:`theory_elaboration_sequence_math_concept`:
+The simplest way to use this inference-rule is to access it via the :python:`inference_rules` (abridged :python:`i` ) property of the :ref:`theory-elaboration-sequence`:
 
 .. code-block:: python
 
@@ -40,7 +40,7 @@ The simplest way to use this inference-rule is to access it via the :python:`inf
    ...
    t.i.equal-terms_substitution.infer_statement(p = ...)
 
-If the :ref:`inference_rule_math_concept` was not yet declared in the :ref:`universe_of_discourse_math_concept` , it will be automatically declared. If the :ref:`inference_rule_math_concept` was not yet included in the :ref:`theory_elaboration_sequence_math_concept` , it will be automatically included.
+If the :ref:`inference_rule_math_concept` was not yet declared in the :ref:`universe-of-discourse` , it will be automatically declared. If the :ref:`inference_rule_math_concept` was not yet included in the :ref:`theory-elaboration-sequence` , it will be automatically included.
 
 This calls the following method:
 

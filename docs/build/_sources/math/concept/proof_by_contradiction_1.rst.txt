@@ -12,8 +12,8 @@ Definition
 
 Where:
 
-* :math:`\mathcal{H}` is an :doc:`hypothesis`
-* :math:`\mathbf{P}` is a propositional :doc:`formula`
+* :math:`\mathcal{H}` is an :ref:`hypothesis`
+* :math:`\mathbf{P}` is a propositional :ref:`formula`
 * :math:`\mathit{Inc}` is the inconsistency function
 
 Python implementation

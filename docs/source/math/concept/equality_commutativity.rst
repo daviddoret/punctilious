@@ -5,7 +5,7 @@ equality-commutativity
 =============================
 
 .. seealso::
-   :doc:`equal_terms_substitution` | :ref:`inference_rule_math_concept`
+   :ref:`equal_terms_substitution` | :ref:`inference_rule_math_concept`
 
 Definition
 ----------
@@ -18,7 +18,7 @@ Definition
 
 Where:
 
-* :math:`x = y` is a :doc:`formula_statement` of the form :math:`x = y`
+* :math:`x = y` is a :ref:`formula_statement` of the form :math:`x = y`
 
 Quotes
 ------
@@ -27,7 +27,7 @@ Quotes
 Python implementation
 ----------------------
 
-The simplest way to use this inference-rule is to access it via the :python:`inference_rules` (abridged :python:`i` ) property of the :ref:`theory_elaboration_sequence_math_concept`:
+The simplest way to use this inference-rule is to access it via the :python:`inference_rules` (abridged :python:`i` ) property of the :ref:`theory-elaboration-sequence`:
 
 .. code-block:: python
 
@@ -38,7 +38,7 @@ The simplest way to use this inference-rule is to access it via the :python:`inf
    ...
    t.i.equality_commutativity.infer_statement(p = ...)
 
-If the :ref:`inference_rule_math_concept` was not yet declared in the :ref:`universe_of_discourse_math_concept` , it will be automatically declared. If the :ref:`inference_rule_math_concept` was not yet included in the :ref:`theory_elaboration_sequence_math_concept` , it will be automatically included.
+If the :ref:`inference_rule_math_concept` was not yet declared in the :ref:`universe-of-discourse` , it will be automatically declared. If the :ref:`inference_rule_math_concept` was not yet included in the :ref:`theory-elaboration-sequence` , it will be automatically included.
 
 This calls the following method:
 

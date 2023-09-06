@@ -1,20 +1,22 @@
+.. _elimination_rule_math_concept:
+.. _elimination-rule:
+
 elimination-rule
 ==================
 
 Definition
 ----------
 
-An *introduction-rule* is an :ref:`inference_rule_math_concept` that allows to derive a formula-statement of some syntactic form from some define premises.
+An *introduction-rule* is an :ref:`inference-rule` that allows to derive a formula-statement of some syntactic form from some define premises.
 
 List of well-known *introduction-rules*
 ------------------------------------------
 
-* :doc:`biconditional_elimination_left`
-* :doc:`biconditional_elimination_right`
-* :doc:`conjunction_elimination_left`
-* :doc:`conjunction_elimination_right`
-* :doc:`disjunction_elimination`
-* :doc:`double_negation_elimination`
+* :ref:`biconditional-elimination-1`
+* :ref:`biconditional-elimination-2`
+* :ref:`conjunction-elimination-1`
+* :ref:`conjunction-elimination-2`
+* :ref:`double-negation-elimination`
 
 Quotes
 -------

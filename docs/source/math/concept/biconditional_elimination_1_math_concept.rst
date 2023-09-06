@@ -1,3 +1,6 @@
+.. _biconditional_elimination_1_math_concept:
+.. _biconditional-elimination-1:
+
 .. role:: python(code)
     :language: py
 
@@ -5,12 +8,12 @@ biconditional-elimination-1
 ========================================
 
 .. seealso::
-   :doc:`biconditional_elimination_2` | :doc:`biconditional_introduction` | :ref:`inference_rule_math_concept`
+   :ref:`biconditional-elimination-2` | :ref:`biconditional-introduction` | :ref:`inference-rule`
 
 Definition
 ----------
 
-*biconditional-elimination-1* is the :ref:`inference_rule_math_concept`:
+*biconditional-elimination-1* is the :ref:`inference-rule`:
 
 .. math::
 
@@ -18,9 +21,9 @@ Definition
 
 Where:
 
-* :math:`P \iff Q` is a :doc:`formula_statement`
-* :math:`P` is a propositional :doc:`formula`
-* :math:`Q` is a propositional :doc:`formula`
+* :math:`P \iff Q` is a :ref:`formula_statement`
+* :math:`P` is a propositional :ref:`formula`
+* :math:`Q` is a propositional :ref:`formula`
 
 In straightforward language, if P is true if and only if Q is true, it follows that P implies Q.
 
@@ -30,7 +33,7 @@ Quotes
 Python implementation
 ----------------------
 
-The simplest way to use this inference-rule is to access it via the :python:`inference_rules` (abridged :python:`i` ) property of the :ref:`theory_elaboration_sequence_math_concept`:
+The simplest way to use this inference-rule is to access it via the :python:`inference_rules` (abridged :python:`i` ) property of the :ref:`theory-elaboration-sequence`:
 
 .. code-block:: python
 
@@ -41,7 +44,7 @@ The simplest way to use this inference-rule is to access it via the :python:`inf
    ...
    t.i.biconditional_elimination_1.infer_statement(p_iff_q = ...)
 
-If the :ref:`inference_rule_math_concept` was not yet declared in the :ref:`universe_of_discourse_math_concept` , it will be automatically declared. If the :ref:`inference_rule_math_concept` was not yet included in the :ref:`theory_elaboration_sequence_math_concept` , it will be automatically included.
+If the :ref:`inference_rule_math_concept` was not yet declared in the :ref:`universe-of-discourse` , it will be automatically declared. If the :ref:`inference_rule_math_concept` was not yet included in the :ref:`theory-elaboration-sequence` , it will be automatically included.
 
 This calls the following method:
 

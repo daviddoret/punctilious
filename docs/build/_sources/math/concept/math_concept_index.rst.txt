@@ -9,17 +9,17 @@ This table of contents references the key mathematical concepts used by punctili
 
    absorption<absorption_math_concept>
    axiom<axiom_math_concept>
-   biconditional_elimination_1
-   biconditional_elimination_2
-   biconditional_introduction
-   conjunction_elimination_1
-   conjunction_elimination_2
+   biconditional-elimination-1<biconditional_elimination_1_math_concept>
+   biconditional-elimination-2<biconditional_elimination_2_math_concept>
+   biconditional-introduction<biconditional_introduction_math_concept>
+   conjunction-elimination-1<conjunction_elimination_1_math_concept>
+   conjunction-elimination-2<conjunction_elimination_2_math_concept>
    conjunction_introduction
    disjunction_introduction_1
    disjunction_introduction_2
-   double_negation_elimination
+   double-negation-elimination<double_negation_elimination_math_concept>
    double_negation_introduction
-   elimination_rule
+   elimination-rule<elimination_rule_math_concept>
    equal_terms_substitution
    equality_commutativity
    formula
@@ -35,9 +35,9 @@ This table of contents references the key mathematical concepts used by punctili
    modus_ponens
    notation_form
    object
-   object_creation
-   object_declaration<object_declaration_math_concept>
-   object_inclusion
+   object-creation<object_creation_math_concept>
+   object-declaration<object_declaration_math_concept>
+   object-inclusion<object_inclusion_math_concept>
    paragraph_proof
    proof_by_contradiction_1
    proof_by_contradiction_2
