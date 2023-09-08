@@ -1,60 +1,31 @@
 Index
 =====
 
-punctilious documentation master file, created by
-sphinx-quickstart on Sun Aug 13 22:01:23 2023.
-You can adapt this file completely to your liking, but it should at least
-contain the root `toctree` directive.
+.. toctree::
+   :maxdepth: 1
+   :caption: Front matter
 
-Welcome to punctilious's documentation!
-=======================================
+   Title<front_matter/title_front_matter>
+   About<front_matter/about_front_matter>
+   Contributing<front_matter/contributing_front_matter>
+   Roadmap<front_matter/roadmap_front_matter>
+   Project<front_matter/project_front_matter>
+   Support<front_matter/support_front_matter>
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
+   :caption: Math
 
-   test
+   /math/math_index
 
-   absorption
-   bibliography
-   biconditional_elimination_1
-   biconditional_elimination_2
-   biconditional_introduction
-   conjunction_elimination_1
-   conjunction_elimination_2
-   conjunction_introduction
-   disjunction_introduction_1
-   disjunction_introduction_2
-   double_negation_elimination
-   double_negation_introduction
-   elimination_rule
-   equal_terms_substitution
-   equality_commutativity
-   formula
-   formula_statement
-   hypothesis
-   inconsistency_introduction_1
-   inconsistency_introduction_2
-   inconsistency_introduction_3
-   inference_rule
-   introduction_rule
-   is_a
-   meta_object
-   modus_ponens
-   notation_form
-   paragraph_proof
-   proof_by_contradiction_1
-   proof_by_contradiction_2
-   proof_by_refutation_1
-   proof_by_refutation_2
-   relation
-   theory_elaboration_sequence
-   universe_of_discourse
-   variable_substitution
+.. toctree::
+   :maxdepth: 1
+   :caption: Python
 
-Indices and tables
-==================
+   /python/python_index
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. toctree::
+   :maxdepth: 1
+   :caption: Back matter
+
+   /back_matter/back_matter_index

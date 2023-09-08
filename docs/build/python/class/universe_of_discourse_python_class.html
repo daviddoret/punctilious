@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../../_static/punctilious-logo-compact-light.svg" rel="icon" type="image/svg+xml">
+    <link href="../../_static/punctilious-logo-compact-light-16x16-white.png" sizes="16x16" rel="icon" type="image/png">
+    <link href="../../_static/punctilious-logo-compact-light-32x32-white.png" sizes="32x32" rel="icon" type="image/png">
+    <link rel="apple-touch-icon" href="../../_static/punctilious-logo-compact-light-180x180-white.png" sizes="180x180" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniverseOfDiscourse (python class) &mdash; punctilious 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=af2ce170"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Python functions" href="../function/python_function_index.html" />
+    <link rel="prev" title="InferenceRuleDeclarationDict (python class)" href="inference_rule_declaration_python_class.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            punctilious
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Front matter</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../front_matter/front_matter_index.html">Front matter</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Math</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../math/math_index.html">Math</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../python_index.html">Python</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../prerequisites_python.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation_python.html">Installation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="python_class_index.html">Class</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="absorption_declaration_python_class.html">AbsorptionDeclaration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="absorption_inclusion_python_class.html">AbsorptionInclusion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inference_rule_declaration_python_class.html">InferenceRuleDeclaration</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">UniverseOfDiscourse</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#core.UniverseOfDiscourse"><code class="docutils literal notranslate"><span class="pre">UniverseOfDiscourse</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../function/python_function_index.html">Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sample/python_sample_index.html">Sample</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Back matter</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../back_matter/back_matter_index.html">Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">punctilious</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../python_index.html">Python</a></li>
+          <li class="breadcrumb-item"><a href="python_class_index.html">Python classes</a></li>
+      <li class="breadcrumb-item active">UniverseOfDiscourse (python class)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/python/class/universe_of_discourse_python_class.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="universeofdiscourse-python-class">
+<span id="universe-of-discourse-python-class"></span><h1>UniverseOfDiscourse (python class)<a class="headerlink" href="#universeofdiscourse-python-class" title="Permalink to this heading"></a></h1>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../../math/concept/universe_of_discourse_math_concept.html#universe-of-discourse"><span class="std std-ref">universe-of-discourse</span></a></p>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">UniverseOfDiscourse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse" title="Permalink to this definition"></a></dt>
+<dd><p>The <a class="reference internal" href="#universe-of-discourse-python-class"><span class="std std-ref">UniverseOfDiscourse (python class)</span></a> models a <a class="reference internal" href="../../math/concept/universe_of_discourse_math_concept.html#universe-of-discourse"><span class="std std-ref">universe-of-discourse</span></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.cross_reference_axiom">
+<span class="sig-name descname"><span class="pre">cross_reference_axiom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.cross_reference_axiom" title="Permalink to this definition"></a></dt>
+<dd><p>Cross-references an axiom in this universe-of-discourse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>a</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">AxiomDeclaration</span></code>) – an axiom-declaration.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.cross_reference_definition">
+<span class="sig-name descname"><span class="pre">cross_reference_definition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.cross_reference_definition" title="Permalink to this definition"></a></dt>
+<dd><p>Cross-references a definition in this universe-of-discourse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>d</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DefinitionDeclaration</span></code>) – a definition.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.cross_reference_formula">
+<span class="sig-name descname"><span class="pre">cross_reference_formula</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.cross_reference_formula" title="Permalink to this definition"></a></dt>
+<dd><p>Cross-references a formula in this universe-of-discourse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>phi</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Formula</span></code>) – a formula.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.cross_reference_inference_rule">
+<span class="sig-name descname"><span class="pre">cross_reference_inference_rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.cross_reference_inference_rule" title="Permalink to this definition"></a></dt>
+<dd><p>Cross-references an inference-rule in this universe-of-discourse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ir</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">InferenceRuleDeclaration</span></code>) – an inference-rule.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.cross_reference_relation">
+<span class="sig-name descname"><span class="pre">cross_reference_relation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.cross_reference_relation" title="Permalink to this definition"></a></dt>
+<dd><p>Cross-references a relation in this universe-of-discourse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>r</strong> (<a class="reference internal" href="../../math/concept/relation_math_concept.html#core.Relation" title="core.Relation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Relation</span></code></a>) – a relation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.cross_reference_simple_objct">
+<span class="sig-name descname"><span class="pre">cross_reference_simple_objct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.cross_reference_simple_objct" title="Permalink to this definition"></a></dt>
+<dd><p>Cross-references a simple-objct in this universe-of-discourse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>o</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleObjct</span></code>) – a simple-objct.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.cross_reference_symbolic_objct">
+<span class="sig-name descname"><span class="pre">cross_reference_symbolic_objct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.cross_reference_symbolic_objct" title="Permalink to this definition"></a></dt>
+<dd><p>Cross-references a symbolic-objct in this universe-of-discourse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>o</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TheoreticalObject</span></code>) – a symbolic-objct.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.cross_reference_theory">
+<span class="sig-name descname"><span class="pre">cross_reference_theory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.cross_reference_theory" title="Permalink to this definition"></a></dt>
+<dd><p>Cross-references a theory in this universe-of-discourse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>t</strong> (<a class="reference internal" href="../../math/concept/theory_elaboration_sequence_math_concept.html#core.TheoryElaborationSequence" title="core.TheoryElaborationSequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">TheoryElaborationSequence</span></code></a>) – a formula.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.declare_axiom">
+<span class="sig-name descname"><span class="pre">declare_axiom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">natural_language</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acronym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paragraph_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.declare_axiom" title="Permalink to this definition"></a></dt>
+<dd><p><a class="reference internal" href="../../math/concept/object_declaration_math_concept.html#declare"><span class="std std-ref">object-declaration</span></a> a new axiom in this universe-of-discourse.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.declare_definition">
+<span class="sig-name descname"><span class="pre">declare_definition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">natural_language</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acronym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.declare_definition" title="Permalink to this definition"></a></dt>
+<dd><p>Elaborate a new axiom 𝑎 in this universe-of-discourse.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.declare_formula">
+<span class="sig-name descname"><span class="pre">declare_formula</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relation</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lock_variable_scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.declare_formula" title="Permalink to this definition"></a></dt>
+<dd><p>Declare a new formula in this universe-of-discourse.</p>
+<p>This method is a shortcut for Formula(universe_of_discourse=self, . . d.).</p>
+<p>A formula is <em>declared</em> in a theory, and not <em>stated</em>, because it is not a statement,
+i.e. it is not necessarily true in this theory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.declare_free_variable">
+<span class="sig-name descname"><span class="pre">declare_free_variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acronym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.declare_free_variable" title="Permalink to this definition"></a></dt>
+<dd><p>Declare a free-variable in this universe-of-discourse.</p>
+<p>A shortcut function for FreeVariable(universe_of_discourse=u, …)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>symbol</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.declare_theory">
+<span class="sig-name descname"><span class="pre">declare_theory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extended_theory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extended_theory_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stabilized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.declare_theory" title="Permalink to this definition"></a></dt>
+<dd><p>Declare a new theory in this universe-of-discourse.</p>
+<p>Shortcut for Theory(universe_of_discourse, …).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nameset</strong> – </p></li>
+<li><p><strong>is_theory_foundation_system</strong> – </p></li>
+<li><p><strong>extended_theory</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.f">
+<span class="sig-name descname"><span class="pre">f</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relation</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lock_variable_scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.f" title="Permalink to this definition"></a></dt>
+<dd><p>Declare a new formula in this universe-of-discourse.</p>
+<p>Shortcut for self.elaborate_formula(…).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.get_symbol_max_index">
+<span class="sig-name descname"><span class="pre">get_symbol_max_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.get_symbol_max_index" title="Permalink to this definition"></a></dt>
+<dd><p>Return the highest index for that symbol-base in the universe-of-discourse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.i">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">i</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="inference_rule_declaration_python_class.html#core.InferenceRuleDeclarationDict" title="core.InferenceRuleDeclarationDict"><span class="pre">InferenceRuleDeclarationDict</span></a></em><a class="headerlink" href="#core.UniverseOfDiscourse.i" title="Permalink to this definition"></a></dt>
+<dd><p>The (possibly empty) collection of <a class="reference internal" href="../../math/concept/inference_rule_math_concept.html#inference-rules"><span class="std std-ref">inference-rule</span></a> declared in this <a class="reference internal" href="../../math/concept/universe_of_discourse_math_concept.html#universe-of-discourse"><span class="std std-ref">universe-of-discourse</span></a>.</p>
+<p>Unabridged name: inference_rules</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.index_symbol">
+<span class="sig-name descname"><span class="pre">index_symbol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.index_symbol" title="Permalink to this definition"></a></dt>
+<dd><p>Given a symbol-base S (i.e. an unindexed symbol), returns a unique integer n
+such that (S, n) is a unique identifier in this instance of UniverseOfDiscourse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>symbol</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">StyledText</span></code>) – The symbol-base.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.inference_rules">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inference_rules</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="inference_rule_declaration_python_class.html#core.InferenceRuleDeclarationDict" title="core.InferenceRuleDeclarationDict"><span class="pre">InferenceRuleDeclarationDict</span></a></em><a class="headerlink" href="#core.UniverseOfDiscourse.inference_rules" title="Permalink to this definition"></a></dt>
+<dd><p>The (possibly empty) collection of <a class="reference internal" href="../../math/concept/inference_rule_math_concept.html#inference-rules"><span class="std std-ref">inference-rule</span></a> declared in this in this <a class="reference internal" href="../../math/concept/universe_of_discourse_math_concept.html#universe-of-discourse"><span class="std std-ref">universe-of-discourse</span></a>.</p>
+<p>Abridged name: i</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.o">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">o</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../math/concept/relation_math_concept.html#core.SimpleObjctDict" title="core.SimpleObjctDict"><span class="pre">SimpleObjctDict</span></a></em><a class="headerlink" href="#core.UniverseOfDiscourse.o" title="Permalink to this definition"></a></dt>
+<dd><p>The (possibly empty) collection of simple-objects declared in this in this universe-of-discourse.</p>
+<p>Unabridged name: simple_objcts</p>
+<p>Well-known simple-objcts are exposed as python properties. In general, a well-known
+simple-objct is declared in the universe-of-discourse the first time its property is
+accessed.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.r">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">r</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../math/concept/is_a_math_concept.html#core.RelationDict" title="core.RelationDict"><span class="pre">RelationDict</span></a></em><a class="headerlink" href="#core.UniverseOfDiscourse.r" title="Permalink to this definition"></a></dt>
+<dd><p>A python dictionary of relations contained in this universe-of-discourse,
+where well-known relations are directly available as properties.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.relations">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">relations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../math/concept/is_a_math_concept.html#core.RelationDict" title="core.RelationDict"><span class="pre">RelationDict</span></a></em><a class="headerlink" href="#core.UniverseOfDiscourse.relations" title="Permalink to this definition"></a></dt>
+<dd><p>A python dictionary of relations contained in this universe-of-discourse,
+where well-known relations are directly available as properties.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.simple_objcts">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">simple_objcts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../math/concept/relation_math_concept.html#core.SimpleObjctDict" title="core.SimpleObjctDict"><span class="pre">SimpleObjctDict</span></a></em><a class="headerlink" href="#core.UniverseOfDiscourse.simple_objcts" title="Permalink to this definition"></a></dt>
+<dd><p>The collection of simple-objcts in this universe-of-discourse.</p>
+<p>Abridged version: u.o</p>
+<p>Well-known simple-objcts are exposed as python properties. In general, a well-known
+simple-objct is declared in the universe-of-discourse the first time its property is
+accessed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.t">
+<span class="sig-name descname"><span class="pre">t</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extended_theory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extended_theory_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stabilized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.t" title="Permalink to this definition"></a></dt>
+<dd><p>Declare a new theory in this universe-of-discourse.</p>
+<p>Shortcut for self.declare_theory(…).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nameset</strong> – </p></li>
+<li><p><strong>is_theory_foundation_system</strong> – </p></li>
+<li><p><strong>extended_theory</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.take_note">
+<span class="sig-name descname"><span class="pre">take_note</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acronym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paragraph_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.take_note" title="Permalink to this definition"></a></dt>
+<dd><p>Take a note, make a comment, or remark.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="core.UniverseOfDiscourse.v">
+<span class="sig-name descname"><span class="pre">v</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acronym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.UniverseOfDiscourse.v" title="Permalink to this definition"></a></dt>
+<dd><p>Declare a free-variable in this universe-of-discourse.</p>
+<p>This method is expected to be as in a with statement,
+it yields an instance of FreeVariable,
+and automatically lock the variable scope when the with left.</p>
+<p>Example: with u.v(‘x’) as x, u.v(‘y’) as y:
+some code…</p>
+<p>To manage variable scope extensions and locking expressly,
+use declare_free_variable() instead.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="inference_rule_declaration_python_class.html" class="btn btn-neutral float-left" title="InferenceRuleDeclarationDict (python class)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../function/python_function_index.html" class="btn btn-neutral float-right" title="Python functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, David Doret.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

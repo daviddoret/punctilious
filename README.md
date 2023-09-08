@@ -1,4 +1,5 @@
 # punctilious
+
 <br />
 <div align="center">
   <a href="https://github.com/daviddoret/punctilious">
@@ -9,7 +10,11 @@
     A human-friendly math proof assistant library.
 </p>
 
-## About The Project
+## About
+
+```{eval-rst}
+.. include:: docs/source/front_matter/about_front_matter.rst
+```
 
 ## Built With
 

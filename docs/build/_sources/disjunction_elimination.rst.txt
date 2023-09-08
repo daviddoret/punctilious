@@ -1,2 +1,0 @@
-disjunction-elimination
-=========================
