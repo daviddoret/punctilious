@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/daviddoret/punctilious">
-    <img src="logo/punctilious-logo-600x600-white.png" alt="Logo" width="300" height="300">
+    <img src="branding/punctilious-logo-600x600-transparent.png" alt="Logo" width="300" height="300">
   </a>
 </div>
 <p align="center">
@@ -39,15 +39,21 @@ Besides being fun and a thrilling learning experience, the focus points of *punc
 
 * Performance (i.e. for large-scale proof applications)
 
-## Getting Started
-
 ## Prerequisites
+
+Python 3.x.
 
 ## Installation
 
 We are just in the process of publishing *punctilious* on PyPI. Please wait...
 
+## Getting started
+
+Many samples will be provided soon once we will have published our documentation on ReadTheDocs. Please wait...
+
 ## Usage
+
+Many samples will be provided soon once we will have published our documentation on ReadTheDocs. Please wait...
 
 ## Roadmap
 
@@ -91,8 +97,8 @@ Here are some ideas on how to get started:
   our [Contribute discussion thread](https://github.com/daviddoret/punctilious/discussions/166) and we will be
   most happy to help you from there.
 
-* If you are looking for ideas on how to contribute, you may wish to have a look at the :ref:`roadmap`, and the :
-  ref:`project`.
+* If you are looking for ideas on how to contribute, you may wish to have a look at the [roadmap](#roadmap), and the :
+  [project](#project).
 
 ## Project
 
@@ -100,4 +106,8 @@ We try to manage the *punctilious* project with this [GitHub project](https://gi
 
 ## License
 
+[MIT License](https://github.com/daviddoret/punctilious/blob/master/LICENSE)
+
 ## Acknowledgments
+
+The list of dependencies is being compiled. Please wait...
