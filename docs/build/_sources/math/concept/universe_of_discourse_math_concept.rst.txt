@@ -1,4 +1,5 @@
 .. _universe_of_discourse_math_concept:
+.. _universe-of-discourse:
 
 .. role:: python(code)
     :language: py

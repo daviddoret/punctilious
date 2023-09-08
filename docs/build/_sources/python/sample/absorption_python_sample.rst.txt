@@ -25,7 +25,7 @@ The simplest way to use the :ref:`absorption<absorption_math_concept>` :ref:`inf
    ...
    t.i.absorption_1.infer_statement(p_iff_q = ...)
 
-If the :ref:`inference_rule_math_concept` was not yet declared in the :ref:`universe-of-discourse` , it will be automatically declared. If the :ref:`inference_rule_math_concept` was not yet included in the :ref:`theory-elaboration-sequence` , it will be automatically included.
+If the :ref:`inference-rule` was not yet declared in the :ref:`universe-of-discourse` , it will be automatically declared. If the :ref:`inference-rule` was not yet included in the :ref:`theory-elaboration-sequence` , it will be automatically included.
 
 This calls the following method:
 

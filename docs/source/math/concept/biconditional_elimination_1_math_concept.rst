@@ -21,7 +21,7 @@ Definition
 
 Where:
 
-* :math:`P \iff Q` is a :ref:`formula_statement`
+* :math:`P \iff Q` is a :ref:`formula-statement`
 * :math:`P` is a propositional :ref:`formula`
 * :math:`Q` is a propositional :ref:`formula`
 
@@ -44,7 +44,7 @@ The simplest way to use this inference-rule is to access it via the :python:`inf
    ...
    t.i.biconditional_elimination_1.infer_statement(p_iff_q = ...)
 
-If the :ref:`inference_rule_math_concept` was not yet declared in the :ref:`universe-of-discourse` , it will be automatically declared. If the :ref:`inference_rule_math_concept` was not yet included in the :ref:`theory-elaboration-sequence` , it will be automatically included.
+If the :ref:`inference-rule` was not yet declared in the :ref:`universe-of-discourse` , it will be automatically declared. If the :ref:`inference-rule` was not yet included in the :ref:`theory-elaboration-sequence` , it will be automatically included.
 
 This calls the following method:
 

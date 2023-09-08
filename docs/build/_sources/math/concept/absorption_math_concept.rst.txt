@@ -13,7 +13,7 @@ absorption (math concept)
 Definition
 ----------
 
-*absorption* is the well-known and valid :ref:`inference_rule_math_concept` in propositional-logic:
+*absorption* is the well-known and valid :ref:`inference-rule` in propositional-logic:
 
 .. math::
 
@@ -21,7 +21,7 @@ Definition
 
 Where:
 
-* :math:`P \implies Q` is a :ref:`formula_statement`
+* :math:`P \implies Q` is a :ref:`formula-statement`
 * :math:`P` is a propositional :ref:`formula`
 * :math:`Q` is a propositional :ref:`formula`
 

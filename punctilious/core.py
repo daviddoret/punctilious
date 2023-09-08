@@ -3729,7 +3729,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
 
 class AbsorptionDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :ref:`absorption_math_concept` :ref:`inference_rule_math_concept` in a :ref:`universe-of-discourse`.
+    """The declaration of the :ref:`absorption_math_concept` :ref:`inference-rule` in a :ref:`universe-of-discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4121,7 +4121,7 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
 
 
 class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`conjunction_introduction` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe-of-discourse`.
+    """The declaration of the :doc:`conjunction_introduction` :ref:`inference-rule` as valid in the target :ref:`universe-of-discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4141,7 +4141,7 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
-        """Apply the :doc:`conjunction_introduction` :ref:`inference_rule_math_concept` and return the resulting formula.
+        """Apply the :doc:`conjunction_introduction` :ref:`inference-rule` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula-statement of the form :math:`Q` .
@@ -4155,14 +4155,14 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :doc:`conjunction_introduction` :ref:`inference_rule_math_concept` ."""
+        """Composes the paragraph-proof of inferred-statements based on the :doc:`conjunction_introduction` :ref:`inference-rule` ."""
         output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
             o=o)
         return output
 
     def verify_args(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
-        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` .
+        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :ref:`inference-rule` .
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula-statement of the form :math:`Q` .
@@ -4235,7 +4235,7 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
 
 
 class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`disjunction_introduction_1` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe-of-discourse`.
+    """The declaration of the :doc:`disjunction_introduction_1` :ref:`inference-rule` as valid in the target :ref:`universe-of-discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4255,7 +4255,7 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        """Apply the :doc:`disjunction_introduction_1` :ref:`inference_rule_math_concept` and return the resulting formula.
+        """Apply the :doc:`disjunction_introduction_1` :ref:`inference-rule` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -4269,14 +4269,14 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :doc:`disjunction_introduction_1` :ref:`inference_rule_math_concept` ."""
+        """Composes the paragraph-proof of inferred-statements based on the :doc:`disjunction_introduction_1` :ref:`inference-rule` ."""
         output = yield from configuration.locale.compose_disjunction_introduction_1_paragraph_proof(
             o=o)
         return output
 
     def verify_args(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence) -> bool:
-        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` .
+        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :ref:`inference-rule` .
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -4292,7 +4292,7 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
 
 
 class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`disjunction_introduction_2` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe-of-discourse`.
+    """The declaration of the :doc:`disjunction_introduction_2` :ref:`inference-rule` as valid in the target :ref:`universe-of-discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4312,7 +4312,7 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        """Apply the :doc:`disjunction_introduction_2` :ref:`inference_rule_math_concept` and return the resulting formula.
+        """Apply the :doc:`disjunction_introduction_2` :ref:`inference-rule` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -4326,14 +4326,14 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :doc:`disjunction_introduction_2` :ref:`inference_rule_math_concept` ."""
+        """Composes the paragraph-proof of inferred-statements based on the :doc:`disjunction_introduction_2` :ref:`inference-rule` ."""
         output = yield from configuration.locale.compose_disjunction_introduction_2_paragraph_proof(
             o=o)
         return output
 
     def verify_args(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence) -> bool:
-        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` .
+        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :ref:`inference-rule` .
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -4411,7 +4411,7 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
 
 
 class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` as valid in the target :ref:`universe-of-discourse`.
+    """The declaration of the :doc:`double_negation_introduction` :ref:`inference-rule` as valid in the target :ref:`universe-of-discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -4431,7 +4431,7 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
-        """Apply the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` and return the resulting formula.
+        """Apply the :doc:`double_negation_introduction` :ref:`inference-rule` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
@@ -4444,14 +4444,14 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` ."""
+        """Composes the paragraph-proof of inferred-statements based on the :doc:`double_negation_introduction` :ref:`inference-rule` ."""
         output = yield from configuration.locale.compose_double_negation_introduction_paragraph_proof(
             o=o)
         return output
 
     def verify_args(self, p: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
         p: FormulaStatement = interpret_statement_formula(t=t, arity=1, flexible_formula=p)
-        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` .
+        """Verify the correctness of the parameters provided to the :doc:`double_negation_introduction` :ref:`inference-rule` .
         
         :param p: (mandatory) A formula-statement of the form: :math:`P` .
         
@@ -4724,7 +4724,7 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
 
 
 class ModusPonensDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :doc:`modus_ponens` :ref:`inference_rule_math_concept` in a :ref:`universe-of-discourse`.
+    """The declaration of the :doc:`modus_ponens` :ref:`inference-rule` in a :ref:`universe-of-discourse`.
     """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
@@ -6689,7 +6689,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
 
 class AbsorptionInclusion(InferenceRuleInclusion):
-    """The inclusion of :ref:`absorption_math_concept` as a valid :ref:`inference_rule_math_concept` in the :ref:`theory-elaboration-sequence`.
+    """The inclusion of :ref:`absorption_math_concept` as a valid :ref:`inference-rule` in the :ref:`theory-elaboration-sequence`.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6959,7 +6959,7 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :doc:`conjunction_introduction` :ref:`inference_rule_math_concept` and return the resulting formula.
+        """Apply the :doc:`conjunction_introduction` :ref:`inference-rule` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula-statement of the form :math:`Q` .
@@ -6974,7 +6974,7 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
             q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the :doc:`conjunction_introduction` :ref:`inference_rule_math_concept` and return the resulting inferred-statement.
+        """Apply the :doc:`conjunction_introduction` :ref:`inference-rule` and return the resulting inferred-statement.
 
                 :param p: (mandatory) A formula-statement of the form: :math:`P`.
                 :param q: (mandatory) A formula-statement of the form: :math:`Q`.
@@ -7054,7 +7054,7 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :doc:`disjunction_introduction_1` :ref:`inference_rule_math_concept` and return the resulting formula.
+        """Apply the :doc:`disjunction_introduction_1` :ref:`inference-rule` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -7069,7 +7069,7 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
             q: (None, Formula, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the :doc:`disjunction_introduction_1` :ref:`inference_rule_math_concept` and return the resulting inferred-statement.
+        """Apply the :doc:`disjunction_introduction_1` :ref:`inference-rule` and return the resulting inferred-statement.
 
                 :param p: (mandatory) A formula-statement of the form: :math:`P`.
                 :param q: (mandatory) A formula of the form: :math:`Q`.
@@ -7105,7 +7105,7 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :doc:`disjunction_introduction_2` :ref:`inference_rule_math_concept` and return the resulting formula.
+        """Apply the :doc:`disjunction_introduction_2` :ref:`inference-rule` and return the resulting formula.
 
         :param p: (mandatory) A formula-statement of the form :math:`P` .
         :param q: (mandatory) A formula of the form :math:`Q` .
@@ -7120,7 +7120,7 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
             q: (None, Formula, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the :doc:`disjunction_introduction_2` :ref:`inference_rule_math_concept` and return the resulting inferred-statement.
+        """Apply the :doc:`disjunction_introduction_2` :ref:`inference-rule` and return the resulting inferred-statement.
 
                 :param p: (mandatory) A formula-statement of the form: :math:`P`.
                 :param q: (mandatory) A formula of the form: :math:`Q`.
@@ -7174,7 +7174,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
 
 
 class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
-    """The inclusion of the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` as valid in the target :ref:`theory-elaboration-sequence`.
+    """The inclusion of the :doc:`double_negation_introduction` :ref:`inference-rule` as valid in the target :ref:`theory-elaboration-sequence`.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7190,7 +7190,7 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
             proof=proof)
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` and return the resulting formula.
+        """Apply the :doc:`double_negation_introduction` :ref:`inference-rule` and return the resulting formula.
 
         :param p: (mandatory) A formula or formula-statement of the form: :math:`P` .
         :param echo:
@@ -7202,7 +7202,7 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the :doc:`double_negation_introduction` :ref:`inference_rule_math_concept` and return the resulting inferred-statement.
+        """Apply the :doc:`double_negation_introduction` :ref:`inference-rule` and return the resulting inferred-statement.
 
         :param p: (mandatory) A formula-statement of the form: :math:`P`.
         :param nameset:
@@ -7419,7 +7419,7 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
 
 
 class ModusPonensInclusion(InferenceRuleInclusion):
-    """The inclusion of :doc:`modus_ponens` as a valid :ref:`inference_rule_math_concept` in a :ref:`theory-elaboration-sequence`.
+    """The inclusion of :doc:`modus_ponens` as a valid :ref:`inference-rule` in a :ref:`theory-elaboration-sequence`.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7550,7 +7550,7 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :doc:`proof_by_refutation_1` :ref:`inference_rule_math_concept` and return the inferred-formula.
+        """Apply the :doc:`proof_by_refutation_1` :ref:`inference-rule` and return the inferred-formula.
 
         :param p_hypothesis: (mandatory) The :math:`\\neg \\mathbf{P}` hypothesis.
         :param inc_hypothesis: (mandatory) The proof of inconsistency of the :math:`\\neg \\mathbf{P}` hypothesis :math:`Inc\\left(\\mathcal{H}\\right)` .

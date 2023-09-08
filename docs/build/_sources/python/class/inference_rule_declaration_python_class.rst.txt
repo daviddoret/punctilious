@@ -7,7 +7,7 @@ InferenceRuleDeclarationDict (python class)
 ==============================================
 
 .. seealso::
-   :ref:`inference_rule_math_concept`
+   :ref:`inference-rule`
 
 
 .. module:: core

@@ -1,3 +1,6 @@
+.. _math_concept_index:
+.. _math-concept-index:
+
 Math concept
 =====================
 
@@ -14,39 +17,39 @@ This table of contents references the key mathematical concepts used by punctili
    biconditional-introduction<biconditional_introduction_math_concept>
    conjunction-elimination-1<conjunction_elimination_1_math_concept>
    conjunction-elimination-2<conjunction_elimination_2_math_concept>
-   conjunction_introduction
-   disjunction_introduction_1
-   disjunction_introduction_2
+   conjunction-introduction<conjunction_introduction_math_concept>
+   disjunction-introduction-1<disjunction_introduction_1_math_concept>
+   disjunction-introduction-2<disjunction_introduction_2_math_concept>
    double-negation-elimination<double_negation_elimination_math_concept>
-   double_negation_introduction
+   double_negation_introduction_math_concept>
    elimination-rule<elimination_rule_math_concept>
-   equal_terms_substitution
-   equality_commutativity
-   formula
-   formula_statement
-   hypothesis
-   inconsistency_introduction_1
-   inconsistency_introduction_2
-   inconsistency_introduction_3
+   equal-terms-substitution<equal_terms_substitution_math_concept>
+   equality-commutativity<equality_commutativity_math_concept>
+   formula<formula_math_concept>
+   formula<formula-statement<formula_statement_math_concept>
+   hypothesis<hypothesis_math_concept>
+   inconsistency-introduction-1<inconsistency_introduction_1_math_concept>
+   inconsistency-introduction-2<inconsistency_introduction_2_math_concept>
+   inconsistency-introduction-3<inconsistency_introduction_3_math_concept>
    inference-rule<inference_rule_math_concept>
-   introduction_rule
-   is_a
-   meta_object
-   modus_ponens
-   notation_form
-   object
+   introduction-rule<introduction_rule_math_concept>
+   is-a<is_a_math_concept>
+   meta-object<meta_object_math_concept>
+   modus-ponens<modus_ponens_math_concept>
+   notation-form<notation_form_math_concept>
+   object<object_math_concept>
    object-creation<object_creation_math_concept>
    object-declaration<object_declaration_math_concept>
    object-inclusion<object_inclusion_math_concept>
-   paragraph_proof
-   proof_by_contradiction_1
-   proof_by_contradiction_2
-   proof_by_refutation_1
-   proof_by_refutation_2
-   relation
-   statement
+   paragraph-proof<paragraph_proof_math_concept>
+   proof-by-contradiction-1<proof_by_contradiction_1_math_concept>
+   proof-by-contradiction-2<proof_by_contradiction_2_math_concept>
+   proof-by-refutation-1<proof_by_refutation_1_math_concept>
+   proof-by-refutation-2<proof_by_refutation_2_math_concept>
+   relation<relation_math_concept>
+   statement<statement_math_concept>
    theory-elaboration-sequence<theory_elaboration_sequence_math_concept>
    universe-of-discourse<universe_of_discourse_math_concept>
-   variable_substitution
+   variable-substitution<variable_substitution_math_concept>
 
 

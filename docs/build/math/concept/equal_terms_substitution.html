@@ -69,7 +69,6 @@
 <li class="toctree-l3"><a class="reference internal" href="biconditional_introduction_math_concept.html">biconditional-introduction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="conjunction_elimination_1_math_concept.html">conjunction-elimination-1</a></li>
 <li class="toctree-l3"><a class="reference internal" href="conjunction_elimination_2_math_concept.html">conjunction-elimination-2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="conjunction_introduction.html">conjunction-introduction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="disjunction_introduction_1.html">disjunction-introduction-1</a></li>
 <li class="toctree-l3"><a class="reference internal" href="disjunction_introduction_2.html">disjunction-introduction-2</a></li>
 <li class="toctree-l3"><a class="reference internal" href="double_negation_elimination_math_concept.html">double-negation-elimination</a></li>
@@ -83,8 +82,8 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="equality_commutativity.html">equality-commutativity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="formula.html">formula</a></li>
-<li class="toctree-l3"><a class="reference internal" href="formula_statement.html">formula-statement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="formula_math_concept.html">formula</a></li>
+<li class="toctree-l3"><a class="reference internal" href="formula_statement_math_concept.html">formula-statement</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hypothesis.html">hypothesis</a></li>
 <li class="toctree-l3"><a class="reference internal" href="inconsistency_introduction_1.html">inconsistency-introduction-1</a></li>
 <li class="toctree-l3"><a class="reference internal" href="inconsistency_introduction_2.html">inconsistency-introduction-2</a></li>
@@ -160,9 +159,9 @@
 \[\left( P, x = y \right) \vdash Q\]</div>
 <p>Where:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(P\)</span> is a <span class="xref std std-ref">formula_statement</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(x = y\)</span> is a <span class="xref std std-ref">formula_statement</span> of the form <span class="math notranslate nohighlight">\(x = y\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(Q\)</span> is a <span class="xref std std-ref">formula_statement</span> identical to <span class="math notranslate nohighlight">\(P\)</span> except that every occurrences of <span class="math notranslate nohighlight">\(x\)</span> in <span class="math notranslate nohighlight">\(P\)</span> are substituted with <span class="math notranslate nohighlight">\(y\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(P\)</span> is a <a class="reference internal" href="formula_statement_math_concept.html#formula-statement"><span class="std std-ref">formula-statement</span></a></p></li>
+<li><p><span class="math notranslate nohighlight">\(x = y\)</span> is a <a class="reference internal" href="formula_statement_math_concept.html#formula-statement"><span class="std std-ref">formula-statement</span></a> of the form <span class="math notranslate nohighlight">\(x = y\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(Q\)</span> is a <a class="reference internal" href="formula_statement_math_concept.html#formula-statement"><span class="std std-ref">formula-statement</span></a> identical to <span class="math notranslate nohighlight">\(P\)</span> except that every occurrences of <span class="math notranslate nohighlight">\(x\)</span> in <span class="math notranslate nohighlight">\(P\)</span> are substituted with <span class="math notranslate nohighlight">\(y\)</span></p></li>
 </ul>
 </section>
 <section id="quotes">
@@ -179,7 +178,7 @@
 <span class="n">t</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">equal</span><span class="o">-</span><span class="n">terms_substitution</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>If the <a class="reference internal" href="inference_rule_math_concept.html#inference-rule-math-concept"><span class="std std-ref">inference-rule</span></a> was not yet declared in the <span class="xref std std-ref">universe-of-discourse</span> , it will be automatically declared. If the <a class="reference internal" href="inference_rule_math_concept.html#inference-rule-math-concept"><span class="std std-ref">inference-rule</span></a> was not yet included in the <a class="reference internal" href="theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence"><span class="std std-ref">theory-elaboration-sequence</span></a> , it will be automatically included.</p>
+<p>If the <a class="reference internal" href="inference_rule_math_concept.html#inference-rule-math-concept"><span class="std std-ref">inference-rule</span></a> was not yet declared in the <a class="reference internal" href="universe_of_discourse_math_concept.html#universe-of-discourse"><span class="std std-ref">universe-of-discourse</span></a> , it will be automatically declared. If the <a class="reference internal" href="inference_rule_math_concept.html#inference-rule-math-concept"><span class="std std-ref">inference-rule</span></a> was not yet included in the <a class="reference internal" href="theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence"><span class="std std-ref">theory-elaboration-sequence</span></a> , it will be automatically included.</p>
 <p>This calls the following method:</p>
 <dl class="py class">
 <dt class="sig sig-object py">
