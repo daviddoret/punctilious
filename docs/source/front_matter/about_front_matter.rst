@@ -5,7 +5,10 @@
 About *punctilious*
 =========================
 
-*Punctilious* is a *math proof assistant* open-source development project, that is it intends to facilitate the study and development of mathematical proofs by human beings.
+
+
+*Punctilious* is a *math proof assistant* python open-source development project. In clear: it intends to
+facilitate the study and development of mathematical proofs by human beings.
 
 There exists multiple math proof assistants, including:
 
@@ -13,14 +16,16 @@ There exists multiple math proof assistants, including:
 * `Isabelle<https://isabelle.in.tum.de/>`
 * `Lean<https://leanprover.github.io/>`
 
-...and many more. The `proof assistant<https://en.wikipedia.org/wiki/Proof_assistant>` page on Wikipedia contains a general-purpose comparison of these.
+...and many more. The `proof assistant<https://en.wikipedia.org/wiki/Proof_assistant>` page on Wikipedia contains a
+general-purpose comparison of these.
 
-In contrast, *punctilious* is a ridiculous `Lilliputian<https://en.wikipedia.org/wiki/Lilliput_and_Blefuscu>` with neither the length, nor the breadth of these time-proven systems.
+In contrast, *punctilious* is a ridiculous `Lilliputian<https://en.wikipedia.org/wiki/Lilliput_and_Blefuscu>` with
+neither the length, nor the breadth of these time-proven systems.
 
 So why develop yet another math proof assistant?
 *****************************************************
 
-Besides being a thrilling learning experience, the focus points of *punctilious* are:
+Besides being fun and a thrilling learning experience, the focus points of *punctilious* are:
 
 * Human-friendly and developer-friendly inputs (i.e.: write math as we learn it)
 * Ease of use
@@ -29,4 +34,3 @@ Besides being a thrilling learning experience, the focus points of *punctilious*
 *Punctilious* does not pay much attention to:
 
 * Performance (i.e. for large-scale proof applications)
-
