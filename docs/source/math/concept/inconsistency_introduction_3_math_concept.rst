@@ -1,3 +1,6 @@
+.. _inconsistency_introduction_3_math_concept:
+.. _inconsistency-introduction-3:
+
 .. role:: python(code)
     :language: py
 
@@ -5,7 +8,7 @@ inconsistency-introduction-3
 ========================================
 
 .. seealso::
-   :ref:`inconsistency_introduction_1` | :ref:`inconsistency_introduction_2`
+   :ref:`inconsistency-introduction-1` | :ref:`inconsistency-introduction-2`
 
 Definition
 ----------

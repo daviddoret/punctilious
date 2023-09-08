@@ -1,3 +1,7 @@
+.. _modus_ponens_math_concept:
+.. _modus-ponens:
+.. _mp:
+
 modus-ponens
 ============
 

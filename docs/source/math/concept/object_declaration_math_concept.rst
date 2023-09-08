@@ -1,18 +1,19 @@
 .. _object_declaration_math_concept:
 .. _declaration:
 .. _declare:
+.. _declared:
 .. _object-declaration:
 
 object-declaration
 ===================
 
 .. seealso::
-   :ref:`object-creation` | :ref:`object_inclusion`
+   :ref:`object-creation` | :ref:`object-inclusion`
 
 Definition
 ----------
 
-An *object-declaration* is a statement [footnote1]_ that an (existing) object is contained in a :ref:`universe-of-discourse`.
+An *object-declaration* is a statement [footnote2]_ that an (existing) object is contained in a :ref:`universe-of-discourse`.
 
 In straightforward language, an *object-declaration* extends a :ref:`universe-of-discourse` with that object, which makes it possible to speak about that object using other objects.
 
@@ -30,5 +31,5 @@ Let y be a newly created object.
 Let U := U extended by y.
 
 .. rubric:: Footnotes
-.. [footnote1] Here, statement is considered in its general meaning, distinct from :ref:`theory-statement`.
+.. [footnote2] Here, statement is considered in its general meaning, distinct from :ref:`theory-statement`.
 

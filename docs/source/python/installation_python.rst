@@ -1,12 +1,12 @@
-.. installation_python:
-.. installation:
+.. _installation_python:
+.. _installation:
 
 .. role:: python(code)
     :language: py
 
-absorption (python sample)
+Installation
 ============================================
 
-First, use pip to download and install the extension:
+Use pip to download and install punctilious:
 
-pip install sphinx-autodoc-typehints
+pip install punctilious

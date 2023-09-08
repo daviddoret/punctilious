@@ -1,3 +1,6 @@
+.. _disjunction_introduction_1_math_concept:
+.. _disjunction-introduction-1:
+
 .. role:: python(code)
     :language: py
 
@@ -5,7 +8,7 @@ disjunction-introduction-1
 ===============================
 
 .. seealso::
-   :ref:`disjunction_introduction_2` | :ref:`inference-rule`
+   :ref:`disjunction-introduction-2` | :ref:`inference-rule`
 
 Definition
 ----------

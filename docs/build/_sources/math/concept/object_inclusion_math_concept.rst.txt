@@ -1,6 +1,7 @@
 .. _object_inclusion_math_concept:
 .. _inclusion:
 .. _include:
+.. _included:
 .. _object-inclusion:
 
 .. role:: python(code)
@@ -15,8 +16,9 @@ object-inclusion
 Definition
 ----------
 
-An *object-inclusion* is a statement* that an object declared in a :ref:`universe-of-discourse` is a constitutive element of a :ref:`theory-elaboration-sequence`.
-
-*. Here, statement is considered in its general meaning, distinct from :ref:`theory-statement`.
+An *object-inclusion* is the statement [footnote1]_ that an object declared in a :ref:`universe-of-discourse` is a constitutive element of a :ref:`theory-elaboration-sequence`.
 
 In straightforward language, an *object-inclusion* extends a :ref:`theory-elaboration-sequence` with an object, which makes it possible to infer statements about that object.
+
+.. rubric:: Footnotes
+.. [footnote1] Here, statement is considered in its general meaning, distinct from :ref:`theory-statement` .

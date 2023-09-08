@@ -1,3 +1,6 @@
+.. _is_a_math_concept:
+.. _is-a:
+
 is-a
 ==========
 

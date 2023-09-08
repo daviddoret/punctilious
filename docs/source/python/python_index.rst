@@ -9,7 +9,9 @@ The rationale is to keep clearly distinct but cross referenced mathematical and 
    :maxdepth: 1
    :caption: Python
 
-   installation<installation_python>
+   Prerequisites<prerequisites_python>
+   Installation<installation_python>
+   Source code<source_code_repository_python>
 
    Class<class/python_class_index>
    Function<function/python_function_index>

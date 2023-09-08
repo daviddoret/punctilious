@@ -1,3 +1,6 @@
+.. _proof_by_refutation_2_math_concept:
+.. _proof-by-refutation-2:
+
 proof-by-refutation-2
 =========================
 

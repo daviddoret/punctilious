@@ -1,3 +1,6 @@
+.. _double_negation_introduction_math_concept:
+.. _double-negation-introduction:
+
 .. role:: python(code)
     :language: py
 
@@ -5,7 +8,7 @@ double-negation-introduction
 =============================
 
 .. seealso::
-   :ref:`double_negation_elimination` | :ref:`inference-rule`
+   :ref:`double-negation-elimination` | :ref:`inference-rule`
 
 Definition
 ----------

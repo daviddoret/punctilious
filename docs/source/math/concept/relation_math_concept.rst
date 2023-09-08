@@ -1,3 +1,6 @@
+.. _relation_math_concept:
+.. _relation:
+
 relation
 ==========
 
@@ -16,7 +19,7 @@ Syntactically, a *relation* is represented with a
 Key properties
 -------------------
  - arity
- - :ref:`notation_form`
+ - :ref:`notation-form`
  - signal-proposition (TODO: rename to propositional)
  - symbolic-representation
 

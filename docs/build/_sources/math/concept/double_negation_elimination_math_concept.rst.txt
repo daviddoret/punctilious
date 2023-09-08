@@ -8,7 +8,7 @@ double-negation-elimination
 ===============================
 
 .. seealso::
-   :ref:`double_negation_introduction` | :ref:`inference-rule`
+   :ref:`double-negation-introduction` | :ref:`inference-rule`
 
 
 Definition

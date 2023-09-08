@@ -1,6 +1,7 @@
 .. _object_creation_math_concept:
 .. _creation:
 .. _create:
+.. _created:
 .. _object-creation:
 
 .. role:: python(code)
@@ -10,7 +11,7 @@ object-creation
 ===================
 
 .. seealso::
-   :ref:`object-declaration` | :ref:`object_inclusion`
+   :ref:`object-declaration` | :ref:`object-inclusion`
 
 Definition
 ----------

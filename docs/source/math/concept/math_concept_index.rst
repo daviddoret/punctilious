@@ -21,12 +21,12 @@ This table of contents references the key mathematical concepts used by punctili
    disjunction-introduction-1<disjunction_introduction_1_math_concept>
    disjunction-introduction-2<disjunction_introduction_2_math_concept>
    double-negation-elimination<double_negation_elimination_math_concept>
-   double_negation_introduction_math_concept>
+   double-negation-introduction<double_negation_introduction_math_concept>
    elimination-rule<elimination_rule_math_concept>
    equal-terms-substitution<equal_terms_substitution_math_concept>
    equality-commutativity<equality_commutativity_math_concept>
    formula<formula_math_concept>
-   formula<formula-statement<formula_statement_math_concept>
+   formula-statement<formula_statement_math_concept>
    hypothesis<hypothesis_math_concept>
    inconsistency-introduction-1<inconsistency_introduction_1_math_concept>
    inconsistency-introduction-2<inconsistency_introduction_2_math_concept>

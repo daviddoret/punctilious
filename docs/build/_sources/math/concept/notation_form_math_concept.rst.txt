@@ -1,3 +1,6 @@
+.. _notation_form_math_concept:
+.. _notation-form:
+
 notation-form
 =============
 

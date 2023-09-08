@@ -1,3 +1,6 @@
+.. _proof_by_contradiction_1_math_concept:
+.. _proof-by-contradiction-1:
+
 proof-by-contradiction-1
 =========================
 

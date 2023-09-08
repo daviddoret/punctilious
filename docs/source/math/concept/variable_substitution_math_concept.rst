@@ -1,3 +1,6 @@
+.. _variable_substitution_math_concept:
+.. _variable-substitution:
+
 variable-substitution
 =====================
 

@@ -1,3 +1,6 @@
+.. _hypothesis_math_concept:
+.. _hypothesis:
+
 .. role:: python(code)
     :language: py
 

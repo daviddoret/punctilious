@@ -1,3 +1,6 @@
+.. _meta_object_math_concept:
+.. _meta-object:
+
 meta-object
 ============
 

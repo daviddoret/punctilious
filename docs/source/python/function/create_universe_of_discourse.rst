@@ -5,9 +5,9 @@ create_universe_of_discourse
 =============================
 
 .. seealso::
-   :doc:`object_creation` | :ref:`theory-elaboration-sequence`
+   :ref:`object-creation` | :ref:`theory-elaboration-sequence`
 
-The simplest way to :doc:`create<object_creation>` a new *universe-of-discourse* is to call the :python:`create_universe_of_discourse` function:
+The simplest way to :ref:`create` a new *universe-of-discourse* is to call the :python:`create_universe_of_discourse` function:
 
 .. code-block:: python
 

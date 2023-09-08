@@ -8,7 +8,7 @@ conjunction-elimination-2
 ========================================
 
 .. seealso::
-   :ref:`conjunction-elimination-1` | :ref:`conjunction_introduction` | :ref:`inference-rule`
+   :ref:`conjunction-elimination-1` | :ref:`conjunction-introduction` | :ref:`inference-rule`
 
 Definition
 ----------

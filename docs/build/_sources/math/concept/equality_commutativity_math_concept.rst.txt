@@ -1,3 +1,6 @@
+.. _equality_commutativity_math_concept:
+.. _equality-commutativity:
+
 .. role:: python(code)
     :language: py
 
@@ -5,7 +8,7 @@ equality-commutativity
 =============================
 
 .. seealso::
-   :ref:`equal_terms_substitution` | :ref:`inference-rule`
+   :ref:`equal-terms-substitution` | :ref:`inference-rule`
 
 Definition
 ----------

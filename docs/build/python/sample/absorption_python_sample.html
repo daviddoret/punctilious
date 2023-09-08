@@ -30,7 +30,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Bibliography" href="../../bibliography.html" />
+    <link rel="next" title="Index" href="../../back_matter/back_matter_index.html" />
     <link rel="prev" title="Python samples" href="python_sample_index.html" /> 
 </head>
 
@@ -55,13 +55,23 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Front matter</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../title.html">Title</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../front_matter/title_front_matter.html">Title</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../front_matter/about_front_matter.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../front_matter/contributing_front_matter.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../front_matter/roadmap_front_matter.html">Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../front_matter/project_front_matter.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../front_matter/support_front_matter.html">Support</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Core material</span></p>
-<ul class="current">
+<p class="caption" role="heading"><span class="caption-text">Math</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../math/math_index.html">Math</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../python_index.html">Python</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../installation_python.html">installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../prerequisites_python.html">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation_python.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../source_code_repository_python.html">Source code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../class/python_class_index.html">Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../function/python_function_index.html">Function</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="python_sample_index.html">Sample</a><ul class="current">
@@ -79,7 +89,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Back matter</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../bibliography.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../back_matter/back_matter_index.html">Index</a></li>
 </ul>
 
         </div>
@@ -114,10 +124,10 @@
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="../../math/concept/absorption_math_concept.html#absorption-math-concept"><span class="std std-ref">absorption (math concept)</span></a> | <a class="reference internal" href="../class/absorption_declaration_python_class.html#absorption-declaration-python-class"><span class="std std-ref">AbsorptionDeclaration (python class)</span></a> | <a class="reference internal" href="../class/absorption_inclusion_python_class.html#absorption-inclusion-python-class"><span class="std std-ref">AbsorptionInclusion (python class)</span></a></p>
 </div>
-<p>This sample python script showcase how to use the <a class="reference internal" href="../../math/concept/absorption_math_concept.html#absorption-math-concept"><span class="std std-ref">absorption</span></a> <a class="reference internal" href="../../math/concept/inference_rule_math_concept_math_concept.html#inference-rule"><span class="std std-ref">inference-rule</span></a>.</p>
+<p>This sample python script showcase how to use the <a class="reference internal" href="../../math/concept/absorption_math_concept.html#absorption-math-concept"><span class="std std-ref">absorption</span></a> <a class="reference internal" href="../../math/concept/inference_rule_math_concept.html#inference-rule"><span class="std std-ref">inference-rule</span></a>.</p>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
-<p>The simplest way to use the <a class="reference internal" href="../../math/concept/absorption_math_concept.html#absorption-math-concept"><span class="std std-ref">absorption</span></a> <a class="reference internal" href="../../math/concept/inference_rule_math_concept_math_concept.html#inference-rule"><span class="std std-ref">inference-rule</span></a> is to access it via the <code class="code highlight python py docutils literal highlight-py"><span class="n">inference_rules</span></code> (abridged <code class="code highlight python py docutils literal highlight-py"><span class="n">i</span></code> ) property of the <a class="reference internal" href="../../math/concept/theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence"><span class="std std-ref">theory-elaboration-sequence</span></a>:</p>
+<p>The simplest way to use the <a class="reference internal" href="../../math/concept/absorption_math_concept.html#absorption-math-concept"><span class="std std-ref">absorption</span></a> <a class="reference internal" href="../../math/concept/inference_rule_math_concept.html#inference-rule"><span class="std std-ref">inference-rule</span></a> is to access it via the <code class="code highlight python py docutils literal highlight-py"><span class="n">inference_rules</span></code> (abridged <code class="code highlight python py docutils literal highlight-py"><span class="n">i</span></code> ) property of the <a class="reference internal" href="../../math/concept/theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence"><span class="std std-ref">theory-elaboration-sequence</span></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">create_universe</span><span class="p">()</span>
 <span class="n">t</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
 <span class="o">...</span>
@@ -126,12 +136,12 @@
 <span class="n">t</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">absorption_1</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p_iff_q</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>If the <a class="reference internal" href="../../math/concept/inference_rule_math_concept_math_concept.html#inference-rule"><span class="std std-ref">inference-rule</span></a> was not yet declared in the <a class="reference internal" href="../../math/concept/universe_of_discourse_math_concept.html#universe-of-discourse"><span class="std std-ref">universe-of-discourse</span></a> , it will be automatically declared. If the <a class="reference internal" href="../../math/concept/inference_rule_math_concept_math_concept.html#inference-rule"><span class="std std-ref">inference-rule</span></a> was not yet included in the <a class="reference internal" href="../../math/concept/theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence"><span class="std std-ref">theory-elaboration-sequence</span></a> , it will be automatically included.</p>
+<p>If the <a class="reference internal" href="../../math/concept/inference_rule_math_concept.html#inference-rule"><span class="std std-ref">inference-rule</span></a> was not yet declared in the <a class="reference internal" href="../../math/concept/universe_of_discourse_math_concept.html#universe-of-discourse"><span class="std std-ref">universe-of-discourse</span></a> , it will be automatically declared. If the <a class="reference internal" href="../../math/concept/inference_rule_math_concept.html#inference-rule"><span class="std std-ref">inference-rule</span></a> was not yet included in the <a class="reference internal" href="../../math/concept/theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence"><span class="std std-ref">theory-elaboration-sequence</span></a> , it will be automatically included.</p>
 <p>This calls the following method:</p>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">AbsorptionInclusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>The inclusion of <a class="reference internal" href="../../math/concept/absorption_math_concept.html#absorption-math-concept"><span class="std std-ref">absorption (math concept)</span></a> as a valid <a class="reference internal" href="../../math/concept/inference_rule_math_concept_math_concept.html#inference-rule"><span class="std std-ref">inference-rule</span></a> in the <a class="reference internal" href="../../math/concept/theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence"><span class="std std-ref">theory-elaboration-sequence</span></a>.</p>
+<dd><p>The inclusion of <a class="reference internal" href="../../math/concept/absorption_math_concept.html#absorption-math-concept"><span class="std std-ref">absorption (math concept)</span></a> as a valid <a class="reference internal" href="../../math/concept/inference_rule_math_concept.html#inference-rule"><span class="std std-ref">inference-rule</span></a> in the <a class="reference internal" href="../../math/concept/theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence"><span class="std std-ref">theory-elaboration-sequence</span></a>.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">infer_statement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_implies_q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paragraph_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
@@ -223,7 +233,7 @@ Proposition (T1.P2) - The proposition of interest: (r1(o1, o2) ==&gt; (r1(o1, o2
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="python_sample_index.html" class="btn btn-neutral float-left" title="Python samples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../../bibliography.html" class="btn btn-neutral float-right" title="Bibliography" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../../back_matter/back_matter_index.html" class="btn btn-neutral float-right" title="Index" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
