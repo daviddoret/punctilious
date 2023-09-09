@@ -30,7 +30,7 @@ neither the length, nor the breadth of these time-proven systems.
 
 ### So why develop yet another math proof assistant?
 
-Besides being fun and thrilling learning experience, the focus points of *punctilious* are:
+Besides being a fun and thrilling learning experience, the focus points of *punctilious* are:
 
 * Human-friendly and developer-friendly inputs (i.e.: write math as we learn it)
 * Ease of use
