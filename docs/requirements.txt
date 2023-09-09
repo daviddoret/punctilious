@@ -1,9 +1,16 @@
-Sphinx==7.1.2
-sphinx-autodoc-typehints==1.24.0
-# sphinx-exec-code==0.10
-sphinx-favicon==1.0.1
-sphinxcontrib-jquery==4.1
-sphinxcontrib-jsmath==1.0.1
-sphinxcontrib-qthelp==1.0.5
-sphinxcontrib-serializinghtml==1.1.7
-sphinxcontrib-bibtex==2.6.1
+Sphinx
+sphinx-autodoc-typehints
+sphinx-exec-code
+sphinx-favicon
+sphinx-rtd-theme
+sphinx-togglebutton
+sphinxawesome-theme
+sphinxcontrib-applehelp
+sphinxcontrib-bibtex
+sphinxcontrib-devhelp
+sphinxcontrib-htmlhelp
+sphinxcontrib-inlinesyntaxhighlight
+sphinxcontrib-jquery
+sphinxcontrib-jsmath
+sphinxcontrib-qthelp
+sphinxcontrib-serializinghtml
