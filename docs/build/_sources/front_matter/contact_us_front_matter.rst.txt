@@ -1,6 +1,0 @@
-.. _contact_us_front_matter:
-.. _contact us:
-
-Contact us
-=========================
-
