@@ -8,3 +8,7 @@ Punctilious
   :height: 600
   :width: 600
   :alt: The punctilious logo
+  :align: center
+
+.. centered::
+   *A human-friendly and developer-friendly math proof assistant*

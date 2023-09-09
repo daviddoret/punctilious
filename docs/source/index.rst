@@ -1,13 +1,12 @@
+punctilious
+===================
+
+.. image:: _static/punctilious-logo-full-light-200x200-white.png
+ :width: 12em
+ :alt: The punctilious logo
+ :align: center
+
 .. centered::
-
-   punctilious
-   ===================
-
-   .. image:: ../_static/punctilious-logo-full-light.svg
-     :height: 600
-     :width: 600
-     :alt: The punctilious logo
-
    *A human-friendly and developer-friendly math proof assistant*
 
 Table of contents

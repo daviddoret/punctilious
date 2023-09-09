@@ -8,7 +8,7 @@
 Source code repository
 ============================================
 
-The source code of the *punctilious* python library is available on this `GitHub repository<https://github.com/daviddoret/punctilious>`:
+The source code of the *punctilious* python library lives on this `GitHub repository <https://github.com/daviddoret/punctilious>`_.
 
 
 
