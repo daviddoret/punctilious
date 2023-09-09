@@ -52,7 +52,7 @@ Where:
 
 .. note:: The lifecycle of objects
 
-    For :ref:`objects` (including *universes-of-discourse*) to exist, they are :ref:`created`. For :ref:`objects` to be contained in *universes-of-discourse*, they are :ref:`declared`. And finally, for :ref:`objects` to be contained in :ref:`theory-elaboration-sequences`, they are :ref:`included (or postulated)<object_inclusion>`.
+    For :ref:`objects` (including *universes-of-discourse*) to exist, they must be :ref:`created` . For :ref:`objects` to be contained in *universes-of-discourse*, they must be :ref:`declared` . And finally, for :ref:`objects` to be contained in :ref:`theory-elaboration-sequences` , they must be :ref:`included` (aka postulated).
 
 Python implementation
 ---------------------
