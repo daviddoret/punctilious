@@ -6765,9 +6765,6 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
 
 
 class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
-    """
-
-    """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
