@@ -1,4 +1,4 @@
-import punctilious as pu
+from src import punctilious as pu
 
 # Create a universe-of-discourse with basic objects for the sake of this example.
 u = pu.create_universe_of_discourse(echo=True)

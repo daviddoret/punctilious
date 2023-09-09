@@ -1,6 +1,5 @@
 from unittest import TestCase
 import punctilious as pu
-import random_data
 
 
 class TestNoteIntroduction(TestCase):

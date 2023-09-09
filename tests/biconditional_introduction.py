@@ -1,6 +1,5 @@
 from unittest import TestCase
 import punctilious as pu
-import random_data
 
 
 class TestBiconditionalIntroduction(TestCase):
@@ -17,4 +16,4 @@ class TestBiconditionalIntroduction(TestCase):
         phi = (r1(o1, o2) | u.r.biconditional | r2(o3))
         self.assertTrue(biconditional_inference.is_formula_syntactically_equivalent_to(phi))
         self.assertEqual('(r1(o1, o2) <==> r2(o3))',
-            biconditional_inference.rep_formula(encoding=pu.encodings.plaintext))
+                         biconditional_inference.rep_formula(encoding=pu.encodings.plaintext))

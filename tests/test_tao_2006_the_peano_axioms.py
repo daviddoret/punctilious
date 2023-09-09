@@ -1,7 +1,7 @@
 import unittest
-import theory.package.tao_2006_2_1_the_peano_axioms as tpa
+import punctilious.theory.tao_2006_2_1_the_peano_axioms as tpa
 
-# from package.tao_2006_the_peano_axioms import p
+# from theory.tao_2006_the_peano_axioms import p
 
 t = tpa.Tao2006ThePeanoAxioms().develop()
 u = t.u
@@ -12,7 +12,7 @@ class TestTao2006ThePeanoAxioms(unittest.TestCase):
         phi1 = u.f(tpa.is_a, u.f(tpa.plusplus, tpa.zero), tpa.natural_number)
         phi2 = u.f(tpa.is_a, u.f(tpa.plusplus, u.f(tpa.plusplus, tpa.zero)), tpa.natural_number)
         phi3 = u.f(tpa.is_a, u.f(tpa.plusplus, u.f(tpa.plusplus, u.f(tpa.plusplus, tpa.zero))),
-            tpa.natural_number)
+                   tpa.natural_number)
 
         self.assertTrue(tpa.p004.valid_proposition.is_formula_syntactically_equivalent_to(phi1))
         self.assertFalse(tpa.p004.valid_proposition.is_formula_syntactically_equivalent_to(phi2))

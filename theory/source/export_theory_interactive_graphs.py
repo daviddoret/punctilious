@@ -2,8 +2,7 @@
 # import matplotlib.pyplot as plt
 # import pygraphviz
 # import pydot
-import punctilious as pu
-import theory.package.tao_2006_2_1_the_peano_axioms
+from src import punctilious as pu
 
 t1 = theory.package.tao_2006_2_1_the_peano_axioms.Tao2006ThePeanoAxioms().develop()
 pu.configuration.encoding = pu.encodings.plaintext
@@ -17,7 +16,7 @@ output_path = 'build/tao_2006_2_1_the_peano_axioms_interactive_graph_plaintext.h
 t1.export_interactive_graph(encoding=pu.encodings.plaintext, output_path=output_path)
 output_path = 'build/tao_2006_2_1_the_peano_axioms_interactive_graph_unicode.html'
 t1.export_interactive_graph(encoding=pu.encodings.unicode,
-    output_path=output_path)  # g.show('../build/tao_2006_the_peano_axioms_interactive_graph_statement_dependencies.html',notebook=False)  # subax1 = plt.subplot(121)  # nx.draw(g, with_labels=True, font_weight='bold')  # plt.show()
+                            output_path=output_path)  # g.show('../build/tao_2006_the_peano_axioms_interactive_graph_statement_dependencies.html',notebook=False)  # subax1 = plt.subplot(121)  # nx.draw(g, with_labels=True, font_weight='bold')  # plt.show()
 
 # pg = nx.nx_pydot.to_pydot(g)
 # output_graphviz_svg = pg.create_svg()

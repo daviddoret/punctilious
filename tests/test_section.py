@@ -1,6 +1,5 @@
 from unittest import TestCase
 import punctilious as p
-import random_data
 
 
 class TestSection(TestCase):
@@ -20,7 +19,7 @@ class TestSection(TestCase):
         s_2_2_1 = t.open_section('zooming in', section_parent=s_2_2, echo=True)
         self.assertEqual('### 𝟮.𝟮.𝟭: 𝗭𝗼𝗼𝗺𝗶𝗻𝗴 𝗶𝗻', s_2_2_1.rep_report())
         s_2_2_7 = t.open_section('jumping sections', section_number=7, section_parent=s_2_2,
-            echo=True)
+                                 echo=True)
         self.assertEqual('### 𝟮.𝟮.𝟳: 𝗝𝘂𝗺𝗽𝗶𝗻𝗴 𝘀𝗲𝗰𝘁𝗶𝗼𝗻𝘀', s_2_2_7.rep_report())
         s_2_3 = t.open_section('yet more details on this topic', section_parent=s_2, echo=True)
         self.assertEqual('## 𝟮.𝟯: 𝗬𝗲𝘁 𝗺𝗼𝗿𝗲 𝗱𝗲𝘁𝗮𝗶𝗹𝘀 𝗼𝗻 𝘁𝗵𝗶𝘀 𝘁𝗼𝗽𝗶𝗰', s_2_3.rep_report())

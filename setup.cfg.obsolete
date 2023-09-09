@@ -1,0 +1,35 @@
+# https://godatadriven.com/blog/a-practical-guide-to-setuptools-and-pyproject-toml/
+
+
+[options]
+zip_safe = True
+include_package_data = True
+
+[options.packages.find]
+where = punctilious
+
+[metadata]
+name = punctilious
+version = 1.0.0
+author = David Doret
+author_email = david.doret@icloud.com
+url = https://github.com/daviddoret/punctilious
+description = A human-friendly and developer-friendly math proof assistant
+long_description = file: README.md
+long_description_content_type = text/markdown
+keywords = math, mathematics, proof, proof theory, theory, formal system, proof assistant, math proof assistant
+# license = MIT License
+classifiers =
+    Development Status :: 4 - Beta
+    Intended Audience :: Developers
+    Intended Audience :: Education
+    Intended Audience :: Science/Research
+    Programming Language :: Python
+    Programming Language :: Python :: 3
+    License :: OSI Approved :: MIT License
+    Natural Language :: English
+    Operating System :: OS Independent
+    Topic :: Education
+    Topic :: Scientific/Engineering
+    Topic :: Scientific/Engineering :: Mathematics
+

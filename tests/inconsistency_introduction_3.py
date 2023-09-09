@@ -1,7 +1,6 @@
 from unittest import TestCase
 
 import punctilious as pu
-import random_data
 
 
 class TestInconsistencyIntroduction3(TestCase):

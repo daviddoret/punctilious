@@ -1,10 +1,9 @@
-"""Loop through theories natively included in the punctilious package and build them for easy consultation. The idea is to progressively source an interesting library.
+"""Loop through theories natively included in the punctilious theory and build them for easy consultation. The idea is to progressively source an interesting library.
 
 Status: Work in progress
 """
 
-import punctilious as pu
-import theory.package.tao_2006_2_1_the_peano_axioms
+from src import punctilious as pu
 
 t1 = theory.package.tao_2006_2_1_the_peano_axioms.Tao2006ThePeanoAxioms().develop()
 

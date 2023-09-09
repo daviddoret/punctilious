@@ -1,6 +1,5 @@
 from unittest import TestCase
 import punctilious as pu
-import random_data
 
 
 class TestEqualityCommutativity(TestCase):
@@ -16,6 +15,6 @@ class TestEqualityCommutativity(TestCase):
         self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
             o2=r2(o3) | u.r.equal | r1(o1, o2)))
         self.assertEqual('(r2(o3) = r1(o1, o2))',
-            proposition_of_interest.rep_formula(pu.encodings.plaintext))
+                         proposition_of_interest.rep_formula(pu.encodings.plaintext))
         self.assertEqual('(𝑟₂(𝑜₃) = 𝑟₁(𝑜₁, 𝑜₂))',
-            proposition_of_interest.rep_formula(pu.encodings.unicode))
+                         proposition_of_interest.rep_formula(pu.encodings.unicode))
