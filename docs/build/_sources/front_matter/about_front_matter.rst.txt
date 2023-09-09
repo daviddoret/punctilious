@@ -12,14 +12,14 @@ facilitate the study and development of mathematical proofs by human beings.
 
 There exists multiple math proof assistants, including:
 
-* `Coq<https://coq.inria.fr/>`
-* `Isabelle<https://isabelle.in.tum.de/>`
-* `Lean<https://leanprover.github.io/>`
+- `Coq <https://coq.inria.fr/>`_
+- `Isabelle <https://isabelle.in.tum.de/>`_
+- `Lean <https://leanprover.github.io/>`_
 
-...and many more. The `proof assistant<https://en.wikipedia.org/wiki/Proof_assistant>` page on Wikipedia contains a
+...and many more. The `proof assistant <https://en.wikipedia.org/wiki/Proof_assistant>`_ page on Wikipedia contains a
 general-purpose comparison of these.
 
-In contrast, *punctilious* is a ridiculous `Lilliputian<https://en.wikipedia.org/wiki/Lilliput_and_Blefuscu>` with
+In contrast, *punctilious* is a ridiculous `Lilliputian <https://en.wikipedia.org/wiki/Lilliput_and_Blefuscu>`_ with
 neither the length, nor the breadth of these time-proven systems.
 
 So why develop yet another math proof assistant?
