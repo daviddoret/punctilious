@@ -41,7 +41,7 @@ Besides being fun and a thrilling learning experience, the focus points of *punc
 
 ## Prerequisites
 
-Python 3.x.
+Python 3.11
 
 ## Installation
 
