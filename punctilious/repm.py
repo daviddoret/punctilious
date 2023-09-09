@@ -1,6 +1,4 @@
 """The Representation Module (repm) is an independant module that provides IO and string manipulation utilities."""
-# import unidecode
-# import typing
 
 _serif_bold_dict = {'a': '𝐚', 'b': '𝐛', 'c': '𝐜', 'd': '𝐝', 'e': '𝐞', 'f': '𝐟', 'g': '𝐠', 'h': '𝐡',
     'i':                 '𝐢', 'j': '𝐣', 'k': '𝐤', 'l': '𝐥', 'm': '𝐦', 'n': '𝐧', 'o': '𝐨', 'p': '𝐩',
