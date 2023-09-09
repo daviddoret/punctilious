@@ -6,4 +6,4 @@ sphinxcontrib-jquery==4.1
 sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.5
 sphinxcontrib-serializinghtml==1.1.7
-sphinxcontrib-bibtex=2.6.1
+sphinxcontrib-bibtex==2.6.1
