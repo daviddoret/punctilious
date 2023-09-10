@@ -3,8 +3,8 @@
 """
 from punctilious.plaintext import force_plaintext, Plaintext
 from punctilious.repm import monospace, prnt, serif_bold
-from punctilious.core import Article, AxiomDeclaration, AxiomInclusion, ComposableBlockSequence, classes, \
-    configuration, consistency_values, DashedName, create_universe_of_discourse, \
+from punctilious.core import Article, AxiomDeclaration, AxiomInclusion, ComposableBlockSequence, \
+    classes, configuration, consistency_values, DashedName, create_universe_of_discourse, \
     DefinitionInclusion, Encoding, encodings, FailedVerificationException, Formula, FreeVariable, \
     Header, Hypothesis, InconsistencyWarning, interpret_formula, interpret_statement_formula, \
     is_in_class, InferredStatement, NoteInclusion, Paragraph, ParagraphHeader, paragraph_headers, \
@@ -21,4 +21,5 @@ from punctilious.locale_en_us import locale_en_us
 # Configure the default locale
 configuration.locale = locale_en_us
 
-print('punctilious: theory initialized. welcome!')
+print(
+    'Welcome to punctilious. The library documentation is available here: https://punctilious.readthedocs.io/en/latest/')

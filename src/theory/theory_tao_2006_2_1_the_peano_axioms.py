@@ -324,3 +324,5 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
             content='We use induction. We first observe that this procedure gives a single value to a₀, namely c. (None of the other definitions aₙ₊₊ := fₙ(aₙ) will redefine the value of a₀, because of Axiom 2.3.) Now suppose inductively that the procedure gives a single value to aₙ. Then it gives a single value to aₙ₊₊, namely aₙ₊₊ := fₙ(aₙ). (None of the other definitions aₘ₊₊ := fₘ(aₘ) will redefine the value of aₙ₊₊, because of Axiom 2.4.) This completes the induction, and so aₙ is defined for each natural number n, with a single value assigned to each aₙ.')
 
         # TODO: Provide a formal proof of recursive definitions.
+
+        return t

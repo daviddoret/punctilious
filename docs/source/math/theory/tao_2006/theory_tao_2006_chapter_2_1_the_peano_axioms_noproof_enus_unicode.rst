@@ -1,0 +1,30 @@
+.. _theory_tao_2006_chapter_2_1_the_peano_axioms_noproof_enus_unicode:
+
+.. role:: python(code)
+    :language: py
+
+Tao 2006, Real Analysis, Chapter 2.1, The Peano axioms (without proofs, EN-US, Unicode)
+========================================================================================
+
+
+.. seealso::
+   :ref:`absorption_math_concept` | :ref:`absorption_declaration_python_class` | :ref:`absorption_inclusion_python_class`
+
+Usage
+----------------------
+
+This :ref:`theory-elaboration-sequence` is implemented as:
+
+.. module:: theory
+    :noindex:
+.. autoclass:: theory.Tao2006ThePeanoAxioms
+    :noindex:
+    :members: infer_statement
+
+Unicode EN-US no-proofs output
+-------------------------------
+
+   .. literalinclude :: ../../../../../data/theory_tao_2006_2_1_the_peano_axioms_report_noproof_enus_unicode.txt
+      :language: text
+
+
