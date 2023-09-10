@@ -4,7 +4,7 @@ import punctilious as pu
 
 class TestAbsorption(TestCase):
     def test_absorption_1(self):
-        import sample.absorption as test
+        import sample.sample_absorption as test
         u: pu.UniverseOfDiscourse = test.u
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2

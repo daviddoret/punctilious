@@ -4,7 +4,7 @@ import punctilious as pu
 
 class TestProofByContradiction1(TestCase):
     def test_proof_by_contradiction_1(self):
-        import sample.proof_by_contradiction_1 as test
+        import sample.sample_proof_by_contradiction_1 as test
         u: pu.UniverseOfDiscourse = test.u
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2

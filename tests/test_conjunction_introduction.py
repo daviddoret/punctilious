@@ -5,7 +5,7 @@ import punctilious.random_data as random_data
 
 class TestConjunctionIntroduction(TestCase):
     def test_ci(self):
-        import sample.conjunction_introduction as test
+        import sample.sample_conjunction_introduction as test
         u: pu.UniverseOfDiscourse = test.u
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2

@@ -5,7 +5,7 @@ import punctilious as pu
 
 class TestInconsistencyIntroduction2(TestCase):
     def test_inconsistency_introduction_2(self):
-        import sample.inconsistency_introduction_2 as test
+        import sample.sample_inconsistency_introduction_2 as test
         u: pu.UniverseOfDiscourse = test.u
         t1: pu.TheoryElaborationSequence = test.t1
         inc_proof: pu.InferredStatement = test.proposition_of_interest

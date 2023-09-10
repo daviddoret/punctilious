@@ -4,7 +4,7 @@ import punctilious as pu
 
 class TestBiconditionalElimination2(TestCase):
     def test_ber(self):
-        import sample.biconditional_elimination_2 as test
+        import sample.sample_biconditional_elimination_2 as test
         u: pu.UniverseOfDiscourse = test.u
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2

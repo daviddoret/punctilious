@@ -5,7 +5,7 @@ import punctilious.random_data as random_data
 
 class TestDoubleNegationIntroduction(TestCase):
     def test_dni_success(self):
-        import sample.double_negation_introduction as test
+        import sample.sample_double_negation_introduction as test
         u: pu.UniverseOfDiscourse = test.u
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2

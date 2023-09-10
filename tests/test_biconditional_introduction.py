@@ -5,7 +5,7 @@ import punctilious as pu
 class TestBiconditionalIntroduction(TestCase):
 
     def test_biconditional_introduction(self):
-        import sample.biconditional_introduction as test
+        import sample.sample_biconditional_introduction as test
         u: pu.UniverseOfDiscourse = test.u
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2

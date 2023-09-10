@@ -4,7 +4,7 @@ import punctilious as pu
 
 class TestEqualityCommutativity(TestCase):
     def test_ec(self):
-        import sample.equality_commutativity as test
+        import sample.sample_equality_commutativity as test
         u: pu.UniverseOfDiscourse = test.u
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
