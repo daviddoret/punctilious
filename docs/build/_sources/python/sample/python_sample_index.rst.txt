@@ -7,5 +7,5 @@ Python samples
    :maxdepth: 1
    :caption: Sample
 
-   absorption<absorption_python_sample>
+   absorption<sample_absorption_python>
 

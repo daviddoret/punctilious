@@ -1,6 +1,6 @@
 from unittest import TestCase
 import punctilious as pu
-import random_data
+import punctilious.random_data as random_data
 
 
 class TestTheoryElaboration(TestCase):
@@ -18,16 +18,18 @@ class TestTheoryElaboration(TestCase):
         ap1 = robust_theory.include_axiom(a=a1)
         with u.v() as x, u.v() as y, u.v() as z:
             implication = robust_theory.i.axiom_interpretation.infer_statement(ap1,
-                u.f(u.r.implies, u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)), u.f(r1, x, z)))
+                                                                               u.f(u.r.implies,
+                                                                                   u.f(u.r.land, u.f(r1, x, y),
+                                                                                       u.f(r1, y, z)), u.f(r1, x, z)))
         r1o1o2 = robust_theory.i.axiom_interpretation.infer_statement(ap1, u.f(r1, o1, o2))
         r1o2o3 = robust_theory.i.axiom_interpretation.infer_statement(ap1, u.f(r1, o2, o3))
         r1o1o2_and_r1o2o3 = robust_theory.i.ci.infer_statement(r1o1o2, r1o2o3)
         implication_2 = robust_theory.i.variable_substitution.infer_statement(p=implication,
-            phi=(o1, o2, o3))
+                                                                              phi=(o1, o2, o3))
         robust_theory.i.mp.infer_statement(p_implies_q=implication_2, p=r1o1o2_and_r1o2o3)
         robust_theory.stabilize()
         self.assertTrue(robust_theory.stabilized,
-            'The stabilized property of the original-theory is not True.')
+                        'The stabilized property of the original-theory is not True.')
 
         hypothesis = robust_theory.pose_hypothesis(hypothesis_formula=u.f(r1, o2, o3))
         hypothesis_theory = hypothesis.hypothesis_child_theory

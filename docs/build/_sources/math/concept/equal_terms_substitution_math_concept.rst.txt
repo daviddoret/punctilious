@@ -59,17 +59,17 @@ Python sample usage
 .. admonition:: Source code
   :class: tip, dropdown
 
-   .. literalinclude :: ../../../../sample/code/equal_terms_substitution.py
+   .. literalinclude :: ../../../../src/sample/sample_equal_terms_substitution.py
       :language: python
 
 .. admonition:: Unicode output
    :class: note, dropdown
 
-   .. literalinclude :: ../../../../sample/output/equal_terms_substitution_unicode.txt
+   .. literalinclude :: ../../../../data/sample_equal_terms_substitution_unicode.txt
       :language: text
 
 .. admonition:: Plaintext output
    :class: note, dropdown
 
-   .. literalinclude :: ../../../../sample/output/equal_terms_substitution_plaintext.txt
+   .. literalinclude :: ../../../../data/sample_equal_terms_substitution_plaintext.txt
       :language: text

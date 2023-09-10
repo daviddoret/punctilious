@@ -1,6 +1,6 @@
 from unittest import TestCase
 import punctilious as p
-import random_data
+import punctilious.random_data as random_data
 
 
 class TestTheory(TestCase):

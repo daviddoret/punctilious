@@ -5,7 +5,9 @@
 About *punctilious*
 =========================
 
-
+.. toctree::
+   :titlesonly:
+   :caption: About
 
 *Punctilious* is a *math proof assistant* python open-source development project. In clear: it intends to
 facilitate the study and development of mathematical proofs by human beings.

@@ -1,6 +1,6 @@
 from unittest import TestCase
 import punctilious as pu
-import random_data
+import punctilious.random_data as random_data
 
 
 class TestDefinitionDeclaration(TestCase):
@@ -13,7 +13,7 @@ class TestDefinitionDeclaration(TestCase):
         a1 = u.declare_definition(content1)
         self.assertEqual('Definition (D1)', a1.rep_title(cap=True, encoding=pu.encodings.plaintext))
         self.assertEqual('definition (D1)',
-            a1.rep_title(cap=False, encoding=pu.encodings.plaintext))
+                         a1.rep_title(cap=False, encoding=pu.encodings.plaintext))
         self.assertEqual('𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 (𝒟₁)', a1.rep_title(cap=True, encoding=pu.encodings.unicode))
         self.assertEqual('𝗱𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 (𝒟₁)', a1.rep_title(cap=False, encoding=pu.encodings.unicode))
 
@@ -33,7 +33,7 @@ class TestDefinitionDeclaration(TestCase):
         a3 = u.declare_definition(content3, symbol='b')
         a4 = u.declare_definition(content4, symbol='c', name='the definition of test')
         a5 = u.declare_definition(content5, acronym='oaot', symbol='d',
-            name='the other definition of test')
+                                  name='the other definition of test')
         self.assertEqual(
             f'𝖫𝖾𝗍 ⌜𝒟₁⌝ 𝖻𝖾 𝗍𝗁𝖾 𝑑𝑒𝑓𝑖𝑛𝑖𝑡𝑖𝑜𝑛 ⌜𝒷ℴℴ𝓇ℴ𝒶 𝒷ℯℯ𝒹𝓊 𝓇𝒾ℴ𝒷𝓁ℴ 𝒷𝓎𝓊𝒹𝒾ℯ𝓀𝓊.⌝ 𝗂𝗇 {u_unicode}.',
             a1.rep_report(encoding=pu.encodings.unicode, wrap=False))

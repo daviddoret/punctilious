@@ -1,0 +1,46 @@
+Let "U27" be a universe-of-discourse.
+
+Let "T1" be a theory-elaboration-sequence in U27.
+
+Axiom (T1.A1): Let axiom A1 "Dummy axiom to establish some ground propositions." be included (postulated) in T1.
+
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "A |- P" be included and considered valid in T1.
+
+Proposition (T1.P1): f1(o2, o3). Proof: "Dummy axiom to establish some ground propositions." is postulated by axiom (A1). f1(o2, o3) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that f1(o2, o3). QED
+
+Warning (warning1): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
+
+Proposition (T1.P2): ((f1(x1, y1) and f1(y1, z1)) ==> f1(x1, z1)). Proof: "Dummy axiom to establish some ground propositions." is postulated by axiom (A1). ((f1(x1, y1) and f1(y1, z1)) ==> f1(x1, z1)) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that ((f1(x1, y1) and f1(y1, z1)) ==> f1(x1, z1)). QED
+
+Note (note1): Until this point, statements are predecessors to the hypothesis, and they are contained in the (coming) h hypothesis.
+
+Axiom (H1.A2): Let axiom A2 "By hypothesis, assume f1(o1, o2) is true." be included (postulated) in H1.
+
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "A |- P" be included and considered valid in H1.
+
+Proposition (H1.P3): f1(o1, o2). Proof: "By hypothesis, assume f1(o1, o2) is true." is postulated by axiom (A2). f1(o1, o2) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that f1(o1, o2). QED
+
+Warning (warning2): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
+
+Hypothesis (T1.H1) - Pose some hypothesis: f1(o1, o2). This hypothesis is elaborated in theory H1.
+
+Inference rule (conjunction-introduction): Let inference-rule conjunction-introduction defined as "((P1 , Q1) |- (P1 and Q1))" be included and considered valid in H1.
+
+Proposition (H1.P4): (f1(o1, o2) and f1(o2, o3)). Proof: f1(o1, o2), of the form P1, follows from prop. (P3). f1(o2, o3), of the form Q1, follows from prop. (P1). Therefore, by the conjunction-introduction inference rule: ((P1 , Q1) |- (P1 and Q1)), it follows that (f1(o1, o2) and f1(o2, o3)). QED
+
+Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P, Phi) |- P'" be included and considered valid in H1.
+
+Proposition (H1.P5): ((f1(o1, o2) and f1(o2, o3)) ==> f1(o1, o3)). Proof: ((f1(x1, y1) and f1(y1, z1)) ==> f1(x1, z1)) follows from prop. (P2). Let x1 = o1, y1 = o2, z1 = o3.Therefore, by the variable-substitution inference rule: (P, Phi) |- P', it follows that ((f1(o1, o2) and f1(o2, o3)) ==> f1(o1, o3)). QED
+
+Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "(((P2 ==> P2) , P2) |- Q2)" be included and considered valid in H1.
+
+Proposition (H1.P6): f1(o1, o3). Proof: ((f1(o1, o2) and f1(o2, o3)) ==> f1(o1, o3)) follows from prop. (P5).(f1(o1, o2) and f1(o2, o3)) follows from prop. (P4).Therefore, by the modus-ponens inference rule: (((P2 ==> P2) , P2) |- Q2), it follows that f1(o1, o3). QED
+
+Note (note2): Note that without the f(o1, o2) hypothesis, we could not infer f(o1, o3).
+
+Note (note3): From this point on, statements are successors to the hypothesis, and they are not contained in the h hypothesis.
+
+Inference rule (double-negation-introduction): Let inference-rule double-negation-introduction defined as "(P3 |- not(not(P3)))" be included and considered valid in T1.
+
+Proposition (T1.P7): not(not(f1(o2, o3))). Proof: f1(o2, o3), of the form P3, follows from prop. (P1). Therefore, by the double-negation-introduction inference rule: (P3 |- not(not(P3))), it follows that not(not(f1(o2, o3))). QED
+

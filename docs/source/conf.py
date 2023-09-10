@@ -3,7 +3,7 @@ import sys
 
 # https://stackoverflow.com/questions/10324393/sphinx-build-fail-autodoc-cant-import-find-module
 sys.path.insert(0, os.path.abspath('../..'))
-sys.path.insert(0, os.path.abspath('../../punctilious'))
+sys.path.insert(0, os.path.abspath('../../src/punctilious'))
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -38,7 +38,7 @@ bibtex_default_style = 'alpha'
 templates_path = ['_templates']
 exclude_patterns = []
 
-# -- Options for HTML output -------------------------------------------------
+# -- Options for HTML data -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 # html_theme = 'alabaster'
@@ -47,6 +47,7 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 html_css_files = ['css/custom.css', ]
+html_theme_options = {'sticky_navigation': False, 'navigation_depth': -1, 'titles_only': False, }
 
 # sphinx-exec-code
 # URL: https://sphinx-exec-code.readthedocs.io/en/latest/configuration.html#installation

@@ -4,6 +4,10 @@
 Roadmap
 =========================
 
+.. toctree::
+   :titlesonly:
+   :caption: Roadmap
+
 We list here some high-level intentions regarding the future development of *punctilious*.
 
 Formalization of Math theories

@@ -60,17 +60,17 @@ Python sample usage
 .. admonition:: Source code
   :class: tip, dropdown
 
-   .. literalinclude :: ../../../../sample/code/biconditional_elimination_1.py
+   .. literalinclude :: ../../../../src/sample/sample_biconditional_elimination_1.py
       :language: python
 
 .. admonition:: Unicode output
    :class: note, dropdown
 
-   .. literalinclude :: ../../../../sample/output/biconditional_elimination_1_unicode.txt
+   .. literalinclude :: ../../../../data/sample_biconditional_elimination_1_unicode.txt
       :language: text
 
 .. admonition:: Plaintext output
    :class: note, dropdown
 
-   .. literalinclude :: ../../../../sample/output/biconditional_elimination_1_plaintext.txt
+   .. literalinclude :: ../../../../data/sample_biconditional_elimination_1_plaintext.txt
       :language: text

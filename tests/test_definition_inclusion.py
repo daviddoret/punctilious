@@ -1,6 +1,6 @@
 from unittest import TestCase
 import punctilious as pu
-import random_data
+import punctilious.random_data as random_data
 
 
 class TestDefinitionInclusion(TestCase):
@@ -32,6 +32,6 @@ class TestDefinitionInclusion(TestCase):
         f = u.r.declare(1, nameset=pu.NameSet(symbol='f', index=None), signal_proposition=True)
         g = u.r.declare(2, nameset=pu.NameSet(symbol='g', index=None), signal_proposition=True)
         dii1 = t.i.definition_interpretation.infer_statement(di1,
-            u.f(u.r.equal, u.f(f, foo), u.f(g, bar, qux)), echo=True)
+                                                             u.f(u.r.equal, u.f(f, foo), u.f(g, bar, qux)), echo=True)
         self.assertTrue(dii1.valid_proposition.is_formula_syntactically_equivalent_to(
             u.f(u.r.equal, u.f(f, foo), u.f(g, bar, qux))))

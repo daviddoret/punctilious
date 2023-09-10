@@ -1,6 +1,6 @@
 from unittest import TestCase
 import punctilious as pu
-import random_data
+import punctilious.random_data as random_data
 
 
 class TestAxiomInclusion(TestCase):

@@ -1,10 +1,8 @@
 [project]
 name = "punctilious"
 version = "1.0.0"
-authors = [
-    { name = "David Doret", email = "david.doret@icloud.com" },
-]
-keywords = ["math", "mathematics", "proof", "proof assistant", "math proof assistant", "formal system"]
+authors = [{ name = "David Doret", email = "david.doret@icloud.com" }]
+keywords = ["math", "mathematics", "proof", "proof assistant", "math proof assistant", "formal system", ]
 description = "A human-friendly and developer-friendly math proof assistant"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -20,15 +18,14 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Education",
     "Topic :: Scientific/Engineering",
-    "Topic :: Scientific/Engineering :: Mathematics"
-]
+    "Topic :: Scientific/Engineering :: Mathematics"]
 # repository = "https://github.com/daviddoret/punctilious"
 # homepage = "https://github.com/daviddoret/punctilious"
 # documentation = "https://punctilious.readthedocs.io/en/latest/"
 # license = "MIT License"
 
 [build-system]
-requires = ["setuptools"]
+requires = ["build", "setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project.urls]
@@ -36,3 +33,9 @@ build-backend = "setuptools.build_meta"
 "Bug Tracker" = "https://github.com/daviddoret/punctilious/issues"
 "Documentation" = "https://punctilious.readthedocs.io/en/latest/"
 "Repository" = "https://github.com/daviddoret/punctilious"
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+addopts = [
+    "--import-mode=importlib",
+]

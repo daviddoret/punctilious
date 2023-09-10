@@ -1,6 +1,6 @@
 from unittest import TestCase
 import punctilious as pu
-import random_data
+import punctilious.random_data as random_data
 
 
 class TestFormulaIsMaskSimilarTo(TestCase):
@@ -87,13 +87,11 @@ class TestFormulaIsMaskSimilarTo(TestCase):
         with u.v() as x, u.v() as y, u.v() as z:
             variable_set = {x, y, z}
             implication = t.i.axiom_interpretation.infer_statement(ap,
-                                                                   u.f(
-                                                                       u.r.implies,
-                                                                       u.f(u.r.land, u.f(r1, x, y),
-                                                                           u.f(r1, y, z)),
+                                                                   u.f(u.r.implies,
+                                                                       u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)),
                                                                        u.f(r1, x, z)))
             antecedent_with_variables = implication.valid_proposition.parameters[0]
-            self.assertTrue(antecedent_with_variables.is_masked_formula_similar_to(
-                antecedent, variable_set))
-            self.assertTrue(antecedent.is_masked_formula_similar_to(
-                antecedent_with_variables, variable_set))
+            self.assertTrue(
+                antecedent_with_variables.is_masked_formula_similar_to(antecedent, variable_set))
+            self.assertTrue(
+                antecedent.is_masked_formula_similar_to(antecedent_with_variables, variable_set))
