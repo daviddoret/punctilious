@@ -5,7 +5,7 @@ import punctilious.random_data as random_data
 
 class TestEqualTermsSubstitution(TestCase):
     def test_equal_terms_substitution_simple(self):
-        import sample as test
+        import sample.equal_terms_substitution as test
         u: pu.UniverseOfDiscourse = test.u
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2

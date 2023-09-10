@@ -3,8 +3,6 @@
 Status: Work in progress
 """
 
-from src import punctilious as pu
-
 t1 = theory.package.tao_2006_2_1_the_peano_axioms.Tao2006ThePeanoAxioms().develop()
 
 for encoding in (pu.encodings.plaintext, pu.encodings.unicode, pu.encodings.latex):

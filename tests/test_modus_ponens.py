@@ -6,7 +6,7 @@ import punctilious.random_data as random_data
 class TestModusPonens(TestCase):
 
     def test_modus_ponens_without_variable(self):
-        import sample as test
+        import sample.modus_ponens as test
         u: pu.UniverseOfDiscourse = test.u
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2

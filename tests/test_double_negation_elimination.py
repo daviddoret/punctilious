@@ -4,7 +4,7 @@ import punctilious as pu
 
 class TestDoubleNegationElimination(TestCase):
     def test_dne(self):
-        import sample as test
+        import sample.double_negation_elimination as test
         u: pu.UniverseOfDiscourse = test.u
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2

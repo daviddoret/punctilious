@@ -1,4 +1,4 @@
-from src import punctilious as pu
+import punctilious as pu
 
 mira_name = 'Mira'  # random_data.random_word()
 dog_name = 'dog'  # random_data.random_word()
