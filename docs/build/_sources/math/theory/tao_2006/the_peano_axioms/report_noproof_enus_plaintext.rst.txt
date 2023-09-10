@@ -12,8 +12,8 @@ Python implementation
    .. literalinclude :: ../../../../../../src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_plaintext.py
       :language: python
 
-Unicode EN-US no-proofs output
--------------------------------
+Plaintext EN-US no-proofs output
+----------------------------------
 
    .. literalinclude :: ../../../../../../data/report_tao_2006_the_peano_axioms_noproof_enus_plaintext.txt
       :language: text

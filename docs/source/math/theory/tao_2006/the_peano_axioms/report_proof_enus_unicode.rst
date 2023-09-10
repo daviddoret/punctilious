@@ -9,13 +9,13 @@ Tao 2006, Real Analysis, Chapter 2.1, The Peano axioms (without proofs, EN-US, U
 Python implementation
 ----------------------
 
-   .. literalinclude :: ../../../../../../src/sample/sample_tao_2006_the_peano_axioms_proof_enus_unicode.txt
+   .. literalinclude :: ../../../../../../src/sample/sample_tao_2006_the_peano_axioms_proof_enus_unicode.py
       :language: python
 
-Unicode EN-US no-proofs output
--------------------------------
+Unicode EN-US with proofs output
+---------------------------------------------
 
-   .. literalinclude :: ../../../../../../data/report_tao_2006_the_peano_axioms_proof_enus_unicode.py
+   .. literalinclude :: ../../../../../../data/report_tao_2006_the_peano_axioms_proof_enus_unicode.txt
       :language: text
 
 
