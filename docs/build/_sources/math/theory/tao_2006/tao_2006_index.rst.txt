@@ -5,4 +5,8 @@ Tao 2006
    :maxdepth: 0
    :caption: Tao 2006
 
-   theory_tao_2006_chapter_2_1_the_peano_axioms_noproof_enus_unicode
+   Chapter 2.1 - The Peano axioms<chapter_2_1_the_peano_axioms>
+      No-proof EN-US Plaintext Report<chapter_2_1_the_peano_axioms/report_no_proof_enus_plaintext>
+      No-proof EN-US Unicode Report<chapter_2_1_the_peano_axioms/report_no_proof_enus_unicode>
+      Proof EN-US Plaintext Report<chapter_2_1_the_peano_axioms/report_proof_enus_plaintext>
+      Proof EN-US Unicode Report<chapter_2_1_the_peano_axioms/report_proof_enus_unicode>

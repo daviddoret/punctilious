@@ -1,6 +1,136 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../../../_static/punctilious-logo-compact-light.svg" rel="icon" type="image/svg+xml">
+    <link href="../../../_static/punctilious-logo-compact-light-16x16-white.png" sizes="16x16" rel="icon" type="image/png">
+    <link href="../../../_static/punctilious-logo-compact-light-32x32-white.png" sizes="32x32" rel="icon" type="image/png">
+    <link rel="apple-touch-icon" href="../../../_static/punctilious-logo-compact-light-180x180-white.png" sizes="180x180" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tao 2006, Real Analysis, Chapter 2.1, The Peano axioms &mdash; punctilious 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=af2ce170"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../../../_static/togglebutton.js?v=4a39c7ea"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Python" href="../../../python/python_index.html" />
+    <link rel="prev" title="Tao 2006" href="tao_2006_index.html" /> 
+</head>
 
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
 
-# 𝗧𝗵𝗲𝗼𝗿𝘆 𝗽𝗿𝗼𝗽𝗲𝗿𝘁𝗶𝗲𝘀
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            punctilious
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Front matter</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../front_matter/title_front_matter.html">Title</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../front_matter/about_front_matter.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../front_matter/contributing_front_matter.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../front_matter/roadmap_front_matter.html">Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../front_matter/project_front_matter.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../front_matter/support_front_matter.html">Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Math</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../math_index.html">Math</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../concept/math_concept_index.html">Concept</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../math_theory_index.html">Theory</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="tao_2006_index.html">Tao 2006</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Tao 2006, Real Analysis, Chapter 2.1, The Peano axioms</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../python/python_index.html">Python</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Back matter</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../back_matter/back_matter_index.html">Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">punctilious</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../math_index.html">Math</a></li>
+          <li class="breadcrumb-item"><a href="../math_theory_index.html">Math theory</a></li>
+          <li class="breadcrumb-item"><a href="tao_2006_index.html">Tao 2006</a></li>
+      <li class="breadcrumb-item active">Tao 2006, Real Analysis, Chapter 2.1, The Peano axioms</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/math/theory/tao_2006/theory_tao_2006_chapter_2_1_the_peano_axioms_noproof_enus_unicode.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tao-2006-real-analysis-chapter-2-1-the-peano-axioms">
+<span id="theory-tao-2006-chapter-2-1-the-peano-axioms-noproof-enus-unicode"></span><h1>Tao 2006, Real Analysis, Chapter 2.1, The Peano axioms<a class="headerlink" href="#tao-2006-real-analysis-chapter-2-1-the-peano-axioms" title="Permalink to this heading"></a></h1>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../../concept/absorption_math_concept.html#absorption-math-concept"><span class="std std-ref">absorption (math concept)</span></a> | <a class="reference internal" href="../../../python/class/absorption_declaration_python_class.html#absorption-declaration-python-class"><span class="std std-ref">AbsorptionDeclaration (python class)</span></a> | <a class="reference internal" href="../../../python/class/absorption_inclusion_python_class.html#absorption-inclusion-python-class"><span class="std std-ref">AbsorptionInclusion (python class)</span></a></p>
+</div>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<p>This <a class="reference internal" href="../../concept/theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence"><span class="std std-ref">theory-elaboration-sequence</span></a> is implemented as:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">theory.</span></span><span class="sig-name descname"><span class="pre">Tao2006ThePeanoAxioms</span></span></dt>
+<dd></dd></dl>
+
+</section>
+<section id="unicode-en-us-no-proofs-output">
+<h2>Unicode EN-US no-proofs output<a class="headerlink" href="#unicode-en-us-no-proofs-output" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span># 𝗧𝗵𝗲𝗼𝗿𝘆 𝗽𝗿𝗼𝗽𝗲𝗿𝘁𝗶𝗲𝘀
 𝗖𝗼𝗻𝘀𝗶𝘀𝘁𝗲𝗻𝗰𝘆: undetermined
 𝗦𝘁𝗮𝗯𝗶𝗹𝗶𝘇𝗲𝗱: False
 𝗘𝘅𝘁𝗲𝗻𝗱𝗲𝗱 𝘁𝗵𝗲𝗼𝗿𝘆: N/A
@@ -22,7 +152,7 @@
 𝖫𝖾𝗍 ⌜𝑖𝑛𝑐𝑜𝑛𝑠𝑖𝑠𝑡𝑒𝑛𝑐𝑦-𝑖𝑛𝑡𝑟𝑜𝑑𝑢𝑐𝑡𝑖𝑜𝑛-2⌝ 𝖻𝖾 𝖺𝗇 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜((𝑷 = 𝑸), (𝑷 ≠ 𝑸)) ⊢ 𝐼𝑛𝑐(𝒯)⌝ 𝗂𝗇 𝒰₁.
 𝖫𝖾𝗍 ⌜𝑚𝑜𝑑𝑢𝑠-𝑝𝑜𝑛𝑒𝑛𝑠⌝ 𝖻𝖾 𝖺𝗇 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(((𝐏₁ ⟹ 𝐏₁) , 𝐏₁) ⊢ 𝐐₁)⌝ 𝗂𝗇 𝒰₁.
 𝖫𝖾𝗍 ⌜𝑝𝑟𝑜𝑜𝑓-𝑏𝑦-𝑟𝑒𝑓𝑢𝑡𝑎𝑡𝑖𝑜𝑛-2⌝ 𝖻𝖾 𝖺𝗇 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 = 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 ≠ 𝑸)⌝ 𝗂𝗇 𝒰₁.
-𝖫𝖾𝗍 ⌜𝑣𝑎𝑟𝑖𝑎𝑏𝑙𝑒-𝑠𝑢𝑏𝑠𝑡𝑖𝑡𝑢𝑡𝑖𝑜𝑛⌝ 𝖻𝖾 𝖺𝗇 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝖯, 𝛷) ⊢ 𝖯'⌝ 𝗂𝗇 𝒰₁.
+𝖫𝖾𝗍 ⌜𝑣𝑎𝑟𝑖𝑎𝑏𝑙𝑒-𝑠𝑢𝑏𝑠𝑡𝑖𝑡𝑢𝑡𝑖𝑜𝑛⌝ 𝖻𝖾 𝖺𝗇 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝖯, 𝛷) ⊢ 𝖯&#39;⌝ 𝗂𝗇 𝒰₁.
 
 # 𝗧𝗵𝗲𝗼𝗿𝘆 𝗲𝗹𝗮𝗯𝗼𝗿𝗮𝘁𝗶𝗼𝗻 𝘀𝗲𝗾𝘂𝗲𝗻𝗰𝗲
 # 𝟮: 𝗧𝗵𝗲 𝗻𝗮𝘁𝘂𝗿𝗮𝗹 𝗻𝘂𝗺𝗯𝗲𝗿𝘀
@@ -35,11 +165,11 @@
 ### 𝗔𝘅𝗶𝗼𝗺 𝟮.𝟮
 𝗔𝘅𝗶𝗼𝗺 𝟮.𝟮 (𝒯₁.𝐴₂): 𝖫𝖾𝗍 𝑎𝑥𝑖𝑜𝑚 𝒜₂ ⌜𝘐𝘧 𝘯 𝘪𝘴 𝘢 𝘯𝘢𝘵𝘶𝘳𝘢𝘭 𝘯𝘶𝘮𝘣𝘦𝘳, 𝘵𝘩𝘦𝘯 𝘯++ 𝘪𝘴 𝘢 𝘯𝘢𝘵𝘶𝘳𝘢𝘭 𝘯𝘶𝘮𝘣𝘦𝘳.⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 (𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽) 𝗂𝗇 𝒯₁.
 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₂): ((𝐧₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((𝐧₁)++ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)).
-𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑣𝑎𝑟𝑖𝑎𝑏𝑙𝑒-𝑠𝑢𝑏𝑠𝑡𝑖𝑡𝑢𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑣𝑎𝑟𝑖𝑎𝑏𝑙𝑒-𝑠𝑢𝑏𝑠𝑡𝑖𝑡𝑢𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝖯, 𝛷) ⊢ 𝖯'⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝒯₁.
+𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑣𝑎𝑟𝑖𝑎𝑏𝑙𝑒-𝑠𝑢𝑏𝑠𝑡𝑖𝑡𝑢𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑣𝑎𝑟𝑖𝑎𝑏𝑙𝑒-𝑠𝑢𝑏𝑠𝑡𝑖𝑡𝑢𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝖯, 𝛷) ⊢ 𝖯&#39;⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝒯₁.
 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₃): ((0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((0)++ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)).
 𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑚𝑜𝑑𝑢𝑠-𝑝𝑜𝑛𝑒𝑛𝑠): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑚𝑜𝑑𝑢𝑠-𝑝𝑜𝑛𝑒𝑛𝑠 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(((𝐏₁ ⟹ 𝐏₁) , 𝐏₁) ⊢ 𝐐₁)⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝒯₁.
 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 𝟮.𝟮.𝟯 (𝒯₁.𝑃₄): ((0)++ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).
-𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝐷₁): 𝖫𝖾𝗍 𝑑𝑒𝑓𝑖𝑛𝑖𝑡𝑖𝑜𝑛 𝒟₁ ⌜𝘞𝘦 𝘥𝘦𝘧𝘪𝘯𝘦 𝟣 𝘵𝘰 𝘣𝘦 𝘵𝘩𝘦 𝘯𝘶𝘮𝘣𝘦𝘳 𝟢++, 𝟤 𝘵𝘰 𝘣𝘦 𝘵𝘩𝘦 𝘯𝘶𝘮𝘣𝘦𝘳 (𝟢++)++, 𝟥 𝘵𝘰 𝘣𝘦 𝘵𝘩𝘦 𝘯𝘶𝘮𝘣𝘦𝘳 ((𝟢++)++)++,𝘦𝘵𝘤. (𝘐𝘯 𝘰𝘵𝘩𝘦𝘳 𝘸𝘰𝘳𝘥𝘴, 𝟣 := 𝟢++, 𝟤 := 𝟣++, 𝟥 := 𝟤++, 𝘦𝘵𝘤. 𝘐𝘯 𝘵𝘩𝘪𝘴 𝘵𝘦𝘹𝘵 𝘐 𝘶𝘴𝘦 "𝘹 := 𝘺" 𝘵𝘰 𝘥𝘦𝘯𝘰𝘵𝘦 𝘵𝘩𝘦 𝘴𝘵𝘢𝘵𝘦𝘮𝘦𝘯𝘵 𝘵𝘩𝘢𝘵 𝘹 𝘪𝘴 𝘥𝘦𝘧𝘪𝘯𝘦𝘥 𝘵𝘰 𝘦𝘲𝘶𝘢𝘭 𝘺.)⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 (𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽) 𝗂𝗇 𝒯₁.
+𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝐷₁): 𝖫𝖾𝗍 𝑑𝑒𝑓𝑖𝑛𝑖𝑡𝑖𝑜𝑛 𝒟₁ ⌜𝘞𝘦 𝘥𝘦𝘧𝘪𝘯𝘦 𝟣 𝘵𝘰 𝘣𝘦 𝘵𝘩𝘦 𝘯𝘶𝘮𝘣𝘦𝘳 𝟢++, 𝟤 𝘵𝘰 𝘣𝘦 𝘵𝘩𝘦 𝘯𝘶𝘮𝘣𝘦𝘳 (𝟢++)++, 𝟥 𝘵𝘰 𝘣𝘦 𝘵𝘩𝘦 𝘯𝘶𝘮𝘣𝘦𝘳 ((𝟢++)++)++,𝘦𝘵𝘤. (𝘐𝘯 𝘰𝘵𝘩𝘦𝘳 𝘸𝘰𝘳𝘥𝘴, 𝟣 := 𝟢++, 𝟤 := 𝟣++, 𝟥 := 𝟤++, 𝘦𝘵𝘤. 𝘐𝘯 𝘵𝘩𝘪𝘴 𝘵𝘦𝘹𝘵 𝘐 𝘶𝘴𝘦 &quot;𝘹 := 𝘺&quot; 𝘵𝘰 𝘥𝘦𝘯𝘰𝘵𝘦 𝘵𝘩𝘦 𝘴𝘵𝘢𝘵𝘦𝘮𝘦𝘯𝘵 𝘵𝘩𝘢𝘵 𝘹 𝘪𝘴 𝘥𝘦𝘧𝘪𝘯𝘦𝘥 𝘵𝘰 𝘦𝘲𝘶𝘢𝘭 𝘺.)⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 (𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽) 𝗂𝗇 𝒯₁.
 𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑑𝑒𝑓𝑖𝑛𝑖𝑡𝑖𝑜𝑛-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑑𝑒𝑓𝑖𝑛𝑖𝑡𝑖𝑜𝑛-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜𝒟 ⊢ P⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝒯₁.
 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₅): (1 = (0)++).
 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₆): (2 = ((0)++)++).
@@ -118,3 +248,41 @@
 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₇₅): (((𝐧₅ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐏₄(0) ∧ (𝐏₄(𝐧₅) ⟹ 𝐏₄((𝐧₅)++)))) ⟹ ((𝐦₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ 𝐏₄(𝐦₃))).
 ### 𝗧𝗵𝗲 𝗻𝘂𝗺𝗯𝗲𝗿 𝘀𝘆𝘀𝘁𝗲𝗺 𝗻
 ### 𝗥𝗲𝗰𝘂𝗿𝘀𝗶𝘃𝗲 𝗱𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻𝘀
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tao_2006_index.html" class="btn btn-neutral float-left" title="Tao 2006" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../python/python_index.html" class="btn btn-neutral float-right" title="Python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, David Doret.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
