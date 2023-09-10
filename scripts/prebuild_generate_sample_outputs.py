@@ -1,3 +1,8 @@
+"""Pre-build script that iterates over all sample *punctilious* python script files, executes them, and saves their outputs with in different formats (*punctilious* encodings) in the data folder.
+Like this, the output of sample *punctilious* python script files can be included in the documentation.
+
+"""
+
 from pathlib import Path
 import contextlib
 import punctilious as pu
