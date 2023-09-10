@@ -47,6 +47,7 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 html_css_files = ['css/custom.css', ]
+html_theme_options = {'sticky_navigation': False, 'navigation_depth': -1, 'titles_only': False, }
 
 # sphinx-exec-code
 # URL: https://sphinx-exec-code.readthedocs.io/en/latest/configuration.html#installation

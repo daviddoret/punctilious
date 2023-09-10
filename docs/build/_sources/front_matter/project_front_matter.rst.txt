@@ -6,4 +6,8 @@
 The *punctilious* project
 ==========================
 
-We try to manage the *punctilious* project with this `GitHub project<https://github.com/users/daviddoret/projects/1>`.
+.. toctree::
+   :titlesonly:
+   :caption: Project
+
+We try to manage the *punctilious* project with this `GitHub project<https://github.com/users/daviddoret/projects/1>` .

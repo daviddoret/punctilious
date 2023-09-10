@@ -5,6 +5,10 @@
 Contributing to *punctilious*
 ===============================
 
+.. toctree::
+   :titlesonly:
+   :caption: Contributing
+
 Everyone is warmly welcomed to contribute to *punctilious*.
 
 Here are some ideas on how to get started:

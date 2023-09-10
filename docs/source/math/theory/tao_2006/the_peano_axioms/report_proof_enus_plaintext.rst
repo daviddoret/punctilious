@@ -3,17 +3,25 @@
 .. role:: python(code)
     :language: py
 
-Tao 2006, Real Analysis, Chapter 2.1, The Peano axioms (without proofs, EN-US, Unicode)
+Plaintext EN-US with proofs
 ========================================================================================
 
-Python implementation
+.. toctree::
+   :titlesonly:
+   :caption: Reports
+
+Python script
 ----------------------
+
+The python script used to generate the report.
 
    .. literalinclude :: ../../../../../../src/sample/sample_tao_2006_the_peano_axioms_proof_enus_plaintext.py
       :language: python
 
-Plaintext EN-US with proofs output
+Report
 ------------------------------------
+
+The report content.
 
    .. literalinclude :: ../../../../../../data/report_tao_2006_the_peano_axioms_proof_enus_plaintext.txt
       :language: text
