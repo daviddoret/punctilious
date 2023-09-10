@@ -4,7 +4,7 @@ import punctilious as pu
 
 class TestHypothesis(TestCase):
     def test_hypothesis(self):
-        import sample.code.hypothesis as test
+        import sample as test
         u: pu.UniverseOfDiscourse = test.u
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2

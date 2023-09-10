@@ -1,6 +1,6 @@
 from src import punctilious as pu
 import networkx as nx
-import sample.code.pet_theory_1 as pet
+import sample as pet
 
 # import pygraphviz
 

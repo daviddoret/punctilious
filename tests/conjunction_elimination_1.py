@@ -4,7 +4,7 @@ import punctilious as pu
 
 class TestConjunctionElimination1(TestCase):
     def test_ce1(self):
-        import sample.code.conjunction_elimination_1 as test
+        import sample as test
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         r1: pu.Relation = test.r1

@@ -4,7 +4,7 @@ import punctilious as pu
 
 class TestAbsorption(TestCase):
     def test_absorption_1(self):
-        import sample.code.absorption as test
+        import sample.absorption as test
         u: pu.UniverseOfDiscourse = test.u
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
@@ -15,6 +15,6 @@ class TestAbsorption(TestCase):
         self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
             (r1(o1, o2) | u.r.implies | (r1(o1, o2) | u.r.land | r2(o3)))))
         self.assertEqual('(r1(o1, o2) ==> (r1(o1, o2) and r2(o3)))',
-                         proposition_of_interest.rep_formula(pu.encodings.plaintext))
+            proposition_of_interest.rep_formula(pu.encodings.plaintext))
         self.assertEqual('(𝑟₁(𝑜₁, 𝑜₂) ⟹ (𝑟₁(𝑜₁, 𝑜₂) ∧ 𝑟₂(𝑜₃)))',
-                         proposition_of_interest.rep_formula(pu.encodings.unicode))
+            proposition_of_interest.rep_formula(pu.encodings.unicode))

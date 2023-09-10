@@ -38,7 +38,7 @@ bibtex_default_style = 'alpha'
 templates_path = ['_templates']
 exclude_patterns = []
 
-# -- Options for HTML output -------------------------------------------------
+# -- Options for HTML data -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 # html_theme = 'alabaster'

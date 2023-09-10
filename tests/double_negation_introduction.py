@@ -5,7 +5,7 @@ import punctilious.random_data as random_data
 
 class TestDoubleNegationIntroduction(TestCase):
     def test_dni_success(self):
-        import sample.code.double_negation_introduction as test
+        import sample as test
         u: pu.UniverseOfDiscourse = test.u
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
@@ -14,9 +14,9 @@ class TestDoubleNegationIntroduction(TestCase):
         self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
             o2=u.r.lnot(u.r.lnot(r1(o1, o2)))))
         self.assertEqual('not(not(r1(o1, o2)))',
-                         proposition_of_interest.rep_formula(pu.encodings.plaintext))
+            proposition_of_interest.rep_formula(pu.encodings.plaintext))
         self.assertEqual('¬(¬(𝑟₁(𝑜₁, 𝑜₂)))',
-                         proposition_of_interest.rep_formula(pu.encodings.unicode))
+            proposition_of_interest.rep_formula(pu.encodings.unicode))
 
     def test_dni_failure(self):
         pu.configuration.echo_default = True
