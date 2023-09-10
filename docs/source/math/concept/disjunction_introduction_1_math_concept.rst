@@ -59,17 +59,17 @@ Python sample usage
 .. admonition:: Source code
   :class: tip, dropdown
 
-   .. literalinclude :: ../../../../sample/code/disjunction_introduction_1.py
+   .. literalinclude :: ../../../../src/sample/sample_disjunction_introduction_1.py
       :language: python
 
 .. admonition:: Unicode output
    :class: note, dropdown
 
-   .. literalinclude :: ../../../../sample/output/disjunction_introduction_1_unicode.txt
+   .. literalinclude :: ../../../../data/sample_disjunction_introduction_1_unicode.txt
       :language: text
 
 .. admonition:: Plaintext output
    :class: note, dropdown
 
-   .. literalinclude :: ../../../../sample/output/disjunction_introduction_1_plaintext.txt
+   .. literalinclude :: ../../../../data/sample_disjunction_introduction_1_plaintext.txt
       :language: text

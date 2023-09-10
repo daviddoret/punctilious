@@ -38,18 +38,18 @@ This calls the following method:
 Source code
 ----------------------
 
-.. literalinclude :: ../../../../sample/code/absorption.py
+.. literalinclude :: ../../../../src/sample/sample_absorption.py
   :language: python
 
 Unicode output
 -----------------------
 
-.. literalinclude :: ../../../../sample/output/absorption_unicode.txt
+.. literalinclude :: ../../../../data/sample_absorption_unicode.txt
   :language: text
 
 Plaintext output
 ----------------------
 
-   .. literalinclude :: ../../../../sample/output/absorption_plaintext.txt
+   .. literalinclude :: ../../../../data/sample_absorption_plaintext.txt
       :language: text
 

@@ -25,10 +25,10 @@ Python implementation
 Sample usage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. literalinclude :: ../../../../sample/code/proof_by_contradiction_1.py
+.. literalinclude :: ../../../../src/sample/sample_proof_by_contradiction_1.py
    :language: python
 
-.. literalinclude :: ../../../../sample/output/proof_by_contradiction_1_unicode.txt
+.. literalinclude :: ../../../../data/sample_proof_by_contradiction_1_unicode.txt
    :language: text
 
 Documentation

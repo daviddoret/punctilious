@@ -60,18 +60,18 @@ Python sample usage
 .. admonition:: Source code
   :class: tip, dropdown
 
-   .. literalinclude :: ../../../../sample/code/hypothesis.py
+   .. literalinclude :: ../../../../src/sample/sample_hypothesis.py
       :language: python
       :linenos:
 
 .. admonition:: Unicode output
    :class: note, dropdown
 
-   .. literalinclude :: ../../../../sample/output/hypothesis_unicode.txt
+   .. literalinclude :: ../../../../data/sample_hypothesis_unicode.txt
       :language: text
 
 .. admonition:: Plaintext output
    :class: note, dropdown
 
-   .. literalinclude :: ../../../../sample/output/hypothesis_plaintext.txt
+   .. literalinclude :: ../../../../data/sample_hypothesis_plaintext.txt
       :language: text

@@ -57,17 +57,17 @@ Python sample usage
 .. admonition:: Source code
   :class: tip, dropdown
 
-   .. literalinclude :: ../../../../sample/code/equality_commutativity.py
+   .. literalinclude :: ../../../../src/sample/sample_equality_commutativity.py
       :language: python
 
 .. admonition:: Unicode output
    :class: note, dropdown
 
-   .. literalinclude :: ../../../../sample/output/equality_commutativity_unicode.txt
+   .. literalinclude :: ../../../../data/sample_equality_commutativity_unicode.txt
       :language: text
 
 .. admonition:: Plaintext output
    :class: note, dropdown
 
-   .. literalinclude :: ../../../../sample/output/equality_commutativity_plaintext.txt
+   .. literalinclude :: ../../../../data/sample_equality_commutativity_plaintext.txt
       :language: text

@@ -55,18 +55,18 @@ Python sample usage
 .. admonition:: Source code
   :class: tip, dropdown
 
-   .. literalinclude :: ../../../../sample/code/inconsistency_introduction_1.py
+   .. literalinclude :: ../../../../src/sample/sample_inconsistency_introduction_1.py
       :language: python
       :linenos:
 
 .. admonition:: Unicode output
    :class: note, dropdown
 
-   .. literalinclude :: ../../../../sample/output/inconsistency_introduction_1_unicode.txt
+   .. literalinclude :: ../../../../data/sample_inconsistency_introduction_1_unicode.txt
       :language: text
 
 .. admonition:: Plaintext output
    :class: note, dropdown
 
-   .. literalinclude :: ../../../../sample/output/inconsistency_introduction_1_plaintext.txt
+   .. literalinclude :: ../../../../data/sample_inconsistency_introduction_1_plaintext.txt
       :language: text
