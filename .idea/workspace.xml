@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Merge remote-tracking branch 'origin/master' into dev">
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
-    </list>
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Merge remote-tracking branch 'origin/master' into dev" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -384,22 +382,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00209" summary="enhance documentation #48">
-      <option name="closed" value="true" />
-      <created>1693942987786</created>
-      <option name="number" value="00209" />
-      <option name="presentableId" value="LOCAL-00209" />
-      <option name="project" value="LOCAL" />
-      <updated>1693942987786</updated>
-    </task>
-    <task id="LOCAL-00210" summary="enhance documentation #48">
-      <option name="closed" value="true" />
-      <created>1693948621399</created>
-      <option name="number" value="00210" />
-      <option name="presentableId" value="LOCAL-00210" />
-      <option name="project" value="LOCAL" />
-      <updated>1693948621399</updated>
-    </task>
     <task id="LOCAL-00211" summary="enhance documentation #48">
       <option name="closed" value="true" />
       <created>1693951518505</created>
@@ -776,7 +758,23 @@
       <option name="project" value="LOCAL" />
       <updated>1694470684372</updated>
     </task>
-    <option name="localTasksCounter" value="258" />
+    <task id="LOCAL-00258" summary="Merge remote-tracking branch 'origin/master' into dev">
+      <option name="closed" value="true" />
+      <created>1694470960357</created>
+      <option name="number" value="00258" />
+      <option name="presentableId" value="LOCAL-00258" />
+      <option name="project" value="LOCAL" />
+      <updated>1694470960357</updated>
+    </task>
+    <task id="LOCAL-00259" summary="Merge remote-tracking branch 'origin/master' into dev">
+      <option name="closed" value="true" />
+      <created>1694471083970</created>
+      <option name="number" value="00259" />
+      <option name="presentableId" value="LOCAL-00259" />
+      <option name="project" value="LOCAL" />
+      <updated>1694471083970</updated>
+    </task>
+    <option name="localTasksCounter" value="260" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
