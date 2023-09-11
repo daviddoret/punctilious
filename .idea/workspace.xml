@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Merge remote-tracking branch 'origin/master' into dev">
-      <change afterPath="$PROJECT_DIR$/data/sample_tao_2006_the_peano_axioms_noproof_enus_plaintext_plaintext.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/build_windows_run_build.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/build_windows_run_build.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/prebuild_generate_sample_outputs.log" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/prebuild_generate_sample_outputs.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/punctilious-1.0.0-py3-none-any.whl" beforeDir="false" afterPath="$PROJECT_DIR$/dist/punctilious-1.0.0-py3-none-any.whl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/punctilious-1.0.0.tar.gz" beforeDir="false" afterPath="$PROJECT_DIR$/dist/punctilious-1.0.0.tar.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +113,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\theory\chapter_2_1_the_peano_axioms" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.prebuild_generate_sample_outputs">
+  <component name="RunManager" selected="PowerShell.prebuild_windows_increment_version_patch.ps1">
     <configuration name="build_windows_run_build.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/scripts/build_windows_run_build.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
       <envs />
       <method v="2" />
@@ -370,10 +371,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
-        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
-        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
-        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
         <item itemvalue="PowerShell.build_windows_run_build.ps1" />
+        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
+        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
+        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
       </list>
     </recent_temporary>
   </component>
@@ -385,14 +386,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00212" summary="enhance documentation #48">
-      <option name="closed" value="true" />
-      <created>1693981667516</created>
-      <option name="number" value="00212" />
-      <option name="presentableId" value="LOCAL-00212" />
-      <option name="project" value="LOCAL" />
-      <updated>1693981667516</updated>
     </task>
     <task id="LOCAL-00213" summary="enhance documentation #48">
       <option name="closed" value="true" />
@@ -778,7 +771,15 @@
       <option name="project" value="LOCAL" />
       <updated>1694471747873</updated>
     </task>
-    <option name="localTasksCounter" value="261" />
+    <task id="LOCAL-00261" summary="Merge remote-tracking branch 'origin/master' into dev">
+      <option name="closed" value="true" />
+      <created>1694472000277</created>
+      <option name="number" value="00261" />
+      <option name="presentableId" value="LOCAL-00261" />
+      <option name="project" value="LOCAL" />
+      <updated>1694472000277</updated>
+    </task>
+    <option name="localTasksCounter" value="262" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
