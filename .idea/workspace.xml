@@ -370,8 +370,8 @@
         <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
         <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
         <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
-        <item itemvalue="PowerShell.build_windows_run_build.ps1" />
         <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
+        <item itemvalue="PowerShell.build_windows_run_build.ps1" />
       </list>
     </recent_temporary>
   </component>
