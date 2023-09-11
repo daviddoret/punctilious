@@ -1,0 +1,848 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Merge remote-tracking branch 'origin/master' into dev" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Setup Script" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="qa" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+  }
+}</component>
+  <component name="GithubProjectSettings">
+    <option name="branchProtectionPatterns">
+      <list>
+        <option value="master" />
+      </list>
+    </option>
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="recentNewPullRequestHead">
+      <RepoCoordinatesHolder>
+        <option name="owner" value="daviddoret" />
+        <option name="repository" value="punctilious" />
+      </RepoCoordinatesHolder>
+    </option>
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="fa5dcd15-2eb5-413b-8237-afde9396121f" />
+        <option name="url" value="https://github.com/daviddoret/punctilious.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/AppData/Local/Programs/Python/Python311/Lib/pprint.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$USER_HOME$/AppData/Local/Programs/Python/Python311/Lib/unittest/case.py" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2RqcKO4Tm9Fe3cT6hkxTN5r7dma" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "dev",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/scripts",
+    "settings.editor.selected.configurable": "project.propVCSSupport.CommitDialog"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\David\PycharmProjects\punctilious\scripts" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\theory\tao_2006\chapter_2_1_the_peano_axioms" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\theory\tao_2006" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious\src\sample" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious\branding" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\front_matter" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\theory" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\theory\tao_2006" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\theory\chapter_2_1_the_peano_axioms" />
+    </key>
+  </component>
+  <component name="RunManager" selected="PowerShell.prebuild_windows_increment_version_patch.ps1">
+    <configuration name="build_windows_run_build.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/scripts/build_windows_run_build.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="prebuild_upgrade_pip.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/scripts/prebuild_upgrade_pip.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="prebuild_windows_increment_version_patch.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/scripts/prebuild_windows_increment_version_patch.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.11 (punctilious)" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\David\PycharmProjects\punctilious" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="build" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="true" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="build_samples" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sample" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\David\PycharmProjects\punctilious\scripts\build_samples.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="prebuild_generate_sample_outputs" type="PythonConfigurationType" factoryName="Python">
+      <output_file path="C:\Users\David\PycharmProjects\punctilious\scripts\prebuild_generate_sample_outputs.log" is_save="true" />
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/prebuild_generate_sample_outputs.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="prebuild_generate_theory_interactive_graphs" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/theory" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\David\PycharmProjects\punctilious\scripts\prebuild_generate_theory_interactive_graphs.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="prebuild_generate_theory_reports" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/theory/source" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\David\PycharmProjects\punctilious\scripts\prebuild_generate_theory_reports.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="sample_tao_2006_the_peano_axioms_noproof_enus_plaintext (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_plaintext.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="sample_tao_2006_the_peano_axioms_noproof_enus_unicode (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_unicode.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest tests" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="pytest tests" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="false" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="pytest" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="false" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="python -m build" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="python -m build" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="false" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="Sphinx HTML" type="docs" factoryName="Sphinx task">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\David\PycharmProjects\punctilious\venv\Scripts\python.exe" />
+      <option name="SDK_NAME" value="Python 3.11 (punctilious)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/docs" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="docutils_input_file" value="C:\Users\David\PycharmProjects\punctilious\docs\source" />
+      <option name="docutils_output_file" value="C:\Users\David\PycharmProjects\punctilious\docs\build" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="html" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests in tests" type="tests" factoryName="Autodetect">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="PowerShell.prebuild_upgrade_pip.ps1" />
+      <item itemvalue="PowerShell.build_windows_run_build.ps1" />
+      <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
+      <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
+      <item itemvalue="Python.build_samples" />
+      <item itemvalue="Python.prebuild_generate_theory_reports" />
+      <item itemvalue="Python.build" />
+      <item itemvalue="Python.prebuild_generate_sample_outputs" />
+      <item itemvalue="Python.sample_tao_2006_the_peano_axioms_noproof_enus_plaintext (1)" />
+      <item itemvalue="Python.sample_tao_2006_the_peano_axioms_noproof_enus_unicode (1)" />
+      <item itemvalue="Python docs.Sphinx HTML" />
+      <item itemvalue="Python tests.Python tests in tests" />
+      <item itemvalue="Shell Script.pytest tests" />
+      <item itemvalue="Shell Script.pytest" />
+      <item itemvalue="Shell Script.python -m build" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
+        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
+        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
+        <item itemvalue="PowerShell.build_windows_run_build.ps1" />
+        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="" />
+      <created>1687980987309</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1687980987309</updated>
+    </task>
+    <task id="LOCAL-00206" summary="implement #154: review of all inference-rules">
+      <option name="closed" value="true" />
+      <created>1693773506750</created>
+      <option name="number" value="00206" />
+      <option name="presentableId" value="LOCAL-00206" />
+      <option name="project" value="LOCAL" />
+      <updated>1693773506750</updated>
+    </task>
+    <task id="LOCAL-00207" summary="reorganization of sphinx doc in subfolders">
+      <option name="closed" value="true" />
+      <created>1693861628356</created>
+      <option name="number" value="00207" />
+      <option name="presentableId" value="LOCAL-00207" />
+      <option name="project" value="LOCAL" />
+      <updated>1693861628356</updated>
+    </task>
+    <task id="LOCAL-00208" summary="reorganization of sphinx doc in subfolders">
+      <option name="closed" value="true" />
+      <created>1693862160876</created>
+      <option name="number" value="00208" />
+      <option name="presentableId" value="LOCAL-00208" />
+      <option name="project" value="LOCAL" />
+      <updated>1693862160876</updated>
+    </task>
+    <task id="LOCAL-00209" summary="enhance documentation #48">
+      <option name="closed" value="true" />
+      <created>1693942987786</created>
+      <option name="number" value="00209" />
+      <option name="presentableId" value="LOCAL-00209" />
+      <option name="project" value="LOCAL" />
+      <updated>1693942987786</updated>
+    </task>
+    <task id="LOCAL-00210" summary="enhance documentation #48">
+      <option name="closed" value="true" />
+      <created>1693948621399</created>
+      <option name="number" value="00210" />
+      <option name="presentableId" value="LOCAL-00210" />
+      <option name="project" value="LOCAL" />
+      <updated>1693948621399</updated>
+    </task>
+    <task id="LOCAL-00211" summary="enhance documentation #48">
+      <option name="closed" value="true" />
+      <created>1693951518505</created>
+      <option name="number" value="00211" />
+      <option name="presentableId" value="LOCAL-00211" />
+      <option name="project" value="LOCAL" />
+      <updated>1693951518505</updated>
+    </task>
+    <task id="LOCAL-00212" summary="enhance documentation #48">
+      <option name="closed" value="true" />
+      <created>1693981667516</created>
+      <option name="number" value="00212" />
+      <option name="presentableId" value="LOCAL-00212" />
+      <option name="project" value="LOCAL" />
+      <updated>1693981667516</updated>
+    </task>
+    <task id="LOCAL-00213" summary="enhance documentation #48">
+      <option name="closed" value="true" />
+      <created>1694014818091</created>
+      <option name="number" value="00213" />
+      <option name="presentableId" value="LOCAL-00213" />
+      <option name="project" value="LOCAL" />
+      <updated>1694014818091</updated>
+    </task>
+    <task id="LOCAL-00214" summary="enhance documentation #48">
+      <option name="closed" value="true" />
+      <created>1694174321648</created>
+      <option name="number" value="00214" />
+      <option name="presentableId" value="LOCAL-00214" />
+      <option name="project" value="LOCAL" />
+      <updated>1694174321648</updated>
+    </task>
+    <task id="LOCAL-00215" summary="enhance documentation #48">
+      <option name="closed" value="true" />
+      <created>1694210008649</created>
+      <option name="number" value="00215" />
+      <option name="presentableId" value="LOCAL-00215" />
+      <option name="project" value="LOCAL" />
+      <updated>1694210008649</updated>
+    </task>
+    <task id="LOCAL-00216" summary="enhance documentation #48">
+      <option name="closed" value="true" />
+      <created>1694210019312</created>
+      <option name="number" value="00216" />
+      <option name="presentableId" value="LOCAL-00216" />
+      <option name="project" value="LOCAL" />
+      <updated>1694210019312</updated>
+    </task>
+    <task id="LOCAL-00217" summary="enhance documentation #48">
+      <option name="closed" value="true" />
+      <created>1694211036044</created>
+      <option name="number" value="00217" />
+      <option name="presentableId" value="LOCAL-00217" />
+      <option name="project" value="LOCAL" />
+      <updated>1694211036044</updated>
+    </task>
+    <task id="LOCAL-00218" summary="enhance documentation #48">
+      <option name="closed" value="true" />
+      <created>1694211599216</created>
+      <option name="number" value="00218" />
+      <option name="presentableId" value="LOCAL-00218" />
+      <option name="project" value="LOCAL" />
+      <updated>1694211599216</updated>
+    </task>
+    <task id="LOCAL-00219" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694242830822</created>
+      <option name="number" value="00219" />
+      <option name="presentableId" value="LOCAL-00219" />
+      <option name="project" value="LOCAL" />
+      <updated>1694242830822</updated>
+    </task>
+    <task id="LOCAL-00220" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694243138306</created>
+      <option name="number" value="00220" />
+      <option name="presentableId" value="LOCAL-00220" />
+      <option name="project" value="LOCAL" />
+      <updated>1694243138306</updated>
+    </task>
+    <task id="LOCAL-00221" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694243189325</created>
+      <option name="number" value="00221" />
+      <option name="presentableId" value="LOCAL-00221" />
+      <option name="project" value="LOCAL" />
+      <updated>1694243189325</updated>
+    </task>
+    <task id="LOCAL-00222" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694243464295</created>
+      <option name="number" value="00222" />
+      <option name="presentableId" value="LOCAL-00222" />
+      <option name="project" value="LOCAL" />
+      <updated>1694243464295</updated>
+    </task>
+    <task id="LOCAL-00223" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694243715759</created>
+      <option name="number" value="00223" />
+      <option name="presentableId" value="LOCAL-00223" />
+      <option name="project" value="LOCAL" />
+      <updated>1694243715759</updated>
+    </task>
+    <task id="LOCAL-00224" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694244233438</created>
+      <option name="number" value="00224" />
+      <option name="presentableId" value="LOCAL-00224" />
+      <option name="project" value="LOCAL" />
+      <updated>1694244233438</updated>
+    </task>
+    <task id="LOCAL-00225" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694245120681</created>
+      <option name="number" value="00225" />
+      <option name="presentableId" value="LOCAL-00225" />
+      <option name="project" value="LOCAL" />
+      <updated>1694245120681</updated>
+    </task>
+    <task id="LOCAL-00226" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694245127837</created>
+      <option name="number" value="00226" />
+      <option name="presentableId" value="LOCAL-00226" />
+      <option name="project" value="LOCAL" />
+      <updated>1694245127837</updated>
+    </task>
+    <task id="LOCAL-00227" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694245216598</created>
+      <option name="number" value="00227" />
+      <option name="presentableId" value="LOCAL-00227" />
+      <option name="project" value="LOCAL" />
+      <updated>1694245216598</updated>
+    </task>
+    <task id="LOCAL-00228" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694245864934</created>
+      <option name="number" value="00228" />
+      <option name="presentableId" value="LOCAL-00228" />
+      <option name="project" value="LOCAL" />
+      <updated>1694245864934</updated>
+    </task>
+    <task id="LOCAL-00229" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694258937475</created>
+      <option name="number" value="00229" />
+      <option name="presentableId" value="LOCAL-00229" />
+      <option name="project" value="LOCAL" />
+      <updated>1694258937475</updated>
+    </task>
+    <task id="LOCAL-00230" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694266447981</created>
+      <option name="number" value="00230" />
+      <option name="presentableId" value="LOCAL-00230" />
+      <option name="project" value="LOCAL" />
+      <updated>1694266447981</updated>
+    </task>
+    <task id="LOCAL-00231" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694267609895</created>
+      <option name="number" value="00231" />
+      <option name="presentableId" value="LOCAL-00231" />
+      <option name="project" value="LOCAL" />
+      <updated>1694267609895</updated>
+    </task>
+    <task id="LOCAL-00232" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694267621534</created>
+      <option name="number" value="00232" />
+      <option name="presentableId" value="LOCAL-00232" />
+      <option name="project" value="LOCAL" />
+      <updated>1694267621534</updated>
+    </task>
+    <task id="LOCAL-00233" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694268018481</created>
+      <option name="number" value="00233" />
+      <option name="presentableId" value="LOCAL-00233" />
+      <option name="project" value="LOCAL" />
+      <updated>1694268018481</updated>
+    </task>
+    <task id="LOCAL-00234" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694268169501</created>
+      <option name="number" value="00234" />
+      <option name="presentableId" value="LOCAL-00234" />
+      <option name="project" value="LOCAL" />
+      <updated>1694268169501</updated>
+    </task>
+    <task id="LOCAL-00235" summary="enhance documentation and publish on readthedocs #48">
+      <option name="closed" value="true" />
+      <created>1694273421870</created>
+      <option name="number" value="00235" />
+      <option name="presentableId" value="LOCAL-00235" />
+      <option name="project" value="LOCAL" />
+      <updated>1694273421870</updated>
+    </task>
+    <task id="LOCAL-00236" summary="packaging #47 - corrected a few syntax issues in tao 2006 along the way">
+      <option name="closed" value="true" />
+      <created>1694286053515</created>
+      <option name="number" value="00236" />
+      <option name="presentableId" value="LOCAL-00236" />
+      <option name="project" value="LOCAL" />
+      <updated>1694286053515</updated>
+    </task>
+    <task id="LOCAL-00237" summary="testing #181 + setup #47">
+      <option name="closed" value="true" />
+      <created>1694296365379</created>
+      <option name="number" value="00237" />
+      <option name="presentableId" value="LOCAL-00237" />
+      <option name="project" value="LOCAL" />
+      <updated>1694296365379</updated>
+    </task>
+    <task id="LOCAL-00238" summary="testing #181 + setup #47">
+      <option name="closed" value="true" />
+      <created>1694345116043</created>
+      <option name="number" value="00238" />
+      <option name="presentableId" value="LOCAL-00238" />
+      <option name="project" value="LOCAL" />
+      <updated>1694345116043</updated>
+    </task>
+    <task id="LOCAL-00239" summary="testing #181 + setup #47">
+      <option name="closed" value="true" />
+      <created>1694345847870</created>
+      <option name="number" value="00239" />
+      <option name="presentableId" value="LOCAL-00239" />
+      <option name="project" value="LOCAL" />
+      <updated>1694345847870</updated>
+    </task>
+    <task id="LOCAL-00240" summary="testing #181 + setup #47">
+      <option name="closed" value="true" />
+      <created>1694348004264</created>
+      <option name="number" value="00240" />
+      <option name="presentableId" value="LOCAL-00240" />
+      <option name="project" value="LOCAL" />
+      <updated>1694348004264</updated>
+    </task>
+    <task id="LOCAL-00241" summary="testing #181 + setup #47">
+      <option name="closed" value="true" />
+      <created>1694348704420</created>
+      <option name="number" value="00241" />
+      <option name="presentableId" value="LOCAL-00241" />
+      <option name="project" value="LOCAL" />
+      <updated>1694348704420</updated>
+    </task>
+    <task id="LOCAL-00242" summary="testing #181 + setup #47">
+      <option name="closed" value="true" />
+      <created>1694350674541</created>
+      <option name="number" value="00242" />
+      <option name="presentableId" value="LOCAL-00242" />
+      <option name="project" value="LOCAL" />
+      <updated>1694350674541</updated>
+    </task>
+    <task id="LOCAL-00243" summary="testing #181 + setup #47">
+      <option name="closed" value="true" />
+      <created>1694350959341</created>
+      <option name="number" value="00243" />
+      <option name="presentableId" value="LOCAL-00243" />
+      <option name="project" value="LOCAL" />
+      <updated>1694350959341</updated>
+    </task>
+    <task id="LOCAL-00244" summary="testing #181 + setup #47">
+      <option name="closed" value="true" />
+      <created>1694358311857</created>
+      <option name="number" value="00244" />
+      <option name="presentableId" value="LOCAL-00244" />
+      <option name="project" value="LOCAL" />
+      <updated>1694358311857</updated>
+    </task>
+    <task id="LOCAL-00245" summary="testing #181 + setup #47 + inclusion theories in sphinx documentation">
+      <option name="closed" value="true" />
+      <created>1694370816850</created>
+      <option name="number" value="00245" />
+      <option name="presentableId" value="LOCAL-00245" />
+      <option name="project" value="LOCAL" />
+      <updated>1694370816850</updated>
+    </task>
+    <task id="LOCAL-00246" summary="testing #181 + setup #47 + inclusion theories in sphinx documentation">
+      <option name="closed" value="true" />
+      <created>1694374153932</created>
+      <option name="number" value="00246" />
+      <option name="presentableId" value="LOCAL-00246" />
+      <option name="project" value="LOCAL" />
+      <updated>1694374153932</updated>
+    </task>
+    <task id="LOCAL-00247" summary="testing #181 + setup #47 + include theories in sphinx documentation">
+      <option name="closed" value="true" />
+      <created>1694462836366</created>
+      <option name="number" value="00247" />
+      <option name="presentableId" value="LOCAL-00247" />
+      <option name="project" value="LOCAL" />
+      <updated>1694462836366</updated>
+    </task>
+    <task id="LOCAL-00248" summary="testing #181 + setup #47 + include theories in sphinx documentation. readthedocs seem not to support python 3.11. make an attempt with 3.10 to support at the very least the match syntax.">
+      <option name="closed" value="true" />
+      <created>1694463443895</created>
+      <option name="number" value="00248" />
+      <option name="presentableId" value="LOCAL-00248" />
+      <option name="project" value="LOCAL" />
+      <updated>1694463443895</updated>
+    </task>
+    <task id="LOCAL-00249" summary="testing #181 + setup #47 + include theories in sphinx documentation. readthedocs seem not to support python 3.11. make an attempt with 3.10 to support at the very least the match syntax.">
+      <option name="closed" value="true" />
+      <created>1694463659066</created>
+      <option name="number" value="00249" />
+      <option name="presentableId" value="LOCAL-00249" />
+      <option name="project" value="LOCAL" />
+      <updated>1694463659066</updated>
+    </task>
+    <task id="LOCAL-00250" summary="continuous-integration #47, include: bumpver setup, powershell scripts for Windows build, etc.">
+      <option name="closed" value="true" />
+      <created>1694466763884</created>
+      <option name="number" value="00250" />
+      <option name="presentableId" value="LOCAL-00250" />
+      <option name="project" value="LOCAL" />
+      <updated>1694466763884</updated>
+    </task>
+    <task id="LOCAL-00251" summary="continuous-integration #47, include: bumpver setup, powershell scripts for Windows build, etc.">
+      <option name="closed" value="true" />
+      <created>1694467245430</created>
+      <option name="number" value="00251" />
+      <option name="presentableId" value="LOCAL-00251" />
+      <option name="project" value="LOCAL" />
+      <updated>1694467245430</updated>
+    </task>
+    <task id="LOCAL-00252" summary="continuous-integration #47, include: bumpver setup, powershell scripts for Windows build, etc.">
+      <option name="closed" value="true" />
+      <created>1694468468158</created>
+      <option name="number" value="00252" />
+      <option name="presentableId" value="LOCAL-00252" />
+      <option name="project" value="LOCAL" />
+      <updated>1694468468158</updated>
+    </task>
+    <task id="LOCAL-00253" summary="Merge remote-tracking branch 'origin/master' into dev">
+      <option name="closed" value="true" />
+      <created>1694469428279</created>
+      <option name="number" value="00253" />
+      <option name="presentableId" value="LOCAL-00253" />
+      <option name="project" value="LOCAL" />
+      <updated>1694469428279</updated>
+    </task>
+    <task id="LOCAL-00254" summary="Merge remote-tracking branch 'origin/master' into dev">
+      <option name="closed" value="true" />
+      <created>1694469990428</created>
+      <option name="number" value="00254" />
+      <option name="presentableId" value="LOCAL-00254" />
+      <option name="project" value="LOCAL" />
+      <updated>1694469990428</updated>
+    </task>
+    <option name="localTasksCounter" value="255" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="dev" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="CODE_SMELLS_PROFILE" value="Default" />
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="issue #141: enhance conjunction-introduction inference-rule" />
+    <MESSAGE value="issue #143: enhance disjunction-introduction (left and right) inference-rules" />
+    <MESSAGE value="issue #143: enhance disjunction-introduction (left and right) inference-rules + empty restructured pages to prepare the documentation of interence-rules" />
+    <MESSAGE value="reviewing tests" />
+    <MESSAGE value="reviewing tests + complete method signatures for free-variable declarations" />
+    <MESSAGE value="code cleanup" />
+    <MESSAGE value="tests" />
+    <MESSAGE value="cleanup" />
+    <MESSAGE value="implement #148" />
+    <MESSAGE value="implement #137" />
+    <MESSAGE value="implement #147" />
+    <MESSAGE value="implement #147 + biconditional-elimination-left + InferenceRuleDeclaration.declaration implemented as a Formula instead of StyledText." />
+    <MESSAGE value="implement #147 + biconditional-elimination-right + InferenceRuleDeclaration.declaration implemented as a Formula instead of StyledText." />
+    <MESSAGE value="implement #147 + biconditional-introduction + InferenceRuleDeclaration.declaration implemented as a Formula instead of StyledText." />
+    <MESSAGE value="implement #154: review of all inference-rules" />
+    <MESSAGE value="reorganization of sphinx doc in subfolders" />
+    <MESSAGE value="enhance documentation #48" />
+    <MESSAGE value="enhance documentation and publish on readthedocs #48" />
+    <MESSAGE value="packaging #47 - corrected a few syntax issues in tao 2006 along the way" />
+    <MESSAGE value="testing #181 + setup #47" />
+    <MESSAGE value="testing #181 + setup #47 + inclusion theories in sphinx documentation" />
+    <MESSAGE value="testing #181 + setup #47 + include theories in sphinx documentation" />
+    <MESSAGE value="testing #181 + setup #47 + include theories in sphinx documentation. readthedocs seem not to support python 3.11. make an attempt with 3.10 to support at the very least the match syntax." />
+    <MESSAGE value="continuous-integration #47, include: bumpver setup, powershell scripts for Windows build, etc." />
+    <MESSAGE value="Merge remote-tracking branch 'origin/master' into dev" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/master' into dev" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_axiom_interpretation.py</url>
+          <line>24</line>
+          <option name="timeStamp" value="51" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
