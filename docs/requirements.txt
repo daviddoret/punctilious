@@ -1,3 +1,4 @@
+python_version >= 3.11
 Sphinx
 sphinx-autodoc-typehints
 sphinx-exec-code
