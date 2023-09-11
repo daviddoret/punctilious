@@ -62,4 +62,12 @@ push = true
 "docs/source/conf.py" = [
     'release = "{version}"',
 ]
-
+"src/punctilious/__init__.py" = [
+    '__version__ = "{version}"',
+]
+"src/sample/__init__.py" = [
+    '__version__ = "{version}"',
+]
+"src/theory/__init__.py" = [
+    '__version__ = "{version}"',
+]
