@@ -1,1 +1,1 @@
-bumpver update --patch
+pip install --upgrade pip

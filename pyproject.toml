@@ -60,6 +60,6 @@ push = true
     "{pep440_version}",
 ]
 "docs/source/conf.py" = [
-    'release = \'{version}\'',
+    'release = "{version}"',
 ]
 
