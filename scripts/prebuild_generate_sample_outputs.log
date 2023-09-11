@@ -1,4 +1,4 @@
-punctilious: theory initialized. welcome!
+Welcome to punctilious. The library documentation is available here: https://punctilious.readthedocs.io/en/latest/
 ..\src\sample\sample_absorption.py
 ..\src\sample\sample_biconditional_elimination_1.py
 ..\src\sample\sample_biconditional_elimination_2.py
@@ -20,3 +20,16 @@ punctilious: theory initialized. welcome!
 ..\src\sample\sample_pet_theory_1.py
 ..\src\sample\sample_proof_by_contradiction_1.py
 ..\src\sample\sample_proof_by_contradiction_2.py
+..\src\sample\sample_tao_2006_the_peano_axioms_noproof_enus_plaintext.py
+Traceback (most recent call last):
+  File "C:\Users\David\PycharmProjects\punctilious\scripts\prebuild_generate_sample_outputs.py", line 40, in <module>
+    iterate_over_sample_files()
+  File "C:\Users\David\PycharmProjects\punctilious\scripts\prebuild_generate_sample_outputs.py", line 37, in iterate_over_sample_files
+    export_sample_output(sample_file)
+  File "C:\Users\David\PycharmProjects\punctilious\scripts\prebuild_generate_sample_outputs.py", line 25, in export_sample_output
+    exec(source_code)
+  File "<string>", line 5, in <module>
+  File "C:\Users\David\PycharmProjects\punctilious\src\punctilious\core.py", line 5606, in export_article_to_file
+    text_file = open(file_path, 'w', encoding='utf-8')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '../../data/report_tao_2006_the_peano_axioms_noproof_enus_plaintext.txt'
