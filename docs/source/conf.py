@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.abspath('../../src/punctilious'))
 project = 'punctilious'
 copyright = '2023, David Doret'
 author = 'David Doret'
-release = "1.0.6"
+release = "1.0.7"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
