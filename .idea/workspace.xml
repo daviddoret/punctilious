@@ -114,7 +114,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\theory\chapter_2_1_the_peano_axioms" />
     </key>
   </component>
-  <component name="RunManager" selected="PowerShell.distribute_windows_upload_to_pypi.ps1">
+  <component name="RunManager" selected="PowerShell.build_windows_run_build.ps1">
     <configuration name="build_windows_run_build.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/scripts/build_windows_run_build.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
       <envs />
       <method v="2" />
@@ -337,11 +337,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="PowerShell.distribute_windows_upload_to_pypi.ps1" />
-        <item itemvalue="PowerShell.build_windows_run_build.ps1" />
-        <item itemvalue="PowerShell.distribute_windows_upload_to_pypi.ps1" />
         <item itemvalue="PowerShell.build_windows_run_build.ps1" />
         <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
+        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
+        <item itemvalue="PowerShell.distribute_windows_upload_to_pypi.ps1" />
+        <item itemvalue="PowerShell.build_windows_run_build.ps1" />
       </list>
     </recent_temporary>
   </component>
