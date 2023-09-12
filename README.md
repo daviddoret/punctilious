@@ -42,7 +42,7 @@ Besides being a fun and thrilling learning experience, the focus points of *punc
 
 ## Source code repository
 
-*Punctilious* source code lives on [GitHub](https://github.com/) here:
+The source code of the *punctilious* package lives on [GitHub](https://github.com/) here:
 <p align="center"><a href="https://github.com/daviddoret/punctilious">https://github.com/daviddoret/punctilious</a></p>
 
 ## Package directory
@@ -68,7 +68,8 @@ A series of samples will be provided soon once we will have published our docume
 
 ## Documentation
 
-*Punctilious* documentation lives on [ReadTheDocs](https://punctilious.readthedocs.io/en/latest/).
+The documentation of the *punctilious* package is hosted on [ReadTheDocs](https://docs.readthedocs.io/) here:
+<p align="center"><a href="https://punctilious.readthedocs.io/en/latest/">https://punctilious.readthedocs.io/en/latest/</a></p>
 
 ## More links
 
