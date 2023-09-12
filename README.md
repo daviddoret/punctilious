@@ -40,17 +40,35 @@ Besides being a fun and thrilling learning experience, the focus points of *punc
 
 * Performance (i.e. for large-scale proof applications)
 
+## Source code repository
+
+*Punctilious* source code lives on [GitHub](https://github.com/) here:
+<p align="center">
+[https://github.com/daviddoret/punctilious](https://github.com/daviddoret/punctilious)
+</p>
+
+## Package directory
+
+The *punctilious* package is available for download from the [Python Package Index (PyPi)](https://pypi.org/) here:
+<p align="center">
+[https://pypi.org/project/punctilious/](https://pypi.org/project/punctilious/)
+</p>
+
 ## Prerequisites
 
-Python 3.11
+Python version 3.11 or later.
 
 ## Installation
 
-We are just in the process of publishing *punctilious* on PyPI. Please wait...
+Install the latest version of the *punctilious* package, or upgrade it to the latest version if already installed:
+
+```console
+pip install punctilious --upgrade
+```
 
 ## Getting started
 
-Many samples will be provided soon once we will have published our documentation on ReadTheDocs. Please wait...
+A series of samples will be provided soon once we will have published our documentation on ReadTheDocs. Please wait...
 
 ## Documentation
 
