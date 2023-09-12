@@ -43,16 +43,12 @@ Besides being a fun and thrilling learning experience, the focus points of *punc
 ## Source code repository
 
 *Punctilious* source code lives on [GitHub](https://github.com/) here:
-<p align="center">
-[https://github.com/daviddoret/punctilious](https://github.com/daviddoret/punctilious)
-</p>
+<p align="center"><a href="https://github.com/daviddoret/punctilious">https://github.com/daviddoret/punctilious</a></p>
 
 ## Package directory
 
 The *punctilious* package is available for download from the [Python Package Index (PyPi)](https://pypi.org/) here:
-<p align="center">
-[https://pypi.org/project/punctilious/](https://pypi.org/project/punctilious/)
-</p>
+<p align="center"><a href="https://pypi.org/project/punctilious/">https://pypi.org/project/punctilious/</a></p>
 
 ## Prerequisites
 
