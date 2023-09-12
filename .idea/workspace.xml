@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Merge remote-tracking branch 'origin/master' into dev">
+      <change afterPath="$PROJECT_DIR$/scripts/distribute_windows_upload_to_pypi.ps1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/distribute_windows_upload_to_testpypi.ps1" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/punctilious-1.0.0-py3-none-any.whl" beforeDir="false" afterPath="$PROJECT_DIR$/dist/punctilious-1.0.0-py3-none-any.whl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/punctilious-1.0.0.tar.gz" beforeDir="false" afterPath="$PROJECT_DIR$/dist/punctilious-1.0.0.tar.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,17 +86,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/scripts",
-    "settings.editor.selected.configurable": "project.propVCSSupport.CommitDialog"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/David/PycharmProjects/punctilious/scripts&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.CommitDialog&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\David\PycharmProjects\punctilious\scripts" />
@@ -113,12 +113,12 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\theory\chapter_2_1_the_peano_axioms" />
     </key>
   </component>
-  <component name="RunManager" selected="PowerShell.prebuild_windows_increment_version_patch.ps1">
+  <component name="RunManager" selected="PowerShell.distribute_windows_upload_to_testpypi.ps1">
     <configuration name="build_windows_run_build.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/scripts/build_windows_run_build.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
       <envs />
       <method v="2" />
     </configuration>
-    <configuration name="prebuild_upgrade_pip.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/scripts/prebuild_upgrade_pip.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
+    <configuration name="distribute_windows_upload_to_testpypi.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/scripts/distribute_windows_upload_to_testpypi.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
       <envs />
       <method v="2" />
     </configuration>
@@ -352,9 +352,9 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="PowerShell.prebuild_upgrade_pip.ps1" />
       <item itemvalue="PowerShell.build_windows_run_build.ps1" />
       <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
+      <item itemvalue="PowerShell.distribute_windows_upload_to_testpypi.ps1" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.build_samples" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
@@ -370,10 +370,10 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
+        <item itemvalue="PowerShell.distribute_windows_upload_to_testpypi.ps1" />
         <item itemvalue="PowerShell.build_windows_run_build.ps1" />
         <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
-        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
+        <item itemvalue="PowerShell.build_windows_run_build.ps1" />
         <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
       </list>
     </recent_temporary>
@@ -386,30 +386,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00213" summary="enhance documentation #48">
-      <option name="closed" value="true" />
-      <created>1694014818091</created>
-      <option name="number" value="00213" />
-      <option name="presentableId" value="LOCAL-00213" />
-      <option name="project" value="LOCAL" />
-      <updated>1694014818091</updated>
-    </task>
-    <task id="LOCAL-00214" summary="enhance documentation #48">
-      <option name="closed" value="true" />
-      <created>1694174321648</created>
-      <option name="number" value="00214" />
-      <option name="presentableId" value="LOCAL-00214" />
-      <option name="project" value="LOCAL" />
-      <updated>1694174321648</updated>
-    </task>
-    <task id="LOCAL-00215" summary="enhance documentation #48">
-      <option name="closed" value="true" />
-      <created>1694210008649</created>
-      <option name="number" value="00215" />
-      <option name="presentableId" value="LOCAL-00215" />
-      <option name="project" value="LOCAL" />
-      <updated>1694210008649</updated>
     </task>
     <task id="LOCAL-00216" summary="enhance documentation #48">
       <option name="closed" value="true" />
@@ -779,7 +755,31 @@
       <option name="project" value="LOCAL" />
       <updated>1694472000277</updated>
     </task>
-    <option name="localTasksCounter" value="262" />
+    <task id="LOCAL-00262" summary="Merge remote-tracking branch 'origin/master' into dev">
+      <option name="closed" value="true" />
+      <created>1694472426492</created>
+      <option name="number" value="00262" />
+      <option name="presentableId" value="LOCAL-00262" />
+      <option name="project" value="LOCAL" />
+      <updated>1694472426492</updated>
+    </task>
+    <task id="LOCAL-00263" summary="Merge remote-tracking branch 'origin/master' into dev">
+      <option name="closed" value="true" />
+      <created>1694472516718</created>
+      <option name="number" value="00263" />
+      <option name="presentableId" value="LOCAL-00263" />
+      <option name="project" value="LOCAL" />
+      <updated>1694472516718</updated>
+    </task>
+    <task id="LOCAL-00264" summary="Merge remote-tracking branch 'origin/master' into dev">
+      <option name="closed" value="true" />
+      <created>1694472662017</created>
+      <option name="number" value="00264" />
+      <option name="presentableId" value="LOCAL-00264" />
+      <option name="project" value="LOCAL" />
+      <updated>1694472662017</updated>
+    </task>
+    <option name="localTasksCounter" value="265" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

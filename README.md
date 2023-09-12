@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/daviddoret/punctilious">
-    <img src="branding/punctilious-logo-full-light-600x600-white.png" alt="Logo" width="300" height="300">
+    <img src="https://github.com/daviddoret/punctilious/raw/master/branding/punctilious-logo-full-light-600x600-white.png" alt="The punctilious logo" width="300" height="300">
   </a>
 </div>
 <p align="center">
