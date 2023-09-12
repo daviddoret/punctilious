@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="#47: readme.md with installation instructions">
-      <change afterPath="$PROJECT_DIR$/dist/punctilious-1.0.7-py3-none-any.whl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dist/punctilious-1.0.7.tar.gz" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/punctilious-1.0.7-py3-none-any.whl" beforeDir="false" afterPath="$PROJECT_DIR$/dist/punctilious-1.0.7-py3-none-any.whl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/punctilious-1.0.7.tar.gz" beforeDir="false" afterPath="$PROJECT_DIR$/dist/punctilious-1.0.7.tar.gz" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious.egg-info/PKG-INFO" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious.egg-info/PKG-INFO" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -114,7 +114,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\theory\chapter_2_1_the_peano_axioms" />
     </key>
   </component>
-  <component name="RunManager" selected="PowerShell.distribute_windows_upload_to_pypi.ps1">
+  <component name="RunManager" selected="PowerShell.build_windows_run_build.ps1">
     <configuration name="build_windows_run_build.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/scripts/build_windows_run_build.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
       <envs />
       <method v="2" />
@@ -337,11 +337,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="PowerShell.distribute_windows_upload_to_pypi.ps1" />
         <item itemvalue="PowerShell.build_windows_run_build.ps1" />
         <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
-        <item itemvalue="PowerShell.install_windows_from_pypi.ps1" />
-        <item itemvalue="PowerShell.install_windows_from_pypi.ps1" />
+        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
+        <item itemvalue="PowerShell.distribute_windows_upload_to_pypi.ps1" />
+        <item itemvalue="PowerShell.build_windows_run_build.ps1" />
       </list>
     </recent_temporary>
   </component>
@@ -353,14 +353,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00219" summary="enhance documentation and publish on readthedocs #48">
-      <option name="closed" value="true" />
-      <created>1694242830822</created>
-      <option name="number" value="00219" />
-      <option name="presentableId" value="LOCAL-00219" />
-      <option name="project" value="LOCAL" />
-      <updated>1694242830822</updated>
     </task>
     <task id="LOCAL-00220" summary="enhance documentation and publish on readthedocs #48">
       <option name="closed" value="true" />
@@ -746,7 +738,15 @@
       <option name="project" value="LOCAL" />
       <updated>1694550367034</updated>
     </task>
-    <option name="localTasksCounter" value="268" />
+    <task id="LOCAL-00268" summary="#47: readme.md with installation instructions">
+      <option name="closed" value="true" />
+      <created>1694550768076</created>
+      <option name="number" value="00268" />
+      <option name="presentableId" value="LOCAL-00268" />
+      <option name="project" value="LOCAL" />
+      <updated>1694550768076</updated>
+    </task>
+    <option name="localTasksCounter" value="269" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
