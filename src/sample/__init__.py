@@ -1,2 +1,2 @@
 """This python module contains sample python scripts that illustrate *punctilious* usage."""
-__version__ = "1.0.6"
+__version__ = "1.0.7"

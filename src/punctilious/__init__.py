@@ -1,7 +1,7 @@
 """Punctilious: punctilious/__init__.py
 
 """
-__version__ = "1.0.6"
+__version__ = "1.0.7"
 
 from punctilious.plaintext import force_plaintext, Plaintext
 from punctilious.repm import monospace, prnt, serif_bold

@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Merge remote-tracking branch 'origin/master' into dev">
-      <change afterPath="$PROJECT_DIR$/scripts/distribute_windows_upload_to_pypi.ps1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scripts/distribute_windows_upload_to_testpypi.ps1" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="#47: scripts for the installation from pypi">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
@@ -113,12 +111,20 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\theory\chapter_2_1_the_peano_axioms" />
     </key>
   </component>
-  <component name="RunManager" selected="PowerShell.distribute_windows_upload_to_testpypi.ps1">
+  <component name="RunManager" selected="PowerShell.install_windows_from_pypi.ps1">
     <configuration name="build_windows_run_build.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/scripts/build_windows_run_build.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
       <envs />
       <method v="2" />
     </configuration>
+    <configuration name="distribute_windows_upload_to_pypi.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/scripts/distribute_windows_upload_to_pypi.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
+      <envs />
+      <method v="2" />
+    </configuration>
     <configuration name="distribute_windows_upload_to_testpypi.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/scripts/distribute_windows_upload_to_testpypi.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="install_windows_from_pypi.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/scripts/install_windows_from_pypi.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
       <envs />
       <method v="2" />
     </configuration>
@@ -233,48 +239,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="sample_tao_2006_the_peano_axioms_noproof_enus_plaintext (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_plaintext.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="sample_tao_2006_the_peano_axioms_noproof_enus_unicode (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_unicode.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest tests" type="ShConfigurationType">
       <option name="SCRIPT_TEXT" value="pytest tests" />
       <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
@@ -355,13 +319,13 @@
       <item itemvalue="PowerShell.build_windows_run_build.ps1" />
       <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
       <item itemvalue="PowerShell.distribute_windows_upload_to_testpypi.ps1" />
+      <item itemvalue="PowerShell.distribute_windows_upload_to_pypi.ps1" />
+      <item itemvalue="PowerShell.install_windows_from_pypi.ps1" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.build_samples" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.build" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
-      <item itemvalue="Python.sample_tao_2006_the_peano_axioms_noproof_enus_plaintext (1)" />
-      <item itemvalue="Python.sample_tao_2006_the_peano_axioms_noproof_enus_unicode (1)" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -370,11 +334,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="PowerShell.install_windows_from_pypi.ps1" />
+        <item itemvalue="PowerShell.install_windows_from_pypi.ps1" />
+        <item itemvalue="PowerShell.distribute_windows_upload_to_pypi.ps1" />
         <item itemvalue="PowerShell.distribute_windows_upload_to_testpypi.ps1" />
         <item itemvalue="PowerShell.build_windows_run_build.ps1" />
-        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
-        <item itemvalue="PowerShell.build_windows_run_build.ps1" />
-        <item itemvalue="PowerShell.prebuild_windows_increment_version_patch.ps1" />
       </list>
     </recent_temporary>
   </component>
@@ -386,22 +350,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00216" summary="enhance documentation #48">
-      <option name="closed" value="true" />
-      <created>1694210019312</created>
-      <option name="number" value="00216" />
-      <option name="presentableId" value="LOCAL-00216" />
-      <option name="project" value="LOCAL" />
-      <updated>1694210019312</updated>
-    </task>
-    <task id="LOCAL-00217" summary="enhance documentation #48">
-      <option name="closed" value="true" />
-      <created>1694211036044</created>
-      <option name="number" value="00217" />
-      <option name="presentableId" value="LOCAL-00217" />
-      <option name="project" value="LOCAL" />
-      <updated>1694211036044</updated>
     </task>
     <task id="LOCAL-00218" summary="enhance documentation #48">
       <option name="closed" value="true" />
@@ -779,7 +727,23 @@
       <option name="project" value="LOCAL" />
       <updated>1694472662017</updated>
     </task>
-    <option name="localTasksCounter" value="265" />
+    <task id="LOCAL-00265" summary="#47: scripts for the installation to pypi">
+      <option name="closed" value="true" />
+      <created>1694515971305</created>
+      <option name="number" value="00265" />
+      <option name="presentableId" value="LOCAL-00265" />
+      <option name="project" value="LOCAL" />
+      <updated>1694515971306</updated>
+    </task>
+    <task id="LOCAL-00266" summary="#47: scripts for the installation from pypi">
+      <option name="closed" value="true" />
+      <created>1694549184214</created>
+      <option name="number" value="00266" />
+      <option name="presentableId" value="LOCAL-00266" />
+      <option name="project" value="LOCAL" />
+      <updated>1694549184214</updated>
+    </task>
+    <option name="localTasksCounter" value="267" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -811,8 +775,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="issue #141: enhance conjunction-introduction inference-rule" />
-    <MESSAGE value="issue #143: enhance disjunction-introduction (left and right) inference-rules" />
     <MESSAGE value="issue #143: enhance disjunction-introduction (left and right) inference-rules + empty restructured pages to prepare the documentation of interence-rules" />
     <MESSAGE value="reviewing tests" />
     <MESSAGE value="reviewing tests + complete method signatures for free-variable declarations" />
@@ -836,7 +798,9 @@
     <MESSAGE value="testing #181 + setup #47 + include theories in sphinx documentation. readthedocs seem not to support python 3.11. make an attempt with 3.10 to support at the very least the match syntax." />
     <MESSAGE value="continuous-integration #47, include: bumpver setup, powershell scripts for Windows build, etc." />
     <MESSAGE value="Merge remote-tracking branch 'origin/master' into dev" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/master' into dev" />
+    <MESSAGE value="#47: scripts for the installation to pypi" />
+    <MESSAGE value="#47: scripts for the installation from pypi" />
+    <option name="LAST_COMMIT_MESSAGE" value="#47: scripts for the installation from pypi" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
