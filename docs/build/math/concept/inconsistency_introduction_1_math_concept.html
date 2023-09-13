@@ -1,227 +1,469 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link href="../../_static/punctilious-logo-compact-light.svg" rel="icon" type="image/svg+xml">
     <link href="../../_static/punctilious-logo-compact-light-16x16-white.png" sizes="16x16" rel="icon" type="image/png">
     <link href="../../_static/punctilious-logo-compact-light-32x32-white.png" sizes="32x32" rel="icon" type="image/png">
-    <link rel="apple-touch-icon" href="../../_static/punctilious-logo-compact-light-180x180-white.png" sizes="180x180" type="image/png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>inconsistency-introduction-1 &mdash; punctilious 1.0.0 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/togglebutton.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
-  <!--[if lt IE 9]>
+    <link rel="apple-touch-icon" href="../../_static/punctilious-logo-compact-light-180x180-white.png" sizes="180x180"
+          type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>inconsistency-introduction-1 &mdash; punctilious 1.0.8 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/togglebutton.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/tabs.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css"/>
+    <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=af2ce170"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
-        <script>let toggleHintShow = 'Click to show';</script>
-        <script>let toggleHintHide = 'Click to hide';</script>
-        <script>let toggleOpenOnPrint = 'true';</script>
-        <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
-        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <![endif]-->
+
+    <script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script data-url_root="../../" id="documentation_options"
+            src="../../_static/documentation_options.js?v=8cbfd27f"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="inconsistency-introduction-2" href="inconsistency_introduction_2_math_concept.html" />
-    <link rel="prev" title="hypothesis" href="hypothesis_math_concept.html" /> 
+    <link rel="index" title="Index" href="../../genindex.html"/>
+    <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="next" title="inconsistency-introduction-2" href="inconsistency_introduction_2_math_concept.html"/>
+    <link rel="prev" title="hypothesis" href="hypothesis_math_concept.html"/>
 </head>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
 
-          
-          
-          <a href="../../index.html" class="icon icon-home">
-            punctilious
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../front_matter.html">Front matter</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../../math.html">Math</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../../math_concept.html">Concept</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="absorption_math_concept.html">absorption</a></li>
-<li class="toctree-l3"><a class="reference internal" href="axiom_math_concept.html">axiom</a></li>
-<li class="toctree-l3"><a class="reference internal" href="biconditional_elimination_1_math_concept.html">biconditional-elimination-1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="biconditional_elimination_2_math_concept.html">biconditional-elimination-2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="biconditional_introduction_math_concept.html">biconditional-introduction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="conjunction_elimination_1_math_concept.html">conjunction-elimination-1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="conjunction_elimination_2_math_concept.html">conjunction-elimination-2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="conjunction_introduction_math_concept.html">conjunction-introduction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="disjunction_introduction_1_math_concept.html">disjunction-introduction-1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="disjunction_introduction_2_math_concept.html">disjunction-introduction-2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="double_negation_elimination_math_concept.html">double-negation-elimination</a></li>
-<li class="toctree-l3"><a class="reference internal" href="double_negation_introduction_math_concept.html">double-negation-introduction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="elimination_rule_math_concept.html">elimination-rule</a></li>
-<li class="toctree-l3"><a class="reference internal" href="equal_terms_substitution_math_concept.html">equal-terms-substitution</a></li>
-<li class="toctree-l3"><a class="reference internal" href="equality_commutativity_math_concept.html">equality-commutativity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="formula_math_concept.html">formula</a></li>
-<li class="toctree-l3"><a class="reference internal" href="formula_statement_math_concept.html">formula-statement</a></li>
-<li class="toctree-l3"><a class="reference internal" href="hypothesis_math_concept.html">hypothesis</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">inconsistency-introduction-1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="inconsistency_introduction_2_math_concept.html">inconsistency-introduction-2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="inconsistency_introduction_3_math_concept.html">inconsistency-introduction-3</a></li>
-<li class="toctree-l3"><a class="reference internal" href="inference_rule_math_concept.html">inference-rule</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction_rule_math_concept.html">introduction-rule</a></li>
-<li class="toctree-l3"><a class="reference internal" href="is_a_math_concept.html">is-a</a></li>
-<li class="toctree-l3"><a class="reference internal" href="meta_object_math_concept.html">meta-object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modus_ponens_math_concept.html">modus-ponens</a></li>
-<li class="toctree-l3"><a class="reference internal" href="notation_form_math_concept.html">notation-form</a></li>
-<li class="toctree-l3"><a class="reference internal" href="object_math_concept.html">object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="object_creation_math_concept.html">object-creation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="object_declaration_math_concept.html">object-declaration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="object_inclusion_math_concept.html">object-inclusion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paragraph_proof_math_concept.html">paragraph-proof</a></li>
-<li class="toctree-l3"><a class="reference internal" href="proof_by_contradiction_1_math_concept.html">proof-by-contradiction-1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="proof_by_contradiction_2_math_concept.html">proof-by-contradiction-2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="proof_by_refutation_1_math_concept.html">proof-by-refutation-1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="proof_by_refutation_2_math_concept.html">proof-by-refutation-2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="relation_math_concept.html">relation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="statement_math_concept.html">statement</a></li>
-<li class="toctree-l3"><a class="reference internal" href="theory_elaboration_sequence_math_concept.html">theory-elaboration-sequence</a></li>
-<li class="toctree-l3"><a class="reference internal" href="universe_of_discourse_math_concept.html">universe-of-discourse</a></li>
-<li class="toctree-l3"><a class="reference internal" href="variable_substitution_math_concept.html">variable-substitution</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../math_theory.html">Theory</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../python.html">Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../back_matter.html">Back matter</a></li>
-</ul>
 
+                <a href="../../index.html" class="icon icon-home">
+                    punctilious
+                </a>
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs" aria-label="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+            </div>
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../front_matter.html">Front matter</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal" href="../../math.html">Math</a>
+                        <ul class="current">
+                            <li class="toctree-l2 current"><a class="reference internal" href="../../math_concept.html">Concept</a>
+                                <ul class="current">
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="absorption_math_concept.html">absorption</a></li>
+                                    <li class="toctree-l3"><a class="reference internal" href="axiom_math_concept.html">axiom</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_elimination_1_math_concept.html">biconditional-elimination-1</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_elimination_2_math_concept.html">biconditional-elimination-2</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_introduction_math_concept.html">biconditional-introduction</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_elimination_1_math_concept.html">conjunction-elimination-1</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_elimination_2_math_concept.html">conjunction-elimination-2</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_introduction_math_concept.html">conjunction-introduction</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="disjunction_introduction_1_math_concept.html">disjunction-introduction-1</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="disjunction_introduction_2_math_concept.html">disjunction-introduction-2</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="double_negation_elimination_math_concept.html">double-negation-elimination</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="double_negation_introduction_math_concept.html">double-negation-introduction</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="elimination_rule_math_concept.html">elimination-rule</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="equal_terms_substitution_math_concept.html">equal-terms-substitution</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="equality_commutativity_math_concept.html">equality-commutativity</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="formula_math_concept.html">formula</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="formula_statement_math_concept.html">formula-statement</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="hypothesis_math_concept.html">hypothesis</a></li>
+                                    <li class="toctree-l3 current"><a class="current reference internal" href="#">inconsistency-introduction-1</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inconsistency_introduction_2_math_concept.html">inconsistency-introduction-2</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inconsistency_introduction_3_math_concept.html">inconsistency-introduction-3</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inference_rule_math_concept.html">inference-rule</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="introduction_rule_math_concept.html">introduction-rule</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal" href="is_a_math_concept.html">is-a</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="meta_object_math_concept.html">meta-object</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="modus_ponens_math_concept.html">modus-ponens</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="notation_form_math_concept.html">notation-form</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="object_math_concept.html">object</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="object_creation_math_concept.html">object-creation</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="object_declaration_math_concept.html">object-declaration</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="object_inclusion_math_concept.html">object-inclusion</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="paragraph_proof_math_concept.html">paragraph-proof</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_contradiction_1_math_concept.html">proof-by-contradiction-1</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_contradiction_2_math_concept.html">proof-by-contradiction-2</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_refutation_1_math_concept.html">proof-by-refutation-1</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_refutation_2_math_concept.html">proof-by-refutation-2</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="relation_math_concept.html">relation</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="statement_math_concept.html">statement</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="theory_elaboration_sequence_math_concept.html">theory-elaboration-sequence</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="universe_of_discourse_math_concept.html">universe-of-discourse</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="variable_substitution_math_concept.html">variable-substitution</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../../math_theory.html">Theory</a></li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../python.html">Python</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../back_matter.html">Back matter</a>
+                    </li>
+                </ul>
+
+            </div>
         </div>
-      </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">punctilious</a>
-      </nav>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+        <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../../index.html">punctilious</a>
+        </nav>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../../math.html">Math</a></li>
-          <li class="breadcrumb-item"><a href="../../math_concept.html">Math concept</a></li>
-      <li class="breadcrumb-item active">inconsistency-introduction-1</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/math/concept/inconsistency_introduction_1_math_concept.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <section id="inconsistency-introduction-1">
-<span id="inconsistency-introduction-1-math-concept"></span><span id="id1"></span><h1>inconsistency-introduction-1<a class="headerlink" href="#inconsistency-introduction-1" title="Permalink to this heading"></a></h1>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="inconsistency_introduction_2_math_concept.html#inconsistency-introduction-2"><span class="std std-ref">inconsistency-introduction-2</span></a> | <a class="reference internal" href="inconsistency_introduction_3_math_concept.html#inconsistency-introduction-3"><span class="std std-ref">inconsistency-introduction-3</span></a></p>
-</div>
-<section id="definition">
-<h2>Definition<a class="headerlink" href="#definition" title="Permalink to this heading"></a></h2>
-<p><em>inconsistency-introduction-1</em> is the <a class="reference internal" href="inference_rule_math_concept.html#inference-rule"><span class="std std-ref">inference-rule</span></a>:</p>
-<div class="math notranslate nohighlight">
-\[\left( P, \neg \left(P\right) \right) \vdash Inc\left(\mathcal{T}\right)\]</div>
-<p>In straightforward language, if we prove a proposition and its negation, it follows that the theory is inconsistent.</p>
-</section>
-<section id="quotes">
-<h2>Quotes<a class="headerlink" href="#quotes" title="Permalink to this heading"></a></h2>
-</section>
-<section id="python-implementation">
-<h2>Python implementation<a class="headerlink" href="#python-implementation" title="Permalink to this heading"></a></h2>
-<p>The simplest way to use this inference-rule is to access it via the <code class="code highlight python py docutils literal highlight-py"><span class="n">inference_rules</span></code> (abridged <code class="code highlight python py docutils literal highlight-py"><span class="n">i</span></code> ) property of the <a class="reference internal" href="theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence"><span class="std std-ref">theory-elaboration-sequence</span></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">create_universe</span><span class="p">()</span>
-<span class="n">t</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
+        <div class="wy-nav-content">
+            <div class="rst-content">
+                <div role="navigation" aria-label="Page navigation">
+                    <ul class="wy-breadcrumbs">
+                        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+                        <li class="breadcrumb-item"><a href="../../math.html">Math</a></li>
+                        <li class="breadcrumb-item"><a href="../../math_concept.html">Math concept</a></li>
+                        <li class="breadcrumb-item active">inconsistency-introduction-1</li>
+                        <li class="wy-breadcrumbs-aside">
+                            <a href="../../_sources/math/concept/inconsistency_introduction_1_math_concept.rst.txt"
+                               rel="nofollow"> View page source</a>
+                        </li>
+                    </ul>
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <section id="inconsistency-introduction-1">
+                            <span id="inconsistency-introduction-1-math-concept"></span><span id="id1"></span>
+                            <h1>inconsistency-introduction-1<a class="headerlink" href="#inconsistency-introduction-1"
+                                                               title="Permalink to this heading"></a></h1>
+                            <div class="admonition seealso">
+                                <p class="admonition-title">See also</p>
+                                <p><a class="reference internal"
+                                      href="inconsistency_introduction_2_math_concept.html#inconsistency-introduction-2"><span
+                                        class="std std-ref">inconsistency-introduction-2</span></a> | <a
+                                        class="reference internal"
+                                        href="inconsistency_introduction_3_math_concept.html#inconsistency-introduction-3"><span
+                                        class="std std-ref">inconsistency-introduction-3</span></a></p>
+                            </div>
+                            <section id="definition">
+                                <h2>Definition<a class="headerlink" href="#definition"
+                                                 title="Permalink to this heading"></a></h2>
+                                <p><em>inconsistency-introduction-1</em> is the <a class="reference internal"
+                                                                                   href="inference_rule_math_concept.html#inference-rule"><span
+                                        class="std std-ref">inference-rule</span></a>:</p>
+                                <div class="math notranslate nohighlight">
+                                    \[\left( P, \neg \left(P\right) \right) \vdash Inc\left(\mathcal{T}\right)\]
+                                </div>
+                                <p>In straightforward language, if we prove a proposition and its negation, it follows
+                                    that the theory is inconsistent.</p>
+                            </section>
+                            <section id="quotes">
+                                <h2>Quotes<a class="headerlink" href="#quotes" title="Permalink to this heading"></a>
+                                </h2>
+                            </section>
+                            <section id="python-implementation">
+                                <h2>Python implementation<a class="headerlink" href="#python-implementation"
+                                                            title="Permalink to this heading"></a></h2>
+                                <p>The simplest way to use this inference-rule is to access it via the <code
+                                        class="code highlight python py docutils literal highlight-py"><span class="n">inference_rules</span></code>
+                                    (abridged <code class="code highlight python py docutils literal highlight-py"><span
+                                            class="n">i</span></code> ) property of the <a class="reference internal"
+                                                                                           href="theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence"><span
+                                            class="std std-ref">theory-elaboration-sequence</span></a>:</p>
+                                <div class="highlight-python notranslate">
+                                    <div class="highlight"><pre><span></span><span class="n">u</span> <span
+                                            class="o">=</span> <span class="n">pu</span><span class="o">.</span><span
+                                            class="n">create_universe</span><span class="p">()</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">t</span><span class="p">()</span>
 <span class="o">...</span>
 <span class="c1"># some theory elaboration code</span>
 <span class="o">...</span>
-<span class="n">t</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">inconsistency_introduction_1</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>If the <a class="reference internal" href="inference_rule_math_concept.html#inference-rule"><span class="std std-ref">inference-rule</span></a> was not yet declared in the <a class="reference internal" href="universe_of_discourse_math_concept.html#universe-of-discourse"><span class="std std-ref">universe-of-discourse</span></a> , it will be automatically declared. If the <a class="reference internal" href="inference_rule_math_concept.html#inference-rule"><span class="std std-ref">inference-rule</span></a> was not yet included in the <a class="reference internal" href="theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence"><span class="std std-ref">theory-elaboration-sequence</span></a> , it will be automatically included.</p>
-<p>This calls the following method:</p>
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">InconsistencyIntroduction1Inclusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">infer_statement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">not_p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inconsistent_theory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paragraph_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Apply the inconsistency-introduction inference-rule and return the inferred-statement.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>p</strong> – (mandatory) .</p></li>
-<li><p><strong>not_p</strong> – (mandatory) .</p></li>
-<li><p><strong>inconsistent_theory</strong> – (conditional) .</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>An inferred-statement proving p in the current theory.</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="n">t</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">inconsistency_introduction_1</span><span
+                                                class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span
+                                                class="n">p</span> <span class="o">=</span> <span
+                                                class="o">...</span><span class="p">)</span>
+</pre>
+                                    </div>
+                                </div>
+                                <p>If the <a class="reference internal"
+                                             href="inference_rule_math_concept.html#inference-rule"><span
+                                        class="std std-ref">inference-rule</span></a> was not yet declared in the <a
+                                        class="reference internal"
+                                        href="universe_of_discourse_math_concept.html#universe-of-discourse"><span
+                                        class="std std-ref">universe-of-discourse</span></a> , it will be automatically
+                                    declared. If the <a class="reference internal"
+                                                        href="inference_rule_math_concept.html#inference-rule"><span
+                                            class="std std-ref">inference-rule</span></a> was not yet included in the <a
+                                            class="reference internal"
+                                            href="theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence"><span
+                                            class="std std-ref">theory-elaboration-sequence</span></a> , it will be
+                                    automatically included.</p>
+                                <p>This calls the following method:</p>
+                                <dl class="py class">
+                                    <dt class="sig sig-object py">
+                                        <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                                            class="sig-prename descclassname"><span class="pre">core.</span></span><span
+                                            class="sig-name descname"><span class="pre">InconsistencyIntroduction1Inclusion</span></span><span
+                                            class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                            class="pre">t</span></span></em>, <em class="sig-param"><span
+                                            class="n"><span class="pre">echo</span></span><span class="o"><span
+                                            class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>,
+                                        <em class="sig-param"><span class="n"><span class="pre">proof</span></span><span
+                                                class="o"><span class="pre">=</span></span><span
+                                                class="default_value"><span class="pre">None</span></span></em><span
+                                            class="sig-paren">)</span></dt>
+                                    <dd>
+                                        <dl class="py method">
+                                            <dt class="sig sig-object py">
+                                                <span class="sig-name descname"><span class="pre">infer_statement</span></span><span
+                                                    class="sig-paren">(</span><em class="sig-param"><span
+                                                    class="n"><span class="pre">p</span></span><span class="o"><span
+                                                    class="pre">=</span></span><span class="default_value"><span
+                                                    class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                    class="n"><span class="pre">not_p</span></span><span class="o"><span
+                                                    class="pre">=</span></span><span class="default_value"><span
+                                                    class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                    class="n"><span class="pre">inconsistent_theory</span></span><span
+                                                    class="o"><span class="pre">=</span></span><span
+                                                    class="default_value"><span class="pre">None</span></span></em>, <em
+                                                    class="sig-param"><span class="n"><span
+                                                    class="pre">nameset</span></span><span class="o"><span
+                                                    class="pre">=</span></span><span class="default_value"><span
+                                                    class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                    class="n"><span class="pre">ref</span></span><span class="o"><span
+                                                    class="pre">=</span></span><span class="default_value"><span
+                                                    class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                    class="n"><span class="pre">paragraph_header</span></span><span
+                                                    class="o"><span class="pre">=</span></span><span
+                                                    class="default_value"><span class="pre">None</span></span></em>, <em
+                                                    class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span
+                                                    class="o"><span class="pre">=</span></span><span
+                                                    class="default_value"><span class="pre">None</span></span></em>, <em
+                                                    class="sig-param"><span class="n"><span
+                                                    class="pre">echo</span></span><span class="o"><span
+                                                    class="pre">=</span></span><span class="default_value"><span
+                                                    class="pre">None</span></span></em><span class="sig-paren">)</span>
+                                            </dt>
+                                            <dd><p>Apply the inconsistency-introduction inference-rule and return the
+                                                inferred-statement.</p>
+                                                <dl class="field-list simple">
+                                                    <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                                                    <dd class="field-odd">
+                                                        <ul class="simple">
+                                                            <li><p><strong>p</strong> – (mandatory) .</p></li>
+                                                            <li><p><strong>not_p</strong> – (mandatory) .</p></li>
+                                                            <li><p><strong>inconsistent_theory</strong> – (conditional)
+                                                                .</p></li>
+                                                        </ul>
+                                                    </dd>
+                                                    <dt class="field-even">Returns<span class="colon">:</span></dt>
+                                                    <dd class="field-even"><p>An inferred-statement proving p in the
+                                                        current theory.</p>
+                                                    </dd>
+                                                </dl>
+                                            </dd>
+                                        </dl>
 
-</dd></dl>
+                                    </dd>
+                                </dl>
 
-</section>
-<section id="python-sample-usage">
-<h2>Python sample usage<a class="headerlink" href="#python-sample-usage" title="Permalink to this heading"></a></h2>
-<div class="tip dropdown admonition">
-<p class="admonition-title">Source code</p>
-<blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">punctilious</span> <span class="k">as</span> <span class="nn">pu</span>
+                            </section>
+                            <section id="python-sample-usage">
+                                <h2>Python sample usage<a class="headerlink" href="#python-sample-usage"
+                                                          title="Permalink to this heading"></a></h2>
+                                <div class="tip dropdown admonition">
+                                    <p class="admonition-title">Source code</p>
+                                    <blockquote>
+                                        <div>
+                                            <div class="highlight-python notranslate">
+                                                <div class="highlight"><pre><span></span><span class="linenos"> 1</span><span
+                                                        class="kn">import</span> <span
+                                                        class="nn">punctilious</span> <span class="k">as</span> <span
+                                                        class="nn">pu</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="c1"># Create a universe-of-discourse with basic objects for the sake of this example.</span>
-<span class="linenos"> 4</span><span class="n">u</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">UniverseOfDiscourse</span><span class="p">(</span><span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="linenos"> 5</span><span class="n">o1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">o</span><span class="o">.</span><span class="n">declare</span><span class="p">()</span>
-<span class="linenos"> 6</span><span class="n">o2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">o</span><span class="o">.</span><span class="n">declare</span><span class="p">()</span>
-<span class="linenos"> 7</span><span class="n">r1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">signal_proposition</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="linenos"> 8</span><span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="linenos"> 9</span><span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_axiom</span><span class="p">(</span><span class="n">natural_language</span><span class="o">=</span><span class="s1">&#39;Dummy axiom for demonstration purposes&#39;</span><span class="p">)</span>
+<span class="linenos"> 4</span><span class="n">u</span> <span class="o">=</span> <span class="n">pu</span><span
+                                                            class="o">.</span><span class="n">UniverseOfDiscourse</span><span
+                                                            class="p">(</span><span class="n">echo</span><span
+                                                            class="o">=</span><span class="kc">True</span><span
+                                                            class="p">)</span>
+<span class="linenos"> 5</span><span class="n">o1</span> <span class="o">=</span> <span class="n">u</span><span
+                                                            class="o">.</span><span class="n">o</span><span
+                                                            class="o">.</span><span class="n">declare</span><span
+                                                            class="p">()</span>
+<span class="linenos"> 6</span><span class="n">o2</span> <span class="o">=</span> <span class="n">u</span><span
+                                                            class="o">.</span><span class="n">o</span><span
+                                                            class="o">.</span><span class="n">declare</span><span
+                                                            class="p">()</span>
+<span class="linenos"> 7</span><span class="n">r1</span> <span class="o">=</span> <span class="n">u</span><span
+                                                            class="o">.</span><span class="n">r</span><span
+                                                            class="o">.</span><span class="n">declare</span><span
+                                                            class="p">(</span><span class="mi">2</span><span
+                                                            class="p">,</span> <span class="n">signal_proposition</span><span
+                                                            class="o">=</span><span class="kc">True</span><span
+                                                            class="p">)</span>
+<span class="linenos"> 8</span><span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span
+                                                            class="o">.</span><span class="n">t</span><span
+                                                            class="p">(</span><span class="n">echo</span><span
+                                                            class="o">=</span><span class="kc">True</span><span
+                                                            class="p">)</span>
+<span class="linenos"> 9</span><span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span
+                                                            class="o">.</span><span class="n">declare_axiom</span><span
+                                                            class="p">(</span><span
+                                                            class="n">natural_language</span><span
+                                                            class="o">=</span><span class="s1">&#39;Dummy axiom for demonstration purposes&#39;</span><span
+                                                            class="p">)</span>
 <span class="linenos">10</span>
 <span class="linenos">11</span><span class="c1"># Elaborate a dummy theory with inconsistent propositions</span>
-<span class="linenos">12</span><span class="n">theory_axiom</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">include_axiom</span><span class="p">(</span><span class="n">axiom</span><span class="p">)</span>
-<span class="linenos">13</span><span class="n">p</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">theory_axiom</span><span class="p">,</span> <span class="n">r1</span><span class="p">(</span><span class="n">o1</span><span class="p">,</span> <span class="n">o2</span><span class="p">))</span>
-<span class="linenos">14</span><span class="n">not_p</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">theory_axiom</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">lnot</span><span class="p">(</span><span class="n">r1</span><span class="p">(</span><span class="n">o1</span><span class="p">,</span> <span class="n">o2</span><span class="p">)))</span>
-<span class="linenos">15</span><span class="n">t1</span><span class="o">.</span><span class="n">stabilize</span><span class="p">()</span>
+<span class="linenos">12</span><span class="n">theory_axiom</span> <span class="o">=</span> <span
+                                                            class="n">t1</span><span class="o">.</span><span class="n">include_axiom</span><span
+                                                            class="p">(</span><span class="n">axiom</span><span
+                                                            class="p">)</span>
+<span class="linenos">13</span><span class="n">p</span> <span class="o">=</span> <span class="n">t1</span><span
+                                                            class="o">.</span><span class="n">i</span><span
+                                                            class="o">.</span><span
+                                                            class="n">axiom_interpretation</span><span
+                                                            class="o">.</span><span
+                                                            class="n">infer_statement</span><span
+                                                            class="p">(</span><span class="n">theory_axiom</span><span
+                                                            class="p">,</span> <span class="n">r1</span><span class="p">(</span><span
+                                                            class="n">o1</span><span class="p">,</span> <span class="n">o2</span><span
+                                                            class="p">))</span>
+<span class="linenos">14</span><span class="n">not_p</span> <span class="o">=</span> <span class="n">t1</span><span
+                                                            class="o">.</span><span class="n">i</span><span
+                                                            class="o">.</span><span
+                                                            class="n">axiom_interpretation</span><span
+                                                            class="o">.</span><span
+                                                            class="n">infer_statement</span><span
+                                                            class="p">(</span><span class="n">theory_axiom</span><span
+                                                            class="p">,</span> <span class="n">u</span><span
+                                                            class="o">.</span><span class="n">r</span><span
+                                                            class="o">.</span><span class="n">lnot</span><span
+                                                            class="p">(</span><span class="n">r1</span><span
+                                                            class="p">(</span><span class="n">o1</span><span
+                                                            class="p">,</span> <span class="n">o2</span><span class="p">)))</span>
+<span class="linenos">15</span><span class="n">t1</span><span class="o">.</span><span class="n">stabilize</span><span
+                                                            class="p">()</span>
 <span class="linenos">16</span>
 <span class="linenos">17</span><span class="c1"># Use a distinct theory T2 to demonstrate the inconsistency of T1</span>
 <span class="linenos">18</span><span class="c1"># because T1 could not prove its own inconsistency because it is inconsistent!</span>
-<span class="linenos">19</span><span class="n">t2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
+<span class="linenos">19</span><span class="n">t2</span> <span class="o">=</span> <span class="n">u</span><span
+                                                            class="o">.</span><span class="n">t</span><span
+                                                            class="p">()</span>
 <span class="linenos">20</span>
 <span class="linenos">21</span><span class="c1"># And finally, use the inconsistency-introduction-1 inference-rule:</span>
-<span class="linenos">22</span><span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t2</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">inconsistency_introduction_1</span><span class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">not_p</span><span class="o">=</span><span class="n">not_p</span><span class="p">,</span>
-<span class="linenos">23</span>    <span class="n">inconsistent_theory</span><span class="o">=</span><span class="n">t1</span><span class="p">,</span> <span class="n">subtitle</span><span class="o">=</span><span class="s1">&#39;The proposition of interest&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div></blockquote>
-</div>
-<div class="note dropdown admonition">
-<p class="admonition-title">Unicode output</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>𝖫𝖾𝗍 ⌜𝒰₃₀⌝ 𝖻𝖾 𝖺 𝑢𝑛𝑖𝑣𝑒𝑟𝑠𝑒-𝑜𝑓-𝑑𝑖𝑠𝑐𝑜𝑢𝑟𝑠𝑒.
+<span class="linenos">22</span><span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t2</span><span
+                                                            class="o">.</span><span class="n">i</span><span
+                                                            class="o">.</span><span class="n">inconsistency_introduction_1</span><span
+                                                            class="o">.</span><span
+                                                            class="n">infer_statement</span><span
+                                                            class="p">(</span><span class="n">p</span><span
+                                                            class="o">=</span><span class="n">p</span><span
+                                                            class="p">,</span> <span class="n">not_p</span><span
+                                                            class="o">=</span><span class="n">not_p</span><span
+                                                            class="p">,</span>
+<span class="linenos">23</span>    <span class="n">inconsistent_theory</span><span class="o">=</span><span
+                                                            class="n">t1</span><span class="p">,</span> <span class="n">subtitle</span><span
+                                                            class="o">=</span><span class="s1">&#39;The proposition of interest&#39;</span><span
+                                                            class="p">)</span>
+</pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </blockquote>
+                                </div>
+                                <div class="note dropdown admonition">
+                                    <p class="admonition-title">Unicode output</p>
+                                    <div class="highlight-text notranslate">
+                                        <div class="highlight"><pre><span></span>𝖫𝖾𝗍 ⌜𝒰₃₀⌝ 𝖻𝖾 𝖺 𝑢𝑛𝑖𝑣𝑒𝑟𝑠𝑒-𝑜𝑓-𝑑𝑖𝑠𝑐𝑜𝑢𝑟𝑠𝑒.
 
 𝖫𝖾𝗍 ⌜𝒯₁⌝ 𝖻𝖾 𝖺 𝑡ℎ𝑒𝑜𝑟𝑦-𝑒𝑙𝑎𝑏𝑜𝑟𝑎𝑡𝑖𝑜𝑛-𝑠𝑒𝑞𝑢𝑒𝑛𝑐𝑒 𝗂𝗇 𝒰₃₀.
 
@@ -238,12 +480,14 @@
 𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑖𝑛𝑐𝑜𝑛𝑠𝑖𝑠𝑡𝑒𝑛𝑐𝑦-𝑖𝑛𝑡𝑟𝑜𝑑𝑢𝑐𝑡𝑖𝑜𝑛-1): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑖𝑛𝑐𝑜𝑛𝑠𝑖𝑠𝑡𝑒𝑛𝑐𝑦-𝑖𝑛𝑡𝑟𝑜𝑑𝑢𝑐𝑡𝑖𝑜𝑛-1 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝑷, ¬(𝑷)) ⊢ 𝐼𝑛𝑐(𝓣)⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝒯₂.
 
 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₂.𝑃₃) - The proposition of interest: 𝐼𝑛𝑐(𝒯₁). 𝗣𝗿𝗼𝗼𝗳: 𝖫𝖾𝗍 𝑷 := 𝑟₁(𝑜₁, 𝑜₂), 𝗐𝗁𝗂𝖼𝗁 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₁). 𝖫𝖾𝗍 ¬(𝑷) := ¬(𝑟₁(𝑜₁, 𝑜₂)), 𝗐𝗁𝗂𝖼𝗁 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₂). 𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑖𝑛𝑐𝑜𝑛𝑠𝑖𝑠𝑡𝑒𝑛𝑐𝑦-𝑖𝑛𝑡𝑟𝑜𝑑𝑢𝑐𝑡𝑖𝑜𝑛-1 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: (𝑷, ¬(𝑷)) ⊢ 𝐼𝑛𝑐(𝓣), 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 𝐼𝑛𝑐(𝒯₁). ∎
-</pre></div>
-</div>
-</div>
-<div class="note dropdown admonition">
-<p class="admonition-title">Plaintext output</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Let &quot;U29&quot; be a universe-of-discourse.
+</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="note dropdown admonition">
+                                    <p class="admonition-title">Plaintext output</p>
+                                    <div class="highlight-text notranslate">
+                                        <div class="highlight"><pre><span></span>Let &quot;U29&quot; be a universe-of-discourse.
 
 Let &quot;T1&quot; be a theory-elaboration-sequence in U29.
 
@@ -260,41 +504,47 @@ Proposition (T1.P2): not(r1(o1, o2)). Proof: &quot;Dummy axiom for demonstration
 Inference rule (inconsistency-introduction-1): Let inference-rule inconsistency-introduction-1 defined as &quot;(P, not(P)) |- (T)&quot; be included and considered valid in T2.
 
 Proposition (T2.P3) - The proposition of interest: Inc(T1). Proof: Let P := r1(o1, o2), which follows from prop. (P1). Let not(P) := not(r1(o1, o2)), which follows from prop. (P2). Therefore, by the inconsistency-introduction-1 inference rule: (P, not(P)) |- (T), it follows that Inc(T1). QED
-</pre></div>
-</div>
-</div>
-</section>
-</section>
+</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="hypothesis_math_concept.html" class="btn btn-neutral float-left" title="hypothesis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="inconsistency_introduction_2_math_concept.html" class="btn btn-neutral float-right" title="inconsistency-introduction-2" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+                    </div>
+                </div>
+                <footer>
+                    <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+                        <a href="hypothesis_math_concept.html" class="btn btn-neutral float-left" title="hypothesis"
+                           accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span>
+                            Previous</a>
+                        <a href="inconsistency_introduction_2_math_concept.html" class="btn btn-neutral float-right"
+                           title="inconsistency-introduction-2" accesskey="n" rel="next">Next <span
+                                class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+                    </div>
 
-  <hr/>
+                    <hr/>
 
-  <div role="contentinfo">
-    <p>&#169; Copyright 2023, David Doret.</p>
-  </div>
+                    <div role="contentinfo">
+                        <p>&#169; Copyright 2023, David Doret.</p>
+                    </div>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+                    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+                    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+                    provided by <a href="https://readthedocs.org">Read the Docs</a>.
 
-</footer>
+
+                </footer>
+            </div>
         </div>
-      </div>
     </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(false);
-      });
-  </script> 
+</div>
+<script>
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(false);
+    });
+</script>
 
 </body>
 </html>
