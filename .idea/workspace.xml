@@ -4,157 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="#47: readme.md with installation instructions">
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/absorption.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/class.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/declaration.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inclusion.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inference-rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/math.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/python.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/sample.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/tagsindex.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/absorption.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/class.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/concept.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/declaration.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/inclusion.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/inference-rule.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/inference_rule.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/math.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/python.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/sample.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/tagsindex.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sphinx_design_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sphinx_design_static/design-tabs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_static/design-tabs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_static/tabs.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_static/tabs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_tags/absorption.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_tags/class.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_tags/concept.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_tags/declaration.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_tags/inclusion.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_tags/inference-rule.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_tags/inference_rule.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_tags/math.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_tags/python.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_tags/sample.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_tags/tagsindex.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/_tags/absorption.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/_tags/class.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/_tags/concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/_tags/declaration.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/_tags/inference-rule.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/_tags/math.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/_tags/python.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/_tags/sample.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/_tags/tagsindex.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/python/sample/sample_biconditional_elimination_1_python.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/python/sample/sample_biconditional_elimination_2_python.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/.buildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.buildinfo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/absorption_math_concept.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/absorption_math_concept.doctree" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/absorption_declaration_python_class.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/class/absorption_declaration_python_class.doctree" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/absorption_inclusion_python_class.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/class/absorption_inclusion_python_class.doctree" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/python_sample_index.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/python_sample_index.doctree" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/sample_absorption_python.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/sample_absorption_python.doctree" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/concept/absorption_math_concept.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/absorption_math_concept.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/absorption_declaration_python_class.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/absorption_declaration_python_class.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/absorption_inclusion_python_class.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/absorption_inclusion_python_class.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/python_sample_index.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/sample/python_sample_index.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/sample_absorption_python.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/sample/sample_absorption_python.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_static/documentation_options.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/documentation_options.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/back_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/back_matter.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/back_matter/bibliography_back_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/back_matter/bibliography_back_matter.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/front_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/front_matter.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/front_matter/about_front_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/front_matter/about_front_matter.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/front_matter/contributing_front_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/front_matter/contributing_front_matter.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/front_matter/project_front_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/front_matter/project_front_matter.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/front_matter/roadmap_front_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/front_matter/roadmap_front_matter.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/front_matter/support_front_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/front_matter/support_front_matter.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/front_matter/title_front_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/front_matter/title_front_matter.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/genindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/genindex.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/absorption_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/absorption_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/axiom_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/axiom_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/biconditional_elimination_1_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/biconditional_elimination_1_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/biconditional_elimination_2_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/biconditional_elimination_2_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/biconditional_introduction_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/biconditional_introduction_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/conjunction_elimination_1_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/conjunction_elimination_1_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/conjunction_elimination_2_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/conjunction_elimination_2_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/conjunction_introduction_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/conjunction_introduction_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/disjunction_introduction_1_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/disjunction_introduction_1_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/disjunction_introduction_2_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/disjunction_introduction_2_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/double_negation_elimination_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/double_negation_elimination_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/double_negation_introduction_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/double_negation_introduction_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/elimination_rule_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/elimination_rule_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/equal_terms_substitution_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/equal_terms_substitution_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/equality_commutativity_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/equality_commutativity_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/formula_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/formula_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/formula_statement_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/formula_statement_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/hypothesis_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/hypothesis_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/inconsistency_introduction_1_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/inconsistency_introduction_1_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/inconsistency_introduction_2_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/inconsistency_introduction_2_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/inconsistency_introduction_3_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/inconsistency_introduction_3_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/inference_rule_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/inference_rule_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/introduction_rule_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/introduction_rule_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/is_a_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/is_a_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/meta_object_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/meta_object_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/modus_ponens_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/modus_ponens_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/notation_form_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/notation_form_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/object_creation_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/object_creation_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/object_declaration_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/object_declaration_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/object_inclusion_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/object_inclusion_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/object_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/object_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/paragraph_proof_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/paragraph_proof_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/proof_by_contradiction_1_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/proof_by_contradiction_1_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/proof_by_contradiction_2_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/proof_by_contradiction_2_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/proof_by_refutation_1_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/proof_by_refutation_1_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/proof_by_refutation_2_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/proof_by_refutation_2_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/relation_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/relation_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/statement_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/statement_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/theory_elaboration_sequence_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/theory_elaboration_sequence_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/universe_of_discourse_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/universe_of_discourse_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/variable_substitution_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/variable_substitution_math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/theory/tao_2006.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/theory/tao_2006.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms/report_noproof_enus_plaintext.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms/report_noproof_enus_plaintext.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms/report_noproof_enus_unicode.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms/report_noproof_enus_unicode.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms/report_proof_enus_plaintext.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms/report_proof_enus_plaintext.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms/report_proof_enus_unicode.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms/report_proof_enus_unicode.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math_concept.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math_theory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math_theory.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/objects.inv" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/objects.inv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/py-modindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/py-modindex.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/class/absorption_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/absorption_declaration_python_class.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/class/absorption_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/absorption_inclusion_python_class.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/class/inference_rule_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/inference_rule_declaration_python_class.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/class/python_class_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/python_class_index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/class/universe_of_discourse_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/universe_of_discourse_python_class.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/function/create_universe_of_discourse.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/function/create_universe_of_discourse.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/function/python_function_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/function/python_function_index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/installation_python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/installation_python.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/prerequisites_python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/prerequisites_python.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/python_sample_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/python_sample_index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/sample_absorption_python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/sample_absorption_python.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/source_code_repository_python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/source_code_repository_python.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/search.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/searchindex.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/conf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/absorption_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/concept/absorption_math_concept.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/python/class/absorption_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/class/absorption_declaration_python_class.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/python/class/absorption_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/class/absorption_inclusion_python_class.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/python_sample_index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/sample/python_sample_index.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/sample_absorption_python.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/sample/sample_absorption_python.rst" afterDir="false" />
-    </list>
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="#195: inference-rules documentation and samples" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -514,22 +364,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00222" summary="enhance documentation and publish on readthedocs #48">
-      <option name="closed" value="true" />
-      <created>1694243464295</created>
-      <option name="number" value="00222" />
-      <option name="presentableId" value="LOCAL-00222" />
-      <option name="project" value="LOCAL" />
-      <updated>1694243464295</updated>
-    </task>
-    <task id="LOCAL-00223" summary="enhance documentation and publish on readthedocs #48">
-      <option name="closed" value="true" />
-      <created>1694243715759</created>
-      <option name="number" value="00223" />
-      <option name="presentableId" value="LOCAL-00223" />
-      <option name="project" value="LOCAL" />
-      <updated>1694243715759</updated>
     </task>
     <task id="LOCAL-00224" summary="enhance documentation and publish on readthedocs #48">
       <option name="closed" value="true" />
@@ -907,7 +741,23 @@
       <option name="project" value="LOCAL" />
       <updated>1694551447482</updated>
     </task>
-    <option name="localTasksCounter" value="271" />
+    <task id="LOCAL-00271" summary="#47: readme.md with installation instructions">
+      <option name="closed" value="true" />
+      <created>1694638797967</created>
+      <option name="number" value="00271" />
+      <option name="presentableId" value="LOCAL-00271" />
+      <option name="project" value="LOCAL" />
+      <updated>1694638797967</updated>
+    </task>
+    <task id="LOCAL-00272" summary="#195: inference-rules documentation and samples">
+      <option name="closed" value="true" />
+      <created>1694638969283</created>
+      <option name="number" value="00272" />
+      <option name="presentableId" value="LOCAL-00272" />
+      <option name="project" value="LOCAL" />
+      <updated>1694638969283</updated>
+    </task>
+    <option name="localTasksCounter" value="273" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -939,7 +789,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="reviewing tests" />
     <MESSAGE value="reviewing tests + complete method signatures for free-variable declarations" />
     <MESSAGE value="code cleanup" />
     <MESSAGE value="tests" />
@@ -964,7 +813,8 @@
     <MESSAGE value="#47: scripts for the installation to pypi" />
     <MESSAGE value="#47: scripts for the installation from pypi" />
     <MESSAGE value="#47: readme.md with installation instructions" />
-    <option name="LAST_COMMIT_MESSAGE" value="#47: readme.md with installation instructions" />
+    <MESSAGE value="#195: inference-rules documentation and samples" />
+    <option name="LAST_COMMIT_MESSAGE" value="#195: inference-rules documentation and samples" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
