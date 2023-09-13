@@ -3,18 +3,20 @@
 .. role:: python(code)
     :language: py
 
+.. tags:: absorption, python, sample
+
 absorption (python sample)
 ============================================
 
 .. seealso::
-   :ref:`absorption_math_concept` | :ref:`absorption_declaration_python_class` | :ref:`absorption_inclusion_python_class`
+   :ref:`math concept<absorption_math_concept>` | :ref:`python declaration class<absorption_declaration_python_class>` | :ref:`python inclusion class<absorption_inclusion_python_class>`
 
 This sample python script showcase how to use the :ref:`absorption<absorption_math_concept>` :ref:`inference-rule`.
 
 Usage
 ----------------------
 
-The simplest way to use the :ref:`absorption<absorption_math_concept>` :ref:`inference-rule` is to access it via the :python:`inference_rules` (abridged :python:`i` ) property of the :ref:`theory-elaboration-sequence`:
+The simplest way to use the :ref:`absorption<absorption_math_concept>` :ref:`inference-rule` is to access it via the :python:`i` (unabridged :python:`inference_rules` ) property of the :ref:`theory-elaboration-sequence` :
 
 .. code-block:: python
 
@@ -23,33 +25,33 @@ The simplest way to use the :ref:`absorption<absorption_math_concept>` :ref:`inf
    ...
    # some theory elaboration code
    ...
-   t.i.absorption_1.infer_statement(p_iff_q = ...)
+   t.i.absorption.infer_statement(p_iff_q = ...)
 
-If the :ref:`inference-rule` was not yet declared in the :ref:`universe-of-discourse` , it will be automatically declared. If the :ref:`inference-rule` was not yet included in the :ref:`theory-elaboration-sequence` , it will be automatically included.
-
-This calls the following method:
-
-.. module:: core
-    :noindex:
-.. autoclass:: AbsorptionInclusion
-    :noindex:
-    :members: infer_statement
-
-Source code
+Sample code
 ----------------------
 
 .. literalinclude :: ../../../../src/sample/sample_absorption.py
   :language: python
 
-Unicode output
+Code output
 -----------------------
 
-.. literalinclude :: ../../../../data/sample_absorption_unicode.txt
-  :language: text
+.. tabs::
 
-Plaintext output
-----------------------
+   .. tab:: Unicode
 
-   .. literalinclude :: ../../../../data/sample_absorption_plaintext.txt
-      :language: text
+      .. literalinclude :: ../../../../data/sample_absorption_unicode.txt
+         :language: text
 
+   .. tab:: Plaintext
+
+      .. literalinclude :: ../../../../data/sample_absorption_Plaintext.txt
+         :language: text
+
+   .. tab:: LaTeX
+
+      Will be provided in a future version.
+
+   .. tab:: HTML
+
+      Will be provided in a future version.

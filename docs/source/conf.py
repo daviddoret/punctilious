@@ -27,7 +27,8 @@ release = "1.0.8"
 extensions = [  # 'sphinxcontrib-inlinesyntaxhighlight',
     'sphinx.ext.autodoc',  # 'sphinx-autodoc-typehints',
     'sphinx.ext.mathjax', 'sphinxcontrib.bibtex', 'sphinx_autodoc_typehints', 'sphinx.ext.graphviz',
-    'sphinx_togglebutton', 'sphinx_rtd_theme', 'sphinx_favicon']
+    'sphinx_togglebutton', 'sphinx_rtd_theme', 'sphinx_favicon', 'sphinx_tabs.tabs', 'sphinx_tags',
+    'sphinx_design']
 # 'sphinxawesome_theme',
 # 'sphinx_exec_code',
 bibtex_bibfiles = ['bibliography_bibtex.bib']
@@ -37,6 +38,11 @@ bibtex_default_style = 'alpha'
 
 templates_path = ['_templates']
 exclude_patterns = []
+
+# https://sphinx-tags.readthedocs.io/en/latest/configuration.html#config
+tags_create_tags = True
+tags_create_badges = True
+tags_badge_colors = {"math": "primary", "concept": "primary", "python": "secondary", }
 
 # -- Options for HTML data -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

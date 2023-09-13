@@ -1,415 +1,1067 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link href="../../_static/punctilious-logo-compact-light.svg" rel="icon" type="image/svg+xml">
     <link href="../../_static/punctilious-logo-compact-light-16x16-white.png" sizes="16x16" rel="icon" type="image/png">
     <link href="../../_static/punctilious-logo-compact-light-32x32-white.png" sizes="32x32" rel="icon" type="image/png">
-    <link rel="apple-touch-icon" href="../../_static/punctilious-logo-compact-light-180x180-white.png" sizes="180x180" type="image/png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>theory-elaboration-sequence &mdash; punctilious 1.0.0 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/togglebutton.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
-  <!--[if lt IE 9]>
+    <link rel="apple-touch-icon" href="../../_static/punctilious-logo-compact-light-180x180-white.png" sizes="180x180"
+          type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>theory-elaboration-sequence &mdash; punctilious 1.0.8 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/togglebutton.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/tabs.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css"/>
+    <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=af2ce170"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
-        <script>let toggleHintShow = 'Click to show';</script>
-        <script>let toggleHintHide = 'Click to hide';</script>
-        <script>let toggleOpenOnPrint = 'true';</script>
-        <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
-        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <![endif]-->
+
+    <script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script data-url_root="../../" id="documentation_options"
+            src="../../_static/documentation_options.js?v=8cbfd27f"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="universe-of-discourse" href="universe_of_discourse_math_concept.html" />
-    <link rel="prev" title="statement" href="statement_math_concept.html" /> 
+    <link rel="index" title="Index" href="../../genindex.html"/>
+    <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="next" title="universe-of-discourse" href="universe_of_discourse_math_concept.html"/>
+    <link rel="prev" title="statement" href="statement_math_concept.html"/>
 </head>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
 
-          
-          
-          <a href="../../index.html" class="icon icon-home">
-            punctilious
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../front_matter.html">Front matter</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../../math.html">Math</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../../math_concept.html">Concept</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="absorption_math_concept.html">absorption</a></li>
-<li class="toctree-l3"><a class="reference internal" href="axiom_math_concept.html">axiom</a></li>
-<li class="toctree-l3"><a class="reference internal" href="biconditional_elimination_1_math_concept.html">biconditional-elimination-1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="biconditional_elimination_2_math_concept.html">biconditional-elimination-2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="biconditional_introduction_math_concept.html">biconditional-introduction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="conjunction_elimination_1_math_concept.html">conjunction-elimination-1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="conjunction_elimination_2_math_concept.html">conjunction-elimination-2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="conjunction_introduction_math_concept.html">conjunction-introduction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="disjunction_introduction_1_math_concept.html">disjunction-introduction-1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="disjunction_introduction_2_math_concept.html">disjunction-introduction-2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="double_negation_elimination_math_concept.html">double-negation-elimination</a></li>
-<li class="toctree-l3"><a class="reference internal" href="double_negation_introduction_math_concept.html">double-negation-introduction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="elimination_rule_math_concept.html">elimination-rule</a></li>
-<li class="toctree-l3"><a class="reference internal" href="equal_terms_substitution_math_concept.html">equal-terms-substitution</a></li>
-<li class="toctree-l3"><a class="reference internal" href="equality_commutativity_math_concept.html">equality-commutativity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="formula_math_concept.html">formula</a></li>
-<li class="toctree-l3"><a class="reference internal" href="formula_statement_math_concept.html">formula-statement</a></li>
-<li class="toctree-l3"><a class="reference internal" href="hypothesis_math_concept.html">hypothesis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="inconsistency_introduction_1_math_concept.html">inconsistency-introduction-1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="inconsistency_introduction_2_math_concept.html">inconsistency-introduction-2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="inconsistency_introduction_3_math_concept.html">inconsistency-introduction-3</a></li>
-<li class="toctree-l3"><a class="reference internal" href="inference_rule_math_concept.html">inference-rule</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction_rule_math_concept.html">introduction-rule</a></li>
-<li class="toctree-l3"><a class="reference internal" href="is_a_math_concept.html">is-a</a></li>
-<li class="toctree-l3"><a class="reference internal" href="meta_object_math_concept.html">meta-object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modus_ponens_math_concept.html">modus-ponens</a></li>
-<li class="toctree-l3"><a class="reference internal" href="notation_form_math_concept.html">notation-form</a></li>
-<li class="toctree-l3"><a class="reference internal" href="object_math_concept.html">object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="object_creation_math_concept.html">object-creation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="object_declaration_math_concept.html">object-declaration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="object_inclusion_math_concept.html">object-inclusion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="paragraph_proof_math_concept.html">paragraph-proof</a></li>
-<li class="toctree-l3"><a class="reference internal" href="proof_by_contradiction_1_math_concept.html">proof-by-contradiction-1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="proof_by_contradiction_2_math_concept.html">proof-by-contradiction-2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="proof_by_refutation_1_math_concept.html">proof-by-refutation-1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="proof_by_refutation_2_math_concept.html">proof-by-refutation-2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="relation_math_concept.html">relation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="statement_math_concept.html">statement</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">theory-elaboration-sequence</a></li>
-<li class="toctree-l3"><a class="reference internal" href="universe_of_discourse_math_concept.html">universe-of-discourse</a></li>
-<li class="toctree-l3"><a class="reference internal" href="variable_substitution_math_concept.html">variable-substitution</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../math_theory.html">Theory</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../python.html">Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../back_matter.html">Back matter</a></li>
-</ul>
 
+                <a href="../../index.html" class="icon icon-home">
+                    punctilious
+                </a>
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs" aria-label="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+            </div>
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../front_matter.html">Front matter</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal" href="../../math.html">Math</a>
+                        <ul class="current">
+                            <li class="toctree-l2 current"><a class="reference internal" href="../../math_concept.html">Concept</a>
+                                <ul class="current">
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="absorption_math_concept.html">absorption</a></li>
+                                    <li class="toctree-l3"><a class="reference internal" href="axiom_math_concept.html">axiom</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_elimination_1_math_concept.html">biconditional-elimination-1</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_elimination_2_math_concept.html">biconditional-elimination-2</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_introduction_math_concept.html">biconditional-introduction</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_elimination_1_math_concept.html">conjunction-elimination-1</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_elimination_2_math_concept.html">conjunction-elimination-2</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_introduction_math_concept.html">conjunction-introduction</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="disjunction_introduction_1_math_concept.html">disjunction-introduction-1</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="disjunction_introduction_2_math_concept.html">disjunction-introduction-2</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="double_negation_elimination_math_concept.html">double-negation-elimination</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="double_negation_introduction_math_concept.html">double-negation-introduction</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="elimination_rule_math_concept.html">elimination-rule</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="equal_terms_substitution_math_concept.html">equal-terms-substitution</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="equality_commutativity_math_concept.html">equality-commutativity</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="formula_math_concept.html">formula</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="formula_statement_math_concept.html">formula-statement</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="hypothesis_math_concept.html">hypothesis</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inconsistency_introduction_1_math_concept.html">inconsistency-introduction-1</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inconsistency_introduction_2_math_concept.html">inconsistency-introduction-2</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inconsistency_introduction_3_math_concept.html">inconsistency-introduction-3</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inference_rule_math_concept.html">inference-rule</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="introduction_rule_math_concept.html">introduction-rule</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal" href="is_a_math_concept.html">is-a</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="meta_object_math_concept.html">meta-object</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="modus_ponens_math_concept.html">modus-ponens</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="notation_form_math_concept.html">notation-form</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="object_math_concept.html">object</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="object_creation_math_concept.html">object-creation</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="object_declaration_math_concept.html">object-declaration</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="object_inclusion_math_concept.html">object-inclusion</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="paragraph_proof_math_concept.html">paragraph-proof</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_contradiction_1_math_concept.html">proof-by-contradiction-1</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_contradiction_2_math_concept.html">proof-by-contradiction-2</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_refutation_1_math_concept.html">proof-by-refutation-1</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_refutation_2_math_concept.html">proof-by-refutation-2</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="relation_math_concept.html">relation</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="statement_math_concept.html">statement</a></li>
+                                    <li class="toctree-l3 current"><a class="current reference internal" href="#">theory-elaboration-sequence</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="universe_of_discourse_math_concept.html">universe-of-discourse</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="variable_substitution_math_concept.html">variable-substitution</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../../math_theory.html">Theory</a></li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../python.html">Python</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../back_matter.html">Back matter</a>
+                    </li>
+                </ul>
+
+            </div>
         </div>
-      </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">punctilious</a>
-      </nav>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+        <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../../index.html">punctilious</a>
+        </nav>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../../math.html">Math</a></li>
-          <li class="breadcrumb-item"><a href="../../math_concept.html">Math concept</a></li>
-      <li class="breadcrumb-item active">theory-elaboration-sequence</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/math/concept/theory_elaboration_sequence_math_concept.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <section id="theory-elaboration-sequences">
-<span id="theory-elaboration-sequence"></span><span id="theory-elaboration-sequence-math-concept"></span><span id="id1"></span><h1>theory-elaboration-sequence<a class="headerlink" href="#theory-elaboration-sequences" title="Permalink to this heading"></a></h1>
-<section id="definition">
-<h2>Definition<a class="headerlink" href="#definition" title="Permalink to this heading"></a></h2>
-<p><em>theory-elaboration-sequence</em> is …</p>
-</section>
-<section id="python-implementation">
-<h2>Python implementation<a class="headerlink" href="#python-implementation" title="Permalink to this heading"></a></h2>
-<section id="theoryelaborationsequence">
-<h3>TheoryElaborationSequence<a class="headerlink" href="#theoryelaborationsequence" title="Permalink to this heading"></a></h3>
-<dl class="py class">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">core.</span></span><span class="sig-name descname"><span class="pre">TheoryElaborationSequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extended_theory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extended_theory_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stabilized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence" title="Permalink to this definition"></a></dt>
-<dd><p>The TheoryElaboration pythonic class models a [theory-elaboration](theory-elaboration).</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extended_theory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extended_theory_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stabilized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.__init__" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+        <div class="wy-nav-content">
+            <div class="rst-content">
+                <div role="navigation" aria-label="Page navigation">
+                    <ul class="wy-breadcrumbs">
+                        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+                        <li class="breadcrumb-item"><a href="../../math.html">Math</a></li>
+                        <li class="breadcrumb-item"><a href="../../math_concept.html">Math concept</a></li>
+                        <li class="breadcrumb-item active">theory-elaboration-sequence</li>
+                        <li class="wy-breadcrumbs-aside">
+                            <a href="../../_sources/math/concept/theory_elaboration_sequence_math_concept.rst.txt"
+                               rel="nofollow"> View page source</a>
+                        </li>
+                    </ul>
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.assure_interpretation_disclaimer">
-<span class="sig-name descname"><span class="pre">assure_interpretation_disclaimer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.assure_interpretation_disclaimer" title="Permalink to this definition"></a></dt>
-<dd><p>After the first usage of a contentual interpretation inference-rule,
-warns the user that no semantic verification is performed.</p>
-</dd></dl>
+                        <section id="theory-elaboration-sequences">
+                            <span id="theory-elaboration-sequence"></span><span
+                                id="theory-elaboration-sequence-math-concept"></span><span id="id1"></span>
+                            <h1>theory-elaboration-sequence<a class="headerlink" href="#theory-elaboration-sequences"
+                                                              title="Permalink to this heading"></a></h1>
+                            <section id="definition">
+                                <h2>Definition<a class="headerlink" href="#definition"
+                                                 title="Permalink to this heading"></a></h2>
+                                <p><em>theory-elaboration-sequence</em> is …</p>
+                            </section>
+                            <section id="python-implementation">
+                                <h2>Python implementation<a class="headerlink" href="#python-implementation"
+                                                            title="Permalink to this heading"></a></h2>
+                                <section id="theoryelaborationsequence">
+                                    <h3>TheoryElaborationSequence<a class="headerlink" href="#theoryelaborationsequence"
+                                                                    title="Permalink to this heading"></a></h3>
+                                    <dl class="py class">
+                                        <dt class="sig sig-object py" id="core.TheoryElaborationSequence">
+                                            <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                                                class="sig-prename descclassname"><span
+                                                class="pre">core.</span></span><span class="sig-name descname"><span
+                                                class="pre">TheoryElaborationSequence</span></span><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span
+                                                class="pre">symbol</span></span><span class="o"><span
+                                                class="pre">=</span></span><span class="default_value"><span
+                                                class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">nameset</span></span><span class="o"><span
+                                                class="pre">=</span></span><span class="default_value"><span
+                                                class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">ref</span></span><span class="o"><span
+                                                class="pre">=</span></span><span class="default_value"><span
+                                                class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">subtitle</span></span><span class="o"><span
+                                                class="pre">=</span></span><span class="default_value"><span
+                                                class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">extended_theory</span></span><span
+                                                class="o"><span class="pre">=</span></span><span
+                                                class="default_value"><span class="pre">None</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span class="pre">extended_theory_limit</span></span><span
+                                                class="o"><span class="pre">=</span></span><span
+                                                class="default_value"><span class="pre">None</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span
+                                                class="pre">stabilized</span></span><span class="o"><span
+                                                class="pre">=</span></span><span class="default_value"><span
+                                                class="pre">False</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">echo</span></span><span class="o"><span
+                                                class="pre">=</span></span><span class="default_value"><span
+                                                class="pre">None</span></span></em><span class="sig-paren">)</span><a
+                                                class="headerlink" href="#core.TheoryElaborationSequence"
+                                                title="Permalink to this definition"></a></dt>
+                                        <dd><p>The TheoryElaboration pythonic class models a
+                                            [theory-elaboration](theory-elaboration).</p>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.__init__">
+                                                    <span class="sig-name descname"><span
+                                                            class="pre">__init__</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">u</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">symbol</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">nameset</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span
+                                                            class="pre">ref</span></span><span class="o"><span
+                                                            class="pre">=</span></span><span class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span
+                                                        class="pre">subtitle</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">extended_theory</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span class="pre">extended_theory_limit</span></span><span
+                                                            class="o"><span class="pre">=</span></span><span
+                                                            class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span
+                                                        class="pre">stabilized</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">False</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span class="pre">echo</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span
+                                                        class="pre">None</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.__init__"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd></dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.compose_article">
-<span class="sig-name descname"><span class="pre">compose_article</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.compose_article" title="Permalink to this definition"></a></dt>
-<dd><p>Return a representation that expresses and justifies the theory.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.assure_interpretation_disclaimer">
+                                                    <span class="sig-name descname"><span class="pre">assure_interpretation_disclaimer</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span
+                                                        class="pre">None</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.assure_interpretation_disclaimer"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>After the first usage of a contentual interpretation
+                                                    inference-rule,
+                                                    warns the user that no semantic verification is performed.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.compose_report">
-<span class="sig-name descname"><span class="pre">compose_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.compose_report" title="Permalink to this definition"></a></dt>
-<dd><p>Composes a report that describes this object.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.compose_article">
+                                                    <span class="sig-name descname"><span
+                                                            class="pre">compose_article</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">proof</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.compose_article"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Return a representation that expresses and justifies the
+                                                    theory.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.consistency">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">consistency</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Consistency</span></em><a class="headerlink" href="#core.TheoryElaborationSequence.consistency" title="Permalink to this definition"></a></dt>
-<dd><p>The currently proven consistency status of this theory.</p>
-<p>Possible values are:
-- proved-consistent,
-- proved-inconsistent,
-- undetermined.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.compose_report">
+                                                    <span class="sig-name descname"><span
+                                                            class="pre">compose_report</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">proof</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="o"><span class="pre">**</span></span><span
+                                                        class="n"><span class="pre">kwargs</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.compose_report"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Composes a report that describes this object.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.crossreference_axiom_inclusion">
-<span class="sig-name descname"><span class="pre">crossreference_axiom_inclusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.crossreference_axiom_inclusion" title="Permalink to this definition"></a></dt>
-<dd><p>During construction, cross-reference an axiom
-with its parent theory (if it is not already cross-referenced),
-and return its 0-based index in Theory.axioms.</p>
-</dd></dl>
+                                            <dl class="py property">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.consistency">
+                                                    <em class="property"><span class="pre">property</span><span
+                                                            class="w"> </span></em><span class="sig-name descname"><span
+                                                        class="pre">consistency</span></span><em class="property"><span
+                                                        class="p"><span class="pre">:</span></span><span
+                                                        class="w"> </span><span class="pre">Consistency</span></em><a
+                                                        class="headerlink"
+                                                        href="#core.TheoryElaborationSequence.consistency"
+                                                        title="Permalink to this definition"></a></dt>
+                                                <dd><p>The currently proven consistency status of this theory.</p>
+                                                    <p>Possible values are:
+                                                        - proved-consistent,
+                                                        - proved-inconsistent,
+                                                        - undetermined.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.crossreference_definition_endorsement">
-<span class="sig-name descname"><span class="pre">crossreference_definition_endorsement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.crossreference_definition_endorsement" title="Permalink to this definition"></a></dt>
-<dd><p>During construction, cross-reference an endorsement
-with its parent theory (if it is not already cross-referenced),
-and return its 0-based index in Theory.endorsements.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.crossreference_axiom_inclusion">
+                                                    <span class="sig-name descname"><span class="pre">crossreference_axiom_inclusion</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">a</span></span></em><span class="sig-paren">)</span><a
+                                                        class="headerlink"
+                                                        href="#core.TheoryElaborationSequence.crossreference_axiom_inclusion"
+                                                        title="Permalink to this definition"></a></dt>
+                                                <dd><p>During construction, cross-reference an axiom
+                                                    with its parent theory (if it is not already cross-referenced),
+                                                    and return its 0-based index in Theory.axioms.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.crossreference_inference_rule_inclusion">
-<span class="sig-name descname"><span class="pre">crossreference_inference_rule_inclusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.crossreference_inference_rule_inclusion" title="Permalink to this definition"></a></dt>
-<dd><p>During construction, cross-reference an inference-rule
-with its parent theory-elaboration (if it is not already cross-referenced).</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.crossreference_definition_endorsement">
+                                                    <span class="sig-name descname"><span class="pre">crossreference_definition_endorsement</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">d</span></span></em><span class="sig-paren">)</span><a
+                                                        class="headerlink"
+                                                        href="#core.TheoryElaborationSequence.crossreference_definition_endorsement"
+                                                        title="Permalink to this definition"></a></dt>
+                                                <dd><p>During construction, cross-reference an endorsement
+                                                    with its parent theory (if it is not already cross-referenced),
+                                                    and return its 0-based index in Theory.endorsements.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.crossreference_statement">
-<span class="sig-name descname"><span class="pre">crossreference_statement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.crossreference_statement" title="Permalink to this definition"></a></dt>
-<dd><p>During construction, cross-reference a statement 𝒮
-with its parent theory if it is not already cross-referenced,
-and return its 0-based index in Theory.statements.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.crossreference_inference_rule_inclusion">
+                                                    <span class="sig-name descname"><span class="pre">crossreference_inference_rule_inclusion</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">i</span></span></em><span class="sig-paren">)</span><a
+                                                        class="headerlink"
+                                                        href="#core.TheoryElaborationSequence.crossreference_inference_rule_inclusion"
+                                                        title="Permalink to this definition"></a></dt>
+                                                <dd><p>During construction, cross-reference an inference-rule
+                                                    with its parent theory-elaboration (if it is not already
+                                                    cross-referenced).</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.d">
-<span class="sig-name descname"><span class="pre">d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">natural_language</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.d" title="Permalink to this definition"></a></dt>
-<dd><p>Elaborate a new definition with natural-language. Shortcut function for
-t.elaborate_definition(…).</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.crossreference_statement">
+                                                    <span class="sig-name descname"><span class="pre">crossreference_statement</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">s</span></span></em><span class="sig-paren">)</span><a
+                                                        class="headerlink"
+                                                        href="#core.TheoryElaborationSequence.crossreference_statement"
+                                                        title="Permalink to this definition"></a></dt>
+                                                <dd><p>During construction, cross-reference a statement 𝒮
+                                                    with its parent theory if it is not already cross-referenced,
+                                                    and return its 0-based index in Theory.statements.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.export_article_to_file">
-<span class="sig-name descname"><span class="pre">export_article_to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.export_article_to_file" title="Permalink to this definition"></a></dt>
-<dd><p>Export this theory to a Unicode textfile.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py" id="core.TheoryElaborationSequence.d">
+                                                    <span class="sig-name descname"><span
+                                                            class="pre">d</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">natural_language</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span
+                                                        class="pre">symbol</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">reference</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span class="pre">title</span></span><span
+                                                            class="o"><span class="pre">=</span></span><span
+                                                            class="default_value"><span
+                                                            class="pre">None</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.d"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Elaborate a new definition with natural-language. Shortcut
+                                                    function for
+                                                    t.elaborate_definition(…).</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.extended_theory">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extended_theory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#core.TheoryElaborationSequence" title="core.TheoryElaborationSequence"><span class="pre">TheoryElaborationSequence</span></a></em><a class="headerlink" href="#core.TheoryElaborationSequence.extended_theory" title="Permalink to this definition"></a></dt>
-<dd><p>None if this is a root theory, the theory that this theory extends otherwise.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.export_article_to_file">
+                                                    <span class="sig-name descname"><span class="pre">export_article_to_file</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">file_path</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">proof</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span
+                                                            class="pre">encoding</span></span><span class="o"><span
+                                                            class="pre">=</span></span><span class="default_value"><span
+                                                            class="pre">None</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.export_article_to_file"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Export this theory to a Unicode textfile.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.extended_theory_limit">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extended_theory_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Statement</span></em><a class="headerlink" href="#core.TheoryElaborationSequence.extended_theory_limit" title="Permalink to this definition"></a></dt>
-<dd><p>If this is a limited extended-theory, the inclusive statement-limit of the inclusion.</p>
-</dd></dl>
+                                            <dl class="py property">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.extended_theory">
+                                                    <em class="property"><span class="pre">property</span><span
+                                                            class="w"> </span></em><span class="sig-name descname"><span
+                                                        class="pre">extended_theory</span></span><em
+                                                        class="property"><span class="p"><span
+                                                        class="pre">:</span></span><span class="w"> </span><span
+                                                        class="pre">None</span><span class="p"><span
+                                                        class="pre">,</span></span><span class="w"> </span><a
+                                                        class="reference internal"
+                                                        href="#core.TheoryElaborationSequence"
+                                                        title="core.TheoryElaborationSequence"><span class="pre">TheoryElaborationSequence</span></a></em><a
+                                                        class="headerlink"
+                                                        href="#core.TheoryElaborationSequence.extended_theory"
+                                                        title="Permalink to this definition"></a></dt>
+                                                <dd><p>None if this is a root theory, the theory that this theory
+                                                    extends otherwise.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.get_first_syntactically_equivalent_statement">
-<span class="sig-name descname"><span class="pre">get_first_syntactically_equivalent_statement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formula</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.get_first_syntactically_equivalent_statement" title="Permalink to this definition"></a></dt>
-<dd><p>Given a formula, return the first statement that is syntactically-equivalent with it, or None if none are found.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>formula</strong> – </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
+                                            <dl class="py property">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.extended_theory_limit">
+                                                    <em class="property"><span class="pre">property</span><span
+                                                            class="w"> </span></em><span class="sig-name descname"><span
+                                                        class="pre">extended_theory_limit</span></span><em
+                                                        class="property"><span class="p"><span
+                                                        class="pre">:</span></span><span class="w"> </span><span
+                                                        class="pre">None</span><span class="p"><span
+                                                        class="pre">,</span></span><span class="w"> </span><span
+                                                        class="pre">Statement</span></em><a class="headerlink"
+                                                                                            href="#core.TheoryElaborationSequence.extended_theory_limit"
+                                                                                            title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>If this is a limited extended-theory, the inclusive
+                                                    statement-limit of the inclusion.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.i">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">i</span></span><a class="headerlink" href="#core.TheoryElaborationSequence.i" title="Permalink to this definition"></a></dt>
-<dd><p>Return the dictionary of inference-rule-inclusions contained in this
-theory-elaboration.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.get_first_syntactically_equivalent_statement">
+                                                    <span class="sig-name descname"><span class="pre">get_first_syntactically_equivalent_statement</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">formula</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.get_first_syntactically_equivalent_statement"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Given a formula, return the first statement that is
+                                                    syntactically-equivalent with it, or None if none are found.</p>
+                                                    <dl class="field-list simple">
+                                                        <dt class="field-odd">Parameters<span class="colon">:</span>
+                                                        </dt>
+                                                        <dd class="field-odd"><p><strong>formula</strong> – </p>
+                                                        </dd>
+                                                        <dt class="field-even">Returns<span class="colon">:</span></dt>
+                                                        <dd class="field-even"><p></p>
+                                                        </dd>
+                                                    </dl>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.include_axiom">
-<span class="sig-name descname"><span class="pre">include_axiom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acronym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paragraph_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.include_axiom" title="Permalink to this definition"></a></dt>
-<dd><p>Include an axiom in this theory-elaboration-sequence.</p>
-</dd></dl>
+                                            <dl class="py property">
+                                                <dt class="sig sig-object py" id="core.TheoryElaborationSequence.i">
+                                                    <em class="property"><span class="pre">property</span><span
+                                                            class="w"> </span></em><span class="sig-name descname"><span
+                                                        class="pre">i</span></span><a class="headerlink"
+                                                                                      href="#core.TheoryElaborationSequence.i"
+                                                                                      title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Return the dictionary of inference-rule-inclusions contained in
+                                                    this
+                                                    theory-elaboration.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.include_definition">
-<span class="sig-name descname"><span class="pre">include_definition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acronym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.include_definition" title="Permalink to this definition"></a></dt>
-<dd><p>Include a definition in this theory-elaboration-sequence.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.include_axiom">
+                                                    <span class="sig-name descname"><span
+                                                            class="pre">include_axiom</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">a</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">symbol</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">index</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span
+                                                            class="pre">auto_index</span></span><span class="o"><span
+                                                            class="pre">=</span></span><span class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span
+                                                        class="pre">dashed_name</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">acronym</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span
+                                                            class="o"><span class="pre">=</span></span><span
+                                                            class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span class="pre">name</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span
+                                                            class="o"><span class="pre">=</span></span><span
+                                                            class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span
+                                                        class="pre">ref</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">subtitle</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span
+                                                            class="pre">nameset</span></span><span class="o"><span
+                                                            class="pre">=</span></span><span class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span class="pre">paragraph_header</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span
+                                                            class="o"><span class="pre">=</span></span><span
+                                                            class="default_value"><span
+                                                            class="pre">None</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.include_axiom"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Include an axiom in this theory-elaboration-sequence.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.inconsistency_introduction_inference_rule_is_included">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inconsistency_introduction_inference_rule_is_included</span></span><a class="headerlink" href="#core.TheoryElaborationSequence.inconsistency_introduction_inference_rule_is_included" title="Permalink to this definition"></a></dt>
-<dd><p>True if the inconsistency-introduction inference-rule is included in this theory,
-False otherwise.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.include_definition">
+                                                    <span class="sig-name descname"><span
+                                                            class="pre">include_definition</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">d</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">symbol</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">index</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span
+                                                            class="pre">auto_index</span></span><span class="o"><span
+                                                            class="pre">=</span></span><span class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span
+                                                        class="pre">dashed_name</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">acronym</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span
+                                                            class="o"><span class="pre">=</span></span><span
+                                                            class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span class="pre">name</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span
+                                                            class="o"><span class="pre">=</span></span><span
+                                                            class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span
+                                                        class="pre">ref</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">subtitle</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span
+                                                            class="pre">nameset</span></span><span class="o"><span
+                                                            class="pre">=</span></span><span class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span class="pre">echo</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span
+                                                        class="pre">None</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.include_definition"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Include a definition in this theory-elaboration-sequence.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.inference_rule_inclusions">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inference_rule_inclusions</span></span><a class="headerlink" href="#core.TheoryElaborationSequence.inference_rule_inclusions" title="Permalink to this definition"></a></dt>
-<dd><p>Return the dictionary of inference-rule-inclusions contained in this
-theory-elaboration.</p>
-</dd></dl>
+                                            <dl class="py property">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.inconsistency_introduction_inference_rule_is_included">
+                                                    <em class="property"><span class="pre">property</span><span
+                                                            class="w"> </span></em><span class="sig-name descname"><span
+                                                        class="pre">inconsistency_introduction_inference_rule_is_included</span></span><a
+                                                        class="headerlink"
+                                                        href="#core.TheoryElaborationSequence.inconsistency_introduction_inference_rule_is_included"
+                                                        title="Permalink to this definition"></a></dt>
+                                                <dd><p>True if the inconsistency-introduction inference-rule is included
+                                                    in this theory,
+                                                    False otherwise.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.iterate_statements_in_theory_chain">
-<span class="sig-name descname"><span class="pre">iterate_statements_in_theory_chain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formula</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.iterate_statements_in_theory_chain" title="Permalink to this definition"></a></dt>
-<dd><p>Iterate through the (proven or sound) statements in the current theory-chain.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>formula</strong> – (conditional) Filters on formula-statements that are formula-syntactically-equivalent.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
+                                            <dl class="py property">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.inference_rule_inclusions">
+                                                    <em class="property"><span class="pre">property</span><span
+                                                            class="w"> </span></em><span class="sig-name descname"><span
+                                                        class="pre">inference_rule_inclusions</span></span><a
+                                                        class="headerlink"
+                                                        href="#core.TheoryElaborationSequence.inference_rule_inclusions"
+                                                        title="Permalink to this definition"></a></dt>
+                                                <dd><p>Return the dictionary of inference-rule-inclusions contained in
+                                                    this
+                                                    theory-elaboration.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.iterate_theoretical_objcts_references">
-<span class="sig-name descname"><span class="pre">iterate_theoretical_objcts_references</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visited</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.iterate_theoretical_objcts_references" title="Permalink to this definition"></a></dt>
-<dd><p>Iterate through this and all the theoretical-objcts it references recursively.</p>
-<p>Theoretical-objcts may contain references to multiple and diverse other theoretical-objcts. Do not confuse this iteration of all references with iterations of objects in the theory-chain.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>include_root</strong> – </p></li>
-<li><p><strong>visited</strong> – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.iterate_statements_in_theory_chain">
+                                                    <span class="sig-name descname"><span class="pre">iterate_statements_in_theory_chain</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">formula</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.iterate_statements_in_theory_chain"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Iterate through the (proven or sound) statements in the current
+                                                    theory-chain.</p>
+                                                    <dl class="field-list simple">
+                                                        <dt class="field-odd">Parameters<span class="colon">:</span>
+                                                        </dt>
+                                                        <dd class="field-odd"><p><strong>formula</strong> –
+                                                            (conditional) Filters on formula-statements that are
+                                                            formula-syntactically-equivalent.</p>
+                                                        </dd>
+                                                        <dt class="field-even">Returns<span class="colon">:</span></dt>
+                                                        <dd class="field-even"><p></p>
+                                                        </dd>
+                                                    </dl>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.iterate_theory_chain">
-<span class="sig-name descname"><span class="pre">iterate_theory_chain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visited</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.iterate_theory_chain" title="Permalink to this definition"></a></dt>
-<dd><p>Iterate over the theory-chain of this theory.</p>
-<p>The sequence is : this theory, this theory’s extended-theory, the extended-theory’s
-extended-theory, etc. until the root-theory is processes.</p>
-<section id="note">
-<h4>Note<a class="headerlink" href="#note" title="Permalink to this heading"></a></h4>
-<p>The theory-chain set is distinct from theory-dependency set.
-The theory-chain informs of the parent theory whose statements are considered
-valid in the current theory.
-Distinctively, theory may be referenced by meta-theorizing, or in hypothesis,
-or possibly other use cases.</p>
-</section>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.iterate_theoretical_objcts_references">
+                                                    <span class="sig-name descname"><span class="pre">iterate_theoretical_objcts_references</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">include_root</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">True</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">visited</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span
+                                                        class="pre">None</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.iterate_theoretical_objcts_references"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Iterate through this and all the theoretical-objcts it references
+                                                    recursively.</p>
+                                                    <p>Theoretical-objcts may contain references to multiple and diverse
+                                                        other theoretical-objcts. Do not confuse this iteration of all
+                                                        references with iterations of objects in the theory-chain.</p>
+                                                    <dl class="field-list simple">
+                                                        <dt class="field-odd">Parameters<span class="colon">:</span>
+                                                        </dt>
+                                                        <dd class="field-odd">
+                                                            <ul class="simple">
+                                                                <li><p><strong>include_root</strong> – </p></li>
+                                                                <li><p><strong>visited</strong> – </p></li>
+                                                            </ul>
+                                                        </dd>
+                                                        <dt class="field-even">Returns<span class="colon">:</span></dt>
+                                                        <dd class="field-even"><p></p>
+                                                        </dd>
+                                                    </dl>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.iterate_valid_propositions_in_theory_chain">
-<span class="sig-name descname"><span class="pre">iterate_valid_propositions_in_theory_chain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.iterate_valid_propositions_in_theory_chain" title="Permalink to this definition"></a></dt>
-<dd><p>Iterate through the valid-propositions in the current theory-chain.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.iterate_theory_chain">
+                                                    <span class="sig-name descname"><span class="pre">iterate_theory_chain</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">visited</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.iterate_theory_chain"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Iterate over the theory-chain of this theory.</p>
+                                                    <p>The sequence is : this theory, this theory’s extended-theory, the
+                                                        extended-theory’s
+                                                        extended-theory, etc. until the root-theory is processes.</p>
+                                                    <section id="note">
+                                                        <h4>Note<a class="headerlink" href="#note"
+                                                                   title="Permalink to this heading"></a></h4>
+                                                        <p>The theory-chain set is distinct from theory-dependency set.
+                                                            The theory-chain informs of the parent theory whose
+                                                            statements are considered
+                                                            valid in the current theory.
+                                                            Distinctively, theory may be referenced by meta-theorizing,
+                                                            or in hypothesis,
+                                                            or possibly other use cases.</p>
+                                                    </section>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.open_section">
-<span class="sig-name descname"><span class="pre">open_section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">section_title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section_parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numbering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.open_section" title="Permalink to this definition"></a></dt>
-<dd><p>Open a new section in the current theory-elaboration-sequence.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.iterate_valid_propositions_in_theory_chain">
+                                                    <span class="sig-name descname"><span class="pre">iterate_valid_propositions_in_theory_chain</span></span><span
+                                                        class="sig-paren">(</span><span class="sig-paren">)</span><a
+                                                        class="headerlink"
+                                                        href="#core.TheoryElaborationSequence.iterate_valid_propositions_in_theory_chain"
+                                                        title="Permalink to this definition"></a></dt>
+                                                <dd><p>Iterate through the valid-propositions in the current
+                                                    theory-chain.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.pose_hypothesis">
-<span class="sig-name descname"><span class="pre">pose_hypothesis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypothesis_formula</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acronym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.pose_hypothesis" title="Permalink to this definition"></a></dt>
-<dd><p>Pose a new hypothesis in the current theory.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.open_section">
+                                                    <span class="sig-name descname"><span
+                                                            class="pre">open_section</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">section_title</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span class="pre">section_number</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span class="pre">section_parent</span></span><span
+                                                            class="o"><span class="pre">=</span></span><span
+                                                            class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span
+                                                        class="pre">numbering</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">echo</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span
+                                                        class="pre">None</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.open_section"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Open a new section in the current
+                                                    theory-elaboration-sequence.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.report_inconsistency_proof">
-<span class="sig-name descname"><span class="pre">report_inconsistency_proof</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proof</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.report_inconsistency_proof" title="Permalink to this definition"></a></dt>
-<dd><p>This method is called by InferredStatement.__init__() when the inferred-statement
-proves the inconsistency of a theory.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.pose_hypothesis">
+                                                    <span class="sig-name descname"><span
+                                                            class="pre">pose_hypothesis</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">hypothesis_formula</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span
+                                                        class="pre">symbol</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">index</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span
+                                                            class="pre">auto_index</span></span><span class="o"><span
+                                                            class="pre">=</span></span><span class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span
+                                                        class="pre">dashed_name</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">acronym</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span
+                                                            class="o"><span class="pre">=</span></span><span
+                                                            class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span class="pre">name</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span
+                                                            class="o"><span class="pre">=</span></span><span
+                                                            class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span
+                                                        class="pre">ref</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">subtitle</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span
+                                                            class="pre">nameset</span></span><span class="o"><span
+                                                            class="pre">=</span></span><span class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span class="pre">echo</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span
+                                                        class="pre">None</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.pose_hypothesis"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Pose a new hypothesis in the current theory.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.stabilized">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stabilized</span></span><a class="headerlink" href="#core.TheoryElaborationSequence.stabilized" title="Permalink to this definition"></a></dt>
-<dd><p>Return the stabilized property of this theory-elaboration.</p>
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.report_inconsistency_proof">
+                                                    <span class="sig-name descname"><span class="pre">report_inconsistency_proof</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">proof</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.report_inconsistency_proof"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>This method is called by InferredStatement.__init__() when the
+                                                    inferred-statement
+                                                    proves the inconsistency of a theory.</p>
+                                                </dd>
+                                            </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="core.TheoryElaborationSequence.take_note">
-<span class="sig-name descname"><span class="pre">take_note</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acronym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paragraph_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#core.TheoryElaborationSequence.take_note" title="Permalink to this definition"></a></dt>
-<dd><p>Take a note, make a comment, or remark in this theory.</p>
-</dd></dl>
+                                            <dl class="py property">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.stabilized">
+                                                    <em class="property"><span class="pre">property</span><span
+                                                            class="w"> </span></em><span class="sig-name descname"><span
+                                                        class="pre">stabilized</span></span><a class="headerlink"
+                                                                                               href="#core.TheoryElaborationSequence.stabilized"
+                                                                                               title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Return the stabilized property of this theory-elaboration.</p>
+                                                </dd>
+                                            </dl>
 
-</dd></dl>
+                                            <dl class="py method">
+                                                <dt class="sig sig-object py"
+                                                    id="core.TheoryElaborationSequence.take_note">
+                                                    <span class="sig-name descname"><span
+                                                            class="pre">take_note</span></span><span
+                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                        class="pre">content</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span
+                                                        class="pre">symbol</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">index</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span
+                                                            class="pre">auto_index</span></span><span class="o"><span
+                                                            class="pre">=</span></span><span class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span
+                                                        class="pre">dashed_name</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">acronym</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span class="pre">abridged_name</span></span><span
+                                                            class="o"><span class="pre">=</span></span><span
+                                                            class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span class="pre">name</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span
+                                                            class="o"><span class="pre">=</span></span><span
+                                                            class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span class="pre">paragraph_header</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span
+                                                            class="pre">ref</span></span><span class="o"><span
+                                                            class="pre">=</span></span><span class="default_value"><span
+                                                            class="pre">None</span></span></em>, <em
+                                                        class="sig-param"><span class="n"><span
+                                                        class="pre">subtitle</span></span><span class="o"><span
+                                                        class="pre">=</span></span><span class="default_value"><span
+                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                        class="n"><span class="pre">nameset</span></span><span
+                                                        class="o"><span class="pre">=</span></span><span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                    <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span
+                                                            class="o"><span class="pre">=</span></span><span
+                                                            class="default_value"><span
+                                                            class="pre">None</span></span></em><span
+                                                        class="sig-paren">)</span><a class="headerlink"
+                                                                                     href="#core.TheoryElaborationSequence.take_note"
+                                                                                     title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Take a note, make a comment, or remark in this theory.</p>
+                                                </dd>
+                                            </dl>
 
-</section>
-</section>
-<section id="bibliography">
-<h2>Bibliography<a class="headerlink" href="#bibliography" title="Permalink to this heading"></a></h2>
-<ul class="simple">
-<li><p>…</p></li>
-</ul>
-</section>
-</section>
+                                        </dd>
+                                    </dl>
+
+                                </section>
+                            </section>
+                            <section id="bibliography">
+                                <h2>Bibliography<a class="headerlink" href="#bibliography"
+                                                   title="Permalink to this heading"></a></h2>
+                                <ul class="simple">
+                                    <li><p>…</p></li>
+                                </ul>
+                            </section>
+                        </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="statement_math_concept.html" class="btn btn-neutral float-left" title="statement" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="universe_of_discourse_math_concept.html" class="btn btn-neutral float-right" title="universe-of-discourse" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+                    </div>
+                </div>
+                <footer>
+                    <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+                        <a href="statement_math_concept.html" class="btn btn-neutral float-left" title="statement"
+                           accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span>
+                            Previous</a>
+                        <a href="universe_of_discourse_math_concept.html" class="btn btn-neutral float-right"
+                           title="universe-of-discourse" accesskey="n" rel="next">Next <span
+                                class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+                    </div>
 
-  <hr/>
+                    <hr/>
 
-  <div role="contentinfo">
-    <p>&#169; Copyright 2023, David Doret.</p>
-  </div>
+                    <div role="contentinfo">
+                        <p>&#169; Copyright 2023, David Doret.</p>
+                    </div>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+                    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+                    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+                    provided by <a href="https://readthedocs.org">Read the Docs</a>.
 
-</footer>
+
+                </footer>
+            </div>
         </div>
-      </div>
     </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(false);
-      });
-  </script> 
+</div>
+<script>
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(false);
+    });
+</script>
 
 </body>
 </html>

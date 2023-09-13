@@ -7,7 +7,7 @@ AbsorptionInclusion (python class)
 ============================================
 
 .. seealso::
-   :ref:`absorption_math_concept` | :ref:`absorption_declaration_python_class` | :ref:`absorption_python_sample`
+   :ref:`math concept<absorption_math_concept>` | :ref:`python declaration class<absorption_declaration_python_class>` | :ref:`python sample<absorption_python_sample>`
 
 .. module:: core
    :noindex:

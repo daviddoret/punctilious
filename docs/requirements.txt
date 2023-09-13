@@ -3,6 +3,8 @@ sphinx-autodoc-typehints
 sphinx-exec-code
 sphinx-favicon
 sphinx-rtd-theme
+sphinx-tabs
+sphinx_tags
 sphinx-togglebutton
 sphinxawesome-theme
 sphinxcontrib-applehelp

@@ -4,11 +4,13 @@
 .. role:: python(code)
     :language: py
 
+.. tags:: absorption, math, concept, inference-rule
+
 absorption (math concept)
 ==========================
 
 .. seealso::
-   :ref:`absorption_declaration_python_class` | :ref:`absorption_inclusion_python_class` | :ref:`absorption_python_sample`
+   :ref:`python declaration class<absorption_declaration_python_class>` | :ref:`python inclusion class<absorption_inclusion_python_class>` | :ref:`python sample<absorption_python_sample>`
 
 Definition
 ----------
