@@ -50,6 +50,7 @@ tags_badge_colors = {"math": "primary", "concept": "primary", "python": "seconda
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 # html_theme = 'alabaster'
+
 # html_theme = 'sphinxawesome_theme'
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
