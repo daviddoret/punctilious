@@ -4,6 +4,8 @@ import sys
 # https://stackoverflow.com/questions/10324393/sphinx-build-fail-autodoc-cant-import-find-module
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath('../src/punctilious'))
+sys.path.insert(0, os.path.abspath('../src/sample'))
+sys.path.insert(0, os.path.abspath('../src/theory'))
 
 # Configuration file for the Sphinx documentation builder.
 #

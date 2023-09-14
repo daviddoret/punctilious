@@ -7,7 +7,7 @@ sphinx_tabs # for sphinx extension: sphinx_tabs.tabs. spinx-tabs fails.
 sphinx-design # for sphinx extension: sphinx_design
 sphinx-tags # for sphinx extension: sphinx_tags
 sphinx-togglebutton
-sphinxawesome-theme
+# sphinxawesome-theme
 sphinxcontrib-applehelp
 sphinxcontrib-bibtex
 sphinxcontrib-devhelp
