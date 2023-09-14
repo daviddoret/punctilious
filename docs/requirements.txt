@@ -3,7 +3,7 @@ sphinx-autodoc-typehints
 sphinx-exec-code
 sphinx-favicon
 sphinx-rtd-theme
-sphinx-tabs for sphinx extension: sphinx_tabs.tabs
+sphinx_tabs for sphinx extension: sphinx_tabs.tabs
 sphinx-design # for sphinx extension: sphinx_design
 sphinx-tags # for sphinx extension: sphinx_tags
 sphinx-togglebutton
