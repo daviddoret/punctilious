@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="#195: inference-rules documentation and samples">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/conf.py" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="#195: docs/requirements.txt. troubleshooting readthedocs build.">
       <change beforePath="$PROJECT_DIR$/docs/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -368,14 +366,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00225" summary="enhance documentation and publish on readthedocs #48">
-      <option name="closed" value="true" />
-      <created>1694245120681</created>
-      <option name="number" value="00225" />
-      <option name="presentableId" value="LOCAL-00225" />
-      <option name="project" value="LOCAL" />
-      <updated>1694245120681</updated>
     </task>
     <task id="LOCAL-00226" summary="enhance documentation and publish on readthedocs #48">
       <option name="closed" value="true" />
@@ -761,7 +751,15 @@
       <option name="project" value="LOCAL" />
       <updated>1694639269357</updated>
     </task>
-    <option name="localTasksCounter" value="274" />
+    <task id="LOCAL-00274" summary="#195: docs/requirements.txt. troubleshooting readthedocs build.">
+      <option name="closed" value="true" />
+      <created>1694671535470</created>
+      <option name="number" value="00274" />
+      <option name="presentableId" value="LOCAL-00274" />
+      <option name="project" value="LOCAL" />
+      <updated>1694671535470</updated>
+    </task>
+    <option name="localTasksCounter" value="275" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -793,7 +791,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="reviewing tests + complete method signatures for free-variable declarations" />
     <MESSAGE value="code cleanup" />
     <MESSAGE value="tests" />
     <MESSAGE value="cleanup" />
@@ -818,7 +815,8 @@
     <MESSAGE value="#47: scripts for the installation from pypi" />
     <MESSAGE value="#47: readme.md with installation instructions" />
     <MESSAGE value="#195: inference-rules documentation and samples" />
-    <option name="LAST_COMMIT_MESSAGE" value="#195: inference-rules documentation and samples" />
+    <MESSAGE value="#195: docs/requirements.txt. troubleshooting readthedocs build." />
+    <option name="LAST_COMMIT_MESSAGE" value="#195: docs/requirements.txt. troubleshooting readthedocs build." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
