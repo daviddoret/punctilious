@@ -25,10 +25,9 @@ release = "1.0.8"
 # https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html
 # https://pypi.org/project/sphinxcontrib-bibtex/
 extensions = [  # 'sphinxcontrib-inlinesyntaxhighlight',
-    'sphinx.ext.autodoc',  # 'sphinx-autodoc-typehints',
-    'sphinx.ext.mathjax', 'sphinxcontrib.bibtex', 'sphinx_autodoc_typehints', 'sphinx.ext.graphviz',
-    'sphinx_togglebutton', 'sphinx_rtd_theme', 'sphinx_favicon', 'sphinx_tabs.tabs', 'sphinx_tags',
-    'sphinx_design']
+    'sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinxcontrib.bibtex', 'sphinx_autodoc_typehints',
+    'sphinx.ext.graphviz', 'sphinx_togglebutton', 'sphinx_rtd_theme', 'sphinx_favicon',
+    'sphinx_tabs.tabs', 'sphinx_tags', 'sphinx_design']
 # 'sphinxawesome_theme',
 # 'sphinx_exec_code',
 bibtex_bibfiles = ['bibliography_bibtex.bib']
