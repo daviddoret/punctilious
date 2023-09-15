@@ -1,0 +1,7 @@
+*conjunction-elimination-1* is the :ref:`inference-rule`:
+
+.. math::
+
+   \left( P \land Q \right) \vdash P
+
+In straightforward language, if "P and Q" is true, it follows that P is true.

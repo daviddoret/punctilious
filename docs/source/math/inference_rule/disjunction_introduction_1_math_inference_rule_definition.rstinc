@@ -1,0 +1,14 @@
+Definition
+----------
+
+*disjunction-introduction-1* is the :ref:`inference-rule`:
+
+.. math::
+
+    P \vdash \left( Q \lor P \right)
+
+Quotes
+------
+
+    "Addition (or disjunction introduction, or or introduction) is the rule of inference that allows one to infer a disjunction from either of the disjuncts."
+    - :footcite:p:`cook_2009_dictionaryphilosophicallogic`, p8

@@ -1,0 +1,14 @@
+Definition
+----------
+
+*equal-terms-substitution* is the well-known and valid :ref:`inference-rule`:
+
+.. math::
+
+    \left( P, x = y \right) \vdash Q
+
+Where:
+
+* :math:`P` is a :ref:`formula-statement`
+* :math:`x = y` is a :ref:`formula-statement` of the form :math:`x = y`
+* :math:`Q` is a :ref:`formula-statement` identical to :math:`P` except that every occurrences of :math:`x` in :math:`P` are substituted with :math:`y`

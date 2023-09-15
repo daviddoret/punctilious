@@ -1,0 +1,13 @@
+*biconditional-elimination-2* is the :ref:`inference-rule`:
+
+.. math::
+
+   \left( P \iff Q \right) \vdash \left( Q \implies P \right)
+
+Where:
+
+* :math:`P \iff Q` is a :ref:`formula-statement`
+* :math:`P` is a propositional :ref:`formula`
+* :math:`Q` is a propositional :ref:`formula`
+
+In straightforward language, if P is true if and only if Q is true, it follows that P implies Q.

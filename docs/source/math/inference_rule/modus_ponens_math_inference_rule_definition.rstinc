@@ -1,0 +1,8 @@
+Definition
+----------
+
+*modus-ponens* is the well-known and valid :ref:`inference-rule` in propositional-logic:
+
+.. math::
+
+    \left( \left(P \implies Q\right) \land P \right) \vdash Q

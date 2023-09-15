@@ -5,22 +5,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="#201">
-      <change afterPath="$PROJECT_DIR$/continuous_integration/jinja_templates/inference_rule_math_concept_jinja_template.jinja2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/continuous_integration/scripts/generate_docs_inference_rules_math_concepts.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/continuous_integration/scripts/install_in_venv_from_pypi__windows.ps1" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.buildinfo" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/absorption.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/biconditional-elimination-1.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/biconditional-elimination-2.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/biconditional-introduction.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/class.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/conjunction-elimination-1.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/conjunction-elimination-2.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/conjunction-introduction.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/declaration.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/disjunction-introduction-1.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/disjunction-introduction-2.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/double-negation-elimination.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/double-negation-introduction.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/equal-terms-substitution.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/equality-commutativity.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inclusion.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inconsistency-introduction-1.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inconsistency-introduction-2.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inconsistency-introduction-3.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inference-rule.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/math.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/modus-ponens.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/proof-by-contradiction-1.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/proof-by-contradiction-2.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/proof-by-refutation-1.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/proof-by-refutation-2.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/python.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/sample.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/tagsindex.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/variable-substitution.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/back_matter.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/back_matter/bibliography_back_matter.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" afterDir="false" />
@@ -64,6 +80,46 @@
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/object_declaration_math_concept.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/object_inclusion_math_concept.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/object_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/absorption_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/biconditional_elimination_1_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/biconditional_elimination_2_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/biconditional_introduction_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/conjunction_elimination_1_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/conjunction_elimination_2_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/conjunction_introduction_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/disjunction_introduction_1_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/disjunction_introduction_2_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/double_negation_elimination_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/double_negation_introduction_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/elimination_rule_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/equal_terms_substitution_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/equality_commutativity_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/formula_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/formula_statement_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/hypothesis_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/inconsistency_introduction_1_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/inconsistency_introduction_2_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/inconsistency_introduction_3_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/inference_rule_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/introduction_rule_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/is_a_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/meta_object_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/modus_ponens_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/notation_form_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/object_creation_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/object_declaration_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/object_inclusion_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/object_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/paragraph_proof_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/proof_by_contradiction_1_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/proof_by_contradiction_2_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/proof_by_refutation_1_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/proof_by_refutation_2_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/relation_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/statement_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/theory_elaboration_sequence_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/universe_of_discourse_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/obsolete/variable_substitution_math_concept.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/paragraph_proof_math_concept.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/proof_by_contradiction_1_math_concept.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/proof_by_contradiction_2_math_concept.doctree" afterDir="false" />
@@ -74,6 +130,28 @@
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/theory_elaboration_sequence_math_concept.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/universe_of_discourse_math_concept.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/variable_substitution_math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/absorption_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/biconditional_elimination_1_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/biconditional_elimination_2_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/biconditional_introduction_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/conjunction_elimination_1_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/conjunction_elimination_2_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/conjunction_introduction_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/disjunction_introduction_1_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/disjunction_introduction_2_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/double_negation_elimination_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/double_negation_introduction_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/equal_terms_substitution_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/equality_commutativity_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/inconsistency_introduction_1_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/inconsistency_introduction_2_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/inconsistency_introduction_3_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/modus_ponens_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/proof_by_contradiction_1_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/proof_by_contradiction_2_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/proof_by_refutation_1_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/proof_by_refutation_2_math_inference_rule.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/variable_substitution_math_inference_rule.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/tao_2006.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/tao_2006/the_peano_axioms.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/tao_2006/the_peano_axioms/report_noproof_enus_plaintext.doctree" afterDir="false" />
@@ -81,6 +159,7 @@
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/tao_2006/the_peano_axioms/report_proof_enus_plaintext.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/tao_2006/the_peano_axioms/report_proof_enus_unicode.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math_concept.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math_inference_rule.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math_theory.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/python.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/class/absorption_declaration_python_class.doctree" afterDir="false" />
@@ -101,20 +180,41 @@
       <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/source_code_repository_python.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_images/graphviz-98a54e703e904d330caf7281dd6be6e85fd2ac58.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_images/graphviz-98a54e703e904d330caf7281dd6be6e85fd2ac58.png.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_images/graphviz-c3ecaabe72699c2e0c0657d7e9cbcb2110c1f0e0.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_images/graphviz-c3ecaabe72699c2e0c0657d7e9cbcb2110c1f0e0.png.map" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_images/punctilious-logo-full-light-200x200-white.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_images/punctilious-logo-full-light-600x600-white.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/absorption.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/biconditional-elimination-1.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/biconditional-elimination-2.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/biconditional-introduction.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/class.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/conjunction-elimination-1.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/conjunction-elimination-2.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/conjunction-introduction.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/declaration.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/disjunction-introduction-1.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/disjunction-introduction-2.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/double-negation-elimination.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/double-negation-introduction.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/equal-terms-substitution.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/equality-commutativity.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/inclusion.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/inconsistency-introduction-1.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/inconsistency-introduction-2.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/inconsistency-introduction-3.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/inference-rule.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/math.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/modus-ponens.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/proof-by-contradiction-1.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/proof-by-contradiction-2.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/proof-by-refutation-1.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/proof-by-refutation-2.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/python.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/sample.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/tagsindex.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/variable-substitution.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/back_matter.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/back_matter/bibliography_back_matter.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/front_matter.rst.txt" afterDir="false" />
@@ -127,6 +227,7 @@
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/index.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/axiom_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/biconditional_elimination_1_math_concept.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/elimination_rule_math_concept.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/formula_math_concept.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/formula_statement_math_concept.rst.txt" afterDir="false" />
@@ -140,12 +241,72 @@
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/object_declaration_math_concept.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/object_inclusion_math_concept.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/object_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/absorption_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/biconditional_elimination_1_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/biconditional_elimination_2_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/biconditional_introduction_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/conjunction_elimination_2_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/conjunction_introduction_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/disjunction_introduction_1_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/disjunction_introduction_2_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/double_negation_elimination_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/double_negation_introduction_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/elimination_rule_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/equal_terms_substitution_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/equality_commutativity_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/formula_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/formula_statement_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/hypothesis_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/inconsistency_introduction_1_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/inconsistency_introduction_2_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/inconsistency_introduction_3_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/inference_rule_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/introduction_rule_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/is_a_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/meta_object_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/modus_ponens_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/notation_form_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/object_creation_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/object_declaration_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/object_inclusion_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/object_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/paragraph_proof_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/proof_by_contradiction_1_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/proof_by_contradiction_2_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/proof_by_refutation_1_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/proof_by_refutation_2_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/relation_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/statement_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/theory_elaboration_sequence_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/universe_of_discourse_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/variable_substitution_math_concept.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/paragraph_proof_math_concept.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/relation_math_concept.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/statement_math_concept.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/theory_elaboration_sequence_math_concept.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/universe_of_discourse_math_concept.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/variable_substitution_math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/absorption_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/biconditional_elimination_1_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/biconditional_elimination_2_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/biconditional_introduction_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/conjunction_elimination_1_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/conjunction_elimination_2_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/conjunction_introduction_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/disjunction_introduction_1_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/disjunction_introduction_2_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/double_negation_elimination_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/double_negation_introduction_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/equal_terms_substitution_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/equality_commutativity_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/inconsistency_introduction_1_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/inconsistency_introduction_2_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/inconsistency_introduction_3_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/modus_ponens_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/proof_by_contradiction_1_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/proof_by_contradiction_2_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/proof_by_refutation_1_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/proof_by_refutation_2_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/variable_substitution_math_inference_rule.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/theory/tao_2006.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/theory/tao_2006/the_peano_axioms.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/theory/tao_2006/the_peano_axioms/report_noproof_enus_plaintext.rst.txt" afterDir="false" />
@@ -153,6 +314,7 @@
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/theory/tao_2006/the_peano_axioms/report_proof_enus_plaintext.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/theory/tao_2006/the_peano_axioms/report_proof_enus_unicode.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math_concept.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math_inference_rule.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/math_theory.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/python.rst.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/absorption_declaration_python_class.rst.txt" afterDir="false" />
@@ -231,15 +393,34 @@
       <change afterPath="$PROJECT_DIR$/docs/build/_tags/absorption.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_tags/biconditional-elimination-1.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_tags/biconditional-elimination-2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/biconditional-introduction.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_tags/class.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_tags/concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/conjunction-elimination-1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/conjunction-elimination-2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/conjunction-introduction.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_tags/declaration.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/disjunction-introduction-1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/disjunction-introduction-2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/double-negation-elimination.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/double-negation-introduction.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/equal-terms-substitution.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/equality-commutativity.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_tags/inclusion.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/inconsistency-introduction-1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/inconsistency-introduction-2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/inconsistency-introduction-3.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_tags/inference-rule.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_tags/math.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/modus-ponens.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/proof-by-contradiction-1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/proof-by-contradiction-2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/proof-by-refutation-1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/proof-by-refutation-2.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_tags/python.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_tags/sample.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/_tags/tagsindex.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/variable-substitution.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/back_matter.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/back_matter/bibliography_back_matter.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/front_matter.html" afterDir="false" />
@@ -283,6 +464,46 @@
       <change afterPath="$PROJECT_DIR$/docs/build/math/concept/object_declaration_math_concept.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/math/concept/object_inclusion_math_concept.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/math/concept/object_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/absorption_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/biconditional_elimination_1_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/biconditional_elimination_2_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/biconditional_introduction_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/conjunction_elimination_1_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/conjunction_elimination_2_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/conjunction_introduction_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/disjunction_introduction_1_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/disjunction_introduction_2_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/double_negation_elimination_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/double_negation_introduction_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/elimination_rule_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/equal_terms_substitution_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/equality_commutativity_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/formula_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/formula_statement_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/hypothesis_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/inconsistency_introduction_1_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/inconsistency_introduction_2_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/inconsistency_introduction_3_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/inference_rule_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/introduction_rule_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/is_a_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/meta_object_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/modus_ponens_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/notation_form_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/object_creation_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/object_declaration_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/object_inclusion_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/object_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/paragraph_proof_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/proof_by_contradiction_1_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/proof_by_contradiction_2_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/proof_by_refutation_1_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/proof_by_refutation_2_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/relation_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/statement_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/theory_elaboration_sequence_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/universe_of_discourse_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/obsolete/variable_substitution_math_concept.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/math/concept/paragraph_proof_math_concept.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/math/concept/proof_by_contradiction_1_math_concept.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/math/concept/proof_by_contradiction_2_math_concept.html" afterDir="false" />
@@ -293,6 +514,28 @@
       <change afterPath="$PROJECT_DIR$/docs/build/math/concept/theory_elaboration_sequence_math_concept.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/math/concept/universe_of_discourse_math_concept.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/math/concept/variable_substitution_math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/absorption_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_1_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_2_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_introduction_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_elimination_1_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_elimination_2_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_introduction_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunction_introduction_1_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunction_introduction_2_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/double_negation_elimination_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/double_negation_introduction_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/equal_terms_substitution_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/equality_commutativity_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_1_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_2_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_3_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/modus_ponens_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_contradiction_1_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_contradiction_2_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_refutation_1_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_refutation_2_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/variable_substitution_math_inference_rule.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/math/theory/tao_2006.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms/report_noproof_enus_plaintext.html" afterDir="false" />
@@ -300,6 +543,7 @@
       <change afterPath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms/report_proof_enus_plaintext.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms/report_proof_enus_unicode.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/math_concept.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math_inference_rule.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/math_theory.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/objects.inv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/py-modindex.html" afterDir="false" />
@@ -322,56 +566,79 @@
       <change afterPath="$PROJECT_DIR$/docs/build/python/source_code_repository_python.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/search.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/build/searchindex.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/biconditional-introduction.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/conjunction-elimination-1.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/conjunction-elimination-2.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/conjunction-introduction.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/disjunction-introduction-1.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/disjunction-introduction-2.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/double-negation-elimination.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/double-negation-introduction.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/equal-terms-substitution.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/equality-commutativity.rst" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/source/_tags/inclusion.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/_template.rstinc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/absorption_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/biconditional_elimination_1_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/biconditional_elimination_2_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/biconditional_introduction_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/conjunction_elimination_1_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/conjunction_elimination_2_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/conjunction_introduction_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/disjunction_introduction_1_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/disjunction_introduction_2_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/double_negation_elimination_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/double_negation_introduction_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/elimination_rule_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/equal_terms_substitution_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/equality_commutativity_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/formula_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/formula_statement_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/hypothesis_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/inconsistency_introduction_1_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/inconsistency_introduction_2_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/inconsistency_introduction_3_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/inference_rule_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/introduction_rule_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/is_a_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/meta_object_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/modus_ponens_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/notation_form_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/object_creation_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/object_declaration_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/object_inclusion_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/object_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/paragraph_proof_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/proof_by_contradiction_1_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/proof_by_contradiction_2_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/proof_by_refutation_1_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/proof_by_refutation_2_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/relation_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/statement_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/theory_elaboration_sequence_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/universe_of_discourse_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/concept/obsolete/variable_substitution_math_concept.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rules/absorption_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/inconsistency-introduction-1.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/inconsistency-introduction-2.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/inconsistency-introduction-3.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/modus-ponens.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/proof-by-contradiction-1.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/proof-by-contradiction-2.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/proof-by-refutation-1.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/proof-by-refutation-2.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/variable-substitution.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/absorption_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/absorption_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/biconditional_elimination_1_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/biconditional_elimination_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/biconditional_elimination_2_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/biconditional_elimination_2_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/biconditional_introduction_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/biconditional_introduction_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/conjunction_elimination_1_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/conjunction_elimination_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/conjunction_elimination_2_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/conjunction_elimination_2_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/conjunction_introduction_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/conjunction_introduction_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunction_introduction_1_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunction_introduction_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunction_introduction_2_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunction_introduction_2_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/double_negation_elimination_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/double_negation_elimination_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/double_negation_introduction_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/double_negation_introduction_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/equal_terms_substitution_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/equal_terms_substitution_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/equality_commutativity_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/equality_commutativity_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/inconsistency_introduction_1_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/inconsistency_introduction_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/inconsistency_introduction_2_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/inconsistency_introduction_2_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/inconsistency_introduction_3_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/inconsistency_introduction_3_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/modus_ponens_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/modus_ponens_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_contradiction_1_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_contradiction_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_contradiction_2_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_contradiction_2_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_refutation_1_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_refutation_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_refutation_2_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_refutation_2_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/variable_substitution_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/variable_substitution_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math_inference_rule.rst" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/source/python/class/biconditional_elimination_1_declaration_python_class.rst" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/docs/source/python/class/biconditional_elimination_1_inclusion_python_class.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/generate_docs_inference_rules_math_concepts.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/generate_docs_inference_rules_math_concepts.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/bibliography_bibtex.bib" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/bibliography_bibtex.bib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/conf.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/_tags/absorption.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/absorption.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/_tags/biconditional-elimination-1.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/biconditional-elimination-1.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/biconditional-elimination-2.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/biconditional-elimination-2.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/_tags/class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/class.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/_tags/concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/concept.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/_tags/declaration.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/declaration.rst" afterDir="false" />
@@ -379,8 +646,9 @@
       <change beforePath="$PROJECT_DIR$/docs/source/_tags/math.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/math.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/_tags/python.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/python.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/_tags/tagsindex.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/tagsindex.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/math/concept/absorption_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/absorption_math_concept.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/biconditional_elimination_1_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/biconditional_elimination_1_math_concept.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/biconditional_elimination_1_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/obsolete/conjunction_elimination_1_math_concept.rst.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/math/concept/biconditional_elimination_2_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/biconditional_elimination_2_math_concept.rst.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/math/concept/biconditional_introduction_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/biconditional_introduction_math_concept.rst.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/math/concept/conjunction_elimination_1_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/conjunction_elimination_1_math_concept.rst.txt" afterDir="false" />
@@ -401,26 +669,10 @@
       <change beforePath="$PROJECT_DIR$/docs/source/math/concept/proof_by_contradiction_2_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/proof_by_contradiction_2_math_concept.rst.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/math/concept/proof_by_refutation_1_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/proof_by_refutation_1_math_concept.rst.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/math/concept/proof_by_refutation_2_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/proof_by_refutation_2_math_concept.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/variable_substitution_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/variable_substitution_math_concept.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math_concept.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/python/class/absorption_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/class/absorption_declaration_python_class.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/python/class/absorption_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/class/absorption_inclusion_python_class.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/build_docs.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/build_docs.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/build_windows_run_build.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/build_windows_run_build.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/distribute_windows_upload_to_pypi.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/distribute_windows_upload_to_pypi.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/distribute_windows_upload_to_testpypi.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/distribute_windows_upload_to_testpypi.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/install_in_venv_from_pypi__windows.ps1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/install_punctilious_from_dev.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/install_punctilious_from_dev.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/prebuild_generate_sample_outputs.log" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_generate_sample_outputs.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/prebuild_generate_sample_outputs.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_generate_sample_outputs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/prebuild_generate_theory_interactive_graphs.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_generate_theory_interactive_graphs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/prebuild_generate_theory_reports.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_generate_theory_reports.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/prebuild_run_test_legacy.log" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_run_test_legacy.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/prebuild_run_test_legacy.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_run_test_legacy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/prebuild_windows_increment_version_patch.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_windows_increment_version_patch.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/prebuild_windows_upgrade_pip.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_windows_upgrade_pip.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/sandbox_1.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/sandbox_1.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/sandbox_2.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/sandbox_2.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/start_venv.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/start_venv.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/stop_venv.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/stop_venv.ps1" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -506,17 +758,17 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "dev",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/docs/source/math/concept/obsolete",
-    "settings.editor.selected.configurable": "preferences.sourceCode.Markdown"
+    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/docs/source",
+    "settings.editor.selected.configurable": "preferences.fileTypes"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\inference_rules" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\concept\obsolete" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\python\class" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\scripts" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\python\sample" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\theory\tao_2006\chapter_2_1_the_peano_axioms" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\inference_rules" />
@@ -526,7 +778,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.generate_docs_inference_rules_math_concepts">
+  <component name="RunManager" selected="Python docs.Sphinx HTML">
     <configuration name="build_docs.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/scripts/build_docs.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
       <envs />
       <method v="2" />
@@ -799,14 +1051,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00231" summary="enhance documentation and publish on readthedocs #48">
-      <option name="closed" value="true" />
-      <created>1694267609895</created>
-      <option name="number" value="00231" />
-      <option name="presentableId" value="LOCAL-00231" />
-      <option name="project" value="LOCAL" />
-      <updated>1694267609895</updated>
     </task>
     <task id="LOCAL-00232" summary="enhance documentation and publish on readthedocs #48">
       <option name="closed" value="true" />
@@ -1192,7 +1436,15 @@
       <option name="project" value="LOCAL" />
       <updated>1694728082557</updated>
     </task>
-    <option name="localTasksCounter" value="280" />
+    <task id="LOCAL-00280" summary="#201">
+      <option name="closed" value="true" />
+      <created>1694777914447</created>
+      <option name="number" value="00280" />
+      <option name="presentableId" value="LOCAL-00280" />
+      <option name="project" value="LOCAL" />
+      <updated>1694777914447</updated>
+    </task>
+    <option name="localTasksCounter" value="281" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
