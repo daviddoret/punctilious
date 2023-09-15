@@ -6684,7 +6684,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
 
 class AbsorptionInclusion(InferenceRuleInclusion):
-    """The inclusion of :ref:`absorption_math_concept` as a valid :ref:`inference-rule` in the :ref:`theory-elaboration-sequence`.
+    """The :ref:`inclusion<object_inclusion_math_concept>` of :ref:`absorption<absorption_math_concept>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in the :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6699,7 +6699,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p_implies_q: (None, Formula, FormulaStatement) = None,
             echo: (None, bool) = None):
-        """Apply the absorption inference-rule and return the inferred-formula.
+        """Apply the :ref:`absorption<absorption_math_concept>` :ref:`inference-rule<inference_rule_math_concept>` and return the inferred :ref:`formula<formula_math_concept>`.
 
         :param p_implies_q: (mandatory) The implication statement.
         :return: The inferred formula q.

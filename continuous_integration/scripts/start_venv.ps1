@@ -10,11 +10,11 @@ if ($environment_directory -eq "")
 }
 
 $current_step = 1
-Write-Host "Script: $( $script ). Step: $( $current_step ) / $( $total_step ). python -m venv $( $environment_directory )"
+Write-Output "Script: $( $script ). Step: $( $current_step ) / $( $total_step ). python -m venv $( $environment_directory )"
 Invoke-Expression -Command "python -m venv $( $environment_directory )"
 
 $current_step = 2
-Write-Host "Script: $script. Step: $current_step / $total_step. $( $environment_directory )\Scripts\activate"
+Write-Output "Script: $script. Step: $current_step / $total_step. $( $environment_directory )\Scripts\activate"
 Invoke-Expression -Command "$( $environment_directory )\Scripts\activate"
 
 return $environment_directory
