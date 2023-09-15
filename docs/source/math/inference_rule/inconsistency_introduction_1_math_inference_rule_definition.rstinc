@@ -1,7 +1,7 @@
 Definition
 ----------
 
-*inconsistency-introduction-1* is the :ref:`inference-rule`:
+*inconsistency-introduction-1* is the :ref:`inference-rule<inference_rule_math_concept>`:
 
 .. math::
 

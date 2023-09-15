@@ -1,7 +1,7 @@
 Definition
 ----------
 
-*double-negation-introduction* is the well-known and valid :ref:`inference-rule`:
+*double-negation-introduction* is the well-known and valid :ref:`inference-rule<inference_rule_math_concept>`:
 
 .. math::
 

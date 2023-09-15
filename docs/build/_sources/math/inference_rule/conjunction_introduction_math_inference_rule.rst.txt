@@ -1,4 +1,4 @@
-.. _conjunction_introduction_math_concept:
+.. _conjunction_introduction_math_inference_rule:
 
 .. role:: python(code)
     :language: py
@@ -14,4 +14,4 @@ conjunction-introduction (math concept)
 Definition
 ----------
 
-.. include:: conjunction_introduction_math_concept_definition.rstinc
+.. include:: conjunction_introduction_math_inference_rule_definition.rstinc

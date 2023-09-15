@@ -1,7 +1,7 @@
 Definition
 ----------
 
-*disjunction-introduction-1* is the :ref:`inference-rule`:
+*disjunction-introduction-1* is the :ref:`inference-rule<inference_rule_math_concept>`:
 
 .. math::
 

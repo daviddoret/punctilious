@@ -1,4 +1,4 @@
-.. _biconditional_introduction_math_concept:
+.. _biconditional_introduction_math_inference_rule:
 
 .. role:: python(code)
     :language: py
@@ -14,4 +14,4 @@ biconditional-introduction (math concept)
 Definition
 ----------
 
-.. include:: biconditional_introduction_math_concept_definition.rstinc
+.. include:: biconditional_introduction_math_inference_rule_definition.rstinc

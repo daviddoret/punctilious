@@ -1,4 +1,4 @@
-.. _conjunction_elimination_1_math_concept:
+.. _conjunction_elimination_1_math_inference_rule:
 
 .. role:: python(code)
     :language: py
@@ -14,4 +14,4 @@ conjunction-elimination-1 (math concept)
 Definition
 ----------
 
-.. include:: conjunction_elimination_1_math_concept_definition.rstinc
+.. include:: conjunction_elimination_1_math_inference_rule_definition.rstinc

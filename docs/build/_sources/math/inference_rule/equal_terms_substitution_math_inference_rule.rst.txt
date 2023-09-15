@@ -1,4 +1,4 @@
-.. _equal_terms_substitution_math_concept:
+.. _equal_terms_substitution_math_inference_rule:
 
 .. role:: python(code)
     :language: py
@@ -14,4 +14,4 @@ equal-terms-substitution (math concept)
 Definition
 ----------
 
-.. include:: equal_terms_substitution_math_concept_definition.rstinc
+.. include:: equal_terms_substitution_math_inference_rule_definition.rstinc

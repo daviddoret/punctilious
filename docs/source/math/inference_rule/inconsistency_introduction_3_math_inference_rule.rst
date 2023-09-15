@@ -1,4 +1,4 @@
-.. _inconsistency_introduction_3_math_concept:
+.. _inconsistency_introduction_3_math_inference_rule:
 
 .. role:: python(code)
     :language: py
@@ -14,4 +14,4 @@ inconsistency-introduction-3 (math concept)
 Definition
 ----------
 
-.. include:: inconsistency_introduction_3_math_concept_definition.rstinc
+.. include:: inconsistency_introduction_3_math_inference_rule_definition.rstinc

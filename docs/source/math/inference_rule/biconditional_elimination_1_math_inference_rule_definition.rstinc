@@ -1,4 +1,4 @@
-*biconditional-elimination-1* is the :ref:`inference-rule`:
+*biconditional-elimination-1* is the :ref:`inference-rule<inference_rule_math_concept>`:
 
 .. math::
 
@@ -6,8 +6,8 @@
 
 Where:
 
-* :math:`P \iff Q` is a :ref:`formula-statement`
-* :math:`P` is a propositional :ref:`formula`
-* :math:`Q` is a propositional :ref:`formula`
+* :math:`P \iff Q` is a :ref:`formula-statement<formula_statement_math_concept>`
+* :math:`P` is a propositional :ref:`formula<formula_math_concept>`
+* :math:`Q` is a propositional :ref:`formula<formula_math_concept>`
 
 In straightforward language, if P is true if and only if Q is true, it follows that P implies Q.

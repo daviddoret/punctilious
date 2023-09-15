@@ -1,4 +1,4 @@
-.. _biconditional_elimination_2_math_concept:
+.. _biconditional_elimination_2_math_inference_rule:
 
 .. role:: python(code)
     :language: py
@@ -14,4 +14,4 @@ biconditional-elimination-2 (math concept)
 Definition
 ----------
 
-.. include:: biconditional_elimination_2_math_concept_definition.rstinc
+.. include:: biconditional_elimination_2_math_inference_rule_definition.rstinc

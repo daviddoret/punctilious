@@ -1,4 +1,4 @@
-.. _proof_by_contradiction_1_math_concept:
+.. _proof_by_contradiction_1_math_inference_rule:
 
 .. role:: python(code)
     :language: py
@@ -14,4 +14,4 @@ proof-by-contradiction-1 (math concept)
 Definition
 ----------
 
-.. include:: proof_by_contradiction_1_math_concept_definition.rstinc
+.. include:: proof_by_contradiction_1_math_inference_rule_definition.rstinc

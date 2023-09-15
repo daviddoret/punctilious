@@ -1,7 +1,7 @@
 Definition
 ----------
 
-*equality-commutativity* is the well-known and valid :ref:`inference-rule`:
+*equality-commutativity* is the well-known and valid :ref:`inference-rule<inference_rule_math_concept>`:
 
 .. math::
 
@@ -9,4 +9,4 @@ Definition
 
 Where:
 
-* :math:`x = y` is a :ref:`formula-statement` of the form :math:`x = y`
+* :math:`x = y` is a :ref:`formula-statement<formula_statement_math_concept>` of the form :math:`x = y`

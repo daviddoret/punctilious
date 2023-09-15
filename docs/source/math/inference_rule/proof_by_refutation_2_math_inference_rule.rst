@@ -1,4 +1,4 @@
-.. _proof_by_refutation_2_math_concept:
+.. _proof_by_refutation_2_math_inference_rule:
 
 .. role:: python(code)
     :language: py
@@ -14,4 +14,4 @@ proof-by-refutation-2 (math concept)
 Definition
 ----------
 
-.. include:: proof_by_refutation_2_math_concept_definition.rstinc
+.. include:: proof_by_refutation_2_math_inference_rule_definition.rstinc

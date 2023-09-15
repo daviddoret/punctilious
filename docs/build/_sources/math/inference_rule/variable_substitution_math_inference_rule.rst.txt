@@ -1,4 +1,4 @@
-.. _variable_substitution_math_concept:
+.. _variable_substitution_math_inference_rule:
 
 .. role:: python(code)
     :language: py
@@ -14,4 +14,4 @@ variable-substitution (math concept)
 Definition
 ----------
 
-.. include:: variable_substitution_math_concept_definition.rstinc
+.. include:: variable_substitution_math_inference_rule_definition.rstinc

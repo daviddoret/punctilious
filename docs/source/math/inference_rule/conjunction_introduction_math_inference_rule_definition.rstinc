@@ -1,7 +1,7 @@
 Definition
 -----------
 
-*conjunction-introduction* is the well-known and valid :ref:`inference-rule`:
+*conjunction-introduction* is the well-known and valid :ref:`inference-rule<inference_rule_math_concept>`:
 
 .. math::
 

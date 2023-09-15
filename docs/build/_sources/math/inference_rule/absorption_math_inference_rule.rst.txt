@@ -1,4 +1,4 @@
-.. _absorption_math_concept:
+.. _absorption_math_inference_rule:
 
 .. role:: python(code)
     :language: py
@@ -14,4 +14,4 @@ absorption (math concept)
 Definition
 ----------
 
-.. include:: absorption_math_concept_definition.rstinc
+.. include:: absorption_math_inference_rule_definition.rstinc

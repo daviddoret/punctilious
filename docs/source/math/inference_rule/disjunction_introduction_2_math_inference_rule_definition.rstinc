@@ -1,7 +1,7 @@
 Definition
 ----------
 
-*disjunction-introduction-2* is the well-known and valid :ref:`inference-rule`:
+*disjunction-introduction-2* is the well-known and valid :ref:`inference-rule<inference_rule_math_concept>`:
 
 .. math::
 

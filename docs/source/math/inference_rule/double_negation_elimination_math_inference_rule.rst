@@ -1,4 +1,4 @@
-.. _double_negation_elimination_math_concept:
+.. _double_negation_elimination_math_inference_rule:
 
 .. role:: python(code)
     :language: py
@@ -14,4 +14,4 @@ double-negation-elimination (math concept)
 Definition
 ----------
 
-.. include:: double_negation_elimination_math_concept_definition.rstinc
+.. include:: double_negation_elimination_math_inference_rule_definition.rstinc

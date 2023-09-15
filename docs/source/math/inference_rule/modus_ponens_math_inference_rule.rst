@@ -1,4 +1,4 @@
-.. _modus_ponens_math_concept:
+.. _modus_ponens_math_inference_rule:
 
 .. role:: python(code)
     :language: py
@@ -14,4 +14,4 @@ modus-ponens (math concept)
 Definition
 ----------
 
-.. include:: modus_ponens_math_concept_definition.rstinc
+.. include:: modus_ponens_math_inference_rule_definition.rstinc

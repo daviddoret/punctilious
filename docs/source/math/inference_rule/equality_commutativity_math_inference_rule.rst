@@ -1,4 +1,4 @@
-.. _equality_commutativity_math_concept:
+.. _equality_commutativity_math_inference_rule:
 
 .. role:: python(code)
     :language: py
@@ -14,4 +14,4 @@ equality-commutativity (math concept)
 Definition
 ----------
 
-.. include:: equality_commutativity_math_concept_definition.rstinc
+.. include:: equality_commutativity_math_inference_rule_definition.rstinc

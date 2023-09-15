@@ -1,4 +1,4 @@
-.. _disjunction_introduction_2_math_concept:
+.. _disjunction_introduction_2_math_inference_rule:
 
 .. role:: python(code)
     :language: py
@@ -14,4 +14,4 @@ disjunction-introduction-2 (math concept)
 Definition
 ----------
 
-.. include:: disjunction_introduction_2_math_concept_definition.rstinc
+.. include:: disjunction_introduction_2_math_inference_rule_definition.rstinc

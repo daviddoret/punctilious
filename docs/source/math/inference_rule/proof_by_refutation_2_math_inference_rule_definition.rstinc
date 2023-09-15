@@ -4,7 +4,7 @@ proof-by-refutation-2
 Definition
 ----------
 
-*proof-by-refutation-2* is the :ref:`inference-rule`:
+*proof-by-refutation-2* is the :ref:`inference-rule<inference_rule_math_concept>`:
 
 .. math::
 
