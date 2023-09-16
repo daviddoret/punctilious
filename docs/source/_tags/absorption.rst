@@ -8,4 +8,4 @@ My tags: absorption
     ../math/inference_rule/absorption_math_inference_rule.rst
     ../python/class/absorption_declaration_python_class.rst
     ../python/class/absorption_inclusion_python_class.rst
-    ../python/sample/sample_absorption_python.rst
+    ../python/sample/absorption_python_sample.rst

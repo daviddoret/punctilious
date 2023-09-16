@@ -8,3 +8,4 @@ My tags: conjunction-introduction
     ../math/inference_rule/conjunction_introduction_math_inference_rule.rst
     ../python/class/conjunction_introduction_declaration_python_class.rst
     ../python/class/conjunction_introduction_inclusion_python_class.rst
+    ../python/sample/conjunction_introduction_python_sample.rst

@@ -8,3 +8,4 @@ My tags: double-negation-elimination
     ../math/inference_rule/double_negation_elimination_math_inference_rule.rst
     ../python/class/double_negation_elimination_declaration_python_class.rst
     ../python/class/double_negation_elimination_inclusion_python_class.rst
+    ../python/sample/double_negation_elimination_python_sample.rst

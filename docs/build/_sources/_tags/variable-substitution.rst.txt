@@ -8,3 +8,4 @@ My tags: variable-substitution
     ../math/inference_rule/variable_substitution_math_inference_rule.rst
     ../python/class/variable_substitution_declaration_python_class.rst
     ../python/class/variable_substitution_inclusion_python_class.rst
+    ../python/sample/variable_substitution_python_sample.rst
