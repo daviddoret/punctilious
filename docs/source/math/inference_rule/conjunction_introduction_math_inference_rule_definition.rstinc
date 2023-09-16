@@ -1,11 +1,19 @@
 Definition
 -----------
 
-*conjunction-introduction* is the well-known and valid :ref:`inference-rule<inference_rule_math_concept>`:
+*conjunction-introduction* is :ref:`inference-rule<inference_rule_math_concept>`:
 
 .. math::
 
     (P, Q) \vdash \left( P \land Q \right)
+
+Where:
+
+   * :math:`P` is a :ref:`formula-statement<formula_statement_math_concept>`
+   * :math:`Q` is a :ref:`formula-statement<formula_statement_math_concept>`
+   * :math:`P \land Q` is a :ref:`formula-statement<formula_statement_math_concept>`
+
+In straightforward language, if :math:`P` is true, if :math:`Q` is true, it follows that both :math:`P` and :math:`Q` are true.
 
 Quotes
 ------

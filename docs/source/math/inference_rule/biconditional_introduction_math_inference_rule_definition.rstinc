@@ -1,3 +1,6 @@
+Definition
+----------
+
 *biconditional-introduction* is the :ref:`inference-rule<inference_rule_math_concept>`:
 
 .. math::
@@ -6,9 +9,9 @@
 
 Where:
 
-* :math:`P \implies Q` is a :ref:`formula-statement<formula_statement_math_concept>`
-* :math:`Q \implies P` is a :ref:`formula-statement<formula_statement_math_concept>`
-* :math:`P` is a propositional :ref:`formula<formula_math_concept>`
-* :math:`Q` is a propositional :ref:`formula<formula_math_concept>`
+   * :math:`P \implies Q` is a :ref:`formula-statement<formula_statement_math_concept>`
+   * :math:`Q \implies P` is a :ref:`formula-statement<formula_statement_math_concept>`
+   * :math:`P` is a propositional :ref:`formula<formula_math_concept>`
+   * :math:`Q` is a propositional :ref:`formula<formula_math_concept>`
 
 In straightforward language, if P implies Q and Q implies P, it follows that P if and only if Q.

@@ -1,8 +1,24 @@
+Definition
+----------
+
+*variable-substitution* is the :ref:`inference-rule<inference_rule_math_concept>`:
+
 .. math::
 
-    \left( P, \Phi \right)  \vdash Q'
+    \left( P, \Phi \right)  \vdash P'
 
 Where:
-* P is any valid formula-statement that contains n variables,
-* Phi is a sequence of n well-formed formulae,
-* Q is a modified P formula-statement where variables in P have been replaced by the corresponding formulae in Phi
+
+   * :math:`P` is a :ref:`formula-statement<formula_statement_math_concept>` that includes :math:`n` :ref:`free-variables<free_variable_math_concept>`, where :math:`n` is a natural-number
+   * :math:`\Phi` is a sequence of :math:`n` well-formed formulae,
+   * :math:`P'` is a modified version of :math:`P` whose variables have been substituted with the corresponding formulae in :math:`\Phi`
+
+Multiple algorithms are possible to implement *variable-substitution*. *Punctilious* uses the following algorithm:
+
+   1. Parse :math:`P` top-down first, left-right second
+   2. Whenever a free-variable is newly encountered during parsing, assign it a sequential number
+   3. Following order, pair every free-variable in that sequence of free-variables with formulae in :math:`\Phi`
+   4. Parse :math:`P` and substitute every occurrence of free-variables with its paired formula
+
+In straightforward language, substitute the free-variables in :math:`P` with the formulae in :math:`Phi`.
+
