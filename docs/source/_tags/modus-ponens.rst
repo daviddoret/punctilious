@@ -6,3 +6,5 @@ My tags: modus-ponens
     :caption: With this tag
 
     ../math/inference_rule/modus_ponens_math_inference_rule.rst
+    ../python/class/modus_ponens_declaration_python_class.rst
+    ../python/class/modus_ponens_inclusion_python_class.rst

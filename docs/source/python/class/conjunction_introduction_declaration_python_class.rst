@@ -1,0 +1,17 @@
+.. _conjunction_introduction_declaration_python_class:
+
+.. role:: python(code)
+   :language: py
+
+.. tags:: conjunction-introduction, python, declaration, class
+
+Conjunction-IntroductionDeclaration (python class)
+========================================================================
+
+.. seealso::
+   :ref:`math concept<conjunction_introduction_math_inference_rule>` | :ref:`python inclusion class<conjunction_introduction_inclusion_python_class>` | :ref:`python sample<conjunction_introduction_python_sample>`
+
+.. module:: core
+   :noindex:
+.. autoclass:: Conjunction-IntroductionDeclaration
+   :members:

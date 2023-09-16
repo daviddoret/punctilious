@@ -6,10 +6,10 @@
 .. tags:: absorption, python, inclusion, class
 
 AbsorptionInclusion (python class)
-============================================
+=========================================================================
 
 .. seealso::
-   :ref:`math concept<absorption_math_concept>` | :ref:`python declaration class<absorption_declaration_python_class>` | :ref:`python sample<absorption_python_sample>`
+   :ref:`math concept<absorption_math_inference_rule>` | :ref:`python declaration class<absorption_declaration_python_class>` | :ref:`python sample<absorption_python_sample>`
 
 .. module:: core
    :noindex:
