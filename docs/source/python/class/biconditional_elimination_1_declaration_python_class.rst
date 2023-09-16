@@ -1,11 +1,12 @@
 .. _biconditional_elimination_1_declaration_python_class:
+.. _BiconditionalElimination1:
 
 .. role:: python(code)
    :language: py
 
 .. tags:: biconditional-elimination-1, python, declaration, class
 
-Biconditional-Elimination-1Declaration (python class)
+BiconditionalElimination1Declaration (python class)
 ========================================================================
 
 .. seealso::
@@ -13,5 +14,5 @@ Biconditional-Elimination-1Declaration (python class)
 
 .. module:: core
    :noindex:
-.. autoclass:: Biconditional-Elimination-1Declaration
+.. autoclass:: BiconditionalElimination1Declaration
    :members:

@@ -1,4 +1,5 @@
 .. _absorption_inclusion_python_class:
+.. _Absorption:
 
 .. role:: python(code)
    :language: py

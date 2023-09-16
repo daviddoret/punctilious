@@ -31,8 +31,8 @@ inference_rules = ['absorption', 'biconditional-elimination-1', 'biconditional-e
 for ir in inference_rules:
     dashed_name = ir
     underscored_name = ir.replace("-", "_")
-    pascalcased_name = ir.replace("_", " ").title().replace(" ", "")
-    print(f'Generate: {ir}')
+    pascalcased_name = ir.replace("_", " ").title().replace(" ", "").replace("-", "")
+    # print(f'Generate: {ir}')
     filename = f'{underscored_name}_math_inference_rule.rst'
     file_path = os.path.abspath(os.path.join(math_path, filename))
     rst_file_content = math_template.render(script_name=script_name, dashed_name=dashed_name,
@@ -40,6 +40,7 @@ for ir in inference_rules:
     with open(file_path, 'w') as f:
         f.write(rst_file_content)
     filename = f'{underscored_name}_declaration_python_class.rst'
+    print(f'{underscored_name}_declaration_python_class')
     file_path = os.path.abspath(os.path.join(python_path, filename))
     rst_file_content = declaration_python_class_template.render(script_name=script_name,
         dashed_name=dashed_name, underscored_name=underscored_name,
@@ -48,6 +49,7 @@ for ir in inference_rules:
         f.write(rst_file_content)
     filename = f'{underscored_name}_inclusion_python_class.rst'
     file_path = os.path.abspath(os.path.join(python_path, filename))
+    print(f'{underscored_name}_inclusion_python_class')
     rst_file_content = inclusion_python_class_template.render(script_name=script_name,
         dashed_name=dashed_name, underscored_name=underscored_name,
         pascalcased_name=pascalcased_name)
