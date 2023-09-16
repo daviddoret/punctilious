@@ -5,4 +5,11 @@ Definition
 
 .. math::
 
-    \left( \mathcal{H} assume \not \mathbf{P}, Inc\left(\mathcal{H}\right)  \right) \vdash \mathbf{P}
+    \left( \boldsymbol{\mathcal{H}} assume \not \mathbf{P}, Inc\left(\mathcal{H}\right)  \right) \vdash \mathbf{P}
+	
+Where:
+
+ * :math:`\boldsymbol{\mathcal{H}}` is an :ref:`hypothesis`
+ * :math:`\boldsymbol{P}` is :ref:`formula<formula_math_concept>`
+
+In plain language, if we pose the hypothesis that a proposition :math:`\boldsymbol{P}` is not true, and if we refute that hypothesis by proving :math:`\boldsymbol{P}`, the inconsistency of that hypothesis follows from this contradiction, and :math:`\boldsymbol{P}` follows from that inconsistency.

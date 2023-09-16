@@ -5,7 +5,7 @@ Definition
 
 .. math::
 
-   \left( P \neq P \right) \vdash Inc\left(\mathcal{T}\right)
+   \left( \mathbf{P} \neq P \right) \vdash Inc\left(\mathcal{T}\right)
 
 In straightforward language, if we prove that an object is not equal to itself, it follows that the theory is inconsistent.
 

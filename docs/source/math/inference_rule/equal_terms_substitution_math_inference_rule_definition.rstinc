@@ -5,10 +5,10 @@ Definition
 
 .. math::
 
-    \left( P, x = y \right) \vdash Q
+    \left( \mathbf{P}, x = y \right) \vdash \mathbf{Q}
 
 Where:
 
-* :math:`P` is a :ref:`formula-statement<formula_statement_math_concept>`
+* :math:`\mathbf{P}` is a :ref:`formula-statement<formula_statement_math_concept>`
 * :math:`x = y` is a :ref:`formula-statement<formula_statement_math_concept>` of the form :math:`x = y`
-* :math:`Q` is a :ref:`formula-statement<formula_statement_math_concept>` identical to :math:`P` except that every occurrences of :math:`x` in :math:`P` are substituted with :math:`y`
+* :math:`\mathbf{Q}` is a :ref:`formula-statement<formula_statement_math_concept>` identical to :math:`\mathbf{P}` except that every occurrences of :math:`x` in :math:`\mathbf{P}` are substituted with :math:`y`

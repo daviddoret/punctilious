@@ -5,8 +5,49 @@ Python classes
    :maxdepth: 1
    :caption: Class
 
-   AbsorptionDeclaration<absorption_declaration_python_class>
-   AbsorptionInclusion<absorption_inclusion_python_class>
+   absorption_declaration_python_class
+   absorption_inclusion_python_class
+   biconditional_elimination_1_declaration_python_class
+   biconditional_elimination_1_inclusion_python_class
+   biconditional_elimination_2_declaration_python_class
+   biconditional_elimination_2_inclusion_python_class
+   biconditional_introduction_declaration_python_class
+   biconditional_introduction_inclusion_python_class
+   conjunction_elimination_1_declaration_python_class
+   conjunction_elimination_1_inclusion_python_class
+   conjunction_elimination_2_declaration_python_class
+   conjunction_elimination_2_inclusion_python_class
+   conjunction_introduction_declaration_python_class
+   conjunction_introduction_inclusion_python_class
+   disjunction_introduction_1_declaration_python_class
+   disjunction_introduction_1_inclusion_python_class
+   disjunction_introduction_2_declaration_python_class
+   disjunction_introduction_2_inclusion_python_class
+   double_negation_elimination_declaration_python_class
+   double_negation_elimination_inclusion_python_class
+   double_negation_introduction_declaration_python_class
+   double_negation_introduction_inclusion_python_class
+   equal_terms_substitution_declaration_python_class
+   equal_terms_substitution_inclusion_python_class
+   equality_commutativity_declaration_python_class
+   equality_commutativity_inclusion_python_class
+   inconsistency_introduction_1_declaration_python_class
+   inconsistency_introduction_1_inclusion_python_class
+   inconsistency_introduction_2_declaration_python_class
+   inconsistency_introduction_2_inclusion_python_class
+   inconsistency_introduction_3_declaration_python_class
+   inconsistency_introduction_3_inclusion_python_class
    InferenceRuleDeclaration<inference_rule_declaration_python_class>
+   modus_ponens_declaration_python_class
+   modus_ponens_inclusion_python_class
+   proof_by_contradiction_1_declaration_python_class
+   proof_by_contradiction_1_inclusion_python_class
+   proof_by_contradiction_2_declaration_python_class
+   proof_by_contradiction_2_inclusion_python_class
+   proof_by_refutation_1_declaration_python_class
+   proof_by_refutation_1_inclusion_python_class
+   proof_by_refutation_2_declaration_python_class
+   proof_by_refutation_2_inclusion_python_class
    UniverseOfDiscourse<universe_of_discourse_python_class>
-
+   variable_substitution_declaration_python_class
+   variable_substitution_inclusion_python_class
