@@ -1,0 +1,8 @@
+Definition
+----------
+
+*proof-by-refutation-2* is the :ref:`inference-rule<inference_rule_math_concept>`:
+
+.. math::
+
+    \left( \mathcal{H} assume \not \mathbf{P}, Inc\left(\mathcal{H}\right)  \right) \vdash \mathbf{P}

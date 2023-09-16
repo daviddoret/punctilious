@@ -1,9 +1,9 @@
 .. _inference_rule_math_concept:
-.. _inference-rule:
-.. _inference-rules:
 
 .. role:: python(code)
     :language: py
+
+.. tags:: inference-rule
 
 inference-rule
 ==============
@@ -22,7 +22,7 @@ Synonyms
 List of inference-rules natively supported by punctilious
 ------------------------------------------------------------
 
-* :ref:`absorption`
+* :ref:`absorption<absorption_math_concept>`
 * :ref:`biconditional-elimination-1`
 * :ref:`biconditional-elimination-2`
 * :ref:`biconditional-introduction`

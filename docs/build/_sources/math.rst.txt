@@ -9,5 +9,6 @@ The rationale is to keep clearly distinct but cross referenced mathematical and 
    :titlesonly:
    :caption: Table of contents
 
-   Concept<math_concept>
-   Theory<math_theory>
+   Concepts<math_concept>
+   Inference rules<math_inference_rule>
+   Theories<math_theory>

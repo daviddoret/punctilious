@@ -1,0 +1,10 @@
+Definition
+----------
+
+*inconsistency-introduction-1* is the :ref:`inference-rule<inference_rule_math_concept>`:
+
+.. math::
+
+   \left( P, \neg \left(P\right) \right) \vdash Inc\left(\mathcal{T}\right)
+
+In straightforward language, if we prove a proposition and its negation, it follows that the theory is inconsistent.

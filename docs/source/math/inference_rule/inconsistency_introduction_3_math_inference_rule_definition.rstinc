@@ -1,0 +1,15 @@
+Definition
+----------
+
+*inconsistency-introduction-3* is the :ref:`inference-rule<inference_rule_math_concept>`:
+
+.. math::
+
+   \left( P \neq P \right) \vdash Inc\left(\mathcal{T}\right)
+
+In straightforward language, if we prove that an object is not equal to itself, it follows that the theory is inconsistent.
+
+Quotes
+----------
+
+   A proof of consistency will have to show, by appealing to contentual considerations which are completely unproblematic, that in the formalism in question it is never possible to derive the formula 𝑎 ≠ 𝑎, or alternatively it is not possible to prove both 𝑎 = 𝑏 and 𝑎 ≠ 𝑏. :cite:p:`mancosu_2021_introductionprooftheorynormalization{p. 5}`

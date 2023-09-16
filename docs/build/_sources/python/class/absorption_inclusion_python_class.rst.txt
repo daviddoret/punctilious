@@ -3,6 +3,8 @@
 .. role:: python(code)
    :language: py
 
+.. tags:: absorption, python, inclusion, class
+
 AbsorptionInclusion (python class)
 ============================================
 

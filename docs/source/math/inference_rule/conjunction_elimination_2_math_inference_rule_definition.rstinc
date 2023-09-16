@@ -1,0 +1,16 @@
+Definition
+----------
+
+*conjunction-elimination-2* is the :ref:`inference-rule<inference_rule_math_concept>`:
+
+.. math::
+
+   \left( P \land Q \right) \vdash Q
+
+Where:
+
+   * :math:`P \land Q` is a :ref:`formula-statement<formula_statement_math_concept>`
+   * :math:`P` is a propositional :ref:`formula<formula_math_concept>`
+   * :math:`Q` is a propositional :ref:`formula<formula_math_concept>`
+
+In straightforward language, if both :math:`P` and :math:`Q` are true, it follows that :math:`Q` is true.

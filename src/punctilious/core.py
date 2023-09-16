@@ -6684,7 +6684,7 @@ class InferenceRuleDeclarationDict(collections.UserDict):
 
 
 class AbsorptionInclusion(InferenceRuleInclusion):
-    """The inclusion of :ref:`absorption_math_concept` as a valid :ref:`inference-rule` in the :ref:`theory-elaboration-sequence`.
+    """The :ref:`inclusion<object_inclusion_math_concept>` of :ref:`absorption<absorption_math_concept>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in the :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`.
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6699,7 +6699,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p_implies_q: (None, Formula, FormulaStatement) = None,
             echo: (None, bool) = None):
-        """Apply the absorption inference-rule and return the inferred-formula.
+        """Apply the :ref:`absorption<absorption_math_concept>` :ref:`inference-rule<inference_rule_math_concept>` and return the inferred :ref:`formula<formula_math_concept>`.
 
         :param p_implies_q: (mandatory) The implication statement.
         :return: The inferred formula q.
@@ -7820,7 +7820,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
     def cel(self) -> ConjunctionElimination1Declaration:
         """The well-known conjunction-elimination #1 inference-rule: (P ∧ Q) ⊢ P.
 
-        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_1()
+        Unabridged property: universe_of_discourse.inference_rule.conjunction_elimination_1()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
@@ -7831,7 +7831,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
     def cer(self) -> ConjunctionElimination2Inclusion:
         """The well-known conjunction-elimination #2 inference-rule: P ∧ Q ⊢ Q.
 
-        Unabridged property: universe_of_discourse.inference_rules.conjunction_elimination_2()
+        Unabridged property: universe_of_discourse.inference_rule.conjunction_elimination_2()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
@@ -7842,7 +7842,7 @@ class InferenceRuleInclusionDict(collections.UserDict):
     def ci(self) -> ConjunctionIntroductionInclusion:
         """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
-        Unabridged property: universe_of_discourse.inference_rules.conjunction_introduction()
+        Unabridged property: universe_of_discourse.inference_rule.conjunction_introduction()
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
@@ -8373,7 +8373,7 @@ class UniverseOfDiscourse(SymbolicObject):
     def i(self) -> InferenceRuleDeclarationDict:
         """The (possibly empty) collection of :ref:`inference-rules` declared in this :ref:`universe-of-discourse`.
 
-        Unabridged name: inference_rules
+        Unabridged name: inference_rule
         """
         return self.inference_rules
 
