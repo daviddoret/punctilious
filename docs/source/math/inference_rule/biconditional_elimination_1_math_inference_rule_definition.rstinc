@@ -5,12 +5,12 @@ Definition
 
 .. math::
 
-   \left( P \iff Q \right) \vdash \left( P \implies Q \right)
+   \left( \mathbf{P} \iff \mathbf{Q} \right) \vdash \left( \mathbf{P} \implies \mathbf{Q} \right)
 
 Where:
 
-   * :math:`P \iff Q` is a :ref:`formula-statement<formula_statement_math_concept>`
-   * :math:`P` is a propositional :ref:`formula<formula_math_concept>`
-   * :math:`Q` is a propositional :ref:`formula<formula_math_concept>`
+   * :math:`\mathbf{P} \iff \mathbf{Q}` is a :ref:`formula-statement<formula_statement_math_concept>`
+   * :math:`\mathbf{P}` is a propositional :ref:`formula<formula_math_concept>`
+   * :math:`\mathbf{Q}` is a propositional :ref:`formula<formula_math_concept>`
 
-In straightforward language, if P is true if and only if Q is true, it follows that P implies Q.
+In straightforward language, if :math:`\mathbf{P}` is true if and only if :math:`\mathbf{Q}` is true, it follows that :math:`\mathbf{P}` implies :math:`\mathbf{Q}`.

@@ -5,4 +5,4 @@ Definition
 
 .. math::
 
-    \left( \left(P \implies Q\right) \land P \right) \vdash Q
+    \left( \left(\mathbf{P} \implies \mathbf{Q}\right) \land P \right) \vdash \mathbf{Q}
