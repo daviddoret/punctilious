@@ -1,8 +1,4 @@
 .. _object_inclusion_math_concept:
-.. _inclusion:
-.. _include:
-.. _included:
-.. _object-inclusion:
 
 .. role:: python(code)
     :language: py

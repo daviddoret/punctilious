@@ -1,5 +1,4 @@
 .. _paragraph_proof_math_concept:
-.. _paragraph-proof:
 
 paragraph-proof (proof-style)
 =============================
