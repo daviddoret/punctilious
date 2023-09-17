@@ -4,11 +4,11 @@ import pathlib
 
 # https://stackoverflow.com/questions/10324393/sphinx-build-fail-autodoc-cant-import-find-module
 print(f'os.getcwd()={os.getcwd()}')
-# sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
-# sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src')))
-# sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src', 'punctilious')))
-# sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src', 'sample')))
-# sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src', 'theory')))
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src')))
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src', 'punctilious')))
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src', 'sample')))
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src', 'theory')))
 # sys.path.insert(0, os.path.abspath(os.path.join('..', '..', '..')))
 # sys.path.insert(0, os.path.abspath(os.path.join('..', '..', '..', 'src')))
 # sys.path.insert(0, os.path.abspath(os.path.join('..', '..', '..', 'src', 'punctilious')))
