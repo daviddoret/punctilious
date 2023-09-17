@@ -1,8 +1,4 @@
 .. _universe_of_discourse_math_concept:
-.. _universe-of-discourse:
-
-.. role:: python(code)
-    :language: py
 
 universe-of-discourse
 ======================
@@ -53,14 +49,6 @@ Where:
 .. note:: The lifecycle of objects
 
     For :ref:`objects` (including *universes-of-discourse*) to exist, they must be :ref:`created` . For :ref:`objects` to be contained in *universes-of-discourse*, they must be :ref:`declared` . And finally, for :ref:`objects` to be contained in :ref:`theory-elaboration-sequences` , they must be :ref:`included` (aka postulated).
-
-Python implementation
----------------------
-
-*universes-of-discourse* are implemented as the UniverseOfDiscourse class.
-
-
-------------
 
 .. rubric:: Footnotes
 
