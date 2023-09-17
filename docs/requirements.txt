@@ -17,3 +17,9 @@ sphinxcontrib-jquery
 sphinxcontrib-jsmath
 sphinxcontrib-qthelp
 sphinxcontrib-serializinghtml
+unidecode
+pyvis
+networkx
+typing
+random
+numpy

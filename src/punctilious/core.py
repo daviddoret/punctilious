@@ -7438,8 +7438,7 @@ class ProofByContradiction1Inclusion(InferenceRuleInclusion):
         """Apply the proof-by-contradiction inference-rule and return the inferred-formula.
 
         :param not_p_hypothesis: (mandatory) The (¬P) hypothesis-statement.
-        :param inc_hypothesis: (mandatory) The proof of inconsistency of the not_p
-hypothetical-theory: Inc(¬P).
+        :param inc_hypothesis: (mandatory) The proof of inconsistency of the not_p hypothetical-theory: Inc(¬P).
         :return: The inferred formula .
         """
         return super().infer_formula(not_p_hypothesis, inc_hypothesis, echo=echo)
