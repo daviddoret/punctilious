@@ -15,6 +15,12 @@ VariableSubstitutionInclusion (python class)
 .. seealso::
    :ref:`math concept<variable_substitution_math_inference_rule>` | :ref:`python declaration class<variable_substitution_declaration_python_class>` | :ref:`python sample<variable_substitution_python_sample>`
 
+This section presents the :python:`VariableSubstitutionInclusion` python class.
+
+This class models the :ref:`inclusion<object_inclusion_math_concept>` of the :ref:`variable-substitution<variable_substitution_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in the target :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`.
+
+*Punctilious* users do not need to instanciate objects from this class. In effect, the :python:`TheoryElaborationSequence` class exposes the :python:`variable_substitution` property, and instanciation is automatic when this property is accessed for the first time.
+
 .. module:: core
    :noindex:
 .. autoclass:: VariableSubstitutionInclusion

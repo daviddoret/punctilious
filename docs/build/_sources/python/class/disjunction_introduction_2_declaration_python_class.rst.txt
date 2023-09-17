@@ -15,6 +15,12 @@ DisjunctionIntroduction2Declaration (python class)
 .. seealso::
    :ref:`math concept<disjunction_introduction_2_math_inference_rule>` | :ref:`python inclusion class<disjunction_introduction_2_inclusion_python_class>` | :ref:`python sample<disjunction_introduction_2_python_sample>`
 
+This section presents the :python:`DisjunctionIntroduction2Declaration` python class.
+
+This class models the :ref:`declaration<object_declaration_math_concept>` of the :ref:`disjunction-introduction-2<disjunction_introduction_2_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
+
+*Punctilious* users do not need to instanciate objects from this class. In effect, the :python:`UniverseOfDiscourse` class exposes the :python:`disjunction_introduction_2` property, and instanciation is automatic when the property is accessed for the first time.
+
 .. module:: core
    :noindex:
 .. autoclass:: DisjunctionIntroduction2Declaration

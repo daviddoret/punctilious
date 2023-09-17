@@ -1,5 +1,4 @@
 .. _relation_math_concept:
-.. _relation:
 
 relation
 ==========
@@ -32,30 +31,6 @@ Punctilious data model
         rankdir = BT;
         "relation" -> "theoretical-object" [arrowhead=onormal];
    }
-
-Python implementation
----------------------
-
-In punctilious, *relations* are implemented by the core.Relation class.
-
-A catalog of well-known *relations* is handily available in the RelationDict...
-
-Relation
-^^^^^^^^^^
-
-.. module:: core
-    :noindex:
-.. autoclass:: Relation
-    :members:
-    :special-members: __init__
-
-meta-object
-^^^^^^^^^^^^
-
-.. module:: core
-    :noindex:
-.. autoclass:: SimpleObjctDict
-    :members: relation
 
 Bibliography
 ------------

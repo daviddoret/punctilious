@@ -15,6 +15,12 @@ DoubleNegationIntroductionDeclaration (python class)
 .. seealso::
    :ref:`math concept<double_negation_introduction_math_inference_rule>` | :ref:`python inclusion class<double_negation_introduction_inclusion_python_class>` | :ref:`python sample<double_negation_introduction_python_sample>`
 
+This section presents the :python:`DoubleNegationIntroductionDeclaration` python class.
+
+This class models the :ref:`declaration<object_declaration_math_concept>` of the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
+
+*Punctilious* users do not need to instanciate objects from this class. In effect, the :python:`UniverseOfDiscourse` class exposes the :python:`double_negation_introduction` property, and instanciation is automatic when the property is accessed for the first time.
+
 .. module:: core
    :noindex:
 .. autoclass:: DoubleNegationIntroductionDeclaration

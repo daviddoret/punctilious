@@ -1,8 +1,4 @@
 .. _object_creation_math_concept:
-.. _creation:
-.. _create:
-.. _created:
-.. _object-creation:
 
 .. role:: python(code)
     :language: py

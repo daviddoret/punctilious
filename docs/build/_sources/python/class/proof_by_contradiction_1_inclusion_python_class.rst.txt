@@ -15,6 +15,12 @@ ProofByContradiction1Inclusion (python class)
 .. seealso::
    :ref:`math concept<proof_by_contradiction_1_math_inference_rule>` | :ref:`python declaration class<proof_by_contradiction_1_declaration_python_class>` | :ref:`python sample<proof_by_contradiction_1_python_sample>`
 
+This section presents the :python:`ProofByContradiction1Inclusion` python class.
+
+This class models the :ref:`inclusion<object_inclusion_math_concept>` of the :ref:`proof-by-contradiction-1<proof_by_contradiction_1_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in the target :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`.
+
+*Punctilious* users do not need to instanciate objects from this class. In effect, the :python:`TheoryElaborationSequence` class exposes the :python:`proof_by_contradiction_1` property, and instanciation is automatic when this property is accessed for the first time.
+
 .. module:: core
    :noindex:
 .. autoclass:: ProofByContradiction1Inclusion

@@ -15,6 +15,12 @@ InconsistencyIntroduction3Declaration (python class)
 .. seealso::
    :ref:`math concept<inconsistency_introduction_3_math_inference_rule>` | :ref:`python inclusion class<inconsistency_introduction_3_inclusion_python_class>` | :ref:`python sample<inconsistency_introduction_3_python_sample>`
 
+This section presents the :python:`InconsistencyIntroduction3Declaration` python class.
+
+This class models the :ref:`declaration<object_declaration_math_concept>` of the :ref:`inconsistency-introduction-3<inconsistency_introduction_3_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
+
+*Punctilious* users do not need to instanciate objects from this class. In effect, the :python:`UniverseOfDiscourse` class exposes the :python:`inconsistency_introduction_3` property, and instanciation is automatic when the property is accessed for the first time.
+
 .. module:: core
    :noindex:
 .. autoclass:: InconsistencyIntroduction3Declaration
