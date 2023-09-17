@@ -21,7 +21,7 @@ This class models the :ref:`inclusion<object_inclusion_math_concept>` of the :re
 
 *Punctilious* users do not need to instanciate objects from this class. In effect, the :python:`TheoryElaborationSequence` class exposes the :python:`disjunction_introduction_1` property, and instanciation is automatic when this property is accessed for the first time.
 
-.. module:: core
+.. module:: punctilious
    :noindex:
 .. autoclass:: DisjunctionIntroduction1Inclusion
    :members:

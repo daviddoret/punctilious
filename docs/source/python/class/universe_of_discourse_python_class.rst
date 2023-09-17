@@ -3,15 +3,12 @@
 .. role:: python(code)
    :language: py
 
+.. tags:: class, python, universe-of-discourse
+
 UniverseOfDiscourse (python class)
 =====================================
 
-.. seealso::
-   :ref:`universe-of-discourse`
-
-
-.. module:: core
+.. module:: punctilious
    :noindex:
 .. autoclass:: UniverseOfDiscourse
    :members:
-   :special-members: __init__

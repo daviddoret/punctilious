@@ -12,7 +12,7 @@ object-inclusion
 Definition
 ----------
 
-An *object-inclusion* is the statement [footnote1]_ that an object declared in a :ref:`universe-of-discourse` is a constitutive element of a :ref:`theory-elaboration-sequence`.
+An *object-inclusion* is the statement [footnote1]_ that an object declared in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>` is a constitutive element of a :ref:`theory-elaboration-sequence`.
 
 In straightforward language, an *object-inclusion* extends a :ref:`theory-elaboration-sequence` with an object, which makes it possible to infer statements about that object.
 

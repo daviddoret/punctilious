@@ -3,15 +3,12 @@
 .. role:: python(code)
    :language: py
 
+.. tags:: inference-rule, declaration, class, python
+
 InferenceRuleDeclarationDict (python class)
 ==============================================
 
-.. seealso::
-   :ref:`inference-rule`
-
-
-.. module:: core
+.. module:: punctilious
    :noindex:
 .. autoclass:: InferenceRuleDeclarationDict
    :members:
-   :special-members: __init__

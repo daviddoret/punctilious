@@ -17,6 +17,6 @@ The simplest way to :ref:`create` a new *universe-of-discourse* is to call the :
    ...
 
 
-.. module:: core
+.. module:: punctilious
     :noindex:
 .. autofunction:: create_universe_of_discourse
