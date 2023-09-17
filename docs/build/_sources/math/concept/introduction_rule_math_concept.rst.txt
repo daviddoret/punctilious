@@ -1,5 +1,4 @@
 .. _introduction_rule_math_concept:
-.. _introduction-rule:
 
 introduction-rule
 ==================

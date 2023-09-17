@@ -1,5 +1,4 @@
 .. _elimination_rule_math_concept:
-.. _elimination-rule:
 
 elimination-rule
 ==================

@@ -3,12 +3,12 @@ import sys
 
 # https://stackoverflow.com/questions/10324393/sphinx-build-fail-autodoc-cant-import-find-module
 print(f'os.getcwd()={os.getcwd()}')
-sys.path.insert(0, os.path.abspath('../..'))
-sys.path.insert(0, os.path.abspath('../../src/punctilious'))
-sys.path.insert(0, os.path.abspath('../../src/sample'))
-sys.path.insert(0, os.path.abspath('../../src/theory'))
-# sys.path.insert(0, os.path.abspath(os.path.join('../..', '..', 'src')))
-
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src')))
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src', 'punctilious')))
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src', 'sample')))
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src', 'theory')))
+print(sys.path)
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:

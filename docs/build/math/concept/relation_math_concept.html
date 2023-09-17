@@ -158,7 +158,7 @@
                     <div itemprop="articleBody">
 
                         <section id="relation">
-                            <span id="relation-math-concept"></span><span id="id1"></span>
+                            <span id="relation-math-concept"></span>
                             <h1>relation<a class="headerlink" href="#relation" title="Permalink to this heading"></a>
                             </h1>
                             <section id="definition">
@@ -166,13 +166,13 @@
                                                  title="Permalink to this heading"></a></h2>
                                 <p>A <em>relation</em> is a set of ordered pairs <a class="footnote-reference brackets"
                                                                                     href="#footcite-downing-dictionary-2009"
-                                                                                    id="id2" role="doc-noteref"><span
+                                                                                    id="id1" role="doc-noteref"><span
                                         class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.
                                     Equivalently, it is a property of sets such that, for any two members of sets <span
                                             class="math notranslate nohighlight">\(a\)</span> and <span
                                             class="math notranslate nohighlight">\(b\)</span>, <span
                                             class="math notranslate nohighlight">\(aRb\)</span> is either true or false
-                                    <a class="footnote-reference brackets" href="#footcite-mcadams-all-2014" id="id3"
+                                    <a class="footnote-reference brackets" href="#footcite-mcadams-all-2014" id="id2"
                                        role="doc-noteref"><span class="fn-bracket">[</span>2<span
                                             class="fn-bracket">]</span></a>.</p>
                                 <dl class="simple">
@@ -191,9 +191,7 @@
                                     <div>
                                         <ul class="simple">
                                             <li><p>arity</p></li>
-                                            <li><p><a class="reference internal"
-                                                      href="notation_form_math_concept.html#notation-form"><span
-                                                    class="std std-ref">notation-form</span></a></p></li>
+                                            <li><p><span class="xref std std-ref">notation-form</span></p></li>
                                             <li><p>signal-proposition (TODO: rename to propositional)</p></li>
                                             <li><p>symbolic-representation</p></li>
                                         </ul>
@@ -209,221 +207,15 @@
      &quot;relation&quot; -&gt; &quot;theoretical-object&quot; [arrowhead=onormal];
 }" class="graphviz"/></div>
                             </section>
-                            <section id="python-implementation">
-                                <h2>Python implementation<a class="headerlink" href="#python-implementation"
-                                                            title="Permalink to this heading"></a></h2>
-                                <p>In punctilious, <em>relations</em> are implemented by the core.Relation class.</p>
-                                <p>A catalog of well-known <em>relations</em> is handily available in the RelationDict…
-                                </p>
-                                <section id="id4">
-                                    <h3>Relation<a class="headerlink" href="#id4"
-                                                   title="Permalink to this heading"></a></h3>
-                                    <dl class="py class">
-                                        <dt class="sig sig-object py" id="core.Relation">
-                                            <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                                                class="sig-prename descclassname"><span
-                                                class="pre">core.</span></span><span class="sig-name descname"><span
-                                                class="pre">Relation</span></span><span class="sig-paren">(</span><em
-                                                class="sig-param"><span class="n"><span class="pre">universe_of_discourse</span></span></em>,
-                                            <em class="sig-param"><span class="n"><span class="pre">arity</span></span></em>,
-                                            <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span
-                                                    class="o"><span class="pre">=</span></span><span
-                                                    class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">index</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">auto_index</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">formula_rep</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">signal_proposition</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span class="pre">signal_theoretical_morphism</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">implementation</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">dashed_name</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">acronym</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">abridged_name</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">subtitle</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">nameset</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">echo</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em><span class="sig-paren">)</span><a
-                                                class="headerlink" href="#core.Relation"
-                                                title="Permalink to this definition"></a></dt>
-                                        <dd><p>The Relation pythonic class is the implementation of the relation
-                                            theoretical-object.</p>
-                                            <dl class="py method">
-                                                <dt class="sig sig-object py" id="core.Relation.__init__">
-                                                    <span class="sig-name descname"><span
-                                                            class="pre">__init__</span></span><span
-                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                        class="pre">universe_of_discourse</span></span></em>, <em
-                                                        class="sig-param"><span class="n"><span class="pre">arity</span></span></em>,
-                                                    <em class="sig-param"><span class="n"><span
-                                                            class="pre">symbol</span></span><span class="o"><span
-                                                            class="pre">=</span></span><span class="default_value"><span
-                                                            class="pre">None</span></span></em>, <em
-                                                        class="sig-param"><span class="n"><span class="pre">index</span></span><span
-                                                        class="o"><span class="pre">=</span></span><span
-                                                        class="default_value"><span class="pre">None</span></span></em>,
-                                                    <em class="sig-param"><span class="n"><span
-                                                            class="pre">auto_index</span></span><span class="o"><span
-                                                            class="pre">=</span></span><span class="default_value"><span
-                                                            class="pre">None</span></span></em>, <em
-                                                        class="sig-param"><span class="n"><span
-                                                        class="pre">formula_rep</span></span><span class="o"><span
-                                                        class="pre">=</span></span><span class="default_value"><span
-                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                        class="n"><span
-                                                        class="pre">signal_proposition</span></span><span
-                                                        class="o"><span class="pre">=</span></span><span
-                                                        class="default_value"><span class="pre">None</span></span></em>,
-                                                    <em class="sig-param"><span class="n"><span class="pre">signal_theoretical_morphism</span></span><span
-                                                            class="o"><span class="pre">=</span></span><span
-                                                            class="default_value"><span
-                                                            class="pre">None</span></span></em>, <em
-                                                        class="sig-param"><span class="n"><span class="pre">implementation</span></span><span
-                                                        class="o"><span class="pre">=</span></span><span
-                                                        class="default_value"><span class="pre">None</span></span></em>,
-                                                    <em class="sig-param"><span class="n"><span
-                                                            class="pre">dashed_name</span></span><span class="o"><span
-                                                            class="pre">=</span></span><span class="default_value"><span
-                                                            class="pre">None</span></span></em>, <em
-                                                        class="sig-param"><span class="n"><span
-                                                        class="pre">acronym</span></span><span class="o"><span
-                                                        class="pre">=</span></span><span class="default_value"><span
-                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                        class="n"><span class="pre">abridged_name</span></span><span
-                                                        class="o"><span class="pre">=</span></span><span
-                                                        class="default_value"><span class="pre">None</span></span></em>,
-                                                    <em class="sig-param"><span class="n"><span class="pre">name</span></span><span
-                                                            class="o"><span class="pre">=</span></span><span
-                                                            class="default_value"><span
-                                                            class="pre">None</span></span></em>, <em
-                                                        class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span
-                                                        class="o"><span class="pre">=</span></span><span
-                                                        class="default_value"><span class="pre">None</span></span></em>,
-                                                    <em class="sig-param"><span class="n"><span
-                                                            class="pre">ref</span></span><span class="o"><span
-                                                            class="pre">=</span></span><span class="default_value"><span
-                                                            class="pre">None</span></span></em>, <em
-                                                        class="sig-param"><span class="n"><span
-                                                        class="pre">subtitle</span></span><span class="o"><span
-                                                        class="pre">=</span></span><span class="default_value"><span
-                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                        class="n"><span class="pre">nameset</span></span><span
-                                                        class="o"><span class="pre">=</span></span><span
-                                                        class="default_value"><span class="pre">None</span></span></em>,
-                                                    <em class="sig-param"><span class="n"><span class="pre">echo</span></span><span
-                                                            class="o"><span class="pre">=</span></span><span
-                                                            class="default_value"><span
-                                                            class="pre">None</span></span></em><span
-                                                        class="sig-paren">)</span><a class="headerlink"
-                                                                                     href="#core.Relation.__init__"
-                                                                                     title="Permalink to this definition"></a>
-                                                </dt>
-                                                <dd></dd>
-                                            </dl>
-
-                                            <dl class="py method">
-                                                <dt class="sig sig-object py" id="core.Relation.compose_report">
-                                                    <span class="sig-name descname"><span
-                                                            class="pre">compose_report</span></span><span
-                                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                        class="pre">proof</span></span><span class="o"><span
-                                                        class="pre">=</span></span><span class="default_value"><span
-                                                        class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                        class="o"><span class="pre">**</span></span><span
-                                                        class="n"><span class="pre">kwargs</span></span></em><span
-                                                        class="sig-paren">)</span><a class="headerlink"
-                                                                                     href="#core.Relation.compose_report"
-                                                                                     title="Permalink to this definition"></a>
-                                                </dt>
-                                                <dd><p>Composes a report that describes this object.</p>
-                                                </dd>
-                                            </dl>
-
-                                        </dd>
-                                    </dl>
-
-                                </section>
-                                <section id="meta-object">
-                                    <h3>meta-object<a class="headerlink" href="#meta-object"
-                                                      title="Permalink to this heading"></a></h3>
-                                    <dl class="py class">
-                                        <dt class="sig sig-object py" id="core.SimpleObjctDict">
-                                            <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                                                class="sig-prename descclassname"><span
-                                                class="pre">core.</span></span><span class="sig-name descname"><span
-                                                class="pre">SimpleObjctDict</span></span><span
-                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">u</span></span></em><span class="sig-paren">)</span><a
-                                                class="headerlink" href="#core.SimpleObjctDict"
-                                                title="Permalink to this definition"></a></dt>
-                                        <dd><p>A dictionary that exposes well-known simple-objcts as properties.</p>
-                                            <dl class="py property">
-                                                <dt class="sig sig-object py" id="core.SimpleObjctDict.relation">
-                                                    <em class="property"><span class="pre">property</span><span
-                                                            class="w"> </span></em><span class="sig-name descname"><span
-                                                        class="pre">relation</span></span><a class="headerlink"
-                                                                                             href="#core.SimpleObjctDict.relation"
-                                                                                             title="Permalink to this definition"></a>
-                                                </dt>
-                                                <dd><p>The <a class="reference internal" href="#relation"><span
-                                                        class="std std-ref">relation</span></a> <a
-                                                        class="reference internal"
-                                                        href="meta_object_math_concept.html#meta-object"><span
-                                                        class="std std-ref">meta-object</span></a>.</p>
-                                                    <p>TODO: relation meta-object: Move this to a specialized class and
-                                                        dictionary?</p>
-                                                </dd>
-                                            </dl>
-
-                                        </dd>
-                                    </dl>
-
-                                </section>
-                            </section>
                             <section id="bibliography">
                                 <h2>Bibliography<a class="headerlink" href="#bibliography"
                                                    title="Permalink to this heading"></a></h2>
-                                <div class="docutils container" id="id5">
+                                <div class="docutils container" id="id3">
                                     <aside class="footnote-list brackets">
                                         <aside class="footnote brackets" id="footcite-downing-dictionary-2009"
                                                role="doc-footnote">
                                             <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink"
-                                                                                                    href="#id2">1</a><span
+                                                                                                    href="#id1">1</a><span
                                                     class="fn-bracket">]</span></span>
                                             <p>Douglas Downing. <em>Dictionary of Mathematics Terms - 3rd Edition</em>.
                                                 Barron’s professional guides. Barron’s, 3rd ed edition, 2009. ISBN
@@ -433,7 +225,7 @@
                                         <aside class="footnote brackets" id="footcite-mcadams-all-2014"
                                                role="doc-footnote">
                                             <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink"
-                                                                                                    href="#id3">2</a><span
+                                                                                                    href="#id2">2</a><span
                                                     class="fn-bracket">]</span></span>
                                             <p>David E. McAdams. <em>All Math Words Dictionary - Second Edition</em>.
                                                 Life Is a Story Problem LLC, 2014.</p>

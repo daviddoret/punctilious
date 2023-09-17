@@ -1,8 +1,4 @@
 .. _object_declaration_math_concept:
-.. _declaration:
-.. _declare:
-.. _declared:
-.. _object-declaration:
 
 object-declaration
 ===================
