@@ -4,7 +4,7 @@ universe-of-discourse
 ======================
 
 .. seealso::
-   :ref:`object-creation` | :ref:`theory-elaboration-sequence`
+   :ref:`object-creation<object_creation_math_concept>` | :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`
 
 Definition
 ----------
@@ -17,7 +17,7 @@ A *universe-of-discourse* is a (possibly empty) collection of objects.
 
 Where:
 
-* :math:`o_i` is an :ref:`object`
+* :math:`o_i` is an object
 
 If we organize objects in (desirably mutually exclusive but necessarily exhaustive) categories [#category_footnote]_ , a *universe-of-discourse* is equivalently defined as a tuple:
 
@@ -48,7 +48,7 @@ Where:
 
 .. note:: The lifecycle of objects
 
-    For :ref:`objects` (including *universes-of-discourse*) to exist, they must be :ref:`created` . For :ref:`objects` to be contained in *universes-of-discourse*, they must be :ref:`declared` . And finally, for :ref:`objects` to be contained in :ref:`theory-elaboration-sequences` , they must be :ref:`included` (aka postulated).
+    For objects (including *universes-of-discourse*) to exist, they must be :ref:`created<object_creation_math_concept>` . For objects to be contained in *universes-of-discourse*, they must be :ref:`declared<object_declaration_math_concept>` . And finally, for objects to be contained in :ref:`theory-elaboration-sequences<theory_elaboration_sequence_math_concept>` , they must be :ref:`included<object_inclusion_math_concept>` (aka postulated).
 
 .. rubric:: Footnotes
 

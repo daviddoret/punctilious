@@ -1,7 +1,7 @@
 Definition
 ----------
 
-*modus-ponens* is the well-known and valid :ref:`inference-rule` in propositional-logic:
+*modus-ponens* is the :ref:`inference-rule<inference_rule_math_concept>`:
 
 .. math::
 

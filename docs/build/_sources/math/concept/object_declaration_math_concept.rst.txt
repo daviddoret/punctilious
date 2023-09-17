@@ -4,7 +4,7 @@ object-declaration
 ===================
 
 .. seealso::
-   :ref:`object-creation` | :ref:`object-inclusion`
+   :ref:`object-creation<object_creation_math_concept>` | :ref:`object-inclusion<object_inclusion_math_concept>`
 
 Definition
 ----------
@@ -27,5 +27,5 @@ Let y be a newly created object.
 Let U := U extended by y.
 
 .. rubric:: Footnotes
-.. [footnote2] Here, statement is considered in its general meaning, distinct from :ref:`theory-statement`.
+.. [footnote2] Here, statement is considered in its general meaning, distinct from theory-statement.
 

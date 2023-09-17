@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/"/>
     <link href="../../_static/punctilious-logo-compact-light.svg" rel="icon" type="image/svg+xml">
     <link href="../../_static/punctilious-logo-compact-light-16x16-white.png" sizes="16x16" rel="icon" type="image/png">
     <link href="../../_static/punctilious-logo-compact-light-32x32-white.png" sizes="32x32" rel="icon" type="image/png">
@@ -23,16 +23,16 @@
 
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script data-url_root="../../" id="documentation_options"
-            src="../../_static/documentation_options.js?v=8cbfd27f"></script>
+    <script src="../../_static/documentation_options.js?v=aec50437"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html"/>
@@ -76,6 +76,9 @@
                                                               href="formula_math_concept.html">formula</a></li>
                                     <li class="toctree-l3"><a class="reference internal"
                                                               href="formula_statement_math_concept.html">formula-statement</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="free_variable_math_concept.html">free-variable</a>
                                     </li>
                                     <li class="toctree-l3"><a class="reference internal"
                                                               href="hypothesis_math_concept.html">hypothesis</a></li>
@@ -159,23 +162,26 @@
                         <section id="universe-of-discourse">
                             <span id="universe-of-discourse-math-concept"></span>
                             <h1>universe-of-discourse<a class="headerlink" href="#universe-of-discourse"
-                                                        title="Permalink to this heading"></a></h1>
+                                                        title="Link to this heading"></a></h1>
                             <div class="admonition seealso">
                                 <p class="admonition-title">See also</p>
-                                <p><span class="xref std std-ref">object-creation</span> | <span
-                                        class="xref std std-ref">theory-elaboration-sequence</span></p>
+                                <p><a class="reference internal"
+                                      href="object_creation_math_concept.html#object-creation-math-concept"><span
+                                        class="std std-ref">object-creation</span></a> | <a class="reference internal"
+                                                                                            href="theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence-math-concept"><span
+                                        class="std std-ref">theory-elaboration-sequence</span></a></p>
                             </div>
                             <section id="definition">
                                 <h2>Definition<a class="headerlink" href="#definition"
-                                                 title="Permalink to this heading"></a></h2>
+                                                 title="Link to this heading"></a></h2>
                                 <p>A <em>universe-of-discourse</em> is a (possibly empty) collection of objects.</p>
                                 <div class="math notranslate nohighlight">
                                     \[\left( o_1, o_2, \ldots, o_n \right)\]
                                 </div>
                                 <p>Where:</p>
                                 <ul class="simple">
-                                    <li><p><span class="math notranslate nohighlight">\(o_i\)</span> is an <span
-                                            class="xref std std-ref">object</span></p></li>
+                                    <li><p><span class="math notranslate nohighlight">\(o_i\)</span> is an object</p>
+                                    </li>
                                 </ul>
                                 <p>If we organize objects in (desirably mutually exclusive but necessarily exhaustive)
                                     categories <a class="footnote-reference brackets" href="#category-footnote" id="id1"
@@ -217,17 +223,23 @@
                                 <div class="admonition note">
                                     <p class="admonition-title">Note</p>
                                     <p>The lifecycle of objects</p>
-                                    <p>For <span class="xref std std-ref">objects</span> (including <em>universes-of-discourse</em>)
-                                        to exist, they must be <span class="xref std std-ref">created</span> . For <span
-                                                class="xref std std-ref">objects</span> to be contained in <em>universes-of-discourse</em>,
-                                        they must be <span class="xref std std-ref">declared</span> . And finally, for
-                                        <span class="xref std std-ref">objects</span> to be contained in <span
-                                                class="xref std std-ref">theory-elaboration-sequences</span> , they must
-                                        be <span class="xref std std-ref">included</span> (aka postulated).</p>
+                                    <p>For objects (including <em>universes-of-discourse</em>) to exist, they must be <a
+                                            class="reference internal"
+                                            href="object_creation_math_concept.html#object-creation-math-concept"><span
+                                            class="std std-ref">created</span></a> . For objects to be contained in <em>universes-of-discourse</em>,
+                                        they must be <a class="reference internal"
+                                                        href="object_declaration_math_concept.html#object-declaration-math-concept"><span
+                                                class="std std-ref">declared</span></a> . And finally, for objects to be
+                                        contained in <a class="reference internal"
+                                                        href="theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence-math-concept"><span
+                                                class="std std-ref">theory-elaboration-sequences</span></a> , they must
+                                        be <a class="reference internal"
+                                              href="object_inclusion_math_concept.html#object-inclusion-math-concept"><span
+                                                class="std std-ref">included</span></a> (aka postulated).</p>
                                 </div>
                                 <p class="rubric">Footnotes</p>
                                 <aside class="footnote-list brackets">
-                                    <aside class="footnote brackets" id="category-footnote" role="doc-footnote">
+                                    <aside class="footnote brackets" id="category-footnote" role="note">
                                         <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink"
                                                                                                 href="#id1">1</a><span
                                                 class="fn-bracket">]</span></span>

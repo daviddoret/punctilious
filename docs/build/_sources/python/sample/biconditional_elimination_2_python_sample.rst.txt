@@ -12,14 +12,14 @@ biconditional-elimination-2 (python sample)
 .. tags:: biconditional-elimination-2, python, sample
 
 .. seealso::
-   :ref:`math concept<biconditional_elimination_2_math_concept>` | :ref:`python declaration class<biconditional_elimination_2_declaration_python_class>` | :ref:`python inclusion class<biconditional_elimination_2_inclusion_python_class>`
+   :ref:`math concept<biconditional_elimination_2_math_inference_rule>` | :ref:`python declaration class<biconditional_elimination_2_declaration_python_class>` | :ref:`python inclusion class<biconditional_elimination_2_inclusion_python_class>`
 
 This page shows how to infer new statements in a theory-elaboration-sequence by applying the :ref:`biconditional-elimination-2<biconditional_elimination_2_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>`.
 
 Usage
 ----------------------
 
-Call the :python:`infer_statement` method from the inference-rule inclusion class listed in the :python:`i` (unabridged :python:`inference_rules` ) property of the :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept` :
+Call the :python:`infer_statement` method from the inference-rule inclusion class listed in the :python:`i` (unabridged :python:`inference_rules` ) property of the :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` :
 
 .. code-block:: python
 

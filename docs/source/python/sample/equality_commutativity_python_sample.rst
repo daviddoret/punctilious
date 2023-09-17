@@ -12,14 +12,14 @@ equality-commutativity (python sample)
 .. tags:: equality-commutativity, python, sample
 
 .. seealso::
-   :ref:`math concept<equality_commutativity_math_concept>` | :ref:`python declaration class<equality_commutativity_declaration_python_class>` | :ref:`python inclusion class<equality_commutativity_inclusion_python_class>`
+   :ref:`math concept<equality_commutativity_math_inference_rule>` | :ref:`python declaration class<equality_commutativity_declaration_python_class>` | :ref:`python inclusion class<equality_commutativity_inclusion_python_class>`
 
 This page shows how to infer new statements in a theory-elaboration-sequence by applying the :ref:`equality-commutativity<equality_commutativity_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>`.
 
 Usage
 ----------------------
 
-Call the :python:`infer_statement` method from the inference-rule inclusion class listed in the :python:`i` (unabridged :python:`inference_rules` ) property of the :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept` :
+Call the :python:`infer_statement` method from the inference-rule inclusion class listed in the :python:`i` (unabridged :python:`inference_rules` ) property of the :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` :
 
 .. code-block:: python
 

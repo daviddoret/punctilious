@@ -11,19 +11,15 @@ An *introduction-rule* is an :ref:`inference-rule<inference_rule_math_concept>` 
 List of well-known *introduction-rules*
 ------------------------------------------
 
-* :ref:`biconditional-elimination-1`
-* :ref:`biconditional-elimination-2`
-* :ref:`conjunction-elimination-1`
-* :ref:`conjunction-elimination-2`
-* :ref:`double-negation-elimination`
+* :ref:`biconditional-elimination-1<biconditional_elimination_1_math_inference_rule>`
+* :ref:`biconditional-elimination-2<biconditional_elimination_2_math_inference_rule>`
+* :ref:`conjunction-elimination-1<conjunction_elimination_1_math_inference_rule>`
+* :ref:`conjunction-elimination-2<conjunction_elimination_2_math_inference_rule>`
+* :ref:`double-negation-elimination<double_negation_elimination_math_inference_rule>`
 
 Quotes
 -------
 
     "Each of the introduction rules tells us how to derive a formula of some syntactic form. For instance, the conjunction introduction rule (∧I) shows that we can derive a conjunction if we derive both conjunctive terms; the disjunction introduction rules (∨I) show that we can derive a disjunction if we derive one of the disjunctive terms."
-    - :footcite:p:`porter_2008_handbookknowledgerepresentation`, p. 6-7
+    - :cite:p:`porter_2008_handbookknowledgerepresentation`, p. 6-7
 
-Bibliography
-------------
-
-.. footbibliography::

@@ -22,4 +22,4 @@ Quotes
     This includes propositional logic and predicate logic, and in particular natural deduction.
     Proof Rule
     If we can conclude both ϕ and ψ, we may infer the compound statement ϕ ∧ ψ."
-    - :footcite:p:`proofwiki_2022_ruleconjunction`
+    - :cite:p:`proofwiki_2022_ruleconjunction`

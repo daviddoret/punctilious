@@ -3,7 +3,7 @@
 """
 __version__ = "1.0.8"
 
-from punctilious.plaintext import force_plaintext, Plaintext
+from punctilious.plaintext import force_plaintext, Plaintext, unidecode
 from punctilious.repm import monospace, prnt, serif_bold
 from punctilious.core import AbsorptionDeclaration, AbsorptionInclusion, Article, AxiomDeclaration, \
     AxiomInclusion, BiconditionalElimination1Declaration, BiconditionalElimination1Inclusion, \

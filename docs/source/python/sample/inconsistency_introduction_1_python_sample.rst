@@ -12,14 +12,14 @@ inconsistency-introduction-1 (python sample)
 .. tags:: inconsistency-introduction-1, python, sample
 
 .. seealso::
-   :ref:`math concept<inconsistency_introduction_1_math_concept>` | :ref:`python declaration class<inconsistency_introduction_1_declaration_python_class>` | :ref:`python inclusion class<inconsistency_introduction_1_inclusion_python_class>`
+   :ref:`math concept<inconsistency_introduction_1_math_inference_rule>` | :ref:`python declaration class<inconsistency_introduction_1_declaration_python_class>` | :ref:`python inclusion class<inconsistency_introduction_1_inclusion_python_class>`
 
 This page shows how to infer new statements in a theory-elaboration-sequence by applying the :ref:`inconsistency-introduction-1<inconsistency_introduction_1_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>`.
 
 Usage
 ----------------------
 
-Call the :python:`infer_statement` method from the inference-rule inclusion class listed in the :python:`i` (unabridged :python:`inference_rules` ) property of the :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept` :
+Call the :python:`infer_statement` method from the inference-rule inclusion class listed in the :python:`i` (unabridged :python:`inference_rules` ) property of the :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` :
 
 .. code-block:: python
 
