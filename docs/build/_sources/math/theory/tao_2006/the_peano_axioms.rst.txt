@@ -3,7 +3,7 @@
 The Peano axioms
 ========================================================================================
 
-This :ref:`theory-elaboration-sequence` formalizes :cite:`tao_2006_analysis_i{chapter 2.1 - The Peano axioms}` .
+This :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` formalizes :cite:`tao_2006_analysis_i{chapter 2.1 - The Peano axioms}` .
 
 Python class
 ----------------

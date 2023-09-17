@@ -6,8 +6,8 @@ relation
 Definition
 ----------
 
-A *relation* is a set of ordered pairs :footcite:p:`downing_dictionary_2009`.
-Equivalently, it is a property of sets such that, for any two members of sets :math:`a` and :math:`b`, :math:`aRb` is either true or false :footcite:p:`mcadams_all_2014`.
+A *relation* is a set of ordered pairs :cite:p:`downing_dictionary_2009`.
+Equivalently, it is a property of sets such that, for any two members of sets :math:`a` and :math:`b`, :math:`aRb` is either true or false :cite:p:`mcadams_all_2014`.
 
 Syntactically, a *relation* is represented with a
     A relation ◆ is a theoretical-object for formula.
@@ -18,7 +18,7 @@ Syntactically, a *relation* is represented with a
 Key properties
 -------------------
  - arity
- - :ref:`notation-form`
+ - :ref:`notation-form<notation_form_math_concept>`
  - signal-proposition (TODO: rename to propositional)
  - symbolic-representation
 
@@ -32,7 +32,4 @@ Punctilious data model
         "relation" -> "theoretical-object" [arrowhead=onormal];
    }
 
-Bibliography
-------------
 
-.. footbibliography::

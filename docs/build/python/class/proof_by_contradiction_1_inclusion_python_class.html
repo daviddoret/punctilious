@@ -103,7 +103,7 @@
                         <p class="tags"><span>Tags: </span><a
                                 class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
                                 href="../../_tags/proof-by-contradiction-1.html"><span class="doc">proof-by-contradiction-1</span></a><span> </span><a
-                                class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary reference internal"
+                                class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
                                 href="../../_tags/python.html"><span class="doc">python</span></a><span> </span><a
                                 class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
                                 href="../../_tags/inclusion.html"><span class="doc">inclusion</span></a><span> </span><a
@@ -182,15 +182,18 @@
                                         <dd><p>Apply the proof-by-contradiction inference-rule and return the
                                             inferred-formula.</p>
                                             <dl class="field-list simple">
-                                            </dl>
-                                            <dl class="simple">
-                                                <dt>hypothetical-theory: Inc(¬P).</dt>
-                                                <dd>
-                                                    <dl class="field-list simple">
-                                                        <dt class="field-odd">return<span class="colon">:</span></dt>
-                                                        <dd class="field-odd"><p>The inferred formula .</p>
-                                                        </dd>
-                                                    </dl>
+                                                <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>not_p_hypothesis</strong> – (mandatory) The (¬P)
+                                                            hypothesis-statement.</p></li>
+                                                        <li><p><strong>inc_hypothesis</strong> – (mandatory) The proof
+                                                            of inconsistency of the not_p hypothetical-theory: Inc(¬P).
+                                                        </p></li>
+                                                    </ul>
+                                                </dd>
+                                                <dt class="field-even">Returns<span class="colon">:</span></dt>
+                                                <dd class="field-even"><p>The inferred formula .</p>
                                                 </dd>
                                             </dl>
                                         </dd>

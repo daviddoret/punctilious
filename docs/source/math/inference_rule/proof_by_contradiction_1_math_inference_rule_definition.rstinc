@@ -9,6 +9,6 @@ Definition
 
 Where:
 
-* :math:`\mathcal{H}` is an :ref:`hypothesis`
-* :math:`\mathbf{P}` is a propositional :ref:`formula<formula_math_concept>`
-* :math:`\mathit{Inc}` is the inconsistency function
+  * :math:`\mathcal{H}` is an :ref:`hypothesis<hypothesis_math_concept>`
+  * :math:`\mathbf{P}` is a propositional :ref:`formula<formula_math_concept>`
+  * :math:`\mathit{Inc}` is the inconsistency function

@@ -14,6 +14,7 @@ This table of contents references the key mathematical concepts used by punctili
    elimination-rule<math/concept/elimination_rule_math_concept>
    formula<math/concept/formula_math_concept>
    formula-statement<math/concept/formula_statement_math_concept>
+   free-variable<math/concept/free_variable_math_concept>
    hypothesis<math/concept/hypothesis_math_concept>
    inference-rule<math/concept/inference_rule_math_concept>
    introduction-rule<math/concept/introduction_rule_math_concept>

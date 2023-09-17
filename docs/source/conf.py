@@ -53,7 +53,7 @@ exclude_patterns = []
 # https://sphinx-tags.readthedocs.io/en/latest/configuration.html#config
 tags_create_tags = True
 tags_create_badges = True
-tags_badge_colors = {"math": "primary", "concept": "primary", "python": "secondary", }
+# tags_badge_colors = {"concept": "primary", "math": "primary", "python": "primary", }
 
 # -- Options for HTML data -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

@@ -17,7 +17,3 @@ The following *notation-forms* are supported by punctilious:
  - post-fix
  - pre-fix
 
-Bibliography
-------------
-
-.. footbibliography::

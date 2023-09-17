@@ -103,7 +103,7 @@
                         <p class="tags"><span>Tags: </span><a
                                 class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
                                 href="../../_tags/equal-terms-substitution.html"><span class="doc">equal-terms-substitution</span></a><span> </span><a
-                                class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary reference internal"
+                                class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
                                 href="../../_tags/python.html"><span class="doc">python</span></a><span> </span><a
                                 class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
                                 href="../../_tags/declaration.html"><span
@@ -212,8 +212,21 @@
                                         <dd><p>Apply the inference-rule equal-terms-substitution and return the inferred
                                             formula.</p>
                                             <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>p</strong> – a formula-statement of the form: P.
+                                                        </p></li>
+                                                        <li><p><strong>x_equal_y</strong> – an equality
+                                                            formula-statement of the form: (Q = R).</p></li>
+                                                    </ul>
+                                                </dd>
+                                                <dt class="field-even">Returns<span class="colon">:</span></dt>
+                                                <dd class="field-even"><p>(FormulaStatement) The formula-statement P
+                                                    modified such that all occurrences of Q in P are replaced with
+                                                    R.</p>
+                                                </dd>
                                             </dl>
-                                            <p>Q in P are replaced with R.</p>
                                         </dd>
                                     </dl>
 
