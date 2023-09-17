@@ -37,6 +37,7 @@ My tags: class
     ../python/class/inconsistency_introduction_2_inclusion_python_class.rst
     ../python/class/inconsistency_introduction_3_declaration_python_class.rst
     ../python/class/inconsistency_introduction_3_inclusion_python_class.rst
+    ../python/class/inference_rule_declaration_python_class.rst
     ../python/class/modus_ponens_declaration_python_class.rst
     ../python/class/modus_ponens_inclusion_python_class.rst
     ../python/class/proof_by_contradiction_1_declaration_python_class.rst
@@ -47,5 +48,6 @@ My tags: class
     ../python/class/proof_by_refutation_1_inclusion_python_class.rst
     ../python/class/proof_by_refutation_2_declaration_python_class.rst
     ../python/class/proof_by_refutation_2_inclusion_python_class.rst
+    ../python/class/universe_of_discourse_python_class.rst
     ../python/class/variable_substitution_declaration_python_class.rst
     ../python/class/variable_substitution_inclusion_python_class.rst

@@ -11,7 +11,7 @@ Definition
 List
 ----
 
-.. module:: core
+.. module:: punctilious
     :noindex:
 .. autoclass:: SimpleObjctDict
     :noindex:

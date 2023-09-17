@@ -21,7 +21,7 @@ This class models the :ref:`declaration<object_declaration_math_concept>` of the
 
 *Punctilious* users do not need to instanciate objects from this class. In effect, the :python:`UniverseOfDiscourse` class exposes the :python:`disjunction_introduction_2` property, and instanciation is automatic when the property is accessed for the first time.
 
-.. module:: core
+.. module:: punctilious
    :noindex:
 .. autoclass:: DisjunctionIntroduction2Declaration
    :members:

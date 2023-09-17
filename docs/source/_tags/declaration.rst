@@ -21,6 +21,7 @@ My tags: declaration
     ../python/class/inconsistency_introduction_1_declaration_python_class.rst
     ../python/class/inconsistency_introduction_2_declaration_python_class.rst
     ../python/class/inconsistency_introduction_3_declaration_python_class.rst
+    ../python/class/inference_rule_declaration_python_class.rst
     ../python/class/modus_ponens_declaration_python_class.rst
     ../python/class/proof_by_contradiction_1_declaration_python_class.rst
     ../python/class/proof_by_contradiction_2_declaration_python_class.rst

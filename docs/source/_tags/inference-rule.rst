@@ -28,3 +28,4 @@ My tags: inference-rule
     ../math/inference_rule/proof_by_refutation_1_math_inference_rule.rst
     ../math/inference_rule/proof_by_refutation_2_math_inference_rule.rst
     ../math/inference_rule/variable_substitution_math_inference_rule.rst
+    ../python/class/inference_rule_declaration_python_class.rst

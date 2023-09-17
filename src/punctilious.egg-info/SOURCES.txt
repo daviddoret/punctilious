@@ -36,10 +36,13 @@ src/sample/sample_modus_ponens.py
 src/sample/sample_pet_theory_1.py
 src/sample/sample_proof_by_contradiction_1.py
 src/sample/sample_proof_by_contradiction_2.py
+src/sample/sample_proof_by_refutation_1.py
+src/sample/sample_proof_by_refutation_2.py
 src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_plaintext.py
 src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_unicode.py
 src/sample/sample_tao_2006_the_peano_axioms_proof_enus_plaintext.py
 src/sample/sample_tao_2006_the_peano_axioms_proof_enus_unicode.py
+src/sample/sample_variable_substitution.py
 src/theory/__init__.py
 src/theory/classical_propositional_logic.py
 src/theory/punctilious_2023_metatheory.py

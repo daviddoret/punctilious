@@ -3,16 +3,23 @@
 # The key idea is to build the docs but simultaneously to verify
 # that the ReadTheDocs build should be successful.
 
-$total_step = 7
+$total_step = 8
 $script = Split-Path $PSCommandPath -Leaf
+Write-Output "Script: $( $script )."
 $script_folder = $PSScriptRoot
-$project_folder = Split-Path -Path $script_folder -Parent
+$ci_folder = Split-Path -Path $script_folder -Parent
+$project_folder = Split-Path -Path $ci_folder -Parent
 $docs_folder = "$( $project_folder )\docs"
+$docs_source_folder = "$( $docs_folder )\source"
 $docs_build_folder = "$( $docs_folder )\build"
+Write-Output "Script: $( $script ). project_folder = $( $project_folder )"
+Write-Output "Script: $( $script ). docs_source_folder = $( $docs_source_folder )"
+Write-Output "Script: $( $script ). docs_build_folder = $( $docs_build_folder )"
 
 $current_step = 1
 Write-Output "Script: $( $script ). Step: $( $current_step ) / $( $total_step ). start_venv.ps1"
 $environment_directory = & $PSScriptRoot\start_venv.ps1
+Write-Output "Python virtual environment: $( $environment_directory )."
 
 $current_step = 2
 $command = "python -m pip install --upgrade --no-cache-dir pip setuptools"
@@ -35,10 +42,15 @@ Write-Output "Script: $( $script ). Step: $( $current_step ) / $( $total_step ).
 Invoke-Expression -Command $command
 
 $current_step = 6
-$command = "python -m sphinx -T -E -b html -d _build/doctrees -D language=en $docs_folder $docs_build_folder"
+$command = "python -m pip install -e $( $project_folder )"
 Write-Output "Script: $( $script ). Step: $( $current_step ) / $( $total_step ). $( $command )"
 Invoke-Expression -Command $command
 
 $current_step = 7
+$command = "python -m sphinx -T -E -b html -d _build/doctrees -D language=en $docs_source_folder $docs_build_folder"
+Write-Output "Script: $( $script ). Step: $( $current_step ) / $( $total_step ). $( $command )"
+Invoke-Expression -Command $command
+
+$current_step = 8
 Write-Output "Script: $( $script ). Step: $( $current_step ) / $( $total_step ). stop_env.ps1"
 & $PSScriptRoot\stop_venv.ps1 -EnvironmentDirectory $environment_directory

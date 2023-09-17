@@ -9,9 +9,9 @@ object-declaration
 Definition
 ----------
 
-An *object-declaration* is a statement [footnote2]_ that an (existing) object is contained in a :ref:`universe-of-discourse`.
+An *object-declaration* is a statement [footnote2]_ that an (existing) object is contained in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
 
-In straightforward language, an *object-declaration* extends a :ref:`universe-of-discourse` with that object, which makes it possible to speak about that object using other objects.
+In straightforward language, an *object-declaration* extends a :ref:`universe-of-discourse<universe_of_discourse_math_concept>` with that object, which makes it possible to speak about that object using other objects.
 
 Formally, whenever an object is declared:
 

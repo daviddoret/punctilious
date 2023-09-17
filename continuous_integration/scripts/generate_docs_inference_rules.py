@@ -48,6 +48,7 @@ for ir in inference_rules:
     # python declaration class
     filename = f'{underscored_name}_declaration_python_class.rst'
     # print(f'{underscored_name}_declaration_python_class')
+    print(f'{pascalcased_name}Declaration')
     file_path = os.path.abspath(os.path.join(python_class_path, filename))
     rst_file_content = declaration_python_class_template.render(script_name=script_name,
         dashed_name=dashed_name, underscored_name=underscored_name,
@@ -59,6 +60,7 @@ for ir in inference_rules:
     filename = f'{underscored_name}_inclusion_python_class.rst'
     file_path = os.path.abspath(os.path.join(python_class_path, filename))
     # print(f'{underscored_name}_inclusion_python_class')
+    print(f'{pascalcased_name}Inclusion')
     rst_file_content = inclusion_python_class_template.render(script_name=script_name,
         dashed_name=dashed_name, underscored_name=underscored_name,
         pascalcased_name=pascalcased_name)
@@ -68,7 +70,7 @@ for ir in inference_rules:
     # python sample
     filename = f'{underscored_name}_python_sample.rst'
     file_path = os.path.abspath(os.path.join(python_sample_path, filename))
-    print(f'{underscored_name}_python_sample')
+    # print(f'{underscored_name}_python_sample')
     rst_file_content = python_sample_template.render(script_name=script_name,
         dashed_name=dashed_name, underscored_name=underscored_name,
         pascalcased_name=pascalcased_name)
