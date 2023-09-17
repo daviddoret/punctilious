@@ -15,6 +15,12 @@ ProofByRefutation1Declaration (python class)
 .. seealso::
    :ref:`math concept<proof_by_refutation_1_math_inference_rule>` | :ref:`python inclusion class<proof_by_refutation_1_inclusion_python_class>` | :ref:`python sample<proof_by_refutation_1_python_sample>`
 
+This section presents the :python:`ProofByRefutation1Declaration` python class.
+
+This class models the :ref:`declaration<object_declaration_math_concept>` of the :ref:`proof-by-refutation-1<proof_by_refutation_1_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
+
+*Punctilious* users do not need to instanciate objects from this class. In effect, the :python:`UniverseOfDiscourse` class exposes the :python:`proof_by_refutation_1` property, and instanciation is automatic when the property is accessed for the first time.
+
 .. module:: core
    :noindex:
 .. autoclass:: ProofByRefutation1Declaration

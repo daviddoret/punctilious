@@ -15,6 +15,12 @@ EqualTermsSubstitutionInclusion (python class)
 .. seealso::
    :ref:`math concept<equal_terms_substitution_math_inference_rule>` | :ref:`python declaration class<equal_terms_substitution_declaration_python_class>` | :ref:`python sample<equal_terms_substitution_python_sample>`
 
+This section presents the :python:`EqualTermsSubstitutionInclusion` python class.
+
+This class models the :ref:`inclusion<object_inclusion_math_concept>` of the :ref:`equal-terms-substitution<equal_terms_substitution_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in the target :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`.
+
+*Punctilious* users do not need to instanciate objects from this class. In effect, the :python:`TheoryElaborationSequence` class exposes the :python:`equal_terms_substitution` property, and instanciation is automatic when this property is accessed for the first time.
+
 .. module:: core
    :noindex:
 .. autoclass:: EqualTermsSubstitutionInclusion
