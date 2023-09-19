@@ -1,3 +1,24 @@
+import punctilious as pu
+
+# Create a universe-of-discourse with basic objects for the sake of this example.
+u = pu.UniverseOfDiscourse(echo=True)
+o1 = u.o.declare()
+o2 = u.o.declare()
+o3 = u.o.declare()
+r1 = u.r.declare(arity=2, signal_proposition=True)
+r2 = u.r.declare(arity=1, signal_proposition=True)
+axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes')
+
+# Elaborate a dummy theory with a set of propositions necessary for our demonstration
+t1 = u.t(echo=True)
+theory_axiom = t1.include_axiom(a=axiom)
+p = t1.i.axiom_interpretation.infer_statement(axiom=theory_axiom,
+    formula=r1(o1, o2) | u.r.equal | r2(o3))
+
+# And finally, use the equality-commutativity inference-rule:
+proposition_of_interest = t1.i.equality_commutativity.infer_statement(x_equal_y=p,
+    subtitle='The proposition of interest')
+
 Let "U23" be a universe-of-discourse.
 
 Let "T1" be a theory-elaboration-sequence in U23.
@@ -12,5 +33,5 @@ Warning (warning1): By design, punctilious assures the syntactical correctness o
 
 Inference rule (equality-commutativity): Let inference-rule equality-commutativity defined as "((x1 = y1) |- (y1 = x1))" be included and considered valid in T1.
 
-Proposition (T1.P2) - The proposition of interest: (r2(o3) = r1(o1, o2)). Proof: (r1(o1, o2) = r2(o3)) follows from prop. (P1). Therefore, by the equality-commutativity inference rule: ((x1 = y1) |- (y1 = x1)), it follows that (r2(o3) = r1(o1, o2)). QED
+Proposition (T1.P2) - The proposition of interest: (r2(o3) neq r1(o1, o2)). Proof: (r1(o1, o2) = r2(o3)) follows from prop. (P1). Therefore, by the equality-commutativity inference rule: ((x1 = y1) |- (y1 = x1)), it follows that (r2(o3) neq r1(o1, o2)). QED
 

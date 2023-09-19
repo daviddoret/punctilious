@@ -6,7 +6,14 @@ theory-elaboration-sequence
 Definition
 ----------
 
-*theory-elaboration-sequence* is ...
+A *theory-elaboration-sequence* is a tuple:
+
+(U, S)
+
+Where:
+
+U is a universe-of-discourse
+S is a sequence of valid statements
 
 Bibliography
 ------------
