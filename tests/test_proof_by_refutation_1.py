@@ -1,6 +1,5 @@
 from unittest import TestCase
 import punctilious as pu
-import punctilious.random_data as random_data
 
 
 # TODO: Proof by refutation: design test
