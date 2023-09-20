@@ -8671,34 +8671,9 @@ def reset_configuration(configuration: Configuration) -> None:
 reset_configuration(configuration=configuration)
 
 
-class TheoryPackage:
+class Package:
     def __init__(self):
         pass
-
-    def develop(self) -> TheoryElaborationSequence:
-        """Elaborate a new theory in a new universe with the content of the theory.
-
-        """
-        u = create_universe_of_discourse()
-        t = u.declare_theory()
-        self.develop_theory(t=t)
-        return t
-
-    @abc.abstractmethod
-    def develop_theory(self, t: TheoryElaborationSequence) -> TheoryElaborationSequence:
-        """Given a theory t, pursue the elaboration of that theory with the content of the theory.
-
-        This is the key method that must be implemented by the non-abstract theory."""
-        raise NotImplementedError()
-
-    def develop_universe(self, u: UniverseOfDiscourse) -> TheoryElaborationSequence:
-        """Given a universe u, elaborate a new theory with the content of the theory in that
-        universe.
-
-        """
-        t = u.declare_theory()
-        t = self.develop_theory(t=t)
-        return t
 
 
 class Article:

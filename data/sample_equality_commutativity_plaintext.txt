@@ -33,5 +33,5 @@ Warning (warning1): By design, punctilious assures the syntactical correctness o
 
 Inference rule (equality-commutativity): Let inference-rule equality-commutativity defined as "((x1 = y1) |- (y1 = x1))" be included and considered valid in T1.
 
-Proposition (T1.P2) - The proposition of interest: (r2(o3) neq r1(o1, o2)). Proof: (r1(o1, o2) = r2(o3)) follows from prop. (P1). Therefore, by the equality-commutativity inference rule: ((x1 = y1) |- (y1 = x1)), it follows that (r2(o3) neq r1(o1, o2)). QED
+Proposition (T1.P2) - The proposition of interest: (r2(o3) = r1(o1, o2)). Proof: (r1(o1, o2) = r2(o3)) follows from prop. (P1). Therefore, by the equality-commutativity inference rule: ((x1 = y1) |- (y1 = x1)), it follows that (r2(o3) = r1(o1, o2)). QED
 

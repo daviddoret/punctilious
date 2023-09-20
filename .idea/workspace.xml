@@ -4,7 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="#201 + #195 + correcting proofs by contradiction and refutation with corresponding samples and tests" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="#201 + #195 + correcting proofs by contradiction and refutation with corresponding samples and tests">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equality_commutativity_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equality_commutativity_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equality_commutativity_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equality_commutativity_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_contradiction_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_contradiction_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_contradiction_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_contradiction_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_tao_2006_the_peano_axioms_noproof_enus_plaintext_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_tao_2006_the_peano_axioms_noproof_enus_plaintext_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_plaintext.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_plaintext.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_unicode.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_unicode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_proof_enus_plaintext.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_proof_enus_plaintext.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_proof_enus_unicode.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_proof_enus_unicode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/tao_2006_the_peano_axioms.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_tao_2006_the_peano_axioms.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -108,7 +127,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in tests">
+  <component name="RunManager" selected="Python tests.Python tests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms.test_2_2">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -216,7 +235,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="sample_proof_by_refutation_2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="sample_tao_2006_the_peano_axioms_noproof_enus_plaintext" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -228,7 +247,70 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_2.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_plaintext.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="sample_tao_2006_the_peano_axioms_proof_enus_unicode" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_proof_enus_unicode.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="sample_variable_substitution" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_variable_substitution.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="theory_tao_2006_the_peano_axioms" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/theory" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -299,7 +381,7 @@
       <option name="docutils_open_in_browser" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_proof_by_refutation_1.TestProofByRefutation1.test_proof_by_refutation_1" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms.test_2_2" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -309,50 +391,8 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_proof_by_refutation_1.TestProofByRefutation1.test_proof_by_refutation_1&quot;" />
+      <option name="_new_target" value="&quot;test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms.test_2_2&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests for test_proof_by_refutation_2.TestProofByRefutation2.test_proof_by_refutation_2" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_proof_by_refutation_2.TestProofByRefutation2.test_proof_by_refutation_2&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests in test_proof_by_refutation_1.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_proof_by_refutation_1.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests in test_proof_by_refutation_2.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_proof_by_refutation_2.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
     <configuration name="Python tests in tests" type="tests" factoryName="Autodetect">
@@ -375,24 +415,24 @@
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.build" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
-      <item itemvalue="Python.sample_proof_by_refutation_2" />
+      <item itemvalue="Python.sample_tao_2006_the_peano_axioms_noproof_enus_plaintext" />
+      <item itemvalue="Python.sample_tao_2006_the_peano_axioms_proof_enus_unicode" />
+      <item itemvalue="Python.sample_variable_substitution" />
+      <item itemvalue="Python.theory_tao_2006_the_peano_axioms" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.Python tests for test_proof_by_refutation_1.TestProofByRefutation1.test_proof_by_refutation_1" />
-      <item itemvalue="Python tests.Python tests for test_proof_by_refutation_2.TestProofByRefutation2.test_proof_by_refutation_2" />
-      <item itemvalue="Python tests.Python tests in test_proof_by_refutation_1.py" />
-      <item itemvalue="Python tests.Python tests in test_proof_by_refutation_2.py" />
+      <item itemvalue="Python tests.Python tests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms.test_2_2" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests for test_proof_by_refutation_2.TestProofByRefutation2.test_proof_by_refutation_2" />
-        <item itemvalue="Python.sample_proof_by_refutation_2" />
-        <item itemvalue="Python tests.Python tests in test_proof_by_refutation_2.py" />
-        <item itemvalue="Python tests.Python tests in test_proof_by_refutation_1.py" />
-        <item itemvalue="Python tests.Python tests for test_proof_by_refutation_1.TestProofByRefutation1.test_proof_by_refutation_1" />
+        <item itemvalue="Python tests.Python tests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms.test_2_2" />
+        <item itemvalue="Python.sample_tao_2006_the_peano_axioms_proof_enus_unicode" />
+        <item itemvalue="Python.sample_variable_substitution" />
+        <item itemvalue="Python.sample_tao_2006_the_peano_axioms_noproof_enus_plaintext" />
+        <item itemvalue="Python.theory_tao_2006_the_peano_axioms" />
       </list>
     </recent_temporary>
   </component>
@@ -404,14 +444,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00248" summary="testing #181 + setup #47 + include theories in sphinx documentation. readthedocs seem not to support python 3.11. make an attempt with 3.10 to support at the very least the match syntax.">
-      <option name="closed" value="true" />
-      <created>1694463443895</created>
-      <option name="number" value="00248" />
-      <option name="presentableId" value="LOCAL-00248" />
-      <option name="project" value="LOCAL" />
-      <updated>1694463443895</updated>
     </task>
     <task id="LOCAL-00249" summary="testing #181 + setup #47 + include theories in sphinx documentation. readthedocs seem not to support python 3.11. make an attempt with 3.10 to support at the very least the match syntax.">
       <option name="closed" value="true" />
@@ -797,7 +829,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695230792267</updated>
     </task>
-    <option name="localTasksCounter" value="297" />
+    <task id="LOCAL-00297" summary="#201 + #195 + correcting proofs by contradiction and refutation with corresponding samples and tests">
+      <option name="closed" value="true" />
+      <created>1695231607807</created>
+      <option name="number" value="00297" />
+      <option name="presentableId" value="LOCAL-00297" />
+      <option name="project" value="LOCAL" />
+      <updated>1695231607807</updated>
+    </task>
+    <option name="localTasksCounter" value="298" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
