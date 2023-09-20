@@ -5,11 +5,12 @@ Definition
 
 .. math::
 
-    \left( \boldsymbol{\mathcal{H}} \: \textit{assume} \: \neg \boldsymbol{P}, \boldsymbol{P}, Inc\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \boldsymbol{P}
+    \left( \boldsymbol{\mathcal{H}} \: \textit{assume} \: \boldsymbol{P}, Inc\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \neg \boldsymbol{P}
 
 Where:
 
  * :math:`\boldsymbol{\mathcal{H}}` is an :ref:`hypothesis<hypothesis_math_concept>`
  * :math:`\boldsymbol{P}` is a :ref:`formula-statement<formula_statement_math_concept>`
+ * :math:`\mathit{Inc}` is the inconsistency function
 
-In plain language, it consists in posing the hypothesis that a proposition :math:`\boldsymbol{P}` is not true, refuting that hypothesis by proving :math:`\boldsymbol{P}`, inferring the inconsistency of that hypothesis from this contradiction, and finally inferring :math:`\boldsymbol{P}`.
+In plain language, it consists in posing the hypothesis that a proposition :math:`\boldsymbol{P}` is true, refuting that hypothesis by proving :math:`\neg \boldsymbol{P}`, inferring the inconsistency of that hypothesis from this contradiction, and finally inferring :math:`\boldsymbol{P}`  (or alternatively that the parent theory is itself inconsistent).

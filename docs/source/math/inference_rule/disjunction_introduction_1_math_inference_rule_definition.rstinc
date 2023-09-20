@@ -5,13 +5,13 @@ Definition
 
 .. math::
 
-    \mathbf{P} \vdash \left( \mathbf{Q} \lor \mathbf{P} \right)
+    \boldsymbol{P} \vdash \left( \mathbf{Q} \lor \boldsymbol{P} \right)
 
 Where:
-   * :math:`\mathbf{P}` is a :ref:`formula-statement<formula_statement_math_concept>`
+   * :math:`\boldsymbol{P}` is a :ref:`formula-statement<formula_statement_math_concept>`
    * :math:`\mathbf{Q}` is a :ref:`formula<formula_math_concept>`
 
-In straightforward language, if :math:`\mathbf{P}` is true, it follows that :math:`\mathbf{Q}` or :math:`\mathbf{P}` is true.
+In straightforward language, if :math:`\boldsymbol{P}` is true, it follows that :math:`\mathbf{Q}` or :math:`\boldsymbol{P}` is true.
 
 Quotes
 ------

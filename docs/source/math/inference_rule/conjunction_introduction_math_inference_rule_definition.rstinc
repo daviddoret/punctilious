@@ -5,15 +5,15 @@ Definition
 
 .. math::
 
-    ( \mathbf{P}, \mathbf{Q} ) \vdash \left( \mathbf{P} \land \mathbf{Q} \right)
+    ( \boldsymbol{P}, \mathbf{Q} ) \vdash \left( \boldsymbol{P} \land \mathbf{Q} \right)
 
 Where:
 
-   * :math:`\mathbf{P}` is a :ref:`formula-statement<formula_statement_math_concept>`
+   * :math:`\boldsymbol{P}` is a :ref:`formula-statement<formula_statement_math_concept>`
    * :math:`\mathbf{Q}` is a :ref:`formula-statement<formula_statement_math_concept>`
-   * :math:`\mathbf{P} \land \mathbf{Q}` is a :ref:`formula-statement<formula_statement_math_concept>`
+   * :math:`\boldsymbol{P} \land \mathbf{Q}` is a :ref:`formula-statement<formula_statement_math_concept>`
 
-In straightforward language, if :math:`\mathbf{P}` is true, if :math:`\mathbf{Q}` is true, it follows that both :math:`\mathbf{P}` and :math:`\mathbf{Q}` are true.
+In straightforward language, if :math:`\boldsymbol{P}` is true, if :math:`\mathbf{Q}` is true, it follows that both :math:`\boldsymbol{P}` and :math:`\mathbf{Q}` are true.
 
 Quotes
 ------

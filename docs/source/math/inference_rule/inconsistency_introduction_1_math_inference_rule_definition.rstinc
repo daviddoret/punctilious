@@ -5,6 +5,6 @@ Definition
 
 .. math::
 
-   \left( \mathbf{P}, \neg \left(\mathbf{P}\right) \right) \vdash Inc\left(\mathcal{T}\right)
+   \left( \boldsymbol{P}, \neg \left(\boldsymbol{P}\right) \right) \vdash Inc\left(\mathcal{T}\right)
 
 In straightforward language, if we prove a proposition and its negation, it follows that the theory is inconsistent.

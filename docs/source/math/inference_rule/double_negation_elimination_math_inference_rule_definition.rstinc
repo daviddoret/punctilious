@@ -5,4 +5,4 @@ Definition
 
 .. math::
 
-    \lnot \left( \lnot \left( \mathbf{P} \right) \right) \vdash \mathbf{P}
+    \lnot \left( \lnot \left( \boldsymbol{P} \right) \right) \vdash \boldsymbol{P}

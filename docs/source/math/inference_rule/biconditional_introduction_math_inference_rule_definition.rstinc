@@ -5,13 +5,13 @@ Definition
 
 .. math::
 
-   \left( \left( \mathbf{P} \implies \mathbf{Q} \right), \left( \mathbf{Q} \implies \mathbf{P} \right) \right) \vdash \left( \mathbf{Q} \iff P \right)
+   \left( \left( \boldsymbol{P} \implies \mathbf{Q} \right), \left( \mathbf{Q} \implies \boldsymbol{P} \right) \right) \vdash \left( \mathbf{Q} \iff P \right)
 
 Where:
 
-   * :math:`\mathbf{P} \implies \mathbf{Q}` is a :ref:`formula-statement<formula_statement_math_concept>`
-   * :math:`\mathbf{Q} \implies \mathbf{P}` is a :ref:`formula-statement<formula_statement_math_concept>`
-   * :math:`\mathbf{P}` is a propositional :ref:`formula<formula_math_concept>`
+   * :math:`\boldsymbol{P} \implies \mathbf{Q}` is a :ref:`formula-statement<formula_statement_math_concept>`
+   * :math:`\mathbf{Q} \implies \boldsymbol{P}` is a :ref:`formula-statement<formula_statement_math_concept>`
+   * :math:`\boldsymbol{P}` is a propositional :ref:`formula<formula_math_concept>`
    * :math:`\mathbf{Q}` is a propositional :ref:`formula<formula_math_concept>`
 
-In straightforward language, if :math:`\mathbf{Q}` follows from :math:`\mathbf{P}` and :math:`\mathbf{P}` follows from :math:`\mathbf{Q}`, it follows that :math:`\mathbf{P}` is true if and only if :math:`\mathbf{Q}` is true.
+In straightforward language, if :math:`\mathbf{Q}` follows from :math:`\boldsymbol{P}` and :math:`\boldsymbol{P}` follows from :math:`\mathbf{Q}`, it follows that :math:`\boldsymbol{P}` is true if and only if :math:`\mathbf{Q}` is true.

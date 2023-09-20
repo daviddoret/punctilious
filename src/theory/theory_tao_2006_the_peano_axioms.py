@@ -213,7 +213,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         # Proof.
         # Suppose for sake of contradiction that 6 = 2.
-        h1 = t.pose_hypothesis(hypothesis_formula=u.f(u.r.equality, six, two))
+        h1 = t.pose_hypothesis(hypothesis_formula=u.f(u.r.inequality, six, two))
         hypothesis_statement = h1.hypothesis_statement_in_child_theory
         # Then 5++ = 1++,
         # ((5)++ = 2)
@@ -258,7 +258,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
             p=h1_p11)
         p072 = t.i.inconsistency_introduction_2.infer_statement(x_eq_y=h1_p071, x_neq_y=p031,
             inconsistent_theory=h1.hypothesis_child_theory)
-        p073 = t.i.proof_by_refutation_2.infer_statement(p_eq_q_hypothesis=h1, inc_hypothesis=p072,
+        p073 = t.i.proof_by_refutation_2.infer_statement(x_eq_y_hypothesis=h1, inc_hypothesis=p072,
             ref='2.1.8')
 
         t.open_section('Direct proof', section_parent=s55, numbering=False)

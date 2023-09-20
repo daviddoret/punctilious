@@ -9,6 +9,7 @@ class TestProofByContradiction2(TestCase):
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
+        pass
         self.assertTrue(
             proposition_of_interest.is_formula_syntactically_equivalent_to(o2=o1 | u.r.eq | o2))
         self.assertEqual('(o1 = o2)', proposition_of_interest.rep_formula(pu.encodings.plaintext))

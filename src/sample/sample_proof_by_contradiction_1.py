@@ -11,6 +11,7 @@ t1 = u.t(echo=True)
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
 a = t1.include_axiom(a=a1)
+pu.configuration.echo_proof = False
 t1.i.axiom_interpretation.infer_statement(axiom=a, formula=f(o1, o2))
 t1.i.axiom_interpretation.infer_statement(axiom=a, formula=f(o2, o3))
 with u.v('x') as x, u.v('y') as y, u.v('z') as z:
@@ -29,6 +30,7 @@ modus_ponens = h.child_theory.i.modus_ponens.infer_statement(p_implies_q=variabl
     p=conjunction_introduction)
 
 # Prove hypothesis inconsistency
+pu.configuration.echo_proof = True
 h_inconsistency = t1.i.inconsistency_introduction_1.infer_statement(p=modus_ponens,
     not_p=h.child_statement, inconsistent_theory=h.child_theory,
     subtitle='Proof of the hypothesis inconsistency')
