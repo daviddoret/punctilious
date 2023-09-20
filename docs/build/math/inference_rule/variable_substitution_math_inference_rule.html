@@ -210,15 +210,15 @@
                                                                             href="../concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
                                         class="std std-ref">inference-rule</span></a>:</p>
                                 <div class="math notranslate nohighlight">
-                                    \[\left( \mathbf{P}, \Phi \right) \vdash \mathbf{P}'\]
+                                    \[\left( \boldsymbol{P}, \Phi \right) \vdash \boldsymbol{P}'\]
                                 </div>
                                 <p>Where:</p>
                                 <blockquote>
                                     <div>
                                         <ul class="simple">
-                                            <li><p><span class="math notranslate nohighlight">\(\mathbf{P}\)</span> is a
-                                                <a class="reference internal"
-                                                   href="../concept/formula_statement_math_concept.html#formula-statement-math-concept"><span
+                                            <li><p><span class="math notranslate nohighlight">\(\boldsymbol{P}\)</span>
+                                                is a <a class="reference internal"
+                                                        href="../concept/formula_statement_math_concept.html#formula-statement-math-concept"><span
                                                         class="std std-ref">formula-statement</span></a> that includes
                                                 <span class="math notranslate nohighlight">\(n\)</span> <a
                                                         class="reference internal"
@@ -230,7 +230,7 @@
                                                 sequence of <span class="math notranslate nohighlight">\(n\)</span>
                                                 well-formed formulae,</p></li>
                                             <li><p><span class="math notranslate nohighlight">\(P'\)</span> is a
-                                                modified version of <span class="math notranslate nohighlight">\(\mathbf{P}\)</span>
+                                                modified version of <span class="math notranslate nohighlight">\(\boldsymbol{P}\)</span>
                                                 whose variables have been substituted with the corresponding formulae in
                                                 <span class="math notranslate nohighlight">\(\Phi\)</span></p></li>
                                         </ul>
@@ -242,23 +242,23 @@
                                     <div>
                                         <ol class="arabic simple">
                                             <li><p>Parse <span
-                                                    class="math notranslate nohighlight">\(\mathbf{P}\)</span> top-down
-                                                first, left-right second</p></li>
+                                                    class="math notranslate nohighlight">\(\boldsymbol{P}\)</span>
+                                                top-down first, left-right second</p></li>
                                             <li><p>Whenever a free-variable is newly encountered during parsing, assign
                                                 it a sequential number</p></li>
                                             <li><p>Following order, pair every free-variable in that sequence of
                                                 free-variables with formulae in <span
                                                         class="math notranslate nohighlight">\(\Phi\)</span></p></li>
                                             <li><p>Parse <span
-                                                    class="math notranslate nohighlight">\(\mathbf{P}\)</span> and
+                                                    class="math notranslate nohighlight">\(\boldsymbol{P}\)</span> and
                                                 substitute every occurrence of free-variables with its paired formula
                                             </p></li>
                                         </ol>
                                     </div>
                                 </blockquote>
                                 <p>In straightforward language, by substituting the free-variables in <span
-                                        class="math notranslate nohighlight">\(\mathbf{P}\)</span> with the formulae in
-                                    <span class="math notranslate nohighlight">\(Phi\)</span>, a new statement <span
+                                        class="math notranslate nohighlight">\(\boldsymbol{P}\)</span> with the formulae
+                                    in <span class="math notranslate nohighlight">\(Phi\)</span>, a new statement <span
                                             class="math notranslate nohighlight">\(P'\)</span> follows.</p>
                             </section>
                         </section>

@@ -29,6 +29,7 @@ This table of contents references the key mathematical concepts used by punctili
    relation<math/concept/relation_math_concept>
    statement<math/concept/statement_math_concept>
    theory-elaboration-sequence<math/concept/theory_elaboration_sequence_math_concept>
+   validity-of-formula<math/concept/validity_of_formula_math_concept>
    universe-of-discourse<math/concept/universe_of_discourse_math_concept>
 
 

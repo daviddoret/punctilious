@@ -5,12 +5,12 @@ Definition
 
 .. math::
 
-   \left( \mathbf{P} \land \mathbf{Q} \right) \vdash \mathbf{P}
+   \left( \boldsymbol{P} \land \mathbf{Q} \right) \vdash \boldsymbol{P}
 
 Where:
 
-   * :math:`\mathbf{P} \land \mathbf{Q}` is a :ref:`formula-statement<formula_statement_math_concept>`
-   * :math:`\mathbf{P}` is a propositional :ref:`formula<formula_math_concept>`
+   * :math:`\boldsymbol{P} \land \mathbf{Q}` is a :ref:`formula-statement<formula_statement_math_concept>`
+   * :math:`\boldsymbol{P}` is a propositional :ref:`formula<formula_math_concept>`
    * :math:`\mathbf{Q}` is a propositional :ref:`formula<formula_math_concept>`
 
-In straightforward language, if both :math:`\mathbf{P}` and :math:`\mathbf{Q}` are true, it follows that :math:`\mathbf{P}` is true.
+In straightforward language, if both :math:`\boldsymbol{P}` and :math:`\mathbf{Q}` are true, it follows that :math:`\boldsymbol{P}` is true.

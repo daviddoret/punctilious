@@ -5,11 +5,12 @@ Definition
 
 .. math::
 
-    \left( \boldsymbol{\mathcal{H}} assume \not \mathbf{P}, Inc\left(\mathcal{H}\right)  \right) \vdash \mathbf{P}
+    \left( \boldsymbol{\mathcal{H}} \; \textit{assume} \; \boldsymbol{x} = \boldsymbol{y}, \; Inc\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \boldsymbol{x} \neq \boldsymbol{y}
 	
 Where:
 
  * :math:`\boldsymbol{\mathcal{H}}` is an :ref:`hypothesis<hypothesis_math_concept>`
  * :math:`\boldsymbol{P}` is :ref:`formula<formula_math_concept>`
 
-In plain language, if we pose the hypothesis that a proposition :math:`\boldsymbol{P}` is not true, and if we refute that hypothesis by proving :math:`\boldsymbol{P}`, the inconsistency of that hypothesis follows from this contradiction, and :math:`\boldsymbol{P}` follows from that inconsistency.
+In straightforward language, if from the hypothesis that x is equal to y, it follows that the hypothesis is inconsistent, it follows that x is not equal to y (or alternatively that the parent theory is itself inconsistent).
+

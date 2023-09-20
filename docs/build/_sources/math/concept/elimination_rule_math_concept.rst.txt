@@ -21,5 +21,5 @@ Quotes
 -------
 
     "Each of the introduction rules tells us how to derive a formula of some syntactic form. For instance, the conjunction introduction rule (∧I) shows that we can derive a conjunction if we derive both conjunctive terms; the disjunction introduction rules (∨I) show that we can derive a disjunction if we derive one of the disjunctive terms."
-    - :cite:p:`porter_2008_handbookknowledgerepresentation`, p. 6-7
+    - :cite:p:`porter_2008_handbookknowledgerepresentation{, p. 6-7}`
 

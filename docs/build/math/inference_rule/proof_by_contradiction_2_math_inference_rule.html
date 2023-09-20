@@ -210,9 +210,30 @@
                                                                                href="../concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
                                         class="std std-ref">inference-rule</span></a>:</p>
                                 <div class="math notranslate nohighlight">
-                                    \[\left( \mathcal{H} assume \not \mathbf{P}, Inc\left(\mathcal{H}\right) \right)
-                                    \vdash \mathbf{P}\]
+                                    \[\left( \boldsymbol{\mathcal{H}} \; \textit{assume} \; \boldsymbol{x} \neq
+                                    \boldsymbol{y}, \; Inc\left( \boldsymbol{\mathcal{H}} \right) \right) \vdash
+                                    \boldsymbol{x} = \boldsymbol{y}\]
                                 </div>
+                                <p>Where:</p>
+                                <blockquote>
+                                    <div>
+                                        <ul class="simple">
+                                            <li><p><span class="math notranslate nohighlight">\(\boldsymbol{\mathcal{H}}\)</span>
+                                                is an <a class="reference internal"
+                                                         href="../concept/hypothesis_math_concept.html#hypothesis-math-concept"><span
+                                                        class="std std-ref">hypothesis</span></a></p></li>
+                                            <li><p><span class="math notranslate nohighlight">\(\boldsymbol{P}\)</span>
+                                                is a propositional <a class="reference internal"
+                                                                      href="../concept/formula_math_concept.html#formula-math-concept"><span
+                                                        class="std std-ref">formula</span></a></p></li>
+                                            <li><p><span class="math notranslate nohighlight">\(\mathit{Inc}\)</span> is
+                                                the inconsistency function</p></li>
+                                        </ul>
+                                    </div>
+                                </blockquote>
+                                <p>In straightforward language, if from the hypothesis that x is not equal to y, it
+                                    follows that the hypothesis is inconsistent, it follows that x = y (or alternatively
+                                    that the parent theory is itself inconsistent).</p>
                             </section>
                         </section>
 

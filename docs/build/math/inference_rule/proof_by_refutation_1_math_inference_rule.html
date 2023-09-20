@@ -211,9 +211,8 @@
                                                                             href="../concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
                                         class="std std-ref">inference-rule</span></a>:</p>
                                 <div class="math notranslate nohighlight">
-                                    \[\left( \boldsymbol{\mathcal{H}} \: \textit{assume} \: \neg \boldsymbol{P},
-                                    \boldsymbol{P}, Inc\left( \boldsymbol{\mathcal{H}} \right) \right) \vdash
-                                    \boldsymbol{P}\]
+                                    \[\left( \boldsymbol{\mathcal{H}} \: \textit{assume} \: \boldsymbol{P}, Inc\left(
+                                    \boldsymbol{\mathcal{H}} \right) \right) \vdash \neg \boldsymbol{P}\]
                                 </div>
                                 <p>Where:</p>
                                 <blockquote>
@@ -227,14 +226,17 @@
                                                 is a <a class="reference internal"
                                                         href="../concept/formula_statement_math_concept.html#formula-statement-math-concept"><span
                                                         class="std std-ref">formula-statement</span></a></p></li>
+                                            <li><p><span class="math notranslate nohighlight">\(\mathit{Inc}\)</span> is
+                                                the inconsistency function</p></li>
                                         </ul>
                                     </div>
                                 </blockquote>
                                 <p>In plain language, it consists in posing the hypothesis that a proposition <span
-                                        class="math notranslate nohighlight">\(\boldsymbol{P}\)</span> is not true,
-                                    refuting that hypothesis by proving <span class="math notranslate nohighlight">\(\boldsymbol{P}\)</span>,
+                                        class="math notranslate nohighlight">\(\boldsymbol{P}\)</span> is true, refuting
+                                    that hypothesis by proving <span class="math notranslate nohighlight">\(\neg \boldsymbol{P}\)</span>,
                                     inferring the inconsistency of that hypothesis from this contradiction, and finally
-                                    inferring <span class="math notranslate nohighlight">\(\boldsymbol{P}\)</span>.</p>
+                                    inferring <span class="math notranslate nohighlight">\(\boldsymbol{P}\)</span> (or
+                                    alternatively that the parent theory is itself inconsistent).</p>
                             </section>
                         </section>
 

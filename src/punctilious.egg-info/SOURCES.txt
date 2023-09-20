@@ -95,6 +95,7 @@ tests/test_serif_normal.py
 tests/test_simple_objct.py
 tests/test_subscript.py
 tests/test_subscriptify.py
+tests/test_tao_2006_the_peano_axioms.py
 tests/test_text.py
 tests/test_theoretical_objct.py
 tests/test_theory_elaboration_sequence.py

@@ -359,7 +359,28 @@
                                     <div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true"
                                          id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0">
                                         <div class="highlight-text notranslate">
-                                            <div class="highlight"><pre><span></span>Let &quot;U5&quot; be a universe-of-discourse.
+                                            <div class="highlight"><pre><span></span>import punctilious as pu
+
+# Create a universe-of-discourse with basic objects for the sake of this example.
+u = pu.UniverseOfDiscourse(echo=True)
+o1 = u.o.declare()
+o2 = u.o.declare()
+o3 = u.o.declare()
+r1 = u.r.declare(2, signal_proposition=True)
+r2 = u.r.declare(1, signal_proposition=True)
+axiom = u.declare_axiom(natural_language=&#39;Dummy axiom for demonstration purposes&#39;)
+
+# Elaborate a dummy theory with a set of propositions necessary for our demonstration
+t1 = u.t(echo=True)
+theory_axiom = t1.include_axiom(a=axiom)
+phi1 = t1.i.axiom_interpretation.infer_statement(axiom=theory_axiom,
+    formula=r1(o1, o2) | u.r.biconditional | r2(o3))
+
+# And finally, use the biconditional-elimination-2 inference-rule:
+proposition_of_interest = t1.i.biconditional_elimination_2.infer_statement(p_iff_q=phi1,
+    subtitle=&#39;The proposition of interest&#39;, echo=True)
+
+Let &quot;U5&quot; be a universe-of-discourse.
 
 Let &quot;T1&quot; be a theory-elaboration-sequence in U5.
 

@@ -31,9 +31,8 @@ from punctilious.core import AbsorptionDeclaration, AbsorptionInclusion, Article
     ProofByRefutation2Declaration, ProofByRefutation2Inclusion, QuasiQuotation, Relation, \
     rep_two_columns_proof_item, SansSerifBold, SansSerifNormal, ScriptNormal, SerifBoldItalic, \
     SerifItalic, SerifNormal, SimpleObjct, SimpleObjctDict, Statement, Subscript, subscriptify, \
-    SymbolicObject, text_styles, TextStyle, TheoreticalObject, TheoryElaborationSequence, \
-    TheoryPackage, UniverseOfDiscourse, VariableSubstitutionDeclaration, \
-    VariableSubstitutionInclusion
+    SymbolicObject, text_styles, TextStyle, TheoreticalObject, TheoryElaborationSequence, Package, \
+    UniverseOfDiscourse, VariableSubstitutionDeclaration, VariableSubstitutionInclusion
 
 # from foundation_system_1 import foundation_system_1, ft, u
 

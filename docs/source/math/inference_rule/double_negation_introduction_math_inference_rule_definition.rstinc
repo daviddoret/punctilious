@@ -5,7 +5,7 @@ Definition
 
 .. math::
 
-    \mathbf{P} \vdash \lnot \left( \lnot \left( \mathbf{P} \right) \right)
+    \boldsymbol{P} \vdash \lnot \left( \lnot \left( \boldsymbol{P} \right) \right)
 
 Quotes
 ------

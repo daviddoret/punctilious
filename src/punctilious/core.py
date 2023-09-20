@@ -4447,9 +4447,9 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
         """
         x_equal_y: Formula
         x_equal_y = unpack_formula(x_equal_y)
-        p = x_equal_y.parameters[0]
-        q = x_equal_y.parameters[1]
-        return t.u.f(t.u.r.equality, q, p)
+        x = x_equal_y.parameters[0]
+        y = x_equal_y.parameters[1]
+        return t.u.f(t.u.r.equality, y, x)
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -4829,6 +4829,7 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
         x_neq_y = x_neq_y_hypothesis.hypothesis_formula
         x = x_neq_y.parameters[0]
         y = x_neq_y.parameters[1]
+        # Alternatively: not(x = y)
         return t.u.f(t.u.r.equality, x, y)
 
     def verify_args(self, x_neq_y_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
@@ -5925,7 +5926,7 @@ class SubstitutionOfEqualTerms(FormulaStatement):
         assert theory.contains_theoretical_objct(original_expression)
         assert isinstance(equality_statement, FormulaStatement)
         assert theory.contains_theoretical_objct(equality_statement)
-        assert equality_statement.valid_proposition.relation is theory.universe_of_discourse.r.equality
+        assert equality_statement.valid_proposition.relation is theory.universe_of_discourse.r.inequality
         left_term = equality_statement.valid_proposition.parameters[0]
         right_term = equality_statement.valid_proposition.parameters[1]
         self.original_expression = original_expression
@@ -7545,15 +7546,15 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, p_eq_q_hypothesis: (None, Hypothesis) = None,
+    def infer_formula(self, x_eq_y_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        return super().infer_formula(p_eq_q_hypothesis, inc_hypothesis, echo=echo)
+        return super().infer_formula(x_eq_y_hypothesis, inc_hypothesis, echo=echo)
 
-    def infer_statement(self, p_eq_q_hypothesis: (None, FormulaStatement) = None,
+    def infer_statement(self, x_eq_y_hypothesis: (None, FormulaStatement) = None,
             inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        return super().infer_statement(p_eq_q_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
+        return super().infer_statement(x_eq_y_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -8670,34 +8671,9 @@ def reset_configuration(configuration: Configuration) -> None:
 reset_configuration(configuration=configuration)
 
 
-class TheoryPackage:
+class Package:
     def __init__(self):
         pass
-
-    def develop(self) -> TheoryElaborationSequence:
-        """Elaborate a new theory in a new universe with the content of the theory.
-
-        """
-        u = create_universe_of_discourse()
-        t = u.declare_theory()
-        self.develop_theory(t=t)
-        return t
-
-    @abc.abstractmethod
-    def develop_theory(self, t: TheoryElaborationSequence) -> TheoryElaborationSequence:
-        """Given a theory t, pursue the elaboration of that theory with the content of the theory.
-
-        This is the key method that must be implemented by the non-abstract theory."""
-        raise NotImplementedError()
-
-    def develop_universe(self, u: UniverseOfDiscourse) -> TheoryElaborationSequence:
-        """Given a universe u, elaborate a new theory with the content of the theory in that
-        universe.
-
-        """
-        t = u.declare_theory()
-        t = self.develop_theory(t=t)
-        return t
 
 
 class Article:

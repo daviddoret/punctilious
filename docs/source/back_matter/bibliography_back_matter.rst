@@ -1,10 +1,12 @@
 .. _bibliography_front_matter:
 .. _bibliography:
 
+Bibliography
+==================
+
 .. only:: html
 
-Bibliography
-=============
+  .. rubric:: Bibliography
 
 .. bibliography:: ../bibliography_bibtex.bib
    :cited:

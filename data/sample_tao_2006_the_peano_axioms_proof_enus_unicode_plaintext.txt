@@ -1,0 +1,253 @@
+import punctilious as pu
+import theory as pu_theory
+
+the_peano_axioms = pu_theory.Tao2006ThePeanoAxioms()
+the_peano_axioms.t.export_article_to_file(proof=True, encoding=pu.encodings.unicode,
+    file_path='../../data/report_tao_2006_the_peano_axioms_proof_enus_unicode.txt')
+
+# 2: The natural numbers
+
+## 2.1: The peano axioms
+
+### Informal definition of natural number
+
+Informal definition 2.1.1 (note1): A natural number is any element of the set N := { 0, 1, 2, 3, 4, ... }, which is the set of all the numbers created by starting with 0 and then counting forward indefinitely. We call N the set of natural numbers.
+
+Remark 2.1.2 (note2): In some texts the natural numbers start at 1 instead of 0, but this is a matter of notational convention more than anything else. In this text we shall refer to the set { 1, 2, 3, ... } as the positive integers Z+ rather than the natural numbers. Natural numbers are sometimes also known as whole numbers.
+
+### Axiom 2.1
+
+Axiom 2.1 (T1.A1): Let axiom A1 "0 is a natural number." be included (postulated) in T1.
+
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "A |- P" be included and considered valid in T1.
+
+Proposition (T1.P1): (0 is-a natural-number). Proof: "0 is a natural number." is postulated by axiom 2.1 (A1). (0 is-a natural-number) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that (0 is-a natural-number). QED
+
+Warning (warning1): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
+
+### Axiom 2.2
+
+Axiom 2.2 (T1.A2): Let axiom A2 "If n is a natural number, then n++ is a natural number." be included (postulated) in T1.
+
+Proposition (T1.P2): ((n1 is-a natural-number) ==> ((n1)++ is-a natural-number)). Proof: "If n is a natural number, then n++ is a natural number." is postulated by axiom 2.2 (A2). ((n1 is-a natural-number) ==> ((n1)++ is-a natural-number)) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that ((n1 is-a natural-number) ==> ((n1)++ is-a natural-number)). QED
+
+Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P, Phi) |- P'" be included and considered valid in T1.
+
+Proposition (T1.P3): ((0 is-a natural-number) ==> ((0)++ is-a natural-number)). Proof: ((n1 is-a natural-number) ==> ((n1)++ is-a natural-number)) follows from prop. (P2). Let n1 = 0.Therefore, by the variable-substitution inference rule: (P, Phi) |- P', it follows that ((0 is-a natural-number) ==> ((0)++ is-a natural-number)). QED
+
+Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "(((P1 ==> P1) , P1) |- Q1)" be included and considered valid in T1.
+
+Proposition 2.2.3 (T1.P4): ((0)++ is-a natural-number). Proof: ((0 is-a natural-number) ==> ((0)++ is-a natural-number)) follows from prop. (P3).(0 is-a natural-number) follows from prop. (P1).Therefore, by the modus-ponens inference rule: (((P1 ==> P1) , P1) |- Q1), it follows that ((0)++ is-a natural-number). QED
+
+Definition (T1.D1): Let definition D1 "We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that x is defined to equal y.)" be included (postulated) in T1.
+
+Inference rule (definition-interpretation): Let inference-rule definition-interpretation defined as "𝒟 ⊢ P" be included and considered valid in T1.
+
+Proposition (T1.P5): (1 = (0)++). Proof: "We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that x is defined to equal y.)" is postulated by def. (D1). (1 = (0)++) is an interpretation of that definition.Therefore, by the definition-interpretation inference rule: 𝒟 ⊢ P, it follows that (1 = (0)++). QED
+
+Proposition (T1.P6): (2 = ((0)++)++). Proof: "We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that x is defined to equal y.)" is postulated by def. (D1). (2 = ((0)++)++) is an interpretation of that definition.Therefore, by the definition-interpretation inference rule: 𝒟 ⊢ P, it follows that (2 = ((0)++)++). QED
+
+Proposition (T1.P7): (3 = (((0)++)++)++). Proof: "We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that x is defined to equal y.)" is postulated by def. (D1). (3 = (((0)++)++)++) is an interpretation of that definition.Therefore, by the definition-interpretation inference rule: 𝒟 ⊢ P, it follows that (3 = (((0)++)++)++). QED
+
+Proposition (T1.P8): (4 = ((((0)++)++)++)++). Proof: "We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that x is defined to equal y.)" is postulated by def. (D1). (4 = ((((0)++)++)++)++) is an interpretation of that definition.Therefore, by the definition-interpretation inference rule: 𝒟 ⊢ P, it follows that (4 = ((((0)++)++)++)++). QED
+
+Proposition (T1.P9): (((0)++ is-a natural-number) ==> (((0)++)++ is-a natural-number)). Proof: ((n1 is-a natural-number) ==> ((n1)++ is-a natural-number)) follows from prop. (P2). Let n1 = (0)++.Therefore, by the variable-substitution inference rule: (P, Phi) |- P', it follows that (((0)++ is-a natural-number) ==> (((0)++)++ is-a natural-number)). QED
+
+Proposition (T1.P10): (((0)++)++ is-a natural-number). Proof: (((0)++ is-a natural-number) ==> (((0)++)++ is-a natural-number)) follows from prop. (P9).((0)++ is-a natural-number) follows from prop. 2.2.3 (P4).Therefore, by the modus-ponens inference rule: (((P1 ==> P1) , P1) |- Q1), it follows that (((0)++)++ is-a natural-number). QED
+
+Proposition (T1.P11): ((((0)++)++ is-a natural-number) ==> ((((0)++)++)++ is-a natural-number)). Proof: ((n1 is-a natural-number) ==> ((n1)++ is-a natural-number)) follows from prop. (P2). Let n1 = ((0)++)++.Therefore, by the variable-substitution inference rule: (P, Phi) |- P', it follows that ((((0)++)++ is-a natural-number) ==> ((((0)++)++)++ is-a natural-number)). QED
+
+Proposition (T1.P12): ((((0)++)++)++ is-a natural-number). Proof: ((((0)++)++ is-a natural-number) ==> ((((0)++)++)++ is-a natural-number)) follows from prop. (P11).(((0)++)++ is-a natural-number) follows from prop. (P10).Therefore, by the modus-ponens inference rule: (((P1 ==> P1) , P1) |- Q1), it follows that ((((0)++)++)++ is-a natural-number). QED
+
+Proposition (T1.P13): (((((0)++)++)++ is-a natural-number) ==> (((((0)++)++)++)++ is-a natural-number)). Proof: ((n1 is-a natural-number) ==> ((n1)++ is-a natural-number)) follows from prop. (P2). Let n1 = (((0)++)++)++.Therefore, by the variable-substitution inference rule: (P, Phi) |- P', it follows that (((((0)++)++)++ is-a natural-number) ==> (((((0)++)++)++)++ is-a natural-number)). QED
+
+Proposition (T1.P14): (((((0)++)++)++)++ is-a natural-number). Proof: (((((0)++)++)++ is-a natural-number) ==> (((((0)++)++)++)++ is-a natural-number)) follows from prop. (P13).((((0)++)++)++ is-a natural-number) follows from prop. (P12).Therefore, by the modus-ponens inference rule: (((P1 ==> P1) , P1) |- Q1), it follows that (((((0)++)++)++)++ is-a natural-number). QED
+
+Inference rule (equality-commutativity): Let inference-rule equality-commutativity defined as "((x1 = y1) |- (y1 = x1))" be included and considered valid in T1.
+
+Proposition (T1.P15): ((0)++ = 1). Proof: (1 = (0)++) follows from prop. (P5). Therefore, by the equality-commutativity inference rule: ((x1 = y1) |- (y1 = x1)), it follows that ((0)++ = 1). QED
+
+Inference rule (equal-terms-substitution): Let inference-rule equal-terms-substitution defined as "((P2 , (x2 = y2)) |- Q2)" be included and considered valid in T1.
+
+Proposition (T1.P16): (2 = (1)++). Proof: (2 = ((0)++)++) follows from prop. (P6). ((0)++ = 1) follows from prop. (P15).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that (2 = (1)++). QED
+
+Proposition (T1.P17): (((0)++)++ = 2). Proof: (2 = ((0)++)++) follows from prop. (P6). Therefore, by the equality-commutativity inference rule: ((x1 = y1) |- (y1 = x1)), it follows that (((0)++)++ = 2). QED
+
+Proposition (T1.P18): (3 = (2)++). Proof: (3 = (((0)++)++)++) follows from prop. (P7). (((0)++)++ = 2) follows from prop. (P17).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that (3 = (2)++). QED
+
+### 3 is a natural number
+
+Proposition (T1.P19): ((((0)++)++)++ = 3). Proof: (3 = (((0)++)++)++) follows from prop. (P7). Therefore, by the equality-commutativity inference rule: ((x1 = y1) |- (y1 = x1)), it follows that ((((0)++)++)++ = 3). QED
+
+Proposition (T1.P20): ((2)++ = 3). Proof: ((((0)++)++)++ = 3) follows from prop. (P19). (((0)++)++ = 2) follows from prop. (P17).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that ((2)++ = 3). QED
+
+Proposition 2.1.4 (T1.P21): (3 is-a natural-number). Proof: ((((0)++)++)++ is-a natural-number) follows from prop. (P12). ((((0)++)++)++ = 3) follows from prop. (P19).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that (3 is-a natural-number). QED
+
+Proposition (T1.P22): (4 = ((((0)++)++)++)++). Proof: "We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that x is defined to equal y.)" is postulated by def. (D1). (4 = ((((0)++)++)++)++) is an interpretation of that definition.Therefore, by the definition-interpretation inference rule: 𝒟 ⊢ P, it follows that (4 = ((((0)++)++)++)++). QED
+
+Proposition (T1.P23): (((((0)++)++)++)++ = 4). Proof: (4 = ((((0)++)++)++)++) follows from prop. (P8). Therefore, by the equality-commutativity inference rule: ((x1 = y1) |- (y1 = x1)), it follows that (((((0)++)++)++)++ = 4). QED
+
+Proposition (T1.P24): ((3)++ = 4). Proof: (((((0)++)++)++)++ = 4) follows from prop. (P23). ((((0)++)++)++ = 3) follows from prop. (P19).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that ((3)++ = 4). QED
+
+Proposition (T1.P25): (((((0)++)++)++ is-a natural-number) ==> (((((0)++)++)++)++ is-a natural-number)). Proof: (((((0)++)++)++ is-a natural-number) ==> (((((0)++)++)++)++ is-a natural-number)) follows from prop. (P13). ((3)++ = 4) follows from prop. (P24).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that (((((0)++)++)++ is-a natural-number) ==> (((((0)++)++)++)++ is-a natural-number)). QED
+
+Proposition (T1.P26): (4 is-a natural-number). Proof: (((((0)++)++)++)++ is-a natural-number) follows from prop. (P14). (((((0)++)++)++)++ = 4) follows from prop. (P23).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that (4 is-a natural-number). QED
+
+### Axiom 2.3
+
+Axiom 2.3 (T1.A3): Let axiom A3 "0 is not the successor of any natural number; i.e., we have n++  0 for every natural number n." be included (postulated) in T1.
+
+Proposition (T1.P27): ((n2 is-a natural-number) ==> ((n2)++ neq 0)). Proof: "0 is not the successor of any natural number; i.e., we have n++  0 for every natural number n." is postulated by axiom 2.3 (A3). ((n2 is-a natural-number) ==> ((n2)++ neq 0)) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that ((n2 is-a natural-number) ==> ((n2)++ neq 0)). QED
+
+### 4 is not equal to 0.
+
+Note (note3): We want to prove that 4 is not equal to 0, i.e. (4  0).
+
+Proposition (T1.P28): ((3 is-a natural-number) ==> ((3)++ neq 0)). Proof: ((n2 is-a natural-number) ==> ((n2)++ neq 0)) follows from prop. (P27). Let n2 = 3.Therefore, by the variable-substitution inference rule: (P, Phi) |- P', it follows that ((3 is-a natural-number) ==> ((3)++ neq 0)). QED
+
+Proposition (T1.P29): ((3)++ neq 0). Proof: ((3 is-a natural-number) ==> ((3)++ neq 0)) follows from prop. (P28).(3 is-a natural-number) follows from prop. 2.1.4 (P21).Therefore, by the modus-ponens inference rule: (((P1 ==> P1) , P1) |- Q1), it follows that ((3)++ neq 0). QED
+
+Proposition 2.1.6 (T1.P30): (4 neq 0). Proof: ((3)++ neq 0) follows from prop. (P29). ((3)++ = 4) follows from prop. (P24).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that (4 neq 0). QED
+
+### Axiom 2.4
+
+Axiom 2.4 (T1.A4): Let axiom A4 "Different natural numbers must have different successors; i.e., if n, m are natural numbers and n  m, then n++  m++. Equivalently, if n++ = m++, then we must have n = m." be included (postulated) in T1.
+
+Proposition (T1.P31): ((((n3 is-a natural-number) and (m1 is-a natural-number)) and (n3 neq m1)) ==> ((n3)++ neq (m1)++)). Proof: "Different natural numbers must have different successors; i.e., if n, m are natural numbers and n  m, then n++  m++. Equivalently, if n++ = m++, then we must have n = m." is postulated by axiom 2.4 (A4). ((((n3 is-a natural-number) and (m1 is-a natural-number)) and (n3 neq m1)) ==> ((n3)++ neq (m1)++)) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that ((((n3 is-a natural-number) and (m1 is-a natural-number)) and (n3 neq m1)) ==> ((n3)++ neq (m1)++)). QED
+
+Proposition (T1.P32): ((((n4 is-a natural-number) and (m2 is-a natural-number)) and ((n4)++ = (m2)++)) ==> (n4 = m2)). Proof: "Different natural numbers must have different successors; i.e., if n, m are natural numbers and n  m, then n++  m++. Equivalently, if n++ = m++, then we must have n = m." is postulated by axiom 2.4 (A4). ((((n4 is-a natural-number) and (m2 is-a natural-number)) and ((n4)++ = (m2)++)) ==> (n4 = m2)) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that ((((n4 is-a natural-number) and (m2 is-a natural-number)) and ((n4)++ = (m2)++)) ==> (n4 = m2)). QED
+
+### 6 is not equal to 2.
+
+Proposition (T1.P33): ((((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)) ==> ((4)++ neq (0)++)). Proof: ((((n3 is-a natural-number) and (m1 is-a natural-number)) and (n3 neq m1)) ==> ((n3)++ neq (m1)++)) follows from prop. (P31). Let n3 = 4, m1 = 0.Therefore, by the variable-substitution inference rule: (P, Phi) |- P', it follows that ((((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)) ==> ((4)++ neq (0)++)). QED
+
+Inference rule (conjunction-introduction): Let inference-rule conjunction-introduction defined as "((P3 , Q3) |- (P3 and Q3))" be included and considered valid in T1.
+
+Proposition (T1.P34): ((4 is-a natural-number) and (0 is-a natural-number)). Proof: (4 is-a natural-number), of the form P3, follows from prop. (P26). (0 is-a natural-number), of the form Q3, follows from prop. (P1). Therefore, by the conjunction-introduction inference rule: ((P3 , Q3) |- (P3 and Q3)), it follows that ((4 is-a natural-number) and (0 is-a natural-number)). QED
+
+Proposition (T1.P35): (((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)). Proof: ((4 is-a natural-number) and (0 is-a natural-number)), of the form P3, follows from prop. (P34). (4 neq 0), of the form Q3, follows from prop. 2.1.6 (P30). Therefore, by the conjunction-introduction inference rule: ((P3 , Q3) |- (P3 and Q3)), it follows that (((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)). QED
+
+Proposition (T1.P36): ((4)++ neq (0)++). Proof: ((((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)) ==> ((4)++ neq (0)++)) follows from prop. (P33).(((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)) follows from prop. (P35).Therefore, by the modus-ponens inference rule: (((P1 ==> P1) , P1) |- Q1), it follows that ((4)++ neq (0)++). QED
+
+Proposition (T1.P37): (5 = (((((0)++)++)++)++)++). Proof: "We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that x is defined to equal y.)" is postulated by def. (D1). (5 = (((((0)++)++)++)++)++) is an interpretation of that definition.Therefore, by the definition-interpretation inference rule: 𝒟 ⊢ P, it follows that (5 = (((((0)++)++)++)++)++). QED
+
+Proposition (T1.P38): ((((((0)++)++)++)++)++ = 5). Proof: (5 = (((((0)++)++)++)++)++) follows from prop. (P37). Therefore, by the equality-commutativity inference rule: ((x1 = y1) |- (y1 = x1)), it follows that ((((((0)++)++)++)++)++ = 5). QED
+
+Proposition (T1.P39): ((4)++ = 5). Proof: ((((((0)++)++)++)++)++ = 5) follows from prop. (P38). (((((0)++)++)++)++ = 4) follows from prop. (P23).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that ((4)++ = 5). QED
+
+Proposition (T1.P40): (5 = (4)++). Proof: ((4)++ = 5) follows from prop. (P39). Therefore, by the equality-commutativity inference rule: ((x1 = y1) |- (y1 = x1)), it follows that (5 = (4)++). QED
+
+Proposition (T1.P41): ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> ((5)++ neq (1)++)). Proof: ((((n3 is-a natural-number) and (m1 is-a natural-number)) and (n3 neq m1)) ==> ((n3)++ neq (m1)++)) follows from prop. (P31). Let n3 = 5, m1 = 1.Therefore, by the variable-substitution inference rule: (P, Phi) |- P', it follows that ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> ((5)++ neq (1)++)). QED
+
+Proposition (T1.P42): ((4 is-a natural-number) ==> ((4)++ is-a natural-number)). Proof: ((n1 is-a natural-number) ==> ((n1)++ is-a natural-number)) follows from prop. (P2). Let n1 = 4.Therefore, by the variable-substitution inference rule: (P, Phi) |- P', it follows that ((4 is-a natural-number) ==> ((4)++ is-a natural-number)). QED
+
+Proposition (T1.P43): ((4 is-a natural-number) ==> (5 is-a natural-number)). Proof: ((4 is-a natural-number) ==> ((4)++ is-a natural-number)) follows from prop. (P42). ((4)++ = 5) follows from prop. (P39).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that ((4 is-a natural-number) ==> (5 is-a natural-number)). QED
+
+Proposition (T1.P44): (5 is-a natural-number). Proof: ((4 is-a natural-number) ==> (5 is-a natural-number)) follows from prop. (P43).(4 is-a natural-number) follows from prop. (P26).Therefore, by the modus-ponens inference rule: (((P1 ==> P1) , P1) |- Q1), it follows that (5 is-a natural-number). QED
+
+Proposition (T1.P45): ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> ((5)++ neq (1)++)). Proof: ((((n3 is-a natural-number) and (m1 is-a natural-number)) and (n3 neq m1)) ==> ((n3)++ neq (m1)++)) follows from prop. (P31). Let n3 = 5, m1 = 1.Therefore, by the variable-substitution inference rule: (P, Phi) |- P', it follows that ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> ((5)++ neq (1)++)). QED
+
+Proposition (T1.P46): ((4)++ neq (0)++). Proof: ((((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)) ==> ((4)++ neq (0)++)) follows from prop. (P33).(((4 is-a natural-number) and (0 is-a natural-number)) and (4 neq 0)) follows from prop. (P35).Therefore, by the modus-ponens inference rule: (((P1 ==> P1) , P1) |- Q1), it follows that ((4)++ neq (0)++). QED
+
+Proposition (T1.P47): (5 neq (0)++). Proof: ((4)++ neq (0)++) follows from prop. (P46). ((4)++ = 5) follows from prop. (P39).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that (5 neq (0)++). QED
+
+Proposition (T1.P48): (6 = ((((((0)++)++)++)++)++)++). Proof: "We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number ((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text I use "x := y" to denote the statement that x is defined to equal y.)" is postulated by def. (D1). (6 = ((((((0)++)++)++)++)++)++) is an interpretation of that definition.Therefore, by the definition-interpretation inference rule: 𝒟 ⊢ P, it follows that (6 = ((((((0)++)++)++)++)++)++). QED
+
+Proposition (T1.P49): (((((((0)++)++)++)++)++)++ = 6). Proof: (6 = ((((((0)++)++)++)++)++)++) follows from prop. (P48). Therefore, by the equality-commutativity inference rule: ((x1 = y1) |- (y1 = x1)), it follows that (((((((0)++)++)++)++)++)++ = 6). QED
+
+Proposition (T1.P50): (1 is-a natural-number). Proof: ((0)++ is-a natural-number) follows from prop. 2.2.3 (P4). ((0)++ = 1) follows from prop. (P15).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that (1 is-a natural-number). QED
+
+Proposition (T1.P51): ((5)++ = 6). Proof: (((((((0)++)++)++)++)++)++ = 6) follows from prop. (P49). ((((((0)++)++)++)++)++ = 5) follows from prop. (P38).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that ((5)++ = 6). QED
+
+Proposition (T1.P52): (6 = (5)++). Proof: ((5)++ = 6) follows from prop. (P51). Therefore, by the equality-commutativity inference rule: ((x1 = y1) |- (y1 = x1)), it follows that (6 = (5)++). QED
+
+#### Proof by contradiction
+
+Note (note4): First, we follow (Tao 2006)s proof by contradiction. In punctilious, we use the term proof-by-refutation-of-equality to designate this specific method of proof.
+
+Axiom (H1.A5): Let axiom A5 "By hypothesis, assume (6 = 2) is true." be included (postulated) in H1.
+
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "A |- P" be included and considered valid in H1.
+
+Proposition (H1.P53): (6 = 2). Proof: "By hypothesis, assume (6 = 2) is true." is postulated by axiom (A5). (6 = 2) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that (6 = 2). QED
+
+Warning (warning2): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
+
+Hypothesis (T1.H1): (6 = 2). This hypothesis is elaborated in theory H1.
+
+Inference rule (equal-terms-substitution): Let inference-rule equal-terms-substitution defined as "((P2 , (x2 = y2)) |- Q2)" be included and considered valid in H1.
+
+Proposition (H1.P54): ((5)++ = 2). Proof: (6 = 2) follows from prop. (P53). (6 = (5)++) follows from prop. (P52).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that ((5)++ = 2). QED
+
+Proposition (H1.P55): ((5)++ = (1)++). Proof: ((5)++ = 2) follows from prop. (P54). (2 = (1)++) follows from prop. (P16).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that ((5)++ = (1)++). QED
+
+Inference rule (conjunction-introduction): Let inference-rule conjunction-introduction defined as "((P3 , Q3) |- (P3 and Q3))" be included and considered valid in H1.
+
+Proposition (H1.P56): ((5 is-a natural-number) and (1 is-a natural-number)). Proof: (5 is-a natural-number), of the form P3, follows from prop. (P44). (1 is-a natural-number), of the form Q3, follows from prop. (P50). Therefore, by the conjunction-introduction inference rule: ((P3 , Q3) |- (P3 and Q3)), it follows that ((5 is-a natural-number) and (1 is-a natural-number)). QED
+
+Proposition (H1.P57): (((5 is-a natural-number) and (1 is-a natural-number)) and ((5)++ = (1)++)). Proof: ((5 is-a natural-number) and (1 is-a natural-number)), of the form P3, follows from prop. (P56). ((5)++ = (1)++), of the form Q3, follows from prop. (P55). Therefore, by the conjunction-introduction inference rule: ((P3 , Q3) |- (P3 and Q3)), it follows that (((5 is-a natural-number) and (1 is-a natural-number)) and ((5)++ = (1)++)). QED
+
+Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P, Phi) |- P'" be included and considered valid in H1.
+
+Proposition (H1.P58): ((((5 is-a natural-number) and (1 is-a natural-number)) and ((5)++ = (1)++)) ==> (5 = 1)). Proof: ((((n4 is-a natural-number) and (m2 is-a natural-number)) and ((n4)++ = (m2)++)) ==> (n4 = m2)) follows from prop. (P32). Let n4 = 5, m2 = 1.Therefore, by the variable-substitution inference rule: (P, Phi) |- P', it follows that ((((5 is-a natural-number) and (1 is-a natural-number)) and ((5)++ = (1)++)) ==> (5 = 1)). QED
+
+Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "(((P1 ==> P1) , P1) |- Q1)" be included and considered valid in H1.
+
+Proposition (H1.P59): (5 = 1). Proof: ((((5 is-a natural-number) and (1 is-a natural-number)) and ((5)++ = (1)++)) ==> (5 = 1)) follows from prop. (P58).(((5 is-a natural-number) and (1 is-a natural-number)) and ((5)++ = (1)++)) follows from prop. (P57).Therefore, by the modus-ponens inference rule: (((P1 ==> P1) , P1) |- Q1), it follows that (5 = 1). QED
+
+Proposition (H1.P60): ((4)++ = 1). Proof: (5 = 1) follows from prop. (P59). (5 = (4)++) follows from prop. (P40).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that ((4)++ = 1). QED
+
+Proposition (H1.P61): ((4)++ = (0)++). Proof: ((4)++ = 1) follows from prop. (P60). (1 = (0)++) follows from prop. (P5).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that ((4)++ = (0)++). QED
+
+Proposition (H1.P62): ((4 is-a natural-number) and (0 is-a natural-number)). Proof: (4 is-a natural-number), of the form P3, follows from prop. (P26). (0 is-a natural-number), of the form Q3, follows from prop. (P1). Therefore, by the conjunction-introduction inference rule: ((P3 , Q3) |- (P3 and Q3)), it follows that ((4 is-a natural-number) and (0 is-a natural-number)). QED
+
+Proposition (H1.P63): (((4 is-a natural-number) and (0 is-a natural-number)) and ((4)++ = (0)++)). Proof: ((4 is-a natural-number) and (0 is-a natural-number)), of the form P3, follows from prop. (P62). ((4)++ = (0)++), of the form Q3, follows from prop. (P61). Therefore, by the conjunction-introduction inference rule: ((P3 , Q3) |- (P3 and Q3)), it follows that (((4 is-a natural-number) and (0 is-a natural-number)) and ((4)++ = (0)++)). QED
+
+Proposition (H1.P64): ((((4 is-a natural-number) and (0 is-a natural-number)) and ((4)++ = (0)++)) ==> (4 = 0)). Proof: ((((n4 is-a natural-number) and (m2 is-a natural-number)) and ((n4)++ = (m2)++)) ==> (n4 = m2)) follows from prop. (P32). Let n4 = 4, m2 = 0.Therefore, by the variable-substitution inference rule: (P, Phi) |- P', it follows that ((((4 is-a natural-number) and (0 is-a natural-number)) and ((4)++ = (0)++)) ==> (4 = 0)). QED
+
+Proposition (H1.P65): (4 = 0). Proof: ((((4 is-a natural-number) and (0 is-a natural-number)) and ((4)++ = (0)++)) ==> (4 = 0)) follows from prop. (P64).(((4 is-a natural-number) and (0 is-a natural-number)) and ((4)++ = (0)++)) follows from prop. (P63).Therefore, by the modus-ponens inference rule: (((P1 ==> P1) , P1) |- Q1), it follows that (4 = 0). QED
+
+Inference rule (inconsistency-introduction-2): Let inference-rule inconsistency-introduction-2 defined as "((P = Q), (P neq Q)) |- Inc(T)" be included and considered valid in T1.
+
+Proposition (T1.P66): Inc(H1). Proof: Let (P = Q) := (4 = 0) follows from prop. (P65). Let (P neq Q)) := (4 neq 0) follows from prop. 2.1.6 (P30). Therefore, by the inconsistency-introduction-2 inference rule: ((P = Q), (P neq Q)) |- Inc(T), it follows that Inc(H1). QED
+
+Inference rule (proof-by-refutation-2): Let inference-rule proof-by-refutation-2 defined as "(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 = 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 ≠ 𝑸)" be included and considered valid in T1.
+
+Proposition 2.1.8 (T1.P67): (6 neq 2). Proof: Let hyp. (H1) be the hypothesis (6 = 2). Inc(H1) follows from prop. (P66).Therefore, by the proof-by-refutation-2 inference rule: (𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 = 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 ≠ 𝑸), it follows that (6 neq 2). QED
+
+#### Direct proof
+
+Note (note5): In (Tao, 2006), proposition 2.1.8 uses proof by contradiction. Note that in punctilious, this specific proof method is called a proof by refutation of equality. Nevertheless, proofs by contradictions are somehow indirect proofs. As an alternative, we now propose a direct proof.
+
+Proposition (T1.P68): ((1)++ = 2). Proof: (((0)++)++ = 2) follows from prop. (P17). ((0)++ = 1) follows from prop. (P15).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that ((1)++ = 2). QED
+
+Proposition (T1.P69): (5 neq 1). Proof: (5 neq (0)++) follows from prop. (P47). ((0)++ = 1) follows from prop. (P15).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that (5 neq 1). QED
+
+Proposition (T1.P70): ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> (6 neq (1)++)). Proof: ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> ((5)++ neq (1)++)) follows from prop. (P45). ((5)++ = 6) follows from prop. (P51).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> (6 neq (1)++)). QED
+
+Proposition (T1.P71): ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> (6 neq 2)). Proof: ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> (6 neq (1)++)) follows from prop. (P70). ((1)++ = 2) follows from prop. (P68).Therefore, by the equal-terms-substitution inference rule: ((P2 , (x2 = y2)) |- Q2), it follows that ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> (6 neq 2)). QED
+
+Proposition (T1.P72): ((5 is-a natural-number) and (1 is-a natural-number)). Proof: (5 is-a natural-number), of the form P3, follows from prop. (P44). (1 is-a natural-number), of the form Q3, follows from prop. (P50). Therefore, by the conjunction-introduction inference rule: ((P3 , Q3) |- (P3 and Q3)), it follows that ((5 is-a natural-number) and (1 is-a natural-number)). QED
+
+Proposition (T1.P73): (((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)). Proof: ((5 is-a natural-number) and (1 is-a natural-number)), of the form P3, follows from prop. (P72). (5 neq 1), of the form Q3, follows from prop. (P69). Therefore, by the conjunction-introduction inference rule: ((P3 , Q3) |- (P3 and Q3)), it follows that (((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)). QED
+
+Proposition (T1.P74): (6 neq 2). Proof: ((((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) ==> (6 neq 2)) follows from prop. (P71).(((5 is-a natural-number) and (1 is-a natural-number)) and (5 neq 1)) follows from prop. (P73).Therefore, by the modus-ponens inference rule: (((P1 ==> P1) , P1) |- Q1), it follows that (6 neq 2). QED
+
+### Axiom 2.5: the principle of mathematical induction
+
+Axiom schema (T1.A6) - Principle of mathematical induction: Let axiom A6 "Let P(n) be any property pertaining to a natural number n. Suppose that P(O) is true, and suppose that whenever P(n) is true, P(n++) is also true. Then P(n) is true for every natural number n." be included (postulated) in T1.
+
+Proposition (T1.P75): (((n5 is-a natural-number) and (P4(0) and (P4(n5) ==> P4((n5)++)))) ==> ((m3 is-a natural-number) ==> P4(m3))). Proof: "Let P(n) be any property pertaining to a natural number n. Suppose that P(O) is true, and suppose that whenever P(n) is true, P(n++) is also true. Then P(n) is true for every natural number n." is postulated by axiom schema (A6). (((n5 is-a natural-number) and (P4(0) and (P4(n5) ==> P4((n5)++)))) ==> ((m3 is-a natural-number) ==> P4(m3))) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that (((n5 is-a natural-number) and (P4(0) and (P4(n5) ==> P4((n5)++)))) ==> ((m3 is-a natural-number) ==> P4(m3))). QED
+
+Remark 2.1.10 (note6): We are a little vague on what "property" means at this point, but some possible examples of P(n) might be "n is even"; "n is equal to 3"; "n solves the equation (n + 1)2 = n2 + 2n + 1"; and so forth. Of course we haven't defined many of these concepts yet, but when we do, Axiom 2.5 will apply to these properties. (A logical remark: Because this axiom refers not just to variables, but also properties, it is of a different nature than the other four axioms; indeed, Axiom 2.5 should technically be called an axiom schema rather than an axiom - it is a template for producing an (infinite) number of axioms, rather than being a single axiom in its own right. To discuss this distinction further is far beyond the scope of this text, though, and falls in the realm of logic.) [Tao, 2006, p. 22]
+
+### The number system n
+
+Informal assumption 2.6 (informal assumption1): There exists a number system N, whose elements we will call natural numbers, for which Axioms 2.1-2.5 are true.
+
+### Recursive definitions
+
+Informal proposition 2.1.16 (informal proposition1) - recursive definitions: Suppose for each natural number n, we have some function fn : N -> N from the natural numbers to the natural numbers. Let c be a natural number. Then we can assign a unique natural number an to each natural number n, such that a0 = c and an++ = fn(an) for each natural number n.
+
+Informal proof (informal proof1): We use induction. We first observe that this procedure gives a single value to a0, namely c. (None of the other definitions an++ := fn(an) will redefine the value of a0, because of Axiom 2.3.) Now suppose inductively that the procedure gives a single value to an. Then it gives a single value to an++, namely an++ := fn(an). (None of the other definitions am++ := fm(am) will redefine the value of an++, because of Axiom 2.4.) This completes the induction, and so an is defined for each natural number n, with a single value assigned to each an.
+

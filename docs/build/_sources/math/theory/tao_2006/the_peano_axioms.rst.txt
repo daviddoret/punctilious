@@ -3,26 +3,44 @@
 The Peano axioms
 ========================================================================================
 
-This :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` formalizes :cite:`tao_2006_analysis_i{chapter 2.1 - The Peano axioms}` .
+This package formalizes :cite:`tao_2006_analysis_i{chapter 2.1 - The Peano axioms}` .
 
-Python class
-----------------
-.. module:: theory
-.. autoclass:: Tao2006ThePeanoAxioms
-   :members:
+.. tabs::
 
-Python implementation
-----------------------
+   .. tab:: Unicode
 
-.. literalinclude :: ../../../../../src/theory/theory_tao_2006_the_peano_axioms.py
-  :language: python
+      .. tabs::
 
-.. toctree::
-   :titlesonly:
-   :caption: Reports
+         .. tab:: Without proofs
 
-   Plaintext EN-US without proofs report<the_peano_axioms/report_noproof_enus_plaintext>
-   Plaintext EN-US with proofs report<the_peano_axioms/report_proof_enus_plaintext>
-   Unicode EN-US without proofs report<the_peano_axioms/report_noproof_enus_unicode>
-   Unicode EN-US with proofs report<the_peano_axioms/report_proof_enus_unicode>
+            The report content.
+
+               .. literalinclude :: ../../../../../data/report_tao_2006_the_peano_axioms_noproof_enus_unicode.txt
+                  :language: text
+
+         .. tab:: With proofs
+
+            The report content.
+
+               .. literalinclude :: ../../../../../data/report_tao_2006_the_peano_axioms_proof_enus_unicode.txt
+                  :language: text
+
+   .. tab:: Plaintext
+
+      .. tabs::
+
+         .. tab:: Without proofs
+
+            The report content.
+
+               .. literalinclude :: ../../../../../data/report_tao_2006_the_peano_axioms_noproof_enus_plaintext.txt
+                  :language: text
+
+         .. tab:: With proofs
+
+            The report content.
+
+               .. literalinclude :: ../../../../../data/report_tao_2006_the_peano_axioms_proof_enus_plaintext.txt
+                  :language: text
+
 
