@@ -1,0 +1,34 @@
+/*
+Fix to assure text wrapping in code and code output inclusions implemented with the literalinclude sphinx directive.
+References:
+ - https://docs.readthedocs.io/en/stable/guides/adding-custom-css.html
+ - https://stackoverflow.com/questions/66971299/sphinx-documentation-with-readthedocs-theme-text-block-wrapping
+ - https://stackoverflow.com/questions/46800045/how-to-wrap-a-long-literal-block-in-restructuredtext
+*/
+pre {
+    white-space: pre-wrap !important;
+    word-break: break-all;
+}
+
+/*Adapting colors*/
+
+/* Light grey */
+/* background-color */
+html.writer-html4 .rst-content dl:not(.docutils)>dt, html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple)>dt,.rst-content .note, .rst-content .seealso, .rst-content .wy-alert-info.admonition, .rst-content .wy-alert-info.admonition-todo, .rst-content .wy-alert-info.attention, .rst-content .wy-alert-info.caution, .rst-content .wy-alert-info.danger, .rst-content .wy-alert-info.error, .rst-content .wy-alert-info.hint, .rst-content .wy-alert-info.important, .rst-content .wy-alert-info.tip, .rst-content .wy-alert-info.warning, .wy-alert.wy-alert-info { background-color: #e0e0e0; !important;}
+
+/* Dark purple */
+/* color */
+a, html.writer-html4 .rst-content dl:not(.docutils)>dt, html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple)>dt, .wy-menu-vertical header, .wy-menu-vertical p.caption {color: #9b59b6; !important;}
+/* background-color */
+.wy-side-nav-search, .wy-nav-top, .rst-content .note .admonition-title, .rst-content .note .wy-alert-title, .rst-content .seealso .admonition-title, .rst-content .seealso .wy-alert-title, .rst-content .wy-alert-info.admonition-todo .admonition-title, .rst-content .wy-alert-info.admonition-todo .wy-alert-title, .rst-content .wy-alert-info.admonition .admonition-title, .rst-content .wy-alert-info.admonition .wy-alert-title, .rst-content .wy-alert-info.attention .admonition-title, .rst-content .wy-alert-info.attention .wy-alert-title, .rst-content .wy-alert-info.caution .admonition-title, .rst-content .wy-alert-info.caution .wy-alert-title, .rst-content .wy-alert-info.danger .admonition-title, .rst-content .wy-alert-info.danger .wy-alert-title, .rst-content .wy-alert-info.error .admonition-title, .rst-content .wy-alert-info.error .wy-alert-title, .rst-content .wy-alert-info.hint .admonition-title, .rst-content .wy-alert-info.hint .wy-alert-title, .rst-content .wy-alert-info.important .admonition-title, .rst-content .wy-alert-info.important .wy-alert-title, .rst-content .wy-alert-info.tip .admonition-title, .rst-content .wy-alert-info.tip .wy-alert-title, .rst-content .wy-alert-info.warning .admonition-title, .rst-content .wy-alert-info.warning .wy-alert-title, .rst-content .wy-alert.wy-alert-info .admonition-title, .wy-alert.wy-alert-info .rst-content .admonition-title, .wy-alert.wy-alert-info .wy-alert-title {background-color: #9b59b6; !important;}
+/* border-top-color */
+html.writer-html4 .rst-content dl:not(.docutils)>dt, html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple)>dt {border-top-color: #9b59b6; !important;}
+/* outline-color */
+a:hover {text-decoration: underline;!important;}
+/* outline-color */
+a:active {background-color: #FEFE62;!important;}
+
+/* Increasing font sizes for people like me */
+
+.wy-menu-vertical a { font-size: 14px; !important;}
+.rst-content .linenodiv pre, .rst-content div[class^=highlight] pre, .rst-content pre.literal-block { font-size: 16px; !important;}

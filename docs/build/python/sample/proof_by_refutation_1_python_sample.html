@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/"/>
+    <link href="../../_static/punctilious-logo-compact-light.svg" rel="icon" type="image/svg+xml">
+    <link href="../../_static/punctilious-logo-compact-light-16x16-white.png" sizes="16x16" rel="icon" type="image/png">
+    <link href="../../_static/punctilious-logo-compact-light-32x32-white.png" sizes="32x32" rel="icon" type="image/png">
+    <link rel="apple-touch-icon" href="../../_static/punctilious-logo-compact-light-180x180-white.png" sizes="180x180"
+          type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>proof-by-refutation-1 (python sample) &mdash; punctilious 1.0.8 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/togglebutton.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/tabs.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css"/>
+    <!--[if lt IE 9]>
+      <script src="../../_static/js/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../_static/documentation_options.js?v=aec50437"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../../_static/tabs.js?v=3030b3cb"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html"/>
+    <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="next" title="proof-by-refutation-2 (python sample)" href="proof_by_refutation_2_python_sample.html"/>
+    <link rel="prev" title="proof-by-contradiction-2 (python sample)"
+          href="proof_by_contradiction_2_python_sample.html"/>
+</head>
+
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a href="../../index.html" class="icon icon-home">
+                    punctilious
+                </a>
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs" aria-label="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+            </div>
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../front_matter.html">Front matter</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../math.html">Math</a></li>
+                    <li class="toctree-l1 current"><a class="reference internal" href="../../python.html">Python</a>
+                        <ul class="current">
+                            <li class="toctree-l2"><a class="reference internal" href="../prerequisites_python.html">Prerequisites</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../installation_python.html">Installation</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../source_code_repository_python.html">Source code</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../class/python_class_index.html">Class</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../function/python_function_index.html">Function</a></li>
+                            <li class="toctree-l2 current"><a class="reference internal"
+                                                              href="python_sample_index.html">Sample</a>
+                                <ul class="current">
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="absorption_python_sample.html">absorption (python
+                                        sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_elimination_1_python_sample.html">biconditional-elimination-1
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_elimination_2_python_sample.html">biconditional-elimination-2
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_introduction_python_sample.html">biconditional-introduction
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_elimination_1_python_sample.html">conjunction-elimination-1
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_elimination_2_python_sample.html">conjunction-elimination-2
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_introduction_python_sample.html">conjunction-introduction
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="disjunction_introduction_1_python_sample.html">disjunction-introduction-1
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="disjunction_introduction_2_python_sample.html">disjunction-introduction-2
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="double_negation_elimination_python_sample.html">double-negation-elimination
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="double_negation_introduction_python_sample.html">double-negation-introduction
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="equal_terms_substitution_python_sample.html">equal-terms-substitution
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="equality_commutativity_python_sample.html">equality-commutativity
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inconsistency_introduction_1_python_sample.html">inconsistency-introduction-1
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inconsistency_introduction_2_python_sample.html">inconsistency-introduction-2
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inconsistency_introduction_3_python_sample.html">inconsistency-introduction-3
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="modus_ponens_python_sample.html">modus-ponens
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_contradiction_1_python_sample.html">proof-by-contradiction-1
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_contradiction_2_python_sample.html">proof-by-contradiction-2
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3 current"><a class="current reference internal" href="#">proof-by-refutation-1
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_refutation_2_python_sample.html">proof-by-refutation-2
+                                        (python sample)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="variable_substitution_python_sample.html">variable-substitution
+                                        (python sample)</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../back_matter.html">Back matter</a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+        <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../../index.html">punctilious</a>
+        </nav>
+
+        <div class="wy-nav-content">
+            <div class="rst-content">
+                <div role="navigation" aria-label="Page navigation">
+                    <ul class="wy-breadcrumbs">
+                        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+                        <li class="breadcrumb-item"><a href="../../python.html">Python</a></li>
+                        <li class="breadcrumb-item"><a href="python_sample_index.html">Python samples</a></li>
+                        <li class="breadcrumb-item active">proof-by-refutation-1 (python sample)</li>
+                        <li class="wy-breadcrumbs-aside">
+                            <a href="../../_sources/python/sample/proof_by_refutation_1_python_sample.rst.txt"
+                               rel="nofollow"> View page source</a>
+                        </li>
+                    </ul>
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <span class="target" id="proof-by-refutation-1-python-sample"></span>
+                        <section id="id1">
+                            <h1>proof-by-refutation-1 (python sample)<a class="headerlink" href="#id1"
+                                                                        title="Link to this heading"></a></h1>
+                            <p class="tags"><span>Tags: </span><a
+                                    class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
+                                    href="../../_tags/proof-by-refutation-1.html"><span class="doc">proof-by-refutation-1</span></a><span> </span><a
+                                    class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
+                                    href="../../_tags/python.html"><span class="doc">python</span></a><span> </span><a
+                                    class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
+                                    href="../../_tags/sample.html"><span class="doc">sample</span></a></p>
+                            <div class="admonition seealso">
+                                <p class="admonition-title">See also</p>
+                                <p><a class="reference internal"
+                                      href="../../math/inference_rule/proof_by_refutation_1_math_inference_rule.html#proof-by-refutation-1-math-inference-rule"><span
+                                        class="std std-ref">math concept</span></a> | <a class="reference internal"
+                                                                                         href="../class/proof_by_refutation_1_declaration_python_class.html#proof-by-refutation-1-declaration-python-class"><span
+                                        class="std std-ref">python declaration class</span></a> | <a
+                                        class="reference internal"
+                                        href="../class/proof_by_refutation_1_inclusion_python_class.html#proof-by-refutation-1-inclusion-python-class"><span
+                                        class="std std-ref">python inclusion class</span></a></p>
+                            </div>
+                            <p>This page shows how to infer new statements in a theory-elaboration-sequence by applying
+                                the <a class="reference internal"
+                                       href="../../math/inference_rule/proof_by_refutation_1_math_inference_rule.html#proof-by-refutation-1-math-inference-rule"><span
+                                        class="std std-ref">proof-by-refutation-1</span></a> <a
+                                        class="reference internal"
+                                        href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                        class="std std-ref">inference-rule</span></a>.</p>
+                            <section id="usage">
+                                <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+                                <p>Call the <code class="code highlight python py docutils literal highlight-py"><span
+                                        class="n">infer_statement</span></code> method from the inference-rule inclusion
+                                    class listed in the <code
+                                            class="code highlight python py docutils literal highlight-py"><span
+                                            class="n">i</span></code> (unabridged <code
+                                            class="code highlight python py docutils literal highlight-py"><span
+                                            class="n">inference_rules</span></code> ) property of the <a
+                                            class="reference internal"
+                                            href="../../math/concept/theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence-math-concept"><span
+                                            class="std std-ref">theory-elaboration-sequence</span></a> :</p>
+                                <div class="highlight-python notranslate">
+                                    <div class="highlight"><pre><span></span><span class="n">u</span> <span
+                                            class="o">=</span> <span class="n">pu</span><span class="o">.</span><span
+                                            class="n">create_universe</span><span class="p">()</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">t</span><span class="p">()</span>
+<span class="o">...</span>
+<span class="c1"># some theory elaboration code</span>
+<span class="o">...</span>
+<span class="n">t</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">proof_by_refutation_1</span><span
+                                                class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span
+                                                class="o">...</span><span class="p">)</span>
+</pre>
+                                    </div>
+                                </div>
+                            </section>
+                            <section id="sample-code">
+                                <h2>Sample code<a class="headerlink" href="#sample-code"
+                                                  title="Link to this heading"></a></h2>
+                                <div class="highlight-python notranslate">
+                                    <div class="highlight"><pre><span></span><span class="kn">import</span> <span
+                                            class="nn">punctilious</span> <span class="k">as</span> <span
+                                            class="nn">pu</span>
+
+<span class="c1"># Create a universe-of-discourse with basic objects for the sake of this example.</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">create_universe_of_discourse</span><span
+                                                class="p">(</span><span class="n">echo</span><span
+                                                class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_axiom</span><span
+                                                class="p">(</span><span class="n">natural_language</span><span
+                                                class="o">=</span><span class="s1">&#39;Dummy axiom to establish some ground propositions.&#39;</span><span
+                                                class="p">)</span>
+<span class="n">o1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">o</span><span class="o">.</span><span class="n">declare</span><span
+                                                class="p">()</span>
+<span class="n">o2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">o</span><span class="o">.</span><span class="n">declare</span><span
+                                                class="p">()</span>
+<span class="n">o3</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">o</span><span class="o">.</span><span class="n">declare</span><span
+                                                class="p">()</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">r</span><span class="o">.</span><span class="n">declare</span><span
+                                                class="p">(</span><span class="n">arity</span><span
+                                                class="o">=</span><span class="mi">2</span><span
+                                                class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span
+                                                class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="n">signal_proposition</span><span
+                                                class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">t</span><span class="p">(</span><span
+                                                class="n">echo</span><span class="o">=</span><span
+                                                class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Elaborate a dummy theory with a set of propositions necessary for our demonstration</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">include_axiom</span><span
+                                                class="p">(</span><span class="n">a</span><span class="o">=</span><span
+                                                class="n">a1</span><span class="p">)</span>
+<span class="n">t1</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
+                                                class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span
+                                                class="n">axiom</span><span class="o">=</span><span
+                                                class="n">a</span><span class="p">,</span> <span
+                                                class="n">formula</span><span class="o">=</span><span class="n">f</span><span
+                                                class="p">(</span><span class="n">o1</span><span
+                                                class="p">,</span> <span class="n">o2</span><span class="p">))</span>
+<span class="n">t1</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
+                                                class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span
+                                                class="n">axiom</span><span class="o">=</span><span
+                                                class="n">a</span><span class="p">,</span> <span
+                                                class="n">formula</span><span class="o">=</span><span class="n">f</span><span
+                                                class="p">(</span><span class="n">o2</span><span
+                                                class="p">,</span> <span class="n">o3</span><span class="p">))</span>
+<span class="k">with</span> <span class="n">u</span><span class="o">.</span><span class="n">v</span><span
+                                                class="p">(</span><span class="s1">&#39;x&#39;</span><span
+                                                class="p">)</span> <span class="k">as</span> <span
+                                                class="n">x</span><span class="p">,</span> <span class="n">u</span><span
+                                                class="o">.</span><span class="n">v</span><span class="p">(</span><span
+                                                class="s1">&#39;y&#39;</span><span class="p">)</span> <span
+                                                class="k">as</span> <span class="n">y</span><span
+                                                class="p">,</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">v</span><span class="p">(</span><span
+                                                class="s1">&#39;z&#39;</span><span class="p">)</span> <span
+                                                class="k">as</span> <span class="n">z</span><span class="p">:</span>
+    <span class="n">implication</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
+                                                class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
+                                                class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span
+                                                class="n">axiom</span><span class="o">=</span><span
+                                                class="n">a</span><span class="p">,</span>
+        <span class="n">formula</span><span class="o">=</span><span class="p">(</span><span class="n">f</span><span
+                                                class="p">(</span><span class="n">x</span><span class="p">,</span> <span
+                                                class="n">y</span><span class="p">)</span> <span
+                                                class="o">|</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">r</span><span class="o">.</span><span
+                                                class="n">land</span> <span class="o">|</span> <span
+                                                class="n">f</span><span class="p">(</span><span class="n">y</span><span
+                                                class="p">,</span> <span class="n">z</span><span
+                                                class="p">))</span> <span class="o">|</span> <span
+                                                class="n">u</span><span class="o">.</span><span class="n">r</span><span
+                                                class="o">.</span><span class="n">implies</span> <span
+                                                class="o">|</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">r</span><span class="o">.</span><span
+                                                class="n">lnot</span><span class="p">(</span><span
+                                                class="n">f</span><span class="p">(</span><span class="n">x</span><span
+                                                class="p">,</span> <span class="n">z</span><span class="p">)))</span>
+<span class="n">t1</span><span class="o">.</span><span class="n">stabilize</span><span class="p">()</span>
+
+<span class="c1"># Pose the negation hypothesis</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">pose_hypothesis</span><span
+                                                class="p">(</span><span class="n">hypothesis_formula</span><span
+                                                class="o">=</span><span class="n">f</span><span class="p">(</span><span
+                                                class="n">o1</span><span class="p">,</span> <span
+                                                class="n">o3</span><span class="p">),</span> <span
+                                                class="n">subtitle</span><span class="o">=</span><span class="s1">&#39;We pose the positive hypothesis&#39;</span><span
+                                                class="p">)</span>
+<span class="n">conjunction_introduction</span> <span class="o">=</span> <span class="n">h</span><span
+                                                class="o">.</span><span class="n">child_theory</span><span
+                                                class="o">.</span><span class="n">i</span><span class="o">.</span><span
+                                                class="n">conjunction_introduction</span><span class="o">.</span><span
+                                                class="n">infer_statement</span><span class="p">(</span><span class="n">p</span><span
+                                                class="o">=</span><span class="n">f</span><span class="p">(</span><span
+                                                class="n">o1</span><span class="p">,</span> <span
+                                                class="n">o2</span><span class="p">),</span>
+    <span class="n">q</span><span class="o">=</span><span class="n">f</span><span class="p">(</span><span
+                                                class="n">o2</span><span class="p">,</span> <span
+                                                class="n">o3</span><span class="p">))</span>
+<span class="n">variable_substitution</span> <span class="o">=</span> <span class="n">h</span><span
+                                                class="o">.</span><span class="n">child_theory</span><span
+                                                class="o">.</span><span class="n">i</span><span class="o">.</span><span
+                                                class="n">variable_substitution</span><span class="o">.</span><span
+                                                class="n">infer_statement</span><span class="p">(</span><span class="n">p</span><span
+                                                class="o">=</span><span class="n">implication</span><span
+                                                class="p">,</span>
+    <span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="n">o1</span><span
+                                                class="p">,</span> <span class="n">o2</span><span
+                                                class="p">,</span> <span class="n">o3</span><span class="p">))</span>
+<span class="n">modus_ponens</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span
+                                                class="n">child_theory</span><span class="o">.</span><span
+                                                class="n">i</span><span class="o">.</span><span
+                                                class="n">modus_ponens</span><span class="o">.</span><span class="n">infer_statement</span><span
+                                                class="p">(</span><span class="n">p_implies_q</span><span
+                                                class="o">=</span><span class="n">variable_substitution</span><span
+                                                class="p">,</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">conjunction_introduction</span><span
+                                                class="p">)</span>
+
+<span class="c1"># Prove hypothesis inconsistency</span>
+<span class="n">h_inconsistency</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
+                                                class="n">i</span><span class="o">.</span><span class="n">inconsistency_introduction_1</span><span
+                                                class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span
+                                                class="n">p</span><span class="o">=</span><span class="n">h</span><span
+                                                class="o">.</span><span class="n">child_statement</span><span class="p">,</span>
+    <span class="n">not_p</span><span class="o">=</span><span class="n">modus_ponens</span><span
+                                                class="p">,</span> <span class="n">inconsistent_theory</span><span
+                                                class="o">=</span><span class="n">h</span><span class="o">.</span><span
+                                                class="n">child_theory</span><span class="p">,</span>
+    <span class="n">subtitle</span><span class="o">=</span><span class="s1">&#39;Proof of the hypothesis inconsistency&#39;</span><span
+                                                class="p">)</span>
+
+<span class="c1"># And finally, use the proof-by-contradiction-1 inference-rule:</span>
+<span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t1</span><span
+                                                class="o">.</span><span class="n">i</span><span class="o">.</span><span
+                                                class="n">proof_by_refutation_1</span><span class="o">.</span><span
+                                                class="n">infer_statement</span><span class="p">(</span><span class="n">p_hypothesis</span><span
+                                                class="o">=</span><span class="n">h</span><span class="p">,</span>
+    <span class="n">inc_hypothesis</span><span class="o">=</span><span class="n">h_inconsistency</span><span
+                                                class="p">,</span> <span class="n">subtitle</span><span
+                                                class="o">=</span><span
+                                                class="s1">&#39;The proposition of interest&#39;</span><span
+                                                class="p">)</span>
+</pre>
+                                    </div>
+                                </div>
+                            </section>
+                            <section id="code-output">
+                                <h2>Code output<a class="headerlink" href="#code-output"
+                                                  title="Link to this heading"></a></h2>
+                                <div class="sphinx-tabs docutils container">
+                                    <div aria-label="Tabbed content" class="closeable" role="tablist">
+                                        <button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab"
+                                                id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Unicode
+                                        </button>
+                                        <button aria-controls="panel-0-0-1" aria-selected="false"
+                                                class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab"
+                                                tabindex="-1">Plaintext
+                                        </button>
+                                        <button aria-controls="panel-0-0-2" aria-selected="false"
+                                                class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab"
+                                                tabindex="-1">LaTeX
+                                        </button>
+                                        <button aria-controls="panel-0-0-3" aria-selected="false"
+                                                class="sphinx-tabs-tab" id="tab-0-0-3" name="0-3" role="tab"
+                                                tabindex="-1">HTML
+                                        </button>
+                                    </div>
+                                    <div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0"
+                                         name="0-0" role="tabpanel" tabindex="0">
+                                        <div class="highlight-text notranslate">
+                                            <div class="highlight"><pre><span></span>𝖫𝖾𝗍 ⌜𝒰₄₄⌝ 𝖻𝖾 𝖺 𝑢𝑛𝑖𝑣𝑒𝑟𝑠𝑒-𝑜𝑓-𝑑𝑖𝑠𝑐𝑜𝑢𝑟𝑠𝑒.
+
+𝖫𝖾𝗍 ⌜𝒯₁⌝ 𝖻𝖾 𝖺 𝑡ℎ𝑒𝑜𝑟𝑦-𝑒𝑙𝑎𝑏𝑜𝑟𝑎𝑡𝑖𝑜𝑛-𝑠𝑒𝑞𝑢𝑒𝑛𝑐𝑒 𝗂𝗇 𝒰₄₄.
+
+𝗔𝘅𝗶𝗼𝗺 (𝒯₁.𝐴₁): 𝖫𝖾𝗍 𝑎𝑥𝑖𝑜𝑚 𝒜₁ ⌜𝘋𝘶𝘮𝘮𝘺 𝘢𝘹𝘪𝘰𝘮 𝘵𝘰 𝘦𝘴𝘵𝘢𝘣𝘭𝘪𝘴𝘩 𝘴𝘰𝘮𝘦 𝘨𝘳𝘰𝘶𝘯𝘥 𝘱𝘳𝘰𝘱𝘰𝘴𝘪𝘵𝘪𝘰𝘯𝘴.⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 (𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽) 𝗂𝗇 𝒯₁.
+
+𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜𝒜 ⊢ 𝖯⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝒯₁.
+
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₁): 𝑓₁(𝑜₁, 𝑜₂). 𝗣𝗿𝗼𝗼𝗳: ⌜𝘋𝘶𝘮𝘮𝘺 𝘢𝘹𝘪𝘰𝘮 𝘵𝘰 𝘦𝘴𝘵𝘢𝘣𝘭𝘪𝘴𝘩 𝘴𝘰𝘮𝘦 𝘨𝘳𝘰𝘶𝘯𝘥 𝘱𝘳𝘰𝘱𝘰𝘴𝘪𝘵𝘪𝘰𝘯𝘴.⌝ 𝗂𝗌 𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽 𝖻𝗒 𝗮𝘅𝗶𝗼𝗺 (𝐴₁). 𝑓₁(𝑜₁, 𝑜₂) 𝗂𝗌 𝖺 𝗏𝖺𝗅𝗂𝖽 𝖿𝗈𝗋𝗆𝗎𝗅𝖺 𝗌𝗍𝖺𝗍𝖾𝗆𝖾𝗇𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖾𝖽 𝖿𝗋𝗈𝗆 𝗍𝗁𝖺𝗍 𝖺𝗑𝗂𝗈𝗆.𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: 𝒜 ⊢ 𝖯, 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 𝑓₁(𝑜₁, 𝑜₂). ∎
+
+𝗪𝗮𝗿𝗻𝗶𝗻𝗴 (🗅₁): 𝖡𝗒 𝖽𝖾𝗌𝗂𝗀𝗇, 𝗉𝗎𝗇𝖼𝗍𝗂𝗅𝗂𝗈𝗎𝗌 𝖺𝗌𝗌𝗎𝗋𝖾𝗌 𝗍𝗁𝖾 𝗌𝗒𝗇𝗍𝖺𝖼𝗍𝗂𝖼𝖺𝗅 𝖼𝗈𝗋𝗋𝖾𝖼𝗍𝗇𝖾𝗌𝗌 𝗈𝖿 𝗍𝗁𝖾𝗈𝗋𝗂𝖾𝗌, 𝖻𝗎𝗍 𝖽𝗈𝖾𝗌 𝗇𝗈𝗍 𝗉𝖾𝗋𝖿𝗈𝗋𝗆 𝖺𝗇𝗒 𝗌𝖾𝗆𝖺𝗇𝗍𝗂𝖼 𝗏𝖾𝗋𝗂𝖿𝗂𝖼𝖺𝗍𝗂𝗈𝗇. 𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝗍𝗁𝖾 𝗎𝗌𝖺𝗀𝖾 𝗈𝖿 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾-𝗋𝗎𝗅𝖾𝗌 𝗍𝗁𝖺𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍 𝗇𝖺𝗍𝗎𝗋𝖺𝗅 𝖼𝗈𝗇𝗍𝖾𝗇𝗍 (𝗂.𝖾. 𝖺𝗑𝗂𝗈𝗆-𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖺𝗍𝗂𝗈𝗇 𝖺𝗇𝖽 𝖽𝖾𝖿𝗂𝗇𝗂𝗍𝗂𝗈𝗇-𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖺𝗍𝗂𝗈𝗇) 𝗂𝗌 𝖼𝗋𝗂𝗍𝗂𝖼𝖺𝗅𝗅𝗒 𝖽𝖾𝗉𝖾𝗇𝖽𝖾𝗇𝗍 𝗈𝗇 𝗍𝗁𝖾 𝖼𝗈𝗋𝗋𝖾𝖼𝗍𝗇𝖾𝗌𝗌 𝗈𝖿 𝗍𝗁𝖾 𝖼𝗈𝗇𝗍𝖾𝗇𝗍 𝗍𝗋𝖺𝗇𝗌𝗅𝖺𝗍𝗂𝗈𝗇 𝗉𝖾𝗋𝖿𝗈𝗋𝗆𝖾𝖽 𝖻𝗒 𝗍𝗁𝖾 𝗍𝗁𝖾𝗈𝗋𝗒 𝖺𝗎𝗍𝗁𝗈𝗋, 𝖿𝗋𝗈𝗆 𝖺𝗑𝗂𝗈𝗆 𝗈𝗋 𝖽𝖾𝖿𝗂𝗇𝗂𝗍𝗂𝗈𝗇 𝗇𝖺𝗍𝗎𝗋𝖺𝗅 𝗅𝖺𝗇𝗀𝗎𝖺𝗀𝖾, 𝗍𝗈 𝖿𝗈𝗋𝗆𝗎𝗅𝖺𝖾.
+
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₂): 𝑓₁(𝑜₂, 𝑜₃). 𝗣𝗿𝗼𝗼𝗳: ⌜𝘋𝘶𝘮𝘮𝘺 𝘢𝘹𝘪𝘰𝘮 𝘵𝘰 𝘦𝘴𝘵𝘢𝘣𝘭𝘪𝘴𝘩 𝘴𝘰𝘮𝘦 𝘨𝘳𝘰𝘶𝘯𝘥 𝘱𝘳𝘰𝘱𝘰𝘴𝘪𝘵𝘪𝘰𝘯𝘴.⌝ 𝗂𝗌 𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽 𝖻𝗒 𝗮𝘅𝗶𝗼𝗺 (𝐴₁). 𝑓₁(𝑜₂, 𝑜₃) 𝗂𝗌 𝖺 𝗏𝖺𝗅𝗂𝖽 𝖿𝗈𝗋𝗆𝗎𝗅𝖺 𝗌𝗍𝖺𝗍𝖾𝗆𝖾𝗇𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖾𝖽 𝖿𝗋𝗈𝗆 𝗍𝗁𝖺𝗍 𝖺𝗑𝗂𝗈𝗆.𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: 𝒜 ⊢ 𝖯, 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 𝑓₁(𝑜₂, 𝑜₃). ∎
+
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₃): ((𝑓₁(𝐱₁, 𝐲₁) ∧ 𝑓₁(𝐲₁, 𝐳₁)) ⟹ ¬(𝑓₁(𝐱₁, 𝐳₁))). 𝗣𝗿𝗼𝗼𝗳: ⌜𝘋𝘶𝘮𝘮𝘺 𝘢𝘹𝘪𝘰𝘮 𝘵𝘰 𝘦𝘴𝘵𝘢𝘣𝘭𝘪𝘴𝘩 𝘴𝘰𝘮𝘦 𝘨𝘳𝘰𝘶𝘯𝘥 𝘱𝘳𝘰𝘱𝘰𝘴𝘪𝘵𝘪𝘰𝘯𝘴.⌝ 𝗂𝗌 𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽 𝖻𝗒 𝗮𝘅𝗶𝗼𝗺 (𝐴₁). ((𝑓₁(𝐱₁, 𝐲₁) ∧ 𝑓₁(𝐲₁, 𝐳₁)) ⟹ ¬(𝑓₁(𝐱₁, 𝐳₁))) 𝗂𝗌 𝖺 𝗏𝖺𝗅𝗂𝖽 𝖿𝗈𝗋𝗆𝗎𝗅𝖺 𝗌𝗍𝖺𝗍𝖾𝗆𝖾𝗇𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖾𝖽 𝖿𝗋𝗈𝗆 𝗍𝗁𝖺𝗍 𝖺𝗑𝗂𝗈𝗆.𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: 𝒜 ⊢ 𝖯, 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 ((𝑓₁(𝐱₁, 𝐲₁) ∧ 𝑓₁(𝐲₁, 𝐳₁)) ⟹ ¬(𝑓₁(𝐱₁, 𝐳₁))). ∎
+
+𝗔𝘅𝗶𝗼𝗺 (ℋ₁.𝐴₂): 𝖫𝖾𝗍 𝑎𝑥𝑖𝑜𝑚 𝒜₂ ⌜𝘉𝘺 𝘩𝘺𝘱𝘰𝘵𝘩𝘦𝘴𝘪𝘴, 𝘢𝘴𝘴𝘶𝘮𝘦 𝑓₁(𝑜₁, 𝑜₃) 𝘪𝘴 𝘵𝘳𝘶𝘦.⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 (𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽) 𝗂𝗇 ℋ₁.
+
+𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜𝒜 ⊢ 𝖯⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 ℋ₁.
+
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (ℋ₁.𝑃₄): 𝑓₁(𝑜₁, 𝑜₃). 𝗣𝗿𝗼𝗼𝗳: ⌜𝘉𝘺 𝘩𝘺𝘱𝘰𝘵𝘩𝘦𝘴𝘪𝘴, 𝘢𝘴𝘴𝘶𝘮𝘦 𝑓₁(𝑜₁, 𝑜₃) 𝘪𝘴 𝘵𝘳𝘶𝘦.⌝ 𝗂𝗌 𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽 𝖻𝗒 𝗮𝘅𝗶𝗼𝗺 (𝐴₂). 𝑓₁(𝑜₁, 𝑜₃) 𝗂𝗌 𝖺 𝗏𝖺𝗅𝗂𝖽 𝖿𝗈𝗋𝗆𝗎𝗅𝖺 𝗌𝗍𝖺𝗍𝖾𝗆𝖾𝗇𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖾𝖽 𝖿𝗋𝗈𝗆 𝗍𝗁𝖺𝗍 𝖺𝗑𝗂𝗈𝗆.𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: 𝒜 ⊢ 𝖯, 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 𝑓₁(𝑜₁, 𝑜₃). ∎
+
+𝗪𝗮𝗿𝗻𝗶𝗻𝗴 (🗅₂): 𝖡𝗒 𝖽𝖾𝗌𝗂𝗀𝗇, 𝗉𝗎𝗇𝖼𝗍𝗂𝗅𝗂𝗈𝗎𝗌 𝖺𝗌𝗌𝗎𝗋𝖾𝗌 𝗍𝗁𝖾 𝗌𝗒𝗇𝗍𝖺𝖼𝗍𝗂𝖼𝖺𝗅 𝖼𝗈𝗋𝗋𝖾𝖼𝗍𝗇𝖾𝗌𝗌 𝗈𝖿 𝗍𝗁𝖾𝗈𝗋𝗂𝖾𝗌, 𝖻𝗎𝗍 𝖽𝗈𝖾𝗌 𝗇𝗈𝗍 𝗉𝖾𝗋𝖿𝗈𝗋𝗆 𝖺𝗇𝗒 𝗌𝖾𝗆𝖺𝗇𝗍𝗂𝖼 𝗏𝖾𝗋𝗂𝖿𝗂𝖼𝖺𝗍𝗂𝗈𝗇. 𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝗍𝗁𝖾 𝗎𝗌𝖺𝗀𝖾 𝗈𝖿 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾-𝗋𝗎𝗅𝖾𝗌 𝗍𝗁𝖺𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍 𝗇𝖺𝗍𝗎𝗋𝖺𝗅 𝖼𝗈𝗇𝗍𝖾𝗇𝗍 (𝗂.𝖾. 𝖺𝗑𝗂𝗈𝗆-𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖺𝗍𝗂𝗈𝗇 𝖺𝗇𝖽 𝖽𝖾𝖿𝗂𝗇𝗂𝗍𝗂𝗈𝗇-𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖺𝗍𝗂𝗈𝗇) 𝗂𝗌 𝖼𝗋𝗂𝗍𝗂𝖼𝖺𝗅𝗅𝗒 𝖽𝖾𝗉𝖾𝗇𝖽𝖾𝗇𝗍 𝗈𝗇 𝗍𝗁𝖾 𝖼𝗈𝗋𝗋𝖾𝖼𝗍𝗇𝖾𝗌𝗌 𝗈𝖿 𝗍𝗁𝖾 𝖼𝗈𝗇𝗍𝖾𝗇𝗍 𝗍𝗋𝖺𝗇𝗌𝗅𝖺𝗍𝗂𝗈𝗇 𝗉𝖾𝗋𝖿𝗈𝗋𝗆𝖾𝖽 𝖻𝗒 𝗍𝗁𝖾 𝗍𝗁𝖾𝗈𝗋𝗒 𝖺𝗎𝗍𝗁𝗈𝗋, 𝖿𝗋𝗈𝗆 𝖺𝗑𝗂𝗈𝗆 𝗈𝗋 𝖽𝖾𝖿𝗂𝗇𝗂𝗍𝗂𝗈𝗇 𝗇𝖺𝗍𝗎𝗋𝖺𝗅 𝗅𝖺𝗇𝗀𝗎𝖺𝗀𝖾, 𝗍𝗈 𝖿𝗈𝗋𝗆𝗎𝗅𝖺𝖾.
+
+𝗛𝘆𝗽𝗼𝘁𝗵𝗲𝘀𝗶𝘀 (𝒯₁.𝐻₁) - We pose the positive hypothesis: 𝑓₁(𝑜₁, 𝑜₃). 𝖳𝗁𝗂𝗌 𝗁𝗒𝗉𝗈𝗍𝗁𝖾𝗌𝗂𝗌 𝗂𝗌 𝖾𝗅𝖺𝖻𝗈𝗋𝖺𝗍𝖾𝖽 𝗂𝗇 𝗍𝗁𝖾𝗈𝗋𝗒 ℋ₁.
+
+𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑐𝑜𝑛𝑗𝑢𝑛𝑐𝑡𝑖𝑜𝑛-𝑖𝑛𝑡𝑟𝑜𝑑𝑢𝑐𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑐𝑜𝑛𝑗𝑢𝑛𝑐𝑡𝑖𝑜𝑛-𝑖𝑛𝑡𝑟𝑜𝑑𝑢𝑐𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜((𝐏₁ , 𝐐₁) ⊢ (𝐏₁ ∧ 𝐐₁))⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 ℋ₁.
+
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (ℋ₁.𝑃₅): (𝑓₁(𝑜₁, 𝑜₂) ∧ 𝑓₁(𝑜₂, 𝑜₃)). 𝗣𝗿𝗼𝗼𝗳: 𝑓₁(𝑜₁, 𝑜₂), 𝗈𝖿 𝗍𝗁𝖾 𝖿𝗈𝗋𝗆 𝐏₁, 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₁). 𝑓₁(𝑜₂, 𝑜₃), 𝗈𝖿 𝗍𝗁𝖾 𝖿𝗈𝗋𝗆 𝐐₁, 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₂). 𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑐𝑜𝑛𝑗𝑢𝑛𝑐𝑡𝑖𝑜𝑛-𝑖𝑛𝑡𝑟𝑜𝑑𝑢𝑐𝑡𝑖𝑜𝑛 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: ((𝐏₁ , 𝐐₁) ⊢ (𝐏₁ ∧ 𝐐₁)), 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 (𝑓₁(𝑜₁, 𝑜₂) ∧ 𝑓₁(𝑜₂, 𝑜₃)). ∎
+
+𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑣𝑎𝑟𝑖𝑎𝑏𝑙𝑒-𝑠𝑢𝑏𝑠𝑡𝑖𝑡𝑢𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑣𝑎𝑟𝑖𝑎𝑏𝑙𝑒-𝑠𝑢𝑏𝑠𝑡𝑖𝑡𝑢𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝖯, 𝛷) ⊢ 𝖯&#39;⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 ℋ₁.
+
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (ℋ₁.𝑃₆): ((𝑓₁(𝑜₁, 𝑜₂) ∧ 𝑓₁(𝑜₂, 𝑜₃)) ⟹ ¬(𝑓₁(𝑜₁, 𝑜₃))). 𝗣𝗿𝗼𝗼𝗳: ((𝑓₁(𝐱₁, 𝐲₁) ∧ 𝑓₁(𝐲₁, 𝐳₁)) ⟹ ¬(𝑓₁(𝐱₁, 𝐳₁))) 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₃). 𝖫𝖾𝗍 𝐱₁ = 𝑜₁, 𝐲₁ = 𝑜₂, 𝐳₁ = 𝑜₃.𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑣𝑎𝑟𝑖𝑎𝑏𝑙𝑒-𝑠𝑢𝑏𝑠𝑡𝑖𝑡𝑢𝑡𝑖𝑜𝑛 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: (𝖯, 𝛷) ⊢ 𝖯&#39;, 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 ((𝑓₁(𝑜₁, 𝑜₂) ∧ 𝑓₁(𝑜₂, 𝑜₃)) ⟹ ¬(𝑓₁(𝑜₁, 𝑜₃))). ∎
+
+𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑚𝑜𝑑𝑢𝑠-𝑝𝑜𝑛𝑒𝑛𝑠): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑚𝑜𝑑𝑢𝑠-𝑝𝑜𝑛𝑒𝑛𝑠 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(((𝐏₂ ⟹ 𝐏₂) , 𝐏₂) ⊢ 𝐐₂)⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 ℋ₁.
+
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (ℋ₁.𝑃₇): ¬(𝑓₁(𝑜₁, 𝑜₃)). 𝗣𝗿𝗼𝗼𝗳: ((𝑓₁(𝑜₁, 𝑜₂) ∧ 𝑓₁(𝑜₂, 𝑜₃)) ⟹ ¬(𝑓₁(𝑜₁, 𝑜₃))) 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₆).(𝑓₁(𝑜₁, 𝑜₂) ∧ 𝑓₁(𝑜₂, 𝑜₃)) 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₅).𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑚𝑜𝑑𝑢𝑠-𝑝𝑜𝑛𝑒𝑛𝑠 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: (((𝐏₂ ⟹ 𝐏₂) , 𝐏₂) ⊢ 𝐐₂), 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 ¬(𝑓₁(𝑜₁, 𝑜₃)). ∎
+
+𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑖𝑛𝑐𝑜𝑛𝑠𝑖𝑠𝑡𝑒𝑛𝑐𝑦-𝑖𝑛𝑡𝑟𝑜𝑑𝑢𝑐𝑡𝑖𝑜𝑛-1): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑖𝑛𝑐𝑜𝑛𝑠𝑖𝑠𝑡𝑒𝑛𝑐𝑦-𝑖𝑛𝑡𝑟𝑜𝑑𝑢𝑐𝑡𝑖𝑜𝑛-1 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝑷, ¬(𝑷)) ⊢ 𝐼𝑛𝑐(𝓣)⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝒯₁.
+
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₈) - Proof of the hypothesis inconsistency: 𝐼𝑛𝑐(ℋ₁). 𝗣𝗿𝗼𝗼𝗳: 𝖫𝖾𝗍 𝑷 := 𝑓₁(𝑜₁, 𝑜₃), 𝗐𝗁𝗂𝖼𝗁 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₄). 𝖫𝖾𝗍 ¬(𝑷) := ¬(𝑓₁(𝑜₁, 𝑜₃)), 𝗐𝗁𝗂𝖼𝗁 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₇). 𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑖𝑛𝑐𝑜𝑛𝑠𝑖𝑠𝑡𝑒𝑛𝑐𝑦-𝑖𝑛𝑡𝑟𝑜𝑑𝑢𝑐𝑡𝑖𝑜𝑛-1 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: (𝑷, ¬(𝑷)) ⊢ 𝐼𝑛𝑐(𝓣), 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 𝐼𝑛𝑐(ℋ₁). ∎
+
+𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑝𝑟𝑜𝑜𝑓-𝑏𝑦-𝑟𝑒𝑓𝑢𝑡𝑎𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑝𝑟𝑜𝑜𝑓-𝑏𝑦-𝑟𝑒𝑓𝑢𝑡𝑎𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ ¬𝑷⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝒯₁.
+
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₉) - The proposition of interest: ¬(𝑓₁(𝑜₁, 𝑜₃)). 𝗣𝗿𝗼𝗼𝗳: 𝖫𝖾𝗍 𝗵𝘆𝗽. (𝐻₁) 𝖻𝖾 𝗍𝗁𝖾 𝗁𝗒𝗉𝗈𝗍𝗁𝖾𝗌𝗂𝗌 𝑓₁(𝑜₁, 𝑜₃). 𝐼𝑛𝑐(ℋ₁) 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₈).𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑝𝑟𝑜𝑜𝑓-𝑏𝑦-𝑟𝑒𝑓𝑢𝑡𝑎𝑡𝑖𝑜𝑛 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: (𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ ¬𝑷, 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 ¬(𝑓₁(𝑜₁, 𝑜₃)). ∎
+</pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true"
+                                         id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0">
+                                        <div class="highlight-text notranslate">
+                                            <div class="highlight"><pre><span></span>import punctilious as pu
+
+# Create a universe-of-discourse with basic objects for the sake of this example.
+u = pu.create_universe_of_discourse(echo=True)
+a1 = u.declare_axiom(natural_language=&#39;Dummy axiom to establish some ground propositions.&#39;)
+o1 = u.o.declare()
+o2 = u.o.declare()
+o3 = u.o.declare()
+f = u.r.declare(arity=2, symbol=&#39;f&#39;, signal_proposition=True)
+t1 = u.t(echo=True)
+
+# Elaborate a dummy theory with a set of propositions necessary for our demonstration
+a = t1.include_axiom(a=a1)
+t1.i.axiom_interpretation.infer_statement(axiom=a, formula=f(o1, o2))
+t1.i.axiom_interpretation.infer_statement(axiom=a, formula=f(o2, o3))
+with u.v(&#39;x&#39;) as x, u.v(&#39;y&#39;) as y, u.v(&#39;z&#39;) as z:
+    implication = t1.i.axiom_interpretation.infer_statement(axiom=a,
+        formula=(f(x, y) | u.r.land | f(y, z)) | u.r.implies | u.r.lnot(f(x, z)))
+t1.stabilize()
+
+# Pose the negation hypothesis
+h = t1.pose_hypothesis(hypothesis_formula=f(o1, o3), subtitle=&#39;We pose the positive hypothesis&#39;)
+conjunction_introduction = h.child_theory.i.conjunction_introduction.infer_statement(p=f(o1, o2),
+    q=f(o2, o3))
+variable_substitution = h.child_theory.i.variable_substitution.infer_statement(p=implication,
+    phi=(o1, o2, o3))
+modus_ponens = h.child_theory.i.modus_ponens.infer_statement(p_implies_q=variable_substitution,
+    p=conjunction_introduction)
+
+# Prove hypothesis inconsistency
+h_inconsistency = t1.i.inconsistency_introduction_1.infer_statement(p=h.child_statement,
+    not_p=modus_ponens, inconsistent_theory=h.child_theory,
+    subtitle=&#39;Proof of the hypothesis inconsistency&#39;)
+
+# And finally, use the proof-by-contradiction-1 inference-rule:
+proposition_of_interest = t1.i.proof_by_refutation_1.infer_statement(p_hypothesis=h,
+    inc_hypothesis=h_inconsistency, subtitle=&#39;The proposition of interest&#39;)
+
+Let &quot;U43&quot; be a universe-of-discourse.
+
+Let &quot;T1&quot; be a theory-elaboration-sequence in U43.
+
+Axiom (T1.A1): Let axiom A1 &quot;Dummy axiom to establish some ground propositions.&quot; be included (postulated) in T1.
+
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as &quot;A |- P&quot; be included and considered valid in T1.
+
+Proposition (T1.P1): f1(o1, o2). Proof: &quot;Dummy axiom to establish some ground propositions.&quot; is postulated by axiom (A1). f1(o1, o2) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that f1(o1, o2). QED
+
+Warning (warning1): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
+
+Proposition (T1.P2): f1(o2, o3). Proof: &quot;Dummy axiom to establish some ground propositions.&quot; is postulated by axiom (A1). f1(o2, o3) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that f1(o2, o3). QED
+
+Proposition (T1.P3): ((f1(x1, y1) and f1(y1, z1)) ==&gt; not(f1(x1, z1))). Proof: &quot;Dummy axiom to establish some ground propositions.&quot; is postulated by axiom (A1). ((f1(x1, y1) and f1(y1, z1)) ==&gt; not(f1(x1, z1))) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that ((f1(x1, y1) and f1(y1, z1)) ==&gt; not(f1(x1, z1))). QED
+
+Axiom (H1.A2): Let axiom A2 &quot;By hypothesis, assume f1(o1, o3) is true.&quot; be included (postulated) in H1.
+
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as &quot;A |- P&quot; be included and considered valid in H1.
+
+Proposition (H1.P4): f1(o1, o3). Proof: &quot;By hypothesis, assume f1(o1, o3) is true.&quot; is postulated by axiom (A2). f1(o1, o3) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that f1(o1, o3). QED
+
+Warning (warning2): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
+
+Hypothesis (T1.H1) - We pose the positive hypothesis: f1(o1, o3). This hypothesis is elaborated in theory H1.
+
+Inference rule (conjunction-introduction): Let inference-rule conjunction-introduction defined as &quot;((P1 , Q1) |- (P1 and Q1))&quot; be included and considered valid in H1.
+
+Proposition (H1.P5): (f1(o1, o2) and f1(o2, o3)). Proof: f1(o1, o2), of the form P1, follows from prop. (P1). f1(o2, o3), of the form Q1, follows from prop. (P2). Therefore, by the conjunction-introduction inference rule: ((P1 , Q1) |- (P1 and Q1)), it follows that (f1(o1, o2) and f1(o2, o3)). QED
+
+Inference rule (variable-substitution): Let inference-rule variable-substitution defined as &quot;(P, Phi) |- P&#39;&quot; be included and considered valid in H1.
+
+Proposition (H1.P6): ((f1(o1, o2) and f1(o2, o3)) ==&gt; not(f1(o1, o3))). Proof: ((f1(x1, y1) and f1(y1, z1)) ==&gt; not(f1(x1, z1))) follows from prop. (P3). Let x1 = o1, y1 = o2, z1 = o3.Therefore, by the variable-substitution inference rule: (P, Phi) |- P&#39;, it follows that ((f1(o1, o2) and f1(o2, o3)) ==&gt; not(f1(o1, o3))). QED
+
+Inference rule (modus-ponens): Let inference-rule modus-ponens defined as &quot;(((P2 ==&gt; P2) , P2) |- Q2)&quot; be included and considered valid in H1.
+
+Proposition (H1.P7): not(f1(o1, o3)). Proof: ((f1(o1, o2) and f1(o2, o3)) ==&gt; not(f1(o1, o3))) follows from prop. (P6).(f1(o1, o2) and f1(o2, o3)) follows from prop. (P5).Therefore, by the modus-ponens inference rule: (((P2 ==&gt; P2) , P2) |- Q2), it follows that not(f1(o1, o3)). QED
+
+Inference rule (inconsistency-introduction-1): Let inference-rule inconsistency-introduction-1 defined as &quot;(P, not(P)) |- (T)&quot; be included and considered valid in T1.
+
+Proposition (T1.P8) - Proof of the hypothesis inconsistency: Inc(H1). Proof: Let P := f1(o1, o3), which follows from prop. (P4). Let not(P) := not(f1(o1, o3)), which follows from prop. (P7). Therefore, by the inconsistency-introduction-1 inference rule: (P, not(P)) |- (T), it follows that Inc(H1). QED
+
+Inference rule (proof-by-refutation): Let inference-rule proof-by-refutation defined as &quot;(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ ¬𝑷&quot; be included and considered valid in T1.
+
+Proposition (T1.P9) - The proposition of interest: not(f1(o1, o3)). Proof: Let hyp. (H1) be the hypothesis f1(o1, o3). Inc(H1) follows from prop. (P8).Therefore, by the proof-by-refutation inference rule: (𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ ¬𝑷, it follows that not(f1(o1, o3)). QED
+</pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true"
+                                         id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><p>Will be provided in
+                                        a future version.</p>
+                                    </div>
+                                    <div aria-labelledby="tab-0-0-3" class="sphinx-tabs-panel" hidden="true"
+                                         id="panel-0-0-3" name="0-3" role="tabpanel" tabindex="0"><p>Will be provided in
+                                        a future version.</p>
+                                    </div>
+                                </div>
+                            </section>
+                        </section>
+
+
+                    </div>
+                </div>
+                <footer>
+                    <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+                        <a href="proof_by_contradiction_2_python_sample.html" class="btn btn-neutral float-left"
+                           title="proof-by-contradiction-2 (python sample)" accesskey="p" rel="prev"><span
+                                class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+                        <a href="proof_by_refutation_2_python_sample.html" class="btn btn-neutral float-right"
+                           title="proof-by-refutation-2 (python sample)" accesskey="n" rel="next">Next <span
+                                class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+                    </div>
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>&#169; Copyright 2023, David Doret.</p>
+                    </div>
+
+                    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+                    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+                    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+                </footer>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(false);
+    });
+</script>
+
+</body>
+</html>
