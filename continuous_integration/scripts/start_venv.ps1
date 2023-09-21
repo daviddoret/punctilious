@@ -5,8 +5,7 @@ $script = Split-Path $PSCommandPath -Leaf
 $environment_directory = $EnvironmentDirectory
 if ($environment_directory -eq "")
 {
-    #$environment_directory = "$( $PSScriptRoot )\python-virtual-environment-$( New-Guid )"
-    $environment_directory = "python-virtual-environment-$( New-Guid )"
+    $environment_directory = [System.IO.Path]::GetTempPath() + "python-virtual-environment-$( New-Guid )"
 }
 
 $current_step = 1
