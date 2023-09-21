@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="#201 + #195">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup + branding">
       <change afterPath="$PROJECT_DIR$/_build/doctrees/_tags/absorption.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/_build/doctrees/_tags/biconditional-elimination-1.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/_build/doctrees/_tags/biconditional-elimination-2.doctree" afterDir="false" />
@@ -173,6 +173,8 @@
       <change afterPath="$PROJECT_DIR$/_build/doctrees/python/sample/python_sample_index.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/_build/doctrees/python/sample/variable_substitution_python_sample.doctree" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/_build/doctrees/python/source_code_repository_python.doctree" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/branding/github-repository-social-media-preview.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/branding/github-repository-social-media-preview.svg" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/dist/punctilious-1.0.9-py3-none-any.whl" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/dist/punctilious-1.0.9.tar.gz" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -711,14 +713,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00256" summary="Merge remote-tracking branch 'origin/master' into dev">
-      <option name="closed" value="true" />
-      <created>1694470597211</created>
-      <option name="number" value="00256" />
-      <option name="presentableId" value="LOCAL-00256" />
-      <option name="project" value="LOCAL" />
-      <updated>1694470597211</updated>
-    </task>
     <task id="LOCAL-00257" summary="Merge remote-tracking branch 'origin/master' into dev">
       <option name="closed" value="true" />
       <created>1694470684372</created>
@@ -1103,7 +1097,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695277082887</updated>
     </task>
-    <option name="localTasksCounter" value="305" />
+    <task id="LOCAL-00305" summary="cleanup + branding">
+      <option name="closed" value="true" />
+      <created>1695326453754</created>
+      <option name="number" value="00305" />
+      <option name="presentableId" value="LOCAL-00305" />
+      <option name="project" value="LOCAL" />
+      <updated>1695326453755</updated>
+    </task>
+    <option name="localTasksCounter" value="306" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -1135,7 +1137,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="implement #137" />
     <MESSAGE value="implement #147" />
     <MESSAGE value="implement #147 + biconditional-elimination-left + InferenceRuleDeclaration.declaration implemented as a Formula instead of StyledText." />
     <MESSAGE value="implement #147 + biconditional-elimination-right + InferenceRuleDeclaration.declaration implemented as a Formula instead of StyledText." />
@@ -1160,7 +1161,8 @@
     <MESSAGE value="#201" />
     <MESSAGE value="#201 + #195 + correcting proofs by contradiction and refutation with corresponding samples and tests" />
     <MESSAGE value="#201 + #195" />
-    <option name="LAST_COMMIT_MESSAGE" value="#201 + #195" />
+    <MESSAGE value="cleanup + branding" />
+    <option name="LAST_COMMIT_MESSAGE" value="cleanup + branding" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
