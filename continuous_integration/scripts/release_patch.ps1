@@ -29,7 +29,7 @@ Write-Output "Script: $( $script ). Step: $( $current_step ) / $( $total_step ).
 & $PSScriptRoot\build_package.ps1
 
 $current_step = 4
-$command = "release_package.ps1"
+$command = "distribute_package_to_pypi.ps1"
 Write-Output "Script: $( $script ). Step: $( $current_step ) / $( $total_step ). $( $command )"
-& $PSScriptRoot\release_package.ps1
+& $PSScriptRoot\distribute_package_to_pypi.ps1
 
