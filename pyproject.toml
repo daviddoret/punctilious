@@ -1,6 +1,6 @@
 [project]
 name = "punctilious"
-version = "1.0.8"
+version = "1.0.9"
 authors = [{ name = "David Doret", email = "david.doret@icloud.com" }]
 keywords = ["math", "mathematics", "proof", "proof assistant", "math proof assistant", "formal system", ]
 description = "A human-friendly and developer-friendly math proof assistant"
@@ -40,7 +40,7 @@ addopts = [
     "--import-mode=importlib",
 ]
 [tool.bumpver]
-current_version = "1.0.8"
+current_version = "1.0.9"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 tag_message = "v{new_version}"

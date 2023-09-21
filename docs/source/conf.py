@@ -22,7 +22,7 @@ print(sys.path)
 project = 'punctilious'
 copyright = '2023, David Doret'
 author = 'David Doret'
-release = "1.0.8"
+release = "1.0.9"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
