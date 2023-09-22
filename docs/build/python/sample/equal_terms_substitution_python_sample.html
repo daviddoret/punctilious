@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css"/>
     <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css"/>
     <!--[if lt IE 9]>
-      <script src="../../_static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -288,8 +288,8 @@
 <span class="n">proposition_x_equal_y</span> <span class="o">=</span> <span class="n">t1</span><span
                                                 class="o">.</span><span class="n">i</span><span class="o">.</span><span
                                                 class="n">axiom_interpretation</span><span class="o">.</span><span
-                                                class="n">infer_statement</span><span class="p">(</span><span class="n">axiom</span><span
-                                                class="o">=</span><span class="n">theory_axiom</span><span
+                                                class="n">infer_formula_statement</span><span class="p">(</span><span
+                                                class="n">axiom</span><span class="o">=</span><span class="n">theory_axiom</span><span
                                                 class="p">,</span>
     <span class="n">formula</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span
                                                 class="n">f</span><span class="p">(</span><span class="n">u</span><span
@@ -305,8 +305,9 @@
                                                 class="n">o3</span><span class="p">)))</span>
 <span class="n">dummy_proposition</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
-                                                class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span
-                                                class="n">axiom</span><span class="o">=</span><span class="n">theory_axiom</span><span
+                                                class="o">.</span><span class="n">infer_formula_statement</span><span
+                                                class="p">(</span><span class="n">axiom</span><span
+                                                class="o">=</span><span class="n">theory_axiom</span><span
                                                 class="p">,</span>
     <span class="n">formula</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span
                                                 class="n">f</span><span class="p">(</span><span class="n">r1</span><span
@@ -333,7 +334,7 @@
 <span class="c1"># And finally, use the equal-terms-substitution inference-rule:</span>
 <span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t1</span><span
                                                 class="o">.</span><span class="n">i</span><span class="o">.</span><span
-                                                class="n">ets</span><span class="o">.</span><span class="n">infer_statement</span><span
+                                                class="n">ets</span><span class="o">.</span><span class="n">infer_formula_statement</span><span
                                                 class="p">(</span><span class="n">p</span><span class="o">=</span><span
                                                 class="n">dummy_proposition</span><span class="p">,</span>
     <span class="n">x_equal_y</span><span class="o">=</span><span class="n">proposition_x_equal_y</span><span class="p">,</span> <span

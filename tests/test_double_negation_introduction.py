@@ -28,11 +28,11 @@ class TestDoubleNegationIntroduction(TestCase):
         t = u.t()
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
-        phi1 = t.i.axiom_interpretation.infer_statement(ap, r1(o1, o2))
+        phi1 = t.i.axiom_interpretation.infer_formula_statement(ap, r1(o1, o2))
         self.assertEqual('r1(o1, o2)', phi1.rep_formula(encoding=pu.encodings.plaintext))
         self.assertEqual('𝑟₁(𝑜₁, 𝑜₂)', phi1.rep_formula(encoding=pu.encodings.unicode))
         print(u.inference_rules.double_negation_introduction)
         print(t.inference_rule_inclusions.double_negation_introduction)
         # Trying to pass a formula that is not a valid formula-statement must raise an Exception
         with self.assertRaises(pu.FailedVerificationException):
-            phi2 = t.i.dni.infer_statement(p=r1(o1, o3))
+            phi2 = t.i.dni.infer_formula_statement(p=r1(o1, o3))

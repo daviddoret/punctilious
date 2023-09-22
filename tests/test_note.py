@@ -12,7 +12,7 @@ class TestNoteIntroduction(TestCase):
         t = u.t()
         a = u.declare_axiom('The arbitrary axiom of testing.')
         ap = t.include_axiom(a)
-        t.i.axiom_interpretation.infer_statement(ap, u.f(r1, o1))
+        t.i.axiom_interpretation.infer_formula_statement(ap, u.f(r1, o1))
         note = t.take_note('Hello world!', ref='1.1.1')
         self.assertEqual('𝗡𝗼𝘁𝗲 𝟭.𝟭.𝟭 (🗅₁): 𝖧𝖾𝗅𝗅𝗈 𝗐𝗈𝗋𝗅𝖽!', note.rep_report())
         comment = t.take_note('Foo', ref='1.1.2', paragraph_header=pu.paragraph_headers.comment)

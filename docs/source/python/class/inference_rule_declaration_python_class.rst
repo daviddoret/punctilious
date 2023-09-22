@@ -5,10 +5,10 @@
 
 .. tags:: inference-rule, declaration, class, python
 
-InferenceRuleDeclarationDict (python class)
-==============================================
+InferenceRuleDeclaration (python class)
+=====================================================
 
 .. module:: punctilious
    :noindex:
-.. autoclass:: InferenceRuleDeclarationDict
+.. autoclass:: InferenceRuleDeclaration
    :members:

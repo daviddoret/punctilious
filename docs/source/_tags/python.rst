@@ -37,7 +37,10 @@ My tags: python
     ../python/class/inconsistency_introduction_2_inclusion_python_class.rst
     ../python/class/inconsistency_introduction_3_declaration_python_class.rst
     ../python/class/inconsistency_introduction_3_inclusion_python_class.rst
+    ../python/class/inference_rule_declaration_collection_python_class.rst
     ../python/class/inference_rule_declaration_python_class.rst
+    ../python/class/inference_rule_inclusion_collection_python_class.rst
+    ../python/class/inference_rule_inclusion_python_class.rst
     ../python/class/modus_ponens_declaration_python_class.rst
     ../python/class/modus_ponens_inclusion_python_class.rst
     ../python/class/proof_by_contradiction_1_declaration_python_class.rst

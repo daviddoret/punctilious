@@ -22,7 +22,8 @@ from punctilious.core import AbsorptionDeclaration, AbsorptionInclusion, Article
     Formula, FreeVariable, Header, Hypothesis, InconsistencyIntroduction1Declaration, \
     InconsistencyIntroduction1Inclusion, InconsistencyIntroduction2Declaration, \
     InconsistencyIntroduction2Inclusion, InconsistencyIntroduction3Declaration, \
-    InconsistencyIntroduction3Inclusion, InconsistencyWarning, InferenceRuleDeclarationDict, \
+    InconsistencyIntroduction3Inclusion, InconsistencyWarning, InferenceRuleDeclaration, \
+    InferenceRuleDeclarationCollection, InferenceRuleInclusion, InferenceRuleInclusionCollection, \
     InferredStatement, interpret_formula, interpret_statement_formula, is_in_class, \
     ModusPonensDeclaration, ModusPonensInclusion, NameSet, NoteInclusion, Paragraph, \
     paragraph_headers, ParagraphHeader, prioritize_value, ProofByContradiction1Declaration, \
