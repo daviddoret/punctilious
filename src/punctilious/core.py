@@ -3196,7 +3196,8 @@ class AxiomInclusion(Statement):
 
 
 class InferenceRuleInclusion(Statement):
-    """An inference-rule inclusion (aka inference-rule allowance) in the current theory-elaboration.
+    """This python class models the :ref:`inclusion<object_inclusion_math_concept>` of an :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`.
+
     """
 
     def __init__(self, i: InferenceRuleDeclaration, t: TheoryElaborationSequence,
@@ -3205,8 +3206,6 @@ class InferenceRuleInclusion(Statement):
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        """Include (aka allow) an inference-rule in a theory-elaboration.
-        """
         self._inference_rule = i
         paragraph_header = paragraph_headers.inference_rule_inclusion
         if symbol is None:
@@ -3234,21 +3233,17 @@ class InferenceRuleInclusion(Statement):
 
     def infer_formula(self, *args, echo: (None, bool) = None):
         """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param args:
-        :param echo:
-        :return:
         """
         return self.inference_rule.infer_formula(*args, t=self.theory, echo=echo)
 
-    def infer_statement(self, *args, nameset: (None, str, NameSet) = None, ref: (None, str) = None,
-            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
-            echo: (None, bool) = None) -> InferredStatement:
+    def infer_formula_statement(self, *args, nameset: (None, str, NameSet) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
-        :param args:
-        :param echo:
-        :return:
         """
         return self.inference_rule.infer_statement(*args, t=self.theory, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
@@ -3614,12 +3609,9 @@ def index_universe_of_discourse_symbol(base):
 
 
 class InferenceRuleDeclaration(TheoreticalObject):
-    """An inference-rule object.
+    """This python class models the :ref:`declaration<object_declaration_math_concept>` of an :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
 
-    If an inference-rule is allowed / included in a theory-elaboration,
-    it allows to take a sequences of premise statements P1, P2, P3, ...
-    of certain shapes,
-    and infer a new statement C."""
+    """
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, definition: (None, str) = None,
             rep_two_columns_proof_OBSOLETE: (None, collections.abc.Callable) = None,
@@ -3670,7 +3662,10 @@ class InferenceRuleDeclaration(TheoreticalObject):
     @abc.abstractmethod
     def infer_formula(self, *args, t: TheoryElaborationSequence, echo: (None, bool) = None,
             **kwargs) -> Formula:
-        """Apply this inference-rules on input statements and return the resulting statement."""
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         raise NotImplementedError('infer_formula is an abstract method and must be implemented')
 
     def infer_statement(self, *args, t: TheoryElaborationSequence,
@@ -3708,10 +3703,8 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, p_implies_q: FormulaStatement = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
         """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p_implies_q: A formula-statement of the form: (P ⟹ Q).
-        :param t: The current theory-elaboration-sequence.
-        :return: The (proven) formula: (P ⟹ (P ∧ Q)).
         """
         p_implies_q = unpack_formula(p_implies_q)
         p = unpack_formula(p_implies_q.parameters[0])
@@ -3762,12 +3755,9 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
 
     def infer_formula(self, a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
-        """Compute the formula that results from applying this inference-rule with those arguments.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param a: An axiom-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
-        :param p: A propositional formula: P.
-        :param t: The current theory-elaboration-sequence.
-        :return: (Formula) The inferred formula: P.
         """
         p = unpack_formula(p)
         return p
@@ -3819,10 +3809,8 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
     def infer_formula(self, p_iff_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
         """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p_implies_q: A formula-statement of the form: (P ⟹ Q).
-        :param t: The current theory-elaboration-sequence.
-        :return: The (proven) formula: (P ⟹ (P ∧ Q)).
         """
         p_iff_q: Formula = interpret_formula(u=self.u, arity=2, flexible_formula=p_iff_q)
         p: Formula = interpret_formula(u=self.u, arity=None, flexible_formula=p_iff_q.parameters[0])
@@ -3879,11 +3867,9 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p_iff_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
-        """(P ⟺ Q ⊢ Q ⟹ P)
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p_iff_q: A formula-statement of the form: (P ⟺ Q).
-        :param t: The current theory-elaboration-sequence.
-        :return: The (proven) formula: (Q ⟹ P).
         """
         p_iff_q: Formula = interpret_formula(u=self.u, arity=2, flexible_formula=p_iff_q)
         p: Formula = interpret_formula(u=self.u, arity=None, flexible_formula=p_iff_q.parameters[0])
@@ -3930,7 +3916,9 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
             q_implies_p: (tuple, Formula, FormulaStatement) = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
-        """Infer formula (P ⟺ Q) from formulae (P ⟹ Q), and (Q ⟹ P).
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
         """
         p_implies_q = interpret_formula(u=t.u, arity=2, flexible_formula=p_implies_q)
         p = p_implies_q.parameters[0]
@@ -3999,11 +3987,8 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
     def infer_formula(self, p_land_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None, **kwargs) -> Formula:
         """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p_land_q: A formula-statement of the form: (P ⋀ Q).
-        :param t: The current theory-elaboration-sequence.
-        :param echo:
-        :return: The (proven) formula: P.
         """
         p = unpack_formula(p_land_q).parameters[0]
         return p
@@ -4053,10 +4038,8 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
     def infer_formula(self, p_land_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
         """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p_land_q: A formula-statement of the form: (P ∧ Q).
-        :param t: The current theory-elaboration-sequence.
-        :return: The (proven) formula: Q.
         """
         p_land_q = interpret_formula(u=t.u, arity=2, flexible_formula=p_land_q)
         q = p_land_q.parameters[1]
@@ -4100,13 +4083,9 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
-        """Apply the :ref:`conjunction-introduction<conjunction_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` and return the resulting formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p: (mandatory) A formula-statement of the form :math:`P` .
-        :param q: (mandatory) A formula-statement of the form :math:`Q` .
-        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
-        :param echo:
-        :return: The resulting formula :math:`\\left( P \\land Q \\right)` .
         """
         p = interpret_formula(u=t.u, arity=None, flexible_formula=p)
         q = interpret_formula(u=t.u, arity=None, flexible_formula=q)
@@ -4160,12 +4139,9 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
 
     def infer_formula(self, d: DefinitionInclusion, p: Formula, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
-        """Compute the formula that results from applying this inference-rule with those arguments.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param d: An definition-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
-        :param p: A propositional formula: P.
-        :param t: The current theory-elaboration-sequence.
-        :return: (Formula) The inferred formula: P.
         """
         p = unpack_formula(p)
         return p
@@ -4214,13 +4190,9 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        """Apply the :ref:`disjunction-introduction-1<disjunction_introduction_1_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` and return the resulting formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p: (mandatory) A formula-statement of the form :math:`P` .
-        :param q: (mandatory) A formula of the form :math:`Q` .
-        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
-        :param echo:
-        :return: The resulting formula :math:`\\left( Q \\lor P \\right)` .
         """
         p = interpret_formula(u=t.u, arity=None, flexible_formula=p)
         q = interpret_formula(u=t.u, arity=None, flexible_formula=q)
@@ -4271,13 +4243,9 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
-        """Apply the :ref:`disjunction-introduction-2<disjunction_introduction_2_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` and return the resulting formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p: (mandatory) A formula-statement of the form :math:`P` .
-        :param q: (mandatory) A formula of the form :math:`Q` .
-        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
-        :param echo:
-        :return: The resulting formula :math:`\\left( P \\lor Q \\right)` .
         """
         p = interpret_formula(u=t.u, arity=None, flexible_formula=p)
         q = interpret_formula(u=t.u, arity=None, flexible_formula=q)
@@ -4335,10 +4303,8 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, not_not_p: (None, Formula) = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
         """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param not_not_p: A formula-statement of the form: ¬(¬(P)).
-        :param t: The current theory-elaboration-sequence.
-        :return: The (proven) formula: P.
         """
         not_not_p: Formula = interpret_formula(u=t.u, arity=1, flexible_formula=not_not_p)
         not_p: Formula = not_not_p.parameters[0]
@@ -4390,12 +4356,9 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
-        """Apply the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` and return the resulting formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p: (mandatory) A formula-statement of the form :math:`P` .
-        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
-        :param echo:
-        :return: The resulting formula :math:`\\lnot \\left( \\lnot \\left( P \\right) \\right)` .
         """
         p: Formula = interpret_formula(u=t.u, arity=1, flexible_formula=p)
         not_not_p: Formula = t.u.r.lnot(t.u.r.lnot(p))
@@ -4440,10 +4403,9 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
 
     def infer_formula(self, x_equal_y: (None, FormulaStatement) = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
-        """Apply the inference-rule equality-commutativity and return the inferred formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param x_equal_y: an equality formula-statement of the form: (P = Q).
-        :return: (FormulaStatement) The inferred-statement (Q = P).
         """
         x_equal_y: Formula
         x_equal_y = unpack_formula(x_equal_y)
@@ -4490,11 +4452,8 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: FormulaStatement = None, x_equal_y: FormulaStatement = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
-        """Apply the inference-rule equal-terms-substitution and return the inferred formula.
-
-        :param p: a formula-statement of the form: P.
-        :param x_equal_y: an equality formula-statement of the form: (Q = R).
-        :return: (FormulaStatement) The formula-statement P modified such that all occurrences of Q in P are replaced with R.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
         """
         p: Formula
@@ -4552,6 +4511,10 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
     def infer_formula(self, p: FormulaStatement = None, not_p: FormulaStatement = None,
             inconsistent_theory: TheoryElaborationSequence = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         p = unpack_formula(p)
         not_p = unpack_formula(not_p)
         return t.u.f(t.u.r.inconsistency, inconsistent_theory)
@@ -4602,6 +4565,10 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
     def infer_formula(self, x_eq_y: FormulaStatement = None, x_neq_y: FormulaStatement = None,
             inconsistent_theory: TheoryElaborationSequence = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         x_eq_y = unpack_formula(x_eq_y)
         x_neq_y = unpack_formula(x_neq_y)
         return t.u.f(t.u.r.inconsistency, inconsistent_theory)
@@ -4657,6 +4624,10 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
     def infer_formula(self, p_neq_p: FormulaStatement = None,
             inconsistent_theory: TheoryElaborationSequence = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         p_neq_p = interpret_formula(u=self.u, arity=2, flexible_formula=p_neq_p)
         return t.u.f(t.u.r.inconsistency, inconsistent_theory)
 
@@ -4709,10 +4680,8 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, p_implies_q: FormulaStatement, p: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param args: A statement (P ⟹ Q), and a statement P
-        :param t:
-        :return: A formula Q
         """
         p_implies_q = interpret_formula(u=self.u, arity=2, flexible_formula=p_implies_q)
         q = interpret_formula(u=self.u, arity=2, flexible_formula=p_implies_q.parameters[1])
@@ -4769,6 +4738,10 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
 
     def infer_formula(self, not_p_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         not_p = not_p_hypothesis.hypothesis_formula
         p = not_p.parameters[0]
         return p
@@ -4826,6 +4799,10 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
 
     def infer_formula(self, x_neq_y_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         x_neq_y = x_neq_y_hypothesis.hypothesis_formula
         x = x_neq_y.parameters[0]
         y = x_neq_y.parameters[1]
@@ -4887,6 +4864,10 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         p = p_hypothesis.hypothesis_formula
         not_p = t.u.f(t.u.r.negation, p)
         return not_p
@@ -4946,6 +4927,10 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p_eq_q_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         p_eq_q = p_eq_q_hypothesis.hypothesis_formula
         p_neq_q = t.u.f(t.u.r.inequality, p_eq_q.parameters[0], p_eq_q.parameters[1])
         return p_neq_q
@@ -5005,12 +4990,9 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
 
     def infer_formula(self, p: FormulaStatement, phi: (None, tuple[TheoreticalObject]),
             t: TheoryElaborationSequence, echo: (None, bool) = None, **kwargs) -> Formula:
-        """Compute the formula that results from applying this inference-rule with those arguments.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p: A formula statement that may contain n variables.
-        :param phi: A sequence of n well-formed formulae.
-        :param t: The current theory-elaboration-sequence.
-        :return: (Formula) The inferred formula.
         """
         x_oset = unpack_formula(p).get_variable_ordered_set()
         x_y_map = dict((x, y) for x, y in zip(x_oset, phi))
@@ -5242,7 +5224,7 @@ class TheoryElaborationSequence(TheoreticalObject):
         self._stabilized = False
         self.axiom_inclusions = tuple()
         self.definition_inclusions = tuple()
-        self._inference_rule_inclusions = InferenceRuleInclusionDict(t=self)
+        self._inference_rule_inclusions = InferenceRuleInclusionCollection(t=self)
         self.statements = tuple()
         self._extended_theory = extended_theory
         self._extended_theory_limit = extended_theory_limit
@@ -5673,7 +5655,7 @@ class Hypothesis(Statement):
         self._hypothesis_axiom_inclusion_in_child_theory = self.hypothesis_child_theory.include_axiom(
             a=self.hypothesis_axiom_declaration, echo=echo)
         # ...and the hypothetical-proposition is posed as an interpretation of that axiom in 𝒯₂.
-        self._hypothesis_statement_in_child_theory = self.hypothesis_child_theory.i.axiom_interpretation.infer_statement(
+        self._hypothesis_statement_in_child_theory = self.hypothesis_child_theory.i.axiom_interpretation.infer_formula_statement(
             self.hypothesis_axiom_inclusion_in_child_theory, hypothesis_formula, echo=echo)
         echo = prioritize_value(echo, configuration.echo_hypothesis,
             configuration.echo_inferred_statement, False)
@@ -6357,8 +6339,10 @@ def interpret_statement_formula(t: TheoryElaborationSequence, arity: (None, int)
         return flexible_formula
 
 
-class InferenceRuleDeclarationDict(collections.UserDict):
-    """A (possibly empty) collection of inference-rule declarations.
+class InferenceRuleDeclarationCollection(collections.UserDict):
+    """This python class models the collection of :ref:`inference-rules<inference_rule_math_concept>` :ref:`declared<object_declaration_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
+
+    In complement, it conveniently exposes as python properties a catalog of natively supported :ref:`inference-rules<inference_rule_math_concept>` that are automatically :ref:`declared<object_declaration_math_concept>` in the :ref:`universe-of-discourse<universe_of_discourse_math_concept>` when they are accessed for the first time.
     """
 
     def __init__(self, u: UniverseOfDiscourse):
@@ -6664,24 +6648,23 @@ class AbsorptionInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p_implies_q: (None, Formula, FormulaStatement) = None,
             echo: (None, bool) = None):
-        """Apply the :ref:`absorption<absorption_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` and return the inferred :ref:`formula<formula_math_concept>` .
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p_implies_q: (mandatory) The implication statement.
-        :return: The inferred formula q.
         """
         return super().infer_formula(p_implies_q, echo=echo)
 
-    def infer_statement(self, p_implies_q: (None, tuple, list, Formula, FormulaStatement) = None,
+    def infer_formula_statement(self,
+            p_implies_q: (None, tuple, list, Formula, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the absorption inference-rule and return the inferred-statement.
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
-        :param p_implies_q: (mandatory) The implication statement.
-        :return: An inferred-statement proving p implies p and q in the current theory.
         """
         p_implies_q = interpret_statement_formula(t=self.t, arity=2, flexible_formula=p_implies_q)
-        return super().infer_statement(p_implies_q, nameset=nameset, ref=ref,
+        return super().infer_formula_statement(p_implies_q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -6704,28 +6687,22 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, axiom: (None, AxiomInclusion) = None, formula: (None, Formula) = None,
             echo: (None, bool) = None):
-        """Apply the axiom-interpretation inference-rule and return the inferred-formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param axiom: (mandatory) The axiom-inclusion statement. This proves that the axiom is
-        part of the theory.
-        :param formula: (mandatory) The interpretation of the axiom as a formula.
-        :return: An inferred-statement proving the formula in the current theory.
         """
         return super().infer_formula(axiom, formula, echo=echo)
 
-    def infer_statement(self, axiom: (None, AxiomInclusion) = None, formula: (None, Formula) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
-            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
-            echo: (None, bool) = None) -> InferredStatement:
-        """Apply the axiom-interpretation inference-rule and return the inferred-statement.
+    def infer_formula_statement(self, axiom: (None, AxiomInclusion) = None,
+            formula: (None, Formula) = None, nameset: (None, str, NameSet) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
-        :param axiom: (mandatory) The axiom-inclusion statement. This proves that the axiom is
-        part of the theory.
-        :param formula: (mandatory) The interpretation of the axiom as a formula.
-        :return: An inferred-statement proving the formula in the current theory.
         """
         formula = interpret_formula(u=self.u, arity=None, flexible_formula=formula)
-        return super().infer_statement(axiom, formula, nameset=nameset, ref=ref,
+        return super().infer_formula_statement(axiom, formula, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -6744,19 +6721,21 @@ class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
             proof=proof)
 
     def infer_formula(self, p_iff_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         return super().infer_formula(p_iff_q, echo=echo)
 
-    def infer_statement(self, p_iff_q: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, p_iff_q: (None, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the biconditional elimination #1 inference-rule and return the
-        inferred-statement.
-
-        :param p_iff_q: (mandatory) The biconditional statement.
-        :return: The proven inferred-statement p implies q in the current theory.
         """
-        return super().infer_statement(p_iff_q, nameset=nameset, ref=ref,
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        return super().infer_formula_statement(p_iff_q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -6778,19 +6757,21 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
             proof=proof)
 
     def infer_formula(self, p_iff_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         return super().infer_formula(p_iff_q, echo=echo)
 
-    def infer_statement(self, p_iff_q: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, p_iff_q: (None, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the biconditional elimination #2 inference-rule and return the
-        inferred-statement.
-
-        :param p_iff_q: (mandatory) The biconditional statement.
-        :return: The proven inferred-statement p implies q in the current theory.
         """
-        return super().infer_statement(p_iff_q, nameset=nameset, ref=ref,
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        return super().infer_formula_statement(p_iff_q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -6813,20 +6794,22 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
             q_implies_p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         return super().infer_formula(p_iff_q, echo=echo)
 
-    def infer_statement(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
+    def infer_formula_statement(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
             q_implies_p: (tuple, Formula, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the biconditional elimination #2 inference-rule and return the
-        inferred-statement.
-
-        :param p_iff_q: (mandatory) The biconditional statement.
-        :return: The proven inferred-statement p implies q in the current theory.
         """
-        return super().infer_statement(p_implies_q, q_implies_p, nameset=nameset, ref=ref,
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        return super().infer_formula_statement(p_implies_q, q_implies_p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -6848,18 +6831,20 @@ class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
             proof=proof)
 
     def infer_formula(self, p_and_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         return super().infer_formula(p_and_q, echo=echo)
 
-    def infer_statement(self, p_and_q: (None, FormulaStatement) = None, ref: (None, str) = None,
-            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
-            echo: (None, bool) = None) -> InferredStatement:
-        """Apply the conjunction elimination #1 inference-rule and return the
-        inferred-statement.
-
-        :param p_and_q:
-        :return: The proven inferred-statement p implies q in the current theory.
+    def infer_formula_statement(self, p_and_q: (None, FormulaStatement) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
-        return super().infer_statement(p_and_q, ref=ref, paragraph_header=paragraph_header,
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        return super().infer_formula_statement(p_and_q, ref=ref, paragraph_header=paragraph_header,
             subtitle=subtitle, echo=echo)
 
 
@@ -6881,19 +6866,21 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
             proof=proof)
 
     def infer_formula(self, p_and_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         return super().infer_formula(p_and_q, echo=echo)
 
-    def infer_statement(self, p_and_q: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, p_and_q: (None, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the conjunction elimination #2 inference-rule and return the
-        inferred-statement.
-
-        :param p_and_q: (mandatory) The conjunction statement.
-        :return: The proven inferred-statement p implies q in the current theory.
         """
-        return super().infer_statement(p_and_q, nameset=nameset, ref=ref,
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        return super().infer_formula_statement(p_and_q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -6916,35 +6903,25 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :ref:`conjunction-introduction<conjunction_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` and return the resulting formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p: (mandatory) A formula-statement of the form :math:`P` .
-        :param q: (mandatory) A formula-statement of the form :math:`Q` .
-        :param echo:
-        :return: The resulting formula :math:`\\left( P \\land Q \\right)` .
         """
         p = interpret_formula(u=self.t.u, arity=None, flexible_formula=p)
         q = interpret_formula(u=self.t.u, arity=None, flexible_formula=q)
         return super().infer_formula(p, q, echo=echo)
 
-    def infer_statement(self, p: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the :ref:`conjunction-introduction<conjunction_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` and return the resulting inferred-statement.
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
-                :param p: (mandatory) A formula-statement of the form: :math:`P` .
-                :param q: (mandatory) A formula-statement of the form: :math:`Q` .
-                :param nameset:
-                :param ref:
-                :param paragraph_header:
-                :param subtitle:
-                :param echo:
-                :return: The resulting inferred-statement: :math:`\\left( P \\land Q \\right)` .
-                """
+        """
         p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
         q = interpret_statement_formula(t=self.t, arity=None, flexible_formula=q)
-        return super().infer_statement(p, q, nameset=nameset, ref=ref,
+        return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -6967,28 +6944,22 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, definition: (None, DefinitionInclusion) = None,
             formula: (None, Formula) = None, echo: (None, bool) = None):
-        """Apply the definition-interpretation inference-rule and return the inferred-formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param definition: (mandatory) The definition-inclusion statement. This proves that the definition is
-        part of the theory.
-        :param formula: (mandatory) The interpretation of the definition as a formula.
-        :return: An inferred-statement proving the formula in the current theory.
         """
         return super().infer_formula(definition, formula, echo=echo)
 
-    def infer_statement(self, definition: (None, DefinitionInclusion) = None,
+    def infer_formula_statement(self, definition: (None, DefinitionInclusion) = None,
             formula: (None, FlexibleFormula) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the definition-interpretation inference-rule and return the inferred-statement.
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
-        :param definition: (mandatory) The definition-inclusion statement. This proves that the definition is
-        part of the theory.
-        :param formula: (mandatory) The interpretation of the definition as a formula.
-        :return: An inferred-statement proving the formula in the current theory.
         """
         formula = interpret_formula(u=self.u, arity=None, flexible_formula=formula)
-        return super().infer_statement(definition, formula, nameset=nameset, ref=ref,
+        return super().infer_formula_statement(definition, formula, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7011,35 +6982,25 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :ref:`disjunction-introduction-1<disjunction_introduction_1_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` and return the resulting formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p: (mandatory) A formula-statement of the form :math:`P` .
-        :param q: (mandatory) A formula of the form :math:`Q` .
-        :param echo:
-        :return: The resulting formula :math:`\\left( P \\lor Q \\right)` .
         """
         p = interpret_formula(u=self.t.u, arity=None, flexible_formula=p)
         q = interpret_formula(u=self.t.u, arity=None, flexible_formula=q)
         return super().infer_formula(p, q, echo=echo)
 
-    def infer_statement(self, p: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the :ref:`disjunction-introduction-1<disjunction_introduction_1_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` and return the resulting inferred-statement.
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
-                :param p: (mandatory) A formula-statement of the form: :math:`P` .
-                :param q: (mandatory) A formula of the form: :math:`Q` .
-                :param nameset:
-                :param ref:
-                :param paragraph_header:
-                :param subtitle:
-                :param echo:
-                :return: The resulting inferred-statement: :math:`\\left( P \\lor Q \\right)` .
-                """
+        """
         p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
         q = interpret_formula(u=self.u, arity=None, flexible_formula=q)
-        return super().infer_statement(p, q, nameset=nameset, ref=ref,
+        return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7062,35 +7023,25 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :ref:`disjunction-introduction-2<disjunction_introduction_2_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` and return the resulting formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p: (mandatory) A formula-statement of the form :math:`P` .
-        :param q: (mandatory) A formula of the form :math:`Q` .
-        :param echo:
-        :return: The resulting formula :math:`\\left( P \\lor Q \\right)` .
         """
         p = interpret_formula(u=self.t.u, arity=None, flexible_formula=p)
         q = interpret_formula(u=self.t.u, arity=None, flexible_formula=q)
         return super().infer_formula(p, q, echo=echo)
 
-    def infer_statement(self, p: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the :ref:`disjunction-introduction-2<disjunction_introduction_2_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` and return the resulting inferred-statement.
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
-                :param p: (mandatory) A formula-statement of the form: :math:`P` .
-                :param q: (mandatory) A formula of the form: :math:`Q` .
-                :param nameset:
-                :param ref:
-                :param paragraph_header:
-                :param subtitle:
-                :param echo:
-                :return: The resulting inferred-statement: :math:`\\left( P \\lor Q \\right)` .
-                """
+        """
         p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
         q = interpret_formula(u=self.u, arity=None, flexible_formula=q)
-        return super().infer_statement(p, q, nameset=nameset, ref=ref,
+        return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7112,21 +7063,22 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
             proof=proof)
 
     def infer_formula(self, not_not_p: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the double-negation-elimination inference-rule and return the inferred-formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
         """
         return super().infer_formula(not_not_p, echo=echo)
 
-    def infer_statement(self, not_not_p: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, not_not_p: (None, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the double-negation-elimination inference-rule and return the inferred-statement.
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
-        :param not_not_p: (mandatory)
-        :return: An inferred-statement proving p in the current theory.
         """
         not_not_p = interpret_statement_formula(t=self.t, arity=1, flexible_formula=not_not_p)
-        return super().infer_statement(not_not_p, nameset=nameset, ref=ref,
+        return super().infer_formula_statement(not_not_p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7147,30 +7099,22 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
             proof=proof)
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` and return the resulting formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p: (mandatory) A formula or formula-statement of the form: :math:`P` .
-        :param echo:
-        :return: The resulting formula: :math:`\\lnot \\left( \\lnot \\left( P \\right) \\right)` .
         """
         return super().infer_formula(p, echo=echo)
 
-    def infer_statement(self, p: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` and return the resulting inferred-statement.
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
-        :param p: (mandatory) A formula-statement of the form: :math:`P` .
-        :param nameset:
-        :param ref:
-        :param paragraph_header:
-        :param subtitle:
-        :param echo:
-        :return: The resulting inferred-statement: :math:`\\lnot \\left( \\lnot \\left( P \\right) \\right)` .
         """
         p = interpret_statement_formula(t=self.t, arity=1, flexible_formula=p)
-        return super().infer_statement(p, nameset=nameset, ref=ref,
+        return super().infer_formula_statement(p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7192,15 +7136,21 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
             proof=proof)
 
     def infer_formula(self, x_equal_y: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the equality-commutativity inference-rule and return the inferred-formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
         """
         return super().infer_formula(x_equal_y, echo=echo)
 
-    def infer_statement(self, x_equal_y: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, x_equal_y: (None, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        return super().infer_statement(x_equal_y, nameset=nameset, ref=ref,
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        return super().infer_formula_statement(x_equal_y, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7223,15 +7173,21 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p: (None, FormulaStatement) = None,
             q_equal_r: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the equal-terms-substitution inference-rule and return the inferred-formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
         """
         return super().infer_formula(p, q_equal_r, echo=echo)
 
-    def infer_statement(self, p: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             x_equal_y: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        return super().infer_statement(p, x_equal_y, nameset=nameset, ref=ref,
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        return super().infer_formula_statement(p, x_equal_y, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7256,29 +7212,28 @@ class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
             not_p: (None, FormulaStatement) = None,
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
             t: (None, TheoryElaborationSequence) = None, echo: (None, bool) = None):
-        """Apply the inconsistency-introduction inference-rule and return the inferred-formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
         """
         return super().infer_formula(p, not_p, inconsistent_theory, echo=echo)
 
-    def infer_statement(self, p: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             not_p: (None, FormulaStatement) = None,
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the inconsistency-introduction inference-rule and return the inferred-statement.
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
-        :param p: (mandatory) .
-        :param not_p: (mandatory) .
-        :param inconsistent_theory: (conditional) .
-        :return: An inferred-statement proving p in the current theory.
         """
         if inconsistent_theory is None and p.t is not_p.t:
             # The inconsistent_theory can be unambiguously defaulted
             # when both p and not_p are contained in the same theory.
             inconsistent_theory = p.t
-        return super().infer_statement(p, not_p, inconsistent_theory, nameset=nameset, ref=ref,
-            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        return super().infer_formula_statement(p, not_p, inconsistent_theory, nameset=nameset,
+            ref=ref, paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
 class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
@@ -7302,22 +7257,21 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
             x_neq_y: (None, FormulaStatement) = None,
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
             t: (None, TheoryElaborationSequence) = None, echo: (None, bool) = None):
-        """Apply the inconsistency-introduction inference-rule and return the inferred-formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
         """
         return super().infer_formula(x_eq_y, x_neq_y, inconsistent_theory, echo=echo)
 
-    def infer_statement(self, x_eq_y: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, x_eq_y: (None, FormulaStatement) = None,
             x_neq_y: (None, FormulaStatement) = None,
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the inconsistency-introduction inference-rule and return the inferred-statement.
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
-        :param p: (mandatory) .
-        :param not_p: (mandatory) .
-        :param inconsistent_theory: (conditional) .
-        :return: An inferred-statement proving p in the current theory.
         """
         if inconsistent_theory is None and x_eq_y.t is x_neq_y.t:
             # The inconsistent_theory can be unambiguously defaulted
@@ -7327,8 +7281,9 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
             flexible_formula=x_eq_y)
         x_neq_y = interpret_statement_formula(t=inconsistent_theory, arity=2,
             flexible_formula=x_neq_y)
-        return super().infer_statement(x_eq_y, x_neq_y, inconsistent_theory, nameset=nameset,
-            ref=ref, paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        return super().infer_formula_statement(x_eq_y, x_neq_y, inconsistent_theory,
+            nameset=nameset, ref=ref, paragraph_header=paragraph_header, subtitle=subtitle,
+            echo=echo)
 
 
 class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
@@ -7351,28 +7306,27 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
     def infer_formula(self, p_neq_p: (None, FormulaStatement) = None,
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
             t: (None, TheoryElaborationSequence) = None, echo: (None, bool) = None):
-        """Apply the inconsistency-introduction inference-rule and return the inferred-formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
         """
         return super().infer_formula(p_neq_p, inconsistent_theory, echo=echo)
 
-    def infer_statement(self, p_neq_p: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, p_neq_p: (None, FormulaStatement) = None,
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the inconsistency-introduction inference-rule and return the inferred-statement.
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
-        :param p: (mandatory) .
-        :param not_p: (mandatory) .
-        :param inconsistent_theory: (conditional) .
-        :return: An inferred-statement proving p in the current theory.
         """
         if inconsistent_theory is None:
             # The inconsistent_theory can be unambiguously defaulted
             # when all terms are contained in the same theory.
             inconsistent_theory = p_neq_p.t
-        return super().infer_statement(p_neq_p, inconsistent_theory, nameset=nameset, ref=ref,
-            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        return super().infer_formula_statement(p_neq_p, inconsistent_theory, nameset=nameset,
+            ref=ref, paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
 class ModusPonensInclusion(InferenceRuleInclusion):
@@ -7393,27 +7347,23 @@ class ModusPonensInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
             p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the modus-ponens inference-rule and return the inferred-formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p_implies_q: (mandatory) The implication statement.
-        :param p: (mandatory) The p statement, proving that p is true in the current theory.
-        :return: The inferred formula q.
         """
         return super().infer_formula(p_implies_q, p, echo=echo)
 
-    def infer_statement(self, p_implies_q: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, p_implies_q: (None, FormulaStatement) = None,
             p: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the modus-ponens inference-rule and return the inferred-statement.
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
-        :param p_implies_q: (mandatory) The implication statement.
-        :param p: (mandatory) The p statement, proving that p is true in the current theory.
-        :return: An inferred-statement proving p in the current theory.
         """
         p_implies_q = interpret_statement_formula(t=self.t, arity=2, flexible_formula=p_implies_q)
         p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
-        return super().infer_statement(p_implies_q, p, nameset=nameset, ref=ref,
+        return super().infer_formula_statement(p_implies_q, p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7436,26 +7386,22 @@ class ProofByContradiction1Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, not_p_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None) -> Formula:
-        """Apply the proof-by-contradiction inference-rule and return the inferred-formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param not_p_hypothesis: (mandatory) The (¬P) hypothesis-statement.
-        :param inc_hypothesis: (mandatory) The proof of inconsistency of the not_p hypothetical-theory: Inc(¬P).
-        :return: The inferred formula .
         """
         return super().infer_formula(not_p_hypothesis, inc_hypothesis, echo=echo)
 
-    def infer_statement(self, not_p_hypothesis: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, not_p_hypothesis: (None, FormulaStatement) = None,
             inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the modus-ponens inference-rule and return the inferred-statement.
-
-        :param not_p_hypothesis: (mandatory) The implication statement.
-        :param inc_hypothesis: (mandatory) The p statement, proving that p is true in the current theory.
-        :return: An inferred-statement proving p in the current theory.
         """
-        return super().infer_statement(not_p_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
-            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        return super().infer_formula_statement(not_p_hypothesis, inc_hypothesis, nameset=nameset,
+            ref=ref, paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
 class ProofByContradiction2Inclusion(InferenceRuleInclusion):
@@ -7477,14 +7423,22 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, x_neq_y_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         return super().infer_formula(x_neq_y_hypothesis, inc_hypothesis, echo=echo)
 
-    def infer_statement(self, x_neq_y_hypothesis: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, x_neq_y_hypothesis: (None, FormulaStatement) = None,
             inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        return super().infer_statement(x_neq_y_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
-            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        return super().infer_formula_statement(x_neq_y_hypothesis, inc_hypothesis, nameset=nameset,
+            ref=ref, paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
 class ProofByRefutation1Inclusion(InferenceRuleInclusion):
@@ -7506,27 +7460,22 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
-        """Apply the :ref:`proof-by-refutation-1<proof_by_refutation_1_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` and return the inferred-formula.
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
 
-        :param p_hypothesis: (mandatory) The :math:`\\neg \\mathbf{P}` hypothesis.
-        :param inc_hypothesis: (mandatory) The proof of inconsistency of the :math:`\\neg \\mathbf{P}` hypothesis :math:`Inc\\left(\\mathcal{H}\\right)` .
-        :param echo:
-        :return: The inferred formula: :math:`\\mathbf{P}` .
         """
         return super().infer_formula(p_hypothesis, inc_hypothesis, echo=echo)
 
-    def infer_statement(self, p_hypothesis: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, p_hypothesis: (None, FormulaStatement) = None,
             inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        """Apply the modus-ponens inference-rule and return the inferred-statement.
-
-        :param p_hypothesis: (mandatory) The implication statement.
-        :param inc_hypothesis: (mandatory) The p statement, proving that p is true in the current theory.
-        :return: An inferred-statement proving p in the current theory.
         """
-        return super().infer_statement(p_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
-            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        return super().infer_formula_statement(p_hypothesis, inc_hypothesis, nameset=nameset,
+            ref=ref, paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
 class ProofByRefutation2Inclusion(InferenceRuleInclusion):
@@ -7548,14 +7497,22 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, x_eq_y_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         return super().infer_formula(x_eq_y_hypothesis, inc_hypothesis, echo=echo)
 
-    def infer_statement(self, x_eq_y_hypothesis: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, x_eq_y_hypothesis: (None, FormulaStatement) = None,
             inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
-        return super().infer_statement(x_eq_y_hypothesis, inc_hypothesis, nameset=nameset, ref=ref,
-            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        return super().infer_formula_statement(x_eq_y_hypothesis, inc_hypothesis, nameset=nameset,
+            ref=ref, paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
 class VariableSubstitutionInclusion(InferenceRuleInclusion):
@@ -7574,38 +7531,34 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p: (None, FormulaStatement) = None,
             phi: (None, tuple[TheoreticalObject]) = None, echo: (None, bool) = None):
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
         return super().infer_formula(p, phi, echo=echo)
 
-    def infer_statement(self, p: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             phi: (None, TheoreticalObject, tuple[TheoreticalObject]) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
-        """Apply the variable-substitution inference-rule and return the inferred-statement.
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
-        :param p:
-        :param phi:
-        :param nameset:
-        :param ref:
-        :param paragraph_header:
-        :param subtitle:
-        :param echo:
-        :return:
         """
         p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
         if isinstance(phi, TheoreticalObject):
             # If phi is passed as an theoretical-object,
             # embed it into a tuple as we expect tuple[TheoreticalObject] as input type.
             phi = tuple([phi])
-        return super().infer_statement(p, phi, nameset=nameset, ref=ref,
+        return super().infer_formula_statement(p, phi, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class InferenceRuleInclusionDict(collections.UserDict):
-    """The repository of inference-rules included in a theory. In complement, this object exposes
-    well-known inference-rules as easily accessible python properties. Accessing these properties
-    automatically include (aka recognizes as well-founded and valid) the corresponding
-    inference-rule in the current theory.
+class InferenceRuleInclusionCollection(collections.UserDict):
+    """This python class models the collection of :ref:`inference-rules<inference_rule_math_concept>` :ref:`included<object_inclusion_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`.
+
+    In complement, it conveniently exposes as python properties a catalog of natively supported :ref:`inference-rules<inference_rule_math_concept>` that are automatically :ref:`included<object_inclusion_math_concept>` in the :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` when they are accessed for the first time.
 
     """
 
@@ -8063,7 +8016,7 @@ class UniverseOfDiscourse(SymbolicObject):
         self.axioms = dict()
         self.definitions = dict()
         self.formulae = dict()
-        self._inference_rules = InferenceRuleDeclarationDict(u=self)
+        self._inference_rules = InferenceRuleDeclarationCollection(u=self)
         self._relations = RelationDict(u=self)
         self.theories = dict()
         self._simple_objcts = SimpleObjctDict(u=self)
@@ -8334,7 +8287,7 @@ class UniverseOfDiscourse(SymbolicObject):
         return max(same_symbols, default=0)
 
     @property
-    def i(self) -> InferenceRuleDeclarationDict:
+    def i(self) -> InferenceRuleDeclarationCollection:
         """The (possibly empty) collection of :ref:`inference-rules<inference_rule_math_concept>` declared in this :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
 
         Unabridged name: inference_rule
@@ -8351,7 +8304,7 @@ class UniverseOfDiscourse(SymbolicObject):
         return self.get_symbol_max_index(symbol) + 1
 
     @property
-    def inference_rules(self) -> InferenceRuleDeclarationDict:
+    def inference_rules(self) -> InferenceRuleDeclarationCollection:
         """The (possibly empty) collection of :ref:`inference-rules<inference_rule_math_concept>` declared in this in this :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
 
         Abridged name: i

@@ -38,6 +38,9 @@ Python classes
    inconsistency_introduction_3_declaration_python_class
    inconsistency_introduction_3_inclusion_python_class
    InferenceRuleDeclaration<inference_rule_declaration_python_class>
+   InferenceRuleDeclarationCollection<inference_rule_declaration_collection_python_class>
+   InferenceRuleInclusion<inference_rule_inclusion_python_class>
+   InferenceRuleInclusionCollection<inference_rule_inclusion_collection_python_class>
    modus_ponens_declaration_python_class
    modus_ponens_inclusion_python_class
    proof_by_contradiction_1_declaration_python_class

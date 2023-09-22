@@ -32,16 +32,16 @@ class TestEqualTermsSubstitution(TestCase):
         t1 = u.t()
         a = u.declare_axiom(random_data.random_sentence())
         ap = t1.include_axiom(a)
-        q_equal_r = t1.i.axiom_interpretation.infer_statement(ap,
+        q_equal_r = t1.i.axiom_interpretation.infer_formula_statement(ap,
             u.f(u.r.equal, u.f(r1, o1, o2), u.f(r2, o3)))
         self.assertEqual('(r1(o1, o2) = r2(o3))',
             q_equal_r.rep_formula(encoding=pu.encodings.plaintext))
-        p = t1.i.axiom_interpretation.infer_statement(ap,
+        p = t1.i.axiom_interpretation.infer_formula_statement(ap,
             u.f(r1, u.f(r1, u.f(r1, u.f(r1, o1, o2), u.f(r1, o1, o2)), o2),
                 u.f(r2, u.f(r1, o1, o2))))
         self.assertEqual('r1(r1(r1(r1(o1, o2), r1(o1, o2)), o2), r2(r1(o1, o2)))',
             p.rep_formula(encoding=pu.encodings.plaintext))
         t2 = u.declare_theory(extended_theory=t1, extended_theory_limit=p)
-        p_prime = t2.i.ets.infer_statement(p=p, x_equal_y=q_equal_r)
+        p_prime = t2.i.ets.infer_formula_statement(p=p, x_equal_y=q_equal_r)
         self.assertEqual('r1(r1(r1(r2(o3), r2(o3)), o2), r2(r2(o3)))',
             p_prime.rep_formula(encoding=pu.encodings.plaintext))

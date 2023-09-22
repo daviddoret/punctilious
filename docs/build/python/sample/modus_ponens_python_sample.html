@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css"/>
     <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css"/>
     <!--[if lt IE 9]>
-      <script src="../../_static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -288,8 +288,9 @@
                                                 class="n">axiom</span><span class="p">)</span>
 <span class="n">p_implies_q</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
-                                                class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span
-                                                class="n">axiom</span><span class="o">=</span><span class="n">theory_axiom</span><span
+                                                class="o">.</span><span class="n">infer_formula_statement</span><span
+                                                class="p">(</span><span class="n">axiom</span><span
+                                                class="o">=</span><span class="n">theory_axiom</span><span
                                                 class="p">,</span>
     <span class="n">formula</span><span class="o">=</span><span class="n">r1</span><span class="p">(</span><span
                                                 class="n">o1</span><span class="p">,</span> <span
@@ -300,8 +301,9 @@
                                                 class="p">(</span><span class="n">o3</span><span class="p">))</span>
 <span class="n">p</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
-                                                class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span
-                                                class="n">axiom</span><span class="o">=</span><span class="n">theory_axiom</span><span
+                                                class="o">.</span><span class="n">infer_formula_statement</span><span
+                                                class="p">(</span><span class="n">axiom</span><span
+                                                class="o">=</span><span class="n">theory_axiom</span><span
                                                 class="p">,</span> <span class="n">formula</span><span
                                                 class="o">=</span><span class="n">r1</span><span class="p">(</span><span
                                                 class="n">o1</span><span class="p">,</span> <span
@@ -310,7 +312,7 @@
 <span class="c1"># And finally, use the modus-ponens inference-rule:</span>
 <span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t1</span><span
                                                 class="o">.</span><span class="n">i</span><span class="o">.</span><span
-                                                class="n">modus_ponens</span><span class="o">.</span><span class="n">infer_statement</span><span
+                                                class="n">modus_ponens</span><span class="o">.</span><span class="n">infer_formula_statement</span><span
                                                 class="p">(</span><span class="n">p_implies_q</span><span
                                                 class="o">=</span><span class="n">p_implies_q</span><span
                                                 class="p">,</span> <span class="n">p</span><span class="o">=</span><span

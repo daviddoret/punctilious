@@ -14,9 +14,9 @@ t1 = u.t(echo=True)
 # t theory elaboration statements.
 # these are predecessor statements that are contained in the h hypothesis.
 a = t1.include_axiom(a=a1)
-predecessor = t1.i.axiom_interpretation.infer_statement(axiom=a, formula=f(o2, o3))
+predecessor = t1.i.axiom_interpretation.infer_formula_statement(axiom=a, formula=f(o2, o3))
 with u.v('x') as x, u.v('y') as y, u.v('z') as z:
-    implication = t1.i.axiom_interpretation.infer_statement(axiom=a,
+    implication = t1.i.axiom_interpretation.infer_formula_statement(axiom=a,
         formula=(f(x, y) | u.r.land | f(y, z)) | u.r.implies | f(x, z))
 t1.stabilize()
 t1.take_note(
@@ -25,15 +25,15 @@ t1.take_note(
 # Pose some hypothesis and infer some statement that we couldn't infer otherwise
 # h theory elaboration statements.
 h = t1.pose_hypothesis(hypothesis_formula=f(o1, o2), subtitle='Pose some hypothesis')
-conjunction_introduction = h.child_theory.i.conjunction_introduction.infer_statement(p=f(o1, o2),
-    q=f(o2, o3))
-variable_substitution = h.child_theory.i.variable_substitution.infer_statement(p=implication,
-    phi=(o1, o2, o3))
-proposition_of_interest = h.child_theory.i.modus_ponens.infer_statement(
+conjunction_introduction = h.child_theory.i.conjunction_introduction.infer_formula_statement(
+    p=f(o1, o2), q=f(o2, o3))
+variable_substitution = h.child_theory.i.variable_substitution.infer_formula_statement(
+    p=implication, phi=(o1, o2, o3))
+proposition_of_interest = h.child_theory.i.modus_ponens.infer_formula_statement(
     p_implies_q=variable_substitution, p=conjunction_introduction)
 h.child_theory.take_note(
     content='Note that without the f(o1, o2) hypothesis, we could not infer f(o1, o3).')
 
 t1.take_note(
     content='From this point on, statements are successors to the hypothesis, and they are not contained in the h hypothesis.')
-successor = t1.i.double_negation_introduction.infer_statement(p=f(o2, o3))
+successor = t1.i.double_negation_introduction.infer_formula_statement(p=f(o2, o3))

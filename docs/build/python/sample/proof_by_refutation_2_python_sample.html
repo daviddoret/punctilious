@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css"/>
     <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css"/>
     <!--[if lt IE 9]>
-      <script src="../../_static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -276,15 +276,15 @@
                                                 class="p">)</span>
 <span class="n">f_o1_eq_f_02</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
-                                                class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span
-                                                class="n">theory_axiom</span><span class="p">,</span> <span
-                                                class="p">(</span><span class="n">f</span><span class="p">(</span><span
-                                                class="n">o1</span><span class="p">)</span> <span
-                                                class="o">|</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span
-                                                class="n">eq</span> <span class="o">|</span> <span
-                                                class="n">f</span><span class="p">(</span><span class="n">o2</span><span
-                                                class="p">)))</span>
+                                                class="o">.</span><span class="n">infer_formula_statement</span><span
+                                                class="p">(</span><span class="n">theory_axiom</span><span
+                                                class="p">,</span>
+    <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">o1</span><span
+                                                class="p">)</span> <span class="o">|</span> <span
+                                                class="n">u</span><span class="o">.</span><span class="n">r</span><span
+                                                class="o">.</span><span class="n">eq</span> <span
+                                                class="o">|</span> <span class="n">f</span><span class="p">(</span><span
+                                                class="n">o2</span><span class="p">)))</span>
 <span class="k">with</span> <span class="n">u</span><span class="o">.</span><span class="n">v</span><span
                                                 class="p">(</span><span class="s1">&#39;x&#39;</span><span
                                                 class="p">)</span> <span class="k">as</span> <span
@@ -294,8 +294,9 @@
                                                 class="k">as</span> <span class="n">y</span><span class="p">:</span>
     <span class="n">implication</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
-                                                class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span
-                                                class="n">axiom</span><span class="o">=</span><span class="n">theory_axiom</span><span
+                                                class="o">.</span><span class="n">infer_formula_statement</span><span
+                                                class="p">(</span><span class="n">axiom</span><span
+                                                class="o">=</span><span class="n">theory_axiom</span><span
                                                 class="p">,</span>
         <span class="n">formula</span><span class="o">=</span><span class="p">(</span><span class="n">f</span><span
                                                 class="p">(</span><span class="n">x</span><span class="p">)</span> <span
@@ -327,20 +328,19 @@
 <span class="n">substitution</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span
                                                 class="n">child_theory</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span class="n">variable_substitution</span><span
-                                                class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span
-                                                class="n">p</span><span class="o">=</span><span
-                                                class="n">implication</span><span class="p">,</span> <span
-                                                class="n">phi</span><span class="o">=</span><span
-                                                class="p">(</span><span class="n">o1</span><span
+                                                class="o">.</span><span class="n">infer_formula_statement</span><span
+                                                class="p">(</span><span class="n">p</span><span class="o">=</span><span
+                                                class="n">implication</span><span class="p">,</span>
+    <span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="n">o1</span><span
                                                 class="p">,</span> <span class="n">o2</span><span class="p">))</span>
 <span class="n">inequality</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span
                                                 class="n">child_theory</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span
-                                                class="n">modus_ponens</span><span class="o">.</span><span class="n">infer_statement</span><span
+                                                class="n">modus_ponens</span><span class="o">.</span><span class="n">infer_formula_statement</span><span
                                                 class="p">(</span><span class="n">p_implies_q</span><span
                                                 class="o">=</span><span class="n">substitution</span><span
-                                                class="p">,</span> <span class="n">p</span><span class="o">=</span><span
-                                                class="n">f_o1_eq_f_02</span><span class="p">)</span>
+                                                class="p">,</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">f_o1_eq_f_02</span><span class="p">)</span>
 
 <span class="c1"># Use a distinct theory T2 to demonstrate the inconsistency of T1</span>
 <span class="c1"># because T1 could not prove its own inconsistency because it is inconsistent!</span>
@@ -352,24 +352,24 @@
 <span class="c1"># Prove hypothesis inconsistency</span>
 <span class="n">h_inconsistency</span> <span class="o">=</span> <span class="n">t2</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span class="n">inconsistency_introduction_2</span><span
-                                                class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span
-                                                class="n">x_eq_y</span><span class="o">=</span><span
-                                                class="n">h</span><span class="o">.</span><span class="n">child_statement</span><span
-                                                class="p">,</span>
-    <span class="n">x_neq_y</span><span class="o">=</span><span class="n">inequality</span><span
+                                                class="o">.</span><span class="n">infer_formula_statement</span><span
+                                                class="p">(</span>
+    <span class="n">x_eq_y</span><span class="o">=</span><span class="n">h</span><span class="o">.</span><span
+                                                class="n">child_statement</span><span class="p">,</span> <span
+                                                class="n">x_neq_y</span><span class="o">=</span><span class="n">inequality</span><span
                                                 class="p">,</span> <span class="n">inconsistent_theory</span><span
                                                 class="o">=</span><span class="n">h</span><span class="o">.</span><span
-                                                class="n">child_theory</span><span class="p">,</span> <span class="n">subtitle</span><span
-                                                class="o">=</span><span
-                                                class="s1">&#39;The proposition of interest&#39;</span><span
+                                                class="n">child_theory</span><span class="p">,</span>
+    <span class="n">subtitle</span><span class="o">=</span><span class="s1">&#39;The proposition of interest&#39;</span><span
                                                 class="p">)</span>
 
 <span class="c1"># And finally, use the proof-by-contradiction-2 inference-rule:</span>
 <span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t1</span><span
                                                 class="o">.</span><span class="n">i</span><span class="o">.</span><span
                                                 class="n">proof_by_refutation_2</span><span class="o">.</span><span
-                                                class="n">infer_statement</span><span class="p">(</span><span class="n">x_eq_y_hypothesis</span><span
-                                                class="o">=</span><span class="n">h</span><span class="p">,</span>
+                                                class="n">infer_formula_statement</span><span class="p">(</span><span
+                                                class="n">x_eq_y_hypothesis</span><span class="o">=</span><span
+                                                class="n">h</span><span class="p">,</span>
     <span class="n">inc_hypothesis</span><span class="o">=</span><span class="n">h_inconsistency</span><span
                                                 class="p">,</span> <span class="n">subtitle</span><span
                                                 class="o">=</span><span

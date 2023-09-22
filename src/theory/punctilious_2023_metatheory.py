@@ -21,15 +21,16 @@ axiom_03 = ft.include_axiom(
                     'universe-of-discourse (TODO: Or foundation theory?).'))
 class_of_classes = u.o.declare('class-of-classes')
 element_of = u.r.declare(2, '∈', formula_rep=core.Formula.infix, signal_proposition=True,
-                         dashed_name='element-of')
-fa1 = ft.i.axiom_interpretation.infer_statement(axiom_02,
-                                                u.f(element_of, class_of_classes, class_of_classes))
+    dashed_name='element-of')
+fa1 = ft.i.axiom_interpretation.infer_formula_statement(axiom_02,
+    u.f(element_of, class_of_classes, class_of_classes))
 
 nla_04 = ft.include_axiom(u.declare_axiom('The theory-class is the class of all theory'))
 theory_class = u.o.declare('theory-class')
-fa2b = ft.i.axiom_interpretation.infer_statement(axiom_02,
-                                                 u.f(element_of, theory_class, class_of_classes))
-fa2c = ft.i.axiom_interpretation.infer_statement(axiom_02, u.f(element_of, ft, theory_class))
+fa2b = ft.i.axiom_interpretation.infer_formula_statement(axiom_02,
+    u.f(element_of, theory_class, class_of_classes))
+fa2c = ft.i.axiom_interpretation.infer_formula_statement(axiom_02,
+    u.f(element_of, ft, theory_class))
 # TODO: Implement a trigger to automatically add a statement (t in theory-class)
 #   for every existing and new theory that is declared?
 
@@ -40,12 +41,12 @@ nla_05 = ft.include_axiom(
 falsehood = u.o.declare('false')
 truth = u.o.declare('true')
 truth_values = u.o.declare('truth-values')
-proposition_060 = ft.i.axiom_interpretation.infer_statement(axiom_03,
-                                                            u.f(element_of, truth_values, class_of_classes))
-proposition_070 = ft.i.axiom_interpretation.infer_statement(axiom_03,
-                                                            u.f(element_of, truth, truth_values))
-proposition_080 = ft.i.axiom_interpretation.infer_statement(axiom_03,
-                                                            u.f(element_of, falsehood, truth_values))
+proposition_060 = ft.i.axiom_interpretation.infer_formula_statement(axiom_03,
+    u.f(element_of, truth_values, class_of_classes))
+proposition_070 = ft.i.axiom_interpretation.infer_formula_statement(axiom_03,
+    u.f(element_of, truth, truth_values))
+proposition_080 = ft.i.axiom_interpretation.infer_formula_statement(axiom_03,
+    u.f(element_of, falsehood, truth_values))
 
 # foundation propositional relations
 nla_09 = ft.include_axiom(
@@ -53,35 +54,33 @@ nla_09 = ft.include_axiom(
                                      'the relations: conjunction, disjunction, implication, and negation, '
                                      'and any relation defined from these.'))
 propositional_relations_class = u.o.declare('propositional-relations-class')
-ft.i.axiom_interpretation.infer_statement(axiom_03,
-                                          u.f(element_of, propositional_relations_class, class_of_classes))
+ft.i.axiom_interpretation.infer_formula_statement(axiom_03,
+    u.f(element_of, propositional_relations_class, class_of_classes))
 
-ft.i.axiom_interpretation.infer_statement(nla_09,
-                                          u.f(element_of, u.r.conjunction, propositional_relations_class))
-ft.i.axiom_interpretation.infer_statement(nla_09,
-                                          u.f(element_of, u.r.disjunction, propositional_relations_class))
-ft.i.axiom_interpretation.infer_statement(nla_09,
-                                          u.f(element_of, u.r.implication, propositional_relations_class))
-ft.i.axiom_interpretation.infer_statement(nla_09,
-                                          u.f(element_of, u.r.lnot, propositional_relations_class))
-ft.i.axiom_interpretation.infer_statement(nla_09,
-                                          u.f(element_of, u.r.neq, propositional_relations_class))
+ft.i.axiom_interpretation.infer_formula_statement(nla_09,
+    u.f(element_of, u.r.conjunction, propositional_relations_class))
+ft.i.axiom_interpretation.infer_formula_statement(nla_09,
+    u.f(element_of, u.r.disjunction, propositional_relations_class))
+ft.i.axiom_interpretation.infer_formula_statement(nla_09,
+    u.f(element_of, u.r.implication, propositional_relations_class))
+ft.i.axiom_interpretation.infer_formula_statement(nla_09,
+    u.f(element_of, u.r.lnot, propositional_relations_class))
+ft.i.axiom_interpretation.infer_formula_statement(nla_09,
+    u.f(element_of, u.r.neq, propositional_relations_class))
 nla_01b = ft.include_axiom(
     u.declare_axiom('= is a binary relation such that, given any two theoretical-objcts x and y, '
                     'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.'))
 with u.v('x') as x1, u.v('y') as x2:
     x1_equal_x2 = u.f(u.r.equal, x1, x2)
     x2_equal_x1 = u.f(u.r.equal, x2, x1)
-    ft.commutativity_of_equality = ft.i.axiom_interpretation.infer_statement(nla_01b,
-                                                                             u.f(u.r.implication, x1_equal_x2,
-                                                                                 x2_equal_x1))
+    ft.commutativity_of_equality = ft.i.axiom_interpretation.infer_formula_statement(nla_01b,
+        u.f(u.r.implication, x1_equal_x2, x2_equal_x1))
 
 d_55 = u.declare_definition('Inequality is defined as the negation of equality.')
 nld_55 = ft.include_definition(d=d_55)
 with u.v('x') as x, u.v('y') as y:
-    ft.i.definition_interpretation.infer_statement(nld_55,
-                                                   u.f(u.r.equal, u.f(u.r.neq, x, y),
-                                                       u.f(u.r.lnot, u.f(u.r.equal, x, y))))
+    ft.i.definition_interpretation.infer_formula_statement(nld_55,
+        u.f(u.r.equal, u.f(u.r.neq, x, y), u.f(u.r.lnot, u.f(u.r.equal, x, y))))
 
 nla_10 = ft.include_axiom(u.declare_axiom('propositions is a class whose elements are '
                                           'truth, falsehood, all elements of the theory-formula-statement class, '
@@ -89,15 +88,17 @@ nla_10 = ft.include_axiom(u.declare_axiom('propositions is a class whose element
                                           'and all theory-formula-statements whose relation is defined '
                                           'from these. Its elements are called propositions.'))
 proposition_class = u.o.declare('proposition-class')
-ft.i.axiom_interpretation.infer_statement(nla_10, u.f(element_of, truth, class_of_classes))
-ft.i.axiom_interpretation.infer_statement(nla_10, u.f(element_of, falsehood, class_of_classes))
+ft.i.axiom_interpretation.infer_formula_statement(nla_10, u.f(element_of, truth, class_of_classes))
+ft.i.axiom_interpretation.infer_formula_statement(nla_10,
+    u.f(element_of, falsehood, class_of_classes))
 
 nla_20 = ft.include_axiom(
     u.declare_axiom('If P is a proposition, then either the statement P has truth value true,'
                     'or the statement P has truth value falsehood.'))
 has_truth_value = u.r.declare(2, 'is', formula_rep=core.Formula.infix, signal_proposition=True)
-ft.i.axiom_interpretation.infer_statement(nla_10, u.f(has_truth_value, truth, truth))
-ft.i.axiom_interpretation.infer_statement(nla_10, u.f(has_truth_value, falsehood, falsehood))
+ft.i.axiom_interpretation.infer_formula_statement(nla_10, u.f(has_truth_value, truth, truth))
+ft.i.axiom_interpretation.infer_formula_statement(nla_10,
+    u.f(has_truth_value, falsehood, falsehood))
 
 nla_30 = ft.include_axiom(u.declare_axiom('¬ is a unary relation. '
                                           'If P is a proposition and it has truth-value truth, '
@@ -108,9 +109,9 @@ nla_30 = ft.include_axiom(u.declare_axiom('¬ is a unary relation. '
 # DOUBLE-NEGATION
 nla_09_50 = ft.include_axiom(u.declare_axiom('If P has-truth-value t, ¬(¬(P)) has-truth-value t.'))
 with u.v() as p, u.v() as t:
-    fa_09_51 = ft.i.axiom_interpretation.infer_statement(nla_09_50,
-                                                         u.f(u.r.implication, u.f(has_truth_value, p, t),
-                                                             u.f(has_truth_value, u.f(u.r.lnot, u.f(u.r.lnot, p)), t)))
+    fa_09_51 = ft.i.axiom_interpretation.infer_formula_statement(nla_09_50,
+        u.f(u.r.implication, u.f(has_truth_value, p, t),
+            u.f(has_truth_value, u.f(u.r.lnot, u.f(u.r.lnot, p)), t)))
 
 
 # CONJUNCTION
@@ -148,10 +149,9 @@ nla_40 = ft.include_axiom(
 contradictory_theories = u.o.declare('contradictory-theory')
 contradictory_statements = u.o.declare('contradictory-statement')
 with u.v('φ') as phi:
-    ft.i.axiom_interpretation.infer_statement(nla_40, u.f(u.r.implication,
-                                                          u.f(u.r.conjunction, u.f(has_truth_value, phi, truth),
-                                                              u.f(has_truth_value, phi, falsehood)),
-                                                          u.f(element_of, phi, contradictory_statements)))
+    ft.i.axiom_interpretation.infer_formula_statement(nla_40, u.f(u.r.implication,
+        u.f(u.r.conjunction, u.f(has_truth_value, phi, truth),
+            u.f(has_truth_value, phi, falsehood)), u.f(element_of, phi, contradictory_statements)))
 
 _relation_declaration = u.r.declare(2, 'relation-declaration')
 _simple_objct_declaration = u.r.declare(2, 'simple-objct-declaration')
@@ -195,13 +195,13 @@ def elaborate_foundation_theory():
         axiom2 = ft.include_axiom(
             'If x = y, o = subst(o, x, y) where o, x, and y are theoretical-objcts.')
         subst = u.r.declare(arity=3, nameset='subst', signal_theoretical_morphism=True,
-                            implementation=substitute_xy)
+            implementation=substitute_xy)
         # if x = y, implies subst(o, x, y)
         x = u.v()
         y = u.v()
         o = u.v()
         r1x1 = u.f(implies, u.f(equality, x, y), u.f(subst, o, x, y))
-        equality_substitution = ft.i.axiom_interpretation.infer_statement(axiom2, r1x1)
+        equality_substitution = ft.i.axiom_interpretation.infer_formula_statement(axiom2, r1x1)
 
     gen1()
 

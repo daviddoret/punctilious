@@ -5,12 +5,12 @@ Python classes
    :maxdepth: 1
    :caption: Class
 
-   absorption_declaration_python_class
-   absorption_inclusion_python_class
-   biconditional_elimination_1_declaration_python_class
-   biconditional_elimination_1_inclusion_python_class
-   biconditional_elimination_2_declaration_python_class
-   biconditional_elimination_2_inclusion_python_class
+   AbsorptionDeclaration<absorption_declaration_python_class>
+   AbsorptionInclusion<absorption_inclusion_python_class>
+   BiconditionalElimination1Declaration<biconditional_elimination_1_declaration_python_class>
+   BiconditionalElimination1Inclusion<biconditional_elimination_1_inclusion_python_class>
+   BiconditionalElimination2Declaration<biconditional_elimination_2_declaration_python_class>
+   BiconditionalElimination2Inclusion<biconditional_elimination_2_inclusion_python_class>
    biconditional_introduction_declaration_python_class
    biconditional_introduction_inclusion_python_class
    conjunction_elimination_1_declaration_python_class
@@ -38,6 +38,9 @@ Python classes
    inconsistency_introduction_3_declaration_python_class
    inconsistency_introduction_3_inclusion_python_class
    InferenceRuleDeclaration<inference_rule_declaration_python_class>
+   InferenceRuleDeclarationCollection<inference_rule_declaration_collection_python_class>
+   InferenceRuleInclusion<inference_rule_inclusion_python_class>
+   InferenceRuleInclusionCollection<inference_rule_inclusion_collection_python_class>
    modus_ponens_declaration_python_class
    modus_ponens_inclusion_python_class
    proof_by_contradiction_1_declaration_python_class
