@@ -9,8 +9,8 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 
 # Elaborate a dummy theory with inconsistent propositions
 theory_axiom = t1.include_axiom(axiom)
-p_eq_q = t1.i.axiom_interpretation.infer_statement(theory_axiom, (o1 | u.r.eq | o2))
-p_neq_q = t1.i.axiom_interpretation.infer_statement(theory_axiom, (o1 | u.r.neq | o2))
+p_eq_q = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom, (o1 | u.r.eq | o2))
+p_neq_q = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom, (o1 | u.r.neq | o2))
 t1.stabilize()
 
 # Use a distinct theory T2 to demonstrate the inconsistency of T1
@@ -18,12 +18,12 @@ t1.stabilize()
 t2 = u.t(echo=True)
 
 # And finally, use the inconsistency-introduction-2 inference-rule:
-proposition_of_interest = t2.i.inconsistency_introduction_2.infer_statement(x_eq_y=p_eq_q,
+proposition_of_interest = t2.i.inconsistency_introduction_2.infer_formula_statement(x_eq_y=p_eq_q,
     x_neq_y=p_neq_q, inconsistent_theory=t1, subtitle='The proposition of interest')
 
-Let "U31" be a universe-of-discourse.
+Let "U35" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U31.
+Let "T1" be a theory-elaboration-sequence in U35.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 
@@ -35,7 +35,7 @@ Warning (warning1): By design, punctilious assures the syntactical correctness o
 
 Proposition (T1.P2): (o1 neq o2). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). (o1 neq o2) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that (o1 neq o2). QED
 
-Let "T2" be a theory-elaboration-sequence in U31.
+Let "T2" be a theory-elaboration-sequence in U35.
 
 Inference rule (inconsistency-introduction-2): Let inference-rule inconsistency-introduction-2 defined as "((P = Q), (P neq Q)) |- Inc(T)" be included and considered valid in T2.
 

@@ -5,125 +5,260 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="documentation #195">
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/absorption.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/axiom-interpretation.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/biconditional-elimination-1.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/biconditional-elimination-2.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/biconditional-introduction.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/class.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/collection.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/conjunction-elimination-1.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/conjunction-elimination-2.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/conjunction-introduction.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/declaration.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/definition-interpretation.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/disjunction-introduction-1.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/disjunction-introduction-2.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/double-negation-elimination.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/double-negation-introduction.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/equal-terms-substitution.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/equality-commutativity.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inclusion.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inconsistency-introduction-1.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inconsistency-introduction-2.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inconsistency-introduction-3.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inference-rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/math.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/modus-ponens.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/proof-by-contradiction-1.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/proof-by-contradiction-2.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/proof-by-refutation-1.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/proof-by-refutation-2.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/python.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/sample.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/tagsindex.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/universe-of-discourse.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/variable-substitution.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/back_matter.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/back_matter/bibliography_back_matter.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/front_matter.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/front_matter/about_front_matter.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/front_matter/contributing_front_matter.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/front_matter/project_front_matter.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/front_matter/roadmap_front_matter.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/front_matter/support_front_matter.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/front_matter/title_front_matter.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/index.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/axiom_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/definition_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/elimination_rule_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/formula_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/formula_statement_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/free_variable_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/hypothesis_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/inference_rule_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/introduction_rule_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/is_a_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/meta_object_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/notation_form_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/object_creation_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/object_declaration_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/object_inclusion_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/object_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/paragraph_proof_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/relation_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/statement_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/theory_elaboration_sequence_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/universe_of_discourse_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/validity_of_formula_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/absorption_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/axiom_interpretation_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/biconditional_elimination_1_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/biconditional_elimination_2_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/biconditional_introduction_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/conjunction_elimination_1_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/conjunction_elimination_2_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/conjunction_introduction_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/definition_interpretation_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/disjunction_introduction_1_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/disjunction_introduction_2_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/double_negation_elimination_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/double_negation_introduction_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/equal_terms_substitution_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/equality_commutativity_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/inconsistency_introduction_1_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/inconsistency_introduction_2_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/inconsistency_introduction_3_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/modus_ponens_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/proof_by_contradiction_1_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/proof_by_contradiction_2_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/proof_by_refutation_1_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/proof_by_refutation_2_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/variable_substitution_math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/tao_2006.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/tao_2006/the_peano_axioms.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math_inference_rule.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math_theory.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/python.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/class/absorption_declaration_python_class.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/class/absorption_inclusion_python_class.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_static/_sphinx_javascript_frameworks_compat.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/_tags/axiom-interpretation.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/_tags/definition-interpretation.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/axiom_interpretation_math_inference_rule.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/axiom_interpretation_math_inference_rule_definition.rstinc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/definition_interpretation_math_inference_rule.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/definition_interpretation_math_inference_rule_definition.rstinc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/python/class/axiom_interpretation_declaration_python_class.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/python/class/axiom_interpretation_inclusion_python_class.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/python/class/definition_interpretation_declaration_python_class.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/python/class/definition_interpretation_inclusion_python_class.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sample/sample_axiom_interpretation.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sample/sample_definition_interpretation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/generate_docs_inference_rules.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/generate_docs_inference_rules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/build_docs.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/build_docs.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/build_package.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/build_package.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/distribute_package_to_pypi.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/distribute_package_to_pypi.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/increment_package_version_patch.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/increment_package_version_patch.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/install_in_venv_from_pypi__windows.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/install_in_venv_from_pypi__windows.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/install_punctilious_from_dev.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/install_punctilious_from_dev.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/release_patch.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/release_patch.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/sandbox_1.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/sandbox_1.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/start_venv.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/start_venv.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/stop_venv.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/stop_venv.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_absorption_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_absorption_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_elimination_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_biconditional_elimination_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_elimination_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_biconditional_elimination_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_elimination_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_biconditional_elimination_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_elimination_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_biconditional_elimination_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_introduction_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_biconditional_introduction_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_introduction_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_biconditional_introduction_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_elimination_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_conjunction_elimination_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_elimination_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_conjunction_elimination_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_elimination_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_conjunction_elimination_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_elimination_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_conjunction_elimination_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_introduction_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_conjunction_introduction_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_introduction_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_conjunction_introduction_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunction_introduction_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_disjunction_introduction_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunction_introduction_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_disjunction_introduction_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunction_introduction_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_disjunction_introduction_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunction_introduction_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_disjunction_introduction_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_elimination_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_double_negation_elimination_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_elimination_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_double_negation_elimination_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_introduction_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_double_negation_introduction_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_introduction_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_double_negation_introduction_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equal_terms_substitution_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equal_terms_substitution_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equal_terms_substitution_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equal_terms_substitution_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equality_commutativity_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equality_commutativity_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equality_commutativity_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equality_commutativity_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_hypothesis_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_hypothesis_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_hypothesis_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_hypothesis_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_3_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_3_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_3_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_3_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_modus_ponens_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_modus_ponens_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_modus_ponens_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_modus_ponens_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_pet_theory_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_pet_theory_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_pet_theory_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_pet_theory_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_contradiction_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_contradiction_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_contradiction_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_contradiction_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_refutation_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_refutation_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_refutation_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_refutation_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_refutation_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_refutation_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_refutation_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_refutation_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_variable_substitution_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_variable_substitution_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_variable_substitution_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_variable_substitution_unicode.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/.buildinfo" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/absorption.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/axiom-interpretation.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/biconditional-elimination-1.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/biconditional-elimination-2.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/biconditional-introduction.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/collection.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/conjunction-elimination-1.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/conjunction-elimination-2.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/conjunction-introduction.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/declaration.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/definition-interpretation.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/disjunction-introduction-1.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/disjunction-introduction-2.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/double-negation-elimination.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/double-negation-introduction.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/equal-terms-substitution.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/equality-commutativity.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inclusion.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inconsistency-introduction-1.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inconsistency-introduction-2.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inconsistency-introduction-3.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/inference-rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/math.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/modus-ponens.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/proof-by-contradiction-1.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/proof-by-contradiction-2.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/proof-by-refutation-1.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/proof-by-refutation-2.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/python.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/tagsindex.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/universe-of-discourse.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/variable-substitution.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/back_matter.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/back_matter/bibliography_back_matter.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/front_matter.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/front_matter/about_front_matter.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/front_matter/contributing_front_matter.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/front_matter/project_front_matter.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/front_matter/roadmap_front_matter.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/front_matter/support_front_matter.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/front_matter/title_front_matter.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/index.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/axiom_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/definition_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/elimination_rule_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/formula_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/formula_statement_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/free_variable_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/hypothesis_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/inference_rule_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/introduction_rule_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/is_a_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/meta_object_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/notation_form_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/object_creation_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/object_declaration_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/object_inclusion_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/object_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/paragraph_proof_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/relation_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/statement_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/theory_elaboration_sequence_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/universe_of_discourse_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/validity_of_formula_math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/absorption_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/axiom_interpretation_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/biconditional_elimination_1_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/biconditional_elimination_2_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/biconditional_introduction_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/conjunction_elimination_1_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/conjunction_elimination_2_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/conjunction_introduction_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/definition_interpretation_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/disjunction_introduction_1_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/disjunction_introduction_2_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/double_negation_elimination_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/double_negation_introduction_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/equal_terms_substitution_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/equality_commutativity_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/inconsistency_introduction_1_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/inconsistency_introduction_2_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/inconsistency_introduction_3_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/modus_ponens_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/proof_by_contradiction_1_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/proof_by_contradiction_2_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/proof_by_refutation_1_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/proof_by_refutation_2_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/variable_substitution_math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/tao_2006.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/tao_2006/the_peano_axioms.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math_concept.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math_inference_rule.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math_theory.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/absorption_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/absorption_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/axiom_interpretation_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/axiom_interpretation_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/biconditional_elimination_1_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/biconditional_elimination_1_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/biconditional_elimination_2_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/biconditional_elimination_2_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/biconditional_introduction_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/biconditional_introduction_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/conjunction_elimination_1_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/conjunction_elimination_1_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/conjunction_elimination_2_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/conjunction_elimination_2_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/conjunction_introduction_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/conjunction_introduction_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/definition_interpretation_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/definition_interpretation_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/disjunction_introduction_1_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/disjunction_introduction_1_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/disjunction_introduction_2_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/disjunction_introduction_2_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/double_negation_elimination_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/double_negation_elimination_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/double_negation_introduction_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/double_negation_introduction_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/equal_terms_substitution_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/equal_terms_substitution_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/equality_commutativity_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/equality_commutativity_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/inconsistency_introduction_1_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/inconsistency_introduction_1_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/inconsistency_introduction_2_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/inconsistency_introduction_2_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/inconsistency_introduction_3_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/inconsistency_introduction_3_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/inference_rule_declaration_collection_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/inference_rule_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/inference_rule_inclusion_collection_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/inference_rule_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/modus_ponens_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/modus_ponens_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/proof_by_contradiction_1_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/proof_by_contradiction_1_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/proof_by_contradiction_2_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/proof_by_contradiction_2_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/proof_by_refutation_1_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/proof_by_refutation_1_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/proof_by_refutation_2_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/proof_by_refutation_2_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/python_class_index.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/universe_of_discourse_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/variable_substitution_declaration_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/variable_substitution_inclusion_python_class.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/function/create_universe_of_discourse.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/function/python_function_index.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/installation_python.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/prerequisites_python.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/absorption_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/axiom_interpretation_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/biconditional_elimination_1_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/biconditional_elimination_2_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/biconditional_introduction_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/conjunction_elimination_1_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/conjunction_elimination_2_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/conjunction_introduction_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/definition_interpretation_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/disjunction_introduction_1_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/disjunction_introduction_2_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/double_negation_elimination_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/double_negation_introduction_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/equal_terms_substitution_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/equality_commutativity_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/inconsistency_introduction_1_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/inconsistency_introduction_2_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/inconsistency_introduction_3_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/modus_ponens_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/proof_by_contradiction_1_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/proof_by_contradiction_2_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/proof_by_refutation_1_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/proof_by_refutation_2_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/python_sample_index.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/variable_substitution_python_sample.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/source_code_repository_python.doctree" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_images/graphviz-98a54e703e904d330caf7281dd6be6e85fd2ac58.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_images/graphviz-98a54e703e904d330caf7281dd6be6e85fd2ac58.png.map" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_images/punctilious-logo-full-light-200x200-white.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_images/punctilious-logo-full-light-600x600-white.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/absorption.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/axiom-interpretation.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/biconditional-elimination-1.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/biconditional-elimination-2.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/biconditional-introduction.rst.txt" beforeDir="false" />
@@ -134,6 +269,7 @@
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/conjunction-elimination-2.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/conjunction-introduction.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/declaration.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/definition-interpretation.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/disjunction-introduction-1.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/disjunction-introduction-2.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/double-negation-elimination.rst.txt" beforeDir="false" />
@@ -168,6 +304,7 @@
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/index.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/concept/axiom_math_concept.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/concept/definition_math_concept.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/concept/elimination_rule_math_concept.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/concept/formula_math_concept.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/concept/formula_statement_math_concept.rst.txt" beforeDir="false" />
@@ -189,12 +326,14 @@
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/concept/universe_of_discourse_math_concept.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/concept/validity_of_formula_math_concept.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/absorption_math_inference_rule.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/axiom_interpretation_math_inference_rule.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/biconditional_elimination_1_math_inference_rule.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/biconditional_elimination_2_math_inference_rule.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/biconditional_introduction_math_inference_rule.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/conjunction_elimination_1_math_inference_rule.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/conjunction_elimination_2_math_inference_rule.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/conjunction_introduction_math_inference_rule.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/definition_interpretation_math_inference_rule.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/disjunction_introduction_1_math_inference_rule.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/disjunction_introduction_2_math_inference_rule.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/double_negation_elimination_math_inference_rule.rst.txt" beforeDir="false" />
@@ -218,6 +357,8 @@
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/absorption_declaration_python_class.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/absorption_inclusion_python_class.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/axiom_interpretation_declaration_python_class.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/axiom_interpretation_inclusion_python_class.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/biconditional_elimination_1_declaration_python_class.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/biconditional_elimination_1_inclusion_python_class.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/biconditional_elimination_2_declaration_python_class.rst.txt" beforeDir="false" />
@@ -230,6 +371,8 @@
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/conjunction_elimination_2_inclusion_python_class.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/conjunction_introduction_declaration_python_class.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/conjunction_introduction_inclusion_python_class.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/definition_interpretation_declaration_python_class.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/definition_interpretation_inclusion_python_class.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/disjunction_introduction_1_declaration_python_class.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/disjunction_introduction_1_inclusion_python_class.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/disjunction_introduction_2_declaration_python_class.rst.txt" beforeDir="false" />
@@ -270,13 +413,15 @@
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/function/python_function_index.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/installation_python.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/prerequisites_python.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/absorption_python_sample.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/sample/axiom_interpretation_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/absorption_python_sample.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/axiom_interpretation_python_sample.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/biconditional_elimination_1_python_sample.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/biconditional_elimination_2_python_sample.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/biconditional_introduction_python_sample.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/conjunction_elimination_1_python_sample.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/sample/definition_interpretation_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/conjunction_elimination_1_python_sample.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/conjunction_elimination_2_python_sample.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/conjunction_introduction_python_sample.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/definition_interpretation_python_sample.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/disjunction_introduction_1_python_sample.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/disjunction_introduction_2_python_sample.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/double_negation_elimination_python_sample.rst.txt" beforeDir="false" />
@@ -294,6 +439,9 @@
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/python_sample_index.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/variable_substitution_python_sample.rst.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/source_code_repository_python.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sphinx_design_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sphinx_design_static/design-tabs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/_sphinx_javascript_frameworks_compat.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/basic.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/css/badge_only.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/css/custom.css" beforeDir="false" />
@@ -321,8 +469,7 @@
       <change beforePath="$PROJECT_DIR$/docs/build/_static/documentation_options.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/file.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/graphviz.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_static/jquery-3.5.1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_static/jquery.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/jquery.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/jquery.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/js/badge_only.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/js/html5shiv-printshiv.min.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/js/html5shiv.min.js" beforeDir="false" />
@@ -344,13 +491,13 @@
       <change beforePath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-full-light.svg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/pygments.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/searchtools.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/sphinx_highlight.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/tabs.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/tabs.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/togglebutton.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/togglebutton.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_static/underscore-1.13.1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_static/underscore.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/absorption.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/axiom-interpretation.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/biconditional-elimination-1.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/biconditional-elimination-2.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/biconditional-introduction.html" beforeDir="false" />
@@ -361,6 +508,7 @@
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/conjunction-elimination-2.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/conjunction-introduction.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/declaration.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/definition-interpretation.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/disjunction-introduction-1.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/disjunction-introduction-2.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/double-negation-elimination.html" beforeDir="false" />
@@ -396,6 +544,7 @@
       <change beforePath="$PROJECT_DIR$/docs/build/index.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/concept/axiom_math_concept.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/definition_math_concept.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/concept/elimination_rule_math_concept.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/concept/formula_math_concept.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/concept/formula_statement_math_concept.html" beforeDir="false" />
@@ -417,12 +566,14 @@
       <change beforePath="$PROJECT_DIR$/docs/build/math/concept/universe_of_discourse_math_concept.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/concept/validity_of_formula_math_concept.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/absorption_math_inference_rule.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/axiom_interpretation_math_inference_rule.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_1_math_inference_rule.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_2_math_inference_rule.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_introduction_math_inference_rule.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_elimination_1_math_inference_rule.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_elimination_2_math_inference_rule.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_introduction_math_inference_rule.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/definition_interpretation_math_inference_rule.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunction_introduction_1_math_inference_rule.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunction_introduction_2_math_inference_rule.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/double_negation_elimination_math_inference_rule.html" beforeDir="false" />
@@ -447,6 +598,8 @@
       <change beforePath="$PROJECT_DIR$/docs/build/python.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/absorption_declaration_python_class.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/absorption_inclusion_python_class.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/axiom_interpretation_declaration_python_class.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/axiom_interpretation_inclusion_python_class.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/biconditional_elimination_1_declaration_python_class.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/biconditional_elimination_1_inclusion_python_class.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/biconditional_elimination_2_declaration_python_class.html" beforeDir="false" />
@@ -459,6 +612,8 @@
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/conjunction_elimination_2_inclusion_python_class.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/conjunction_introduction_declaration_python_class.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/conjunction_introduction_inclusion_python_class.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/definition_interpretation_declaration_python_class.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/definition_interpretation_inclusion_python_class.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_1_declaration_python_class.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_1_inclusion_python_class.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_2_declaration_python_class.html" beforeDir="false" />
@@ -500,12 +655,14 @@
       <change beforePath="$PROJECT_DIR$/docs/build/python/installation_python.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/prerequisites_python.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/absorption_python_sample.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/axiom_interpretation_python_sample.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/biconditional_elimination_1_python_sample.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/biconditional_elimination_2_python_sample.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/biconditional_introduction_python_sample.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/conjunction_elimination_1_python_sample.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/conjunction_elimination_2_python_sample.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/conjunction_introduction_python_sample.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/definition_interpretation_python_sample.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/disjunction_introduction_1_python_sample.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/disjunction_introduction_2_python_sample.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/double_negation_elimination_python_sample.html" beforeDir="false" />
@@ -525,18 +682,7 @@
       <change beforePath="$PROJECT_DIR$/docs/build/python/source_code_repository_python.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/search.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/searchindex.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/class.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/concept.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/declaration.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/declaration.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/inclusion.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/inclusion.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/inference-rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/inference-rule.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/math.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/math.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/python.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/python.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/sample.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/tagsindex.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/tagsindex.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math_inference_rule.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -621,7 +767,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "dev",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/docs/source/math/inference_rule",
+    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/src/sample",
     "settings.editor.selected.configurable": "advanced.settings"
   }
 }]]></component>
@@ -635,11 +781,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\David\PycharmProjects\punctilious\src\sample" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\inference_rule" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\concept" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\include" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\python\class" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\continuous_integration\scripts" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source" />
@@ -649,16 +795,12 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\continuous_integration" />
     </key>
   </component>
-  <component name="RunManager" selected="Python docs.Sphinx HTML">
+  <component name="RunManager" selected="PowerShell.build_docs.ps1">
     <configuration name="build_docs.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/build_docs.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
       <envs />
       <method v="2" />
     </configuration>
-    <configuration name="distribute_package_to_pypi.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/distribute_package_to_pypi.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
-      <envs />
-      <method v="2" />
-    </configuration>
-    <configuration name="release_patch.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/release_patch.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
+    <configuration name="sandbox_1.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/sandbox_1.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
       <envs />
       <method v="2" />
     </configuration>
@@ -718,6 +860,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/continuous_integration/scripts/generate_docs_inference_rules.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="generate_sample_outputs" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/continuous_integration/scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/continuous_integration/scripts/generate_sample_outputs.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -790,6 +953,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="sample_definition_interpretation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_definition_interpretation.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest tests" type="ShConfigurationType">
       <option name="SCRIPT_TEXT" value="pytest tests" />
       <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
@@ -851,20 +1035,6 @@
       <option name="docutils_open_in_browser" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms.test_2_2" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms.test_2_2&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="Python tests in tests" type="tests" factoryName="Autodetect">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -880,29 +1050,29 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="PowerShell.sandbox_1.ps1" />
       <item itemvalue="PowerShell.build_docs.ps1" />
-      <item itemvalue="PowerShell.release_patch.ps1" />
-      <item itemvalue="PowerShell.distribute_package_to_pypi.ps1" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.build_samples" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.build" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.generate_docs_inference_rules" />
+      <item itemvalue="Python.generate_sample_outputs" />
+      <item itemvalue="Python.sample_definition_interpretation" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.Python tests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms.test_2_2" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.generate_docs_inference_rules" />
         <item itemvalue="PowerShell.build_docs.ps1" />
-        <item itemvalue="PowerShell.build_docs.ps1" />
-        <item itemvalue="PowerShell.build_docs.ps1" />
-        <item itemvalue="PowerShell.distribute_package_to_pypi.ps1" />
+        <item itemvalue="PowerShell.sandbox_1.ps1" />
+        <item itemvalue="PowerShell.sandbox_1.ps1" />
+        <item itemvalue="PowerShell.sandbox_1.ps1" />
+        <item itemvalue="PowerShell.sandbox_1.ps1" />
       </list>
     </recent_temporary>
   </component>
@@ -914,14 +1084,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00261" summary="Merge remote-tracking branch 'origin/master' into dev">
-      <option name="closed" value="true" />
-      <created>1694472000277</created>
-      <option name="number" value="00261" />
-      <option name="presentableId" value="LOCAL-00261" />
-      <option name="project" value="LOCAL" />
-      <updated>1694472000277</updated>
     </task>
     <task id="LOCAL-00262" summary="Merge remote-tracking branch 'origin/master' into dev">
       <option name="closed" value="true" />
@@ -1307,7 +1469,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695453479140</updated>
     </task>
-    <option name="localTasksCounter" value="310" />
+    <task id="LOCAL-00310" summary="documentation #195">
+      <option name="closed" value="true" />
+      <created>1695454740844</created>
+      <option name="number" value="00310" />
+      <option name="presentableId" value="LOCAL-00310" />
+      <option name="project" value="LOCAL" />
+      <updated>1695454740844</updated>
+    </task>
+    <option name="localTasksCounter" value="311" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

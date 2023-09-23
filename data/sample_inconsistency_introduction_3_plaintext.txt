@@ -8,7 +8,7 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 
 # Elaborate a dummy theory with inconsistent propositions
 theory_axiom = t1.include_axiom(axiom)
-p_neq_p = t1.i.axiom_interpretation.infer_statement(theory_axiom, (o1 | u.r.neq | o1))
+p_neq_p = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom, (o1 | u.r.neq | o1))
 t1.stabilize()
 
 # Use a distinct theory T2 to demonstrate the inconsistency of T1
@@ -16,12 +16,12 @@ t1.stabilize()
 t2 = u.t(echo=True)
 
 # And finally, use the inconsistency-introduction-3 inference-rule:
-proposition_of_interest = t2.i.inconsistency_introduction_3.infer_statement(p_neq_p=p_neq_p,
+proposition_of_interest = t2.i.inconsistency_introduction_3.infer_formula_statement(p_neq_p=p_neq_p,
     inconsistent_theory=t1, subtitle='The proposition of interest')
 
-Let "U33" be a universe-of-discourse.
+Let "U37" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U33.
+Let "T1" be a theory-elaboration-sequence in U37.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 
@@ -31,7 +31,7 @@ Proposition (T1.P1): (o1 neq o1). Proof: "Dummy axiom for demonstration purposes
 
 Warning (warning1): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
 
-Let "T2" be a theory-elaboration-sequence in U33.
+Let "T2" be a theory-elaboration-sequence in U37.
 
 Inference rule (inconsistency-introduction-3): Let inference-rule inconsistency-introduction-3 defined as "(P neq P) |- Inc(T)" be included and considered valid in T2.
 

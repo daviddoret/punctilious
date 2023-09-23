@@ -6,23 +6,23 @@ Stabilized: False
 Extended theory: N/A
 
 # Simple-objects declarations
-Let "natural-number", "0", "1", "2", "3", "4", "5", "6" be simple-objects in U48.
+Let "natural-number", "0", "1", "2", "3", "4", "5", "6" be simple-objects in U52.
 
 # Relations
-Let "++", "Inc" be unary-relations in U48.
-Let "==>", "and", "is-a", "neq", "=" be binary-relations in U48.
+Let "++", "Inc" be unary-relations in U52.
+Let "neq", "==>", "and", "is-a", "=" be binary-relations in U52.
 
 # Inference rules
 The following inference rules are considered valid under this theory:
-Let "axiom-interpretation" be an inference-rule defined as "A |- P" in U48.
-Let "conjunction-introduction" be an inference-rule defined as "((P3 , Q3) |- (P3 and Q3))" in U48.
-Let "definition-interpretation" be an inference-rule defined as "𝒟 ⊢ P" in U48.
-Let "equal-terms-substitution" be an inference-rule defined as "((P2 , (x2 = y2)) |- Q2)" in U48.
-Let "equality-commutativity" be an inference-rule defined as "((x1 = y1) |- (y1 = x1))" in U48.
-Let "inconsistency-introduction-2" be an inference-rule defined as "((P = Q), (P neq Q)) |- Inc(T)" in U48.
-Let "modus-ponens" be an inference-rule defined as "(((P1 ==> P1) , P1) |- Q1)" in U48.
-Let "proof-by-refutation-2" be an inference-rule defined as "(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 = 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 ≠ 𝑸)" in U48.
-Let "variable-substitution" be an inference-rule defined as "(P, Phi) |- P'" in U48.
+Let "axiom-interpretation" be an inference-rule defined as "A |- P" in U52.
+Let "conjunction-introduction" be an inference-rule defined as "((P3 , Q3) |- (P3 and Q3))" in U52.
+Let "definition-interpretation" be an inference-rule defined as "𝒟 ⊢ P" in U52.
+Let "equal-terms-substitution" be an inference-rule defined as "((P2 , (x2 = y2)) |- Q2)" in U52.
+Let "equality-commutativity" be an inference-rule defined as "((x1 = y1) |- (y1 = x1))" in U52.
+Let "inconsistency-introduction-2" be an inference-rule defined as "((P = Q), (P neq Q)) |- Inc(T)" in U52.
+Let "modus-ponens" be an inference-rule defined as "(((P1 ==> P1) , P1) |- Q1)" in U52.
+Let "proof-by-refutation-2" be an inference-rule defined as "(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 = 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 ≠ 𝑸)" in U52.
+Let "variable-substitution" be an inference-rule defined as "(P, Phi) |- P'" in U52.
 
 # Theory elaboration sequence
 # 2: The natural numbers
