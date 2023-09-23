@@ -6,14 +6,16 @@ __version__ = "1.0.9"
 from punctilious.plaintext import force_plaintext, Plaintext, unidecode
 from punctilious.repm import monospace, prnt, serif_bold
 from punctilious.core import AbsorptionDeclaration, AbsorptionInclusion, Article, AxiomDeclaration, \
-    AxiomInclusion, BiconditionalElimination1Declaration, BiconditionalElimination1Inclusion, \
+    AxiomInclusion, AxiomInterpretationDeclaration, AxiomInterpretationInclusion, \
+    BiconditionalElimination1Declaration, BiconditionalElimination1Inclusion, \
     BiconditionalElimination2Declaration, BiconditionalElimination2Inclusion, \
     BiconditionalIntroductionDeclaration, BiconditionalIntroductionInclusion, classes, \
     ComposableBlockSequence, ComposableText, configuration, ConjunctionElimination1Declaration, \
     ConjunctionElimination1Inclusion, ConjunctionElimination2Declaration, \
     ConjunctionElimination2Inclusion, ConjunctionIntroductionDeclaration, \
     ConjunctionIntroductionInclusion, consistency_values, create_universe_of_discourse, DashedName, \
-    DefinitionInclusion, DisjunctionIntroduction1Declaration, DisjunctionIntroduction1Inclusion, \
+    DefinitionInclusion, DefinitionInterpretationDeclaration, DefinitionInterpretationInclusion, \
+    DisjunctionIntroduction1Declaration, DisjunctionIntroduction1Inclusion, \
     DisjunctionIntroduction2Declaration, DisjunctionIntroduction2Inclusion, \
     DoubleNegationEliminationDeclaration, DoubleNegationEliminationInclusion, \
     DoubleNegationIntroductionDeclaration, DoubleNegationIntroductionInclusion, Encoding, encodings, \

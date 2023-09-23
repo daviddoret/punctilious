@@ -7,6 +7,8 @@ My tags: python
 
     ../python/class/absorption_declaration_python_class.rst
     ../python/class/absorption_inclusion_python_class.rst
+    ../python/class/axiom_interpretation_declaration_python_class.rst
+    ../python/class/axiom_interpretation_inclusion_python_class.rst
     ../python/class/biconditional_elimination_1_declaration_python_class.rst
     ../python/class/biconditional_elimination_1_inclusion_python_class.rst
     ../python/class/biconditional_elimination_2_declaration_python_class.rst
@@ -19,6 +21,8 @@ My tags: python
     ../python/class/conjunction_elimination_2_inclusion_python_class.rst
     ../python/class/conjunction_introduction_declaration_python_class.rst
     ../python/class/conjunction_introduction_inclusion_python_class.rst
+    ../python/class/definition_interpretation_declaration_python_class.rst
+    ../python/class/definition_interpretation_inclusion_python_class.rst
     ../python/class/disjunction_introduction_1_declaration_python_class.rst
     ../python/class/disjunction_introduction_1_inclusion_python_class.rst
     ../python/class/disjunction_introduction_2_declaration_python_class.rst
@@ -55,12 +59,14 @@ My tags: python
     ../python/class/variable_substitution_declaration_python_class.rst
     ../python/class/variable_substitution_inclusion_python_class.rst
     ../python/sample/absorption_python_sample.rst
+    ../python/sample/axiom_interpretation_python_sample.rst
     ../python/sample/biconditional_elimination_1_python_sample.rst
     ../python/sample/biconditional_elimination_2_python_sample.rst
     ../python/sample/biconditional_introduction_python_sample.rst
     ../python/sample/conjunction_elimination_1_python_sample.rst
     ../python/sample/conjunction_elimination_2_python_sample.rst
     ../python/sample/conjunction_introduction_python_sample.rst
+    ../python/sample/definition_interpretation_python_sample.rst
     ../python/sample/disjunction_introduction_1_python_sample.rst
     ../python/sample/disjunction_introduction_2_python_sample.rst
     ../python/sample/double_negation_elimination_python_sample.rst

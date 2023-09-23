@@ -6,12 +6,14 @@ My tags: inclusion
     :caption: With this tag
 
     ../python/class/absorption_inclusion_python_class.rst
+    ../python/class/axiom_interpretation_inclusion_python_class.rst
     ../python/class/biconditional_elimination_1_inclusion_python_class.rst
     ../python/class/biconditional_elimination_2_inclusion_python_class.rst
     ../python/class/biconditional_introduction_inclusion_python_class.rst
     ../python/class/conjunction_elimination_1_inclusion_python_class.rst
     ../python/class/conjunction_elimination_2_inclusion_python_class.rst
     ../python/class/conjunction_introduction_inclusion_python_class.rst
+    ../python/class/definition_interpretation_inclusion_python_class.rst
     ../python/class/disjunction_introduction_1_inclusion_python_class.rst
     ../python/class/disjunction_introduction_2_inclusion_python_class.rst
     ../python/class/double_negation_elimination_inclusion_python_class.rst

@@ -6,12 +6,14 @@ My tags: declaration
     :caption: With this tag
 
     ../python/class/absorption_declaration_python_class.rst
+    ../python/class/axiom_interpretation_declaration_python_class.rst
     ../python/class/biconditional_elimination_1_declaration_python_class.rst
     ../python/class/biconditional_elimination_2_declaration_python_class.rst
     ../python/class/biconditional_introduction_declaration_python_class.rst
     ../python/class/conjunction_elimination_1_declaration_python_class.rst
     ../python/class/conjunction_elimination_2_declaration_python_class.rst
     ../python/class/conjunction_introduction_declaration_python_class.rst
+    ../python/class/definition_interpretation_declaration_python_class.rst
     ../python/class/disjunction_introduction_1_declaration_python_class.rst
     ../python/class/disjunction_introduction_2_declaration_python_class.rst
     ../python/class/double_negation_elimination_declaration_python_class.rst

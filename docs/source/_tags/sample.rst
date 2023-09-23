@@ -6,12 +6,14 @@ My tags: sample
     :caption: With this tag
 
     ../python/sample/absorption_python_sample.rst
+    ../python/sample/axiom_interpretation_python_sample.rst
     ../python/sample/biconditional_elimination_1_python_sample.rst
     ../python/sample/biconditional_elimination_2_python_sample.rst
     ../python/sample/biconditional_introduction_python_sample.rst
     ../python/sample/conjunction_elimination_1_python_sample.rst
     ../python/sample/conjunction_elimination_2_python_sample.rst
     ../python/sample/conjunction_introduction_python_sample.rst
+    ../python/sample/definition_interpretation_python_sample.rst
     ../python/sample/disjunction_introduction_1_python_sample.rst
     ../python/sample/disjunction_introduction_2_python_sample.rst
     ../python/sample/double_negation_elimination_python_sample.rst

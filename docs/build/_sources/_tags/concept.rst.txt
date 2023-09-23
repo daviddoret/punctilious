@@ -6,12 +6,14 @@ My tags: concept
     :caption: With this tag
 
     ../math/inference_rule/absorption_math_inference_rule.rst
+    ../math/inference_rule/axiom_interpretation_math_inference_rule.rst
     ../math/inference_rule/biconditional_elimination_1_math_inference_rule.rst
     ../math/inference_rule/biconditional_elimination_2_math_inference_rule.rst
     ../math/inference_rule/biconditional_introduction_math_inference_rule.rst
     ../math/inference_rule/conjunction_elimination_1_math_inference_rule.rst
     ../math/inference_rule/conjunction_elimination_2_math_inference_rule.rst
     ../math/inference_rule/conjunction_introduction_math_inference_rule.rst
+    ../math/inference_rule/definition_interpretation_math_inference_rule.rst
     ../math/inference_rule/disjunction_introduction_1_math_inference_rule.rst
     ../math/inference_rule/disjunction_introduction_2_math_inference_rule.rst
     ../math/inference_rule/double_negation_elimination_math_inference_rule.rst

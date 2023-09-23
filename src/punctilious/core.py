@@ -3763,18 +3763,6 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         return p
 
     def verify_args(self, a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence) -> bool:
-        """Verify if the arguments comply syntactically with the inference-rule.
-
-        WARNING:
-        --------
-        No semantic operation is performed.
-
-       :param a: An axiom-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
-        :param p: A propositional formula: P.
-        :param t: The current theory-elaboration-sequence.
-        :return: (bool) True if the inference-rule arguments comply syntactically
-            with the inference-rule, False otherwise.
-        """
         verify(is_in_class(a, classes.axiom_inclusion),
             '⌜a⌝ is not of declarative-class axiom-inclusion.', a=a, t=t, slf=self)
         verify(t.contains_theoretical_objct(a), '⌜a⌝ is not contained in ⌜t⌝.', a=a, t=t, slf=self)
@@ -4147,18 +4135,6 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
         return p
 
     def verify_args(self, d: DefinitionInclusion, p: Formula, t: TheoryElaborationSequence) -> bool:
-        """Verify if the arguments comply syntactically with the inference-rule.
-
-        WARNING:
-        --------
-        No semantic operation is performed.
-
-       :param d: An definition-inclusion in the theory-elaboration-sequence under consideration: 𝒜.
-        :param p: A propositional formula: P.
-        :param t: The current theory-elaboration-sequence.
-        :return: (bool) True if the inference-rule arguments comply syntactically
-            with the inference-rule, False otherwise.
-        """
         verify(is_in_class(d, classes.definition_inclusion),
             '⌜d⌝ is not of declarative-class definition-inclusion.', d=d, t=t, slf=self)
         verify(t.contains_theoretical_objct(d), '⌜d⌝ is not contained in ⌜t⌝.', d=d, t=t, slf=self)
