@@ -1,0 +1,13 @@
+Definition
+----------
+
+*constructive-dilemna* is the :ref:`inference-rule<inference_rule_math_concept>`:
+
+.. math::
+
+    \left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), \left( \boldsymbol{R} \implies \boldsymbol{S} \right), \left( \boldsymbol{P} \lor \boldsymbol{R} \right) \right) \vdash \left( \boldsymbol{Q} \lor \boldsymbol{S} \right)
+
+Sources
+----------
+
+* :cite:p:`warner_2018_puremathematicsbeginnersrigorous{p. 114}`

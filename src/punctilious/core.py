@@ -8,7 +8,7 @@ import contextlib
 import abc
 import collections
 import pyvis
-import unidecode
+# import unidecode
 import punctilious.unicode_utilities as unicode_utilities
 from punctilious.plaintext import Plaintext
 from punctilious.unicode_utilities import Unicode2

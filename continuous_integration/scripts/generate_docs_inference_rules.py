@@ -24,11 +24,13 @@ python_sample_template = env.get_template('inference_rule_python_sample_template
 
 inference_rules = ['absorption', 'axiom-interpretation', 'biconditional-elimination-1',
     'biconditional-elimination-2', 'biconditional-introduction', 'conjunction-elimination-1',
-    'conjunction-elimination-2', 'conjunction-introduction', 'definition-interpretation',
-    'disjunction-introduction-1', 'disjunction-introduction-2', 'double-negation-elimination',
-    'double-negation-introduction', 'equality-commutativity', 'equal-terms-substitution',
-    'inconsistency-introduction-1', 'inconsistency-introduction-2', 'inconsistency-introduction-3',
-    'modus-ponens', 'proof-by-contradiction-1', 'proof-by-contradiction-2', 'proof-by-refutation-1',
+    'conjunction-elimination-2', 'conjunction-introduction', 'constructive-dilemna',
+    'definition-interpretation', 'destructive-dilemna', 'disjunction-introduction-1',
+    'disjunction-introduction-2', 'disjunctive-resolution', 'disjunctive-syllogism',
+    'double-negation-elimination', 'double-negation-introduction', 'equality-commutativity',
+    'equal-terms-substitution', 'hypothetical-syllogism', 'inconsistency-introduction-1',
+    'inconsistency-introduction-2', 'inconsistency-introduction-3', 'modus-ponens', 'modus-tollens',
+    'proof-by-contradiction-1', 'proof-by-contradiction-2', 'proof-by-refutation-1',
     'proof-by-refutation-2', 'variable-substitution']
 
 for ir in inference_rules:

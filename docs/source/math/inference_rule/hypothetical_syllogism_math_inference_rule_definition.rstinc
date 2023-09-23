@@ -1,0 +1,13 @@
+Definition
+----------
+
+*hypothetical-syllogism* is the :ref:`inference-rule<inference_rule_math_concept>`:
+
+.. math::
+
+    \left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), \left( \boldsymbol{Q} \implies \boldsymbol{R} \right) \right) \vdash \left( \boldsymbol{P} \implies \boldsymbol{R} \right)
+
+Sources
+----------
+
+* :cite:p:`warner_2018_puremathematicsbeginnersrigorous{p. 114}`

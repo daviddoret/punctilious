@@ -1,6 +1,5 @@
 import os
 import sys
-import pathlib
 
 # https://stackoverflow.com/questions/10324393/sphinx-build-fail-autodoc-cant-import-find-module
 print(f'os.getcwd()={os.getcwd()}')

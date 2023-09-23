@@ -5,4 +5,9 @@ Definition
 
 .. math::
 
-    \left( \left(\boldsymbol{P} \implies \mathbf{Q}\right) \land P \right) \vdash \mathbf{Q}
+    \left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), P \right) \vdash \boldsymbol{Q}
+
+Sources
+----------
+
+* :cite:p:`warner_2018_puremathematicsbeginnersrigorous{p. 114}`

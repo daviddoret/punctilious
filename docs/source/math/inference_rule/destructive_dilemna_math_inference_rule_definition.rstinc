@@ -1,0 +1,13 @@
+Definition
+----------
+
+*destructive-dilemna* is the :ref:`inference-rule<inference_rule_math_concept>`:
+
+.. math::
+
+    \left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), \left( \boldsymbol{R} \implies \boldsymbol{S} \right), \left( \neg \boldsymbol{Q} \lor \neg \boldsymbol{S} \right) \right) \vdash \left( \neg \boldsymbol{P} \lor \neg \boldsymbol{R} \right)
+
+Sources
+----------
+
+* :cite:p:`warner_2018_puremathematicsbeginnersrigorous{p. 114}`
