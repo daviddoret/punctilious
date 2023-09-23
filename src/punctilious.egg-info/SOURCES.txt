@@ -16,12 +16,14 @@ src/punctilious.egg-info/dependency_links.txt
 src/punctilious.egg-info/top_level.txt
 src/sample/__init__.py
 src/sample/sample_absorption.py
+src/sample/sample_axiom_interpretation.py
 src/sample/sample_biconditional_elimination_1.py
 src/sample/sample_biconditional_elimination_2.py
 src/sample/sample_biconditional_introduction.py
 src/sample/sample_conjunction_elimination_1.py
 src/sample/sample_conjunction_elimination_2.py
 src/sample/sample_conjunction_introduction.py
+src/sample/sample_definition_interpretation.py
 src/sample/sample_disjunction_introduction_1.py
 src/sample/sample_disjunction_introduction_2.py
 src/sample/sample_double_negation_elimination.py

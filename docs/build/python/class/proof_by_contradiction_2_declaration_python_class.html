@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/"/>
+    <link href="../../_static/punctilious-logo-compact-light.svg" rel="icon" type="image/svg+xml">
+    <link href="../../_static/punctilious-logo-compact-light-16x16-white.png" sizes="16x16" rel="icon" type="image/png">
+    <link href="../../_static/punctilious-logo-compact-light-32x32-white.png" sizes="32x32" rel="icon" type="image/png">
+    <link rel="apple-touch-icon" href="../../_static/punctilious-logo-compact-light-180x180-white.png" sizes="180x180"
+          type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ProofByContradiction2Declaration (python class) &mdash; punctilious 1.0.9 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/togglebutton.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/tabs.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css"/>
+    <!--[if lt IE 9]>
+      <script src="../../_static/js/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html"/>
+    <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="next" title="ProofByContradiction2Inclusion (python class)"
+          href="proof_by_contradiction_2_inclusion_python_class.html"/>
+    <link rel="prev" title="ProofByContradiction1Inclusion (python class)"
+          href="proof_by_contradiction_1_inclusion_python_class.html"/>
+</head>
+
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a href="../../index.html" class="icon icon-home">
+                    punctilious
+                </a>
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs" aria-label="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+            </div>
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../front_matter.html">Front matter</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../math.html">Math</a></li>
+                    <li class="toctree-l1 current"><a class="reference internal" href="../../python.html">Python</a>
+                        <ul class="current">
+                            <li class="toctree-l2"><a class="reference internal" href="../prerequisites_python.html">Prerequisites</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../installation_python.html">Installation</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../source_code_repository_python.html">Source code
+                                repository</a></li>
+                            <li class="toctree-l2 current"><a class="reference internal" href="python_class_index.html">Class</a>
+                                <ul class="current">
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="absorption_declaration_python_class.html">AbsorptionDeclaration</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="absorption_inclusion_python_class.html">AbsorptionInclusion</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_elimination_1_declaration_python_class.html">BiconditionalElimination1Declaration</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_elimination_1_inclusion_python_class.html">BiconditionalElimination1Inclusion</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_elimination_2_declaration_python_class.html">BiconditionalElimination2Declaration</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_elimination_2_inclusion_python_class.html">BiconditionalElimination2Inclusion</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_introduction_declaration_python_class.html">BiconditionalIntroductionDeclaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="biconditional_introduction_inclusion_python_class.html">BiconditionalIntroductionInclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_elimination_1_declaration_python_class.html">ConjunctionElimination1Declaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_elimination_1_inclusion_python_class.html">ConjunctionElimination1Inclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_elimination_2_declaration_python_class.html">ConjunctionElimination2Declaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_elimination_2_inclusion_python_class.html">ConjunctionElimination2Inclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_introduction_declaration_python_class.html">ConjunctionIntroductionDeclaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="conjunction_introduction_inclusion_python_class.html">ConjunctionIntroductionInclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="disjunction_introduction_1_declaration_python_class.html">DisjunctionIntroduction1Declaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="disjunction_introduction_1_inclusion_python_class.html">DisjunctionIntroduction1Inclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="disjunction_introduction_2_declaration_python_class.html">DisjunctionIntroduction2Declaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="disjunction_introduction_2_inclusion_python_class.html">DisjunctionIntroduction2Inclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="double_negation_elimination_declaration_python_class.html">DoubleNegationEliminationDeclaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="double_negation_elimination_inclusion_python_class.html">DoubleNegationEliminationInclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="double_negation_introduction_declaration_python_class.html">DoubleNegationIntroductionDeclaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="double_negation_introduction_inclusion_python_class.html">DoubleNegationIntroductionInclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="equal_terms_substitution_declaration_python_class.html">EqualTermsSubstitutionDeclaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="equal_terms_substitution_inclusion_python_class.html">EqualTermsSubstitutionInclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="equality_commutativity_declaration_python_class.html">EqualityCommutativityDeclaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="equality_commutativity_inclusion_python_class.html">EqualityCommutativityInclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inconsistency_introduction_1_declaration_python_class.html">InconsistencyIntroduction1Declaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inconsistency_introduction_1_inclusion_python_class.html">InconsistencyIntroduction1Inclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inconsistency_introduction_2_declaration_python_class.html">InconsistencyIntroduction2Declaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inconsistency_introduction_2_inclusion_python_class.html">InconsistencyIntroduction2Inclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inconsistency_introduction_3_declaration_python_class.html">InconsistencyIntroduction3Declaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inconsistency_introduction_3_inclusion_python_class.html">InconsistencyIntroduction3Inclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inference_rule_declaration_python_class.html">InferenceRuleDeclaration</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inference_rule_declaration_collection_python_class.html">InferenceRuleDeclarationCollection</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inference_rule_inclusion_python_class.html">InferenceRuleInclusion</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inference_rule_inclusion_collection_python_class.html">InferenceRuleInclusionCollection</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="modus_ponens_declaration_python_class.html">ModusPonensDeclaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="modus_ponens_inclusion_python_class.html">ModusPonensInclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_contradiction_1_declaration_python_class.html">ProofByContradiction1Declaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_contradiction_1_inclusion_python_class.html">ProofByContradiction1Inclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3 current"><a class="current reference internal" href="#">ProofByContradiction2Declaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_contradiction_2_inclusion_python_class.html">ProofByContradiction2Inclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_refutation_1_declaration_python_class.html">ProofByRefutation1Declaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_refutation_1_inclusion_python_class.html">ProofByRefutation1Inclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_refutation_2_declaration_python_class.html">ProofByRefutation2Declaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="proof_by_refutation_2_inclusion_python_class.html">ProofByRefutation2Inclusion
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="universe_of_discourse_python_class.html">UniverseOfDiscourse</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="variable_substitution_declaration_python_class.html">VariableSubstitutionDeclaration
+                                        (python class)</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="variable_substitution_inclusion_python_class.html">VariableSubstitutionInclusion
+                                        (python class)</a></li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../function/python_function_index.html">Function</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../sample/python_sample_index.html">Sample</a></li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../back_matter.html">Back matter</a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+        <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../../index.html">punctilious</a>
+        </nav>
+
+        <div class="wy-nav-content">
+            <div class="rst-content">
+                <div role="navigation" aria-label="Page navigation">
+                    <ul class="wy-breadcrumbs">
+                        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+                        <li class="breadcrumb-item"><a href="../../python.html">Python</a></li>
+                        <li class="breadcrumb-item"><a href="python_class_index.html">Python classes</a></li>
+                        <li class="breadcrumb-item active">ProofByContradiction2Declaration (python class)</li>
+                        <li class="wy-breadcrumbs-aside">
+                            <a href="../../_sources/python/class/proof_by_contradiction_2_declaration_python_class.rst.txt"
+                               rel="nofollow"> View page source</a>
+                        </li>
+                    </ul>
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <span class="target" id="proofbycontradiction2"><span
+                                id="proof-by-contradiction-2-declaration-python-class"></span></span>
+                        <p class="tags"><span>Tags: </span><a
+                                class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
+                                href="../../_tags/proof-by-contradiction-2.html"><span class="doc">proof-by-contradiction-2</span></a><span> </span><a
+                                class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
+                                href="../../_tags/python.html"><span class="doc">python</span></a><span> </span><a
+                                class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
+                                href="../../_tags/declaration.html"><span
+                                class="doc">declaration</span></a><span> </span><a
+                                class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
+                                href="../../_tags/class.html"><span class="doc">class</span></a></p>
+                        <section id="proofbycontradiction2declaration-python-class">
+                            <h1>ProofByContradiction2Declaration (python class)<a class="headerlink"
+                                                                                  href="#proofbycontradiction2declaration-python-class"
+                                                                                  title="Permalink to this headline"></a>
+                            </h1>
+                            <div class="admonition seealso">
+                                <p class="admonition-title">See also</p>
+                                <p><a class="reference internal"
+                                      href="../../math/inference_rule/proof_by_contradiction_2_math_inference_rule.html#proof-by-contradiction-2-math-inference-rule"><span
+                                        class="std std-ref">math concept</span></a> | <a class="reference internal"
+                                                                                         href="proof_by_contradiction_2_inclusion_python_class.html#proof-by-contradiction-2-inclusion-python-class"><span
+                                        class="std std-ref">python inclusion class</span></a> | <a
+                                        class="reference internal"
+                                        href="../sample/proof_by_contradiction_2_python_sample.html#proof-by-contradiction-2-python-sample"><span
+                                        class="std std-ref">python sample</span></a></p>
+                            </div>
+                            <p>This section presents the <code class="code python py docutils literal notranslate"><span
+                                    class="name"><span class="pre">ProofByContradiction2Declaration</span></span></code>
+                                python class.</p>
+                            <p>This class models the <a class="reference internal"
+                                                        href="../../math/concept/object_declaration_math_concept.html#object-declaration-math-concept"><span
+                                    class="std std-ref">declaration</span></a> of the <a class="reference internal"
+                                                                                         href="../../math/inference_rule/proof_by_contradiction_2_math_inference_rule.html#proof-by-contradiction-2-math-inference-rule"><span
+                                    class="std std-ref">proof-by-contradiction-2</span></a> <a
+                                    class="reference internal"
+                                    href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                    class="std std-ref">inference-rule</span></a> in the target <a
+                                    class="reference internal"
+                                    href="../../math/concept/universe_of_discourse_math_concept.html#universe-of-discourse-math-concept"><span
+                                    class="std std-ref">universe-of-discourse</span></a>.</p>
+                            <p><em>Punctilious</em> users do not need to instanciate objects from this class. In effect,
+                                the <code class="code python py docutils literal notranslate"><span class="name"><span
+                                        class="pre">UniverseOfDiscourse</span></span></code> class exposes the <code
+                                        class="code python py docutils literal notranslate"><span class="name"><span
+                                        class="pre">proof_by_contradiction_2</span></span></code> property, and
+                                instanciation is automatic when the property is accessed for the first time.</p>
+                            <dl class="py class">
+                                <dt class="sig sig-object py" id="punctilious.ProofByContradiction2Declaration">
+                                    <em class="property"><span class="pre">class</span><span
+                                            class="w"> </span></em><span class="sig-prename descclassname"><span
+                                        class="pre">punctilious.</span></span><span class="sig-name descname"><span
+                                        class="pre">ProofByContradiction2Declaration</span></span><span
+                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                        class="pre">universe_of_discourse</span></span></em>, <em
+                                        class="sig-param"><span class="n"><span class="pre">echo</span></span><span
+                                        class="o"><span class="pre">=</span></span><span class="default_value"><span
+                                        class="pre">None</span></span></em><span class="sig-paren">)</span><a
+                                        class="headerlink" href="#punctilious.ProofByContradiction2Declaration"
+                                        title="Permalink to this definition"></a></dt>
+                                <dd>
+                                    <dl class="py method">
+                                        <dt class="sig sig-object py"
+                                            id="punctilious.ProofByContradiction2Declaration.compose_paragraph_proof">
+                                            <span class="sig-name descname"><span
+                                                    class="pre">compose_paragraph_proof</span></span><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">o</span></span></em><span class="sig-paren">)</span><a
+                                                class="headerlink"
+                                                href="#punctilious.ProofByContradiction2Declaration.compose_paragraph_proof"
+                                                title="Permalink to this definition"></a></dt>
+                                        <dd><p>This method should be overridden by specialized inference-rule classes to
+                                            provide accurate proofs.</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Return type</dt>
+                                                <dd class="field-odd"><p><code
+                                                        class="xref py py-class docutils literal notranslate"><span
+                                                        class="pre">Generator</span></code>[<code
+                                                        class="xref py py-class docutils literal notranslate"><span
+                                                        class="pre">Composable</span></code>, <code
+                                                        class="xref py py-class docutils literal notranslate"><span
+                                                        class="pre">Composable</span></code>, <code
+                                                        class="xref py py-class docutils literal notranslate"><span
+                                                        class="pre">bool</span></code>]</p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt class="sig sig-object py"
+                                            id="punctilious.ProofByContradiction2Declaration.infer_formula">
+                                            <span class="sig-name descname"><span
+                                                    class="pre">infer_formula</span></span><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">x_neq_y_hypothesis</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span
+                                                class="pre">inc_hypothesis</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span class="pre">t</span></span></em>,
+                                            <em class="sig-param"><span class="n"><span
+                                                    class="pre">echo</span></span><span class="o"><span
+                                                    class="pre">=</span></span><span class="default_value"><span
+                                                    class="pre">None</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#punctilious.ProofByContradiction2Declaration.infer_formula"
+                                                                             title="Permalink to this definition"></a>
+                                        </dt>
+                                        <dd><p>This python method <strong>does not</strong> verify the validity of the
+                                            arguments, applies the <a class="reference internal"
+                                                                      href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                                    class="std std-ref">inference-rule</span></a> algorithm, and returns
+                                            a <a class="reference internal"
+                                                 href="../../math/concept/formula_math_concept.html#formula-math-concept"><span
+                                                    class="std std-ref">formula</span></a>.</p>
+                                            <div class="admonition note">
+                                                <p class="admonition-title">Note</p>
+                                                <p>Note the critical distinction between the <code
+                                                        class="code python py docutils literal notranslate"><span
+                                                        class="name"><span
+                                                        class="pre">infer_formula</span></span></code> and the <code
+                                                        class="code python py docutils literal notranslate"><span
+                                                        class="name"><span
+                                                        class="pre">infer_formula_statement</span></span></code>
+                                                    methods. The former does not verify the validity of the arguments,
+                                                    applies the <a class="reference internal"
+                                                                   href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                                            class="std std-ref">inference-rule</span></a> algorithm, and
+                                                    produces a <a class="reference internal"
+                                                                  href="../../math/concept/formula_math_concept.html#formula-math-concept"><span
+                                                            class="std std-ref">formula</span></a> that may be <strong>invalid</strong>
+                                                    . The later verifies the validity of the arguments, applies the <a
+                                                            class="reference internal"
+                                                            href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                                            class="std std-ref">inference-rule</span></a> algorithm, and
+                                                    produces a <a class="reference internal"
+                                                                  href="../../math/concept/formula_statement_math_concept.html#formula-statement-math-concept"><span
+                                                            class="std std-ref">formula-statement</span></a> that is
+                                                    <strong>valid</strong> by definition.</p>
+                                            </div>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt class="sig sig-object py"
+                                            id="punctilious.ProofByContradiction2Declaration.verify_args">
+                                            <span class="sig-name descname"><span
+                                                    class="pre">verify_args</span></span><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">x_neq_y_hypothesis</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span
+                                                class="pre">inc_hypothesis</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span class="pre">t</span></span></em>,
+                                            <em class="sig-param"><span class="n"><span
+                                                    class="pre">echo</span></span><span class="o"><span
+                                                    class="pre">=</span></span><span class="default_value"><span
+                                                    class="pre">None</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#punctilious.ProofByContradiction2Declaration.verify_args"
+                                                                             title="Permalink to this definition"></a>
+                                        </dt>
+                                        <dd>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>x_neq_y_hypothesis</strong> – The
+                                                            hypothesis-statement in the parent theory.</p></li>
+                                                        <li><p><strong>inc_hypothesis</strong> – The
+                                                            contradiction-statement Inc(Tn) where Tn is the
+                                                            hypothesis-theory.</p></li>
+                                                        <li><p><strong>t</strong> – The current (parent) theory.</p>
+                                                        </li>
+                                                        <li><p><strong>echo</strong> – </p></li>
+                                                    </ul>
+                                                </dd>
+                                                <dt class="field-even">Returns</dt>
+                                                <dd class="field-even"><p></p>
+                                                </dd>
+                                            </dl>
+                                            <p>TODO: ProofByContradiction2Declaration.verify_args(): Make systematic
+                                                verifications. I doubt it is still possible to call the method with
+                                                wrong parameters.</p>
+                                        </dd>
+                                    </dl>
+
+                                </dd>
+                            </dl>
+
+                        </section>
+
+
+                    </div>
+                </div>
+                <footer>
+                    <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+                        <a href="proof_by_contradiction_1_inclusion_python_class.html"
+                           class="btn btn-neutral float-left" title="ProofByContradiction1Inclusion (python class)"
+                           accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span>
+                            Previous</a>
+                        <a href="proof_by_contradiction_2_inclusion_python_class.html"
+                           class="btn btn-neutral float-right" title="ProofByContradiction2Inclusion (python class)"
+                           accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"
+                                                               aria-hidden="true"></span></a>
+                    </div>
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>&#169; Copyright 2023, David Doret.</p>
+                    </div>
+
+                    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+                    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+                    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+                </footer>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(false);
+    });
+</script>
+
+</body>
+</html>
