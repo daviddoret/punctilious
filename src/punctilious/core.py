@@ -6143,8 +6143,6 @@ class RelationDict(collections.UserDict):
 
     @property
     def is_a(self):
-        """XXXXXXX
-        """
         if self._is_a is None:
             self._is_a = self.declare(arity=2, formula_rep=Formula.infix, signal_proposition=True,
                 symbol=SerifItalic(plaintext='is-a', unicode='is-a', latex='is-a'),
@@ -7623,13 +7621,7 @@ class InferenceRuleInclusionCollection(collections.UserDict):
                If the well-known inference-rule does not exist in the universe-of-discourse,
                the inference-rule is automatically declared.
 
-               Warning
-               -------
-               Axiom-interpretation is especially dangerous because, contrary to most
-               inference-rules,
-               it allows the introduction of arbitrary truthes in the theory. For this reason,
-               one must be very attentive when applying this inference-rule to assure the resulting
-               formula-statement complies / interprets properly its related contentual-axiom.
+               .. include:: ../../include/interpretative_inference_rule_warning.rstinc
                """
         if self._axiom_interpretation is None:
             self._axiom_interpretation = AxiomInterpretationInclusion(t=self.t)
@@ -7786,12 +7778,7 @@ class InferenceRuleInclusionCollection(collections.UserDict):
         If the inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
 
-        Warning
-        -------
-        Axiom-interpretation is especially dangerous because, contrary to most inference-rules,
-        it allows the introduction of arbitrary truthes in the theory. For this reason,
-        one must be very attentive when applying this inference-rule to assure the resulting
-        formula-statement complies / interprets properly its related contentual-definition.
+        .. include:: ../../include/interpretative_inference_rule_warning.rstinc
         """
         if self._definition_interpretation is None:
             self._definition_interpretation = DefinitionInterpretationInclusion(t=self.t)

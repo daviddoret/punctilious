@@ -5,12 +5,12 @@ Python classes
    :maxdepth: 1
    :caption: Class
 
-   absorption_declaration_python_class
-   absorption_inclusion_python_class
-   biconditional_elimination_1_declaration_python_class
-   biconditional_elimination_1_inclusion_python_class
-   biconditional_elimination_2_declaration_python_class
-   biconditional_elimination_2_inclusion_python_class
+   AbsorptionDeclaration<absorption_declaration_python_class>
+   AbsorptionInclusion<absorption_inclusion_python_class>
+   BiconditionalElimination1Declaration<biconditional_elimination_1_declaration_python_class>
+   BiconditionalElimination1Inclusion<biconditional_elimination_1_inclusion_python_class>
+   BiconditionalElimination2Declaration<biconditional_elimination_2_declaration_python_class>
+   BiconditionalElimination2Inclusion<biconditional_elimination_2_inclusion_python_class>
    biconditional_introduction_declaration_python_class
    biconditional_introduction_inclusion_python_class
    conjunction_elimination_1_declaration_python_class
