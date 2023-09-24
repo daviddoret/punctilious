@@ -12,6 +12,7 @@ import pyvis
 import punctilious.unicode_utilities as unicode_utilities
 from punctilious.plaintext import Plaintext
 from punctilious.unicode_utilities import Unicode2
+from caller_info import caller_info
 
 
 def prioritize_value(*args):
@@ -3736,10 +3737,6 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         explicit_name = 'axiom interpretation inference rule'
         name = 'axiom interpretation'
         definition = StyledText(plaintext='A |- P', unicode='𝒜 ⊢ P')
-        # Assure backward-compatibility with the parent class,
-        # which received these methods as __init__ arguments.
-        infer_formula = AxiomInterpretationDeclaration.infer_formula
-        verify_args = AxiomInterpretationDeclaration.verify_args
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -6545,9 +6542,9 @@ FlexibleFormula = typing.Union[FormulaStatement, Formula, tuple, list]
 """See validate_flexible_statement_formula() for details."""
 
 
-def interpret_formula(u: UniverseOfDiscourse, arity: (None, int),
-        flexible_formula: FlexibleFormula) -> Formula:
-    """Many punctilious pythonic methods expect some Formula as input parameters. This is programmatically robust, but it may render theory code less readable for humans. In effect, one must store all formulae in variables to reuse them in composite formulae. If the number of formulae gets large, readability suffers and maintenability of variable names becomes cumbersome. To provide a friendler interface for humans, we allow passing formulae as formula, formula-statement, tuple, and lists and apply the following interpretation rules:
+def interpret_formula(u: UniverseOfDiscourse, arity: (None, int), flexible_formula: FlexibleFormula,
+        arg: (None, str) = None, form: (None, Formula) = None) -> Formula:
+    """Many punctilious pythonic methods expect some instances of Formula as input parameters. This is programmatically robust, but it may render theory code less readable for humans. To provide a friendler interface for humans, we allow passing formulae as formula, formula-statement, tuple, and lists and apply the following interpretation rules:
 
     If ⌜argument⌝ is of type formula, return it directly.
 
@@ -6562,21 +6559,46 @@ def interpret_formula(u: UniverseOfDiscourse, arity: (None, int),
     :param flexible_formula:
     :return:
     """
+    formula: (None, Formula) = None
     if isinstance(flexible_formula, Formula):
-        return flexible_formula
+        # the input is already correctly typed as a Formula.
+        formula = flexible_formula
     elif isinstance(flexible_formula, FormulaStatement):
-        return flexible_formula.valid_proposition
+        # the input is typed as a FormulaStatement,
+        # we must unpack it to retrieve its internal Formula.
+        formula = flexible_formula.valid_proposition
     elif isinstance(flexible_formula, tuple):
-        if arity is None:
-            arity: int = len(flexible_formula) - 1
-        verify(assertion=len(flexible_formula) == arity + 1,
-            msg='⌜argument⌝ passed as a tuple must be of length ⌜arity⌝ +1 (the +1 is the relation).',
-            argument=flexible_formula, arity=arity)
-        flexible_formula = u.f(flexible_formula[0], *flexible_formula[1:])
-        return flexible_formula
+        # the input is a tuple, assuming a data structure
+        # of the form (relation, argument_1, argument_2, ..., argument_n),
+        # where the relation and/or the arguments may also be free-variables.
+        formula = u.f(flexible_formula[0], *flexible_formula[1:])
     else:
-        raise PunctiliousException('⌜argument⌝ could not be interpreted as a formula.',
+        # argument could not be interpreted as a formula
+        caller: str = ''.join(['⌜', caller_info(), '⌝ '])
+        arg_string: str = '' if arg is None else ''.join(['⌜', arg, '⌝ '])
+        type_name: str = str(type(flexible_formula))
+        value_string: str
+        try:
+            value_string = str(flexible_formula)
+        except:
+            value_string = 'string conversion failure'
+        raise PunctiliousException(
+            f'The argument {arg_string}passed to {caller} could not be interpreted as a Formula. Its type was {type_name}, and its value was ⌜{value_string}⌝.',
+            argument=flexible_formula, u=u)
+    if arity is not None and arity != formula.arity:
+        # argument could not be interpreted as a formula
+        caller: str = ''.join(['⌜', caller_info(), '⌝'])
+        arg_string: str = '' if arg is None else ''.join(['⌜', arg, '⌝ '])
+        formula_string: str = formula.rep_formula(encoding=encodings.plaintext)
+        raise PunctiliousException(
+            f'The formula ⌜{formula_string}⌝ passed as argument {arg_string}to {caller} was required to be of arity {arity}.',
             argument=flexible_formula, arity=arity, u=u)
+    if form is not None:
+        form: Formula
+        # TODO: Retrieve the mask, this is the list of free-variables in form
+        # TODO: Check form is complied with. Or raise a friendly error.
+        form.is_masked_formula_similar_to(...)
+    return formula
 
 
 def interpret_statement_formula(t: TheoryElaborationSequence, arity: (None, int),
