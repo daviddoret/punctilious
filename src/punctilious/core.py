@@ -4102,6 +4102,54 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         return True
 
 
+class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
+    """The declaration of the :ref:`constructive-dilemma<constructive_dilemma_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
+    """
+
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
+        symbol = 'constructive-dilemma'
+        acronym = 'cd'
+        abridged_name = None
+        auto_index = False
+        dashed_name = 'constructive-dilemma'
+        explicit_name = 'constructive dilemma inference rule'
+        name = 'constructive dilemma'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.sequent_comma | q) | u.r.proves | (p | u.r.land | q))
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
+            echo: (None, bool) = None) -> Formula:
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
+        p = interpret_formula(u=t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=t.u, arity=None, flexible_formula=q)
+        return p | t.u.r.land | q
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """ """
+        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p: FormulaStatement, q: FormulaStatement,
+            t: TheoryElaborationSequence) -> bool:
+        """ """
+        p = interpret_statement_formula(t=t, arity=None, flexible_formula=p)
+        q = interpret_statement_formula(t=t, arity=None, flexible_formula=q)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        verify(t.contains_theoretical_objct(q),
+            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
+        return True
+
+
 class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'definition-interpretation'
@@ -4139,6 +4187,54 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
             t=t, slf=self)
         verify(p.is_proposition, '⌜p⌝ is not propositional.', p=p, t=t, slf=self)
         # TODO: Add a verification step: the definition is not locked.
+        return True
+
+
+class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
+    """The declaration of the :ref:`destructive-dilemma<destructive_dilemma_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
+    """
+
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
+        symbol = 'destructive-dilemma'
+        acronym = 'dd'
+        abridged_name = None
+        auto_index = False
+        dashed_name = 'destructive-dilemma'
+        explicit_name = 'destructive dilemma inference rule'
+        name = 'destructive dilemma'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.sequent_comma | q) | u.r.proves | (p | u.r.land | q))
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
+            echo: (None, bool) = None) -> Formula:
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
+        p = interpret_formula(u=t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=t.u, arity=None, flexible_formula=q)
+        return p | t.u.r.land | q
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """ """
+        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p: FormulaStatement, q: FormulaStatement,
+            t: TheoryElaborationSequence) -> bool:
+        """ """
+        p = interpret_statement_formula(t=t, arity=None, flexible_formula=p)
+        q = interpret_statement_formula(t=t, arity=None, flexible_formula=q)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        verify(t.contains_theoretical_objct(q),
+            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
         return True
 
 
@@ -4245,6 +4341,102 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
         q = interpret_formula(u=t.u, arity=None, flexible_formula=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        return True
+
+
+class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
+    """The declaration of the :ref:`disjunctive-resolution<disjunctive_resolution_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
+    """
+
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
+        symbol = 'disjunctive-resolution'
+        acronym = 'dr'
+        abridged_name = None
+        auto_index = False
+        dashed_name = 'disjunctive-resolution'
+        explicit_name = 'disjunctive resolution inference rule'
+        name = 'disjunctive resolution'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.sequent_comma | q) | u.r.proves | (p | u.r.land | q))
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
+            echo: (None, bool) = None) -> Formula:
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
+        p = interpret_formula(u=t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=t.u, arity=None, flexible_formula=q)
+        return p | t.u.r.land | q
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """ """
+        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p: FormulaStatement, q: FormulaStatement,
+            t: TheoryElaborationSequence) -> bool:
+        """ """
+        p = interpret_statement_formula(t=t, arity=None, flexible_formula=p)
+        q = interpret_statement_formula(t=t, arity=None, flexible_formula=q)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        verify(t.contains_theoretical_objct(q),
+            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
+        return True
+
+
+class DisjunctiveSyllogismDeclaration(InferenceRuleDeclaration):
+    """The declaration of the :ref:`disjunctive-syllogism<disjunctive_syllogism_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
+    """
+
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
+        symbol = 'disjunctive-syllogism'
+        acronym = 'ds'
+        abridged_name = None
+        auto_index = False
+        dashed_name = 'disjunctive-syllogism'
+        explicit_name = 'disjunctive syllogism inference rule'
+        name = 'disjunctive syllogism'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.sequent_comma | q) | u.r.proves | (p | u.r.land | q))
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
+            echo: (None, bool) = None) -> Formula:
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
+        p = interpret_formula(u=t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=t.u, arity=None, flexible_formula=q)
+        return p | t.u.r.land | q
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """ """
+        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p: FormulaStatement, q: FormulaStatement,
+            t: TheoryElaborationSequence) -> bool:
+        """ """
+        p = interpret_statement_formula(t=t, arity=None, flexible_formula=p)
+        q = interpret_statement_formula(t=t, arity=None, flexible_formula=q)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        verify(t.contains_theoretical_objct(q),
+            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
         return True
 
 
@@ -4465,6 +4657,54 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
         return True
 
 
+class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
+    """The declaration of the :ref:`hypothetical-syllogism<hypothetical_syllogism_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
+    """
+
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
+        symbol = 'hypothetical-syllogism'
+        acronym = 'hs'
+        abridged_name = None
+        auto_index = False
+        dashed_name = 'hypothetical-syllogism'
+        explicit_name = 'hypothetical syllogism inference rule'
+        name = 'hypothetical syllogism'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.sequent_comma | q) | u.r.proves | (p | u.r.land | q))
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
+            echo: (None, bool) = None) -> Formula:
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
+        p = interpret_formula(u=t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=t.u, arity=None, flexible_formula=q)
+        return p | t.u.r.land | q
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """ """
+        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
+            o=o)
+        return output
+
+    def verify_args(self, p: FormulaStatement, q: FormulaStatement,
+            t: TheoryElaborationSequence) -> bool:
+        """ """
+        p = interpret_statement_formula(t=t, arity=None, flexible_formula=p)
+        q = interpret_statement_formula(t=t, arity=None, flexible_formula=q)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        verify(t.contains_theoretical_objct(q),
+            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
+        return True
+
+
 class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
     """P ⋀ not P: inconsistency"""
 
@@ -4639,6 +4879,69 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         dashed_name = 'modus-ponens'
         explicit_name = 'modus ponens inference rule'
         name = 'modus ponens'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = ((p | u.r.implies | p) | u.r.sequent_comma | p) | u.r.proves | q
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(o=o)
+        return output
+
+    def infer_formula(self, p_implies_q: FormulaStatement, p: FormulaStatement,
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
+        p_implies_q = interpret_formula(u=self.u, arity=2, flexible_formula=p_implies_q)
+        q = interpret_formula(u=self.u, arity=2, flexible_formula=p_implies_q.parameters[1])
+        return q
+
+    def verify_args(self, p_implies_q: FormulaStatement, p: FormulaStatement,
+            t: TheoryElaborationSequence) -> bool:
+        """
+
+        :param args: A statement (P ⟹ Q), and a statement P
+        :param t:
+        :return: A formula Q
+        """
+        p_implies_q = interpret_statement_formula(t=t, arity=2, flexible_formula=p_implies_q)
+        p = interpret_statement_formula(t=t, arity=2, flexible_formula=p)
+        verify(t.contains_theoretical_objct(p_implies_q),
+            'Statement ⌜p_implies_q⌝ is not contained in theory ⌜t⌝''s hierarchy.',
+            p_implies_q=p_implies_q, t=t, slf=self)
+        p_implies_q = unpack_formula(p_implies_q)
+        verify(p_implies_q.relation is t.u.r.implication,
+            'The relation of formula ⌜p_implies_q⌝ is not an implication.',
+            p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p_prime=p, t=t, slf=self)
+        p = unpack_formula(p)
+        p_prime = unpack_formula(p_implies_q.parameters[0])
+        # The antecedant of the implication may contain free-variables,
+        # store these in a mask for masked-formula-similitude comparison.
+        verify(p.is_formula_syntactically_equivalent_to(p_prime),
+            'Formula ⌜p_prime⌝ in statement ⌜p_implies_q⌝ must be formula-syntactically-equivalent to statement '
+            '⌜p⌝.', p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t, slf=self)
+        return True
+
+
+class ModusTollensDeclaration(InferenceRuleDeclaration):
+    """The declaration of the :ref:`modus-tollens<modus_tollens_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
+    """
+
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
+        symbol = 'modus-tollens'
+        acronym = 'mt'
+        abridged_name = None
+        auto_index = False
+        dashed_name = 'modus-tollens'
+        explicit_name = 'modus tollens inference rule'
+        name = 'modus tollens'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             definition = ((p | u.r.implies | p) | u.r.sequent_comma | p) | u.r.proves | q
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,

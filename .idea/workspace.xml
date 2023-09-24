@@ -6,11 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="documentation #195">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/generate_docs_inference_rules.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/generate_docs_inference_rules.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math_concept.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math_concept.doctree" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/math_concept.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math_concept.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/math_inference_rule.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math_inference_rule.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/python_class_index.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/class/python_class_index.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/python_class_index.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/python_class_index.rst.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/css/fonts/fontawesome-webfont.svg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/css/fonts/fontawesome-webfont.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-compact-light.svg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-compact-light.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-full-light.svg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-full-light.svg" afterDir="false" />
@@ -59,13 +57,8 @@
       <change beforePath="$PROJECT_DIR$/docs/build/genindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/genindex.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/absorption_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/absorption_math_inference_rule.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/axiom_interpretation_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/axiom_interpretation_math_inference_rule.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_1_math_inference_rule.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_2_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_2_math_inference_rule.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_introduction_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_introduction_math_inference_rule.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math_concept.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemna_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemna_declaration_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemna_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemna_inclusion_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemna_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemna_declaration_python_class.html" afterDir="false" />
@@ -78,6 +71,7 @@
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/hypothetical_syllogism_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/hypothetical_syllogism_inclusion_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/modus_tollens_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/modus_tollens_declaration_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/modus_tollens_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/modus_tollens_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/python_class_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/python_class_index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/constructive_dilemna_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/constructive_dilemna_python_sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/destructive_dilemna_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/destructive_dilemna_python_sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/disjunctive_resolution_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/disjunctive_resolution_python_sample.html" afterDir="false" />
@@ -86,16 +80,7 @@
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/modus_tollens_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/modus_tollens_python_sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/search.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/searchindex.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/class.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/concept.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/declaration.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/declaration.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/inclusion.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/inclusion.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/inference-rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/inference-rule.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/math.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/math.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/python.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/python.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/sample.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/tagsindex.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/tagsindex.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/python_class_index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/class/python_class_index.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -499,22 +484,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00265" summary="#47: scripts for the installation to pypi">
-      <option name="closed" value="true" />
-      <created>1694515971305</created>
-      <option name="number" value="00265" />
-      <option name="presentableId" value="LOCAL-00265" />
-      <option name="project" value="LOCAL" />
-      <updated>1694515971306</updated>
-    </task>
-    <task id="LOCAL-00266" summary="#47: scripts for the installation from pypi">
-      <option name="closed" value="true" />
-      <created>1694549184214</created>
-      <option name="number" value="00266" />
-      <option name="presentableId" value="LOCAL-00266" />
-      <option name="project" value="LOCAL" />
-      <updated>1694549184214</updated>
-    </task>
     <task id="LOCAL-00267" summary="#47: readme.md with installation instructions">
       <option name="closed" value="true" />
       <created>1694550367034</created>
@@ -891,7 +860,23 @@
       <option name="project" value="LOCAL" />
       <updated>1695502464898</updated>
     </task>
-    <option name="localTasksCounter" value="314" />
+    <task id="LOCAL-00314" summary="documentation #195">
+      <option name="closed" value="true" />
+      <created>1695538606793</created>
+      <option name="number" value="00314" />
+      <option name="presentableId" value="LOCAL-00314" />
+      <option name="project" value="LOCAL" />
+      <updated>1695538606793</updated>
+    </task>
+    <task id="LOCAL-00315" summary="documentation #195">
+      <option name="closed" value="true" />
+      <created>1695538890236</created>
+      <option name="number" value="00315" />
+      <option name="presentableId" value="LOCAL-00315" />
+      <option name="project" value="LOCAL" />
+      <updated>1695538890236</updated>
+    </task>
+    <option name="localTasksCounter" value="316" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
