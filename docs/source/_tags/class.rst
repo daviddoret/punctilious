@@ -21,8 +21,8 @@ My tags: class
     ../python/class/conjunction_elimination_2_inclusion_python_class.rst
     ../python/class/conjunction_introduction_declaration_python_class.rst
     ../python/class/conjunction_introduction_inclusion_python_class.rst
-    ../python/class/constructive_dilemma_declaration_python_class.rst
-    ../python/class/constructive_dilemma_inclusion_python_class.rst
+    ../python/class/constructive_dilemna_declaration_python_class.rst
+    ../python/class/constructive_dilemna_inclusion_python_class.rst
     ../python/class/definition_interpretation_declaration_python_class.rst
     ../python/class/definition_interpretation_inclusion_python_class.rst
     ../python/class/destructive_dilemna_declaration_python_class.rst

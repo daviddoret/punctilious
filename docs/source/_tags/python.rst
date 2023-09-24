@@ -21,12 +21,12 @@ My tags: python
     ../python/class/conjunction_elimination_2_inclusion_python_class.rst
     ../python/class/conjunction_introduction_declaration_python_class.rst
     ../python/class/conjunction_introduction_inclusion_python_class.rst
-    ../python/class/constructive_dilemma_declaration_python_class.rst
-    ../python/class/constructive_dilemma_inclusion_python_class.rst
+    ../python/class/constructive_dilemna_declaration_python_class.rst
+    ../python/class/constructive_dilemna_inclusion_python_class.rst
     ../python/class/definition_interpretation_declaration_python_class.rst
     ../python/class/definition_interpretation_inclusion_python_class.rst
-    ../python/class/destructive_dilemma_declaration_python_class.rst
-    ../python/class/destructive_dilemma_inclusion_python_class.rst
+    ../python/class/destructive_dilemna_declaration_python_class.rst
+    ../python/class/destructive_dilemna_inclusion_python_class.rst
     ../python/class/disjunction_introduction_1_declaration_python_class.rst
     ../python/class/disjunction_introduction_1_inclusion_python_class.rst
     ../python/class/disjunction_introduction_2_declaration_python_class.rst
@@ -78,9 +78,9 @@ My tags: python
     ../python/sample/conjunction_elimination_1_python_sample.rst
     ../python/sample/conjunction_elimination_2_python_sample.rst
     ../python/sample/conjunction_introduction_python_sample.rst
-    ../python/sample/constructive_dilemma_python_sample.rst
+    ../python/sample/constructive_dilemna_python_sample.rst
     ../python/sample/definition_interpretation_python_sample.rst
-    ../python/sample/destructive_dilemma_python_sample.rst
+    ../python/sample/destructive_dilemna_python_sample.rst
     ../python/sample/disjunction_introduction_1_python_sample.rst
     ../python/sample/disjunction_introduction_2_python_sample.rst
     ../python/sample/disjunctive_resolution_python_sample.rst
