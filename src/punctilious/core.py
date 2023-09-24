@@ -4134,8 +4134,7 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
         """ """
-        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
-            o=o)
+        output = yield from configuration.locale.compose_constructive_dilemma_paragraph_proof(o=o)
         return output
 
     def verify_args(self, p: FormulaStatement, q: FormulaStatement,
@@ -4222,7 +4221,7 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
         """ """
-        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
+        output = yield from configuration.locale.destructive_dilemma_introduction_paragraph_proof(
             o=o)
         return output
 
@@ -4376,8 +4375,7 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
         """ """
-        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
-            o=o)
+        output = yield from configuration.locale.compose_disjunctive_resolution_paragraph_proof(o=o)
         return output
 
     def verify_args(self, p: FormulaStatement, q: FormulaStatement,
@@ -4424,8 +4422,7 @@ class DisjunctiveSyllogismDeclaration(InferenceRuleDeclaration):
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
         """ """
-        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
-            o=o)
+        output = yield from configuration.locale.compose_disjunctive_syllogism_paragraph_proof(o=o)
         return output
 
     def verify_args(self, p: FormulaStatement, q: FormulaStatement,
@@ -4689,8 +4686,7 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
         """ """
-        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
-            o=o)
+        output = yield from configuration.locale.compose_hypothetical_syllogism_paragraph_proof(o=o)
         return output
 
     def verify_args(self, p: FormulaStatement, q: FormulaStatement,
@@ -4950,7 +4946,7 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(o=o)
+        output = yield from configuration.locale.compose_modus_tollens_paragraph_proof(o=o)
         return output
 
     def infer_formula(self, p_implies_q: FormulaStatement, p: FormulaStatement,
@@ -5213,8 +5209,6 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
         p_eq_q = p_eq_q_hypothesis.hypothesis_formula
         p_neq_q = t.u.f(t.u.r.inequality, p_eq_q.parameters[0], p_eq_q.parameters[1])
         return p_neq_q
-
-        # def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[  #     Composable, Composable, bool]:  #     data = yield from  #  #  #  #  #  #     configuration.locale.compose_modus_ponens_paragraph_proof(  #         o=o)  #  #  #  #     return data
 
     def verify_args(self, p_eq_q_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
