@@ -21,7 +21,7 @@ Tags overview
     conjunction-elimination-1 (4) <conjunction-elimination-1.rst>
     conjunction-elimination-2 (4) <conjunction-elimination-2.rst>
     conjunction-introduction (4) <conjunction-introduction.rst>
-    constructive-dilemna (4) <constructive-dilemna.rst>
+    constructive-dilemma (4) <constructive-dilemma.rst>
     declaration (32) <declaration.rst>
     definition-interpretation (4) <definition-interpretation.rst>
     destructive-dilemna (4) <destructive-dilemna.rst>

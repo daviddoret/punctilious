@@ -13,9 +13,9 @@ My tags: sample
     ../python/sample/conjunction_elimination_1_python_sample.rst
     ../python/sample/conjunction_elimination_2_python_sample.rst
     ../python/sample/conjunction_introduction_python_sample.rst
-    ../python/sample/constructive_dilemna_python_sample.rst
+    ../python/sample/constructive_dilemma_python_sample.rst
     ../python/sample/definition_interpretation_python_sample.rst
-    ../python/sample/destructive_dilemna_python_sample.rst
+    ../python/sample/destructive_dilemma_python_sample.rst
     ../python/sample/disjunction_introduction_1_python_sample.rst
     ../python/sample/disjunction_introduction_2_python_sample.rst
     ../python/sample/disjunctive_resolution_python_sample.rst

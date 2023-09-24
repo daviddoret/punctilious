@@ -11,6 +11,7 @@ This table of contents references the key mathematical concepts used by punctili
    :caption: Table of contents
 
    axiom<math/concept/axiom_math_concept>
+   axiomatic-method<math/concept/axiomatic_method_math_concept>
    definition<math/concept/definition_math_concept>
    elimination-rule<math/concept/elimination_rule_math_concept>
    formula<math/concept/formula_math_concept>

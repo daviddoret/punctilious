@@ -24,8 +24,8 @@ python_sample_template = env.get_template('inference_rule_python_sample_template
 
 inference_rules = ['absorption', 'axiom-interpretation', 'biconditional-elimination-1',
     'biconditional-elimination-2', 'biconditional-introduction', 'conjunction-elimination-1',
-    'conjunction-elimination-2', 'conjunction-introduction', 'constructive-dilemna',
-    'definition-interpretation', 'destructive-dilemna', 'disjunction-introduction-1',
+    'conjunction-elimination-2', 'conjunction-introduction', 'constructive-dilemma',
+    'definition-interpretation', 'destructive-dilemma', 'disjunction-introduction-1',
     'disjunction-introduction-2', 'disjunctive-resolution', 'disjunctive-syllogism',
     'double-negation-elimination', 'double-negation-introduction', 'equality-commutativity',
     'equal-terms-substitution', 'hypothetical-syllogism', 'inconsistency-introduction-1',

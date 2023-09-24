@@ -18,9 +18,9 @@ This table of contents references the key mathematical inference_rules used by p
    conjunction-elimination-1<math/inference_rule/conjunction_elimination_1_math_inference_rule>
    conjunction-elimination-2<math/inference_rule/conjunction_elimination_2_math_inference_rule>
    conjunction-introduction<math/inference_rule/conjunction_introduction_math_inference_rule>
-   constructive-dilemna<math/inference_rule/constructive_dilemna_math_inference_rule>
+   constructive-dilemma<math/inference_rule/constructive_dilemma_math_inference_rule>
    definition-interpretation<math/inference_rule/definition_interpretation_math_inference_rule>
-   destructive-dilemna<math/inference_rule/destructive_dilemna_math_inference_rule>
+   destructive-dilemma<math/inference_rule/destructive_dilemma_math_inference_rule>
    disjunction-introduction-1<math/inference_rule/disjunction_introduction_1_math_inference_rule>
    disjunction-introduction-2<math/inference_rule/disjunction_introduction_2_math_inference_rule>
    disjunctive-resolution<math/inference_rule/disjunctive_resolution_math_inference_rule>

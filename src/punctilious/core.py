@@ -3135,8 +3135,7 @@ class AxiomDeclaration(TheoreticalObject):
 
 
 class AxiomInclusion(Statement):
-    """An axiom-inclusion (aka axiom-postulation) is defined as a pair (𝑡,𝑎),
-    where 𝑡 is a theory-elaboration-sequence and 𝑎 is a contentual axiom.
+    """This python class models the inclusion of an :ref:`axiom<axiom_math_concept>` as a valid in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, a: AxiomDeclaration, t: TheoryElaborationSequence,
@@ -3147,8 +3146,6 @@ class AxiomInclusion(Statement):
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
             paragraph_header: (None, ParagraphHeader) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
-        """Include (postulate) an axiom in a theory-elaboration-sequence.
-        """
         echo = prioritize_value(echo, configuration.echo_axiom_inclusion,
             configuration.echo_default, False)
         self._axiom = a
@@ -3342,7 +3339,7 @@ class DefinitionDeclaration(TheoreticalObject):
 
 
 class DefinitionInclusion(Statement):
-    """A definition-endorsement in the current theory-elaboration.
+    """This python class models the inclusion of a :ref:`definition<definition_math_concept>` as a valid in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, d: DefinitionDeclaration, t: TheoryElaborationSequence,
@@ -4884,6 +4881,9 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
 
 
 class ProofByRefutation2Declaration(InferenceRuleDeclaration):
+    """This python class models the inclusion of :ref:`proof-by-refutation-2<proof_by_refutation_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """
+
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'proof-by-refutation-2'
         acronym = 'pbr2'
@@ -6607,7 +6607,7 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
 
 
 class AbsorptionInclusion(InferenceRuleInclusion):
-    """The :ref:`inclusion<object_inclusion_math_concept>` of :ref:`absorption<absorption_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in the :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`absorption<absorption_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6643,8 +6643,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
 
 
 class AxiomInterpretationInclusion(InferenceRuleInclusion):
-    """
-
+    """This python class models the inclusion of :ref:`axiom-interpretation<axiom_interpretation_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6681,6 +6680,8 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
 
 
 class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`biconditional-elimination-1<biconditional_elimination_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
@@ -6714,8 +6715,7 @@ class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
 
 
 class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
-    """
-
+    """This python class models the inclusion of :ref:`biconditional-elimination-2<biconditional_elimination_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6750,8 +6750,7 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
 
 
 class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
-    """
-
+    """This python class models the inclusion of :ref:`biconditional-introduction<biconditional_introduction_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6788,8 +6787,7 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
 
 
 class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
-    """
-
+    """This python class models the inclusion of :ref:`conjunction-elimination-1<conjunction_elimination_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6823,8 +6821,7 @@ class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
 
 
 class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
-    """
-
+    """This python class models the inclusion of :ref:`conjunction-elimination-2<conjunction_elimination_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6859,8 +6856,7 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
 
 
 class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
-    """
-
+    """This python class models the inclusion of :ref:`conjunction-introduction<conjunction_introduction_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6899,9 +6895,48 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class DefinitionInterpretationInclusion(InferenceRuleInclusion):
+class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`constructive-dilemma<constructive_dilemma_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.conjunction_introduction
+        dashed_name = 'constructive-dilemma'
+        acronym = 'cd'
+        abridged_name = None
+        name = 'constructive dilemma'
+        explicit_name = 'constructive dilemma inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
+            q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
+        p = interpret_formula(u=self.t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=self.t.u, arity=None, flexible_formula=q)
+        return super().infer_formula(p, q, echo=echo)
+
+    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
+            q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        q = interpret_statement_formula(t=self.t, arity=None, flexible_formula=q)
+        return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
+class DefinitionInterpretationInclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`definition-interpretation<definition_interpretation_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6937,9 +6972,48 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
+class DestructiveDilemmaInclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`destructive-dilemma<destructive_dilemma_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.conjunction_introduction
+        dashed_name = 'destructive-dilemma'
+        acronym = 'dd'
+        abridged_name = None
+        name = 'destructive dilemma'
+        explicit_name = 'destructive dilemma inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
+            q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
+        p = interpret_formula(u=self.t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=self.t.u, arity=None, flexible_formula=q)
+        return super().infer_formula(p, q, echo=echo)
+
+    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
+            q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        q = interpret_statement_formula(t=self.t, arity=None, flexible_formula=q)
+        return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
+class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`disjunction-introduction-1<disjunction_introduction_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -6979,8 +7053,7 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
 
 
 class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
-    """
-
+    """This python class models the inclusion of :ref:`disjunction-introduction-2<disjunction_introduction_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7019,9 +7092,88 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
+class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`disjunctive-resolution<disjunctive_resolution_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.conjunction_introduction
+        dashed_name = 'disjunctive-resolution'
+        acronym = 'dr'
+        abridged_name = None
+        name = 'disjunctive resolution'
+        explicit_name = 'disjunctive resolution inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
+            q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
+        p = interpret_formula(u=self.t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=self.t.u, arity=None, flexible_formula=q)
+        return super().infer_formula(p, q, echo=echo)
+
+    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
+            q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        q = interpret_statement_formula(t=self.t, arity=None, flexible_formula=q)
+        return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
+class DisjunctiveSyllogismInclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`disjunctive-syllogism<disjunctive_syllogism_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """
+
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.conjunction_introduction
+        dashed_name = 'disjunctive-syllogism'
+        acronym = 'ds'
+        abridged_name = None
+        name = 'disjunctive syllogism'
+        explicit_name = 'disjunctive syllogism inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
+            q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
+        p = interpret_formula(u=self.t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=self.t.u, arity=None, flexible_formula=q)
+        return super().infer_formula(p, q, echo=echo)
+
+    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
+            q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        q = interpret_statement_formula(t=self.t, arity=None, flexible_formula=q)
+        return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
+class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`double-negation-elimination<double_negation_elimination_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7057,7 +7209,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
 
 
 class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
-    """The inclusion of the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7093,8 +7245,7 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
 
 
 class EqualityCommutativityInclusion(InferenceRuleInclusion):
-    """
-
+    """This python class models the inclusion of :ref:`equality-commutativity<equality_commutativity_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7129,8 +7280,7 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
 
 
 class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
-    """
-
+    """This python class models the inclusion of :ref:`equal-terms-substitution<equal_terms_substitution_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7165,9 +7315,48 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
+class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`hypothetical-syllogism<hypothetical_syllogism_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.conjunction_introduction
+        dashed_name = 'hypothetical-syllogism'
+        acronym = 'hs'
+        abridged_name = None
+        name = 'hypothetical syllogism'
+        explicit_name = 'hypothetical syllogism inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
+            q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
+        p = interpret_formula(u=self.t.u, arity=None, flexible_formula=p)
+        q = interpret_formula(u=self.t.u, arity=None, flexible_formula=q)
+        return super().infer_formula(p, q, echo=echo)
+
+    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
+            q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        q = interpret_statement_formula(t=self.t, arity=None, flexible_formula=q)
+        return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
+class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`inconsistency-introduction-1<inconsistency_introduction_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7211,8 +7400,7 @@ class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
 
 
 class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
-    """
-
+    """This python class models the inclusion of :ref:`inconsistency-introduction-2<inconsistency_introduction_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7261,8 +7449,7 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
 
 
 class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
-    """
-
+    """This python class models the inclusion of :ref:`inconsistency-introduction-3<inconsistency_introduction_3_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7304,7 +7491,7 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
 
 
 class ModusPonensInclusion(InferenceRuleInclusion):
-    """The inclusion of :ref:`modus-ponens<modus_ponens_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`modus-ponens<modus_ponens_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7341,9 +7528,46 @@ class ModusPonensInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class ProofByContradiction1Inclusion(InferenceRuleInclusion):
+class ModusTollensInclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`modus-tollens<modus_tollens_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.modus_ponens
+        dashed_name = 'modus-tollens'
+        acronym = 'mt'
+        abridged_name = None
+        name = 'modus tollens'
+        explicit_name = 'modus tollens inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
+            p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
+        """
+        .. include:: ../../include/infer_formula_python_method.rstinc
+
+        """
+        return super().infer_formula(p_implies_q, p, echo=echo)
+
+    def infer_formula_statement(self, p_implies_q: (None, FormulaStatement) = None,
+            p: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        p_implies_q = interpret_statement_formula(t=self.t, arity=2, flexible_formula=p_implies_q)
+        p = interpret_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        return super().infer_formula_statement(p_implies_q, p, nameset=nameset, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
+class ProofByContradiction1Inclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`proof-by-contradiction-1<proof_by_contradiction_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7379,8 +7603,7 @@ class ProofByContradiction1Inclusion(InferenceRuleInclusion):
 
 
 class ProofByContradiction2Inclusion(InferenceRuleInclusion):
-    """
-
+    """This python class models the inclusion of :ref:`proof-by-contradiction-2<proof_by_contradiction_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7416,8 +7639,7 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
 
 
 class ProofByRefutation1Inclusion(InferenceRuleInclusion):
-    """
-
+    """This python class models the inclusion of :ref:`proof-by-refutation-1<proof_by_refutation_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7490,6 +7712,8 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
 
 
 class VariableSubstitutionInclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`variable-substitution<variable_substitution_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
