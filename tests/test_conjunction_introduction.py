@@ -37,5 +37,5 @@ class TestConjunctionIntroduction(TestCase):
         self.assertTrue(phi3.is_formula_syntactically_equivalent_to(r1(o1, o2) | u.r.land | r2(o3)))
         self.assertEqual('(𝑟₁(𝑜₁, 𝑜₂) ∧ 𝑟₂(𝑜₃))', phi3.rep_formula(encoding=pu.encodings.unicode))
         # Trying to pass a formula that is not a valid formula-statement must raise an Exception
-        with self.assertRaises(pu.FailedVerificationException):
+        with self.assertRaises(pu.PunctiliousException):
             phi4 = t.i.ci.infer_formula_statement(p=r1(o1, o2), q=r1(o1, o3))

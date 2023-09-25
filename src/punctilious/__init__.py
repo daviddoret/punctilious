@@ -20,7 +20,7 @@ from punctilious.core import AbsorptionDeclaration, AbsorptionInclusion, Article
     DoubleNegationEliminationDeclaration, DoubleNegationEliminationInclusion, \
     DoubleNegationIntroductionDeclaration, DoubleNegationIntroductionInclusion, Encoding, encodings, \
     EqualityCommutativityDeclaration, EqualityCommutativityInclusion, \
-    EqualTermsSubstitutionDeclaration, EqualTermsSubstitutionInclusion, FailedVerificationException, \
+    EqualTermsSubstitutionDeclaration, EqualTermsSubstitutionInclusion, PunctiliousException, \
     Formula, FreeVariable, Header, Hypothesis, InconsistencyIntroduction1Declaration, \
     InconsistencyIntroduction1Inclusion, InconsistencyIntroduction2Declaration, \
     InconsistencyIntroduction2Inclusion, InconsistencyIntroduction3Declaration, \

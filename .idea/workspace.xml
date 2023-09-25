@@ -7,9 +7,13 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="documentation #195">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/caller_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/caller_info.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_interpret_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_validate_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_conjunction_introduction.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_conjunction_introduction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_disjunction_introduction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_disjunction_introduction_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_disjunction_introduction_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_disjunction_introduction_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_double_negation_introduction.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_double_negation_introduction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_free_variable.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_free_variable.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_validate_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_validate_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +126,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\continuous_integration" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in test_double_negation_introduction.py">
+  <component name="RunManager" selected="Python tests.Python tests for test_validate_formula.TestValidateFormula.test_validate_unary_function_call_formula">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -401,9 +405,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Python tests for test_validate_formula.TestValidateFormula.test_validate_unary_function_call_formula" />
         <item itemvalue="Python tests.Python tests in test_double_negation_introduction.py" />
         <item itemvalue="Python tests.Python tests in test_validate_formula.py" />
-        <item itemvalue="Python tests.Python tests for test_validate_formula.TestValidateFormula.test_validate_unary_function_call_formula" />
         <item itemvalue="Python tests.Python tests for test_validate_formula.TestValidateFormula" />
         <item itemvalue="Python.generate_docs_inference_rules" />
       </list>
@@ -417,14 +421,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00269" summary="#47: readme.md with installation instructions">
-      <option name="closed" value="true" />
-      <created>1694551228444</created>
-      <option name="number" value="00269" />
-      <option name="presentableId" value="LOCAL-00269" />
-      <option name="project" value="LOCAL" />
-      <updated>1694551228444</updated>
     </task>
     <task id="LOCAL-00270" summary="#47: readme.md with installation instructions">
       <option name="closed" value="true" />
@@ -810,7 +806,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695623494969</updated>
     </task>
-    <option name="localTasksCounter" value="318" />
+    <task id="LOCAL-00318" summary="documentation #195">
+      <option name="closed" value="true" />
+      <created>1695642508594</created>
+      <option name="number" value="00318" />
+      <option name="presentableId" value="LOCAL-00318" />
+      <option name="project" value="LOCAL" />
+      <updated>1695642508594</updated>
+    </task>
+    <option name="localTasksCounter" value="319" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

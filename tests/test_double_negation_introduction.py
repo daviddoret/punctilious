@@ -34,5 +34,5 @@ class TestDoubleNegationIntroduction(TestCase):
         print(u.inference_rules.double_negation_introduction)
         print(t.inference_rule_inclusions.double_negation_introduction)
         # Trying to pass a formula that is not a valid formula-statement must raise an Exception
-        with self.assertRaises(pu.FailedVerificationException):
+        with self.assertRaises(pu.PunctiliousException):
             phi2 = t.i.dni.infer_formula_statement(p=r1(o1, o3))
