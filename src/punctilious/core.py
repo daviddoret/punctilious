@@ -3796,8 +3796,7 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
 
     def verify_args(self, p_iff_q: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
-        p_iff_q: FormulaStatement = validate_statement_formula(t=t, arity=None,
-            flexible_formula=p_iff_q)
+        p_iff_q: FormulaStatement = validate_formula_statement(t=t, arity=None, input_value=p_iff_q)
         verify(t.contains_theoretical_objct(p_iff_q),
             'Formula-statement ⌜p_iff_q⌝ must be contained in theory ⌜t⌝.', phi=p_iff_q, t=t,
             slf=self)
@@ -3849,8 +3848,7 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
 
     def verify_args(self, p_iff_q: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
-        p_iff_q: FormulaStatement = validate_statement_formula(t=t, arity=None,
-            flexible_formula=p_iff_q)
+        p_iff_q: FormulaStatement = validate_formula_statement(t=t, arity=None, input_value=p_iff_q)
         verify(t.contains_theoretical_objct(p_iff_q),
             'Formula-statement ⌜p_iff_q⌝ must be contained in theory ⌜t⌝.', phi=p_iff_q, t=t,
             slf=self)
@@ -3903,11 +3901,11 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
 
     def verify_args(self, p_implies_q: FormulaStatement = None,
             q_implies_p: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
-        p_implies_q = validate_statement_formula(t=t, arity=2, flexible_formula=p_implies_q)
+        p_implies_q = validate_formula_statement(t=t, arity=2, input_value=p_implies_q)
         verify(t.contains_theoretical_objct(p_implies_q),
             'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝.', p_implies_q=p_implies_q,
             t=t, slf=self)
-        q_implies_p = validate_statement_formula(t=t, arity=2, flexible_formula=q_implies_p)
+        q_implies_p = validate_formula_statement(t=t, arity=2, input_value=q_implies_p)
         verify(t.contains_theoretical_objct(q_implies_p),
             'Statement ⌜q_implies_p⌝ must be contained in theory ⌜t⌝.', q_implies_p=q_implies_p,
             t=t, slf=self)
@@ -4078,8 +4076,8 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
 
         :return: True (bool) if the parameters are correct.
         """
-        p = validate_statement_formula(t=t, arity=None, flexible_formula=p)
-        q = validate_statement_formula(t=t, arity=None, flexible_formula=q)
+        p = validate_formula_statement(t=t, arity=None, input_value=p)
+        q = validate_formula_statement(t=t, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         verify(t.contains_theoretical_objct(q),
@@ -4125,8 +4123,8 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
     def verify_args(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
-        p = validate_statement_formula(t=t, arity=None, flexible_formula=p)
-        q = validate_statement_formula(t=t, arity=None, flexible_formula=q)
+        p = validate_formula_statement(t=t, arity=None, input_value=p)
+        q = validate_formula_statement(t=t, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         verify(t.contains_theoretical_objct(q),
@@ -4213,8 +4211,8 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
     def verify_args(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
-        p = validate_statement_formula(t=t, arity=None, flexible_formula=p)
-        q = validate_statement_formula(t=t, arity=None, flexible_formula=q)
+        p = validate_formula_statement(t=t, arity=None, input_value=p)
+        q = validate_formula_statement(t=t, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         verify(t.contains_theoretical_objct(q),
@@ -4268,7 +4266,7 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
 
         :return: True (bool) if the parameters are correct.
         """
-        p = validate_statement_formula(t=t, arity=None, flexible_formula=p)
+        p = validate_formula_statement(t=t, arity=None, input_value=p)
         q = validate_formula(u=t.u, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
@@ -4321,7 +4319,7 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
 
         :return: True (bool) if the parameters are correct.
         """
-        p = validate_statement_formula(t=t, arity=None, flexible_formula=p)
+        p = validate_formula_statement(t=t, arity=None, input_value=p)
         q = validate_formula(u=t.u, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
@@ -4366,8 +4364,8 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
     def verify_args(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
-        p = validate_statement_formula(t=t, arity=None, flexible_formula=p)
-        q = validate_statement_formula(t=t, arity=None, flexible_formula=q)
+        p = validate_formula_statement(t=t, arity=None, input_value=p)
+        q = validate_formula_statement(t=t, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         verify(t.contains_theoretical_objct(q),
@@ -4413,8 +4411,8 @@ class DisjunctiveSyllogismDeclaration(InferenceRuleDeclaration):
     def verify_args(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
-        p = validate_statement_formula(t=t, arity=None, flexible_formula=p)
-        q = validate_statement_formula(t=t, arity=None, flexible_formula=q)
+        p = validate_formula_statement(t=t, arity=None, input_value=p)
+        q = validate_formula_statement(t=t, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         verify(t.contains_theoretical_objct(q),
@@ -4466,8 +4464,8 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
 
     def verify_args(self, not_not_p: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
-        not_not_p: FormulaStatement = validate_statement_formula(t=t, arity=1,
-            flexible_formula=not_not_p)
+        not_not_p: FormulaStatement = validate_formula_statement(t=t, arity=1,
+            input_value=not_not_p)
         verify(assertion=t.contains_theoretical_objct(not_not_p),
             msg='Statement ⌜not_not_p⌝ must be contained in ⌜t⌝.', not_not_p=not_not_p, t=t,
             slf=self)
@@ -4507,7 +4505,7 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/infer_formula_python_method.rstinc
 
         """
-        p: Formula = validate_formula(arg_name='p', u=t.u, arity=1, input_value=p)
+        p: Formula = validate_formula(arg='p', u=t.u, arity=1, input_value=p)
         not_not_p: Formula = t.u.r.lnot(t.u.r.lnot(p))
         return not_not_p
 
@@ -4519,7 +4517,7 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
         return output
 
     def verify_args(self, p: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
-        p: FormulaStatement = validate_statement_formula(t=t, arity=1, flexible_formula=p)
+        p: FormulaStatement = validate_formula_statement(t=t, arity=1, input_value=p)
         """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
         
         :param p: (mandatory) A formula-statement of the form: :math:`P` .
@@ -4677,8 +4675,8 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
     def verify_args(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
-        p = validate_statement_formula(t=t, arity=None, flexible_formula=p)
-        q = validate_statement_formula(t=t, arity=None, flexible_formula=q)
+        p = validate_formula_statement(t=t, arity=None, input_value=p)
+        q = validate_formula_statement(t=t, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         verify(t.contains_theoretical_objct(q),
@@ -4889,8 +4887,8 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         :param t:
         :return: A formula Q
         """
-        p_implies_q = validate_statement_formula(t=t, arity=2, flexible_formula=p_implies_q)
-        p = validate_statement_formula(t=t, arity=2, flexible_formula=p)
+        p_implies_q = validate_formula_statement(t=t, arity=2, input_value=p_implies_q)
+        p = validate_formula_statement(t=t, arity=2, input_value=p)
         verify(t.contains_theoretical_objct(p_implies_q),
             'Statement ⌜p_implies_q⌝ is not contained in theory ⌜t⌝''s hierarchy.',
             p_implies_q=p_implies_q, t=t, slf=self)
@@ -4952,8 +4950,8 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
         :param t:
         :return: A formula Q
         """
-        p_implies_q = validate_statement_formula(t=t, arity=2, flexible_formula=p_implies_q)
-        p = validate_statement_formula(t=t, arity=2, flexible_formula=p)
+        p_implies_q = validate_formula_statement(t=t, arity=2, input_value=p_implies_q)
+        p = validate_formula_statement(t=t, arity=2, input_value=p)
         verify(t.contains_theoretical_objct(p_implies_q),
             'Statement ⌜p_implies_q⌝ is not contained in theory ⌜t⌝''s hierarchy.',
             p_implies_q=p_implies_q, t=t, slf=self)
@@ -5078,8 +5076,8 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
 
         TODO: ProofByContradiction2Declaration.verify_args(): Make systematic verifications. I doubt it is still possible to call the method with wrong parameters.
         """
-        inc_hypothesis: InferredStatement = validate_statement_formula(t=t, arity=1,
-            flexible_formula=inc_hypothesis)
+        inc_hypothesis: InferredStatement = validate_formula_statement(t=t, arity=1,
+            input_value=inc_hypothesis)
         verify(is_in_class(x_neq_y_hypothesis, classes.hypothesis),
             '⌜x_neq_y_hypothesis⌝ must be an hypothesis.', p_neq_q=x_neq_y_hypothesis, slf=self)
         verify(t.contains_theoretical_objct(x_neq_y_hypothesis), '⌜x_neq_y⌝ must be in theory ⌜t⌝.',
@@ -6529,13 +6527,12 @@ FlexibleFormula = typing.Union[FormulaStatement, Formula, tuple, list]
 """See validate_flexible_statement_formula() for details."""
 
 
-def validate_formula(input_value: FlexibleFormula, u: UniverseOfDiscourse,
-        arity: (None, int) = None, arg_name: (None, str) = None,
-        form: (None, FlexibleFormula) = None,
-        mask: (None, frozenset[FreeVariable]) = None) -> Formula:
-    """Many punctilious pythonic methods expect some instances of Formula as input parameters. This is programmatically robust, but it may render theory code less readable for humans. To provide a friendler interface for humans, we allow passing formulae as formula, formula-statement, tuple, and lists and apply the following interpretation rules:
+def validate_formula(input_value: FlexibleFormula, u: UniverseOfDiscourse, arg: (None, str) = None,
+        form: (None, FlexibleFormula) = None, mask: (None, frozenset[FreeVariable]) = None,
+        arity: (None, int) = None) -> Formula:
+    """Many punctilious pythonic methods or functions expect some formula as input parameters. This function assures that the input value is a proper formula and that it is consistent with possible contraints imposed on that formula.
 
-    If ⌜argument⌝ is of type formula, return it directly.
+    If ⌜input_value⌝ is of type formula, it is already well typed.
 
     If ⌜argument⌝ is of type statement-variable, retrieve its valid-proposition property.
 
@@ -6564,40 +6561,33 @@ def validate_formula(input_value: FlexibleFormula, u: UniverseOfDiscourse,
         formula = u.f(input_value[0], *input_value[1:])
     else:
         # the input argument could not be interpreted as a formula
-        arg_string: str = '' if arg_name is None else ''.join(['⌜', arg_name, '⌝ '])
-        type_name: str = str(type(input_value))
         value_string: str
         try:
             value_string = str(input_value)
         except:
             value_string = 'string conversion failure'
-        raise PunctiliousException(
-            f'The argument {arg_string}could not be interpreted as a Formula. Its type was {type_name}, and its value was ⌜{value_string}⌝.',
+        verify(False,
+            f'The argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}could not be interpreted as a Formula. Its type was {str(type(input_value))}, and its value was ⌜{value_string}⌝.',
             argument=input_value, u=u)
+
     # Note: it is not necessary to verify that the universe
     # of the formula relation is consistent with the universe of the formula,
     # because this is already verified in the formula constructor.
     # Note: it is not necessary to verify that the universe
     # of the formula parameters are consistent with the universe of the formula,
     # because this is already verified in the formula constructor.
-    if arity is not None and arity != formula.arity:
-        # arity is an obsolete parameter, form is more general.
-        # a specific arity is required,
-        # and the arity of the input formula does not match the requirement.
-        arg_string: str = '' if arg_name is None else ''.join(['⌜', arg_name, '⌝ '])
-        formula_string: str = formula.rep_formula(encoding=encodings.plaintext)
-        raise PunctiliousException(
-            f'The formula ⌜{formula_string}⌝ passed as argument {arg_string}is not of the required arity {arity}.',
-            argument=input_value, u=u, arity=arity)
+    # arity is an obsolete parameter, form is more general.
+    # a specific arity is required,
+    # and the arity of the input formula does not match the requirement.
+    verify(arity is None or arity == formula.arity,
+        f'The formula ⌜{formula}⌝ passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not of the required arity {arity}.',
+        argument=input_value, u=u, arity=arity)
     if form is not None:
         form = validate_formula(u=u, input_value=form)  # The form itself may be a flexible formula.
         is_of_form = form.is_masked_formula_similar_to(o2=formula, mask=mask)
         if not is_of_form:
             # a certain form is required for the formula,
             # and the form of the formula does not match that required form.
-            arg_string: str = '' if arg_name is None else ''.join(['⌜', arg_name, '⌝ '])
-            formula_string: str = formula.rep_formula(encoding=encodings.plaintext)
-            form_string: str = form.rep_formula(encoding=encodings.plaintext)
             free_variables_string: str
             if mask is None:
                 free_variables_string = ''
@@ -6609,15 +6599,15 @@ def validate_formula(input_value: FlexibleFormula, u: UniverseOfDiscourse,
                 free_variables_string = ', where ' + ', '.join(
                     [free_variable.rep(encoding=encodings.plaintext) for free_variable in
                         mask]) + ' are free-variables'
-            raise PunctiliousException(
-                f'The formula ⌜{formula_string}⌝ passed as argument {arg_string}is not of the required form ⌜{form_string}⌝{free_variables_string}.',
+            verify(False,
+                f'The formula ⌜{formula}⌝ passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not of the required form ⌜{form}⌝{free_variables_string}.',
                 argument=input_value, u=u, form=form, mask=mask)
     return formula
 
 
-def validate_statement_formula(t: TheoryElaborationSequence, arity: (None, int),
-        flexible_formula: FlexibleFormula, arg: (None, str) = None,
-        form: (None, FlexibleFormula) = None, mask: (None, frozenset[FreeVariable]) = None):
+def validate_formula_statement(t: TheoryElaborationSequence, input_value: FlexibleFormula,
+        arg: (None, str) = None, form: (None, FlexibleFormula) = None,
+        mask: (None, frozenset[FreeVariable]) = None, arity: (None, int) = None):
     """Many punctilious pythonic methods expect some FormulaStatement as input parameters (e.g. the infer_statement() of inference-rules). This is syntactically robust, but it may read theory code less readable. In effect, one must store all formula-statements in variables to reuse them in formula. If the number of formula-statements get large, readability suffers. To provide a friendler interface for humans, we allow passing formula-statements as formula, tuple, and lists and apply the following interpretation rules:
 
     If ⌜argument⌝ is of type iterable, such as tuple, e.g.: (implies, q, p), we assume it is a formula in the form (relation, a1, a2, ... an) where ai are arguments.
@@ -6626,44 +6616,38 @@ def validate_statement_formula(t: TheoryElaborationSequence, arity: (None, int),
 
     :param t:
     :param arity:
-    :param flexible_formula:
+    :param input_value:
     :return:
     """
-
-    # TODO: Consistency check: statements are in the theory
 
     formula: Formula = None
     u: UniverseOfDiscourse = t.u
 
-    if not isinstance(flexible_formula, FormulaStatement):
+    if not isinstance(input_value, FormulaStatement):
         # ⌜argument⌝ is not a statement-formula.
-        # But it is expected to be interpretable as a formula.
-        formula = validate_formula(arg_name=arg, u=u, input_value=flexible_formula, form=None,
-            mask=None, arity=None)
+        # But it is expected to be interpretable first as a formula, and then as a formula-statement.
+        formula = validate_formula(arg=arg, u=u, input_value=input_value, form=None, mask=None,
+            arity=None)
+        formula: Formula
         # We only received a formula, not a formula-statement.
         # Since we require a formula-statement,
         # we attempt to automatically retrieve the first occurrence
         # of a formula-statement in ⌜t⌝ that is
         # syntactically-equivalent to ⌜argument⌝.
-        # TODO: RESUME HERE
-        flexible_formula: FormulaStatement = t.get_first_syntactically_equivalent_statement(
-            formula=flexible_formula)
-        if flexible_formula is None:
-            raise PunctiliousException(
-                f'The formula ⌜{formula_string}⌝ passed as argument {arg_string}is not of the required form ⌜{form_string}⌝{free_variables_string}.',
-                argument=flexible_formula, arity=arity, u=u)
-        verify(assertion=flexible_formula is not None,
-            msg='No syntactically-equivalent formula-statement found for ⌜argument⌝.',
-            argument=flexible_formula, arity=arity, t=t)
+        input_value: (None, FormulaStatement) = t.get_first_syntactically_equivalent_statement(
+            formula=input_value)
+        verify(input_value is not None,
+            f'The formula ⌜{formula}⌝ passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not a formula-statement in theory-elaboration-sequence ⌜{t}⌝.',
+            formula=formula, t=t)
 
-    flexible_formula: FormulaStatement
-    formula = flexible_formula.valid_proposition
+    verify(input_value.t is t,
+        f'The theory-elaboration-sequence ⌜{input_value.t}⌝ of the formula-statement {input_value} passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not consistent with the theory-elaboration-sequence ⌜{t}⌝.',
+        formula=formula, t=t)
 
     # Validate the form, arity, etc. of the underlying formula.
-    formula = validate_formula(arg_name=arg, u=u, input_value=formula, form=form, mask=mask,
-        arity=arity)
+    validate_formula(arg=arg, u=u, input_value=formula, form=form, mask=mask, arity=arity)
 
-    return flexible_formula
+    return input_value
 
 
 class InferenceRuleDeclarationCollection(collections.UserDict):
@@ -6990,7 +6974,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p_implies_q = validate_statement_formula(t=self.t, arity=2, flexible_formula=p_implies_q)
+        p_implies_q = validate_formula_statement(t=self.t, arity=2, input_value=p_implies_q)
         return super().infer_formula_statement(p_implies_q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7242,8 +7226,8 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = validate_statement_formula(t=self.t, arity=None, flexible_formula=p)
-        q = validate_statement_formula(t=self.t, arity=None, flexible_formula=q)
+        p = validate_formula_statement(t=self.t, arity=None, input_value=p)
+        q = validate_formula_statement(t=self.t, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7282,8 +7266,8 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = validate_statement_formula(t=self.t, arity=None, flexible_formula=p)
-        q = validate_statement_formula(t=self.t, arity=None, flexible_formula=q)
+        p = validate_formula_statement(t=self.t, arity=None, input_value=p)
+        q = validate_formula_statement(t=self.t, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7359,8 +7343,8 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = validate_statement_formula(t=self.t, arity=None, flexible_formula=p)
-        q = validate_statement_formula(t=self.t, arity=None, flexible_formula=q)
+        p = validate_formula_statement(t=self.t, arity=None, input_value=p)
+        q = validate_formula_statement(t=self.t, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7399,7 +7383,7 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = validate_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        p = validate_formula_statement(t=self.t, arity=None, input_value=p)
         q = validate_formula(u=self.u, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
@@ -7439,7 +7423,7 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = validate_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        p = validate_formula_statement(t=self.t, arity=None, input_value=p)
         q = validate_formula(u=self.u, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
@@ -7479,8 +7463,8 @@ class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = validate_statement_formula(t=self.t, arity=None, flexible_formula=p)
-        q = validate_statement_formula(t=self.t, arity=None, flexible_formula=q)
+        p = validate_formula_statement(t=self.t, arity=None, input_value=p)
+        q = validate_formula_statement(t=self.t, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7519,8 +7503,8 @@ class DisjunctiveSyllogismInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = validate_statement_formula(t=self.t, arity=None, flexible_formula=p)
-        q = validate_statement_formula(t=self.t, arity=None, flexible_formula=q)
+        p = validate_formula_statement(t=self.t, arity=None, input_value=p)
+        q = validate_formula_statement(t=self.t, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7556,7 +7540,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        not_not_p = validate_statement_formula(t=self.t, arity=1, flexible_formula=not_not_p)
+        not_not_p = validate_formula_statement(t=self.t, arity=1, input_value=not_not_p)
         return super().infer_formula_statement(not_not_p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7592,7 +7576,7 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = validate_statement_formula(arg='p', t=self.t, arity=1, flexible_formula=p)
+        p = validate_formula_statement(arg='p', t=self.t, arity=1, input_value=p)
         return super().infer_formula_statement(p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7702,8 +7686,8 @@ class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = validate_statement_formula(t=self.t, arity=None, flexible_formula=p)
-        q = validate_statement_formula(t=self.t, arity=None, flexible_formula=q)
+        p = validate_formula_statement(t=self.t, arity=None, input_value=p)
+        q = validate_formula_statement(t=self.t, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7792,9 +7776,8 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
             # The inconsistent_theory can be unambiguously defaulted
             # when both p and not_p are contained in the same theory.
             inconsistent_theory = x_eq_y.t
-        x_eq_y = validate_statement_formula(t=inconsistent_theory, arity=2, flexible_formula=x_eq_y)
-        x_neq_y = validate_statement_formula(t=inconsistent_theory, arity=2,
-            flexible_formula=x_neq_y)
+        x_eq_y = validate_formula_statement(t=inconsistent_theory, arity=2, input_value=x_eq_y)
+        x_neq_y = validate_formula_statement(t=inconsistent_theory, arity=2, input_value=x_neq_y)
         return super().infer_formula_statement(x_eq_y, x_neq_y, inconsistent_theory,
             nameset=nameset, ref=ref, paragraph_header=paragraph_header, subtitle=subtitle,
             echo=echo)
@@ -7874,8 +7857,8 @@ class ModusPonensInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p_implies_q = validate_statement_formula(t=self.t, arity=2, flexible_formula=p_implies_q)
-        p = validate_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        p_implies_q = validate_formula_statement(t=self.t, arity=2, input_value=p_implies_q)
+        p = validate_formula_statement(t=self.t, arity=None, input_value=p)
         return super().infer_formula_statement(p_implies_q, p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7912,8 +7895,8 @@ class ModusTollensInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p_implies_q = validate_statement_formula(t=self.t, arity=2, flexible_formula=p_implies_q)
-        p = validate_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        p_implies_q = validate_formula_statement(t=self.t, arity=2, input_value=p_implies_q)
+        p = validate_formula_statement(t=self.t, arity=None, input_value=p)
         return super().infer_formula_statement(p_implies_q, p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -8096,7 +8079,7 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = validate_statement_formula(t=self.t, arity=None, flexible_formula=p)
+        p = validate_formula_statement(t=self.t, arity=None, input_value=p)
         if isinstance(phi, TheoreticalObject):
             # If phi is passed as an theoretical-object,
             # embed it into a tuple as we expect tuple[TheoreticalObject] as input type.

@@ -26,17 +26,16 @@ from punctilious.core import AbsorptionDeclaration, AbsorptionInclusion, Article
     InconsistencyIntroduction2Inclusion, InconsistencyIntroduction3Declaration, \
     InconsistencyIntroduction3Inclusion, InconsistencyWarning, InferenceRuleDeclaration, \
     InferenceRuleDeclarationCollection, InferenceRuleInclusion, InferenceRuleInclusionCollection, \
-    InferredStatement, validate_formula, validate_statement_formula, is_in_class, \
-    ModusPonensDeclaration, ModusPonensInclusion, NameSet, NoteInclusion, Paragraph, \
-    paragraph_headers, ParagraphHeader, prioritize_value, ProofByContradiction1Declaration, \
-    ProofByContradiction1Inclusion, ProofByContradiction2Declaration, \
-    ProofByContradiction2Inclusion, ProofByRefutation1Declaration, ProofByRefutation1Inclusion, \
-    ProofByRefutation2Declaration, ProofByRefutation2Inclusion, PunctiliousException, \
-    QuasiQuotation, Relation, rep_two_columns_proof_item, SansSerifBold, SansSerifNormal, \
-    ScriptNormal, SerifBoldItalic, SerifItalic, SerifNormal, SimpleObjct, SimpleObjctDict, \
-    Statement, Subscript, subscriptify, SymbolicObject, text_styles, TextStyle, TheoreticalObject, \
-    TheoryElaborationSequence, Package, UniverseOfDiscourse, VariableSubstitutionDeclaration, \
-    VariableSubstitutionInclusion
+    InferredStatement, is_in_class, ModusPonensDeclaration, ModusPonensInclusion, NameSet, \
+    NoteInclusion, Paragraph, paragraph_headers, ParagraphHeader, prioritize_value, \
+    ProofByContradiction1Declaration, ProofByContradiction1Inclusion, \
+    ProofByContradiction2Declaration, ProofByContradiction2Inclusion, ProofByRefutation1Declaration, \
+    ProofByRefutation1Inclusion, ProofByRefutation2Declaration, ProofByRefutation2Inclusion, \
+    PunctiliousException, QuasiQuotation, Relation, rep_two_columns_proof_item, SansSerifBold, \
+    SansSerifNormal, ScriptNormal, SerifBoldItalic, SerifItalic, SerifNormal, SimpleObjct, \
+    SimpleObjctDict, Statement, Subscript, subscriptify, SymbolicObject, text_styles, TextStyle, \
+    TheoreticalObject, TheoryElaborationSequence, Package, UniverseOfDiscourse, validate_formula, \
+    validate_formula_statement, VariableSubstitutionDeclaration, VariableSubstitutionInclusion
 
 # from foundation_system_1 import foundation_system_1, ft, u
 

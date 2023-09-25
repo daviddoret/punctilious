@@ -20,9 +20,9 @@ class TestValidateFormula(TestCase):
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_formula))
         phi1_tuple = pu.validate_formula(u=u, input_value=(r1, o1))
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_tuple))
-        phi1_prefix = r1 ^ o1
+        phi1_prefix = pu.validate_formula(u=u, input_value=r1 ^ o1)
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_prefix))
-        phi1_postfix = o1 & r1
+        phi1_postfix = pu.validate_formula(u=u, input_value=o1 & r1)
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_postfix))
         phi_form_ok_1 = pu.validate_formula(u=u, input_value=phi, form=phi)
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi_form_ok_1))
