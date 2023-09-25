@@ -67,4 +67,9 @@ def caller_info(skip=2):
     # See: https://docs.python.org/3/library/inspect.html#the-interpreter-stack
     del parentframe
 
-    return '.'.join(filter(None, [package, module, klass, caller, line]))
+    return package, module, klass, caller, line
+
+
+def friendly_caller_info(skip: int):
+    components = caller_info(skip=skip)
+    return '.'.join(filter(None, [str(elem) for elem in components]))
