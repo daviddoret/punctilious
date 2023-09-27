@@ -18,7 +18,7 @@ class TestValidateFormulaStatement(TestCase):
         phi = u.f(r1, o1)
         t = u.declare_theory()
         a = t.include_axiom(a=u.declare_axiom(natural_language='Dummy axiom for testing purposes'))
-        t.i.axiom_interpretation.infer_formula_statement(axiom=a, formula=phi)
+        t.i.axiom_interpretation.infer_formula_statement(a=a, formula=phi)
         phi1_formula = pu.validate_formula_statement(t=t, input_value=u.f(r1, o1))
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_formula))
         phi1_tuple = pu.validate_formula_statement(t=t, input_value=(r1, o1))

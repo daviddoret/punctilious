@@ -5,11 +5,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="documentation #195">
-      <change afterPath="$PROJECT_DIR$/tests/test_validate_formula_statement.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/sandbox.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/sandbox2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_validate_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_validate_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_absorption.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_absorption.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_axiom_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_axiom_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_biconditional_elimination_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_biconditional_elimination_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_biconditional_elimination_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_biconditional_elimination_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_biconditional_introduction.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_biconditional_introduction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_conjunction_elimination_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_conjunction_elimination_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_conjunction_elimination_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_conjunction_elimination_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_conjunction_introduction.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_conjunction_introduction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_disjunction_introduction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_disjunction_introduction_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_disjunction_introduction_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_disjunction_introduction_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_double_negation_elimination.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_double_negation_elimination.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_double_negation_introduction.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_double_negation_introduction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_equal_terms_substitution.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_equal_terms_substitution.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_equality_commutativity.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_equality_commutativity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_hypothesis.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_hypothesis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_modus_ponens.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_modus_ponens.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_variable_substitution.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_variable_substitution.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_modus_ponens.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_modus_ponens.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_validate_formula_statement.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_validate_formula_statement.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_variable_substitution.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_variable_substitution.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +119,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "dev",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/tests",
+    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/project",
     "settings.editor.selected.configurable": "advanced.settings"
   }
 }]]></component>
@@ -108,11 +133,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\David\PycharmProjects\punctilious\project" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\tests" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\punctilious" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\inference_rule" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\sample" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\concept" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source" />
@@ -122,7 +147,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\continuous_integration" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in test_validate_formula_statement.py">
+  <component name="RunManager" selected="Python.sample_absorption">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -230,6 +255,69 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="sample_absorption" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_absorption.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="sandbox" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/project" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/project/sandbox.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="sandbox2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/project" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/project/sandbox2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest tests" type="ShConfigurationType">
       <option name="SCRIPT_TEXT" value="pytest tests" />
       <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
@@ -291,62 +379,6 @@
       <option name="docutils_open_in_browser" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_validate_formula.TestValidateFormula" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_validate_formula.TestValidateFormula&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests for test_validate_formula.TestValidateFormula.test_validate_unary_function_call_formula" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_validate_formula.TestValidateFormula.test_validate_unary_function_call_formula&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests in test_double_negation_introduction.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_double_negation_introduction.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests in test_validate_formula.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_validate_formula.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="Python tests in test_validate_formula_statement.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -375,30 +407,45 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="Unittests for test_absorption" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\David\PycharmProjects\PythonVirtualEnvironments\Scripts\python.exe" />
+      <option name="SDK_NAME" value="Python 3.11 (PythonVirtualEnvironments)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_absorption&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.build_samples" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.build" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
+      <item itemvalue="Python.sample_absorption" />
+      <item itemvalue="Python.sandbox" />
+      <item itemvalue="Python.sandbox2" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.Python tests for test_validate_formula.TestValidateFormula" />
-      <item itemvalue="Python tests.Python tests for test_validate_formula.TestValidateFormula.test_validate_unary_function_call_formula" />
-      <item itemvalue="Python tests.Python tests in test_double_negation_introduction.py" />
-      <item itemvalue="Python tests.Python tests in test_validate_formula.py" />
       <item itemvalue="Python tests.Python tests in test_validate_formula_statement.py" />
+      <item itemvalue="Python tests.Unittests for test_absorption" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.sample_absorption" />
+        <item itemvalue="Python.sandbox2" />
+        <item itemvalue="Python.sandbox" />
+        <item itemvalue="Python tests.Unittests for test_absorption" />
         <item itemvalue="Python tests.Python tests in test_validate_formula_statement.py" />
-        <item itemvalue="Python tests.Python tests for test_validate_formula.TestValidateFormula.test_validate_unary_function_call_formula" />
-        <item itemvalue="Python tests.Python tests in test_double_negation_introduction.py" />
-        <item itemvalue="Python tests.Python tests in test_validate_formula.py" />
-        <item itemvalue="Python tests.Python tests for test_validate_formula.TestValidateFormula" />
       </list>
     </recent_temporary>
   </component>
@@ -410,14 +457,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00271" summary="#47: readme.md with installation instructions">
-      <option name="closed" value="true" />
-      <created>1694638797967</created>
-      <option name="number" value="00271" />
-      <option name="presentableId" value="LOCAL-00271" />
-      <option name="project" value="LOCAL" />
-      <updated>1694638797967</updated>
     </task>
     <task id="LOCAL-00272" summary="#195: inference-rules documentation and samples">
       <option name="closed" value="true" />
@@ -803,7 +842,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695672939918</updated>
     </task>
-    <option name="localTasksCounter" value="320" />
+    <task id="LOCAL-00320" summary="documentation #195">
+      <option name="closed" value="true" />
+      <created>1695675628111</created>
+      <option name="number" value="00320" />
+      <option name="presentableId" value="LOCAL-00320" />
+      <option name="project" value="LOCAL" />
+      <updated>1695675628111</updated>
+    </task>
+    <option name="localTasksCounter" value="321" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -870,6 +917,21 @@
           <url>file://$PROJECT_DIR$/tests/test_axiom_interpretation.py</url>
           <line>24</line>
           <option name="timeStamp" value="51" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/sample/sample_absorption.py</url>
+          <line>18</line>
+          <option name="timeStamp" value="52" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
+          <line>6651</line>
+          <option name="timeStamp" value="53" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
+          <line>61</line>
+          <option name="timeStamp" value="55" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

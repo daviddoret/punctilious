@@ -12,8 +12,8 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
 t1 = u.t(echo=True)
 theory_axiom = t1.include_axiom(a=axiom)
-p_implies_q = t1.i.axiom_interpretation.infer_formula_statement(axiom=theory_axiom,
-    formula=r1(o1, o2) | u.r.implies | r2(o3))
+p_implies_q = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
+    p=r1(o1, o2) | u.r.implies | r2(o3))
 
 # And finally, use the absorption inference-rule:
 proposition_of_interest = t1.i.absorption.infer_formula_statement(p_implies_q=p_implies_q,

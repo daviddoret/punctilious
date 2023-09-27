@@ -14,9 +14,9 @@ t1 = u.t(echo=True)
 # t theory elaboration statements.
 # these are predecessor statements that are contained in the h hypothesis.
 a = t1.include_axiom(a=a1)
-predecessor = t1.i.axiom_interpretation.infer_formula_statement(axiom=a, formula=f(o2, o3))
+predecessor = t1.i.axiom_interpretation.infer_formula_statement(a=a, formula=f(o2, o3))
 with u.v('x') as x, u.v('y') as y, u.v('z') as z:
-    implication = t1.i.axiom_interpretation.infer_formula_statement(axiom=a,
+    implication = t1.i.axiom_interpretation.infer_formula_statement(a=a,
         formula=(f(x, y) | u.r.land | f(y, z)) | u.r.implies | f(x, z))
 t1.stabilize()
 t1.take_note(

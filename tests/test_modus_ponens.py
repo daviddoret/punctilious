@@ -31,8 +31,8 @@ class TestModusPonens(TestCase):
         with u.v() as x, u.v() as y, u.v() as z:
             p_implies_q = t.i.axiom_interpretation.infer_formula_statement(ap,
                 (r1(x, y) | u.r.land | r1(y, z)) | u.r.implies | r1(x, z), echo=True)
-        t.i.axiom_interpretation.infer_formula_statement(axiom=ap, formula=r1(o1, o2))
-        t.i.axiom_interpretation.infer_formula_statement(axiom=ap, formula=r1(o2, o3))
+        t.i.axiom_interpretation.infer_formula_statement(a=ap, formula=r1(o1, o2))
+        t.i.axiom_interpretation.infer_formula_statement(a=ap, formula=r1(o2, o3))
         p_prime = t.i.conjunction_introduction.infer_formula_statement(p=r1(o1, o2), q=r1(o2, o3),
             echo=True)
         p_implies_q_prime = t.i.variable_substitution.infer_formula_statement(p=p_implies_q,

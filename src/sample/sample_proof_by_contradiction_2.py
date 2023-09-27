@@ -14,7 +14,7 @@ theory_axiom = t1.include_axiom(axiom)
 f_o1_eq_f_02 = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom,
     (f(o1) | u.r.eq | f(o2)))
 with u.v('x') as x, u.v('y') as y:
-    implication = t1.i.axiom_interpretation.infer_formula_statement(axiom=theory_axiom,
+    implication = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
         formula=(f(x) | u.r.eq | f(y)) | u.r.implies | (x | u.r.eq | y))
 t1.stabilize()
 

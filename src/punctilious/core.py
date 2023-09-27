@@ -1,4 +1,5 @@
 from __future__ import annotations
+import dataclasses
 import collections.abc
 import textwrap
 import typing
@@ -2000,8 +2001,7 @@ class TheoreticalObject(SymbolicObject):
         """Hack to provide support for direct function-call notation, as in: p(x).
         """
         # print(f'TO.__call__: self = {self}, parameters = {parameters}')
-        arity = len(parameters)
-        return validate_formula(u=self.u, arity=arity, input_value=(self, *parameters))
+        return validate_formula(u=self.u, input_value=(self, *parameters))
 
     def __xor__(self, other=None):
         """Hack to provide support for pseudo-prefix notation, as in: neg ^ p.
@@ -2010,7 +2010,7 @@ class TheoreticalObject(SymbolicObject):
         and gluing all this together.
         """
         # print(f'TO.__xor__: self = {self}, other = {other}')
-        return validate_formula(u=self.u, arity=1, input_value=(self, other))
+        return validate_formula(u=self.u, input_value=(self, other))
 
     def __or__(self, other=None):
         """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
@@ -2023,7 +2023,7 @@ class TheoreticalObject(SymbolicObject):
             return InfixPartialFormula(a=self, b=other)
         else:
             # return self.u.f(self, other.a, other.b)
-            return validate_formula(u=self.u, arity=2, input_value=(self, other.a, other.b))
+            return validate_formula(u=self.u, input_value=(self, other.a, other.b))
 
     def add_to_graph(self, g):
         """Add this theoretical object as a node in the target graph g.
@@ -3217,30 +3217,35 @@ class InferenceRuleInclusion(Statement):
             proof=proof)
         return output
 
-    def infer_formula(self, *args, echo: (None, bool) = None):
+    @property
+    def definition(self) -> Formula:
+        return self.i.definition
+
+    @property
+    @abc.abstractmethod
+    def infer_formula(self, *args, **kwargs) -> Formula:
         """
         .. include:: ../../include/infer_formula_python_method.rstinc
 
         """
-        return self.inference_rule.infer_formula(*args, t=self.theory, echo=echo)
+        raise NotImplementedError(
+            'The ⌜infer_formula⌝ method is abstract. It must be implemented in the child class.')
 
-    def infer_formula_statement(self, *args, nameset: (None, str, NameSet) = None,
-            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
-            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+    @property
+    @abc.abstractmethod
+    def infer_formula_statement(self, *args, **kwargs) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        return self.inference_rule.infer_statement(*args, t=self.theory, nameset=nameset, ref=ref,
-            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        raise NotImplementedError(
+            'The ⌜infer_formula_statement⌝ method is abstract. It must be implemented in the child class.')
 
-    def verify_args(self, *args):
-        """
-
-        :param args:
-        :return:
-        """
-        return self.inference_rule.verify_args(*args, t=self.theory)
+    @property
+    @abc.abstractmethod
+    def check_inference_validity(self, *args, **kwargs):
+        raise NotImplementedError(
+            'The ⌜check_inference_validity⌝ method is abstract. It must be implemented in the child class.')
 
     @property
     def i(self):
@@ -3255,7 +3260,7 @@ class InferenceRuleInclusion(Statement):
         return self._inference_rule
 
     def verify_compatibility(self, *args):
-        return self.inference_rule.verify_args(*args, t=self.theory)
+        return self.inference_rule.check_inference_validity(*args, t=self.theory)
 
 
 class DefinitionDeclaration(TheoreticalObject):
@@ -3599,18 +3604,19 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
     """
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, definition: (None, str) = None,
-            rep_two_columns_proof_OBSOLETE: (None, collections.abc.Callable) = None,
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse,
+            definition: (None, Formula) = None,
             compose_paragraph_proof_method: (None, collections.abc.Callable) = None,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
             auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+            nameset: (None, str, NameSet) = None, arg_class: (None, type) = None,
+            echo: (None, bool) = None):
         self._definition = definition
-        self._rep_two_columns_proof = rep_two_columns_proof_OBSOLETE
         self._compose_paragraph_proof_method = compose_paragraph_proof_method
+        self._arg_class = arg_class
         if nameset is None and symbol is None:
             symbol = configuration.default_inference_rule_symbol
         paragraph_header = paragraph_headers.inference_rule_declaration
@@ -3625,6 +3631,11 @@ class InferenceRuleDeclaration(TheoreticalObject):
             configuration.echo_declaration, configuration.echo_default, False)
         if echo:
             self.echo()
+
+    @property
+    def arg_class(self) -> (None, type):
+        """The data structure of the arguments necessary to call this inference-rule."""
+        return self._arg_class
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -3646,31 +3657,23 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
     @property
     @abc.abstractmethod
-    def infer_formula(self, *args, t: TheoryElaborationSequence, echo: (None, bool) = None,
-            **kwargs) -> Formula:
+    def infer_formula(self, *args, **kwargs) -> Formula:
         """
         .. include:: ../../include/infer_formula_python_method.rstinc
 
         """
-        raise NotImplementedError('infer_formula is an abstract method and must be implemented')
-
-    def infer_statement(self, *args, t: TheoryElaborationSequence,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
-            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
-            echo: (None, bool) = None, **kwargs) -> InferredStatement:
-        """Apply this inference-rules on input statements and return the resulting statement."""
-        return InferredStatement(*args, i=self, t=t, nameset=nameset, ref=ref,
-            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo, **kwargs)
-
-    def verify_args(self, *args, t: TheoryElaborationSequence):
-        """Verify the syntactical-compatibility of input statements and return True
-        if they are compatible, False otherwise."""
-        return self._verify_args(*args, t=t)
+        raise NotImplementedError(
+            'The ⌜infer_formula⌝ method is abstract. It must be implemented in the child class.')
 
 
 class AbsorptionDeclaration(InferenceRuleDeclaration):
     """This python class models the declaration of the :ref:`absorption<absorption_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
+
+    TODO: AbsorptionDeclaration: Add a data validation step to assure that parameters p and q are propositional.
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -3680,43 +3683,45 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
         dashed_name = 'absorption'
         explicit_name = 'absorption inference rule'
         name = 'absorption'
+        arg_class = AbsorptionDeclaration.Premises
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             definition = (p | u.r.implies | q) | u.r.proves | (p | u.r.implies | (p | u.r.land | q))
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            self.parameter_p_implies_q = p | u.r.implies | q
+            self.parameter_p_implies_q_mask = frozenset([p, q])
+        super().__init__(arg_class=arg_class, definition=definition,
+            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_implies_q: FormulaStatement = None,
-            t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
+    def infer_formula(self, p_implies_q: FlexibleFormula) -> (None, Formula):
         """
         .. include:: ../../include/infer_formula_python_method.rstinc
 
         """
-        p_implies_q = unpack_formula(p_implies_q)
-        p = unpack_formula(p_implies_q.parameters[0])
-        q = unpack_formula(p_implies_q.parameters[1])
-        p_implies_p_and_q = t.u.f(t.u.r.implication, p, t.u.f(t.u.r.conjunction, p, q))
-        return p_implies_p_and_q
-
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_absorption_paragraph_proof(o=o)
+        p_implies_q = validate_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
+            form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask)
+        p_implies_q: Formula
+        p: Formula = p_implies_q.parameters[0]  # TODO: Use composed type hints
+        q: Formula = p_implies_q.parameters[1]  # TODO: Use composed type hints
+        output: Formula = p | self.u.r.implies | (p | self.u.r.land | q)
         return output
-
-    def verify_args(self, p_implies_q: FormulaStatement = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        verify(t.contains_theoretical_objct(p_implies_q),
-            'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝.', phi=p_implies_q, t=t,
-            slf=self)
-        p_implies_q = unpack_formula(p_implies_q)
-        verify(p_implies_q.relation is t.u.r.implication,
-            'The relation of formula ⌜p_implies_q⌝ must be an implication.',
-            phi_relation=p_implies_q.relation, phi=p_implies_q, t=t, slf=self)
-        return True
 
 
 class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
+    """
+
+    TODO: AxiomInterpretation (Declaration and Inclusion): Add a data validation step to assure that parameter p is propositional.
+    TODO: AxiomInterpretation (Declaration and Inclusion): Add a verification step: the axiom is not locked.
+
+    """
+
+    class Premises(typing.NamedTuple):
+        a: AxiomInclusion
+        p: FlexibleFormula
+
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'axiom-interpretation'
         acronym = 'ai'
         abridged_name = None
@@ -3724,35 +3729,35 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         dashed_name = 'axiom-interpretation'
         explicit_name = 'axiom interpretation inference rule'
         name = 'axiom interpretation'
-        definition = StyledText(plaintext='A |- P', unicode='𝒜 ⊢ P')
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        arg_class = AxiomInterpretationDeclaration.Premises
+        with u.v(symbol=ScriptNormal('A')) as a, u.v(symbol='P') as p:
+            definition = a | u.r.proves | p
+        with u.v(symbol=ScriptNormal('A')) as a:
+            self.parameter_a = a
+            self.parameter_a_mask = frozenset([a])
+        with u.v(symbol='P') as p:
+            self.parameter_p = p
+            self.parameter_p_mask = frozenset([p])
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        """Overrides the generic paragraph proof method."""
-        output = yield from configuration.locale.compose_axiom_interpretation_paragraph_proof(o=o)
-        return output
+        super().__init__(arg_class=arg_class, definition=definition,
+            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> Formula:
+    def infer_formula(self, a: AxiomInclusion, p: Formula) -> Formula:
         """
         .. include:: ../../include/infer_formula_python_method.rstinc
 
         """
-        p = unpack_formula(p)
-        return p
-
-    def verify_args(self, a: AxiomInclusion, p: Formula, t: TheoryElaborationSequence) -> bool:
-        verify(is_in_class(a, classes.axiom_inclusion),
-            '⌜a⌝ is not of declarative-class axiom-inclusion.', a=a, t=t, slf=self)
-        verify(t.contains_theoretical_objct(a), '⌜a⌝ is not contained in ⌜t⌝.', a=a, t=t, slf=self)
-        verify(is_in_class(p, classes.formula), '⌜p⌝ is not of declarative-class formula.', p=p,
-            t=t, slf=self)
-        verify(p.is_proposition, '⌜p⌝ is not propositional.', p=p, t=t, slf=self)
-        # TODO: Add a verification step: the axiom is not locked.
-        return True
+        # TODO: NICETOHAVE: AxiomInterpretationDeclaration: replace this verify statement with a generic validate_axiom_inclusion function.
+        verify(assertion=isinstance(a, AxiomInclusion),
+            msg=f'⌜{a}⌝ passed as argument ⌜a⌝ is not an axiom-inclusion.', a=a)
+        p: Formula = validate_formula(arg='p', input_value=p, u=self.u)
+        # TODO: BUG: validate_formula does not support basic masks like: ⌜P⌝ where P is a free-variable.
+        # validate_formula(u=self.u, input_value=p, form=self.i.parameter_p,
+        #    mask=self.i.parameter_p_mask)
+        output: Formula = p
+        return output
 
 
 class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
@@ -3794,7 +3799,7 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, p_iff_q: FormulaStatement = None,
+    def check_inference_validity(self, p_iff_q: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
         p_iff_q: FormulaStatement = validate_formula_statement(t=t, arity=None, input_value=p_iff_q)
         verify(t.contains_theoretical_objct(p_iff_q),
@@ -3846,7 +3851,7 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
         output = (q | t.u.r.implies | p)
         return output
 
-    def verify_args(self, p_iff_q: FormulaStatement = None,
+    def check_inference_validity(self, p_iff_q: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
         p_iff_q: FormulaStatement = validate_formula_statement(t=t, arity=None, input_value=p_iff_q)
         verify(t.contains_theoretical_objct(p_iff_q),
@@ -3899,7 +3904,7 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, p_implies_q: FormulaStatement = None,
+    def check_inference_validity(self, p_implies_q: FormulaStatement = None,
             q_implies_p: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
         p_implies_q = validate_formula_statement(t=t, arity=2, input_value=p_implies_q)
         verify(t.contains_theoretical_objct(p_implies_q),
@@ -3967,7 +3972,7 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, p_land_q: FormulaStatement = None,
+    def check_inference_validity(self, p_land_q: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
         verify(t.contains_theoretical_objct(p_land_q),
             'Statement ⌜p_land_q⌝ must be contained in theory ⌜t⌝''s hierarchy.', p_land_q=p_land_q,
@@ -4019,7 +4024,7 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, p_land_q: FormulaStatement = None,
+    def check_inference_validity(self, p_land_q: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
         verify(t.contains_theoretical_objct(p_land_q),
             'Statement ⌜p_land_q⌝ must be contained in theory ⌜t⌝''s hierarchy.', p_land_q=p_land_q,
@@ -4066,7 +4071,7 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, p: FormulaStatement, q: FormulaStatement,
+    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
 
@@ -4120,7 +4125,7 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
         output = yield from configuration.locale.compose_constructive_dilemma_paragraph_proof(o=o)
         return output
 
-    def verify_args(self, p: FormulaStatement, q: FormulaStatement,
+    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
         p = validate_formula_statement(t=t, arity=None, input_value=p)
@@ -4161,7 +4166,8 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
         p = unpack_formula(p)
         return p
 
-    def verify_args(self, d: DefinitionInclusion, p: Formula, t: TheoryElaborationSequence) -> bool:
+    def check_inference_validity(self, d: DefinitionInclusion, p: Formula,
+            t: TheoryElaborationSequence) -> bool:
         verify(is_in_class(d, classes.definition_inclusion),
             '⌜d⌝ is not of declarative-class definition-inclusion.', d=d, t=t, slf=self)
         verify(t.contains_theoretical_objct(d), '⌜d⌝ is not contained in ⌜t⌝.', d=d, t=t, slf=self)
@@ -4208,7 +4214,7 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, p: FormulaStatement, q: FormulaStatement,
+    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
         p = validate_formula_statement(t=t, arity=None, input_value=p)
@@ -4256,7 +4262,7 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, p: FormulaStatement, q: (Formula, FormulaStatement),
+    def check_inference_validity(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence) -> bool:
         """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
 
@@ -4309,7 +4315,7 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, p: FormulaStatement, q: (Formula, FormulaStatement),
+    def check_inference_validity(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence) -> bool:
         """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
 
@@ -4361,7 +4367,7 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
         output = yield from configuration.locale.compose_disjunctive_resolution_paragraph_proof(o=o)
         return output
 
-    def verify_args(self, p: FormulaStatement, q: FormulaStatement,
+    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
         p = validate_formula_statement(t=t, arity=None, input_value=p)
@@ -4408,7 +4414,7 @@ class DisjunctiveSyllogismDeclaration(InferenceRuleDeclaration):
         output = yield from configuration.locale.compose_disjunctive_syllogism_paragraph_proof(o=o)
         return output
 
-    def verify_args(self, p: FormulaStatement, q: FormulaStatement,
+    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
         p = validate_formula_statement(t=t, arity=None, input_value=p)
@@ -4462,7 +4468,7 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, not_not_p: FormulaStatement = None,
+    def check_inference_validity(self, not_not_p: FormulaStatement = None,
             t: TheoryElaborationSequence = None) -> bool:
         not_not_p: FormulaStatement = validate_formula_statement(t=t, arity=1,
             input_value=not_not_p)
@@ -4516,7 +4522,8 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, p: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
+    def check_inference_validity(self, p: FormulaStatement = None,
+            t: TheoryElaborationSequence = None) -> bool:
         p: FormulaStatement = validate_formula_statement(t=t, arity=1, input_value=p)
         """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
         
@@ -4563,7 +4570,7 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
         output = yield from configuration.locale.compose_equality_commutativity_paragraph_proof(o=o)
         return output
 
-    def verify_args(self, x_equal_y: (None, FormulaStatement) = None,
+    def check_inference_validity(self, x_equal_y: (None, FormulaStatement) = None,
             t: TheoryElaborationSequence = None) -> bool:
         verify(is_in_class(x_equal_y, classes.formula_statement),
             '⌜x_equal_y⌝ is not of the declarative-class formula-statement.', p_eq_q=x_equal_y, t=t,
@@ -4618,8 +4625,8 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, p: FormulaStatement = None, x_equal_y: FormulaStatement = None,
-            t: TheoryElaborationSequence = None) -> bool:
+    def check_inference_validity(self, p: FormulaStatement = None,
+            x_equal_y: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
         verify(is_in_class(p, classes.formula_statement), '⌜p⌝ must be a formula-statement.', p=p,
             slf=self, t=t)
         verify(t.contains_theoretical_objct(p), '⌜p⌝ must be in theory-elaboration-sequence ⌜t⌝.',
@@ -4672,7 +4679,7 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
         output = yield from configuration.locale.compose_hypothetical_syllogism_paragraph_proof(o=o)
         return output
 
-    def verify_args(self, p: FormulaStatement, q: FormulaStatement,
+    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
         p = validate_formula_statement(t=t, arity=None, input_value=p)
@@ -4717,7 +4724,7 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, p: FormulaStatement = None, not_p: FormulaStatement = None,
+    def check_inference_validity(self, p: FormulaStatement = None, not_p: FormulaStatement = None,
             inconsistent_theory: TheoryElaborationSequence = None,
             t: TheoryElaborationSequence = None) -> bool:
         verify(inconsistent_theory.contains_theoretical_objct(p),
@@ -4771,8 +4778,8 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, x_eq_y: FormulaStatement = None, x_neq_y: FormulaStatement = None,
-            inconsistent_theory: TheoryElaborationSequence = None,
+    def check_inference_validity(self, x_eq_y: FormulaStatement = None,
+            x_neq_y: FormulaStatement = None, inconsistent_theory: TheoryElaborationSequence = None,
             t: TheoryElaborationSequence = None) -> bool:
         verify(inconsistent_theory.contains_theoretical_objct(x_eq_y),
             'Statement ⌜x_eq_y⌝ must be contained in ⌜inconsistent_theory⌝.', p_eq_q=x_eq_y,
@@ -4829,7 +4836,7 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
             o=o)
         return output
 
-    def verify_args(self, p_neq_p: FormulaStatement = None,
+    def check_inference_validity(self, p_neq_p: FormulaStatement = None,
             inconsistent_theory: TheoryElaborationSequence = None,
             t: TheoryElaborationSequence = None) -> bool:
         verify(inconsistent_theory.contains_theoretical_objct(p_neq_p),
@@ -4879,7 +4886,7 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         q = validate_formula(u=self.u, arity=2, input_value=p_implies_q.parameters[1])
         return q
 
-    def verify_args(self, p_implies_q: FormulaStatement, p: FormulaStatement,
+    def check_inference_validity(self, p_implies_q: FormulaStatement, p: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """
 
@@ -4942,7 +4949,7 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
         q = validate_formula(u=self.u, arity=2, input_value=p_implies_q.parameters[1])
         return q
 
-    def verify_args(self, p_implies_q: FormulaStatement, p: FormulaStatement,
+    def check_inference_validity(self, p_implies_q: FormulaStatement, p: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """
 
@@ -5001,8 +5008,9 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
         p = not_p.parameters[0]
         return p
 
-    def verify_args(self, not_p_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
+    def check_inference_validity(self, not_p_hypothesis: Hypothesis,
+            inc_hypothesis: InferredStatement, t: TheoryElaborationSequence,
+            echo: (None, bool) = None) -> bool:
         """
 
         :param not_p_hypothesis: The hypothesis-statement in the parent theory.
@@ -5064,8 +5072,9 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
         # Alternatively: not(x = y)
         return t.u.f(t.u.r.equality, x, y)
 
-    def verify_args(self, x_neq_y_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
+    def check_inference_validity(self, x_neq_y_hypothesis: Hypothesis,
+            inc_hypothesis: InferredStatement, t: TheoryElaborationSequence,
+            echo: (None, bool) = None) -> bool:
         """
 
         :param x_neq_y_hypothesis: The hypothesis-statement in the parent theory.
@@ -5127,7 +5136,7 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
         not_p = t.u.f(t.u.r.negation, p)
         return not_p
 
-    def verify_args(self, p_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
+    def check_inference_validity(self, p_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
         """
 
@@ -5193,8 +5202,9 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
         p_neq_q = t.u.f(t.u.r.inequality, p_eq_q.parameters[0], p_eq_q.parameters[1])
         return p_neq_q
 
-    def verify_args(self, p_eq_q_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
+    def check_inference_validity(self, p_eq_q_hypothesis: Hypothesis,
+            inc_hypothesis: InferredStatement, t: TheoryElaborationSequence,
+            echo: (None, bool) = None) -> bool:
         """
 
         :param p_eq_q_hypothesis: The hypothesis-statement in the parent theory.
@@ -5255,7 +5265,7 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         p_prime = p.valid_proposition.substitute(substitution_map=x_y_map, target_theory=t)
         return p_prime
 
-    def verify_args(self, p: FormulaStatement, phi: (None, tuple[TheoreticalObject]),
+    def check_inference_validity(self, p: FormulaStatement, phi: (None, tuple[TheoreticalObject]),
             t: TheoryElaborationSequence, echo: (None, bool) = None, **kwargs) -> bool:
         """Verify if the arguments comply syntactically with the inference-rule.
         """
@@ -6527,9 +6537,9 @@ FlexibleFormula = typing.Union[FormulaStatement, Formula, tuple, list]
 """See validate_flexible_statement_formula() for details."""
 
 
-def validate_formula(input_value: FlexibleFormula, u: UniverseOfDiscourse, arg: (None, str) = None,
-        form: (None, FlexibleFormula) = None, mask: (None, frozenset[FreeVariable]) = None,
-        arity: (None, int) = None) -> Formula:
+def validate_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (None, str) = None,
+        form: (None, FlexibleFormula) = None,
+        mask: (None, frozenset[FreeVariable]) = None) -> Formula:
     """Many punctilious pythonic methods or functions expect some formula as input parameters. This function assures that the input value is a proper formula and that it is consistent with possible contraints imposed on that formula.
 
     If ⌜input_value⌝ is of type formula, it is already well typed.
@@ -6541,7 +6551,6 @@ def validate_formula(input_value: FlexibleFormula, u: UniverseOfDiscourse, arg: 
     Note that this is complementary with the pseudo-infix notation, which uses the __or__ method and | operator to transform: p |r| q to (r, p, q).
 
     :param t:
-    :param arity: (conditional) If provided, verify the arity of the formula to assure consistency with whatever we are expecting.
     :param input_value:
     :return:
     """
@@ -6576,12 +6585,6 @@ def validate_formula(input_value: FlexibleFormula, u: UniverseOfDiscourse, arg: 
     # Note: it is not necessary to verify that the universe
     # of the formula parameters are consistent with the universe of the formula,
     # because this is already verified in the formula constructor.
-    # arity is an obsolete parameter, form is more general.
-    # a specific arity is required,
-    # and the arity of the input formula does not match the requirement.
-    verify(arity is None or arity == formula.arity,
-        f'The formula ⌜{formula}⌝ passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not of the required arity {arity}.',
-        argument=input_value, u=u, arity=arity)
     if form is not None:
         form = validate_formula(u=u, input_value=form)  # The form itself may be a flexible formula.
         is_of_form = form.is_masked_formula_similar_to(o2=formula, mask=mask)
@@ -6600,14 +6603,14 @@ def validate_formula(input_value: FlexibleFormula, u: UniverseOfDiscourse, arg: 
                     [free_variable.rep(encoding=encodings.plaintext) for free_variable in
                         mask]) + ' are free-variables'
             verify(False,
-                f'The formula ⌜{formula}⌝ passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not of the required form ⌜{form}⌝{free_variables_string}.',
+                f'The formula ⌜{formula} passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not of the required form ⌜{form}⌝{free_variables_string}.',
                 argument=input_value, u=u, form=form, mask=mask)
     return formula
 
 
 def validate_formula_statement(t: TheoryElaborationSequence, input_value: FlexibleFormula,
         arg: (None, str) = None, form: (None, FlexibleFormula) = None,
-        mask: (None, frozenset[FreeVariable]) = None, arity: (None, int) = None):
+        mask: (None, frozenset[FreeVariable]) = None):
     """Many punctilious pythonic methods expect some FormulaStatement as input parameters (e.g. the infer_statement() of inference-rules). This is syntactically robust, but it may read theory code less readable. In effect, one must store all formula-statements in variables to reuse them in formula. If the number of formula-statements get large, readability suffers. To provide a friendler interface for humans, we allow passing formula-statements as formula, tuple, and lists and apply the following interpretation rules:
 
     If ⌜argument⌝ is of type iterable, such as tuple, e.g.: (implies, q, p), we assume it is a formula in the form (relation, a1, a2, ... an) where ai are arguments.
@@ -6645,7 +6648,8 @@ def validate_formula_statement(t: TheoryElaborationSequence, input_value: Flexib
         formula=formula, t=t)
 
     # Validate the form, arity, etc. of the underlying formula.
-    validate_formula(arg=arg, u=u, input_value=formula, form=form, mask=mask, arity=arity)
+    formula = input_value.valid_proposition
+    validate_formula(u=u, input_value=formula, arg=arg, form=form, mask=mask)
 
     return input_value
 
@@ -6957,25 +6961,46 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def infer_formula(self, p_implies_q: (None, Formula, FormulaStatement) = None,
-            echo: (None, bool) = None):
+    def check_inference_validity(self, p_implies_q: FlexibleFormula) -> bool:
+        """This method is called back by the constructor of the InferredStatement class.
+        It returns True if making an inference based on the provided arguments is valid. In this case, the constructor of the InferredStatement class will succeed and create an InferredStatement instance.
+        It returns False if making an inference based on the provided arguments is invalid. In this case, the constructor of the InferredStatement class will fail and raise a PunctiliousException error.
+        This mechanism prevents the creation of InferredStatement objects that are invalid.
+        """
+        # Validate that expected formula-statements are formula-statements.
+        validate_formula_statement(t=self.t, input_value=p_implies_q,
+            form=self.i.parameter_p_implies_q, mask=self.i.parameter_p_implies_q_mask)
+        # The method either raises an exception during validation, or return True.
+        return True
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_absorption_paragraph_proof(o=o)
+        return output
+
+    @property
+    def i(self) -> AbsorptionDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: AbsorptionDeclaration = super().i
+        return i
+
+    def infer_formula(self, p_implies_q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/infer_formula_python_method.rstinc
 
         """
-        return super().infer_formula(p_implies_q, echo=echo)
+        # Call back the infer_formula method on the inference-rule declaration class.
+        return self.i.infer_formula(p_implies_q=p_implies_q)
 
-    def infer_formula_statement(self,
-            p_implies_q: (None, tuple, list, Formula, FormulaStatement) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+    def infer_formula_statement(self, p_implies_q: FlexibleFormula = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p_implies_q = validate_formula_statement(t=self.t, arity=2, input_value=p_implies_q)
-        return super().infer_formula_statement(p_implies_q, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p_implies_q=p_implies_q)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -6991,28 +7016,62 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         abridged_name = None
         name = 'axiom interpretation'
         explicit_name = 'axiom interpretation inference rule'
+        self._i_specialized = i  # The parent class uses a private pro
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, axiom: (None, AxiomInclusion) = None, formula: (None, Formula) = None,
+    def check_inference_validity(self, a: AxiomInclusion, p: FlexibleFormula) -> bool:
+        """This method is called back by the constructor of the InferredStatement class.
+        It returns True if making an inference based on the provided arguments is valid. In this case, the constructor of the InferredStatement class will succeed and create an InferredStatement instance.
+        It returns False if making an inference based on the provided arguments is invalid. In this case, the constructor of the InferredStatement class will fail and raise a PunctiliousException error.
+        This mechanism prevents the creation of InferredStatement objects that are invalid.
+        """
+        # Validate that expected formula-statements are formula-statements.
+        # TODO: NICETOHAVE: AxiomInterpretationInclusion: replace these verify statements with a generic validate_axiom_inclusion function.
+        verify(assertion=isinstance(a, AxiomInclusion),
+            msg=f'⌜{a}⌝ passed as argument ⌜a⌝ is not an axiom-inclusion.', a=a)
+        verify(assertion=self.t.contains_theoretical_objct(a),
+            msg=f'⌜{a}⌝ passed as argument ⌜a⌝ is not contained in theory-elaboration-sequence ⌜{self.t}⌝.',
+            a=a)
+        validate_formula(u=self.u, input_value=p)
+        # TODO: BUG: validate_formula does not support basic masks like: ⌜P⌝ where P is a free-variable.
+        # validate_formula(u=self.u, input_value=p, form=self.i.parameter_p,
+        #    mask=self.i.parameter_p_mask)
+        # The method either raises an exception during validation, or returns True.
+        return True
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """Overrides the generic paragraph proof method."""
+        output = yield from configuration.locale.compose_axiom_interpretation_paragraph_proof(o=o)
+        return output
+
+    @property
+    def i(self) -> AxiomInterpretationDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: AxiomInterpretationDeclaration = super().i
+        return i
+
+    def infer_formula(self, a: (None, AxiomInclusion) = None, p: (None, FlexibleFormula) = None,
             echo: (None, bool) = None):
         """
         .. include:: ../../include/infer_formula_python_method.rstinc
 
         """
-        return super().infer_formula(axiom, formula, echo=echo)
+        # Call back the infer_formula method on the inference-rule declaration class.
+        return self.i.infer_formula(a=a, p=p)
 
-    def infer_formula_statement(self, axiom: (None, AxiomInclusion) = None,
-            formula: (None, Formula) = None, nameset: (None, str, NameSet) = None,
-            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
-            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+    def infer_formula_statement(self, a: (None, AxiomInclusion) = None,
+            p: (None, FlexibleFormula) = None, ref: (None, str) = None,
+            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
+            echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        formula = validate_formula(u=self.u, arity=None, input_value=formula)
-        return super().infer_formula_statement(axiom, formula, nameset=nameset, ref=ref,
+        premises = self.i.Premises(a=a, p=p)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -8954,26 +9013,25 @@ class InferredStatement(FormulaStatement):
     """A statement inferred from an inference-rule in the current theory-elaboration.
     """
 
-    def __init__(self, *parameters, i: InferenceRuleDeclaration,
-            # TODO: InferredStatement.__init__(): Possible design-flaw: shouldn't we pass the InferenceRuleInclusion instead?
-            t: TheoryElaborationSequence, symbol: (None, str, StyledText) = None,
-            index: (None, int) = None, auto_index: (None, bool) = None,
-            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
-            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
-            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
-            subtitle: (None, str, StyledText) = None,
+    def __init__(self, i: InferenceRuleInclusion, premises: typing.NamedTuple,
+            symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
             paragraph_header: (None, ParagraphHeader) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None, echo_proof: (None, bool) = None):
         """Include (aka allow) an inference_rule in a theory-elaboration.
         """
         echo = prioritize_value(echo, configuration.echo_inferred_statement,
             configuration.echo_statement, configuration.echo_default, False)
+        t: TheoryElaborationSequence = i.t
         self._inference_rule = i
-        self._parameters = tuple(parameters)
-        verify(self._inference_rule.verify_args(*parameters, t=t),
-            'Parameters ⌜*args⌝ are not compatible with inference-rule ⌜self⌝', args=parameters,
-            slf=self, t=t)
-        valid_proposition = self._inference_rule.infer_formula(*parameters, t=t)
+        self._premises = premises
+        verify(assertion=self._inference_rule.check_inference_validity(**premises._asdict()),
+            msg='Parameters ⌜*args⌝ are not compatible with inference-rule ⌜self⌝',
+            inference_rule=i, premises=premises)
+        valid_proposition = self._inference_rule.infer_formula(**premises._asdict())
         super().__init__(theory=t, valid_proposition=valid_proposition, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
@@ -9007,7 +9065,7 @@ class InferredStatement(FormulaStatement):
 
     @property
     def parameters(self) -> tuple:
-        return self._parameters
+        return self._premises
 
     @property
     def inference_rule(self) -> InferenceRuleDeclaration:

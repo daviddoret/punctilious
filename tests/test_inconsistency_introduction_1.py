@@ -26,13 +26,12 @@ class TestInconsistencyIntroduction1(TestCase):
         # Elaborate the parent theory
         t1 = u.t()
         axiom_theory = t1.include_axiom(a=axiom)
-        t1_p1 = t1.i.axiom_interpretation.infer_formula_statement(axiom=axiom_theory,
+        t1_p1 = t1.i.axiom_interpretation.infer_formula_statement(a=axiom_theory,
             formula=r1(o1, o2))
-        t1_p2 = t1.i.axiom_interpretation.infer_formula_statement(axiom=axiom_theory,
+        t1_p2 = t1.i.axiom_interpretation.infer_formula_statement(a=axiom_theory,
             formula=r1(o2, o3))
         with u.v() as x, u.v() as y, u.v() as z:
-            t1_p3_implication = t1.i.axiom_interpretation.infer_formula_statement(
-                axiom=axiom_theory,
+            t1_p3_implication = t1.i.axiom_interpretation.infer_formula_statement(a=axiom_theory,
                 formula=((r1(x, y) | u.r.land | r1(y, z)) | u.r.implies | r1(x, z)))
         t1.stabilize()
         hypothetical_formula = u.f(u.r.lnot, u.f(r1, o1, o3))

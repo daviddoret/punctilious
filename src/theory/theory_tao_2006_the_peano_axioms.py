@@ -330,7 +330,7 @@ class Tao2006ThePeanoAxioms(pu.Package):
             # ((m is-a natural-number) ⟹ P(m))
             phi6 = (m | u.r.is_a | natural_number) | u.r.implies | p(m)
             phi7 = phi5 | u.r.implies | phi6
-            p100 = t.i.axiom_interpretation.infer_formula_statement(axiom=a_2_5b, formula=phi7)
+            p100 = t.i.axiom_interpretation.infer_formula_statement(a=a_2_5b, formula=phi7)
 
         t.take_note(paragraph_header=pu.paragraph_headers.remark, ref='2.1.10',
             content='We are a little vague on what "property" means at this point, but some possible examples of P(n) might be "n is even"; "n is equal to 3"; "n solves the equation (n + 1)2 = n2 + 2n + 1"; and so forth. Of course we haven\'t defined many of these concepts yet, but when we do, Axiom 2.5 will apply to these properties. (A logical remark: Because this axiom refers not just to variables, but also properties, it is of a different nature than the other four axioms; indeed, Axiom 2.5 should technically be called an axiom schema rather than an axiom - it is a template for producing an (infinite) number of axioms, rather than being a single axiom in its own right. To discuss this distinction further is far beyond the scope of this text, though, and falls in the realm of logic.) [Tao, 2006, p. 22]')
