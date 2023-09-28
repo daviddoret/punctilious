@@ -19,42 +19,42 @@ class TestValidateFormulaStatement(TestCase):
         t = u.declare_theory()
         a = t.include_axiom(a=u.declare_axiom(natural_language='Dummy axiom for testing purposes'))
         t.i.axiom_interpretation.infer_formula_statement(a=a, formula=phi)
-        phi1_formula = pu.validate_formula_statement(t=t, input_value=u.f(r1, o1))
+        phi1_formula = pu.verify_formula_statement(t=t, input_value=u.f(r1, o1))
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_formula))
-        phi1_tuple = pu.validate_formula_statement(t=t, input_value=(r1, o1))
+        phi1_tuple = pu.verify_formula_statement(t=t, input_value=(r1, o1))
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_tuple))
-        phi1_prefix = pu.validate_formula_statement(t=t, input_value=r1 ^ o1)
+        phi1_prefix = pu.verify_formula_statement(t=t, input_value=r1 ^ o1)
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_prefix))
-        phi1_postfix = pu.validate_formula_statement(t=t, input_value=o1 & r1)
+        phi1_postfix = pu.verify_formula_statement(t=t, input_value=o1 & r1)
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_postfix))
-        phi_form_ok_1 = pu.validate_formula_statement(t=t, input_value=phi, form=phi)
+        phi_form_ok_1 = pu.verify_formula_statement(t=t, input_value=phi, form=phi)
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi_form_ok_1))
         # Successful form validations
         with u.v('x') as x:
-            phi_form_ok_1 = pu.validate_formula_statement(t=t, input_value=phi, form=(r1, x),
+            phi_form_ok_1 = pu.verify_formula_statement(t=t, input_value=phi, form=(r1, x),
                 mask=[x])
             self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi_form_ok_1))
         with u.v('x') as x:
-            phi_form_ok_1 = pu.validate_formula_statement(t=t, input_value=phi, form=(x, o1),
+            phi_form_ok_1 = pu.verify_formula_statement(t=t, input_value=phi, form=(x, o1),
                 mask=[x])
             self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi_form_ok_1))
         with u.v('x') as x, u.v('y') as y:
-            phi_form_ok_1 = pu.validate_formula_statement(t=t, input_value=phi, form=(x, y),
+            phi_form_ok_1 = pu.verify_formula_statement(t=t, input_value=phi, form=(x, y),
                 mask=[x, y])
             self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi_form_ok_1))
         # Failed form validations
         with self.assertRaises(pu.PunctiliousException):
             with u.v('x') as x:
-                pu.validate_formula_statement(t=t, input_value=phi, form=(r2, x), mask=[x])
+                pu.verify_formula_statement(t=t, input_value=phi, form=(r2, x), mask=[x])
         with self.assertRaises(pu.PunctiliousException):
             with u.v('x') as x:
-                pu.validate_formula_statement(t=t, input_value=phi, form=(x, o2), mask=[x])
+                pu.verify_formula_statement(t=t, input_value=phi, form=(x, o2), mask=[x])
         # Inconsistent relation universe
         with self.assertRaises(pu.PunctiliousException):
-            pu.validate_formula_statement(t=t, input_value=(r1_in_u2, o1))
+            pu.verify_formula_statement(t=t, input_value=(r1_in_u2, o1))
         # Inconsistent parameter universe
         with self.assertRaises(pu.PunctiliousException):
-            pu.validate_formula_statement(t=t, input_value=(r1, o1_in_u2))
+            pu.verify_formula_statement(t=t, input_value=(r1, o1_in_u2))
         # Well-formed formula but not valid formula-statement
         with self.assertRaises(pu.PunctiliousException):
-            pu.validate_formula_statement(t=t, input_value=(r1, o2))
+            pu.verify_formula_statement(t=t, input_value=(r1, o2))
