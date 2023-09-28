@@ -3223,13 +3223,19 @@ class InferenceRuleInclusion(Statement):
 
     @property
     @abc.abstractmethod
-    def infer_formula(self, *args, **kwargs) -> Formula:
+    def check_premises_validity(self, **kwargs) -> bool:
+        raise NotImplementedError(
+            'The ⌜check_premises_validity⌝ method is abstract. It must be implemented in the child class.')
+
+    @property
+    @abc.abstractmethod
+    def construct_formula(self, **kwargs) -> Formula:
         """
         .. include:: ../../include/infer_formula_python_method.rstinc
 
         """
         raise NotImplementedError(
-            'The ⌜infer_formula⌝ method is abstract. It must be implemented in the child class.')
+            'The ⌜construct_formula⌝ method is abstract. It must be implemented in the child class.')
 
     @property
     @abc.abstractmethod
@@ -3243,7 +3249,7 @@ class InferenceRuleInclusion(Statement):
 
     @property
     @abc.abstractmethod
-    def check_inference_validity(self, *args, **kwargs):
+    def check_premises_validity(self, *args, **kwargs):
         raise NotImplementedError(
             'The ⌜check_inference_validity⌝ method is abstract. It must be implemented in the child class.')
 
@@ -3612,11 +3618,9 @@ class InferenceRuleDeclaration(TheoreticalObject):
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None, arg_class: (None, type) = None,
-            echo: (None, bool) = None):
+            nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
         self._definition = definition
         self._compose_paragraph_proof_method = compose_paragraph_proof_method
-        self._arg_class = arg_class
         if nameset is None and symbol is None:
             symbol = configuration.default_inference_rule_symbol
         paragraph_header = paragraph_headers.inference_rule_declaration
@@ -3631,11 +3635,6 @@ class InferenceRuleDeclaration(TheoreticalObject):
             configuration.echo_declaration, configuration.echo_default, False)
         if echo:
             self.echo()
-
-    @property
-    def arg_class(self) -> (None, type):
-        """The data structure of the arguments necessary to call this inference-rule."""
-        return self._arg_class
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -3657,13 +3656,13 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
     @property
     @abc.abstractmethod
-    def infer_formula(self, *args, **kwargs) -> Formula:
+    def construct_formula(self, **kwargs) -> Formula:
         """
         .. include:: ../../include/infer_formula_python_method.rstinc
 
         """
         raise NotImplementedError(
-            'The ⌜infer_formula⌝ method is abstract. It must be implemented in the child class.')
+            'The ⌜construct_formula⌝ method is abstract. It must be implemented in the child class.')
 
 
 class AbsorptionDeclaration(InferenceRuleDeclaration):
@@ -3683,18 +3682,16 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
         dashed_name = 'absorption'
         explicit_name = 'absorption inference rule'
         name = 'absorption'
-        arg_class = AbsorptionDeclaration.Premises
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             definition = (p | u.r.implies | q) | u.r.proves | (p | u.r.implies | (p | u.r.land | q))
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_implies_q = p | u.r.implies | q
             self.parameter_p_implies_q_mask = frozenset([p, q])
-        super().__init__(arg_class=arg_class, definition=definition,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_implies_q: FlexibleFormula) -> (None, Formula):
+    def construct_formula(self, p_implies_q: FlexibleFormula) -> (None, Formula):
         """
         .. include:: ../../include/infer_formula_python_method.rstinc
 
@@ -3729,7 +3726,6 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         dashed_name = 'axiom-interpretation'
         explicit_name = 'axiom interpretation inference rule'
         name = 'axiom interpretation'
-        arg_class = AxiomInterpretationDeclaration.Premises
         with u.v(symbol=ScriptNormal('A')) as a, u.v(symbol='P') as p:
             definition = a | u.r.proves | p
         with u.v(symbol=ScriptNormal('A')) as a:
@@ -3739,12 +3735,11 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
             self.parameter_p = p
             self.parameter_p_mask = frozenset([p])
 
-        super().__init__(arg_class=arg_class, definition=definition,
-            universe_of_discourse=universe_of_discourse, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, a: AxiomInclusion, p: Formula) -> Formula:
+    def construct_formula(self, a: AxiomInclusion, p: Formula) -> Formula:
         """
         .. include:: ../../include/infer_formula_python_method.rstinc
 
@@ -6961,7 +6956,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_inference_validity(self, p_implies_q: FlexibleFormula) -> bool:
+    def check_premises_validity(self, p_implies_q: FlexibleFormula) -> bool:
         """This method is called back by the constructor of the InferredStatement class.
         It returns True if making an inference based on the provided arguments is valid. In this case, the constructor of the InferredStatement class will succeed and create an InferredStatement instance.
         It returns False if making an inference based on the provided arguments is invalid. In this case, the constructor of the InferredStatement class will fail and raise a PunctiliousException error.
@@ -6984,13 +6979,13 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         i: AbsorptionDeclaration = super().i
         return i
 
-    def infer_formula(self, p_implies_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_implies_q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/infer_formula_python_method.rstinc
 
         """
         # Call back the infer_formula method on the inference-rule declaration class.
-        return self.i.infer_formula(p_implies_q=p_implies_q)
+        return self.i.construct_formula(p_implies_q=p_implies_q)
 
     def infer_formula_statement(self, p_implies_q: FlexibleFormula = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
@@ -7021,7 +7016,7 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def check_inference_validity(self, a: AxiomInclusion, p: FlexibleFormula) -> bool:
+    def check_premises_validity(self, a: AxiomInclusion, p: FlexibleFormula) -> bool:
         """This method is called back by the constructor of the InferredStatement class.
         It returns True if making an inference based on the provided arguments is valid. In this case, the constructor of the InferredStatement class will succeed and create an InferredStatement instance.
         It returns False if making an inference based on the provided arguments is invalid. In this case, the constructor of the InferredStatement class will fail and raise a PunctiliousException error.
@@ -7039,6 +7034,7 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         # validate_formula(u=self.u, input_value=p, form=self.i.parameter_p,
         #    mask=self.i.parameter_p_mask)
         # The method either raises an exception during validation, or returns True.
+        # TODO: ENHANCEMENT: check_premises_validity: use a parameter raise_exception and return False when applicable. This will allow to use the method to check something without raising an exception.
         return True
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
@@ -7053,14 +7049,14 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         i: AxiomInterpretationDeclaration = super().i
         return i
 
-    def infer_formula(self, a: (None, AxiomInclusion) = None, p: (None, FlexibleFormula) = None,
+    def construct_formula(self, a: (None, AxiomInclusion) = None, p: (None, FlexibleFormula) = None,
             echo: (None, bool) = None):
         """
         .. include:: ../../include/infer_formula_python_method.rstinc
 
         """
         # Call back the infer_formula method on the inference-rule declaration class.
-        return self.i.infer_formula(a=a, p=p)
+        return self.i.construct_formula(a=a, p=p)
 
     def infer_formula_statement(self, a: (None, AxiomInclusion) = None,
             p: (None, FlexibleFormula) = None, ref: (None, str) = None,
@@ -9028,10 +9024,11 @@ class InferredStatement(FormulaStatement):
         t: TheoryElaborationSequence = i.t
         self._inference_rule = i
         self._premises = premises
-        verify(assertion=self._inference_rule.check_inference_validity(**premises._asdict()),
-            msg='Parameters ⌜*args⌝ are not compatible with inference-rule ⌜self⌝',
-            inference_rule=i, premises=premises)
-        valid_proposition = self._inference_rule.infer_formula(**premises._asdict())
+        # Check that the premises are valid.
+        # If they are not, raise a Punctilious Exception and stop processing.
+        # If they are, complete the inference process.
+        self._inference_rule.check_premises_validity(**premises._asdict())
+        valid_proposition = self._inference_rule.construct_formula(**premises._asdict())
         super().__init__(theory=t, valid_proposition=valid_proposition, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
