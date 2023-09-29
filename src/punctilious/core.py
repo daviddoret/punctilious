@@ -3092,6 +3092,9 @@ class AxiomDeclaration(TheoreticalObject):
 
     """
 
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
+
     def __init__(self, natural_language: (str, StyledText), u: UniverseOfDiscourse,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
             auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
@@ -3336,6 +3339,9 @@ class DefinitionDeclaration(TheoreticalObject):
     _universe-of-discourse_.
 
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, natural_language: str, u: UniverseOfDiscourse,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
@@ -3856,6 +3862,9 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
     Acronym: be1.
     """
 
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
+
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'biconditional-elimination-1'
@@ -3883,30 +3892,15 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
         output = (p | t.u.r.implies | q)
         return output
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_biconditional_elimination_1_paragraph_proof(
-            o=o)
-        return output
-
-    def check_inference_validity(self, p_iff_q: FormulaStatement = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        p_iff_q: FormulaStatement = verify_formula_statement(t=t, arity=None, input_value=p_iff_q)
-        verify(t.contains_theoretical_objct(p_iff_q),
-            'Formula-statement ⌜p_iff_q⌝ must be contained in theory ⌜t⌝.', phi=p_iff_q, t=t,
-            slf=self)
-        p_iff_q: Formula = verify_formula(u=self.u, arity=None, input_value=p_iff_q)
-        verify(p_iff_q.relation is t.u.r.biconditional,
-            'The relation of formula ⌜p_iff_q⌝ must be a biconditional.',
-            phi_relation=p_iff_q.relation, phi=p_iff_q, t=t, slf=self)
-        return True
-
 
 class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
     """The well-known biconditional elimination #1 inference rule: P ⟺ Q ⊢ Q ⟹ P.
 
     Acronym: ber.
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -3923,12 +3917,6 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_biconditional_elimination_2_paragraph_proof(
-            o=o)
-        return output
-
     def infer_formula(self, p_iff_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
         """
@@ -3941,24 +3929,15 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
         output = (q | t.u.r.implies | p)
         return output
 
-    def check_inference_validity(self, p_iff_q: FormulaStatement = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        p_iff_q: FormulaStatement = verify_formula_statement(t=t, arity=None, input_value=p_iff_q)
-        verify(t.contains_theoretical_objct(p_iff_q),
-            'Formula-statement ⌜p_iff_q⌝ must be contained in theory ⌜t⌝.', phi=p_iff_q, t=t,
-            slf=self)
-        p_iff_q: Formula = verify_formula(u=self.u, arity=None, input_value=p_iff_q)
-        verify(p_iff_q.relation is t.u.r.biconditional,
-            'The relation of formula ⌜p_iff_q⌝ must be a biconditional.',
-            phi_relation=p_iff_q.relation, phi=p_iff_q, t=t, slf=self)
-        return True
-
 
 class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
     """The well-known biconditional introduction inference rule: (P ⟹ Q), (Q ⟹ P) ⊢ (P ⟺ Q)
 
     Acronym: bi.
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -3988,49 +3967,15 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
         q = p_implies_q.parameters[1]
         return p | t.u.r.iff | q
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_biconditional_introduction_paragraph_proof(
-            o=o)
-        return output
-
-    def check_inference_validity(self, p_implies_q: FormulaStatement = None,
-            q_implies_p: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
-        p_implies_q = verify_formula_statement(t=t, arity=2, input_value=p_implies_q)
-        verify(t.contains_theoretical_objct(p_implies_q),
-            'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝.', p_implies_q=p_implies_q,
-            t=t, slf=self)
-        q_implies_p = verify_formula_statement(t=t, arity=2, input_value=q_implies_p)
-        verify(t.contains_theoretical_objct(q_implies_p),
-            'Statement ⌜q_implies_p⌝ must be contained in theory ⌜t⌝.', q_implies_p=q_implies_p,
-            t=t, slf=self)
-        p_implies_q: Formula = verify_formula(u=t.u, arity=2, input_value=p_implies_q)
-        q_implies_p: Formula = verify_formula(u=t.u, arity=2, input_value=q_implies_p)
-        verify(p_implies_q.relation is t.u.r.implication,
-            'The relation of formula ⌜p_implies_q⌝ must be an implication.',
-            p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
-        verify(q_implies_p.relation is t.u.r.implication,
-            'The relation of formula ⌜q_implies_p⌝ must be an implication.',
-            q_implies_p_relation=p_implies_q.relation, q_implies_p=q_implies_p, t=t, slf=self)
-
-        verify(p_implies_q.parameters[0].is_formula_syntactically_equivalent_to(
-            q_implies_p.parameters[1]),
-            'The p of the ⌜p_implies_q⌝ formula must be formula-syntactically-equivalent to the p of '
-            '⌜q_implies_p⌝ formula.', p_implies_q=p_implies_q, q_implies_p=q_implies_p, t=t,
-            slf=self)
-        verify(p_implies_q.parameters[1].is_formula_syntactically_equivalent_to(
-            q_implies_p.parameters[0]),
-            'The q of the ⌜p_implies_q⌝ formula must be formula-syntactically-equivalent to the q of '
-            '⌜q_implies_p⌝ formula.', p_implies_q=p_implies_q, q_implies_p=q_implies_p, t=t,
-            slf=self)
-        return True
-
 
 class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
     """The well-known conjunction elimination #1 inference rule: P ⟺ Q ⊢ P ⟹ Q.
 
     Acronym: cel.
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4056,22 +4001,6 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
         p = unpack_formula(p_land_q).parameters[0]
         return p
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_conjunction_elimination_1_paragraph_proof(
-            o=o)
-        return output
-
-    def check_inference_validity(self, p_land_q: FormulaStatement = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        verify(t.contains_theoretical_objct(p_land_q),
-            'Statement ⌜p_land_q⌝ must be contained in theory ⌜t⌝''s hierarchy.', p_land_q=p_land_q,
-            t=t, slf=self)
-        verify(p_land_q.relation is t.u.r.conjunction,
-            'The relation of formula ⌜p_land_q⌝ must be a conjunction.',
-            p_land_q_relation=p_land_q.relation, p_land_q=p_land_q, t=t, slf=self)
-        return True
-
 
 class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
     """The well-known conjunction elimination #2 inference rule: P ⟺ Q ⊢ Q ⟹ P.
@@ -4082,6 +4011,9 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
     :param t: The current theory-elaboration-sequence.
     :return: The (proven) formula: Q.
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4108,26 +4040,13 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
         q = p_land_q.parameters[1]
         return q
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_conjunction_elimination_2_paragraph_proof(
-            o=o)
-        return output
-
-    def check_inference_validity(self, p_land_q: FormulaStatement = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        verify(t.contains_theoretical_objct(p_land_q),
-            'Statement ⌜p_land_q⌝ must be contained in theory ⌜t⌝''s hierarchy.', p_land_q=p_land_q,
-            t=t, slf=self)
-        verify(p_land_q.relation is t.u.r.conjunction,
-            'The relation of formula ⌜p_land_q⌝ must be a conjunction.',
-            p_land_q_relation=p_land_q.relation, p_land_q=p_land_q, t=t, slf=self)
-        return True
-
 
 class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
     """The declaration of the :ref:`conjunction-introduction<conjunction_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4154,35 +4073,13 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         q = verify_formula(u=t.u, arity=None, input_value=q)
         return p | t.u.r.land | q
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :ref:`conjunction-introduction<conjunction_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` ."""
-        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
-            o=o)
-        return output
-
-    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
-            t: TheoryElaborationSequence) -> bool:
-        """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
-
-        :param p: (mandatory) A formula-statement of the form :math:`P` .
-        :param q: (mandatory) A formula-statement of the form :math:`Q` .
-        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
-
-        :return: True (bool) if the parameters are correct.
-        """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula_statement(t=t, arity=None, input_value=q)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
-        verify(t.contains_theoretical_objct(q),
-            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
-        return True
-
 
 class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
     """The declaration of the :ref:`constructive-dilemma<constructive_dilemma_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4297,6 +4194,9 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
     """The declaration of the :ref:`destructive-dilemma<destructive_dilemma_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
 
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
+
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'destructive-dilemma'
@@ -4322,28 +4222,13 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
         q = verify_formula(u=t.u, arity=None, input_value=q)
         return p | t.u.r.land | q
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        """ """
-        output = yield from configuration.locale.destructive_dilemma_introduction_paragraph_proof(
-            o=o)
-        return output
-
-    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
-            t: TheoryElaborationSequence) -> bool:
-        """ """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula_statement(t=t, arity=None, input_value=q)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
-        verify(t.contains_theoretical_objct(q),
-            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
-        return True
-
 
 class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
     """The declaration of the :ref:`disjunction-introduction-1<disjunction_introduction_1_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4370,33 +4255,13 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
         q = verify_formula(u=t.u, arity=None, input_value=q)
         return q | t.u.r.lor | p
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :ref:`disjunction-introduction-1<disjunction_introduction_1_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` ."""
-        output = yield from configuration.locale.compose_disjunction_introduction_1_paragraph_proof(
-            o=o)
-        return output
-
-    def check_inference_validity(self, p: FormulaStatement, q: (Formula, FormulaStatement),
-            t: TheoryElaborationSequence) -> bool:
-        """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
-
-        :param p: (mandatory) A formula-statement of the form :math:`P` .
-        :param q: (mandatory) A formula of the form :math:`Q` .
-        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
-
-        :return: True (bool) if the parameters are correct.
-        """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula(u=t.u, arity=None, input_value=q)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
-        return True
-
 
 class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
     """The declaration of the :ref:`disjunction-introduction-2<disjunction_introduction_2_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4423,33 +4288,13 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
         q = verify_formula(u=t.u, arity=None, input_value=q)
         return p | t.u.r.lor | q
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :ref:`disjunction-introduction-2<disjunction_introduction_2_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` ."""
-        output = yield from configuration.locale.compose_disjunction_introduction_2_paragraph_proof(
-            o=o)
-        return output
-
-    def check_inference_validity(self, p: FormulaStatement, q: (Formula, FormulaStatement),
-            t: TheoryElaborationSequence) -> bool:
-        """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
-
-        :param p: (mandatory) A formula-statement of the form :math:`P` .
-        :param q: (mandatory) A formula of the form :math:`Q` .
-        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
-
-        :return: True (bool) if the parameters are correct.
-        """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula(u=t.u, arity=None, input_value=q)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
-        return True
-
 
 class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
     """The declaration of the :ref:`disjunctive-resolution<disjunctive_resolution_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4476,27 +4321,13 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
         q = verify_formula(u=t.u, arity=None, input_value=q)
         return p | t.u.r.land | q
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        """ """
-        output = yield from configuration.locale.compose_disjunctive_resolution_paragraph_proof(o=o)
-        return output
-
-    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
-            t: TheoryElaborationSequence) -> bool:
-        """ """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula_statement(t=t, arity=None, input_value=q)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
-        verify(t.contains_theoretical_objct(q),
-            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
-        return True
-
 
 class DisjunctiveSyllogismDeclaration(InferenceRuleDeclaration):
     """The declaration of the :ref:`disjunctive-syllogism<disjunctive_syllogism_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4523,23 +4354,6 @@ class DisjunctiveSyllogismDeclaration(InferenceRuleDeclaration):
         q = verify_formula(u=t.u, arity=None, input_value=q)
         return p | t.u.r.land | q
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        """ """
-        output = yield from configuration.locale.compose_disjunctive_syllogism_paragraph_proof(o=o)
-        return output
-
-    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
-            t: TheoryElaborationSequence) -> bool:
-        """ """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula_statement(t=t, arity=None, input_value=q)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
-        verify(t.contains_theoretical_objct(q),
-            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
-        return True
-
 
 class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
     """The well-known double negation elimination #1 inference rule: ¬(¬(P)) ⊢ P.
@@ -4550,6 +4364,9 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
     :param t: The current theory-elaboration-sequence.
     :return: The (proven) formula: Q.
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4577,32 +4394,13 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
         p: Formula = not_p.parameters[0]
         return p
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_double_negation_elimination_paragraph_proof(
-            o=o)
-        return output
-
-    def check_inference_validity(self, not_not_p: FormulaStatement = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        not_not_p: FormulaStatement = verify_formula_statement(t=t, arity=1, input_value=not_not_p)
-        verify(assertion=t.contains_theoretical_objct(not_not_p),
-            msg='Statement ⌜not_not_p⌝ must be contained in ⌜t⌝.', not_not_p=not_not_p, t=t,
-            slf=self)
-        verify(assertion=not_not_p.valid_proposition.relation is t.u.r.negation,
-            msg='The parent formula in ⌜not_not_p⌝ must have ⌜negation⌝ relation.',
-            not_not_p=not_not_p, t=t, slf=self)
-        not_p: Formula = not_not_p.valid_proposition.parameters[0]
-        not_p: Formula = verify_formula(u=t.u, arity=1, input_value=not_p)
-        verify(assertion=not_p.relation is t.u.r.negation,
-            msg='The child formula in ⌜not_not_p⌝ must have ⌜negation⌝ relation.', not_not_p=not_p,
-            t=t, slf=self)
-        return True
-
 
 class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
     """The declaration of the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4629,28 +4427,10 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
         not_not_p: Formula = t.u.r.lnot(t.u.r.lnot(p))
         return not_not_p
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` ."""
-        output = yield from configuration.locale.compose_double_negation_introduction_paragraph_proof(
-            o=o)
-        return output
-
-    def check_inference_validity(self, p: FormulaStatement = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        p: FormulaStatement = verify_formula_statement(t=t, arity=1, input_value=p)
-        """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
-        
-        :param p: (mandatory) A formula-statement of the form: :math:`P` .
-        
-        :return: True (bool) if the parameters are correct.
-        """
-        verify(assertion=t.contains_theoretical_objct(p),
-            msg='Statement ⌜p⌝ must be contained in ⌜t⌝.', p=p, t=t, slf=self)
-        return True
-
 
 class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4679,27 +4459,10 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
         y = x_equal_y.parameters[1]
         return t.u.f(t.u.r.equality, y, x)
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_equality_commutativity_paragraph_proof(o=o)
-        return output
-
-    def check_inference_validity(self, x_equal_y: (None, FormulaStatement) = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        verify(is_in_class(x_equal_y, classes.formula_statement),
-            '⌜x_equal_y⌝ is not of the declarative-class formula-statement.', p_eq_q=x_equal_y, t=t,
-            slf=self)
-        verify(t.contains_theoretical_objct(x_equal_y),
-            'Statement ⌜x_equal_y⌝ is not contained in ⌜t⌝''s hierarchy.', p_eq_q=x_equal_y, t=t,
-            slf=self)
-        x_equal_y = unpack_formula(x_equal_y)
-        verify(x_equal_y.relation is self.u.r.equality,
-            'The root relation of formula ⌜x_equal_y⌝ is not the equality relation.',
-            p_eq_q_relation=x_equal_y.relation, p_eq_q=x_equal_y, t=t, slf=self)
-        return True
-
 
 class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4733,34 +4496,13 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
             lock_variable_scope=True)
         return p_prime  # TODO: EqualTermsSubstitution: Provide support for statements that are  # atomic propositional formula, that is without relation or where the objct is a 0-ary  #  # relation.
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_equal_terms_substitution_paragraph_proof(
-            o=o)
-        return output
-
-    def check_inference_validity(self, p: FormulaStatement = None,
-            x_equal_y: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
-        verify(is_in_class(p, classes.formula_statement), '⌜p⌝ must be a formula-statement.', p=p,
-            slf=self, t=t)
-        verify(t.contains_theoretical_objct(p), '⌜p⌝ must be in theory-elaboration-sequence ⌜t⌝.',
-            p=p, slf=self, t=t)
-        verify(is_in_class(x_equal_y, classes.formula_statement),
-            '⌜x_equal_y⌝ is not of the formula-statement declarative-class.', q_equal_r=x_equal_y,
-            slf=self, t=t)
-        verify(t.contains_theoretical_objct(x_equal_y),
-            '⌜x_equal_y⌝ is not contained in theoretical-elaboration-sequence ⌜t⌝.',
-            q_equal_r=x_equal_y, slf=self, t=t)
-        x_equal_y = unpack_formula(x_equal_y)
-        verify(x_equal_y.relation is self.u.r.equality,
-            'The root relation of ⌜x_equal_y⌝ is not the equality relation.', q_equal_r=x_equal_y,
-            slf=self, t=t)
-        return True
-
 
 class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
     """The declaration of the :ref:`hypothetical-syllogism<hypothetical_syllogism_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4787,26 +4529,12 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
         q = verify_formula(u=t.u, arity=None, input_value=q)
         return p | t.u.r.land | q
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        """ """
-        output = yield from configuration.locale.compose_hypothetical_syllogism_paragraph_proof(o=o)
-        return output
-
-    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
-            t: TheoryElaborationSequence) -> bool:
-        """ """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula_statement(t=t, arity=None, input_value=q)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
-        verify(t.contains_theoretical_objct(q),
-            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
-        return True
-
 
 class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
     """P ⋀ not P: inconsistency"""
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'inconsistency-introduction-1'
@@ -4832,34 +4560,12 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
         not_p = unpack_formula(not_p)
         return t.u.f(t.u.r.inconsistency, inconsistent_theory)
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_inconsistency_introduction_1_paragraph_proof(
-            o=o)
-        return output
-
-    def check_inference_validity(self, p: FormulaStatement = None, not_p: FormulaStatement = None,
-            inconsistent_theory: TheoryElaborationSequence = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        verify(inconsistent_theory.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜inconsistent_theory⌝''s hierarchy.', p=p,
-            inconsistent_theory=inconsistent_theory, slf=self)
-        verify(inconsistent_theory.contains_theoretical_objct(not_p),
-            'Statement ⌜not_p⌝ must be contained in theory ⌜inconsistent_theory⌝''s hierarchy.',
-            not_p=not_p, inconsistent_theory=inconsistent_theory, slf=self)
-        verify(not_p.relation is not_p.theory.universe_of_discourse.relations.negation,
-            'The relation of statement ⌜not_p⌝ must be ⌜negation⌝.', not_p=not_p,
-            inconsistent_theory=inconsistent_theory, slf=self)
-        not_p_formula = not_p.valid_proposition
-        p_in_not_p = not_p_formula.parameters[0]
-        verify(p_in_not_p.is_formula_syntactically_equivalent_to(p),
-            'The sub-formula (parameter) ⌜p⌝ in ⌜not_p⌝ must be formula-syntactically-equivalent to ⌜p⌝.',
-            not_p=not_p, p_in_not_p=p_in_not_p, p=p, slf=self)
-        return True
-
 
 class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
     """P = Q ⋀ P neq Q: inconsistency """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'inconsistency-introduction-2'
@@ -4886,40 +4592,12 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
         x_neq_y = unpack_formula(x_neq_y)
         return t.u.f(t.u.r.inconsistency, inconsistent_theory)
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_inconsistency_introduction_2_paragraph_proof(
-            o=o)
-        return output
-
-    def check_inference_validity(self, x_eq_y: FormulaStatement = None,
-            x_neq_y: FormulaStatement = None, inconsistent_theory: TheoryElaborationSequence = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        verify(inconsistent_theory.contains_theoretical_objct(x_eq_y),
-            'Statement ⌜x_eq_y⌝ must be contained in ⌜inconsistent_theory⌝.', p_eq_q=x_eq_y,
-            inconsistent_theory=inconsistent_theory, slf=self)
-        verify(inconsistent_theory.contains_theoretical_objct(x_neq_y),
-            'Statement ⌜x_neq_y⌝ must be contained in ⌜inconsistent_theory⌝.', p_neq_q=x_neq_y,
-            inconsistent_theory=inconsistent_theory, slf=self)
-        verify(x_eq_y.relation is x_eq_y.theory.universe_of_discourse.relations.equality,
-            'The relation of statement ⌜x_eq_y⌝ must be ⌜equality⌝.', p_neq_q=x_neq_y,
-            inconsistent_theory=inconsistent_theory, slf=self)
-        verify(x_neq_y.relation is x_neq_y.theory.universe_of_discourse.relations.inequality,
-            'The relation of statement ⌜x_neq_y⌝ must be ⌜inequality⌝.', p_neq_q=x_neq_y,
-            inconsistent_theory=inconsistent_theory, slf=self)
-        verify(x_eq_y.valid_proposition.parameters[0].is_formula_syntactically_equivalent_to(
-            x_neq_y.valid_proposition.parameters[0]),
-            'The ⌜x⌝ in ⌜x_eq_y⌝ must be formula-syntactically-equivalent to the ⌜x⌝ in ⌜x_neq_y⌝.',
-            p_eq_q=x_eq_y, p_neq_q=x_neq_y, inconsistent_theory=inconsistent_theory, slf=self)
-        verify(x_eq_y.valid_proposition.parameters[1].is_formula_syntactically_equivalent_to(
-            x_neq_y.valid_proposition.parameters[1]),
-            'The ⌜y⌝ in ⌜x_eq_y⌝ must be formula-syntactically-equivalent to the ⌜y⌝ in ⌜x_neq_y⌝.',
-            p_eq_q=x_eq_y, p_neq_q=x_neq_y, inconsistent_theory=inconsistent_theory, slf=self)
-        return True
-
 
 class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
     """P neq P: inconsistency """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'inconsistency-introduction-3'
@@ -4944,31 +4622,13 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
         p_neq_p = verify_formula(u=self.u, arity=2, input_value=p_neq_p)
         return t.u.f(t.u.r.inconsistency, inconsistent_theory)
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_inconsistency_introduction_3_paragraph_proof(
-            o=o)
-        return output
-
-    def check_inference_validity(self, p_neq_p: FormulaStatement = None,
-            inconsistent_theory: TheoryElaborationSequence = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        verify(inconsistent_theory.contains_theoretical_objct(p_neq_p),
-            'Statement ⌜p_neq_p⌝ must be contained in theory ⌜inconsistent_theory⌝''s hierarchy.',
-            p_neq_p=p_neq_p, inconsistent_theory=inconsistent_theory, slf=self)
-        verify(p_neq_p.relation is p_neq_p.theory.universe_of_discourse.relations.inequality,
-            'The relation of statement ⌜p_neq_p⌝ must be ⌜inequality⌝.', p_neq_p=p_neq_p,
-            inconsistent_theory=inconsistent_theory, slf=self)
-        verify(p_neq_p.valid_proposition.parameters[0].is_formula_syntactically_equivalent_to(
-            p_neq_p.valid_proposition.parameters[1]),
-            'The two ⌜p⌝ terms in  ⌜p_neq_p⌝ must be formula-syntactically-equivalent.',
-            p_neq_p=p_neq_p, inconsistent_theory=inconsistent_theory, slf=self)
-        return True
-
 
 class ModusPonensDeclaration(InferenceRuleDeclaration):
     """The declaration of the :ref:`modus-ponens<modus_ponens_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4985,11 +4645,6 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(o=o)
-        return output
-
     def infer_formula(self, p_implies_q: FormulaStatement, p: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
@@ -5000,38 +4655,13 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         q = verify_formula(u=self.u, arity=2, input_value=p_implies_q.parameters[1])
         return q
 
-    def check_inference_validity(self, p_implies_q: FormulaStatement, p: FormulaStatement,
-            t: TheoryElaborationSequence) -> bool:
-        """
-
-        :param args: A statement (P ⟹ Q), and a statement P
-        :param t:
-        :return: A formula Q
-        """
-        p_implies_q = verify_formula_statement(t=t, arity=2, input_value=p_implies_q)
-        p = verify_formula_statement(t=t, arity=2, input_value=p)
-        verify(t.contains_theoretical_objct(p_implies_q),
-            'Statement ⌜p_implies_q⌝ is not contained in theory ⌜t⌝''s hierarchy.',
-            p_implies_q=p_implies_q, t=t, slf=self)
-        p_implies_q = unpack_formula(p_implies_q)
-        verify(p_implies_q.relation is t.u.r.implication,
-            'The relation of formula ⌜p_implies_q⌝ is not an implication.',
-            p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p_prime=p, t=t, slf=self)
-        p = unpack_formula(p)
-        p_prime = unpack_formula(p_implies_q.parameters[0])
-        # The antecedant of the implication may contain free-variables,
-        # store these in a mask for masked-formula-similitude comparison.
-        verify(p.is_formula_syntactically_equivalent_to(p_prime),
-            'Formula ⌜p_prime⌝ in statement ⌜p_implies_q⌝ must be formula-syntactically-equivalent to statement '
-            '⌜p⌝.', p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t, slf=self)
-        return True
-
 
 class ModusTollensDeclaration(InferenceRuleDeclaration):
     """The declaration of the :ref:`modus-tollens<modus_tollens_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -5048,11 +4678,6 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_modus_tollens_paragraph_proof(o=o)
-        return output
-
     def infer_formula(self, p_implies_q: FormulaStatement, p: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
@@ -5063,36 +4688,11 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
         q = verify_formula(u=self.u, arity=2, input_value=p_implies_q.parameters[1])
         return q
 
-    def check_inference_validity(self, p_implies_q: FormulaStatement, p: FormulaStatement,
-            t: TheoryElaborationSequence) -> bool:
-        """
-
-        :param args: A statement (P ⟹ Q), and a statement P
-        :param t:
-        :return: A formula Q
-        """
-        p_implies_q = verify_formula_statement(t=t, arity=2, input_value=p_implies_q)
-        p = verify_formula_statement(t=t, arity=2, input_value=p)
-        verify(t.contains_theoretical_objct(p_implies_q),
-            'Statement ⌜p_implies_q⌝ is not contained in theory ⌜t⌝''s hierarchy.',
-            p_implies_q=p_implies_q, t=t, slf=self)
-        p_implies_q = unpack_formula(p_implies_q)
-        verify(p_implies_q.relation is t.u.r.implication,
-            'The relation of formula ⌜p_implies_q⌝ is not an implication.',
-            p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p_prime=p, t=t, slf=self)
-        p = unpack_formula(p)
-        p_prime = unpack_formula(p_implies_q.parameters[0])
-        # The antecedant of the implication may contain free-variables,
-        # store these in a mask for masked-formula-similitude comparison.
-        verify(p.is_formula_syntactically_equivalent_to(p_prime),
-            'Formula ⌜p_prime⌝ in statement ⌜p_implies_q⌝ must be formula-syntactically-equivalent to statement '
-            '⌜p⌝.', p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t, slf=self)
-        return True
-
 
 class ProofByContradiction1Declaration(InferenceRuleDeclaration):
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
+
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'proof-by-contradiction'
         acronym = 'pbc'
@@ -5106,12 +4706,6 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             name=name, explicit_name=explicit_name, echo=echo)
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_proof_by_contradiction_1_paragraph_proof(
-            o=o)
-        return output
-
     def infer_formula(self, not_p_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
@@ -5122,40 +4716,11 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
         p = not_p.parameters[0]
         return p
 
-    def check_inference_validity(self, not_p_hypothesis: Hypothesis,
-            inc_hypothesis: InferredStatement, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> bool:
-        """
-
-        :param not_p_hypothesis: The hypothesis-statement in the parent theory.
-        :param inc_hypothesis: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
-        :param t: The current (parent) theory.
-        :param echo:
-        :return:
-        """
-        verify(is_in_class(not_p_hypothesis, classes.hypothesis), '⌜not_p⌝ must be an hypothesis.',
-            not_p=not_p_hypothesis, slf=self)
-        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
-            '⌜inc_not_p⌝ must be an inferred-statement.', inc_not_p=inc_hypothesis, slf=self)
-        verify(t.contains_theoretical_objct(not_p_hypothesis), '⌜not_p⌝ must be in theory ⌜t⌝.',
-            not_p=not_p_hypothesis, t=t, slf=self)
-        verify(not_p_hypothesis.hypothesis_child_theory.extended_theory is t,
-            '⌜not_p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
-            not_p_hypothetical_theory=not_p_hypothesis.hypothesis_child_theory,
-            not_p=not_p_hypothesis, t=t, slf=self)
-        verify(inc_hypothesis.relation is t.u.relations.inconsistency,
-            '⌜inc_not_p.relation⌝ must be of form (Inc(Hn)).',
-            inc_not_p_relation=inc_hypothesis.relation, inc_not_p=inc_hypothesis, t=t, slf=self)
-        verify(inc_hypothesis.valid_proposition.parameters[
-                   0] is not_p_hypothesis.hypothesis_child_theory,
-            '⌜inc_not_p⌝ must be of form (Inc(Hn)) where parameter[0] Hn is the '
-            'hypothetical-theory.',
-            inc_not_p_parameters_0=inc_hypothesis.valid_proposition.parameters[0],
-            not_p_hypothetical_theory=not_p_hypothesis.hypothesis_child_theory, t=t, slf=self)
-        return True
-
 
 class ProofByContradiction2Declaration(InferenceRuleDeclaration):
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
+
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'proof-by-contradiction-2'
         acronym = 'pbc2'
@@ -5167,12 +4732,6 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             name=name, explicit_name=explicit_name, echo=echo)
-
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_proof_by_contradiction_2_paragraph_proof(
-            o=o)
-        return output
 
     def infer_formula(self, x_neq_y_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
@@ -5186,43 +4745,11 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
         # Alternatively: not(x = y)
         return t.u.f(t.u.r.equality, x, y)
 
-    def check_inference_validity(self, x_neq_y_hypothesis: Hypothesis,
-            inc_hypothesis: InferredStatement, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> bool:
-        """
-
-        :param x_neq_y_hypothesis: The hypothesis-statement in the parent theory.
-        :param inc_hypothesis: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
-        :param t: The current (parent) theory.
-        :param echo:
-        :return:
-
-        TODO: ProofByContradiction2Declaration.verify_args(): Make systematic verifications. I doubt it is still possible to call the method with wrong parameters.
-        """
-        inc_hypothesis: InferredStatement = verify_formula_statement(t=t, arity=1,
-            input_value=inc_hypothesis)
-        verify(is_in_class(x_neq_y_hypothesis, classes.hypothesis),
-            '⌜x_neq_y_hypothesis⌝ must be an hypothesis.', p_neq_q=x_neq_y_hypothesis, slf=self)
-        verify(t.contains_theoretical_objct(x_neq_y_hypothesis), '⌜x_neq_y⌝ must be in theory ⌜t⌝.',
-            p_neq_q=x_neq_y_hypothesis, t=t, slf=self)
-        verify(x_neq_y_hypothesis.hypothesis_child_theory.extended_theory is t,
-            '⌜x_neq_y_hypothesis.hypothesis_child_theory⌝ must extend the parent theory ⌜t⌝.',
-            p_neq_q_hypothetical_theory=x_neq_y_hypothesis.hypothesis_child_theory,
-            p_neq_q=x_neq_y_hypothesis, t=t, slf=self)
-        verify(inc_hypothesis.valid_proposition.relation is t.u.relations.inconsistency,
-            '⌜inc_hypothesis.relation⌝ must be the inconsistency relation.',
-            inc_hypothesis_relation=inc_hypothesis.relation, inc_hypothesis=inc_hypothesis, t=t,
-            slf=self)
-        inc_hypothesis_hypothesis: Hypothesis = inc_hypothesis.valid_proposition.parameters[0]
-        x_neq_y_prime: FormulaStatement = inc_hypothesis.parameters[1]
-        verify(x_neq_y_hypothesis.child_statement.is_formula_syntactically_equivalent_to(
-            x_neq_y_prime),
-            '⌜x_neq_y⌝ must be formula-syntactically-equivalent to ⌜x_neq_y⌝ in ⌜inc_x_neq_y⌝.',
-            x_neq_y_hypothesis=x_neq_y_hypothesis, x_neq_y_prime=x_neq_y_prime, t=t, slf=self)
-        return True
-
 
 class ProofByRefutation1Declaration(InferenceRuleDeclaration):
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
+
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'proof-by-refutation'
         acronym = 'pbr'
@@ -5235,11 +4762,6 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             name=name, explicit_name=explicit_name, echo=echo)
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_proof_by_refutation_1_paragraph_proof(o=o)
-        return output
-
     def infer_formula(self, p_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
@@ -5250,44 +4772,13 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
         not_p = t.u.f(t.u.r.negation, p)
         return not_p
 
-    def check_inference_validity(self, p_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
-        """
-
-        :param p_hypothesis: The hypothesis-statement in the parent theory.
-        :param inc_hypothesis: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
-        :param t: The current (parent) theory.
-        :param echo:
-        :return:
-        """
-        verify(is_in_class(p_hypothesis, classes.hypothesis), '⌜p⌝ must be an hypothesis.',
-            p=p_hypothesis, slf=self)
-        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
-            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_hypothesis, slf=self)
-        verify(t.contains_theoretical_objct(p_hypothesis), '⌜p⌝ must be in theory ⌜t⌝.',
-            p=p_hypothesis, t=t, slf=self)
-        verify(p_hypothesis.hypothesis_child_theory.extended_theory is t,
-            '⌜p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
-            p_hypothetical_theory=p_hypothesis.hypothesis_child_theory, p=p_hypothesis, t=t,
-            slf=self)
-        verify(inc_hypothesis.relation is t.u.relations.inconsistency,
-            '⌜inc_p.relation⌝ must be of form (Inc(Hn)).', inc_p_relation=inc_hypothesis.relation,
-            inc_p=inc_hypothesis, t=t, slf=self)
-        verify(
-            inc_hypothesis.valid_proposition.parameters[0] is p_hypothesis.hypothesis_child_theory,
-            '⌜inc_p⌝ must be of form (Inc(Hn)) where parameter[0] Hn is the hypothetical-theory.',
-            inc_p_parameters_0=inc_hypothesis.valid_proposition.parameters[0],
-            p_hypothetical_theory=p_hypothesis.hypothesis_child_theory, t=t, slf=self)
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
-        #  stable???
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
-        #  is stable
-        return True
-
 
 class ProofByRefutation2Declaration(InferenceRuleDeclaration):
     """This python class models the inclusion of :ref:`proof-by-refutation-2<proof_by_refutation_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
+
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'proof-by-refutation-2'
@@ -5301,11 +4792,6 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             name=name, explicit_name=explicit_name, echo=echo)
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_proof_by_refutation_2_paragraph_proof(o=o)
-        return output
-
     def infer_formula(self, p_eq_q_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
@@ -5316,39 +4802,11 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
         p_neq_q = t.u.f(t.u.r.inequality, p_eq_q.parameters[0], p_eq_q.parameters[1])
         return p_neq_q
 
-    def check_inference_validity(self, p_eq_q_hypothesis: Hypothesis,
-            inc_hypothesis: InferredStatement, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> bool:
-        """
-
-        :param p_eq_q_hypothesis: The hypothesis-statement in the parent theory.
-        :param inc_hypothesis: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
-        :param t: The current (parent) theory.
-        :param echo:
-        :return:
-        """
-        verify(is_in_class(p_eq_q_hypothesis, classes.hypothesis), '⌜p⌝ must be an hypothesis.',
-            p=p_eq_q_hypothesis, slf=self)
-        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
-            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_hypothesis, slf=self)
-        verify(t.contains_theoretical_objct(p_eq_q_hypothesis), '⌜p⌝ must be in theory ⌜t⌝.',
-            p=p_eq_q_hypothesis, t=t, slf=self)
-        verify(p_eq_q_hypothesis.hypothesis_child_theory.extended_theory is t,
-            '⌜p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
-            p_hypothetical_theory=p_eq_q_hypothesis.hypothesis_child_theory, p=p_eq_q_hypothesis,
-            t=t, slf=self)
-        verify(inc_hypothesis.valid_proposition.relation is t.u.relations.inconsistency,
-            '⌜inc_p.relation⌝ must be of form (Inc(Hn)).',
-            inc_p_relation=inc_hypothesis.valid_proposition.relation, inc_p=inc_hypothesis, t=t,
-            slf=self)
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
-        #  stable???
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
-        #  is stable
-        return True
-
 
 class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
+    class Premises(typing.NamedTuple):
+        p_implies_q: FlexibleFormula
+
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'variable-substitution'
         acronym = 'vs'
@@ -5362,12 +4820,6 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        """Overrides the generic paragraph proof method."""
-        output = yield from configuration.locale.compose_variable_substitution_paragraph_proof(o=o)
-        return output
-
     def infer_formula(self, p: FormulaStatement, phi: (None, tuple[TheoreticalObject]),
             t: TheoryElaborationSequence, echo: (None, bool) = None, **kwargs) -> Formula:
         """
@@ -5378,28 +4830,6 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         x_y_map = dict((x, y) for x, y in zip(x_oset, phi))
         p_prime = p.valid_proposition.substitute(substitution_map=x_y_map, target_theory=t)
         return p_prime
-
-    def check_inference_validity(self, p: FormulaStatement, phi: (None, tuple[TheoreticalObject]),
-            t: TheoryElaborationSequence, echo: (None, bool) = None, **kwargs) -> bool:
-        """Verify if the arguments comply syntactically with the inference-rule.
-        """
-        verify(is_in_class(p, classes.formula_statement), '⌜p⌝ must be a formula-statement.', p=p,
-            t=t, slf=self)
-        verify(t.contains_theoretical_objct(p), '⌜p⌝ must be contained in ⌜t⌝.', p=p, t=t, slf=self)
-        verify(isinstance(phi, tuple), '⌜phi⌝ must be a tuple.', phi=phi, t=t, slf=self)
-        x_oset = unpack_formula(p).get_variable_ordered_set()
-        verify(len(x_oset) == len(phi),
-            'The cardinality of the canonically ordered free-variables.')
-        # Substitution objects in Y must be declared in U,
-        # but they may not be referenced yet in T's extension.
-        for y in phi:
-            verify(isinstance(y, TheoreticalObject), '⌜y⌝ in ⌜phi⌝ must be a theoretical-object.',
-                y=y, t=t, slf=self)
-            verify(y.u is self.u, '⌜y⌝ and ⌜self⌝ do not share the same universe-of-discourse.',
-                y=y, y_u=y.u, slf=self, slf_u=self.u)
-
-        # TODO: Add a verification step: the variable is not locked.
-        return True
 
 
 class AtheoreticalStatement(SymbolicObject):
@@ -7266,6 +6696,24 @@ class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_biconditional_elimination_1_paragraph_proof(
+            o=o)
+        return output
+
+    def check_inference_validity(self, p_iff_q: FormulaStatement = None,
+            t: TheoryElaborationSequence = None) -> bool:
+        p_iff_q: FormulaStatement = verify_formula_statement(t=t, arity=None, input_value=p_iff_q)
+        verify(t.contains_theoretical_objct(p_iff_q),
+            'Formula-statement ⌜p_iff_q⌝ must be contained in theory ⌜t⌝.', phi=p_iff_q, t=t,
+            slf=self)
+        p_iff_q: Formula = verify_formula(u=self.u, arity=None, input_value=p_iff_q)
+        verify(p_iff_q.relation is t.u.r.biconditional,
+            'The relation of formula ⌜p_iff_q⌝ must be a biconditional.',
+            phi_relation=p_iff_q.relation, phi=p_iff_q, t=t, slf=self)
+        return True
+
     def infer_formula(self, p_iff_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
@@ -7301,6 +6749,24 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def check_inference_validity(self, p_iff_q: FormulaStatement = None,
+            t: TheoryElaborationSequence = None) -> bool:
+        p_iff_q: FormulaStatement = verify_formula_statement(t=t, arity=None, input_value=p_iff_q)
+        verify(t.contains_theoretical_objct(p_iff_q),
+            'Formula-statement ⌜p_iff_q⌝ must be contained in theory ⌜t⌝.', phi=p_iff_q, t=t,
+            slf=self)
+        p_iff_q: Formula = verify_formula(u=self.u, arity=None, input_value=p_iff_q)
+        verify(p_iff_q.relation is t.u.r.biconditional,
+            'The relation of formula ⌜p_iff_q⌝ must be a biconditional.',
+            phi_relation=p_iff_q.relation, phi=p_iff_q, t=t, slf=self)
+        return True
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_biconditional_elimination_2_paragraph_proof(
+            o=o)
+        return output
+
     def infer_formula(self, p_iff_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
@@ -7335,6 +6801,43 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_biconditional_introduction_paragraph_proof(
+            o=o)
+        return output
+
+    def check_inference_validity(self, p_implies_q: FormulaStatement = None,
+            q_implies_p: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
+        p_implies_q = verify_formula_statement(t=t, arity=2, input_value=p_implies_q)
+        verify(t.contains_theoretical_objct(p_implies_q),
+            'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝.', p_implies_q=p_implies_q,
+            t=t, slf=self)
+        q_implies_p = verify_formula_statement(t=t, arity=2, input_value=q_implies_p)
+        verify(t.contains_theoretical_objct(q_implies_p),
+            'Statement ⌜q_implies_p⌝ must be contained in theory ⌜t⌝.', q_implies_p=q_implies_p,
+            t=t, slf=self)
+        p_implies_q: Formula = verify_formula(u=t.u, arity=2, input_value=p_implies_q)
+        q_implies_p: Formula = verify_formula(u=t.u, arity=2, input_value=q_implies_p)
+        verify(p_implies_q.relation is t.u.r.implication,
+            'The relation of formula ⌜p_implies_q⌝ must be an implication.',
+            p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
+        verify(q_implies_p.relation is t.u.r.implication,
+            'The relation of formula ⌜q_implies_p⌝ must be an implication.',
+            q_implies_p_relation=p_implies_q.relation, q_implies_p=q_implies_p, t=t, slf=self)
+
+        verify(p_implies_q.parameters[0].is_formula_syntactically_equivalent_to(
+            q_implies_p.parameters[1]),
+            'The p of the ⌜p_implies_q⌝ formula must be formula-syntactically-equivalent to the p of '
+            '⌜q_implies_p⌝ formula.', p_implies_q=p_implies_q, q_implies_p=q_implies_p, t=t,
+            slf=self)
+        verify(p_implies_q.parameters[1].is_formula_syntactically_equivalent_to(
+            q_implies_p.parameters[0]),
+            'The q of the ⌜p_implies_q⌝ formula must be formula-syntactically-equivalent to the q of '
+            '⌜q_implies_p⌝ formula.', p_implies_q=p_implies_q, q_implies_p=q_implies_p, t=t,
+            slf=self)
+        return True
 
     def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
             q_implies_p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
@@ -7373,6 +6876,22 @@ class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_conjunction_elimination_1_paragraph_proof(
+            o=o)
+        return output
+
+    def check_inference_validity(self, p_land_q: FormulaStatement = None,
+            t: TheoryElaborationSequence = None) -> bool:
+        verify(t.contains_theoretical_objct(p_land_q),
+            'Statement ⌜p_land_q⌝ must be contained in theory ⌜t⌝''s hierarchy.', p_land_q=p_land_q,
+            t=t, slf=self)
+        verify(p_land_q.relation is t.u.r.conjunction,
+            'The relation of formula ⌜p_land_q⌝ must be a conjunction.',
+            p_land_q_relation=p_land_q.relation, p_land_q=p_land_q, t=t, slf=self)
+        return True
+
     def infer_formula(self, p_and_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
@@ -7406,6 +6925,22 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_conjunction_elimination_2_paragraph_proof(
+            o=o)
+        return output
+
+    def check_inference_validity(self, p_land_q: FormulaStatement = None,
+            t: TheoryElaborationSequence = None) -> bool:
+        verify(t.contains_theoretical_objct(p_land_q),
+            'Statement ⌜p_land_q⌝ must be contained in theory ⌜t⌝''s hierarchy.', p_land_q=p_land_q,
+            t=t, slf=self)
+        verify(p_land_q.relation is t.u.r.conjunction,
+            'The relation of formula ⌜p_land_q⌝ must be a conjunction.',
+            p_land_q_relation=p_land_q.relation, p_land_q=p_land_q, t=t, slf=self)
+        return True
 
     def infer_formula(self, p_and_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -7441,6 +6976,31 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """Composes the paragraph-proof of inferred-statements based on the :ref:`conjunction-introduction<conjunction_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` ."""
+        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
+            o=o)
+        return output
+
+    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
+            t: TheoryElaborationSequence) -> bool:
+        """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
+
+        :param p: (mandatory) A formula-statement of the form :math:`P` .
+        :param q: (mandatory) A formula-statement of the form :math:`Q` .
+        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
+
+        :return: True (bool) if the parameters are correct.
+        """
+        p = verify_formula_statement(t=t, arity=None, input_value=p)
+        q = verify_formula_statement(t=t, arity=None, input_value=q)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        verify(t.contains_theoretical_objct(q),
+            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
+        return True
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
@@ -7606,6 +7166,24 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """ """
+        output = yield from configuration.locale.destructive_dilemma_introduction_paragraph_proof(
+            o=o)
+        return output
+
+    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
+            t: TheoryElaborationSequence) -> bool:
+        """ """
+        p = verify_formula_statement(t=t, arity=None, input_value=p)
+        q = verify_formula_statement(t=t, arity=None, input_value=q)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        verify(t.contains_theoretical_objct(q),
+            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
+        return True
+
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -7645,6 +7223,29 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """Composes the paragraph-proof of inferred-statements based on the :ref:`disjunction-introduction-1<disjunction_introduction_1_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` ."""
+        output = yield from configuration.locale.compose_disjunction_introduction_1_paragraph_proof(
+            o=o)
+        return output
+
+    def check_inference_validity(self, p: FormulaStatement, q: (Formula, FormulaStatement),
+            t: TheoryElaborationSequence) -> bool:
+        """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
+
+        :param p: (mandatory) A formula-statement of the form :math:`P` .
+        :param q: (mandatory) A formula of the form :math:`Q` .
+        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
+
+        :return: True (bool) if the parameters are correct.
+        """
+        p = verify_formula_statement(t=t, arity=None, input_value=p)
+        q = verify_formula(u=t.u, arity=None, input_value=q)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        return True
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
@@ -7686,6 +7287,29 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """Composes the paragraph-proof of inferred-statements based on the :ref:`disjunction-introduction-2<disjunction_introduction_2_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` ."""
+        output = yield from configuration.locale.compose_disjunction_introduction_2_paragraph_proof(
+            o=o)
+        return output
+
+    def check_inference_validity(self, p: FormulaStatement, q: (Formula, FormulaStatement),
+            t: TheoryElaborationSequence) -> bool:
+        """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
+
+        :param p: (mandatory) A formula-statement of the form :math:`P` .
+        :param q: (mandatory) A formula of the form :math:`Q` .
+        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
+
+        :return: True (bool) if the parameters are correct.
+        """
+        p = verify_formula_statement(t=t, arity=None, input_value=p)
+        q = verify_formula(u=t.u, arity=None, input_value=q)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        return True
+
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -7725,6 +7349,23 @@ class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """ """
+        output = yield from configuration.locale.compose_disjunctive_resolution_paragraph_proof(o=o)
+        return output
+
+    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
+            t: TheoryElaborationSequence) -> bool:
+        """ """
+        p = verify_formula_statement(t=t, arity=None, input_value=p)
+        q = verify_formula_statement(t=t, arity=None, input_value=q)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        verify(t.contains_theoretical_objct(q),
+            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
+        return True
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
@@ -7766,6 +7407,23 @@ class DisjunctiveSyllogismInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """ """
+        output = yield from configuration.locale.compose_disjunctive_syllogism_paragraph_proof(o=o)
+        return output
+
+    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
+            t: TheoryElaborationSequence) -> bool:
+        """ """
+        p = verify_formula_statement(t=t, arity=None, input_value=p)
+        q = verify_formula_statement(t=t, arity=None, input_value=q)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        verify(t.contains_theoretical_objct(q),
+            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
+        return True
+
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -7806,6 +7464,28 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_double_negation_elimination_paragraph_proof(
+            o=o)
+        return output
+
+    def check_inference_validity(self, not_not_p: FormulaStatement = None,
+            t: TheoryElaborationSequence = None) -> bool:
+        not_not_p: FormulaStatement = verify_formula_statement(t=t, arity=1, input_value=not_not_p)
+        verify(assertion=t.contains_theoretical_objct(not_not_p),
+            msg='Statement ⌜not_not_p⌝ must be contained in ⌜t⌝.', not_not_p=not_not_p, t=t,
+            slf=self)
+        verify(assertion=not_not_p.valid_proposition.relation is t.u.r.negation,
+            msg='The parent formula in ⌜not_not_p⌝ must have ⌜negation⌝ relation.',
+            not_not_p=not_not_p, t=t, slf=self)
+        not_p: Formula = not_not_p.valid_proposition.parameters[0]
+        not_p: Formula = verify_formula(u=t.u, arity=1, input_value=not_p)
+        verify(assertion=not_p.relation is t.u.r.negation,
+            msg='The child formula in ⌜not_not_p⌝ must have ⌜negation⌝ relation.', not_not_p=not_p,
+            t=t, slf=self)
+        return True
+
     def infer_formula(self, not_not_p: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
@@ -7841,6 +7521,26 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """Composes the paragraph-proof of inferred-statements based on the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` ."""
+        output = yield from configuration.locale.compose_double_negation_introduction_paragraph_proof(
+            o=o)
+        return output
+
+    def check_inference_validity(self, p: FormulaStatement = None,
+            t: TheoryElaborationSequence = None) -> bool:
+        p: FormulaStatement = verify_formula_statement(t=t, arity=1, input_value=p)
+        """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
+
+        :param p: (mandatory) A formula-statement of the form: :math:`P` .
+
+        :return: True (bool) if the parameters are correct.
+        """
+        verify(assertion=t.contains_theoretical_objct(p),
+            msg='Statement ⌜p⌝ must be contained in ⌜t⌝.', p=p, t=t, slf=self)
+        return True
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -7878,6 +7578,25 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_equality_commutativity_paragraph_proof(o=o)
+        return output
+
+    def check_inference_validity(self, x_equal_y: (None, FormulaStatement) = None,
+            t: TheoryElaborationSequence = None) -> bool:
+        verify(is_in_class(x_equal_y, classes.formula_statement),
+            '⌜x_equal_y⌝ is not of the declarative-class formula-statement.', p_eq_q=x_equal_y, t=t,
+            slf=self)
+        verify(t.contains_theoretical_objct(x_equal_y),
+            'Statement ⌜x_equal_y⌝ is not contained in ⌜t⌝''s hierarchy.', p_eq_q=x_equal_y, t=t,
+            slf=self)
+        x_equal_y = unpack_formula(x_equal_y)
+        verify(x_equal_y.relation is self.u.r.equality,
+            'The root relation of formula ⌜x_equal_y⌝ is not the equality relation.',
+            p_eq_q_relation=x_equal_y.relation, p_eq_q=x_equal_y, t=t, slf=self)
+        return True
+
     def infer_formula(self, x_equal_y: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
@@ -7912,6 +7631,30 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_equal_terms_substitution_paragraph_proof(
+            o=o)
+        return output
+
+    def check_inference_validity(self, p: FormulaStatement = None,
+            x_equal_y: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
+        verify(is_in_class(p, classes.formula_statement), '⌜p⌝ must be a formula-statement.', p=p,
+            slf=self, t=t)
+        verify(t.contains_theoretical_objct(p), '⌜p⌝ must be in theory-elaboration-sequence ⌜t⌝.',
+            p=p, slf=self, t=t)
+        verify(is_in_class(x_equal_y, classes.formula_statement),
+            '⌜x_equal_y⌝ is not of the formula-statement declarative-class.', q_equal_r=x_equal_y,
+            slf=self, t=t)
+        verify(t.contains_theoretical_objct(x_equal_y),
+            '⌜x_equal_y⌝ is not contained in theoretical-elaboration-sequence ⌜t⌝.',
+            q_equal_r=x_equal_y, slf=self, t=t)
+        x_equal_y = unpack_formula(x_equal_y)
+        verify(x_equal_y.relation is self.u.r.equality,
+            'The root relation of ⌜x_equal_y⌝ is not the equality relation.', q_equal_r=x_equal_y,
+            slf=self, t=t)
+        return True
 
     def infer_formula(self, p: (None, FormulaStatement) = None,
             q_equal_r: (None, FormulaStatement) = None, echo: (None, bool) = None):
@@ -7948,6 +7691,23 @@ class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """ """
+        output = yield from configuration.locale.compose_hypothetical_syllogism_paragraph_proof(o=o)
+        return output
+
+    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
+            t: TheoryElaborationSequence) -> bool:
+        """ """
+        p = verify_formula_statement(t=t, arity=None, input_value=p)
+        q = verify_formula_statement(t=t, arity=None, input_value=q)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
+        verify(t.contains_theoretical_objct(q),
+            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
+        return True
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
@@ -7988,6 +7748,31 @@ class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_inconsistency_introduction_1_paragraph_proof(
+            o=o)
+        return output
+
+    def check_inference_validity(self, p: FormulaStatement = None, not_p: FormulaStatement = None,
+            inconsistent_theory: TheoryElaborationSequence = None,
+            t: TheoryElaborationSequence = None) -> bool:
+        verify(inconsistent_theory.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜inconsistent_theory⌝''s hierarchy.', p=p,
+            inconsistent_theory=inconsistent_theory, slf=self)
+        verify(inconsistent_theory.contains_theoretical_objct(not_p),
+            'Statement ⌜not_p⌝ must be contained in theory ⌜inconsistent_theory⌝''s hierarchy.',
+            not_p=not_p, inconsistent_theory=inconsistent_theory, slf=self)
+        verify(not_p.relation is not_p.theory.universe_of_discourse.relations.negation,
+            'The relation of statement ⌜not_p⌝ must be ⌜negation⌝.', not_p=not_p,
+            inconsistent_theory=inconsistent_theory, slf=self)
+        not_p_formula = not_p.valid_proposition
+        p_in_not_p = not_p_formula.parameters[0]
+        verify(p_in_not_p.is_formula_syntactically_equivalent_to(p),
+            'The sub-formula (parameter) ⌜p⌝ in ⌜not_p⌝ must be formula-syntactically-equivalent to ⌜p⌝.',
+            not_p=not_p, p_in_not_p=p_in_not_p, p=p, slf=self)
+        return True
 
     def infer_formula(self, p: (None, FormulaStatement) = None,
             not_p: (None, FormulaStatement) = None,
@@ -8032,6 +7817,37 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_inconsistency_introduction_2_paragraph_proof(
+            o=o)
+        return output
+
+    def check_inference_validity(self, x_eq_y: FormulaStatement = None,
+            x_neq_y: FormulaStatement = None, inconsistent_theory: TheoryElaborationSequence = None,
+            t: TheoryElaborationSequence = None) -> bool:
+        verify(inconsistent_theory.contains_theoretical_objct(x_eq_y),
+            'Statement ⌜x_eq_y⌝ must be contained in ⌜inconsistent_theory⌝.', p_eq_q=x_eq_y,
+            inconsistent_theory=inconsistent_theory, slf=self)
+        verify(inconsistent_theory.contains_theoretical_objct(x_neq_y),
+            'Statement ⌜x_neq_y⌝ must be contained in ⌜inconsistent_theory⌝.', p_neq_q=x_neq_y,
+            inconsistent_theory=inconsistent_theory, slf=self)
+        verify(x_eq_y.relation is x_eq_y.theory.universe_of_discourse.relations.equality,
+            'The relation of statement ⌜x_eq_y⌝ must be ⌜equality⌝.', p_neq_q=x_neq_y,
+            inconsistent_theory=inconsistent_theory, slf=self)
+        verify(x_neq_y.relation is x_neq_y.theory.universe_of_discourse.relations.inequality,
+            'The relation of statement ⌜x_neq_y⌝ must be ⌜inequality⌝.', p_neq_q=x_neq_y,
+            inconsistent_theory=inconsistent_theory, slf=self)
+        verify(x_eq_y.valid_proposition.parameters[0].is_formula_syntactically_equivalent_to(
+            x_neq_y.valid_proposition.parameters[0]),
+            'The ⌜x⌝ in ⌜x_eq_y⌝ must be formula-syntactically-equivalent to the ⌜x⌝ in ⌜x_neq_y⌝.',
+            p_eq_q=x_eq_y, p_neq_q=x_neq_y, inconsistent_theory=inconsistent_theory, slf=self)
+        verify(x_eq_y.valid_proposition.parameters[1].is_formula_syntactically_equivalent_to(
+            x_neq_y.valid_proposition.parameters[1]),
+            'The ⌜y⌝ in ⌜x_eq_y⌝ must be formula-syntactically-equivalent to the ⌜y⌝ in ⌜x_neq_y⌝.',
+            p_eq_q=x_eq_y, p_neq_q=x_neq_y, inconsistent_theory=inconsistent_theory, slf=self)
+        return True
 
     def infer_formula(self, x_eq_y: (None, FormulaStatement) = None,
             x_neq_y: (None, FormulaStatement) = None,
@@ -8080,6 +7896,27 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_inconsistency_introduction_3_paragraph_proof(
+            o=o)
+        return output
+
+    def check_inference_validity(self, p_neq_p: FormulaStatement = None,
+            inconsistent_theory: TheoryElaborationSequence = None,
+            t: TheoryElaborationSequence = None) -> bool:
+        verify(inconsistent_theory.contains_theoretical_objct(p_neq_p),
+            'Statement ⌜p_neq_p⌝ must be contained in theory ⌜inconsistent_theory⌝''s hierarchy.',
+            p_neq_p=p_neq_p, inconsistent_theory=inconsistent_theory, slf=self)
+        verify(p_neq_p.relation is p_neq_p.theory.universe_of_discourse.relations.inequality,
+            'The relation of statement ⌜p_neq_p⌝ must be ⌜inequality⌝.', p_neq_p=p_neq_p,
+            inconsistent_theory=inconsistent_theory, slf=self)
+        verify(p_neq_p.valid_proposition.parameters[0].is_formula_syntactically_equivalent_to(
+            p_neq_p.valid_proposition.parameters[1]),
+            'The two ⌜p⌝ terms in  ⌜p_neq_p⌝ must be formula-syntactically-equivalent.',
+            p_neq_p=p_neq_p, inconsistent_theory=inconsistent_theory, slf=self)
+        return True
+
     def infer_formula(self, p_neq_p: (None, FormulaStatement) = None,
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
             t: (None, TheoryElaborationSequence) = None, echo: (None, bool) = None):
@@ -8122,6 +7959,39 @@ class ModusPonensInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def check_inference_validity(self, p_implies_q: FormulaStatement, p: FormulaStatement,
+            t: TheoryElaborationSequence) -> bool:
+        """
+
+        :param args: A statement (P ⟹ Q), and a statement P
+        :param t:
+        :return: A formula Q
+        """
+        p_implies_q = verify_formula_statement(t=t, arity=2, input_value=p_implies_q)
+        p = verify_formula_statement(t=t, arity=2, input_value=p)
+        verify(t.contains_theoretical_objct(p_implies_q),
+            'Statement ⌜p_implies_q⌝ is not contained in theory ⌜t⌝''s hierarchy.',
+            p_implies_q=p_implies_q, t=t, slf=self)
+        p_implies_q = unpack_formula(p_implies_q)
+        verify(p_implies_q.relation is t.u.r.implication,
+            'The relation of formula ⌜p_implies_q⌝ is not an implication.',
+            p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p_prime=p, t=t, slf=self)
+        p = unpack_formula(p)
+        p_prime = unpack_formula(p_implies_q.parameters[0])
+        # The antecedant of the implication may contain free-variables,
+        # store these in a mask for masked-formula-similitude comparison.
+        verify(p.is_formula_syntactically_equivalent_to(p_prime),
+            'Formula ⌜p_prime⌝ in statement ⌜p_implies_q⌝ must be formula-syntactically-equivalent to statement '
+            '⌜p⌝.', p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t, slf=self)
+        return True
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(o=o)
+        return output
+
     def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
             p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -8159,6 +8029,39 @@ class ModusTollensInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
+
+    def check_inference_validity(self, p_implies_q: FormulaStatement, p: FormulaStatement,
+            t: TheoryElaborationSequence) -> bool:
+        """
+
+        :param args: A statement (P ⟹ Q), and a statement P
+        :param t:
+        :return: A formula Q
+        """
+        p_implies_q = verify_formula_statement(t=t, arity=2, input_value=p_implies_q)
+        p = verify_formula_statement(t=t, arity=2, input_value=p)
+        verify(t.contains_theoretical_objct(p_implies_q),
+            'Statement ⌜p_implies_q⌝ is not contained in theory ⌜t⌝''s hierarchy.',
+            p_implies_q=p_implies_q, t=t, slf=self)
+        p_implies_q = unpack_formula(p_implies_q)
+        verify(p_implies_q.relation is t.u.r.implication,
+            'The relation of formula ⌜p_implies_q⌝ is not an implication.',
+            p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
+        verify(t.contains_theoretical_objct(p),
+            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p_prime=p, t=t, slf=self)
+        p = unpack_formula(p)
+        p_prime = unpack_formula(p_implies_q.parameters[0])
+        # The antecedant of the implication may contain free-variables,
+        # store these in a mask for masked-formula-similitude comparison.
+        verify(p.is_formula_syntactically_equivalent_to(p_prime),
+            'Formula ⌜p_prime⌝ in statement ⌜p_implies_q⌝ must be formula-syntactically-equivalent to statement '
+            '⌜p⌝.', p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t, slf=self)
+        return True
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_modus_tollens_paragraph_proof(o=o)
+        return output
 
     def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
             p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
@@ -8198,6 +8101,44 @@ class ProofByContradiction1Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def check_inference_validity(self, not_p_hypothesis: Hypothesis,
+            inc_hypothesis: InferredStatement, t: TheoryElaborationSequence,
+            echo: (None, bool) = None) -> bool:
+        """
+
+        :param not_p_hypothesis: The hypothesis-statement in the parent theory.
+        :param inc_hypothesis: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param t: The current (parent) theory.
+        :param echo:
+        :return:
+        """
+        verify(is_in_class(not_p_hypothesis, classes.hypothesis), '⌜not_p⌝ must be an hypothesis.',
+            not_p=not_p_hypothesis, slf=self)
+        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
+            '⌜inc_not_p⌝ must be an inferred-statement.', inc_not_p=inc_hypothesis, slf=self)
+        verify(t.contains_theoretical_objct(not_p_hypothesis), '⌜not_p⌝ must be in theory ⌜t⌝.',
+            not_p=not_p_hypothesis, t=t, slf=self)
+        verify(not_p_hypothesis.hypothesis_child_theory.extended_theory is t,
+            '⌜not_p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
+            not_p_hypothetical_theory=not_p_hypothesis.hypothesis_child_theory,
+            not_p=not_p_hypothesis, t=t, slf=self)
+        verify(inc_hypothesis.relation is t.u.relations.inconsistency,
+            '⌜inc_not_p.relation⌝ must be of form (Inc(Hn)).',
+            inc_not_p_relation=inc_hypothesis.relation, inc_not_p=inc_hypothesis, t=t, slf=self)
+        verify(inc_hypothesis.valid_proposition.parameters[
+                   0] is not_p_hypothesis.hypothesis_child_theory,
+            '⌜inc_not_p⌝ must be of form (Inc(Hn)) where parameter[0] Hn is the '
+            'hypothetical-theory.',
+            inc_not_p_parameters_0=inc_hypothesis.valid_proposition.parameters[0],
+            not_p_hypothetical_theory=not_p_hypothesis.hypothesis_child_theory, t=t, slf=self)
+        return True
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_proof_by_contradiction_1_paragraph_proof(
+            o=o)
+        return output
+
     def infer_formula(self, not_p_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None) -> Formula:
         """
@@ -8234,6 +8175,47 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def check_inference_validity(self, x_neq_y_hypothesis: Hypothesis,
+            inc_hypothesis: InferredStatement, t: TheoryElaborationSequence,
+            echo: (None, bool) = None) -> bool:
+        """
+
+        :param x_neq_y_hypothesis: The hypothesis-statement in the parent theory.
+        :param inc_hypothesis: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param t: The current (parent) theory.
+        :param echo:
+        :return:
+
+        TODO: ProofByContradiction2Declaration.verify_args(): Make systematic verifications. I doubt it is still possible to call the method with wrong parameters.
+        """
+        inc_hypothesis: InferredStatement = verify_formula_statement(t=t, arity=1,
+            input_value=inc_hypothesis)
+        verify(is_in_class(x_neq_y_hypothesis, classes.hypothesis),
+            '⌜x_neq_y_hypothesis⌝ must be an hypothesis.', p_neq_q=x_neq_y_hypothesis, slf=self)
+        verify(t.contains_theoretical_objct(x_neq_y_hypothesis), '⌜x_neq_y⌝ must be in theory ⌜t⌝.',
+            p_neq_q=x_neq_y_hypothesis, t=t, slf=self)
+        verify(x_neq_y_hypothesis.hypothesis_child_theory.extended_theory is t,
+            '⌜x_neq_y_hypothesis.hypothesis_child_theory⌝ must extend the parent theory ⌜t⌝.',
+            p_neq_q_hypothetical_theory=x_neq_y_hypothesis.hypothesis_child_theory,
+            p_neq_q=x_neq_y_hypothesis, t=t, slf=self)
+        verify(inc_hypothesis.valid_proposition.relation is t.u.relations.inconsistency,
+            '⌜inc_hypothesis.relation⌝ must be the inconsistency relation.',
+            inc_hypothesis_relation=inc_hypothesis.relation, inc_hypothesis=inc_hypothesis, t=t,
+            slf=self)
+        inc_hypothesis_hypothesis: Hypothesis = inc_hypothesis.valid_proposition.parameters[0]
+        x_neq_y_prime: FormulaStatement = inc_hypothesis.parameters[1]
+        verify(x_neq_y_hypothesis.child_statement.is_formula_syntactically_equivalent_to(
+            x_neq_y_prime),
+            '⌜x_neq_y⌝ must be formula-syntactically-equivalent to ⌜x_neq_y⌝ in ⌜inc_x_neq_y⌝.',
+            x_neq_y_hypothesis=x_neq_y_hypothesis, x_neq_y_prime=x_neq_y_prime, t=t, slf=self)
+        return True
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_proof_by_contradiction_2_paragraph_proof(
+            o=o)
+        return output
+
     def infer_formula(self, x_neq_y_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -8269,6 +8251,45 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
+
+    def check_inference_validity(self, p_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
+            t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
+        """
+
+        :param p_hypothesis: The hypothesis-statement in the parent theory.
+        :param inc_hypothesis: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param t: The current (parent) theory.
+        :param echo:
+        :return:
+        """
+        verify(is_in_class(p_hypothesis, classes.hypothesis), '⌜p⌝ must be an hypothesis.',
+            p=p_hypothesis, slf=self)
+        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
+            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_hypothesis, slf=self)
+        verify(t.contains_theoretical_objct(p_hypothesis), '⌜p⌝ must be in theory ⌜t⌝.',
+            p=p_hypothesis, t=t, slf=self)
+        verify(p_hypothesis.hypothesis_child_theory.extended_theory is t,
+            '⌜p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
+            p_hypothetical_theory=p_hypothesis.hypothesis_child_theory, p=p_hypothesis, t=t,
+            slf=self)
+        verify(inc_hypothesis.relation is t.u.relations.inconsistency,
+            '⌜inc_p.relation⌝ must be of form (Inc(Hn)).', inc_p_relation=inc_hypothesis.relation,
+            inc_p=inc_hypothesis, t=t, slf=self)
+        verify(
+            inc_hypothesis.valid_proposition.parameters[0] is p_hypothesis.hypothesis_child_theory,
+            '⌜inc_p⌝ must be of form (Inc(Hn)) where parameter[0] Hn is the hypothetical-theory.',
+            inc_p_parameters_0=inc_hypothesis.valid_proposition.parameters[0],
+            p_hypothetical_theory=p_hypothesis.hypothesis_child_theory, t=t, slf=self)
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
+        #  stable???
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
+        #  is stable
+        return True
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_proof_by_refutation_1_paragraph_proof(o=o)
+        return output
 
     def infer_formula(self, p_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
@@ -8307,6 +8328,42 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_proof_by_refutation_2_paragraph_proof(o=o)
+        return output
+
+    def check_inference_validity(self, p_eq_q_hypothesis: Hypothesis,
+            inc_hypothesis: InferredStatement, t: TheoryElaborationSequence,
+            echo: (None, bool) = None) -> bool:
+        """
+
+        :param p_eq_q_hypothesis: The hypothesis-statement in the parent theory.
+        :param inc_hypothesis: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
+        :param t: The current (parent) theory.
+        :param echo:
+        :return:
+        """
+        verify(is_in_class(p_eq_q_hypothesis, classes.hypothesis), '⌜p⌝ must be an hypothesis.',
+            p=p_eq_q_hypothesis, slf=self)
+        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
+            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_hypothesis, slf=self)
+        verify(t.contains_theoretical_objct(p_eq_q_hypothesis), '⌜p⌝ must be in theory ⌜t⌝.',
+            p=p_eq_q_hypothesis, t=t, slf=self)
+        verify(p_eq_q_hypothesis.hypothesis_child_theory.extended_theory is t,
+            '⌜p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
+            p_hypothetical_theory=p_eq_q_hypothesis.hypothesis_child_theory, p=p_eq_q_hypothesis,
+            t=t, slf=self)
+        verify(inc_hypothesis.valid_proposition.relation is t.u.relations.inconsistency,
+            '⌜inc_p.relation⌝ must be of form (Inc(Hn)).',
+            inc_p_relation=inc_hypothesis.valid_proposition.relation, inc_p=inc_hypothesis, t=t,
+            slf=self)
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
+        #  stable???
+        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
+        #  is stable
+        return True
+
     def infer_formula(self, x_eq_y_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -8342,6 +8399,34 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
+
+    def check_inference_validity(self, p: FormulaStatement, phi: (None, tuple[TheoreticalObject]),
+            t: TheoryElaborationSequence, echo: (None, bool) = None, **kwargs) -> bool:
+        """Verify if the arguments comply syntactically with the inference-rule.
+        """
+        verify(is_in_class(p, classes.formula_statement), '⌜p⌝ must be a formula-statement.', p=p,
+            t=t, slf=self)
+        verify(t.contains_theoretical_objct(p), '⌜p⌝ must be contained in ⌜t⌝.', p=p, t=t, slf=self)
+        verify(isinstance(phi, tuple), '⌜phi⌝ must be a tuple.', phi=phi, t=t, slf=self)
+        x_oset = unpack_formula(p).get_variable_ordered_set()
+        verify(len(x_oset) == len(phi),
+            'The cardinality of the canonically ordered free-variables.')
+        # Substitution objects in Y must be declared in U,
+        # but they may not be referenced yet in T's extension.
+        for y in phi:
+            verify(isinstance(y, TheoreticalObject), '⌜y⌝ in ⌜phi⌝ must be a theoretical-object.',
+                y=y, t=t, slf=self)
+            verify(y.u is self.u, '⌜y⌝ and ⌜self⌝ do not share the same universe-of-discourse.',
+                y=y, y_u=y.u, slf=self, slf_u=self.u)
+
+        # TODO: Add a verification step: the variable is not locked.
+        return True
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """Overrides the generic paragraph proof method."""
+        output = yield from configuration.locale.compose_variable_substitution_paragraph_proof(o=o)
+        return output
 
     def infer_formula(self, p: (None, FormulaStatement) = None,
             phi: (None, tuple[TheoreticalObject]) = None, echo: (None, bool) = None):
