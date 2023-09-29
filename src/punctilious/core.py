@@ -3830,7 +3830,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, a: AxiomInclusion, p: Formula) -> Formula:
+    def construct_formula(self, a: AxiomInclusion, p: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -3842,7 +3842,8 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         verify(assertion=isinstance(a, AxiomInclusion),
             msg=f'⌜{a}⌝ passed as premise ⌜a⌝ is not an axiom-inclusion.', a=a)
         ok, p, msg = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True)
-        # TODO: BUG: validate_formula does not support basic masks like: ⌜P⌝ where P is a free-variable.
+        # TODO: Bug #217: assure that atomic formula are supported by verify_formula and verify_formula_statements #217
+        # validate_formula does not support basic masks like: ⌜P⌝ where P is a free-variable.
         # validate_formula(u=self.u, input_value=p, form=self.i.parameter_p,
         #    mask=self.i.parameter_p_mask)
         output: Formula = p
@@ -3850,7 +3851,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
 
 
 class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
-    """The well-known biconditional elimination #1 inference rule: P ⟺ Q ⊢ P ⟹ Q.
+    """This python class models the declaration of the :ref:`absorption<absorption_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
 
     Acronym: be1.
     """
