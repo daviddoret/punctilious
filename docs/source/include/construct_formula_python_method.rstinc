@@ -1,0 +1,3 @@
+This python method **does not** verify the validity of the premises, applies the :ref:`inference-rule<inference_rule_math_concept>` algorithm, and returns a :ref:`formula<formula_math_concept>`.
+
+.. include:: ../../include/construct_formula_vs_infer_formula_statement_note.rstinc

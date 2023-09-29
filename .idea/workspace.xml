@@ -5,12 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="documentation #195 + inference validation #126">
+      <change afterPath="$PROJECT_DIR$/docs/source/include/check_premises_validity_python_method.rstinc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/include/compose_report_python_method.rstinc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/include/infer_formula_python_method.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/include/construct_formula_python_method.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/include/infer_formula_statement_python_method.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/include/infer_formula_statement_python_method.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/include/infer_formula_vs_infer_formula_statement_note.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/include/construct_formula_vs_infer_formula_statement_note.rstinc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_absorption.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_absorption.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_validate_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_validate_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_validate_formula_statement.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_validate_formula_statement.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +96,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "dev",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/project",
+    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/docs/source/include",
     "settings.editor.selected.configurable": "advanced.settings"
   }
 }]]></component>
@@ -109,11 +110,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\include" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\project" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\tests" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\punctilious" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\inference_rule" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\src\sample" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source" />
@@ -433,14 +434,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00274" summary="#195: docs/requirements.txt. troubleshooting readthedocs build.">
-      <option name="closed" value="true" />
-      <created>1694671535470</created>
-      <option name="number" value="00274" />
-      <option name="presentableId" value="LOCAL-00274" />
-      <option name="project" value="LOCAL" />
-      <updated>1694671535470</updated>
     </task>
     <task id="LOCAL-00275" summary="#195: docs/requirements.txt. troubleshooting readthedocs build.">
       <option name="closed" value="true" />
@@ -826,7 +819,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695899815928</updated>
     </task>
-    <option name="localTasksCounter" value="323" />
+    <task id="LOCAL-00323" summary="documentation #195 + inference validation #126">
+      <option name="closed" value="true" />
+      <created>1695933081596</created>
+      <option name="number" value="00323" />
+      <option name="presentableId" value="LOCAL-00323" />
+      <option name="project" value="LOCAL" />
+      <updated>1695933081596</updated>
+    </task>
+    <option name="localTasksCounter" value="324" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -901,7 +902,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>9095</line>
+          <line>9255</line>
           <option name="timeStamp" value="60" />
         </line-breakpoint>
       </breakpoints>

@@ -1,0 +1,2 @@
+.. note::
+   Note the critical distinction between the :python:`construct_formula` and the :python:`infer_formula_statement` methods. The former does not verify the validity of the premises, applies the :ref:`inference-rule<inference_rule_math_concept>` algorithm, and produces a :ref:`formula<formula_math_concept>` that may be **invalid** . The later verifies the validity of the premises, applies the :ref:`inference-rule<inference_rule_math_concept>` algorithm, and produces a :ref:`formula-statement<formula_statement_math_concept>` that is **valid** by definition.

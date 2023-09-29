@@ -1,0 +1,5 @@
+This python method yields a human-readable formal report on the object.
+
+:param proof: True if the report must include a formal proof. False otherwise.
+:param kwargs:
+:return:

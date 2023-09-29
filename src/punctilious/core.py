@@ -1663,7 +1663,7 @@ class DashedName:
         return self._dashed_name
 
 
-class SymbolicObject:
+class SymbolicObject(abc.ABC):
     """
     Definition
     ----------
@@ -1765,7 +1765,10 @@ class SymbolicObject:
     def compose_report(self, close_punctuation: Composable = None, cap: (None, bool) = None,
             proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        """Composes a report that describes this object."""
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         yield from text_dict.let.compose(cap=cap)  # TODO: Support cap parameter
         yield text_dict.space
         yield text_dict.open_quasi_quote
@@ -2310,6 +2313,10 @@ class TheoreticalObject(SymbolicObject):
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, None, None]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         pass
 
     def export_interactive_graph(self, output_path: str, pyvis_graph: (None, pyvis.network) = None,
@@ -2828,6 +2835,10 @@ class Formula(TheoreticalObject):
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, None, None]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         global text_dict
         yield text_dict.let
         yield text_dict.space
@@ -3028,6 +3039,10 @@ class Statement(TheoreticalObject):
     @abc.abstractmethod
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         raise NotImplementedError('This is an abstract method.')
 
     def echo(self):
@@ -3122,6 +3137,10 @@ class AxiomDeclaration(TheoreticalObject):
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         output = yield from configuration.locale.compose_axiom_declaration(o=self)
         return output
 
@@ -3195,6 +3214,10 @@ class AxiomInclusion(Statement):
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         output = yield from configuration.locale.compose_axiom_inclusion_report(o=self, proof=proof)
         return output
 
@@ -3203,7 +3226,7 @@ class AxiomInclusion(Statement):
 
 
 class InferenceRuleInclusion(Statement):
-    """This python class models the :ref:`inclusion<object_inclusion_math_concept>` of an :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`.
+    """This python abstract class models the :ref:`inclusion<object_inclusion_math_concept>` of an :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`.
 
     """
 
@@ -3229,22 +3252,36 @@ class InferenceRuleInclusion(Statement):
             repm.prnt(self.rep_report(proof=proof))
 
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
+        """This python method yields the default mathematical-class of the object in the *punctilious* data model.
+        """
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='inference-rule')
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         output = yield from configuration.locale.compose_inference_rule_inclusion_report(i=self,
             proof=proof)
         return output
 
     @property
     def definition(self) -> Formula:
+        """This python property returns a formal definition of the object.
+
+        :return: a formula.
+        """
         return self.i.definition
 
     @property
     @abc.abstractmethod
     def check_premises_validity(self, **kwargs) -> bool:
+        """
+        .. include:: ../../include/check_premises_validity_python_method.rstinc
+
+        """
         raise NotImplementedError(
             'The ⌜check_premises_validity⌝ method is abstract. It must be implemented in the child class.')
 
@@ -3252,7 +3289,7 @@ class InferenceRuleInclusion(Statement):
     @abc.abstractmethod
     def construct_formula(self, **kwargs) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         raise NotImplementedError(
@@ -3271,6 +3308,10 @@ class InferenceRuleInclusion(Statement):
     @property
     @abc.abstractmethod
     def check_premises_validity(self, **kwargs):
+        """
+        .. include:: ../../include/check_premises_validity_python_method.rstinc
+
+        """
         raise NotImplementedError(
             'The ⌜check_inference_validity⌝ method is abstract. It must be implemented in the child class.')
 
@@ -3336,6 +3377,10 @@ class DefinitionDeclaration(TheoreticalObject):
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         output = yield from configuration.locale.compose_definition_declaration(o=self)
         return output
 
@@ -3393,6 +3438,10 @@ class DefinitionInclusion(Statement):
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         output = yield from configuration.locale.compose_definition_inclusion_report(o=self,
             proof=proof)
         return output
@@ -3627,7 +3676,7 @@ def index_universe_of_discourse_symbol(base):
 
 
 class InferenceRuleDeclaration(TheoreticalObject):
-    """This python class models the :ref:`declaration<object_declaration_math_concept>` of an :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
+    """This python abstract class models the :ref:`declaration<object_declaration_math_concept>` of an :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
 
     """
 
@@ -3659,27 +3708,42 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         output = yield from configuration.locale.compose_inference_rule_declaration(i=self)
         return output
 
     def compose_paragraph_proof(self, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
-        """This method should be overridden by specialized inference-rule classes to provide accurate proofs."""
+        """This python method yields a :ref:`paragraph-proof<paragraph_proof_math_concept>` that demonstrates the validity of the object.
+
+        This method should be overridden by specialized inference-rule classes to provide accurate proofs.
+        """
         output = yield from configuration.locale.compose_inferred_statement_paragraph_proof(o=self)
         return output
 
     @property
-    def definition(self) -> (None, str):
+    def definition(self) -> Formula:
+        """This python property returns a formal definition of the object.
+
+        :return: a formula.
+        """
         return self._definition
 
     def echo(self):
+        """This python method prints the object to the console (sys.stdout).
+
+        :return:
+        """
         repm.prnt(self.rep_report())
 
     @property
     @abc.abstractmethod
     def construct_formula(self, **kwargs) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         raise NotImplementedError(
@@ -3714,7 +3778,7 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
 
     def construct_formula(self, p_implies_q: FlexibleFormula) -> (None, Formula):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         ok: bool
@@ -3730,7 +3794,9 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
 
 
 class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
-    """
+    """This python class models the :ref:`declaration<object_declaration_math_concept>` of the :ref:`axiom-interpretation<axiom_interpretation_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
+
+    Inherits from :ref:`InferenceRuleDeclaration<inference_rule_declaration_python_class>` .
 
     TODO: AxiomInterpretation (Declaration and Inclusion): Add a data validation step to assure that parameter p is propositional.
     TODO: AxiomInterpretation (Declaration and Inclusion): Add a verification step: the axiom is not locked.
@@ -3738,6 +3804,8 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
     """
 
     class Premises(typing.NamedTuple):
+        """This python NamedTuple is used behind the scene as a data structure to manipulate the premises required by the :ref:`inference-rule<inference_rule_math_concept>` .
+        """
         a: AxiomInclusion
         p: FlexibleFormula
 
@@ -3751,21 +3819,20 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         explicit_name = 'axiom interpretation inference rule'
         name = 'axiom interpretation'
         with u.v(symbol=ScriptNormal('A')) as a, u.v(symbol='P') as p:
-            definition = a | u.r.proves | p
+            definition = (a | u.r.sequent_comma | p) | u.r.proves | p
         with u.v(symbol=ScriptNormal('A')) as a:
             self.parameter_a = a
             self.parameter_a_mask = frozenset([a])
         with u.v(symbol='P') as p:
             self.parameter_p = p
             self.parameter_p_mask = frozenset([p])
-
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, a: AxiomInclusion, p: Formula) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         # TODO: NICETOHAVE: AxiomInterpretationDeclaration: replace this verify statement with a generic validate_axiom_inclusion function.
@@ -3773,7 +3840,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         p: (None, Formula)
         msg: (None, str)
         verify(assertion=isinstance(a, AxiomInclusion),
-            msg=f'⌜{a}⌝ passed as argument ⌜a⌝ is not an axiom-inclusion.', a=a)
+            msg=f'⌜{a}⌝ passed as premise ⌜a⌝ is not an axiom-inclusion.', a=a)
         ok, p, msg = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True)
         # TODO: BUG: validate_formula does not support basic masks like: ⌜P⌝ where P is a free-variable.
         # validate_formula(u=self.u, input_value=p, form=self.i.parameter_p,
@@ -3806,7 +3873,7 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
     def infer_formula(self, p_iff_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p_iff_q: Formula = verify_formula(u=self.u, arity=2, input_value=p_iff_q)
@@ -3864,7 +3931,7 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
     def infer_formula(self, p_iff_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p_iff_q: Formula = verify_formula(u=self.u, arity=2, input_value=p_iff_q)
@@ -3912,7 +3979,7 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
             q_implies_p: (tuple, Formula, FormulaStatement) = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p_implies_q = verify_formula(u=t.u, arity=2, input_value=p_implies_q)
@@ -3982,7 +4049,7 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
     def infer_formula(self, p_land_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None, **kwargs) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = unpack_formula(p_land_q).parameters[0]
@@ -4033,7 +4100,7 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
     def infer_formula(self, p_land_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p_land_q = verify_formula(u=t.u, arity=2, input_value=p_land_q)
@@ -4079,7 +4146,7 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=t.u, arity=None, input_value=p)
@@ -4134,7 +4201,7 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=t.u, arity=None, input_value=p)
@@ -4160,7 +4227,23 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
 
 
 class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
+    """This python class models the :ref:`declaration<object_declaration_math_concept>` of the :ref:`definition-interpretation<definition_interpretation_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
+
+    Inherits from :ref:`InferenceRuleDeclaration<inference_rule_declaration_python_class>` .
+
+    TODO: DefinitionInterpretation (Declaration and Inclusion): Add a data validation step to assure that parameter p is propositional.
+    TODO: DefinitionInterpretation (Declaration and Inclusion): Add a verification step: the axiom is not locked.
+
+    """
+
+    class Premises(typing.NamedTuple):
+        """This python NamedTuple is used behind the scene as a data structure to manipulate the premises required by the :ref:`inference-rule<inference_rule_math_concept>` .
+        """
+        d: DefinitionInclusion
+        x_equal_y: FlexibleFormula
+
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'definition-interpretation'
         acronym = 'di'
         abridged_name = None
@@ -4168,36 +4251,45 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
         dashed_name = 'definition-interpretation'
         explicit_name = 'definition interpretation inference rule'
         name = 'definition interpretation'
-        definition = '𝒟 ⊢ P'
+        with u.v(symbol=ScriptNormal('D')) as d, u.v(symbol='x') as x, u.v(symbol='y') as y:
+            # Feature #216: provide support for n-ary relations
+            # Provide support for n-ary relations. First need: sequent-comma, or collection-comma.
+            # definition = u.r.sequent_comma(d, x, y) | u.r.proves | (x | u.r.equal | y)
+            # Meanwhile, I use combined 2-ary formulae:
+            definition = d | u.r.sequent_comma | (x | u.r.sequent_comma | y) | u.r.proves | (
+                    x | u.r.equal | y)
+        with u.v(symbol=ScriptNormal('D')) as d:
+            self.parameter_d = d
+            self.parameter_d_mask = frozenset([d])
+        with u.v(symbol='x') as x:
+            self.parameter_x = x
+            self.parameter_x_mask = frozenset([x])
+        with u.v(symbol='y') as y:
+            self.parameter_y = y
+            self.parameter_y_mask = frozenset([y])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        output = yield from configuration.locale.compose_definition_interpretation_paragraph_proof(
-            o=o)
+    def construct_formula(self, d: DefinitionInclusion, x: FlexibleFormula,
+            y: FlexibleFormula) -> Formula:
+        """
+        .. include:: ../../include/construct_formula_python_method.rstinc
+
+        """
+        # TODO: NICETOHAVE: DefinitionInterpretationDeclaration: replace this verify statement with a generic validate_definition_inclusion function.
+        ok: bool
+        output: Formula
+        msg: (None, str)
+        verify(assertion=isinstance(d, DefinitionInclusion),
+            msg=f'⌜{d}⌝ passed as premise ⌜d⌝ is not a definition-inclusion.', d=d)
+        ok, x, msg = verify_formula(arg='x', input_value=x, u=self.u, raise_exception=True)
+        ok, y, msg = verify_formula(arg='y', input_value=y, u=self.u, raise_exception=True)
+        # TODO: BUG: validate_formula does not support basic masks like: ⌜P⌝ where P is a free-variable.
+        # validate_formula(u=self.u, input_value=p, form=self.i.parameter_p,
+        #    mask=self.i.parameter_p_mask)
+        output: Formula = x | self.u.r.equal | y
         return output
-
-    def infer_formula(self, d: DefinitionInclusion, p: Formula, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> Formula:
-        """
-        .. include:: ../../include/infer_formula_python_method.rstinc
-
-        """
-        p = unpack_formula(p)
-        return p
-
-    def check_inference_validity(self, d: DefinitionInclusion, p: Formula,
-            t: TheoryElaborationSequence) -> bool:
-        verify(is_in_class(d, classes.definition_inclusion),
-            '⌜d⌝ is not of declarative-class definition-inclusion.', d=d, t=t, slf=self)
-        verify(t.contains_theoretical_objct(d), '⌜d⌝ is not contained in ⌜t⌝.', d=d, t=t, slf=self)
-        verify(is_in_class(p, classes.formula), '⌜p⌝ is not of declarative-class formula.', p=p,
-            t=t, slf=self)
-        verify(p.is_proposition, '⌜p⌝ is not propositional.', p=p, t=t, slf=self)
-        # TODO: Add a verification step: the definition is not locked.
-        return True
 
 
 class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
@@ -4222,7 +4314,7 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=t.u, arity=None, input_value=p)
@@ -4270,7 +4362,7 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
     def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=t.u, arity=None, input_value=p)
@@ -4323,7 +4415,7 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
     def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=t.u, arity=None, input_value=p)
@@ -4376,7 +4468,7 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=t.u, arity=None, input_value=p)
@@ -4423,7 +4515,7 @@ class DisjunctiveSyllogismDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=t.u, arity=None, input_value=p)
@@ -4476,7 +4568,7 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, not_not_p: (None, Formula) = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         not_not_p: Formula = verify_formula(u=t.u, arity=1, input_value=not_not_p)
@@ -4529,7 +4621,7 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p: Formula = verify_formula(arg='p', u=t.u, arity=1, input_value=p)
@@ -4577,7 +4669,7 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, x_equal_y: (None, FormulaStatement) = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         x_equal_y: Formula
@@ -4626,7 +4718,7 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, p: FormulaStatement = None, x_equal_y: FormulaStatement = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p: Formula
@@ -4687,7 +4779,7 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=t.u, arity=None, input_value=p)
@@ -4732,7 +4824,7 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
             inconsistent_theory: TheoryElaborationSequence = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = unpack_formula(p)
@@ -4786,7 +4878,7 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
             inconsistent_theory: TheoryElaborationSequence = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         x_eq_y = unpack_formula(x_eq_y)
@@ -4845,7 +4937,7 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
             inconsistent_theory: TheoryElaborationSequence = None,
             t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p_neq_p = verify_formula(u=self.u, arity=2, input_value=p_neq_p)
@@ -4900,7 +4992,7 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, p_implies_q: FormulaStatement, p: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p_implies_q = verify_formula(u=self.u, arity=2, input_value=p_implies_q)
@@ -4963,7 +5055,7 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, p_implies_q: FormulaStatement, p: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p_implies_q = verify_formula(u=self.u, arity=2, input_value=p_implies_q)
@@ -5022,7 +5114,7 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
     def infer_formula(self, not_p_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         not_p = not_p_hypothesis.hypothesis_formula
@@ -5084,7 +5176,7 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
     def infer_formula(self, x_neq_y_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         x_neq_y = x_neq_y_hypothesis.hypothesis_formula
@@ -5150,7 +5242,7 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
     def infer_formula(self, p_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = p_hypothesis.hypothesis_formula
@@ -5216,7 +5308,7 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
     def infer_formula(self, p_eq_q_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p_eq_q = p_eq_q_hypothesis.hypothesis_formula
@@ -5278,7 +5370,7 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
     def infer_formula(self, p: FormulaStatement, phi: (None, tuple[TheoreticalObject]),
             t: TheoryElaborationSequence, echo: (None, bool) = None, **kwargs) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         x_oset = unpack_formula(p).get_variable_ordered_set()
@@ -5390,6 +5482,10 @@ class NoteInclusion(AtheoreticalStatement):
         return True
 
     def compose_report(self, proof: (None, bool) = None, **kwargs):
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         output = yield from configuration.locale.compose_note_report(o=self, proof=proof)
         return output
 
@@ -5445,6 +5541,10 @@ class Section(AtheoreticalStatement):
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         yield '#' * self.section_level  # This is only valid for plaintext and unicode, not latex
         yield text_dict.space
         if self.numbering:
@@ -5583,6 +5683,10 @@ class TheoryElaborationSequence(TheoreticalObject):
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         output = yield from configuration.locale.compose_theory_declaration(t=self)
         return output
 
@@ -5964,6 +6068,10 @@ class Hypothesis(Statement):
         return True
 
     def compose_report(self, proof: (None, bool) = None, **kwargs):
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         output = yield from configuration.locale.compose_parent_hypothesis_statement_report(o=self,
             proof=proof)
         return output
@@ -6070,6 +6178,10 @@ class Relation(TheoreticalObject):
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         global text_dict
         yield SansSerifNormal('Let ')
         yield text_dict.open_quasi_quote
@@ -6135,6 +6247,10 @@ class SimpleObjct(TheoreticalObject):
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         output = yield from configuration.locale.compose_simple_objct_declaration(o=self)
         return output
 
@@ -7011,10 +7127,9 @@ class AbsorptionInclusion(InferenceRuleInclusion):
 
     def check_premises_validity(self, p_implies_q: FlexibleFormula,
             raise_exception: bool = True) -> bool:
-        """This method is called back by the constructor of the InferredStatement class.
-        It returns True if making an inference based on the provided arguments is valid. In this case, the constructor of the InferredStatement class will succeed and create an InferredStatement instance.
-        It returns False if making an inference based on the provided arguments is invalid. In this case, the constructor of the InferredStatement class will fail and raise a PunctiliousException error.
-        This mechanism prevents the creation of InferredStatement objects that are invalid.
+        """
+        .. include:: ../../include/check_premises_validity_python_method.rstinc
+
         """
         # Validate that expected formula-statements are formula-statements.
         formula_ok, _, _ = verify_formula_statement(t=self.t, input_value=p_implies_q,
@@ -7036,7 +7151,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
 
     def construct_formula(self, p_implies_q: FlexibleFormula) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         # Call back the infer_formula method on the inference-rule declaration class.
@@ -7056,6 +7171,8 @@ class AbsorptionInclusion(InferenceRuleInclusion):
 
 class AxiomInterpretationInclusion(InferenceRuleInclusion):
     """This python class models the inclusion of :ref:`axiom-interpretation<axiom_interpretation_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+
+    Inherits from :ref:`InferenceRuleInclusion<inference_rule_inclusion_python_class>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7066,17 +7183,15 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         abridged_name = None
         name = 'axiom interpretation'
         explicit_name = 'axiom interpretation inference rule'
-        self._i_specialized = i  # The parent class uses a private pro
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
     def check_premises_validity(self, a: AxiomInclusion, p: FlexibleFormula,
             raise_exception: bool = True) -> tuple[bool, (None, str)]:
-        """This method is called back by the constructor of the InferredStatement class.
-        It returns True if making an inference based on the provided arguments is valid. In this case, the constructor of the InferredStatement class will succeed and create an InferredStatement instance.
-        It returns False if making an inference based on the provided arguments is invalid. In this case, the constructor of the InferredStatement class will fail and raise a PunctiliousException error.
-        This mechanism prevents the creation of InferredStatement objects that are invalid.
+        """
+        .. include:: ../../include/check_premises_validity_python_method.rstinc
+
         """
         ok: bool
         msg: (None, str)
@@ -7113,9 +7228,9 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         return i
 
     def construct_formula(self, a: (None, AxiomInclusion) = None, p: (None, FlexibleFormula) = None,
-            echo: (None, bool) = None):
+            echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         # Call back the infer_formula method on the inference-rule declaration class.
@@ -7152,7 +7267,7 @@ class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p_iff_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(p_iff_q, echo=echo)
@@ -7187,7 +7302,7 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p_iff_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(p_iff_q, echo=echo)
@@ -7223,7 +7338,7 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
     def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
             q_implies_p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(p_iff_q, echo=echo)
@@ -7259,7 +7374,7 @@ class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p_and_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(p_and_q, echo=echo)
@@ -7293,7 +7408,7 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p_and_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(p_and_q, echo=echo)
@@ -7329,7 +7444,7 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         ok: bool
@@ -7371,7 +7486,7 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=self.t.u, arity=None, input_value=p)
@@ -7394,6 +7509,8 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
 
 class DefinitionInterpretationInclusion(InferenceRuleInclusion):
     """This python class models the inclusion of :ref:`definition-interpretation<definition_interpretation_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+
+    Inherits from :ref:`InferenceRuleInclusion<inference_rule_inclusion_python_class>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
@@ -7408,24 +7525,67 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def infer_formula(self, definition: (None, DefinitionInclusion) = None,
-            formula: (None, Formula) = None, echo: (None, bool) = None):
+    def check_premises_validity(self, d: DefinitionInclusion, x: FlexibleFormula,
+            y: FlexibleFormula, raise_exception: bool = True) -> tuple[bool, (None, str)]:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/check_premises_validity_python_method.rstinc
 
         """
-        return super().infer_formula(definition, formula, echo=echo)
+        ok: bool
+        msg: (None, str)
+        # Validate that expected formula-statements are formula-statements.
+        # TODO: NICETOHAVE: DefinitionInterpretationInclusion: replace these verify statements with a generic validate_definition_inclusion function.
+        ok, msg = verify(raise_exception=raise_exception,
+            assertion=isinstance(d, DefinitionInclusion),
+            msg=f'⌜{d}⌝ passed as argument ⌜d⌝ is not a definition-inclusion.', d=d)
+        if not ok:
+            return ok, msg
+        ok, msg = verify(raise_exception=raise_exception,
+            assertion=self.t.contains_theoretical_objct(d),
+            msg=f'⌜{d}⌝ passed as argument ⌜d⌝ is not contained in theory-elaboration-sequence ⌜{self.t}⌝.',
+            d=d)
+        if not ok:
+            return ok, msg
+        ok, x, msg = verify_formula(arg='x', input_value=x, u=self.u, raise_exception=True)
+        if not ok:
+            return ok, msg
+        ok, y, msg = verify_formula(arg='y', input_value=y, u=self.u, raise_exception=True)
+        if not ok:
+            return ok, msg
+        return True, None
 
-    def infer_formula_statement(self, definition: (None, DefinitionInclusion) = None,
-            formula: (None, FlexibleFormula) = None, nameset: (None, str, NameSet) = None,
-            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
-            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """Overrides the generic paragraph proof method."""
+        output = yield from configuration.locale.compose_definition_interpretation_paragraph_proof(
+            o=o)
+        return output
+
+    @property
+    def i(self) -> DefinitionInterpretationDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: DefinitionInterpretationDeclaration = super().i
+        return i
+
+    def construct_formula(self, d: (None, DefinitionInclusion) = None,
+            x_equal_y: (None, FlexibleFormula) = None, echo: (None, bool) = None) -> Formula:
+        """
+        .. include:: ../../include/construct_formula_python_method.rstinc
+
+        """
+        # Call back the infer_formula method on the inference-rule declaration class.
+        return self.i.construct_formula(d=d, x_equal_y=x_equal_y)
+
+    def infer_formula_statement(self, d: (None, DefinitionInclusion) = None,
+            x_equal_y: (None, FlexibleFormula) = None, ref: (None, str) = None,
+            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
+            echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        formula = verify_formula(u=self.u, arity=None, input_value=formula)
-        return super().infer_formula_statement(definition, formula, nameset=nameset, ref=ref,
+        premises = self.i.Premises(d=d, x_equal_y=x_equal_y)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7448,7 +7608,7 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=self.t.u, arity=None, input_value=p)
@@ -7488,7 +7648,7 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=self.t.u, arity=None, input_value=p)
@@ -7528,7 +7688,7 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=self.t.u, arity=None, input_value=p)
@@ -7568,7 +7728,7 @@ class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=self.t.u, arity=None, input_value=p)
@@ -7608,7 +7768,7 @@ class DisjunctiveSyllogismInclusion(InferenceRuleInclusion):
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=self.t.u, arity=None, input_value=p)
@@ -7647,7 +7807,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, not_not_p: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(not_not_p, echo=echo)
@@ -7683,7 +7843,7 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(p, echo=echo)
@@ -7719,7 +7879,7 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
 
     def infer_formula(self, x_equal_y: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(x_equal_y, echo=echo)
@@ -7755,7 +7915,7 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
     def infer_formula(self, p: (None, FormulaStatement) = None,
             q_equal_r: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(p, q_equal_r, echo=echo)
@@ -7791,7 +7951,7 @@ class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         p = verify_formula(u=self.t.u, arity=None, input_value=p)
@@ -7833,7 +7993,7 @@ class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
             t: (None, TheoryElaborationSequence) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(p, not_p, inconsistent_theory, echo=echo)
@@ -7877,7 +8037,7 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
             t: (None, TheoryElaborationSequence) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(x_eq_y, x_neq_y, inconsistent_theory, echo=echo)
@@ -7923,7 +8083,7 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
             t: (None, TheoryElaborationSequence) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(p_neq_p, inconsistent_theory, echo=echo)
@@ -7964,7 +8124,7 @@ class ModusPonensInclusion(InferenceRuleInclusion):
     def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
             p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(p_implies_q, p, echo=echo)
@@ -8002,7 +8162,7 @@ class ModusTollensInclusion(InferenceRuleInclusion):
     def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
             p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(p_implies_q, p, echo=echo)
@@ -8040,7 +8200,7 @@ class ProofByContradiction1Inclusion(InferenceRuleInclusion):
     def infer_formula(self, not_p_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None) -> Formula:
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(not_p_hypothesis, inc_hypothesis, echo=echo)
@@ -8076,7 +8236,7 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
     def infer_formula(self, x_neq_y_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(x_neq_y_hypothesis, inc_hypothesis, echo=echo)
@@ -8112,7 +8272,7 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
     def infer_formula(self, p_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(p_hypothesis, inc_hypothesis, echo=echo)
@@ -8149,7 +8309,7 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
     def infer_formula(self, x_eq_y_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(x_eq_y_hypothesis, inc_hypothesis, echo=echo)
@@ -8185,7 +8345,7 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
     def infer_formula(self, p: (None, FormulaStatement) = None,
             phi: (None, tuple[TheoreticalObject]) = None, echo: (None, bool) = None):
         """
-        .. include:: ../../include/infer_formula_python_method.rstinc
+        .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return super().infer_formula(p, phi, echo=echo)
@@ -9117,6 +9277,10 @@ class InferredStatement(FormulaStatement):
         yield SerifItalic(plaintext='inferred-statement')
 
     def compose_report(self, proof: (None, bool) = None, **kwargs):
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
         output = yield from configuration.locale.compose_inferred_statement_report(o=self,
             proof=proof)
         return output
