@@ -3340,8 +3340,8 @@ class DefinitionDeclaration(TheoreticalObject):
 
     """
 
-    class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+    # class Premises(typing.NamedTuple):
+    #    p_implies_q: FlexibleFormula
 
     def __init__(self, natural_language: str, u: UniverseOfDiscourse,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
@@ -3813,7 +3813,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         """This python NamedTuple is used behind the scene as a data structure to manipulate the premises required by the :ref:`inference-rule<inference_rule_math_concept>` .
         """
         a: AxiomInclusion
-        p: FlexibleFormula
+        p: FormulaStatement
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -3863,7 +3863,7 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
     """
 
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        p_iff_q: FormulaStatement
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -3876,20 +3876,26 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
         name = 'biconditional elimination #1'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             definition = ((p | u.r.iff | q) | u.r.proves | (p | u.r.implies | q))
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            self.parameter_p_iff_q = p | u.r.iff | q
+            self.parameter_p_iff_q_mask = frozenset([p, q])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_iff_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
-            echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, p_iff_q: FormulaStatement = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p_iff_q: Formula = verify_formula(u=self.u, arity=2, input_value=p_iff_q)
-        p: Formula = verify_formula(u=self.u, arity=None, input_value=p_iff_q.parameters[0])
-        q: Formula = verify_formula(u=self.u, arity=None, input_value=p_iff_q.parameters[1])
-        output = (p | t.u.r.implies | q)
+        ok: bool
+        msg: (None, msg)
+        ok, p_iff_q, msg = verify_formula(arg='p_iff_q', input_value=p_iff_q, u=self.u,
+            form=self.parameter_p_iff_q, mask=self.parameter_p_iff_q_mask, raise_exception=True)
+        p_iff_q: Formula
+        p: Formula = p_iff_q.parameters[0]
+        q: Formula = p_iff_q.parameters[1]
+        output = (p | self.u.r.implies | q)
         return output
 
 
@@ -3900,7 +3906,7 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
     """
 
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        p_iff_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -3938,6 +3944,7 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
 
     class Premises(typing.NamedTuple):
         p_implies_q: FlexibleFormula
+        q_implies_p: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -3975,7 +3982,7 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
     """
 
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        p_and_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -3992,13 +3999,13 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_land_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
+    def infer_formula(self, p_and_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None, **kwargs) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = unpack_formula(p_land_q).parameters[0]
+        p = unpack_formula(p_and_q).parameters[0]
         return p
 
 
@@ -4013,7 +4020,7 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
     """
 
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        p_and_q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4030,14 +4037,14 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_land_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
+    def infer_formula(self, p_and_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
             echo: (None, bool) = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p_land_q = verify_formula(u=t.u, arity=2, input_value=p_land_q)
-        q = p_land_q.parameters[1]
+        p_and_q = verify_formula(u=t.u, arity=2, input_value=p_and_q)
+        q = p_and_q.parameters[1]
         return q
 
 
@@ -4046,7 +4053,8 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
     """
 
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        p: FlexibleFormula
+        q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4078,8 +4086,12 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
     """The declaration of the :ref:`constructive-dilemma<constructive_dilemma_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
 
+    # TODO: BUG #218: It seems that ConstructiveDilemmaDeclaration is ill-defined. Review the litterature and assure that it is properly defined. As is it is synonymous to conjunction-introduction, this doesn't make sense.
+
     class Premises(typing.NamedTuple):
         p_implies_q: FlexibleFormula
+        r_implies_s: FlexibleFormula
+        p_or_r: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4090,20 +4102,25 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
         dashed_name = 'constructive-dilemma'
         explicit_name = 'constructive dilemma inference rule'
         name = 'constructive dilemma'
-        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.sequent_comma | q) | u.r.proves | (p | u.r.land | q))
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q, u.v(symbol='R') as r, u.v(symbol='S') as s:
+            # TODO: FEATURE #216: Review this definition once sequence-comma supports n-ary components.
+            definition = ((p | u.r.implies | q) | u.r.sequent_comma | (
+                    (r | u.r.implies | s) | u.r.sequent_comma | (p | u.r.lor | r))) | u.r.proves | (
+                                 q | u.r.lor | s)
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
+    def infer_formula(self, p_implies_q: FormulaStatement, r_implies_s: FormulaStatement,
+            p_or_r: FormulaStatement, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=t.u, arity=None, input_value=p)
-        q = verify_formula(u=t.u, arity=None, input_value=q)
+        p_implies_q = verify_formula(u=t.u, arity=None, input_value=p_implies_q)
+        r_implies_s = verify_formula(u=t.u, arity=None, input_value=r_implies_s)
+        p_or_r = verify_formula(u=t.u, arity=None, input_value=p_or_r)
         return p | t.u.r.land | q
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
@@ -6696,40 +6713,48 @@ class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def check_premises_validity(self, p_iff_q: FlexibleFormula,
+            raise_exception: bool = True) -> bool:
+        """
+        .. include:: ../../include/check_premises_validity_python_method.rstinc
+
+        """
+        # Validate that expected formula-statements are formula-statements.
+        formula_ok, _, _ = verify_formula_statement(t=self.t, input_value=p_iff_q,
+            form=self.i.parameter_p_iff_q, mask=self.i.parameter_p_iff_q_mask,
+            raise_exception=raise_exception)
+        # The method either raises an exception during validation, or return True.
+        return formula_ok
+
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
         output = yield from configuration.locale.compose_biconditional_elimination_1_paragraph_proof(
             o=o)
         return output
 
-    def check_inference_validity(self, p_iff_q: FormulaStatement = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        p_iff_q: FormulaStatement = verify_formula_statement(t=t, arity=None, input_value=p_iff_q)
-        verify(t.contains_theoretical_objct(p_iff_q),
-            'Formula-statement ⌜p_iff_q⌝ must be contained in theory ⌜t⌝.', phi=p_iff_q, t=t,
-            slf=self)
-        p_iff_q: Formula = verify_formula(u=self.u, arity=None, input_value=p_iff_q)
-        verify(p_iff_q.relation is t.u.r.biconditional,
-            'The relation of formula ⌜p_iff_q⌝ must be a biconditional.',
-            phi_relation=p_iff_q.relation, phi=p_iff_q, t=t, slf=self)
-        return True
+    @property
+    def i(self) -> BiconditionalElimination1Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: BiconditionalElimination1Declaration = super().i
+        return i
 
-    def infer_formula(self, p_iff_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p_iff_q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(p_iff_q, echo=echo)
+        # Call back the infer_formula method on the inference-rule declaration class.
+        return self.i.construct_formula(p_iff_q=p_iff_q)
 
-    def infer_formula_statement(self, p_iff_q: (None, FormulaStatement) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+    def infer_formula_statement(self, p_iff_q: FlexibleFormula = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        return super().infer_formula_statement(p_iff_q, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p_iff_q=p_iff_q)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
