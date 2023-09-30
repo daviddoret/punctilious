@@ -120,7 +120,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\continuous_integration" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.sample_biconditional_elimination_1">
+  <component name="RunManager" selected="Python tests.Python tests in test_biconditional_elimination_1.py">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -270,27 +270,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="sandbox2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/project" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/project/sandbox2.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest tests" type="ShConfigurationType">
       <option name="SCRIPT_TEXT" value="pytest tests" />
       <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
@@ -380,6 +359,20 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests in test_biconditional_elimination_1.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_biconditional_elimination_1.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="Python tests in tests" type="tests" factoryName="Autodetect">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -402,9 +395,9 @@
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.sample_biconditional_elimination_1" />
       <item itemvalue="Python.sample_absorption" />
-      <item itemvalue="Python.sandbox2" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
+      <item itemvalue="Python tests.Python tests in test_biconditional_elimination_1.py" />
       <item itemvalue="Python tests.Python tests for test_absorption.TestAbsorption.test_absorption_1" />
       <item itemvalue="Python tests.Python tests in test_absorption.py" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -413,11 +406,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Python tests in test_biconditional_elimination_1.py" />
         <item itemvalue="Python.sample_biconditional_elimination_1" />
         <item itemvalue="Python tests.Python tests in test_absorption.py" />
         <item itemvalue="Python.sample_absorption" />
         <item itemvalue="Python tests.Python tests for test_absorption.TestAbsorption.test_absorption_1" />
-        <item itemvalue="Python.sandbox2" />
       </list>
     </recent_temporary>
   </component>
