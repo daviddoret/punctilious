@@ -2579,6 +2579,7 @@ class Formula(TheoreticalObject):
     infix = repm.ValueName('infix-operator')
     prefix = repm.ValueName('prefix-operator')
     postfix = repm.ValueName('postfix-operator')
+    collection = repm.ValueName('collection-operator')
 
     def __init__(self, relation: (Relation, FreeVariable), parameters: tuple,
             universe_of_discourse: UniverseOfDiscourse, nameset: (None, str, NameSet) = None,
@@ -2629,12 +2630,11 @@ class Formula(TheoreticalObject):
         super().__init__(nameset=nameset, universe_of_discourse=universe_of_discourse, echo=False)
         super()._declare_class_membership(declarative_class_list.formula)
         universe_of_discourse.cross_reference_formula(self)
-        verify(
-            is_in_class(relation, classes.relation) or is_in_class(relation, classes.free_variable),
-            'The relation of this formula is neither a relation, nor a '
-            'free-variable.', formula=self, relation=relation)
-        verify(relation.universe_of_discourse is self.universe_of_discourse,
-            f'The universe-of-discourse ⌜{relation.u}⌝ of the relation in the formula ⌜{self}⌝ is inconsistent with the universe-of-discourse ⌜{self.u}⌝ of the formula.',
+        verify(assertion=is_in_class(relation, classes.relation) or is_in_class(relation,
+            classes.free_variable), msg='The relation of this formula is neither a relation, nor a '
+                                        'free-variable.', formula=self, relation=relation)
+        verify(assertion=relation.u is self.u,
+            msg=f'The universe-of-discourse ⌜{relation.u}⌝ of the relation in the formula is inconsistent with the universe-of-discourse ⌜{self.u}⌝ of the formula.',
             formula=self, relation=relation)
         self.cross_reference_variables()
         for p in parameters:
@@ -2643,8 +2643,8 @@ class Formula(TheoreticalObject):
             if is_in_class(p, classes.free_variable):
                 p.extend_scope(self)
             verify(p.u is self.universe_of_discourse,
-                f'The universe-of-discourse ⌜{p.u}⌝ of the parameter ⌜{p}⌝ in the formula ⌜{self}⌝ is inconsistent with the universe-of-discourse ⌜{self.u}⌝ of the formula.',
-                formula=self, p=p)
+                f'The universe-of-discourse ⌜p_u⌝ of the parameter ⌜p⌝ in the formula ⌜formula⌝ is inconsistent with the universe-of-discourse ⌜formula_u⌝ of the formula.',
+                p=p, p_u=p.u, formula=self, formula_u=self.u)
         if lock_variable_scope:
             self.lock_variable_scope()
         if echo:
@@ -2797,6 +2797,23 @@ class Formula(TheoreticalObject):
         yield text_dict.close_parenthesis
         yield from self.relation.compose_formula()
 
+    def compose_collection_operator(self) -> collections.abc.Generator[Composable, None, None]:
+        global text_dict
+        start: StyledText = prioritize_value(self.relation.collection_start,
+            text_dict.open_parenthesis)
+        sep: StyledText = prioritize_value(self.relation.collection_separator, text_dict.comma)
+        end: StyledText = prioritize_value(self.relation.collection_end,
+            text_dict.close_parenthesis)
+        yield start
+        first_p: bool = True
+        for p in self.parameters:
+            if not first_p:
+                yield sep
+            else:
+                first_p = False
+            yield from p.compose_formula()
+        yield end
+
     def rep_postfix_operator(self, encoding: (None, Encoding) = None, expand=None) -> str:
         encoding = prioritize_value(encoding, configuration.encoding, encodings.plaintext)
         return rep_composition(composition=self.compose_postfix_operator(), encoding=encoding)
@@ -2835,6 +2852,8 @@ class Formula(TheoreticalObject):
                     yield from self.compose_prefix_operator()
                 case Formula.postfix:
                     yield from self.compose_postfix_operator()
+                case Formula.collection:
+                    yield from self.compose_collection_operator()
                 case _:
                     # Fallback notation.
                     yield from self.compose_function_call()
@@ -5620,11 +5639,13 @@ class Relation(TheoreticalObject):
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
             auto_index: (None, bool) = None, formula_rep=None, signal_proposition=None,
             signal_theoretical_morphism=None, implementation=None,
-            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
-            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
-            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
-            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
-            echo: (None, bool) = None):
+            collection_start: (None, StyledText) = None,
+            collection_separator: (None, StyledText) = None,
+            collection_end: (None, StyledText) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+            nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
         """
 
         :param universe_of_discourse:
@@ -5634,10 +5655,13 @@ class Relation(TheoreticalObject):
         :param symbol:
         :param index:
         :param auto_index:
-        :param formula_rep:
+        :param formula_rep: The default representation method for formulae based on this relation, including: function-call, infix-operator, postfix-operator, and collection.
         :param signal_proposition:
         :param signal_theoretical_morphism:
         :param implementation:
+        :param collection_start: If representation of formulae based on this relation should support collection style, the starting element (e.g. an opening parenthesis).
+        :param collection_separator: If representation of formulae based on this relation should support collection style, the separator element (e.g. a comma).
+        :param collection_end: If representation of formulae based on this relation should support collection style, the ending element (e.g. an closing parenthesis).
         :param dashed_name:
         :param acronym:
         :param abridged_name:
@@ -5664,6 +5688,9 @@ class Relation(TheoreticalObject):
         self.arity = arity
         self.min_arity = min_arity
         self.max_arity = max_arity
+        self.collection_start = collection_start
+        self.collection_separator = collection_separator
+        self.collection_end = collection_end
         if nameset is None:
             symbol = configuration.default_relation_symbol if symbol is None else symbol
             index = universe_of_discourse.index_symbol(symbol=symbol) if auto_index else index
@@ -5881,9 +5908,13 @@ class RelationDict(collections.UserDict):
         self._negation = None
         self._syntactic_entailment = None
 
-    def declare(self, arity: int, symbol: (None, str, StyledText) = None, index: (None, int) = None,
-            auto_index: (None, bool) = None, formula_rep=None, signal_proposition=None,
-            signal_theoretical_morphism=None, implementation=None,
+    def declare(self, arity: (None, int) = None, symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None, formula_rep=None,
+            signal_proposition=None, signal_theoretical_morphism=None, implementation=None,
+            min_arity: (None, int) = None, max_arity: (None, int) = None,
+            collection_start: (None, str, StyledText) = None,
+            collection_separator: (None, str, StyledText) = None,
+            collection_end: (None, str, StyledText) = None,
             dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
             explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
@@ -5891,7 +5922,10 @@ class RelationDict(collections.UserDict):
             echo: (None, bool) = None):
         """Declare a new relation in this universe-of-discourse.
         """
-        return Relation(arity=arity, formula_rep=formula_rep, signal_proposition=signal_proposition,
+        return Relation(arity=arity, min_arity=min_arity, max_arity=max_arity,
+            formula_rep=formula_rep, collection_start=collection_start,
+            collection_separator=collection_separator, collection_end=collection_end,
+            signal_proposition=signal_proposition,
             signal_theoretical_morphism=signal_theoretical_morphism, implementation=implementation,
             universe_of_discourse=self.u, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
