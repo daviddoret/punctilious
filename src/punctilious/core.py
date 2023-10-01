@@ -2603,14 +2603,28 @@ class Formula(TheoreticalObject):
             nameset = NameSet(symbol=symbol, index=index)
         self.relation = relation
         parameters = parameters if isinstance(parameters, tuple) else tuple([parameters])
+        verify(assertion=len(parameters) > 0,
+            msg='Ill-formed formula error. The number of parameters in this formula is zero. 0-ary relations are currently not supported. Use a simple-object instead.',
+            severity=verification_severities.error, raise_exception=True, relation=self.relation,
+            len_parameters=len(parameters))
+        verify(assertion=self.relation.arity is None or self.relation.arity == len(parameters),
+            msg=f'Ill-formed formula error. Relation ⌜{self.relation}⌝ is defined with a fixed arity constraint of {self.relation.arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
+            severity=verification_severities.error, raise_exception=True, relation=self.relation,
+            relation_arity=self.relation.arity, len_parameters=len(parameters),
+            parameters=parameters)
+        verify(
+            assertion=self.relation.min_arity is None or self.relation.min_arity >= len(parameters),
+            msg=f'Ill-formed formula error. Relation ⌜{self.relation}⌝ is defined with a minimum arity constraint of {self.relation.min_arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
+            severity=verification_severities.error, raise_exception=True, relation=self.relation,
+            relation_min_arity=self.relation.min_arity, len_parameters=len(parameters),
+            parameters=parameters)
+        verify(
+            assertion=self.relation.max_arity is None or self.relation.max_arity >= len(parameters),
+            msg=f'Ill-formed formula error. Relation ⌜{self.relation}⌝ is defined with a maximum arity constraint of {self.relation.max_arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
+            severity=verification_severities.error, raise_exception=True, relation=self.relation,
+            relation_max_arity=self.relation.max_arity, len_parameters=len(parameters),
+            parameters=parameters)
         self.arity = len(parameters)
-        verify(self.arity > 0,
-            'The number of parameters in this formula is zero. 0-ary relations are currently not '
-            'supported.')
-
-        verify(is_in_class(relation, classes.free_variable) or self.relation.arity == self.arity,
-            'The arity of this formula''s relation is inconsistent with the number of parameters '
-            'in the formula.', relation=self.relation, parameters=parameters)
         self.parameters = parameters
         super().__init__(nameset=nameset, universe_of_discourse=universe_of_discourse, echo=False)
         super()._declare_class_membership(declarative_class_list.formula)
@@ -3919,20 +3933,26 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
         name = 'biconditional elimination #2'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             definition = ((p | u.r.iff | q) | u.r.proves | (q | u.r.implies | p))
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            self.parameter_p_iff_q = p | u.r.iff | q
+            self.parameter_p_iff_q_mask = frozenset([p, q])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_iff_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
-            echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, p_iff_q: FormulaStatement = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p_iff_q: Formula = verify_formula(u=self.u, arity=2, input_value=p_iff_q)
-        p: Formula = verify_formula(u=self.u, arity=None, input_value=p_iff_q.parameters[0])
-        q: Formula = verify_formula(u=self.u, arity=None, input_value=p_iff_q.parameters[1])
-        output = (q | t.u.r.implies | p)
+        ok: bool
+        msg: (None, msg)
+        ok, p_iff_q, msg = verify_formula(arg='p_iff_q', input_value=p_iff_q, u=self.u,
+            form=self.parameter_p_iff_q, mask=self.parameter_p_iff_q_mask, raise_exception=True)
+        p_iff_q: Formula
+        p: Formula = p_iff_q.parameters[0]
+        q: Formula = p_iff_q.parameters[1]
+        output = (q | self.u.r.implies | p)
         return output
 
 
@@ -3958,21 +3978,39 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             definition = (((p | u.r.implies | q) | u.r.sequent_comma | (
                     q | u.r.implies | p)) | u.r.proves | (p | u.r.iff | q))
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            self.parameter_p_implies_q = p | u.r.implies | q
+            self.parameter_p_implies_q_mask = frozenset([p, q])
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            self.parameter_q_implies_p = q | u.r.iff | p
+            self.parameter_q_implies_p_mask = frozenset([p, q])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
-            q_implies_p: (tuple, Formula, FormulaStatement) = None,
-            t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, p_iff_q: FormulaStatement = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p_implies_q = verify_formula(u=t.u, arity=2, input_value=p_implies_q)
-        p = p_implies_q.parameters[0]
-        q = p_implies_q.parameters[1]
-        return p | t.u.r.iff | q
+        ok: bool
+        msg: (None, msg)
+        ok, p_implies_q, msg = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
+            form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask,
+            raise_exception=True)
+        p_implies_q: Formula
+        ok, q_implies_p, msg = verify_formula(arg='q_implies_p', input_value=q_implies_p, u=self.u,
+            form=self.parameter_q_implies_p, mask=self.parameter_q_implies_p_mask,
+            raise_exception=True)
+        q_implies_p: Formula
+        p_implies_q__p: Formula = p_implies_q.parameters[0]
+        # TODO: Do not is but use is_syntactically_equivalent instead.
+        verify(assertion=p_implies_q.parameters[0] is p_implies_q.parameters[1], msg='The ⌜p⌝ in ',
+            severity=verification_severities.error, raise_exception=True)
+        p: Formula = p_implies_q.parameters[0]
+        q: Formula = p_implies_q.parameters[1]
+        output = (q | self.u.r.implies | p)
+        return output
 
 
 class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
@@ -5577,7 +5615,8 @@ class Relation(TheoreticalObject):
     """The Relation pythonic class is the implementation of the relation theoretical-object.
     """
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, arity: int,
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, arity: (None, int) = None,
+            min_arity: (None, int) = None, max_arity: (None, int) = None,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
             auto_index: (None, bool) = None, formula_rep=None, signal_proposition=None,
             signal_theoretical_morphism=None, implementation=None,
@@ -5586,6 +5625,29 @@ class Relation(TheoreticalObject):
             explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
+        """
+
+        :param universe_of_discourse:
+        :param arity: A fixed arity constraint for well-formed formula. Formulae based on this relation with distinct arity are ill-formed. Equivalent to passing the same value to both min_arity, and max_arity.
+        :param min_arity: A fixed minimum (inclusive) arity constraint for well-formed formula. Formulae based on this relation with lesser arity are ill-formed.
+        :param max_arity: A fixed maximum (inclusive) arity constraint for well-formed formula. Formulae based on this relation with greater arity are ill-formed.
+        :param symbol:
+        :param index:
+        :param auto_index:
+        :param formula_rep:
+        :param signal_proposition:
+        :param signal_theoretical_morphism:
+        :param implementation:
+        :param dashed_name:
+        :param acronym:
+        :param abridged_name:
+        :param name:
+        :param explicit_name:
+        :param ref:
+        :param subtitle:
+        :param nameset:
+        :param echo:
+        """
         echo = prioritize_value(echo, configuration.echo_relation, configuration.echo_default,
             False)
         auto_index = prioritize_value(auto_index, configuration.auto_index, True)
@@ -5599,8 +5661,9 @@ class Relation(TheoreticalObject):
         self.signal_proposition = signal_proposition
         self.signal_theoretical_morphism = signal_theoretical_morphism
         self.implementation = implementation
-        assert arity is not None and isinstance(arity, int) and arity > 0
         self.arity = arity
+        self.min_arity = min_arity
+        self.max_arity = max_arity
         if nameset is None:
             symbol = configuration.default_relation_symbol if symbol is None else symbol
             index = universe_of_discourse.index_symbol(symbol=symbol) if auto_index else index
@@ -6774,17 +6837,18 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def check_inference_validity(self, p_iff_q: FormulaStatement = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        p_iff_q: FormulaStatement = verify_formula_statement(t=t, arity=None, input_value=p_iff_q)
-        verify(t.contains_theoretical_objct(p_iff_q),
-            'Formula-statement ⌜p_iff_q⌝ must be contained in theory ⌜t⌝.', phi=p_iff_q, t=t,
-            slf=self)
-        p_iff_q: Formula = verify_formula(u=self.u, arity=None, input_value=p_iff_q)
-        verify(p_iff_q.relation is t.u.r.biconditional,
-            'The relation of formula ⌜p_iff_q⌝ must be a biconditional.',
-            phi_relation=p_iff_q.relation, phi=p_iff_q, t=t, slf=self)
-        return True
+    def check_premises_validity(self, p_iff_q: FlexibleFormula,
+            raise_exception: bool = True) -> bool:
+        """
+        .. include:: ../../include/check_premises_validity_python_method.rstinc
+
+        """
+        # Validate that expected formula-statements are formula-statements.
+        formula_ok, _, _ = verify_formula_statement(t=self.t, input_value=p_iff_q,
+            form=self.i.parameter_p_iff_q, mask=self.i.parameter_p_iff_q_mask,
+            raise_exception=raise_exception)
+        # The method either raises an exception during validation, or return True.
+        return formula_ok
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -6792,22 +6856,29 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    def infer_formula(self, p_iff_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    @property
+    def i(self) -> BiconditionalElimination1Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: BiconditionalElimination1Declaration = super().i
+        return i
+
+    def construct_formula(self, p_iff_q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(p_iff_q, echo=echo)
+        # Call back the infer_formula method on the inference-rule declaration class.
+        return self.i.construct_formula(p_iff_q=p_iff_q)
 
-    def infer_formula_statement(self, p_iff_q: (None, FormulaStatement) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+    def infer_formula_statement(self, p_iff_q: FlexibleFormula = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        return super().infer_formula_statement(p_iff_q, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p_iff_q=p_iff_q)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
