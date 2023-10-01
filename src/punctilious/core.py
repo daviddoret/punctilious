@@ -3807,7 +3807,8 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'absorption inference rule'
         name = 'absorption'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = (p | u.r.implies | q) | u.r.proves | (p | u.r.implies | (p | u.r.land | q))
+            definition = u.r.sequent_premises(p | u.r.implies | q) | u.r.proves | (
+                    p | u.r.implies | (p | u.r.land | q))
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_implies_q = p | u.r.implies | q
             self.parameter_p_implies_q_mask = frozenset([p, q])
@@ -3858,7 +3859,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         explicit_name = 'axiom interpretation inference rule'
         name = 'axiom interpretation'
         with u.v(symbol=ScriptNormal('A')) as a, u.v(symbol='P') as p:
-            definition = (a | u.r.sequent_comma | p) | u.r.proves | p
+            definition = u.r.sequent_premises(a, p) | u.r.proves | p
         with u.v(symbol=ScriptNormal('A')) as a:
             self.parameter_a = a
             self.parameter_a_mask = frozenset([a])
@@ -3995,19 +3996,20 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'biconditional introduction inference rule'
         name = 'biconditional introduction'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = (((p | u.r.implies | q) | u.r.sequent_comma | (
-                    q | u.r.implies | p)) | u.r.proves | (p | u.r.iff | q))
+            definition = u.r.sequent_premises(p | u.r.implies | q,
+                q | u.r.implies | p) | u.r.proves | (p | u.r.iff | q)
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_implies_q = p | u.r.implies | q
             self.parameter_p_implies_q_mask = frozenset([p, q])
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            self.parameter_q_implies_p = q | u.r.iff | p
+            self.parameter_q_implies_p = q | u.r.implies | p
             self.parameter_q_implies_p_mask = frozenset([p, q])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_iff_q: FormulaStatement = None) -> Formula:
+    def construct_formula(self, p_implies_q: FormulaStatement,
+            q_implies_p: FormulaStatement) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4023,12 +4025,18 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
             raise_exception=True)
         q_implies_p: Formula
         p_implies_q__p: Formula = p_implies_q.parameters[0]
-        # TODO: Do not is but use is_syntactically_equivalent instead.
-        verify(assertion=p_implies_q.parameters[0] is p_implies_q.parameters[1], msg='The ⌜p⌝ in ',
-            severity=verification_severities.error, raise_exception=True)
-        p: Formula = p_implies_q.parameters[0]
-        q: Formula = p_implies_q.parameters[1]
-        output = (q | self.u.r.implies | p)
+        p_implies_q__q: Formula = p_implies_q.parameters[1]
+        q_implies_p__q: Formula = q_implies_p.parameters[0]
+        q_implies_p__p: Formula = q_implies_p.parameters[1]
+        verify(assertion=p_implies_q__p.is_formula_syntactically_equivalent_to(q_implies_p__p),
+            msg='The ⌜p⌝ in ⌜p_implies_q⌝ is not syntactically-equivalent to the ⌜p⌝ in  ⌜q_implies_p⌝.',
+            severity=verification_severities.error, raise_exception=True, p_implies_q=p_implies_q,
+            p_implies_q__p=p_implies_q__p, q_implies_p=q_implies_p, q_implies_p__p=q_implies_p__p)
+        verify(assertion=p_implies_q__q.is_formula_syntactically_equivalent_to(q_implies_p__q),
+            msg='The ⌜q⌝ in ⌜p_implies_q⌝ is not syntactically-equivalent to the ⌜q⌝ in  ⌜q_implies_p⌝.',
+            severity=verification_severities.error, raise_exception=True, p_implies_q=p_implies_q,
+            p_implies_q__q=p_implies_q__q, q_implies_p=q_implies_p, q_implies_p__q=q_implies_p__q)
+        output = p_implies_q__p | self.u.r.iff | p_implies_q__q
         return output
 
 
@@ -4123,7 +4131,7 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'conjunction introduction inference rule'
         name = 'conjunction introduction'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.sequent_comma | q) | u.r.proves | (p | u.r.land | q))
+            definition = ((p | u.r.sequent_premises | q) | u.r.proves | (p | u.r.land | q))
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4161,9 +4169,9 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
         name = 'constructive dilemma'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q, u.v(symbol='R') as r, u.v(symbol='S') as s:
             # TODO: FEATURE #216: Review this definition once sequence-comma supports n-ary components.
-            definition = ((p | u.r.implies | q) | u.r.sequent_comma | (
-                    (r | u.r.implies | s) | u.r.sequent_comma | (p | u.r.lor | r))) | u.r.proves | (
-                                 q | u.r.lor | s)
+            definition = ((p | u.r.implies | q) | u.r.sequent_premises | (
+                    (r | u.r.implies | s) | u.r.sequent_premises | (
+                    p | u.r.lor | r))) | u.r.proves | (q | u.r.lor | s)
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4228,7 +4236,7 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
             # Provide support for n-ary relations. First need: sequent-comma, or collection-comma.
             # definition = u.r.sequent_comma(d, x, y) | u.r.proves | (x | u.r.equal | y)
             # Meanwhile, I use combined 2-ary formulae:
-            definition = d | u.r.sequent_comma | (x | u.r.sequent_comma | y) | u.r.proves | (
+            definition = d | u.r.sequent_premises | (x | u.r.sequent_premises | y) | u.r.proves | (
                     x | u.r.equal | y)
         with u.v(symbol=ScriptNormal('D')) as d:
             self.parameter_d = d
@@ -4281,7 +4289,7 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
         explicit_name = 'destructive dilemma inference rule'
         name = 'destructive dilemma'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.sequent_comma | q) | u.r.proves | (p | u.r.land | q))
+            definition = ((p | u.r.sequent_premises | q) | u.r.proves | (p | u.r.land | q))
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4380,7 +4388,7 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'disjunctive resolution inference rule'
         name = 'disjunctive resolution'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.sequent_comma | q) | u.r.proves | (p | u.r.land | q))
+            definition = ((p | u.r.sequent_premises | q) | u.r.proves | (p | u.r.land | q))
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4413,7 +4421,7 @@ class DisjunctiveSyllogismDeclaration(InferenceRuleDeclaration):
         explicit_name = 'disjunctive syllogism inference rule'
         name = 'disjunctive syllogism'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.sequent_comma | q) | u.r.proves | (p | u.r.land | q))
+            definition = ((p | u.r.sequent_premises | q) | u.r.proves | (p | u.r.land | q))
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4548,7 +4556,7 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'equal terms substitution inference rule'
         name = 'equal terms substitution'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q, u.v(symbol='x') as x, u.v(symbol='y') as y:
-            definition = (p | u.r.sequent_comma | (x | u.r.equal | y)) | u.r.proves | q
+            definition = (p | u.r.sequent_premises | (x | u.r.equal | y)) | u.r.proves | q
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4588,7 +4596,7 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
         explicit_name = 'hypothetical syllogism inference rule'
         name = 'hypothetical syllogism'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.sequent_comma | q) | u.r.proves | (p | u.r.land | q))
+            definition = ((p | u.r.sequent_premises | q) | u.r.proves | (p | u.r.land | q))
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4714,7 +4722,7 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         explicit_name = 'modus ponens inference rule'
         name = 'modus ponens'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.implies | p) | u.r.sequent_comma | p) | u.r.proves | q
+            definition = ((p | u.r.implies | p) | u.r.sequent_premises | p) | u.r.proves | q
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4747,7 +4755,7 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
         explicit_name = 'modus tollens inference rule'
         name = 'modus tollens'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.implies | p) | u.r.sequent_comma | p) | u.r.proves | q
+            definition = ((p | u.r.implies | p) | u.r.sequent_premises | p) | u.r.proves | q
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -5896,7 +5904,6 @@ class RelationDict(collections.UserDict):
         super().__init__()
         # Well-known objects
         self._biconditional = None
-        self._sequent_comma = None
         self._conjunction = None
         self._disjunction = None
         self._equality = None
@@ -5906,6 +5913,7 @@ class RelationDict(collections.UserDict):
         self._is_a = None
         self._map = None
         self._negation = None
+        self._sequent_premises = None
         self._syntactic_entailment = None
 
     def declare(self, arity: (None, int) = None, symbol: (None, str, StyledText) = None,
@@ -6183,19 +6191,18 @@ class RelationDict(collections.UserDict):
         return self.syntactic_entailment
 
     @property
-    def sequent_comma(self):
-        """Initially needed to express the collection of premises in inference-rule formula definitions.
-
-        For the time being it is sufficient to implement it as a binary relation,
-        because our initial catalog of inference rules have one or two premises.
-        But at a later point, we will need to implement (0-n)-ary relations.
+    def sequent_premises(self):
+        """Expresses the collection of premises in inference-rule formula definitions.
         """
-        if self._sequent_comma is None:
-            self._sequent_comma = self.declare(arity=2, formula_rep=Formula.infix,
-                signal_proposition=True, symbol=SerifItalic(plaintext=',', unicode=',', latex=','),
-                auto_index=False, dashed_name='sequent-comma', name='sequent comma',
-                explicit_name='sequent calculus comma')
-        return self._sequent_comma
+        global text_dict
+        if self._sequent_premises is None:
+            self._sequent_premises = self.declare(formula_rep=Formula.collection,
+                collection_start=text_dict.empty_string, collection_separator=text_dict.comma,
+                collection_end=text_dict.empty_string, signal_proposition=True,
+                symbol=SerifItalic(plaintext=',', unicode=',', latex=','), auto_index=False,
+                dashed_name='sequent-premises', name='sequent premises',
+                explicit_name='sequent calculus premises collection')
+        return self._sequent_premises
 
     @property
     def syntactic_entailment(self):
@@ -6932,61 +6939,53 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def check_premises_validity(self, p_implies_q: FlexibleFormula = None,
+            q_implies_p: FlexibleFormula = None, raise_exception: bool = True) -> bool:
+        """
+        .. include:: ../../include/check_premises_validity_python_method.rstinc
+
+        """
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        formula_ok, _, _ = verify_formula_statement(arg='p_implies_q', t=self.t,
+            input_value=p_implies_q, form=self.i.parameter_p_implies_q,
+            mask=self.i.parameter_p_implies_q_mask, raise_exception=raise_exception)
+        formula_ok, _, _ = verify_formula_statement(arg='q_implies_p', t=self.t,
+            input_value=q_implies_p, form=self.i.parameter_q_implies_p,
+            mask=self.i.parameter_q_implies_p_mask, raise_exception=raise_exception)
+        # The method either raises an exception during validation, or return True.
+        return formula_ok
+
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
         output = yield from configuration.locale.compose_biconditional_introduction_paragraph_proof(
             o=o)
         return output
 
-    def check_inference_validity(self, p_implies_q: FormulaStatement = None,
-            q_implies_p: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
-        p_implies_q = verify_formula_statement(t=t, arity=2, input_value=p_implies_q)
-        verify(t.contains_theoretical_objct(p_implies_q),
-            'Statement ⌜p_implies_q⌝ must be contained in theory ⌜t⌝.', p_implies_q=p_implies_q,
-            t=t, slf=self)
-        q_implies_p = verify_formula_statement(t=t, arity=2, input_value=q_implies_p)
-        verify(t.contains_theoretical_objct(q_implies_p),
-            'Statement ⌜q_implies_p⌝ must be contained in theory ⌜t⌝.', q_implies_p=q_implies_p,
-            t=t, slf=self)
-        p_implies_q: Formula = verify_formula(u=t.u, arity=2, input_value=p_implies_q)
-        q_implies_p: Formula = verify_formula(u=t.u, arity=2, input_value=q_implies_p)
-        verify(p_implies_q.relation is t.u.r.implication,
-            'The relation of formula ⌜p_implies_q⌝ must be an implication.',
-            p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
-        verify(q_implies_p.relation is t.u.r.implication,
-            'The relation of formula ⌜q_implies_p⌝ must be an implication.',
-            q_implies_p_relation=p_implies_q.relation, q_implies_p=q_implies_p, t=t, slf=self)
+    @property
+    def i(self) -> BiconditionalIntroductionDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: BiconditionalIntroductionDeclaration = super().i
+        return i
 
-        verify(p_implies_q.parameters[0].is_formula_syntactically_equivalent_to(
-            q_implies_p.parameters[1]),
-            'The p of the ⌜p_implies_q⌝ formula must be formula-syntactically-equivalent to the p of '
-            '⌜q_implies_p⌝ formula.', p_implies_q=p_implies_q, q_implies_p=q_implies_p, t=t,
-            slf=self)
-        verify(p_implies_q.parameters[1].is_formula_syntactically_equivalent_to(
-            q_implies_p.parameters[0]),
-            'The q of the ⌜p_implies_q⌝ formula must be formula-syntactically-equivalent to the q of '
-            '⌜q_implies_p⌝ formula.', p_implies_q=p_implies_q, q_implies_p=q_implies_p, t=t,
-            slf=self)
-        return True
-
-    def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
-            q_implies_p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p_implies_q: FlexibleFormula = None,
+            q_implies_p: FlexibleFormula = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(p_iff_q, echo=echo)
+        # Call back the infer_formula method on the inference-rule declaration class.
+        return self.i.construct_formula(p_implies_q=p_implies_q, q_implies_p=q_implies_p)
 
-    def infer_formula_statement(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
-            q_implies_p: (tuple, Formula, FormulaStatement) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+    def infer_formula_statement(self, p_implies_q: FlexibleFormula = None,
+            q_implies_p: FlexibleFormula = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        return super().infer_formula_statement(p_implies_q, q_implies_p, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p_implies_q=p_implies_q, q_implies_p=q_implies_p)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
