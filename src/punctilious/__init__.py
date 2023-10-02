@@ -20,21 +20,22 @@ from punctilious.core import AbsorptionDeclaration, AbsorptionInclusion, Article
     DoubleNegationEliminationDeclaration, DoubleNegationEliminationInclusion, \
     DoubleNegationIntroductionDeclaration, DoubleNegationIntroductionInclusion, Encoding, encodings, \
     EqualityCommutativityDeclaration, EqualityCommutativityInclusion, \
-    EqualTermsSubstitutionDeclaration, EqualTermsSubstitutionInclusion, PunctiliousException, \
-    Formula, FreeVariable, Header, Hypothesis, InconsistencyIntroduction1Declaration, \
-    InconsistencyIntroduction1Inclusion, InconsistencyIntroduction2Declaration, \
-    InconsistencyIntroduction2Inclusion, InconsistencyIntroduction3Declaration, \
-    InconsistencyIntroduction3Inclusion, InconsistencyWarning, InferenceRuleDeclaration, \
-    InferenceRuleDeclarationCollection, InferenceRuleInclusion, InferenceRuleInclusionCollection, \
-    InferredStatement, is_in_class, ModusPonensDeclaration, ModusPonensInclusion, NameSet, \
-    NoteInclusion, Paragraph, paragraph_headers, ParagraphHeader, prioritize_value, \
-    ProofByContradiction1Declaration, ProofByContradiction1Inclusion, \
-    ProofByContradiction2Declaration, ProofByContradiction2Inclusion, ProofByRefutation1Declaration, \
-    ProofByRefutation1Inclusion, ProofByRefutation2Declaration, ProofByRefutation2Inclusion, \
-    PunctiliousException, QuasiQuotation, Relation, rep_two_columns_proof_item, SansSerifBold, \
-    SansSerifNormal, ScriptNormal, SerifBoldItalic, SerifItalic, SerifNormal, SimpleObjct, \
-    SimpleObjctDict, Statement, Subscript, subscriptify, SymbolicObject, text_styles, TextStyle, \
-    TheoreticalObject, TheoryElaborationSequence, Package, UniverseOfDiscourse, verify_formula, \
+    EqualTermsSubstitutionDeclaration, EqualTermsSubstitutionInclusion, ErrorCode, error_codes, \
+    PunctiliousException, Formula, FreeVariable, Header, Hypothesis, \
+    InconsistencyIntroduction1Declaration, InconsistencyIntroduction1Inclusion, \
+    InconsistencyIntroduction2Declaration, InconsistencyIntroduction2Inclusion, \
+    InconsistencyIntroduction3Declaration, InconsistencyIntroduction3Inclusion, \
+    InconsistencyWarning, InferenceRuleDeclaration, InferenceRuleDeclarationCollection, \
+    InferenceRuleInclusion, InferenceRuleInclusionCollection, InferredStatement, is_in_class, \
+    ModusPonensDeclaration, ModusPonensInclusion, NameSet, NoteInclusion, Paragraph, \
+    paragraph_headers, ParagraphHeader, prioritize_value, ProofByContradiction1Declaration, \
+    ProofByContradiction1Inclusion, ProofByContradiction2Declaration, \
+    ProofByContradiction2Inclusion, ProofByRefutation1Declaration, ProofByRefutation1Inclusion, \
+    ProofByRefutation2Declaration, ProofByRefutation2Inclusion, PunctiliousException, \
+    QuasiQuotation, Relation, rep_two_columns_proof_item, SansSerifBold, SansSerifNormal, \
+    ScriptNormal, SerifBoldItalic, SerifItalic, SerifNormal, SimpleObjct, SimpleObjctDict, \
+    Statement, Subscript, subscriptify, SymbolicObject, text_styles, TextStyle, TheoreticalObject, \
+    TheoryElaborationSequence, Package, UniverseOfDiscourse, verify_formula, \
     verify_formula_statement, VariableSubstitutionDeclaration, VariableSubstitutionInclusion
 
 # from foundation_system_1 import foundation_system_1, ft, u

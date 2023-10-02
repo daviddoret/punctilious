@@ -26,10 +26,35 @@ def prioritize_value(*args):
     return None
 
 
+class ErrorCode:
+    def __init__(self, code, title):
+        self.code = code
+        self.title = title
+
+
+class ErrorCodes:
+    def __init__(self):
+        self.error_001_base_error = ErrorCode(1, 'Base error')
+        self.error_002_inference_premise_syntax_error = ErrorCode(2,
+            'Inference premise syntax error')
+        self.error_003_inference_premise_validity_error = ErrorCode(3,
+            'Inference premise validity error')
+
+
+error_codes = ErrorCodes()
+
+
 class PunctiliousException(Exception):
-    def __init__(self, msg, **kwargs):
+
+    def __init__(self, error_code: ErrorCode, msg: str, **kwargs):
+        if error_code is None:
+            error_code = error_codes.error_001_base_error
+        msg = f'{msg}\nError code: {error_code.code}.'
+        msg = f'{msg}\nError title: {error_code.title}.'
         self.msg = msg
+        self.error_code = error_code
         self.kwargs = kwargs
+        super().__init__(msg)
 
 
 def rep_composition(composition: collections.abc.Generator[Composable, Composable, bool] = None,
@@ -934,8 +959,10 @@ class VerificationSeverities(repm.ValueName):
 verification_severities = VerificationSeverities('verification_severities')
 
 
-def verify(assertion, msg, severity: VerificationSeverity = verification_severities.error,
-        raise_exception: bool = True, **kwargs) -> tuple[bool, (None, str)]:
+def verify(assertion: bool, msg: str,
+        severity: VerificationSeverity = verification_severities.error,
+        raise_exception: bool = True, error_code: (None, ErrorCode) = None, **kwargs) -> tuple[
+    bool, (None, str)]:
     if not assertion:
         contextual_information = ''
         for key, value in kwargs.items():
@@ -947,16 +974,16 @@ def verify(assertion, msg, severity: VerificationSeverity = verification_severit
                     value_as_string = str(value)
                 finally:
                     pass
-            contextual_information += f'\n{key}: {value_as_string}'
-        report = f'{str(severity).upper()}: {msg}\nContextual information:{contextual_information}'
-        repm.prnt(report)
+            contextual_information += f'\n  {key}: {value_as_string}'
+        report = f'\n\nMessage:\n{msg}\n\nContextual information:{contextual_information}\n\nSeverity: {str(severity).upper()}'
+        # repm.prnt(report)
         if severity is verification_severities.warning:
             warnings.warn(report)
         raise_exception = prioritize_value(raise_exception,
             configuration.raise_exception_on_verification_error, True)
         if severity is verification_severities.error:
             if raise_exception:
-                raise PunctiliousException(msg=report, **kwargs)
+                raise PunctiliousException(error_code=error_code, msg=report, **kwargs)
             else:
                 return False, report
     else:
@@ -2217,6 +2244,16 @@ class TheoreticalObject(SymbolicObject):
                 _values[variable] = newly_observed_value
         return True, _values
 
+    @property
+    @abc.abstractmethod
+    def is_propositional(self) -> bool:
+        """Informs if a theoretical-object is propositional.
+
+        :return: True if the theoretical-object is propositional, False otherwise.
+        """
+        raise NotImplementedError(
+            'The is_propositional property is abstract, it must be implemented by the child class.')
+
     def substitute(self, substitution_map, target_theory, lock_variable_scope=None):
         """Given a theoretical-objct o₁ (self),
         and a substitution map 𝐌,
@@ -2254,15 +2291,18 @@ class TheoreticalObject(SymbolicObject):
             # FreeVariable instances may be of type contextlib._GeneratorContextManager
             # when used inside a with statement.
             pass  # assert isinstance(key, TheoreticalObjct)  ##### XXXXX  # verify(  #  #  #  #  # isinstance(value, (  #    TheoreticalObjct, contextlib._GeneratorContextManager)),  #    'The value component of this key/value pair in this '  #    'substitution map is  #    not an instance of TheoreticalObjct.',  #    key=key, value=value,  #    value_type=type(value), self2=self)  # A formula relation cannot be replaced by  #    a simple-objct.  # But a simple-object could be replaced by a formula,  # if that formula "yields" such simple-objects.  # TODO: Implement clever rules here  #  to avoid ill-formed formula,  #   or let the formula constructor do the work.  #  #  assert type(key) == type(value) or isinstance(  #    value, FreeVariable) or  #  #  #  isinstance(  #    key, FreeVariable)  # If these are formula, their arity must be  #  equal  # to prevent the creation of an ill-formed formula.  # NO, THIS IS WRONG.  #  TODO: Re-analyze this point.  # assert not isinstance(key, Formula) or key.arity  #   == value.arity
-
-        # Because the scope of variables is locked,
-        # the substituted formula must create "duplicates" of all variables.
+        # Because the scope of variables is locked, the substituted formula must create "duplicates" of all variables.
+        # During this process, we reuse the variable symbols, but we let auto-indexing re-numbering the new variables.
+        # During this process, we must of course assure the consistency of the is_propositional property.
         variables_list = self.get_variable_ordered_set()
+        x: FreeVariable
         for x in variables_list:
+            variable_is_propositional: bool = x.is_propositional
             if x not in substitution_map.keys():
                 # Call declare_free_variable() instead of v()
                 # to explicitly manage variables scope locking.
-                x2 = self.universe_of_discourse.declare_free_variable(x.nameset.nameset)
+                x2 = self.universe_of_discourse.declare_free_variable(symbol=x.nameset.symbol,
+                    is_propositional=variable_is_propositional)
                 substitution_map[x] = x2
 
         # Now we may proceed with substitution.
@@ -2445,11 +2485,13 @@ class FreeVariable(TheoreticalObject):
             auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None, echo: (None, bool) = None) -> None:
+            nameset: (None, str, NameSet) = None, is_propositional: (None, bool) = None,
+            echo: (None, bool) = None) -> None:
         echo = prioritize_value(echo, configuration.echo_free_variable_declaration,
             configuration.echo_default, False)
         status = prioritize_value(status, FreeVariable.scope_initialization_status)
         scope = prioritize_value(scope, frozenset())
+        self._is_propositional = prioritize_value(is_propositional, False)
         scope = {scope} if isinstance(scope, Formula) else scope
         verify(isinstance(scope, frozenset),
             'The scope of a FreeVariable must be of python type frozenset.')
@@ -2482,22 +2524,6 @@ class FreeVariable(TheoreticalObject):
 
     def echo(self):
         self.rep_report()
-
-    @property
-    def scope(self):
-        """The scope of a free variable is the set of the formula where the variable is used.
-
-        :return:
-        """
-        return self._scope
-
-    def lock_scope(self):
-        # Support for the with pythonic syntax
-        # Start building  variable scope
-        verify(self._status == FreeVariable.scope_initialization_status,
-            'The scope of an instance of FreeVariable can only be locked if it is open.')
-        # Close variable scope
-        self._status = FreeVariable.closed_scope_status
 
     def extend_scope(self, phi):
         # Support for the with pythonic syntax
@@ -2539,9 +2565,33 @@ class FreeVariable(TheoreticalObject):
         # o2 is not a variable.
         return self.is_formula_syntactically_equivalent_to(o2), _values
 
+    @property
+    def is_propositional(self) -> bool:
+        """A free-variable is denoted as propositional if a strict constraint is imposed on the objects it may be substituted with, that is only propositional objects.
+
+        When a free-variable is declared as propositional, punctilious assures through data-validation that it is never substituted by a non-propositional object.
+        """
+        return self._is_propositional
+
+    def lock_scope(self):
+        # Support for the with pythonic syntax
+        # Start building  variable scope
+        verify(self._status == FreeVariable.scope_initialization_status,
+            'The scope of an instance of FreeVariable can only be locked if it is open.')
+        # Close variable scope
+        self._status = FreeVariable.closed_scope_status
+
     def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None):
         return f'Let {self.rep_name(encoding=encoding)} be a free-variable in ' \
                f'{self.universe_of_discourse.rep_name(encoding=encoding)}' + '\n'
+
+    @property
+    def scope(self):
+        """The scope of a free variable is the set of the formula where the variable is used.
+
+        :return:
+        """
+        return self._scope
 
 
 class Formula(TheoreticalObject):
@@ -2656,6 +2706,122 @@ class Formula(TheoreticalObject):
     def __str__(self):
         return self.rep(expand=True)
 
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
+        # TODO: Instead of hard-coding the class name, use a meta-theory.
+        yield SerifItalic(plaintext='formula')
+
+    def compose_collection_operator(self) -> collections.abc.Generator[Composable, None, None]:
+        global text_dict
+        start: StyledText = prioritize_value(self.relation.collection_start,
+            text_dict.open_parenthesis)
+        sep: StyledText = prioritize_value(self.relation.collection_separator, text_dict.comma)
+        end: StyledText = prioritize_value(self.relation.collection_end,
+            text_dict.close_parenthesis)
+        yield start
+        first_p: bool = True
+        for p in self.parameters:
+            if not first_p:
+                yield sep
+            else:
+                first_p = False
+            yield from p.compose_formula()
+        yield end
+
+    def compose_formula(self) -> collections.abc.Generator[Composable, None, None]:
+        if is_in_class(self.relation, classes.free_variable):
+            # If the relation of this formula is a free-variable,
+            # it has no arity, neither a representation-mode.
+            # In this situation, our design-choice is to
+            # fallback on the function-call representation-mode.
+            # In future developments, we may choose to allow
+            # the "decoration" of free-variables with arity,
+            # and presentation-mode to improve readability.
+            yield from self.compose_function_call()
+        else:
+            match self.relation.formula_rep:
+                case Formula.function_call:
+                    yield from self.compose_function_call()
+                case Formula.infix:
+                    yield from self.compose_infix_operator()
+                case Formula.prefix:
+                    yield from self.compose_prefix_operator()
+                case Formula.postfix:
+                    yield from self.compose_postfix_operator()
+                case Formula.collection:
+                    yield from self.compose_collection_operator()
+                case _:
+                    # Fallback notation.
+                    yield from self.compose_function_call()
+
+    def compose_function_call(self) -> collections.abc.Generator[Composable, None, None]:
+        global text_dict
+        yield from self.relation.compose_formula()
+        yield text_dict.open_parenthesis
+        first_item = True
+        for p in self.parameters:
+            if not first_item:
+                yield text_dict.formula_parameter_separator
+            yield from p.compose_formula()
+            first_item = False
+        yield text_dict.close_parenthesis
+
+    def compose_infix_operator(self) -> collections.abc.Generator[Composable, None, None]:
+        verify(assertion=self.relation.arity == 2,
+            msg='Relation is not binary, formula-representation-style is infix.',
+            relation=self.relation, slf=self)
+        global text_dict
+        yield text_dict.open_parenthesis
+        yield from self.parameters[0].compose_formula()
+        yield text_dict.space
+        yield from self.relation.compose_formula()
+        yield text_dict.space
+        yield from self.parameters[1].compose_formula()
+        yield text_dict.close_parenthesis
+
+    def compose_postfix_operator(self) -> collections.abc.Generator[Composable, None, None]:
+        verify(assertion=len(self.parameters) == 1,
+            msg='Postfix-operator formula representation is used but arity is not equal to 1',
+            slf=self)
+        global text_dict
+        yield text_dict.open_parenthesis
+        yield from self.parameters[0].compose_formula()
+        yield text_dict.close_parenthesis
+        yield from self.relation.compose_formula()
+
+    def compose_prefix_operator(self) -> collections.abc.Generator[Composable, None, None]:
+        verify(assertion=len(self.parameters) == 1,
+            msg='Prefix-operator formula representation is used but arity is not equal to 1',
+            slf=self)
+        global text_dict
+        yield from self.relation.compose_formula()
+        yield text_dict.open_parenthesis
+        yield from self.parameters[0].compose_formula()
+        yield text_dict.close_parenthesis
+
+    def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
+        Composable, None, None]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
+        global text_dict
+        yield text_dict.let
+        yield text_dict.space
+        yield from self.compose_symbol()
+        yield text_dict.space
+        yield text_dict.be
+        yield text_dict.space
+        yield text_dict.the
+        yield text_dict.space
+        yield from self.compose_class()
+        yield text_dict.space
+        yield from self.compose_formula()
+        yield text_dict.space
+        yield text_dict.in2
+        yield text_dict.space
+        yield from self.universe_of_discourse.compose_symbol()
+        yield text_dict.period
+
     def crossreference_variable(self, x):
         """During construction, cross-reference a free-variable 𝓍
         with its parent formula if it is not already cross-referenced,
@@ -2674,14 +2840,6 @@ class Formula(TheoreticalObject):
 
     def echo(self):
         repm.prnt(self.rep_report())
-
-    @property
-    def is_proposition(self):
-        """Tell if the formula is a logic-proposition.
-
-        This property is directly inherited from the formula-is-proposition
-        attribute of the formula's relation."""
-        return self.relation.signal_proposition
 
     def is_formula_syntactically_equivalent_to(self, o2: TheoreticalObject) -> bool:
         """Return true if ⌜self⌝ is formula-syntactically-equivalent to ⌜o2⌝.
@@ -2706,6 +2864,14 @@ class Formula(TheoreticalObject):
             if not self.parameters[i].is_formula_syntactically_equivalent_to(o2.parameters[i]):
                 return False
         return True
+
+    @property
+    def is_propositional(self) -> bool:
+        """Tell if the formula is a logic-proposition.
+
+        This property is directly inherited from the formula-is-proposition
+        attribute of the formula's relation."""
+        return self.relation.signal_proposition
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
             visited: (None, set) = None):
@@ -2752,143 +2918,27 @@ class Formula(TheoreticalObject):
         else:
             return super().rep(encoding=encoding, expand=expand)
 
-    def compose_function_call(self) -> collections.abc.Generator[Composable, None, None]:
-        global text_dict
-        yield from self.relation.compose_formula()
-        yield text_dict.open_parenthesis
-        first_item = True
-        for p in self.parameters:
-            if not first_item:
-                yield text_dict.formula_parameter_separator
-            yield from p.compose_formula()
-            first_item = False
-        yield text_dict.close_parenthesis
-
     def rep_function_call(self, encoding: (None, Encoding) = None,
             expand: (None, bool) = None) -> str:
         encoding = prioritize_value(encoding, configuration.encoding, encodings.plaintext)
         return rep_composition(composition=self.compose_function_call(), encoding=encoding)
-
-    def compose_infix_operator(self) -> collections.abc.Generator[Composable, None, None]:
-        verify(assertion=self.relation.arity == 2,
-            msg='Relation is not binary, formula-representation-style is infix.',
-            relation=self.relation, slf=self)
-        global text_dict
-        yield text_dict.open_parenthesis
-        yield from self.parameters[0].compose_formula()
-        yield text_dict.space
-        yield from self.relation.compose_formula()
-        yield text_dict.space
-        yield from self.parameters[1].compose_formula()
-        yield text_dict.close_parenthesis
 
     def rep_infix_operator(self, encoding: (None, Encoding) = None, expand=(None, bool),
             **kwargs) -> str:
         encoding = prioritize_value(encoding, configuration.encoding, encodings.plaintext)
         return rep_composition(composition=self.compose_infix_operator(), encoding=encoding)
 
-    def compose_postfix_operator(self) -> collections.abc.Generator[Composable, None, None]:
-        verify(assertion=len(self.parameters) == 1,
-            msg='Postfix-operator formula representation is used but arity is not equal to 1',
-            slf=self)
-        global text_dict
-        yield text_dict.open_parenthesis
-        yield from self.parameters[0].compose_formula()
-        yield text_dict.close_parenthesis
-        yield from self.relation.compose_formula()
-
-    def compose_collection_operator(self) -> collections.abc.Generator[Composable, None, None]:
-        global text_dict
-        start: StyledText = prioritize_value(self.relation.collection_start,
-            text_dict.open_parenthesis)
-        sep: StyledText = prioritize_value(self.relation.collection_separator, text_dict.comma)
-        end: StyledText = prioritize_value(self.relation.collection_end,
-            text_dict.close_parenthesis)
-        yield start
-        first_p: bool = True
-        for p in self.parameters:
-            if not first_p:
-                yield sep
-            else:
-                first_p = False
-            yield from p.compose_formula()
-        yield end
-
     def rep_postfix_operator(self, encoding: (None, Encoding) = None, expand=None) -> str:
         encoding = prioritize_value(encoding, configuration.encoding, encodings.plaintext)
         return rep_composition(composition=self.compose_postfix_operator(), encoding=encoding)
-
-    def compose_prefix_operator(self) -> collections.abc.Generator[Composable, None, None]:
-        verify(assertion=len(self.parameters) == 1,
-            msg='Prefix-operator formula representation is used but arity is not equal to 1',
-            slf=self)
-        global text_dict
-        yield from self.relation.compose_formula()
-        yield text_dict.open_parenthesis
-        yield from self.parameters[0].compose_formula()
-        yield text_dict.close_parenthesis
 
     def rep_as_prefix_operator(self, encoding: (None, Encoding) = None, expand=None) -> str:
         encoding = prioritize_value(encoding, configuration.encoding, encodings.plaintext)
         return rep_composition(composition=self.compose_prefix_operator(), encoding=encoding)
 
-    def compose_formula(self) -> collections.abc.Generator[Composable, None, None]:
-        if is_in_class(self.relation, classes.free_variable):
-            # If the relation of this formula is a free-variable,
-            # it has no arity, neither a representation-mode.
-            # In this situation, our design-choice is to
-            # fallback on the function-call representation-mode.
-            # In future developments, we may choose to allow
-            # the "decoration" of free-variables with arity,
-            # and presentation-mode to improve readability.
-            yield from self.compose_function_call()
-        else:
-            match self.relation.formula_rep:
-                case Formula.function_call:
-                    yield from self.compose_function_call()
-                case Formula.infix:
-                    yield from self.compose_infix_operator()
-                case Formula.prefix:
-                    yield from self.compose_prefix_operator()
-                case Formula.postfix:
-                    yield from self.compose_postfix_operator()
-                case Formula.collection:
-                    yield from self.compose_collection_operator()
-                case _:
-                    # Fallback notation.
-                    yield from self.compose_function_call()
-
     def rep_formula(self, encoding: (None, Encoding) = None, expand: bool = True) -> str:
         encoding = prioritize_value(encoding, configuration.encoding, encodings.plaintext)
         return rep_composition(composition=self.compose_formula(), encoding=encoding)
-
-    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
-        # TODO: Instead of hard-coding the class name, use a meta-theory.
-        yield SerifItalic(plaintext='formula')
-
-    def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
-        Composable, None, None]:
-        """
-        .. include:: ../../include/compose_report_python_method.rstinc
-
-        """
-        global text_dict
-        yield text_dict.let
-        yield text_dict.space
-        yield from self.compose_symbol()
-        yield text_dict.space
-        yield text_dict.be
-        yield text_dict.space
-        yield text_dict.the
-        yield text_dict.space
-        yield from self.compose_class()
-        yield text_dict.space
-        yield from self.compose_formula()
-        yield text_dict.space
-        yield text_dict.in2
-        yield text_dict.space
-        yield from self.universe_of_discourse.compose_symbol()
-        yield text_dict.period
 
 
 class SimpleObjctDict(collections.UserDict):
@@ -3190,6 +3240,10 @@ class AxiomDeclaration(TheoreticalObject):
     def echo(self):
         repm.prnt(self.rep_report())
 
+    def is_propositional(self) -> bool:
+        """An axiom-declaration is not propositional by definition. Distinctively, it is possible to infer propositional statements from an axiom-declaration, cf. axiom-interpretation."""
+        return False
+
     @property
     def natural_language(self) -> StyledText:
         return self._natural_language
@@ -3433,6 +3487,10 @@ class DefinitionDeclaration(TheoreticalObject):
     def echo(self):
         repm.prnt(self.rep_report())
 
+    def is_propositional(self) -> bool:
+        """A definition-declaration is not propositional by definition. Distinctively, it is possible to infer propositional statements from a definition-declaration, cf. definition-interpretation."""
+        return False
+
     @property
     def natural_language(self) -> (None, str):
         """The content of the axiom in natural-language."""
@@ -3527,7 +3585,7 @@ class FormulaStatement(Statement):
         universe_of_discourse = theory.universe_of_discourse
         # Theory statements must be logical propositions.
         valid_proposition = unpack_formula(valid_proposition)
-        verify(valid_proposition.is_proposition,
+        verify(valid_proposition.is_propositional,
             'The formula of this statement is not propositional.')
         # TODO: Check that all components of the hypothetical-proposition
         #  are elements of the source theory-branch.
@@ -3823,9 +3881,10 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
         """
         ok: bool
         msg: (None, msg)
-        ok, p_implies_q, msg = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
-            form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask,
-            raise_exception=True)
+        ok, p_implies_q, msg = verify_formula(
+            error_code=error_codes.error_002_inference_premise_syntax_error, arg='p_implies_q',
+            input_value=p_implies_q, u=self.u, form=self.parameter_p_implies_q,
+            mask=self.parameter_p_implies_q_mask, raise_exception=True)
         p_implies_q: Formula
         p: Formula = p_implies_q.parameters[0]  # TODO: Use composed type hints
         q: Formula = p_implies_q.parameters[1]  # TODO: Use composed type hints
@@ -4108,7 +4167,7 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p_and_q = verify_formula(u=t.u, arity=2, input_value=p_and_q)
+        _, p_and_q, _ = verify_formula(u=t.u, arity=2, input_value=p_and_q)
         q = p_and_q.parameters[1]
         return q
 
@@ -4142,8 +4201,8 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=t.u, arity=None, input_value=p)
-        q = verify_formula(u=t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula(u=t.u, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
         return p | t.u.r.land | q
 
 
@@ -4183,9 +4242,9 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p_implies_q = verify_formula(u=t.u, arity=None, input_value=p_implies_q)
-        r_implies_s = verify_formula(u=t.u, arity=None, input_value=r_implies_s)
-        p_or_r = verify_formula(u=t.u, arity=None, input_value=p_or_r)
+        _, p_implies_q, _ = verify_formula(u=t.u, arity=None, input_value=p_implies_q)
+        _, r_implies_s, _ = verify_formula(u=t.u, arity=None, input_value=r_implies_s)
+        _, p_or_r, _ = verify_formula(u=t.u, arity=None, input_value=p_or_r)
         return p | t.u.r.land | q
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
@@ -4197,8 +4256,8 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
     def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula_statement(t=t, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=t, arity=None, input_value=p)
+        _, q, _ = verify_formula_statement(t=t, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         verify(t.contains_theoretical_objct(q),
@@ -4300,8 +4359,8 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=t.u, arity=None, input_value=p)
-        q = verify_formula(u=t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula(u=t.u, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
         return p | t.u.r.land | q
 
 
@@ -4333,8 +4392,8 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=t.u, arity=None, input_value=p)
-        q = verify_formula(u=t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula(u=t.u, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
         return q | t.u.r.lor | p
 
 
@@ -4366,8 +4425,8 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=t.u, arity=None, input_value=p)
-        q = verify_formula(u=t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula(u=t.u, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
         return p | t.u.r.lor | q
 
 
@@ -4399,8 +4458,8 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=t.u, arity=None, input_value=p)
-        q = verify_formula(u=t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula(u=t.u, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
         return p | t.u.r.land | q
 
 
@@ -4432,8 +4491,8 @@ class DisjunctiveSyllogismDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=t.u, arity=None, input_value=p)
-        q = verify_formula(u=t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula(u=t.u, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
         return p | t.u.r.land | q
 
 
@@ -4471,8 +4530,8 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        not_not_p: Formula = verify_formula(u=t.u, arity=1, input_value=not_not_p)
-        not_p: Formula = not_not_p.parameters[0]
+        _, not_not_p, _ = verify_formula(u=t.u, input_value=not_not_p)
+        not_p = not_not_p.parameters[0]
         p: Formula = not_p.parameters[0]
         return p
 
@@ -4505,7 +4564,7 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p: Formula = verify_formula(arg='p', u=t.u, arity=1, input_value=p)
+        _, p, _ = verify_formula(arg='p', u=t.u, input_value=p)
         not_not_p: Formula = t.u.r.lnot(t.u.r.lnot(p))
         return not_not_p
 
@@ -4607,8 +4666,8 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=t.u, arity=None, input_value=p)
-        q = verify_formula(u=t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula(u=t.u, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
         return p | t.u.r.land | q
 
 
@@ -4701,7 +4760,7 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p_neq_p = verify_formula(u=self.u, arity=2, input_value=p_neq_p)
+        _, p_neq_p, _ = verify_formula(u=self.u, arity=2, input_value=p_neq_p)
         return t.u.f(t.u.r.inconsistency, inconsistent_theory)
 
 
@@ -4733,8 +4792,8 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p_implies_q = verify_formula(u=self.u, arity=2, input_value=p_implies_q)
-        q = verify_formula(u=self.u, arity=2, input_value=p_implies_q.parameters[1])
+        _, p_implies_q, _ = verify_formula(u=self.u, arity=2, input_value=p_implies_q)
+        _, q, _ = verify_formula(u=self.u, arity=2, input_value=p_implies_q.parameters[1])
         return q
 
 
@@ -4766,8 +4825,8 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p_implies_q = verify_formula(u=self.u, arity=2, input_value=p_implies_q)
-        q = verify_formula(u=self.u, arity=2, input_value=p_implies_q.parameters[1])
+        _, p_implies_q, _ = verify_formula(u=self.u, arity=2, input_value=p_implies_q)
+        _, q, _ = verify_formula(u=self.u, arity=2, input_value=p_implies_q.parameters[1])
         return q
 
 
@@ -5349,7 +5408,7 @@ theory-elaboration."""
         :return:
         """
         if formula is not None:
-            formula = verify_formula(u=self.u, arity=None, input_value=formula)
+            _, formula, _ = verify_formula(u=self.u, input_value=formula, raise_exception=True)
         for t in self.iterate_theory_chain():
             for s in t.statements:
                 if formula is None or (is_in_class(s,
@@ -5417,7 +5476,7 @@ theory-elaboration."""
         return self.include_definition(natural_language=natural_language, nameset=symbol,
             reference=reference, title=title)
 
-    def get_first_syntactically_equivalent_statement(self, formula: (None, Formula) = None):
+    def get_first_syntactically_equivalent_statement(self, formula: Formula):
         """Given a formula, return the first statement that is syntactically-equivalent with it, or None if none are found.
 
         :param formula:
@@ -5433,7 +5492,8 @@ theory-elaboration."""
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None) -> Hypothesis:
         """Pose a new hypothesis in the current theory."""
-        hypothesis_formula = verify_formula(u=self.u, arity=None, input_value=hypothesis_formula)
+        _, hypothesis_formula, _ = verify_formula(u=self.u, arity=None,
+            input_value=hypothesis_formula)
         return Hypothesis(t=self, hypothesis_formula=hypothesis_formula, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
@@ -5530,7 +5590,8 @@ class Hypothesis(Statement):
         paragraph_header = paragraph_headers.hypothesis
         # TODO: Check that all components of the hypothetical-proposition
         #  are elements of the source theory-branch.
-        verify(hypothesis_formula.is_proposition, 'The hypothetical-formula is not a proposition.',
+        verify(hypothesis_formula.is_propositional,
+            'The hypothetical-formula is not a proposition.',
             hypothetical_formula=hypothesis_formula, slf=self)
         if isinstance(symbol, str):
             # If symbol was passed as a string,
@@ -5747,6 +5808,10 @@ class Relation(TheoreticalObject):
     def echo(self):
         repm.prnt(self.rep_report())
 
+    def is_propositional(self) -> bool:
+        "A relation is not a propositional object by definition. But note that formulae based on a relation are propositional if the relation signals a proposition."
+        return False
+
 
 def rep_arity_as_text(n):
     match n:
@@ -5831,6 +5896,13 @@ class SimpleObjct(TheoreticalObject):
             return False, _values
         # o2 is not a variable.
         return self.is_formula_syntactically_equivalent_to(o2), _values
+
+    def is_propositional(self) -> bool:
+        """A simple-object if propositional if and only if it is truth or the falsehood."""
+        if self is self.u.o.truth or self is self.u.o.falsehood:
+            return True
+        else:
+            return False
 
 
 class SubstitutionOfEqualTerms(FormulaStatement):
@@ -6228,7 +6300,8 @@ FlexibleFormula = typing.Union[FormulaStatement, Formula, tuple, list]
 
 def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (None, str) = None,
         form: (None, FlexibleFormula) = None, mask: (None, frozenset[FreeVariable]) = None,
-        raise_exception: bool = True) -> tuple[bool, (None, Formula), (None, str)]:
+        raise_exception: bool = True, error_code: (None, ErrorCode) = None) -> tuple[
+    bool, (None, Formula), (None, str)]:
     """Many punctilious pythonic methods or functions expect some formula as input parameters. This function assures that the input value is a proper formula and that it is consistent with possible contraints imposed on that formula.
 
     If ⌜input_value⌝ is of type formula, it is already well typed.
@@ -6266,7 +6339,7 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
             value_string = str(input_value)
         except:
             value_string = 'string conversion failure'
-        ok, msg = verify(raise_exception=raise_exception, assertion=False,
+        ok, msg = verify(raise_exception=raise_exception, error_code=error_code, assertion=False,
             msg=f'The argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}could not be interpreted as a Formula. Its type was {str(type(input_value))}, and its value was ⌜{value_string}⌝.',
             argument=input_value, u=u)
         if not ok:
@@ -6282,7 +6355,7 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
         ok, form, msg = verify_formula(u=u, input_value=form,
             raise_exception=True)  # The form itself may be a flexible formula.
         if not ok:
-            verify(raise_exception=raise_exception, assertion=False,
+            verify(raise_exception=raise_exception, error_code=error_code, assertion=False,
                 msg=f'The form ⌜{form}⌝ passed to verify the structure of formula ⌜{formula}⌝ is not a proper formula.',
                 argument=input_value, u=u, form=form, mask=mask)
         form: Formula
@@ -6301,7 +6374,8 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
                 free_variables_string = ', where ' + ', '.join(
                     [free_variable.rep(encoding=encodings.plaintext) for free_variable in
                         mask]) + ' are free-variables'
-            ok, msg = verify(raise_exception=raise_exception, assertion=False,
+            ok, msg = verify(raise_exception=raise_exception, error_code=error_code,
+                assertion=False,
                 msg=f'The formula ⌜{formula}⌝ passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not of the required form ⌜{form}⌝{free_variables_string}.',
                 argument=input_value, u=u, form=form, mask=mask)
             if not ok:
@@ -6311,8 +6385,8 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
 
 def verify_formula_statement(t: TheoryElaborationSequence, input_value: FlexibleFormula,
         arg: (None, str) = None, form: (None, FlexibleFormula) = None,
-        mask: (None, frozenset[FreeVariable]) = None, raise_exception: bool = True) -> tuple[
-    bool, (None, FormulaStatement), (None, str)]:
+        mask: (None, frozenset[FreeVariable]) = None, raise_exception: bool = True,
+        error_code: (None, ErrorCode) = None) -> tuple[bool, (None, FormulaStatement), (None, str)]:
     """Many punctilious pythonic methods expect some FormulaStatement as input parameters (e.g. the infer_statement() of inference-rules). This is syntactically robust, but it may read theory code less readable. In effect, one must store all formula-statements in variables to reuse them in formula. If the number of formula-statements get large, readability suffers. To provide a friendler interface for humans, we allow passing formula-statements as formula, tuple, and lists and apply the following interpretation rules:
 
     If ⌜argument⌝ is of type iterable, such as tuple, e.g.: (implies, q, p), we assume it is a formula in the form (relation, a1, a2, ... an) where ai are arguments.
@@ -6337,7 +6411,7 @@ def verify_formula_statement(t: TheoryElaborationSequence, input_value: Flexible
         # ⌜argument⌝ is not a statement-formula.
         # But it is expected to be interpretable first as a formula, and then as a formula-statement.
         formula_ok, formula, msg = verify_formula(arg=arg, u=u, input_value=input_value, form=None,
-            mask=None, arity=None)
+            mask=None, raise_exception=raise_exception, error_code=error_code)
         if not formula_ok:
             return formula_ok, None, msg
         formula: Formula
@@ -6347,15 +6421,17 @@ def verify_formula_statement(t: TheoryElaborationSequence, input_value: Flexible
         # of a formula-statement in ⌜t⌝ that is
         # syntactically-equivalent to ⌜argument⌝.
         formula_statement = t.get_first_syntactically_equivalent_statement(formula=input_value)
-        formula_ok, msg = verify(input_value is not None,
-            f'The formula ⌜{formula}⌝ passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not a formula-statement in theory-elaboration-sequence ⌜{t}⌝.',
+        formula_ok, msg = verify(raise_exception=raise_exception, error_code=error_code,
+            assertion=formula_statement is not None,
+            msg=f'The formula ⌜{formula}⌝ passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not a formula-statement in theory-elaboration-sequence ⌜{t}⌝.',
             formula=formula, t=t)
         if not formula_ok:
             return formula_ok, None, msg
 
     # At this point we have a properly typed FormulaStatement.
-    formula_ok, msg = verify(formula_statement.t is t,
-        f'The theory-elaboration-sequence ⌜{formula_statement.t}⌝ of the formula-statement {formula_statement} passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not consistent with the theory-elaboration-sequence ⌜{t}⌝.',
+    formula_ok, msg = verify(raise_exception=raise_exception, error_code=error_code,
+        assertion=formula_statement.t is t,
+        msg=f'The theory-elaboration-sequence ⌜{formula_statement.t}⌝ of the formula-statement {formula_statement} passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not consistent with the theory-elaboration-sequence ⌜{t}⌝.',
         formula=formula, t=t)
     if not formula_ok:
         return formula_ok, None, msg
@@ -6363,7 +6439,7 @@ def verify_formula_statement(t: TheoryElaborationSequence, input_value: Flexible
     # Validate the form, etc. of the underlying formula.
     formula = input_value.valid_proposition
     formula_ok, formula, msg = verify_formula(u=u, input_value=formula, arg=arg, form=form,
-        mask=mask)
+        mask=mask, raise_exception=raise_exception, error_code=error_code)
     if not formula_ok:
         return formula_ok, None, msg
 
@@ -6684,9 +6760,10 @@ class AbsorptionInclusion(InferenceRuleInclusion):
 
         """
         # Validate that expected formula-statements are formula-statements.
-        formula_ok, _, _ = verify_formula_statement(t=self.t, input_value=p_implies_q,
-            form=self.i.parameter_p_implies_q, mask=self.i.parameter_p_implies_q_mask,
-            raise_exception=raise_exception)
+        formula_ok, _, _ = verify_formula_statement(
+            error_code=error_codes.error_003_inference_premise_validity_error, t=self.t,
+            input_value=p_implies_q, form=self.i.parameter_p_implies_q,
+            mask=self.i.parameter_p_implies_q_mask, raise_exception=raise_exception)
         # The method either raises an exception during validation, or return True.
         return formula_ok
 
@@ -7123,8 +7200,8 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
 
         :return: True (bool) if the parameters are correct.
         """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula_statement(t=t, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=t, arity=None, input_value=p)
+        _, q, _ = verify_formula_statement(t=t, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         verify(t.contains_theoretical_objct(q),
@@ -7151,8 +7228,8 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        q = verify_formula_statement(t=self.t, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
+        _, q, _ = verify_formula_statement(t=self.t, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7179,8 +7256,8 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=self.t.u, arity=None, input_value=p)
-        q = verify_formula(u=self.t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula(u=self.t.u, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=self.t.u, arity=None, input_value=q)
         return super().infer_formula(p, q, echo=echo)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
@@ -7191,8 +7268,8 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        q = verify_formula_statement(t=self.t, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
+        _, q, _ = verify_formula_statement(t=self.t, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7305,8 +7382,8 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
     def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula_statement(t=t, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=t, arity=None, input_value=p)
+        _, q, _ = verify_formula_statement(t=t, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         verify(t.contains_theoretical_objct(q),
@@ -7319,8 +7396,8 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=self.t.u, arity=None, input_value=p)
-        q = verify_formula(u=self.t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula(u=self.t.u, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=self.t.u, arity=None, input_value=q)
         return super().infer_formula(p, q, echo=echo)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
@@ -7331,8 +7408,8 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        q = verify_formula_statement(t=self.t, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
+        _, q, _ = verify_formula_statement(t=self.t, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7370,8 +7447,8 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
 
         :return: True (bool) if the parameters are correct.
         """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula(u=t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=t, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         return True
@@ -7382,8 +7459,8 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=self.t.u, arity=None, input_value=p)
-        q = verify_formula(u=self.t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula(u=self.t.u, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=self.t.u, arity=None, input_value=q)
         return super().infer_formula(p, q, echo=echo)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
@@ -7394,8 +7471,8 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        q = verify_formula(u=self.u, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=self.u, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7433,8 +7510,8 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
 
         :return: True (bool) if the parameters are correct.
         """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula(u=t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=t, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         return True
@@ -7445,8 +7522,8 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=self.t.u, arity=None, input_value=p)
-        q = verify_formula(u=self.t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula(u=self.t.u, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=self.t.u, arity=None, input_value=q)
         return super().infer_formula(p, q, echo=echo)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
@@ -7457,8 +7534,8 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        q = verify_formula(u=self.u, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=self.u, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7488,8 +7565,8 @@ class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
     def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula_statement(t=t, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=t, arity=None, input_value=p)
+        _, q, _ = verify_formula_statement(t=t, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         verify(t.contains_theoretical_objct(q),
@@ -7502,8 +7579,8 @@ class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=self.t.u, arity=None, input_value=p)
-        q = verify_formula(u=self.t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula(u=self.t.u, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=self.t.u, arity=None, input_value=q)
         return super().infer_formula(p, q, echo=echo)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
@@ -7514,8 +7591,8 @@ class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        q = verify_formula_statement(t=self.t, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
+        _, q, _ = verify_formula_statement(t=self.t, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7545,8 +7622,8 @@ class DisjunctiveSyllogismInclusion(InferenceRuleInclusion):
     def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula_statement(t=t, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=t, arity=None, input_value=p)
+        _, q, _ = verify_formula_statement(t=t, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         verify(t.contains_theoretical_objct(q),
@@ -7559,8 +7636,8 @@ class DisjunctiveSyllogismInclusion(InferenceRuleInclusion):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=self.t.u, arity=None, input_value=p)
-        q = verify_formula(u=self.t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula(u=self.t.u, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=self.t.u, arity=None, input_value=q)
         return super().infer_formula(p, q, echo=echo)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
@@ -7571,8 +7648,8 @@ class DisjunctiveSyllogismInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        q = verify_formula_statement(t=self.t, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
+        _, q, _ = verify_formula_statement(t=self.t, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7609,7 +7686,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
             msg='The parent formula in ⌜not_not_p⌝ must have ⌜negation⌝ relation.',
             not_not_p=not_not_p, t=t, slf=self)
         not_p: Formula = not_not_p.valid_proposition.parameters[0]
-        not_p: Formula = verify_formula(u=t.u, arity=1, input_value=not_p)
+        _, not_p, _ = verify_formula(u=t.u, arity=1, input_value=not_p)
         verify(assertion=not_p.relation is t.u.r.negation,
             msg='The child formula in ⌜not_not_p⌝ must have ⌜negation⌝ relation.', not_not_p=not_p,
             t=t, slf=self)
@@ -7630,7 +7707,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        not_not_p = verify_formula_statement(t=self.t, arity=1, input_value=not_not_p)
+        not_not__, p, _ = verify_formula_statement(t=self.t, arity=1, input_value=not_not_p)
         return super().infer_formula_statement(not_not_p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7686,7 +7763,7 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = verify_formula_statement(arg='p', t=self.t, arity=1, input_value=p)
+        _, p, _ = verify_formula_statement(arg='p', t=self.t, arity=1, input_value=p)
         return super().infer_formula_statement(p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -7830,8 +7907,8 @@ class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
     def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
             t: TheoryElaborationSequence) -> bool:
         """ """
-        p = verify_formula_statement(t=t, arity=None, input_value=p)
-        q = verify_formula_statement(t=t, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=t, arity=None, input_value=p)
+        _, q, _ = verify_formula_statement(t=t, arity=None, input_value=q)
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         verify(t.contains_theoretical_objct(q),
@@ -7844,8 +7921,8 @@ class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = verify_formula(u=self.t.u, arity=None, input_value=p)
-        q = verify_formula(u=self.t.u, arity=None, input_value=q)
+        _, p, _ = verify_formula(u=self.t.u, arity=None, input_value=p)
+        _, q, _ = verify_formula(u=self.t.u, arity=None, input_value=q)
         return super().infer_formula(p, q, echo=echo)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
@@ -7856,8 +7933,8 @@ class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        q = verify_formula_statement(t=self.t, arity=None, input_value=q)
+        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
+        _, q, _ = verify_formula_statement(t=self.t, arity=None, input_value=q)
         return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -8096,8 +8173,8 @@ class ModusPonensInclusion(InferenceRuleInclusion):
         :param t:
         :return: A formula Q
         """
-        p_implies_q = verify_formula_statement(t=t, arity=2, input_value=p_implies_q)
-        p = verify_formula_statement(t=t, arity=2, input_value=p)
+        p_implies__, q, _ = verify_formula_statement(t=t, arity=2, input_value=p_implies_q)
+        _, p, _ = verify_formula_statement(t=t, arity=2, input_value=p)
         verify(t.contains_theoretical_objct(p_implies_q),
             'Statement ⌜p_implies_q⌝ is not contained in theory ⌜t⌝''s hierarchy.',
             p_implies_q=p_implies_q, t=t, slf=self)
@@ -8137,8 +8214,8 @@ class ModusPonensInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p_implies_q = verify_formula_statement(t=self.t, arity=2, input_value=p_implies_q)
-        p = verify_formula_statement(t=self.t, arity=None, input_value=p)
+        p_implies__, q, _ = verify_formula_statement(t=self.t, arity=2, input_value=p_implies_q)
+        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
         return super().infer_formula_statement(p_implies_q, p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -8167,8 +8244,8 @@ class ModusTollensInclusion(InferenceRuleInclusion):
         :param t:
         :return: A formula Q
         """
-        p_implies_q = verify_formula_statement(t=t, arity=2, input_value=p_implies_q)
-        p = verify_formula_statement(t=t, arity=2, input_value=p)
+        p_implies__, q, _ = verify_formula_statement(t=t, arity=2, input_value=p_implies_q)
+        _, p, _ = verify_formula_statement(t=t, arity=2, input_value=p)
         verify(t.contains_theoretical_objct(p_implies_q),
             'Statement ⌜p_implies_q⌝ is not contained in theory ⌜t⌝''s hierarchy.',
             p_implies_q=p_implies_q, t=t, slf=self)
@@ -8208,8 +8285,8 @@ class ModusTollensInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p_implies_q = verify_formula_statement(t=self.t, arity=2, input_value=p_implies_q)
-        p = verify_formula_statement(t=self.t, arity=None, input_value=p)
+        p_implies__, q, _ = verify_formula_statement(t=self.t, arity=2, input_value=p_implies_q)
+        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
         return super().infer_formula_statement(p_implies_q, p, nameset=nameset, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
@@ -8574,7 +8651,7 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p = verify_formula_statement(t=self.t, arity=None, input_value=p)
+        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
         if isinstance(phi, TheoreticalObject):
             # If phi is passed as an theoretical-object,
             # embed it into a tuple as we expect tuple[TheoreticalObject] as input type.
@@ -9211,7 +9288,8 @@ class UniverseOfDiscourse(SymbolicObject):
     def declare_free_variable(self, symbol: (None, str, StyledText) = None,
             dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
-            explicit_name: (None, str, StyledText) = None, echo: (None, bool) = None):
+            explicit_name: (None, str, StyledText) = None, is_propositional: (None, bool) = None,
+            echo: (None, bool) = None):
         """Declare a free-variable in this universe-of-discourse.
 
         A shortcut function for FreeVariable(universe_of_discourse=u, ...)
@@ -9220,7 +9298,8 @@ class UniverseOfDiscourse(SymbolicObject):
         :return:
         """
         x = FreeVariable(universe_of_discourse=self, nameset=symbol,
-            status=FreeVariable.scope_initialization_status, echo=echo)
+            status=FreeVariable.scope_initialization_status, is_propositional=is_propositional,
+            echo=echo)
         return x
 
     def declare_symbolic_objct(self, symbol: (None, str, StyledText) = None,
@@ -9464,11 +9543,14 @@ class InferredStatement(FormulaStatement):
         t: TheoryElaborationSequence = i.t
         self._inference_rule = i
         self._premises = premises
+        # Verify that premises are syntaxically correct, and construct the resulting formula at the same time.
+        # If syntaxically incorrect, raise a Punctilious Exception and stop processing.
+        # If syntaxically correct, complete the inference process.
+        valid_proposition = self._inference_rule.construct_formula(**premises._asdict())
         # Check that the premises are valid.
         # If they are not, raise a Punctilious Exception and stop processing.
         # If they are, complete the inference process.
         self._inference_rule.check_premises_validity(**premises._asdict(), raise_exception=True)
-        valid_proposition = self._inference_rule.construct_formula(**premises._asdict())
         super().__init__(theory=t, valid_proposition=valid_proposition, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
