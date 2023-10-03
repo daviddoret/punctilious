@@ -3427,8 +3427,7 @@ class InferenceRuleInclusion(Statement):
     def inference_rule(self):
         return self._inference_rule
 
-    def verify_compatibility(self, *args):
-        return self.inference_rule.check_inference_validity(*args, t=self.theory)
+    # def verify_compatibility(self, *args):  #    return self.inference_rule.check_inference_validity(*args, t=self.theory)
 
 
 class DefinitionDeclaration(TheoreticalObject):
@@ -4149,8 +4148,11 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
         _, p_and_q, _ = verify_formula(arg='p_and_q', input_value=p_and_q, u=self.u,
-            form=self.parameter_p_and_q, mask=self.parameter_p_and_q_mask, raise_exception=True)
+            form=self.parameter_p_and_q, mask=self.parameter_p_and_q_mask, raise_exception=True,
+            error_code=error_code)
+        p_and_q: Formula
         p: Formula = p_and_q.parameters[0]
         output: Formula = p
         return output
@@ -4192,8 +4194,11 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
         _, p_and_q, _ = verify_formula(arg='p_and_q', input_value=p_and_q, u=self.u,
-            form=self.parameter_p_and_q, mask=self.parameter_p_and_q_mask, raise_exception=True)
+            form=self.parameter_p_and_q, mask=self.parameter_p_and_q_mask, raise_exception=True,
+            error_code=error_code)
+        p_and_q: Formula
         q: Formula = p_and_q.parameters[1]
         output: Formula = q
         return output
@@ -4217,7 +4222,7 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'conjunction introduction inference rule'
         name = 'conjunction introduction'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.sequent_premises | q) | u.r.proves | (p | u.r.land | q))
+            definition = u.r.sequent_premises(p, q) | u.r.proves | (p | u.r.land | q)
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4227,9 +4232,15 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True)
-        _, q, _ = verify_formula(arg='q', input_value=q, u=self.u, raise_exception=True)
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
+            error_code=error_code)
+        p: Formula
+        _, q, _ = verify_formula(arg='q', input_value=q, u=self.u, raise_exception=True,
+            error_code=error_code)
+        q: Formula
         output: Formula = p | self.u.r.land | q
+        return output
 
 
 class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
@@ -4253,23 +4264,29 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
         explicit_name = 'constructive dilemma inference rule'
         name = 'constructive dilemma'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q, u.v(symbol='R') as r, u.v(symbol='S') as s:
-            # TODO: FEATURE #216: Review this definition once sequence-comma supports n-ary components.
-            definition = ((p | u.r.implies | q) | u.r.sequent_premises | (
-                    (r | u.r.implies | s) | u.r.sequent_premises | (
-                    p | u.r.lor | r))) | u.r.proves | (q | u.r.lor | s)
+            definition = u.r.sequent_premises((p | u.r.implies | q), (r | u.r.implies | s),
+                (p | u.r.lor | r)) | u.r.proves | (q | u.r.lor | s)
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            self.parameter_p_implies_q = p | u.r.implies | q
+            self.parameter_p_implies_q_mask = frozenset([p, q])
+        with u.v(symbol='R') as r, u.v(symbol='S') as s:
+            self.parameter_r_implies_s = r | u.r.implies | s
+            self.parameter_r_implies_s_mask = frozenset([r, s])
+        with u.v(symbol='P') as p, u.v(symbol='R') as r:
+            self.parameter_p_or_r = p | u.r.lor | r
+            self.parameter_p_or_r_mask = frozenset([p, r])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_implies_q: FormulaStatement, r_implies_s: FormulaStatement,
-            p_or_r: FormulaStatement, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> Formula:
+    def infer_formula(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
+            p_or_r: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p_implies_q, _ = verify_formula(u=t.u, arity=None, input_value=p_implies_q)
-        _, r_implies_s, _ = verify_formula(u=t.u, arity=None, input_value=r_implies_s)
+        _, p_implies_q, _ = verify_formula(u=t.u, input_value=p_implies_q, )
+        _, r_implies_s, _ = verify_formula(u=t.u, input_value=r_implies_s)
         _, p_or_r, _ = verify_formula(u=t.u, arity=None, input_value=p_or_r)
         return p | t.u.r.land | q
 
@@ -7136,8 +7153,7 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
         """
         return self.i.construct_formula(p_and_q=p_and_q)
 
-    def infer_formula_statement(self, p_and_q: FlexibleFormula,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+    def infer_formula_statement(self, p_and_q: FlexibleFormula, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """
