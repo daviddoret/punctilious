@@ -4343,6 +4343,7 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
 
         """
         # TODO: NICETOHAVE: DefinitionInterpretationDeclaration: replace this verify statement with a generic validate_definition_inclusion function.
+        # TODO: THEORY CONSISTENCY: IF X or Y IS PROPOSITIONAL, THE OTHER MUST BE PROPOSITIONAL. Otherwhise this inference-rule could introduce inconsistencies. ANALYSE THIS FURTHER.
         ok: bool
         output: Formula
         msg: (None, str)
@@ -4748,15 +4749,14 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, x_eq_y: FormulaStatement = None, x_neq_y: FormulaStatement = None,
-            inconsistent_theory: TheoryElaborationSequence = None,
-            t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, x_eq_y: FlexibleFormula, x_neq_y: FlexibleFormula,
+            inconsistent_theory: (None, TheoryElaborationSequence) = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        x_eq_y = unpack_formula(x_eq_y)
-        x_neq_y = unpack_formula(x_neq_y)
+        x_eq_y = verify_formula()
+        x_neq_y = verify_formula()
         return t.u.f(t.u.r.inconsistency, inconsistent_theory)
 
 
@@ -5936,60 +5936,6 @@ class SimpleObjct(TheoreticalObject):
             return False
 
 
-class SubstitutionOfEqualTerms(FormulaStatement):
-    """
-    TODO: Develop SubstitutionOfEqualTerms
-
-    Definition:
-    -----------
-    A substitution-of-equal-terms is a valid rule-of-inference propositional-logic argument that,
-    given a proposition (phi)
-    given a proposition (x = y)
-    infers the proposition (subst(phi, x, y))
-    """
-
-    symbol_base = '𝚂𝙾𝙴𝚃'
-
-    def __init__(self, original_expression, equality_statement, nameset=None,
-            paragraphe_header=None, theory=None, reference=None, title=None):
-        paragraphe_header = paragraph_headers.proposition if paragraphe_header is None else paragraphe_header
-        # Check p_implies_q consistency
-        assert isinstance(theory, TheoryElaborationSequence)
-        assert isinstance(original_expression, FormulaStatement)
-        assert theory.contains_theoretical_objct(original_expression)
-        assert isinstance(equality_statement, FormulaStatement)
-        assert theory.contains_theoretical_objct(equality_statement)
-        assert equality_statement.valid_proposition.relation is theory.universe_of_discourse.r.inequality
-        left_term = equality_statement.valid_proposition.parameters[0]
-        right_term = equality_statement.valid_proposition.parameters[1]
-        self.original_expression = original_expression
-        self.equality_statement = equality_statement
-        substitution_map = {left_term: right_term}
-        valid_proposition = original_expression.valid_proposition.substitute(
-            substitution_map=substitution_map, target_theory=theory, lock_variable_scope=True)
-        # Note: valid_proposition will be formula-syntactically-equivalent to self,
-        #   if there are no occurrences of left_term in original_expression.
-        super().__init__(theory=theory, valid_proposition=valid_proposition,
-            paragraphe_header=paragraphe_header, nameset=nameset)
-
-    def rep_report(self, proof: (None, bool) = None):
-        """Return a representation that expresses and justifies the statement.
-
-        The representation is in two parts:
-        - The formula that is being stated,
-        - The justification for the formula."""
-        output = f'{self.rep_title(cap=True)}: {self.valid_proposition.rep_formula()}'
-        if proof:
-            output = output + f'\n\t{repm.serif_bold("Substitution of equal terms")}'
-            output = output + f'\n\t{self.original_expression.rep_formula(expand=True):<70} │ ' \
-                              f'Follows from {repm.serif_bold(self.original_expression.rep_ref())}.'
-            output = output + f'\n\t{self.equality_statement.rep_formula(expand=True):<70} │ ' \
-                              f'Follows from {repm.serif_bold(self.equality_statement.rep_ref())}.'
-            output = output + f'\n\t{"─" * 71}┤'
-            output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ ∎'
-        return output + f'\n'
-
-
 class Tuple(tuple):
     """Tuple subclasses the native tuple class.
     The resulting supports setattr, getattr, hasattr,
@@ -7128,12 +7074,12 @@ class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
         i: ConjunctionElimination1Declaration = super().i
         return i
 
-    def infer_formula(self, p_and_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p_and_q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(p_and_q, echo=echo)
+        return self.i.construct_formula(p_and_q=p_and_q)
 
     def infer_formula_statement(self, p_and_q: (None, FormulaStatement) = None,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
@@ -7184,12 +7130,12 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
         i: ConjunctionElimination2Declaration = super().i
         return i
 
-    def infer_formula(self, p_and_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p_and_q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(p_and_q, echo=echo)
+        return self.i.construct_formula(p_and_q=p_and_q)
 
     def infer_formula_statement(self, p_and_q: (None, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
@@ -7250,17 +7196,12 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
         i: ConjunctionIntroductionDeclaration = super().i
         return i
 
-    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
-            q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        ok: bool
-        msg: (None, str)
-        ok, p, msg = verify_formula(u=self.t.u, arity=None, input_value=p)
-        ok, q, msg = verify_formula(u=self.t.u, arity=None, input_value=q)
-        return super().infer_formula(p, q, echo=echo)
+        return self.i.construct_formula(p=p, q=q)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -7298,15 +7239,12 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
         i: ConstructiveDilemmaDeclaration = super().i
         return i
 
-    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
-            q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p, _ = verify_formula(u=self.t.u, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=self.t.u, arity=None, input_value=q)
-        return super().infer_formula(p, q, echo=echo)
+        return self.i.construct_formula(p=p, q=q)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -7382,14 +7320,14 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
         i: DefinitionInterpretationDeclaration = super().i
         return i
 
-    def construct_formula(self, d: (None, DefinitionInclusion) = None,
-            x_equal_y: (None, FlexibleFormula) = None, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, d: DefinitionInclusion, x: FlexibleFormula,
+            y: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         # Call back the infer_formula method on the inference-rule declaration class.
-        return self.i.construct_formula(d=d, x_equal_y=x_equal_y)
+        return self.i.construct_formula(d=d, x=x, y=y)
 
     def infer_formula_statement(self, d: (None, DefinitionInclusion) = None,
             x_equal_y: (None, FlexibleFormula) = None, ref: (None, str) = None,
@@ -7444,15 +7382,12 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
         i: DestructiveDilemmaDeclaration = super().i
         return i
 
-    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
-            q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p, _ = verify_formula(u=self.t.u, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=self.t.u, arity=None, input_value=q)
-        return super().infer_formula(p, q, echo=echo)
+        return self.i.construct_formula(p=p, q=q)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -7513,15 +7448,12 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
         i: DisjunctionIntroduction1Declaration = super().i
         return i
 
-    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
-            q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p, _ = verify_formula(u=self.t.u, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=self.t.u, arity=None, input_value=q)
-        return super().infer_formula(p, q, echo=echo)
+        return self.i.construct_formula(p=p, q=q)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -7582,15 +7514,12 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
         i: DisjunctionIntroduction2Declaration = super().i
         return i
 
-    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
-            q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p, _ = verify_formula(u=self.t.u, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=self.t.u, arity=None, input_value=q)
-        return super().infer_formula(p, q, echo=echo)
+        return self.i.construct_formula(p=p, q=q)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -7645,15 +7574,12 @@ class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
         i: DisjunctiveResolutionDeclaration = super().i
         return i
 
-    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
-            q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p, _ = verify_formula(u=self.t.u, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=self.t.u, arity=None, input_value=q)
-        return super().infer_formula(p, q, echo=echo)
+        return self.i.construct_formula(p=p, q=q)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -7708,15 +7634,12 @@ class DisjunctiveSyllogismInclusion(InferenceRuleInclusion):
         i: DisjunctiveSyllogismDeclaration = super().i
         return i
 
-    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
-            q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p, _ = verify_formula(u=self.t.u, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=self.t.u, arity=None, input_value=q)
-        return super().infer_formula(p, q, echo=echo)
+        return self.i.construct_formula(p=p, q=q)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -7776,12 +7699,12 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
         i: DoubleNegationEliminationDeclaration = super().i
         return i
 
-    def infer_formula(self, not_not_p: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, not_not_p: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(not_not_p, echo=echo)
+        return self.i.construct_formula(not_not_p=not_not_p)
 
     def infer_formula_statement(self, not_not_p: (None, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
@@ -7838,12 +7761,12 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
         i: DoubleNegationIntroductionDeclaration = super().i
         return i
 
-    def infer_formula(self, p: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(p, echo=echo)
+        return self.i.construct_formula(p=p)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
@@ -7899,12 +7822,12 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
         i: EqualityCommutativityDeclaration = super().i
         return i
 
-    def infer_formula(self, x_equal_y: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, x_equal_y: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(x_equal_y, echo=echo)
+        return self.i.construct_formula(x_equal_y=x_equal_y)
 
     def infer_formula_statement(self, x_equal_y: (None, FormulaStatement) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
@@ -7964,13 +7887,12 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
         i: EqualTermsSubstitutionDeclaration = super().i
         return i
 
-    def infer_formula(self, p: (None, FormulaStatement) = None,
-            q_equal_r: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p: FlexibleFormula, q_equal_r: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(p, q_equal_r, echo=echo)
+        return self.i.construct_formula(p=p, q_equal_r=q_equal_r)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             x_equal_y: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -8023,15 +7945,12 @@ class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
         i: HypotheticalSyllogismDeclaration = super().i
         return i
 
-    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
-            q: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p, _ = verify_formula(u=self.t.u, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=self.t.u, arity=None, input_value=q)
-        return super().infer_formula(p, q, echo=echo)
+        return self.i.construct_formula(p=p, q=q)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -8094,15 +8013,13 @@ class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
         i: InconsistencyIntroduction1Declaration = super().i
         return i
 
-    def infer_formula(self, p: (None, FormulaStatement) = None,
-            not_p: (None, FormulaStatement) = None,
-            inconsistent_theory: (None, TheoryElaborationSequence) = None,
-            t: (None, TheoryElaborationSequence) = None, echo: (None, bool) = None):
+    def infer_formula(self, p: FlexibleFormula, not_p: FlexibleFormula,
+            inconsistent_theory: (None, TheoryElaborationSequence) = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(p, not_p, inconsistent_theory, echo=echo)
+        return self.i.construct_formula(p=p, not_p=not_p, inconsistent_theory=inconsistent_theory)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             not_p: (None, FormulaStatement) = None,
@@ -8175,15 +8092,14 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
         i: InconsistencyIntroduction2Declaration = super().i
         return i
 
-    def infer_formula(self, x_eq_y: (None, FormulaStatement) = None,
-            x_neq_y: (None, FormulaStatement) = None,
-            inconsistent_theory: (None, TheoryElaborationSequence) = None,
-            t: (None, TheoryElaborationSequence) = None, echo: (None, bool) = None):
+    def construct_formula(self, x_eq_y: FlexibleFormula, x_neq_y: FlexibleFormula,
+            inconsistent_theory: (None, TheoryElaborationSequence) = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(x_eq_y, x_neq_y, inconsistent_theory, echo=echo)
+        return self.i.construct_formula(x_eq_y=x_eq_y, x_neq_y=x_neq_y,
+            inconsistent_theory=inconsistent_theory)
 
     def infer_formula_statement(self, x_eq_y: (None, FormulaStatement) = None,
             x_neq_y: (None, FormulaStatement) = None,
@@ -8249,14 +8165,13 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
         i: InconsistencyIntroduction3Declaration = super().i
         return i
 
-    def infer_formula(self, p_neq_p: (None, FormulaStatement) = None,
-            inconsistent_theory: (None, TheoryElaborationSequence) = None,
-            t: (None, TheoryElaborationSequence) = None, echo: (None, bool) = None):
+    def construct_formula(self, p_neq_p: FlexibleFormula,
+            inconsistent_theory: (None, TheoryElaborationSequence) = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(p_neq_p, inconsistent_theory, echo=echo)
+        return self.i.construct_formula(p_neq_p=p_neq_p, inconsistent_theory=inconsistent_theory)
 
     def infer_formula_statement(self, p_neq_p: (None, FormulaStatement) = None,
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
@@ -8330,13 +8245,12 @@ class ModusPonensInclusion(InferenceRuleInclusion):
         i: ModusPonensDeclaration = super().i
         return i
 
-    def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
-            p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p_implies_q: FlexibleFormula, p: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(p_implies_q, p, echo=echo)
+        return self.i.construct_formula(p_implies_q=p_implies_q, p=p)
 
     def infer_formula_statement(self, p_implies_q: (None, FormulaStatement) = None,
             p: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -8407,13 +8321,12 @@ class ModusTollensInclusion(InferenceRuleInclusion):
         i: ModusTollensDeclaration = super().i
         return i
 
-    def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
-            p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, p_implies_q: FlexibleFormula, p: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(p_implies_q, p, echo=echo)
+        return self.i.construct_formula(p_implies_q=p_implies_q, p=p)
 
     def infer_formula_statement(self, p_implies_q: (None, FormulaStatement) = None,
             p: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -8489,13 +8402,14 @@ class ProofByContradiction1Inclusion(InferenceRuleInclusion):
         i: ProofByContradiction1Declaration = super().i
         return i
 
-    def infer_formula(self, not_p_hypothesis: (None, Hypothesis) = None,
-            inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, not_p_hypothesis: Hypothesis,
+            inc_hypothesis: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(not_p_hypothesis, inc_hypothesis, echo=echo)
+        return self.i.construct_formula(not_p_hypothesis=not_p_hypothesis,
+            inc_hypothesis=inc_hypothesis)
 
     def infer_formula_statement(self, not_p_hypothesis: (None, FormulaStatement) = None,
             inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -8572,13 +8486,14 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
         i: ProofByContradiction2Declaration = super().i
         return i
 
-    def infer_formula(self, x_neq_y_hypothesis: (None, Hypothesis) = None,
-            inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, x_neq_y_hypothesis: Hypothesis,
+            inc_hypothesis: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(x_neq_y_hypothesis, inc_hypothesis, echo=echo)
+        return self.i.construct_formula(x_neq_y_hypothesis=x_neq_y_hypothesis,
+            inc_hypothesis=inc_hypothesis)
 
     def infer_formula_statement(self, x_neq_y_hypothesis: (None, FormulaStatement) = None,
             inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -8653,13 +8568,12 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
         i: ProofByRefutation1Declaration = super().i
         return i
 
-    def infer_formula(self, p_hypothesis: (None, Hypothesis) = None,
-            inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def infer_formula(self, p_hypothesis: Hypothesis, inc_hypothesis: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(p_hypothesis, inc_hypothesis, echo=echo)
+        return self.i.construct_formula(p_hypothesis=p_hypothesis, inc_hypothesis=inc_hypothesis)
 
     def infer_formula_statement(self, p_hypothesis: (None, FormulaStatement) = None,
             inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -8732,13 +8646,13 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
         i: ProofByRefutation2Declaration = super().i
         return i
 
-    def infer_formula(self, x_eq_y_hypothesis: (None, Hypothesis) = None,
-            inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
+    def construct_formula(self, x_eq_y_hypothesis: Hypothesis, inc_hypothesis: FlexibleFormula):
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(x_eq_y_hypothesis, inc_hypothesis, echo=echo)
+        return self.i.construct_formula(x_eq_y_hypothesis=x_eq_y_hypothesis,
+            inc_hypothesis=inc_hypothesis)
 
     def infer_formula_statement(self, x_eq_y_hypothesis: (None, FormulaStatement) = None,
             inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
@@ -8802,13 +8716,13 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
         i: VariableSubstitutionDeclaration = super().i
         return i
 
-    def infer_formula(self, p: (None, FormulaStatement) = None,
-            phi: (None, tuple[TheoreticalObject]) = None, echo: (None, bool) = None):
+    def construct_formula(self, p: FlexibleFormula,
+            phi: (None, tuple[TheoreticalObject]) = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return super().infer_formula(p, phi, echo=echo)
+        return self.i.construct_formula(p=p, phi=phi)
 
     def infer_formula_statement(self, p: (None, FormulaStatement) = None,
             phi: (None, TheoreticalObject, tuple[TheoreticalObject]) = None,
