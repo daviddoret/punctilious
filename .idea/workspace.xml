@@ -392,10 +392,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.Python tests in test_biconditional_elimination_1.py" />
+        <item itemvalue="Python tests.Python tests in test_biconditional_elimination_2.py" />
+        <item itemvalue="Python tests.Python tests in test_biconditional_introduction.py" />
         <item itemvalue="Python tests.Python tests in test_absorption.py" />
         <item itemvalue="Python tests.Python tests in test_conjunction_elimination_1.py" />
-        <item itemvalue="Python tests.Python tests in test_biconditional_introduction.py" />
-        <item itemvalue="Python tests.Python tests in test_biconditional_elimination_2.py" />
       </list>
     </recent_temporary>
   </component>
@@ -407,14 +407,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00286" summary="#201 + #195">
-      <option name="closed" value="true" />
-      <created>1694895891980</created>
-      <option name="number" value="00286" />
-      <option name="presentableId" value="LOCAL-00286" />
-      <option name="project" value="LOCAL" />
-      <updated>1694895891980</updated>
     </task>
     <task id="LOCAL-00287" summary="#201 + #195">
       <option name="closed" value="true" />
@@ -800,7 +792,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696302457345</updated>
     </task>
-    <option name="localTasksCounter" value="335" />
+    <task id="LOCAL-00335" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
+      <option name="closed" value="true" />
+      <created>1696304726518</created>
+      <option name="number" value="00335" />
+      <option name="presentableId" value="LOCAL-00335" />
+      <option name="project" value="LOCAL" />
+      <updated>1696304726518</updated>
+    </task>
+    <option name="localTasksCounter" value="336" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

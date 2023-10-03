@@ -6789,19 +6789,18 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, p_implies_q: FlexibleFormula,
-            raise_exception: bool = True) -> bool:
+    def check_premises_validity(self, p_implies_q: FlexibleFormula) -> bool:
         """
         .. include:: ../../include/check_premises_validity_python_method.rstinc
 
         """
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements.
-        formula_ok, _, _ = verify_formula_statement(t=self.t, input_value=p_implies_q,
+        verify_formula_statement(t=self.t, input_value=p_implies_q,
             form=self.i.parameter_p_implies_q, mask=self.i.parameter_p_implies_q_mask,
-            raise_exception=raise_exception, error_code=error_code)
+            raise_exception=True, error_code=error_code)
         # The method either raises an exception during validation, or return True.
-        return formula_ok
+        return True
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -6852,35 +6851,25 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def check_premises_validity(self, a: AxiomInclusion, p: FlexibleFormula,
-            raise_exception: bool = True) -> tuple[bool, (None, str)]:
+    def check_premises_validity(self, a: AxiomInclusion, p: FlexibleFormula) -> bool:
         """
         .. include:: ../../include/check_premises_validity_python_method.rstinc
 
         """
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
-        ok: bool
-        msg: (None, str)
         # Validate that expected formula-statements are formula-statements.
         # TODO: NICETOHAVE: AxiomInterpretationInclusion: replace these verify statements with a generic validate_axiom_inclusion function.
-        ok, msg = verify(assertion=isinstance(a, AxiomInclusion),
+        verify(assertion=isinstance(a, AxiomInclusion),
             msg=f'⌜{a}⌝ passed as argument ⌜a⌝ is not an axiom-inclusion.', a=a,
-            raise_exception=raise_exception, error_code=error_code)
-        if not ok:
-            return ok, msg
-        ok, msg = verify(assertion=self.t.contains_theoretical_objct(a),
+            raise_exception=True, error_code=error_code)
+        verify(assertion=self.t.contains_theoretical_objct(a),
             msg=f'⌜{a}⌝ passed as argument ⌜a⌝ is not contained in theory-elaboration-sequence ⌜{self.t}⌝.',
-            a=a, raise_exception=raise_exception, error_code=error_code)
-        if not ok:
-            return ok, msg
-        ok, formula, msg = verify_formula(u=self.u, input_value=p, raise_exception=raise_exception,
-            error_code=error_code)
-        if not ok:
-            return ok, msg
+            a=a, raise_exception=True, error_code=error_code)
+        verify_formula(u=self.u, input_value=p, raise_exception=True, error_code=error_code)
         # TODO: BUG: validate_formula does not support basic masks like: ⌜P⌝ where P is a free-variable.
         # validate_formula(u=self.u, input_value=p, form=self.i.parameter_p,
         #    mask=self.i.parameter_p_mask)
-        return True, None
+        return True
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -6931,19 +6920,17 @@ class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def check_premises_validity(self, p_iff_q: FlexibleFormula,
-            raise_exception: bool = True) -> bool:
+    def check_premises_validity(self, p_iff_q: FlexibleFormula) -> bool:
         """
         .. include:: ../../include/check_premises_validity_python_method.rstinc
 
         """
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements.
-        formula_ok, _, _ = verify_formula_statement(t=self.t, input_value=p_iff_q,
-            form=self.i.parameter_p_iff_q, mask=self.i.parameter_p_iff_q_mask,
-            raise_exception=raise_exception, error_code=error_code)
+        verify_formula_statement(t=self.t, input_value=p_iff_q, form=self.i.parameter_p_iff_q,
+            mask=self.i.parameter_p_iff_q_mask, raise_exception=True, error_code=error_code)
         # The method either raises an exception during validation, or return True.
-        return formula_ok
+        return True
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -6993,19 +6980,17 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def check_premises_validity(self, p_iff_q: FlexibleFormula,
-            raise_exception: bool = True) -> bool:
+    def check_premises_validity(self, p_iff_q: FlexibleFormula) -> bool:
         """
         .. include:: ../../include/check_premises_validity_python_method.rstinc
 
         """
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements.
-        formula_ok, _, _ = verify_formula_statement(t=self.t, input_value=p_iff_q,
-            form=self.i.parameter_p_iff_q, mask=self.i.parameter_p_iff_q_mask,
-            raise_exception=raise_exception, error_code=error_code)
+        verify_formula_statement(t=self.t, input_value=p_iff_q, form=self.i.parameter_p_iff_q,
+            mask=self.i.parameter_p_iff_q_mask, raise_exception=True, error_code=error_code)
         # The method either raises an exception during validation, or return True.
-        return formula_ok
+        return True
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -7055,24 +7040,22 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def check_premises_validity(self, p_implies_q: FlexibleFormula, q_implies_p: FlexibleFormula,
-            raise_exception: bool = True) -> bool:
+    def check_premises_validity(self, p_implies_q: FlexibleFormula,
+            q_implies_p: FlexibleFormula) -> bool:
         """
         .. include:: ../../include/check_premises_validity_python_method.rstinc
 
         """
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
-        formula_ok, _, _ = verify_formula_statement(arg='p_implies_q', t=self.t,
-            input_value=p_implies_q, form=self.i.parameter_p_implies_q,
-            mask=self.i.parameter_p_implies_q_mask, raise_exception=raise_exception,
-            error_code=error_code)
-        formula_ok, _, _ = verify_formula_statement(arg='q_implies_p', t=self.t,
-            input_value=q_implies_p, form=self.i.parameter_q_implies_p,
-            mask=self.i.parameter_q_implies_p_mask, raise_exception=raise_exception,
-            error_code=error_code)
+        verify_formula_statement(arg='p_implies_q', t=self.t, input_value=p_implies_q,
+            form=self.i.parameter_p_implies_q, mask=self.i.parameter_p_implies_q_mask,
+            raise_exception=True, error_code=error_code)
+        verify_formula_statement(arg='q_implies_p', t=self.t, input_value=q_implies_p,
+            form=self.i.parameter_q_implies_p, mask=self.i.parameter_q_implies_p_mask,
+            raise_exception=True, error_code=error_code)
         # The method either raises an exception during validation, or return True.
-        return formula_ok
+        return True
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -9735,7 +9718,7 @@ class InferredStatement(FormulaStatement):
         # Check that the premises are valid.
         # If they are not, raise a Punctilious Exception and stop processing.
         # If they are, complete the inference process.
-        self._inference_rule.check_premises_validity(**premises._asdict(), raise_exception=True)
+        self._inference_rule.check_premises_validity(**premises._asdict())
         super().__init__(theory=t, valid_proposition=valid_proposition, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
