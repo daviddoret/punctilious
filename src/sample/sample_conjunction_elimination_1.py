@@ -13,7 +13,7 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 t1 = u.t(echo=True)
 theory_axiom = t1.include_axiom(axiom)
 phi1 = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
-    formula=r1(o1, o2) | u.r.land | r2(o3))
+    p=r1(o1, o2) | u.r.land | r2(o3))
 
 # And finally, use the conjunction-elimination-1 inference-rule:
 proposition_of_interest = t1.i.conjunction_elimination_1.infer_formula_statement(p_and_q=phi1,

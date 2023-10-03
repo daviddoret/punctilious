@@ -12,8 +12,8 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
 t1 = u.t(echo=True)
 theory_axiom = t1.include_axiom(a=axiom)
-phi1 = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom, formula=r1(o1, o2))
-phi2 = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom, formula=r2(o3))
+phi1 = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom, p=r1(o1, o2))
+phi2 = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom, p=r2(o3))
 
 # And finally, use the conjunction-introduction inference-rule:
 proposition_of_interest = t1.i.conjunction_introduction.infer_formula_statement(p=phi1, q=phi2,

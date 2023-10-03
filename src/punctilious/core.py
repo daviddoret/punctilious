@@ -7052,21 +7052,20 @@ class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def check_premises_validity(self, p_and_q: FlexibleFormula) -> bool:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        verify_formula_statement(arg='p_and_q', t=self.t, input_value=p_and_q,
+            form=self.i.parameter_p_and_q, mask=self.i.parameter_p_and_q_mask, raise_exception=True,
+            error_code=error_code)
+        # The method either raises an exception during validation, or return True.
+        return True
+
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
         output = yield from configuration.locale.compose_conjunction_elimination_1_paragraph_proof(
             o=o)
         return output
-
-    def check_inference_validity(self, p_land_q: FormulaStatement = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        verify(t.contains_theoretical_objct(p_land_q),
-            'Statement ⌜p_land_q⌝ must be contained in theory ⌜t⌝''s hierarchy.', p_land_q=p_land_q,
-            t=t, slf=self)
-        verify(p_land_q.relation is t.u.r.conjunction,
-            'The relation of formula ⌜p_land_q⌝ must be a conjunction.',
-            p_land_q_relation=p_land_q.relation, p_land_q=p_land_q, t=t, slf=self)
-        return True
 
     @property
     def i(self) -> ConjunctionElimination1Declaration:
@@ -7081,15 +7080,16 @@ class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
         """
         return self.i.construct_formula(p_and_q=p_and_q)
 
-    def infer_formula_statement(self, p_and_q: (None, FormulaStatement) = None,
-            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
-            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+    def infer_formula_statement(self, p_and_q: FlexibleFormula, ref: (None, str) = None,
+            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
+            echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        return super().infer_formula_statement(p_and_q, ref=ref, paragraph_header=paragraph_header,
-            subtitle=subtitle, echo=echo)
+        premises = self.i.Premises(p_and_q=p_and_q)
+        return InferredStatement(i=self, premises=premises, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
 class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
@@ -7114,14 +7114,13 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    def check_inference_validity(self, p_land_q: FormulaStatement = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        verify(t.contains_theoretical_objct(p_land_q),
-            'Statement ⌜p_land_q⌝ must be contained in theory ⌜t⌝''s hierarchy.', p_land_q=p_land_q,
-            t=t, slf=self)
-        verify(p_land_q.relation is t.u.r.conjunction,
-            'The relation of formula ⌜p_land_q⌝ must be a conjunction.',
-            p_land_q_relation=p_land_q.relation, p_land_q=p_land_q, t=t, slf=self)
+    def check_premises_validity(self, p_and_q: FlexibleFormula) -> bool:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        verify_formula_statement(arg='p_and_q', t=self.t, input_value=p_and_q,
+            form=self.i.parameter_p_and_q, mask=self.i.parameter_p_and_q_mask, raise_exception=True,
+            error_code=error_code)
+        # The method either raises an exception during validation, or return True.
         return True
 
     @property
@@ -7137,7 +7136,7 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
         """
         return self.i.construct_formula(p_and_q=p_and_q)
 
-    def infer_formula_statement(self, p_and_q: (None, FormulaStatement) = None,
+    def infer_formula_statement(self, p_and_q: FlexibleFormula,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
@@ -7145,7 +7144,8 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        return super().infer_formula_statement(p_and_q, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p_and_q=p_and_q)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7172,22 +7172,14 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
-            t: TheoryElaborationSequence) -> bool:
-        """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
-
-        :param p: (mandatory) A formula-statement of the form :math:`P` .
-        :param q: (mandatory) A formula-statement of the form :math:`Q` .
-        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
-
-        :return: True (bool) if the parameters are correct.
-        """
-        _, p, _ = verify_formula_statement(t=t, arity=None, input_value=p)
-        _, q, _ = verify_formula_statement(t=t, arity=None, input_value=q)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
-        verify(t.contains_theoretical_objct(q),
-            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
+    def check_premises_validity(self, p: FlexibleFormula, q: FlexibleFormula) -> bool:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        verify_formula_statement(arg='p', t=self.t, input_value=p, raise_exception=True,
+            error_code=error_code)
+        verify_formula_statement(arg='q', t=self.t, input_value=q, raise_exception=True,
+            error_code=error_code)
+        # The method either raises an exception during validation, or return True.
         return True
 
     @property
@@ -7203,17 +7195,15 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
         """
         return self.i.construct_formula(p=p, q=q)
 
-    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
-            q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_formula_statement(self, p: FlexibleFormula, q: FlexibleFormula,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        _, q, _ = verify_formula_statement(t=self.t, arity=None, input_value=q)
-        return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p=p, q=q)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
