@@ -3311,6 +3311,11 @@ class AxiomInclusion(Statement):
         output = yield from configuration.locale.compose_axiom_inclusion_report(o=self, proof=proof)
         return output
 
+    @property
+    def is_propositional(self) -> bool:
+        """By definition, an axiom-inclusion is not a propositional object."""
+        return False
+
     def rep_natural_language(self, encoding: (None, Encoding) = None, wrap: bool = True) -> str:
         return self._axiom.rep_natural_language(encoding=encoding, wrap=wrap)
 
@@ -3394,6 +3399,11 @@ class InferenceRuleInclusion(Statement):
         """
         raise NotImplementedError(
             'The ⌜infer_formula_statement⌝ method is abstract. It must be implemented in the child class.')
+
+    @property
+    def is_propositional(self) -> bool:
+        """By definition, an inference-rule-inclusion is not a propositional object."""
+        return False
 
     @property
     @abc.abstractmethod
@@ -3549,6 +3559,11 @@ class DefinitionInclusion(Statement):
 
     def echo(self):
         repm.prnt(self.rep_report())
+
+    @property
+    def is_propositional(self) -> bool:
+        """By definition, a definition-inclusion is not a propositional object."""
+        return False
 
     def rep_natural_language(self, encoding: (None, Encoding) = None, wrap: bool = True) -> str:
         return self._definition.rep_natural_language(encoding=encoding, wrap=wrap)
@@ -3822,6 +3837,16 @@ class InferenceRuleDeclaration(TheoreticalObject):
         return output
 
     @property
+    @abc.abstractmethod
+    def construct_formula(self, **kwargs) -> Formula:
+        """
+        .. include:: ../../include/construct_formula_python_method.rstinc
+
+        """
+        raise NotImplementedError(
+            'The ⌜construct_formula⌝ method is abstract. It must be implemented in the child class.')
+
+    @property
     def definition(self) -> Formula:
         """This python property returns a formal definition of the object.
 
@@ -3837,14 +3862,9 @@ class InferenceRuleDeclaration(TheoreticalObject):
         repm.prnt(self.rep_report())
 
     @property
-    @abc.abstractmethod
-    def construct_formula(self, **kwargs) -> Formula:
-        """
-        .. include:: ../../include/construct_formula_python_method.rstinc
-
-        """
-        raise NotImplementedError(
-            'The ⌜construct_formula⌝ method is abstract. It must be implemented in the child class.')
+    def is_propositional(self) -> bool:
+        """By definition, an inference-rule-declaration is not a propositional object."""
+        return False
 
 
 class AbsorptionDeclaration(InferenceRuleDeclaration):
@@ -4119,18 +4139,26 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
         name = 'conjunction elimination #1'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             definition = ((p | u.r.land | q) | u.r.proves | p)
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            self.parameter_p_and_q = p | u.r.land | q
+            self.parameter_p_and_q_mask = frozenset([p, q])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_and_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
-            echo: (None, bool) = None, **kwargs) -> Formula:
+    def construct_formula(self, p_and_q: FormulaStatement = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = unpack_formula(p_and_q).parameters[0]
-        return p
+        ok: bool
+        msg: (None, msg)
+        ok, p_and_q, msg = verify_formula(arg='p_and_q', input_value=p_and_q, u=self.u,
+            form=self.parameter_p_and_q, mask=self.parameter_p_and_q_mask, raise_exception=True)
+        p_and_q: Formula
+        p: Formula = p_and_q.parameters[0]
+        output = p
+        return output
 
 
 class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
@@ -4157,19 +4185,26 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
         name = 'conjunction elimination #2'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             definition = ((p | u.r.land | q) | u.r.proves | q)
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            self.parameter_p_and_q = p | u.r.land | q
+            self.parameter_p_and_q_mask = frozenset([p, q])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_and_q: FormulaStatement = None, t: TheoryElaborationSequence = None,
-            echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, p_and_q: FormulaStatement = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p_and_q, _ = verify_formula(u=t.u, arity=2, input_value=p_and_q)
-        q = p_and_q.parameters[1]
-        return q
+        ok: bool
+        msg: (None, msg)
+        ok, p_and_q, msg = verify_formula(arg='p_and_q', input_value=p_and_q, u=self.u,
+            form=self.parameter_p_and_q, mask=self.parameter_p_and_q_mask, raise_exception=True)
+        p_and_q: Formula
+        q: Formula = p_and_q.parameters[1]
+        output = q
+        return output
 
 
 class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
@@ -5338,6 +5373,11 @@ theory-elaboration."""
         """Return the dictionary of inference-rule-inclusions contained in this
         theory-elaboration."""
         return self._inference_rule_inclusions
+
+    @property
+    def is_propositional(self) -> bool:
+        """By definition, a theory-elaboration-sequence is not a propositional object."""
+        return False
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
             visited: (None, set) = None):
@@ -6678,6 +6718,11 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
         return self._inconsistency_introduction_3
 
     @property
+    def is_propositional(self) -> bool:
+        """By definition, an inference-rule-declaration is not a propositional object."""
+        return False
+
+    @property
     def modus_ponens(self) -> ModusPonensDeclaration:
         if self._modus_ponens is None:
             self._modus_ponens = ModusPonensDeclaration(universe_of_discourse=self.u)
@@ -7098,6 +7143,12 @@ class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
             p_land_q_relation=p_land_q.relation, p_land_q=p_land_q, t=t, slf=self)
         return True
 
+    @property
+    def i(self) -> ConjunctionElimination1Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: ConjunctionElimination1Declaration = super().i
+        return i
+
     def infer_formula(self, p_and_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
@@ -7147,6 +7198,12 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
             'The relation of formula ⌜p_land_q⌝ must be a conjunction.',
             p_land_q_relation=p_land_q.relation, p_land_q=p_land_q, t=t, slf=self)
         return True
+
+    @property
+    def i(self) -> ConjunctionElimination2Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: ConjunctionElimination2Declaration = super().i
+        return i
 
     def infer_formula(self, p_and_q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -7208,6 +7265,12 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
             'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
         return True
 
+    @property
+    def i(self) -> ConjunctionIntroductionDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: ConjunctionIntroductionDeclaration = super().i
+        return i
+
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -7249,6 +7312,12 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
+
+    @property
+    def i(self) -> ConstructiveDilemmaDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: ConstructiveDilemmaDeclaration = super().i
+        return i
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
@@ -7390,6 +7459,12 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
             'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
         return True
 
+    @property
+    def i(self) -> DestructiveDilemmaDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: DestructiveDilemmaDeclaration = super().i
+        return i
+
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -7452,6 +7527,12 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
         verify(t.contains_theoretical_objct(p),
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         return True
+
+    @property
+    def i(self) -> DisjunctionIntroduction1Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: DisjunctionIntroduction1Declaration = super().i
+        return i
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
@@ -7516,6 +7597,12 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
             'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
         return True
 
+    @property
+    def i(self) -> DisjunctionIntroduction2Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: DisjunctionIntroduction2Declaration = super().i
+        return i
+
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -7573,6 +7660,12 @@ class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
             'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
         return True
 
+    @property
+    def i(self) -> DisjunctiveResolutionDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: DisjunctiveResolutionDeclaration = super().i
+        return i
+
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -7629,6 +7722,12 @@ class DisjunctiveSyllogismInclusion(InferenceRuleInclusion):
         verify(t.contains_theoretical_objct(q),
             'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
         return True
+
+    @property
+    def i(self) -> DisjunctiveSyllogismDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: DisjunctiveSyllogismDeclaration = super().i
+        return i
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
@@ -7692,6 +7791,12 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
             t=t, slf=self)
         return True
 
+    @property
+    def i(self) -> DoubleNegationEliminationDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: DoubleNegationEliminationDeclaration = super().i
+        return i
+
     def infer_formula(self, not_not_p: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
@@ -7748,6 +7853,12 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
             msg='Statement ⌜p⌝ must be contained in ⌜t⌝.', p=p, t=t, slf=self)
         return True
 
+    @property
+    def i(self) -> DoubleNegationIntroductionDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: DoubleNegationIntroductionDeclaration = super().i
+        return i
+
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
@@ -7802,6 +7913,12 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
             'The root relation of formula ⌜x_equal_y⌝ is not the equality relation.',
             p_eq_q_relation=x_equal_y.relation, p_eq_q=x_equal_y, t=t, slf=self)
         return True
+
+    @property
+    def i(self) -> EqualityCommutativityDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: EqualityCommutativityDeclaration = super().i
+        return i
 
     def infer_formula(self, x_equal_y: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -7862,6 +7979,12 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
             slf=self, t=t)
         return True
 
+    @property
+    def i(self) -> EqualTermsSubstitutionDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: EqualTermsSubstitutionDeclaration = super().i
+        return i
+
     def infer_formula(self, p: (None, FormulaStatement) = None,
             q_equal_r: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -7914,6 +8037,12 @@ class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
         verify(t.contains_theoretical_objct(q),
             'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
         return True
+
+    @property
+    def i(self) -> HypotheticalSyllogismDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: HypotheticalSyllogismDeclaration = super().i
+        return i
 
     def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
             q: (None, FormulaStatement) = None, echo: (None, bool) = None):
@@ -7979,6 +8108,12 @@ class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
             'The sub-formula (parameter) ⌜p⌝ in ⌜not_p⌝ must be formula-syntactically-equivalent to ⌜p⌝.',
             not_p=not_p, p_in_not_p=p_in_not_p, p=p, slf=self)
         return True
+
+    @property
+    def i(self) -> InconsistencyIntroduction1Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: InconsistencyIntroduction1Declaration = super().i
+        return i
 
     def infer_formula(self, p: (None, FormulaStatement) = None,
             not_p: (None, FormulaStatement) = None,
@@ -8055,6 +8190,12 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
             p_eq_q=x_eq_y, p_neq_q=x_neq_y, inconsistent_theory=inconsistent_theory, slf=self)
         return True
 
+    @property
+    def i(self) -> InconsistencyIntroduction2Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: InconsistencyIntroduction2Declaration = super().i
+        return i
+
     def infer_formula(self, x_eq_y: (None, FormulaStatement) = None,
             x_neq_y: (None, FormulaStatement) = None,
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
@@ -8122,6 +8263,12 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
             'The two ⌜p⌝ terms in  ⌜p_neq_p⌝ must be formula-syntactically-equivalent.',
             p_neq_p=p_neq_p, inconsistent_theory=inconsistent_theory, slf=self)
         return True
+
+    @property
+    def i(self) -> InconsistencyIntroduction3Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: InconsistencyIntroduction3Declaration = super().i
+        return i
 
     def infer_formula(self, p_neq_p: (None, FormulaStatement) = None,
             inconsistent_theory: (None, TheoryElaborationSequence) = None,
@@ -8198,6 +8345,12 @@ class ModusPonensInclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(o=o)
         return output
 
+    @property
+    def i(self) -> ModusPonensDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: ModusPonensDeclaration = super().i
+        return i
+
     def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
             p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -8268,6 +8421,12 @@ class ModusTollensInclusion(InferenceRuleInclusion):
         Composable, Composable, bool]:
         output = yield from configuration.locale.compose_modus_tollens_paragraph_proof(o=o)
         return output
+
+    @property
+    def i(self) -> ModusTollensDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: ModusTollensDeclaration = super().i
+        return i
 
     def infer_formula(self, p_implies_q: (tuple, Formula, FormulaStatement) = None,
             p: (tuple, Formula, FormulaStatement) = None, echo: (None, bool) = None):
@@ -8344,6 +8503,12 @@ class ProofByContradiction1Inclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_proof_by_contradiction_1_paragraph_proof(
             o=o)
         return output
+
+    @property
+    def i(self) -> ProofByContradiction1Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: ProofByContradiction1Declaration = super().i
+        return i
 
     def infer_formula(self, not_p_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None) -> Formula:
@@ -8422,6 +8587,12 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
             o=o)
         return output
 
+    @property
+    def i(self) -> ProofByContradiction2Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: ProofByContradiction2Declaration = super().i
+        return i
+
     def infer_formula(self, x_neq_y_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -8497,6 +8668,12 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_proof_by_refutation_1_paragraph_proof(o=o)
         return output
 
+    @property
+    def i(self) -> ProofByRefutation1Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: ProofByRefutation1Declaration = super().i
+        return i
+
     def infer_formula(self, p_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -8570,6 +8747,12 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
         #  is stable
         return True
 
+    @property
+    def i(self) -> ProofByRefutation2Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: ProofByRefutation2Declaration = super().i
+        return i
+
     def infer_formula(self, x_eq_y_hypothesis: (None, Hypothesis) = None,
             inc_hypothesis: (None, FormulaStatement) = None, echo: (None, bool) = None):
         """
@@ -8633,6 +8816,12 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
         """Overrides the generic paragraph proof method."""
         output = yield from configuration.locale.compose_variable_substitution_paragraph_proof(o=o)
         return output
+
+    @property
+    def i(self) -> VariableSubstitutionDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: VariableSubstitutionDeclaration = super().i
+        return i
 
     def infer_formula(self, p: (None, FormulaStatement) = None,
             phi: (None, tuple[TheoreticalObject]) = None, echo: (None, bool) = None):
@@ -9585,6 +9774,11 @@ class InferredStatement(FormulaStatement):
     def echo(self, proof: (None, bool) = None):
         proof = prioritize_value(proof, configuration.echo_proof, True)
         repm.prnt(self.rep_report(proof=proof))
+
+    @property
+    def is_propositional(self) -> bool:
+        """By definition, an inferred statement is propositional."""
+        return True
 
     @property
     def parameters(self) -> tuple:
