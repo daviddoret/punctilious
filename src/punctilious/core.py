@@ -3899,12 +3899,10 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        ok: bool
-        msg: (None, msg)
-        ok, p_implies_q, msg = verify_formula(
-            error_code=error_codes.error_002_inference_premise_syntax_error, arg='p_implies_q',
-            input_value=p_implies_q, u=self.u, form=self.parameter_p_implies_q,
-            mask=self.parameter_p_implies_q_mask, raise_exception=True)
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p_implies_q, _ = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
+            form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask,
+            raise_exception=True, error_code=error_code)
         p_implies_q: Formula
         p: Formula = p_implies_q.parameters[0]  # TODO: Use composed type hints
         q: Formula = p_implies_q.parameters[1]  # TODO: Use composed type hints
@@ -3954,13 +3952,14 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
         # TODO: NICETOHAVE: AxiomInterpretationDeclaration: replace this verify statement with a generic validate_axiom_inclusion function.
-        ok: bool
-        p: (None, Formula)
-        msg: (None, str)
         verify(assertion=isinstance(a, AxiomInclusion),
-            msg=f'⌜{a}⌝ passed as premise ⌜a⌝ is not an axiom-inclusion.', a=a)
-        ok, p, msg = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True)
+            msg=f'⌜{a}⌝ passed as premise ⌜a⌝ is not an axiom-inclusion.', a=a,
+            raise_exception=True, error_code=error_code)
+        _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
+            error_code=error_code)
+        p: Formula
         # TODO: Bug #217: assure that atomic formula are supported by verify_formula and verify_formula_statements #217
         # validate_formula does not support basic masks like: ⌜P⌝ where P is a free-variable.
         # validate_formula(u=self.u, input_value=p, form=self.i.parameter_p,
@@ -3996,19 +3995,19 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_iff_q: FormulaStatement = None) -> Formula:
+    def construct_formula(self, p_iff_q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        ok: bool
-        msg: (None, msg)
-        ok, p_iff_q, msg = verify_formula(arg='p_iff_q', input_value=p_iff_q, u=self.u,
-            form=self.parameter_p_iff_q, mask=self.parameter_p_iff_q_mask, raise_exception=True)
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p_iff_q, _ = verify_formula(arg='p_iff_q', input_value=p_iff_q, u=self.u,
+            form=self.parameter_p_iff_q, mask=self.parameter_p_iff_q_mask, raise_exception=True,
+            error_code=error_code)
         p_iff_q: Formula
         p: Formula = p_iff_q.parameters[0]
         q: Formula = p_iff_q.parameters[1]
-        output = (p | self.u.r.implies | q)
+        output: Formula = (p | self.u.r.implies | q)
         return output
 
 
@@ -4039,19 +4038,19 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_iff_q: FormulaStatement = None) -> Formula:
+    def construct_formula(self, p_iff_q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        ok: bool
-        msg: (None, msg)
-        ok, p_iff_q, msg = verify_formula(arg='p_iff_q', input_value=p_iff_q, u=self.u,
-            form=self.parameter_p_iff_q, mask=self.parameter_p_iff_q_mask, raise_exception=True)
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p_iff_q, _ = verify_formula(arg='p_iff_q', input_value=p_iff_q, u=self.u,
+            form=self.parameter_p_iff_q, mask=self.parameter_p_iff_q_mask, raise_exception=True,
+            error_code=error_code)
         p_iff_q: Formula
         p: Formula = p_iff_q.parameters[0]
         q: Formula = p_iff_q.parameters[1]
-        output = (q | self.u.r.implies | p)
+        output: Formula = (q | self.u.r.implies | p)
         return output
 
 
@@ -4087,21 +4086,20 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_implies_q: FormulaStatement,
-            q_implies_p: FormulaStatement) -> Formula:
+    def construct_formula(self, p_implies_q: FlexibleFormula,
+            q_implies_p: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        ok: bool
-        msg: (None, msg)
-        ok, p_implies_q, msg = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p_implies_q, _ = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
             form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask,
-            raise_exception=True)
+            raise_exception=True, error_code=error_code)
         p_implies_q: Formula
-        ok, q_implies_p, msg = verify_formula(arg='q_implies_p', input_value=q_implies_p, u=self.u,
+        _, q_implies_p, _ = verify_formula(arg='q_implies_p', input_value=q_implies_p, u=self.u,
             form=self.parameter_q_implies_p, mask=self.parameter_q_implies_p_mask,
-            raise_exception=True)
+            raise_exception=True, error_code=error_code)
         q_implies_p: Formula
         p_implies_q__p: Formula = p_implies_q.parameters[0]
         p_implies_q__q: Formula = p_implies_q.parameters[1]
@@ -4115,7 +4113,7 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
             msg='The ⌜q⌝ in ⌜p_implies_q⌝ is not syntactically-equivalent to the ⌜q⌝ in  ⌜q_implies_p⌝.',
             severity=verification_severities.error, raise_exception=True, p_implies_q=p_implies_q,
             p_implies_q__q=p_implies_q__q, q_implies_p=q_implies_p, q_implies_p__q=q_implies_p__q)
-        output = p_implies_q__p | self.u.r.iff | p_implies_q__q
+        output: Formula = p_implies_q__p | self.u.r.iff | p_implies_q__q
         return output
 
 
@@ -4146,18 +4144,15 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_and_q: FormulaStatement = None) -> Formula:
+    def construct_formula(self, p_and_q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        ok: bool
-        msg: (None, msg)
-        ok, p_and_q, msg = verify_formula(arg='p_and_q', input_value=p_and_q, u=self.u,
+        _, p_and_q, _ = verify_formula(arg='p_and_q', input_value=p_and_q, u=self.u,
             form=self.parameter_p_and_q, mask=self.parameter_p_and_q_mask, raise_exception=True)
-        p_and_q: Formula
         p: Formula = p_and_q.parameters[0]
-        output = p
+        output: Formula = p
         return output
 
 
@@ -4192,18 +4187,15 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_and_q: FormulaStatement = None) -> Formula:
+    def construct_formula(self, p_and_q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        ok: bool
-        msg: (None, msg)
-        ok, p_and_q, msg = verify_formula(arg='p_and_q', input_value=p_and_q, u=self.u,
+        _, p_and_q, _ = verify_formula(arg='p_and_q', input_value=p_and_q, u=self.u,
             form=self.parameter_p_and_q, mask=self.parameter_p_and_q_mask, raise_exception=True)
-        p_and_q: Formula
         q: Formula = p_and_q.parameters[1]
-        output = q
+        output: Formula = q
         return output
 
 
@@ -4230,15 +4222,14 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p, _ = verify_formula(u=t.u, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
-        return p | t.u.r.land | q
+        _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True)
+        _, q, _ = verify_formula(arg='q', input_value=q, u=self.u, raise_exception=True)
+        output: Formula = p | self.u.r.land | q
 
 
 class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
@@ -6804,11 +6795,11 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         .. include:: ../../include/check_premises_validity_python_method.rstinc
 
         """
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements.
-        formula_ok, _, _ = verify_formula_statement(
-            error_code=error_codes.error_003_inference_premise_validity_error, t=self.t,
-            input_value=p_implies_q, form=self.i.parameter_p_implies_q,
-            mask=self.i.parameter_p_implies_q_mask, raise_exception=raise_exception)
+        formula_ok, _, _ = verify_formula_statement(t=self.t, input_value=p_implies_q,
+            form=self.i.parameter_p_implies_q, mask=self.i.parameter_p_implies_q_mask,
+            raise_exception=raise_exception, error_code=error_code)
         # The method either raises an exception during validation, or return True.
         return formula_ok
 
@@ -6816,12 +6807,6 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         Composable, Composable, bool]:
         output = yield from configuration.locale.compose_absorption_paragraph_proof(o=o)
         return output
-
-    @property
-    def i(self) -> AbsorptionDeclaration:
-        """Override the base class i property with a specialized inherited class type."""
-        i: AbsorptionDeclaration = super().i
-        return i
 
     def construct_formula(self, p_implies_q: FlexibleFormula) -> Formula:
         """
@@ -6831,7 +6816,13 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         # Call back the infer_formula method on the inference-rule declaration class.
         return self.i.construct_formula(p_implies_q=p_implies_q)
 
-    def infer_formula_statement(self, p_implies_q: FlexibleFormula = None, ref: (None, str) = None,
+    @property
+    def i(self) -> AbsorptionDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: AbsorptionDeclaration = super().i
+        return i
+
+    def infer_formula_statement(self, p_implies_q: FlexibleFormula, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """
@@ -6867,21 +6858,23 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         .. include:: ../../include/check_premises_validity_python_method.rstinc
 
         """
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         ok: bool
         msg: (None, str)
         # Validate that expected formula-statements are formula-statements.
         # TODO: NICETOHAVE: AxiomInterpretationInclusion: replace these verify statements with a generic validate_axiom_inclusion function.
-        ok, msg = verify(raise_exception=raise_exception, assertion=isinstance(a, AxiomInclusion),
-            msg=f'⌜{a}⌝ passed as argument ⌜a⌝ is not an axiom-inclusion.', a=a)
+        ok, msg = verify(assertion=isinstance(a, AxiomInclusion),
+            msg=f'⌜{a}⌝ passed as argument ⌜a⌝ is not an axiom-inclusion.', a=a,
+            raise_exception=raise_exception, error_code=error_code)
         if not ok:
             return ok, msg
-        ok, msg = verify(raise_exception=raise_exception,
-            assertion=self.t.contains_theoretical_objct(a),
+        ok, msg = verify(assertion=self.t.contains_theoretical_objct(a),
             msg=f'⌜{a}⌝ passed as argument ⌜a⌝ is not contained in theory-elaboration-sequence ⌜{self.t}⌝.',
-            a=a)
+            a=a, raise_exception=raise_exception, error_code=error_code)
         if not ok:
             return ok, msg
-        ok, formula, msg = verify_formula(raise_exception=raise_exception, u=self.u, input_value=p)
+        ok, formula, msg = verify_formula(u=self.u, input_value=p, raise_exception=raise_exception,
+            error_code=error_code)
         if not ok:
             return ok, msg
         # TODO: BUG: validate_formula does not support basic masks like: ⌜P⌝ where P is a free-variable.
@@ -6895,13 +6888,7 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_axiom_interpretation_paragraph_proof(o=o)
         return output
 
-    @property
-    def i(self) -> AxiomInterpretationDeclaration:
-        """Override the base class i property with a specialized inherited class type."""
-        i: AxiomInterpretationDeclaration = super().i
-        return i
-
-    def construct_formula(self, a: (None, AxiomInclusion) = None, p: (None, FlexibleFormula) = None,
+    def construct_formula(self, a: AxiomInclusion, p: FlexibleFormula,
             echo: (None, bool) = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
@@ -6910,10 +6897,15 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         # Call back the infer_formula method on the inference-rule declaration class.
         return self.i.construct_formula(a=a, p=p)
 
-    def infer_formula_statement(self, a: (None, AxiomInclusion) = None,
-            p: (None, FlexibleFormula) = None, ref: (None, str) = None,
-            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
-            echo: (None, bool) = None) -> InferredStatement:
+    @property
+    def i(self) -> AxiomInterpretationDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: AxiomInterpretationDeclaration = super().i
+        return i
+
+    def infer_formula_statement(self, a: AxiomInclusion, p: FlexibleFormula,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
@@ -6945,10 +6937,11 @@ class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
         .. include:: ../../include/check_premises_validity_python_method.rstinc
 
         """
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements.
         formula_ok, _, _ = verify_formula_statement(t=self.t, input_value=p_iff_q,
             form=self.i.parameter_p_iff_q, mask=self.i.parameter_p_iff_q_mask,
-            raise_exception=raise_exception)
+            raise_exception=raise_exception, error_code=error_code)
         # The method either raises an exception during validation, or return True.
         return formula_ok
 
@@ -6958,12 +6951,6 @@ class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    @property
-    def i(self) -> BiconditionalElimination1Declaration:
-        """Override the base class i property with a specialized inherited class type."""
-        i: BiconditionalElimination1Declaration = super().i
-        return i
-
     def construct_formula(self, p_iff_q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
@@ -6972,7 +6959,13 @@ class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
         # Call back the infer_formula method on the inference-rule declaration class.
         return self.i.construct_formula(p_iff_q=p_iff_q)
 
-    def infer_formula_statement(self, p_iff_q: FlexibleFormula = None, ref: (None, str) = None,
+    @property
+    def i(self) -> BiconditionalElimination1Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: BiconditionalElimination1Declaration = super().i
+        return i
+
+    def infer_formula_statement(self, p_iff_q: FlexibleFormula, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """
@@ -7006,10 +6999,11 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
         .. include:: ../../include/check_premises_validity_python_method.rstinc
 
         """
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements.
         formula_ok, _, _ = verify_formula_statement(t=self.t, input_value=p_iff_q,
             form=self.i.parameter_p_iff_q, mask=self.i.parameter_p_iff_q_mask,
-            raise_exception=raise_exception)
+            raise_exception=raise_exception, error_code=error_code)
         # The method either raises an exception during validation, or return True.
         return formula_ok
 
@@ -7019,12 +7013,6 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    @property
-    def i(self) -> BiconditionalElimination1Declaration:
-        """Override the base class i property with a specialized inherited class type."""
-        i: BiconditionalElimination1Declaration = super().i
-        return i
-
     def construct_formula(self, p_iff_q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
@@ -7033,7 +7021,13 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
         # Call back the infer_formula method on the inference-rule declaration class.
         return self.i.construct_formula(p_iff_q=p_iff_q)
 
-    def infer_formula_statement(self, p_iff_q: FlexibleFormula = None, ref: (None, str) = None,
+    @property
+    def i(self) -> BiconditionalElimination1Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: BiconditionalElimination1Declaration = super().i
+        return i
+
+    def infer_formula_statement(self, p_iff_q: FlexibleFormula, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """
@@ -7061,19 +7055,22 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def check_premises_validity(self, p_implies_q: FlexibleFormula = None,
-            q_implies_p: FlexibleFormula = None, raise_exception: bool = True) -> bool:
+    def check_premises_validity(self, p_implies_q: FlexibleFormula, q_implies_p: FlexibleFormula,
+            raise_exception: bool = True) -> bool:
         """
         .. include:: ../../include/check_premises_validity_python_method.rstinc
 
         """
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
         formula_ok, _, _ = verify_formula_statement(arg='p_implies_q', t=self.t,
             input_value=p_implies_q, form=self.i.parameter_p_implies_q,
-            mask=self.i.parameter_p_implies_q_mask, raise_exception=raise_exception)
+            mask=self.i.parameter_p_implies_q_mask, raise_exception=raise_exception,
+            error_code=error_code)
         formula_ok, _, _ = verify_formula_statement(arg='q_implies_p', t=self.t,
             input_value=q_implies_p, form=self.i.parameter_q_implies_p,
-            mask=self.i.parameter_q_implies_p_mask, raise_exception=raise_exception)
+            mask=self.i.parameter_q_implies_p_mask, raise_exception=raise_exception,
+            error_code=error_code)
         # The method either raises an exception during validation, or return True.
         return formula_ok
 
@@ -7083,14 +7080,8 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    @property
-    def i(self) -> BiconditionalIntroductionDeclaration:
-        """Override the base class i property with a specialized inherited class type."""
-        i: BiconditionalIntroductionDeclaration = super().i
-        return i
-
-    def construct_formula(self, p_implies_q: FlexibleFormula = None,
-            q_implies_p: FlexibleFormula = None) -> Formula:
+    def construct_formula(self, p_implies_q: FlexibleFormula,
+            q_implies_p: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -7098,10 +7089,15 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
         # Call back the infer_formula method on the inference-rule declaration class.
         return self.i.construct_formula(p_implies_q=p_implies_q, q_implies_p=q_implies_p)
 
-    def infer_formula_statement(self, p_implies_q: FlexibleFormula = None,
-            q_implies_p: FlexibleFormula = None, ref: (None, str) = None,
-            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
-            echo: (None, bool) = None) -> InferredStatement:
+    @property
+    def i(self) -> BiconditionalIntroductionDeclaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: BiconditionalIntroductionDeclaration = super().i
+        return i
+
+    def infer_formula_statement(self, p_implies_q: FlexibleFormula, q_implies_p: FlexibleFormula,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
