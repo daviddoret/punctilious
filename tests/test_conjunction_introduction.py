@@ -13,6 +13,7 @@ class TestConjunctionIntroduction(TestCase):
         o3: pu.SimpleObjct = test.o3
         r1: pu.Relation = test.r1
         r2: pu.Relation = test.r2
+        theory_axiom: pu.AxiomInclusion = test.theory_axiom
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
             o2=r1(o1, o2) | u.r.land | r2(o3)))
@@ -21,5 +22,11 @@ class TestConjunctionIntroduction(TestCase):
         self.assertEqual('(𝑟₁(𝑜₁, 𝑜₂) ∧ 𝑟₂(𝑜₃))',
             proposition_of_interest.rep_formula(pu.encodings.unicode))
         # Trying to pass a formula that is not a valid formula-statement must raise an Exception
-        with self.assertRaises(pu.PunctiliousException):
+        with self.assertRaises(pu.PunctiliousException) as error:
+            t1.i.conjunction_introduction.infer_formula_statement(p=o2, q=r1(o1, o3))
+        self.assertIs(pu.error_codes.error_002_inference_premise_syntax_error,
+            error.exception.error_code)
+        with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.conjunction_introduction.infer_formula_statement(p=r1(o1, o2), q=r1(o1, o3))
+        self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,
+            error.exception.error_code)

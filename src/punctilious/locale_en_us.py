@@ -136,8 +136,8 @@ class LocaleEnUs(Locale):
 
     def compose_conjunction_elimination_2_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        p0 = o.inference_rule.definition.parameters[0]
         p_and_q: FormulaStatement = o.parameters[0]
+        p0 = o.inference_rule.definition.parameters[0]
         yield from p_and_q.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
         yield p0.compose_formula()
@@ -187,8 +187,7 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_definition_inclusion_report(self, o: DefinitionInclusion,
-                                            proof: (None, bool) = None) -> collections.abc.Generator[
-        Composable, Composable, bool]:
+            proof: (None, bool) = None) -> collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         yield from o.compose_title(cap=True)
         yield SansSerifNormal(': Let ')
@@ -393,8 +392,7 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_inference_rule_inclusion_report(self, i: InferenceRuleInclusion,
-                                                proof: (None, bool) = None) -> collections.abc.Generator[
-        Composable, Composable, bool]:
+            proof: (None, bool) = None) -> collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         yield from i.inference_rule.compose_title(cap=True)
         yield SansSerifNormal(': Let ')
@@ -477,8 +475,7 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_parent_hypothesis_statement_report(self, o: Hypothesis,
-                                                   proof: (None, bool) = None) -> collections.abc.Generator[
-        Composable, Composable, bool]:
+            proof: (None, bool) = None) -> collections.abc.Generator[Composable, Composable, bool]:
         proof = prioritize_value(proof, True)
         yield o.compose_title(cap=True)
         yield SansSerifNormal(': ')
@@ -662,7 +659,7 @@ class LocaleEnUs(Locale):
             'The following inference rules are considered valid under this theory:')
         yield self.paragraph_end
         for inference_rule in sorted(t.i.values(),
-                                     key=lambda i: i.inference_rule.rep_dashed_name(encoding=encodings.plaintext)):
+                key=lambda i: i.inference_rule.rep_dashed_name(encoding=encodings.plaintext)):
             inference_rule: InferenceRuleInclusion
             yield self.paragraph_start
             yield from inference_rule.inference_rule.compose_report()

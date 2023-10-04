@@ -15,4 +15,4 @@ theory_axiom = t1.include_axiom(a=axiom)
 
 # And finally, use the absorption inference-rule:
 proposition_of_interest = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
-    formula=r1(o1, o2) | u.r.implies | r2(o3), subtitle='The proposition of interest')
+    p=r1(o1, o2) | u.r.implies | r2(o3), subtitle='The proposition of interest')
