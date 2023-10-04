@@ -14,9 +14,9 @@ My tags: inference-rule
     ../math/inference_rule/conjunction_elimination_1_math_inference_rule.rst
     ../math/inference_rule/conjunction_elimination_2_math_inference_rule.rst
     ../math/inference_rule/conjunction_introduction_math_inference_rule.rst
-    ../math/inference_rule/constructive_dilemna_math_inference_rule.rst
+    ../math/inference_rule/constructive__math_inference_rule.rst
     ../math/inference_rule/definition_interpretation_math_inference_rule.rst
-    ../math/inference_rule/destructive_dilemna_math_inference_rule.rst
+    ../math/inference_rule/destructive__math_inference_rule.rst
     ../math/inference_rule/disjunction_introduction_1_math_inference_rule.rst
     ../math/inference_rule/disjunction_introduction_2_math_inference_rule.rst
     ../math/inference_rule/disjunctive_resolution_math_inference_rule.rst

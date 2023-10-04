@@ -4279,33 +4279,39 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
+    def construct_formula(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
             p_or_r: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p_implies_q, _ = verify_formula(u=t.u, input_value=p_implies_q, )
-        _, r_implies_s, _ = verify_formula(u=t.u, input_value=r_implies_s)
-        _, p_or_r, _ = verify_formula(u=t.u, arity=None, input_value=p_or_r)
-        return p | t.u.r.land | q
-
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        """ """
-        output = yield from configuration.locale.compose_constructive_dilemma_paragraph_proof(o=o)
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p_implies_q, _ = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
+            form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask,
+            raise_exception=True, error_code=error_code)
+        p_implies_q: Formula
+        _, r_implies_s, _ = verify_formula(arg='r_implies_s', input_value=r_implies_s, u=self.u,
+            form=self.parameter_r_implies_s, mask=self.parameter_r_implies_s_mask,
+            raise_exception=True, error_code=error_code)
+        r_implies_s: Formula
+        _, p_or_r, _ = verify_formula(arg='p_or_r', input_value=p_or_r, u=self.u,
+            form=self.parameter_p_or_r, mask=self.parameter_p_or_r_mask, raise_exception=True,
+            error_code=error_code)
+        p_or_r: Formula
+        p__in__p_implies_q: Formula = p_implies_q.parameters[0]
+        p__in__p_or_r: Formula = p_or_r.parameters[0]
+        verify(assertion=p__in__p_implies_q.is_formula_syntactically_equivalent_to(p__in__p_or_r),
+            msg=f'The ⌜p⌝({p__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜p⌝({p__in__p_or_r}) in the formula argument ⌜p_implies_q⌝({p_or_r})',
+            raise_exception=True, error_code=error_code)
+        r__in__r_implies_s: Formula = r_implies_s.parameters[0]
+        r__in__p_or_r: Formula = p_or_r.parameters[1]
+        verify(assertion=r__in__r_implies_s.is_formula_syntactically_equivalent_to(r__in__p_or_r),
+            msg=f'The ⌜r⌝({r__in__r_implies_s}) in the formula argument ⌜r_implies_s⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜r⌝({r__in__p_or_r}) in the formula argument ⌜p_implies_q⌝({p_or_r})',
+            raise_exception=True, error_code=error_code)
+        q: Formula = p_implies_q.parameters[1]
+        s: Formula = r_implies_s.parameters[1]
+        output: Formula = q | self.u.r.lor | s
         return output
-
-    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
-            t: TheoryElaborationSequence) -> bool:
-        """ """
-        _, p, _ = verify_formula_statement(t=t, arity=None, input_value=p)
-        _, q, _ = verify_formula_statement(t=t, arity=None, input_value=q)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
-        verify(t.contains_theoretical_objct(q),
-            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
-        return True
 
 
 class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
@@ -6459,6 +6465,7 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
         self._conjunction_elimination_1 = None
         self._conjunction_elimination_2 = None
         self._conjunction_introduction = None
+        self._constructive_dilemma = None
         self._definition_interpretation = None
         self._disjunction_elimination = None
         self._disjunction_introduction_1 = None
@@ -6528,6 +6535,10 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
         return self._biconditional_introduction
 
     @property
+    def cd(self) -> ConstructiveDilemmaDeclaration:
+        return self.constructive_dilemma
+
+    @property
     def cel(self) -> ConjunctionElimination1Declaration:
         return self.conjunction_elimination_1
 
@@ -6565,6 +6576,13 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
             self._conjunction_introduction = ConjunctionIntroductionDeclaration(
                 universe_of_discourse=self.u)
         return self._conjunction_introduction
+
+    @property
+    def constructive_dilemma(self) -> ConstructiveDilemmaDeclaration:
+        if self._constructive_dilemma is None:
+            self._constructive_dilemma = ConstructiveDilemmaDeclaration(
+                universe_of_discourse=self.u)
+        return self._constructive_dilemma
 
     @property
     def definition_interpretation(self) -> DefinitionInterpretationDeclaration:
@@ -7206,13 +7224,6 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
-        Composable, Composable, bool]:
-        """Composes the paragraph-proof of inferred-statements based on the :ref:`conjunction-introduction<conjunction_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` ."""
-        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
-            o=o)
-        return output
-
     def check_premises_validity(self, p: FlexibleFormula, q: FlexibleFormula) -> Tuple[
         bool, ConjunctionIntroductionDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
@@ -7225,6 +7236,13 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
         valid_premises: ConjunctionIntroductionDeclaration.Premises = ConjunctionIntroductionDeclaration.Premises(
             p=p, q=q)
         return True, valid_premises
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """Composes the paragraph-proof of inferred-statements based on the :ref:`conjunction-introduction<conjunction_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` ."""
+        output = yield from configuration.locale.compose_conjunction_introduction_paragraph_proof(
+            o=o)
+        return output
 
     @property
     def i(self) -> ConjunctionIntroductionDeclaration:
@@ -7257,7 +7275,7 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.conjunction_introduction
+        i = t.universe_of_discourse.inference_rules.constructive_dilemma
         dashed_name = 'constructive-dilemma'
         acronym = 'cd'
         abridged_name = None
@@ -7267,30 +7285,58 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
+    def check_premises_validity(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
+            p_or_r: FlexibleFormula) -> Tuple[bool, ConstructiveDilemmaDeclaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, p_implies_q, _ = verify_formula_statement(arg='p_implies_q', t=self.t,
+            input_value=p_implies_q, form=self.i.parameter_p_implies_q,
+            mask=self.i.parameter_p_implies_q_mask, raise_exception=True, error_code=error_code)
+        p_implies_q: Formula
+        _, r_implies_s, _ = verify_formula_statement(arg='r_implies_s', t=self.t,
+            input_value=r_implies_s, form=self.i.parameter_r_implies_s,
+            mask=self.i.parameter_r_implies_s_mask, raise_exception=True, error_code=error_code)
+        r_implies_s: Formula
+        _, p_or_r, _ = verify_formula_statement(arg='p_or_r', t=self.t, input_value=p_or_r,
+            form=self.i.parameter_p_or_r, mask=self.i.parameter_p_or_r_mask, raise_exception=True,
+            error_code=error_code)
+        p_or_r: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: ConstructiveDilemmaDeclaration.Premises = ConstructiveDilemmaDeclaration.Premises(
+            p_implies_q=p_implies_q, r_implies_s=r_implies_s, p_or_r=p_or_r)
+        return True, valid_premises
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """ """
+        output = yield from configuration.locale.compose_constructive_dilemma_paragraph_proof(o=o)
+        return output
+
     @property
     def i(self) -> ConstructiveDilemmaDeclaration:
         """Override the base class i property with a specialized inherited class type."""
         i: ConstructiveDilemmaDeclaration = super().i
         return i
 
-    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
+            p_or_r: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return self.i.construct_formula(p=p, q=q)
+        return self.i.construct_formula(p_implies_q=p_implies_q, r_implies_s=r_implies_s,
+            p_or_r=p_or_r)
 
-    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
-            q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
-            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
-            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+    def infer_formula_statement(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
+            p_or_r: FlexibleFormula, ref: (None, str) = None,
+            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
+            echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        _, q, _ = verify_formula_statement(t=self.t, arity=None, input_value=q)
-        return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p_implies_q=p_implies_q, r_implies_s=r_implies_s, p_or_r=p_or_r)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -8795,8 +8841,9 @@ class InferenceRuleInclusionCollection(collections.UserDict):
         self._conjunction_elimination_1 = None
         self._conjunction_elimination_2 = None
         self._conjunction_introduction = None
+        self._constructive_dilemma = None
         self._definition_interpretation = None
-        self._disjunction_elimination = None  # TODO: IMPLEMENT disjunction_elimination
+        self._disjunction_elimination = None
         self._disjunction_introduction_1 = None
         self._disjunction_introduction_2 = None
         self._double_negation_elimination = None
@@ -8923,30 +8970,15 @@ class InferenceRuleInclusionCollection(collections.UserDict):
         return self._biconditional_introduction
 
     @property
-    def conjunction_elimination_1(self) -> ConjunctionElimination1Inclusion:
-        """The well-known conjunction-elimination #1 inference-rule: P ∧ Q ⊢ P.
+    def cd(self) -> ConstructiveDilemmaInclusion:
+        """The well-known constructive-dilemma inference-rule
 
-        Abridged property: t.i.cel()
-
-        If the well-known inference-rule does not exist in the universe-of-discourse,
-        the inference-rule is automatically declared.
-        """
-        if self._conjunction_elimination_1 is None:
-            self._conjunction_elimination_1 = ConjunctionElimination1Inclusion(t=self.t)
-        return self._conjunction_elimination_1
-
-    @property
-    def conjunction_elimination_2(self) -> ConjunctionElimination2Inclusion:
-        """The well-known conjunction-elimination #2 inference-rule: P ∧ Q ⊢ Q.
-
-        Abridged property: t.i.cer
+        Unabridged property: universe_of_discourse.inference_rule.constructive_dilemma(...)
 
         If the well-known inference-rule does not exist in the universe-of-discourse,
         the inference-rule is automatically declared.
         """
-        if self._conjunction_elimination_2 is None:
-            self._conjunction_elimination_2 = ConjunctionElimination2Inclusion(t=self.t)
-        return self._conjunction_elimination_2
+        return self.constructive_dilemma
 
     @property
     def cel(self) -> ConjunctionElimination1Declaration:
@@ -8982,6 +9014,32 @@ class InferenceRuleInclusionCollection(collections.UserDict):
         return self.conjunction_introduction
 
     @property
+    def conjunction_elimination_1(self) -> ConjunctionElimination1Inclusion:
+        """The well-known conjunction-elimination #1 inference-rule: P ∧ Q ⊢ P.
+
+        Abridged property: t.i.cel()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        if self._conjunction_elimination_1 is None:
+            self._conjunction_elimination_1 = ConjunctionElimination1Inclusion(t=self.t)
+        return self._conjunction_elimination_1
+
+    @property
+    def conjunction_elimination_2(self) -> ConjunctionElimination2Inclusion:
+        """The well-known conjunction-elimination #2 inference-rule: P ∧ Q ⊢ Q.
+
+        Abridged property: t.i.cer
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        if self._conjunction_elimination_2 is None:
+            self._conjunction_elimination_2 = ConjunctionElimination2Inclusion(t=self.t)
+        return self._conjunction_elimination_2
+
+    @property
     def conjunction_introduction(self) -> ConjunctionIntroductionInclusion:
         """The well-known conjunction-introduction inference-rule: P, Q ⊢ P ∧ Q.
 
@@ -8993,6 +9051,19 @@ class InferenceRuleInclusionCollection(collections.UserDict):
         if self._conjunction_introduction is None:
             self._conjunction_introduction = ConjunctionIntroductionInclusion(t=self.t)
         return self._conjunction_introduction
+
+    @property
+    def constructive_dilemma(self) -> ConstructiveDilemmaInclusion:
+        """The well-known constructive-dilemma inference-rule
+
+        Abridged property: t.i.cd()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        if self._constructive_dilemma is None:
+            self._constructive_dilemma = ConstructiveDilemmaInclusion(t=self.t)
+        return self._constructive_dilemma
 
     @property
     def definition_interpretation(self) -> DefinitionInterpretationInclusion:

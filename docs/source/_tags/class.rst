@@ -21,12 +21,12 @@ My tags: class
     ../python/class/conjunction_elimination_2_inclusion_python_class.rst
     ../python/class/conjunction_introduction_declaration_python_class.rst
     ../python/class/conjunction_introduction_inclusion_python_class.rst
-    ../python/class/constructive_dilemna_declaration_python_class.rst
-    ../python/class/constructive_dilemna_inclusion_python_class.rst
+    ../python/class/constructive__declaration_python_class.rst
+    ../python/class/constructive__inclusion_python_class.rst
     ../python/class/definition_interpretation_declaration_python_class.rst
     ../python/class/definition_interpretation_inclusion_python_class.rst
-    ../python/class/destructive_dilemna_declaration_python_class.rst
-    ../python/class/destructive_dilemna_inclusion_python_class.rst
+    ../python/class/destructive__declaration_python_class.rst
+    ../python/class/destructive__inclusion_python_class.rst
     ../python/class/disjunction_introduction_1_declaration_python_class.rst
     ../python/class/disjunction_introduction_1_inclusion_python_class.rst
     ../python/class/disjunction_introduction_2_declaration_python_class.rst

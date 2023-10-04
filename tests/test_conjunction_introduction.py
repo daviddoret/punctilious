@@ -21,11 +21,12 @@ class TestConjunctionIntroduction(TestCase):
             proposition_of_interest.rep_formula(pu.encodings.plaintext))
         self.assertEqual('(𝑟₁(𝑜₁, 𝑜₂) ∧ 𝑟₂(𝑜₃))',
             proposition_of_interest.rep_formula(pu.encodings.unicode))
-        # Trying to pass a formula that is not a valid formula-statement must raise an Exception
+        # Syntax error
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.conjunction_introduction.infer_formula_statement(p=o2, q=r1(o1, o3))
         self.assertIs(pu.error_codes.error_002_inference_premise_syntax_error,
             error.exception.error_code)
+        # Validity error
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.conjunction_introduction.infer_formula_statement(p=r1(o1, o2), q=r1(o1, o3))
         self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,

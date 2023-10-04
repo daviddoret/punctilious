@@ -5,10 +5,101 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/constructive_dilemma_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/destructive_dilemma_math_inference_rule.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sample/sample_constructive_dilemma.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_constructive_dilemma.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/class.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/class.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/concept.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/concept.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/constructive-dilemna.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/constructive-dilemna.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/declaration.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/declaration.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/destructive-dilemna.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/destructive-dilemna.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/inclusion.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/inclusion.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/inference-rule.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/inference-rule.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/math.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/math.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/python.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/python.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/sample.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/sample.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/tagsindex.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/tagsindex.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/constructive_dilemna_math_inference_rule.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/constructive_dilemna_math_inference_rule.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/destructive_dilemna_math_inference_rule.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/destructive_dilemna_math_inference_rule.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/constructive_dilemna_declaration_python_class.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/constructive_dilemna_declaration_python_class.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/constructive_dilemna_inclusion_python_class.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/constructive_dilemna_inclusion_python_class.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/destructive_dilemna_declaration_python_class.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/destructive_dilemna_declaration_python_class.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/destructive_dilemna_inclusion_python_class.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/destructive_dilemna_inclusion_python_class.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/constructive_dilemna_python_sample.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/sample/constructive_dilemna_python_sample.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/sample/destructive_dilemna_python_sample.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/sample/destructive_dilemna_python_sample.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/constructive-dilemna.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/constructive-dilemna.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/declaration.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/declaration.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/destructive-dilemna.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/destructive-dilemna.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/inclusion.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/inclusion.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/inference-rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/inference-rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/math.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/math.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/python.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/tagsindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/tagsindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/absorption_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/absorption_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/axiom_interpretation_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/axiom_interpretation_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_1_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_2_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_2_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_elimination_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_elimination_1_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_elimination_2_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_elimination_2_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_introduction_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_introduction_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/constructive_dilemna_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/constructive_dilemna_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/definition_interpretation_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/definition_interpretation_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/destructive_dilemna_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/destructive_dilemna_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunction_introduction_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunction_introduction_1_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunction_introduction_2_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunction_introduction_2_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunctive_resolution_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunctive_resolution_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunctive_syllogism_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunctive_syllogism_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/double_negation_elimination_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/double_negation_elimination_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/double_negation_introduction_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/double_negation_introduction_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/equal_terms_substitution_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/equal_terms_substitution_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/equality_commutativity_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/equality_commutativity_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/hypothetical_syllogism_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/hypothetical_syllogism_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_1_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_2_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_2_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_3_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_3_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/modus_ponens_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/modus_ponens_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/modus_tollens_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/modus_tollens_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_contradiction_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_contradiction_1_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_contradiction_2_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_contradiction_2_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_refutation_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_refutation_1_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_refutation_2_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_refutation_2_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/variable_substitution_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/variable_substitution_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemna_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemna_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemna_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemna_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemna_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemna_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemna_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemna_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/constructive_dilemna_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/constructive_dilemna_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/destructive_dilemna_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/destructive_dilemna_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/searchindex.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/constructive-dilemna.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/constructive-dilemna.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/declaration.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/declaration.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/destructive-dilemna.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/destructive-dilemna.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/inclusion.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/inclusion.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/inference-rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/inference-rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/math.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/math.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/python.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/python.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/tagsindex.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/tagsindex.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/constructive_dilemna_math_inference_rule.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/constructive_dilemna_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/constructive_dilemma_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/destructive_dilemna_math_inference_rule.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/destructive_dilemna_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/destructive_dilemma_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/constructive_dilemna_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/class/constructive_dilemna_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/constructive_dilemna_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/class/constructive_dilemna_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/destructive_dilemna_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/class/destructive_dilemna_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/destructive_dilemna_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/class/destructive_dilemna_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/constructive_dilemna_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/sample/constructive_dilemna_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/destructive_dilemna_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/sample/destructive_dilemna_python_sample.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/locale_en_us.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/locale_en_us.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_axiom_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_axiom_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_biconditional_elimination_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_biconditional_elimination_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_conjunction_introduction.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_conjunction_introduction.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -87,17 +178,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/David/PycharmProjects/punctilious/docs/source/include&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "dev",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/tests",
+    "settings.editor.selected.configurable": "advanced.settings"
   }
-}</component>
+}]]></component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings module-name="2023_05_02_PyCharmProject_Maths" is-module-sdk="true">
@@ -108,11 +199,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\David\PycharmProjects\punctilious\tests" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious\src\sample" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\include" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\project" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\tests" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\punctilious" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\inference_rule" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source" />
@@ -122,7 +213,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\continuous_integration" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for test_conjunction_introduction.TestConjunctionIntroduction.test_ci">
+  <component name="RunManager" selected="Python tests.Python tests for test_constructive_dilemma.TestConstructiveDilemma.test_constructive_dilemma">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -230,6 +321,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="sample_constructive_dilemma" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_constructive_dilemma.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest tests" type="ShConfigurationType">
       <option name="SCRIPT_TEXT" value="pytest tests" />
       <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
@@ -291,6 +403,20 @@
       <option name="docutils_open_in_browser" value="false" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests for test_biconditional_elimination_1.TestBiconditionalElimination1.test_be1" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_biconditional_elimination_1.TestBiconditionalElimination1.test_be1&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="Python tests for test_conjunction_introduction.TestConjunctionIntroduction.test_ci" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -305,7 +431,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in test_block.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_constructive_dilemma.TestConstructiveDilemma.test_constructive_dilemma" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -315,11 +441,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_block.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <option name="_new_target" value="&quot;test_constructive_dilemma.TestConstructiveDilemma.test_constructive_dilemma&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in test_conjunction_elimination_1.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests in test_biconditional_elimination_1.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -329,35 +455,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_conjunction_elimination_1.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests in test_conjunction_elimination_2.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_conjunction_elimination_2.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests in test_conjunction_introduction.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_conjunction_introduction.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_biconditional_elimination_1.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -381,24 +479,24 @@
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.build" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
+      <item itemvalue="Python.sample_constructive_dilemma" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.Python tests in test_block.py" />
+      <item itemvalue="Python tests.Python tests for test_biconditional_elimination_1.TestBiconditionalElimination1.test_be1" />
+      <item itemvalue="Python tests.Python tests for test_constructive_dilemma.TestConstructiveDilemma.test_constructive_dilemma" />
+      <item itemvalue="Python tests.Python tests in test_biconditional_elimination_1.py" />
       <item itemvalue="Python tests.Python tests for test_conjunction_introduction.TestConjunctionIntroduction.test_ci" />
-      <item itemvalue="Python tests.Python tests in test_conjunction_elimination_1.py" />
-      <item itemvalue="Python tests.Python tests in test_conjunction_elimination_2.py" />
-      <item itemvalue="Python tests.Python tests in test_conjunction_introduction.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Python tests for test_constructive_dilemma.TestConstructiveDilemma.test_constructive_dilemma" />
+        <item itemvalue="Python.sample_constructive_dilemma" />
+        <item itemvalue="Python tests.Python tests in test_biconditional_elimination_1.py" />
+        <item itemvalue="Python tests.Python tests for test_biconditional_elimination_1.TestBiconditionalElimination1.test_be1" />
         <item itemvalue="Python tests.Python tests for test_conjunction_introduction.TestConjunctionIntroduction.test_ci" />
-        <item itemvalue="Python tests.Python tests in test_conjunction_introduction.py" />
-        <item itemvalue="Python tests.Python tests in test_conjunction_elimination_2.py" />
-        <item itemvalue="Python tests.Python tests in test_conjunction_elimination_1.py" />
-        <item itemvalue="Python tests.Python tests in test_block.py" />
       </list>
     </recent_temporary>
   </component>
@@ -410,14 +508,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00290" summary="#201 + #195">
-      <option name="closed" value="true" />
-      <created>1694933881746</created>
-      <option name="number" value="00290" />
-      <option name="presentableId" value="LOCAL-00290" />
-      <option name="project" value="LOCAL" />
-      <updated>1694933881746</updated>
     </task>
     <task id="LOCAL-00291" summary="#201 + #195">
       <option name="closed" value="true" />
@@ -803,7 +893,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696332797135</updated>
     </task>
-    <option name="localTasksCounter" value="339" />
+    <task id="LOCAL-00339" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
+      <option name="closed" value="true" />
+      <created>1696420598709</created>
+      <option name="number" value="00339" />
+      <option name="presentableId" value="LOCAL-00339" />
+      <option name="project" value="LOCAL" />
+      <updated>1696420598709</updated>
+    </task>
+    <option name="localTasksCounter" value="340" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -875,11 +973,6 @@
           <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
           <line>51</line>
           <option name="timeStamp" value="71" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/locale_en_us.py</url>
-          <line>151</line>
-          <option name="timeStamp" value="73" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

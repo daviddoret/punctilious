@@ -13,9 +13,9 @@ My tags: inclusion
     ../python/class/conjunction_elimination_1_inclusion_python_class.rst
     ../python/class/conjunction_elimination_2_inclusion_python_class.rst
     ../python/class/conjunction_introduction_inclusion_python_class.rst
-    ../python/class/constructive_dilemna_inclusion_python_class.rst
+    ../python/class/constructive__inclusion_python_class.rst
     ../python/class/definition_interpretation_inclusion_python_class.rst
-    ../python/class/destructive_dilemna_inclusion_python_class.rst
+    ../python/class/destructive__inclusion_python_class.rst
     ../python/class/disjunction_introduction_1_inclusion_python_class.rst
     ../python/class/disjunction_introduction_2_inclusion_python_class.rst
     ../python/class/disjunctive_resolution_inclusion_python_class.rst

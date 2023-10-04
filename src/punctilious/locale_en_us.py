@@ -166,6 +166,34 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('. ')
         return True
 
+    def compose_constructive_dilemma_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        parameter_p_implies_q: Formula = o.inference_rule.definition.parameters[0].parameters[0]
+        p_implies_q: FormulaStatement = o.parameters[0]
+        yield from p_implies_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_p_implies_q.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from p_implies_q.compose_ref_link()
+        yield SansSerifNormal('. ')
+        parameter_r_implies_s: Formula = o.inference_rule.definition.parameters[0].parameters[1]
+        r_implies_s: FormulaStatement = o.parameters[1]
+        yield from r_implies_s.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_r_implies_s.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from r_implies_s.compose_ref_link()
+        yield SansSerifNormal('. ')
+        parameter_p_or_r: Formula = o.inference_rule.definition.parameters[0].parameters[2]
+        p_or_r: FormulaStatement = o.parameters[2]
+        yield from p_or_r.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_p_or_r.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from p_or_r.compose_ref_link()
+        yield SansSerifNormal('. ')
+        return True
+
     def compose_definition_declaration(self, o: DefinitionDeclaration) -> collections.abc.Generator[
         Composable, Composable, bool]:
         global text_dict
