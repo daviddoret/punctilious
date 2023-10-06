@@ -6363,14 +6363,14 @@ def verify_axiom_inclusion(t: TheoryElaborationSequence, input_value: FlexibleAx
     elif isinstance(input_value, AxiomDeclaration):
         # TODO: Find if there is an inclusion for that axiom in t.
         raise NotImplementedError('Feature not implemented yet, sorry')
-    if isinstance(input_value, str):
+    elif isinstance(input_value, str):
         # Assume the string is the axiom expressed in natural language.
         # TODO: Find the matching axiom from u.
         raise NotImplementedError('Feature not implemented yet, sorry')
     else:
         ok, msg = verify(raise_exception=raise_exception, error_code=error_code, assertion=False,
-            msg=f'The axiom {"" if arg is None else "passed as argument " + "".join(["⌜", arg, "⌝ "])}is not of a supported pythonic type.',
-            a=a, a_type=type(a), u=u)
+            msg=f'The axiom {"" if arg is None else "passed as argument " + "".join(["⌜", arg, "⌝ "])}is not of pythonic type FlexibleAxiom.',
+            input_value=input_value, input_value_type=type(input_value))
         if not ok:
             return ok, None, msg
     return ok, axiom_inclusion, None
@@ -6432,14 +6432,14 @@ def verify_definition_inclusion(t: TheoryElaborationSequence, input_value: Flexi
     elif isinstance(input_value, DefinitionDeclaration):
         # TODO: Find if there is an inclusion for that definition in t.
         raise NotImplementedError('Feature not implemented yet, sorry')
-    if isinstance(input_value, str):
+    elif isinstance(input_value, str):
         # Assume the string is the definition expressed in natural language.
         # TODO: Find the matching definition from u.
         raise NotImplementedError('Feature not implemented yet, sorry')
     else:
         ok, msg = verify(raise_exception=raise_exception, error_code=error_code, assertion=False,
-            msg=f'The definition {"" if arg is None else "passed as argument " + "".join(["⌜", arg, "⌝ "])}is not of a supported pythonic type.',
-            a=a, a_type=type(a), u=u)
+            msg=f'The definition {"" if arg is None else "passed as argument " + "".join(["⌜", arg, "⌝ "])}is not of pythonic type FlexibleDefinition.',
+            input_value=input_value, input_value_type=type(input_value))
         if not ok:
             return ok, None, msg
     return ok, definition_inclusion, None
@@ -6935,7 +6935,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         # Validate that expected formula-statements are formula-statements.
         _, p_implies_q, _ = verify_formula_statement(t=self.t, input_value=p_implies_q,
             form=self.i.parameter_p_implies_q, mask=self.i.parameter_p_implies_q_mask,
-            raise_exception=True, error_code=error_code)
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
         # The method either raises an exception during validation, or return True.
         valid_premises: AbsorptionDeclaration.Premises = AbsorptionDeclaration.Premises(
             p_implies_q=p_implies_q)
@@ -6999,14 +6999,10 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements.
         # TODO: NICETOHAVE: AxiomInterpretationInclusion: replace these verify statements with a generic validate_axiom_inclusion function.
-        verify(assertion=isinstance(a, AxiomInclusion),
-            msg=f'⌜{a}⌝ passed as argument ⌜a⌝ is not an axiom-inclusion.', a=a,
-            raise_exception=True, error_code=error_code)
-        verify(assertion=self.t.contains_theoretical_objct(a),
-            msg=f'⌜{a}⌝ passed as argument ⌜a⌝ is not contained in theory-elaboration-sequence ⌜{self.t}⌝.',
-            a=a, raise_exception=True, error_code=error_code)
-        _, p, _ = verify_formula(u=self.u, input_value=p, raise_exception=True,
+        _, a, _ = verify_axiom_inclusion(arg='a', t=self.t, input_value=a, raise_exception=True,
             error_code=error_code)
+        _, p, _ = verify_formula(arg='p', u=self.u, input_value=p, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
         # TODO: BUG: validate_formula does not support basic masks like: ⌜P⌝ where P is a free-variable.
         # validate_formula(u=self.u, input_value=p, form=self.i.parameter_p,
         #    mask=self.i.parameter_p_mask)
@@ -7073,8 +7069,8 @@ class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements.
         _, p_iff_q, _ = verify_formula_statement(t=self.t, input_value=p_iff_q,
-            form=self.i.parameter_p_iff_q, mask=self.i.parameter_p_iff_q_mask, raise_exception=True,
-            error_code=error_code)
+            form=self.i.parameter_p_iff_q, mask=self.i.parameter_p_iff_q_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
         # The method either raises an exception during validation, or return True.
         valid_premises: BiconditionalElimination1Declaration.Premises = BiconditionalElimination1Declaration.Premises(
             p_iff_q=p_iff_q)
@@ -7137,8 +7133,8 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements.
         _, p_iff_q, _ = verify_formula_statement(t=self.t, input_value=p_iff_q,
-            form=self.i.parameter_p_iff_q, mask=self.i.parameter_p_iff_q_mask, raise_exception=True,
-            error_code=error_code)
+            form=self.i.parameter_p_iff_q, mask=self.i.parameter_p_iff_q_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
         # The method either raises an exception during validation, or return True.
         valid_premises: BiconditionalElimination2Declaration.Premises = BiconditionalElimination2Declaration.Premises(
             p_iff_q=p_iff_q)
@@ -7202,10 +7198,12 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
         # Validate that expected formula-statements are formula-statements in the current theory.
         _, p_implies_q, _ = verify_formula_statement(arg='p_implies_q', t=self.t,
             input_value=p_implies_q, form=self.i.parameter_p_implies_q,
-            mask=self.i.parameter_p_implies_q_mask, raise_exception=True, error_code=error_code)
+            mask=self.i.parameter_p_implies_q_mask, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
         _, q_implies_p, _ = verify_formula_statement(arg='q_implies_p', t=self.t,
             input_value=q_implies_p, form=self.i.parameter_q_implies_p,
-            mask=self.i.parameter_q_implies_p_mask, raise_exception=True, error_code=error_code)
+            mask=self.i.parameter_q_implies_p_mask, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
         # The method either raises an exception during validation, or return True.
         valid_premises: BiconditionalIntroductionDeclaration.Premises = BiconditionalIntroductionDeclaration.Premises(
             p_implies_q=p_implies_q, q_implies_p=q_implies_p)
@@ -7265,8 +7263,8 @@ class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
         _, p_and_q, _ = verify_formula_statement(arg='p_and_q', t=self.t, input_value=p_and_q,
-            form=self.i.parameter_p_and_q, mask=self.i.parameter_p_and_q_mask, raise_exception=True,
-            error_code=error_code)
+            form=self.i.parameter_p_and_q, mask=self.i.parameter_p_and_q_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
         # The method either raises an exception during validation, or return True.
         valid_premises: ConjunctionElimination1Declaration.Premises = ConjunctionElimination1Declaration.Premises(
             p_and_q=p_and_q)
@@ -7330,8 +7328,8 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
         _, p_and_q, _ = verify_formula_statement(arg='p_and_q', t=self.t, input_value=p_and_q,
-            form=self.i.parameter_p_and_q, mask=self.i.parameter_p_and_q_mask, raise_exception=True,
-            error_code=error_code)
+            form=self.i.parameter_p_and_q, mask=self.i.parameter_p_and_q_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
         # The method either raises an exception during validation, or return True.
         valid_premises: ConjunctionElimination2Declaration.Premises = ConjunctionElimination2Declaration.Premises(
             p_and_q=p_and_q)
@@ -7382,10 +7380,10 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
         bool, ConjunctionIntroductionDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
-        _, p, _ = verify_formula_statement(arg='p', t=self.t, input_value=p, raise_exception=True,
-            error_code=error_code)
-        _, q, _ = verify_formula_statement(arg='q', t=self.t, input_value=q, raise_exception=True,
-            error_code=error_code)
+        _, p, _ = verify_formula_statement(arg='p', t=self.t, input_value=p,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        _, q, _ = verify_formula_statement(arg='q', t=self.t, input_value=q,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
         # The method either raises an exception during validation, or return True.
         valid_premises: ConjunctionIntroductionDeclaration.Premises = ConjunctionIntroductionDeclaration.Premises(
             p=p, q=q)
@@ -7445,15 +7443,17 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
         # Validate that expected formula-statements are formula-statements in the current theory.
         _, p_implies_q, _ = verify_formula_statement(arg='p_implies_q', t=self.t,
             input_value=p_implies_q, form=self.i.parameter_p_implies_q,
-            mask=self.i.parameter_p_implies_q_mask, raise_exception=True, error_code=error_code)
+            mask=self.i.parameter_p_implies_q_mask, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
         p_implies_q: Formula
         _, r_implies_s, _ = verify_formula_statement(arg='r_implies_s', t=self.t,
             input_value=r_implies_s, form=self.i.parameter_r_implies_s,
-            mask=self.i.parameter_r_implies_s_mask, raise_exception=True, error_code=error_code)
+            mask=self.i.parameter_r_implies_s_mask, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
         r_implies_s: Formula
         _, p_or_r, _ = verify_formula_statement(arg='p_or_r', t=self.t, input_value=p_or_r,
-            form=self.i.parameter_p_or_r, mask=self.i.parameter_p_or_r_mask, raise_exception=True,
-            error_code=error_code)
+            form=self.i.parameter_p_or_r, mask=self.i.parameter_p_or_r_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
         p_or_r: Formula
         # The method either raises an exception during validation, or return True.
         valid_premises: ConstructiveDilemmaDeclaration.Premises = ConstructiveDilemmaDeclaration.Premises(

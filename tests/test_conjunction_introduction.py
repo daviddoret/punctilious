@@ -31,3 +31,10 @@ class TestConjunctionIntroduction(TestCase):
             t1.i.conjunction_introduction.infer_formula_statement(p=r1(o1, o2), q=r1(o1, o3))
         self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,
             error.exception.error_code)
+        # Validity error caused by non-propositional formula
+        with self.assertRaises(pu.PunctiliousException) as error:
+            # In fact the error is raised earlier because it cannot be a formula-statement...
+            r2 = u.r.declare(signal_proposition=False)
+            t1.i.conjunction_introduction.infer_formula_statement(p=r1(o1, o2), q=r2(o1, o3))
+        self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,
+            error.exception.error_code)
