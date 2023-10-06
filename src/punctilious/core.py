@@ -2246,13 +2246,13 @@ class TheoreticalObject(SymbolicObject):
 
     @property
     @abc.abstractmethod
-    def is_propositional(self) -> bool:
+    def is_strictly_propositional(self) -> bool:
         """Informs if a theoretical-object is propositional.
 
         :return: True if the theoretical-object is propositional, False otherwise.
         """
         raise NotImplementedError(
-            'The is_propositional property is abstract, it must be implemented by the child class.')
+            'The is_strictly_propositional property is abstract, it must be implemented by the child class.')
 
     def substitute(self, substitution_map, target_theory, lock_variable_scope=None):
         """Given a theoretical-objct o₁ (self),
@@ -2293,16 +2293,16 @@ class TheoreticalObject(SymbolicObject):
             pass  # assert isinstance(key, TheoreticalObjct)  ##### XXXXX  # verify(  #  #  #  #  # isinstance(value, (  #    TheoreticalObjct, contextlib._GeneratorContextManager)),  #    'The value component of this key/value pair in this '  #    'substitution map is  #    not an instance of TheoreticalObjct.',  #    key=key, value=value,  #    value_type=type(value), self2=self)  # A formula relation cannot be replaced by  #    a simple-objct.  # But a simple-object could be replaced by a formula,  # if that formula "yields" such simple-objects.  # TODO: Implement clever rules here  #  to avoid ill-formed formula,  #   or let the formula constructor do the work.  #  #  assert type(key) == type(value) or isinstance(  #    value, FreeVariable) or  #  #  #  isinstance(  #    key, FreeVariable)  # If these are formula, their arity must be  #  equal  # to prevent the creation of an ill-formed formula.  # NO, THIS IS WRONG.  #  TODO: Re-analyze this point.  # assert not isinstance(key, Formula) or key.arity  #   == value.arity
         # Because the scope of variables is locked, the substituted formula must create "duplicates" of all variables.
         # During this process, we reuse the variable symbols, but we let auto-indexing re-numbering the new variables.
-        # During this process, we must of course assure the consistency of the is_propositional property.
+        # During this process, we must of course assure the consistency of the is_strictly_propositional property.
         variables_list = self.get_variable_ordered_set()
         x: FreeVariable
         for x in variables_list:
-            variable_is_propositional: bool = x.is_propositional
+            variable_is_strictly_propositional: bool = x.is_strictly_propositional
             if x not in substitution_map.keys():
                 # Call declare_free_variable() instead of v()
                 # to explicitly manage variables scope locking.
                 x2 = self.universe_of_discourse.declare_free_variable(symbol=x.nameset.symbol,
-                    is_propositional=variable_is_propositional)
+                    is_strictly_propositional=variable_is_strictly_propositional)
                 substitution_map[x] = x2
 
         # Now we may proceed with substitution.
@@ -2485,13 +2485,13 @@ class FreeVariable(TheoreticalObject):
             auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None, is_propositional: (None, bool) = None,
+            nameset: (None, str, NameSet) = None, is_strictly_propositional: (None, bool) = None,
             echo: (None, bool) = None) -> None:
         echo = prioritize_value(echo, configuration.echo_free_variable_declaration,
             configuration.echo_default, False)
         status = prioritize_value(status, FreeVariable.scope_initialization_status)
         scope = prioritize_value(scope, frozenset())
-        self._is_propositional = prioritize_value(is_propositional, False)
+        self._is_strictly_propositional = prioritize_value(is_strictly_propositional, False)
         scope = {scope} if isinstance(scope, Formula) else scope
         verify(isinstance(scope, frozenset),
             'The scope of a FreeVariable must be of python type frozenset.')
@@ -2566,12 +2566,12 @@ class FreeVariable(TheoreticalObject):
         return self.is_formula_syntactically_equivalent_to(o2), _values
 
     @property
-    def is_propositional(self) -> bool:
+    def is_strictly_propositional(self) -> bool:
         """A free-variable is denoted as propositional if a strict constraint is imposed on the objects it may be substituted with, that is only propositional objects.
 
         When a free-variable is declared as propositional, punctilious assures through data-validation that it is never substituted by a non-propositional object.
         """
-        return self._is_propositional
+        return self._is_strictly_propositional
 
     def lock_scope(self):
         # Support for the with pythonic syntax
@@ -2866,7 +2866,7 @@ class Formula(TheoreticalObject):
         return True
 
     @property
-    def is_propositional(self) -> bool:
+    def is_strictly_propositional(self) -> bool:
         """Tell if the formula is a logic-proposition.
 
         This property is directly inherited from the formula-is-proposition
@@ -3240,7 +3240,7 @@ class AxiomDeclaration(TheoreticalObject):
     def echo(self):
         repm.prnt(self.rep_report())
 
-    def is_propositional(self) -> bool:
+    def is_strictly_propositional(self) -> bool:
         """An axiom-declaration is not propositional by definition. Distinctively, it is possible to infer propositional statements from an axiom-declaration, cf. axiom-interpretation."""
         return False
 
@@ -3312,7 +3312,7 @@ class AxiomInclusion(Statement):
         return output
 
     @property
-    def is_propositional(self) -> bool:
+    def is_strictly_propositional(self) -> bool:
         """By definition, an axiom-inclusion is not a propositional object."""
         return False
 
@@ -3401,7 +3401,7 @@ class InferenceRuleInclusion(Statement):
             'The ⌜infer_formula_statement⌝ method is abstract. It must be implemented in the child class.')
 
     @property
-    def is_propositional(self) -> bool:
+    def is_strictly_propositional(self) -> bool:
         """By definition, an inference-rule-inclusion is not a propositional object."""
         return False
 
@@ -3496,7 +3496,7 @@ class DefinitionDeclaration(TheoreticalObject):
     def echo(self):
         repm.prnt(self.rep_report())
 
-    def is_propositional(self) -> bool:
+    def is_strictly_propositional(self) -> bool:
         """A definition-declaration is not propositional by definition. Distinctively, it is possible to infer propositional statements from a definition-declaration, cf. definition-interpretation."""
         return False
 
@@ -3560,7 +3560,7 @@ class DefinitionInclusion(Statement):
         repm.prnt(self.rep_report())
 
     @property
-    def is_propositional(self) -> bool:
+    def is_strictly_propositional(self) -> bool:
         """By definition, a definition-inclusion is not a propositional object."""
         return False
 
@@ -3599,7 +3599,7 @@ class FormulaStatement(Statement):
         universe_of_discourse = theory.universe_of_discourse
         # Theory statements must be logical propositions.
         valid_proposition = unpack_formula(valid_proposition)
-        verify(valid_proposition.is_propositional,
+        verify(valid_proposition.is_strictly_propositional,
             'The formula of this statement is not propositional.')
         # TODO: Check that all components of the hypothetical-proposition
         #  are elements of the source theory-branch.
@@ -3861,7 +3861,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
         repm.prnt(self.rep_report())
 
     @property
-    def is_propositional(self) -> bool:
+    def is_strictly_propositional(self) -> bool:
         """By definition, an inference-rule-declaration is not a propositional object."""
         return False
 
@@ -3922,8 +3922,8 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
         """This python NamedTuple is used behind the scene as a data structure to manipulate the premises required by the :ref:`inference-rule<inference_rule_math_concept>` .
         """
-        a: AxiomInclusion
-        p: FormulaStatement
+        a: FlexibleAxiom
+        p: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -3946,16 +3946,14 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, a: AxiomInclusion, p: FlexibleFormula) -> Formula:
+    def construct_formula(self, a: FlexibleAxiom, p: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
-        # TODO: NICETOHAVE: AxiomInterpretationDeclaration: replace this verify statement with a generic validate_axiom_inclusion function.
-        verify(assertion=isinstance(a, AxiomInclusion),
-            msg=f'⌜{a}⌝ passed as premise ⌜a⌝ is not an axiom-inclusion.', a=a,
-            raise_exception=True, error_code=error_code)
+        _, a, _ = verify_axiom_declaration(arg='a', input_value=a, u=self.u, raise_exception=True,
+            error_code=error_code)
         _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
             error_code=error_code)
         p: Formula
@@ -4370,8 +4368,13 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
         ok: bool
         output: Formula
         msg: (None, str)
-        verify(assertion=isinstance(d, DefinitionInclusion),
-            msg=f'⌜{d}⌝ passed as premise ⌜d⌝ is not a definition-inclusion.', d=d)
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, d, _ = verify_axiom_declaration(arg='d', input_value=d, u=self.u, raise_exception=True,
+            error_code=error_code)
+        _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
+            error_code=error_code)
+        p: Formula
+
         ok, x, msg = verify_formula(arg='x', input_value=x, u=self.u, raise_exception=True)
         ok, y, msg = verify_formula(arg='y', input_value=y, u=self.u, raise_exception=True)
         # TODO: BUG: validate_formula does not support basic masks like: ⌜P⌝ where P is a free-variable.
@@ -5389,7 +5392,7 @@ theory-elaboration."""
         return self._inference_rule_inclusions
 
     @property
-    def is_propositional(self) -> bool:
+    def is_strictly_propositional(self) -> bool:
         """By definition, a theory-elaboration-sequence is not a propositional object."""
         return False
 
@@ -5644,7 +5647,7 @@ class Hypothesis(Statement):
         paragraph_header = paragraph_headers.hypothesis
         # TODO: Check that all components of the hypothetical-proposition
         #  are elements of the source theory-branch.
-        verify(hypothesis_formula.is_propositional,
+        verify(hypothesis_formula.is_strictly_propositional,
             'The hypothetical-formula is not a proposition.',
             hypothetical_formula=hypothesis_formula, slf=self)
         if isinstance(symbol, str):
@@ -5862,7 +5865,7 @@ class Relation(TheoreticalObject):
     def echo(self):
         repm.prnt(self.rep_report())
 
-    def is_propositional(self) -> bool:
+    def is_strictly_propositional(self) -> bool:
         "A relation is not a propositional object by definition. But note that formulae based on a relation are propositional if the relation signals a proposition."
         return False
 
@@ -5951,7 +5954,7 @@ class SimpleObjct(TheoreticalObject):
         # o2 is not a variable.
         return self.is_formula_syntactically_equivalent_to(o2), _values
 
-    def is_propositional(self) -> bool:
+    def is_strictly_propositional(self) -> bool:
         """A simple-object if propositional if and only if it is truth or the falsehood."""
         if self is self.u.o.truth or self is self.u.o.falsehood:
             return True
@@ -6294,14 +6297,158 @@ class RelationDict(collections.UserDict):
         return self._syntactic_entailment
 
 
+FlexibleAxiom = typing.Union[AxiomDeclaration, AxiomInclusion, str]
+"""A flexible composite data type to pass axioms as arguments.
+
+"""
+
+FlexibleDefinition = typing.Union[DefinitionDeclaration, DefinitionInclusion, str]
+"""A flexible composite data type to pass definitions as arguments.
+
+"""
+
 FlexibleFormula = typing.Union[FormulaStatement, Formula, tuple, list]
 """See validate_flexible_statement_formula() for details."""
 
 
+def verify_axiom_declaration(u: UniverseOfDiscourse, input_value: FlexibleAxiom,
+        arg: (None, str) = None, raise_exception: bool = True,
+        error_code: (None, ErrorCode) = None) -> tuple[bool, (None, AxiomDeclaration), (None, str)]:
+    ok: bool = True
+    axiom_declaration: (None, AxiomDeclaration) = None
+    msg: (None, str)
+
+    if isinstance(input_value, AxiomDeclaration):
+        axiom_declaration = input_value
+    elif isinstance(input_value, AxiomInclusion):
+        # Unpack the axiom-declaration from the axiom-inclusion.
+        input_value: AxiomInclusion
+        axiom_declaration: AxiomDeclaration = input_value.a
+    elif isinstance(input_value, str):
+        # Assume the string is the axiom expressed in natural language.
+        # TODO: Find the matching axiom from u.
+        raise NotImplementedError('Feature not implemented yet, sorry')
+    else:
+        ok, msg = verify(raise_exception=raise_exception, error_code=error_code, assertion=False,
+            msg=f'The axiom {"" if arg is None else "passed as argument " + "".join(["⌜", arg, "⌝ "])}is not of a supported pythonic type.',
+            input_value=input_value, input_value_type=type(input_value), u=u)
+        if not ok:
+            return ok, None, msg
+
+    ok, msg = verify(raise_exception=raise_exception, error_code=error_code,
+        assertion=axiom_declaration is not None,
+        msg=f'The axiom {"" if arg is None else "passed as argument " + "".join(["⌜", arg, "⌝ "])}is None.',
+        axiom_declaration=axiom_declaration, axiom_declaration_u=axiom_declaration.u, u=u)
+    if not ok:
+        return ok, None, msg
+
+    ok, msg = verify(raise_exception=raise_exception, error_code=error_code,
+        assertion=axiom_declaration.u is u,
+        msg=f'The universe-of-discourse ⌜{axiom_declaration.u}⌝ passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is distinct from the universe-of-discourse ⌜{u}⌝.',
+        axiom_declaration=axiom_declaration, axiom_declaration_u=axiom_declaration.u, u=u)
+    if not ok:
+        return ok, None, msg
+
+    return ok, axiom_declaration, msg
+
+
+def verify_axiom_inclusion(t: TheoryElaborationSequence, input_value: FlexibleAxiom,
+        arg: (None, str) = None, raise_exception: bool = True,
+        error_code: (None, ErrorCode) = None) -> tuple[bool, (None, AxiomInclusion), (None, str)]:
+    ok: bool = True
+    axiom_inclusion: (None, AxiomInclusion) = None
+    msg: (None, str)
+    if isinstance(input_value, AxiomInclusion):
+        axiom_inclusion = input_value
+    elif isinstance(input_value, AxiomDeclaration):
+        # TODO: Find if there is an inclusion for that axiom in t.
+        raise NotImplementedError('Feature not implemented yet, sorry')
+    if isinstance(input_value, str):
+        # Assume the string is the axiom expressed in natural language.
+        # TODO: Find the matching axiom from u.
+        raise NotImplementedError('Feature not implemented yet, sorry')
+    else:
+        ok, msg = verify(raise_exception=raise_exception, error_code=error_code, assertion=False,
+            msg=f'The axiom {"" if arg is None else "passed as argument " + "".join(["⌜", arg, "⌝ "])}is not of a supported pythonic type.',
+            a=a, a_type=type(a), u=u)
+        if not ok:
+            return ok, None, msg
+    return ok, axiom_inclusion, None
+
+
+def verify_definition_declaration(u: UniverseOfDiscourse, input_value: FlexibleDefinition,
+        arg: (None, str) = None, raise_exception: bool = True,
+        error_code: (None, ErrorCode) = None) -> tuple[
+    bool, (None, DefinitionDeclaration), (None, str)]:
+    ok: bool = True
+    definition_declaration: (None, DefinitionDeclaration) = None
+    msg: (None, str)
+
+    if isinstance(input_value, DefinitionDeclaration):
+        definition_declaration = input_value
+    elif isinstance(input_value, DefinitionInclusion):
+        # Unpack the definition-declaration from the definition-inclusion.
+        input_value: DefinitionInclusion
+        definition_declaration: DefinitionDeclaration = input_value.a
+    elif isinstance(input_value, str):
+        # Assume the string is the definition expressed in natural language.
+        # TODO: Find the matching definition from u.
+        raise NotImplementedError('Feature not implemented yet, sorry')
+    else:
+        ok, msg = verify(raise_exception=raise_exception, error_code=error_code, assertion=False,
+            msg=f'The definition {"" if arg is None else "passed as argument " + "".join(["⌜", arg, "⌝ "])}is not of a supported pythonic type.',
+            input_value=input_value, input_value_type=type(input_value), u=u)
+        if not ok:
+            return ok, None, msg
+
+    ok, msg = verify(raise_exception=raise_exception, error_code=error_code,
+        assertion=definition_declaration is not None,
+        msg=f'The definition {"" if arg is None else "passed as argument " + "".join(["⌜", arg, "⌝ "])}is None.',
+        definition_declaration=definition_declaration,
+        definition_declaration_u=definition_declaration.u, u=u)
+    if not ok:
+        return ok, None, msg
+
+    ok, msg = verify(raise_exception=raise_exception, error_code=error_code,
+        assertion=definition_declaration.u is u,
+        msg=f'The universe-of-discourse ⌜{definition_declaration.u}⌝ passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is distinct from the universe-of-discourse ⌜{u}⌝.',
+        definition_declaration=definition_declaration,
+        definition_declaration_u=definition_declaration.u, u=u)
+    if not ok:
+        return ok, None, msg
+
+    return ok, definition_declaration, msg
+
+
+def verify_definition_inclusion(t: TheoryElaborationSequence, input_value: FlexibleDefinition,
+        arg: (None, str) = None, raise_exception: bool = True,
+        error_code: (None, ErrorCode) = None) -> tuple[
+    bool, (None, DefinitionInclusion), (None, str)]:
+    ok: bool = True
+    definition_inclusion: (None, DefinitionInclusion) = None
+    msg: (None, str)
+    if isinstance(input_value, DefinitionInclusion):
+        definition_inclusion = input_value
+    elif isinstance(input_value, DefinitionDeclaration):
+        # TODO: Find if there is an inclusion for that definition in t.
+        raise NotImplementedError('Feature not implemented yet, sorry')
+    if isinstance(input_value, str):
+        # Assume the string is the definition expressed in natural language.
+        # TODO: Find the matching definition from u.
+        raise NotImplementedError('Feature not implemented yet, sorry')
+    else:
+        ok, msg = verify(raise_exception=raise_exception, error_code=error_code, assertion=False,
+            msg=f'The definition {"" if arg is None else "passed as argument " + "".join(["⌜", arg, "⌝ "])}is not of a supported pythonic type.',
+            a=a, a_type=type(a), u=u)
+        if not ok:
+            return ok, None, msg
+    return ok, definition_inclusion, None
+
+
 def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (None, str) = None,
         form: (None, FlexibleFormula) = None, mask: (None, frozenset[FreeVariable]) = None,
-        raise_exception: bool = True, error_code: (None, ErrorCode) = None) -> tuple[
-    bool, (None, Formula), (None, str)]:
+        is_strictly_propositional: (None, bool) = None, raise_exception: bool = True,
+        error_code: (None, ErrorCode) = None) -> tuple[bool, (None, Formula), (None, str)]:
     """Many punctilious pythonic methods or functions expect some formula as input parameters. This function assures that the input value is a proper formula and that it is consistent with possible contraints imposed on that formula.
 
     If ⌜input_value⌝ is of type formula, it is already well typed.
@@ -6380,12 +6527,19 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
                 argument=input_value, u=u, form=form, mask=mask)
             if not ok:
                 return ok, None, msg
+
+    verify(
+        assertion=is_strictly_propositional is None or is_strictly_propositional == formula.is_strictly_propositional,
+        msg=f'The formula ⌜{formula}⌝ passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is {"" if formula.is_strictly_propositional else "not "}strictly-propositional.',
+        raise_exception=raise_exception, error_code=error_code)
+
     return True, formula, None
 
 
 def verify_formula_statement(t: TheoryElaborationSequence, input_value: FlexibleFormula,
         arg: (None, str) = None, form: (None, FlexibleFormula) = None,
-        mask: (None, frozenset[FreeVariable]) = None, raise_exception: bool = True,
+        mask: (None, frozenset[FreeVariable]) = None,
+        is_strictly_propositional: (None, bool) = None, raise_exception: bool = True,
         error_code: (None, ErrorCode) = None) -> tuple[bool, (None, FormulaStatement), (None, str)]:
     """Many punctilious pythonic methods expect some FormulaStatement as input parameters (e.g. the infer_statement() of inference-rules). This is syntactically robust, but it may read theory code less readable. In effect, one must store all formula-statements in variables to reuse them in formula. If the number of formula-statements get large, readability suffers. To provide a friendler interface for humans, we allow passing formula-statements as formula, tuple, and lists and apply the following interpretation rules:
 
@@ -6691,7 +6845,7 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
         return self._inconsistency_introduction_3
 
     @property
-    def is_propositional(self) -> bool:
+    def is_strictly_propositional(self) -> bool:
         """By definition, an inference-rule-declaration is not a propositional object."""
         return False
 
@@ -6836,7 +6990,7 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def check_premises_validity(self, a: AxiomInclusion, p: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, a: FlexibleAxiom, p: FlexibleFormula) -> Tuple[
         bool, AxiomInterpretationDeclaration.Premises]:
         """
         .. include:: ../../include/check_premises_validity_python_method.rstinc
@@ -6867,7 +7021,7 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_axiom_interpretation_paragraph_proof(o=o)
         return output
 
-    def construct_formula(self, a: AxiomInclusion, p: FlexibleFormula,
+    def construct_formula(self, a: FlexibleAxiom, p: FlexibleFormula,
             echo: (None, bool) = None) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
@@ -9475,8 +9629,8 @@ class UniverseOfDiscourse(SymbolicObject):
     def declare_free_variable(self, symbol: (None, str, StyledText) = None,
             dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
-            explicit_name: (None, str, StyledText) = None, is_propositional: (None, bool) = None,
-            echo: (None, bool) = None):
+            explicit_name: (None, str, StyledText) = None,
+            is_strictly_propositional: (None, bool) = None, echo: (None, bool) = None):
         """Declare a free-variable in this universe-of-discourse.
 
         A shortcut function for FreeVariable(universe_of_discourse=u, ...)
@@ -9485,8 +9639,8 @@ class UniverseOfDiscourse(SymbolicObject):
         :return:
         """
         x = FreeVariable(universe_of_discourse=self, nameset=symbol,
-            status=FreeVariable.scope_initialization_status, is_propositional=is_propositional,
-            echo=echo)
+            status=FreeVariable.scope_initialization_status,
+            is_strictly_propositional=is_strictly_propositional, echo=echo)
         return x
 
     def declare_symbolic_objct(self, symbol: (None, str, StyledText) = None,
@@ -9777,7 +9931,7 @@ class InferredStatement(FormulaStatement):
         repm.prnt(self.rep_report(proof=proof))
 
     @property
-    def is_propositional(self) -> bool:
+    def is_strictly_propositional(self) -> bool:
         """By definition, an inferred statement is propositional."""
         return True
 
