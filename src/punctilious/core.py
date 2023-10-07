@@ -4299,12 +4299,12 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
         p__in__p_implies_q: Formula = p_implies_q.parameters[0]
         p__in__p_or_r: Formula = p_or_r.parameters[0]
         verify(assertion=p__in__p_implies_q.is_formula_syntactically_equivalent_to(p__in__p_or_r),
-            msg=f'The ⌜p⌝({p__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜p⌝({p__in__p_or_r}) in the formula argument ⌜p_implies_q⌝({p_or_r})',
+            msg=f'The ⌜p⌝({p__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜p⌝({p__in__p_or_r}) in the formula argument ⌜p_or_r⌝({p_or_r})',
             raise_exception=True, error_code=error_code)
         r__in__r_implies_s: Formula = r_implies_s.parameters[0]
         r__in__p_or_r: Formula = p_or_r.parameters[1]
         verify(assertion=r__in__r_implies_s.is_formula_syntactically_equivalent_to(r__in__p_or_r),
-            msg=f'The ⌜r⌝({r__in__r_implies_s}) in the formula argument ⌜r_implies_s⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜r⌝({r__in__p_or_r}) in the formula argument ⌜p_implies_q⌝({p_or_r})',
+            msg=f'The ⌜r⌝({r__in__r_implies_s}) in the formula argument ⌜r_implies_s⌝({r_implies_s}) is not syntaxically-equivalent to the ⌜r⌝({r__in__p_or_r}) in the formula argument ⌜p_or_r⌝({p_or_r})',
             raise_exception=True, error_code=error_code)
         q: Formula = p_implies_q.parameters[1]
         s: Formula = r_implies_s.parameters[1]
@@ -4386,6 +4386,8 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
 
     class Premises(typing.NamedTuple):
         p_implies_q: FlexibleFormula
+        r_implies_s: FlexibleFormula
+        not_q_or_not_s: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4396,21 +4398,57 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
         dashed_name = 'destructive-dilemma'
         explicit_name = 'destructive dilemma inference rule'
         name = 'destructive dilemma'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q, u.v(symbol='R') as r, u.v(symbol='S') as s:
+            definition = u.r.sequent_premises((p | u.r.implies | q), (r | u.r.implies | s),
+                (p | u.r.lor | r)) | u.r.proves | (q | u.r.lor | s)
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.sequent_premises | q) | u.r.proves | (p | u.r.land | q))
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+            self.parameter_p_implies_q = p | u.r.implies | q
+            self.parameter_p_implies_q_mask = frozenset([p, q])
+        with u.v(symbol='R') as r, u.v(symbol='S') as s:
+            self.parameter_r_implies_s = r | u.r.implies | s
+            self.parameter_r_implies_s_mask = frozenset([r, s])
+        with u.v(symbol='Q') as q, u.v(symbol='S') as s:
+            self.parameter_not_q_or_not_s = u.r.lnot(q) | u.r.lor | u.r.lnot(s)
+            self.parameter_not_q_or_not_s_mask = frozenset([q, s])
+            super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+                symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+                abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
+            not_q_or_not_s: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p, _ = verify_formula(u=t.u, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
-        return p | t.u.r.land | q
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p_implies_q, _ = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
+            form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask,
+            raise_exception=True, error_code=error_code)
+        p_implies_q: Formula
+        _, r_implies_s, _ = verify_formula(arg='r_implies_s', input_value=r_implies_s, u=self.u,
+            form=self.parameter_r_implies_s, mask=self.parameter_r_implies_s_mask,
+            raise_exception=True, error_code=error_code)
+        r_implies_s: Formula
+        _, not_q_or_not_s, _ = verify_formula(arg='not_q_or_not_s', input_value=not_q_or_not_s,
+            u=self.u, form=self.parameter_not_q_or_not_s, mask=self.parameter_not_q_or_not_s_mask,
+            raise_exception=True, error_code=error_code)
+        not_q_or_not_s: Formula
+        q__in__p_implies_q: Formula = p_implies_q.parameters[1]
+        q__in__not_q_or_not_s: Formula = not_q_or_not_s.parameters[0].parameters[0]
+        verify(
+            assertion=q__in__p_implies_q.is_formula_syntactically_equivalent_to(q__in__p_implies_q),
+            msg=f'The ⌜q⌝({q__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜q⌝({q__in__not_q_or_not_s}) in the formula argument ⌜not_q_or_not_s⌝({not_q_or_not_s})',
+            raise_exception=True, error_code=error_code)
+        s__in__r_implies_s: Formula = r_implies_s.parameters[1]
+        s__in__not_q_or_not_s: Formula = not_q_or_not_s.parameters[1].parameters[0]
+        verify(assertion=s__in__r_implies_s.is_formula_syntactically_equivalent_to(
+            s__in__not_q_or_not_s),
+            msg=f'The ⌜s⌝({s__in__r_implies_s}) in the formula argument ⌜r_implies_s⌝({r_implies_s}) is not syntaxically-equivalent to the ⌜s⌝({s__in__not_q_or_not_s}) in the formula argument ⌜not_q_or_not_s⌝({not_q_or_not_s})',
+            raise_exception=True, error_code=error_code)
+        p: Formula = p_implies_q.parameters[0]
+        r: Formula = r_implies_s.parameters[0]
+        output: Formula = self.u.r.lnot(p) | self.u.r.lor | self.u.r.lnot(r)
+        return output
 
 
 class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
@@ -6618,6 +6656,7 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
         self._conjunction_introduction = None
         self._constructive_dilemma = None
         self._definition_interpretation = None
+        self._destructive_dilemma = None
         self._disjunction_elimination = None
         self._disjunction_introduction_1 = None
         self._disjunction_introduction_2 = None
@@ -6741,6 +6780,12 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
             self._definition_interpretation = DefinitionInterpretationDeclaration(
                 universe_of_discourse=self.u)
         return self._definition_interpretation
+
+    @property
+    def destructive_dilemma(self) -> DestructiveDilemmaDeclaration:
+        if self._destructive_dilemma is None:
+            self._destructive_dilemma = DestructiveDilemmaDeclaration(universe_of_discourse=self.u)
+        return self._destructive_dilemma
 
     @property
     def dil(self) -> DisjunctionIntroduction1Declaration:
@@ -7567,7 +7612,7 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.conjunction_introduction
+        i = t.universe_of_discourse.inference_rules.destructive_dilemma
         dashed_name = 'destructive-dilemma'
         acronym = 'dd'
         abridged_name = None
@@ -7580,20 +7625,32 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
         """ """
-        output = yield from configuration.locale.destructive_dilemma_introduction_paragraph_proof(
-            o=o)
+        output = yield from configuration.locale.compose_destructive_dilemma_paragraph_proof(o=o)
         return output
 
-    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
-            t: TheoryElaborationSequence) -> bool:
-        """ """
-        _, p, _ = verify_formula_statement(t=t, arity=None, input_value=p)
-        _, q, _ = verify_formula_statement(t=t, arity=None, input_value=q)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
-        verify(t.contains_theoretical_objct(q),
-            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
-        return True
+    def check_premises_validity(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
+            not_q_or_not_s: FlexibleFormula) -> Tuple[bool, DestructiveDilemmaDeclaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, p_implies_q, _ = verify_formula_statement(arg='p_implies_q', t=self.t,
+            input_value=p_implies_q, form=self.i.parameter_p_implies_q,
+            mask=self.i.parameter_p_implies_q_mask, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
+        p_implies_q: Formula
+        _, r_implies_s, _ = verify_formula_statement(arg='r_implies_s', t=self.t,
+            input_value=r_implies_s, form=self.i.parameter_r_implies_s,
+            mask=self.i.parameter_r_implies_s_mask, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
+        r_implies_s: Formula
+        _, not_q_or_not_s, _ = verify_formula_statement(arg='not_q_or_not_s', t=self.t,
+            input_value=not_q_or_not_s, form=self.i.parameter_not_q_or_not_s,
+            mask=self.i.parameter_not_q_or_not_s_mask, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
+        not_q_or_not_s: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: DestructiveDilemmaDeclaration.Premises = DestructiveDilemmaDeclaration.Premises(
+            p_implies_q=p_implies_q, r_implies_s=r_implies_s, not_q_or_not_s=not_q_or_not_s)
+        return True, valid_premises
 
     @property
     def i(self) -> DestructiveDilemmaDeclaration:
@@ -7601,24 +7658,26 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
         i: DestructiveDilemmaDeclaration = super().i
         return i
 
-    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
+            not_q_or_not_s: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return self.i.construct_formula(p=p, q=q)
+        return self.i.construct_formula(p_implies_q=p_implies_q, r_implies_s=r_implies_s,
+            not_q_or_not_s=not_q_or_not_s)
 
-    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
-            q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
-            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
-            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+    def infer_formula_statement(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
+            not_q_or_not_s: FlexibleFormula, ref: (None, str) = None,
+            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
+            echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        _, q, _ = verify_formula_statement(t=self.t, arity=None, input_value=q)
-        return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p_implies_q=p_implies_q, r_implies_s=r_implies_s,
+            not_q_or_not_s=not_q_or_not_s)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -8982,6 +9041,7 @@ class InferenceRuleInclusionCollection(collections.UserDict):
         self._conjunction_introduction = None
         self._constructive_dilemma = None
         self._definition_interpretation = None
+        self._destructive_dilemma = None
         self._disjunction_elimination = None
         self._disjunction_introduction_1 = None
         self._disjunction_introduction_2 = None
@@ -9216,6 +9276,19 @@ class InferenceRuleInclusionCollection(collections.UserDict):
         if self._definition_interpretation is None:
             self._definition_interpretation = DefinitionInterpretationInclusion(t=self.t)
         return self._definition_interpretation
+
+    @property
+    def destructive_dilemma(self) -> DestructiveDilemmaInclusion:
+        """The well-known destructive-dilemma inference-rule
+
+        Abridged property: t.i.cd()
+
+        If the well-known inference-rule does not exist in the universe-of-discourse,
+        the inference-rule is automatically declared.
+        """
+        if self._destructive_dilemma is None:
+            self._destructive_dilemma = DestructiveDilemmaInclusion(t=self.t)
+        return self._destructive_dilemma
 
     @property
     def di1(self) -> DisjunctionIntroduction1Inclusion:
