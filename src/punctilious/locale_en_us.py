@@ -221,10 +221,10 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal(': Let ')
         yield SerifItalic('definition')
         yield SansSerifNormal(' ')
-        yield from o.definition.compose_symbol()
+        yield from o.d.compose_symbol()
         yield SansSerifNormal(' ')
         yield text_dict.open_quasi_quote
-        yield o.definition.natural_language
+        yield o.d.natural_language
         yield text_dict.close_quasi_quote
         yield SansSerifNormal(' be included (postulated) in ')
         yield from o.theory.compose_symbol()
@@ -239,7 +239,7 @@ class LocaleEnUs(Locale):
         p: Formula
         a = o.parameters[0]
         p = o.parameters[1]
-        yield from a.definition.compose_natural_language()
+        yield from a.d.compose_natural_language()
         yield SansSerifNormal(' is postulated by ')
         yield from a.compose_ref_link()
         yield SansSerifNormal('. ')

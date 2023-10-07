@@ -15,5 +15,4 @@ theory_definition = t1.include_definition(d=definition)
 
 # And finally, use the absorption inference-rule:
 proposition_of_interest = t1.i.definition_interpretation.infer_formula_statement(
-    definition=theory_definition, formula=r1(o1, o2) | u.r.equal | r2(o3),
-    subtitle='The proposition of interest')
+    d=theory_definition, x=r1(o1, o2), y=r2(o3), subtitle='The proposition of interest')

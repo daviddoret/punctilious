@@ -3525,7 +3525,7 @@ class DefinitionInclusion(Statement):
         """
         echo = prioritize_value(echo, configuration.echo_definition_inclusion,
             configuration.echo_default, False)
-        self._definition = d
+        self._d = d
         t.crossreference_definition_endorsement(self)
         cat = paragraph_headers.definition_inclusion
         if nameset is None and symbol is None:
@@ -3553,8 +3553,8 @@ class DefinitionInclusion(Statement):
         return output
 
     @property
-    def definition(self):
-        return self._definition
+    def d(self):
+        return self._d
 
     def echo(self):
         repm.prnt(self.rep_report())
@@ -3565,7 +3565,7 @@ class DefinitionInclusion(Statement):
         return False
 
     def rep_natural_language(self, encoding: (None, Encoding) = None, wrap: bool = True) -> str:
-        return self._definition.rep_natural_language(encoding=encoding, wrap=wrap)
+        return self._d.rep_natural_language(encoding=encoding, wrap=wrap)
 
 
 class FormulaStatement(Statement):
@@ -4325,8 +4325,9 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
         """This python NamedTuple is used behind the scene as a data structure to manipulate the premises required by the :ref:`inference-rule<inference_rule_math_concept>` .
         """
-        d: DefinitionInclusion
-        x_equal_y: FlexibleFormula
+        d: FlexibleDefinition
+        x: FlexibleFormula
+        y: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4363,23 +4364,18 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        # TODO: NICETOHAVE: DefinitionInterpretationDeclaration: replace this verify statement with a generic validate_definition_inclusion function.
-        # TODO: THEORY CONSISTENCY: IF X or Y IS PROPOSITIONAL, THE OTHER MUST BE PROPOSITIONAL. Otherwhise this inference-rule could introduce inconsistencies. ANALYSE THIS FURTHER.
         ok: bool
         output: Formula
         msg: (None, str)
         error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
-        _, d, _ = verify_axiom_declaration(arg='d', input_value=d, u=self.u, raise_exception=True,
+        _, d, _ = verify_definition_declaration(arg='d', input_value=d, u=self.u,
+            raise_exception=True, error_code=error_code)
+        _, x, _ = verify_formula(arg='x', input_value=x, u=self.u, raise_exception=True,
             error_code=error_code)
-        _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
+        x: Formula
+        _, y, _ = verify_formula(arg='y', input_value=y, u=self.u, raise_exception=True,
             error_code=error_code)
-        p: Formula
-
-        ok, x, msg = verify_formula(arg='x', input_value=x, u=self.u, raise_exception=True)
-        ok, y, msg = verify_formula(arg='y', input_value=y, u=self.u, raise_exception=True)
-        # TODO: BUG: validate_formula does not support basic masks like: ⌜P⌝ where P is a free-variable.
-        # validate_formula(u=self.u, input_value=p, form=self.i.parameter_p,
-        #    mask=self.i.parameter_p_mask)
+        y: Formula
         output: Formula = x | self.u.r.equal | y
         return output
 
@@ -6362,7 +6358,8 @@ def verify_axiom_inclusion(t: TheoryElaborationSequence, input_value: FlexibleAx
         axiom_inclusion = input_value
     elif isinstance(input_value, AxiomDeclaration):
         # TODO: Find if there is an inclusion for that axiom in t.
-        raise NotImplementedError('Feature not implemented yet, sorry')
+        raise NotImplementedError(
+            'This is an axiom-declaration, not an axiom-inclusion. Punctilious enhancement to be considered for future development: automatically check if an axiom-inclusion is present in the current theory-elaboration-sequence for that axiom-declaration.')
     elif isinstance(input_value, str):
         # Assume the string is the axiom expressed in natural language.
         # TODO: Find the matching axiom from u.
@@ -6389,7 +6386,7 @@ def verify_definition_declaration(u: UniverseOfDiscourse, input_value: FlexibleD
     elif isinstance(input_value, DefinitionInclusion):
         # Unpack the definition-declaration from the definition-inclusion.
         input_value: DefinitionInclusion
-        definition_declaration: DefinitionDeclaration = input_value.a
+        definition_declaration: DefinitionDeclaration = input_value.d
     elif isinstance(input_value, str):
         # Assume the string is the definition expressed in natural language.
         # TODO: Find the matching definition from u.
@@ -6998,7 +6995,6 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         """
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements.
-        # TODO: NICETOHAVE: AxiomInterpretationInclusion: replace these verify statements with a generic validate_axiom_inclusion function.
         _, a, _ = verify_axiom_inclusion(arg='a', t=self.t, input_value=a, raise_exception=True,
             error_code=error_code)
         _, p, _ = verify_formula(arg='p', u=self.u, input_value=p, is_strictly_propositional=True,
@@ -7032,9 +7028,9 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         i: AxiomInterpretationDeclaration = super().i
         return i
 
-    def infer_formula_statement(self, a: AxiomInclusion, p: FlexibleFormula,
-            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
-            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+    def infer_formula_statement(self, a: FlexibleAxiom, p: FlexibleFormula, ref: (None, str) = None,
+            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
+            echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
@@ -7512,34 +7508,24 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def check_premises_validity(self, d: DefinitionInclusion, x: FlexibleFormula,
-            y: FlexibleFormula, raise_exception: bool = True) -> tuple[bool, (None, str)]:
+    def check_premises_validity(self, d: FlexibleDefinition, x: FlexibleFormula,
+            y: FlexibleFormula) -> Tuple[bool, DefinitionInterpretationDeclaration.Premises]:
         """
         .. include:: ../../include/check_premises_validity_python_method.rstinc
 
         """
-        ok: bool
-        msg: (None, str)
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements.
-        # TODO: NICETOHAVE: DefinitionInterpretationInclusion: replace these verify statements with a generic validate_definition_inclusion function.
-        ok, msg = verify(raise_exception=raise_exception,
-            assertion=isinstance(d, DefinitionInclusion),
-            msg=f'⌜{d}⌝ passed as argument ⌜d⌝ is not a definition-inclusion.', d=d)
-        if not ok:
-            return ok, msg
-        ok, msg = verify(raise_exception=raise_exception,
-            assertion=self.t.contains_theoretical_objct(d),
-            msg=f'⌜{d}⌝ passed as argument ⌜d⌝ is not contained in theory-elaboration-sequence ⌜{self.t}⌝.',
-            d=d)
-        if not ok:
-            return ok, msg
-        ok, x, msg = verify_formula(arg='x', input_value=x, u=self.u, raise_exception=True)
-        if not ok:
-            return ok, msg
-        ok, y, msg = verify_formula(arg='y', input_value=y, u=self.u, raise_exception=True)
-        if not ok:
-            return ok, msg
-        return True, None
+        _, d, _ = verify_definition_inclusion(arg='d', t=self.t, input_value=d,
+            raise_exception=True, error_code=error_code)
+        _, x, _ = verify_formula(arg='x', u=self.u, input_value=x, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
+        _, y, _ = verify_formula(arg='y', u=self.u, input_value=y, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
+        # The method either raises an exception during validation, or return True.
+        valid_premises: DefinitionInterpretationDeclaration.Premises = DefinitionInterpretationDeclaration.Premises(
+            d=d, x=x, y=y)
+        return True, valid_premises
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -7554,7 +7540,7 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
         i: DefinitionInterpretationDeclaration = super().i
         return i
 
-    def construct_formula(self, d: DefinitionInclusion, x: FlexibleFormula,
+    def construct_formula(self, d: FlexibleDefinition, x: FlexibleFormula,
             y: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
@@ -7563,15 +7549,14 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
         # Call back the infer_formula method on the inference-rule declaration class.
         return self.i.construct_formula(d=d, x=x, y=y)
 
-    def infer_formula_statement(self, d: (None, DefinitionInclusion) = None,
-            x_equal_y: (None, FlexibleFormula) = None, ref: (None, str) = None,
-            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
-            echo: (None, bool) = None) -> InferredStatement:
+    def infer_formula_statement(self, d: FlexibleDefinition, x: FlexibleFormula, y: FlexibleFormula,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        premises = self.i.Premises(d=d, x_equal_y=x_equal_y)
+        premises = self.i.Premises(d=d, x=x, y=y)
         return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
