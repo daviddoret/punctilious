@@ -33,8 +33,8 @@ My tags: class
     ../python/class/disjunction_introduction_2_inclusion_python_class.rst
     ../python/class/disjunctive_resolution_declaration_python_class.rst
     ../python/class/disjunctive_resolution_inclusion_python_class.rst
-    ../python/class/disjunctive_syllogism_declaration_python_class.rst
-    ../python/class/disjunctive_syllogism_inclusion_python_class.rst
+    ../python/class/disjunctive_syllogism_1_declaration_python_class.rst
+    ../python/class/disjunctive_syllogism_1_inclusion_python_class.rst
     ../python/class/double_negation_elimination_declaration_python_class.rst
     ../python/class/double_negation_elimination_inclusion_python_class.rst
     ../python/class/double_negation_introduction_declaration_python_class.rst

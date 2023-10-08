@@ -6,15 +6,15 @@
 .. role:: python(code)
     :language: py
 
-disjunctive-syllogism (python sample)
+disjunctive-syllogism-1 (python sample)
 ============================================
 
-.. tags:: disjunctive-syllogism, python, sample
+.. tags:: disjunctive-syllogism-1, python, sample
 
 .. seealso::
-   :ref:`math concept<disjunctive_syllogism_math_inference_rule>` | :ref:`python declaration class<disjunctive_syllogism_declaration_python_class>` | :ref:`python inclusion class<disjunctive_syllogism_inclusion_python_class>`
+   :ref:`math concept<disjunctive_syllogism_1_math_inference_rule>` | :ref:`python declaration class<disjunctive_syllogism_declaration_python_class>` | :ref:`python inclusion class<disjunctive_syllogism_inclusion_python_class>`
 
-This page shows how to infer new statements in a theory-elaboration-sequence by applying the :ref:`disjunctive-syllogism<disjunctive_syllogism_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>`.
+This page shows how to infer new statements in a theory-elaboration-sequence by applying the :ref:`disjunctive-syllogism-1<disjunctive_syllogism_1_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>`.
 
 Usage
 ----------------------

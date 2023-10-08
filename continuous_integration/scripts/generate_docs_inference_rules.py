@@ -26,7 +26,7 @@ inference_rules = ['absorption', 'axiom-interpretation', 'biconditional-eliminat
     'biconditional-elimination-2', 'biconditional-introduction', 'conjunction-elimination-1',
     'conjunction-elimination-2', 'conjunction-introduction', 'constructive-dilemma',
     'definition-interpretation', 'destructive-dilemma', 'disjunction-introduction-1',
-    'disjunction-introduction-2', 'disjunctive-resolution', 'disjunctive-syllogism',
+    'disjunction-introduction-2', 'disjunctive-resolution', 'disjunctive-syllogism-1-1',
     'double-negation-elimination', 'double-negation-introduction', 'equality-commutativity',
     'equal-terms-substitution', 'hypothetical-syllogism', 'inconsistency-introduction-1',
     'inconsistency-introduction-2', 'inconsistency-introduction-3', 'modus-ponens', 'modus-tollens',

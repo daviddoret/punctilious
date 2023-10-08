@@ -1,11 +1,11 @@
-My tags: disjunctive-syllogism
+My tags: disjunctive-syllogism-1-1
 ##############################
 
 .. toctree::
     :maxdepth: 1
     :caption: With this tag
 
-    ../math/inference_rule/disjunctive_syllogism_math_inference_rule.rst
+    ../math/inference_rule/disjunctive_syllogism_1_math_inference_rule.rst
     ../python/class/disjunctive_syllogism_declaration_python_class.rst
     ../python/class/disjunctive_syllogism_inclusion_python_class.rst
     ../python/sample/disjunctive_syllogism_python_sample.rst

@@ -19,7 +19,7 @@ My tags: inclusion
     ../python/class/disjunction_introduction_1_inclusion_python_class.rst
     ../python/class/disjunction_introduction_2_inclusion_python_class.rst
     ../python/class/disjunctive_resolution_inclusion_python_class.rst
-    ../python/class/disjunctive_syllogism_inclusion_python_class.rst
+    ../python/class/disjunctive_syllogism_1_inclusion_python_class.rst
     ../python/class/double_negation_elimination_inclusion_python_class.rst
     ../python/class/double_negation_introduction_inclusion_python_class.rst
     ../python/class/equal_terms_substitution_inclusion_python_class.rst

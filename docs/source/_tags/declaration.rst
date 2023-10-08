@@ -19,7 +19,7 @@ My tags: declaration
     ../python/class/disjunction_introduction_1_declaration_python_class.rst
     ../python/class/disjunction_introduction_2_declaration_python_class.rst
     ../python/class/disjunctive_resolution_declaration_python_class.rst
-    ../python/class/disjunctive_syllogism_declaration_python_class.rst
+    ../python/class/disjunctive_syllogism_1_declaration_python_class.rst
     ../python/class/double_negation_elimination_declaration_python_class.rst
     ../python/class/double_negation_introduction_declaration_python_class.rst
     ../python/class/equal_terms_substitution_declaration_python_class.rst

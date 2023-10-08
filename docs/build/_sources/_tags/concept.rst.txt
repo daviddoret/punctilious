@@ -19,7 +19,7 @@ My tags: concept
     ../math/inference_rule/disjunction_introduction_1_math_inference_rule.rst
     ../math/inference_rule/disjunction_introduction_2_math_inference_rule.rst
     ../math/inference_rule/disjunctive_resolution_math_inference_rule.rst
-    ../math/inference_rule/disjunctive_syllogism_math_inference_rule.rst
+    ../math/inference_rule/disjunctive_syllogism_1_math_inference_rule.rst
     ../math/inference_rule/double_negation_elimination_math_inference_rule.rst
     ../math/inference_rule/double_negation_introduction_math_inference_rule.rst
     ../math/inference_rule/equal_terms_substitution_math_inference_rule.rst

@@ -4584,37 +4584,112 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
         return output
 
 
-class DisjunctiveSyllogismDeclaration(InferenceRuleDeclaration):
-    """The declaration of the :ref:`disjunctive-syllogism<disjunctive_syllogism_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
+class DisjunctiveSyllogism1Declaration(InferenceRuleDeclaration):
+    """The declaration of the :ref:`disjunctive-syllogism-1<disjunctive_syllogism_1_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
 
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        p_or_q: FlexibleFormula
+        not_p: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
-        symbol = 'disjunctive-syllogism'
+        symbol = 'disjunctive-syllogism-1'
         acronym = 'ds'
         abridged_name = None
         auto_index = False
-        dashed_name = 'disjunctive-syllogism'
+        dashed_name = 'disjunctive-syllogism-1'
         explicit_name = 'disjunctive syllogism inference rule'
         name = 'disjunctive syllogism'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.sequent_premises | q) | u.r.proves | (p | u.r.land | q))
+            definition = (
+                    ((p | u.r.lor | q) | u.r.sequent_premises | u.r.lnot(p)) | u.r.proves | (q))
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            self.parameter_p_or_q = p | u.r.lor | q
+            self.parameter_p_or_q_mask = frozenset([p, q])
+        with u.v(symbol='P') as p:
+            self.parameter_not_p = u.r.lnot(p)
+            self.parameter_not_p_mask = frozenset([p])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, p_or_q: FlexibleFormula, not_p: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p, _ = verify_formula(u=t.u, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
-        return p | t.u.r.land | q
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p_or_q, _ = verify_formula(arg='p_or_q', input_value=p_or_q, u=self.u,
+            form=self.parameter_p_or_q, mask=self.parameter_p_or_q_mask, raise_exception=True,
+            error_code=error_code)
+        p_or_q: Formula
+        _, not_p, _ = verify_formula(arg='not_p', input_value=not_p, u=self.u,
+            form=self.parameter_not_p, mask=self.parameter_not_p_mask, raise_exception=True,
+            error_code=error_code)
+        not_p: Formula
+        p__in__p_or_q: Formula = p_or_q.parameters[0]
+        p__in__not_p: Formula = not_p.parameters[0]
+        verify(assertion=p__in__p_or_q.is_formula_syntactically_equivalent_to(p__in__not_p),
+            msg=f'The ⌜p⌝({p__in__p_or_q}) in the formula argument ⌜p_or_q⌝({p_or_q}) is not syntaxically-equivalent to the ⌜p⌝({p__in__not_p}) in the formula argument ⌜not_p⌝({not_p})',
+            raise_exception=True, error_code=error_code)
+        q: Formula = p_or_q.parameters[1]
+        output: Formula = q
+        return output
+
+
+class DisjunctiveSyllogism2Declaration(InferenceRuleDeclaration):
+    """The declaration of the :ref:`disjunctive-syllogism-2<disjunctive_syllogism_2_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as valid in the target :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
+    """
+
+    class Premises(typing.NamedTuple):
+        p_or_q: FlexibleFormula
+        not_q: FlexibleFormula
+
+    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
+        symbol = 'disjunctive-syllogism-2'
+        acronym = 'ds'
+        abridged_name = None
+        auto_index = False
+        dashed_name = 'disjunctive-syllogism-2'
+        explicit_name = 'disjunctive syllogism inference rule'
+        name = 'disjunctive syllogism'
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            definition = (
+                    ((p | u.r.lor | q) | u.r.sequent_premises | u.r.lnot(p)) | u.r.proves | (q))
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            self.parameter_p_or_q = p | u.r.lor | q
+            self.parameter_p_or_q_mask = frozenset([p, q])
+        with u.v(symbol='Q') as q:
+            self.parameter_not_q = u.r.lnot(q)
+            self.parameter_not_q_mask = frozenset([q])
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+
+    def construct_formula(self, p_or_q: FlexibleFormula, not_q: FlexibleFormula) -> Formula:
+        """
+        .. include:: ../../include/construct_formula_python_method.rstinc
+
+        """
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p_or_q, _ = verify_formula(arg='p_or_q', input_value=p_or_q, u=self.u,
+            form=self.parameter_p_or_q, mask=self.parameter_p_or_q_mask, raise_exception=True,
+            error_code=error_code)
+        p_or_q: Formula
+        _, not_q, _ = verify_formula(arg='not_q', input_value=not_q, u=self.u,
+            form=self.parameter_not_q, mask=self.parameter_not_q_mask, raise_exception=True,
+            error_code=error_code)
+        not_q: Formula
+        q__in__p_or_q: Formula = p_or_q.parameters[1]
+        q__in__not_q: Formula = not_q.parameters[0]
+        verify(assertion=q__in__p_or_q.is_formula_syntactically_equivalent_to(q__in__not_q),
+            msg=f'The ⌜p⌝({q__in__p_or_q}) in the formula argument ⌜p_or_q⌝({p_or_q}) is not syntaxically-equivalent to the ⌜p⌝({q__in__not_q}) in the formula argument ⌜not_q⌝({not_q})',
+            raise_exception=True, error_code=error_code)
+        q: Formula = p_or_q.parameters[0]
+        output: Formula = q
+        return output
 
 
 class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
@@ -6695,6 +6770,8 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
         self._disjunction_introduction_1 = None
         self._disjunction_introduction_2 = None
         self._disjunctive_resolution = None
+        self._disjunctive_syllogism_1 = None
+        self._disjunctive_syllogism_2 = None
         self._double_negation_elimination = None
         self._double_negation_introduction = None
         self._equality_commutativity = None
@@ -6850,6 +6927,20 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
             self._disjunctive_resolution = DisjunctiveResolutionDeclaration(
                 universe_of_discourse=self.u)
         return self._disjunctive_resolution
+
+    @property
+    def disjunctive_syllogism_1(self) -> DisjunctiveSyllogism1Declaration:
+        if self._disjunctive_syllogism_1 is None:
+            self._disjunctive_syllogism_1 = DisjunctiveSyllogism1Declaration(
+                universe_of_discourse=self.u)
+        return self._disjunctive_syllogism_1
+
+    @property
+    def disjunctive_syllogism_2(self) -> DisjunctiveSyllogism2Declaration:
+        if self._disjunctive_syllogism_2 is None:
+            self._disjunctive_syllogism_2 = DisjunctiveSyllogism2Declaration(
+                universe_of_discourse=self.u)
+        return self._disjunctive_syllogism_2
 
     @property
     def dne(self) -> DoubleNegationEliminationDeclaration:
@@ -7910,14 +8001,14 @@ class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
-class DisjunctiveSyllogismInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`disjunctive-syllogism<disjunctive_syllogism_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+class DisjunctiveSyllogism1Inclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`disjunctive-syllogism-1<disjunctive_syllogism_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
     """
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.conjunction_introduction
-        dashed_name = 'disjunctive-syllogism'
+        i = t.universe_of_discourse.inference_rules.disjunctive_syllogism_1
+        dashed_name = 'disjunctive-syllogism-1'
         acronym = 'ds'
         abridged_name = None
         name = 'disjunctive syllogism'
@@ -7929,44 +8020,114 @@ class DisjunctiveSyllogismInclusion(InferenceRuleInclusion):
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
         """ """
-        output = yield from configuration.locale.compose_disjunctive_syllogism_paragraph_proof(o=o)
+        output = yield from configuration.locale.compose_disjunctive_syllogism_1_paragraph_proof(
+            o=o)
         return output
 
-    def check_inference_validity(self, p: FormulaStatement, q: FormulaStatement,
-            t: TheoryElaborationSequence) -> bool:
-        """ """
-        _, p, _ = verify_formula_statement(t=t, arity=None, input_value=p)
-        _, q, _ = verify_formula_statement(t=t, arity=None, input_value=q)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
-        verify(t.contains_theoretical_objct(q),
-            'Statement ⌜q⌝ must be contained in theory ⌜t⌝''s hierarchy.', q=q, t=t, slf=self)
-        return True
+    def check_premises_validity(self, p_or_q: FlexibleFormula, not_p: FlexibleFormula) -> Tuple[
+        bool, DisjunctiveSyllogism1Declaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, p_or_q, _ = verify_formula_statement(arg='p_or_q', t=self.t, input_value=p_or_q,
+            form=self.i.parameter_p_or_q, mask=self.i.parameter_p_or_q_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        not_p: Formula
+        _, not_p, _ = verify_formula_statement(arg='not_p', t=self.t, input_value=not_p,
+            form=self.i.parameter_not_p, mask=self.i.parameter_not_p_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        not_p: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: DisjunctiveSyllogism1Declaration.Premises = DisjunctiveSyllogism1Declaration.Premises(
+            p_or_q=p_or_q, not_p=not_p)
+        return True, valid_premises
 
     @property
-    def i(self) -> DisjunctiveSyllogismDeclaration:
+    def i(self) -> DisjunctiveSyllogism1Declaration:
         """Override the base class i property with a specialized inherited class type."""
-        i: DisjunctiveSyllogismDeclaration = super().i
+        i: DisjunctiveSyllogism1Declaration = super().i
         return i
 
-    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_or_q: FlexibleFormula, not_p: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return self.i.construct_formula(p=p, q=q)
+        return self.i.construct_formula(p_or_q=p_or_q, not_p=not_p)
 
-    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
-            q: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_formula_statement(self, p_or_q: FlexibleFormula, not_p: FlexibleFormula,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        _, q, _ = verify_formula_statement(t=self.t, arity=None, input_value=q)
-        return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p_or_q=p_or_q, not_p=not_p)
+        return InferredStatement(i=self, premises=premises, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+
+
+class DisjunctiveSyllogism2Inclusion(InferenceRuleInclusion):
+    """This python class models the inclusion of :ref:`disjunctive-syllogism-1<disjunctive_syllogism_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """
+
+    def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
+            proof: (None, bool) = None):
+        i = t.universe_of_discourse.inference_rules.disjunctive_syllogism_2
+        dashed_name = 'disjunctive-syllogism-2'
+        acronym = 'ds'
+        abridged_name = None
+        name = 'disjunctive syllogism'
+        explicit_name = 'disjunctive syllogism inference rule'
+        super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
+            proof=proof)
+
+    def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """ """
+        output = yield from configuration.locale.compose_disjunctive_syllogism_2_paragraph_proof(
+            o=o)
+        return output
+
+    def check_premises_validity(self, p_or_q: FlexibleFormula, not_q: FlexibleFormula) -> Tuple[
+        bool, DisjunctiveSyllogism2Declaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, p_or_q, _ = verify_formula_statement(arg='p_or_q', t=self.t, input_value=p_or_q,
+            form=self.i.parameter_p_or_q, mask=self.i.parameter_p_or_q_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        not_q: Formula
+        _, not_q, _ = verify_formula_statement(arg='not_q', t=self.t, input_value=not_q,
+            form=self.i.parameter_not_q, mask=self.i.parameter_not_q_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        not_q: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: DisjunctiveSyllogism1Declaration.Premises = DisjunctiveSyllogism2Declaration.Premises(
+            p_or_q=p_or_q, not_q=not_q)
+        return True, valid_premises
+
+    @property
+    def i(self) -> DisjunctiveSyllogism2Declaration:
+        """Override the base class i property with a specialized inherited class type."""
+        i: DisjunctiveSyllogism2Declaration = super().i
+        return i
+
+    def construct_formula(self, p_or_q: FlexibleFormula, not_q: FlexibleFormula) -> Formula:
+        """
+        .. include:: ../../include/construct_formula_python_method.rstinc
+
+        """
+        return self.i.construct_formula(p_or_q=p_or_q, not_q=not_q)
+
+    def infer_formula_statement(self, p_or_q: FlexibleFormula, not_q: FlexibleFormula,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+        """
+        .. include:: ../../include/infer_formula_statement_python_method.rstinc
+
+        """
+        premises = self.i.Premises(p_or_q=p_or_q, not_q=not_q)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -9083,6 +9244,8 @@ class InferenceRuleInclusionCollection(collections.UserDict):
         self._disjunction_introduction_1 = None
         self._disjunction_introduction_2 = None
         self._disjunctive_resolution = None
+        self._disjunctive_syllogism_1 = None
+        self._disjunctive_syllogism_2 = None
         self._double_negation_elimination = None
         self._double_negation_introduction = None
         self._equality_commutativity = None
@@ -9353,6 +9516,18 @@ class InferenceRuleInclusionCollection(collections.UserDict):
         if self._disjunctive_resolution is None:
             self._disjunctive_resolution = DisjunctiveResolutionInclusion(t=self.t)
         return self._disjunctive_resolution
+
+    @property
+    def disjunctive_syllogism_1(self) -> DisjunctiveSyllogism1Inclusion:
+        if self._disjunctive_syllogism_1 is None:
+            self._disjunctive_syllogism_1 = DisjunctiveSyllogism1Inclusion(t=self.t)
+        return self._disjunctive_syllogism_1
+
+    @property
+    def disjunctive_syllogism_2(self) -> DisjunctiveSyllogism2Inclusion:
+        if self._disjunctive_syllogism_2 is None:
+            self._disjunctive_syllogism_2 = DisjunctiveSyllogism2Inclusion(t=self.t)
+        return self._disjunctive_syllogism_2
 
     @property
     def dne(self) -> DoubleNegationEliminationInclusion:
