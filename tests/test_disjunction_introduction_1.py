@@ -8,6 +8,7 @@ class TestDisjunctionIntroduction1(TestCase):
     def test_di1(self):
         import sample.sample_disjunction_introduction_1 as test
         u: pu.UniverseOfDiscourse = test.u
+        t1: pu.TheoryElaborationSequence = test.t1
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         o3: pu.SimpleObjct = test.o3
@@ -20,18 +21,14 @@ class TestDisjunctionIntroduction1(TestCase):
             proposition_of_interest.rep_formula(pu.encodings.plaintext))
         self.assertEqual('(𝑟₂(𝑜₃) ∨ 𝑟₁(𝑜₁, 𝑜₂))',
             proposition_of_interest.rep_formula(pu.encodings.unicode))
-
-    def test_di_failure(self):
-        pu.configuration.echo_default = True
-        u = pu.UniverseOfDiscourse()
-        o1 = u.o.declare()
-        o2 = u.o.declare()
-        o3 = u.o.declare()
-        r1 = u.r.declare(2, signal_proposition=True)
-        r2 = u.r.declare(1, signal_proposition=True)
-        t = u.t()
-        a = u.declare_axiom(random_data.random_sentence())
-        ap = t.include_axiom(a)
-        t.i.axiom_interpretation.infer_formula_statement(ap, r2(o3))
-        with self.assertRaises(pu.PunctiliousException):
-            phi3 = t.i.disjunction_introduction_1.infer_formula_statement(p=r1(o1, o2), q=r2(o3))
+        # Syntax error
+        r3: pu.Relation = u.r.declare(signal_proposition=False)
+        with self.assertRaises(pu.PunctiliousException) as error:
+            t1.i.disjunction_introduction_1.infer_formula_statement(p=r1(o1, o2), q=t1)
+        self.assertIs(pu.error_codes.error_002_inference_premise_syntax_error,
+            error.exception.error_code)
+        # Validity error
+        with self.assertRaises(pu.PunctiliousException) as error:
+            t1.i.disjunction_introduction_1.infer_formula_statement(p=r2(o2), q=r2(o1))
+        self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,
+            error.exception.error_code)

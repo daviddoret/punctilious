@@ -4456,7 +4456,8 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
     """
 
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        p: FlexibleFormula
+        q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4473,15 +4474,20 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p, _ = verify_formula(u=t.u, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
-        return q | t.u.r.lor | p
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
+            error_code=error_code)
+        p: Formula
+        _, q, _ = verify_formula(arg='q', input_value=q, u=self.u, raise_exception=True,
+            error_code=error_code)
+        q: Formula
+        output: Formula = q | self.u.r.lor | p
+        return output
 
 
 class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
@@ -4489,7 +4495,8 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
     """
 
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        p: FlexibleFormula
+        q: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4506,15 +4513,20 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p: FormulaStatement, q: (Formula, FormulaStatement),
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p, _ = verify_formula(u=t.u, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
-        return p | t.u.r.lor | q
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
+            error_code=error_code)
+        p: Formula
+        _, q, _ = verify_formula(arg='q', input_value=q, u=self.u, raise_exception=True,
+            error_code=error_code)
+        q: Formula
+        output: Formula = p | self.u.r.lor | q
+        return output
 
 
 class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
@@ -7704,21 +7716,18 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    def check_inference_validity(self, p: FormulaStatement, q: (Formula, FormulaStatement),
-            t: TheoryElaborationSequence) -> bool:
-        """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
-
-        :param p: (mandatory) A formula-statement of the form :math:`P` .
-        :param q: (mandatory) A formula of the form :math:`Q` .
-        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
-
-        :return: True (bool) if the parameters are correct.
-        """
-        _, p, _ = verify_formula_statement(t=t, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
-        return True
+    def check_premises_validity(self, p: FlexibleFormula, q: FlexibleFormula) -> Tuple[
+        bool, ConjunctionIntroductionDeclaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, p, _ = verify_formula_statement(arg='p', t=self.t, input_value=p,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        _, q, _ = verify_formula(arg='q', u=self.u, input_value=q, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
+        # The method either raises an exception during validation, or return True.
+        valid_premises: ConjunctionIntroductionDeclaration.Premises = ConjunctionIntroductionDeclaration.Premises(
+            p=p, q=q)
+        return True, valid_premises
 
     @property
     def i(self) -> DisjunctionIntroduction1Declaration:
@@ -7733,17 +7742,15 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
         """
         return self.i.construct_formula(p=p, q=q)
 
-    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
-            q: (None, Formula, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_formula_statement(self, p: FlexibleFormula, q: FlexibleFormula,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=self.u, arity=None, input_value=q)
-        return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p=p, q=q)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -7770,21 +7777,18 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    def check_inference_validity(self, p: FormulaStatement, q: (Formula, FormulaStatement),
-            t: TheoryElaborationSequence) -> bool:
-        """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
-
-        :param p: (mandatory) A formula-statement of the form :math:`P` .
-        :param q: (mandatory) A formula of the form :math:`Q` .
-        :param t: (mandatory) The target theory-elaboration-sequence that must contain :math:`P` .
-
-        :return: True (bool) if the parameters are correct.
-        """
-        _, p, _ = verify_formula_statement(t=t, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=t.u, arity=None, input_value=q)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p=p, t=t, slf=self)
-        return True
+    def check_premises_validity(self, p: FlexibleFormula, q: FlexibleFormula) -> Tuple[
+        bool, ConjunctionIntroductionDeclaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, p, _ = verify_formula_statement(arg='p', t=self.t, input_value=p,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        _, q, _ = verify_formula(arg='q', u=self.u, input_value=q, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
+        # The method either raises an exception during validation, or return True.
+        valid_premises: ConjunctionIntroductionDeclaration.Premises = ConjunctionIntroductionDeclaration.Premises(
+            p=p, q=q)
+        return True, valid_premises
 
     @property
     def i(self) -> DisjunctionIntroduction2Declaration:
@@ -7799,17 +7803,15 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
         """
         return self.i.construct_formula(p=p, q=q)
 
-    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
-            q: (None, Formula, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_formula_statement(self, p: FlexibleFormula, q: FlexibleFormula,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        _, q, _ = verify_formula(u=self.u, arity=None, input_value=q)
-        return super().infer_formula_statement(p, q, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p=p, q=q)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
