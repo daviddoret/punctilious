@@ -311,6 +311,24 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal(', is given. ')
         return True
 
+    def compose_disjunctive_resolution_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        parameter_p_or_q: Formula = o.inference_rule.definition.parameters[0].parameters[0]
+        p_or_q: FormulaStatement = o.parameters[0]
+        yield from p_or_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_p_or_q.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from p_or_q.compose_ref_link()
+        yield SansSerifNormal('. ')
+        parameter_not_p_or_r: Formula = o.inference_rule.definition.parameters[0].parameters[1]
+        not_p_or_r: FormulaStatement = o.parameters[1]
+        yield from not_p_or_r.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_not_p_or_r.compose_formula()
+        yield SansSerifNormal(', is given. ')
+        return True
+
     def compose_double_negation_elimination_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         parameter_not_not_p: Formula = o.inference_rule.definition.parameters[0]
