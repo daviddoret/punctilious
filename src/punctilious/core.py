@@ -2254,12 +2254,14 @@ class TheoreticalObject(SymbolicObject):
         raise NotImplementedError(
             'The is_strictly_propositional property is abstract, it must be implemented by the child class.')
 
-    def substitute(self, substitution_map, target_theory, lock_variable_scope=None):
+    def substitute(self, substitution_map, target_theory=None, lock_variable_scope=None):
         """Given a theoretical-objct o₁ (self),
         and a substitution map 𝐌,
         return a theoretical-objct o₂
         where all components, including o₂ itself,
         have been substituted if present in 𝐌.
+
+        TODO: target_theory is supposedly unecessary, remove this parameter from the function.
 
         Note
         ----
@@ -4817,7 +4819,8 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
 
 class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        p: FlexibleFormula
+        x_equal_y: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4830,26 +4833,36 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
         name = 'equal terms substitution'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q, u.v(symbol='x') as x, u.v(symbol='y') as y:
             definition = (p | u.r.sequent_premises | (x | u.r.equal | y)) | u.r.proves | q
+        with u.v(symbol='P') as p:
+            self.parameter_p = p
+            self.parameter_p_mask = frozenset([p])
+        with u.v(symbol='x') as x, u.v(symbol='y') as y:
+            self.parameter_x_equal_y = x | u.r.equal | y
+            self.parameter_x_equal_y_mask = frozenset([x, y])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p: FormulaStatement = None, x_equal_y: FormulaStatement = None,
-            t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, x_equal_y: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
+            error_code=error_code)
         p: Formula
+        _, x_equal_y, _ = verify_formula(arg='x_equal_y', input_value=x_equal_y, u=self.u,
+            form=self.parameter_x_equal_y, mask=self.parameter_x_equal_y_mask, raise_exception=True,
+            error_code=error_code)
         x_equal_y: Formula
-        p = unpack_formula(p)
-        x_equal_y = unpack_formula(x_equal_y)
-        q = x_equal_y.parameters[0]
-        r = x_equal_y.parameters[1]
-        substitution_map = {q: r}
-        p_prime = p.substitute(substitution_map=substitution_map, target_theory=t,
+        x__in__x_equal_y: Formula = x_equal_y.parameters[0]
+        y__in__x_equal_y: Formula = x_equal_y.parameters[1]
+        substitution_map = {x__in__x_equal_y: y__in__x_equal_y}
+        q: Formula = p.substitute(substitution_map=substitution_map, target_theory=None,
             lock_variable_scope=True)
-        return p_prime  # TODO: EqualTermsSubstitution: Provide support for statements that are  # atomic propositional formula, that is without relation or where the objct is a 0-ary  #  # relation.
+        output: Formula = q
+        return output
 
 
 class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
@@ -8350,23 +8363,21 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    def check_inference_validity(self, p: FormulaStatement = None,
-            x_equal_y: FormulaStatement = None, t: TheoryElaborationSequence = None) -> bool:
-        verify(is_in_class(p, classes.formula_statement), '⌜p⌝ must be a formula-statement.', p=p,
-            slf=self, t=t)
-        verify(t.contains_theoretical_objct(p), '⌜p⌝ must be in theory-elaboration-sequence ⌜t⌝.',
-            p=p, slf=self, t=t)
-        verify(is_in_class(x_equal_y, classes.formula_statement),
-            '⌜x_equal_y⌝ is not of the formula-statement declarative-class.', q_equal_r=x_equal_y,
-            slf=self, t=t)
-        verify(t.contains_theoretical_objct(x_equal_y),
-            '⌜x_equal_y⌝ is not contained in theoretical-elaboration-sequence ⌜t⌝.',
-            q_equal_r=x_equal_y, slf=self, t=t)
-        x_equal_y = unpack_formula(x_equal_y)
-        verify(x_equal_y.relation is self.u.r.equality,
-            'The root relation of ⌜x_equal_y⌝ is not the equality relation.', q_equal_r=x_equal_y,
-            slf=self, t=t)
-        return True
+    def check_premises_validity(self, p: FlexibleFormula, x_equal_y: FlexibleFormula) -> Tuple[
+        bool, EqualTermsSubstitutionDeclaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, p, _ = verify_formula_statement(arg='p', t=self.t, input_value=p,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        p: Formula
+        _, x_equal_y, _ = verify_formula_statement(arg='x_equal_y', t=self.t, input_value=x_equal_y,
+            form=self.i.parameter_x_equal_y, mask=self.i.parameter_x_equal_y_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        x_equal_y: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: EqualTermsSubstitutionDeclaration.Premises = EqualTermsSubstitutionDeclaration.Premises(
+            p=p, x_equal_y=x_equal_y)
+        return True, valid_premises
 
     @property
     def i(self) -> EqualTermsSubstitutionDeclaration:
@@ -8374,22 +8385,22 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
         i: EqualTermsSubstitutionDeclaration = super().i
         return i
 
-    def construct_formula(self, p: FlexibleFormula, q_equal_r: FlexibleFormula) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, x_equal_y: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return self.i.construct_formula(p=p, q_equal_r=q_equal_r)
+        return self.i.construct_formula(p=p, x_equal_y=x_equal_y)
 
-    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
-            x_equal_y: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_formula_statement(self, p: FlexibleFormula, x_equal_y: FlexibleFormula,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        return super().infer_formula_statement(p, x_equal_y, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p=p, x_equal_y=x_equal_y)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
