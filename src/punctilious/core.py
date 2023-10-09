@@ -4703,7 +4703,7 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
     """
 
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        not_not_p: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4716,20 +4716,26 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
         name = 'double negation elimination'
         with u.v(symbol='P') as p:
             definition = (u.r.lnot(u.r.lnot(p)) | u.r.proves | p)
+        with u.v(symbol='P') as p:
+            self.parameter_not_not_p = u.r.lnot(u.r.lnot(p))
+            self.parameter_not_not_p_mask = frozenset([p])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, not_not_p: (None, Formula) = None, t: TheoryElaborationSequence = None,
-            echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, not_not_p: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, not_not_p, _ = verify_formula(u=t.u, input_value=not_not_p)
-        not_p = not_not_p.parameters[0]
-        p: Formula = not_p.parameters[0]
-        return p
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, not_not_p, _ = verify_formula(arg='not_not_p', input_value=not_not_p, u=self.u,
+            form=self.parameter_not_not_p, mask=self.parameter_not_not_p_mask, raise_exception=True,
+            error_code=error_code)
+        not_not_p: Formula
+        p: Formula = not_not_p.parameters[0].parameters[0]
+        output: Formula = p
+        return output
 
 
 class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
@@ -4737,7 +4743,7 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
     """
 
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        p: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4750,24 +4756,30 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
         name = 'double negation introduction'
         with u.v(symbol='P') as p:
             definition = (p | u.r.proves | u.r.lnot(u.r.lnot(p)))
+        with u.v(symbol='P') as p:
+            self.parameter_p = p
+            self.parameter_p_mask = frozenset([p])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p: (None, Formula, FormulaStatement) = None,
-            t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, p: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p, _ = verify_formula(arg='p', u=t.u, input_value=p)
-        not_not_p: Formula = t.u.r.lnot(t.u.r.lnot(p))
-        return not_not_p
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
+            error_code=error_code)
+        p: Formula
+        not_not_p: Formula = self.u.r.lnot(self.u.r.lnot(p))
+        output: Formula = not_not_p
+        return output
 
 
 class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        x_equal_y: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -4780,21 +4792,27 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
         name = 'equality commutativity'
         with u.v(symbol='x') as x, u.v(symbol='y') as y:
             definition = (x | u.r.equal | y) | u.r.proves | (y | u.r.equal | x)
+        with u.v(symbol='x') as x, u.v(symbol='y') as y:
+            self.parameter_x_equal_y = x | u.r.equal | y
+            self.parameter_x_equal_y_mask = frozenset([x, y])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, x_equal_y: (None, FormulaStatement) = None,
-            t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, x_equal_y: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, x_equal_y, _ = verify_formula(arg='x_equal_y', input_value=x_equal_y, u=self.u,
+            form=self.parameter_x_equal_y, mask=self.parameter_x_equal_y_mask, raise_exception=True,
+            error_code=error_code)
         x_equal_y: Formula
-        x_equal_y = unpack_formula(x_equal_y)
-        x = x_equal_y.parameters[0]
-        y = x_equal_y.parameters[1]
-        return t.u.f(t.u.r.equality, y, x)
+        x__in__x_equal_y: Formula = x_equal_y.parameters[0]
+        y__in__x_equal_y: Formula = x_equal_y.parameters[1]
+        output: Formula = y__in__x_equal_y | self.u.r.equal | x__in__x_equal_y
+        return output
 
 
 class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
@@ -8096,7 +8114,7 @@ class DisjunctiveSyllogism2Inclusion(InferenceRuleInclusion):
         _, p_or_q, _ = verify_formula_statement(arg='p_or_q', t=self.t, input_value=p_or_q,
             form=self.i.parameter_p_or_q, mask=self.i.parameter_p_or_q_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        not_q: Formula
+        p_or_q: Formula
         _, not_q, _ = verify_formula_statement(arg='not_q', t=self.t, input_value=not_q,
             form=self.i.parameter_not_q, mask=self.i.parameter_not_q_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
@@ -8153,21 +8171,18 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    def check_inference_validity(self, not_not_p: FormulaStatement = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        not_not_p: FormulaStatement = verify_formula_statement(t=t, arity=1, input_value=not_not_p)
-        verify(assertion=t.contains_theoretical_objct(not_not_p),
-            msg='Statement ⌜not_not_p⌝ must be contained in ⌜t⌝.', not_not_p=not_not_p, t=t,
-            slf=self)
-        verify(assertion=not_not_p.valid_proposition.relation is t.u.r.negation,
-            msg='The parent formula in ⌜not_not_p⌝ must have ⌜negation⌝ relation.',
-            not_not_p=not_not_p, t=t, slf=self)
-        not_p: Formula = not_not_p.valid_proposition.parameters[0]
-        _, not_p, _ = verify_formula(u=t.u, arity=1, input_value=not_p)
-        verify(assertion=not_p.relation is t.u.r.negation,
-            msg='The child formula in ⌜not_not_p⌝ must have ⌜negation⌝ relation.', not_not_p=not_p,
-            t=t, slf=self)
-        return True
+    def check_premises_validity(self, not_not_p: FlexibleFormula) -> Tuple[
+        bool, DoubleNegationEliminationDeclaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, not_not_p, _ = verify_formula_statement(arg='not_not_p', t=self.t, input_value=not_not_p,
+            form=self.i.parameter_not_not_p, mask=self.i.parameter_not_not_p_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        not_not_p: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: DoubleNegationEliminationDeclaration.Premises = DoubleNegationEliminationDeclaration.Premises(
+            not_not_p=not_not_p)
+        return True, valid_premises
 
     @property
     def i(self) -> DoubleNegationEliminationDeclaration:
@@ -8182,16 +8197,15 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
         """
         return self.i.construct_formula(not_not_p=not_not_p)
 
-    def infer_formula_statement(self, not_not_p: (None, FormulaStatement) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+    def infer_formula_statement(self, not_not_p: FlexibleFormula, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        not_not__, p, _ = verify_formula_statement(t=self.t, arity=1, input_value=not_not_p)
-        return super().infer_formula_statement(not_not_p, nameset=nameset, ref=ref,
+        premises = self.i.Premises(not_not_p=not_not_p)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -8218,18 +8232,17 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    def check_inference_validity(self, p: FormulaStatement = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        p: FormulaStatement = verify_formula_statement(t=t, arity=1, input_value=p)
-        """Verify the correctness of the parameters provided to the :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` .
-
-        :param p: (mandatory) A formula-statement of the form: :math:`P` .
-
-        :return: True (bool) if the parameters are correct.
-        """
-        verify(assertion=t.contains_theoretical_objct(p),
-            msg='Statement ⌜p⌝ must be contained in ⌜t⌝.', p=p, t=t, slf=self)
-        return True
+    def check_premises_validity(self, p: FlexibleFormula) -> Tuple[
+        bool, DoubleNegationIntroductionDeclaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, p, _ = verify_formula_statement(arg='p', t=self.t, input_value=p,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        p: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: DoubleNegationIntroductionDeclaration.Premises = DoubleNegationIntroductionDeclaration.Premises(
+            p=p)
+        return True, valid_premises
 
     @property
     def i(self) -> DoubleNegationIntroductionDeclaration:
@@ -8244,16 +8257,15 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
         """
         return self.i.construct_formula(p=p)
 
-    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+    def infer_formula_statement(self, p: FlexibleFormula, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        _, p, _ = verify_formula_statement(arg='p', t=self.t, arity=1, input_value=p)
-        return super().infer_formula_statement(p, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p=p)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -8278,19 +8290,18 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_equality_commutativity_paragraph_proof(o=o)
         return output
 
-    def check_inference_validity(self, x_equal_y: (None, FormulaStatement) = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        verify(is_in_class(x_equal_y, classes.formula_statement),
-            '⌜x_equal_y⌝ is not of the declarative-class formula-statement.', p_eq_q=x_equal_y, t=t,
-            slf=self)
-        verify(t.contains_theoretical_objct(x_equal_y),
-            'Statement ⌜x_equal_y⌝ is not contained in ⌜t⌝''s hierarchy.', p_eq_q=x_equal_y, t=t,
-            slf=self)
-        x_equal_y = unpack_formula(x_equal_y)
-        verify(x_equal_y.relation is self.u.r.equality,
-            'The root relation of formula ⌜x_equal_y⌝ is not the equality relation.',
-            p_eq_q_relation=x_equal_y.relation, p_eq_q=x_equal_y, t=t, slf=self)
-        return True
+    def check_premises_validity(self, x_equal_y: FlexibleFormula) -> Tuple[
+        bool, EqualityCommutativityDeclaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, x_equal_y, _ = verify_formula_statement(arg='x_equal_y', t=self.t, input_value=x_equal_y,
+            form=self.i.parameter_x_equal_y, mask=self.i.parameter_x_equal_y_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        x_equal_y: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: EqualityCommutativityDeclaration.Premises = EqualityCommutativityDeclaration.Premises(
+            x_equal_y=x_equal_y)
+        return True, valid_premises
 
     @property
     def i(self) -> EqualityCommutativityDeclaration:
@@ -8305,15 +8316,15 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
         """
         return self.i.construct_formula(x_equal_y=x_equal_y)
 
-    def infer_formula_statement(self, x_equal_y: (None, FormulaStatement) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+    def infer_formula_statement(self, x_equal_y: FlexibleFormula, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        return super().infer_formula_statement(x_equal_y, nameset=nameset, ref=ref,
+        premises = self.i.Premises(x_equal_y=x_equal_y)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 

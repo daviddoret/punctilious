@@ -11,7 +11,7 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 t1 = u.t(echo=True)
 theory_axiom = t1.include_axiom(a=axiom)
 not_not_p = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
-    formula=u.r.lnot(u.r.lnot(r1(o1, o2))))
+    p=u.r.lnot(u.r.lnot(r1(o1, o2))))
 
 # And finally, use the double-negation-elimination inference-rule:
 proposition_of_interest = t1.i.double_negation_elimination.infer_formula_statement(
