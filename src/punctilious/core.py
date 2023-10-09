@@ -306,7 +306,7 @@ class TextStyles:
             unicode_table_index=unicode_utilities.unicode_double_struck_index,
             start_tag=ComposableText(plaintext='', unicode='', latex='\\mathbb{'),
             end_tag=ComposableText(plaintext='', unicode='', latex='}'))
-        self.monospace = TextStyle(name='fraktur-normal',
+        self.fraktur_normal = TextStyle(name='fraktur-normal',
             unicode_table_index=unicode_utilities.unicode_fraktur_normal_index,
             start_tag=ComposableText(plaintext='', unicode='', latex='\\mathfrak{'),
             end_tag=ComposableText(plaintext='', unicode='', latex='}'))
@@ -329,6 +329,10 @@ class TextStyles:
             end_tag=ComposableText(plaintext='', unicode='', latex='}'))
         self.script_normal = TextStyle(name='script-normal',
             unicode_table_index=unicode_utilities.unicode_script_normal_index,
+            start_tag=ComposableText(plaintext='', unicode='', latex='\\mathcal{'),
+            end_tag=ComposableText(plaintext='', unicode='', latex='}'))
+        self.script_bold = TextStyle(name='script-bold',
+            unicode_table_index=unicode_utilities.unicode_script_bold_index,
             start_tag=ComposableText(plaintext='', unicode='', latex='\\mathcal{'),
             end_tag=ComposableText(plaintext='', unicode='', latex='}'))
         self.serif_bold = TextStyle(name='serif-bold',
@@ -2656,10 +2660,10 @@ class Formula(TheoreticalObject):
             nameset = NameSet(symbol=symbol, index=index)
         self.relation = relation
         parameters = parameters if isinstance(parameters, tuple) else tuple([parameters])
-        verify(assertion=len(parameters) > 0,
-            msg='Ill-formed formula error. The number of parameters in this formula is zero. 0-ary relations are currently not supported. Use a simple-object instead.',
-            severity=verification_severities.error, raise_exception=True, relation=self.relation,
-            len_parameters=len(parameters))
+        # verify(assertion=len(parameters) > 0,
+        #     msg='Ill-formed formula error. The number of parameters in this formula is zero. 0-ary relations are currently not supported. Use a simple-object instead.',
+        #     severity=verification_severities.error, raise_exception=True, relation=self.relation,
+        #     len_parameters=len(parameters))
         verify(assertion=self.relation.arity is None or self.relation.arity == len(parameters),
             msg=f'Ill-formed formula error. Relation ⌜{self.relation}⌝ is defined with a fixed arity constraint of {self.relation.arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
             severity=verification_severities.error, raise_exception=True, relation=self.relation,
@@ -4902,9 +4906,12 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
     """P ⋀ not P: inconsistency"""
 
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        p: FlexibleFormula
+        not_p: FlexibleFormula
+        t: TheoryElaborationSequence
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'inconsistency-introduction-1'
         acronym = 'ii1'
         abridged_name = None
@@ -4912,30 +4919,55 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
         dashed_name = 'inconsistency-introduction-1'
         explicit_name = 'inconsistency introduction #1 inference rule'
         name = 'inconsistency introduction #1'
-        definition = StyledText(plaintext='(P, not(P)) |- (T)', unicode='(𝑷, ¬(𝑷)) ⊢ 𝐼𝑛𝑐(𝓣)')
+        # definition = StyledText(plaintext='(P, not(P)) |- (T)', unicode='(𝑷, ¬(𝑷)) ⊢ 𝐼𝑛𝑐(𝓣)')
+        with u.v(symbol='P') as p, u.v(
+                symbol=StyledText(s='T', text_style=text_styles.script_normal)) as t:
+            definition = (p | u.r.sequent_premises | (u.r.lnot(p))) | u.r.proves | u.r.inc(t)
+        with u.v(symbol='P') as p:
+            self.parameter_p = p
+            self.parameter_p_mask = frozenset([p])
+        with u.v(symbol='P') as p:
+            self.parameter_not_p = u.r.lnot(p)
+            self.parameter_not_p_mask = frozenset([p])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p: FormulaStatement = None, not_p: FormulaStatement = None,
-            inconsistent_theory: TheoryElaborationSequence = None,
-            t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, not_p: FlexibleFormula,
+            t: TheoryElaborationSequence) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = unpack_formula(p)
-        not_p = unpack_formula(not_p)
-        return t.u.f(t.u.r.inconsistency, inconsistent_theory)
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
+            error_code=error_code)
+        p: Formula
+        _, not_p, _ = verify_formula(arg='not_p', input_value=not_p, u=self.u,
+            form=self.parameter_not_p, mask=self.parameter_not_p_mask, raise_exception=True,
+            error_code=error_code)
+        not_p: Formula
+        p__in__not_p: Formula = not_p.parameters[0]
+        verify(assertion=p.is_formula_syntactically_equivalent_to(p__in__not_p),
+            msg=f'The formula argument ⌜p⌝({p}) is not syntaxically-equivalent to the ⌜p⌝({p__in__not_p}) in the formula argument ⌜not_q⌝({not_p})',
+            raise_exception=True, error_code=error_code)
+        verify(assertion=isinstance(t, TheoryElaborationSequence),
+            msg=f'The argument ⌜t⌝({t}) is not a theory-elaboration-sequence.',
+            raise_exception=True, error_code=error_code)
+        output: Formula = self.u.r.inc(t)
+        return output
 
 
 class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
     """P = Q ⋀ P neq Q: inconsistency """
 
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        x_equal_y: FlexibleFormula
+        x_unequal_y: FlexibleFormula
+        t: TheoryElaborationSequence
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'inconsistency-introduction-2'
         acronym = 'ii2'
         abridged_name = None
@@ -4943,30 +4975,64 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
         dashed_name = 'inconsistency-introduction-2'
         explicit_name = 'inconsistency introduction #2 inference rule'
         name = 'inconsistency introduction #2'
-        definition = StyledText(plaintext='((P = Q), (P neq Q)) |- Inc(T)',
-            unicode='((𝑷 = 𝑸), (𝑷 ≠ 𝑸)) ⊢ 𝐼𝑛𝑐(𝒯)')
+        # definition = StyledText(plaintext='((P = Q), (P neq Q)) |- Inc(T)',unicode='((𝑷 = 𝑸), (𝑷 ≠ 𝑸)) ⊢ 𝐼𝑛𝑐(𝒯)')
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q, u.v(
+                symbol=StyledText(s='T', text_style=text_styles.script_normal)) as t:
+            definition = ((p | u.r.equal | q) | u.r.sequent_premises | (
+                    p | u.r.unequal | q)) | u.r.proves | u.r.inc(t)
+        with u.v(symbol='x') as x, u.v(symbol='y') as y:
+            self.parameter_x_equal_y = x | u.r.equal | y
+            self.parameter_x_equal_y_mask = frozenset([x, y])
+        with u.v(symbol='x') as x, u.v(symbol='y') as y:
+            self.parameter_x_unequal_y = x | u.r.unequal | y
+            self.parameter_x_unequal_y_mask = frozenset([x, y])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, x_eq_y: FlexibleFormula, x_neq_y: FlexibleFormula,
-            inconsistent_theory: (None, TheoryElaborationSequence) = None) -> Formula:
+    def construct_formula(self, x_equal_y: FlexibleFormula, x_unequal_y: FlexibleFormula,
+            t: TheoryElaborationSequence) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        x_eq_y = verify_formula()
-        x_neq_y = verify_formula()
-        return t.u.f(t.u.r.inconsistency, inconsistent_theory)
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, x_equal_y, _ = verify_formula(arg='x_equal_y', input_value=x_equal_y, u=self.u,
+            form=self.parameter_x_equal_y, mask=self.parameter_x_equal_y_mask, raise_exception=True,
+            error_code=error_code)
+        x_equal_y: Formula
+        _, x_unequal_y, _ = verify_formula(arg='x_unequal_y', input_value=x_unequal_y, u=self.u,
+            form=self.parameter_x_unequal_y, mask=self.parameter_x_unequal_y_mask,
+            raise_exception=True, error_code=error_code)
+        x_unequal_y: Formula
+        x__in__x_equal_y: Formula = x_equal_y.parameters[0]
+        x__in__x_unequal_y: Formula = x_unequal_y.parameters[0]
+        verify(
+            assertion=x__in__x_equal_y.is_formula_syntactically_equivalent_to(x__in__x_unequal_y),
+            msg=f'The ⌜x⌝({x__in__x_equal_y}) in the formula argument ⌜x_equal_y⌝({x_equal_y}) is not syntaxically-equivalent to the ⌜x⌝({x__in__x_unequal_y}) in the formula argument ⌜x_unequal_y⌝({x_unequal_y})',
+            raise_exception=True, error_code=error_code)
+        y__in__x_equal_y: Formula = x_equal_y.parameters[1]
+        y__in__x_unequal_y: Formula = x_unequal_y.parameters[1]
+        verify(
+            assertion=y__in__x_equal_y.is_formula_syntactically_equivalent_to(y__in__x_unequal_y),
+            msg=f'The ⌜y⌝({y__in__x_equal_y}) in the formula argument ⌜x_equal_y⌝({x_equal_y}) is not syntaxically-equivalent to the ⌜y⌝({y__in__x_unequal_y}) in the formula argument ⌜y_unequal_y⌝({x_unequal_y})',
+            raise_exception=True, error_code=error_code)
+        verify(assertion=isinstance(t, TheoryElaborationSequence),
+            msg=f'The argument ⌜t⌝({t}) is not a theory-elaboration-sequence.',
+            raise_exception=True, error_code=error_code)
+        output: Formula = self.u.r.inc(t)
+        return output
 
 
 class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
     """P neq P: inconsistency """
 
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        x_unequal_x: FlexibleFormula
+        t: TheoryElaborationSequence
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'inconsistency-introduction-3'
         acronym = 'ii3'
         abridged_name = None
@@ -4974,20 +5040,33 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
         dashed_name = 'inconsistency-introduction-3'
         explicit_name = 'inconsistency introduction #3 inference rule'
         name = 'inconsistency introduction #3'
-        definition = StyledText(plaintext='(P neq P) |- Inc(T)', unicode='(𝑷 ≠ 𝑷) ⊢ Inc(𝒯)')
+        # definition = StyledText(plaintext='(P neq P) |- Inc(T)', unicode='(𝑷 ≠ 𝑷) ⊢ Inc(𝒯)')
+        with u.v(symbol='P') as p, u.v(
+                symbol=StyledText(s='T', text_style=text_styles.script_normal)) as t:
+            definition = (p | u.r.unequal | p) | u.r.proves | u.r.inc(t)
+        with u.v(symbol='x') as x:
+            self.parameter_x_unequal_x = x | u.r.unequal | x
+            self.parameter_x_unequal_x_mask = frozenset([x])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_neq_p: FormulaStatement = None,
-            inconsistent_theory: TheoryElaborationSequence = None,
-            t: TheoryElaborationSequence = None, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, x_unequal_x: FlexibleFormula,
+            t: TheoryElaborationSequence) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p_neq_p, _ = verify_formula(u=self.u, arity=2, input_value=p_neq_p)
-        return t.u.f(t.u.r.inconsistency, inconsistent_theory)
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, x_unequal_x, _ = verify_formula(arg='x_unequal_x', input_value=x_unequal_x, u=self.u,
+            form=self.parameter_x_unequal_x, mask=self.parameter_x_unequal_x_mask,
+            raise_exception=True, error_code=error_code)
+        x_unequal_x: Formula
+        verify(assertion=isinstance(t, TheoryElaborationSequence),
+            msg=f'The argument ⌜t⌝({t}) is not a theory-elaboration-sequence.',
+            raise_exception=True, error_code=error_code)
+        output: Formula = self.u.r.inc(t)
+        return output
 
 
 class ModusPonensDeclaration(InferenceRuleDeclaration):
@@ -5723,8 +5802,7 @@ theory-elaboration."""
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None) -> Hypothesis:
         """Pose a new hypothesis in the current theory."""
-        _, hypothesis_formula, _ = verify_formula(u=self.u, arity=None,
-            input_value=hypothesis_formula)
+        _, hypothesis_formula, _ = verify_formula(u=self.u, input_value=hypothesis_formula)
         return Hypothesis(t=self, hypothesis_formula=hypothesis_formula, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
@@ -6318,13 +6396,16 @@ class RelationDict(collections.UserDict):
     def inconsistency(self):
         """The well-known (theory-)inconsistent relation.
 
+        By convention:
+        - inc(T) means that theory-elaboration-sequence T is inconsistent.
+
         Abridged property: u.r.inc
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
         """
         if self._inconsistency is None:
-            self._inconsistency = self.declare(arity=1, formula_rep=Formula.prefix,
+            self._inconsistency = self.declare(arity=1, formula_rep=Formula.function_call,
                 signal_proposition=True, symbol='Inc', auto_index=False, acronym='inc.',
                 name='inconsistent')
         return self._inconsistency
@@ -6469,6 +6550,17 @@ class RelationDict(collections.UserDict):
                 dashed_name='syntactic-entailment', abridged_name='proves',
                 name='syntactic entailment')
         return self._syntactic_entailment
+
+    @property
+    def unequal(self):
+        """The well-known inequality relation.
+
+        Unabridged property: u.r.inequality
+
+        If it does not exist in the universe-of-discourse,
+        declares it automatically.
+        """
+        return self.inequality
 
 
 FlexibleAxiom = typing.Union[AxiomDeclaration, AxiomInclusion, str]
@@ -6654,6 +6746,11 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
         # (relation, argument_1, argument_2, ..., argument_n)
         # where the relation and/or the arguments may be free-variables.
         formula = u.f(input_value[0], *input_value[1:])
+    elif isinstance(input_value, TheoreticalObject):
+        # the input is typed as an individual theoretical-object.
+        # this is a meta-theory formula, i.e. it is a formula
+        # whose object is a theoretical-object.
+        formula = input_value
     else:
         # the input argument could not be interpreted as a formula
         value_string: str
@@ -8486,24 +8583,22 @@ class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    def check_inference_validity(self, p: FormulaStatement = None, not_p: FormulaStatement = None,
-            inconsistent_theory: TheoryElaborationSequence = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        verify(inconsistent_theory.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜inconsistent_theory⌝''s hierarchy.', p=p,
-            inconsistent_theory=inconsistent_theory, slf=self)
-        verify(inconsistent_theory.contains_theoretical_objct(not_p),
-            'Statement ⌜not_p⌝ must be contained in theory ⌜inconsistent_theory⌝''s hierarchy.',
-            not_p=not_p, inconsistent_theory=inconsistent_theory, slf=self)
-        verify(not_p.relation is not_p.theory.universe_of_discourse.relations.negation,
-            'The relation of statement ⌜not_p⌝ must be ⌜negation⌝.', not_p=not_p,
-            inconsistent_theory=inconsistent_theory, slf=self)
-        not_p_formula = not_p.valid_proposition
-        p_in_not_p = not_p_formula.parameters[0]
-        verify(p_in_not_p.is_formula_syntactically_equivalent_to(p),
-            'The sub-formula (parameter) ⌜p⌝ in ⌜not_p⌝ must be formula-syntactically-equivalent to ⌜p⌝.',
-            not_p=not_p, p_in_not_p=p_in_not_p, p=p, slf=self)
-        return True
+    def check_premises_validity(self, p: FlexibleFormula, not_p: FlexibleFormula,
+            t: TheoryElaborationSequence) -> Tuple[
+        bool, InconsistencyIntroduction1Declaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, p, _ = verify_formula_statement(arg='p', t=t, input_value=p,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        p: Formula
+        _, not_p, _ = verify_formula_statement(arg='not_p', t=t, input_value=not_p,
+            form=self.i.parameter_not_p, mask=self.i.parameter_not_p_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        not_p: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: InconsistencyIntroduction1Declaration.Premises = InconsistencyIntroduction1Declaration.Premises(
+            p=p, not_p=not_p, t=t)
+        return True, valid_premises
 
     @property
     def i(self) -> InconsistencyIntroduction1Declaration:
@@ -8511,30 +8606,25 @@ class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
         i: InconsistencyIntroduction1Declaration = super().i
         return i
 
-    def infer_formula(self, p: FlexibleFormula, not_p: FlexibleFormula,
-            inconsistent_theory: (None, TheoryElaborationSequence) = None) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, not_p: FlexibleFormula,
+            t: TheoryElaborationSequence) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return self.i.construct_formula(p=p, not_p=not_p, inconsistent_theory=inconsistent_theory)
+        return self.i.construct_formula(p=p, not_p=not_p, t=t)
 
-    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
-            not_p: (None, FormulaStatement) = None,
-            inconsistent_theory: (None, TheoryElaborationSequence) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+    def infer_formula_statement(self, p: FlexibleFormula, not_p: FlexibleFormula,
+            t: TheoryElaborationSequence, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        if inconsistent_theory is None and p.t is not_p.t:
-            # The inconsistent_theory can be unambiguously defaulted
-            # when both p and not_p are contained in the same theory.
-            inconsistent_theory = p.t
-        return super().infer_formula_statement(p, not_p, inconsistent_theory, nameset=nameset,
-            ref=ref, paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        premises = self.i.Premises(p=p, not_p=not_p, t=t)
+        return InferredStatement(i=self, premises=premises, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
 class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
@@ -8559,30 +8649,24 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    def check_inference_validity(self, x_eq_y: FormulaStatement = None,
-            x_neq_y: FormulaStatement = None, inconsistent_theory: TheoryElaborationSequence = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        verify(inconsistent_theory.contains_theoretical_objct(x_eq_y),
-            'Statement ⌜x_eq_y⌝ must be contained in ⌜inconsistent_theory⌝.', p_eq_q=x_eq_y,
-            inconsistent_theory=inconsistent_theory, slf=self)
-        verify(inconsistent_theory.contains_theoretical_objct(x_neq_y),
-            'Statement ⌜x_neq_y⌝ must be contained in ⌜inconsistent_theory⌝.', p_neq_q=x_neq_y,
-            inconsistent_theory=inconsistent_theory, slf=self)
-        verify(x_eq_y.relation is x_eq_y.theory.universe_of_discourse.relations.equality,
-            'The relation of statement ⌜x_eq_y⌝ must be ⌜equality⌝.', p_neq_q=x_neq_y,
-            inconsistent_theory=inconsistent_theory, slf=self)
-        verify(x_neq_y.relation is x_neq_y.theory.universe_of_discourse.relations.inequality,
-            'The relation of statement ⌜x_neq_y⌝ must be ⌜inequality⌝.', p_neq_q=x_neq_y,
-            inconsistent_theory=inconsistent_theory, slf=self)
-        verify(x_eq_y.valid_proposition.parameters[0].is_formula_syntactically_equivalent_to(
-            x_neq_y.valid_proposition.parameters[0]),
-            'The ⌜x⌝ in ⌜x_eq_y⌝ must be formula-syntactically-equivalent to the ⌜x⌝ in ⌜x_neq_y⌝.',
-            p_eq_q=x_eq_y, p_neq_q=x_neq_y, inconsistent_theory=inconsistent_theory, slf=self)
-        verify(x_eq_y.valid_proposition.parameters[1].is_formula_syntactically_equivalent_to(
-            x_neq_y.valid_proposition.parameters[1]),
-            'The ⌜y⌝ in ⌜x_eq_y⌝ must be formula-syntactically-equivalent to the ⌜y⌝ in ⌜x_neq_y⌝.',
-            p_eq_q=x_eq_y, p_neq_q=x_neq_y, inconsistent_theory=inconsistent_theory, slf=self)
-        return True
+    def check_premises_validity(self, x_equal_y: FlexibleFormula, x_unequal_y: FlexibleFormula,
+            t: TheoryElaborationSequence) -> Tuple[
+        bool, InconsistencyIntroduction2Declaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, x_equal_y, _ = verify_formula_statement(arg='x_equal_y', t=t, input_value=x_equal_y,
+            form=self.i.parameter_x_equal_y, mask=self.i.parameter_x_equal_y_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        x_equal_y: Formula
+        _, x_unequal_y, _ = verify_formula_statement(arg='x_unequal_y', t=t,
+            input_value=x_unequal_y, form=self.i.parameter_x_unequal_y,
+            mask=self.i.parameter_x_unequal_y_mask, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
+        x_unequal_y: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: InconsistencyIntroduction2Declaration.Premises = InconsistencyIntroduction2Declaration.Premises(
+            x_equal_y=x_equal_y, x_unequal_y=x_unequal_y, t=t)
+        return True, valid_premises
 
     @property
     def i(self) -> InconsistencyIntroduction2Declaration:
@@ -8590,34 +8674,25 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
         i: InconsistencyIntroduction2Declaration = super().i
         return i
 
-    def construct_formula(self, x_eq_y: FlexibleFormula, x_neq_y: FlexibleFormula,
-            inconsistent_theory: (None, TheoryElaborationSequence) = None) -> Formula:
+    def construct_formula(self, x_equal_y: FlexibleFormula, x_unequal_y: FlexibleFormula,
+            t: TheoryElaborationSequence) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return self.i.construct_formula(x_eq_y=x_eq_y, x_neq_y=x_neq_y,
-            inconsistent_theory=inconsistent_theory)
+        return self.i.construct_formula(x_equal_y=x_equal_y, x_unequal_y=x_unequal_y, t=t)
 
-    def infer_formula_statement(self, x_eq_y: (None, FormulaStatement) = None,
-            x_neq_y: (None, FormulaStatement) = None,
-            inconsistent_theory: (None, TheoryElaborationSequence) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
+    def infer_formula_statement(self, x_equal_y: FlexibleFormula, x_unequal_y: FlexibleFormula,
+            t: TheoryElaborationSequence, ref: (None, str) = None,
             paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
             echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        if inconsistent_theory is None and x_eq_y.t is x_neq_y.t:
-            # The inconsistent_theory can be unambiguously defaulted
-            # when both p and not_p are contained in the same theory.
-            inconsistent_theory = x_eq_y.t
-        x_eq_y = verify_formula_statement(t=inconsistent_theory, arity=2, input_value=x_eq_y)
-        x_neq_y = verify_formula_statement(t=inconsistent_theory, arity=2, input_value=x_neq_y)
-        return super().infer_formula_statement(x_eq_y, x_neq_y, inconsistent_theory,
-            nameset=nameset, ref=ref, paragraph_header=paragraph_header, subtitle=subtitle,
-            echo=echo)
+        premises = self.i.Premises(x_equal_y=x_equal_y, x_unequal_y=x_unequal_y, t=t)
+        return InferredStatement(i=self, premises=premises, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
 class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
@@ -8642,20 +8717,19 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    def check_inference_validity(self, p_neq_p: FormulaStatement = None,
-            inconsistent_theory: TheoryElaborationSequence = None,
-            t: TheoryElaborationSequence = None) -> bool:
-        verify(inconsistent_theory.contains_theoretical_objct(p_neq_p),
-            'Statement ⌜p_neq_p⌝ must be contained in theory ⌜inconsistent_theory⌝''s hierarchy.',
-            p_neq_p=p_neq_p, inconsistent_theory=inconsistent_theory, slf=self)
-        verify(p_neq_p.relation is p_neq_p.theory.universe_of_discourse.relations.inequality,
-            'The relation of statement ⌜p_neq_p⌝ must be ⌜inequality⌝.', p_neq_p=p_neq_p,
-            inconsistent_theory=inconsistent_theory, slf=self)
-        verify(p_neq_p.valid_proposition.parameters[0].is_formula_syntactically_equivalent_to(
-            p_neq_p.valid_proposition.parameters[1]),
-            'The two ⌜p⌝ terms in  ⌜p_neq_p⌝ must be formula-syntactically-equivalent.',
-            p_neq_p=p_neq_p, inconsistent_theory=inconsistent_theory, slf=self)
-        return True
+    def check_premises_validity(self, x_unequal_x: FlexibleFormula, t: TheoryElaborationSequence) -> \
+            Tuple[bool, InconsistencyIntroduction3Declaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, x_unequal_x, _ = verify_formula_statement(arg='x_unequal_x', t=t,
+            input_value=x_unequal_x, form=self.i.parameter_x_unequal_x,
+            mask=self.i.parameter_x_unequal_x_mask, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
+        x_unequal_x: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: InconsistencyIntroduction3Declaration.Premises = InconsistencyIntroduction3Declaration.Premises(
+            x_unequal_x=x_unequal_x, t=t)
+        return True, valid_premises
 
     @property
     def i(self) -> InconsistencyIntroduction3Declaration:
@@ -8663,29 +8737,24 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
         i: InconsistencyIntroduction3Declaration = super().i
         return i
 
-    def construct_formula(self, p_neq_p: FlexibleFormula,
-            inconsistent_theory: (None, TheoryElaborationSequence) = None) -> Formula:
+    def construct_formula(self, x_unequal_x: FlexibleFormula,
+            t: TheoryElaborationSequence) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return self.i.construct_formula(p_neq_p=p_neq_p, inconsistent_theory=inconsistent_theory)
+        return self.i.construct_formula(x_unequal_x=x_unequal_x, t=t)
 
-    def infer_formula_statement(self, p_neq_p: (None, FormulaStatement) = None,
-            inconsistent_theory: (None, TheoryElaborationSequence) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
-            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
-            echo: (None, bool) = None) -> InferredStatement:
+    def infer_formula_statement(self, x_unequal_x: FlexibleFormula, t: TheoryElaborationSequence,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        if inconsistent_theory is None:
-            # The inconsistent_theory can be unambiguously defaulted
-            # when all terms are contained in the same theory.
-            inconsistent_theory = p_neq_p.t
-        return super().infer_formula_statement(p_neq_p, inconsistent_theory, nameset=nameset,
-            ref=ref, paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        premises = self.i.Premises(x_unequal_x=x_unequal_x, t=t)
+        return InferredStatement(i=self, premises=premises, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
 class ModusPonensInclusion(InferenceRuleInclusion):

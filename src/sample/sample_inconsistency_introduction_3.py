@@ -8,7 +8,8 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 
 # Elaborate a dummy theory with inconsistent propositions
 theory_axiom = t1.include_axiom(axiom)
-p_neq_p = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom, (o1 | u.r.neq | o1))
+x_unequal_x = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom,
+    (o1 | u.r.unequal | o1))
 t1.stabilize()
 
 # Use a distinct theory T2 to demonstrate the inconsistency of T1
@@ -16,5 +17,5 @@ t1.stabilize()
 t2 = u.t(echo=True)
 
 # And finally, use the inconsistency-introduction-3 inference-rule:
-proposition_of_interest = t2.i.inconsistency_introduction_3.infer_formula_statement(p_neq_p=p_neq_p,
-    inconsistent_theory=t1, subtitle='The proposition of interest')
+proposition_of_interest = t2.i.inconsistency_introduction_3.infer_formula_statement(
+    x_unequal_x=x_unequal_x, t=t1, subtitle='The proposition of interest')
