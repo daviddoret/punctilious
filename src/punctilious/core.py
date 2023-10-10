@@ -31,6 +31,12 @@ class ErrorCode:
         self.code = code
         self.title = title
 
+    def __repr__(self):
+        return f'Error #{self.code}: "{self.title}"'
+
+    def __str__(self):
+        return f'Error #{self.code}: "{self.title}"'
+
 
 class ErrorCodes:
     def __init__(self):
@@ -5075,6 +5081,7 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
 
     class Premises(typing.NamedTuple):
         p_implies_q: FlexibleFormula
+        p: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
         u: UniverseOfDiscourse = universe_of_discourse
@@ -5086,20 +5093,34 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         explicit_name = 'modus ponens inference rule'
         name = 'modus ponens'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.implies | p) | u.r.sequent_premises | p) | u.r.proves | q
+            definition = ((p | u.r.implies | q) | u.r.sequent_premises | p) | u.r.proves | q
+        with u.v(symbol='P') as p, u.v(symbol='Q') as q:
+            self.parameter_p_implies_q = p | u.r.implies | q
+            self.parameter_p_implies_q_mask = frozenset([p, q])
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_implies_q: FormulaStatement, p: FormulaStatement,
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, p_implies_q: FlexibleFormula, p: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        _, p_implies_q, _ = verify_formula(u=self.u, arity=2, input_value=p_implies_q)
-        _, q, _ = verify_formula(u=self.u, arity=2, input_value=p_implies_q.parameters[1])
-        return q
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p_implies_q, _ = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
+            form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask,
+            raise_exception=True, error_code=error_code)
+        p_implies_q: Formula
+        _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
+            error_code=error_code)
+        p: Formula
+        p__in__p_implies_q: Formula = p_implies_q.parameters[0]
+        verify(assertion=p__in__p_implies_q.is_formula_syntactically_equivalent_to(p),
+            msg=f'The ⌜p⌝({p__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the formula argument ⌜p⌝({p})',
+            raise_exception=True, error_code=error_code)
+        q__in__p_implies_q: Formula = p_implies_q.parameters[1]
+        output: Formula = q__in__p_implies_q
+        return output
 
 
 class ModusTollensDeclaration(InferenceRuleDeclaration):
@@ -6573,7 +6594,7 @@ FlexibleDefinition = typing.Union[DefinitionDeclaration, DefinitionInclusion, st
 
 """
 
-FlexibleFormula = typing.Union[FormulaStatement, Formula, tuple, list]
+FlexibleFormula = typing.Union[TheoreticalObject, FormulaStatement, Formula, tuple, list]
 """See validate_flexible_statement_formula() for details."""
 
 
@@ -8773,36 +8794,26 @@ class ModusPonensInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def check_inference_validity(self, p_implies_q: FormulaStatement, p: FormulaStatement,
-            t: TheoryElaborationSequence) -> bool:
-        """
-
-        :param args: A statement (P ⟹ Q), and a statement P
-        :param t:
-        :return: A formula Q
-        """
-        p_implies__, q, _ = verify_formula_statement(t=t, arity=2, input_value=p_implies_q)
-        _, p, _ = verify_formula_statement(t=t, arity=2, input_value=p)
-        verify(t.contains_theoretical_objct(p_implies_q),
-            'Statement ⌜p_implies_q⌝ is not contained in theory ⌜t⌝''s hierarchy.',
-            p_implies_q=p_implies_q, t=t, slf=self)
-        p_implies_q = unpack_formula(p_implies_q)
-        verify(p_implies_q.relation is t.u.r.implication,
-            'The relation of formula ⌜p_implies_q⌝ is not an implication.',
-            p_implies_q_relation=p_implies_q.relation, p_implies_q=p_implies_q, t=t, slf=self)
-        verify(t.contains_theoretical_objct(p),
-            'Statement ⌜p⌝ must be contained in theory ⌜t⌝''s hierarchy.', p_prime=p, t=t, slf=self)
-        p = unpack_formula(p)
-        p_prime = unpack_formula(p_implies_q.parameters[0])
-        # The antecedant of the implication may contain free-variables,
-        # store these in a mask for masked-formula-similitude comparison.
-        verify(p.is_formula_syntactically_equivalent_to(p_prime),
-            'Formula ⌜p_prime⌝ in statement ⌜p_implies_q⌝ must be formula-syntactically-equivalent to statement '
-            '⌜p⌝.', p_implies_q=p_implies_q, p=p, p_prime=p_prime, t=t, slf=self)
-        return True
+    def check_premises_validity(self, p_implies_q: FlexibleFormula, p: FlexibleFormula) -> Tuple[
+        bool, ModusPonensDeclaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, p_implies_q, _ = verify_formula_statement(arg='p_implies_q', t=self.t,
+            input_value=p_implies_q, form=self.i.parameter_p_implies_q,
+            mask=self.i.parameter_p_implies_q_mask, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
+        p_implies_q: Formula
+        _, p, _ = verify_formula_statement(arg='p', t=self.t, input_value=p,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        p: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: ModusPonensDeclaration.Premises = ModusPonensDeclaration.Premises(
+            p_implies_q=p_implies_q, p=p)
+        return True, valid_premises
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
+        """ """
         output = yield from configuration.locale.compose_modus_ponens_paragraph_proof(o=o)
         return output
 
@@ -8819,17 +8830,15 @@ class ModusPonensInclusion(InferenceRuleInclusion):
         """
         return self.i.construct_formula(p_implies_q=p_implies_q, p=p)
 
-    def infer_formula_statement(self, p_implies_q: (None, FormulaStatement) = None,
-            p: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_formula_statement(self, p_implies_q: FlexibleFormula, p: FlexibleFormula,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        p_implies__, q, _ = verify_formula_statement(t=self.t, arity=2, input_value=p_implies_q)
-        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        return super().infer_formula_statement(p_implies_q, p, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p_implies_q=p_implies_q, p=p)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 

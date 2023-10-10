@@ -8,6 +8,7 @@ class TestModusPonens(TestCase):
     def test_modus_ponens_without_variable(self):
         import sample.sample_modus_ponens as test
         u: pu.UniverseOfDiscourse = test.u
+        t1: pu.TheoryElaborationSequence = test.t1
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         o3: pu.SimpleObjct = test.o3
@@ -17,6 +18,16 @@ class TestModusPonens(TestCase):
         self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(o2=r2(o3)))
         self.assertEqual('r2(o3)', proposition_of_interest.rep_formula(pu.encodings.plaintext))
         self.assertEqual('𝑟₂(𝑜₃)', proposition_of_interest.rep_formula(pu.encodings.unicode))
+        # Syntax error
+        with self.assertRaises(pu.PunctiliousException) as error:
+            t1.i.modus_ponens.infer_formula_statement(p_implies_q=o3 | u.r.implies | o2, p=o2)
+        self.assertIs(pu.error_codes.error_002_inference_premise_syntax_error,
+            error.exception.error_code)
+        # Validity error
+        with self.assertRaises(pu.PunctiliousException) as error:
+            t1.i.modus_ponens.infer_formula_statement(p_implies_q=o3 | u.r.implies | o2, p=o3)
+        self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,
+            error.exception.error_code)
 
     def test_modus_ponens_with_free_variables(self):
         pu.configuration.echo_default = True
