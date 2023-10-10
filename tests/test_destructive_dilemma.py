@@ -25,12 +25,13 @@ class TestDestructiveDilemma(TestCase):
         # Syntax error 2
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.destructive_dilemma.infer_formula_statement(p_implies_q=o2 | u.r.implies | o1,
-                r_implies_s=o3 | u.r.implies | o4, p_or_r=u.r.lnot(o1) | u.r.lor | o4)
+                r_implies_s=o3 | u.r.implies | o4, not_q_or_not_s=u.r.lnot(o1) | u.r.lor | o4)
         self.assertIs(pu.error_codes.error_002_inference_premise_syntax_error,
             error.exception.error_code)
         # Validity error
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.destructive_dilemma.infer_formula_statement(p_implies_q=o2 | u.r.implies | o1,
-                r_implies_s=o3 | u.r.implies | o4, p_or_r=u.r.lnot(o1) | u.r.lor | u.r.lnot(o4))
+                r_implies_s=o3 | u.r.implies | o4,
+                not_q_or_not_s=u.r.lnot(o1) | u.r.lor | u.r.lnot(o4))
         self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,
             error.exception.error_code)
