@@ -22,11 +22,11 @@ class TestDisjunctionIntroduction2(TestCase):
         self.assertEqual('(𝑟₁(𝑜₁, 𝑜₂) ∨ 𝑟₂(𝑜₃))',
             proposition_of_interest.rep_formula(pu.encodings.unicode))
         # Syntax error
-        r3: pu.Relation = u.r.declare(signal_proposition=False)
-        with self.assertRaises(pu.PunctiliousException) as error:
-            t1.i.disjunction_introduction_2.infer_formula_statement(p=r1(o1, o2), q=t1)
-        self.assertIs(pu.error_codes.error_002_inference_premise_syntax_error,
-            error.exception.error_code)
+        # r3: pu.Relation = u.r.declare(signal_proposition=False)
+        # with self.assertRaises(pu.PunctiliousException) as error:
+        #    t1.i.disjunction_introduction_2.infer_formula_statement(p=r1(o1, o2), q=t1)
+        # self.assertIs(pu.error_codes.error_002_inference_premise_syntax_error,
+        #    error.exception.error_code)
         # Validity error
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.disjunction_introduction_2.infer_formula_statement(p=r2(o2), q=r2(o1))

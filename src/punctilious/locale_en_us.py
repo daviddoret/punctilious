@@ -803,15 +803,15 @@ class LocaleEnUs(Locale):
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
-        parameter = o.parameters[0]
-        yield from parameter.valid_proposition.compose_formula()
+        p = o.parameters[0]
+        yield from p.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
-        yield from parameter.compose_ref_link()
+        yield from p.compose_ref_link()
         yield SansSerifNormal('.')
         yield SansSerifNormal(' Let ')
-        free_variables = parameter.get_variable_ordered_set()
-        substitution_values = o.parameters[1]
-        mapping = zip(free_variables, substitution_values)
+        free_variables = p.get_variable_ordered_set()
+        parameter_o: Formula = o.parameters[1]
+        mapping = zip(free_variables, parameter_o.parameters)
         first_pair = True
         for k, v in mapping:
             if not first_pair:

@@ -2264,14 +2264,12 @@ class TheoreticalObject(SymbolicObject):
         raise NotImplementedError(
             'The is_strictly_propositional property is abstract, it must be implemented by the child class.')
 
-    def substitute(self, substitution_map, target_theory=None, lock_variable_scope=None):
+    def substitute(self, substitution_map: dict, lock_variable_scope=None):
         """Given a theoretical-objct o₁ (self),
         and a substitution map 𝐌,
         return a theoretical-objct o₂
         where all components, including o₂ itself,
         have been substituted if present in 𝐌.
-
-        TODO: target_theory is supposedly unecessary, remove this parameter from the function.
 
         Note
         ----
@@ -2295,6 +2293,7 @@ class TheoreticalObject(SymbolicObject):
             and o' is the substitute theoretical-objct in o₂.
 
         """
+        # TODO: substitute() method: add a data validation step to verify that variables are in the same universe as the root formula.
         lock_variable_scope = True if lock_variable_scope is None else lock_variable_scope
         substitution_map = dict() if substitution_map is None else substitution_map
         assert isinstance(substitution_map, dict)
@@ -2333,10 +2332,10 @@ class TheoreticalObject(SymbolicObject):
             # into its constituent parts, i.e. relation and parameters,
             # to apply the substitution operation on these.
             relation = self.relation.substitute(substitution_map=substitution_map,
-                target_theory=target_theory, lock_variable_scope=lock_variable_scope)
+                lock_variable_scope=lock_variable_scope)
             parameters = tuple(
-                p.substitute(substitution_map=substitution_map, target_theory=target_theory,
-                    lock_variable_scope=False) for p in self.parameters)
+                p.substitute(substitution_map=substitution_map, lock_variable_scope=False) for p in
+                    self.parameters)
             phi = self.universe_of_discourse.f(relation, *parameters,
                 lock_variable_scope=lock_variable_scope)
             return phi
@@ -3896,7 +3895,7 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'absorption inference rule'
         name = 'absorption'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = u.r.sequent_premises(p | u.r.implies | q) | u.r.proves | (
+            definition = u.r.tupl(p | u.r.implies | q) | u.r.proves | (
                     p | u.r.implies | (p | u.r.land | q))
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_implies_q = p | u.r.implies | q
@@ -3947,7 +3946,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         explicit_name = 'axiom interpretation inference rule'
         name = 'axiom interpretation'
         with u.v(symbol=ScriptNormal('A')) as a, u.v(symbol='P') as p:
-            definition = u.r.sequent_premises(a, p) | u.r.proves | p
+            definition = u.r.tupl(a, p) | u.r.proves | p
         with u.v(symbol=ScriptNormal('A')) as a:
             self.parameter_a = a
             self.parameter_a_mask = frozenset([a])
@@ -4083,8 +4082,8 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'biconditional introduction inference rule'
         name = 'biconditional introduction'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = u.r.sequent_premises(p | u.r.implies | q,
-                q | u.r.implies | p) | u.r.proves | (p | u.r.iff | q)
+            definition = u.r.tupl(p | u.r.implies | q, q | u.r.implies | p) | u.r.proves | (
+                    p | u.r.iff | q)
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_implies_q = p | u.r.implies | q
             self.parameter_p_implies_q_mask = frozenset([p, q])
@@ -4232,7 +4231,7 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'conjunction introduction inference rule'
         name = 'conjunction introduction'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = u.r.sequent_premises(p, q) | u.r.proves | (p | u.r.land | q)
+            definition = u.r.tupl(p, q) | u.r.proves | (p | u.r.land | q)
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4274,7 +4273,7 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
         explicit_name = 'constructive dilemma inference rule'
         name = 'constructive dilemma'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q, u.v(symbol='R') as r, u.v(symbol='S') as s:
-            definition = u.r.sequent_premises((p | u.r.implies | q), (r | u.r.implies | s),
+            definition = u.r.tupl((p | u.r.implies | q), (r | u.r.implies | s),
                 (p | u.r.lor | r)) | u.r.proves | (q | u.r.lor | s)
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_implies_q = p | u.r.implies | q
@@ -4355,8 +4354,7 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
             # Provide support for n-ary relations. First need: sequent-comma, or collection-comma.
             # definition = u.r.sequent_comma(d, x, y) | u.r.proves | (x | u.r.equal | y)
             # Meanwhile, I use combined 2-ary formulae:
-            definition = d | u.r.sequent_premises | (x | u.r.sequent_premises | y) | u.r.proves | (
-                    x | u.r.equal | y)
+            definition = d | u.r.tupl | (x | u.r.tupl | y) | u.r.proves | (x | u.r.equal | y)
         with u.v(symbol=ScriptNormal('D')) as d:
             self.parameter_d = d
             self.parameter_d_mask = frozenset([d])
@@ -4411,7 +4409,7 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
         explicit_name = 'destructive dilemma inference rule'
         name = 'destructive dilemma'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q, u.v(symbol='R') as r, u.v(symbol='S') as s:
-            definition = u.r.sequent_premises((p | u.r.implies | q), (r | u.r.implies | s),
+            definition = u.r.tupl((p | u.r.implies | q), (r | u.r.implies | s),
                 (p | u.r.lor | r)) | u.r.proves | (q | u.r.lor | s)
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_implies_q = p | u.r.implies | q
@@ -4559,7 +4557,7 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'disjunctive resolution inference rule'
         name = 'disjunctive resolution'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q, u.v(symbol='R') as r:
-            definition = (((p | u.r.lor | q) | u.r.sequent_premises | (
+            definition = (((p | u.r.lor | q) | u.r.tupl | (
                     u.r.lnot(p) | u.r.lor | r)) | u.r.proves | (p | u.r.lor | r))
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_or_q = p | u.r.lor | q
@@ -4614,8 +4612,7 @@ class DisjunctiveSyllogism1Declaration(InferenceRuleDeclaration):
         explicit_name = 'disjunctive syllogism inference rule'
         name = 'disjunctive syllogism'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = (
-                    ((p | u.r.lor | q) | u.r.sequent_premises | u.r.lnot(p)) | u.r.proves | (q))
+            definition = (((p | u.r.lor | q) | u.r.tupl | u.r.lnot(p)) | u.r.proves | (q))
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_or_q = p | u.r.lor | q
             self.parameter_p_or_q_mask = frozenset([p, q])
@@ -4668,8 +4665,7 @@ class DisjunctiveSyllogism2Declaration(InferenceRuleDeclaration):
         explicit_name = 'disjunctive syllogism inference rule'
         name = 'disjunctive syllogism'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = (
-                    ((p | u.r.lor | q) | u.r.sequent_premises | u.r.lnot(p)) | u.r.proves | (q))
+            definition = (((p | u.r.lor | q) | u.r.tupl | u.r.lnot(p)) | u.r.proves | (q))
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_or_q = p | u.r.lor | q
             self.parameter_p_or_q_mask = frozenset([p, q])
@@ -4842,7 +4838,7 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'equal terms substitution inference rule'
         name = 'equal terms substitution'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q, u.v(symbol='x') as x, u.v(symbol='y') as y:
-            definition = (p | u.r.sequent_premises | (x | u.r.equal | y)) | u.r.proves | q
+            definition = (p | u.r.tupl | (x | u.r.equal | y)) | u.r.proves | q
         with u.v(symbol='P') as p:
             self.parameter_p = p
             self.parameter_p_mask = frozenset([p])
@@ -4869,8 +4865,7 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
         x__in__x_equal_y: Formula = x_equal_y.parameters[0]
         y__in__x_equal_y: Formula = x_equal_y.parameters[1]
         substitution_map = {x__in__x_equal_y: y__in__x_equal_y}
-        q: Formula = p.substitute(substitution_map=substitution_map, target_theory=None,
-            lock_variable_scope=True)
+        q: Formula = p.substitute(substitution_map=substitution_map, lock_variable_scope=True)
         output: Formula = q
         return output
 
@@ -4892,7 +4887,7 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
         explicit_name = 'hypothetical syllogism inference rule'
         name = 'hypothetical syllogism'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.sequent_premises | q) | u.r.proves | (p | u.r.land | q))
+            definition = ((p | u.r.tupl | q) | u.r.proves | (p | u.r.land | q))
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4928,7 +4923,7 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
         # definition = StyledText(plaintext='(P, not(P)) |- (T)', unicode='(𝑷, ¬(𝑷)) ⊢ 𝐼𝑛𝑐(𝓣)')
         with u.v(symbol='P') as p, u.v(
                 symbol=StyledText(s='T', text_style=text_styles.script_normal)) as t:
-            definition = (p | u.r.sequent_premises | (u.r.lnot(p))) | u.r.proves | u.r.inc(t)
+            definition = (p | u.r.tupl | (u.r.lnot(p))) | u.r.proves | u.r.inc(t)
         with u.v(symbol='P') as p:
             self.parameter_p = p
             self.parameter_p_mask = frozenset([p])
@@ -4984,7 +4979,7 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
         # definition = StyledText(plaintext='((P = Q), (P neq Q)) |- Inc(T)',unicode='((𝑷 = 𝑸), (𝑷 ≠ 𝑸)) ⊢ 𝐼𝑛𝑐(𝒯)')
         with u.v(symbol='P') as p, u.v(symbol='Q') as q, u.v(
                 symbol=StyledText(s='T', text_style=text_styles.script_normal)) as t:
-            definition = ((p | u.r.equal | q) | u.r.sequent_premises | (
+            definition = ((p | u.r.equal | q) | u.r.tupl | (
                     p | u.r.unequal | q)) | u.r.proves | u.r.inc(t)
         with u.v(symbol='x') as x, u.v(symbol='y') as y:
             self.parameter_x_equal_y = x | u.r.equal | y
@@ -5093,7 +5088,7 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         explicit_name = 'modus ponens inference rule'
         name = 'modus ponens'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.implies | q) | u.r.sequent_premises | p) | u.r.proves | q
+            definition = ((p | u.r.implies | q) | u.r.tupl | p) | u.r.proves | q
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_implies_q = p | u.r.implies | q
             self.parameter_p_implies_q_mask = frozenset([p, q])
@@ -5144,8 +5139,7 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
         explicit_name = 'modus tollens inference rule'
         name = 'modus tollens'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
-            definition = ((p | u.r.implies | q) | u.r.sequent_premises | u.r.lnot(
-                q)) | u.r.proves | u.r.lnot(p)
+            definition = ((p | u.r.implies | q) | u.r.tupl | u.r.lnot(q)) | u.r.proves | u.r.lnot(p)
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_implies_q = p | u.r.implies | q
             self.parameter_p_implies_q_mask = frozenset([p, q])
@@ -5296,9 +5290,11 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
 
 class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        p: FlexibleFormula
+        phi: FlexibleFormula
 
     def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = universe_of_discourse
         symbol = 'variable-substitution'
         acronym = 'vs'
         abridged_name = None
@@ -5306,21 +5302,54 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         dashed_name = 'variable-substitution'
         explicit_name = 'variable substitution inference rule'
         name = 'variable substitution'
-        definition = StyledText(plaintext='(P, Phi) |- P\'', unicode='(P, 𝛷) ⊢ P\'')
+        # definition = StyledText(plaintext='(P, Phi) |- P\'', unicode='(P, 𝛷) ⊢ P\'')
+        with u.v(symbol='P') as p, u.v(symbol='O') as o, u.v(symbol='Q') as q:
+            definition = (p | u.r.tupl | o) | u.r.proves | q
+        with u.v(symbol='P') as p:
+            self.parameter_p = p
+            self.parameter_p_mask = frozenset([p])
+        with u.v(symbol=StyledText(text_style=text_styles.sans_serif_bold, plaintext='Phi',
+                unicode='Φ', latex='\Phi')) as phi:
+            # TODO: VariableSubstitutionDeclaration: Provide a standard library of greek letters.
+            # TODO: VariableSubstitutionDeclaration: Enrich how inference-rule parameters may be defined to allow an expression like (v1, v2, ..., v3) using collection-defined-by-extension with n elements.
+            self.parameter_phi = u.r.tupl
+            self.parameter_phi_mask = frozenset([phi])
+        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
+            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
         super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
             symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p: FormulaStatement, phi: (None, tuple[TheoreticalObject]),
-            t: TheoryElaborationSequence, echo: (None, bool) = None, **kwargs) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, phi: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        x_oset = unpack_formula(p).get_variable_ordered_set()
-        x_y_map = dict((x, y) for x, y in zip(x_oset, phi))
-        p_prime = p.valid_proposition.substitute(substitution_map=x_y_map, target_theory=t)
-        return p_prime
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
+            error_code=error_code)
+        p: Formula
+        _, phi, _ = verify_formula(arg='phi', input_value=phi, u=self.u, raise_exception=True,
+            error_code=error_code)
+        phi: Formula
+        # See the TO DO above.
+        # Currently this type of parameter cannot be expressed with a form and mask.
+        # In consequence we must check its syntax consistency here in an ad hoc manner.
+        verify(assertion=isinstance(phi, Formula) and phi.relation is self.u.r.tupl,
+            msg=f'The argument ⌜phi⌝({phi}) is not a collection-defined-by-extension of theoretical-objects.',
+            raise_exception=True, error_code=error_code)
+        verify(assertion=len(phi.parameters) == len(p.get_variable_ordered_set()),
+            msg=f'The number of theoretical-objects in the collection argument ⌜phi⌝({phi}) is not equal to the number of free-variables in the propositional formula ⌜p⌝{p}.',
+            raise_exception=True, error_code=error_code)
+        x_oset = p.get_variable_ordered_set()
+        x_y_map = dict((x, y) for x, y in zip(x_oset, phi.parameters))
+        output: Formula = p.substitute(substitution_map=x_y_map)
+        # TODO: VariableSubstitutionDeclaration.construct_formula(): change the following verification step. the construct_formula() may generate a formula that is only possibly propositional. but the check_premises_validity() method must require strict-propositionality.
+        verify(assertion=output.is_strictly_propositional,
+            msg=f'The formula ({output}) resulting from the application of the variable-substitution inference-rule is not strictly-propositional.',
+            raise_exception=True, error_code=error_code)
+        return output
 
 
 class AtheoreticalStatement(SymbolicObject):
@@ -6285,8 +6314,8 @@ class RelationDict(collections.UserDict):
         self._is_a = None
         self._map = None
         self._negation = None
-        self._sequent_premises = None
         self._syntactic_entailment = None
+        self._tupl = None
 
     def declare(self, arity: (None, int) = None, symbol: (None, str, StyledText) = None,
             index: (None, int) = None, auto_index: (None, bool) = None, formula_rep=None,
@@ -6566,18 +6595,20 @@ class RelationDict(collections.UserDict):
         return self.syntactic_entailment
 
     @property
-    def sequent_premises(self):
-        """Expresses the collection of premises in inference-rule formula definitions.
+    def tupl(self):
+        """Expresses an ordered sequence of theoretical objects defined by extension.
+        Notation is comma separator.
+        Name tupl to avoid a name conflict with python tuple class.
         """
         global text_dict
-        if self._sequent_premises is None:
-            self._sequent_premises = self.declare(formula_rep=Formula.collection,
+        if self._tupl is None:
+            self._tupl = self.declare(formula_rep=Formula.collection,
                 collection_start=text_dict.empty_string, collection_separator=text_dict.comma,
                 collection_end=text_dict.empty_string, signal_proposition=True,
                 symbol=SerifItalic(plaintext=',', unicode=',', latex=','), auto_index=False,
                 dashed_name='sequent-premises', name='sequent premises',
                 explicit_name='sequent calculus premises collection')
-        return self._sequent_premises
+        return self._tupl
 
     @property
     def syntactic_entailment(self):
@@ -9281,27 +9312,18 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def check_inference_validity(self, p: FormulaStatement, phi: (None, tuple[TheoreticalObject]),
-            t: TheoryElaborationSequence, echo: (None, bool) = None, **kwargs) -> bool:
-        """Verify if the arguments comply syntactically with the inference-rule.
-        """
-        verify(is_in_class(p, classes.formula_statement), '⌜p⌝ must be a formula-statement.', p=p,
-            t=t, slf=self)
-        verify(t.contains_theoretical_objct(p), '⌜p⌝ must be contained in ⌜t⌝.', p=p, t=t, slf=self)
-        verify(isinstance(phi, tuple), '⌜phi⌝ must be a tuple.', phi=phi, t=t, slf=self)
-        x_oset = unpack_formula(p).get_variable_ordered_set()
-        verify(len(x_oset) == len(phi),
-            'The cardinality of the canonically ordered free-variables.')
-        # Substitution objects in Y must be declared in U,
-        # but they may not be referenced yet in T's extension.
-        for y in phi:
-            verify(isinstance(y, TheoreticalObject), '⌜y⌝ in ⌜phi⌝ must be a theoretical-object.',
-                y=y, t=t, slf=self)
-            verify(y.u is self.u, '⌜y⌝ and ⌜self⌝ do not share the same universe-of-discourse.',
-                y=y, y_u=y.u, slf=self, slf_u=self.u)
-
-        # TODO: Add a verification step: the variable is not locked.
-        return True
+    def check_premises_validity(self, p: FlexibleFormula, phi: FlexibleFormula) -> Tuple[
+        bool, VariableSubstitutionDeclaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, p, _ = verify_formula_statement(arg='p', t=self.t, input_value=p,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        p: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: VariableSubstitutionDeclaration.Premises = VariableSubstitutionDeclaration.Premises(
+            p=p, phi=phi)
+        # TODO: VariableSubstitutionInclusion().check_premises_validity(): Add a verification or warning step: the variable is not locked.
+        return True, valid_premises
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -9315,29 +9337,22 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
         i: VariableSubstitutionDeclaration = super().i
         return i
 
-    def construct_formula(self, p: FlexibleFormula,
-            phi: (None, tuple[TheoreticalObject]) = None) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, phi: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         return self.i.construct_formula(p=p, phi=phi)
 
-    def infer_formula_statement(self, p: (None, FormulaStatement) = None,
-            phi: (None, TheoreticalObject, tuple[TheoreticalObject]) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
-            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
-            echo: (None, bool) = None) -> InferredStatement:
+    def infer_formula_statement(self, p: FlexibleFormula, phi: FlexibleFormula,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        _, p, _ = verify_formula_statement(t=self.t, arity=None, input_value=p)
-        if isinstance(phi, TheoreticalObject):
-            # If phi is passed as an theoretical-object,
-            # embed it into a tuple as we expect tuple[TheoreticalObject] as input type.
-            phi = tuple([phi])
-        return super().infer_formula_statement(p, phi, nameset=nameset, ref=ref,
+        premises = self.i.Premises(p=p, phi=phi)
+        return InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
@@ -10006,8 +10021,8 @@ class UniverseOfDiscourse(SymbolicObject):
             'an object of type SymbolicObjct.', o=o, slf=self)
         duplicate = self.symbolic_objcts.get(o.nameset)
         verify(severity=verification_severities.warning, assertion=duplicate is None,
-            msg='A symbolic-object already exists in the current universe-of-discourse with a '
-                'duplicate (symbol, index) pair.', o=o, duplicate=duplicate, slf=self)
+            msg=f'A symbolic-object {duplicate} already exists in the current universe-of-discourse {self.u} with a '
+                'duplicate designation (symbol and index).', o=o, duplicate=duplicate, slf=self)
         self.symbolic_objcts[o.nameset] = o
 
     def cross_reference_theory(self, t: TheoryElaborationSequence):
