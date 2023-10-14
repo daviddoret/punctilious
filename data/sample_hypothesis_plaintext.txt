@@ -28,7 +28,7 @@ h = t1.pose_hypothesis(hypothesis_formula=f(o1, o2), subtitle='Pose some hypothe
 conjunction_introduction = h.child_theory.i.conjunction_introduction.infer_formula_statement(
     p=f(o1, o2), q=f(o2, o3))
 variable_substitution = h.child_theory.i.variable_substitution.infer_formula_statement(
-    p=implication, phi=(o1, o2, o3))
+    p=implication, phi=u.r.tupl(o1, o2, o3))
 proposition_of_interest = h.child_theory.i.modus_ponens.infer_formula_statement(
     p_implies_q=variable_substitution, p=conjunction_introduction)
 h.child_theory.take_note(

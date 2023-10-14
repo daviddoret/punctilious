@@ -6,13 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/variable_substitution_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/variable_substitution_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_hypothesis_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_hypothesis_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/bibliography_bibtex.bib" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/bibliography_bibtex.bib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_contradiction_1_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_contradiction_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_contradiction_2_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_contradiction_2_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_refutation_1_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_refutation_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_refutation_2_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_refutation_2_math_inference_rule_definition.rstinc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/locale_en_us.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/locale_en_us.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_variable_substitution.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_variable_substitution.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_disjunction_introduction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_disjunction_introduction_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_disjunction_introduction_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_disjunction_introduction_2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_variable_substitution.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_variable_substitution.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_hypothesis.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_hypothesis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_modus_ponens.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_modus_ponens.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_theory_elaboration_stabilized.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_theory_elaboration_stabilized.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,17 +98,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/tests",
-    "settings.editor.selected.configurable": "advanced.settings"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/David/PycharmProjects/punctilious/tests&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;
   }
-}]]></component>
+}</component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings module-name="2023_05_02_PyCharmProject_Maths" is-module-sdk="true">
@@ -125,7 +133,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\continuous_integration" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for test_variable_substitution.TestVariableSubstitution.test_variable_substitution_without_variable">
+  <component name="RunManager" selected="Python.sample_proof_by_contradiction_1">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -225,6 +233,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/prebuild_generate_theory_reports.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="sample_proof_by_contradiction_1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_1.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -343,20 +372,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in test_hypothesis.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_hypothesis.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="Python tests in test_variable_substitution.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -391,12 +406,12 @@
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.build" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
+      <item itemvalue="Python.sample_proof_by_contradiction_1" />
       <item itemvalue="Python.sample_variable_substitution" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.Python tests for test_variable_substitution.TestVariableSubstitution.test_variable_substitution_with_free_variables" />
       <item itemvalue="Python tests.Python tests for test_variable_substitution.TestVariableSubstitution.test_variable_substitution_without_variable" />
-      <item itemvalue="Python tests.Python tests in test_hypothesis.py" />
       <item itemvalue="Python tests.Python tests in test_variable_substitution.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -404,11 +419,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests for test_variable_substitution.TestVariableSubstitution.test_variable_substitution_without_variable" />
+        <item itemvalue="Python.sample_proof_by_contradiction_1" />
         <item itemvalue="Python tests.Python tests in test_variable_substitution.py" />
+        <item itemvalue="Python tests.Python tests for test_variable_substitution.TestVariableSubstitution.test_variable_substitution_without_variable" />
         <item itemvalue="Python tests.Python tests for test_variable_substitution.TestVariableSubstitution.test_variable_substitution_with_free_variables" />
         <item itemvalue="Python.sample_variable_substitution" />
-        <item itemvalue="Python tests.Python tests in test_hypothesis.py" />
       </list>
     </recent_temporary>
   </component>
@@ -420,22 +435,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00305" summary="cleanup + branding">
-      <option name="closed" value="true" />
-      <created>1695326453754</created>
-      <option name="number" value="00305" />
-      <option name="presentableId" value="LOCAL-00305" />
-      <option name="project" value="LOCAL" />
-      <updated>1695326453755</updated>
-    </task>
-    <task id="LOCAL-00306" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1695326804809</created>
-      <option name="number" value="00306" />
-      <option name="presentableId" value="LOCAL-00306" />
-      <option name="project" value="LOCAL" />
-      <updated>1695326804809</updated>
     </task>
     <task id="LOCAL-00307" summary="documentation #195">
       <option name="closed" value="true" />
@@ -813,7 +812,23 @@
       <option name="project" value="LOCAL" />
       <updated>1696937811763</updated>
     </task>
-    <option name="localTasksCounter" value="354" />
+    <task id="LOCAL-00354" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
+      <option name="closed" value="true" />
+      <created>1697053548263</created>
+      <option name="number" value="00354" />
+      <option name="presentableId" value="LOCAL-00354" />
+      <option name="project" value="LOCAL" />
+      <updated>1697053548263</updated>
+    </task>
+    <task id="LOCAL-00355" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
+      <option name="closed" value="true" />
+      <created>1697053572992</created>
+      <option name="number" value="00355" />
+      <option name="presentableId" value="LOCAL-00355" />
+      <option name="project" value="LOCAL" />
+      <updated>1697053572992</updated>
+    </task>
+    <option name="localTasksCounter" value="356" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -877,11 +892,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>57</line>
-          <option name="timeStamp" value="71" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_definition_interpretation.py</url>
           <line>17</line>
           <option name="timeStamp" value="72" />
@@ -903,8 +913,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>2671</line>
-          <option name="timeStamp" value="76" />
+          <line>9069</line>
+          <option name="timeStamp" value="77" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

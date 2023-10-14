@@ -23,7 +23,7 @@ class TestTheoryElaboration(TestCase):
         r1o2o3 = robust_theory.i.axiom_interpretation.infer_formula_statement(ap1, u.f(r1, o2, o3))
         r1o1o2_and_r1o2o3 = robust_theory.i.ci.infer_formula_statement(r1o1o2, r1o2o3)
         implication_2 = robust_theory.i.variable_substitution.infer_formula_statement(p=implication,
-            phi=(o1, o2, o3))
+            phi=u.r.tupl(o1, o2, o3))
         robust_theory.i.mp.infer_formula_statement(p_implies_q=implication_2, p=r1o1o2_and_r1o2o3)
         robust_theory.stabilize()
         self.assertTrue(robust_theory.stabilized,

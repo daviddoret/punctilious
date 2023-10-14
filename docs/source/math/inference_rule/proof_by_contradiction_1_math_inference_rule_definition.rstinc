@@ -14,3 +14,18 @@ Where:
   * :math:`\mathit{Inc}` is the inconsistency function
 
 In straightforward language, if from the hypothesis that P is false, it follows that the hypothesis is inconsistent, it follows that P is true (or alternatively that the parent theory is itself inconsistent).
+
+Note
+----
+
+Note the possibility that the base :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` from which the :ref:`hypothesis<hypothesis_math_concept>` is elaborated is inconsistent.
+
+Synonyms
+---------
+
+  * reductio ad absurdum :cite:p:`bauer_2010_mathematicscomputationproofnegation`
+
+Sources
+----------
+
+  * :cite:p:`bauer_2010_mathematicscomputationproofnegation`

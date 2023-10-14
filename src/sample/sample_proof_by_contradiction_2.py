@@ -24,7 +24,7 @@ h = t1.pose_hypothesis(hypothesis_formula=o1 | u.r.neq | o2,
 
 # Elaborate on the hypothesis to uncover its inconsistency
 substitution = h.child_theory.i.variable_substitution.infer_formula_statement(p=implication,
-    phi=(o1, o2))
+    phi=u.r.tupl(o1, o2))
 equality = h.child_theory.i.modus_ponens.infer_formula_statement(p_implies_q=substitution,
     p=f_o1_eq_f_02)
 

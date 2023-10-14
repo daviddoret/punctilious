@@ -76,7 +76,7 @@ class Tao2006ThePeanoAxioms(pu.Package):
             p002 = t.i.axiom_interpretation.infer_formula_statement(axiom_2_2, (
                     (n | u.r.is_a | natural_number) | u.r.implies | (
                     (n & plusplus) | u.r.is_a | natural_number)))
-        p003 = t.i.variable_substitution.infer_formula_statement(p=p002, phi=tuple([zero]))
+        p003 = t.i.variable_substitution.infer_formula_statement(p=p002, phi=u.r.tupl(zero))
         p004 = t.i.mp.infer_formula_statement(p003, zero | u.r.is_a | natural_number, ref='2.2.3')
         self.proposition_2_2_3 = p004
 
@@ -154,7 +154,7 @@ class Tao2006ThePeanoAxioms(pu.Package):
         # Proposition 2.1.6. 4 is not equal to 0.
         t.take_note('We want to prove that 4 is not equal to 0, i.e. (4 ≠ 0).')
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: ((3 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((3)++ ≠ 0)).
-        p029 = t.i.variable_substitution.infer_formula_statement(p028, three)
+        p029 = t.i.variable_substitution.infer_formula_statement(p028, u.r.tupl(three))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: ((3)++ ≠ 0).
         p030 = t.i.modus_ponens.infer_formula_statement(p029, p022)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (4 ≠ 0).
@@ -209,15 +209,15 @@ class Tao2006ThePeanoAxioms(pu.Package):
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₀): (5 = (4)++).
         p040 = t.i.equality_commutativity.infer_formula_statement(p039)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₁): ((((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (5 ≠ 1)) ⟹ ((5)++ ≠ (1)++)).
-        p041 = t.i.variable_substitution.infer_formula_statement(p=p032, phi=(five, one))
+        p041 = t.i.variable_substitution.infer_formula_statement(p=p032, phi=u.r.tupl(five, one))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₂): ((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((4)++ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)).
-        p042 = t.i.variable_substitution.infer_formula_statement(p002, four)
+        p042 = t.i.variable_substitution.infer_formula_statement(p=p002, phi=u.r.tupl(four))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₃): ((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ (5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)).
         p043 = t.i.equal_terms_substitution.infer_formula_statement(p042, p039)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻(P₄₄): (5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).
         p044 = t.i.modus_ponens.infer_formula_statement(p043, p027)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₅): ((((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (5 ≠ 1)) ⟹ ((5)++ ≠ (1)++)).
-        p045 = t.i.variable_substitution.infer_formula_statement(p=p032, phi=(five, one))
+        p045 = t.i.variable_substitution.infer_formula_statement(p=p032, phi=u.r.tupl(five, one))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₆): ((4)++ ≠ (0)++).
         p046 = t.i.modus_ponens.infer_formula_statement(p033, p035)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₇): (5 ≠ (0)++).
@@ -259,7 +259,7 @@ class Tao2006ThePeanoAxioms(pu.Package):
             p=h1_p4, q=h1_p3)
         # ((((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ ((5)++ = (1)++)) ⟹ (5 = 1))
         h1_p6 = h1.hypothesis_child_theory.i.variable_substitution.infer_formula_statement(p=p032b,
-            phi=tuple([five, one]))
+            phi=u.r.tupl(five, one))
         # (5 = 1)
         h1_p7 = h1.hypothesis_child_theory.i.modus_ponens.infer_formula_statement(p_implies_q=h1_p6,
             p=h1_p5)
@@ -279,7 +279,7 @@ class Tao2006ThePeanoAxioms(pu.Package):
             p=h1_p10, q=h1_p9)
         # ((((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ ((4)++ = (0)++)) ⟹ (4 = 0))
         h1_p12 = h1.hypothesis_child_theory.i.variable_substitution.infer_formula_statement(p=p032b,
-            phi=tuple([four, zero]))
+            phi=u.r.tupl(four, zero))
         # (4 = 0)
         # By Axiom 2.4 again we then have 4 = 0, which contradicts our previous proposition.
         h1_p071 = h1.hypothesis_child_theory.i.modus_ponens.infer_formula_statement(

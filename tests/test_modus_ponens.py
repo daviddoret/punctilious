@@ -47,7 +47,7 @@ class TestModusPonens(TestCase):
         p_prime = t.i.conjunction_introduction.infer_formula_statement(p=r1(o1, o2), q=r1(o2, o3),
             echo=True)
         p_implies_q_prime = t.i.variable_substitution.infer_formula_statement(p=p_implies_q,
-            phi=(o1, o2, o3), echo=True)
+            phi=u.r.tupl(o1, o2, o3), echo=True)
         conclusion = t.i.mp.infer_formula_statement(p_implies_q_prime, p_prime, echo=True)
         self.assertEqual('r1(o1, o3)',
             conclusion.valid_proposition.rep_formula(pu.encodings.plaintext))
