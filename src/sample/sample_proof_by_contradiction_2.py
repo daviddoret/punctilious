@@ -15,7 +15,7 @@ f_o1_eq_f_02 = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom,
     (f(o1) | u.r.eq | f(o2)))
 with u.v('x') as x, u.v('y') as y:
     implication = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
-        formula=(f(x) | u.r.eq | f(y)) | u.r.implies | (x | u.r.eq | y))
+        p=(f(x) | u.r.eq | f(y)) | u.r.implies | (x | u.r.eq | y))
 t1.stabilize()
 
 # Pose the inequality hypothesis
@@ -30,12 +30,11 @@ equality = h.child_theory.i.modus_ponens.infer_formula_statement(p_implies_q=sub
 
 # Prove hypothesis inconsistency
 pu.configuration.echo_proof = True
-h_inconsistency = t1.i.inconsistency_introduction_2.infer_formula_statement(x_eq_y=equality,
-    x_neq_y=h.child_statement, inconsistent_theory=h.child_theory,
-    subtitle='Proof of hypothesis inconsistency')
+h_inconsistency = t1.i.inconsistency_introduction_2.infer_formula_statement(x_equal_y=equality,
+    x_unequal_y=h.child_statement, t=h.child_theory, subtitle='Proof of hypothesis inconsistency')
 
 # And finally, use the proof-by-contradiction-2 inference-rule:
-proposition_of_interest = t1.i.proof_by_contradiction_2.infer_formula_statement(
-    x_neq_y_hypothesis=h, inc_hypothesis=h_inconsistency, subtitle='The proposition of interest')
+proposition_of_interest = t1.i.proof_by_contradiction_2.infer_formula_statement(h=h,
+    inc_h=h_inconsistency, subtitle='The proposition of interest')
 
 pass

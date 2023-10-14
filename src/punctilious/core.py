@@ -5224,6 +5224,9 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
             form=self.parameter_inc_h, mask=self.parameter_inc_h_mask, raise_exception=True,
             error_code=error_code)
         h__in__inc_h: Formula = inc_h.parameters[0]
+        verify(assertion=h__in__inc_h.is_in_class(classes.theory_elaboration),
+            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-elaboration-sequence. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
+            raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
             raise_exception=True, error_code=error_code)
@@ -5261,17 +5264,33 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, x_neq_y_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        x_neq_y = x_neq_y_hypothesis.hypothesis_formula
-        x = x_neq_y.parameters[0]
-        y = x_neq_y.parameters[1]
-        # Alternatively: not(x = y)
-        return t.u.f(t.u.r.equality, x, y)
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        verify(assertion=isinstance(h, Hypothesis), msg=f'⌜h⌝({h}) is not an hypothesis',
+            raise_exception=True, error_code=error_code)
+        h: Hypothesis
+        _, x_unequal_y, _ = verify_formula(arg='h.x_unequal_y', input_value=h.hypothesis_formula,
+            u=self.u, form=self.parameter_x_unequal_y, mask=self.parameter_x_unequal_y_mask,
+            raise_exception=True, error_code=error_code)
+        x_unequal_y: Formula
+        _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u,
+            form=self.parameter_inc_h, mask=self.parameter_inc_h_mask, raise_exception=True,
+            error_code=error_code)
+        h__in__inc_h: Formula = inc_h.parameters[0]
+        verify(assertion=h__in__inc_h.is_in_class(classes.theory_elaboration),
+            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-elaboration-sequence. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
+            raise_exception=True, error_code=error_code)
+        verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(h.child_theory),
+            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
+            raise_exception=True, error_code=error_code)
+        x__in__x_unequal_y: Formula = x_unequal_y.parameters[0]
+        y__in__x_unequal_y: Formula = x_unequal_y.parameters[1]
+        output: Formula = x__in__x_unequal_y | self.u.r.equal | y__in__x_unequal_y
+        return output
 
 
 class ProofByRefutation1Declaration(InferenceRuleDeclaration):
@@ -5318,6 +5337,9 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
             form=self.parameter_inc_h, mask=self.parameter_inc_h_mask, raise_exception=True,
             error_code=error_code)
         h__in__inc_h: Formula = inc_h.parameters[0]
+        verify(assertion=h__in__inc_h.is_in_class(classes.theory_elaboration),
+            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-elaboration-sequence. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
+            raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
             raise_exception=True, error_code=error_code)
@@ -5357,15 +5379,33 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_eq_q_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p_eq_q = p_eq_q_hypothesis.hypothesis_formula
-        p_neq_q = t.u.f(t.u.r.inequality, p_eq_q.parameters[0], p_eq_q.parameters[1])
-        return p_neq_q
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        verify(assertion=isinstance(h, Hypothesis), msg=f'⌜h⌝({h}) is not an hypothesis',
+            raise_exception=True, error_code=error_code)
+        h: Hypothesis
+        _, x_equal_y, _ = verify_formula(arg='h.x_equal_y', input_value=h.hypothesis_formula,
+            u=self.u, form=self.parameter_x_equal_y, mask=self.parameter_x_equal_y_mask,
+            raise_exception=True, error_code=error_code)
+        x_equal_y: Formula
+        _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u,
+            form=self.parameter_inc_h, mask=self.parameter_inc_h_mask, raise_exception=True,
+            error_code=error_code)
+        h__in__inc_h: Formula = inc_h.parameters[0]
+        verify(assertion=h__in__inc_h.is_in_class(classes.theory_elaboration),
+            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-elaboration-sequence. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
+            raise_exception=True, error_code=error_code)
+        verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(h.child_theory),
+            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
+            raise_exception=True, error_code=error_code)
+        x__in__x_equal_y: Formula = x_equal_y.parameters[0]
+        y__in__x_equal_y: Formula = x_equal_y.parameters[y]
+        output: Formula = x__in__x_equal_y | self.u.r.unequal | y__in__x_equal_y
+        return output
 
 
 class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
@@ -9194,40 +9234,23 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def check_inference_validity(self, x_neq_y_hypothesis: Hypothesis,
-            inc_hypothesis: InferredStatement, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> bool:
-        """
-
-        :param x_neq_y_hypothesis: The hypothesis-statement in the parent theory.
-        :param inc_hypothesis: The contradiction-statement Inc(Tn) where Tn is the hypothesis-theory.
-        :param t: The current (parent) theory.
-        :param echo:
-        :return:
-
-        TODO: ProofByContradiction2Declaration.verify_args(): Make systematic verifications. I doubt it is still possible to call the method with wrong parameters.
-        """
-        inc_hypothesis: InferredStatement = verify_formula_statement(t=t, arity=1,
-            input_value=inc_hypothesis)
-        verify(is_in_class(x_neq_y_hypothesis, classes.hypothesis),
-            '⌜x_neq_y_hypothesis⌝ must be an hypothesis.', p_neq_q=x_neq_y_hypothesis, slf=self)
-        verify(t.contains_theoretical_objct(x_neq_y_hypothesis), '⌜x_neq_y⌝ must be in theory ⌜t⌝.',
-            p_neq_q=x_neq_y_hypothesis, t=t, slf=self)
-        verify(x_neq_y_hypothesis.hypothesis_child_theory.extended_theory is t,
-            '⌜x_neq_y_hypothesis.hypothesis_child_theory⌝ must extend the parent theory ⌜t⌝.',
-            p_neq_q_hypothetical_theory=x_neq_y_hypothesis.hypothesis_child_theory,
-            p_neq_q=x_neq_y_hypothesis, t=t, slf=self)
-        verify(inc_hypothesis.valid_proposition.relation is t.u.relations.inconsistency,
-            '⌜inc_hypothesis.relation⌝ must be the inconsistency relation.',
-            inc_hypothesis_relation=inc_hypothesis.relation, inc_hypothesis=inc_hypothesis, t=t,
-            slf=self)
-        inc_hypothesis_hypothesis: Hypothesis = inc_hypothesis.valid_proposition.parameters[0]
-        x_neq_y_prime: FormulaStatement = inc_hypothesis.parameters[1]
-        verify(x_neq_y_hypothesis.child_statement.is_formula_syntactically_equivalent_to(
-            x_neq_y_prime),
-            '⌜x_neq_y⌝ must be formula-syntactically-equivalent to ⌜x_neq_y⌝ in ⌜inc_x_neq_y⌝.',
-            x_neq_y_hypothesis=x_neq_y_hypothesis, x_neq_y_prime=x_neq_y_prime, t=t, slf=self)
-        return True
+    def check_premises_validity(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Tuple[
+        bool, ProofByContradiction2Declaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, h, _ = verify_hypothesis(arg='h', t=self.t, input_value=h,
+            hypothesis_form=self.i.parameter_x_unequal_y,
+            hypothesis_mask=self.i.parameter_x_unequal_y_mask, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
+        h: Hypothesis
+        _, inc_h, _ = verify_formula_statement(arg='inc_h', t=self.t, input_value=inc_h,
+            form=self.i.parameter_inc_h, mask=self.i.parameter_inc_h_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        inc_h: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: ProofByContradiction2Declaration.Premises = ProofByContradiction2Declaration.Premises(
+            h=h, inc_h=inc_h)
+        return True, valid_premises
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -9241,25 +9264,23 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
         i: ProofByContradiction2Declaration = super().i
         return i
 
-    def construct_formula(self, x_neq_y_hypothesis: Hypothesis,
-            inc_hypothesis: FlexibleFormula) -> Formula:
+    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return self.i.construct_formula(x_neq_y_hypothesis=x_neq_y_hypothesis,
-            inc_hypothesis=inc_hypothesis)
+        return self.i.construct_formula(h=h, inc_h=inc_h)
 
-    def infer_formula_statement(self, x_neq_y_hypothesis: (None, FormulaStatement) = None,
-            inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_formula_statement(self, h: FlexibleFormula, inc_h: FlexibleFormula,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        return super().infer_formula_statement(x_neq_y_hypothesis, inc_hypothesis, nameset=nameset,
-            ref=ref, paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        premises = self.i.Premises(h=h, inc_h=inc_h)
+        return InferredStatement(i=self, premises=premises, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
 class ProofByRefutation1Inclusion(InferenceRuleInclusion):
@@ -9278,39 +9299,21 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo,
             proof=proof)
 
-    def check_inference_validity(self, p_hypothesis: Hypothesis, inc_hypothesis: InferredStatement,
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> bool:
-        """
-
-        :param p_hypothesis: The hypothesis-statement in the parent theory.
-        :param inc_hypothesis: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
-        :param t: The current (parent) theory.
-        :param echo:
-        :return:
-        """
-        verify(is_in_class(p_hypothesis, classes.hypothesis), '⌜p⌝ must be an hypothesis.',
-            p=p_hypothesis, slf=self)
-        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
-            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_hypothesis, slf=self)
-        verify(t.contains_theoretical_objct(p_hypothesis), '⌜p⌝ must be in theory ⌜t⌝.',
-            p=p_hypothesis, t=t, slf=self)
-        verify(p_hypothesis.hypothesis_child_theory.extended_theory is t,
-            '⌜p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
-            p_hypothetical_theory=p_hypothesis.hypothesis_child_theory, p=p_hypothesis, t=t,
-            slf=self)
-        verify(inc_hypothesis.relation is t.u.relations.inconsistency,
-            '⌜inc_p.relation⌝ must be of form (Inc(Hn)).', inc_p_relation=inc_hypothesis.relation,
-            inc_p=inc_hypothesis, t=t, slf=self)
-        verify(
-            inc_hypothesis.valid_proposition.parameters[0] is p_hypothesis.hypothesis_child_theory,
-            '⌜inc_p⌝ must be of form (Inc(Hn)) where parameter[0] Hn is the hypothetical-theory.',
-            inc_p_parameters_0=inc_hypothesis.valid_proposition.parameters[0],
-            p_hypothetical_theory=p_hypothesis.hypothesis_child_theory, t=t, slf=self)
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
-        #  stable???
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
-        #  is stable
-        return True
+    def check_premises_validity(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Tuple[
+        bool, ProofByRefutation1Declaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, h, _ = verify_hypothesis(arg='h', t=self.t, input_value=h,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        h: Hypothesis
+        _, inc_h, _ = verify_formula_statement(arg='inc_h', t=self.t, input_value=inc_h,
+            form=self.i.parameter_inc_h, mask=self.i.parameter_inc_h_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        inc_h: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: ProofByRefutation1Declaration.Premises = ProofByRefutation1Declaration.Premises(
+            h=h, inc_h=inc_h)
+        return True, valid_premises
 
     def compose_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -9323,23 +9326,23 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
         i: ProofByRefutation1Declaration = super().i
         return i
 
-    def infer_formula(self, p_hypothesis: Hypothesis, inc_hypothesis: FlexibleFormula) -> Formula:
+    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return self.i.construct_formula(p_hypothesis=p_hypothesis, inc_hypothesis=inc_hypothesis)
+        return self.i.construct_formula(h=h, inc_h=inc_h)
 
-    def infer_formula_statement(self, p_hypothesis: (None, FormulaStatement) = None,
-            inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_formula_statement(self, h: FlexibleFormula, inc_h: FlexibleFormula,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        return super().infer_formula_statement(p_hypothesis, inc_hypothesis, nameset=nameset,
-            ref=ref, paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        premises = self.i.Premises(h=h, inc_h=inc_h)
+        return InferredStatement(i=self, premises=premises, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
 class ProofByRefutation2Inclusion(InferenceRuleInclusion):
@@ -9364,36 +9367,23 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_proof_by_refutation_2_paragraph_proof(o=o)
         return output
 
-    def check_inference_validity(self, p_eq_q_hypothesis: Hypothesis,
-            inc_hypothesis: InferredStatement, t: TheoryElaborationSequence,
-            echo: (None, bool) = None) -> bool:
-        """
-
-        :param p_eq_q_hypothesis: The hypothesis-statement in the parent theory.
-        :param inc_hypothesis: The refutation-statement Inc(Tn) where Tn is the hypothesis-theory.
-        :param t: The current (parent) theory.
-        :param echo:
-        :return:
-        """
-        verify(is_in_class(p_eq_q_hypothesis, classes.hypothesis), '⌜p⌝ must be an hypothesis.',
-            p=p_eq_q_hypothesis, slf=self)
-        verify(is_in_class(inc_hypothesis, classes.inferred_proposition),
-            '⌜inc_p⌝ must be an inferred-statement.', inc_p=inc_hypothesis, slf=self)
-        verify(t.contains_theoretical_objct(p_eq_q_hypothesis), '⌜p⌝ must be in theory ⌜t⌝.',
-            p=p_eq_q_hypothesis, t=t, slf=self)
-        verify(p_eq_q_hypothesis.hypothesis_child_theory.extended_theory is t,
-            '⌜p.hypothetical_theory⌝ must extend the parent theory ⌜t⌝.',
-            p_hypothetical_theory=p_eq_q_hypothesis.hypothesis_child_theory, p=p_eq_q_hypothesis,
-            t=t, slf=self)
-        verify(inc_hypothesis.valid_proposition.relation is t.u.relations.inconsistency,
-            '⌜inc_p.relation⌝ must be of form (Inc(Hn)).',
-            inc_p_relation=inc_hypothesis.valid_proposition.relation, inc_p=inc_hypothesis, t=t,
-            slf=self)
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the parent theory is
-        #  stable???
-        # TODO: ProofByContradictionDeclaration.verify_args: check that the hypothetical-theory
-        #  is stable
-        return True
+    def check_premises_validity(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Tuple[
+        bool, ProofByRefutation2Declaration.Premises]:
+        error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
+        # Validate that expected formula-statements are formula-statements in the current theory.
+        _, h, _ = verify_hypothesis(arg='h', t=self.t, input_value=h,
+            hypothesis_form=self.i.parameter_x_equal_y,
+            hypothesis_mask=self.i.parameter_x_equal_y_mask, is_strictly_propositional=True,
+            raise_exception=True, error_code=error_code)
+        h: Hypothesis
+        _, inc_h, _ = verify_formula_statement(arg='inc_h', t=self.t, input_value=inc_h,
+            form=self.i.parameter_inc_h, mask=self.i.parameter_inc_h_mask,
+            is_strictly_propositional=True, raise_exception=True, error_code=error_code)
+        inc_h: Formula
+        # The method either raises an exception during validation, or return True.
+        valid_premises: ProofByRefutation2Declaration.Premises = ProofByRefutation2Declaration.Premises(
+            h=h, inc_h=inc_h)
+        return True, valid_premises
 
     @property
     def i(self) -> ProofByRefutation2Declaration:
@@ -9401,24 +9391,23 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
         i: ProofByRefutation2Declaration = super().i
         return i
 
-    def construct_formula(self, x_eq_y_hypothesis: Hypothesis, inc_hypothesis: FlexibleFormula):
+    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        return self.i.construct_formula(x_eq_y_hypothesis=x_eq_y_hypothesis,
-            inc_hypothesis=inc_hypothesis)
+        return self.i.construct_formula(h=h, inc_h=inc_h)
 
-    def infer_formula_statement(self, x_eq_y_hypothesis: (None, FormulaStatement) = None,
-            inc_hypothesis: (None, FormulaStatement) = None, nameset: (None, str, NameSet) = None,
+    def infer_formula_statement(self, h: FlexibleFormula, inc_h: FlexibleFormula,
             ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
             subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
         """
-        return super().infer_formula_statement(x_eq_y_hypothesis, inc_hypothesis, nameset=nameset,
-            ref=ref, paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        premises = self.i.Premises(h=h, inc_h=inc_h)
+        return InferredStatement(i=self, premises=premises, ref=ref,
+            paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
 
 
 class VariableSubstitutionInclusion(InferenceRuleInclusion):
