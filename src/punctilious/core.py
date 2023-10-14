@@ -988,6 +988,7 @@ def verify(assertion: bool, msg: str,
         report = f'\n\nMessage:\n{msg}\n\nContextual information:{contextual_information}\n\nSeverity: {str(severity).upper()}'
         # repm.prnt(report)
         if severity is verification_severities.warning:
+            # raise Exception("oops")
             warnings.warn(report)
         raise_exception = prioritize_value(raise_exception,
             configuration.raise_exception_on_verification_error, True)
@@ -2861,6 +2862,8 @@ class Formula(TheoreticalObject):
             The theoretical-object with which to verify formula-equivalence.
 
         """
+        if self is o2:
+            return True
         # if o2 is a formula-statement, retrieve its formula.
         o2 = o2.valid_proposition if is_in_class(o2, classes.formula_statement) else o2
         if self is o2:
@@ -3666,6 +3669,8 @@ class FormulaStatement(Statement):
             The theoretical-object with which to verify formula-equivalence.
 
         """
+        if self is o2:
+            return True
         return self.valid_proposition.is_formula_syntactically_equivalent_to(o2)
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
@@ -5218,6 +5223,10 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
         _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u,
             form=self.parameter_inc_h, mask=self.parameter_inc_h_mask, raise_exception=True,
             error_code=error_code)
+        h__in__inc_h: Formula = inc_h.parameters[0]
+        verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(h.child_theory),
+            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
+            raise_exception=True, error_code=error_code)
         p__in__not_p: Formula = not_p.parameters[0]
         output: Formula = p__in__not_p
         return output
@@ -5225,19 +5234,32 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
 
 class ProofByContradiction2Declaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        h: FlexibleFormula
+        inc_h: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'proof-by-contradiction-2'
         acronym = 'pbc2'
         auto_index = False
         dashed_name = 'proof-by-contradiction-2'
         explicit_name = 'proof by contradiction #2 inference rule'
         name = 'proof by contradiction #2'
-        definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 ≠ 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 = 𝑸)'
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            name=name, explicit_name=explicit_name, echo=echo)
+        # definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 ≠ 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 = 𝑸)'
+        with u.v(symbol='H') as h, u.v(symbol='x') as x, u.v(symbol='y') as y:
+            definition = u.r.tupl(h | u.r.formulates | (x | u.r.unequal | y),
+                u.r.inc(h)) | u.r.proves | (x | u.r.equal | y)
+        with  u.v(symbol='x') as x, u.v(symbol='y') as y:
+            self.parameter_x_unequal_y = (x | u.r.unequal | y)
+            self.parameter_x_unequal_y_mask = frozenset([x, y])
+        with u.v(symbol='H') as h:
+            self.parameter_h = h
+            self.parameter_h_mask = frozenset([h])
+        with u.v(symbol='H') as h:
+            self.parameter_inc_h = u.r.inc(h)
+            self.parameter_inc_h_mask = frozenset([h])
+        super().__init__(definition=definition, universe_of_discourse=u, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, x_neq_y_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
@@ -5254,29 +5276,53 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
 
 class ProofByRefutation1Declaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        h: FlexibleFormula
+        inc_h: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'proof-by-refutation-1'
         acronym = 'pbr1'
         auto_index = False
         dashed_name = 'proof-by-refutation-1'
         explicit_name = 'proof by refutation #1 inference rule'
         name = 'proof by refutation #1'
-        definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ ¬𝑷'
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            name=name, explicit_name=explicit_name, echo=echo)
+        # definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ ¬𝑷'
+        with u.v(symbol='H') as h, u.v(symbol='P') as p:
+            definition = u.r.tupl(h | u.r.formulates | p, u.r.inc(h)) | u.r.proves | u.r.lnot(p)
+        with u.v(symbol='P') as p:
+            self.parameter_p = p
+            self.parameter_p_mask = frozenset([p])
+        with u.v(symbol='H') as h:
+            self.parameter_h = h
+            self.parameter_h_mask = frozenset([h])
+        with u.v(symbol='H') as h:
+            self.parameter_inc_h = u.r.inc(h)
+            self.parameter_inc_h_mask = frozenset([h])
+        super().__init__(definition=definition, universe_of_discourse=u, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
+            explicit_name=explicit_name, echo=echo)
 
-    def infer_formula(self, p_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
-            t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
+    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
-        p = p_hypothesis.hypothesis_formula
-        not_p = t.u.f(t.u.r.negation, p)
-        return not_p
+        error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
+        verify(assertion=isinstance(h, Hypothesis), msg=f'⌜h⌝({h}) is not an hypothesis',
+            raise_exception=True, error_code=error_code)
+        h: Hypothesis
+        _, p, _ = verify_formula(arg='h.p', input_value=h.hypothesis_formula, u=self.u,
+            raise_exception=True, error_code=error_code)
+        p: Formula
+        _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u,
+            form=self.parameter_inc_h, mask=self.parameter_inc_h_mask, raise_exception=True,
+            error_code=error_code)
+        h__in__inc_h: Formula = inc_h.parameters[0]
+        verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(h.child_theory),
+            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
+            raise_exception=True, error_code=error_code)
+        output: Formula = self.u.r.lnot(p)
+        return output
 
 
 class ProofByRefutation2Declaration(InferenceRuleDeclaration):
@@ -5284,19 +5330,32 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
     """
 
     class Premises(typing.NamedTuple):
-        p_implies_q: FlexibleFormula
+        h: FlexibleFormula
+        inc_h: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
         symbol = 'proof-by-refutation-2'
         acronym = 'pbr2'
         auto_index = False
         dashed_name = 'proof-by-refutation-2'
         explicit_name = 'proof by refutation #2 inference rule'
         name = 'proof by refutation #2'
-        definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 = 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 ≠ 𝑸)'
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            name=name, explicit_name=explicit_name, echo=echo)
+        # definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 = 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 ≠ 𝑸)'
+        with u.v(symbol='H') as h, u.v(symbol='x') as x, u.v(symbol='y') as y:
+            definition = u.r.tupl(h | u.r.formulates | (x | u.r.equal | y),
+                u.r.inc(h)) | u.r.proves | (x | u.r.unequal | y)
+        with  u.v(symbol='x') as x, u.v(symbol='y') as y:
+            self.parameter_x_equal_y = (x | u.r.equal | y)
+            self.parameter_x_equal_y_mask = frozenset([x, y])
+        with u.v(symbol='H') as h:
+            self.parameter_h = h
+            self.parameter_h_mask = frozenset([h])
+        with u.v(symbol='H') as h:
+            self.parameter_inc_h = u.r.inc(h)
+            self.parameter_inc_h_mask = frozenset([h])
+        super().__init__(definition=definition, universe_of_discourse=u, symbol=symbol,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p_eq_q_hypothesis: Hypothesis, inc_hypothesis: FormulaStatement,
             t: TheoryElaborationSequence, echo: (None, bool) = None) -> Formula:
@@ -5738,6 +5797,17 @@ theory-elaboration."""
         """Return the dictionary of inference-rule-inclusions contained in this
         theory-elaboration."""
         return self._inference_rule_inclusions
+
+    def is_formula_syntactically_equivalent_to(self, o2: TheoreticalObject) -> bool:
+        """Returns true if ⌜self⌝ is formula-syntactically-equivalent to ⌜o2⌝.
+
+        Parameters:
+        -----------
+        o2 : TheoreticalObject
+            The theoretical-object with which to verify formula-equivalence.
+
+        """
+        return self is o2
 
     @property
     def is_strictly_propositional(self) -> bool:
@@ -7346,22 +7416,19 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
     @property
     def proof_by_contradiction_2(self) -> ProofByContradiction2Declaration:
         if self._proof_by_contradiction_2 is None:
-            self._proof_by_contradiction_2 = ProofByContradiction2Declaration(
-                universe_of_discourse=self.u)
+            self._proof_by_contradiction_2 = ProofByContradiction2Declaration(u=self.u)
         return self._proof_by_contradiction_2
 
     @property
     def proof_by_refutation_1(self) -> ProofByRefutation1Declaration:
         if self._proof_by_refutation_1 is None:
-            self._proof_by_refutation_1 = ProofByRefutation1Declaration(
-                universe_of_discourse=self.u)
+            self._proof_by_refutation_1 = ProofByRefutation1Declaration(u=self.u)
         return self._proof_by_refutation_1
 
     @property
     def proof_by_refutation_2(self) -> ProofByRefutation2Declaration:
         if self._proof_by_refutation_2 is None:
-            self._proof_by_refutation_2 = ProofByRefutation2Declaration(
-                universe_of_discourse=self.u)
+            self._proof_by_refutation_2 = ProofByRefutation2Declaration(u=self.u)
         return self._proof_by_refutation_2
 
     @property
