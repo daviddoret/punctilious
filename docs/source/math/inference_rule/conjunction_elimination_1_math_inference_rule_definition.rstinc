@@ -14,3 +14,14 @@ Where:
    * :math:`\mathbf{Q}` is a propositional :ref:`formula<formula_math_concept>`
 
 In straightforward language, if both :math:`\boldsymbol{P}` and :math:`\mathbf{Q}` are true, it follows that :math:`\boldsymbol{P}` is true.
+
+Synonyms
+----------
+
+   * Simplification :cite:p:`copi_2014_introductionlogic{p. 369}`
+
+Sources
+----------
+
+* :cite:p:`warner_2018_puremathematicsbeginnersrigorous{p. 114}`
+* :cite:p:`copi_2014_introductionlogic{p. 369}`

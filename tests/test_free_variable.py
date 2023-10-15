@@ -20,7 +20,7 @@ class TestFreeVariable(TestCase):
             self.assertIs(y, phi.parameters[1])
             self.assertIsNot(y, phi.parameters[0])
             self.assertIsNot(x, phi.parameters[1])
-        with self.assertRaises(pu.FailedVerificationException):
+        with self.assertRaises(pu.PunctiliousException):
             # Outside the with statement, scope is locked.
             # Trying to extend the scope raises an exception.
             psi = u.f(r, y, x)

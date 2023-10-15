@@ -1,0 +1,7 @@
+This python method verifies the validity of the premises. It is called by the python constructor of the :ref:`InferredStatement<inferred_statement_python_class>` python class to assure that :ref:`formula-statements<formula_statement_math_concept>` are inferred if and only if they are valid.
+
+Returns True if the premises are valid and allow the execution of the inference algorithm. In this case, the constructor of the :ref:`InferredStatement<inferred_statement_python_class>` class will succeed and create an :ref:`InferredStatement<inferred_statement_python_class>` instance.
+
+Returns False if the premises are *not* valid and *do not* allow the execution of the inference algorithm. In this case, the constructor of the :ref:`InferredStatement<inferred_statement_python_class>` class will fail and raise a PunctiliousException error.
+
+.. include:: ../../include/construct_formula_vs_infer_formula_statement_note.rstinc

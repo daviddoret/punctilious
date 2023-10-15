@@ -26,14 +26,11 @@ class TestInconsistencyIntroduction1(TestCase):
         # Elaborate the parent theory
         t1 = u.t()
         axiom_theory = t1.include_axiom(a=axiom)
-        t1_p1 = t1.i.axiom_interpretation.infer_formula_statement(axiom=axiom_theory,
-            formula=r1(o1, o2))
-        t1_p2 = t1.i.axiom_interpretation.infer_formula_statement(axiom=axiom_theory,
-            formula=r1(o2, o3))
+        t1_p1 = t1.i.axiom_interpretation.infer_formula_statement(a=axiom_theory, p=r1(o1, o2))
+        t1_p2 = t1.i.axiom_interpretation.infer_formula_statement(a=axiom_theory, p=r1(o2, o3))
         with u.v() as x, u.v() as y, u.v() as z:
-            t1_p3_implication = t1.i.axiom_interpretation.infer_formula_statement(
-                axiom=axiom_theory,
-                formula=((r1(x, y) | u.r.land | r1(y, z)) | u.r.implies | r1(x, z)))
+            t1_p3_implication = t1.i.axiom_interpretation.infer_formula_statement(a=axiom_theory,
+                p=((r1(x, y) | u.r.land | r1(y, z)) | u.r.implies | r1(x, z)))
         t1.stabilize()
         hypothetical_formula = u.f(u.r.lnot, u.f(r1, o1, o3))
         # H1: ¬(𝑟₁(𝑜₁, 𝑜₃))
@@ -42,9 +39,8 @@ class TestInconsistencyIntroduction1(TestCase):
         t2_p5 = t1_h1.hypothesis_statement_in_child_theory
         t2_p6 = t2.i.conjunction_introduction.infer_formula_statement(p=t1_p1, q=t1_p2)
         t2_p7 = t2.i.variable_substitution.infer_formula_statement(p=t1_p3_implication,
-            phi=(o1, o2, o3))
+            phi=u.r.tupl(o1, o2, o3))
         # t2_p8: 𝑟₁(𝑜₁, 𝑜₃) by modus ponens
         t2_p8 = t2.i.modus_ponens.infer_formula_statement(p_implies_q=t2_p7, p=t2_p6)
         # p5 is the negation of p8, which is a contradiction in t2
-        p9 = t1.i.inconsistency_introduction_1.infer_formula_statement(p=t2_p8, not_p=t2_p5,
-            inconsistent_theory=t2)
+        p9 = t1.i.inconsistency_introduction_1.infer_formula_statement(p=t2_p8, not_p=t2_p5, t=t2)

@@ -1,14 +1,13 @@
 import os
 import sys
-import pathlib
 
 # https://stackoverflow.com/questions/10324393/sphinx-build-fail-autodoc-cant-import-find-module
 print(f'os.getcwd()={os.getcwd()}')
-sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
-sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src')))
-sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src', 'punctilious')))
-sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src', 'sample')))
-sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src', 'theory')))
+sys.path.insert(0, os.path.abspath(os.path.join('', '../..')))
+sys.path.insert(0, os.path.abspath(os.path.join('', '../..', 'src')))
+sys.path.insert(0, os.path.abspath(os.path.join('', '../..', 'src', 'punctilious')))
+sys.path.insert(0, os.path.abspath(os.path.join('', '../..', 'src', 'sample')))
+sys.path.insert(0, os.path.abspath(os.path.join('', '../..', 'src', 'theory')))
 # sys.path.insert(0, 'C:\\Users\\David\\PycharmProjects\\punctilious\\src')
 print(sys.path)
 # Configuration file for the Sphinx documentation builder.
@@ -31,9 +30,9 @@ release = "1.0.9"
 # https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html
 # https://pypi.org/project/sphinxcontrib-bibtex/
 extensions = [  # 'sphinxcontrib-inlinesyntaxhighlight',
-    'sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinxcontrib.bibtex', 'sphinx_autodoc_typehints',
-    'sphinx.ext.graphviz', 'sphinx_togglebutton', 'sphinx_rtd_theme', 'sphinx_favicon',
-    'sphinx_tabs.tabs', 'sphinx_tags', 'sphinx_design']
+    'sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinx_autodoc_typehints', 'sphinx.ext.graphviz',
+    'sphinx_togglebutton', 'sphinx_rtd_theme', 'sphinx_favicon', 'sphinx_tabs.tabs', 'sphinx_tags',
+    'sphinx_design', 'sphinxcontrib.bibtex']
 # 'sphinxawesome_theme',
 # 'sphinx_exec_code',
 bibtex_bibfiles = ['bibliography_bibtex.bib']

@@ -1,0 +1,29 @@
+import punctilious as pu
+
+# Create a universe-of-discourse with basic objects for the sake of this example.
+u = pu.UniverseOfDiscourse(echo=True)
+o1 = u.o.declare()
+o2 = u.o.declare()
+o3 = u.o.declare()
+r1 = u.r.declare(2, signal_proposition=True)
+r2 = u.r.declare(1, signal_proposition=True)
+definition = u.declare_definition(natural_language='Dummy definition for demonstration purposes')
+
+# Elaborate a dummy theory with a set of propositions necessary for our demonstration
+t1 = u.t(echo=True)
+theory_definition = t1.include_definition(d=definition)
+
+# And finally, use the absorption inference-rule:
+proposition_of_interest = t1.i.definition_interpretation.infer_formula_statement(
+    d=theory_definition, x=r1(o1, o2), y=r2(o3), subtitle='The proposition of interest')
+
+Let "U19" be a universe-of-discourse.
+
+Let "T1" be a theory-elaboration-sequence in U19.
+
+Definition (T1.D1): Let definition D1 "Dummy definition for demonstration purposes" be included (postulated) in T1.
+
+Inference rule (definition-interpretation): Let inference-rule definition-interpretation defined as "(D2, x1, y1 |- (x1 = y1))" be included and considered valid in T1.
+
+Proposition (T1.P1) - The proposition of interest: (r1(o1, o2) = r2(o3)). Proof: "Dummy definition for demonstration purposes" is postulated by def. (D1). r1(o1, o2) is an interpretation of that definition.Therefore, by the  inference rule: (D2, x1, y1 |- (x1 = y1)), it follows that (r1(o1, o2) = r2(o3)). QED
+

@@ -1,0 +1,14 @@
+Definition
+----------
+
+*disjunctive-syllogism-2* is the :ref:`inference-rule<inference_rule_math_concept>`:
+
+.. math::
+
+    \left( \left( \boldsymbol{P} \lor \boldsymbol{Q} \right), \neg \boldsymbol{Q} \right) \vdash \boldsymbol{P}
+
+Sources
+----------
+
+* :cite:p:`warner_2018_puremathematicsbeginnersrigorous{p. 114}`
+* :cite:p:`copi_2014_introductionlogic{p. 368}`

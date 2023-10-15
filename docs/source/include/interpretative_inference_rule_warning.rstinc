@@ -1,0 +1,4 @@
+.. warning::
+   This :ref:`inference-rule<inference_rule_math_concept>` is **interpretative**, i.e.: it interprets a truth expressed in natural-language (e.g.: an :ref:`axiom<axiom_math_concept>`, or a :ref:`definition<definition_math_concept>`) and translates it to a :ref:`formula-statement<formula_statement_math_concept>`. Theory authors must be critically attentive to the semantic accuracy of this **interpretation** . In effect, *punctilious* does not verify semantic consistency, it only covers syntactical consistency.
+
+   In straightforward language, one may introduce arbitrary statements in a theory with **interpretative** :ref:`inference-rules<inference_rule_math_concept>`.

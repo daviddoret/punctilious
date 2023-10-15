@@ -14,3 +14,8 @@ Where:
    * :math:`\mathbf{Q}` is a propositional :ref:`formula<formula_math_concept>`
 
 In straightforward language, if :math:`\mathbf{Q}` follows from :math:`\boldsymbol{P}`, then both :math:`\boldsymbol{P}` and :math:`\mathbf{Q}` follow from :math:`\boldsymbol{P}`.
+
+Sources
+----------
+
+* :cite:p:`copi_2014_introductionlogic{p. 369}`

@@ -1,3 +1,0 @@
-This python method **does not** verify the validity of the arguments, applies the :ref:`inference-rule<inference_rule_math_concept>` algorithm, and returns a :ref:`formula<formula_math_concept>`.
-
-.. include:: ../../include/infer_formula_vs_infer_formula_statement_note.rstinc

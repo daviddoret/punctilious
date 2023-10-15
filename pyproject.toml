@@ -56,7 +56,7 @@ push = true
     'current_version = "{version}"',
     'version = "{version}"',
 ]
-"docs/source/conf.py" = [
+"docs/conf.py" = [
     'release = "{version}"',
 ]
 "src/punctilious/__init__.py" = [

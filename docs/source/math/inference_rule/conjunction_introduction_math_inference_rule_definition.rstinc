@@ -23,3 +23,15 @@ Quotes
     Proof Rule
     If we can conclude both ϕ and ψ, we may infer the compound statement ϕ ∧ ψ."
     - :cite:p:`proofwiki_2022_ruleconjunction`
+
+Synonyms
+----------
+
+   * Conjunction :cite:p:`copi_2014_introductionlogic{p. 370}`
+
+Sources
+----------
+
+* :cite:p:`copi_2014_introductionlogic{p. 370}`
+* :cite:p:`proofwiki_2022_ruleconjunction`
+* :cite:p:`warner_2018_puremathematicsbeginnersrigorous{p. 114}`

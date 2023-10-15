@@ -1,6 +1,4 @@
 .. _source_code_repository_python:
-.. _source code repository:
-.. _source code:
 
 .. role:: python(code)
     :language: py

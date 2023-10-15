@@ -22,14 +22,16 @@ python_sample_path = os.path.abspath(
     os.path.join(project_path, 'docs', 'source', 'python', 'sample'))
 python_sample_template = env.get_template('inference_rule_python_sample_template.jinja2')
 
-inference_rules = ['absorption', 'biconditional-elimination-1', 'biconditional-elimination-2',
-    'biconditional-introduction', 'conjunction-elimination-1', 'conjunction-elimination-2',
-    'conjunction-introduction', 'disjunction-introduction-1', 'disjunction-introduction-2',
-    'double-negation-elimination', 'double-negation-introduction', 'equal-terms-substitution',
-    'equality-commutativity', 'inconsistency-introduction-1', 'inconsistency-introduction-2',
-    'inconsistency-introduction-3', 'modus-ponens', 'proof-by-contradiction-1',
-    'proof-by-contradiction-2', 'proof-by-refutation-1', 'proof-by-refutation-2',
-    'variable-substitution']
+inference_rules = ['absorption', 'axiom-interpretation', 'biconditional-elimination-1',
+    'biconditional-elimination-2', 'biconditional-introduction', 'conjunction-elimination-1',
+    'conjunction-elimination-2', 'conjunction-introduction', 'constructive-dilemma',
+    'definition-interpretation', 'destructive-dilemma', 'disjunction-introduction-1',
+    'disjunction-introduction-2', 'disjunctive-resolution', 'disjunctive-syllogism-1-1',
+    'double-negation-elimination', 'double-negation-introduction', 'equality-commutativity',
+    'equal-terms-substitution', 'hypothetical-syllogism', 'inconsistency-introduction-1',
+    'inconsistency-introduction-2', 'inconsistency-introduction-3', 'modus-ponens', 'modus-tollens',
+    'proof-by-contradiction-1', 'proof-by-contradiction-2', 'proof-by-refutation-1',
+    'proof-by-refutation-2', 'variable-substitution']
 
 for ir in inference_rules:
     dashed_name = ir

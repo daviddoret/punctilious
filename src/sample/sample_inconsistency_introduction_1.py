@@ -20,4 +20,4 @@ t2 = u.t()
 
 # And finally, use the inconsistency-introduction-1 inference-rule:
 proposition_of_interest = t2.i.inconsistency_introduction_1.infer_formula_statement(p=p,
-    not_p=not_p, inconsistent_theory=t1, subtitle='The proposition of interest')
+    not_p=not_p, t=t1, subtitle='The proposition of interest')

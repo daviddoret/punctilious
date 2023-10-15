@@ -14,3 +14,21 @@ Where:
  * :math:`\mathit{Inc}` is the inconsistency function
 
 In plain language, it consists in posing the hypothesis that a proposition :math:`\boldsymbol{P}` is true, refuting that hypothesis by proving :math:`\neg \boldsymbol{P}`, inferring the inconsistency of that hypothesis from this contradiction, and finally inferring :math:`\boldsymbol{P}`  (or alternatively that the parent theory is itself inconsistent).
+
+Note
+----
+
+Note the possibility that the base :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` from which the :ref:`hypothesis<hypothesis_math_concept>` is elaborated is inconsistent.
+
+Synonyms
+---------
+
+  * proof of negation :cite:p:`bauer_2010_mathematicscomputationproofnegation`
+  * refutation by contradiction :cite:p:`nlab_2017_refutationcontradictionnlab`
+
+Sources
+----------
+
+  * :cite:p:`bauer_2010_mathematicscomputationproofnegation`
+  * :cite:p:`nlab_2017_refutationcontradictionnlab`
+

@@ -39,7 +39,7 @@ class LocaleEnUs(Locale):
         yield o.natural_language
         yield text_dict.close_quasi_quote
         yield SansSerifNormal(' in ')
-        yield from o.universe_of_discourse.compose_symbol()
+        yield from o.u.compose_symbol()
         yield from o.nameset.compose_name(pre=SansSerifNormal(', known as '))
         yield from o.nameset.compose_acronym(pre=SansSerifNormal(', or simply '))
         yield SansSerifNormal('.')
@@ -136,8 +136,8 @@ class LocaleEnUs(Locale):
 
     def compose_conjunction_elimination_2_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        p0 = o.inference_rule.definition.parameters[0]
         p_and_q: FormulaStatement = o.parameters[0]
+        p0 = o.inference_rule.definition.parameters[0]
         yield from p_and_q.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
         yield p0.compose_formula()
@@ -166,6 +166,34 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('. ')
         return True
 
+    def compose_constructive_dilemma_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        parameter_p_implies_q: Formula = o.inference_rule.definition.parameters[0].parameters[0]
+        p_implies_q: FormulaStatement = o.parameters[0]
+        yield from p_implies_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_p_implies_q.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from p_implies_q.compose_ref_link()
+        yield SansSerifNormal('. ')
+        parameter_r_implies_s: Formula = o.inference_rule.definition.parameters[0].parameters[1]
+        r_implies_s: FormulaStatement = o.parameters[1]
+        yield from r_implies_s.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_r_implies_s.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from r_implies_s.compose_ref_link()
+        yield SansSerifNormal('. ')
+        parameter_p_or_r: Formula = o.inference_rule.definition.parameters[0].parameters[2]
+        p_or_r: FormulaStatement = o.parameters[2]
+        yield from p_or_r.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_p_or_r.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from p_or_r.compose_ref_link()
+        yield SansSerifNormal('. ')
+        return True
+
     def compose_definition_declaration(self, o: DefinitionDeclaration) -> collections.abc.Generator[
         Composable, Composable, bool]:
         global text_dict
@@ -180,24 +208,23 @@ class LocaleEnUs(Locale):
         yield o.natural_language
         yield text_dict.close_quasi_quote
         yield SansSerifNormal(' in ')
-        yield from o.universe_of_discourse.compose_symbol()
+        yield from o.u.compose_symbol()
         yield from o.nameset.compose_name(pre=SansSerifNormal(', known as '))
         yield from o.nameset.compose_acronym(pre=SansSerifNormal(', or simply '))
         yield SansSerifNormal('.')
         return True
 
     def compose_definition_inclusion_report(self, o: DefinitionInclusion,
-                                            proof: (None, bool) = None) -> collections.abc.Generator[
-        Composable, Composable, bool]:
+            proof: (None, bool) = None) -> collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         yield from o.compose_title(cap=True)
         yield SansSerifNormal(': Let ')
         yield SerifItalic('definition')
         yield SansSerifNormal(' ')
-        yield from o.definition.compose_symbol()
+        yield from o.d.compose_symbol()
         yield SansSerifNormal(' ')
         yield text_dict.open_quasi_quote
-        yield o.definition.natural_language
+        yield o.d.natural_language
         yield text_dict.close_quasi_quote
         yield SansSerifNormal(' be included (postulated) in ')
         yield from o.theory.compose_symbol()
@@ -212,12 +239,40 @@ class LocaleEnUs(Locale):
         p: Formula
         a = o.parameters[0]
         p = o.parameters[1]
-        yield from a.definition.compose_natural_language()
+        yield from a.d.compose_natural_language()
         yield SansSerifNormal(' is postulated by ')
         yield from a.compose_ref_link()
         yield SansSerifNormal('. ')
         yield from p.compose_formula()
         yield SansSerifNormal(' is an interpretation of that definition.')
+        return True
+
+    def compose_destructive_dilemma_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        parameter_p_implies_q: Formula = o.inference_rule.definition.parameters[0].parameters[0]
+        p_implies_q: FormulaStatement = o.parameters[0]
+        yield from p_implies_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_p_implies_q.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from p_implies_q.compose_ref_link()
+        yield SansSerifNormal('. ')
+        parameter_r_implies_s: Formula = o.inference_rule.definition.parameters[0].parameters[1]
+        r_implies_s: FormulaStatement = o.parameters[1]
+        yield from r_implies_s.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_r_implies_s.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from r_implies_s.compose_ref_link()
+        yield SansSerifNormal('. ')
+        parameter_not_q_or_not_s: Formula = o.inference_rule.definition.parameters[0].parameters[2]
+        not_q_or_not_s: FormulaStatement = o.parameters[2]
+        yield from not_q_or_not_s.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_not_q_or_not_s.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from not_q_or_not_s.compose_ref_link()
+        yield SansSerifNormal('. ')
         return True
 
     def compose_disjunction_introduction_1_paragraph_proof(self, o: InferredStatement) -> \
@@ -253,6 +308,60 @@ class LocaleEnUs(Locale):
         yield from q.compose_formula()
         yield SansSerifNormal(', of the form ')
         yield from parameter_q.compose_formula()
+        yield SansSerifNormal(', is given. ')
+        return True
+
+    def compose_disjunctive_resolution_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        parameter_p_or_q: Formula = o.inference_rule.definition.parameters[0].parameters[0]
+        p_or_q: FormulaStatement = o.parameters[0]
+        yield from p_or_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_p_or_q.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from p_or_q.compose_ref_link()
+        yield SansSerifNormal('. ')
+        parameter_not_p_or_r: Formula = o.inference_rule.definition.parameters[0].parameters[1]
+        not_p_or_r: FormulaStatement = o.parameters[1]
+        yield from not_p_or_r.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_not_p_or_r.compose_formula()
+        yield SansSerifNormal(', is given. ')
+        return True
+
+    def compose_disjunctive_syllogism_1_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        parameter_p_or_q: Formula = o.inference_rule.definition.parameters[0].parameters[0]
+        p_or_q: FormulaStatement = o.parameters[0]
+        yield from p_or_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_p_or_q.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from p_or_q.compose_ref_link()
+        yield SansSerifNormal('. ')
+        parameter_not_p: Formula = o.inference_rule.definition.parameters[0].parameters[1]
+        not_p: FormulaStatement = o.parameters[1]
+        yield from not_p.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_not_p.compose_formula()
+        yield SansSerifNormal(', is given. ')
+        return True
+
+    def compose_disjunctive_syllogism_2_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        parameter_p_or_q: Formula = o.inference_rule.definition.parameters[0].parameters[0]
+        p_or_q: FormulaStatement = o.parameters[0]
+        yield from p_or_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_p_or_q.compose_formula()
+        yield SansSerifNormal(', follows from ')
+        yield from p_or_q.compose_ref_link()
+        yield SansSerifNormal('. ')
+        parameter_not_q: Formula = o.inference_rule.definition.parameters[0].parameters[1]
+        not_q: FormulaStatement = o.parameters[1]
+        yield from not_q.compose_formula()
+        yield SansSerifNormal(', of the form ')
+        yield from parameter_not_q.compose_formula()
         yield SansSerifNormal(', is given. ')
         return True
 
@@ -393,8 +502,7 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_inference_rule_inclusion_report(self, i: InferenceRuleInclusion,
-                                                proof: (None, bool) = None) -> collections.abc.Generator[
-        Composable, Composable, bool]:
+            proof: (None, bool) = None) -> collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         yield from i.inference_rule.compose_title(cap=True)
         yield SansSerifNormal(': Let ')
@@ -469,6 +577,22 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         return True
 
+    def compose_modus_tollens_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p_implies_q: FormulaStatement = o.parameters[0]
+        not_q: FormulaStatement = o.parameters[1]
+        yield from p_implies_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from p_implies_q.compose_ref_link()
+        yield SansSerifNormal('.')
+        yield from not_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from not_q.compose_ref_link()
+        yield SansSerifNormal('.')
+        return True
+
     def compose_note_report(self, o: InferredStatement, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
         yield o.compose_title(cap=True)
@@ -477,8 +601,7 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_parent_hypothesis_statement_report(self, o: Hypothesis,
-                                                   proof: (None, bool) = None) -> collections.abc.Generator[
-        Composable, Composable, bool]:
+            proof: (None, bool) = None) -> collections.abc.Generator[Composable, Composable, bool]:
         proof = prioritize_value(proof, True)
         yield o.compose_title(cap=True)
         yield SansSerifNormal(': ')
@@ -568,7 +691,7 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal(' be a ')
         yield SerifItalic('simple-object')
         yield SansSerifNormal(' in ')
-        yield from o.universe_of_discourse.compose_symbol()
+        yield from o.u.compose_symbol()
         yield SansSerifNormal('.')
         return True
 
@@ -611,7 +734,7 @@ class LocaleEnUs(Locale):
         yield self.paragraph_start
         yield SansSerifNormal('Let ')
         first_item = True
-        for o in t.universe_of_discourse.simple_objcts.values():
+        for o in t.u.simple_objcts.values():
             # TODO: Filter on simple-objects that are effectively present in the theory.
             if not first_item:
                 yield ', '
@@ -622,7 +745,7 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal(' be ')
         yield SerifItalic('simple-objects')
         yield SansSerifNormal(' in ')
-        yield from t.universe_of_discourse.compose_symbol()
+        yield from t.u.compose_symbol()
         yield SansSerifNormal('.')
         yield self.paragraph_end
 
@@ -652,7 +775,7 @@ class LocaleEnUs(Locale):
                 yield SerifItalic(rep_arity_as_text(a))
                 yield SerifItalic('-relation')
             yield SansSerifNormal(' in ')
-            yield from t.universe_of_discourse.compose_symbol()
+            yield from t.u.compose_symbol()
             yield SansSerifNormal('.')
             yield self.paragraph_end
 
@@ -662,7 +785,7 @@ class LocaleEnUs(Locale):
             'The following inference rules are considered valid under this theory:')
         yield self.paragraph_end
         for inference_rule in sorted(t.i.values(),
-                                     key=lambda i: i.inference_rule.rep_dashed_name(encoding=encodings.plaintext)):
+                key=lambda i: i.inference_rule.rep_dashed_name(encoding=encodings.plaintext)):
             inference_rule: InferenceRuleInclusion
             yield self.paragraph_start
             yield from inference_rule.inference_rule.compose_report()
@@ -680,15 +803,15 @@ class LocaleEnUs(Locale):
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
-        parameter = o.parameters[0]
-        yield from parameter.valid_proposition.compose_formula()
+        p = o.parameters[0]
+        yield from p.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
-        yield from parameter.compose_ref_link()
+        yield from p.compose_ref_link()
         yield SansSerifNormal('.')
         yield SansSerifNormal(' Let ')
-        free_variables = parameter.get_variable_ordered_set()
-        substitution_values = o.parameters[1]
-        mapping = zip(free_variables, substitution_values)
+        free_variables = p.get_variable_ordered_set()
+        parameter_o: Formula = o.parameters[1]
+        mapping = zip(free_variables, parameter_o.parameters)
         first_pair = True
         for k, v in mapping:
             if not first_pair:

@@ -1,0 +1,13 @@
+Definition
+----------
+
+*disjunctive-resolution* is the :ref:`inference-rule<inference_rule_math_concept>`:
+
+.. math::
+
+    \left( \left( \boldsymbol{P} \lor \boldsymbol{Q} \right), \left( \neg \boldsymbol{P} \lor \boldsymbol{R} \right) \right) \vdash \left( \boldsymbol{Q} \lor \boldsymbol{R} \right)
+
+Sources
+----------
+
+* :cite:p:`warner_2018_puremathematicsbeginnersrigorous{p. 114}`

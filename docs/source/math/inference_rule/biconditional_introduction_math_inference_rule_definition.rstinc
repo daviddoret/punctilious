@@ -15,3 +15,8 @@ Where:
    * :math:`\mathbf{Q}` is a propositional :ref:`formula<formula_math_concept>`
 
 In straightforward language, if :math:`\mathbf{Q}` follows from :math:`\boldsymbol{P}` and :math:`\boldsymbol{P}` follows from :math:`\mathbf{Q}`, it follows that :math:`\boldsymbol{P}` is true if and only if :math:`\mathbf{Q}` is true.
+
+Sources
+----------
+
+* :cite:p:`warner_2018_puremathematicsbeginnersrigorous{p. 114}`
