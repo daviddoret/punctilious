@@ -12,76 +12,84 @@ t1 = u.t(echo=True)
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
 a = t1.include_axiom(a=a1)
 pu.configuration.echo_proof = False
-t1.i.axiom_interpretation.infer_formula_statement(axiom=a, formula=f(o1, o2))
-t1.i.axiom_interpretation.infer_formula_statement(axiom=a, formula=f(o2, o3))
+t1.i.axiom_interpretation.infer_formula_statement(a=a, p=f(o1, o2))
+t1.i.axiom_interpretation.infer_formula_statement(a=a, p=f(o2, o3))
 with u.v('x') as x, u.v('y') as y, u.v('z') as z:
-    implication = t1.i.axiom_interpretation.infer_formula_statement(axiom=a,
-        formula=(f(x, y) | u.r.land | f(y, z)) | u.r.implies | f(x, z))
+    implication = t1.i.axiom_interpretation.infer_formula_statement(a=a,
+        p=(f(x, y) | u.r.land | f(y, z)) | u.r.implies | f(x, z))
 t1.stabilize()
 
 # Pose the negation hypothesis
 h = t1.pose_hypothesis(hypothesis_formula=u.r.lnot(f(o1, o3)),
     subtitle='We pose the negation hypothesis')
+
+for i in h.child_theory.iterate_statements_in_theory_chain():
+    print(i)
+
 conjunction_introduction = h.child_theory.i.conjunction_introduction.infer_formula_statement(
     p=f(o1, o2), q=f(o2, o3))
 variable_substitution = h.child_theory.i.variable_substitution.infer_formula_statement(
-    p=implication, phi=(o1, o2, o3))
+    p=implication, phi=u.r.tupl(o1, o2, o3))
 modus_ponens = h.child_theory.i.modus_ponens.infer_formula_statement(
     p_implies_q=variable_substitution, p=conjunction_introduction)
 
 # Prove hypothesis inconsistency
 pu.configuration.echo_proof = True
 h_inconsistency = t1.i.inconsistency_introduction_1.infer_formula_statement(p=modus_ponens,
-    not_p=h.child_statement, inconsistent_theory=h.child_theory,
-    subtitle='Proof of the hypothesis inconsistency')
+    not_p=h.child_statement, t=h.child_theory, subtitle='Proof of the hypothesis inconsistency')
 
 # And finally, use the proof-by-contradiction-1 inference-rule:
-proposition_of_interest = t1.i.proof_by_contradiction_1.infer_formula_statement(not_p_hypothesis=h,
-    inc_hypothesis=h_inconsistency, subtitle='The proposition of interest')
+proposition_of_interest = t1.i.proof_by_contradiction_1.infer_formula_statement(h=h,
+    inc_h=h_inconsistency, subtitle='The proposition of interest')
 
-Let "U43" be a universe-of-discourse.
+Let "U55" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U43.
+Let "T1" be a theory-elaboration-sequence in U55.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom to establish some ground propositions." be included (postulated) in T1.
 
-Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "A |- P" be included and considered valid in T1.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A2, P1 |- P1)" be included and considered valid in T1.
 
 Proposition (T1.P1): f1(o1, o2).
 
-Warning (warning1): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
-
 Proposition (T1.P2): f1(o2, o3).
 
-Proposition (T1.P3): ((f1(x1, y1) and f1(y1, z1)) ==> f1(x1, z1)).
+Proposition (T1.P3): ((f1(x3, y3) and f1(y3, z1)) ==> f1(x3, z1)).
 
-Axiom (H1.A2): Let axiom A2 "By hypothesis, assume not(f1(o1, o3)) is true." be included (postulated) in H1.
+Axiom (H1.A2): Let axiom A4 "By hypothesis, assume not(f1(o1, o3)) is true." be included (postulated) in H1.
 
-Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "A |- P" be included and considered valid in H1.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A2, P1 |- P1)" be included and considered valid in H1.
 
 Proposition (H1.P4): not(f1(o1, o3)).
 
-Warning (warning2): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
-
 Hypothesis (T1.H1) - We pose the negation hypothesis: not(f1(o1, o3)). This hypothesis is elaborated in theory H1.
 
-Inference rule (conjunction-introduction): Let inference-rule conjunction-introduction defined as "((P1 , Q1) |- (P1 and Q1))" be included and considered valid in H1.
+A2
+I2
+not(f1(o1, o3))
+A1
+I1
+f1(o1, o2)
+f1(o2, o3)
+((f1(x3, y3) and f1(y3, z1)) ==> f1(x3, z1))
+H1
+Inference rule (conjunction-introduction): Let inference-rule conjunction-introduction defined as "(P3, Q1 |- (P3 and Q1))" be included and considered valid in H1.
 
 Proposition (H1.P5): (f1(o1, o2) and f1(o2, o3)).
 
-Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P, Phi) |- P'" be included and considered valid in H1.
+Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P4, O1 |- Q2)" be included and considered valid in H1.
 
 Proposition (H1.P6): ((f1(o1, o2) and f1(o2, o3)) ==> f1(o1, o3)).
 
-Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "(((P2 ==> P2) , P2) |- Q2)" be included and considered valid in H1.
+Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "((P6 ==> Q3), P6 |- Q3)" be included and considered valid in H1.
 
 Proposition (H1.P7): f1(o1, o3).
 
-Inference rule (inconsistency-introduction-1): Let inference-rule inconsistency-introduction-1 defined as "(P, not(P)) |- (T)" be included and considered valid in T1.
+Inference rule (inconsistency-introduction-1): Let inference-rule inconsistency-introduction-1 defined as "(P9, not(P9) |- Inc(T1))" be included and considered valid in T1.
 
-Proposition (T1.P8) - Proof of the hypothesis inconsistency: Inc(H1). Proof: Let P := f1(o1, o3), which follows from prop. (P7). Let not(P) := not(f1(o1, o3)), which follows from prop. (P4). Therefore, by the inconsistency-introduction-1 inference rule: (P, not(P)) |- (T), it follows that Inc(H1). QED
+Proposition (T1.P8) - Proof of the hypothesis inconsistency: Inc(H1). Proof: Let P := f1(o1, o3), which follows from prop. (P7). Let not(P) := not(f1(o1, o3)), which follows from prop. (P4). Therefore, by the  inference rule: (P9, not(P9) |- Inc(T1)), it follows that Inc(H1). QED
 
-Inference rule (proof-by-contradiction): Let inference-rule proof-by-contradiction defined as "(H assume not(P), P, Inc(H)) |- P" be included and considered valid in T1.
+Inference rule (proof-by-contradiction-1): Let inference-rule proof-by-contradiction-1 defined as "((H1 formulate not(P12)), Inc(H1) |- P12)" be included and considered valid in T1.
 
-Proposition (T1.P9) - The proposition of interest: f1(o1, o3). Proof: Let hyp. (H1) be the hypothesis not(f1(o1, o3)). Inc(H1) follows from prop. (P8).Therefore, by the proof-by-contradiction inference rule: (H assume not(P), P, Inc(H)) |- P, it follows that f1(o1, o3). QED
+Proposition (T1.P9) - The proposition of interest: f1(o1, o3). Proof: Let hyp. (H1) be the hypothesis not(f1(o1, o3)). Inc(H1) follows from prop. (P8).Therefore, by the  inference rule: ((H1 formulate not(P12)), Inc(H1) |- P12), it follows that f1(o1, o3). QED
 

@@ -5,9 +5,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
+      <change afterPath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_1_plaintext.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_1_unicode.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_2_plaintext.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_2_unicode.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/sample_modus_tollens_plaintext.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/sample_modus_tollens_unicode.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/locale_en_us.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/locale_en_us.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_elimination_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_double_negation_elimination_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_elimination_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_double_negation_elimination_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_introduction_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_double_negation_introduction_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_introduction_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_double_negation_introduction_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equal_terms_substitution_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equal_terms_substitution_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equal_terms_substitution_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equal_terms_substitution_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equality_commutativity_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equality_commutativity_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equality_commutativity_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equality_commutativity_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_hypothesis_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_hypothesis_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_hypothesis_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_hypothesis_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_3_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_3_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_3_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_3_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_modus_ponens_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_modus_ponens_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_modus_ponens_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_modus_ponens_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_pet_theory_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_pet_theory_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_pet_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_pet_theory_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +144,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\continuous_integration" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.sample_variable_substitution">
+  <component name="RunManager" selected="Python.generate_sample_outputs">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -156,6 +180,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/build_samples.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="generate_sample_outputs" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/continuous_integration/scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/continuous_integration/scripts/generate_sample_outputs.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -220,27 +265,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/prebuild_generate_theory_reports.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="sample_tao_2006_the_peano_axioms_noproof_enus_plaintext" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_plaintext.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -414,7 +438,7 @@
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.build" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
-      <item itemvalue="Python.sample_tao_2006_the_peano_axioms_noproof_enus_plaintext" />
+      <item itemvalue="Python.generate_sample_outputs" />
       <item itemvalue="Python.sample_tao_2006_the_peano_axioms_noproof_enus_unicode" />
       <item itemvalue="Python.sample_tao_2006_the_peano_axioms_proof_enus_plaintext" />
       <item itemvalue="Python.sample_tao_2006_the_peano_axioms_proof_enus_unicode" />
@@ -427,11 +451,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.generate_sample_outputs" />
         <item itemvalue="Python.sample_variable_substitution" />
         <item itemvalue="Python.sample_tao_2006_the_peano_axioms_proof_enus_unicode" />
         <item itemvalue="Python.sample_tao_2006_the_peano_axioms_proof_enus_plaintext" />
         <item itemvalue="Python.sample_tao_2006_the_peano_axioms_noproof_enus_unicode" />
-        <item itemvalue="Python.sample_tao_2006_the_peano_axioms_noproof_enus_plaintext" />
       </list>
     </recent_temporary>
   </component>
@@ -443,14 +467,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00314" summary="documentation #195">
-      <option name="closed" value="true" />
-      <created>1695538606793</created>
-      <option name="number" value="00314" />
-      <option name="presentableId" value="LOCAL-00314" />
-      <option name="project" value="LOCAL" />
-      <updated>1695538606793</updated>
     </task>
     <task id="LOCAL-00315" summary="documentation #195">
       <option name="closed" value="true" />
@@ -836,7 +852,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697402814131</updated>
     </task>
-    <option name="localTasksCounter" value="363" />
+    <task id="LOCAL-00363" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
+      <option name="closed" value="true" />
+      <created>1697404867379</created>
+      <option name="number" value="00363" />
+      <option name="presentableId" value="LOCAL-00363" />
+      <option name="project" value="LOCAL" />
+      <updated>1697404867379</updated>
+    </task>
+    <option name="localTasksCounter" value="364" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

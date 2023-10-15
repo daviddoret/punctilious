@@ -13,70 +13,60 @@ theory_axiom = t1.include_axiom(axiom)
 f_o1_eq_f_02 = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom,
     (f(o1) | u.r.eq | f(o2)))
 with u.v('x') as x, u.v('y') as y:
-    implication = t1.i.axiom_interpretation.infer_formula_statement(axiom=theory_axiom,
-        formula=(f(x) | u.r.eq | f(y)) | u.r.implies | (x | u.r.neq | y))
+    implication = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
+        p=(f(x) | u.r.eq | f(y)) | u.r.implies | (x | u.r.neq | y))
 t1.stabilize()
 
 # Pose the inequality hypothesis
 h = t1.pose_hypothesis(hypothesis_formula=o1 | u.r.eq | o2,
     subtitle='We pose the positive hypothesis')
 substitution = h.child_theory.i.variable_substitution.infer_formula_statement(p=implication,
-    phi=(o1, o2))
+    phi=u.r.tupl(o1, o2))
 inequality = h.child_theory.i.modus_ponens.infer_formula_statement(p_implies_q=substitution,
     p=f_o1_eq_f_02)
 
-# Use a distinct theory T2 to demonstrate the inconsistency of T1
-# because T1 could not prove its own inconsistency because it is inconsistent!
-t2 = u.t(echo=True)
-
 # Prove hypothesis inconsistency
-h_inconsistency = t2.i.inconsistency_introduction_2.infer_formula_statement(
-    x_eq_y=h.child_statement, x_neq_y=inequality, inconsistent_theory=h.child_theory,
+h_inconsistency = t1.i.inconsistency_introduction_2.infer_formula_statement(
+    x_equal_y=h.child_statement, x_unequal_y=inequality, t=h.child_theory,
     subtitle='The proposition of interest')
 
 # And finally, use the proof-by-contradiction-2 inference-rule:
-proposition_of_interest = t1.i.proof_by_refutation_2.infer_formula_statement(x_eq_y_hypothesis=h,
-    inc_hypothesis=h_inconsistency, subtitle='The proposition of interest')
+proposition_of_interest = t1.i.proof_by_refutation_2.infer_formula_statement(h=h,
+    inc_h=h_inconsistency, subtitle='The proposition of interest')
 
-Let "U49" be a universe-of-discourse.
+Let "U61" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U49.
+Let "T1" be a theory-elaboration-sequence in U61.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 
-Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "A |- P" be included and considered valid in T1.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A2, P1 |- P1)" be included and considered valid in T1.
 
-Proposition (T1.P1): (f1(o1) = f1(o2)). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). (f1(o1) = f1(o2)) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that (f1(o1) = f1(o2)). QED
+Proposition (T1.P1): (f1(o1) = f1(o2)). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). (f1(o1) = f1(o2)) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that (f1(o1) = f1(o2)). QED
 
-Warning (warning1): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
+Proposition (T1.P2): ((f1(x3) = f1(y3)) ==> (x3 neq y3)). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). ((f1(x3) = f1(y3)) ==> (x3 neq y3)) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that ((f1(x3) = f1(y3)) ==> (x3 neq y3)). QED
 
-Proposition (T1.P2): ((f1(x1) = f1(y1)) ==> (x1 neq y1)). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). ((f1(x1) = f1(y1)) ==> (x1 neq y1)) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that ((f1(x1) = f1(y1)) ==> (x1 neq y1)). QED
+Axiom (H1.A2): Let axiom A4 "By hypothesis, assume (o1 = o2) is true." be included (postulated) in H1.
 
-Axiom (H1.A2): Let axiom A2 "By hypothesis, assume (o1 = o2) is true." be included (postulated) in H1.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A2, P1 |- P1)" be included and considered valid in H1.
 
-Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "A |- P" be included and considered valid in H1.
-
-Proposition (H1.P3): (o1 = o2). Proof: "By hypothesis, assume (o1 = o2) is true." is postulated by axiom (A2). (o1 = o2) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that (o1 = o2). QED
-
-Warning (warning2): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
+Proposition (H1.P3): (o1 = o2). Proof: "By hypothesis, assume (o1 = o2) is true." is postulated by axiom (A2). (o1 = o2) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that (o1 = o2). QED
 
 Hypothesis (T1.H1) - We pose the positive hypothesis: (o1 = o2). This hypothesis is elaborated in theory H1.
 
-Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P, Phi) |- P'" be included and considered valid in H1.
+Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P3, O1 |- Q1)" be included and considered valid in H1.
 
-Proposition (H1.P4): ((f1(o1) = f1(o2)) ==> (o1 neq o2)). Proof: ((f1(x1) = f1(y1)) ==> (x1 neq y1)) follows from prop. (P2). Let x1 = o1, y1 = o2.Therefore, by the variable-substitution inference rule: (P, Phi) |- P', it follows that ((f1(o1) = f1(o2)) ==> (o1 neq o2)). QED
+Proposition (H1.P4): ((f1(o1) = f1(o2)) ==> (o1 neq o2)). Proof: ((f1(x3) = f1(y3)) ==> (x3 neq y3)) follows from prop. (P2). Let x3 = o1, y3 = o2.Therefore, by the  inference rule: (P3, O1 |- Q1), it follows that ((f1(o1) = f1(o2)) ==> (o1 neq o2)). QED
 
-Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "(((P1 ==> P1) , P1) |- Q1)" be included and considered valid in H1.
+Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "((P5 ==> Q2), P5 |- Q2)" be included and considered valid in H1.
 
-Proposition (H1.P5): (o1 neq o2). Proof: ((f1(o1) = f1(o2)) ==> (o1 neq o2)) follows from prop. (P4).(f1(o1) = f1(o2)) follows from prop. (P1).Therefore, by the modus-ponens inference rule: (((P1 ==> P1) , P1) |- Q1), it follows that (o1 neq o2). QED
+Proposition (H1.P5): (o1 neq o2). Proof: ((f1(o1) = f1(o2)) ==> (o1 neq o2)) follows from prop. (P4).(f1(o1) = f1(o2)) follows from prop. (P1).Therefore, by the  inference rule: ((P5 ==> Q2), P5 |- Q2), it follows that (o1 neq o2). QED
 
-Let "T2" be a theory-elaboration-sequence in U49.
+Inference rule (inconsistency-introduction-2): Let inference-rule inconsistency-introduction-2 defined as "((P8 = Q4), (P8 neq Q4) |- Inc(T1))" be included and considered valid in T1.
 
-Inference rule (inconsistency-introduction-2): Let inference-rule inconsistency-introduction-2 defined as "((P = Q), (P neq Q)) |- Inc(T)" be included and considered valid in T2.
+Proposition (T1.P6) - The proposition of interest: Inc(H1). Proof: Let (P = Q) := (o1 = o2) follows from prop. (P3). Let (P neq Q)) := (o1 neq o2) follows from prop. (P5). Therefore, by the  inference rule: ((P8 = Q4), (P8 neq Q4) |- Inc(T1)), it follows that Inc(H1). QED
 
-Proposition (T2.P6) - The proposition of interest: Inc(H1). Proof: Let (P = Q) := (o1 = o2) follows from prop. (P3). Let (P neq Q)) := (o1 neq o2) follows from prop. (P5). Therefore, by the inconsistency-introduction-2 inference rule: ((P = Q), (P neq Q)) |- Inc(T), it follows that Inc(H1). QED
+Inference rule (proof-by-refutation-2): Let inference-rule proof-by-refutation-2 defined as "((H1 formulate (x6 = y6)), Inc(H1) |- (x6 neq y6))" be included and considered valid in T1.
 
-Inference rule (proof-by-refutation-2): Let inference-rule proof-by-refutation-2 defined as "(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 = 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 ≠ 𝑸)" be included and considered valid in T1.
-
-Proposition (T1.P7) - The proposition of interest: (o1 neq o2). Proof: Let hyp. (H1) be the hypothesis (o1 = o2). Inc(H1) follows from prop. (P6).Therefore, by the proof-by-refutation-2 inference rule: (𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 = 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 ≠ 𝑸), it follows that (o1 neq o2). QED
+Proposition (T1.P7) - The proposition of interest: (o1 neq o2). Proof: Let hyp. (H1) be the hypothesis (o1 = o2). Inc(H1) follows from prop. (P6).Therefore, by the  inference rule: ((H1 formulate (x6 = y6)), Inc(H1) |- (x6 neq y6)), it follows that (o1 neq o2). QED
 

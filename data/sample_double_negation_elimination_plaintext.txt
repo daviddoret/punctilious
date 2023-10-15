@@ -11,17 +11,23 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 t1 = u.t(echo=True)
 theory_axiom = t1.include_axiom(a=axiom)
 not_not_p = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
-    formula=u.r.lnot(u.r.lnot(r1(o1, o2))))
+    p=u.r.lnot(u.r.lnot(r1(o1, o2))))
 
 # And finally, use the double-negation-elimination inference-rule:
 proposition_of_interest = t1.i.double_negation_elimination.infer_formula_statement(
     not_not_p=not_not_p, subtitle='The proposition of interest')
 
-Let "U29" be a universe-of-discourse.
+Let "U33" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U29.
+Let "T1" be a theory-elaboration-sequence in U33.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 
 Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A2, P1 |- P1)" be included and considered valid in T1.
+
+Proposition (T1.P1): not(not(r1(o1, o2))). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). not(not(r1(o1, o2))) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that not(not(r1(o1, o2))). QED
+
+Inference rule (double-negation-elimination): Let inference-rule double-negation-elimination defined as "(not(not(P3)) |- P3)" be included and considered valid in T1.
+
+Proposition (T1.P2) - The proposition of interest: r1(o1, o2). Proof: not(not(r1(o1, o2))), of the form not(not(P3)), follows from prop. (P1). Therefore, by the  inference rule: (not(not(P3)) |- P3), it follows that r1(o1, o2). QED
 

@@ -14,15 +14,15 @@ t1 = u.t(echo=True)
 theory_axiom = t1.include_axiom(a=axiom)
 p_implies_q = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
     p=r1(o1, o2) | u.r.implies | r2(o3))
-p = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom, p=r1(o1, o2))
+not_q = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom, p=u.r.lnot(r2(o3)))
 
 # And finally, use the modus-ponens inference-rule:
-proposition_of_interest = t1.i.modus_ponens.infer_formula_statement(p_implies_q=p_implies_q, p=p,
-    subtitle='The proposition of interest')
+proposition_of_interest = t1.i.modus_tollens.infer_formula_statement(p_implies_q=p_implies_q,
+    not_q=not_q, subtitle='The proposition of interest')
 
-Let "U49" be a universe-of-discourse.
+Let "U51" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U49.
+Let "T1" be a theory-elaboration-sequence in U51.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 
@@ -30,9 +30,9 @@ Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation d
 
 Proposition (T1.P1): (r1(o1, o2) ==> r2(o3)). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). (r1(o1, o2) ==> r2(o3)) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that (r1(o1, o2) ==> r2(o3)). QED
 
-Proposition (T1.P2): r1(o1, o2). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). r1(o1, o2) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that r1(o1, o2). QED
+Proposition (T1.P2): not(r2(o3)). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). not(r2(o3)) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that not(r2(o3)). QED
 
-Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "((P3 ==> Q1), P3 |- Q1)" be included and considered valid in T1.
+Inference rule (modus-tollens): Let inference-rule modus-tollens defined as "((P3 ==> Q1), not(Q1) |- not(P3))" be included and considered valid in T1.
 
-Proposition (T1.P3) - The proposition of interest: r2(o3). Proof: (r1(o1, o2) ==> r2(o3)) follows from prop. (P1).r1(o1, o2) follows from prop. (P2).Therefore, by the  inference rule: ((P3 ==> Q1), P3 |- Q1), it follows that r2(o3). QED
+Proposition (T1.P3) - The proposition of interest: not(r1(o1, o2)). Proof: (r1(o1, o2) ==> r2(o3)) follows from prop. (P1).not(r2(o3)) follows from prop. (P2).Therefore, by the  inference rule: ((P3 ==> Q1), not(Q1) |- not(P3)), it follows that not(r1(o1, o2)). QED
 

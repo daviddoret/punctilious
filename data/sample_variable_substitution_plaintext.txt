@@ -11,30 +11,28 @@ t1 = u.t(echo=True)
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
 a = t1.include_axiom(a=a1)
-t1.i.axiom_interpretation.infer_formula_statement(axiom=a, formula=f(o1, o2))
+t1.i.axiom_interpretation.infer_formula_statement(a=a, p=f(o1, o2))
 with u.v('x') as x, u.v('y') as y:
-    implication = t1.i.axiom_interpretation.infer_formula_statement(axiom=a,
-        formula=f(x, y) | u.r.implies | f(y, x))
+    implication = t1.i.axiom_interpretation.infer_formula_statement(a=a,
+        p=f(x, y) | u.r.implies | f(y, x))
 t1.stabilize()
 
 proposition_of_interest = t1.i.variable_substitution.infer_formula_statement(p=implication,
-    phi=(o1, o2))
+    phi=u.r.tupl(o1, o2))
 
-Let "U59" be a universe-of-discourse.
+Let "U71" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U59.
+Let "T1" be a theory-elaboration-sequence in U71.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom to establish some ground propositions." be included (postulated) in T1.
 
-Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "A |- P" be included and considered valid in T1.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A2, P1 |- P1)" be included and considered valid in T1.
 
-Proposition (T1.P1): f1(o1, o2). Proof: "Dummy axiom to establish some ground propositions." is postulated by axiom (A1). f1(o1, o2) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that f1(o1, o2). QED
+Proposition (T1.P1): f1(o1, o2). Proof: "Dummy axiom to establish some ground propositions." is postulated by axiom (A1). f1(o1, o2) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that f1(o1, o2). QED
 
-Warning (warning1): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
+Proposition (T1.P2): (f1(x3, y3) ==> f1(y3, x3)). Proof: "Dummy axiom to establish some ground propositions." is postulated by axiom (A1). (f1(x3, y3) ==> f1(y3, x3)) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that (f1(x3, y3) ==> f1(y3, x3)). QED
 
-Proposition (T1.P2): (f1(x1, y1) ==> f1(y1, x1)). Proof: "Dummy axiom to establish some ground propositions." is postulated by axiom (A1). (f1(x1, y1) ==> f1(y1, x1)) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that (f1(x1, y1) ==> f1(y1, x1)). QED
+Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P3, O1 |- Q1)" be included and considered valid in T1.
 
-Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P, Phi) |- P'" be included and considered valid in T1.
-
-Proposition (T1.P3): (f1(o1, o2) ==> f1(o2, o1)). Proof: (f1(x1, y1) ==> f1(y1, x1)) follows from prop. (P2). Let x1 = o1, y1 = o2.Therefore, by the variable-substitution inference rule: (P, Phi) |- P', it follows that (f1(o1, o2) ==> f1(o2, o1)). QED
+Proposition (T1.P3): (f1(o1, o2) ==> f1(o2, o1)). Proof: (f1(x3, y3) ==> f1(y3, x3)) follows from prop. (P2). Let x3 = o1, y3 = o2.Therefore, by the  inference rule: (P3, O1 |- Q1), it follows that (f1(o1, o2) ==> f1(o2, o1)). QED
 
