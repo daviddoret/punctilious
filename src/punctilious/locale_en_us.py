@@ -39,7 +39,7 @@ class LocaleEnUs(Locale):
         yield o.natural_language
         yield text_dict.close_quasi_quote
         yield SansSerifNormal(' in ')
-        yield from o.universe_of_discourse.compose_symbol()
+        yield from o.u.compose_symbol()
         yield from o.nameset.compose_name(pre=SansSerifNormal(', known as '))
         yield from o.nameset.compose_acronym(pre=SansSerifNormal(', or simply '))
         yield SansSerifNormal('.')
@@ -208,7 +208,7 @@ class LocaleEnUs(Locale):
         yield o.natural_language
         yield text_dict.close_quasi_quote
         yield SansSerifNormal(' in ')
-        yield from o.universe_of_discourse.compose_symbol()
+        yield from o.u.compose_symbol()
         yield from o.nameset.compose_name(pre=SansSerifNormal(', known as '))
         yield from o.nameset.compose_acronym(pre=SansSerifNormal(', or simply '))
         yield SansSerifNormal('.')
@@ -691,7 +691,7 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal(' be a ')
         yield SerifItalic('simple-object')
         yield SansSerifNormal(' in ')
-        yield from o.universe_of_discourse.compose_symbol()
+        yield from o.u.compose_symbol()
         yield SansSerifNormal('.')
         return True
 
@@ -734,7 +734,7 @@ class LocaleEnUs(Locale):
         yield self.paragraph_start
         yield SansSerifNormal('Let ')
         first_item = True
-        for o in t.universe_of_discourse.simple_objcts.values():
+        for o in t.u.simple_objcts.values():
             # TODO: Filter on simple-objects that are effectively present in the theory.
             if not first_item:
                 yield ', '
@@ -745,7 +745,7 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal(' be ')
         yield SerifItalic('simple-objects')
         yield SansSerifNormal(' in ')
-        yield from t.universe_of_discourse.compose_symbol()
+        yield from t.u.compose_symbol()
         yield SansSerifNormal('.')
         yield self.paragraph_end
 
@@ -775,7 +775,7 @@ class LocaleEnUs(Locale):
                 yield SerifItalic(rep_arity_as_text(a))
                 yield SerifItalic('-relation')
             yield SansSerifNormal(' in ')
-            yield from t.universe_of_discourse.compose_symbol()
+            yield from t.u.compose_symbol()
             yield SansSerifNormal('.')
             yield self.paragraph_end
 

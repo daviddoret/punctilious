@@ -1764,8 +1764,7 @@ class SymbolicObject(abc.ABC):
         # thus hashing can be safely based on the key: U + symbol.
         # With a special case for the universe-of-discourse itself,
         # where hash of the symbol is sufficient.
-        return hash(self.nameset) if is_in_class(self, classes.u) else hash(
-            (self.universe_of_discourse, self.nameset))
+        return hash(self.nameset) if is_in_class(self, classes.u) else hash((self.u, self.nameset))
 
     # def __lt__(self, other):
     #    """WARNING: Only used for support with the sorted() function, no intention to transmit
@@ -1823,7 +1822,7 @@ class SymbolicObject(abc.ABC):
         yield text_dict.space
         yield text_dict.in2
         yield text_dict.space
-        yield from self.universe_of_discourse.compose_symbol()
+        yield from self.u.compose_symbol()
         yield prioritize_value(close_punctuation, text_dict.period)
         return True
 
@@ -1890,7 +1889,7 @@ class SymbolicObject(abc.ABC):
             # python object instance, by definitions the two python references
             # are referencing the same object.
             return True
-        if not self.universe_of_discourse.is_symbol_equivalent(o2.universe_of_discourse):
+        if not self.u.is_symbol_equivalent(o2.u):
             return False
         if self.nameset != o2.nameset:
             return False
@@ -1955,12 +1954,7 @@ class SymbolicObject(abc.ABC):
 
     @property
     def u(self):
-        """This symbolic-object''s universe of discourse. Full name: o.universe_of_discourse."""
-        return self.universe_of_discourse
-
-    @property
-    def universe_of_discourse(self):
-        """This symbolic-object''s universe of discourse. Shortcut: o.u"""
+        """The universe of discourse containing this object."""
         return self._u
 
 
@@ -2325,7 +2319,7 @@ class TheoreticalObject(SymbolicObject):
             if x not in substitution_map.keys():
                 # Call declare_free_variable() instead of v()
                 # to explicitly manage variables scope locking.
-                x2 = self.universe_of_discourse.declare_free_variable(symbol=x.nameset.symbol,
+                x2 = self.u.declare_free_variable(symbol=x.nameset.symbol,
                     is_strictly_propositional=variable_is_strictly_propositional)
                 substitution_map[x] = x2
 
@@ -2349,8 +2343,7 @@ class TheoreticalObject(SymbolicObject):
             parameters = tuple(
                 p.substitute(substitution_map=substitution_map, lock_variable_scope=False) for p in
                     self.parameters)
-            phi = self.universe_of_discourse.f(relation, *parameters,
-                lock_variable_scope=lock_variable_scope)
+            phi = self.u.f(relation, *parameters, lock_variable_scope=lock_variable_scope)
             return phi
         else:
             return self
@@ -2537,7 +2530,6 @@ class FreeVariable(TheoreticalObject):
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, nameset=nameset, echo=False)
-        # self.universe_of_discourse.cross_reference_variable(x=self)
         super()._declare_class_membership(declarative_class_list.free_variable)
         if echo:
             self.echo()
@@ -2607,7 +2599,7 @@ class FreeVariable(TheoreticalObject):
 
     def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None):
         return f'Let {self.rep_name(encoding=encoding)} be a free-variable in ' \
-               f'{self.universe_of_discourse.rep_name(encoding=encoding)}' + '\n'
+               f'{self.u.rep_name(encoding=encoding)}' + '\n'
 
     @property
     def scope(self):
@@ -2716,7 +2708,7 @@ class Formula(TheoreticalObject):
                 formula=self, p=p)
             if is_in_class(p, classes.free_variable):
                 p.extend_scope(self)
-            verify(p.u is self.universe_of_discourse,
+            verify(p.u is self.u,
                 f'The universe-of-discourse ⌜p_u⌝ of the parameter ⌜p⌝ in the formula ⌜formula⌝ is inconsistent with the universe-of-discourse ⌜formula_u⌝ of the formula.',
                 p=p, p_u=p.u, formula=self, formula_u=self.u)
         if lock_variable_scope:
@@ -2843,7 +2835,7 @@ class Formula(TheoreticalObject):
         yield text_dict.space
         yield text_dict.in2
         yield text_dict.space
-        yield from self.universe_of_discourse.compose_symbol()
+        yield from self.u.compose_symbol()
         yield text_dict.period
 
     def crossreference_variable(self, x):
@@ -3127,7 +3119,7 @@ class Statement(TheoreticalObject):
         self._theory = theory
         echo = prioritize_value(echo, configuration.echo_statement, configuration.echo_default,
             False)
-        universe_of_discourse = theory.universe_of_discourse
+        universe_of_discourse = theory.u
         self.statement_index = theory.crossreference_statement(self)
         self._paragraph_header = paragraph_header
         namespace = self._theory  # TODO: Cross-referencing the theory symbol as the nameset of
@@ -3189,13 +3181,6 @@ class Statement(TheoreticalObject):
         """The universe-of-discourse where this statement is declared.
 
         Unabridged property: statement.universe_of_discourse"""
-        return self.universe_of_discourse
-
-    @property
-    def universe_of_discourse(self) -> UniverseOfDiscourse:
-        """The universe-of-discourse where this statement is declared.
-
-        Abridged property: s.u"""
         return self._u
 
 
@@ -3366,7 +3351,7 @@ class InferenceRuleInclusion(Statement):
         paragraph_header = paragraph_headers.inference_rule_inclusion
         if symbol is None:
             symbol = configuration.default_inference_rule_inclusion_symbol if symbol is None else symbol
-            index = t.universe_of_discourse.index_symbol(symbol=symbol)
+            index = t.u.index_symbol(symbol=symbol)
         super().__init__(theory=t, paragraph_header=paragraph_headers, symbol=symbol, index=index,
             nameset=nameset, echo=False)
         t.crossreference_inference_rule_inclusion(self)
@@ -3623,11 +3608,11 @@ class FormulaStatement(Statement):
             echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_statement, configuration.echo_default,
             False)
-        verify(assertion=theory.universe_of_discourse is valid_proposition.universe_of_discourse,
+        verify(assertion=theory.u is valid_proposition.u,
             msg='The universe-of-discourse of this formula-statement''s theory-elaboration is '
                 'inconsistent with the universe-of-discourse of the valid-proposition of that '
                 'formula-statement.')
-        universe_of_discourse = theory.universe_of_discourse
+        universe_of_discourse = theory.u
         # Theory statements must be logical propositions.
         valid_proposition = unpack_formula(valid_proposition)
         verify(valid_proposition.is_strictly_propositional,
@@ -5430,7 +5415,6 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         phi: FlexibleFormula
 
     def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = u
         symbol = 'variable-substitution'
         acronym = 'vs'
         abridged_name = None
@@ -5450,9 +5434,6 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
             # TODO: VariableSubstitutionDeclaration: Enrich how inference-rule parameters may be defined to allow an expression like (v1, v2, ..., v3) using collection-defined-by-extension with n elements.
             self.parameter_phi = u.r.tupl
             self.parameter_phi_mask = frozenset([phi])
-        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, echo=echo)
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
@@ -5508,11 +5489,10 @@ class AtheoreticalStatement(SymbolicObject):
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         self.theory = theory
-        super().__init__(u=theory.universe_of_discourse, symbol=symbol, index=index,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-            paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
-            echo=echo)
+        super().__init__(u=theory.u, symbol=symbol, index=index, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref,
+            subtitle=subtitle, nameset=nameset, echo=echo)
         super()._declare_class_membership(classes.atheoretical_statement)
 
 
@@ -5533,7 +5513,7 @@ class NoteInclusion(AtheoreticalStatement):
         echo = prioritize_value(echo, configuration.echo_note, configuration.echo_default, False)
         verify(is_in_class(t, classes.t), 'theory is not a member of declarative-class theory.',
             t=t, slf=self)
-        universe_of_discourse = t.universe_of_discourse
+        universe_of_discourse = t.u
         paragraph_header = paragraph_headers.note if paragraph_header is None else paragraph_header
         #  self.statement_index = theory.crossreference_statement(self)
         self.theory = t
@@ -6093,8 +6073,8 @@ theory-elaboration."""
             echo: (None, bool) = None) -> NoteInclusion:
         """Take a note, make a comment, or remark in this theory.
         """
-        return self.universe_of_discourse.take_note(t=self, content=content, symbol=symbol,
-            index=index, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        return self.u.take_note(t=self, content=content, symbol=symbol, index=index,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
             echo=echo)
@@ -6135,12 +6115,11 @@ class Hypothesis(Statement):
         self._hypothesis_formula = hypothesis_formula
         # When a hypothesis is posed in a theory 𝒯₁,
         # ...the hypothesis is declared (aka postulated) as an axiom in the universe-of-discourse,
-        self._hypothesis_axiom_declaration = self.universe_of_discourse.declare_axiom(
+        self._hypothesis_axiom_declaration = self.u.declare_axiom(
             f'By hypothesis, assume {hypothesis_formula.rep_formula()} is true.', echo=echo)
         # ...a hypothetical-theory 𝒯₂ is created to store the hypothesis elaboration,
-        self._hypothesis_child_theory = t.universe_of_discourse.t(extended_theory=t,
-            extended_theory_limit=self, symbol=configuration.default_child_hypothesis_theory_symbol,
-            echo=echo)
+        self._hypothesis_child_theory = t.u.t(extended_theory=t, extended_theory_limit=self,
+            symbol=configuration.default_child_hypothesis_theory_symbol, echo=echo)
         # ...the axiom is included in 𝒯₂,
         self._hypothesis_axiom_inclusion_in_child_theory = self.hypothesis_child_theory.include_axiom(
             a=self.hypothesis_axiom_declaration, echo=echo)
@@ -6302,7 +6281,7 @@ class Relation(TheoreticalObject):
                 abridged_name=abridged_name, name=name, explicit_name=explicit_name,
                 paragraph_header=cat, ref=ref, subtitle=subtitle)
         super().__init__(u=u, nameset=nameset, echo=False)
-        self.universe_of_discourse.cross_reference_relation(r=self)
+        self.u.cross_reference_relation(r=self)
         super()._declare_class_membership(classes.relation)
         if echo:
             self.echo()
@@ -6334,7 +6313,7 @@ class Relation(TheoreticalObject):
         yield text_dict.space
         yield SerifItalic('relation')
         yield SansSerifNormal(' in ')
-        yield from self.universe_of_discourse.compose_symbol()
+        yield from self.u.compose_symbol()
         yield SansSerifNormal(' (default notation: ')
         yield SansSerifNormal(str(self.formula_rep))
         yield SansSerifNormal(').')
@@ -6382,7 +6361,7 @@ class SimpleObjct(TheoreticalObject):
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
-        self.universe_of_discourse.cross_reference_simple_objct(o=self)
+        self.u.cross_reference_simple_objct(o=self)
         if echo:
             self.echo()
 
@@ -7530,7 +7509,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.absorption
+        i = t.u.inference_rules.absorption
         dashed_name = 'absorption'
         abridged_name = 'absorp.'
         name = 'absorption'
@@ -7593,7 +7572,7 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.axiom_interpretation
+        i = t.u.inference_rules.axiom_interpretation
         dashed_name = 'axiom-interpretation'
         acronym = 'ai'
         abridged_name = None
@@ -7662,7 +7641,7 @@ class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.biconditional_elimination_1
+        i = t.u.inference_rules.biconditional_elimination_1
         dashed_name = 'biconditional-elimination-1'
         acronym = 'be1'
         abridged_name = None
@@ -7726,7 +7705,7 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.biconditional_elimination_2
+        i = t.u.inference_rules.biconditional_elimination_2
         dashed_name = 'biconditional-elimination-2'
         acronym = 'be2'
         abridged_name = None
@@ -7790,7 +7769,7 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.biconditional_introduction
+        i = t.u.inference_rules.biconditional_introduction
         dashed_name = 'biconditional-introduction'
         acronym = 'bi'
         abridged_name = None
@@ -7860,7 +7839,7 @@ class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.conjunction_elimination_1
+        i = t.u.inference_rules.conjunction_elimination_1
         dashed_name = 'conjunction-elimination-1'
         acronym = 'ce1'
         abridged_name = None
@@ -7919,7 +7898,7 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.conjunction_elimination_2
+        i = t.u.inference_rules.conjunction_elimination_2
         dashed_name = 'conjunction-elimination-2'
         acronym = 'bel'
         abridged_name = 'conj. elim. right'
@@ -7978,7 +7957,7 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.conjunction_introduction
+        i = t.u.inference_rules.conjunction_introduction
         dashed_name = 'conjunction-introduction'
         acronym = 'ci'
         abridged_name = 'conj.-intro.'
@@ -8039,7 +8018,7 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.constructive_dilemma
+        i = t.u.inference_rules.constructive_dilemma
         dashed_name = 'constructive-dilemma'
         acronym = 'cd'
         abridged_name = None
@@ -8114,7 +8093,7 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.definition_interpretation
+        i = t.u.inference_rules.definition_interpretation
         dashed_name = 'definition-interpretation'
         acronym = 'di'
         abridged_name = None
@@ -8183,7 +8162,7 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.destructive_dilemma
+        i = t.u.inference_rules.destructive_dilemma
         dashed_name = 'destructive-dilemma'
         acronym = 'dd'
         abridged_name = None
@@ -8258,7 +8237,7 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.disjunction_introduction_1
+        i = t.u.inference_rules.disjunction_introduction_1
         dashed_name = 'disjunction-introduction-1'
         acronym = 'di1'
         abridged_name = None
@@ -8319,7 +8298,7 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.disjunction_introduction_2
+        i = t.u.inference_rules.disjunction_introduction_2
         dashed_name = 'disjunction-introduction-2'
         acronym = 'di2'
         abridged_name = None
@@ -8380,7 +8359,7 @@ class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.disjunctive_resolution
+        i = t.u.inference_rules.disjunctive_resolution
         dashed_name = 'disjunctive-resolution'
         acronym = 'dr'
         abridged_name = None
@@ -8445,7 +8424,7 @@ class DisjunctiveSyllogism1Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.disjunctive_syllogism_1
+        i = t.u.inference_rules.disjunctive_syllogism_1
         dashed_name = 'disjunctive-syllogism-1'
         acronym = 'ds'
         abridged_name = None
@@ -8510,7 +8489,7 @@ class DisjunctiveSyllogism2Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.disjunctive_syllogism_2
+        i = t.u.inference_rules.disjunctive_syllogism_2
         dashed_name = 'disjunctive-syllogism-2'
         acronym = 'ds'
         abridged_name = None
@@ -8575,7 +8554,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.double_negation_elimination
+        i = t.u.inference_rules.double_negation_elimination
         dashed_name = 'double-negation-elimination'
         acronym = 'dne'
         abridged_name = 'double neg. elim.'
@@ -8635,7 +8614,7 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.double_negation_introduction
+        i = t.u.inference_rules.double_negation_introduction
         dashed_name = 'double-negation-introduction'
         acronym = 'dni'
         abridged_name = 'double neg. intro.'
@@ -8695,7 +8674,7 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.equality_commutativity
+        i = t.u.inference_rules.equality_commutativity
         dashed_name = 'equality-commutativity'
         acronym = 'ec'
         abridged_name = None
@@ -8754,7 +8733,7 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.equal_terms_substitution
+        i = t.u.inference_rules.equal_terms_substitution
         dashed_name = 'equal-terms-substitution'
         acronym = 'ets'
         abridged_name = None
@@ -8817,7 +8796,7 @@ class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.conjunction_introduction
+        i = t.u.inference_rules.conjunction_introduction
         dashed_name = 'hypothetical-syllogism'
         acronym = 'hs'
         abridged_name = None
@@ -8877,7 +8856,7 @@ class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.inconsistency_introduction_1
+        i = t.u.inference_rules.inconsistency_introduction_1
         dashed_name = 'inconsistency-introduction-1'
         acronym = 'ii1'
         abridged_name = None
@@ -8943,7 +8922,7 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.inconsistency_introduction_2
+        i = t.u.inference_rules.inconsistency_introduction_2
         dashed_name = 'inconsistency-introduction-2'
         acronym = 'ii2'
         abridged_name = None
@@ -9011,7 +8990,7 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.inconsistency_introduction_3
+        i = t.u.inference_rules.inconsistency_introduction_3
         dashed_name = 'inconsistency-introduction-3'
         acronym = 'ii3'
         abridged_name = None
@@ -9073,7 +9052,7 @@ class ModusPonensInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.modus_ponens
+        i = t.u.inference_rules.modus_ponens
         dashed_name = 'modus-ponens'
         acronym = 'mp'
         abridged_name = None
@@ -9137,7 +9116,7 @@ class ModusTollensInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.modus_tollens
+        i = t.u.inference_rules.modus_tollens
         dashed_name = 'modus-tollens'
         acronym = 'mt'
         abridged_name = None
@@ -9201,7 +9180,7 @@ class ProofByContradiction1Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.proof_by_contradiction_1
+        i = t.u.inference_rules.proof_by_contradiction_1
         dashed_name = 'proof-by-contradiction-1'
         acronym = 'pbc1'
         abridged_name = None
@@ -9265,7 +9244,7 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.proof_by_contradiction_2
+        i = t.u.inference_rules.proof_by_contradiction_2
         dashed_name = 'proof-by-contradiction-2'
         acronym = 'pbc2'
         abridged_name = None
@@ -9330,7 +9309,7 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.proof_by_refutation_1
+        i = t.u.inference_rules.proof_by_refutation_1
         dashed_name = 'proof-by-refutation-1'
         acronym = 'pbr1'
         abridged_name = None
@@ -9393,7 +9372,7 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.proof_by_refutation_2
+        i = t.u.inference_rules.proof_by_refutation_2
         dashed_name = 'proof-by-refutation-2'
         acronym = 'pbr2'
         abridged_name = None
@@ -9457,7 +9436,7 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
 
     def __init__(self, t: TheoryElaborationSequence, echo: (None, bool) = None,
             proof: (None, bool) = None):
-        i = t.universe_of_discourse.inference_rules.variable_substitution
+        i = t.u.inference_rules.variable_substitution
         dashed_name = 'variable-substitution'
         acronym = 'vs'
         abridged_name = None
@@ -10171,12 +10150,15 @@ class UniverseOfDiscourse(SymbolicObject):
 
         :param o: a symbolic-objct.
         """
+        if o.nameset.symbol.plaintext == 'variable-substitution':
+            pass
+        #    raise Exception('ooooops')
         verify(is_in_class(o=o, c=classes.symbolic_objct),
             'Cross-referencing a symbolic-objct in a universe-of-discourse requires '
             'an object of type SymbolicObjct.', o=o, slf=self)
         duplicate = self.symbolic_objcts.get(o.nameset)
         verify(severity=verification_severities.warning, assertion=duplicate is None,
-            msg=f'A symbolic-object {duplicate} already exists in the current universe-of-discourse {self.u} with a '
+            msg=f'A symbolic-object {duplicate} already exists in the current universe-of-discourse {self} with a '
                 'duplicate designation (symbol and index).', o=o, duplicate=duplicate, slf=self)
         self.symbolic_objcts[o.nameset] = o
 
@@ -10399,7 +10381,7 @@ class UniverseOfDiscourse(SymbolicObject):
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         """Take a note, make a comment, or remark."""
-        verify(t.universe_of_discourse is self,
+        verify(t.u is self,
             'This universe-of-discourse 𝑢₁ (self) is distinct from the universe-of-discourse 𝑢₂ '
             'of the theory '
             'parameter 𝑡.')
