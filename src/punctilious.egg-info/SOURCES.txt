@@ -2,6 +2,7 @@ LICENSE
 README.md
 pyproject.toml
 src/punctilious/__init__.py
+src/punctilious/caller_info.py
 src/punctilious/core.py
 src/punctilious/graph.py
 src/punctilious/locale_en_us.py
@@ -23,9 +24,14 @@ src/sample/sample_biconditional_introduction.py
 src/sample/sample_conjunction_elimination_1.py
 src/sample/sample_conjunction_elimination_2.py
 src/sample/sample_conjunction_introduction.py
+src/sample/sample_constructive_dilemma.py
 src/sample/sample_definition_interpretation.py
+src/sample/sample_destructive_dilemma.py
 src/sample/sample_disjunction_introduction_1.py
 src/sample/sample_disjunction_introduction_2.py
+src/sample/sample_disjunctive_resolution.py
+src/sample/sample_disjunctive_syllogism_1.py
+src/sample/sample_disjunctive_syllogism_2.py
 src/sample/sample_double_negation_elimination.py
 src/sample/sample_double_negation_introduction.py
 src/sample/sample_equal_terms_substitution.py
@@ -35,6 +41,7 @@ src/sample/sample_inconsistency_introduction_1.py
 src/sample/sample_inconsistency_introduction_2.py
 src/sample/sample_inconsistency_introduction_3.py
 src/sample/sample_modus_ponens.py
+src/sample/sample_modus_tollens.py
 src/sample/sample_pet_theory_1.py
 src/sample/sample_proof_by_contradiction_1.py
 src/sample/sample_proof_by_contradiction_2.py
@@ -61,11 +68,17 @@ tests/test_block.py
 tests/test_conjunction_elimination_1.py
 tests/test_conjunction_elimination_2.py
 tests/test_conjunction_introduction.py
+tests/test_constructive_dilemma.py
 tests/test_dashed_name.py
 tests/test_definition_declaration.py
 tests/test_definition_inclusion.py
+tests/test_definition_interpretation.py
+tests/test_destructive_dilemma.py
 tests/test_disjunction_introduction_1.py
 tests/test_disjunction_introduction_2.py
+tests/test_disjunctive_resolution.py
+tests/test_disjunctive_syllogism_1.py
+tests/test_disjunctive_syllogism_2.py
 tests/test_double_negation_elimination.py
 tests/test_double_negation_introduction.py
 tests/test_equal_terms_substitution.py
@@ -77,8 +90,8 @@ tests/test_hypothesis.py
 tests/test_inconsistency_introduction_1.py
 tests/test_inconsistency_introduction_2.py
 tests/test_inconsistency_introduction_3.py
-tests/test_interpret_formula.py
 tests/test_modus_ponens.py
+tests/test_modus_tollens.py
 tests/test_nameset.py
 tests/test_note.py
 tests/test_paragraph.py
@@ -105,4 +118,6 @@ tests/test_theory_elaboration_stabilized.py
 tests/test_theory_extension.py
 tests/test_universe_of_discourse.py
 tests/test_universe_of_discourse_inference_rules.py
+tests/test_validate_formula.py
+tests/test_validate_formula_statement.py
 tests/test_variable_substitution.py

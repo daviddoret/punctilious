@@ -14,6 +14,12 @@ Definition
 An *inference-rule* is a syntactic transformation rule which allows to infer a valid statement
 from some premises.
 
+Quotes
+------
+
+    "The rules of inference may be thought of as a logical toolbox, from which the tools may be taken, as needed, to prove validity."
+    :cite:p:`copi_2014_introductionlogic{p. 368}`
+
 Synonyms
 --------
 
