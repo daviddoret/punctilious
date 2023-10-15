@@ -2051,7 +2051,11 @@ class TheoreticalObject(SymbolicObject):
         and gluing all this together.
         """
         # print(f'TO.__and__: self = {self}, other = {other}')
-        return verify_formula(u=self.u, input_value=(other, self))
+        ok: bool
+        formula: (None, Formula)
+        msg: (None, str)
+        ok, formula, msg = verify_formula(u=self.u, input_value=(other, self), raise_exception=True)
+        return formula
 
     def __call__(self, *parameters):
         """Hack to provide support for direct function-call notation, as in: p(x).
@@ -2678,23 +2682,23 @@ class Formula(TheoreticalObject):
         #     msg='Ill-formed formula error. The number of parameters in this formula is zero. 0-ary relations are currently not supported. Use a simple-object instead.',
         #     severity=verification_severities.error, raise_exception=True, relation=self.relation,
         #     len_parameters=len(parameters))
-        verify(assertion=self.relation.arity is None or self.relation.arity == len(parameters),
-            msg=f'Ill-formed formula error. Relation ⌜{self.relation}⌝ is defined with a fixed arity constraint of {self.relation.arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
-            severity=verification_severities.error, raise_exception=True, relation=self.relation,
-            relation_arity=self.relation.arity, len_parameters=len(parameters),
-            parameters=parameters)
-        verify(
-            assertion=self.relation.min_arity is None or self.relation.min_arity >= len(parameters),
-            msg=f'Ill-formed formula error. Relation ⌜{self.relation}⌝ is defined with a minimum arity constraint of {self.relation.min_arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
-            severity=verification_severities.error, raise_exception=True, relation=self.relation,
-            relation_min_arity=self.relation.min_arity, len_parameters=len(parameters),
-            parameters=parameters)
-        verify(
-            assertion=self.relation.max_arity is None or self.relation.max_arity >= len(parameters),
-            msg=f'Ill-formed formula error. Relation ⌜{self.relation}⌝ is defined with a maximum arity constraint of {self.relation.max_arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
-            severity=verification_severities.error, raise_exception=True, relation=self.relation,
-            relation_max_arity=self.relation.max_arity, len_parameters=len(parameters),
-            parameters=parameters)
+        if not is_in_class(self.relation, classes.free_variable):
+            verify(self.relation.arity is None or self.relation.arity == len(parameters),
+                msg=f'Ill-formed formula error. Relation ⌜{self.relation}⌝ is defined with a fixed arity constraint of {self.relation.arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
+                severity=verification_severities.error, raise_exception=True,
+                relation=self.relation, relation_arity=self.relation.arity,
+                len_parameters=len(parameters), parameters=parameters)
+            verify(self.relation.min_arity is None or self.relation.min_arity >= len(parameters),
+                msg=f'Ill-formed formula error. Relation ⌜{self.relation}⌝ is defined with a minimum arity constraint of {self.relation.min_arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
+                severity=verification_severities.error, raise_exception=True,
+                relation=self.relation, relation_min_arity=self.relation.min_arity,
+                len_parameters=len(parameters), parameters=parameters)
+            verify(assertion=self.relation.max_arity is None or self.relation.max_arity >= len(
+                parameters),
+                msg=f'Ill-formed formula error. Relation ⌜{self.relation}⌝ is defined with a maximum arity constraint of {self.relation.max_arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
+                severity=verification_severities.error, raise_exception=True,
+                relation=self.relation, relation_max_arity=self.relation.max_arity,
+                len_parameters=len(parameters), parameters=parameters)
         self.arity = len(parameters)
         self.parameters = parameters
         super().__init__(nameset=nameset, u=u, echo=False)
@@ -2893,7 +2897,11 @@ class Formula(TheoreticalObject):
 
         This property is directly inherited from the formula-is-proposition
         attribute of the formula's relation."""
-        return self.relation.signal_proposition
+        if is_in_class(self.relation, classes.free_variable):
+            # TODO: IDEA: Is it a good idea to equip FreeVariable with a strictly-proposition property?
+            return False
+        else:
+            return self.relation.signal_proposition
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
             visited: (None, set) = None):
@@ -5465,7 +5473,7 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         # Currently this type of parameter cannot be expressed with a form and mask.
         # In consequence we must check its syntax consistency here in an ad hoc manner.
         verify(assertion=isinstance(phi, Formula) and phi.relation is self.u.r.tupl,
-            msg=f'The argument ⌜phi⌝({phi}) is not a collection-defined-by-extension of theoretical-objects.',
+            msg=f'The argument ⌜phi⌝({phi}) is not a mathematical tuple (u.r.tupl) of theoretical-objects.',
             raise_exception=True, error_code=error_code)
         verify(assertion=len(phi.parameters) == len(p.get_variable_ordered_set()),
             msg=f'The number of theoretical-objects in the collection argument ⌜phi⌝({phi}) is not equal to the number of free-variables in the propositional formula ⌜p⌝{p}.',
@@ -6769,8 +6777,7 @@ class RelationDict(collections.UserDict):
                 collection_start=text_dict.empty_string, collection_separator=text_dict.comma,
                 collection_end=text_dict.empty_string, signal_proposition=True,
                 symbol=SerifItalic(plaintext=',', unicode=',', latex=','), auto_index=False,
-                dashed_name='sequent-premises', name='sequent premises',
-                explicit_name='sequent calculus premises collection')
+                dashed_name='tuple', name='tuple', explicit_name='tuple')
         return self._tupl
 
     @property
@@ -8127,10 +8134,10 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
         # Validate that expected formula-statements are formula-statements.
         _, d, _ = verify_definition_inclusion(arg='d', t=self.t, input_value=d,
             raise_exception=True, error_code=error_code)
-        _, x, _ = verify_formula(arg='x', u=self.u, input_value=x, is_strictly_propositional=True,
-            raise_exception=True, error_code=error_code)
-        _, y, _ = verify_formula(arg='y', u=self.u, input_value=y, is_strictly_propositional=True,
-            raise_exception=True, error_code=error_code)
+        _, x, _ = verify_formula(arg='x', u=self.u, input_value=x, raise_exception=True,
+            error_code=error_code)
+        _, y, _ = verify_formula(arg='y', u=self.u, input_value=y, raise_exception=True,
+            error_code=error_code)
         # The method either raises an exception during validation, or return True.
         valid_premises: DefinitionInterpretationDeclaration.Premises = DefinitionInterpretationDeclaration.Premises(
             d=d, x=x, y=y)

@@ -18,4 +18,4 @@ with u.v('x') as x, u.v('y') as y:
 t1.stabilize()
 
 proposition_of_interest = t1.i.variable_substitution.infer_formula_statement(p=implication,
-    o=u.r.tupl(o1, o2))
+    phi=u.r.tupl(o1, o2))

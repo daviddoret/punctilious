@@ -89,72 +89,76 @@ class Tao2006ThePeanoAxioms(pu.Package):
         d02 = t.include_definition(d=d01)
         self.definition_2_1_3 = d02
 
-        p005 = t.i.definition_interpretation.infer_formula_statement(d02,
-            one | u.r.equal | (zero & plusplus))
+        p005 = t.i.definition_interpretation.infer_formula_statement(d=d02, x=one,
+            y=zero & plusplus)
 
-        p006 = t.i.definition_interpretation.infer_formula_statement(d02,
-            u.f(u.r.equal, two, ((zero & plusplus) & plusplus)))
-        p007 = t.i.definition_interpretation.infer_formula_statement(d02,
-            u.f(u.r.equal, three, (((zero & plusplus) & plusplus) & plusplus)))
+        p006 = t.i.definition_interpretation.infer_formula_statement(d=d02, x=two,
+            y=(zero & plusplus) & plusplus)
+        p007 = t.i.definition_interpretation.infer_formula_statement(d=d02, x=three,
+            y=((zero & plusplus) & plusplus) & plusplus)
 
-        p008 = t.i.definition_interpretation.infer_formula_statement(d02,
-            u.f(u.r.equal, four, ((((zero & plusplus) & plusplus) & plusplus) & plusplus)))
+        p008 = t.i.definition_interpretation.infer_formula_statement(d=d02, x=four,
+            y=(((zero & plusplus) & plusplus) & plusplus) & plusplus)
 
-        zero_plusplus = (zero & plusplus)
-        p009 = t.i.variable_substitution.infer_formula_statement(p=p002, phi=zero_plusplus)
+        zero_plusplus = zero & plusplus
+        p009 = t.i.variable_substitution.infer_formula_statement(p=p002,
+            phi=u.r.tupl(zero_plusplus))
         p010 = t.i.mp.infer_formula_statement(p009, p004)
         self.p010 = p010
         zero_plus_plus_plusplus = u.f(plusplus, zero_plusplus)
-        p011 = t.i.variable_substitution.infer_formula_statement(p002, zero_plus_plus_plusplus)
+        p011 = t.i.variable_substitution.infer_formula_statement(p=p002,
+            phi=u.r.tupl(zero_plus_plus_plusplus))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₁₂): ((((0)++)++)++ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).
         p012 = t.i.mp.infer_formula_statement(p011, p010)
         self.p012 = p012
         zero_plus_plus_plus_plusplus = u.f(plusplus, zero_plus_plus_plusplus)
-        p013 = t.i.variable_substitution.infer_formula_statement(p002, zero_plus_plus_plus_plusplus)
+        p013 = t.i.variable_substitution.infer_formula_statement(p=p002,
+            phi=u.r.tupl(zero_plus_plus_plus_plusplus))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₁₄): (((((0)++)++)++)++ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).
-        p014 = t.i.mp.infer_formula_statement(p013, p012)
+        p014 = t.i.mp.infer_formula_statement(p_implies_q=p013, p=p012)
         self.p014 = p014
-        p015 = t.i.equality_commutativity.infer_formula_statement(p005)
-        p016 = t.i.equal_terms_substitution.infer_formula_statement(p006, p015)
-        p017 = t.i.equality_commutativity.infer_formula_statement(p006)
-        p019 = t.i.equal_terms_substitution.infer_formula_statement(p007, p017)
+        p015 = t.i.equality_commutativity.infer_formula_statement(x_equal_y=p005)
+        p016 = t.i.equal_terms_substitution.infer_formula_statement(p=p006, x_equal_y=p015)
+        p017 = t.i.equality_commutativity.infer_formula_statement(x_equal_y=p006)
+        p019 = t.i.equal_terms_substitution.infer_formula_statement(p=p007, x_equal_y=p017)
 
         t.open_section('3 is a natural number', section_parent=section_2_1, numbering=False)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₂₀): ((((0)++)++)++ = 3).
-        p020 = t.i.equality_commutativity.infer_formula_statement(p007)
+        p020 = t.i.equality_commutativity.infer_formula_statement(x_equal_y=p007)
 
-        p021 = t.i.equal_terms_substitution.infer_formula_statement(p020, p017)
+        p021 = t.i.equal_terms_substitution.infer_formula_statement(p=p020, x_equal_y=p017)
         # Proposition 2.1.4. 3 is a natural number.
-        p022 = t.i.equal_terms_substitution.infer_formula_statement(p012, p020, ref='2.1.4')
+        p022 = t.i.equal_terms_substitution.infer_formula_statement(p=p012, x_equal_y=p020,
+            ref='2.1.4')
         self.proposition_2_1_4 = p022
 
-        p023 = t.i.definition_interpretation.infer_formula_statement(d02,
-            u.f(u.r.equal, four, ((((zero & plusplus) & plusplus) & plusplus) & plusplus)))
+        p023 = t.i.definition_interpretation.infer_formula_statement(d=d02, x=four,
+            y=(((zero & plusplus) & plusplus) & plusplus) & plusplus)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻(P₂₄): (((((0) + +) + +) + +) + + = 4).
-        p024 = t.i.equality_commutativity.infer_formula_statement(p008)
-        p025 = t.i.equal_terms_substitution.infer_formula_statement(p024, p020)
-        p026 = t.i.equal_terms_substitution.infer_formula_statement(p013, p025)
+        p024 = t.i.equality_commutativity.infer_formula_statement(x_equal_y=p008)
+        p025 = t.i.equal_terms_substitution.infer_formula_statement(p=p024, x_equal_y=p020)
+        p026 = t.i.equal_terms_substitution.infer_formula_statement(p=p013, x_equal_y=p025)
 
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₂₇): (4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).
-        p027 = t.i.equal_terms_substitution.infer_formula_statement(p014, p024)
+        p027 = t.i.equal_terms_substitution.infer_formula_statement(p=p014, x_equal_y=p024)
 
         t.open_section('Axiom 2.3', section_parent=section_2_1, numbering=False)
 
-        a05 = t.include_axiom(u.declare_axiom(
+        a05 = t.include_axiom(a=u.declare_axiom(
             '0 is not the successor of any natural number; i.e., we have n++ ≠ 0 for '
             'every natural number n.'), ref='2.3')
 
         with u.v('n') as n:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₂₈): ((𝐧₂ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((𝐧₂)++ ≠ 0)).
-            p028 = t.i.axiom_interpretation.infer_formula_statement(a05,
-                u.f(u.r.implies, (n | u.r.is_a | natural_number),
+            p028 = t.i.axiom_interpretation.infer_formula_statement(a=a05,
+                p=u.f(u.r.implies, (n | u.r.is_a | natural_number),
                     u.f(u.r.neq, u.f(plusplus, n), zero)))
 
         t.open_section('4 is not equal to 0.', section_parent=section_2_1, numbering=False)
         # Proposition 2.1.6. 4 is not equal to 0.
         t.take_note('We want to prove that 4 is not equal to 0, i.e. (4 ≠ 0).')
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: ((3 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((3)++ ≠ 0)).
-        p029 = t.i.variable_substitution.infer_formula_statement(p028, u.r.tupl(three))
+        p029 = t.i.variable_substitution.infer_formula_statement(p=p028, phi=u.r.tupl(three))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: ((3)++ ≠ 0).
         p030 = t.i.modus_ponens.infer_formula_statement(p029, p022)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (4 ≠ 0).
@@ -188,7 +192,7 @@ class Tao2006ThePeanoAxioms(pu.Package):
         # Take 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₁): ((((𝐧₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐦₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (𝐧₃ ≠ 𝐦₁)) ⟹ ((𝐧₃)++ ≠ (𝐦₁)++)).
         # Substitute 𝐧₃ with 4, and 𝐦₁ with 0.
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₂): ((((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (4 ≠ 0)) ⟹ ((4)++ ≠ (0)++)).
-        p033 = t.i.variable_substitution.infer_formula_statement(p=p032, phi=(four, zero))
+        p033 = t.i.variable_substitution.infer_formula_statement(p=p032, phi=u.r.tupl(four, zero))
         # It follows that ((((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (4 ≠ 0)) ⟹ ((4)++ ≠ (0)++)).
         # Pair two true propositions (4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) and (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻(P₃₄): ((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)).
@@ -197,35 +201,35 @@ class Tao2006ThePeanoAxioms(pu.Package):
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₅): (((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (0 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (4 ≠ 0)).
         p035 = t.i.conjunction_introduction.infer_formula_statement(p=p034, q=p031)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₆): ((4)++ ≠ (0)++).
-        p036 = t.i.modus_ponens.infer_formula_statement(p033, p035)
+        p036 = t.i.modus_ponens.infer_formula_statement(p_implies_q=p033, p=p035)
 
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₇): (5 = (((((0)++)++)++)++)++).
-        p037 = t.i.definition_interpretation.infer_formula_statement(d02, u.f(u.r.equal, five,
-            u.f(plusplus, ((((zero & plusplus) & plusplus) & plusplus) & plusplus))))
+        p037 = t.i.definition_interpretation.infer_formula_statement(d=d02, x=five,
+            y=((((zero & plusplus) & plusplus) & plusplus) & plusplus) & plusplus)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₈): ((((((0)++)++)++)++)++ = 5).
-        p038 = t.i.equality_commutativity.infer_formula_statement(p037)
+        p038 = t.i.equality_commutativity.infer_formula_statement(x_equal_y=p037)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₉): ((4)++ = 5).
-        p039 = t.i.equal_terms_substitution.infer_formula_statement(p038, p024)
+        p039 = t.i.equal_terms_substitution.infer_formula_statement(p=p038, x_equal_y=p024)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₀): (5 = (4)++).
-        p040 = t.i.equality_commutativity.infer_formula_statement(p039)
+        p040 = t.i.equality_commutativity.infer_formula_statement(x_equal_y=p039)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₁): ((((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (5 ≠ 1)) ⟹ ((5)++ ≠ (1)++)).
         p041 = t.i.variable_substitution.infer_formula_statement(p=p032, phi=u.r.tupl(five, one))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₂): ((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((4)++ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)).
         p042 = t.i.variable_substitution.infer_formula_statement(p=p002, phi=u.r.tupl(four))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₃): ((4 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ (5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)).
-        p043 = t.i.equal_terms_substitution.infer_formula_statement(p042, p039)
+        p043 = t.i.equal_terms_substitution.infer_formula_statement(p=p042, x_equal_y=p039)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻(P₄₄): (5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).
-        p044 = t.i.modus_ponens.infer_formula_statement(p043, p027)
+        p044 = t.i.modus_ponens.infer_formula_statement(p_implies_q=p043, p=p027)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₅): ((((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (5 ≠ 1)) ⟹ ((5)++ ≠ (1)++)).
         p045 = t.i.variable_substitution.infer_formula_statement(p=p032, phi=u.r.tupl(five, one))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₆): ((4)++ ≠ (0)++).
-        p046 = t.i.modus_ponens.infer_formula_statement(p033, p035)
+        p046 = t.i.modus_ponens.infer_formula_statement(p_implies_q=p033, p=p035)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₄₇): (5 ≠ (0)++).
         p047 = t.i.equal_terms_substitution.infer_formula_statement(p=p046, x_equal_y=p039)
 
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (6 = ((((((0)++)++)++)++)++)++).
-        p049 = t.i.definition_interpretation.infer_formula_statement(d02, u.f(u.r.equal, six,
-            u.f(plusplus, u.f(plusplus, ((((zero & plusplus) & plusplus) & plusplus) & plusplus)))))
+        p049 = t.i.definition_interpretation.infer_formula_statement(d=d02, x=six,
+            y=(((((zero & plusplus) & plusplus) & plusplus) & plusplus) & plusplus) & plusplus)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (((((((0)++)++)++)++)++)++ = 6).
         p050 = t.i.equality_commutativity.infer_formula_statement(p049)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₅₄): (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).
@@ -284,25 +288,24 @@ class Tao2006ThePeanoAxioms(pu.Package):
         # By Axiom 2.4 again we then have 4 = 0, which contradicts our previous proposition.
         h1_p071 = h1.hypothesis_child_theory.i.modus_ponens.infer_formula_statement(
             p_implies_q=h1_p12, p=h1_p11)
-        p072 = t.i.inconsistency_introduction_2.infer_formula_statement(x_eq_y=h1_p071,
-            x_neq_y=p031, inconsistent_theory=h1.hypothesis_child_theory)
-        p073 = t.i.proof_by_refutation_2.infer_formula_statement(x_eq_y_hypothesis=h1,
-            inc_hypothesis=p072, ref='2.1.8')
+        p072 = t.i.inconsistency_introduction_2.infer_formula_statement(x_equal_y=h1_p071,
+            x_unequal_y=p031, t=h1.hypothesis_child_theory)
+        p073 = t.i.proof_by_refutation_2.infer_formula_statement(h=h1, inc_h=p072, ref='2.1.8')
 
         t.open_section('Direct proof', section_parent=s55, numbering=False)
 
         t.take_note(
             content='In (Tao, 2006), proposition 2.1.8 uses proof by contradiction. Note that in punctilious, this specific proof method is called a proof by refutation of equality. Nevertheless, proofs by contradictions are somehow indirect proofs. As an alternative, we now propose a direct proof.')
-        p018 = t.i.equal_terms_substitution.infer_formula_statement(p017, p015)
+        p018 = t.i.equal_terms_substitution.infer_formula_statement(p=p017, x_equal_y=p015)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (5 ≠ 1).
-        p048 = t.i.equal_terms_substitution.infer_formula_statement(p047, p015)
+        p048 = t.i.equal_terms_substitution.infer_formula_statement(p=p047, x_equal_y=p015)
         # ((5)++ = 6).
-        p052 = t.i.equal_terms_substitution.infer_formula_statement(p045, p051)
+        p052 = t.i.equal_terms_substitution.infer_formula_statement(p=p045, x_equal_y=p051)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (5 ≠ 1)).
-        p053 = t.i.equal_terms_substitution.infer_formula_statement(p052, p018)
+        p053 = t.i.equal_terms_substitution.infer_formula_statement(p=p052, x_equal_y=p018)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: ((5 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)).
-        p055 = t.i.conjunction_introduction.infer_formula_statement(p044, p054)
-        p056 = t.i.conjunction_introduction.infer_formula_statement(p055, p048)
+        p055 = t.i.conjunction_introduction.infer_formula_statement(p=p044, q=p054)
+        p056 = t.i.conjunction_introduction.infer_formula_statement(p=p055, q=p048)
         p057 = t.i.modus_ponens.infer_formula_statement(p_implies_q=p053, p=p056)
 
         t.open_section('Axiom 2.5: The principle of mathematical induction',
@@ -330,7 +333,7 @@ class Tao2006ThePeanoAxioms(pu.Package):
             # ((m is-a natural-number) ⟹ P(m))
             phi6 = (m | u.r.is_a | natural_number) | u.r.implies | p(m)
             phi7 = phi5 | u.r.implies | phi6
-            p100 = t.i.axiom_interpretation.infer_formula_statement(a=a_2_5b, formula=phi7)
+            p100 = t.i.axiom_interpretation.infer_formula_statement(a=a_2_5b, p=phi7)
 
         t.take_note(paragraph_header=pu.paragraph_headers.remark, ref='2.1.10',
             content='We are a little vague on what "property" means at this point, but some possible examples of P(n) might be "n is even"; "n is equal to 3"; "n solves the equation (n + 1)2 = n2 + 2n + 1"; and so forth. Of course we haven\'t defined many of these concepts yet, but when we do, Axiom 2.5 will apply to these properties. (A logical remark: Because this axiom refers not just to variables, but also properties, it is of a different nature than the other four axioms; indeed, Axiom 2.5 should technically be called an axiom schema rather than an axiom - it is a template for producing an (infinite) number of axioms, rather than being a single axiom in its own right. To discuss this distinction further is far beyond the scope of this text, though, and falls in the realm of logic.) [Tao, 2006, p. 22]')
