@@ -18,7 +18,7 @@ class TestProofByContradiction1(TestCase):
         self.assertEqual('f1(o1, o3)', proposition_of_interest.rep_formula(pu.encodings.plaintext))
         self.assertEqual('𝑓₁(𝑜₁, 𝑜₃)', proposition_of_interest.rep_formula(pu.encodings.unicode))
         # Syntax error, first parameter
-        h2 = t1.pose_hypothesis(hypothesis_formula=f(o2, o3),
+        h2: pu.Hypothesis = t1.pose_hypothesis(hypothesis_formula=f(o2, o3),
             subtitle='We pose the negation hypothesis')
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.proof_by_contradiction_1.infer_formula_statement(h=h2, inc_h=u.r.inc(h2))
@@ -30,7 +30,7 @@ class TestProofByContradiction1(TestCase):
         self.assertIs(pu.error_codes.error_002_inference_premise_syntax_error,
             error.exception.error_code)
         # Validity error
-        h3 = t1.pose_hypothesis(hypothesis_formula=u.r.lnot(f(o2, o3)),
+        h3: pu.Hypothesis = t1.pose_hypothesis(hypothesis_formula=u.r.lnot(f(o2, o3)),
             subtitle='We pose the negation hypothesis')
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.proof_by_contradiction_1.infer_formula_statement(h=h3,

@@ -45,6 +45,12 @@ class ErrorCodes:
             'Inference premise syntax error')
         self.error_003_inference_premise_validity_error = ErrorCode(3,
             'Inference premise validity error')
+        self.error_004_inadequate_universe_parameter = ErrorCode(4,
+            'Inadequate universe-of-discourse parameter')
+        """A parameter was passed to a python function requiring a universe-of-discourse (UniverseOfDiscourse), but None or an instance of a non-supported class was received."""
+        self.error_005_inadequate_theory_parameter = ErrorCode(4,
+            'Inadequate theory-elaboration-sequence parameter')
+        """A parameter was passed to a python function requiring a theory-elaboration-sequence (TheoryElaborationSequence), but None or an instance of a non-supported class was received."""
 
 
 error_codes = ErrorCodes()
@@ -1709,13 +1715,12 @@ class SymbolicObject(abc.ABC):
     that is linked to a theory, but that is not necessarily constitutive of the theory.
     """
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse,
-            is_theory_foundation_system: bool = False, is_universe_of_discourse: bool = False,
-            symbol: (None, str, StyledText) = None, index: (None, int) = None,
-            auto_index: (None, bool) = None, namespace: (None, SymbolicObject) = None,
-            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
-            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
-            explicit_name: (None, str, StyledText) = None,
+    def __init__(self, u: UniverseOfDiscourse, is_theory_foundation_system: bool = False,
+            is_universe_of_discourse: bool = False, symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            namespace: (None, SymbolicObject) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             paragraph_header: (None, ParagraphHeader) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
@@ -1729,8 +1734,7 @@ class SymbolicObject(abc.ABC):
             symbol = configuration.default_symbolic_object_symbol if symbol is None else symbol
             if isinstance(symbol, str):
                 symbol = SerifItalic(symbol)
-            index = universe_of_discourse.index_symbol(symbol=symbol) if (
-                    index is None and auto_index) else index
+            index = u.index_symbol(symbol=symbol) if (index is None and auto_index) else index
             if paragraph_header is None:
                 paragraph_header = paragraph_headers.uncategorized
             nameset = NameSet(symbol=symbol, index=index, namespace=namespace,
@@ -1739,7 +1743,7 @@ class SymbolicObject(abc.ABC):
                 subtitle=subtitle)
         if isinstance(nameset, str):
             symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
-            index = universe_of_discourse.index_symbol(symbol=symbol)
+            index = u.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index, namespace=namespace,
                 dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
                 explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref,
@@ -1748,10 +1752,10 @@ class SymbolicObject(abc.ABC):
         self.is_theory_foundation_system = is_theory_foundation_system
         self._declare_class_membership(classes.symbolic_objct)
         if not is_universe_of_discourse:
-            self._universe_of_discourse = universe_of_discourse
-            self._universe_of_discourse.cross_reference_symbolic_objct(o=self)
+            self._u = u
+            self._u.cross_reference_symbolic_objct(o=self)
         else:
-            self._universe_of_discourse = None
+            self._u = None
         if echo:
             repm.prnt(self.rep_report())
 
@@ -1957,7 +1961,7 @@ class SymbolicObject(abc.ABC):
     @property
     def universe_of_discourse(self):
         """This symbolic-object''s universe of discourse. Shortcut: o.u"""
-        return self._universe_of_discourse
+        return self._u
 
 
 class InfixPartialFormula:
@@ -2011,12 +2015,12 @@ class TheoreticalObject(SymbolicObject):
     * variable
     """
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse,
-            is_theory_foundation_system: bool = False, symbol: (None, str, StyledText) = None,
-            index: (None, int) = None, auto_index: (None, bool) = None,
-            namespace: (None, SymbolicObject) = None, dashed_name: (None, str, StyledText) = None,
-            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
-            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+    def __init__(self, u: UniverseOfDiscourse, is_theory_foundation_system: bool = False,
+            symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, namespace: (None, SymbolicObject) = None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None,
             paragraph_header: (None, ParagraphHeader) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
@@ -2026,12 +2030,11 @@ class TheoreticalObject(SymbolicObject):
         # miserably (e.g. because of context managers),
         # thus, implementing explicit functional-types will prove
         # more robust and allow for duck typing.
-        super().__init__(universe_of_discourse=universe_of_discourse,
-            is_theory_foundation_system=is_theory_foundation_system, symbol=symbol, index=index,
-            auto_index=auto_index, namespace=namespace, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-            paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
-            echo=False)
+        super().__init__(u=u, is_theory_foundation_system=is_theory_foundation_system,
+            symbol=symbol, index=index, auto_index=auto_index, namespace=namespace,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref,
+            subtitle=subtitle, nameset=nameset, echo=False)
         super()._declare_class_membership(classes.theoretical_objct)
         if echo:
             repm.prnt(self.rep_fully_qualified_name())
@@ -2522,7 +2525,7 @@ class FreeVariable(TheoreticalObject):
             symbol = StyledText(plaintext=symbol, text_style=text_styles.serif_bold)
             if index is None and auto_index:
                 index = u.index_symbol(symbol=symbol)
-        super().__init__(universe_of_discourse=u, symbol=symbol, index=index, auto_index=auto_index,
+        super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, nameset=nameset, echo=False)
         # self.universe_of_discourse.cross_reference_variable(x=self)
@@ -2644,7 +2647,7 @@ class Formula(TheoreticalObject):
     collection = repm.ValueName('collection-operator')
 
     def __init__(self, relation: (Relation, FreeVariable), parameters: tuple,
-            universe_of_discourse: UniverseOfDiscourse, nameset: (None, str, NameSet) = None,
+            u: UniverseOfDiscourse, nameset: (None, str, NameSet) = None,
             lock_variable_scope: bool = False, dashed_name: (None, str, DashedName) = None,
             echo: (None, bool) = None):
         """
@@ -2655,14 +2658,14 @@ class Formula(TheoreticalObject):
         # self.formula_index = theory.crossreference_formula(self)
         if nameset is None:
             symbol = configuration.default_formula_symbol
-            index = universe_of_discourse.index_symbol(symbol=symbol)
+            index = u.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         if isinstance(nameset, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
             symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
-            index = universe_of_discourse.index_symbol(symbol=symbol)
+            index = u.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
         self.relation = relation
         parameters = parameters if isinstance(parameters, tuple) else tuple([parameters])
@@ -2689,9 +2692,9 @@ class Formula(TheoreticalObject):
             parameters=parameters)
         self.arity = len(parameters)
         self.parameters = parameters
-        super().__init__(nameset=nameset, universe_of_discourse=universe_of_discourse, echo=False)
+        super().__init__(nameset=nameset, u=u, echo=False)
         super()._declare_class_membership(declarative_class_list.formula)
-        universe_of_discourse.cross_reference_formula(self)
+        u.cross_reference_formula(self)
         verify(assertion=is_in_class(relation, classes.relation) or is_in_class(relation,
             classes.free_variable), msg='The relation of this formula is neither a relation, nor a '
                                         'free-variable.', formula=self, relation=relation)
@@ -2973,8 +2976,8 @@ class SimpleObjctDict(collections.UserDict):
             nameset: (None, str, NameSet) = None, echo: (None, bool) = None) -> SimpleObjct:
         return SimpleObjct(symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset,
-            universe_of_discourse=self.u, echo=echo)
+            explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, u=self.u,
+            echo=echo)
 
     @property
     def fals(self):
@@ -3116,8 +3119,8 @@ class Statement(TheoreticalObject):
         self._paragraph_header = paragraph_header
         namespace = self._theory  # TODO: Cross-referencing the theory symbol as the nameset of
         # the statement is ugly, there's something wrong with the data model, correct it.
-        super().__init__(universe_of_discourse=universe_of_discourse, symbol=symbol, index=index,
-            auto_index=auto_index, namespace=namespace, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(u=universe_of_discourse, symbol=symbol, index=index, auto_index=auto_index,
+            namespace=namespace, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
             echo=echo)
@@ -3180,7 +3183,7 @@ class Statement(TheoreticalObject):
         """The universe-of-discourse where this statement is declared.
 
         Abridged property: s.u"""
-        return self._universe_of_discourse
+        return self._u
 
 
 class AxiomDeclaration(TheoreticalObject):
@@ -3222,7 +3225,7 @@ class AxiomDeclaration(TheoreticalObject):
             paragraph_header=paragraph_header)
         if nameset is None and symbol is None:
             symbol = configuration.default_axiom_declaration_symbol
-        super().__init__(universe_of_discourse=u, symbol=symbol, index=index, auto_index=auto_index,
+        super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, ref=ref, subtitle=subtitle,
             paragraph_header=paragraph_header, nameset=nameset, echo=False)
@@ -3345,6 +3348,7 @@ class InferenceRuleInclusion(Statement):
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None, echo: (None, bool) = None,
             proof: (None, bool) = None):
+        verify_theory_elaboration_sequence(input_value=t, arg='t')
         self._inference_rule = i
         paragraph_header = paragraph_headers.inference_rule_inclusion
         if symbol is None:
@@ -3478,7 +3482,7 @@ class DefinitionDeclaration(TheoreticalObject):
         cat = paragraph_headers.definition_declaration
         if nameset is None and symbol is None:
             symbol = configuration.default_definition_declaration_symbol
-        super().__init__(universe_of_discourse=u, symbol=symbol, index=index, auto_index=auto_index,
+        super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, paragraph_header=cat, ref=ref, subtitle=subtitle,
             nameset=nameset, echo=False)
@@ -3807,8 +3811,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
     """
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse,
-            definition: (None, Formula) = None,
+    def __init__(self, u: UniverseOfDiscourse, definition: (None, Formula) = None,
             compose_paragraph_proof_method: (None, collections.abc.Callable) = None,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
             auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
@@ -3816,18 +3819,19 @@ class InferenceRuleDeclaration(TheoreticalObject):
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        verify_universe_of_discourse(input_value=u, arg='u')
         self._definition = definition
         self._compose_paragraph_proof_method = compose_paragraph_proof_method
         if nameset is None and symbol is None:
             symbol = configuration.default_inference_rule_symbol
         paragraph_header = paragraph_headers.inference_rule_declaration
-        super().__init__(universe_of_discourse=universe_of_discourse,
-            is_theory_foundation_system=False, symbol=symbol, index=index, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref,
-            subtitle=subtitle, nameset=nameset, echo=False)
+        super().__init__(u=u, is_theory_foundation_system=False, symbol=symbol, index=index,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+            paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
+            echo=False)
         super()._declare_class_membership(declarative_class_list.inference_rule)
-        universe_of_discourse.cross_reference_inference_rule(self)
+        u.cross_reference_inference_rule(self)
         echo = prioritize_value(echo, configuration.echo_inference_rule_declaration,
             configuration.echo_declaration, configuration.echo_default, False)
         if echo:
@@ -3891,8 +3895,8 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
         p_implies_q: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'absorption'
         abridged_name = None
         auto_index = False
@@ -3905,9 +3909,9 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_implies_q = p | u.r.implies | q
             self.parameter_p_implies_q_mask = frozenset([p, q])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_implies_q: FlexibleFormula) -> Formula:
         """
@@ -3941,8 +3945,8 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         a: FlexibleAxiom
         p: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'axiom-interpretation'
         acronym = 'ai'
         abridged_name = None
@@ -3958,9 +3962,9 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p:
             self.parameter_p = p
             self.parameter_p_mask = frozenset([p])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, a: FlexibleAxiom, p: FlexibleFormula) -> Formula:
         """
@@ -3990,8 +3994,8 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
         p_iff_q: FormulaStatement
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'biconditional-elimination-1'
         auto_index = False
         dashed_name = 'biconditional-elimination-1'
@@ -4004,9 +4008,9 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_iff_q = p | u.r.iff | q
             self.parameter_p_iff_q_mask = frozenset([p, q])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_iff_q: FlexibleFormula) -> Formula:
         """
@@ -4033,8 +4037,8 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
         p_iff_q: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'biconditional-elimination-2'
         auto_index = False
         dashed_name = 'biconditional-elimination-2'
@@ -4047,9 +4051,9 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_iff_q = p | u.r.iff | q
             self.parameter_p_iff_q_mask = frozenset([p, q])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_iff_q: FlexibleFormula) -> Formula:
         """
@@ -4077,8 +4081,8 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
         p_implies_q: FlexibleFormula
         q_implies_p: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'biconditional-introduction'
         auto_index = False
         dashed_name = 'biconditional-introduction'
@@ -4095,9 +4099,9 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_q_implies_p = q | u.r.implies | p
             self.parameter_q_implies_p_mask = frozenset([p, q])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_implies_q: FlexibleFormula,
             q_implies_p: FlexibleFormula) -> Formula:
@@ -4139,8 +4143,8 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
         p_and_q: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'conjunction-elimination-1'
         auto_index = False
         dashed_name = 'conjunction-elimination-1'
@@ -4153,9 +4157,9 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_and_q = p | u.r.land | q
             self.parameter_p_and_q_mask = frozenset([p, q])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_and_q: FlexibleFormula) -> Formula:
         """
@@ -4185,8 +4189,8 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
         p_and_q: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'conjunction-elimination-2'
         auto_index = False
         dashed_name = 'conjunction-elimination-2'
@@ -4199,9 +4203,9 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             self.parameter_p_and_q = p | u.r.land | q
             self.parameter_p_and_q_mask = frozenset([p, q])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_and_q: FlexibleFormula) -> Formula:
         """
@@ -4226,8 +4230,8 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         p: FlexibleFormula
         q: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'conjunction-introduction'
         acronym = 'ci'
         abridged_name = None
@@ -4237,9 +4241,9 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         name = 'conjunction introduction'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             definition = u.r.tupl(p, q) | u.r.proves | (p | u.r.land | q)
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
         """
@@ -4268,8 +4272,8 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
         r_implies_s: FlexibleFormula
         p_or_r: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'constructive-dilemma'
         acronym = 'cd'
         abridged_name = None
@@ -4289,9 +4293,9 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p, u.v(symbol='R') as r:
             self.parameter_p_or_r = p | u.r.lor | r
             self.parameter_p_or_r_mask = frozenset([p, r])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
             p_or_r: FlexibleFormula) -> Formula:
@@ -4345,8 +4349,8 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
         x: FlexibleFormula
         y: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'definition-interpretation'
         acronym = 'di'
         abridged_name = None
@@ -4369,9 +4373,9 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
         with u.v(symbol='y') as y:
             self.parameter_y = y
             self.parameter_y_mask = frozenset([y])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, d: DefinitionInclusion, x: FlexibleFormula,
             y: FlexibleFormula) -> Formula:
@@ -4404,8 +4408,8 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
         r_implies_s: FlexibleFormula
         not_q_or_not_s: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'destructive-dilemma'
         acronym = 'dd'
         abridged_name = None
@@ -4425,9 +4429,9 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
         with u.v(symbol='Q') as q, u.v(symbol='S') as s:
             self.parameter_not_q_or_not_s = u.r.lnot(q) | u.r.lor | u.r.lnot(s)
             self.parameter_not_q_or_not_s_mask = frozenset([q, s])
-            super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-                symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-                abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+            super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+                dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+                explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
             not_q_or_not_s: FlexibleFormula) -> Formula:
@@ -4474,8 +4478,8 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
         p: FlexibleFormula
         q: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'disjunction-introduction-1'
         acronym = 'di1'
         abridged_name = None
@@ -4485,9 +4489,9 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
         name = 'disjunction introduction #1'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             definition = (p | u.r.proves | (q | u.r.lor | p))
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
         """
@@ -4513,8 +4517,8 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
         p: FlexibleFormula
         q: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'disjunction-introduction-2'
         acronym = 'di2'
         abridged_name = None
@@ -4524,9 +4528,9 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
         name = 'disjunction introduction #2'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             definition = (p | u.r.proves | (p | u.r.lor | q))
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
         """
@@ -4552,8 +4556,8 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
         p_or_q: FlexibleFormula
         not_p_or_r: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'disjunctive-resolution'
         acronym = 'dr'
         abridged_name = None
@@ -4570,9 +4574,9 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p, u.v(symbol='R') as r:
             self.parameter_not_p_or_r = u.r.lnot(p) | u.r.lor | r
             self.parameter_not_p_or_r_mask = frozenset([p, r])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_or_q: FlexibleFormula, not_p_or_r: FlexibleFormula) -> Formula:
         """
@@ -4607,8 +4611,8 @@ class DisjunctiveSyllogism1Declaration(InferenceRuleDeclaration):
         p_or_q: FlexibleFormula
         not_p: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'disjunctive-syllogism-1'
         acronym = 'ds'
         abridged_name = None
@@ -4624,9 +4628,9 @@ class DisjunctiveSyllogism1Declaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p:
             self.parameter_not_p = u.r.lnot(p)
             self.parameter_not_p_mask = frozenset([p])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_or_q: FlexibleFormula, not_p: FlexibleFormula) -> Formula:
         """
@@ -4660,8 +4664,8 @@ class DisjunctiveSyllogism2Declaration(InferenceRuleDeclaration):
         p_or_q: FlexibleFormula
         not_q: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'disjunctive-syllogism-2'
         acronym = 'ds'
         abridged_name = None
@@ -4677,9 +4681,9 @@ class DisjunctiveSyllogism2Declaration(InferenceRuleDeclaration):
         with u.v(symbol='Q') as q:
             self.parameter_not_q = u.r.lnot(q)
             self.parameter_not_q_mask = frozenset([q])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_or_q: FlexibleFormula, not_q: FlexibleFormula) -> Formula:
         """
@@ -4718,8 +4722,8 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
         not_not_p: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'double-negation-elimination'
         auto_index = False
         dashed_name = 'double-negation-elimination'
@@ -4732,9 +4736,9 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p:
             self.parameter_not_not_p = u.r.lnot(u.r.lnot(p))
             self.parameter_not_not_p_mask = frozenset([p])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, not_not_p: FlexibleFormula) -> Formula:
         """
@@ -4758,8 +4762,8 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
         p: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'double-negation-introduction'
         auto_index = False
         dashed_name = 'double-negation-introduction'
@@ -4772,9 +4776,9 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p:
             self.parameter_p = p
             self.parameter_p_mask = frozenset([p])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p: FlexibleFormula) -> Formula:
         """
@@ -4794,8 +4798,8 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
         x_equal_y: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'equality-commutativity'
         acronym = 'ec'
         abridged_name = None
@@ -4808,9 +4812,9 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
         with u.v(symbol='x') as x, u.v(symbol='y') as y:
             self.parameter_x_equal_y = x | u.r.equal | y
             self.parameter_x_equal_y_mask = frozenset([x, y])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, x_equal_y: FlexibleFormula) -> Formula:
         """
@@ -4833,8 +4837,8 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
         p: FlexibleFormula
         x_equal_y: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'equal-terms-substitution'
         acronym = 'ets'
         abridged_name = None
@@ -4850,9 +4854,9 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
         with u.v(symbol='x') as x, u.v(symbol='y') as y:
             self.parameter_x_equal_y = x | u.r.equal | y
             self.parameter_x_equal_y_mask = frozenset([x, y])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p: FlexibleFormula, x_equal_y: FlexibleFormula) -> Formula:
         """
@@ -4882,8 +4886,8 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
     class Premises(typing.NamedTuple):
         p_implies_q: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'hypothetical-syllogism'
         acronym = 'hs'
         abridged_name = None
@@ -4893,9 +4897,9 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
         name = 'hypothetical syllogism'
         with u.v(symbol='P') as p, u.v(symbol='Q') as q:
             definition = ((p | u.r.tupl | q) | u.r.proves | (p | u.r.land | q))
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def infer_formula(self, p: FormulaStatement, q: FormulaStatement, t: TheoryElaborationSequence,
             echo: (None, bool) = None) -> Formula:
@@ -4916,8 +4920,8 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
         not_p: FlexibleFormula
         t: TheoryElaborationSequence
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'inconsistency-introduction-1'
         acronym = 'ii1'
         abridged_name = None
@@ -4935,9 +4939,9 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p:
             self.parameter_not_p = u.r.lnot(p)
             self.parameter_not_p_mask = frozenset([p])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p: FlexibleFormula, not_p: FlexibleFormula,
             t: TheoryElaborationSequence) -> Formula:
@@ -4972,8 +4976,8 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
         x_unequal_y: FlexibleFormula
         t: TheoryElaborationSequence
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'inconsistency-introduction-2'
         acronym = 'ii2'
         abridged_name = None
@@ -4992,9 +4996,9 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
         with u.v(symbol='x') as x, u.v(symbol='y') as y:
             self.parameter_x_unequal_y = x | u.r.unequal | y
             self.parameter_x_unequal_y_mask = frozenset([x, y])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, x_equal_y: FlexibleFormula, x_unequal_y: FlexibleFormula,
             t: TheoryElaborationSequence) -> Formula:
@@ -5037,8 +5041,8 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
         x_unequal_x: FlexibleFormula
         t: TheoryElaborationSequence
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'inconsistency-introduction-3'
         acronym = 'ii3'
         abridged_name = None
@@ -5053,9 +5057,9 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
         with u.v(symbol='x') as x:
             self.parameter_x_unequal_x = x | u.r.unequal | x
             self.parameter_x_unequal_x_mask = frozenset([x])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, x_unequal_x: FlexibleFormula,
             t: TheoryElaborationSequence) -> Formula:
@@ -5083,8 +5087,8 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         p_implies_q: FlexibleFormula
         p: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'modus-ponens'
         acronym = 'mp'
         abridged_name = None
@@ -5100,9 +5104,9 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         with u.v(symbol='P') as p:
             self.parameter_p = p
             self.parameter_p_mask = frozenset([p])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_implies_q: FlexibleFormula, p: FlexibleFormula) -> Formula:
         """
@@ -5134,8 +5138,8 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
         p_implies_q: FlexibleFormula
         not_q: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'modus-tollens'
         acronym = 'mt'
         abridged_name = None
@@ -5151,9 +5155,9 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
         with u.v(symbol='Q') as q:
             self.parameter_not_q = u.r.lnot(q)
             self.parameter_not_q_mask = frozenset([q])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_implies_q: FlexibleFormula, not_q: FlexibleFormula) -> Formula:
         """
@@ -5203,9 +5207,9 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
             self.parameter_inc_h = u.r.inc(h)
             self.parameter_inc_h_mask = frozenset([h])
 
-        super().__init__(definition=definition, universe_of_discourse=u, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
+            echo=echo)
 
     def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
         """
@@ -5260,9 +5264,9 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
         with u.v(symbol='H') as h:
             self.parameter_inc_h = u.r.inc(h)
             self.parameter_inc_h_mask = frozenset([h])
-        super().__init__(definition=definition, universe_of_discourse=u, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
+            echo=echo)
 
     def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
         """
@@ -5317,9 +5321,9 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
         with u.v(symbol='H') as h:
             self.parameter_inc_h = u.r.inc(h)
             self.parameter_inc_h_mask = frozenset([h])
-        super().__init__(definition=definition, universe_of_discourse=u, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
+            echo=echo)
 
     def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
         """
@@ -5375,9 +5379,9 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
         with u.v(symbol='H') as h:
             self.parameter_inc_h = u.r.inc(h)
             self.parameter_inc_h_mask = frozenset([h])
-        super().__init__(definition=definition, universe_of_discourse=u, symbol=symbol,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, name=name,
-            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
+            echo=echo)
 
     def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
         """
@@ -5403,7 +5407,7 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
             raise_exception=True, error_code=error_code)
         x__in__x_equal_y: Formula = x_equal_y.parameters[0]
-        y__in__x_equal_y: Formula = x_equal_y.parameters[y]
+        y__in__x_equal_y: Formula = x_equal_y.parameters[1]
         output: Formula = x__in__x_equal_y | self.u.r.unequal | y__in__x_equal_y
         return output
 
@@ -5413,8 +5417,8 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         p: FlexibleFormula
         phi: FlexibleFormula
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, echo: (None, bool) = None):
-        u: UniverseOfDiscourse = universe_of_discourse
+    def __init__(self, u: UniverseOfDiscourse, echo: (None, bool) = None):
+        u: UniverseOfDiscourse = u
         symbol = 'variable-substitution'
         acronym = 'vs'
         abridged_name = None
@@ -5434,12 +5438,12 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
             # TODO: VariableSubstitutionDeclaration: Enrich how inference-rule parameters may be defined to allow an expression like (v1, v2, ..., v3) using collection-defined-by-extension with n elements.
             self.parameter_phi = u.r.tupl
             self.parameter_phi_mask = frozenset([phi])
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
-        super().__init__(definition=definition, universe_of_discourse=universe_of_discourse,
-            symbol=symbol, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
+        super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p: FlexibleFormula, phi: FlexibleFormula) -> Formula:
         """
@@ -5492,8 +5496,8 @@ class AtheoreticalStatement(SymbolicObject):
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
         self.theory = theory
-        super().__init__(universe_of_discourse=theory.universe_of_discourse, symbol=symbol,
-            index=index, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+        super().__init__(u=theory.universe_of_discourse, symbol=symbol, index=index,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
             echo=echo)
@@ -5677,6 +5681,7 @@ class TheoryElaborationSequence(TheoreticalObject):
             echo: bool = None):
         echo = prioritize_value(echo, configuration.echo_theory_elaboration_sequence_declaration,
             configuration.echo_default, False)
+        verify_universe_of_discourse(input_value=u, arg='u')
         self._max_subsection_number = 0
         self._consistency = consistency_values.undetermined
         self._stabilized = False
@@ -5702,8 +5707,7 @@ class TheoryElaborationSequence(TheoreticalObject):
         nameset.ref = ref
         nameset.subtitle = subtitle
         super().__init__(nameset=nameset, paragraph_header=nameset.paragraph_header,
-            is_theory_foundation_system=True if extended_theory is None else False,
-            universe_of_discourse=u, echo=False)
+            is_theory_foundation_system=True if extended_theory is None else False, u=u, echo=False)
         verify(is_in_class(u, classes.universe_of_discourse),
             'Parameter "u" is not a member of declarative-class universe-of-discourse.', u=u)
         verify(extended_theory is None or is_in_class(extended_theory, classes.theory_elaboration),
@@ -6004,14 +6008,13 @@ theory-elaboration."""
             dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
             explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
-            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
-            echo: (None, bool) = None) -> Hypothesis:
+            subtitle: (None, str, StyledText) = None, echo: (None, bool) = None) -> Hypothesis:
         """Pose a new hypothesis in the current theory."""
         _, hypothesis_formula, _ = verify_formula(u=self.u, input_value=hypothesis_formula)
         return Hypothesis(t=self, hypothesis_formula=hypothesis_formula, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
-            subtitle=subtitle, nameset=nameset, echo=echo)
+            subtitle=subtitle, echo=echo)
 
     def prnt(self, proof: (None, bool) = None):
         repm.prnt(self.rep_report(proof=proof))
@@ -6101,13 +6104,10 @@ class Hypothesis(Statement):
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+            echo: (None, bool) = None):
         paragraph_header = paragraph_headers.hypothesis
         # TODO: Check that all components of the hypothetical-proposition
         #  are elements of the source theory-branch.
-        verify(hypothesis_formula.is_strictly_propositional,
-            'The hypothetical-formula is not a proposition.',
-            hypothetical_formula=hypothesis_formula, slf=self)
         if isinstance(symbol, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
@@ -6117,9 +6117,8 @@ class Hypothesis(Statement):
         elif symbol is None:
             symbol = configuration.default_parent_hypothesis_statement_symbol
             index = t.u.index_symbol(symbol=symbol)
-
         super().__init__(theory=t, symbol=symbol, index=index, paragraph_header=paragraph_header,
-            nameset=nameset, subtitle=subtitle, dashed_name=dashed_name, echo=False)
+            subtitle=subtitle, dashed_name=dashed_name, echo=False)
         super()._declare_class_membership(declarative_class_list.hypothesis)
         self._hypothesis_formula = hypothesis_formula
         # When a hypothesis is posed in a theory 𝒯₁,
@@ -6136,6 +6135,9 @@ class Hypothesis(Statement):
         # ...and the hypothetical-proposition is posed as an interpretation of that axiom in 𝒯₂.
         self._hypothesis_statement_in_child_theory = self.hypothesis_child_theory.i.axiom_interpretation.infer_formula_statement(
             self.hypothesis_axiom_inclusion_in_child_theory, hypothesis_formula, echo=echo)
+        verify(assertion=hypothesis_formula.is_strictly_propositional,
+            msg='The hypothetical-formula is not strictly-propositional.',
+            hypothetical_formula=hypothesis_formula, slf=self)
         echo = prioritize_value(echo, configuration.echo_hypothesis,
             configuration.echo_inferred_statement, False)
         if echo:
@@ -6224,7 +6226,7 @@ class Relation(TheoreticalObject):
     """The Relation pythonic class is the implementation of the relation theoretical-object.
     """
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse, arity: (None, int) = None,
+    def __init__(self, u: UniverseOfDiscourse, arity: (None, int) = None,
             min_arity: (None, int) = None, max_arity: (None, int) = None,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
             auto_index: (None, bool) = None, formula_rep=None, signal_proposition=None,
@@ -6238,7 +6240,7 @@ class Relation(TheoreticalObject):
             nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
         """
 
-        :param universe_of_discourse:
+        :param u:
         :param arity: A fixed arity constraint for well-formed formula. Formulae based on this relation with distinct arity are ill-formed. Equivalent to passing the same value to both min_arity, and max_arity.
         :param min_arity: A fixed minimum (inclusive) arity constraint for well-formed formula. Formulae based on this relation with lesser arity are ill-formed.
         :param max_arity: A fixed maximum (inclusive) arity constraint for well-formed formula. Formulae based on this relation with greater arity are ill-formed.
@@ -6265,7 +6267,7 @@ class Relation(TheoreticalObject):
         echo = prioritize_value(echo, configuration.echo_relation, configuration.echo_default,
             False)
         auto_index = prioritize_value(auto_index, configuration.auto_index, True)
-        assert isinstance(universe_of_discourse, UniverseOfDiscourse)
+        assert isinstance(u, UniverseOfDiscourse)
         signal_proposition = False if signal_proposition is None else signal_proposition
         signal_theoretical_morphism = False if signal_theoretical_morphism is None else signal_theoretical_morphism
         assert isinstance(signal_proposition, bool)
@@ -6283,11 +6285,11 @@ class Relation(TheoreticalObject):
         self.collection_end = collection_end
         if nameset is None:
             symbol = configuration.default_relation_symbol if symbol is None else symbol
-            index = universe_of_discourse.index_symbol(symbol=symbol) if auto_index else index
+            index = u.index_symbol(symbol=symbol) if auto_index else index
             nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name, acronym=acronym,
                 abridged_name=abridged_name, name=name, explicit_name=explicit_name,
                 paragraph_header=cat, ref=ref, subtitle=subtitle)
-        super().__init__(universe_of_discourse=universe_of_discourse, nameset=nameset, echo=False)
+        super().__init__(u=u, nameset=nameset, echo=False)
         self.universe_of_discourse.cross_reference_relation(r=self)
         super()._declare_class_membership(classes.relation)
         if echo:
@@ -6356,19 +6358,18 @@ class SimpleObjct(TheoreticalObject):
     TODO: SimpleObjct: By design, a SimpleObjct should also be a Formula. As an immediate measure, I implement the method is_syntactic_equivalent() to make it compatible, but the data model should be improved.
     """
 
-    def __init__(self, universe_of_discourse: UniverseOfDiscourse,
-            symbol: (None, str, StyledText) = None, index: (None, int) = None,
-            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
-            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
-            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+    def __init__(self, u: UniverseOfDiscourse, symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
+            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
+            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
+            subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
+            echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_simple_objct_declaration,
             configuration.echo_default, False)
-        super().__init__(universe_of_discourse=universe_of_discourse, symbol=symbol, index=index,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
-            subtitle=subtitle, nameset=nameset, echo=False)
+        super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
         self.universe_of_discourse.cross_reference_simple_objct(o=self)
         if echo:
             self.echo()
@@ -6475,9 +6476,9 @@ class RelationDict(collections.UserDict):
             collection_separator=collection_separator, collection_end=collection_end,
             signal_proposition=signal_proposition,
             signal_theoretical_morphism=signal_theoretical_morphism, implementation=implementation,
-            universe_of_discourse=self.u, symbol=symbol, index=index, auto_index=auto_index,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
+            u=self.u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
+            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+            ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
 
     @property
     def biconditional(self):
@@ -7135,6 +7136,57 @@ def verify_hypothesis(t: TheoryElaborationSequence, input_value: FlexibleFormula
     return True, hypothesis, msg
 
 
+def complement_error(context: (None, ErrorCode, frozenset[ErrorCode]),
+        complement: (None, ErrorCode, frozenset[ErrorCode])):
+    """Enrich some error-codes with complementary error-codes to provide more accurate context for the troubleshooting of python exceptions and warnings."""
+    context: frozenset = frozenset() if context is None else context if isinstance(context,
+        frozenset) else frozenset(context)
+    complement: frozenset = frozenset() if complement is None else complement if isinstance(
+        complement, frozenset) else frozenset(context)
+    output: frozenset = context.union(complement)
+    return output
+
+
+def verify_universe_of_discourse(input_value: (None, FlexibleFormula), arg: str,
+        raise_exception: bool = True, error_code: (None, ErrorCode, frozenset[ErrorCode]) = None) -> \
+        tuple[bool, (None, DefinitionInclusion), (None, str)]:
+    """A data-validation function that verifies the adequacy of a universe-of-discourse mandatory parameter."""
+    ok: bool = True
+    msg: (None, str)
+    error_code: frozenset[ErrorCode] = complement_error(context=error_code,
+        complement=error_codes.error_004_inadequate_universe_parameter)
+    ok, msg = verify(
+        assertion=input_value is not None and isinstance(input_value, UniverseOfDiscourse),
+        raise_exception=raise_exception, error_code=error_code,
+        msg=f'Python variable {arg}=⌜{repr(input_value)}⌝ of type {repr(type(input_value))} could not be resolved to an instance of UniverseOfDiscourse.',
+        input_value=input_value, input_value_type=type(input_value))
+    if ok:
+        u: UniverseOfDiscourse = input_value
+        return True, u, None
+    else:
+        return False, None, msg
+
+
+def verify_theory_elaboration_sequence(input_value: (None, FlexibleFormula), arg: str,
+        raise_exception: bool = True, error_code: (None, ErrorCode, frozenset[ErrorCode]) = None) -> \
+        tuple[bool, (None, DefinitionInclusion), (None, str)]:
+    """A data-validation function that verifies the adequacy of a theory-elaboration-sequence mandatory parameter."""
+    ok: bool = True
+    msg: (None, str)
+    error_code: frozenset[ErrorCode] = complement_error(context=error_code,
+        complement=error_codes.error_005_inadequate_theory_parameter)
+    ok, msg = verify(
+        assertion=input_value is not None and isinstance(input_value, TheoryElaborationSequence),
+        raise_exception=raise_exception, error_code=error_code,
+        msg=f'Python variable {arg}=⌜{repr(input_value)}⌝ of type {repr(type(input_value))} could not be resolved to an instance of TheoryElaborationSequence.',
+        input_value=input_value, input_value_type=type(input_value))
+    if ok:
+        t: TheoryElaborationSequence = input_value
+        return True, t, None
+    else:
+        return False, None, msg
+
+
 class InferenceRuleDeclarationCollection(collections.UserDict):
     """This python class models the collection of :ref:`inference-rules<inference_rule_math_concept>` :ref:`declared<object_declaration_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
 
@@ -7184,14 +7236,13 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
     @property
     def absorption(self) -> AbsorptionDeclaration:
         if self._absorption is None:
-            self._absorption = AbsorptionDeclaration(universe_of_discourse=self.u)
+            self._absorption = AbsorptionDeclaration(u=self.u)
         return self._absorption
 
     @property
     def axiom_interpretation(self) -> AxiomInterpretationDeclaration:
         if self._axiom_interpretation is None:
-            self._axiom_interpretation = AxiomInterpretationDeclaration(
-                universe_of_discourse=self.u)
+            self._axiom_interpretation = AxiomInterpretationDeclaration(u=self.u)
         return self._axiom_interpretation
 
     @property
@@ -7209,22 +7260,19 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
     @property
     def biconditional_elimination_1(self) -> BiconditionalElimination1Declaration:
         if self._biconditional_elimination_1 is None:
-            self._biconditional_elimination_1 = BiconditionalElimination1Declaration(
-                universe_of_discourse=self.u)
+            self._biconditional_elimination_1 = BiconditionalElimination1Declaration(u=self.u)
         return self._biconditional_elimination_1
 
     @property
     def biconditional_elimination_2(self) -> BiconditionalElimination2Declaration:
         if self._biconditional_elimination_2 is None:
-            self._biconditional_elimination_2 = BiconditionalElimination2Declaration(
-                universe_of_discourse=self.u)
+            self._biconditional_elimination_2 = BiconditionalElimination2Declaration(u=self.u)
         return self._biconditional_elimination_2
 
     @property
     def biconditional_introduction(self) -> BiconditionalIntroductionDeclaration:
         if self._biconditional_introduction is None:
-            self._biconditional_introduction = BiconditionalIntroductionDeclaration(
-                universe_of_discourse=self.u)
+            self._biconditional_introduction = BiconditionalIntroductionDeclaration(u=self.u)
         return self._biconditional_introduction
 
     @property
@@ -7252,42 +7300,37 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
         # TODO: inference-rule: conjunction_elimination_1: Migrate to specialized classes
 
         if self._conjunction_elimination_1 is None:
-            self._conjunction_elimination_1 = ConjunctionElimination1Declaration(
-                universe_of_discourse=self.u)
+            self._conjunction_elimination_1 = ConjunctionElimination1Declaration(u=self.u)
         return self._conjunction_elimination_1
 
     @property
     def conjunction_elimination_2(self) -> ConjunctionElimination2Declaration:
         if self._conjunction_elimination_2 is None:
-            self._conjunction_elimination_2 = ConjunctionElimination2Declaration(
-                universe_of_discourse=self.u)
+            self._conjunction_elimination_2 = ConjunctionElimination2Declaration(u=self.u)
         return self._conjunction_elimination_2
 
     @property
     def conjunction_introduction(self) -> ConjunctionIntroductionDeclaration:
         if self._conjunction_introduction is None:
-            self._conjunction_introduction = ConjunctionIntroductionDeclaration(
-                universe_of_discourse=self.u)
+            self._conjunction_introduction = ConjunctionIntroductionDeclaration(u=self.u)
         return self._conjunction_introduction
 
     @property
     def constructive_dilemma(self) -> ConstructiveDilemmaDeclaration:
         if self._constructive_dilemma is None:
-            self._constructive_dilemma = ConstructiveDilemmaDeclaration(
-                universe_of_discourse=self.u)
+            self._constructive_dilemma = ConstructiveDilemmaDeclaration(u=self.u)
         return self._constructive_dilemma
 
     @property
     def definition_interpretation(self) -> DefinitionInterpretationDeclaration:
         if self._definition_interpretation is None:
-            self._definition_interpretation = DefinitionInterpretationDeclaration(
-                universe_of_discourse=self.u)
+            self._definition_interpretation = DefinitionInterpretationDeclaration(u=self.u)
         return self._definition_interpretation
 
     @property
     def destructive_dilemma(self) -> DestructiveDilemmaDeclaration:
         if self._destructive_dilemma is None:
-            self._destructive_dilemma = DestructiveDilemmaDeclaration(universe_of_discourse=self.u)
+            self._destructive_dilemma = DestructiveDilemmaDeclaration(u=self.u)
         return self._destructive_dilemma
 
     @property
@@ -7301,36 +7344,31 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
     @property
     def disjunction_introduction_1(self) -> DisjunctionIntroduction1Declaration:
         if self._disjunction_introduction_1 is None:
-            self._disjunction_introduction_1 = DisjunctionIntroduction1Declaration(
-                universe_of_discourse=self.u)
+            self._disjunction_introduction_1 = DisjunctionIntroduction1Declaration(u=self.u)
         return self._disjunction_introduction_1
 
     @property
     def disjunction_introduction_2(self) -> DisjunctionIntroduction2Declaration:
         if self._disjunction_introduction_2 is None:
-            self._disjunction_introduction_2 = DisjunctionIntroduction2Declaration(
-                universe_of_discourse=self.u)
+            self._disjunction_introduction_2 = DisjunctionIntroduction2Declaration(u=self.u)
         return self._disjunction_introduction_2
 
     @property
     def disjunctive_resolution(self) -> DisjunctiveResolutionDeclaration:
         if self._disjunctive_resolution is None:
-            self._disjunctive_resolution = DisjunctiveResolutionDeclaration(
-                universe_of_discourse=self.u)
+            self._disjunctive_resolution = DisjunctiveResolutionDeclaration(u=self.u)
         return self._disjunctive_resolution
 
     @property
     def disjunctive_syllogism_1(self) -> DisjunctiveSyllogism1Declaration:
         if self._disjunctive_syllogism_1 is None:
-            self._disjunctive_syllogism_1 = DisjunctiveSyllogism1Declaration(
-                universe_of_discourse=self.u)
+            self._disjunctive_syllogism_1 = DisjunctiveSyllogism1Declaration(u=self.u)
         return self._disjunctive_syllogism_1
 
     @property
     def disjunctive_syllogism_2(self) -> DisjunctiveSyllogism2Declaration:
         if self._disjunctive_syllogism_2 is None:
-            self._disjunctive_syllogism_2 = DisjunctiveSyllogism2Declaration(
-                universe_of_discourse=self.u)
+            self._disjunctive_syllogism_2 = DisjunctiveSyllogism2Declaration(u=self.u)
         return self._disjunctive_syllogism_2
 
     @property
@@ -7344,15 +7382,13 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
     @property
     def double_negation_elimination(self) -> DoubleNegationEliminationDeclaration:
         if self._double_negation_elimination is None:
-            self._double_negation_elimination = DoubleNegationEliminationDeclaration(
-                universe_of_discourse=self.u)
+            self._double_negation_elimination = DoubleNegationEliminationDeclaration(u=self.u)
         return self._double_negation_elimination
 
     @property
     def double_negation_introduction(self) -> DoubleNegationIntroductionDeclaration:
         if self._double_negation_introduction is None:
-            self._double_negation_introduction = DoubleNegationIntroductionDeclaration(
-                universe_of_discourse=self.u)
+            self._double_negation_introduction = DoubleNegationIntroductionDeclaration(u=self.u)
         return self._double_negation_introduction
 
     @property
@@ -7362,15 +7398,13 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
     @property
     def equality_commutativity(self) -> EqualityCommutativityDeclaration:
         if self._equality_commutativity is None:
-            self._equality_commutativity = EqualityCommutativityDeclaration(
-                universe_of_discourse=self.u)
+            self._equality_commutativity = EqualityCommutativityDeclaration(u=self.u)
         return self._equality_commutativity
 
     @property
     def equal_terms_substitution(self) -> EqualTermsSubstitutionDeclaration:
         if self._equal_terms_substitution is None:
-            self._equal_terms_substitution = EqualTermsSubstitutionDeclaration(
-                universe_of_discourse=self.u)
+            self._equal_terms_substitution = EqualTermsSubstitutionDeclaration(u=self.u)
         return self._equal_terms_substitution
 
     @property
@@ -7392,22 +7426,19 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
     @property
     def inconsistency_introduction_1(self) -> InconsistencyIntroduction1Declaration:
         if self._inconsistency_introduction_1 is None:
-            self._inconsistency_introduction_1 = InconsistencyIntroduction1Declaration(
-                universe_of_discourse=self.u)
+            self._inconsistency_introduction_1 = InconsistencyIntroduction1Declaration(u=self.u)
         return self._inconsistency_introduction_1
 
     @property
     def inconsistency_introduction_2(self) -> InconsistencyIntroduction2Declaration:
         if self._inconsistency_introduction_2 is None:
-            self._inconsistency_introduction_2 = InconsistencyIntroduction2Declaration(
-                universe_of_discourse=self.u)
+            self._inconsistency_introduction_2 = InconsistencyIntroduction2Declaration(u=self.u)
         return self._inconsistency_introduction_2
 
     @property
     def inconsistency_introduction_3(self) -> InconsistencyIntroduction3Declaration:
         if self._inconsistency_introduction_3 is None:
-            self._inconsistency_introduction_3 = InconsistencyIntroduction3Declaration(
-                universe_of_discourse=self.u)
+            self._inconsistency_introduction_3 = InconsistencyIntroduction3Declaration(u=self.u)
         return self._inconsistency_introduction_3
 
     @property
@@ -7418,13 +7449,13 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
     @property
     def modus_ponens(self) -> ModusPonensDeclaration:
         if self._modus_ponens is None:
-            self._modus_ponens = ModusPonensDeclaration(universe_of_discourse=self.u)
+            self._modus_ponens = ModusPonensDeclaration(u=self.u)
         return self._modus_ponens
 
     @property
     def modus_tollens(self) -> ModusTollensDeclaration:
         if self._modus_tollens is None:
-            self._modus_tollens = ModusTollensDeclaration(universe_of_discourse=self.u)
+            self._modus_tollens = ModusTollensDeclaration(u=self.u)
         return self._modus_tollens
 
     @property
@@ -7474,8 +7505,7 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
     @property
     def variable_substitution(self) -> VariableSubstitutionDeclaration:
         if self._variable_substitution is None:
-            self._variable_substitution = VariableSubstitutionDeclaration(
-                universe_of_discourse=self.u)
+            self._variable_substitution = VariableSubstitutionDeclaration(u=self.u)
         return self._variable_substitution
 
     @property
@@ -10016,7 +10046,7 @@ class UniverseOfDiscourse(SymbolicObject):
             index = index_universe_of_discourse_symbol(base=nameset)
             nameset = NameSet(s=nameset, index=index, name=name)
         super().__init__(is_universe_of_discourse=True, is_theory_foundation_system=False,
-            nameset=nameset, universe_of_discourse=None, echo=False)
+            nameset=nameset, u=None, echo=False)
         super()._declare_class_membership(classes.universe_of_discourse)
         if echo:
             self.echo()
@@ -10162,8 +10192,8 @@ class UniverseOfDiscourse(SymbolicObject):
         A formula is *declared* in a theory, and not *stated*, because it is not a statement,
         i.e. it is not necessarily true in this theory.
         """
-        phi = Formula(relation=relation, parameters=parameters, universe_of_discourse=self,
-            nameset=nameset, lock_variable_scope=lock_variable_scope, echo=echo)
+        phi = Formula(relation=relation, parameters=parameters, u=self, nameset=nameset,
+            lock_variable_scope=lock_variable_scope, echo=echo)
         return phi
 
     def declare_free_variable(self, symbol: (None, str, StyledText) = None,
@@ -10190,10 +10220,9 @@ class UniverseOfDiscourse(SymbolicObject):
             explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None) -> SymbolicObject:
-        return SymbolicObject(universe_of_discourse=self, symbol=symbol, index=index,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
-            subtitle=subtitle, echo=echo)
+        return SymbolicObject(u=self, symbol=symbol, index=index, auto_index=auto_index,
+            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, ref=ref, subtitle=subtitle, echo=echo)
 
     def declare_theory(self, symbol: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None, ref: (None, str) = None,

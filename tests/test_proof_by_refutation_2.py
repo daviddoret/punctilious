@@ -8,6 +8,8 @@ class TestProofByRefutation2(TestCase):
     def test_proof_by_refutation_2(self):
         import sample.sample_proof_by_refutation_2 as test
         u: pu.UniverseOfDiscourse = test.u
+        t1: pu.TheoryElaborationSequence = test.t1
+        h: pu.Hypothesis = test.h
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
