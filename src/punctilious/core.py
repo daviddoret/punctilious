@@ -2036,6 +2036,11 @@ class TheoreticalObject(SymbolicObject):
             explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref,
             subtitle=subtitle, nameset=nameset, echo=False)
         super()._declare_class_membership(classes.theoretical_objct)
+        if not is_in_class(self, classes.universe_of_discourse):
+            # The universe-of-discourse is the only object that may not
+            # be contained in a universe-of-discourse.
+            # All other objects must be contained in a universe-of-discourse.
+            verify_universe_of_discourse(input_value=u, arg='u')
         if echo:
             repm.prnt(self.rep_fully_qualified_name())
 
@@ -3819,7 +3824,6 @@ class InferenceRuleDeclaration(TheoreticalObject):
             name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
             nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
-        verify_universe_of_discourse(input_value=u, arg='u')
         self._definition = definition
         self._compose_paragraph_proof_method = compose_paragraph_proof_method
         if nameset is None and symbol is None:

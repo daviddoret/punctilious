@@ -25,12 +25,8 @@ substitution = h.child_theory.i.variable_substitution.infer_formula_statement(p=
 inequality = h.child_theory.i.modus_ponens.infer_formula_statement(p_implies_q=substitution,
     p=f_o1_eq_f_02)
 
-# Use a distinct theory T2 to demonstrate the inconsistency of T1
-# because T1 could not prove its own inconsistency because it is inconsistent!
-t2 = u.t(echo=True)
-
 # Prove hypothesis inconsistency
-h_inconsistency = t2.i.inconsistency_introduction_2.infer_formula_statement(
+h_inconsistency = t1.i.inconsistency_introduction_2.infer_formula_statement(
     x_equal_y=h.child_statement, x_unequal_y=inequality, t=h.child_theory,
     subtitle='The proposition of interest')
 
