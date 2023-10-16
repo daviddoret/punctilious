@@ -13,7 +13,7 @@ DisjunctiveSyllogism2Inclusion (python class)
 =========================================================================
 
 .. seealso::
-   :ref:`math concept<disjunctive_syllogism_2_math_inference_rule>` | :ref:`python declaration class<disjunctive_syllogism1_declaration_python_class>` | :ref:`python sample<disjunctive_syllogism_2_python_sample>`
+   :ref:`math concept<disjunctive_syllogism_2_math_inference_rule>` | :ref:`python declaration class<disjunctive_syllogism_1_declaration_python_class>` | :ref:`python sample<disjunctive_syllogism_2_python_sample>`
 
 This section presents the :python:`DisjunctiveSyllogism2Inclusion` python class.
 

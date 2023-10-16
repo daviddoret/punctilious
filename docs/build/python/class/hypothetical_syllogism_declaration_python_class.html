@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css"/>
     <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css"/>
     <!--[if lt IE 9]>
-      <script src="../../_static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -378,7 +378,8 @@
                                             <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
                                                 class="sig-name descname"><span class="pre">Premises</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">p_implies_q</span></span></em><span
+                                                class="pre">p_implies_q</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">q_implies_r</span></span></em><span
                                                 class="sig-paren">)</span><a class="headerlink"
                                                                              href="#punctilious.HypotheticalSyllogismDeclaration.Premises"
                                                                              title="Permalink to this definition"></a>
@@ -409,22 +410,44 @@
                                                 </dd>
                                             </dl>
 
+                                            <dl class="py attribute">
+                                                <dt class="sig sig-object py"
+                                                    id="punctilious.HypotheticalSyllogismDeclaration.Premises.q_implies_r">
+                                                    <span class="sig-name descname"><span class="pre">q_implies_r</span></span><em
+                                                        class="property"><span class="p"><span
+                                                        class="pre">:</span></span><span class="w"> </span><span
+                                                        class="pre">Union</span><span class="p"><span
+                                                        class="pre">[</span></span><span class="pre">punctilious.core.TheoreticalObject</span><span
+                                                        class="p"><span class="pre">,</span></span><span
+                                                        class="w"> </span><span class="pre">punctilious.core.FormulaStatement</span><span
+                                                        class="p"><span class="pre">,</span></span><span
+                                                        class="w"> </span><span
+                                                        class="pre">punctilious.core.Formula</span><span class="p"><span
+                                                        class="pre">,</span></span><span class="w"> </span><span
+                                                        class="pre">tuple</span><span class="p"><span
+                                                        class="pre">,</span></span><span class="w"> </span><span
+                                                        class="pre">list</span><span class="p"><span
+                                                        class="pre">]</span></span></em><a class="headerlink"
+                                                                                           href="#punctilious.HypotheticalSyllogismDeclaration.Premises.q_implies_r"
+                                                                                           title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Alias for field number 1</p>
+                                                </dd>
+                                            </dl>
+
                                         </dd>
                                     </dl>
 
                                     <dl class="py method">
                                         <dt class="sig sig-object py"
-                                            id="punctilious.HypotheticalSyllogismDeclaration.infer_formula">
+                                            id="punctilious.HypotheticalSyllogismDeclaration.construct_formula">
                                             <span class="sig-name descname"><span
-                                                    class="pre">infer_formula</span></span><span
+                                                    class="pre">construct_formula</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span
-                                                class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span
-                                                class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span
-                                                class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em><span
+                                                class="pre">p_implies_q</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">q_implies_r</span></span></em><span
                                                 class="sig-paren">)</span><a class="headerlink"
-                                                                             href="#punctilious.HypotheticalSyllogismDeclaration.infer_formula"
+                                                                             href="#punctilious.HypotheticalSyllogismDeclaration.construct_formula"
                                                                              title="Permalink to this definition"></a>
                                         </dt>
                                         <dd><p>This python method verify the syntactic correctness of the premises, but
@@ -497,6 +520,13 @@
                                                             class="std std-ref">formula_statements</span></a> are valid.
                                                 </p>
                                             </div>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Return type</dt>
+                                                <dd class="field-odd"><p><code
+                                                        class="xref py py-class docutils literal notranslate"><span
+                                                        class="pre">Formula</span></code></p>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 

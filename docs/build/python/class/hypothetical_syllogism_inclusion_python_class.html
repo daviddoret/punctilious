@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css"/>
     <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css"/>
     <!--[if lt IE 9]>
-      <script src="../../_static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -374,15 +374,128 @@
                                         class="std std-ref">theory-elaboration-sequence</span></a> .</p>
                                     <dl class="py method">
                                         <dt class="sig sig-object py"
+                                            id="punctilious.HypotheticalSyllogismInclusion.check_premises_validity">
+                                            <span class="sig-name descname"><span
+                                                    class="pre">check_premises_validity</span></span><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">p_implies_q</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">q_implies_r</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#punctilious.HypotheticalSyllogismInclusion.check_premises_validity"
+                                                                             title="Permalink to this definition"></a>
+                                        </dt>
+                                        <dd><p>This python method verifies the validity of the premises. It is called by
+                                            the python constructor of the <a class="reference internal"
+                                                                             href="inferred_statement_python_class.html#inferred-statement-python-class"><span
+                                                    class="std std-ref">InferredStatement</span></a> python class to
+                                            assure that <a class="reference internal"
+                                                           href="../../math/concept/formula_statement_math_concept.html#formula-statement-math-concept"><span
+                                                    class="std std-ref">formula-statements</span></a> are inferred if
+                                            and only if they are valid.</p>
+                                            <p>Returns True if the premises are valid and allow the execution of the
+                                                inference algorithm. In this case, the constructor of the <a
+                                                        class="reference internal"
+                                                        href="inferred_statement_python_class.html#inferred-statement-python-class"><span
+                                                        class="std std-ref">InferredStatement</span></a> class will
+                                                succeed and create an <a class="reference internal"
+                                                                         href="inferred_statement_python_class.html#inferred-statement-python-class"><span
+                                                        class="std std-ref">InferredStatement</span></a> instance.</p>
+                                            <p>Returns False if the premises are <em>not</em> valid and <em>do not</em>
+                                                allow the execution of the inference algorithm. In this case, the
+                                                constructor of the <a class="reference internal"
+                                                                      href="inferred_statement_python_class.html#inferred-statement-python-class"><span
+                                                        class="std std-ref">InferredStatement</span></a> class will fail
+                                                and raise a PunctiliousException error.</p>
+                                            <div class="admonition note">
+                                                <p class="admonition-title">Note</p>
+                                                <p>Note the critical distinction between the <code
+                                                        class="code python py docutils literal notranslate"><span
+                                                        class="name"><span
+                                                        class="pre">construct_formula</span></span></code> and the <code
+                                                        class="code python py docutils literal notranslate"><span
+                                                        class="name"><span
+                                                        class="pre">infer_formula_statement</span></span></code>
+                                                    methods. The former only verifies the syntactic correctness but does
+                                                    not verify the validity of the premises, it then applies the <a
+                                                            class="reference internal"
+                                                            href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                                            class="std std-ref">inference-rule</span></a> algorithm, and
+                                                    produces a <a class="reference internal"
+                                                                  href="../../math/concept/formula_math_concept.html#formula-math-concept"><span
+                                                            class="std std-ref">formula</span></a> that may be <strong>invalid</strong>
+                                                    . The later verifies the validity of the premises, applies the <a
+                                                            class="reference internal"
+                                                            href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                                            class="std std-ref">inference-rule</span></a> algorithm, and
+                                                    produces a <a class="reference internal"
+                                                                  href="../../math/concept/formula_statement_math_concept.html#formula-statement-math-concept"><span
+                                                            class="std std-ref">formula-statement</span></a> that is
+                                                    <strong>valid</strong> by definition.</p>
+                                                <p>Taking the <a class="reference internal"
+                                                                 href="../../math/inference_rule/modus_ponens_math_inference_rule.html#modus-ponens-math-inference-rule"><span
+                                                        class="std std-ref">modus-ponens</span></a> <a
+                                                        class="reference internal"
+                                                        href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                                        class="std std-ref">inference-rule</span></a> as an example, the
+                                                    <code class="code python py docutils literal notranslate"><span
+                                                            class="name"><span
+                                                            class="pre">construct_formula</span></span></code> method
+                                                    requires two premise arguments: <code
+                                                            class="code python py docutils literal notranslate"><span
+                                                            class="name"><span
+                                                            class="pre">p_implies_q</span></span></code> and <code
+                                                            class="code python py docutils literal notranslate"><span
+                                                            class="name"><span class="pre">p</span></span></code>. One
+                                                    may pass a formula as the <code
+                                                            class="code python py docutils literal notranslate"><span
+                                                            class="name"><span
+                                                            class="pre">p_implies_q</span></span></code> argument that
+                                                    is not valid in the <a class="reference internal"
+                                                                           href="../../math/concept/theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence-math-concept"><span
+                                                            class="std std-ref">theory-elaboration-sequence</span></a>
+                                                    under consideration, but that is syntactically correct. On the other
+                                                    hand, the <code class="code python py docutils literal notranslate"><span
+                                                            class="name"><span
+                                                            class="pre">infer_formula_statement</span></span></code>
+                                                    method requires that both premise arguments be valid.</p>
+                                                <p>This distinction makes it possible to use the algorithms of <a
+                                                        class="reference internal"
+                                                        href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                                        class="std std-ref">inference-rules</span></a> in “what if”
+                                                    scenarii, i.e. building invalid formulae. And at the same time, it
+                                                    assures that all <a class="reference internal"
+                                                                        href="../../math/concept/formula_statement_math_concept.html#formula-statement-math-concept"><span
+                                                            class="std std-ref">formula_statements</span></a> are valid.
+                                                </p>
+                                            </div>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Return type</dt>
+                                                <dd class="field-odd"><p><code
+                                                        class="xref py py-data docutils literal notranslate"><span
+                                                        class="pre">Tuple</span></code>[<code
+                                                        class="xref py py-class docutils literal notranslate"><span
+                                                        class="pre">bool</span></code>, <a class="reference internal"
+                                                                                           href="hypothetical_syllogism_declaration_python_class.html#punctilious.HypotheticalSyllogismDeclaration.Premises"
+                                                                                           title="punctilious.core.HypotheticalSyllogismDeclaration.Premises"><code
+                                                        class="xref py py-class docutils literal notranslate"><span
+                                                        class="pre">Premises</span></code></a>]</p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt class="sig sig-object py"
                                             id="punctilious.HypotheticalSyllogismInclusion.construct_formula">
                                             <span class="sig-name descname"><span
                                                     class="pre">construct_formula</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span
-                                                class="pre">q</span></span></em><span class="sig-paren">)</span><a
-                                                class="headerlink"
-                                                href="#punctilious.HypotheticalSyllogismInclusion.construct_formula"
-                                                title="Permalink to this definition"></a></dt>
+                                                class="pre">p_implies_q</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">q_implies_r</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#punctilious.HypotheticalSyllogismInclusion.construct_formula"
+                                                                             title="Permalink to this definition"></a>
+                                        </dt>
                                         <dd><p>This python method verify the syntactic correctness of the premises, but
                                             <strong>does not</strong> verify the validity of the premises, it then
                                             applies the <a class="reference internal"
@@ -496,23 +609,16 @@
                                             <span class="sig-name descname"><span
                                                     class="pre">infer_formula_statement</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">p</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">q</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">nameset</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">ref</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">paragraph_header</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
+                                                class="pre">p_implies_q</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">q_implies_r</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span
+                                                class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span
                                                 class="default_value"><span class="pre">None</span></span></em>, <em
                                                 class="sig-param"><span class="n"><span
-                                                class="pre">subtitle</span></span><span class="o"><span
+                                                class="pre">paragraph_header</span></span><span class="o"><span
+                                                class="pre">=</span></span><span class="default_value"><span
+                                                class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">subtitle</span></span><span class="o"><span
                                                 class="pre">=</span></span><span class="default_value"><span
                                                 class="pre">None</span></span></em>, <em class="sig-param"><span
                                                 class="n"><span class="pre">echo</span></span><span class="o"><span

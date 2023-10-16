@@ -33,7 +33,7 @@ Call the :python:`infer_statement` method from the inference-rule inclusion clas
 Sample code
 ----------------------
 
-.. literalinclude :: ../../../../src/sample/sample_disjunctive_1_syllogism.py
+.. literalinclude :: ../../../../src/sample/sample_disjunctive_syllogism_1.py
   :language: python
 
 Code output
@@ -43,12 +43,12 @@ Code output
 
    .. tab:: Unicode
 
-      .. literalinclude :: ../../../../data/sample_disjunctive_1_syllogism_unicode.txt
+      .. literalinclude :: ../../../../data/sample_disjunctive_syllogism_1_unicode.txt
          :language: text
 
    .. tab:: Plaintext
 
-      .. literalinclude :: ../../../../data/sample_disjunctive_1_syllogism_plaintext.txt
+      .. literalinclude :: ../../../../data/sample_disjunctive_syllogism_1_plaintext.txt
          :language: text
 
    .. tab:: LaTeX
