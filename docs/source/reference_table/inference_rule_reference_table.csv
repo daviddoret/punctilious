@@ -1,0 +1,32 @@
+Unabridged name;Abridged name;Formula
+:ref:`absorption<absorption_math_inference_rule>`;abs.;:math:`\left(\boldsymbol{P} \implies \mathbf{Q}\right) \vdash \left(\boldsymbol{P} \implies \boldsymbol{P} \land \mathbf{Q}\right)`
+:ref:`axiom-interpretation<axiom_interpretation_math_inference_rule>`;ai;:math:`\boldsymbol{\mathcal{A}} \vdash \boldsymbol{P}`
+:ref:`biconditional-elimination-1<biconditional_elimination_1_math_inference_rule>`;be1;:math:`\left( \boldsymbol{P} \iff \mathbf{Q} \right) \vdash \left( \boldsymbol{P} \implies \mathbf{Q} \right)`
+:ref:`biconditional-elimination-2<biconditional_elimination_2_math_inference_rule>`;be2;:math:`\left( \boldsymbol{P} \iff \mathbf{Q} \right) \vdash \left( \mathbf{Q} \implies \boldsymbol{P} \right)`
+:ref:`biconditional-introduction<biconditional_introduction_math_inference_rule>`;bi;:math:`\left( \left( \boldsymbol{P} \implies \mathbf{Q} \right), \left( \mathbf{Q} \implies \boldsymbol{P} \right) \right) \vdash \left( \mathbf{Q} \iff P \right)`
+:ref:`conjunction-elimination-1<conjunction_elimination_1_math_inference_rule>`;ce1;:math:`\left( \boldsymbol{P} \land \mathbf{Q} \right) \vdash \boldsymbol{P}`
+:ref:`conjunction-elimination-2<conjunction_elimination_2_math_inference_rule>`;ce2;:math:`\left( \boldsymbol{P} \land \mathbf{Q} \right) \vdash \mathbf{Q}`
+:ref:`conjunction-introduction<conjunction_introduction_math_inference_rule>`;ci;:math:`\boldsymbol{P}, \boldsymbol{Q} \vdash \left( \boldsymbol{P} \land \boldsymbol{Q} \right)`
+:ref:`constructive-dilemma<constructive_dilemma_math_inference_rule>`;cd;:math:`\left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), \left( \boldsymbol{R} \implies \boldsymbol{S} \right), \left( \boldsymbol{P} \lor \boldsymbol{R} \right) \right) \vdash \left( \boldsymbol{Q} \lor \boldsymbol{S} \right)`
+:ref:`definition-interpretation<definition_interpretation_math_inference_rule>`;di;:math:`\boldsymbol{\mathcal{A}} \vdash \boldsymbol{P}`
+:ref:`destructive-dilemma<destructive_dilemma_math_inference_rule>`;dd;:math:`\left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), \left( \boldsymbol{R} \implies \boldsymbol{S} \right), \left( \neg \boldsymbol{Q} \lor \neg \boldsymbol{S} \right) \right) \vdash \left( \neg \boldsymbol{P} \lor \neg \boldsymbol{R} \right)`
+:ref:`disjunction-introduction-1<disjunction_introduction_1_math_inference_rule>`;di1;:math:`\boldsymbol{P} \vdash \left( \mathbf{Q} \lor \boldsymbol{P} \right)`
+:ref:`disjunction-introduction-2<disjunction_introduction_2_math_inference_rule>`;di2;:math:`\boldsymbol{P} \vdash \left( \boldsymbol{P} \lor \mathbf{Q} \right)`
+:ref:`disjunctive-resolution<disjunctive_resolution_math_inference_rule>`;dr;:math:`\left( \left( \boldsymbol{P} \lor \boldsymbol{Q} \right), \left( \neg \boldsymbol{P} \lor \boldsymbol{R} \right) \right) \vdash \left( \boldsymbol{Q} \lor \boldsymbol{R} \right)`
+:ref:`disjunctive-syllogism-1<disjunctive_syllogism_1_math_inference_rule>`;ds1;:math:`\left( \left( \boldsymbol{P} \lor \boldsymbol{Q} \right), \neg \boldsymbol{P} \right) \vdash \boldsymbol{Q}`
+:ref:`disjunctive-syllogism-2<disjunctive_syllogism_2_math_inference_rule>`;ds2;:math:`\left( \left( \boldsymbol{P} \lor \boldsymbol{Q} \right), \neg \boldsymbol{Q} \right) \vdash \boldsymbol{P}`
+:ref:`double-negation-elimination<double_negation_elimination_math_inference_rule>`;dne;:math:`\lnot \left( \lnot \left( \boldsymbol{P} \right) \right) \vdash \boldsymbol{P}`
+:ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>`;dni;:math:`\boldsymbol{P} \vdash \lnot \left( \lnot \left( \boldsymbol{P} \right) \right)`
+:ref:`equal-terms-substitution<equal_terms_substitution_math_inference_rule>`;ets;:math:`\left( \boldsymbol{P}, x = y \right) \vdash \mathbf{Q}`
+:ref:`equality-commutativity<equality_commutativity_math_inference_rule>`;ec;:math:`\left( x = y \right) \vdash \left( y = x \right)`
+:ref:`hypothetical-syllogism<hypothetical_syllogism_math_inference_rule>`;hs;:math:`\left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), \left( \boldsymbol{Q} \implies \boldsymbol{R} \right) \right) \vdash \left( \boldsymbol{P} \implies \boldsymbol{R} \right)`
+:ref:`inconsistency-introduction-1<inconsistency_introduction_1_math_inference_rule>`;ii1;:math:`\left( \boldsymbol{P}, \neg \left(\boldsymbol{P}\right) \right) \vdash Inc\left(\mathcal{T}\right)`
+:ref:`inconsistency-introduction-2<inconsistency_introduction_2_math_inference_rule>`;ii2;:math:`\left(\left(x = y\right), \left(x \neq y\right)\right) \vdash Inc\left(\mathcal{T}\right)`
+:ref:`inconsistency-introduction-3<inconsistency_introduction_3_math_inference_rule>`;ii3;:math:`\left( \boldsymbol{P} \neq P \right) \vdash Inc\left(\mathcal{T}\right)`
+:ref:`modus-ponens<modus_ponens_math_inference_rule>`;mp;:math:`\left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), P \right) \vdash \boldsymbol{Q}`
+:ref:`modus-tollens<modus_tollens_math_inference_rule>`;mt;:math:`\left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), \neg Q \right) \vdash \neg \boldsymbol{P}`
+:ref:`proof-by-contradiction-1<proof_by_contradiction_1_math_inference_rule>`;pbc1;:math:`\left( \boldsymbol{\mathcal{H}} \: \text{assume} \: \neg \boldsymbol{P}, \mathit{Inc}\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \boldsymbol{P}`
+:ref:`proof-by-contradiction-2<proof_by_contradiction_2_math_inference_rule>`;pbc2;:math:`\left( \boldsymbol{\mathcal{H}} \: \textit{assume} \: \boldsymbol{x} \neq \boldsymbol{y}, \: Inc\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \boldsymbol{x} = \boldsymbol{y}`
+:ref:`proof-by-refutation-1<proof_by_refutation_1_math_inference_rule>`;pbf1;:math:`\left( \boldsymbol{\mathcal{H}} \: \textit{assume} \: \boldsymbol{P}, Inc\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \neg \boldsymbol{P}`
+:ref:`proof-by-refutation-2<proof_by_refutation_2_math_inference_rule>`;pbf2;:math:`\left( \boldsymbol{\mathcal{H}} \: \textit{assume} \: \boldsymbol{x} = \boldsymbol{y}, \: Inc\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \boldsymbol{x} \neq \boldsymbol{y}`
+:ref:`variable-substitution<variable_substitution_math_inference_rule>`;vs;:math:`\left( \boldsymbol{P}, \boldsymbol{\Phi} \right)  \vdash \boldsymbol{Q}`

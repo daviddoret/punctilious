@@ -25,37 +25,11 @@ Synonyms
 
   * Derivation rule
 
-List of inference-rules natively supported by punctilious
-------------------------------------------------------------
-
-   * :ref:`absorption<absorption_math_inference_rule>`
-   * :ref:`biconditional-elimination-1<biconditional_elimination_1_math_inference_rule>`
-   * :ref:`biconditional-elimination-2<biconditional_elimination_2_math_inference_rule>`
-   * :ref:`biconditional-introduction<biconditional_introduction_math_inference_rule>`
-   * :ref:`conjunction-elimination-1<conjunction_elimination_1_math_inference_rule>`
-   * :ref:`conjunction-elimination-2<conjunction_elimination_2_math_inference_rule>`
-   * :ref:`conjunction-introduction<conjunction_introduction_math_inference_rule>`
-   * :ref:`disjunction-introduction-1<disjunction_introduction_1_math_inference_rule>`
-   * :ref:`disjunction-introduction-2<disjunction_introduction_2_math_inference_rule>`
-   * :ref:`double-negation-elimination<double_negation_elimination_math_inference_rule>`
-   * :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>`
-   * :ref:`equal-terms-substitution<equal_terms_substitution_math_inference_rule>`
-   * :ref:`equality-commutativity<equality_commutativity_math_inference_rule>`
-   * :ref:`inconsistency-introduction-1<inconsistency_introduction_1_math_inference_rule>`
-   * :ref:`inconsistency-introduction-2<inconsistency_introduction_2_math_inference_rule>`
-   * :ref:`inconsistency-introduction-3<inconsistency_introduction_3_math_inference_rule>`
-   * :ref:`modus-ponens<modus_ponens_math_inference_rule>`
-   * :ref:`proof-by-contradiction-1<proof_by_contradiction_1_math_inference_rule>`
-   * :ref:`proof-by-contradiction-2<proof_by_contradiction_2_math_inference_rule>`
-   * :ref:`proof-by-refutation-1<proof_by_refutation_1_math_inference_rule>`
-   * :ref:`proof-by-refutation-2<proof_by_refutation_2_math_inference_rule>`
-   * :ref:`variable-substitution<variable_substitution_math_inference_rule>`
-
-
 See also
 --------
 
 * :ref:`elimination-rule<elimination_rule_math_concept>`
+* :ref:`inference rules reference table<inference_rule_reference_table>`
 * :ref:`introduction-rule<introduction_rule_math_concept>`
 
 Bibliography

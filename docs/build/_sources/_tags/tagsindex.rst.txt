@@ -39,7 +39,7 @@ Tags overview
     inconsistency-introduction-1 (4) <inconsistency-introduction-1.rst>
     inconsistency-introduction-2 (4) <inconsistency-introduction-2.rst>
     inconsistency-introduction-3 (4) <inconsistency-introduction-3.rst>
-    inference-rule (36) <inference-rule.rst>
+    inference-rule (37) <inference-rule.rst>
     inferred-statement (2) <inferred-statement.rst>
     math (31) <math.rst>
     modus-ponens (4) <modus-ponens.rst>
