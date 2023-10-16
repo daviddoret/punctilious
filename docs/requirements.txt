@@ -127,6 +127,7 @@ sphinx==4.3.0
     #   sphinxcontrib-jquery
 sphinx-autodoc-typehints==1.17.1
     # via -r docs/requirements.txt
+sphinx-design
 # sphinx-design 0.4.1 requires sphinx<7,>=4, but you have sphinx 7.2.6 which is in compatible.
 # sphinx-design 0.4.1 requires sphinx<7,>=4, but you have sphinx 7.2.6 which is in compatible.
 # sphinx-design==0.4.1
