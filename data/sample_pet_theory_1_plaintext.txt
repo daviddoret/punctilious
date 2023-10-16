@@ -47,5 +47,5 @@ Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "((P5 
 
 Proposition (T1.P4): (Mira is-a mammal). Proof: ((Mira is-a dog) ==> (Mira is-a mammal)) follows from prop. (P3).(Mira is-a dog) follows from prop. (P1).Therefore, by the  inference rule: ((P5 ==> Q2), P5 |- Q2), it follows that (Mira is-a mammal). QED
 
-Let "T1" be a theory-elaboration-sequence in U53.
+Let "T1" be a theory-elaboration-sequence in U55.
 

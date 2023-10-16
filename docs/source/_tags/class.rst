@@ -57,6 +57,7 @@ My tags: class
     ../python/class/inference_rule_declaration_python_class.rst
     ../python/class/inference_rule_inclusion_collection_python_class.rst
     ../python/class/inference_rule_inclusion_python_class.rst
+    ../python/class/inferred_statement_python_class.rst
     ../python/class/modus_ponens_declaration_python_class.rst
     ../python/class/modus_ponens_inclusion_python_class.rst
     ../python/class/modus_tollens_declaration_python_class.rst

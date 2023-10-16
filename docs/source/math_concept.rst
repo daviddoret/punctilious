@@ -19,6 +19,7 @@ This table of contents references the key mathematical concepts used by punctili
    free-variable<math/concept/free_variable_math_concept>
    hypothesis<math/concept/hypothesis_math_concept>
    inference-rule<math/concept/inference_rule_math_concept>
+   inferred-statement<math/concept/inferred_statement_math_concept>
    introduction-rule<math/concept/introduction_rule_math_concept>
    is-a<math/concept/is_a_math_concept>
    meta-object<math/concept/meta_object_math_concept>

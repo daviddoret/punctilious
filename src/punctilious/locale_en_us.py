@@ -417,6 +417,22 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         return True
 
+    def compose_hypothetical_syllogism_paragraph_proof(self, o: InferredStatement) -> \
+            collections.abc.Generator[Composable, Composable, bool]:
+        global text_dict
+        # Retrieve the parameters from the statement
+        p_implies_q: FormulaStatement = o.parameters[0]
+        q_implies_r: FormulaStatement = o.parameters[1]
+        yield from p_implies_q.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from p_implies_q.compose_ref_link()
+        yield SansSerifNormal('. ')
+        yield from q_implies_r.valid_proposition.compose_formula()
+        yield SansSerifNormal(' follows from ')
+        yield from q_implies_r.compose_ref_link()
+        yield SansSerifNormal('.')
+        return True
+
     def compose_inconsistency_introduction_1_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict

@@ -149,7 +149,13 @@
                                                               href="disjunctive_syllogism_1_declaration_python_class.html">DisjunctiveSyllogism1Declaration</a>
                                     </li>
                                     <li class="toctree-l3"><a class="reference internal"
-                                                              href="disjunctive_resolution_inclusion_python_class.html">DisjunctiveResolutionInclusion</a>
+                                                              href="disjunctive_syllogism_1_inclusion_python_class.html">DisjunctiveSyllogism1Inclusion</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="disjunctive_syllogism_2_declaration_python_class.html">DisjunctiveSyllogism2Declaration</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="disjunctive_syllogism_2_inclusion_python_class.html">DisjunctiveSyllogism2Inclusion</a>
                                     </li>
                                     <li class="toctree-l3"><a class="reference internal"
                                                               href="double_negation_elimination_declaration_python_class.html">DoubleNegationEliminationDeclaration</a>
@@ -371,21 +377,27 @@
                                                 href="#punctilious.ProofByRefutation2Inclusion.check_premises_validity"
                                                 title="Permalink to this definition"></a></dt>
                                         <dd><p>This python method verifies the validity of the premises. It is called by
-                                            the python constructor of the <span class="xref std std-ref">InferredStatement</span>
-                                            python class to assure that <a class="reference internal"
-                                                                           href="../../math/concept/formula_statement_math_concept.html#formula-statement-math-concept"><span
+                                            the python constructor of the <a class="reference internal"
+                                                                             href="inferred_statement_python_class.html#inferred-statement-python-class"><span
+                                                    class="std std-ref">InferredStatement</span></a> python class to
+                                            assure that <a class="reference internal"
+                                                           href="../../math/concept/formula_statement_math_concept.html#formula-statement-math-concept"><span
                                                     class="std std-ref">formula-statements</span></a> are inferred if
                                             and only if they are valid.</p>
                                             <p>Returns True if the premises are valid and allow the execution of the
-                                                inference algorithm. In this case, the constructor of the <span
-                                                        class="xref std std-ref">InferredStatement</span> class will
-                                                succeed and create an <span
-                                                        class="xref std std-ref">InferredStatement</span> instance.</p>
+                                                inference algorithm. In this case, the constructor of the <a
+                                                        class="reference internal"
+                                                        href="inferred_statement_python_class.html#inferred-statement-python-class"><span
+                                                        class="std std-ref">InferredStatement</span></a> class will
+                                                succeed and create an <a class="reference internal"
+                                                                         href="inferred_statement_python_class.html#inferred-statement-python-class"><span
+                                                        class="std std-ref">InferredStatement</span></a> instance.</p>
                                             <p>Returns False if the premises are <em>not</em> valid and <em>do not</em>
                                                 allow the execution of the inference algorithm. In this case, the
-                                                constructor of the <span
-                                                        class="xref std std-ref">InferredStatement</span> class will
-                                                fail and raise a PunctiliousException error.</p>
+                                                constructor of the <a class="reference internal"
+                                                                      href="inferred_statement_python_class.html#inferred-statement-python-class"><span
+                                                        class="std std-ref">InferredStatement</span></a> class will fail
+                                                and raise a PunctiliousException error.</p>
                                             <div class="admonition note">
                                                 <p class="admonition-title">Note</p>
                                                 <p>Note the critical distinction between the <code
@@ -443,9 +455,10 @@
                                                         href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
                                                         class="std std-ref">inference-rules</span></a> in “what if”
                                                     scenarii, i.e. building invalid formulae. And at the same time, it
-                                                    assures that all <span
-                                                            class="xref std std-ref">formula_statements</span> are
-                                                    valid.</p>
+                                                    assures that all <a class="reference internal"
+                                                                        href="../../math/concept/formula_statement_math_concept.html#formula-statement-math-concept"><span
+                                                            class="std std-ref">formula_statements</span></a> are valid.
+                                                </p>
                                             </div>
                                             <dl class="field-list simple">
                                                 <dt class="field-odd">Return type</dt>
@@ -539,9 +552,10 @@
                                                         href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
                                                         class="std std-ref">inference-rules</span></a> in “what if”
                                                     scenarii, i.e. building invalid formulae. And at the same time, it
-                                                    assures that all <span
-                                                            class="xref std std-ref">formula_statements</span> are
-                                                    valid.</p>
+                                                    assures that all <a class="reference internal"
+                                                                        href="../../math/concept/formula_statement_math_concept.html#formula-statement-math-concept"><span
+                                                            class="std std-ref">formula_statements</span></a> are valid.
+                                                </p>
                                             </div>
                                             <dl class="field-list simple">
                                                 <dt class="field-odd">Return type</dt>
@@ -667,9 +681,10 @@
                                                         href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
                                                         class="std std-ref">inference-rules</span></a> in “what if”
                                                     scenarii, i.e. building invalid formulae. And at the same time, it
-                                                    assures that all <span
-                                                            class="xref std std-ref">formula_statements</span> are
-                                                    valid.</p>
+                                                    assures that all <a class="reference internal"
+                                                                        href="../../math/concept/formula_statement_math_concept.html#formula-statement-math-concept"><span
+                                                            class="std std-ref">formula_statements</span></a> are valid.
+                                                </p>
                                             </div>
                                         </dd>
                                     </dl>

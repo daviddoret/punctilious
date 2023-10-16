@@ -42,9 +42,9 @@ h_inconsistency = t1.i.inconsistency_introduction_1.infer_formula_statement(p=mo
 proposition_of_interest = t1.i.proof_by_contradiction_1.infer_formula_statement(h=h,
     inc_h=h_inconsistency, subtitle='The proposition of interest')
 
-Let "U55" be a universe-of-discourse.
+Let "U57" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U55.
+Let "T1" be a theory-elaboration-sequence in U57.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom to establish some ground propositions." be included (postulated) in T1.
 

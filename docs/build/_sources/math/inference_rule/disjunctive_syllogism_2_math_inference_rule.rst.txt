@@ -12,6 +12,6 @@ disjunctive-syllogism-2 (math concept)
 ===============================================================
 
 .. seealso::
-   :ref:`python declaration class<disjunctive_syllogism_2_declaration_python_class>` | :ref:`python inclusion class<disjunctive_syllogism_inclusion_python_class>` | :ref:`python sample<disjunctive_syllogism_python_sample>`
+   :ref:`python declaration class<disjunctive_syllogism_2_declaration_python_class>` | :ref:`python inclusion class<disjunctive_syllogism_2_inclusion_python_class>` | :ref:`python sample<disjunctive_syllogism_2_python_sample>`
 
 .. include:: disjunctive_syllogism_2_math_inference_rule_definition.rstinc
