@@ -41,3 +41,4 @@ My tags: inference-rule
     ../python/class/inference_rule_declaration_python_class.rst
     ../python/class/inference_rule_inclusion_collection_python_class.rst
     ../python/class/inference_rule_inclusion_python_class.rst
+    ../reference_table/inference_rule_reference_table.rst

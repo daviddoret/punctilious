@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/"/>
+    <link href="../_static/punctilious-logo-compact-light.svg" rel="icon" type="image/svg+xml">
+    <link href="../_static/punctilious-logo-compact-light-16x16-white.png" sizes="16x16" rel="icon" type="image/png">
+    <link href="../_static/punctilious-logo-compact-light-32x32-white.png" sizes="32x32" rel="icon" type="image/png">
+    <link rel="apple-touch-icon" href="../_static/punctilious-logo-compact-light-180x180-white.png" sizes="180x180"
+          type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Inference rules reference table &mdash; punctilious 1.0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../_static/graphviz.css" type="text/css"/>
+    <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css"/>
+    <link rel="stylesheet" href="../_static/tabs.css" type="text/css"/>
+    <link rel="stylesheet" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css"/>
+    <link rel="stylesheet" href="../_static/css/custom.css" type="text/css"/>
+    <!--[if lt IE 9]>
+      <script src="../_static/js/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html"/>
+    <link rel="search" title="Search" href="../search.html"/>
+    <link rel="next" title="Back matter" href="../back_matter.html"/>
+    <link rel="prev" title="Reference tables" href="../reference_table.html"/>
+</head>
+
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a href="../index.html" class="icon icon-home">
+                    punctilious
+                </a>
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs" aria-label="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+            </div>
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../front_matter.html">Front matter</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../math.html">Math</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../python.html">Python</a></li>
+                    <li class="toctree-l1 current"><a class="reference internal" href="../reference_table.html">Reference
+                        tables</a>
+                        <ul class="current">
+                            <li class="toctree-l2 current"><a class="current reference internal" href="#">inference
+                                rules</a></li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../back_matter.html">Back matter</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+        <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../index.html">punctilious</a>
+        </nav>
+
+        <div class="wy-nav-content">
+            <div class="rst-content">
+                <div role="navigation" aria-label="Page navigation">
+                    <ul class="wy-breadcrumbs">
+                        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+                        <li class="breadcrumb-item"><a href="../reference_table.html">Reference tables</a></li>
+                        <li class="breadcrumb-item active">Inference rules reference table</li>
+                        <li class="wy-breadcrumbs-aside">
+                            <a href="../_sources/reference_table/inference_rule_reference_table.rst.txt" rel="nofollow">
+                                View page source</a>
+                        </li>
+                    </ul>
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <p class="tags" id="inference-rule-reference-table"><span>Tags: </span><a
+                                class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
+                                href="../_tags/inference-rule.html"><span class="doc">inference-rule</span></a></p>
+                        <section id="inference-rules-reference-table">
+                            <h1>Inference rules reference table<a class="headerlink"
+                                                                  href="#inference-rules-reference-table"
+                                                                  title="Permalink to this headline"></a></h1>
+                            <table class="colwidths-auto docutils align-center">
+                                <thead>
+                                <tr class="row-odd">
+                                    <th class="head stub"><p>Unabridged name</p></th>
+                                    <th class="head stub"><p>Abridged name</p></th>
+                                    <th class="head"><p>Formula</p></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/absorption_math_inference_rule.html#absorption-math-inference-rule"><span
+                                            class="std std-ref">absorption</span></a></p></th>
+                                    <th class="stub"><p>abs.</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left(\boldsymbol{P} \implies \mathbf{Q}\right) \vdash \left(\boldsymbol{P} \implies \boldsymbol{P} \land \mathbf{Q}\right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/axiom_interpretation_math_inference_rule.html#axiom-interpretation-math-inference-rule"><span
+                                            class="std std-ref">axiom-interpretation</span></a></p></th>
+                                    <th class="stub"><p>ai</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\boldsymbol{\mathcal{A}} \vdash \boldsymbol{P}\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/biconditional_elimination_1_math_inference_rule.html#biconditional-elimination-1-math-inference-rule"><span
+                                            class="std std-ref">biconditional-elimination-1</span></a></p></th>
+                                    <th class="stub"><p>be1</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \boldsymbol{P} \iff \mathbf{Q} \right) \vdash \left( \boldsymbol{P} \implies \mathbf{Q} \right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/biconditional_elimination_2_math_inference_rule.html#biconditional-elimination-2-math-inference-rule"><span
+                                            class="std std-ref">biconditional-elimination-2</span></a></p></th>
+                                    <th class="stub"><p>be2</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \boldsymbol{P} \iff \mathbf{Q} \right) \vdash \left( \mathbf{Q} \implies \boldsymbol{P} \right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/biconditional_introduction_math_inference_rule.html#biconditional-introduction-math-inference-rule"><span
+                                            class="std std-ref">biconditional-introduction</span></a></p></th>
+                                    <th class="stub"><p>bi</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \left( \boldsymbol{P} \implies \mathbf{Q} \right), \left( \mathbf{Q} \implies \boldsymbol{P} \right) \right) \vdash \left( \mathbf{Q} \iff P \right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/conjunction_elimination_1_math_inference_rule.html#conjunction-elimination-1-math-inference-rule"><span
+                                            class="std std-ref">conjunction-elimination-1</span></a></p></th>
+                                    <th class="stub"><p>ce1</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \boldsymbol{P} \land \mathbf{Q} \right) \vdash \boldsymbol{P}\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/conjunction_elimination_2_math_inference_rule.html#conjunction-elimination-2-math-inference-rule"><span
+                                            class="std std-ref">conjunction-elimination-2</span></a></p></th>
+                                    <th class="stub"><p>ce2</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \boldsymbol{P} \land \mathbf{Q} \right) \vdash \mathbf{Q}\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/conjunction_introduction_math_inference_rule.html#conjunction-introduction-math-inference-rule"><span
+                                            class="std std-ref">conjunction-introduction</span></a></p></th>
+                                    <th class="stub"><p>ci</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\boldsymbol{P}, \boldsymbol{Q} \vdash \left( \boldsymbol{P} \land \boldsymbol{Q} \right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/constructive_dilemma_math_inference_rule.html#constructive-dilemma-math-inference-rule"><span
+                                            class="std std-ref">constructive-dilemma</span></a></p></th>
+                                    <th class="stub"><p>cd</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), \left( \boldsymbol{R} \implies \boldsymbol{S} \right), \left( \boldsymbol{P} \lor \boldsymbol{R} \right) \right) \vdash \left( \boldsymbol{Q} \lor \boldsymbol{S} \right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/definition_interpretation_math_inference_rule.html#definition-interpretation-math-inference-rule"><span
+                                            class="std std-ref">definition-interpretation</span></a></p></th>
+                                    <th class="stub"><p>di</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\boldsymbol{\mathcal{A}} \vdash \boldsymbol{P}\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/destructive_dilemma_math_inference_rule.html#destructive-dilemma-math-inference-rule"><span
+                                            class="std std-ref">destructive-dilemma</span></a></p></th>
+                                    <th class="stub"><p>dd</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), \left( \boldsymbol{R} \implies \boldsymbol{S} \right), \left( \neg \boldsymbol{Q} \lor \neg \boldsymbol{S} \right) \right) \vdash \left( \neg \boldsymbol{P} \lor \neg \boldsymbol{R} \right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/disjunction_introduction_1_math_inference_rule.html#disjunction-introduction-1-math-inference-rule"><span
+                                            class="std std-ref">disjunction-introduction-1</span></a></p></th>
+                                    <th class="stub"><p>di1</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\boldsymbol{P} \vdash \left( \mathbf{Q} \lor \boldsymbol{P} \right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/disjunction_introduction_2_math_inference_rule.html#disjunction-introduction-2-math-inference-rule"><span
+                                            class="std std-ref">disjunction-introduction-2</span></a></p></th>
+                                    <th class="stub"><p>di2</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\boldsymbol{P} \vdash \left( \boldsymbol{P} \lor \mathbf{Q} \right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/disjunctive_resolution_math_inference_rule.html#disjunctive-resolution-math-inference-rule"><span
+                                            class="std std-ref">disjunctive-resolution</span></a></p></th>
+                                    <th class="stub"><p>dr</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \left( \boldsymbol{P} \lor \boldsymbol{Q} \right), \left( \neg \boldsymbol{P} \lor \boldsymbol{R} \right) \right) \vdash \left( \boldsymbol{Q} \lor \boldsymbol{R} \right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/disjunctive_syllogism_1_math_inference_rule.html#disjunctive-syllogism-1-math-inference-rule"><span
+                                            class="std std-ref">disjunctive-syllogism-1</span></a></p></th>
+                                    <th class="stub"><p>ds1</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \left( \boldsymbol{P} \lor \boldsymbol{Q} \right), \neg \boldsymbol{P} \right) \vdash \boldsymbol{Q}\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/disjunctive_syllogism_2_math_inference_rule.html#disjunctive-syllogism-2-math-inference-rule"><span
+                                            class="std std-ref">disjunctive-syllogism-2</span></a></p></th>
+                                    <th class="stub"><p>ds2</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \left( \boldsymbol{P} \lor \boldsymbol{Q} \right), \neg \boldsymbol{Q} \right) \vdash \boldsymbol{P}\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/double_negation_elimination_math_inference_rule.html#double-negation-elimination-math-inference-rule"><span
+                                            class="std std-ref">double-negation-elimination</span></a></p></th>
+                                    <th class="stub"><p>dne</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\lnot \left( \lnot \left( \boldsymbol{P} \right) \right) \vdash \boldsymbol{P}\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/double_negation_introduction_math_inference_rule.html#double-negation-introduction-math-inference-rule"><span
+                                            class="std std-ref">double-negation-introduction</span></a></p></th>
+                                    <th class="stub"><p>dni</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\boldsymbol{P} \vdash \lnot \left( \lnot \left( \boldsymbol{P} \right) \right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/equal_terms_substitution_math_inference_rule.html#equal-terms-substitution-math-inference-rule"><span
+                                            class="std std-ref">equal-terms-substitution</span></a></p></th>
+                                    <th class="stub"><p>ets</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \boldsymbol{P}, x = y \right) \vdash \mathbf{Q}\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/equality_commutativity_math_inference_rule.html#equality-commutativity-math-inference-rule"><span
+                                            class="std std-ref">equality-commutativity</span></a></p></th>
+                                    <th class="stub"><p>ec</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( x = y \right) \vdash \left( y = x \right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/hypothetical_syllogism_math_inference_rule.html#hypothetical-syllogism-math-inference-rule"><span
+                                            class="std std-ref">hypothetical-syllogism</span></a></p></th>
+                                    <th class="stub"><p>hs</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), \left( \boldsymbol{Q} \implies \boldsymbol{R} \right) \right) \vdash \left( \boldsymbol{P} \implies \boldsymbol{R} \right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/inconsistency_introduction_1_math_inference_rule.html#inconsistency-introduction-1-math-inference-rule"><span
+                                            class="std std-ref">inconsistency-introduction-1</span></a></p></th>
+                                    <th class="stub"><p>ii1</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \boldsymbol{P}, \neg \left(\boldsymbol{P}\right) \right) \vdash Inc\left(\mathcal{T}\right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/inconsistency_introduction_2_math_inference_rule.html#inconsistency-introduction-2-math-inference-rule"><span
+                                            class="std std-ref">inconsistency-introduction-2</span></a></p></th>
+                                    <th class="stub"><p>ii2</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left(\left(x = y\right), \left(x \neq y\right)\right) \vdash Inc\left(\mathcal{T}\right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/inconsistency_introduction_3_math_inference_rule.html#inconsistency-introduction-3-math-inference-rule"><span
+                                            class="std std-ref">inconsistency-introduction-3</span></a></p></th>
+                                    <th class="stub"><p>ii3</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \boldsymbol{P} \neq P \right) \vdash Inc\left(\mathcal{T}\right)\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/modus_ponens_math_inference_rule.html#modus-ponens-math-inference-rule"><span
+                                            class="std std-ref">modus-ponens</span></a></p></th>
+                                    <th class="stub"><p>mp</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), P \right) \vdash \boldsymbol{Q}\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/modus_tollens_math_inference_rule.html#modus-tollens-math-inference-rule"><span
+                                            class="std std-ref">modus-tollens</span></a></p></th>
+                                    <th class="stub"><p>mt</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), \neg Q \right) \vdash \neg \boldsymbol{P}\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/proof_by_contradiction_1_math_inference_rule.html#proof-by-contradiction-1-math-inference-rule"><span
+                                            class="std std-ref">proof-by-contradiction-1</span></a></p></th>
+                                    <th class="stub"><p>pbc1</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \boldsymbol{\mathcal{H}} \: \text{assume} \: \neg \boldsymbol{P}, \mathit{Inc}\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \boldsymbol{P}\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/proof_by_contradiction_2_math_inference_rule.html#proof-by-contradiction-2-math-inference-rule"><span
+                                            class="std std-ref">proof-by-contradiction-2</span></a></p></th>
+                                    <th class="stub"><p>pbc2</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \boldsymbol{\mathcal{H}} \: \textit{assume} \: \boldsymbol{x} \neq \boldsymbol{y}, \: Inc\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \boldsymbol{x} = \boldsymbol{y}\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/proof_by_refutation_1_math_inference_rule.html#proof-by-refutation-1-math-inference-rule"><span
+                                            class="std std-ref">proof-by-refutation-1</span></a></p></th>
+                                    <th class="stub"><p>pbf1</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \boldsymbol{\mathcal{H}} \: \textit{assume} \: \boldsymbol{P}, Inc\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \neg \boldsymbol{P}\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-odd">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/proof_by_refutation_2_math_inference_rule.html#proof-by-refutation-2-math-inference-rule"><span
+                                            class="std std-ref">proof-by-refutation-2</span></a></p></th>
+                                    <th class="stub"><p>pbf2</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \boldsymbol{\mathcal{H}} \: \textit{assume} \: \boldsymbol{x} = \boldsymbol{y}, \: Inc\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \boldsymbol{x} \neq \boldsymbol{y}\)</span>
+                                    </p></td>
+                                </tr>
+                                <tr class="row-even">
+                                    <th class="stub"><p><a class="reference internal"
+                                                           href="../math/inference_rule/variable_substitution_math_inference_rule.html#variable-substitution-math-inference-rule"><span
+                                            class="std std-ref">variable-substitution</span></a></p></th>
+                                    <th class="stub"><p>vs</p></th>
+                                    <td><p><span class="math notranslate nohighlight">\(\left( \boldsymbol{P}, \boldsymbol{\Phi} \right)  \vdash \boldsymbol{Q}\)</span>
+                                    </p></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <section id="see-also">
+                                <h2>See also<a class="headerlink" href="#see-also"
+                                               title="Permalink to this headline"></a></h2>
+                                <ul class="simple">
+                                    <li><p><a class="reference internal"
+                                              href="../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                            class="std std-ref">inference-rule</span></a></p></li>
+                                </ul>
+                            </section>
+                            <section id="bibliography">
+                                <h2>Bibliography<a class="headerlink" href="#bibliography"
+                                                   title="Permalink to this headline"></a></h2>
+                                <ul class="simple">
+                                    <li><p>List of rules of inference. Wikipedia.</p></li>
+                                    <li><p>URL: <a class="reference external"
+                                                   href="https://en.wikipedia.org/wiki/List_of_rules_of_inference">https://en.wikipedia.org/wiki/List_of_rules_of_inference</a>
+                                    </p></li>
+                                </ul>
+                            </section>
+                        </section>
+
+
+                    </div>
+                </div>
+                <footer>
+                    <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+                        <a href="../reference_table.html" class="btn btn-neutral float-left" title="Reference tables"
+                           accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span>
+                            Previous</a>
+                        <a href="../back_matter.html" class="btn btn-neutral float-right" title="Back matter"
+                           accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"
+                                                               aria-hidden="true"></span></a>
+                    </div>
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>&#169; Copyright 2023, David Doret.</p>
+                    </div>
+
+                    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+                    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+                    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+                </footer>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(false);
+    });
+</script>
+
+</body>
+</html>

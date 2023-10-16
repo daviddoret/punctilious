@@ -5,7 +5,7 @@ Definition
 
 .. math::
 
-    ( \boldsymbol{P}, \mathbf{Q} ) \vdash \left( \boldsymbol{P} \land \mathbf{Q} \right)
+    \boldsymbol{P}, \boldsymbol{Q} \vdash \left( \boldsymbol{P} \land \boldsymbol{Q} \right)
 
 Where:
 

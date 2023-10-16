@@ -5,7 +5,7 @@ Definition
 
 .. math::
 
-    \left( \boldsymbol{\mathcal{H}} \; \text{assume} \; \neg \boldsymbol{P}, \mathit{Inc}\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \boldsymbol{P}
+    \left( \boldsymbol{\mathcal{H}} \: \text{assume} \: \neg \boldsymbol{P}, \mathit{Inc}\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \boldsymbol{P}
 
 Where:
 

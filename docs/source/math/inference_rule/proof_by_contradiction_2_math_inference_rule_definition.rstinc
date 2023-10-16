@@ -5,7 +5,7 @@ Definition
 
 .. math::
 
-    \left( \boldsymbol{\mathcal{H}} \; \textit{assume} \; \boldsymbol{x} \neq \boldsymbol{y}, \; Inc\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \boldsymbol{x} = \boldsymbol{y}
+    \left( \boldsymbol{\mathcal{H}} \: \textit{assume} \: \boldsymbol{x} \neq \boldsymbol{y}, \; Inc\left( \boldsymbol{\mathcal{H}} \right)  \right) \vdash \boldsymbol{x} = \boldsymbol{y}
 
 Where:
 
