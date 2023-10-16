@@ -6,23 +6,23 @@ Stabilized: False
 Extended theory: N/A
 
 # Simple-objects declarations
-Let "natural-number", "0", "1", "2", "3", "4", "5", "6" be simple-objects in U64.
+Let "natural-number", "0", "1", "2", "3", "4", "5", "6" be simple-objects in U66.
 
 # Relations
-Let "++", "Inc" be unary-relations in U64.
-Let "and", "neq", "is-a", "=", "==>" be binary-relations in U64.
+Let "++", "Inc" be unary-relations in U66.
+Let "neq", "=", "and", "is-a", "==>" be binary-relations in U66.
 
 # Inference rules
 The following inference rules are considered valid under this theory:
-Let "axiom-interpretation" be an inference-rule defined as "(A2, P1 |- P1)" in U64.
-Let "conjunction-introduction" be an inference-rule defined as "(P10, Q5 |- (P10 and Q5))" in U64.
-Let "definition-interpretation" be an inference-rule defined as "(D1, x1, y1 |- (x1 = y1))" in U64.
-Let "equal-terms-substitution" be an inference-rule defined as "(P8, (x5 = y5) |- Q4)" in U64.
-Let "equality-commutativity" be an inference-rule defined as "((x3 = y3) |- (y3 = x3))" in U64.
-Let "inconsistency-introduction-2" be an inference-rule defined as "((P11 = Q6), (P11 neq Q6) |- Inc(T1))" in U64.
-Let "modus-ponens" be an inference-rule defined as "((P5 ==> Q2), P5 |- Q2)" in U64.
-Let "proof-by-refutation-2" be an inference-rule defined as "((H1 formulate (x9 = y9)), Inc(H1) |- (x9 neq y9))" in U64.
-Let "variable-substitution" be an inference-rule defined as "(P3, O1 |- Q1)" in U64.
+Let "axiom-interpretation" be an inference-rule defined as "(A2, P1 |- P1)" in U66.
+Let "conjunction-introduction" be an inference-rule defined as "(P10, Q5 |- (P10 and Q5))" in U66.
+Let "definition-interpretation" be an inference-rule defined as "(D1, x1, y1 |- (x1 = y1))" in U66.
+Let "equal-terms-substitution" be an inference-rule defined as "(P8, (x5 = y5) |- Q4)" in U66.
+Let "equality-commutativity" be an inference-rule defined as "((x3 = y3) |- (y3 = x3))" in U66.
+Let "inconsistency-introduction-2" be an inference-rule defined as "((P11 = Q6), (P11 neq Q6) |- Inc(T1))" in U66.
+Let "modus-ponens" be an inference-rule defined as "((P5 ==> Q2), P5 |- Q2)" in U66.
+Let "proof-by-refutation-2" be an inference-rule defined as "((H1 formulate (x9 = y9)), Inc(H1) |- (x9 neq y9))" in U66.
+Let "variable-substitution" be an inference-rule defined as "(P3, O1 |- Q1)" in U66.
 
 # Theory elaboration sequence
 # 2: The natural numbers

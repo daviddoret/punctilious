@@ -1,0 +1,9 @@
+My tags: constructive-
+######################
+
+.. toctree::
+    :maxdepth: 1
+    :caption: With this tag
+
+    ../python/class/constructive_dilemma_declaration_python_class.rst
+    ../python/class/constructive_dilemma_inclusion_python_class.rst

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../../">
+<html class="writer-html5" lang="en">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/"/>
     <link href="../../_static/punctilious-logo-compact-light.svg" rel="icon" type="image/svg+xml">
     <link href="../../_static/punctilious-logo-compact-light-16x16-white.png" sizes="16x16" rel="icon" type="image/png">
     <link href="../../_static/punctilious-logo-compact-light-32x32-white.png" sizes="32x32" rel="icon" type="image/png">
@@ -10,31 +10,28 @@
           type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>equal-terms-substitution (python sample) &mdash; punctilious 1.0.9 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1"/>
-    <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094"/>
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6"/>
-    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357"/>
-    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=a5c4661c"/>
-    <link rel="stylesheet" type="text/css"
-          href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7"/>
-    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=a491ee77"/>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/togglebutton.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/tabs.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css"/>
     <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
-    <script src="../../_static/jquery.js?v=5d32c60e"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../../_static/documentation_options.js?v=0abd802e"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
-    <script src="../../_static/tabs.js?v=3030b3cb"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/tabs.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../../_static/design-tabs.js?v=36754332"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html"/>
     <link rel="search" title="Search" href="../../search.html"/>
@@ -186,7 +183,7 @@
                         <span class="target" id="equal-terms-substitution-python-sample"></span>
                         <section id="id1">
                             <h1>equal-terms-substitution (python sample)<a class="headerlink" href="#id1"
-                                                                           title="Link to this heading"></a></h1>
+                                                                           title="Permalink to this headline"></a></h1>
                             <p class="tags"><span>Tags: </span><a
                                     class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
                                     href="../../_tags/equal-terms-substitution.html"><span class="doc">equal-terms-substitution</span></a><span> </span><a
@@ -213,14 +210,15 @@
                                         href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
                                         class="std std-ref">inference-rule</span></a>.</p>
                             <section id="usage">
-                                <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
-                                <p>Call the <code class="code highlight python py docutils literal highlight-py"><span
-                                        class="n">infer_statement</span></code> method from the inference-rule inclusion
-                                    class listed in the <code
-                                            class="code highlight python py docutils literal highlight-py"><span
-                                            class="n">i</span></code> (unabridged <code
-                                            class="code highlight python py docutils literal highlight-py"><span
-                                            class="n">inference_rules</span></code> ) property of the <a
+                                <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a>
+                                </h2>
+                                <p>Call the <code class="code python py docutils literal notranslate"><span
+                                        class="name"><span class="pre">infer_statement</span></span></code> method from
+                                    the inference-rule inclusion class listed in the <code
+                                            class="code python py docutils literal notranslate"><span class="name"><span
+                                            class="pre">i</span></span></code> (unabridged <code
+                                            class="code python py docutils literal notranslate"><span class="name"><span
+                                            class="pre">inference_rules</span></span></code> ) property of the <a
                                             class="reference internal"
                                             href="../../math/concept/theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence-math-concept"><span
                                             class="std std-ref">theory-elaboration-sequence</span></a> :</p>
@@ -242,7 +240,7 @@
                             </section>
                             <section id="sample-code">
                                 <h2>Sample code<a class="headerlink" href="#sample-code"
-                                                  title="Link to this heading"></a></h2>
+                                                  title="Permalink to this headline"></a></h2>
                                 <div class="highlight-python notranslate">
                                     <div class="highlight"><pre><span></span><span class="kn">import</span> <span
                                             class="nn">punctilious</span> <span class="k">as</span> <span
@@ -291,9 +289,9 @@
                                                 class="o">.</span><span class="n">i</span><span class="o">.</span><span
                                                 class="n">axiom_interpretation</span><span class="o">.</span><span
                                                 class="n">infer_formula_statement</span><span class="p">(</span><span
-                                                class="n">axiom</span><span class="o">=</span><span class="n">theory_axiom</span><span
-                                                class="p">,</span>
-    <span class="n">formula</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span
+                                                class="n">a</span><span class="o">=</span><span
+                                                class="n">theory_axiom</span><span class="p">,</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span
                                                 class="n">f</span><span class="p">(</span><span class="n">u</span><span
                                                 class="o">.</span><span class="n">r</span><span class="o">.</span><span
                                                 class="n">equal</span><span class="p">,</span> <span
@@ -308,10 +306,9 @@
 <span class="n">dummy_proposition</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
                                                 class="o">.</span><span class="n">infer_formula_statement</span><span
-                                                class="p">(</span><span class="n">axiom</span><span
-                                                class="o">=</span><span class="n">theory_axiom</span><span
-                                                class="p">,</span>
-    <span class="n">formula</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span
+                                                class="p">(</span><span class="n">a</span><span class="o">=</span><span
+                                                class="n">theory_axiom</span><span class="p">,</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span
                                                 class="n">f</span><span class="p">(</span><span class="n">r1</span><span
                                                 class="p">,</span> <span class="n">u</span><span class="o">.</span><span
                                                 class="n">f</span><span class="p">(</span><span class="n">r1</span><span
@@ -326,8 +323,9 @@
                                                 class="n">r1</span><span class="p">,</span> <span
                                                 class="n">o1</span><span class="p">,</span> <span
                                                 class="n">o2</span><span class="p">)),</span> <span
-                                                class="n">o2</span><span class="p">),</span>
-        <span class="n">u</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">r2</span><span
+                                                class="n">o2</span><span class="p">),</span> <span
+                                                class="n">u</span><span class="o">.</span><span class="n">f</span><span
+                                                class="p">(</span><span class="n">r2</span><span
                                                 class="p">,</span> <span class="n">u</span><span class="o">.</span><span
                                                 class="n">f</span><span class="p">(</span><span class="n">r1</span><span
                                                 class="p">,</span> <span class="n">o1</span><span
@@ -348,7 +346,7 @@
                             </section>
                             <section id="code-output">
                                 <h2>Code output<a class="headerlink" href="#code-output"
-                                                  title="Link to this heading"></a></h2>
+                                                  title="Permalink to this headline"></a></h2>
                                 <div class="sphinx-tabs docutils container">
                                     <div aria-label="Tabbed content" class="closeable" role="tablist">
                                         <button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab"
@@ -370,23 +368,21 @@
                                     <div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0"
                                          name="0-0" role="tabpanel" tabindex="0">
                                         <div class="highlight-text notranslate">
-                                            <div class="highlight"><pre><span></span>𝖫𝖾𝗍 ⌜𝒰₃₀⌝ 𝖻𝖾 𝖺 𝑢𝑛𝑖𝑣𝑒𝑟𝑠𝑒-𝑜𝑓-𝑑𝑖𝑠𝑐𝑜𝑢𝑟𝑠𝑒.
+                                            <div class="highlight"><pre><span></span>𝖫𝖾𝗍 ⌜𝒰₄₀⌝ 𝖻𝖾 𝖺 𝑢𝑛𝑖𝑣𝑒𝑟𝑠𝑒-𝑜𝑓-𝑑𝑖𝑠𝑐𝑜𝑢𝑟𝑠𝑒.
 
-𝖫𝖾𝗍 ⌜𝒯₁⌝ 𝖻𝖾 𝖺 𝑡ℎ𝑒𝑜𝑟𝑦-𝑒𝑙𝑎𝑏𝑜𝑟𝑎𝑡𝑖𝑜𝑛-𝑠𝑒𝑞𝑢𝑒𝑛𝑐𝑒 𝗂𝗇 𝒰₃₀.
+𝖫𝖾𝗍 ⌜𝒯₁⌝ 𝖻𝖾 𝖺 𝑡ℎ𝑒𝑜𝑟𝑦-𝑒𝑙𝑎𝑏𝑜𝑟𝑎𝑡𝑖𝑜𝑛-𝑠𝑒𝑞𝑢𝑒𝑛𝑐𝑒 𝗂𝗇 𝒰₄₀.
 
 𝗔𝘅𝗶𝗼𝗺 (𝒯₁.𝐴₁): 𝖫𝖾𝗍 𝑎𝑥𝑖𝑜𝑚 𝒜₁ ⌜𝘋𝘶𝘮𝘮𝘺 𝘢𝘹𝘪𝘰𝘮 𝘧𝘰𝘳 𝘥𝘦𝘮𝘰𝘯𝘴𝘵𝘳𝘢𝘵𝘪𝘰𝘯 𝘱𝘶𝘳𝘱𝘰𝘴𝘦𝘴⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 (𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽) 𝗂𝗇 𝒯₁.
 
-𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜𝒜 ⊢ 𝖯⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝒯₁.
+𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝒜₂, 𝐏₁ ⊢ 𝐏₁)⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝒯₁.
 
-𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₁): (𝑟₁(𝑜₁, 𝑜₂) = 𝑟₂(𝑜₃)). 𝗣𝗿𝗼𝗼𝗳: ⌜𝘋𝘶𝘮𝘮𝘺 𝘢𝘹𝘪𝘰𝘮 𝘧𝘰𝘳 𝘥𝘦𝘮𝘰𝘯𝘴𝘵𝘳𝘢𝘵𝘪𝘰𝘯 𝘱𝘶𝘳𝘱𝘰𝘴𝘦𝘴⌝ 𝗂𝗌 𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽 𝖻𝗒 𝗮𝘅𝗶𝗼𝗺 (𝐴₁). (𝑟₁(𝑜₁, 𝑜₂) = 𝑟₂(𝑜₃)) 𝗂𝗌 𝖺 𝗏𝖺𝗅𝗂𝖽 𝖿𝗈𝗋𝗆𝗎𝗅𝖺 𝗌𝗍𝖺𝗍𝖾𝗆𝖾𝗇𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖾𝖽 𝖿𝗋𝗈𝗆 𝗍𝗁𝖺𝗍 𝖺𝗑𝗂𝗈𝗆.𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: 𝒜 ⊢ 𝖯, 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 (𝑟₁(𝑜₁, 𝑜₂) = 𝑟₂(𝑜₃)). ∎
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₁): (𝑟₁(𝑜₁, 𝑜₂) = 𝑟₂(𝑜₃)). 𝗣𝗿𝗼𝗼𝗳: ⌜𝘋𝘶𝘮𝘮𝘺 𝘢𝘹𝘪𝘰𝘮 𝘧𝘰𝘳 𝘥𝘦𝘮𝘰𝘯𝘴𝘵𝘳𝘢𝘵𝘪𝘰𝘯 𝘱𝘶𝘳𝘱𝘰𝘴𝘦𝘴⌝ 𝗂𝗌 𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽 𝖻𝗒 𝗮𝘅𝗶𝗼𝗺 (𝐴₁). (𝑟₁(𝑜₁, 𝑜₂) = 𝑟₂(𝑜₃)) 𝗂𝗌 𝖺 𝗏𝖺𝗅𝗂𝖽 𝖿𝗈𝗋𝗆𝗎𝗅𝖺 𝗌𝗍𝖺𝗍𝖾𝗆𝖾𝗇𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖾𝖽 𝖿𝗋𝗈𝗆 𝗍𝗁𝖺𝗍 𝖺𝗑𝗂𝗈𝗆.𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾  𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: (𝒜₂, 𝐏₁ ⊢ 𝐏₁), 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 (𝑟₁(𝑜₁, 𝑜₂) = 𝑟₂(𝑜₃)). ∎
 
-𝗪𝗮𝗿𝗻𝗶𝗻𝗴 (🗅₁): 𝖡𝗒 𝖽𝖾𝗌𝗂𝗀𝗇, 𝗉𝗎𝗇𝖼𝗍𝗂𝗅𝗂𝗈𝗎𝗌 𝖺𝗌𝗌𝗎𝗋𝖾𝗌 𝗍𝗁𝖾 𝗌𝗒𝗇𝗍𝖺𝖼𝗍𝗂𝖼𝖺𝗅 𝖼𝗈𝗋𝗋𝖾𝖼𝗍𝗇𝖾𝗌𝗌 𝗈𝖿 𝗍𝗁𝖾𝗈𝗋𝗂𝖾𝗌, 𝖻𝗎𝗍 𝖽𝗈𝖾𝗌 𝗇𝗈𝗍 𝗉𝖾𝗋𝖿𝗈𝗋𝗆 𝖺𝗇𝗒 𝗌𝖾𝗆𝖺𝗇𝗍𝗂𝖼 𝗏𝖾𝗋𝗂𝖿𝗂𝖼𝖺𝗍𝗂𝗈𝗇. 𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝗍𝗁𝖾 𝗎𝗌𝖺𝗀𝖾 𝗈𝖿 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾-𝗋𝗎𝗅𝖾𝗌 𝗍𝗁𝖺𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍 𝗇𝖺𝗍𝗎𝗋𝖺𝗅 𝖼𝗈𝗇𝗍𝖾𝗇𝗍 (𝗂.𝖾. 𝖺𝗑𝗂𝗈𝗆-𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖺𝗍𝗂𝗈𝗇 𝖺𝗇𝖽 𝖽𝖾𝖿𝗂𝗇𝗂𝗍𝗂𝗈𝗇-𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖺𝗍𝗂𝗈𝗇) 𝗂𝗌 𝖼𝗋𝗂𝗍𝗂𝖼𝖺𝗅𝗅𝗒 𝖽𝖾𝗉𝖾𝗇𝖽𝖾𝗇𝗍 𝗈𝗇 𝗍𝗁𝖾 𝖼𝗈𝗋𝗋𝖾𝖼𝗍𝗇𝖾𝗌𝗌 𝗈𝖿 𝗍𝗁𝖾 𝖼𝗈𝗇𝗍𝖾𝗇𝗍 𝗍𝗋𝖺𝗇𝗌𝗅𝖺𝗍𝗂𝗈𝗇 𝗉𝖾𝗋𝖿𝗈𝗋𝗆𝖾𝖽 𝖻𝗒 𝗍𝗁𝖾 𝗍𝗁𝖾𝗈𝗋𝗒 𝖺𝗎𝗍𝗁𝗈𝗋, 𝖿𝗋𝗈𝗆 𝖺𝗑𝗂𝗈𝗆 𝗈𝗋 𝖽𝖾𝖿𝗂𝗇𝗂𝗍𝗂𝗈𝗇 𝗇𝖺𝗍𝗎𝗋𝖺𝗅 𝗅𝖺𝗇𝗀𝗎𝖺𝗀𝖾, 𝗍𝗈 𝖿𝗈𝗋𝗆𝗎𝗅𝖺𝖾.
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₂): 𝑟₁(𝑟₁(𝑟₁(𝑟₁(𝑜₁, 𝑜₂), 𝑟₁(𝑜₁, 𝑜₂)), 𝑜₂), 𝑟₂(𝑟₁(𝑜₁, 𝑜₂))). 𝗣𝗿𝗼𝗼𝗳: ⌜𝘋𝘶𝘮𝘮𝘺 𝘢𝘹𝘪𝘰𝘮 𝘧𝘰𝘳 𝘥𝘦𝘮𝘰𝘯𝘴𝘵𝘳𝘢𝘵𝘪𝘰𝘯 𝘱𝘶𝘳𝘱𝘰𝘴𝘦𝘴⌝ 𝗂𝗌 𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽 𝖻𝗒 𝗮𝘅𝗶𝗼𝗺 (𝐴₁). 𝑟₁(𝑟₁(𝑟₁(𝑟₁(𝑜₁, 𝑜₂), 𝑟₁(𝑜₁, 𝑜₂)), 𝑜₂), 𝑟₂(𝑟₁(𝑜₁, 𝑜₂))) 𝗂𝗌 𝖺 𝗏𝖺𝗅𝗂𝖽 𝖿𝗈𝗋𝗆𝗎𝗅𝖺 𝗌𝗍𝖺𝗍𝖾𝗆𝖾𝗇𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖾𝖽 𝖿𝗋𝗈𝗆 𝗍𝗁𝖺𝗍 𝖺𝗑𝗂𝗈𝗆.𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾  𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: (𝒜₂, 𝐏₁ ⊢ 𝐏₁), 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 𝑟₁(𝑟₁(𝑟₁(𝑟₁(𝑜₁, 𝑜₂), 𝑟₁(𝑜₁, 𝑜₂)), 𝑜₂), 𝑟₂(𝑟₁(𝑜₁, 𝑜₂))). ∎
 
-𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₂): 𝑟₁(𝑟₁(𝑟₁(𝑟₁(𝑜₁, 𝑜₂), 𝑟₁(𝑜₁, 𝑜₂)), 𝑜₂), 𝑟₂(𝑟₁(𝑜₁, 𝑜₂))). 𝗣𝗿𝗼𝗼𝗳: ⌜𝘋𝘶𝘮𝘮𝘺 𝘢𝘹𝘪𝘰𝘮 𝘧𝘰𝘳 𝘥𝘦𝘮𝘰𝘯𝘴𝘵𝘳𝘢𝘵𝘪𝘰𝘯 𝘱𝘶𝘳𝘱𝘰𝘴𝘦𝘴⌝ 𝗂𝗌 𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽 𝖻𝗒 𝗮𝘅𝗶𝗼𝗺 (𝐴₁). 𝑟₁(𝑟₁(𝑟₁(𝑟₁(𝑜₁, 𝑜₂), 𝑟₁(𝑜₁, 𝑜₂)), 𝑜₂), 𝑟₂(𝑟₁(𝑜₁, 𝑜₂))) 𝗂𝗌 𝖺 𝗏𝖺𝗅𝗂𝖽 𝖿𝗈𝗋𝗆𝗎𝗅𝖺 𝗌𝗍𝖺𝗍𝖾𝗆𝖾𝗇𝗍 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖾𝖽 𝖿𝗋𝗈𝗆 𝗍𝗁𝖺𝗍 𝖺𝗑𝗂𝗈𝗆.𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: 𝒜 ⊢ 𝖯, 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 𝑟₁(𝑟₁(𝑟₁(𝑟₁(𝑜₁, 𝑜₂), 𝑟₁(𝑜₁, 𝑜₂)), 𝑜₂), 𝑟₂(𝑟₁(𝑜₁, 𝑜₂))). ∎
+𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑒𝑞𝑢𝑎𝑙-𝑡𝑒𝑟𝑚𝑠-𝑠𝑢𝑏𝑠𝑡𝑖𝑡𝑢𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑒𝑞𝑢𝑎𝑙-𝑡𝑒𝑟𝑚𝑠-𝑠𝑢𝑏𝑠𝑡𝑖𝑡𝑢𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝐏₃, (𝐱₃ = 𝐲₃) ⊢ 𝐐₁)⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝒯₁.
 
-𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑒𝑞𝑢𝑎𝑙-𝑡𝑒𝑟𝑚𝑠-𝑠𝑢𝑏𝑠𝑡𝑖𝑡𝑢𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑒𝑞𝑢𝑎𝑙-𝑡𝑒𝑟𝑚𝑠-𝑠𝑢𝑏𝑠𝑡𝑖𝑡𝑢𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜((𝐏₁ , (𝐱₁ = 𝐲₁)) ⊢ 𝐐₁)⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝒯₁.
-
-𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₃) - The proposition of interest: 𝑟₁(𝑟₁(𝑟₁(𝑟₂(𝑜₃), 𝑟₂(𝑜₃)), 𝑜₂), 𝑟₂(𝑟₂(𝑜₃))). 𝗣𝗿𝗼𝗼𝗳: 𝑟₁(𝑟₁(𝑟₁(𝑟₁(𝑜₁, 𝑜₂), 𝑟₁(𝑜₁, 𝑜₂)), 𝑜₂), 𝑟₂(𝑟₁(𝑜₁, 𝑜₂))) 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₂). (𝑟₁(𝑜₁, 𝑜₂) = 𝑟₂(𝑜₃)) 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₁).𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑒𝑞𝑢𝑎𝑙-𝑡𝑒𝑟𝑚𝑠-𝑠𝑢𝑏𝑠𝑡𝑖𝑡𝑢𝑡𝑖𝑜𝑛 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: ((𝐏₁ , (𝐱₁ = 𝐲₁)) ⊢ 𝐐₁), 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 𝑟₁(𝑟₁(𝑟₁(𝑟₂(𝑜₃), 𝑟₂(𝑜₃)), 𝑜₂), 𝑟₂(𝑟₂(𝑜₃))). ∎
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝒯₁.𝑃₃) - The proposition of interest: 𝑟₁(𝑟₁(𝑟₁(𝑟₂(𝑜₃), 𝑟₂(𝑜₃)), 𝑜₂), 𝑟₂(𝑟₂(𝑜₃))). 𝗣𝗿𝗼𝗼𝗳: 𝑟₁(𝑟₁(𝑟₁(𝑟₁(𝑜₁, 𝑜₂), 𝑟₁(𝑜₁, 𝑜₂)), 𝑜₂), 𝑟₂(𝑟₁(𝑜₁, 𝑜₂))) 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₂). (𝑟₁(𝑜₁, 𝑜₂) = 𝑟₂(𝑜₃)) 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝖿𝗋𝗈𝗆 𝗽𝗿𝗼𝗽. (𝑃₁).𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾  𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: (𝐏₃, (𝐱₃ = 𝐲₃) ⊢ 𝐐₁), 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 𝑟₁(𝑟₁(𝑟₁(𝑟₂(𝑜₃), 𝑟₂(𝑜₃)), 𝑜₂), 𝑟₂(𝑟₂(𝑜₃))). ∎
 </pre>
                                             </div>
                                         </div>
@@ -408,33 +404,30 @@ axiom = u.declare_axiom(natural_language=&#39;Dummy axiom for demonstration purp
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
 t1 = u.t(echo=True)
 theory_axiom = t1.include_axiom(a=axiom)
-proposition_x_equal_y = t1.i.axiom_interpretation.infer_formula_statement(axiom=theory_axiom,
-    formula=u.f(u.r.equal, u.f(r1, o1, o2), u.f(r2, o3)))
-dummy_proposition = t1.i.axiom_interpretation.infer_formula_statement(axiom=theory_axiom,
-    formula=u.f(r1, u.f(r1, u.f(r1, u.f(r1, o1, o2), u.f(r1, o1, o2)), o2),
-        u.f(r2, u.f(r1, o1, o2))))
+proposition_x_equal_y = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
+    p=u.f(u.r.equal, u.f(r1, o1, o2), u.f(r2, o3)))
+dummy_proposition = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
+    p=u.f(r1, u.f(r1, u.f(r1, u.f(r1, o1, o2), u.f(r1, o1, o2)), o2), u.f(r2, u.f(r1, o1, o2))))
 
 # And finally, use the equal-terms-substitution inference-rule:
 proposition_of_interest = t1.i.ets.infer_formula_statement(p=dummy_proposition,
     x_equal_y=proposition_x_equal_y, subtitle=&#39;The proposition of interest&#39;)
 
-Let &quot;U29&quot; be a universe-of-discourse.
+Let &quot;U39&quot; be a universe-of-discourse.
 
-Let &quot;T1&quot; be a theory-elaboration-sequence in U29.
+Let &quot;T1&quot; be a theory-elaboration-sequence in U39.
 
 Axiom (T1.A1): Let axiom A1 &quot;Dummy axiom for demonstration purposes&quot; be included (postulated) in T1.
 
-Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as &quot;A |- P&quot; be included and considered valid in T1.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as &quot;(A2, P1 |- P1)&quot; be included and considered valid in T1.
 
-Proposition (T1.P1): (r1(o1, o2) = r2(o3)). Proof: &quot;Dummy axiom for demonstration purposes&quot; is postulated by axiom (A1). (r1(o1, o2) = r2(o3)) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that (r1(o1, o2) = r2(o3)). QED
+Proposition (T1.P1): (r1(o1, o2) = r2(o3)). Proof: &quot;Dummy axiom for demonstration purposes&quot; is postulated by axiom (A1). (r1(o1, o2) = r2(o3)) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that (r1(o1, o2) = r2(o3)). QED
 
-Warning (warning1): By design, punctilious assures the syntactical correctness of theories, but does not perform any semantic verification. Therefore, the usage of inference-rules that interpret natural content (i.e. axiom-interpretation and definition-interpretation) is critically dependent on the correctness of the content translation performed by the theory author, from axiom or definition natural language, to formulae.
+Proposition (T1.P2): r1(r1(r1(r1(o1, o2), r1(o1, o2)), o2), r2(r1(o1, o2))). Proof: &quot;Dummy axiom for demonstration purposes&quot; is postulated by axiom (A1). r1(r1(r1(r1(o1, o2), r1(o1, o2)), o2), r2(r1(o1, o2))) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that r1(r1(r1(r1(o1, o2), r1(o1, o2)), o2), r2(r1(o1, o2))). QED
 
-Proposition (T1.P2): r1(r1(r1(r1(o1, o2), r1(o1, o2)), o2), r2(r1(o1, o2))). Proof: &quot;Dummy axiom for demonstration purposes&quot; is postulated by axiom (A1). r1(r1(r1(r1(o1, o2), r1(o1, o2)), o2), r2(r1(o1, o2))) is a valid formula statement interpreted from that axiom.Therefore, by the axiom-interpretation inference rule: A |- P, it follows that r1(r1(r1(r1(o1, o2), r1(o1, o2)), o2), r2(r1(o1, o2))). QED
+Inference rule (equal-terms-substitution): Let inference-rule equal-terms-substitution defined as &quot;(P3, (x3 = y3) |- Q1)&quot; be included and considered valid in T1.
 
-Inference rule (equal-terms-substitution): Let inference-rule equal-terms-substitution defined as &quot;((P1 , (x1 = y1)) |- Q1)&quot; be included and considered valid in T1.
-
-Proposition (T1.P3) - The proposition of interest: r1(r1(r1(r2(o3), r2(o3)), o2), r2(r2(o3))). Proof: r1(r1(r1(r1(o1, o2), r1(o1, o2)), o2), r2(r1(o1, o2))) follows from prop. (P2). (r1(o1, o2) = r2(o3)) follows from prop. (P1).Therefore, by the equal-terms-substitution inference rule: ((P1 , (x1 = y1)) |- Q1), it follows that r1(r1(r1(r2(o3), r2(o3)), o2), r2(r2(o3))). QED
+Proposition (T1.P3) - The proposition of interest: r1(r1(r1(r2(o3), r2(o3)), o2), r2(r2(o3))). Proof: r1(r1(r1(r1(o1, o2), r1(o1, o2)), o2), r2(r1(o1, o2))) follows from prop. (P2). (r1(o1, o2) = r2(o3)) follows from prop. (P1).Therefore, by the  inference rule: (P3, (x3 = y3) |- Q1), it follows that r1(r1(r1(r2(o3), r2(o3)), o2), r2(r2(o3))). QED
 </pre>
                                             </div>
                                         </div>

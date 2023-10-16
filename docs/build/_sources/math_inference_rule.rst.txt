@@ -24,7 +24,7 @@ This table of contents references the key mathematical inference_rules used by p
    disjunction-introduction-1<math/inference_rule/disjunction_introduction_1_math_inference_rule>
    disjunction-introduction-2<math/inference_rule/disjunction_introduction_2_math_inference_rule>
    disjunctive-resolution<math/inference_rule/disjunctive_resolution_math_inference_rule>
-   disjunctive-syllogism-1-1<math/inference_rule/disjunctive_syllogism_1_math_inference_rule>
+   disjunctive-syllogism-1<math/inference_rule/disjunctive_syllogism_1_math_inference_rule>
    double-negation-elimination<math/inference_rule/double_negation_elimination_math_inference_rule>
    double-negation-introduction<math/inference_rule/double_negation_introduction_math_inference_rule>
    equal-terms-substitution<math/inference_rule/equal_terms_substitution_math_inference_rule>

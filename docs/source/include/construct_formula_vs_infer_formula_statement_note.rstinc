@@ -3,4 +3,4 @@
 
    Taking the :ref:`modus-ponens<modus_ponens_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` as an example, the :python:`construct_formula` method requires two premise arguments: :python:`p_implies_q` and :python:`p`. One may pass a formula as the :python:`p_implies_q` argument that is not valid in the :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` under consideration, but that is syntactically correct. On the other hand, the :python:`infer_formula_statement` method requires that both premise arguments be valid.
 
-   This distinction makes it possible to use the algorithms of :ref:`inference-rules<inference_rule_math_concept>` in "what if" scenarii, i.e. building invalid formulae. And at the same time, it assures that all :ref:`formula_statements<formula_statements_math_concept>` are valid.
+   This distinction makes it possible to use the algorithms of :ref:`inference-rules<inference_rule_math_concept>` in "what if" scenarii, i.e. building invalid formulae. And at the same time, it assures that all :ref:`formula_statements<formula_statement_math_concept>` are valid.

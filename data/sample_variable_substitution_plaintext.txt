@@ -20,9 +20,9 @@ t1.stabilize()
 proposition_of_interest = t1.i.variable_substitution.infer_formula_statement(p=implication,
     phi=u.r.tupl(o1, o2))
 
-Let "U71" be a universe-of-discourse.
+Let "U73" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U71.
+Let "T1" be a theory-elaboration-sequence in U73.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom to establish some ground propositions." be included (postulated) in T1.
 

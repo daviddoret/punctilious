@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/"/>
+    <link href="../../_static/punctilious-logo-compact-light.svg" rel="icon" type="image/svg+xml">
+    <link href="../../_static/punctilious-logo-compact-light-16x16-white.png" sizes="16x16" rel="icon" type="image/png">
+    <link href="../../_static/punctilious-logo-compact-light-32x32-white.png" sizes="32x32" rel="icon" type="image/png">
+    <link rel="apple-touch-icon" href="../../_static/punctilious-logo-compact-light-180x180-white.png" sizes="180x180"
+          type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>inferred-statement &mdash; punctilious 1.0.9 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/togglebutton.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/tabs.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css"/>
+    <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html"/>
+    <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="next" title="introduction-rule" href="introduction_rule_math_concept.html"/>
+    <link rel="prev" title="inference-rule" href="inference_rule_math_concept.html"/>
+</head>
+
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a href="../../index.html" class="icon icon-home">
+                    punctilious
+                </a>
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs" aria-label="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+            </div>
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../front_matter.html">Front matter</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal" href="../../math.html">Math</a>
+                        <ul class="current">
+                            <li class="toctree-l2 current"><a class="reference internal" href="../../math_concept.html">Concepts</a>
+                                <ul class="current">
+                                    <li class="toctree-l3"><a class="reference internal" href="axiom_math_concept.html">axiom</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="axiomatic_method_math_concept.html">axiomatic-method</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="definition_math_concept.html">definition</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="elimination_rule_math_concept.html">elimination-rule</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="formula_math_concept.html">formula</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="formula_statement_math_concept.html">formula-statement</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="free_variable_math_concept.html">free-variable</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="hypothesis_math_concept.html">hypothesis</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="inference_rule_math_concept.html">inference-rule</a>
+                                    </li>
+                                    <li class="toctree-l3 current"><a class="current reference internal" href="#">inferred-statement</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="introduction_rule_math_concept.html">introduction-rule</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal" href="is_a_math_concept.html">is-a</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="meta_object_math_concept.html">meta-object</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="notation_form_math_concept.html">notation-form</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="object_math_concept.html">object</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="object_creation_math_concept.html">object-creation</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="object_declaration_math_concept.html">object-declaration</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="object_inclusion_math_concept.html">object-inclusion</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="paragraph_proof_math_concept.html">paragraph-proof</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="relation_math_concept.html">relation</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="statement_math_concept.html">statement</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="theory_elaboration_sequence_math_concept.html">theory-elaboration-sequence</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="validity_of_formula_math_concept.html">validity-of-formula</a>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="universe_of_discourse_math_concept.html">universe-of-discourse</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../../math_inference_rule.html">Inference
+                                rules</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../../math_theory.html">Theories</a></li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../python.html">Python</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../back_matter.html">Back matter</a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+        <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../../index.html">punctilious</a>
+        </nav>
+
+        <div class="wy-nav-content">
+            <div class="rst-content">
+                <div role="navigation" aria-label="Page navigation">
+                    <ul class="wy-breadcrumbs">
+                        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+                        <li class="breadcrumb-item"><a href="../../math.html">Math</a></li>
+                        <li class="breadcrumb-item"><a href="../../math_concept.html">Math concept</a></li>
+                        <li class="breadcrumb-item active">inferred-statement</li>
+                        <li class="wy-breadcrumbs-aside">
+                            <a href="../../_sources/math/concept/inferred_statement_math_concept.rst.txt"
+                               rel="nofollow"> View page source</a>
+                        </li>
+                    </ul>
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <p class="tags" id="inferred-statement-math-concept"><span>Tags: </span><a
+                                class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary reference internal"
+                                href="../../_tags/inferred-statement.html"><span
+                                class="doc">inferred-statement</span></a></p>
+                        <section id="inferred-statement">
+                            <h1>inferred-statement<a class="headerlink" href="#inferred-statement"
+                                                     title="Permalink to this headline"></a></h1>
+                            <section id="definition">
+                                <h2>Definition<a class="headerlink" href="#definition"
+                                                 title="Permalink to this headline"></a></h2>
+                                <p>An <em>inferred-statement</em> is a propositional <cite>statement&lt;statement_math_concept&gt;</cite>
+                                    that has been derived from an <cite>inference-rule&lt;inference_rule_math_concept&gt;</cite>
+                                    in a <cite>theory-elaboration-sequence&lt;theory_elaboration_sequence_math_concept&gt;</cite>.
+                                </p>
+                            </section>
+                            <section id="quotes">
+                                <h2>Quotes<a class="headerlink" href="#quotes" title="Permalink to this headline"></a>
+                                </h2>
+                                <blockquote>
+                                    <div><p>“The rules of inference may be thought of as a logical toolbox, from which
+                                        the tools may be taken, as needed, to prove validity.”
+                                        <span id="id1">[<a class="reference internal"
+                                                           href="../../back_matter/bibliography_back_matter.html#id6"
+                                                           title="Irving M. Copi, Carl Cohen, and Kenneth MacMahon. Introduction to Logic. Pearson Custom Library. Pearson Education Limited, Harlow, 14 ed., pearson new international ed edition, 2014. ISBN 978-1-292-02482-0.">CCM14</a>, p. 368]</span>
+                                    </p>
+                                    </div>
+                                </blockquote>
+                            </section>
+                            <section id="synonyms">
+                                <h2>Synonyms<a class="headerlink" href="#synonyms"
+                                               title="Permalink to this headline"></a></h2>
+                                <p>N/A</p>
+                            </section>
+                            <section id="see-also">
+                                <h2>See also<a class="headerlink" href="#see-also"
+                                               title="Permalink to this headline"></a></h2>
+                                <ul class="simple">
+                                    <li><p><a class="reference internal"
+                                              href="inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                            class="std std-ref">inference-rule</span></a></p></li>
+                                    <li><p><a class="reference internal"
+                                              href="statement_math_concept.html#statement-math-concept"><span
+                                            class="std std-ref">statement</span></a></p></li>
+                                </ul>
+                            </section>
+                            <section id="bibliography">
+                                <h2>Bibliography<a class="headerlink" href="#bibliography"
+                                                   title="Permalink to this headline"></a></h2>
+                                <p>N/A</p>
+                            </section>
+                        </section>
+
+
+                    </div>
+                </div>
+                <footer>
+                    <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+                        <a href="inference_rule_math_concept.html" class="btn btn-neutral float-left"
+                           title="inference-rule" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"
+                                                                                 aria-hidden="true"></span> Previous</a>
+                        <a href="introduction_rule_math_concept.html" class="btn btn-neutral float-right"
+                           title="introduction-rule" accesskey="n" rel="next">Next <span
+                                class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+                    </div>
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>&#169; Copyright 2023, David Doret.</p>
+                    </div>
+
+                    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+                    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+                    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+                </footer>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(false);
+    });
+</script>
+
+</body>
+</html>

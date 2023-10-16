@@ -20,9 +20,9 @@ not_q = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom, p=u.r.
 proposition_of_interest = t1.i.modus_tollens.infer_formula_statement(p_implies_q=p_implies_q,
     not_q=not_q, subtitle='The proposition of interest')
 
-Let "U51" be a universe-of-discourse.
+Let "U53" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U51.
+Let "T1" be a theory-elaboration-sequence in U53.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 
