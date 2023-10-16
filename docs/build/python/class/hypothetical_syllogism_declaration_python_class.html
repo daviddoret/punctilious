@@ -344,6 +344,158 @@
                                         class="code python py docutils literal notranslate"><span class="name"><span
                                         class="pre">hypothetical_syllogism</span></span></code> property, and
                                 instanciation is automatic when the property is accessed for the first time.</p>
+                            <dl class="py class">
+                                <dt class="sig sig-object py" id="punctilious.HypotheticalSyllogismDeclaration">
+                                    <em class="property"><span class="pre">class</span><span
+                                            class="w"> </span></em><span class="sig-prename descclassname"><span
+                                        class="pre">punctilious.</span></span><span class="sig-name descname"><span
+                                        class="pre">HypotheticalSyllogismDeclaration</span></span><span
+                                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                        class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span
+                                        class="pre">echo</span></span><span class="o"><span
+                                        class="pre">=</span></span><span class="default_value"><span
+                                        class="pre">None</span></span></em><span class="sig-paren">)</span><a
+                                        class="headerlink" href="#punctilious.HypotheticalSyllogismDeclaration"
+                                        title="Permalink to this definition"></a></dt>
+                                <dd><p>The declaration of the <a class="reference internal"
+                                                                 href="../../math/inference_rule/hypothetical_syllogism_math_inference_rule.html#hypothetical-syllogism-math-inference-rule"><span
+                                        class="std std-ref">hypothetical-syllogism</span></a> <a
+                                        class="reference internal"
+                                        href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                        class="std std-ref">inference-rule</span></a> as valid in the target <a
+                                        class="reference internal"
+                                        href="../../math/concept/universe_of_discourse_math_concept.html#universe-of-discourse-math-concept"><span
+                                        class="std std-ref">universe-of-discourse</span></a> .</p>
+                                    <dl class="py class">
+                                        <dt class="sig sig-object py"
+                                            id="punctilious.HypotheticalSyllogismDeclaration.Premises">
+                                            <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                                                class="sig-name descname"><span class="pre">Premises</span></span><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">p_implies_q</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#punctilious.HypotheticalSyllogismDeclaration.Premises"
+                                                                             title="Permalink to this definition"></a>
+                                        </dt>
+                                        <dd>
+                                            <dl class="py attribute">
+                                                <dt class="sig sig-object py"
+                                                    id="punctilious.HypotheticalSyllogismDeclaration.Premises.p_implies_q">
+                                                    <span class="sig-name descname"><span class="pre">p_implies_q</span></span><em
+                                                        class="property"><span class="p"><span
+                                                        class="pre">:</span></span><span class="w"> </span><span
+                                                        class="pre">Union</span><span class="p"><span
+                                                        class="pre">[</span></span><span class="pre">punctilious.core.TheoreticalObject</span><span
+                                                        class="p"><span class="pre">,</span></span><span
+                                                        class="w"> </span><span class="pre">punctilious.core.FormulaStatement</span><span
+                                                        class="p"><span class="pre">,</span></span><span
+                                                        class="w"> </span><span
+                                                        class="pre">punctilious.core.Formula</span><span class="p"><span
+                                                        class="pre">,</span></span><span class="w"> </span><span
+                                                        class="pre">tuple</span><span class="p"><span
+                                                        class="pre">,</span></span><span class="w"> </span><span
+                                                        class="pre">list</span><span class="p"><span
+                                                        class="pre">]</span></span></em><a class="headerlink"
+                                                                                           href="#punctilious.HypotheticalSyllogismDeclaration.Premises.p_implies_q"
+                                                                                           title="Permalink to this definition"></a>
+                                                </dt>
+                                                <dd><p>Alias for field number 0</p>
+                                                </dd>
+                                            </dl>
+
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt class="sig sig-object py"
+                                            id="punctilious.HypotheticalSyllogismDeclaration.infer_formula">
+                                            <span class="sig-name descname"><span
+                                                    class="pre">infer_formula</span></span><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span
+                                                class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span
+                                                class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span
+                                                class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span
+                                                class="default_value"><span class="pre">None</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#punctilious.HypotheticalSyllogismDeclaration.infer_formula"
+                                                                             title="Permalink to this definition"></a>
+                                        </dt>
+                                        <dd><p>This python method verify the syntactic correctness of the premises, but
+                                            <strong>does not</strong> verify the validity of the premises, it then
+                                            applies the <a class="reference internal"
+                                                           href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                                    class="std std-ref">inference-rule</span></a> algorithm, and returns
+                                            a <a class="reference internal"
+                                                 href="../../math/concept/formula_math_concept.html#formula-math-concept"><span
+                                                    class="std std-ref">formula</span></a>.</p>
+                                            <div class="admonition note">
+                                                <p class="admonition-title">Note</p>
+                                                <p>Note the critical distinction between the <code
+                                                        class="code python py docutils literal notranslate"><span
+                                                        class="name"><span
+                                                        class="pre">construct_formula</span></span></code> and the <code
+                                                        class="code python py docutils literal notranslate"><span
+                                                        class="name"><span
+                                                        class="pre">infer_formula_statement</span></span></code>
+                                                    methods. The former only verifies the syntactic correctness but does
+                                                    not verify the validity of the premises, it then applies the <a
+                                                            class="reference internal"
+                                                            href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                                            class="std std-ref">inference-rule</span></a> algorithm, and
+                                                    produces a <a class="reference internal"
+                                                                  href="../../math/concept/formula_math_concept.html#formula-math-concept"><span
+                                                            class="std std-ref">formula</span></a> that may be <strong>invalid</strong>
+                                                    . The later verifies the validity of the premises, applies the <a
+                                                            class="reference internal"
+                                                            href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                                            class="std std-ref">inference-rule</span></a> algorithm, and
+                                                    produces a <a class="reference internal"
+                                                                  href="../../math/concept/formula_statement_math_concept.html#formula-statement-math-concept"><span
+                                                            class="std std-ref">formula-statement</span></a> that is
+                                                    <strong>valid</strong> by definition.</p>
+                                                <p>Taking the <a class="reference internal"
+                                                                 href="../../math/inference_rule/modus_ponens_math_inference_rule.html#modus-ponens-math-inference-rule"><span
+                                                        class="std std-ref">modus-ponens</span></a> <a
+                                                        class="reference internal"
+                                                        href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                                        class="std std-ref">inference-rule</span></a> as an example, the
+                                                    <code class="code python py docutils literal notranslate"><span
+                                                            class="name"><span
+                                                            class="pre">construct_formula</span></span></code> method
+                                                    requires two premise arguments: <code
+                                                            class="code python py docutils literal notranslate"><span
+                                                            class="name"><span
+                                                            class="pre">p_implies_q</span></span></code> and <code
+                                                            class="code python py docutils literal notranslate"><span
+                                                            class="name"><span class="pre">p</span></span></code>. One
+                                                    may pass a formula as the <code
+                                                            class="code python py docutils literal notranslate"><span
+                                                            class="name"><span
+                                                            class="pre">p_implies_q</span></span></code> argument that
+                                                    is not valid in the <a class="reference internal"
+                                                                           href="../../math/concept/theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence-math-concept"><span
+                                                            class="std std-ref">theory-elaboration-sequence</span></a>
+                                                    under consideration, but that is syntactically correct. On the other
+                                                    hand, the <code class="code python py docutils literal notranslate"><span
+                                                            class="name"><span
+                                                            class="pre">infer_formula_statement</span></span></code>
+                                                    method requires that both premise arguments be valid.</p>
+                                                <p>This distinction makes it possible to use the algorithms of <a
+                                                        class="reference internal"
+                                                        href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                                        class="std std-ref">inference-rules</span></a> in “what if”
+                                                    scenarii, i.e. building invalid formulae. And at the same time, it
+                                                    assures that all <span
+                                                            class="xref std std-ref">formula_statements</span> are
+                                                    valid.</p>
+                                            </div>
+                                        </dd>
+                                    </dl>
+
+                                </dd>
+                            </dl>
+
                         </section>
 
 

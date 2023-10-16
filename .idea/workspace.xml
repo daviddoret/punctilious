@@ -5,30 +5,52 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/constructive-.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/destructive-.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/disjunctive-syllogism-1.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/disjunctive-syllogism-2.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/constructive_dilemma_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/destructive_dilemma_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/disjunctive_syllogism_1_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/inference_rule/disjunctive_syllogism_2_math_inference_rule.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/constructive_dilemma_declaration_python_class.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/constructive_dilemma_inclusion_python_class.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/destructive_dilemma_declaration_python_class.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/destructive_dilemma_inclusion_python_class.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/disjunctive_syllogism_1_declaration_python_class.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/disjunctive_syllogism_1_inclusion_python_class.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/disjunctive_syllogism_2_declaration_python_class.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/disjunctive_syllogism_2_inclusion_python_class.rst.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_static/alabaster.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_static/custom.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/constructive-.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/destructive-.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/disjunctive-syllogism-1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/_tags/disjunctive-syllogism-2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/constructive_dilemma_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/destructive_dilemma_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunctive_syllogism_1_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunctive_syllogism_2_math_inference_rule.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemma_declaration_python_class.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemma_inclusion_python_class.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemma_declaration_python_class.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemma_inclusion_python_class.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/python/class/disjunctive_syllogism_1_declaration_python_class.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/python/class/disjunctive_syllogism_1_inclusion_python_class.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/python/class/disjunctive_syllogism_2_declaration_python_class.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/build/python/class/disjunctive_syllogism_2_inclusion_python_class.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/constructive-dilemma.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/destructive-dilemma.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/disjunctive-syllogism-1.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/_tags/disjunctive-syllogism-2.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/.buildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.buildinfo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/class.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/class.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/concept.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/concept.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/declaration.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/declaration.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/inclusion.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/inclusion.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/inference-rule.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/inference-rule.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/math.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/math.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/python.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/python.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/sample.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/sample.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/tagsindex.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/tagsindex.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/concept/inference_rule_math_concept.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/inference_rule_math_concept.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/math_inference_rule.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math_inference_rule.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/python_class_index.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/python_class_index.rst.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_static/basic.css" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/basic.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/constructive_dilemna_declaration_python_class.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/constructive_dilemna_declaration_python_class.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/constructive_dilemna_inclusion_python_class.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/constructive_dilemna_inclusion_python_class.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/destructive_dilemna_declaration_python_class.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/destructive_dilemna_declaration_python_class.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python/class/destructive_dilemna_inclusion_python_class.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/destructive_dilemna_inclusion_python_class.rst.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/css/fonts/fontawesome-webfont.svg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/css/fonts/fontawesome-webfont.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_static/doctools.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/doctools.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_static/documentation_options.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/documentation_options.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_static/graphviz.css" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/graphviz.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_static/jquery.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/jquery.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_static/language_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/language_data.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-compact-light.svg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-compact-light.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-full-light.svg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-full-light.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_static/searchtools.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/searchtools.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/absorption.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/absorption.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/axiom-interpretation.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/axiom-interpretation.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/axiom.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/axiom.html" afterDir="false" />
@@ -41,8 +63,10 @@
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/conjunction-elimination-1.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/conjunction-elimination-1.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/conjunction-elimination-2.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/conjunction-elimination-2.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/conjunction-introduction.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/conjunction-introduction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/constructive-dilemna.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/constructive-dilemna.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/declaration.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/declaration.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/definition-interpretation.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/definition-interpretation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/destructive-dilemna.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/destructive-dilemna.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/disjunction-introduction-1.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/disjunction-introduction-1.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/disjunction-introduction-2.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/disjunction-introduction-2.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/disjunctive-resolution.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/disjunctive-resolution.html" afterDir="false" />
@@ -64,7 +88,6 @@
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/proof-by-refutation-1.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/proof-by-refutation-1.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/proof-by-refutation-2.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/proof-by-refutation-2.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/python.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_tags/sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/tagsindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/tagsindex.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/universe-of-discourse.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/universe-of-discourse.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/variable-substitution.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/variable-substitution.html" afterDir="false" />
@@ -153,8 +176,12 @@
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/conjunction_elimination_2_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/conjunction_elimination_2_inclusion_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/conjunction_introduction_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/conjunction_introduction_declaration_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/conjunction_introduction_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/conjunction_introduction_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemna_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemna_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemna_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemna_inclusion_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/definition_interpretation_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/definition_interpretation_declaration_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/definition_interpretation_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/definition_interpretation_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemna_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemna_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemna_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemna_inclusion_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_1_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_1_declaration_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_1_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_1_inclusion_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_2_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_2_declaration_python_class.html" afterDir="false" />
@@ -209,9 +236,7 @@
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/conjunction_elimination_1_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/conjunction_elimination_1_python_sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/conjunction_elimination_2_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/conjunction_elimination_2_python_sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/conjunction_introduction_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/conjunction_introduction_python_sample.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/constructive_dilemna_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/constructive_dilemna_python_sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/definition_interpretation_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/definition_interpretation_python_sample.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/destructive_dilemna_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/destructive_dilemna_python_sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/disjunction_introduction_1_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/disjunction_introduction_1_python_sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/disjunction_introduction_2_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/disjunction_introduction_2_python_sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/disjunctive_resolution_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/disjunctive_resolution_python_sample.html" afterDir="false" />
@@ -235,21 +260,16 @@
       <change beforePath="$PROJECT_DIR$/docs/build/python/source_code_repository_python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/source_code_repository_python.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/search.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/searchindex.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/class.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/concept.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/constructive-dilemna.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/declaration.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/declaration.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/destructive-dilemna.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/disjunctive-syllogism.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/inclusion.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/inclusion.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/inference-rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/inference-rule.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/math.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/math.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/python.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/python.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/sample.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/_tags/tagsindex.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/tagsindex.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious.egg-info/SOURCES.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious.egg-info/SOURCES.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/constructive_dilemma_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/constructive_dilemma_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/constructive_dilemma_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/constructive_dilemma_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/destructive_dilemma_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/destructive_dilemma_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/destructive_dilemma_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/destructive_dilemma_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunctive_syllogism_1_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunctive_syllogism_1_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunctive_syllogism_2_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunctive_syllogism_2_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/constructive_dilemma_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/class/constructive_dilemma_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/constructive_dilemma_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/class/constructive_dilemma_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/destructive_dilemma_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/class/destructive_dilemma_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/destructive_dilemma_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python/class/destructive_dilemma_inclusion_python_class.rst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -653,10 +673,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="PowerShell.build_docs.ps1" />
+        <item itemvalue="PowerShell.build_docs.ps1" />
         <item itemvalue="Python.generate_sample_outputs" />
         <item itemvalue="Python.sample_pet_theory_1" />
         <item itemvalue="Python.sample_variable_substitution" />
-        <item itemvalue="Python.sample_tao_2006_the_peano_axioms_proof_enus_unicode" />
       </list>
     </recent_temporary>
   </component>
@@ -668,14 +688,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00316" summary="documentation #195">
-      <option name="closed" value="true" />
-      <created>1695559293051</created>
-      <option name="number" value="00316" />
-      <option name="presentableId" value="LOCAL-00316" />
-      <option name="project" value="LOCAL" />
-      <updated>1695559293051</updated>
     </task>
     <task id="LOCAL-00317" summary="documentation #195">
       <option name="closed" value="true" />
@@ -1061,7 +1073,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697405472676</updated>
     </task>
-    <option name="localTasksCounter" value="365" />
+    <task id="LOCAL-00365" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
+      <option name="closed" value="true" />
+      <created>1697406933954</created>
+      <option name="number" value="00365" />
+      <option name="presentableId" value="LOCAL-00365" />
+      <option name="project" value="LOCAL" />
+      <updated>1697406933954</updated>
+    </task>
+    <option name="localTasksCounter" value="366" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
