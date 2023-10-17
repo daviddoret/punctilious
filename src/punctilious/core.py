@@ -10405,9 +10405,8 @@ class UniverseOfDiscourse(SymbolicObject):
     def so(self, symbol=None):
         return self.declare_symbolic_objct(symbol=symbol)
 
-    def t(self, symbol: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
-            ref: (None, str) = None, subtitle: (None, str) = None,
-            extended_theory: (None, TheoryElaborationSequence) = None,
+    def t(self, symbol: (None, str, StyledText) = None, ref: (None, str) = None,
+            subtitle: (None, str) = None, extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None, stabilized: bool = False,
             echo: bool = None):
         """Declare a new theory in this universe-of-discourse.
@@ -10419,7 +10418,7 @@ class UniverseOfDiscourse(SymbolicObject):
         :param extended_theory:
         :return:
         """
-        return self.declare_theory(symbol=symbol, nameset=nameset, ref=ref, subtitle=subtitle,
+        return self.declare_theory(symbol=symbol, ref=ref, subtitle=subtitle,
             extended_theory=extended_theory, extended_theory_limit=extended_theory_limit,
             stabilized=stabilized, echo=echo)
 

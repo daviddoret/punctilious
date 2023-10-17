@@ -32,8 +32,7 @@ class Mancosou2021MinimalLogicM0(pu.Package):
         inclusion = t.include_axiom(ref='PL1', symbol=axiom_symbol, index=1, a=self.pl1)
         with u.v(symbol='A', auto_index=False) as a:
             t.i.axiom_interpretation.infer_formula_statement(a=inclusion,
-                p=a | u.r.implies | (a | u.r.land | a))
-        inclusion.lock_axiom()
+                p=a | u.r.implies | (a | u.r.land | a))  # inclusion.lock_axiom()
 
 
 test = Mancosou2021MinimalLogicM0()
