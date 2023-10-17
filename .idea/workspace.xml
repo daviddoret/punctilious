@@ -4,35 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="develop minimal logic (M0) #226">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_biconditional_introduction.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_biconditional_introduction.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_conjunction_introduction.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_conjunction_introduction.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_constructive_dilemma.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_constructive_dilemma.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_destructive_dilemma.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_destructive_dilemma.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_disjunctive_syllogism_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_disjunctive_syllogism_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_disjunctive_syllogism_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_disjunctive_syllogism_2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_equal_terms_substitution.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_equal_terms_substitution.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_hypothesis.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_hypothesis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_hypothetical_syllogism.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_hypothetical_syllogism.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_inconsistency_introduction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_inconsistency_introduction_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_inconsistency_introduction_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_inconsistency_introduction_2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_modus_ponens.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_modus_ponens.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_modus_tollens.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_modus_tollens.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_minimal_logic_m0.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_minimal_logic_m0.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_axiom_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiom_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_definition_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_definition_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_equal_terms_substitution.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_equal_terms_substitution.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula_is_mask_similar_to.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula_is_mask_similar_to.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_modus_ponens.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_modus_ponens.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_theory_elaboration_stabilized.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_theory_elaboration_stabilized.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,7 +119,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\inference_rules" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms">
+  <component name="RunManager" selected="Python.theory_mancosou_2021_minimal_logic_m0">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -295,6 +269,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="theory_mancosou_2021_minimal_logic_m0" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/theory" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/theory/theory_mancosou_2021_minimal_logic_m0.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest tests" type="ShConfigurationType">
       <option name="SCRIPT_TEXT" value="pytest tests" />
       <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
@@ -356,20 +351,6 @@
       <option name="docutils_open_in_browser" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_definition_interpretation.TestDefinitionInterpretation.test_definition_interpretation_1" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_definition_interpretation.TestDefinitionInterpretation.test_definition_interpretation_1&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="Python tests in tests" type="tests" factoryName="Autodetect">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -422,9 +403,9 @@
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.sample_biconditional_introduction" />
       <item itemvalue="Python.sample_modus_ponens" />
+      <item itemvalue="Python.theory_mancosou_2021_minimal_logic_m0" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.Python tests for test_definition_interpretation.TestDefinitionInterpretation.test_definition_interpretation_1" />
       <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms" />
       <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -433,11 +414,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.theory_mancosou_2021_minimal_logic_m0" />
         <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms" />
         <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms" />
         <item itemvalue="Python.sample_modus_ponens" />
         <item itemvalue="Python.sample_biconditional_introduction" />
-        <item itemvalue="Python tests.Python tests for test_definition_interpretation.TestDefinitionInterpretation.test_definition_interpretation_1" />
       </list>
     </recent_temporary>
   </component>
@@ -449,14 +430,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00323" summary="documentation #195 + inference validation #126">
-      <option name="closed" value="true" />
-      <created>1695933081596</created>
-      <option name="number" value="00323" />
-      <option name="presentableId" value="LOCAL-00323" />
-      <option name="project" value="LOCAL" />
-      <updated>1695933081596</updated>
     </task>
     <task id="LOCAL-00324" summary="documentation #195 + inference validation #126">
       <option name="closed" value="true" />
@@ -842,7 +815,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697543905166</updated>
     </task>
-    <option name="localTasksCounter" value="372" />
+    <task id="LOCAL-00372" summary="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation.">
+      <option name="closed" value="true" />
+      <created>1697579530281</created>
+      <option name="number" value="00372" />
+      <option name="presentableId" value="LOCAL-00372" />
+      <option name="project" value="LOCAL" />
+      <updated>1697579530281</updated>
+    </task>
+    <option name="localTasksCounter" value="373" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -874,7 +855,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="enhance documentation and publish on readthedocs #48" />
     <MESSAGE value="packaging #47 - corrected a few syntax issues in tao 2006 along the way" />
     <MESSAGE value="testing #181 + setup #47" />
     <MESSAGE value="testing #181 + setup #47 + inclusion theories in sphinx documentation" />
@@ -899,7 +879,8 @@
     <MESSAGE value="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules" />
     <MESSAGE value="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects." />
     <MESSAGE value="develop minimal logic (M0) #226" />
-    <option name="LAST_COMMIT_MESSAGE" value="develop minimal logic (M0) #226" />
+    <MESSAGE value="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation." />
+    <option name="LAST_COMMIT_MESSAGE" value="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
