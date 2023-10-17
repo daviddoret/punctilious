@@ -994,7 +994,7 @@ def verify(assertion: bool, msg: str,
         report = f'\n\nMessage:\n{msg}\n\nContextual information:{contextual_information}\n\nSeverity: {str(severity).upper()}'
         # repm.prnt(report)
         if severity is verification_severities.warning:
-            # raise Exception("oops")
+            raise Exception("oops")
             warnings.warn(report)
         raise_exception = prioritize_value(raise_exception,
             configuration.raise_exception_on_verification_error, True)
@@ -1501,6 +1501,10 @@ class NameSet(Composable):
         yield SansSerifNormal(')')
         yield from self.compose_subtitle(pre=' - ')
         return True
+
+    @property
+    def dashed_name(self) -> StyledText:
+        return self._dashed_name
 
     @property
     def explicit_name(self) -> ComposableText:
@@ -3951,12 +3955,14 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         dashed_name = 'axiom-interpretation'
         explicit_name = 'axiom interpretation inference rule'
         name = 'axiom interpretation'
-        with u.v(symbol=ScriptNormal('A')) as a, u.v(symbol='P') as p:
+        with u.v(symbol=StyledText(plaintext='A', text_style=text_styles.script_bold),
+                auto_index=False) as a, u.v(symbol='P', auto_index=False) as p:
             definition = u.r.tupl(a, p) | u.r.proves | p
-        with u.v(symbol=ScriptNormal('A')) as a:
+        with u.v(symbol=StyledText(plaintext='A', text_style=text_styles.script_bold),
+                auto_index=False) as a:
             self.parameter_a = a
             self.parameter_a_mask = frozenset([a])
-        with u.v(symbol='P') as p:
+        with u.v(symbol='P', auto_index=False) as p:
             self.parameter_p = p
             self.parameter_p_mask = frozenset([p])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
@@ -4355,19 +4361,22 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
         dashed_name = 'definition-interpretation'
         explicit_name = 'definition interpretation inference rule'
         name = 'definition interpretation'
-        with u.v(symbol=ScriptNormal('D')) as d, u.v(symbol='x') as x, u.v(symbol='y') as y:
+        with u.v(symbol=StyledText(plaintext='D', text_style=text_styles.script_bold),
+                auto_index=False) as d, u.v(symbol='x', auto_index=False) as x, u.v(symbol='y',
+            auto_index=False) as y:
             # Feature #216: provide support for n-ary relations
             # Provide support for n-ary relations. First need: sequent-comma, or collection-comma.
             # definition = u.r.sequent_comma(d, x, y) | u.r.proves | (x | u.r.equal | y)
             # Meanwhile, I use combined 2-ary formulae:
             definition = d | u.r.tupl | (x | u.r.tupl | y) | u.r.proves | (x | u.r.equal | y)
-        with u.v(symbol=ScriptNormal('D')) as d:
+        with u.v(symbol=StyledText(plaintext='D', text_style=text_styles.script_bold),
+                auto_index=False) as d:
             self.parameter_d = d
             self.parameter_d_mask = frozenset([d])
-        with u.v(symbol='x') as x:
+        with u.v(symbol='x', auto_index=False) as x:
             self.parameter_x = x
             self.parameter_x_mask = frozenset([x])
-        with u.v(symbol='y') as y:
+        with u.v(symbol='y', auto_index=False) as y:
             self.parameter_y = y
             self.parameter_y_mask = frozenset([y])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index,
@@ -5688,8 +5697,9 @@ class TheoryElaborationSequence(TheoreticalObject):
     """
 
     def __init__(self, u: UniverseOfDiscourse, symbol: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
-            subtitle: (None, str) = None, extended_theory: (None, TheoryElaborationSequence) = None,
+            index: (None, int, str) = None, auto_index: (None, bool) = None,
+            ref: (None, str) = None, subtitle: (None, str) = None,
+            extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None, stabilized: bool = False,
             echo: bool = None):
         echo = prioritize_value(echo, configuration.echo_theory_elaboration_sequence_declaration,
@@ -5705,21 +5715,11 @@ class TheoryElaborationSequence(TheoreticalObject):
         self._extended_theory = extended_theory
         self._extended_theory_limit = extended_theory_limit
         self._interpretation_disclaimer = False
-        if nameset is None:
+        if symbol is None:
             symbol = prioritize_value(symbol, configuration.default_theory_symbol)
             index = u.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
-        elif isinstance(nameset, str):
-            # If symbol was passed as a string,
-            # assume the base was passed without index.
-            # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.script_normal)
-            index = u.index_symbol(symbol=symbol)
-            nameset = NameSet(s=symbol, index=index)
-        nameset.paragraph_header = paragraph_headers.theory_elaboration_sequence
-        nameset.ref = ref
-        nameset.subtitle = subtitle
-        super().__init__(nameset=nameset, paragraph_header=nameset.paragraph_header,
+        super().__init__(symbol=symbol, index=index, auto_index=auto_index,
+            paragraph_header=paragraph_headers.theory_elaboration_sequence,
             is_theory_foundation_system=True if extended_theory is None else False, u=u, echo=False)
         verify(is_in_class(u, classes.universe_of_discourse),
             'Parameter "u" is not a member of declarative-class universe-of-discourse.', u=u)
@@ -10207,7 +10207,7 @@ class UniverseOfDiscourse(SymbolicObject):
             'Cross-referencing a symbolic-objct in a universe-of-discourse requires '
             'an object of type SymbolicObjct.', o=o, slf=self)
         duplicate = self.symbolic_objcts.get(o.nameset)
-        verify(severity=verification_severities.warning, assertion=duplicate is None,
+        verify(severity=verification_severities.verbose, assertion=duplicate is None,
             msg=f'A symbolic-object {duplicate} already exists in the current universe-of-discourse {self} with a '
                 'duplicate designation (symbol and index).', o=o, duplicate=duplicate, slf=self)
         self.symbolic_objcts[o.nameset] = o
@@ -10267,9 +10267,9 @@ class UniverseOfDiscourse(SymbolicObject):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, ref=ref, subtitle=subtitle, echo=echo)
 
-    def declare_theory(self, symbol: (None, str, StyledText) = None,
-            nameset: (None, str, NameSet) = None, ref: (None, str) = None,
-            subtitle: (None, str) = None, extended_theory: (None, TheoryElaborationSequence) = None,
+    def declare_theory(self, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
+            auto_index: (None, bool) = None, ref: (None, str) = None, subtitle: (None, str) = None,
+            extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None, stabilized: bool = False,
             echo: bool = None):
         """Declare a new theory in this universe-of-discourse.
@@ -10281,11 +10281,12 @@ class UniverseOfDiscourse(SymbolicObject):
         :param extended_theory:
         :return:
         """
-        return TheoryElaborationSequence(u=self, symbol=symbol, nameset=nameset, ref=ref,
-            subtitle=subtitle, extended_theory=extended_theory,
+        return TheoryElaborationSequence(u=self, symbol=symbol, index=index, auto_index=auto_index,
+            ref=ref, subtitle=subtitle, extended_theory=extended_theory,
             extended_theory_limit=extended_theory_limit, stabilized=stabilized, echo=echo)
 
     def declare_axiom(self, natural_language: str, symbol: (None, str, StyledText) = None,
+            index: (None, int, str) = None, auto_index: (None, bool) = None,
             dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
             abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
             explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
@@ -10295,9 +10296,9 @@ class UniverseOfDiscourse(SymbolicObject):
         """:ref:`Declare<object_declaration_math_concept>` a new axiom in this universe-of-discourse.
         """
         return AxiomDeclaration(u=self, natural_language=natural_language, symbol=symbol,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, ref=ref, subtitle=subtitle,
-            paragraph_header=paragraph_header, nameset=nameset, echo=echo)
+            index=index, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
+            subtitle=subtitle, paragraph_header=paragraph_header, nameset=nameset, echo=echo)
 
     def declare_definition(self, natural_language: str, symbol: (None, str, StyledText) = None,
             index: (None, int) = None, auto_index: (None, bool) = None,
