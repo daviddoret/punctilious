@@ -13,9 +13,9 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 t1 = u.t(echo=True)
 theory_axiom = t1.include_axiom(a=axiom)
 p_implies_q = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
-    p=r1(o1, o2) | u.r.implies | r2(o3))
+    p=r1(o1, o2) | u.r.implies | r2(o3), lock=False)
 q_implies_r = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
-    p=r2(o3) | u.r.implies | r1(o3, o1))
+    p=r2(o3) | u.r.implies | r1(o3, o1), lock=True)
 
 # And finally, use the modus-ponens inference-rule:
 proposition_of_interest = t1.i.hypothetical_syllogism.infer_formula_statement(

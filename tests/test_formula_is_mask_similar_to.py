@@ -79,15 +79,16 @@ class TestFormulaIsMaskSimilarTo(TestCase):
         t = u.t()
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
-        phi1 = t.i.axiom_interpretation.infer_formula_statement(ap, u.f(r1, o1, o2))
-        phi2 = t.i.axiom_interpretation.infer_formula_statement(ap, u.f(r1, o2, o3))
+        phi1 = t.i.axiom_interpretation.infer_formula_statement(a=ap, p=u.f(r1, o1, o2), lock=False)
+        phi2 = t.i.axiom_interpretation.infer_formula_statement(a=ap, p=u.f(r1, o2, o3), lock=False)
         antecedent_statement = t.i.ci.infer_formula_statement(phi1, phi2)
         antecedent = antecedent_statement.valid_proposition
 
         with u.v() as x, u.v() as y, u.v() as z:
             variable_set = {x, y, z}
-            implication = t.i.axiom_interpretation.infer_formula_statement(ap,
-                u.f(u.r.implies, u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)), u.f(r1, x, z)))
+            implication = t.i.axiom_interpretation.infer_formula_statement(a=ap,
+                p=u.f(u.r.implies, u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)), u.f(r1, x, z)),
+                lock=True)
             antecedent_with_variables = implication.valid_proposition.parameters[0]
             self.assertTrue(
                 antecedent_with_variables.is_masked_formula_similar_to(antecedent, variable_set))

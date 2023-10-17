@@ -7,6 +7,32 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="develop minimal logic (M0) #226">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_biconditional_introduction.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_biconditional_introduction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_conjunction_introduction.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_conjunction_introduction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_constructive_dilemma.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_constructive_dilemma.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_destructive_dilemma.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_destructive_dilemma.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_disjunctive_syllogism_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_disjunctive_syllogism_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_disjunctive_syllogism_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_disjunctive_syllogism_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_equal_terms_substitution.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_equal_terms_substitution.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_hypothesis.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_hypothesis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_hypothetical_syllogism.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_hypothetical_syllogism.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_inconsistency_introduction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_inconsistency_introduction_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_inconsistency_introduction_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_inconsistency_introduction_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_modus_ponens.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_modus_ponens.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_modus_tollens.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_modus_tollens.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_minimal_logic_m0.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_minimal_logic_m0.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_axiom_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiom_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_definition_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_definition_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_equal_terms_substitution.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_equal_terms_substitution.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula_is_mask_similar_to.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula_is_mask_similar_to.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_modus_ponens.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_modus_ponens.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_theory_elaboration_stabilized.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_theory_elaboration_stabilized.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,11 +145,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\inference_rules" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in tests">
-    <configuration name="build_docs.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/build_docs.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
-      <envs />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python tests.Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -159,27 +181,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/build_samples.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="generate_sample_outputs" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/continuous_integration/scripts" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/continuous_integration/scripts/generate_sample_outputs.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -252,7 +253,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="sample_hypothetical_syllogism" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="sample_biconditional_introduction" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -264,7 +265,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_hypothetical_syllogism.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_biconditional_introduction.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -273,7 +274,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="theory_mancosou_2021_minimal_logic_m0" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="sample_modus_ponens" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -281,11 +282,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/theory" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/theory/theory_mancosou_2021_minimal_logic_m0.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_modus_ponens.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -355,7 +356,7 @@
       <option name="docutils_open_in_browser" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_hypothetical_syllogism.TestHypotheticalSyllogism.test_hypothetical_syllogism" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_definition_interpretation.TestDefinitionInterpretation.test_definition_interpretation_1" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -365,7 +366,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_hypothetical_syllogism.TestHypotheticalSyllogism.test_hypothetical_syllogism&quot;" />
+      <option name="_new_target" value="&quot;test_definition_interpretation.TestDefinitionInterpretation.test_definition_interpretation_1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -383,30 +384,60 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="Unittests for test_tao_2006_the_peano_axioms" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\David\PycharmProjects\PythonVirtualEnvironments\Scripts\python.exe" />
+      <option name="SDK_NAME" value="Python 3.11 (PythonVirtualEnvironments)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_tao_2006_the_peano_axioms&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\David\PycharmProjects\PythonVirtualEnvironments\Scripts\python.exe" />
+      <option name="SDK_NAME" value="Python 3.11 (PythonVirtualEnvironments)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <list>
-      <item itemvalue="PowerShell.build_docs.ps1" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.build_samples" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.build" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
-      <item itemvalue="Python.theory_mancosou_2021_minimal_logic_m0" />
-      <item itemvalue="Python.sample_hypothetical_syllogism" />
-      <item itemvalue="Python.generate_sample_outputs" />
+      <item itemvalue="Python.sample_biconditional_introduction" />
+      <item itemvalue="Python.sample_modus_ponens" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.Python tests for test_hypothetical_syllogism.TestHypotheticalSyllogism.test_hypothetical_syllogism" />
+      <item itemvalue="Python tests.Python tests for test_definition_interpretation.TestDefinitionInterpretation.test_definition_interpretation_1" />
+      <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms" />
+      <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.theory_mancosou_2021_minimal_logic_m0" />
-        <item itemvalue="PowerShell.build_docs.ps1" />
-        <item itemvalue="Python.generate_sample_outputs" />
-        <item itemvalue="Python tests.Python tests for test_hypothetical_syllogism.TestHypotheticalSyllogism.test_hypothetical_syllogism" />
-        <item itemvalue="Python.sample_hypothetical_syllogism" />
+        <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms" />
+        <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms" />
+        <item itemvalue="Python.sample_modus_ponens" />
+        <item itemvalue="Python.sample_biconditional_introduction" />
+        <item itemvalue="Python tests.Python tests for test_definition_interpretation.TestDefinitionInterpretation.test_definition_interpretation_1" />
       </list>
     </recent_temporary>
   </component>
@@ -418,14 +449,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00322" summary="documentation #195 + inference validation #126">
-      <option name="closed" value="true" />
-      <created>1695899815928</created>
-      <option name="number" value="00322" />
-      <option name="presentableId" value="LOCAL-00322" />
-      <option name="project" value="LOCAL" />
-      <updated>1695899815928</updated>
     </task>
     <task id="LOCAL-00323" summary="documentation #195 + inference validation #126">
       <option name="closed" value="true" />
@@ -811,7 +834,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697543794556</updated>
     </task>
-    <option name="localTasksCounter" value="371" />
+    <task id="LOCAL-00371" summary="develop minimal logic (M0) #226">
+      <option name="closed" value="true" />
+      <created>1697543905166</created>
+      <option name="number" value="00371" />
+      <option name="presentableId" value="LOCAL-00371" />
+      <option name="project" value="LOCAL" />
+      <updated>1697543905166</updated>
+    </task>
+    <option name="localTasksCounter" value="372" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -875,23 +906,18 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_definition_interpretation.py</url>
-          <line>17</line>
-          <option name="timeStamp" value="72" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>4467</line>
+          <line>4497</line>
           <option name="timeStamp" value="73" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>4448</line>
+          <line>4478</line>
           <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>5866</line>
+          <line>5896</line>
           <option name="timeStamp" value="84" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -901,7 +927,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>10203</line>
+          <line>10265</line>
           <option name="timeStamp" value="89" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -911,7 +937,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>3949</line>
+          <line>3979</line>
           <option name="timeStamp" value="91" />
         </line-breakpoint>
       </breakpoints>

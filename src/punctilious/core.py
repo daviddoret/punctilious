@@ -3286,7 +3286,8 @@ class AxiomInclusion(Statement):
             echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_axiom_inclusion,
             configuration.echo_default, False)
-        self._axiom = a
+        self._a = a
+        self._locked = False
         t.crossreference_definition_endorsement(self)
         paragraph_header = prioritize_value(paragraph_header, paragraph_headers.axiom_inclusion)
         verify(
@@ -3315,7 +3316,7 @@ class AxiomInclusion(Statement):
         """The axiom of an axiom-inclusion.
 
         Abridged property: a.a"""
-        return self._axiom
+        return self._a
 
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
@@ -3335,8 +3336,22 @@ class AxiomInclusion(Statement):
         """By definition, an axiom-inclusion is not a propositional object."""
         return False
 
+    @property
+    def locked(self) -> bool:
+        """When an axiom or definition is locked, the usage of the axiom-interpretation, respectively the definition-interpretation, inference-rule is no longer authorized on that axiom.
+
+        A theory author should lock axioms and definitions once all axiom-interpretations, respectively definition-interpretations, have been derived from them. This protects the theory-elaboration-sequence from the introduction of inconsistent statements.
+
+        A theory author is of course free to unlock axiom-inclusions, the goal of this feature is not to make it technically impossible to re-interpret axioms and definitions, but rather to act as a strong reminder and prevent mistakes.
+        """
+        return self._locked
+
+    @locked.setter
+    def locked(self, v):
+        self._locked = v
+
     def rep_natural_language(self, encoding: (None, Encoding) = None, wrap: bool = True) -> str:
-        return self._axiom.rep_natural_language(encoding=encoding, wrap=wrap)
+        return self._a.rep_natural_language(encoding=encoding, wrap=wrap)
 
 
 class InferenceRuleInclusion(Statement):
@@ -3546,6 +3561,7 @@ class DefinitionInclusion(Statement):
         echo = prioritize_value(echo, configuration.echo_definition_inclusion,
             configuration.echo_default, False)
         self._d = d
+        self._locked = False
         t.crossreference_definition_endorsement(self)
         cat = paragraph_headers.definition_inclusion
         if nameset is None and symbol is None:
@@ -3578,6 +3594,20 @@ class DefinitionInclusion(Statement):
 
     def echo(self):
         repm.prnt(self.rep_report())
+
+    @property
+    def locked(self) -> bool:
+        """When an axiom or definition is locked, the usage of the axiom-interpretation, respectively the definition-interpretation, inference-rule is no longer authorized on that axiom.
+
+        A theory author should lock axioms and definitions once all axiom-interpretations, respectively definition-interpretations, have been derived from them. This protects the theory-elaboration-sequence from the introduction of inconsistent statements.
+
+        A theory author is of course free to unlock axiom-inclusions, the goal of this feature is not to make it technically impossible to re-interpret axioms and definitions, but rather to act as a strong reminder and prevent mistakes.
+        """
+        return self._locked
+
+    @locked.setter
+    def locked(self, v):
+        self._locked = v
 
     @property
     def is_strictly_propositional(self) -> bool:
@@ -7624,6 +7654,10 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         # Validate that expected formula-statements are formula-statements.
         _, a, _ = verify_axiom_inclusion(arg='a', t=self.t, input_value=a, raise_exception=True,
             error_code=error_code)
+        verify(assertion=not a.locked,
+            msg=f'The axiom-inclusion argument ⌜a⌝({a}) is locked, new interpretations are not authorized.',
+            severity=verification_severities.error, raise_exception=True, error_code=error_code,
+            a=a)
         _, p, _ = verify_formula(arg='p', u=self.u, input_value=p, is_strictly_propositional=True,
             raise_exception=True, error_code=error_code)
         # TODO: BUG: validate_formula does not support basic masks like: ⌜P⌝ where P is a free-variable.
@@ -7655,16 +7689,27 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         i: AxiomInterpretationDeclaration = super().i
         return i
 
-    def infer_formula_statement(self, a: FlexibleAxiom, p: FlexibleFormula, ref: (None, str) = None,
-            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
-            echo: (None, bool) = None) -> InferredStatement:
+    def infer_formula_statement(self, a: FlexibleAxiom, p: FlexibleFormula, lock: bool = True,
+            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
+            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
+        :param a:
+        :param p:
+        :param lock: Locks the definition-inclusion to forbid additional interpretations.
+        :param ref:
+        :param paragraph_header:
+        :param subtitle:
+        :param echo:
+        :return:
         """
         premises = self.i.Premises(a=a, p=p)
-        return InferredStatement(i=self, premises=premises, ref=ref,
+        s: InferredStatement = InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        if lock:
+            a.locked = lock
+        return s
 
 
 class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
@@ -8145,6 +8190,10 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
         # Validate that expected formula-statements are formula-statements.
         _, d, _ = verify_definition_inclusion(arg='d', t=self.t, input_value=d,
             raise_exception=True, error_code=error_code)
+        verify(assertion=not d.locked,
+            msg=f'The definition-inclusion argument ⌜d⌝({d}) is locked, new interpretations are not authorized.',
+            severity=verification_severities.error, raise_exception=True, error_code=error_code,
+            d=d)
         _, x, _ = verify_formula(arg='x', u=self.u, input_value=x, raise_exception=True,
             error_code=error_code)
         _, y, _ = verify_formula(arg='y', u=self.u, input_value=y, raise_exception=True,
@@ -8177,15 +8226,28 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
         return self.i.construct_formula(d=d, x=x, y=y)
 
     def infer_formula_statement(self, d: FlexibleDefinition, x: FlexibleFormula, y: FlexibleFormula,
-            ref: (None, str) = None, paragraph_header: (None, ParagraphHeader) = None,
-            subtitle: (None, str) = None, echo: (None, bool) = None) -> InferredStatement:
+            lock: bool = True, ref: (None, str) = None,
+            paragraph_header: (None, ParagraphHeader) = None, subtitle: (None, str) = None,
+            echo: (None, bool) = None) -> InferredStatement:
         """
         .. include:: ../../include/infer_formula_statement_python_method.rstinc
 
+        :param d:
+        :param x:
+        :param y:
+        :param lock: Locks the definition-inclusion to forbid additional interpretations.
+        :param ref:
+        :param paragraph_header:
+        :param subtitle:
+        :param echo:
+        :return:
         """
         premises = self.i.Premises(d=d, x=x, y=y)
-        return InferredStatement(i=self, premises=premises, ref=ref,
+        s: InferredStatement = InferredStatement(i=self, premises=premises, ref=ref,
             paragraph_header=paragraph_header, subtitle=subtitle, echo=echo)
+        if lock:
+            d.locked = lock
+        return s
 
 
 class DestructiveDilemmaInclusion(InferenceRuleInclusion):

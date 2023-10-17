@@ -9,23 +9,19 @@ class Mancosou2021MinimalLogicM0(pu.Package):
 
         # Naming conventions in Mancosou 2021
         axiom_symbol = pu.StyledText(plaintext='PL', text_style=pu.text_styles.sans_serif_normal)
-
+        theory_symbol = pu.StyledText(plaintext='M', text_style=pu.text_styles.sans_serif_normal)
         self.u = u
         self.t = t
         if self.u is None and self.t is None:
             self.u = pu.UniverseOfDiscourse()
-            self.t = self.u.declare_theory(
-                symbol=pu.StyledText(plaintext='M', text_style=pu.text_styles.sans_serif_normal),
-                index=0)
+            self.t = self.u.declare_theory(symbol=theory_symbol, index=0)
         elif self.u is None and self.t is not None:
             self.u = self.t.u
         elif self.u is not None and self.t is None:
-            self.t = self.u.declare_theory(
-                symbol=pu.StyledText(plaintext='M', text_style=pu.text_styles.sans_serif_normal),
-                index=0)
+            self.t = self.u.declare_theory(symbol=theory_symbol, index=0)
         u = self.u
         t = self.t
-        section_2 = t.open_section('Minimal Logic', section_number=2)
+        section_1 = t.open_section(section_title='Minimal Logic', section_number=1)
 
         self.pl1 = u.declare_axiom(ref='PL1', symbol=axiom_symbol, index=1,
             natural_language=f'𝐴 ⊃ (𝐴 ∧ 𝐴)')
