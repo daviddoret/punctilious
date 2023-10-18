@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.">
-      <change afterPath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_classical_logic_j0.py" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.">
+      <change afterPath="$PROJECT_DIR$/src/sample/sample_mancosou_2021_minimal_logic_m0_noproof_enus_plaintext.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_classical_logic_j0.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_classical_logic_j0.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_intuitionistic_logic_j0.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_intuitionistic_logic_j0.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_minimal_logic_m0.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_minimal_logic_m0.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,17 +88,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/David/PycharmProjects/punctilious/src/theory&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "dev",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/src/sample",
+    "settings.editor.selected.configurable": "advanced.settings"
   }
-}</component>
+}]]></component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings module-name="2023_05_02_PyCharmProject_Maths" is-module-sdk="true">
@@ -106,10 +109,10 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\David\PycharmProjects\punctilious\src\sample" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\theory" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\tests" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\src\sample" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\python\sample" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -120,9 +123,26 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\inference_rules" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.theory_mancosou_2021_classical_logic_j0">
-    <configuration name="increment_package_version_patch.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/increment_package_version_patch.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
-      <envs />
+  <component name="RunManager" selected="Python.sample_mancosou_2021_minimal_logic_m0_noproof_enus_plaintext">
+    <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/theory" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/theory/__init__.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
@@ -232,6 +252,48 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="sample_mancosou_2021_minimal_logic_m0_noproof_enus_plaintext" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_mancosou_2021_minimal_logic_m0_noproof_enus_plaintext.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="sample_tao_2006_the_peano_axioms_noproof_enus_plaintext" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_plaintext.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="theory_mancosou_2021_classical_logic_j0" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -253,7 +315,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="theory_mancosou_2021_intuitionistic_logic_j0" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="theory_tao_2006_the_peano_axioms" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -265,28 +327,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/theory/theory_mancosou_2021_intuitionistic_logic_j0.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="theory_mancosou_2021_minimal_logic_m0" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/theory" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/theory/theory_mancosou_2021_minimal_logic_m0.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -370,45 +411,30 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="C:\Users\David\PycharmProjects\PythonVirtualEnvironments\Scripts\python.exe" />
-      <option name="SDK_NAME" value="Python 3.11 (PythonVirtualEnvironments)" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <list>
-      <item itemvalue="PowerShell.increment_package_version_patch.ps1" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.build_samples" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.build" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
+      <item itemvalue="Python.__init__" />
+      <item itemvalue="Python.sample_mancosou_2021_minimal_logic_m0_noproof_enus_plaintext" />
+      <item itemvalue="Python.sample_tao_2006_the_peano_axioms_noproof_enus_plaintext" />
       <item itemvalue="Python.theory_mancosou_2021_classical_logic_j0" />
-      <item itemvalue="Python.theory_mancosou_2021_intuitionistic_logic_j0" />
-      <item itemvalue="Python.theory_mancosou_2021_minimal_logic_m0" />
+      <item itemvalue="Python.theory_tao_2006_the_peano_axioms" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.sample_mancosou_2021_minimal_logic_m0_noproof_enus_plaintext" />
+        <item itemvalue="Python.__init__" />
+        <item itemvalue="Python.theory_tao_2006_the_peano_axioms" />
+        <item itemvalue="Python.sample_tao_2006_the_peano_axioms_noproof_enus_plaintext" />
         <item itemvalue="Python.theory_mancosou_2021_classical_logic_j0" />
-        <item itemvalue="Python.theory_mancosou_2021_intuitionistic_logic_j0" />
-        <item itemvalue="PowerShell.increment_package_version_patch.ps1" />
-        <item itemvalue="Python.theory_mancosou_2021_minimal_logic_m0" />
-        <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms" />
       </list>
     </recent_temporary>
   </component>
@@ -420,14 +446,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00329" summary="documentation #195 + inference validation #126">
-      <option name="closed" value="true" />
-      <created>1696161914326</created>
-      <option name="number" value="00329" />
-      <option name="presentableId" value="LOCAL-00329" />
-      <option name="project" value="LOCAL" />
-      <updated>1696161914326</updated>
     </task>
     <task id="LOCAL-00330" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae">
       <option name="closed" value="true" />
@@ -813,7 +831,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697629111017</updated>
     </task>
-    <option name="localTasksCounter" value="378" />
+    <task id="LOCAL-00378" summary="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.">
+      <option name="closed" value="true" />
+      <created>1697629604095</created>
+      <option name="number" value="00378" />
+      <option name="presentableId" value="LOCAL-00378" />
+      <option name="project" value="LOCAL" />
+      <updated>1697629604095</updated>
+    </task>
+    <option name="localTasksCounter" value="379" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -845,7 +871,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="testing #181 + setup #47 + inclusion theories in sphinx documentation" />
     <MESSAGE value="testing #181 + setup #47 + include theories in sphinx documentation" />
     <MESSAGE value="testing #181 + setup #47 + include theories in sphinx documentation. readthedocs seem not to support python 3.11. make an attempt with 3.10 to support at the very least the match syntax." />
     <MESSAGE value="continuous-integration #47, include: bumpver setup, powershell scripts for Windows build, etc." />
@@ -870,7 +895,8 @@
     <MESSAGE value="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation." />
     <MESSAGE value="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;issue #229: elaborate intuitionistic logic (j0) theory." />
     <MESSAGE value="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory." />
-    <option name="LAST_COMMIT_MESSAGE" value="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory." />
+    <MESSAGE value="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory." />
+    <option name="LAST_COMMIT_MESSAGE" value="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

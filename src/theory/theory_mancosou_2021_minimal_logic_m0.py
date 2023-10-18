@@ -115,7 +115,3 @@ class Mancosou2021MinimalLogicM0(pu.Package):
                                                                                                a | u.r.implies | u.r.lnot(
                                                                                            b))) | u.r.implies | u.r.lnot(
                 a), lock=True)
-
-
-pu.configuration.echo_proof = False
-m0_package = Mancosou2021MinimalLogicM0()

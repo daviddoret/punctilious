@@ -1,0 +1,41 @@
+
+
+# Theory properties
+Consistency: undetermined
+Stabilized: False
+Extended theory: N/A
+
+# Simple-objects declarations
+Let  be simple-objects in U1.
+
+# Relations
+Let "not" be a unary-relation in U1.
+Let "==>", "or", "and" be binary-relations in U1.
+
+# Inference rules
+The following inference rules are considered valid under this theory:
+Let "axiom-interpretation" be an inference-rule defined as "(A, P |- P)" in U1.
+
+# Theory elaboration sequence
+# 1: Minimal logic
+Axiom PL1 (M0.PL1): Let axiom PL1 "A  (A  A)" be included (postulated) in M0.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A, P |- P)" be included and considered valid in M0.
+Proposition (M0.P1): (A ==> (A and A)).
+Axiom PL2 (M0.PL2): Let axiom PL2 "(A  B)  (B  A)" be included (postulated) in M0.
+Proposition (M0.P2): ((A and B) ==> (B and A)).
+Axiom PL3 (M0.PL3): Let axiom PL3 "(A  B)  [(A  C)  (B  C)]" be included (postulated) in M0.
+Proposition (M0.P3): ((A ==> B) ==> ((A and C) ==> (B and C))).
+Axiom PL4 (M0.PL4): Let axiom PL4 "[(A  B)  (B  C)]  (A  C)" be included (postulated) in M0.
+Proposition (M0.P4): (((A ==> B) and (B ==> C)) ==> (A ==> C)).
+Axiom PL5 (M0.PL5): Let axiom PL5 "B  (A  B)" be included (postulated) in M0.
+Proposition (M0.P5): (B ==> (A ==> B)).
+Axiom PL6 (M0.PL6): Let axiom PL6 "(A  (A  B))  B" be included (postulated) in M0.
+Proposition (M0.P6): ((A and (A ==> B)) ==> B).
+Axiom PL7 (M0.PL7): Let axiom PL7 "A  (A  B)" be included (postulated) in M0.
+Proposition (M0.P7): (A ==> (A or B)).
+Axiom PL8 (M0.PL8): Let axiom PL8 "(A  B)  (B  A)" be included (postulated) in M0.
+Proposition (M0.P8): ((A or B) ==> (B or A)).
+Axiom PL9 (M0.PL9): Let axiom PL9 "[(A  C)  (B  C)]  [(A  B)  C]" be included (postulated) in M0.
+Proposition (M0.P9): (((A ==> C) and (B ==> C)) ==> ((A or B) ==> C)).
+Axiom PL10 (M0.PL10): Let axiom PL10 "[(A  B)  (A  !B)]  !A" be included (postulated) in M0.
+Proposition (M0.P10): (((A ==> B) and (A ==> not(B))) ==> not(A)).

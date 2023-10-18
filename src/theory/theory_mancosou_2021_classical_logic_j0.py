@@ -1,6 +1,6 @@
 """"""
 import punctilious as pu
-import theory_mancosou_2021_intuitionistic_logic_j0 as j0_module
+from theory.theory_mancosou_2021_intuitionistic_logic_j0 import Mancosou2021IntuitionisticLogicJ0
 
 
 class Mancosou2021ClassicalLogicK0(pu.Package):
@@ -13,7 +13,7 @@ class Mancosou2021ClassicalLogicK0(pu.Package):
         # Naming conventions in Mancosou 2021
         axiom_symbol = pu.StyledText(plaintext='PL', text_style=pu.text_styles.sans_serif_normal)
         theory_symbol = pu.StyledText(plaintext='K', text_style=pu.text_styles.sans_serif_normal)
-        self.j0_package = j0_module.Mancosou2021IntuitionisticLogicJ0(u=u)
+        self.j0_package = Mancosou2021IntuitionisticLogicJ0(u=u)
         t = self.u.declare_theory(symbol=theory_symbol, index=0, extended_theory=self.j0_package.j0)
         self.t = t
         self.m0 = self.j0_package.m0
@@ -30,7 +30,3 @@ class Mancosou2021ClassicalLogicK0(pu.Package):
         with u.v(symbol='A', auto_index=False) as a, u.v(symbol='B', auto_index=False) as b:
             t.i.axiom_interpretation.infer_formula_statement(a=self.pl12_inclusion,
                 p=u.r.lnot(u.r.lnot(a)) | u.r.implies | a, lock=True)
-
-
-pu.configuration.echo_proof = False
-test = Mancosou2021ClassicalLogicK0()
