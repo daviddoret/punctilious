@@ -75,7 +75,7 @@ class LocaleEnUs(Locale):
         yield from a.compose_ref_link()
         yield SansSerifNormal('. ')
         yield from p.compose_formula()
-        yield SansSerifNormal(' is a valid formula statement interpreted from that axiom.')
+        yield SansSerifNormal(' is a propositional formula interpreted from that axiom.')
         return True
 
     def compose_biconditional_elimination_1_paragraph_proof(self, o: InferredStatement) -> \
@@ -567,8 +567,8 @@ class LocaleEnUs(Locale):
             yield SansSerifNormal(': ')
             yield from o.inference_rule.compose_paragraph_proof(o=o)
             # Proof conclusion
-            yield SansSerifNormal('Therefore, by the ')
-            yield from o.inference_rule.compose_dashed_name()
+            yield SansSerifNormal(' Therefore, by the ')
+            yield from o.inference_rule.inference_rule.compose_dashed_name()
             yield SansSerifNormal(' inference rule: ')
             yield o.inference_rule.definition
             yield SansSerifNormal(', it follows that ')

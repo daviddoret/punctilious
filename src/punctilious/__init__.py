@@ -1,7 +1,7 @@
 """Punctilious: punctilious/__init__.py
 
 """
-__version__ = "1.0.9"
+__version__ = "1.0.10"
 
 from punctilious.plaintext import force_plaintext, Plaintext, unidecode
 from punctilious.repm import monospace, prnt, serif_bold
@@ -40,8 +40,8 @@ from punctilious.core import AbsorptionDeclaration, AbsorptionInclusion, Article
     ProofByRefutation2Declaration, ProofByRefutation2Inclusion, PunctiliousException, \
     QuasiQuotation, Relation, rep_two_columns_proof_item, SansSerifBold, SansSerifNormal, \
     ScriptNormal, SerifBoldItalic, SerifItalic, SerifNormal, SimpleObjct, SimpleObjctDict, \
-    Statement, Subscript, subscriptify, SymbolicObject, text_styles, TextStyle, TheoreticalObject, \
-    TheoryElaborationSequence, Package, UniverseOfDiscourse, verify_formula, \
+    Statement, StyledText, Subscript, subscriptify, SymbolicObject, text_styles, TextStyle, \
+    TheoreticalObject, TheoryElaborationSequence, Package, UniverseOfDiscourse, verify_formula, \
     verify_formula_statement, VariableSubstitutionDeclaration, VariableSubstitutionInclusion
 
 # from foundation_system_1 import foundation_system_1, ft, u

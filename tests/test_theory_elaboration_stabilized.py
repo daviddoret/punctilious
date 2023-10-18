@@ -17,10 +17,13 @@ class TestTheoryElaboration(TestCase):
         robust_theory = u.t()
         ap1 = robust_theory.include_axiom(a=a1)
         with u.v() as x, u.v() as y, u.v() as z:
-            implication = robust_theory.i.axiom_interpretation.infer_formula_statement(ap1,
-                u.f(u.r.implies, u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)), u.f(r1, x, z)))
-        r1o1o2 = robust_theory.i.axiom_interpretation.infer_formula_statement(ap1, u.f(r1, o1, o2))
-        r1o2o3 = robust_theory.i.axiom_interpretation.infer_formula_statement(ap1, u.f(r1, o2, o3))
+            implication = robust_theory.i.axiom_interpretation.infer_formula_statement(a=ap1,
+                p=u.f(u.r.implies, u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)), u.f(r1, x, z)),
+                lock=False)
+        r1o1o2 = robust_theory.i.axiom_interpretation.infer_formula_statement(a=ap1,
+            p=u.f(r1, o1, o2), lock=False)
+        r1o2o3 = robust_theory.i.axiom_interpretation.infer_formula_statement(a=ap1,
+            p=u.f(r1, o2, o3), lock=True)
         r1o1o2_and_r1o2o3 = robust_theory.i.ci.infer_formula_statement(r1o1o2, r1o2o3)
         implication_2 = robust_theory.i.variable_substitution.infer_formula_statement(p=implication,
             phi=u.r.tupl(o1, o2, o3))

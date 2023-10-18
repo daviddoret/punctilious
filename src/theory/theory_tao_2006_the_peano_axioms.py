@@ -90,15 +90,15 @@ class Tao2006ThePeanoAxioms(pu.Package):
         self.definition_2_1_3 = d02
 
         p005 = t.i.definition_interpretation.infer_formula_statement(d=d02, x=one,
-            y=zero & plusplus)
+            y=zero & plusplus, lock=False)
 
         p006 = t.i.definition_interpretation.infer_formula_statement(d=d02, x=two,
-            y=(zero & plusplus) & plusplus)
+            y=(zero & plusplus) & plusplus, lock=False)
         p007 = t.i.definition_interpretation.infer_formula_statement(d=d02, x=three,
-            y=((zero & plusplus) & plusplus) & plusplus)
+            y=((zero & plusplus) & plusplus) & plusplus, lock=False)
 
         p008 = t.i.definition_interpretation.infer_formula_statement(d=d02, x=four,
-            y=(((zero & plusplus) & plusplus) & plusplus) & plusplus)
+            y=(((zero & plusplus) & plusplus) & plusplus) & plusplus, lock=False)
 
         zero_plusplus = zero & plusplus
         p009 = t.i.variable_substitution.infer_formula_statement(p=p002,
@@ -133,7 +133,7 @@ class Tao2006ThePeanoAxioms(pu.Package):
         self.proposition_2_1_4 = p022
 
         p023 = t.i.definition_interpretation.infer_formula_statement(d=d02, x=four,
-            y=(((zero & plusplus) & plusplus) & plusplus) & plusplus)
+            y=(((zero & plusplus) & plusplus) & plusplus) & plusplus, lock=False)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻(P₂₄): (((((0) + +) + +) + +) + + = 4).
         p024 = t.i.equality_commutativity.infer_formula_statement(x_equal_y=p008)
         p025 = t.i.equal_terms_substitution.infer_formula_statement(p=p024, x_equal_y=p020)
@@ -173,16 +173,17 @@ class Tao2006ThePeanoAxioms(pu.Package):
 
         with u.v('n') as n, u.v('m') as m:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₂): ((((𝐧₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐦₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (𝐧₃ ≠ 𝐦₁)) ⟹ ((𝐧₃)++ ≠ (𝐦₁)++)).
-            p032 = t.i.axiom_interpretation.infer_formula_statement(axiom_2_4, u.f(u.r.implies,
+            p032 = t.i.axiom_interpretation.infer_formula_statement(a=axiom_2_4, p=u.f(u.r.implies,
                 u.f(u.r.land, u.f(u.r.land, u.f(u.r.is_a, n, natural_number),
                     u.f(u.r.is_a, m, natural_number)), u.f(u.r.neq, n, m)),
-                u.f(u.r.neq, u.f(plusplus, n), u.f(plusplus, m))))
+                u.f(u.r.neq, u.f(plusplus, n), u.f(plusplus, m))), lock=False)
         with u.v('n') as n, u.v('m') as m:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₂): ((((𝐧₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐦₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (𝐧₃ ≠ 𝐦₁)) ⟹ ((𝐧₃)++ ≠ (𝐦₁)++)).
-            p032b = t.i.axiom_interpretation.infer_formula_statement(axiom_2_4, u.f(u.r.implies,
+            p032b = t.i.axiom_interpretation.infer_formula_statement(a=axiom_2_4, p=u.f(u.r.implies,
                 u.f(u.r.land, u.f(u.r.land, u.f(u.r.is_a, n, natural_number),
                     u.f(u.r.is_a, m, natural_number)),
-                    u.f(u.r.equal, u.f(plusplus, n), u.f(plusplus, m))), u.f(u.r.equal, n, m)))
+                    u.f(u.r.equal, u.f(plusplus, n), u.f(plusplus, m))), u.f(u.r.equal, n, m)),
+                lock=True)
 
         s55 = t.open_section('6 is not equal to 2.', section_parent=section_2_1, numbering=False)
 
@@ -205,7 +206,7 @@ class Tao2006ThePeanoAxioms(pu.Package):
 
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₇): (5 = (((((0)++)++)++)++)++).
         p037 = t.i.definition_interpretation.infer_formula_statement(d=d02, x=five,
-            y=((((zero & plusplus) & plusplus) & plusplus) & plusplus) & plusplus)
+            y=((((zero & plusplus) & plusplus) & plusplus) & plusplus) & plusplus, lock=False)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₈): ((((((0)++)++)++)++)++ = 5).
         p038 = t.i.equality_commutativity.infer_formula_statement(x_equal_y=p037)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₉): ((4)++ = 5).
@@ -229,7 +230,8 @@ class Tao2006ThePeanoAxioms(pu.Package):
 
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (6 = ((((((0)++)++)++)++)++)++).
         p049 = t.i.definition_interpretation.infer_formula_statement(d=d02, x=six,
-            y=(((((zero & plusplus) & plusplus) & plusplus) & plusplus) & plusplus) & plusplus)
+            y=(((((zero & plusplus) & plusplus) & plusplus) & plusplus) & plusplus) & plusplus,
+            lock=False)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (((((((0)++)++)++)++)++)++ = 6).
         p050 = t.i.equality_commutativity.infer_formula_statement(p049)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₅₄): (1 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).

@@ -10,11 +10,11 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 
 # Elaborate a dummy theory with inconsistent propositions
 theory_axiom = t1.include_axiom(axiom)
-f_o1_eq_f_02 = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom,
-    (f(o1) | u.r.eq | f(o2)))
+f_o1_eq_f_02 = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
+    p=(f(o1) | u.r.eq | f(o2)), lock=False)
 with u.v('x') as x, u.v('y') as y:
     implication = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
-        p=(f(x) | u.r.eq | f(y)) | u.r.implies | (x | u.r.neq | y))
+        p=(f(x) | u.r.eq | f(y)) | u.r.implies | (x | u.r.neq | y), lock=True)
 t1.stabilize()
 
 # Pose the inequality hypothesis

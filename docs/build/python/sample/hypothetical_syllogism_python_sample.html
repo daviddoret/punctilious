@@ -9,7 +9,7 @@
     <link rel="apple-touch-icon" href="../../_static/punctilious-logo-compact-light-180x180-white.png" sizes="180x180"
           type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>hypothetical-syllogism (python sample) &mdash; punctilious 1.0.9 documentation</title>
+    <title>hypothetical-syllogism (python sample) &mdash; punctilious 1.0.10 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
     <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css"/>
@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css"/>
     <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css"/>
     <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
+      <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -61,8 +61,6 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../../math.html">Math</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../../python.html">Python</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../reference_table.html">Reference
-                        tables</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../../back_matter.html">Back matter</a>
                     </li>
                 </ul>
@@ -209,7 +207,9 @@
                                                 class="o">|</span> <span class="n">u</span><span class="o">.</span><span
                                                 class="n">r</span><span class="o">.</span><span class="n">implies</span> <span
                                                 class="o">|</span> <span class="n">r2</span><span
-                                                class="p">(</span><span class="n">o3</span><span class="p">))</span>
+                                                class="p">(</span><span class="n">o3</span><span
+                                                class="p">),</span> <span class="n">lock</span><span
+                                                class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">q_implies_r</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
                                                 class="o">.</span><span class="n">infer_formula_statement</span><span
@@ -221,7 +221,9 @@
                                                 class="n">r</span><span class="o">.</span><span class="n">implies</span> <span
                                                 class="o">|</span> <span class="n">r1</span><span
                                                 class="p">(</span><span class="n">o3</span><span
-                                                class="p">,</span> <span class="n">o1</span><span class="p">))</span>
+                                                class="p">,</span> <span class="n">o1</span><span
+                                                class="p">),</span> <span class="n">lock</span><span
+                                                class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># And finally, use the modus-ponens inference-rule:</span>
 <span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t1</span><span

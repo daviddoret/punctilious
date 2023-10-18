@@ -7,5 +7,6 @@ This table of contents references mathematical theories implemented using puncti
    :titlesonly:
    :caption: Table of contents
 
-   Tao 2006<math/theory/tao_2006>
+   Mancosou 2021<theory_mancosou_2021>
+   Tao 2006<theory_tao_2006>
 

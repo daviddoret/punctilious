@@ -9,9 +9,10 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 
 # Elaborate a dummy theory with inconsistent propositions
 theory_axiom = t1.include_axiom(axiom)
-x_equal_y = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom, (o1 | u.r.equal | o2))
+x_equal_y = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom, (o1 | u.r.equal | o2),
+    lock=False)
 x_unequal_y = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom,
-    (o1 | u.r.unequal | o2))
+    (o1 | u.r.unequal | o2), lock=True)
 t1.stabilize()
 
 # Use a distinct theory T2 to demonstrate the inconsistency of T1

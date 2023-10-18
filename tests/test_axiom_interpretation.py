@@ -9,6 +9,7 @@ class TestAxiomInterpretation(TestCase):
         import sample.sample_axiom_interpretation as test
         u: pu.UniverseOfDiscourse = test.u
         t1: pu.TheoryElaborationSequence = test.t1
+        a: pu.AxiomInclusion = test.theory_axiom
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         o3: pu.SimpleObjct = test.o3
@@ -24,8 +25,13 @@ class TestAxiomInterpretation(TestCase):
             t1.i.axiom_interpretation.infer_formula_statement(a=r2(o1), p=r1(o1, o3))
         self.assertIs(pu.error_codes.error_002_inference_premise_syntax_error,
             error.exception.error_code)
-
         # Validity error  # with self.assertRaises(pu.PunctiliousException) as error:  #    axiom_2 = u.declare_axiom('Some axiom')  #    t1.i.axiom_interpretation.infer_formula_statement(a=axiom_2, p=r1(o1, o3))  # self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,  #    error.exception.error_code)
+        # Validity error - lock
+        a.locked = True
+        with self.assertRaises(pu.PunctiliousException) as error:
+            t1.i.axiom_interpretation.infer_formula_statement(a=a, p=r1(o1, o3))
+        self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,
+            error.exception.error_code)
 
     def test_axiom_interpretation_2(self):
         pu.configuration.echo_default = False

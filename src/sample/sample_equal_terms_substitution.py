@@ -13,9 +13,10 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 t1 = u.t(echo=True)
 theory_axiom = t1.include_axiom(a=axiom)
 proposition_x_equal_y = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
-    p=u.f(u.r.equal, u.f(r1, o1, o2), u.f(r2, o3)))
+    p=u.f(u.r.equal, u.f(r1, o1, o2), u.f(r2, o3)), lock=False)
 dummy_proposition = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
-    p=u.f(r1, u.f(r1, u.f(r1, u.f(r1, o1, o2), u.f(r1, o1, o2)), o2), u.f(r2, u.f(r1, o1, o2))))
+    p=u.f(r1, u.f(r1, u.f(r1, u.f(r1, o1, o2), u.f(r1, o1, o2)), o2), u.f(r2, u.f(r1, o1, o2))),
+    lock=True)
 
 # And finally, use the equal-terms-substitution inference-rule:
 proposition_of_interest = t1.i.ets.infer_formula_statement(p=dummy_proposition,

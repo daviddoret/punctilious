@@ -13,7 +13,7 @@ The rationale is to keep clearly distinct but cross referenced mathematical and 
    Installation<python/installation_python>
    Source code repository<python/source_code_repository_python>
 
-   Class<python/class/python_class_index>
-   Function<python/function/python_function_index>
-   Sample<python/sample/python_sample_index>
+   Class<python_class_index>
+   Function<python_function_index>
+   Sample<python_sample_index>
 

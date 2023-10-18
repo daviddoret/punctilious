@@ -8,7 +8,7 @@ Unabridged name;Abridged name;Formula
 :ref:`conjunction-elimination-2<conjunction_elimination_2_math_inference_rule>`;ce2;:math:`\left( \boldsymbol{P} \land \mathbf{Q} \right) \vdash \mathbf{Q}`
 :ref:`conjunction-introduction<conjunction_introduction_math_inference_rule>`;ci;:math:`\boldsymbol{P}, \boldsymbol{Q} \vdash \left( \boldsymbol{P} \land \boldsymbol{Q} \right)`
 :ref:`constructive-dilemma<constructive_dilemma_math_inference_rule>`;cd;:math:`\left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), \left( \boldsymbol{R} \implies \boldsymbol{S} \right), \left( \boldsymbol{P} \lor \boldsymbol{R} \right) \right) \vdash \left( \boldsymbol{Q} \lor \boldsymbol{S} \right)`
-:ref:`definition-interpretation<definition_interpretation_math_inference_rule>`;di;:math:`\boldsymbol{\mathcal{A}} \vdash \boldsymbol{P}`
+:ref:`definition-interpretation<definition_interpretation_math_inference_rule>`;di;:math:`\boldsymbol{\mathcal{D}} \vdash \boldsymbol{P}`
 :ref:`destructive-dilemma<destructive_dilemma_math_inference_rule>`;dd;:math:`\left( \left( \boldsymbol{P} \implies \boldsymbol{Q} \right), \left( \boldsymbol{R} \implies \boldsymbol{S} \right), \left( \neg \boldsymbol{Q} \lor \neg \boldsymbol{S} \right) \right) \vdash \left( \neg \boldsymbol{P} \lor \neg \boldsymbol{R} \right)`
 :ref:`disjunction-introduction-1<disjunction_introduction_1_math_inference_rule>`;di1;:math:`\boldsymbol{P} \vdash \left( \mathbf{Q} \lor \boldsymbol{P} \right)`
 :ref:`disjunction-introduction-2<disjunction_introduction_2_math_inference_rule>`;di2;:math:`\boldsymbol{P} \vdash \left( \boldsymbol{P} \lor \mathbf{Q} \right)`
