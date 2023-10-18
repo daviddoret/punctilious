@@ -15,6 +15,9 @@ class Mancosou2021IntuitionisticLogicJ0(pu.Package):
         theory_symbol = pu.StyledText(plaintext='J', text_style=pu.text_styles.sans_serif_normal)
         self.m0_package = m0_module.Mancosou2021MinimalLogicM0(u=u)
         t = self.u.declare_theory(symbol=theory_symbol, index=0, extended_theory=self.m0_package.m0)
+        self.t = t
+        self.m0 = self.m0_package.m0
+        self.j0 = t
 
         section_1 = t.open_section(section_title='Intuitionistic Logic', section_number=1)
 
