@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;issue #229: elaborate intuitionistic logic (j0) theory.">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/conf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/theory/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_intuitionistic_logic_j0.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_intuitionistic_logic_j0.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +119,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\inference_rules" />
     </key>
   </component>
-  <component name="RunManager" selected="PowerShell.increment_package_version_patch.ps1">
+  <component name="RunManager" selected="Python.theory_mancosou_2021_intuitionistic_logic_j0">
     <configuration name="increment_package_version_patch.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/increment_package_version_patch.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
       <envs />
       <method v="2" />
@@ -401,8 +397,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="PowerShell.increment_package_version_patch.ps1" />
         <item itemvalue="Python.theory_mancosou_2021_intuitionistic_logic_j0" />
+        <item itemvalue="PowerShell.increment_package_version_patch.ps1" />
         <item itemvalue="Python.theory_mancosou_2021_minimal_logic_m0" />
         <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms" />
         <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms" />
@@ -417,14 +413,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00327" summary="documentation #195 + inference validation #126">
-      <option name="closed" value="true" />
-      <created>1696109485247</created>
-      <option name="number" value="00327" />
-      <option name="presentableId" value="LOCAL-00327" />
-      <option name="project" value="LOCAL" />
-      <updated>1696109485247</updated>
     </task>
     <task id="LOCAL-00328" summary="documentation #195 + inference validation #126">
       <option name="closed" value="true" />
@@ -810,7 +798,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697626431269</updated>
     </task>
-    <option name="localTasksCounter" value="376" />
+    <task id="LOCAL-00376" summary="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.">
+      <option name="closed" value="true" />
+      <created>1697627082724</created>
+      <option name="number" value="00376" />
+      <option name="presentableId" value="LOCAL-00376" />
+      <option name="project" value="LOCAL" />
+      <updated>1697627082724</updated>
+    </task>
+    <option name="localTasksCounter" value="377" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -842,7 +838,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="testing #181 + setup #47" />
     <MESSAGE value="testing #181 + setup #47 + inclusion theories in sphinx documentation" />
     <MESSAGE value="testing #181 + setup #47 + include theories in sphinx documentation" />
     <MESSAGE value="testing #181 + setup #47 + include theories in sphinx documentation. readthedocs seem not to support python 3.11. make an attempt with 3.10 to support at the very least the match syntax." />
@@ -867,7 +862,8 @@
     <MESSAGE value="develop minimal logic (M0) #226" />
     <MESSAGE value="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation." />
     <MESSAGE value="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;issue #229: elaborate intuitionistic logic (j0) theory." />
-    <option name="LAST_COMMIT_MESSAGE" value="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;issue #229: elaborate intuitionistic logic (j0) theory." />
+    <MESSAGE value="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory." />
+    <option name="LAST_COMMIT_MESSAGE" value="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
