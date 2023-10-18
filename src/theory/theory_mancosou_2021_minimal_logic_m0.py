@@ -4,23 +4,17 @@ import punctilious as pu
 
 class Mancosou2021MinimalLogicM0(pu.Package):
 
-    def __init__(self, t: (None, pu.TheoryElaborationSequence) = None,
-            u: (None, pu.UniverseOfDiscourse) = None):
-
+    def __init__(self, u: (None, pu.UniverseOfDiscourse) = None):
+        if u is None:
+            u = pu.UniverseOfDiscourse()
+        self.u = u
         # Naming conventions in Mancosou 2021
         axiom_symbol = pu.StyledText(plaintext='PL', text_style=pu.text_styles.sans_serif_normal)
         theory_symbol = pu.StyledText(plaintext='M', text_style=pu.text_styles.sans_serif_normal)
-        self.u = u
+        t = self.u.declare_theory(symbol=theory_symbol, index=0)
         self.t = t
-        if self.u is None and self.t is None:
-            self.u = pu.UniverseOfDiscourse()
-            self.t = self.u.declare_theory(symbol=theory_symbol, index=0)
-        elif self.u is None and self.t is not None:
-            self.u = self.t.u
-        elif self.u is not None and self.t is None:
-            self.t = self.u.declare_theory(symbol=theory_symbol, index=0)
-        u = self.u
-        t = self.t
+        self.m0 = t
+
         section_1 = t.open_section(section_title='Minimal Logic', section_number=1)
 
         # Axiom: PL1
@@ -124,4 +118,4 @@ class Mancosou2021MinimalLogicM0(pu.Package):
 
 
 pu.configuration.echo_proof = False
-test = Mancosou2021MinimalLogicM0()
+m0_package = Mancosou2021MinimalLogicM0()
