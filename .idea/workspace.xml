@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation.">
-      <change afterPath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_intuitionistic_logic_j0.py" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;issue #229: elaborate intuitionistic logic (j0) theory.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_minimal_logic_m0.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_mancosou_2021_minimal_logic_m0.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/conf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +123,11 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\inference_rules" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in tests">
+  <component name="RunManager" selected="PowerShell.increment_package_version_patch.ps1">
+    <configuration name="increment_package_version_patch.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/increment_package_version_patch.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
+      <envs />
+      <method v="2" />
+    </configuration>
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -220,27 +227,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/prebuild_generate_theory_reports.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="sample_modus_ponens" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_modus_ponens.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -397,13 +383,13 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="PowerShell.increment_package_version_patch.ps1" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.build_samples" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.build" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.theory_mancosou_2021_intuitionistic_logic_j0" />
-      <item itemvalue="Python.sample_modus_ponens" />
       <item itemvalue="Python.theory_mancosou_2021_minimal_logic_m0" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
@@ -415,11 +401,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="PowerShell.increment_package_version_patch.ps1" />
         <item itemvalue="Python.theory_mancosou_2021_intuitionistic_logic_j0" />
         <item itemvalue="Python.theory_mancosou_2021_minimal_logic_m0" />
         <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms" />
         <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms" />
-        <item itemvalue="Python.sample_modus_ponens" />
       </list>
     </recent_temporary>
   </component>
@@ -431,14 +417,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00326" summary="documentation #195 + inference validation #126">
-      <option name="closed" value="true" />
-      <created>1696020173067</created>
-      <option name="number" value="00326" />
-      <option name="presentableId" value="LOCAL-00326" />
-      <option name="project" value="LOCAL" />
-      <updated>1696020173067</updated>
     </task>
     <task id="LOCAL-00327" summary="documentation #195 + inference validation #126">
       <option name="closed" value="true" />
@@ -824,7 +802,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697625169147</updated>
     </task>
-    <option name="localTasksCounter" value="375" />
+    <task id="LOCAL-00375" summary="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;issue #229: elaborate intuitionistic logic (j0) theory.">
+      <option name="closed" value="true" />
+      <created>1697626431269</created>
+      <option name="number" value="00375" />
+      <option name="presentableId" value="LOCAL-00375" />
+      <option name="project" value="LOCAL" />
+      <updated>1697626431269</updated>
+    </task>
+    <option name="localTasksCounter" value="376" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -856,7 +842,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="packaging #47 - corrected a few syntax issues in tao 2006 along the way" />
     <MESSAGE value="testing #181 + setup #47" />
     <MESSAGE value="testing #181 + setup #47 + inclusion theories in sphinx documentation" />
     <MESSAGE value="testing #181 + setup #47 + include theories in sphinx documentation" />
@@ -881,7 +866,8 @@
     <MESSAGE value="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects." />
     <MESSAGE value="develop minimal logic (M0) #226" />
     <MESSAGE value="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation." />
-    <option name="LAST_COMMIT_MESSAGE" value="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation." />
+    <MESSAGE value="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;issue #229: elaborate intuitionistic logic (j0) theory." />
+    <option name="LAST_COMMIT_MESSAGE" value="issue #226: develop minimal logic (M0).&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;issue #229: elaborate intuitionistic logic (j0) theory." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
