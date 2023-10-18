@@ -60,8 +60,8 @@ class Mancosou2021MinimalLogicM0(pu.Package):
         with u.v(symbol='A', auto_index=False) as a, u.v(symbol='B', auto_index=False) as b, u.v(
                 symbol='C', auto_index=False) as c:
             t.i.axiom_interpretation.infer_formula_statement(a=self.pl4_inclusion,
-                p=((a | u.r.land | c) | u.r.implies | (b | u.r.land | c)) | u.r.implies | (
-                        a | u.r.implies | b), lock=True)
+                p=((a | u.r.implies | b) | u.r.land | (b | u.r.implies | c)) | u.r.implies | (
+                        a | u.r.implies | c), lock=True)
 
         # Axiom: PL5
         self.pl5_declaration = u.declare_axiom(symbol=axiom_symbol, index=5,
@@ -72,5 +72,56 @@ class Mancosou2021MinimalLogicM0(pu.Package):
             t.i.axiom_interpretation.infer_formula_statement(a=self.pl5_inclusion,
                 p=b | u.r.implies | (a | u.r.implies | b), lock=True)
 
+        # Axiom: PL6
+        self.pl6_declaration = u.declare_axiom(symbol=axiom_symbol, index=6,
+            natural_language=f'(𝐴 ∧ (𝐴 ⊃ 𝐵)) ⊃ 𝐵')
+        self.pl6_inclusion = t.include_axiom(ref='PL6', symbol=axiom_symbol, index=6,
+            a=self.pl6_declaration)
+        with u.v(symbol='A', auto_index=False) as a, u.v(symbol='B', auto_index=False) as b:
+            t.i.axiom_interpretation.infer_formula_statement(a=self.pl6_inclusion,
+                p=(a | u.r.land | (a | u.r.implies | b)) | u.r.implies | b, lock=True)
 
+        # Axiom: PL7
+        self.pl7_declaration = u.declare_axiom(symbol=axiom_symbol, index=7,
+            natural_language=f'𝐴 ⊃ (𝐴 ∨ 𝐵)')
+        self.pl7_inclusion = t.include_axiom(ref='PL7', symbol=axiom_symbol, index=7,
+            a=self.pl7_declaration)
+        with u.v(symbol='A', auto_index=False) as a, u.v(symbol='B', auto_index=False) as b:
+            t.i.axiom_interpretation.infer_formula_statement(a=self.pl7_inclusion,
+                p=a | u.r.implies | (a | u.r.lor | b), lock=True)
+
+        # Axiom: PL8
+        self.pl8_declaration = u.declare_axiom(symbol=axiom_symbol, index=8,
+            natural_language=f'(𝐴 ∨ 𝐵) ⊃ (𝐵 ∨ 𝐴)')
+        self.pl8_inclusion = t.include_axiom(ref='PL8', symbol=axiom_symbol, index=8,
+            a=self.pl8_declaration)
+        with u.v(symbol='A', auto_index=False) as a, u.v(symbol='B', auto_index=False) as b:
+            t.i.axiom_interpretation.infer_formula_statement(a=self.pl8_inclusion,
+                p=(a | u.r.lor | b) | u.r.implies | (b | u.r.lor | a), lock=True)
+
+        # Axiom: PL9
+        self.pl9_declaration = u.declare_axiom(symbol=axiom_symbol, index=9,
+            natural_language=f'[(𝐴 ⊃ 𝐶) ∧ (𝐵 ⊃ 𝐶)] ⊃ [(𝐴 ∨ 𝐵) ⊃ 𝐶]')
+        self.pl9_inclusion = t.include_axiom(ref='PL9', symbol=axiom_symbol, index=9,
+            a=self.pl9_declaration)
+        with u.v(symbol='A', auto_index=False) as a, u.v(symbol='B', auto_index=False) as b, u.v(
+                symbol='C', auto_index=False) as c:
+            t.i.axiom_interpretation.infer_formula_statement(a=self.pl9_inclusion,
+                p=((a | u.r.implies | c) | u.r.land | (b | u.r.implies | c)) | u.r.implies | (
+                        (a | u.r.lor | b) | u.r.implies | c), lock=True)
+
+        # Axiom: PL10
+        self.pl10_declaration = u.declare_axiom(symbol=axiom_symbol, index=10,
+            natural_language=f'[(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴')
+        self.pl10_inclusion = t.include_axiom(ref='PL10', symbol=axiom_symbol, index=10,
+            a=self.pl10_declaration)
+        with u.v(symbol='A', auto_index=False) as a, u.v(symbol='B', auto_index=False) as b:
+            t.i.axiom_interpretation.infer_formula_statement(a=self.pl10_inclusion, p=((
+                                                                                               a | u.r.implies | b) | u.r.land | (
+                                                                                               a | u.r.implies | u.r.lnot(
+                                                                                           b))) | u.r.implies | u.r.lnot(
+                a), lock=True)
+
+
+pu.configuration.echo_proof = False
 test = Mancosou2021MinimalLogicM0()
