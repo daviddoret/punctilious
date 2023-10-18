@@ -36,6 +36,7 @@ src/sample/sample_double_negation_elimination.py
 src/sample/sample_double_negation_introduction.py
 src/sample/sample_equal_terms_substitution.py
 src/sample/sample_equality_commutativity.py
+src/sample/sample_export_all_articles.py
 src/sample/sample_hypothesis.py
 src/sample/sample_hypothetical_syllogism.py
 src/sample/sample_inconsistency_introduction_1.py
@@ -48,14 +49,13 @@ src/sample/sample_proof_by_contradiction_1.py
 src/sample/sample_proof_by_contradiction_2.py
 src/sample/sample_proof_by_refutation_1.py
 src/sample/sample_proof_by_refutation_2.py
-src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_plaintext.py
-src/sample/sample_tao_2006_the_peano_axioms_noproof_enus_unicode.py
-src/sample/sample_tao_2006_the_peano_axioms_proof_enus_plaintext.py
-src/sample/sample_tao_2006_the_peano_axioms_proof_enus_unicode.py
 src/sample/sample_variable_substitution.py
 src/theory/__init__.py
 src/theory/classical_propositional_logic.py
 src/theory/punctilious_2023_metatheory.py
+src/theory/theory_mancosou_2021_classical_logic_j0.py
+src/theory/theory_mancosou_2021_intuitionistic_logic_j0.py
+src/theory/theory_mancosou_2021_minimal_logic_m0.py
 src/theory/theory_tao_2006_the_peano_axioms.py
 tests/test_absorption.py
 tests/test_auto_index.py

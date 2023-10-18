@@ -8,6 +8,6 @@ Back matter
    :titlesonly:
    :caption: Table of contents
 
-   Reference tables<reference_table/reference_table>
+   Reference tables<back_matter_reference_table>
    Bibliography<back_matter/bibliography_back_matter>
 

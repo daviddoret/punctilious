@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/"/>
+    <link href="../../../_static/punctilious-logo-compact-light.svg" rel="icon" type="image/svg+xml">
+    <link href="../../../_static/punctilious-logo-compact-light-16x16-white.png" sizes="16x16" rel="icon"
+          type="image/png">
+    <link href="../../../_static/punctilious-logo-compact-light-32x32-white.png" sizes="32x32" rel="icon"
+          type="image/png">
+    <link rel="apple-touch-icon" href="../../../_static/punctilious-logo-compact-light-180x180-white.png"
+          sizes="180x180" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Intuitionistic logic ( \(J_0\) ) &mdash; punctilious 1.0.10 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css"/>
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css"/>
+    <link rel="stylesheet" href="../../../_static/togglebutton.css" type="text/css"/>
+    <link rel="stylesheet" href="../../../_static/tabs.css" type="text/css"/>
+    <link rel="stylesheet" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css"
+          type="text/css"/>
+    <link rel="stylesheet" href="../../../_static/css/custom.css" type="text/css"/>
+    <!--[if lt IE 9]>
+      <script src="../../../_static/js/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <script data-url_root="../../../" id="documentation_options"
+            src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/tabs.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html"/>
+    <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="next" title="Classical logic ( \(K_0\) )" href="classical_logic_k0.html"/>
+    <link rel="prev" title="Minimal logic ( \(M_0\) )" href="minimal_logic_m0.html"/>
+</head>
+
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a href="../../../index.html" class="icon icon-home">
+                    punctilious
+                </a>
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs" aria-label="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+            </div>
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../../front_matter.html">Front
+                        matter</a></li>
+                    <li class="toctree-l1 current"><a class="reference internal" href="../../../math.html">Math</a>
+                        <ul class="current">
+                            <li class="toctree-l2"><a class="reference internal" href="../../../math_concept.html">Concepts</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../../../math_inference_rule.html">Inference rules</a></li>
+                            <li class="toctree-l2 current"><a class="reference internal"
+                                                              href="../../../math_theory.html">Theories</a>
+                                <ul class="current">
+                                    <li class="toctree-l3 current"><a class="reference internal"
+                                                                      href="../../../theory_mancosou_2021.html">Mancosou
+                                        2021</a>
+                                        <ul class="current">
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="minimal_logic_m0.html">Minimal logic</a>
+                                            </li>
+                                            <li class="toctree-l4 current"><a class="current reference internal"
+                                                                              href="#">Intuitionistic logic</a></li>
+                                            <li class="toctree-l4"><a class="reference internal"
+                                                                      href="classical_logic_k0.html">Classical logic</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="../../../theory_tao_2006.html">Tao 2006</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../python.html">Python</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../back_matter.html">Back
+                        matter</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+        <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../../../index.html">punctilious</a>
+        </nav>
+
+        <div class="wy-nav-content">
+            <div class="rst-content">
+                <div role="navigation" aria-label="Page navigation">
+                    <ul class="wy-breadcrumbs">
+                        <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+                        <li class="breadcrumb-item"><a href="../../../math.html">Math</a></li>
+                        <li class="breadcrumb-item"><a href="../../../math_theory.html">Math theory</a></li>
+                        <li class="breadcrumb-item"><a href="../../../theory_mancosou_2021.html">Mancosou 2021</a></li>
+                        <li class="breadcrumb-item active">Intuitionistic logic ( <span
+                                class="math notranslate nohighlight">\(J_0\)</span> )
+                        </li>
+                        <li class="wy-breadcrumbs-aside">
+                            <a href="../../../_sources/math/theory/mancosou_2021/intuitionistic_logic_j0.rst.txt"
+                               rel="nofollow"> View page source</a>
+                        </li>
+                    </ul>
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <section id="intuitionistic-logic-j-0">
+                            <span id="theory-mancosou-2021-intuitionistic-logic-j0"></span>
+                            <h1>Intuitionistic logic ( <span class="math notranslate nohighlight">\(J_0\)</span> )<a
+                                    class="headerlink" href="#intuitionistic-logic-j-0"
+                                    title="Permalink to this headline"></a></h1>
+                            <p>This package formalizes <span id="id1">[<a class="reference internal"
+                                                                          href="../../../back_matter/bibliography_back_matter.html#id9"
+                                                                          title="Paolo Mancosu, Sergio Galvan, and Richard Zach. An Introduction to Proof Theory: Normalization, Cut-Elimination, and Consistency Proofs. Oxford University PressOxford, 1 edition, 2021. doi:10.1093/oso/9780192895936.001.0001.">MGZ21</a>, chapter 2.4.2 - Minimal logic]</span>
+                                .</p>
+                            <div class="sphinx-tabs docutils container">
+                                <div aria-label="Tabbed content" class="closeable" role="tablist">
+                                    <button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab"
+                                            id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Unicode
+                                    </button>
+                                    <button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab"
+                                            id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Plaintext
+                                    </button>
+                                </div>
+                                <div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0"
+                                     role="tabpanel" tabindex="0">
+                                    <div class="sphinx-tabs docutils container">
+                                        <div aria-label="Tabbed content" class="closeable" role="tablist">
+                                            <button aria-controls="panel-1-1-0" aria-selected="true"
+                                                    class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab"
+                                                    tabindex="0">Without proofs
+                                            </button>
+                                            <button aria-controls="panel-1-1-1" aria-selected="false"
+                                                    class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab"
+                                                    tabindex="-1">With proofs
+                                            </button>
+                                        </div>
+                                        <div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0"
+                                             name="1-0" role="tabpanel" tabindex="0"><p>The report content.</p>
+                                            <blockquote>
+                                                <div>
+                                                    <div class="highlight-text notranslate">
+                                                        <div class="highlight"><pre><span></span># 𝗧𝗵𝗲𝗼𝗿𝘆 𝗽𝗿𝗼𝗽𝗲𝗿𝘁𝗶𝗲𝘀
+𝗖𝗼𝗻𝘀𝗶𝘀𝘁𝗲𝗻𝗰𝘆: undetermined
+𝗦𝘁𝗮𝗯𝗶𝗹𝗶𝘇𝗲𝗱: False
+𝗘𝘅𝘁𝗲𝗻𝗱𝗲𝗱 𝘁𝗵𝗲𝗼𝗿𝘆: (𝖬₀)
+
+# 𝗦𝗶𝗺𝗽𝗹𝗲-𝗼𝗯𝗷𝗲𝗰𝘁𝘀 𝗱𝗲𝗰𝗹𝗮𝗿𝗮𝘁𝗶𝗼𝗻𝘀
+𝖫𝖾𝗍  𝖻𝖾 𝑠𝑖𝑚𝑝𝑙𝑒-𝑜𝑏𝑗𝑒𝑐𝑡𝑠 𝗂𝗇 𝒰₂.
+
+# 𝗥𝗲𝗹𝗮𝘁𝗶𝗼𝗻𝘀
+𝖫𝖾𝗍 ⌜¬⌝ 𝖻𝖾 𝖺 𝑢𝑛𝑎𝑟𝑦-𝑟𝑒𝑙𝑎𝑡𝑖𝑜𝑛 𝗂𝗇 𝒰₂.
+𝖫𝖾𝗍 ⌜⟹⌝, ⌜∧⌝, ⌜∨⌝ 𝖻𝖾 𝑏𝑖𝑛𝑎𝑟𝑦-𝑟𝑒𝑙𝑎𝑡𝑖𝑜𝑛𝑠 𝗂𝗇 𝒰₂.
+
+# 𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲𝘀
+𝖳𝗁𝖾 𝖿𝗈𝗅𝗅𝗈𝗐𝗂𝗇𝗀 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾𝗌 𝖺𝗋𝖾 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗎𝗇𝖽𝖾𝗋 𝗍𝗁𝗂𝗌 𝗍𝗁𝖾𝗈𝗋𝗒:
+𝖫𝖾𝗍 ⌜𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛⌝ 𝖻𝖾 𝖺𝗇 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝓐, 𝐏 ⊢ 𝐏)⌝ 𝗂𝗇 𝒰₂.
+
+# 𝗧𝗵𝗲𝗼𝗿𝘆 𝗲𝗹𝗮𝗯𝗼𝗿𝗮𝘁𝗶𝗼𝗻 𝘀𝗲𝗾𝘂𝗲𝗻𝗰𝗲
+# 𝟭: 𝗜𝗻𝘁𝘂𝗶𝘁𝗶𝗼𝗻𝗶𝘀𝘁𝗶𝗰 𝗹𝗼𝗴𝗶𝗰
+𝗔𝘅𝗶𝗼𝗺 𝗣𝗟𝟭𝟭 (𝖩₀.𝖯𝖫₁): 𝖫𝖾𝗍 𝑎𝑥𝑖𝑜𝑚 𝖯𝖫₁₁ ⌜¬𝐴 ⊃ (𝐴 ⊃ 𝐵)⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 (𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽) 𝗂𝗇 𝖩₀.
+𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝓐, 𝐏 ⊢ 𝐏)⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝖩₀.
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝖩₀.𝑃₁₁): (¬(𝐀) ⟹ (𝐀 ⟹ 𝐁)).
+</pre>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </blockquote>
+                                        </div>
+                                        <div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true"
+                                             id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><p>The report
+                                            content.</p>
+                                            <blockquote>
+                                                <div>
+                                                    <div class="highlight-text notranslate">
+                                                        <div class="highlight"><pre><span></span># 𝗧𝗵𝗲𝗼𝗿𝘆 𝗽𝗿𝗼𝗽𝗲𝗿𝘁𝗶𝗲𝘀
+𝗖𝗼𝗻𝘀𝗶𝘀𝘁𝗲𝗻𝗰𝘆: undetermined
+𝗦𝘁𝗮𝗯𝗶𝗹𝗶𝘇𝗲𝗱: False
+𝗘𝘅𝘁𝗲𝗻𝗱𝗲𝗱 𝘁𝗵𝗲𝗼𝗿𝘆: (𝖬₀)
+
+# 𝗦𝗶𝗺𝗽𝗹𝗲-𝗼𝗯𝗷𝗲𝗰𝘁𝘀 𝗱𝗲𝗰𝗹𝗮𝗿𝗮𝘁𝗶𝗼𝗻𝘀
+𝖫𝖾𝗍  𝖻𝖾 𝑠𝑖𝑚𝑝𝑙𝑒-𝑜𝑏𝑗𝑒𝑐𝑡𝑠 𝗂𝗇 𝒰₂.
+
+# 𝗥𝗲𝗹𝗮𝘁𝗶𝗼𝗻𝘀
+𝖫𝖾𝗍 ⌜¬⌝ 𝖻𝖾 𝖺 𝑢𝑛𝑎𝑟𝑦-𝑟𝑒𝑙𝑎𝑡𝑖𝑜𝑛 𝗂𝗇 𝒰₂.
+𝖫𝖾𝗍 ⌜⟹⌝, ⌜∧⌝, ⌜∨⌝ 𝖻𝖾 𝑏𝑖𝑛𝑎𝑟𝑦-𝑟𝑒𝑙𝑎𝑡𝑖𝑜𝑛𝑠 𝗂𝗇 𝒰₂.
+
+# 𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲𝘀
+𝖳𝗁𝖾 𝖿𝗈𝗅𝗅𝗈𝗐𝗂𝗇𝗀 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾𝗌 𝖺𝗋𝖾 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗎𝗇𝖽𝖾𝗋 𝗍𝗁𝗂𝗌 𝗍𝗁𝖾𝗈𝗋𝗒:
+𝖫𝖾𝗍 ⌜𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛⌝ 𝖻𝖾 𝖺𝗇 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝓐, 𝐏 ⊢ 𝐏)⌝ 𝗂𝗇 𝒰₂.
+
+# 𝗧𝗵𝗲𝗼𝗿𝘆 𝗲𝗹𝗮𝗯𝗼𝗿𝗮𝘁𝗶𝗼𝗻 𝘀𝗲𝗾𝘂𝗲𝗻𝗰𝗲
+# 𝟭: 𝗜𝗻𝘁𝘂𝗶𝘁𝗶𝗼𝗻𝗶𝘀𝘁𝗶𝗰 𝗹𝗼𝗴𝗶𝗰
+𝗔𝘅𝗶𝗼𝗺 𝗣𝗟𝟭𝟭 (𝖩₀.𝖯𝖫₁): 𝖫𝖾𝗍 𝑎𝑥𝑖𝑜𝑚 𝖯𝖫₁₁ ⌜¬𝐴 ⊃ (𝐴 ⊃ 𝐵)⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 (𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽) 𝗂𝗇 𝖩₀.
+𝗜𝗻𝗳𝗲𝗿𝗲𝗻𝗰𝗲 𝗿𝘂𝗹𝗲 (𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛): 𝖫𝖾𝗍 𝑖𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒-𝑟𝑢𝑙𝑒 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝖽𝖾𝖿𝗂𝗇𝖾𝖽 𝖺𝗌 ⌜(𝓐, 𝐏 ⊢ 𝐏)⌝ 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝖺𝗇𝖽 𝖼𝗈𝗇𝗌𝗂𝖽𝖾𝗋𝖾𝖽 𝗏𝖺𝗅𝗂𝖽 𝗂𝗇 𝖩₀.
+𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (𝖩₀.𝑃₁₁): (¬(𝐀) ⟹ (𝐀 ⟹ 𝐁)). 𝗣𝗿𝗼𝗼𝗳: ⌜¬𝐴 ⊃ (𝐴 ⊃ 𝐵)⌝ 𝗂𝗌 𝗉𝗈𝗌𝗍𝗎𝗅𝖺𝗍𝖾𝖽 𝖻𝗒 𝗮𝘅𝗶𝗼𝗺 𝗣𝗟𝟭𝟭 (𝖯𝖫₁). (¬(𝐀) ⟹ (𝐀 ⟹ 𝐁)) 𝗂𝗌 𝖺 𝗉𝗋𝗈𝗉𝗈𝗌𝗂𝗍𝗂𝗈𝗇𝖺𝗅 𝖿𝗈𝗋𝗆𝗎𝗅𝖺 𝗂𝗇𝗍𝖾𝗋𝗉𝗋𝖾𝗍𝖾𝖽 𝖿𝗋𝗈𝗆 𝗍𝗁𝖺𝗍 𝖺𝗑𝗂𝗈𝗆. 𝖳𝗁𝖾𝗋𝖾𝖿𝗈𝗋𝖾, 𝖻𝗒 𝗍𝗁𝖾 𝑎𝑥𝑖𝑜𝑚-𝑖𝑛𝑡𝑒𝑟𝑝𝑟𝑒𝑡𝑎𝑡𝑖𝑜𝑛 𝗂𝗇𝖿𝖾𝗋𝖾𝗇𝖼𝖾 𝗋𝗎𝗅𝖾: (𝓐, 𝐏 ⊢ 𝐏), 𝗂𝗍 𝖿𝗈𝗅𝗅𝗈𝗐𝗌 𝗍𝗁𝖺𝗍 (¬(𝐀) ⟹ (𝐀 ⟹ 𝐁)). ∎
+</pre>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </blockquote>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true"
+                                     id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0">
+                                    <div class="sphinx-tabs docutils container">
+                                        <div aria-label="Tabbed content" class="closeable" role="tablist">
+                                            <button aria-controls="panel-2-2-0" aria-selected="true"
+                                                    class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab"
+                                                    tabindex="0">Without proofs
+                                            </button>
+                                            <button aria-controls="panel-2-2-1" aria-selected="false"
+                                                    class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab"
+                                                    tabindex="-1">With proofs
+                                            </button>
+                                        </div>
+                                        <div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0"
+                                             name="2-0" role="tabpanel" tabindex="0"><p>The report content.</p>
+                                            <blockquote>
+                                                <div>
+                                                    <div class="highlight-text notranslate">
+                                                        <div class="highlight"><pre><span></span># Theory properties
+Consistency: undetermined
+Stabilized: False
+Extended theory: (𝖬₀)
+
+# Simple-objects declarations
+Let  be simple-objects in U2.
+
+# Relations
+Let &quot;not&quot; be a unary-relation in U2.
+Let &quot;==&gt;&quot;, &quot;and&quot;, &quot;or&quot; be binary-relations in U2.
+
+# Inference rules
+The following inference rules are considered valid under this theory:
+Let &quot;axiom-interpretation&quot; be an inference-rule defined as &quot;(A, P |- P)&quot; in U2.
+
+# Theory elaboration sequence
+# 1: Intuitionistic logic
+Axiom PL11 (J0.PL1): Let axiom PL11 &quot;!A  (A  B)&quot; be included (postulated) in J0.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as &quot;(A, P |- P)&quot; be included and considered valid in J0.
+Proposition (J0.P11): (not(A) ==&gt; (A ==&gt; B)).
+</pre>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </blockquote>
+                                        </div>
+                                        <div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true"
+                                             id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><p>The report
+                                            content.</p>
+                                            <blockquote>
+                                                <div>
+                                                    <div class="highlight-text notranslate">
+                                                        <div class="highlight"><pre><span></span># Theory properties
+Consistency: undetermined
+Stabilized: False
+Extended theory: (𝖬₀)
+
+# Simple-objects declarations
+Let  be simple-objects in U2.
+
+# Relations
+Let &quot;not&quot; be a unary-relation in U2.
+Let &quot;==&gt;&quot;, &quot;and&quot;, &quot;or&quot; be binary-relations in U2.
+
+# Inference rules
+The following inference rules are considered valid under this theory:
+Let &quot;axiom-interpretation&quot; be an inference-rule defined as &quot;(A, P |- P)&quot; in U2.
+
+# Theory elaboration sequence
+# 1: Intuitionistic logic
+Axiom PL11 (J0.PL1): Let axiom PL11 &quot;!A  (A  B)&quot; be included (postulated) in J0.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as &quot;(A, P |- P)&quot; be included and considered valid in J0.
+Proposition (J0.P11): (not(A) ==&gt; (A ==&gt; B)). Proof: &quot;!A  (A  B)&quot; is postulated by axiom PL11 (PL1). (not(A) ==&gt; (A ==&gt; B)) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that (not(A) ==&gt; (A ==&gt; B)). QED
+</pre>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </blockquote>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+
+                    </div>
+                </div>
+                <footer>
+                    <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+                        <a href="minimal_logic_m0.html" class="btn btn-neutral float-left"
+                           title="Minimal logic ( \(M_0\) )" accesskey="p" rel="prev"><span
+                                class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+                        <a href="classical_logic_k0.html" class="btn btn-neutral float-right"
+                           title="Classical logic ( \(K_0\) )" accesskey="n" rel="next">Next <span
+                                class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+                    </div>
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>&#169; Copyright 2023, David Doret.</p>
+                    </div>
+
+                    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+                    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+                    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+                </footer>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(false);
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+
+
+# Theory properties
+Consistency: undetermined
+Stabilized: False
+Extended theory: (𝖩₀)
+
+# Simple-objects declarations
+Let  be simple-objects in U3.
+
+# Relations
+Let "not" be a unary-relation in U3.
+Let "==>", "and", "or" be binary-relations in U3.
+
+# Inference rules
+The following inference rules are considered valid under this theory:
+Let "axiom-interpretation" be an inference-rule defined as "(A, P |- P)" in U3.
+
+# Theory elaboration sequence
+# 1: Classical logic
+Axiom PL12 (K0.PL1): Let axiom PL12 "!!A  A" be included (postulated) in K0.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A, P |- P)" be included and considered valid in K0.
+Proposition (K0.P12): (not(not(A)) ==> A).
