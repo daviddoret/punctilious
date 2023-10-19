@@ -18,6 +18,11 @@ class Tao2006ThePeanoAxioms(pu.Package):
         u = self.u
         t = self.t
 
+        # Naming conventions in Tao06
+        t = self.u.declare_theory(dashed_name='peano-axioms', name='the Peano axioms',
+            explicit_name='the Peano axioms [Tao06]')
+        self.t = t
+
         section_2 = t.open_section('The natural numbers', section_number=2)
         section_2_1 = t.open_section('The Peano axioms', section_parent=section_2)
 

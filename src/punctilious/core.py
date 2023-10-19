@@ -1612,7 +1612,7 @@ class NameSet(Composable):
         rep = ComposableBlockSequence()
         rep.append(conventional)
         if conventional != sym:
-            rep.append('(')
+            rep.append(' (')
             rep.append(sym)
             rep.append(')')
         if not compose:

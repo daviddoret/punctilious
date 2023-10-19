@@ -3,7 +3,7 @@
 # Theory properties
 Consistency: undetermined
 Stabilized: False
-Extended theory: (𝖩₀)
+Extended theory: 𝗂𝗇𝗍𝗎𝗂𝗍𝗂𝗈𝗇𝗂𝗌𝗍𝗂𝖼 𝗅𝗈𝗀𝗂𝖼 (𝖩₀)
 
 # Simple-objects declarations
 Let  be simple-objects in U3.
