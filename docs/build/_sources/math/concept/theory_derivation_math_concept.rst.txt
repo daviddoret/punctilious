@@ -6,7 +6,7 @@ theory-derivation
 Definition
 ----------
 
-A *theory-derivation* is a tuple :math:`\left\( \boldsymbol{I}, \boldsymbol{\Phi} \right\)`
+A *theory-derivation* is a tuple :math:`\left( \boldsymbol{I}, \boldsymbol{\Phi} \right)`
 
 Where:
 
