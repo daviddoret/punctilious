@@ -1,12 +1,12 @@
-.. _theory_elaboration_sequence_math_concept:
+.. _theory_derivation_math_concept:
 
-theory-elaboration-sequence
+theory-derivation
 ===========================
 
 Definition
 ----------
 
-A *theory-elaboration-sequence* is a tuple:
+A *theory-derivation* is a tuple:
 
 (U, S)
 

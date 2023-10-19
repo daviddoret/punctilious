@@ -15,14 +15,14 @@ This package formalizes :cite:`mgz_2021_introductionprooftheory{chapter 2.4.2 - 
 
             The report content.
 
-               .. literalinclude :: ../../../../../data/report_mancosou_2021_intuitionistic_logic_j0_noproof_enus_unicode.txt
+               .. literalinclude :: ../../../../../data/report_mgz_2021_intuitionistic_logic_j0_noproof_enus_unicode.txt
                   :language: text
 
          .. tab:: With proofs
 
             The report content.
 
-               .. literalinclude :: ../../../../../data/report_mancosou_2021_intuitionistic_logic_j0_proof_enus_unicode.txt
+               .. literalinclude :: ../../../../../data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_unicode.txt
                   :language: text
 
    .. tab:: Plaintext
@@ -33,14 +33,14 @@ This package formalizes :cite:`mgz_2021_introductionprooftheory{chapter 2.4.2 - 
 
             The report content.
 
-               .. literalinclude :: ../../../../../data/report_mancosou_2021_intuitionistic_logic_j0_noproof_enus_plaintext.txt
+               .. literalinclude :: ../../../../../data/report_mgz_2021_intuitionistic_logic_j0_noproof_enus_plaintext.txt
                   :language: text
 
          .. tab:: With proofs
 
             The report content.
 
-               .. literalinclude :: ../../../../../data/report_mancosou_2021_intuitionistic_logic_j0_proof_enus_plaintext.txt
+               .. literalinclude :: ../../../../../data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_plaintext.txt
                   :language: text
 
 

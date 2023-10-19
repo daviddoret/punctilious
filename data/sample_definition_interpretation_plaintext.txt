@@ -19,7 +19,7 @@ proposition_of_interest = t1.i.definition_interpretation.infer_formula_statement
 
 Let "U19" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U19.
+Let "T1" be a theory-derivation in U19.
 
 Definition (T1.D1): Let definition D1 "Dummy definition for demonstration purposes" be included (postulated) in T1.
 

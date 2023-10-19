@@ -22,7 +22,7 @@ proposition_of_interest = t1.i.variable_substitution.infer_formula_statement(p=i
 
 Let "U73" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U73.
+Let "T1" be a theory-derivation in U73.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom to establish some ground propositions." be included (postulated) in T1.
 

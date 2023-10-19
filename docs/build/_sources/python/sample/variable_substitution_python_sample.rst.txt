@@ -14,19 +14,19 @@ variable-substitution (python sample)
 .. seealso::
    :ref:`math concept<variable_substitution_math_inference_rule>` | :ref:`python declaration class<variable_substitution_declaration_python_class>` | :ref:`python inclusion class<variable_substitution_inclusion_python_class>`
 
-This page shows how to infer new statements in a theory-elaboration-sequence by applying the :ref:`variable-substitution<variable_substitution_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>`.
+This page shows how to infer new statements in a theory-derivation by applying the :ref:`variable-substitution<variable_substitution_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>`.
 
 Usage
 ----------------------
 
-Call the :python:`infer_statement` method from the inference-rule inclusion class listed in the :python:`i` (unabridged :python:`inference_rules` ) property of the :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` :
+Call the :python:`infer_statement` method from the inference-rule inclusion class listed in the :python:`i` (unabridged :python:`inference_rules` ) property of the :ref:`theory-derivation<theory_derivation_math_concept>` :
 
 .. code-block:: python
 
    u = pu.create_universe()
    t = u.t()
    ...
-   # some theory elaboration code
+   # some theory derivation code
    ...
    t.i.variable_substitution.infer_statement(...)
 

@@ -11,7 +11,7 @@ inferred-statement
 Definition
 ----------
 
-An *inferred-statement* is a propositional `statement<statement_math_concept>` that has been derived from an `inference-rule<inference_rule_math_concept>` in a `theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`.
+An *inferred-statement* is a propositional `statement<statement_math_concept>` that has been derived from an `inference-rule<inference_rule_math_concept>` in a `theory-derivation<theory_derivation_math_concept>`.
 
 Quotes
 ------

@@ -11,7 +11,7 @@ t1 = u.t(echo=True)
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
 
-# t theory elaboration statements.
+# t theory derivation statements.
 # these are predecessor statements that are contained in the h hypothesis.
 a = t1.include_axiom(a=a1)
 predecessor = t1.i.axiom_interpretation.infer_formula_statement(a=a, p=f(o2, o3), lock=False)
@@ -23,7 +23,7 @@ t1.take_note(
     content='Until this point, statements are predecessors to the hypothesis, and they are contained in the (coming) h hypothesis.')
 
 # Pose some hypothesis and infer some statement that we couldn't infer otherwise
-# h theory elaboration statements.
+# h theory derivation statements.
 h = t1.pose_hypothesis(hypothesis_formula=f(o1, o2), subtitle='Pose some hypothesis')
 conjunction_introduction = h.child_theory.i.conjunction_introduction.infer_formula_statement(
     p=f(o1, o2), q=f(o2, o3))

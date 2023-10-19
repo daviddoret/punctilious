@@ -49,13 +49,13 @@ src/sample/sample_proof_by_contradiction_1.py
 src/sample/sample_proof_by_contradiction_2.py
 src/sample/sample_proof_by_refutation_1.py
 src/sample/sample_proof_by_refutation_2.py
+src/sample/sample_sandbox.py
 src/sample/sample_variable_substitution.py
 src/theory/__init__.py
-src/theory/classical_propositional_logic.py
 src/theory/punctilious_2023_metatheory.py
 src/theory/theory_mgz_2021_classical_logic_j0.py
 src/theory/theory_mgz_2021_intuitionistic_logic_j0.py
-src/theory/theory_mancosou_2021_minimal_logic_m0.py
+src/theory/theory_mgz_2021_minimal_logic_m0.py
 src/theory/theory_tao_2006_the_peano_axioms.py
 tests/test_absorption.py
 tests/test_auto_index.py
@@ -115,8 +115,8 @@ tests/test_subscriptify.py
 tests/test_tao_2006_the_peano_axioms.py
 tests/test_text.py
 tests/test_theoretical_objct.py
-tests/test_theory_elaboration_sequence.py
-tests/test_theory_elaboration_stabilized.py
+tests/test_theory_derivation.py
+tests/test_theory_derivation_stabilized.py
 tests/test_theory_extension.py
 tests/test_universe_of_discourse.py
 tests/test_universe_of_discourse_inference_rules.py

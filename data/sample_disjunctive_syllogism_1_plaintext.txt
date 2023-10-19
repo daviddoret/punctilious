@@ -22,7 +22,7 @@ proposition_of_interest = t1.i.disjunctive_syllogism_1.infer_formula_statement(p
 
 Let "U29" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U29.
+Let "T1" be a theory-derivation in U29.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 

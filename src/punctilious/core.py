@@ -49,8 +49,8 @@ class ErrorCodes:
             'Inadequate universe-of-discourse parameter')
         """A parameter was passed to a python function requiring a universe-of-discourse (UniverseOfDiscourse), but None or an instance of a non-supported class was received."""
         self.error_005_inadequate_theory_parameter = ErrorCode(4,
-            'Inadequate theory-elaboration-sequence parameter')
-        """A parameter was passed to a python function requiring a theory-elaboration-sequence (TheoryElaborationSequence), but None or an instance of a non-supported class was received."""
+            'Inadequate theory-derivation parameter')
+        """A parameter was passed to a python function requiring a theory-derivation (TheoryElaborationSequence), but None or an instance of a non-supported class was received."""
 
 
 error_codes = ErrorCodes()
@@ -3070,8 +3070,8 @@ class ParagraphHeaders(repm.ValueName):
     proposition = ParagraphHeader('proposition', 's', 'proposition', 'prop.')
     relation_declaration = ParagraphHeader('relation_declaration', 's', 'proposition', 'prop.')
     theorem = ParagraphHeader('theorem', 's', 'theorem', 'thrm.')
-    theory_derivation = ParagraphHeader('theory_elaboration_sequence', 't',
-        'theory elaboration sequence', 'theo.')
+    theory_derivation = ParagraphHeader('theory_derivation', 't', 'theory derivation sequence',
+        'theo.')
     informal_definition = ParagraphHeader('informal definition',
         StyledText(plaintext='note', unicode='🗅'), 'informal definition', 'inf. def.')
     comment = ParagraphHeader('comment', StyledText(plaintext='note', unicode='🗅'), 'comment',
@@ -3159,14 +3159,14 @@ class Statement(TheoreticalObject):
 
     @property
     def t(self) -> TheoryDerivation:
-        """The theory-elaboration-sequence that contains this statement.
+        """The theory-derivation that contains this statement.
 
         Unabridged property: statement.theory"""
         return self.theory
 
     @property
     def theory(self) -> TheoryDerivation:
-        """The theory-elaboration-sequence that contains this statement.
+        """The theory-derivation that contains this statement.
 
         Abridged property: s.t
 
@@ -3273,7 +3273,7 @@ class AxiomDeclaration(TheoreticalObject):
 
 
 class AxiomInclusion(Statement):
-    """This python class models the inclusion of an :ref:`axiom<axiom_math_concept>` as a valid in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of an :ref:`axiom<axiom_math_concept>` as a valid in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, a: AxiomDeclaration, t: TheoryDerivation,
@@ -3340,7 +3340,7 @@ class AxiomInclusion(Statement):
     def locked(self) -> bool:
         """When an axiom or definition is locked, the usage of the axiom-interpretation, respectively the definition-interpretation, inference-rule is no longer authorized on that axiom.
 
-        A theory author should lock axioms and definitions once all axiom-interpretations, respectively definition-interpretations, have been derived from them. This protects the theory-elaboration-sequence from the introduction of inconsistent statements.
+        A theory author should lock axioms and definitions once all axiom-interpretations, respectively definition-interpretations, have been derived from them. This protects the theory-derivation from the introduction of inconsistent statements.
 
         A theory author is of course free to unlock axiom-inclusions, the goal of this feature is not to make it technically impossible to re-interpret axioms and definitions, but rather to act as a strong reminder and prevent mistakes.
         """
@@ -3355,7 +3355,7 @@ class AxiomInclusion(Statement):
 
 
 class InferenceRuleInclusion(Statement):
-    """This python abstract class models the :ref:`inclusion<object_inclusion_math_concept>` of an :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`.
+    """This python abstract class models the :ref:`inclusion<object_inclusion_math_concept>` of an :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>`.
 
     """
 
@@ -3546,7 +3546,7 @@ class DefinitionDeclaration(TheoreticalObject):
 
 
 class DefinitionInclusion(Statement):
-    """This python class models the inclusion of a :ref:`definition<definition_math_concept>` as a valid in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of a :ref:`definition<definition_math_concept>` as a valid in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, d: DefinitionDeclaration, t: TheoryDerivation,
@@ -3599,7 +3599,7 @@ class DefinitionInclusion(Statement):
     def locked(self) -> bool:
         """When an axiom or definition is locked, the usage of the axiom-interpretation, respectively the definition-interpretation, inference-rule is no longer authorized on that axiom.
 
-        A theory author should lock axioms and definitions once all axiom-interpretations, respectively definition-interpretations, have been derived from them. This protects the theory-elaboration-sequence from the introduction of inconsistent statements.
+        A theory author should lock axioms and definitions once all axiom-interpretations, respectively definition-interpretations, have been derived from them. This protects the theory-derivation from the introduction of inconsistent statements.
 
         A theory author is of course free to unlock axiom-inclusions, the goal of this feature is not to make it technically impossible to re-interpret axioms and definitions, but rather to act as a strong reminder and prevent mistakes.
         """
@@ -4215,7 +4215,7 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
     Acronym: cer.
 
     :param p_land_q: A formula-statement of the form: (P ⋀ Q).
-    :param t: The current theory-elaboration-sequence.
+    :param t: The current theory-derivation.
     :return: The (proven) formula: Q.
     """
 
@@ -4751,7 +4751,7 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
     Acronym: cer.
 
     :param p_land_q: A formula-statement of the form: (P ⋀ Q).
-    :param t: The current theory-elaboration-sequence.
+    :param t: The current theory-derivation.
     :return: The (proven) formula: Q.
     """
 
@@ -5019,8 +5019,8 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
             msg=f'The formula argument ⌜p⌝({p}) is not syntaxically-equivalent to the ⌜p⌝({p__in__not_p}) in the formula argument ⌜not_q⌝({not_p})',
             raise_exception=True, error_code=error_code)
         verify(assertion=isinstance(t, TheoryDerivation),
-            msg=f'The argument ⌜t⌝({t}) is not a theory-elaboration-sequence.',
-            raise_exception=True, error_code=error_code)
+            msg=f'The argument ⌜t⌝({t}) is not a theory-derivation.', raise_exception=True,
+            error_code=error_code)
         output: Formula = self.u.r.inc(t)
         return output
 
@@ -5085,8 +5085,8 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
             msg=f'The ⌜y⌝({y__in__x_equal_y}) in the formula argument ⌜x_equal_y⌝({x_equal_y}) is not syntaxically-equivalent to the ⌜y⌝({y__in__x_unequal_y}) in the formula argument ⌜y_unequal_y⌝({x_unequal_y})',
             raise_exception=True, error_code=error_code)
         verify(assertion=isinstance(t, TheoryDerivation),
-            msg=f'The argument ⌜t⌝({t}) is not a theory-elaboration-sequence.',
-            raise_exception=True, error_code=error_code)
+            msg=f'The argument ⌜t⌝({t}) is not a theory-derivation.', raise_exception=True,
+            error_code=error_code)
         output: Formula = self.u.r.inc(t)
         return output
 
@@ -5129,8 +5129,8 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
             raise_exception=True, error_code=error_code)
         x_unequal_x: Formula
         verify(assertion=isinstance(t, TheoryDerivation),
-            msg=f'The argument ⌜t⌝({t}) is not a theory-elaboration-sequence.',
-            raise_exception=True, error_code=error_code)
+            msg=f'The argument ⌜t⌝({t}) is not a theory-derivation.', raise_exception=True,
+            error_code=error_code)
         output: Formula = self.u.r.inc(t)
         return output
 
@@ -5285,7 +5285,7 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
             error_code=error_code)
         h__in__inc_h: Formula = inc_h.parameters[0]
         verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
-            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-elaboration-sequence. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
+            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
@@ -5342,7 +5342,7 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
             error_code=error_code)
         h__in__inc_h: Formula = inc_h.parameters[0]
         verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
-            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-elaboration-sequence. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
+            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
@@ -5398,7 +5398,7 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
             error_code=error_code)
         h__in__inc_h: Formula = inc_h.parameters[0]
         verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
-            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-elaboration-sequence. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
+            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
@@ -5408,7 +5408,7 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
 
 
 class ProofByRefutation2Declaration(InferenceRuleDeclaration):
-    """This python class models the inclusion of :ref:`proof-by-refutation-2<proof_by_refutation_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`proof-by-refutation-2<proof_by_refutation_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     class Premises(typing.NamedTuple):
@@ -5457,7 +5457,7 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
             error_code=error_code)
         h__in__inc_h: Formula = inc_h.parameters[0]
         verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
-            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-elaboration-sequence. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
+            msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
@@ -5629,9 +5629,9 @@ section_category = ParagraphHeader(name='section', symbol_base='§', natural_nam
 
 
 class Section(AtheoreticalStatement):
-    """A (leveled) section in a theory-elaboration-sequence.
+    """A (leveled) section in a theory-derivation.
 
-    Sections allow to organize / structure (lengthy) theory-elaboration-sequences
+    Sections allow to organize / structure (lengthy) theory-derivations
     to improve readability.
 
     """
@@ -5798,7 +5798,7 @@ class TheoryDerivation(TheoreticalObject):
 
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
-        yield SerifItalic(plaintext='theory-elaboration-sequence')
+        yield SerifItalic(plaintext='theory-derivation')
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
         Composable, Composable, bool]:
@@ -5899,7 +5899,7 @@ theory-elaboration."""
 
     @property
     def is_strictly_propositional(self) -> bool:
-        """By definition, a theory-elaboration-sequence is not a propositional object."""
+        """By definition, a theory-derivation is not a propositional object."""
         return False
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
@@ -5946,7 +5946,7 @@ theory-elaboration."""
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             paragraph_header: (None, ParagraphHeader) = None,
             echo: (None, bool) = None) -> AxiomInclusion:
-        """Include an axiom in this theory-elaboration-sequence."""
+        """Include an axiom in this theory-derivation."""
         return AxiomInclusion(a=a, t=self, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, ref=ref, subtitle=subtitle,
@@ -5959,7 +5959,7 @@ theory-elaboration."""
             explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None) -> DefinitionInclusion:
-        """Include a definition in this theory-elaboration-sequence."""
+        """Include a definition in this theory-derivation."""
         return DefinitionInclusion(d=d, t=self, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
@@ -6081,7 +6081,7 @@ theory-elaboration."""
     def open_section(self, section_title: str, section_number: (None, int) = None,
             section_parent: (None, Section) = None, numbering: (None, bool) = None,
             echo: (None, bool) = None) -> Section:
-        """Open a new section in the current theory-elaboration-sequence."""
+        """Open a new section in the current theory-derivation."""
         return Section(section_title=section_title, section_number=section_number,
             section_parent=section_parent, numbering=numbering, t=self, echo=echo)
 
@@ -6609,11 +6609,11 @@ class RelationDict(collections.UserDict):
 
     @property
     def formulates(self):
-        """a meta-theory relation stating that an hypothesis theory-elaboration-sequence H formulates an hypothesis propositional formula P, and only P.
+        """a meta-theory relation stating that an hypothesis theory-derivation H formulates an hypothesis propositional formula P, and only P.
 
         H formulate P
         where:
-        H is an hypothesis theory-elaboration-sequence,
+        H is an hypothesis theory-derivation,
         P is the formulated hypothesis of H
 
         H formulate P is True if and only if P is the (only) formulated hypothesis of H
@@ -6673,7 +6673,7 @@ class RelationDict(collections.UserDict):
         """The well-known (theory-)inconsistent relation.
 
         By convention:
-        - inc(T) means that theory-elaboration-sequence T is inconsistent.
+        - inc(T) means that theory-derivation T is inconsistent.
 
         Abridged property: u.r.inc
 
@@ -6906,7 +6906,7 @@ def verify_axiom_inclusion(t: TheoryDerivation, input_value: FlexibleAxiom, arg:
     elif isinstance(input_value, AxiomDeclaration):
         # TODO: Find if there is an inclusion for that axiom in t.
         raise NotImplementedError(
-            'This is an axiom-declaration, not an axiom-inclusion. Punctilious enhancement to be considered for future development: automatically check if an axiom-inclusion is present in the current theory-elaboration-sequence for that axiom-declaration.')
+            'This is an axiom-declaration, not an axiom-inclusion. Punctilious enhancement to be considered for future development: automatically check if an axiom-inclusion is present in the current theory-derivation for that axiom-declaration.')
     elif isinstance(input_value, str):
         # Assume the string is the axiom expressed in natural language.
         # TODO: Find the matching axiom from u.
@@ -7127,7 +7127,7 @@ def verify_formula_statement(t: TheoryDerivation, input_value: FlexibleFormula,
             formula=input_value)
         formula_ok, msg = verify(raise_exception=raise_exception, error_code=error_code,
             assertion=formula_statement is not None,
-            msg=f'The formula ⌜{formula}⌝ passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not a formula-statement in theory-elaboration-sequence ⌜{t}⌝.',
+            msg=f'The formula ⌜{formula}⌝ passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not a formula-statement in theory-derivation ⌜{t}⌝.',
             formula=formula, t=t)
         if not formula_ok:
             return formula_ok, None, msg
@@ -7135,7 +7135,7 @@ def verify_formula_statement(t: TheoryDerivation, input_value: FlexibleFormula,
     # At this point we have a properly typed FormulaStatement.
     formula_ok, msg = verify(raise_exception=raise_exception, error_code=error_code,
         assertion=t.contains_theoretical_objct(formula_statement),
-        msg=f'The formula-statement {formula_statement} passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not contained in the theory-elaboration-sequence ⌜{t}⌝.',
+        msg=f'The formula-statement {formula_statement} passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not contained in the theory-derivation ⌜{t}⌝.',
         formula=formula, t=t)
     if not formula_ok:
         return formula_ok, None, msg
@@ -7165,11 +7165,11 @@ def verify_hypothesis(t: TheoryDerivation, input_value: FlexibleFormula, arg: (N
     hypothesis: Hypothesis = input_value
     verify(raise_exception=raise_exception, error_code=error_code,
         assertion=t.contains_theoretical_objct(hypothesis),
-        msg=f'The hypothesis ⌜{arg}⌝⌜({hypothesis}) is not contained in theory-elaboration-sequence ⌜t⌝({t}).',
+        msg=f'The hypothesis ⌜{arg}⌝⌜({hypothesis}) is not contained in theory-derivation ⌜t⌝({t}).',
         arg=arg, hypothesis=hypothesis, t=t, u=u)
     verify(raise_exception=raise_exception, error_code=error_code,
         assertion=hypothesis.hypothesis_child_theory.extended_theory is t,
-        msg=f'The hypothesis ⌜{arg}⌝⌜({hypothesis}) does not extend theory-elaboration-sequence ⌜t⌝({t}).',
+        msg=f'The hypothesis ⌜{arg}⌝⌜({hypothesis}) does not extend theory-derivation ⌜t⌝({t}).',
         arg=arg, hypothesis=hypothesis, t=t, u=u)
     verify_formula(u=u, input_value=hypothesis.hypothesis_formula, arg='{arg}.hypothesis_formula',
         form=hypothesis_form, mask=hypothesis_mask,
@@ -7212,7 +7212,7 @@ def verify_universe_of_discourse(input_value: (None, FlexibleFormula), arg: str,
 def verify_theory_derivation(input_value: (None, FlexibleFormula), arg: str,
         raise_exception: bool = True, error_code: (None, ErrorCode, frozenset[ErrorCode]) = None) -> \
         tuple[bool, (None, DefinitionInclusion), (None, str)]:
-    """A data-validation function that verifies the adequacy of a theory-elaboration-sequence mandatory parameter."""
+    """A data-validation function that verifies the adequacy of a theory-derivation mandatory parameter."""
     ok: bool = True
     msg: (None, str)
     error_code: frozenset[ErrorCode] = complement_error(context=error_code,
@@ -7567,7 +7567,7 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
 
 
 class AbsorptionInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`absorption<absorption_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`absorption<absorption_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -7627,7 +7627,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
 
 
 class AxiomInterpretationInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`axiom-interpretation<axiom_interpretation_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`axiom-interpretation<axiom_interpretation_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
 
     Inherits from :ref:`InferenceRuleInclusion<inference_rule_inclusion_python_class>` .
     """
@@ -7712,7 +7712,7 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
 
 
 class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`biconditional-elimination-1<biconditional_elimination_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`biconditional-elimination-1<biconditional_elimination_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -7775,7 +7775,7 @@ class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
 
 
 class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`biconditional-elimination-2<biconditional_elimination_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`biconditional-elimination-2<biconditional_elimination_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -7838,7 +7838,7 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
 
 
 class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`biconditional-introduction<biconditional_introduction_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`biconditional-introduction<biconditional_introduction_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -7907,7 +7907,7 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
 
 
 class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`conjunction-elimination-1<conjunction_elimination_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`conjunction-elimination-1<conjunction_elimination_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -7965,7 +7965,7 @@ class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
 
 
 class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`conjunction-elimination-2<conjunction_elimination_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`conjunction-elimination-2<conjunction_elimination_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8023,7 +8023,7 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
 
 
 class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`conjunction-introduction<conjunction_introduction_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`conjunction-introduction<conjunction_introduction_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8083,7 +8083,7 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
 
 
 class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`constructive-dilemma<constructive_dilemma_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`constructive-dilemma<constructive_dilemma_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8155,7 +8155,7 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
 
 
 class DefinitionInterpretationInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`definition-interpretation<definition_interpretation_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`definition-interpretation<definition_interpretation_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
 
     Inherits from :ref:`InferenceRuleInclusion<inference_rule_inclusion_python_class>` .
     """
@@ -8242,7 +8242,7 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
 
 
 class DestructiveDilemmaInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`destructive-dilemma<destructive_dilemma_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`destructive-dilemma<destructive_dilemma_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8316,7 +8316,7 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
 
 
 class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`disjunction-introduction-1<disjunction_introduction_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`disjunction-introduction-1<disjunction_introduction_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8376,7 +8376,7 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
 
 
 class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`disjunction-introduction-2<disjunction_introduction_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`disjunction-introduction-2<disjunction_introduction_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8436,7 +8436,7 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
 
 
 class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`disjunctive-resolution<disjunctive_resolution_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`disjunctive-resolution<disjunctive_resolution_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8500,7 +8500,7 @@ class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
 
 
 class DisjunctiveSyllogism1Inclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`disjunctive-syllogism-1<disjunctive_syllogism_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`disjunctive-syllogism-1<disjunctive_syllogism_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8564,7 +8564,7 @@ class DisjunctiveSyllogism1Inclusion(InferenceRuleInclusion):
 
 
 class DisjunctiveSyllogism2Inclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`disjunctive-syllogism-1<disjunctive_syllogism_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`disjunctive-syllogism-1<disjunctive_syllogism_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8628,7 +8628,7 @@ class DisjunctiveSyllogism2Inclusion(InferenceRuleInclusion):
 
 
 class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`double-negation-elimination<double_negation_elimination_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`double-negation-elimination<double_negation_elimination_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8687,7 +8687,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
 
 
 class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`double-negation-introduction<double_negation_introduction_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8746,7 +8746,7 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
 
 
 class EqualityCommutativityInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`equality-commutativity<equality_commutativity_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`equality-commutativity<equality_commutativity_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8804,7 +8804,7 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
 
 
 class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`equal-terms-substitution<equal_terms_substitution_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`equal-terms-substitution<equal_terms_substitution_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8866,7 +8866,7 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
 
 
 class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`hypothetical-syllogism<hypothetical_syllogism_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`hypothetical-syllogism<hypothetical_syllogism_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8932,7 +8932,7 @@ class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
 
 
 class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`inconsistency-introduction-1<inconsistency_introduction_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`inconsistency-introduction-1<inconsistency_introduction_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -8996,7 +8996,7 @@ class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
 
 
 class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`inconsistency-introduction-2<inconsistency_introduction_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`inconsistency-introduction-2<inconsistency_introduction_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -9062,7 +9062,7 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
 
 
 class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`inconsistency-introduction-3<inconsistency_introduction_3_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`inconsistency-introduction-3<inconsistency_introduction_3_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -9122,7 +9122,7 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
 
 
 class ModusPonensInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`modus-ponens<modus_ponens_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`modus-ponens<modus_ponens_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -9185,7 +9185,7 @@ class ModusPonensInclusion(InferenceRuleInclusion):
 
 
 class ModusTollensInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`modus-tollens<modus_tollens_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`modus-tollens<modus_tollens_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -9248,7 +9248,7 @@ class ModusTollensInclusion(InferenceRuleInclusion):
 
 
 class ProofByContradiction1Inclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`proof-by-contradiction-1<proof_by_contradiction_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`proof-by-contradiction-1<proof_by_contradiction_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -9311,7 +9311,7 @@ class ProofByContradiction1Inclusion(InferenceRuleInclusion):
 
 
 class ProofByContradiction2Inclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`proof-by-contradiction-2<proof_by_contradiction_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`proof-by-contradiction-2<proof_by_contradiction_2_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -9375,7 +9375,7 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
 
 
 class ProofByRefutation1Inclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`proof-by-refutation-1<proof_by_refutation_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`proof-by-refutation-1<proof_by_refutation_1_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -9500,7 +9500,7 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
 
 
 class VariableSubstitutionInclusion(InferenceRuleInclusion):
-    """This python class models the inclusion of :ref:`variable-substitution<variable_substitution_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` .
+    """This python class models the inclusion of :ref:`variable-substitution<variable_substitution_math_inference_rule>` as a valid :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>` .
     """
 
     def __init__(self, t: TheoryDerivation, echo: (None, bool) = None, proof: (None, bool) = None):
@@ -9559,9 +9559,9 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
 
 
 class InferenceRuleInclusionCollection(collections.UserDict):
-    """This python class models the collection of :ref:`inference-rules<inference_rule_math_concept>` :ref:`included<object_inclusion_math_concept>` in a :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`.
+    """This python class models the collection of :ref:`inference-rules<inference_rule_math_concept>` :ref:`included<object_inclusion_math_concept>` in a :ref:`theory-derivation<theory_derivation_math_concept>`.
 
-    In complement, it conveniently exposes as python properties a catalog of natively supported :ref:`inference-rules<inference_rule_math_concept>` that are automatically :ref:`included<object_inclusion_math_concept>` in the :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` when they are accessed for the first time.
+    In complement, it conveniently exposes as python properties a catalog of natively supported :ref:`inference-rules<inference_rule_math_concept>` that are automatically :ref:`included<object_inclusion_math_concept>` in the :ref:`theory-derivation<theory_derivation_math_concept>` when they are accessed for the first time.
 
     """
 
@@ -10546,7 +10546,7 @@ class InferredStatement(FormulaStatement):
         if self.valid_proposition.relation is self.t.u.r.inconsistency and is_in_class(
                 self.valid_proposition.parameters[0], classes.theory_derivation):
             # This inferred-statement proves the inconsistency of its argument,
-            # its argument is a theory-elaboration-sequence (i.e. it is not a free-variable),
+            # its argument is a theory-derivation (i.e. it is not a free-variable),
             # it follows that we must change the consistency attribute of that theory.
             inconsistent_theory: TheoryDerivation
             inconsistent_theory = self.valid_proposition.parameters[0]

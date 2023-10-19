@@ -17,7 +17,7 @@ ProofByContradiction2Inclusion (python class)
 
 This section presents the :python:`ProofByContradiction2Inclusion` python class.
 
-This class models the :ref:`inclusion<object_inclusion_math_concept>` of the :ref:`proof-by-contradiction-2<proof_by_contradiction_2_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in the target :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`.
+This class models the :ref:`inclusion<object_inclusion_math_concept>` of the :ref:`proof-by-contradiction-2<proof_by_contradiction_2_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>` in the target :ref:`theory-derivation<theory_derivation_math_concept>`.
 
 *Punctilious* users do not need to instanciate objects from this class. In effect, the :python:`TheoryElaborationSequence` class exposes the :python:`proof_by_contradiction_2` property, and instanciation is automatic when this property is accessed for the first time.
 

@@ -21,7 +21,7 @@ proposition_of_interest = t1.i.disjunctive_resolution.infer_formula_statement(p_
 
 Let "U27" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U27.
+Let "T1" be a theory-derivation in U27.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 

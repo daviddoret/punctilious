@@ -14,19 +14,19 @@ modus-ponens (python sample)
 .. seealso::
    :ref:`math concept<modus_ponens_math_inference_rule>` | :ref:`python declaration class<modus_ponens_declaration_python_class>` | :ref:`python inclusion class<modus_ponens_inclusion_python_class>`
 
-This page shows how to infer new statements in a theory-elaboration-sequence by applying the :ref:`modus-ponens<modus_ponens_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>`.
+This page shows how to infer new statements in a theory-derivation by applying the :ref:`modus-ponens<modus_ponens_math_inference_rule>` :ref:`inference-rule<inference_rule_math_concept>`.
 
 Usage
 ----------------------
 
-Call the :python:`infer_statement` method from the inference-rule inclusion class listed in the :python:`i` (unabridged :python:`inference_rules` ) property of the :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` :
+Call the :python:`infer_statement` method from the inference-rule inclusion class listed in the :python:`i` (unabridged :python:`inference_rules` ) property of the :ref:`theory-derivation<theory_derivation_math_concept>` :
 
 .. code-block:: python
 
    u = pu.create_universe()
    t = u.t()
    ...
-   # some theory elaboration code
+   # some theory derivation code
    ...
    t.i.modus_ponens.infer_statement(...)
 

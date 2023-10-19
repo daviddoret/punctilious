@@ -4,7 +4,7 @@ universe-of-discourse
 ======================
 
 .. seealso::
-   :ref:`object-creation<object_creation_math_concept>` | :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>`
+   :ref:`object-creation<object_creation_math_concept>` | :ref:`theory-derivation<theory_derivation_math_concept>`
 
 Definition
 ----------
@@ -48,7 +48,7 @@ Where:
 
 .. note:: The lifecycle of objects
 
-    For objects (including *universes-of-discourse*) to exist, they must be :ref:`created<object_creation_math_concept>` . For objects to be contained in *universes-of-discourse*, they must be :ref:`declared<object_declaration_math_concept>` . And finally, for objects to be contained in :ref:`theory-elaboration-sequences<theory_elaboration_sequence_math_concept>` , they must be :ref:`included<object_inclusion_math_concept>` (aka postulated).
+    For objects (including *universes-of-discourse*) to exist, they must be :ref:`created<object_creation_math_concept>` . For objects to be contained in *universes-of-discourse*, they must be :ref:`declared<object_declaration_math_concept>` . And finally, for objects to be contained in :ref:`theory-derivations<theory_derivation_math_concept>` , they must be :ref:`included<object_inclusion_math_concept>` (aka postulated).
 
 .. rubric:: Footnotes
 

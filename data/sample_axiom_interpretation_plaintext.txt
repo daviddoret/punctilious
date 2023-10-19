@@ -19,7 +19,7 @@ proposition_of_interest = t1.i.axiom_interpretation.infer_formula_statement(a=th
 
 Let "U3" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U3.
+Let "T1" be a theory-derivation in U3.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 

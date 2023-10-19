@@ -37,7 +37,7 @@ proposition_of_interest = t1.i.proof_by_refutation_1.infer_formula_statement(h=h
 
 Let "U61" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U61.
+Let "T1" be a theory-derivation in U61.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom to establish some ground propositions." be included (postulated) in T1.
 
