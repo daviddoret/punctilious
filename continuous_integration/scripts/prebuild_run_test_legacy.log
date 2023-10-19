@@ -54,7 +54,7 @@ collected 80 items
 ..\tests\test_subscriptify.py .                                          [ 82%]
 ..\tests\test_text.py ...                                                [ 86%]
 ..\tests\test_theoretical_objct.py ...                                   [ 90%]
-..\tests\test_theory_elaboration_sequence.py .                           [ 91%]
+..\tests\test_theory_derivation.py .                           [ 91%]
 ..\tests\test_theory_elaboration_stabilized.py .                         [ 92%]
 ..\tests\test_theory_extension.py ..                                     [ 95%]
 ..\tests\test_universe_of_discourse.py .                                 [ 96%]

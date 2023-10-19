@@ -8,7 +8,7 @@ class TestModusTollens(TestCase):
     def test_modus_tollens_without_variable(self):
         import sample.sample_modus_tollens as test
         u: pu.UniverseOfDiscourse = test.u
-        t1: pu.TheoryElaborationSequence = test.t1
+        t1: pu.TheoryDerivation = test.t1
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         o3: pu.SimpleObjct = test.o3

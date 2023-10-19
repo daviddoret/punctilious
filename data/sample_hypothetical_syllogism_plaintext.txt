@@ -23,7 +23,7 @@ proposition_of_interest = t1.i.hypothetical_syllogism.infer_formula_statement(
 
 Let "U43" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U43.
+Let "T1" be a theory-derivation in U43.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 

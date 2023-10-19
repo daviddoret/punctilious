@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css"/>
     <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css"/>
     <!--[if lt IE 9]>
-      <script src="../../_static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -204,13 +204,13 @@
                                         href="../class/inconsistency_introduction_2_inclusion_python_class.html#inconsistency-introduction-2-inclusion-python-class"><span
                                         class="std std-ref">python inclusion class</span></a></p>
                             </div>
-                            <p>This page shows how to infer new statements in a theory-elaboration-sequence by applying
-                                the <a class="reference internal"
-                                       href="../../math/inference_rule/inconsistency_introduction_2_math_inference_rule.html#inconsistency-introduction-2-math-inference-rule"><span
-                                        class="std std-ref">inconsistency-introduction-2</span></a> <a
-                                        class="reference internal"
-                                        href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
-                                        class="std std-ref">inference-rule</span></a>.</p>
+                            <p>This page shows how to infer new statements in a theory-derivation by applying the <a
+                                    class="reference internal"
+                                    href="../../math/inference_rule/inconsistency_introduction_2_math_inference_rule.html#inconsistency-introduction-2-math-inference-rule"><span
+                                    class="std std-ref">inconsistency-introduction-2</span></a> <a
+                                    class="reference internal"
+                                    href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
+                                    class="std std-ref">inference-rule</span></a>.</p>
                             <section id="usage">
                                 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a>
                                 </h2>
@@ -222,8 +222,8 @@
                                             class="code python py docutils literal notranslate"><span class="name"><span
                                             class="pre">inference_rules</span></span></code> ) property of the <a
                                             class="reference internal"
-                                            href="../../math/concept/theory_elaboration_sequence_math_concept.html#theory-elaboration-sequence-math-concept"><span
-                                            class="std std-ref">theory-elaboration-sequence</span></a> :</p>
+                                            href="../../math/concept/theory_derivation_math_concept.html#theory-derivation-math-concept"><span
+                                            class="std std-ref">theory-derivation</span></a> :</p>
                                 <div class="highlight-python notranslate">
                                     <div class="highlight"><pre><span></span><span class="n">u</span> <span
                                             class="o">=</span> <span class="n">pu</span><span class="o">.</span><span
@@ -231,7 +231,7 @@
 <span class="n">t</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
                                                 class="n">t</span><span class="p">()</span>
 <span class="o">...</span>
-<span class="c1"># some theory elaboration code</span>
+<span class="c1"># some theory derivation code</span>
 <span class="o">...</span>
 <span class="n">t</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">inconsistency_introduction_2</span><span
                                                 class="o">.</span><span class="n">infer_statement</span><span class="p">(</span><span
@@ -391,7 +391,7 @@ proposition_of_interest = t2.i.inconsistency_introduction_2.infer_formula_statem
 
 Let &quot;U47&quot; be a universe-of-discourse.
 
-Let &quot;T1&quot; be a theory-elaboration-sequence in U47.
+Let &quot;T1&quot; be a theory-derivation in U47.
 
 Axiom (T1.A1): Let axiom A1 &quot;Dummy axiom for demonstration purposes&quot; be included (postulated) in T1.
 
@@ -401,7 +401,7 @@ Proposition (T1.P1): (o1 = o2). Proof: &quot;Dummy axiom for demonstration purpo
 
 Proposition (T1.P2): (o1 neq o2). Proof: &quot;Dummy axiom for demonstration purposes&quot; is postulated by axiom (A1). (o1 neq o2) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that (o1 neq o2). QED
 
-Let &quot;T2&quot; be a theory-elaboration-sequence in U47.
+Let &quot;T2&quot; be a theory-derivation in U47.
 
 Inference rule (inconsistency-introduction-2): Let inference-rule inconsistency-introduction-2 defined as &quot;((P3 = Q1), (P3 neq Q1) |- Inc(T1))&quot; be included and considered valid in T2.
 

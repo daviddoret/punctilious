@@ -8,7 +8,7 @@ class TestAxiomInterpretation(TestCase):
     def test_axiom_interpretation_1(self):
         import sample.sample_axiom_interpretation as test
         u: pu.UniverseOfDiscourse = test.u
-        t1: pu.TheoryElaborationSequence = test.t1
+        t1: pu.TheoryDerivation = test.t1
         a: pu.AxiomInclusion = test.theory_axiom
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2

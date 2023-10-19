@@ -7,7 +7,7 @@ class TestConstructiveDilemma(TestCase):
     def test_constructive_dilemma(self):
         import sample.sample_constructive_dilemma as test
         u: pu.UniverseOfDiscourse = test.u
-        t1: pu.TheoryElaborationSequence = test.t1
+        t1: pu.TheoryDerivation = test.t1
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         o3: pu.SimpleObjct = test.o3

@@ -18,7 +18,7 @@ In plain language, it consists in posing the hypothesis that a proposition :math
 Note
 ----
 
-Note the possibility that the base :ref:`theory-elaboration-sequence<theory_elaboration_sequence_math_concept>` from which the :ref:`hypothesis<hypothesis_math_concept>` is elaborated is inconsistent.
+Note the possibility that the base :ref:`theory-derivation<theory_derivation_math_concept>` from which the :ref:`hypothesis<hypothesis_math_concept>` is elaborated is inconsistent.
 
 Synonyms
 ---------

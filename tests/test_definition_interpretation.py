@@ -8,7 +8,7 @@ class TestDefinitionInterpretation(TestCase):
     def test_definition_interpretation_1(self):
         import sample.sample_definition_interpretation as test
         u: pu.UniverseOfDiscourse = test.u
-        t1: pu.TheoryElaborationSequence = test.t1
+        t1: pu.TheoryDerivation = test.t1
         d: pu.DefinitionInclusion = test.theory_definition
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2

@@ -20,7 +20,7 @@ proposition_of_interest = t1.i.disjunction_introduction_1.infer_formula_statemen
 
 Let "U23" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U23.
+Let "T1" be a theory-derivation in U23.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 

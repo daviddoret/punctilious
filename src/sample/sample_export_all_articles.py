@@ -1,14 +1,14 @@
-"""This sample script export all theory packages """
+"""This sample script export all theory packages."""
 
 import punctilious as pu
 import theory as pu_theory
 
 target_folder = '../../data/'
 
-package_list = {'mancosou_2021_minimal_logic_m0': pu_theory.Mancosou2021MinimalLogicM0(),
-    'mancosou_2021_intuitionistic_logic_j0':      pu_theory.Mancosou2021IntuitionisticLogicJ0(),
-    'mancosou_2021_classical_logic_k0':           pu_theory.Mancosou2021ClassicalLogicK0(),
-    'tao_2006_the_peano_axioms':                  pu_theory.Tao2006ThePeanoAxioms()}
+package_list = {'mgz_2021_minimal_logic_m0': pu_theory.MGZ2021MinimalLogicM0(),
+    'mgz_2021_intuitionistic_logic_j0':      pu_theory.MGZ2021IntuitionisticLogicJ0(),
+    'mgz_2021_classical_logic_k0':           pu_theory.MGZ2021ClassicalLogicK0(),
+    'tao_2006_the_peano_axioms':             pu_theory.Tao2006ThePeanoAxioms()}
 
 for underscored_name, package in package_list.items():
     package.t.export_article_to_file(proof=False, encoding=pu.encodings.plaintext,

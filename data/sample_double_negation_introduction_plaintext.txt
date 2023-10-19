@@ -18,7 +18,7 @@ proposition_of_interest = t1.i.double_negation_introduction.infer_formula_statem
 
 Let "U35" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U35.
+Let "T1" be a theory-derivation in U35.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 

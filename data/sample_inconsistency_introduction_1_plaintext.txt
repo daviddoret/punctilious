@@ -24,7 +24,7 @@ proposition_of_interest = t2.i.inconsistency_introduction_1.infer_formula_statem
 
 Let "U45" be a universe-of-discourse.
 
-Let "T1" be a theory-elaboration-sequence in U45.
+Let "T1" be a theory-derivation in U45.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 
