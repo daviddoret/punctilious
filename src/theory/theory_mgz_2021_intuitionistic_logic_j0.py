@@ -1,19 +1,19 @@
 """"""
 import punctilious as pu
-from theory.theory_mancosou_2021_minimal_logic_m0 import Mancosou2021MinimalLogicM0
+from theory.theory_mgz_2021_minimal_logic_m0 import MGZ2021MinimalLogicM0
 
 
-class Mancosou2021IntuitionisticLogicJ0(pu.Package):
+class MGZ2021IntuitionisticLogicJ0(pu.Package):
 
     def __init__(self, u: (None, pu.UniverseOfDiscourse) = None):
         if u is None:
             u = pu.UniverseOfDiscourse()
         self.u = u
 
-        # Naming conventions in Mancosou 2021
+        # Naming conventions in MGZ 2021
         axiom_symbol = pu.StyledText(plaintext='PL', text_style=pu.text_styles.sans_serif_normal)
         theory_symbol = pu.StyledText(plaintext='J', text_style=pu.text_styles.sans_serif_normal)
-        self.m0_package = Mancosou2021MinimalLogicM0(u=u)
+        self.m0_package = MGZ2021MinimalLogicM0(u=u)
         t = self.u.declare_theory(symbol=theory_symbol, index=0, extended_theory=self.m0_package.m0)
         self.t = t
         self.m0 = self.m0_package.m0

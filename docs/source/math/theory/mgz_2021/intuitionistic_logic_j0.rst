@@ -1,9 +1,9 @@
-.. _theory_mancosou_2021_intuitionistic_logic_j0:
+.. _theory_mgz_2021_intuitionistic_logic_j0:
 
 Intuitionistic logic ( :math:`J_0` )
 ========================================================================================
 
-This package formalizes :cite:`mancosu_2021_introductionprooftheorynormalization{chapter 2.4.2 - Minimal logic}` .
+This package formalizes :cite:`mgz_2021_introductionprooftheory{chapter 2.4.2 - Intuitionistic logic}` .
 
 .. tabs::
 

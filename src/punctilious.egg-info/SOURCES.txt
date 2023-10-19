@@ -53,8 +53,8 @@ src/sample/sample_variable_substitution.py
 src/theory/__init__.py
 src/theory/classical_propositional_logic.py
 src/theory/punctilious_2023_metatheory.py
-src/theory/theory_mancosou_2021_classical_logic_j0.py
-src/theory/theory_mancosou_2021_intuitionistic_logic_j0.py
+src/theory/theory_mgz_2021_classical_logic_j0.py
+src/theory/theory_mgz_2021_intuitionistic_logic_j0.py
 src/theory/theory_mancosou_2021_minimal_logic_m0.py
 src/theory/theory_tao_2006_the_peano_axioms.py
 tests/test_absorption.py

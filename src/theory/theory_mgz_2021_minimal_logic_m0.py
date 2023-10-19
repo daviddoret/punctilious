@@ -2,13 +2,13 @@
 import punctilious as pu
 
 
-class Mancosou2021MinimalLogicM0(pu.Package):
+class MGZ2021MinimalLogicM0(pu.Package):
 
     def __init__(self, u: (None, pu.UniverseOfDiscourse) = None):
         if u is None:
             u = pu.UniverseOfDiscourse()
         self.u = u
-        # Naming conventions in Mancosou 2021
+        # Naming conventions in MGZ 2021
         axiom_symbol = pu.StyledText(plaintext='PL', text_style=pu.text_styles.sans_serif_normal)
         theory_symbol = pu.StyledText(plaintext='M', text_style=pu.text_styles.sans_serif_normal)
         t = self.u.declare_theory(symbol=theory_symbol, index=0)

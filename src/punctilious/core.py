@@ -5728,8 +5728,9 @@ class TheoryElaborationSequence(TheoreticalObject):
 
     def __init__(self, u: UniverseOfDiscourse, symbol: (None, str, StyledText) = None,
             index: (None, int, str) = None, auto_index: (None, bool) = None,
-            ref: (None, str) = None, subtitle: (None, str) = None,
-            extended_theory: (None, TheoryElaborationSequence) = None,
+            dashed_name: (None, str) = None, name: (None, str) = None,
+            explicit_name: (None, str) = None, ref: (None, str) = None,
+            subtitle: (None, str) = None, extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None, stabilized: bool = False,
             echo: bool = None):
         echo = prioritize_value(echo, configuration.echo_theory_elaboration_sequence_declaration,
@@ -5748,7 +5749,8 @@ class TheoryElaborationSequence(TheoreticalObject):
         if symbol is None:
             symbol = prioritize_value(symbol, configuration.default_theory_symbol)
             index = u.index_symbol(symbol=symbol)
-        super().__init__(symbol=symbol, index=index, auto_index=auto_index,
+        super().__init__(symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
+            name=name, explicit_name=explicit_name,
             paragraph_header=paragraph_headers.theory_elaboration_sequence,
             is_theory_foundation_system=True if extended_theory is None else False, u=u, echo=False)
         verify(is_in_class(u, classes.universe_of_discourse),
@@ -10330,8 +10332,9 @@ class UniverseOfDiscourse(SymbolicObject):
             explicit_name=explicit_name, ref=ref, subtitle=subtitle, echo=echo)
 
     def declare_theory(self, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
-            auto_index: (None, bool) = None, ref: (None, str) = None, subtitle: (None, str) = None,
-            extended_theory: (None, TheoryElaborationSequence) = None,
+            auto_index: (None, bool) = None, dashed_name: (None, str) = None,
+            name: (None, str) = None, explicit_name: (None, str) = None, ref: (None, str) = None,
+            subtitle: (None, str) = None, extended_theory: (None, TheoryElaborationSequence) = None,
             extended_theory_limit: (None, Statement) = None, stabilized: bool = False,
             echo: bool = None):
         """Declare a new theory in this universe-of-discourse.
@@ -10344,7 +10347,8 @@ class UniverseOfDiscourse(SymbolicObject):
         :return:
         """
         return TheoryElaborationSequence(u=self, symbol=symbol, index=index, auto_index=auto_index,
-            ref=ref, subtitle=subtitle, extended_theory=extended_theory,
+            dashed_name=dashed_name, name=name, explicit_name=explicit_name, ref=ref,
+            subtitle=subtitle, extended_theory=extended_theory,
             extended_theory_limit=extended_theory_limit, stabilized=stabilized, echo=echo)
 
     def declare_axiom(self, natural_language: str, symbol: (None, str, StyledText) = None,

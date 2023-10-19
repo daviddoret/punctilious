@@ -7,6 +7,6 @@ This table of contents references mathematical theories implemented using puncti
    :titlesonly:
    :caption: Table of contents
 
-   Mancosou 2021<theory_mancosou_2021>
+   MGZ 2021<theory_mgz_2021>
    Tao 2006<theory_tao_2006>
 
