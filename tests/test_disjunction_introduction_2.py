@@ -8,7 +8,7 @@ class TestDisjunctionIntroduction2(TestCase):
     def test_di2(self):
         import sample.sample_disjunction_introduction_2 as test
         u: pu.UniverseOfDiscourse = test.u
-        t1: pu.TheoryElaborationSequence = test.t1
+        t1: pu.TheoryDerivation = test.t1
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         o3: pu.SimpleObjct = test.o3

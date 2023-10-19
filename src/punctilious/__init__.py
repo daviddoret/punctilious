@@ -41,7 +41,7 @@ from punctilious.core import AbsorptionDeclaration, AbsorptionInclusion, Article
     QuasiQuotation, Relation, rep_two_columns_proof_item, SansSerifBold, SansSerifNormal, \
     ScriptNormal, SerifBoldItalic, SerifItalic, SerifNormal, SimpleObjct, SimpleObjctDict, \
     Statement, StyledText, Subscript, subscriptify, SymbolicObject, text_styles, TextStyle, \
-    TheoreticalObject, TheoryElaborationSequence, Package, UniverseOfDiscourse, verify_formula, \
+    TheoreticalObject, TheoryDerivation, Package, UniverseOfDiscourse, verify_formula, \
     verify_formula_statement, VariableSubstitutionDeclaration, VariableSubstitutionInclusion
 
 # from foundation_system_1 import foundation_system_1, ft, u

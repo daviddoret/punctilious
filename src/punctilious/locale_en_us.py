@@ -711,7 +711,7 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         return True
 
-    def compose_theory_declaration(self, t: TheoryElaborationSequence) -> collections.abc.Generator[
+    def compose_theory_declaration(self, t: TheoryDerivation) -> collections.abc.Generator[
         Composable, Composable, bool]:
         global text_dict
         yield SansSerifNormal('Let ')
@@ -725,8 +725,8 @@ class LocaleEnUs(Locale):
         yield text_dict.period
         return True
 
-    def compose_theory_article(self, t: TheoryElaborationSequence, proof: (None, bool) = None) -> \
-            collections.abc.Generator[Composable, Composable, bool]:
+    def compose_theory_article(self, t: TheoryDerivation, proof: (None, bool) = None) -> \
+    collections.abc.Generator[Composable, Composable, bool]:
 
         yield self.paragraph_start
         yield from t.rep_name()

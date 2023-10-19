@@ -10,7 +10,7 @@ u = pet.u
 def graph_symbolic_object(g: nx.MultiDiGraph, o: pu.SymbolicObject):
     if pu.is_in_class(o, pu.classes.simple_objct):
         graph_simpl_objct(g, o)
-    elif pu.is_in_class(o, pu.classes.theory_elaboration):
+    elif pu.is_in_class(o, pu.classes.theory_derivation):
         graph_theory(g, o)
     elif pu.is_in_class(o, pu.classes.relation):
         graph_relation(g, o)
@@ -22,13 +22,13 @@ def graph_symbolic_object(g: nx.MultiDiGraph, o: pu.SymbolicObject):
         graph_formula_statement(g, o)
 
 
-def graph_theory(g: nx.MultiDiGraph, t: pu.TheoryElaborationSequence):
+def graph_theory(g: nx.MultiDiGraph, t: pu.TheoryDerivation):
     g.add_node(t.rep_name())
     for s in t.statements:
         graph_symbolic_object(g, s)
 
 
-def graph_formula_statement(g: nx.MultiDiGraph, s: pu.TheoryElaborationSequence):
+def graph_formula_statement(g: nx.MultiDiGraph, s: pu.TheoryDerivation):
     g.add_node(t.rep_name())
     graph_symbolic_object(g, s.valid_proposition)
     g.add_edge(s.valid_proposition.rep_name(), t.rep_name())

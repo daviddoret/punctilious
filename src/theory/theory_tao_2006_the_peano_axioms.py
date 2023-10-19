@@ -4,7 +4,7 @@ import punctilious as pu
 
 class Tao2006ThePeanoAxioms(pu.Package):
 
-    def __init__(self, t: (None, pu.TheoryElaborationSequence) = None,
+    def __init__(self, t: (None, pu.TheoryDerivation) = None,
             u: (None, pu.UniverseOfDiscourse) = None):
         self.u = u
         self.t = t
