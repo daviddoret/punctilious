@@ -15,19 +15,19 @@ u = pu.create_universe_of_discourse()
 a = u.o.declare()
 b = u.o.declare()
 c = u.o.declare()
+d = u.o.declare()
 
 with u.v() as x, u.v() as y:
     phi: pu.Formula = (a | u.r.implies | x) | u.r.iff | (y | u.r.land | b)
     print(phi)
 
 with u.v() as x, u.v() as y:
-    psi: pu.Formula = (a | u.r.implies | x) | u.r.iff | (y | u.r.land | b)
+    psi: pu.Formula = (x | u.r.implies | x) | u.r.iff | (y | u.r.land | b)
     print(psi)
 
-#  p = MGZ2021MinimalLogicM0()
+v = frozenset(phi.get_variable_ordered_set()).union(psi.get_variable_ordered_set())
 
-print(phi.is_formula_syntactically_equivalent_to(phi=psi))
-
-_, a2, _ = pu.verify_formula(u=u, input_value=a)
+print(phi.is_masked_formula_similar_to(phi=psi, mask=v))
+print(psi.is_masked_formula_similar_to(phi=phi, mask=v))
 
 pass

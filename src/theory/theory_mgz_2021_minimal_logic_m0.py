@@ -151,6 +151,7 @@ class MGZ2021MinimalLogicM0(pu.Package):
                 phi=substitution_tuple)
 
         # Original: ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))
+
         line_3 = t.i.modus_ponens.infer_formula_statement(p_implies_q=line_2, p=line_1)
 
 # p = MGZ2021MinimalLogicM0()

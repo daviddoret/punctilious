@@ -2150,8 +2150,7 @@ class TheoreticalObject(SymbolicObject):
         _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
         return self is phi
 
-    def is_masked_formula_similar_to(self, phi: (
-            Formula, FormulaStatement, FreeVariable, Relation, SimpleObjct, TheoreticalObject),
+    def is_masked_formula_similar_to(self, phi: FlexibleFormula,
             mask: (None, frozenset[FreeVariable]) = None) -> bool:
         """Given two theoretical-objects o₁ (self) and o₂,
         and a finite set of variables 𝐌,
@@ -5181,6 +5180,11 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
             error_code=error_code)
         p: Formula
         p__in__p_implies_q: Formula = p_implies_q.parameters[0]
+
+        # CORRECT BUG #237
+
+        # TODO: A situation that may be difficult to troubleshoot is when two objects (e.g. variables) are given identical symbols.
+        # In this situation, the error message will look weird.
         verify(assertion=p__in__p_implies_q.is_formula_syntactically_equivalent_to(phi=p),
             msg=f'The ⌜p⌝({p__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the formula argument ⌜p⌝({p})',
             raise_exception=True, error_code=error_code)
