@@ -20,28 +20,28 @@ class TestValidateFormulaStatement(TestCase):
         a = t.include_axiom(a=u.declare_axiom(natural_language='Dummy axiom for testing purposes'))
         t.i.axiom_interpretation.infer_formula_statement(a=a, p=phi)
         _, phi1_formula, _ = pu.verify_formula_statement(t=t, input_value=u.f(r1, o1))
-        self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_formula))
+        self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi=phi1_formula))
         _, phi1_tuple, _ = pu.verify_formula_statement(t=t, input_value=(r1, o1))
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_tuple))
         _, phi1_prefix, _ = pu.verify_formula_statement(t=t, input_value=r1 ^ o1)
-        self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_prefix))
+        self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi=phi1_prefix))
         _, phi1_postfix, _ = pu.verify_formula_statement(t=t, input_value=o1 & r1)
-        self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_postfix))
+        self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi=phi1_postfix))
         _, phi_form_ok_1, _ = pu.verify_formula_statement(t=t, input_value=phi, form=phi)
-        self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi_form_ok_1))
+        self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi=phi_form_ok_1))
         # Successful form validations
         with u.v('x') as x:
             _, phi_form_ok_1, _ = pu.verify_formula_statement(t=t, input_value=phi, form=(r1, x),
                 mask=[x])
-            self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi_form_ok_1))
+            self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi=phi_form_ok_1))
         with u.v('x') as x:
             _, phi_form_ok_1, _ = pu.verify_formula_statement(t=t, input_value=phi, form=(x, o1),
                 mask=[x])
-            self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi_form_ok_1))
+            self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi=phi_form_ok_1))
         with u.v('x') as x, u.v('y') as y:
             _, phi_form_ok_1, _ = pu.verify_formula_statement(t=t, input_value=phi, form=(x, y),
                 mask=[x, y])
-            self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi_form_ok_1))
+            self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi=phi_form_ok_1))
         # Failed form validations
         with self.assertRaises(pu.PunctiliousException):
             with u.v('x') as x:

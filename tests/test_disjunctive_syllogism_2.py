@@ -15,7 +15,7 @@ class TestDisjunctiveSyllogism2(TestCase):
         theory_axiom: pu.AxiomInclusion = test.theory_axiom
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
-            o2=o1 | u.r.implies | o3))
+            phi=o1 | u.r.implies | o3))
         # Syntax error
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.disjunctive_syllogism_2.infer_formula_statement(

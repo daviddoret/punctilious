@@ -30,5 +30,5 @@ class MGZ2021ClassicalLogicK0(pu.Package):
         self.pl12_inclusion = t.include_axiom(ref='PL12', symbol=axiom_symbol, index=1,
             a=self.pl12_declaration)
         with u.v(symbol='A', auto_index=False) as a, u.v(symbol='B', auto_index=False) as b:
-            t.i.axiom_interpretation.infer_formula_statement(a=self.pl12_inclusion,
-                p=u.r.lnot(u.r.lnot(a)) | u.r.implies | a, lock=True)
+            self.pl12_statement = t.i.axiom_interpretation.infer_formula_statement(
+                a=self.pl12_inclusion, p=u.r.lnot(u.r.lnot(a)) | u.r.implies | a, lock=True)

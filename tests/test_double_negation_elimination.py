@@ -11,6 +11,6 @@ class TestDoubleNegationElimination(TestCase):
         r1: pu.Relation = test.r1
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         self.assertTrue(
-            proposition_of_interest.is_formula_syntactically_equivalent_to(o2=r1(o1, o2)))
+            proposition_of_interest.is_formula_syntactically_equivalent_to(phi=r1(o1, o2)))
         self.assertEqual('r1(o1, o2)', proposition_of_interest.rep_formula(pu.encodings.plaintext))
         self.assertEqual('𝑟₁(𝑜₁, 𝑜₂)', proposition_of_interest.rep_formula(pu.encodings.unicode))

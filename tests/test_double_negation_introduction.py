@@ -12,7 +12,7 @@ class TestDoubleNegationIntroduction(TestCase):
         r1: pu.Relation = test.r1
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
-            o2=u.r.lnot(u.r.lnot(r1(o1, o2)))))
+            phi=u.r.lnot(u.r.lnot(r1(o1, o2)))))
         self.assertEqual('not(not(r1(o1, o2)))',
             proposition_of_interest.rep_formula(pu.encodings.plaintext))
         self.assertEqual('¬(¬(𝑟₁(𝑜₁, 𝑜₂)))',

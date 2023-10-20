@@ -14,7 +14,7 @@ class TestEqualTermsSubstitution(TestCase):
         r2: pu.Relation = test.r2
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
-            o2=r1(r1(r1(r2(o3), r2(o3)), o2), r2(r2(o3)))))
+            phi=r1(r1(r1(r2(o3), r2(o3)), o2), r2(r2(o3)))))
         self.assertEqual('r1(r1(r1(r2(o3), r2(o3)), o2), r2(r2(o3)))',
             proposition_of_interest.rep_formula(pu.encodings.plaintext))
         self.assertEqual('𝑟₁(𝑟₁(𝑟₁(𝑟₂(𝑜₃), 𝑟₂(𝑜₃)), 𝑜₂), 𝑟₂(𝑟₂(𝑜₃)))',

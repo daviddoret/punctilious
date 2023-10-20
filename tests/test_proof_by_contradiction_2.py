@@ -13,7 +13,7 @@ class TestProofByContradiction2(TestCase):
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         pass
         self.assertTrue(
-            proposition_of_interest.is_formula_syntactically_equivalent_to(o2=o1 | u.r.eq | o2))
+            proposition_of_interest.is_formula_syntactically_equivalent_to(phi=o1 | u.r.eq | o2))
         self.assertEqual('(o1 = o2)', proposition_of_interest.rep_formula(pu.encodings.plaintext))
         self.assertEqual('(𝑜₁ = 𝑜₂)', proposition_of_interest.rep_formula(pu.encodings.unicode))
         # Syntax error, first parameter

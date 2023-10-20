@@ -2138,7 +2138,7 @@ class TheoreticalObject(SymbolicObject):
             if self not in ordered_set:
                 ordered_set.append(self)
 
-    def is_formula_syntactically_equivalent_to(self, o2: TheoreticalObject) -> bool:
+    def is_formula_syntactically_equivalent_to(self, phi: FlexibleFormula) -> bool:
         """Returns true if ⌜self⌝ is formula-syntactically-equivalent to ⌜o2⌝.
 
         Parameters:
@@ -2147,10 +2147,11 @@ class TheoreticalObject(SymbolicObject):
             The theoretical-object with which to verify formula-equivalence.
 
         """
-        return self is o2
+        _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
+        return self is phi
 
-    def is_masked_formula_similar_to(self,
-            o2: (Formula, FormulaStatement, FreeVariable, Relation, SimpleObjct, TheoreticalObject),
+    def is_masked_formula_similar_to(self, phi: (
+            Formula, FormulaStatement, FreeVariable, Relation, SimpleObjct, TheoreticalObject),
             mask: (None, frozenset[FreeVariable]) = None) -> bool:
         """Given two theoretical-objects o₁ (self) and o₂,
         and a finite set of variables 𝐌,
@@ -2178,18 +2179,18 @@ class TheoreticalObject(SymbolicObject):
 
         Parameters
         ----------
-        o2 : TheoreticalObject
+        phi : TheoreticalObject
             A theoretical-object with which to verify masked-formula-similitude.
 
         mask: set
             Set of FreeVariable elements. If None, the empty set is assumed.
 
         """
-        output, _values = self._is_masked_formula_similar_to(o2=o2, mask=mask)
+        output, _values = self._is_masked_formula_similar_to(phi=phi, mask=mask)
         return output
 
-    def _is_masked_formula_similar_to(self,
-            o2: (Formula, FormulaStatement, FreeVariable, Relation, SimpleObjct, TheoreticalObject),
+    def _is_masked_formula_similar_to(self, phi: (
+            Formula, FormulaStatement, FreeVariable, Relation, SimpleObjct, TheoreticalObject),
             mask: (None, frozenset[FreeVariable]) = None, _values: (None, dict) = None) -> (
             bool, dict):
         """A "private" version of the is_masked_formula_similar_to method,
@@ -2197,7 +2198,7 @@ class TheoreticalObject(SymbolicObject):
 
         Parameters
         ----------
-        o2 : TheoreticalObject
+        phi : TheoreticalObject
             A theoretical-object with which to verify masked-formula-similitude.
 
         mask: set
@@ -2218,48 +2219,48 @@ class TheoreticalObject(SymbolicObject):
         #    o2 = o2.valid_proposition
         mask = frozenset() if mask is None else mask
         _values = dict() if _values is None else _values
-        if o1 is o2:
+        if o1 is phi:
             # Trivial case.
             return True, _values
-        if o1.is_formula_syntactically_equivalent_to(o2):
+        if o1.is_formula_syntactically_equivalent_to(phi=phi):
             # Sufficient condition.
             return True, _values
-        if isinstance(o1, (Formula, FormulaStatement)) and isinstance(o2,
+        if isinstance(o1, (Formula, FormulaStatement)) and isinstance(phi,
                 (Formula, FormulaStatement)):
             # When both o1 and o2 are formula,
             # verify that their components are masked-formula-similar.
-            relation_output, _values = o1.relation._is_masked_formula_similar_to(o2=o2.relation,
+            relation_output, _values = o1.relation._is_masked_formula_similar_to(phi=phi.relation,
                 mask=mask, _values=_values)
             if not relation_output:
                 return False, _values
             # Arities are necessarily equal.
             for i in range(len(o1.parameters)):
                 parameter_output, _values = o1.parameters[i]._is_masked_formula_similar_to(
-                    o2=o2.parameters[i], mask=mask, _values=_values)
+                    phi=phi.parameters[i], mask=mask, _values=_values)
                 if not parameter_output:
                     return False, _values
             return True, _values
-        if o1 not in mask and o2 not in mask:
+        if o1 not in mask and phi not in mask:
             # We know o1 and o2 are not formula-syntactically-equivalent,
             # and we know they are not in the mask.
             return False, _values
         if o1 in mask:
-            variable = o2
+            variable = phi
             newly_observed_value = o1
             if variable in _values:
                 already_observed_value = _values[variable]
                 if not newly_observed_value.is_formula_syntactically_equivalent_to(
-                        already_observed_value):
+                        phi=already_observed_value):
                     return False, _values
             else:
                 _values[variable] = newly_observed_value
-        if o2 in mask:
+        if phi in mask:
             variable = o1
-            newly_observed_value = o2
+            newly_observed_value = phi
             if variable in _values:
                 already_observed_value = _values[variable]
                 if not newly_observed_value.is_formula_syntactically_equivalent_to(
-                        already_observed_value):
+                        phi=already_observed_value):
                     return False, _values
             else:
                 _values[variable] = newly_observed_value
@@ -2335,7 +2336,7 @@ class TheoreticalObject(SymbolicObject):
             #   we must check for formula-equivalence,
             #   rather than python-object-equality.
             for k, v in substitution_map.items():
-                if self.is_formula_syntactically_equivalent_to(k):
+                if self.is_formula_syntactically_equivalent_to(phi=k):
                     return v
 
             # If the formula itself is not matched,
@@ -2555,16 +2556,16 @@ class FreeVariable(TheoreticalObject):
             'Scope extensions of FreeVariable must be of type Formula.')
         self._scope = self._scope.union({phi})
 
-    def is_masked_formula_similar_to(self, o2, mask, _values):
+    def is_masked_formula_similar_to(self, phi, mask, _values):
         # TODO: Re-implement this
-        assert isinstance(o2, TheoreticalObject)
-        if isinstance(o2, FreeVariable):
-            if o2 in mask:
+        assert isinstance(phi, TheoreticalObject)
+        if isinstance(phi, FreeVariable):
+            if phi in mask:
                 # o2 is a variable, and it is present in the mask.
                 # first, we must check if it is already in the dictionary of values.
-                if o2 in _values:
+                if phi in _values:
                     # the value is already present in the dictionary.
-                    known_value = _values[o2]
+                    known_value = _values[phi]
                     if known_value is self:
                         # the existing value matches the newly observed value.
                         # until there, masked-formula-similitude is preserved.
@@ -2576,14 +2577,14 @@ class FreeVariable(TheoreticalObject):
                 else:
                     # the value is not present in the dictionary.
                     # until there, masked-formula-similitude is preserved.
-                    _values[o2] = self
+                    _values[phi] = self
                     return True, _values
-        if not isinstance(o2, SimpleObjct):
+        if not isinstance(phi, SimpleObjct):
             # o1 (self) is a simple-objct, and o2 is something else.
             # in consequence, masked-formula-similitude is no longer preserved.
             return False, _values
         # o2 is not a variable.
-        return self.is_formula_syntactically_equivalent_to(o2), _values
+        return self.is_formula_syntactically_equivalent_to(phi=phi), _values
 
     @property
     def is_strictly_propositional(self) -> bool:
@@ -2594,11 +2595,8 @@ class FreeVariable(TheoreticalObject):
         return self._is_strictly_propositional
 
     def lock_scope(self):
-        # Support for the with pythonic syntax
-        # Start building  variable scope
-        verify(self._status == FreeVariable.scope_initialization_status,
-            'The scope of an instance of FreeVariable can only be locked if it is open.')
-        # Close variable scope
+        # Support for the "with u.v():" pythonic syntax.
+        # If the variable scope was already closed, this method has no effect.
         self._status = FreeVariable.closed_scope_status
 
     def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None):
@@ -2861,7 +2859,7 @@ class Formula(TheoreticalObject):
     def echo(self):
         repm.prnt(self.rep_report())
 
-    def is_formula_syntactically_equivalent_to(self, o2: TheoreticalObject) -> bool:
+    def is_formula_syntactically_equivalent_to(self, phi: FlexibleFormula) -> bool:
         """Return true if ⌜self⌝ is formula-syntactically-equivalent to ⌜o2⌝.
 
         Parameters:
@@ -2870,20 +2868,21 @@ class Formula(TheoreticalObject):
             The theoretical-object with which to verify formula-equivalence.
 
         """
-        if self is o2:
+        if self is phi:
             return True
         # if o2 is a formula-statement, retrieve its formula.
-        o2 = o2.valid_proposition if is_in_class(o2, classes.formula_statement) else o2
-        if self is o2:
+        _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
+        # phi = phi.valid_proposition if is_in_class(phi, classes.formula_statement) else phi
+        if self is phi:
             # Trivial case.
             return True
-        if not isinstance(o2, Formula):
+        if not isinstance(phi, Formula):
             return False
-        if not self.relation.is_formula_syntactically_equivalent_to(o2.relation):
+        if not self.relation.is_formula_syntactically_equivalent_to(phi=phi.relation):
             return False
         # Arities are necessarily equal.
         for i in range(len(self.parameters)):
-            if not self.parameters[i].is_formula_syntactically_equivalent_to(o2.parameters[i]):
+            if not self.parameters[i].is_formula_syntactically_equivalent_to(phi=phi.parameters[i]):
                 return False
         return True
 
@@ -3123,12 +3122,12 @@ class Statement(TheoreticalObject):
         self._theory = theory
         echo = prioritize_value(echo, configuration.echo_statement, configuration.echo_default,
             False)
-        universe_of_discourse = theory.u
+        u = theory.u
         self.statement_index = theory.crossreference_statement(self)
         self._paragraph_header = paragraph_header
         namespace = self._theory  # TODO: Cross-referencing the theory symbol as the nameset of
         # the statement is ugly, there's something wrong with the data model, correct it.
-        super().__init__(u=universe_of_discourse, symbol=symbol, index=index, auto_index=auto_index,
+        super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index,
             namespace=namespace, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
@@ -3646,7 +3645,7 @@ class FormulaStatement(Statement):
             msg='The universe-of-discourse of this formula-statement''s theory-elaboration is '
                 'inconsistent with the universe-of-discourse of the valid-proposition of that '
                 'formula-statement.')
-        universe_of_discourse = theory.u
+        u = theory.u
         # Theory statements must be logical propositions.
         valid_proposition = unpack_formula(valid_proposition)
         verify(valid_proposition.is_strictly_propositional,
@@ -3696,7 +3695,7 @@ class FormulaStatement(Statement):
         is the relation of the valid-proposition-formula it contains."""
         return self.valid_proposition.relation
 
-    def is_formula_syntactically_equivalent_to(self, o2: TheoreticalObject) -> bool:
+    def is_formula_syntactically_equivalent_to(self, phi: FlexibleFormula) -> bool:
         """Return true if ⌜self⌝ is formula-syntactically-equivalent to ⌜o2⌝.
 
         Parameters:
@@ -3705,9 +3704,10 @@ class FormulaStatement(Statement):
             The theoretical-object with which to verify formula-equivalence.
 
         """
-        if self is o2:
+        _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
+        if self is phi:
             return True
-        return self.valid_proposition.is_formula_syntactically_equivalent_to(o2)
+        return self.valid_proposition.is_formula_syntactically_equivalent_to(phi=phi)
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
             visited: (None, set) = None):
@@ -4155,11 +4155,11 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
         p_implies_q__q: Formula = p_implies_q.parameters[1]
         q_implies_p__q: Formula = q_implies_p.parameters[0]
         q_implies_p__p: Formula = q_implies_p.parameters[1]
-        verify(assertion=p_implies_q__p.is_formula_syntactically_equivalent_to(q_implies_p__p),
+        verify(assertion=p_implies_q__p.is_formula_syntactically_equivalent_to(phi=q_implies_p__p),
             msg='The ⌜p⌝ in ⌜p_implies_q⌝ is not syntactically-equivalent to the ⌜p⌝ in  ⌜q_implies_p⌝.',
             severity=verification_severities.error, raise_exception=True, p_implies_q=p_implies_q,
             p_implies_q__p=p_implies_q__p, q_implies_p=q_implies_p, q_implies_p__p=q_implies_p__p)
-        verify(assertion=p_implies_q__q.is_formula_syntactically_equivalent_to(q_implies_p__q),
+        verify(assertion=p_implies_q__q.is_formula_syntactically_equivalent_to(phi=q_implies_p__q),
             msg='The ⌜q⌝ in ⌜p_implies_q⌝ is not syntactically-equivalent to the ⌜q⌝ in  ⌜q_implies_p⌝.',
             severity=verification_severities.error, raise_exception=True, p_implies_q=p_implies_q,
             p_implies_q__q=p_implies_q__q, q_implies_p=q_implies_p, q_implies_p__q=q_implies_p__q)
@@ -4351,12 +4351,14 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
         p_or_r: Formula
         p__in__p_implies_q: Formula = p_implies_q.parameters[0]
         p__in__p_or_r: Formula = p_or_r.parameters[0]
-        verify(assertion=p__in__p_implies_q.is_formula_syntactically_equivalent_to(p__in__p_or_r),
+        verify(
+            assertion=p__in__p_implies_q.is_formula_syntactically_equivalent_to(phi=p__in__p_or_r),
             msg=f'The ⌜p⌝({p__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜p⌝({p__in__p_or_r}) in the formula argument ⌜p_or_r⌝({p_or_r})',
             raise_exception=True, error_code=error_code)
         r__in__r_implies_s: Formula = r_implies_s.parameters[0]
         r__in__p_or_r: Formula = p_or_r.parameters[1]
-        verify(assertion=r__in__r_implies_s.is_formula_syntactically_equivalent_to(r__in__p_or_r),
+        verify(
+            assertion=r__in__r_implies_s.is_formula_syntactically_equivalent_to(phi=r__in__p_or_r),
             msg=f'The ⌜r⌝({r__in__r_implies_s}) in the formula argument ⌜r_implies_s⌝({r_implies_s}) is not syntaxically-equivalent to the ⌜r⌝({r__in__p_or_r}) in the formula argument ⌜p_or_r⌝({p_or_r})',
             raise_exception=True, error_code=error_code)
         q: Formula = p_implies_q.parameters[1]
@@ -4490,14 +4492,14 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
         not_q_or_not_s: Formula
         q__in__p_implies_q: Formula = p_implies_q.parameters[1]
         q__in__not_q_or_not_s: Formula = not_q_or_not_s.parameters[0].parameters[0]
-        verify(
-            assertion=q__in__p_implies_q.is_formula_syntactically_equivalent_to(q__in__p_implies_q),
+        verify(assertion=q__in__p_implies_q.is_formula_syntactically_equivalent_to(
+            phi=q__in__p_implies_q),
             msg=f'The ⌜q⌝({q__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜q⌝({q__in__not_q_or_not_s}) in the formula argument ⌜not_q_or_not_s⌝({not_q_or_not_s})',
             raise_exception=True, error_code=error_code)
         s__in__r_implies_s: Formula = r_implies_s.parameters[1]
         s__in__not_q_or_not_s: Formula = not_q_or_not_s.parameters[1].parameters[0]
         verify(assertion=s__in__r_implies_s.is_formula_syntactically_equivalent_to(
-            s__in__not_q_or_not_s),
+            phi=s__in__not_q_or_not_s),
             msg=f'The ⌜s⌝({s__in__r_implies_s}) in the formula argument ⌜r_implies_s⌝({r_implies_s}) is not syntaxically-equivalent to the ⌜s⌝({s__in__not_q_or_not_s}) in the formula argument ⌜not_q_or_not_s⌝({not_q_or_not_s})',
             raise_exception=True, error_code=error_code)
         p: Formula = p_implies_q.parameters[0]
@@ -4630,7 +4632,8 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
         not_p_or_r: Formula
         p__in__p_or_q: Formula = p_or_q.parameters[0]
         p__in__not_p_or_r: Formula = not_p_or_r.parameters[0].parameters[0]
-        verify(assertion=p__in__p_or_q.is_formula_syntactically_equivalent_to(p__in__not_p_or_r),
+        verify(
+            assertion=p__in__p_or_q.is_formula_syntactically_equivalent_to(phi=p__in__not_p_or_r),
             msg=f'The ⌜p⌝({p__in__p_or_q}) in the formula argument ⌜p_or_q⌝({p_or_q}) is not syntaxically-equivalent to the ⌜p⌝({p__in__not_p_or_r}) in the formula argument ⌜not_p_or_r⌝({not_p_or_r})',
             raise_exception=True, error_code=error_code)
         q: Formula = p_or_q.parameters[1]
@@ -4684,7 +4687,7 @@ class DisjunctiveSyllogism1Declaration(InferenceRuleDeclaration):
         not_p: Formula
         p__in__p_or_q: Formula = p_or_q.parameters[0]
         p__in__not_p: Formula = not_p.parameters[0]
-        verify(assertion=p__in__p_or_q.is_formula_syntactically_equivalent_to(p__in__not_p),
+        verify(assertion=p__in__p_or_q.is_formula_syntactically_equivalent_to(phi=p__in__not_p),
             msg=f'The ⌜p⌝({p__in__p_or_q}) in the formula argument ⌜p_or_q⌝({p_or_q}) is not syntaxically-equivalent to the ⌜p⌝({p__in__not_p}) in the formula argument ⌜not_p⌝({not_p})',
             raise_exception=True, error_code=error_code)
         q: Formula = p_or_q.parameters[1]
@@ -4737,7 +4740,7 @@ class DisjunctiveSyllogism2Declaration(InferenceRuleDeclaration):
         not_q: Formula
         q__in__p_or_q: Formula = p_or_q.parameters[1]
         q__in__not_q: Formula = not_q.parameters[0]
-        verify(assertion=q__in__p_or_q.is_formula_syntactically_equivalent_to(q__in__not_q),
+        verify(assertion=q__in__p_or_q.is_formula_syntactically_equivalent_to(phi=q__in__not_q),
             msg=f'The ⌜p⌝({q__in__p_or_q}) in the formula argument ⌜p_or_q⌝({p_or_q}) is not syntaxically-equivalent to the ⌜p⌝({q__in__not_q}) in the formula argument ⌜not_q⌝({not_q})',
             raise_exception=True, error_code=error_code)
         q: Formula = p_or_q.parameters[0]
@@ -4961,8 +4964,8 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
         q_implies_r: Formula
         q__in__p_implies_q: Formula = p_implies_q.parameters[1]
         q__in__q_implies_r: Formula = q_implies_r.parameters[0]
-        verify(
-            assertion=q__in__p_implies_q.is_formula_syntactically_equivalent_to(q__in__q_implies_r),
+        verify(assertion=q__in__p_implies_q.is_formula_syntactically_equivalent_to(
+            phi=q__in__q_implies_r),
             msg=f'The ⌜q⌝({q__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜q⌝({q__in__q_implies_r}) in the formula argument ⌜q_implies_r⌝({q_implies_r})',
             raise_exception=True, error_code=error_code)
         output: Formula = p_implies_q.parameters[0] | self.u.r.implies | q_implies_r.parameters[1]
@@ -5015,7 +5018,7 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
             error_code=error_code)
         not_p: Formula
         p__in__not_p: Formula = not_p.parameters[0]
-        verify(assertion=p.is_formula_syntactically_equivalent_to(p__in__not_p),
+        verify(assertion=p.is_formula_syntactically_equivalent_to(phi=p__in__not_p),
             msg=f'The formula argument ⌜p⌝({p}) is not syntaxically-equivalent to the ⌜p⌝({p__in__not_p}) in the formula argument ⌜not_q⌝({not_p})',
             raise_exception=True, error_code=error_code)
         verify(assertion=isinstance(t, TheoryDerivation),
@@ -5074,14 +5077,14 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
         x_unequal_y: Formula
         x__in__x_equal_y: Formula = x_equal_y.parameters[0]
         x__in__x_unequal_y: Formula = x_unequal_y.parameters[0]
-        verify(
-            assertion=x__in__x_equal_y.is_formula_syntactically_equivalent_to(x__in__x_unequal_y),
+        verify(assertion=x__in__x_equal_y.is_formula_syntactically_equivalent_to(
+            phi=x__in__x_unequal_y),
             msg=f'The ⌜x⌝({x__in__x_equal_y}) in the formula argument ⌜x_equal_y⌝({x_equal_y}) is not syntaxically-equivalent to the ⌜x⌝({x__in__x_unequal_y}) in the formula argument ⌜x_unequal_y⌝({x_unequal_y})',
             raise_exception=True, error_code=error_code)
         y__in__x_equal_y: Formula = x_equal_y.parameters[1]
         y__in__x_unequal_y: Formula = x_unequal_y.parameters[1]
-        verify(
-            assertion=y__in__x_equal_y.is_formula_syntactically_equivalent_to(y__in__x_unequal_y),
+        verify(assertion=y__in__x_equal_y.is_formula_syntactically_equivalent_to(
+            phi=y__in__x_unequal_y),
             msg=f'The ⌜y⌝({y__in__x_equal_y}) in the formula argument ⌜x_equal_y⌝({x_equal_y}) is not syntaxically-equivalent to the ⌜y⌝({y__in__x_unequal_y}) in the formula argument ⌜y_unequal_y⌝({x_unequal_y})',
             raise_exception=True, error_code=error_code)
         verify(assertion=isinstance(t, TheoryDerivation),
@@ -5178,7 +5181,7 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
             error_code=error_code)
         p: Formula
         p__in__p_implies_q: Formula = p_implies_q.parameters[0]
-        verify(assertion=p__in__p_implies_q.is_formula_syntactically_equivalent_to(p),
+        verify(assertion=p__in__p_implies_q.is_formula_syntactically_equivalent_to(phi=p),
             msg=f'The ⌜p⌝({p__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the formula argument ⌜p⌝({p})',
             raise_exception=True, error_code=error_code)
         q__in__p_implies_q: Formula = p_implies_q.parameters[1]
@@ -5231,7 +5234,8 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
         not_q: Formula
         q__in__p_implies_q: Formula = p_implies_q.parameters[1]
         q__in__not_q: Formula = not_q.parameters[0]
-        verify(assertion=q__in__p_implies_q.is_formula_syntactically_equivalent_to(q__in__not_q),
+        verify(
+            assertion=q__in__p_implies_q.is_formula_syntactically_equivalent_to(phi=q__in__not_q),
             msg=f'The ⌜q⌝({q__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜q⌝({q__in__not_q}) in formula argument ⌜not_q⌝({not_q})',
             raise_exception=True, error_code=error_code)
         p__in__p_implies_q: Formula = p_implies_q.parameters[0]
@@ -5287,7 +5291,7 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
         verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
-        verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(h.child_theory),
+        verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
             raise_exception=True, error_code=error_code)
         p__in__not_p: Formula = not_p.parameters[0]
@@ -5344,7 +5348,7 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
         verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
-        verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(h.child_theory),
+        verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
             raise_exception=True, error_code=error_code)
         x__in__x_unequal_y: Formula = x_unequal_y.parameters[0]
@@ -5400,7 +5404,7 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
         verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
-        verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(h.child_theory),
+        verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
             raise_exception=True, error_code=error_code)
         output: Formula = self.u.r.lnot(p)
@@ -5459,7 +5463,7 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
         verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
-        verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(h.child_theory),
+        verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
             raise_exception=True, error_code=error_code)
         x__in__x_equal_y: Formula = x_equal_y.parameters[0]
@@ -5572,7 +5576,7 @@ class NoteInclusion(AtheoreticalStatement):
         echo = prioritize_value(echo, configuration.echo_note, configuration.echo_default, False)
         verify(is_in_class(t, classes.t), 'theory is not a member of declarative-class theory.',
             t=t, slf=self)
-        universe_of_discourse = t.u
+        u = t.u
         paragraph_header = paragraph_headers.note if paragraph_header is None else paragraph_header
         #  self.statement_index = theory.crossreference_statement(self)
         self.theory = t
@@ -5583,13 +5587,13 @@ class NoteInclusion(AtheoreticalStatement):
         if nameset is None and symbol is None:
             # symbol = self.category.symbol_base
             symbol = paragraph_header.symbol_base
-            index = universe_of_discourse.index_symbol(symbol=symbol) if auto_index else index
+            index = u.index_symbol(symbol=symbol) if auto_index else index
         if isinstance(nameset, str):
             # If symbol was passed as a string,
             # assume the base was passed without index.
             # TODO: Analyse the string if it ends with index in subscript characters.
             symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
-            index = universe_of_discourse.index_symbol(symbol=symbol) if auto_index else index
+            index = u.index_symbol(symbol=symbol) if auto_index else index
         super().__init__(theory=t, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref,
@@ -5886,7 +5890,7 @@ theory-elaboration."""
         theory-elaboration."""
         return self._inference_rule_inclusions
 
-    def is_formula_syntactically_equivalent_to(self, o2: TheoreticalObject) -> bool:
+    def is_formula_syntactically_equivalent_to(self, phi: FlexibleFormula) -> bool:
         """Returns true if ⌜self⌝ is formula-syntactically-equivalent to ⌜o2⌝.
 
         Parameters:
@@ -5895,7 +5899,8 @@ theory-elaboration."""
             The theoretical-object with which to verify formula-equivalence.
 
         """
-        return self is o2
+        _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
+        return self is phi
 
     @property
     def is_strictly_propositional(self) -> bool:
@@ -6433,15 +6438,15 @@ class SimpleObjct(TheoreticalObject):
     def echo(self):
         repm.prnt(self.rep_report())
 
-    def is_masked_formula_similar_to(self, o2, mask, _values):
-        assert isinstance(o2, TheoreticalObject)
-        if isinstance(o2, FreeVariable):
-            if o2 in mask:
+    def is_masked_formula_similar_to(self, phi, mask, _values):
+        assert isinstance(phi, TheoreticalObject)
+        if isinstance(phi, FreeVariable):
+            if phi in mask:
                 # o2 is a variable, and it is present in the mask.
                 # first, we must check if it is already in the dictionary of values.
-                if o2 in _values:
+                if phi in _values:
                     # the value is already present in the dictionary.
-                    known_value = _values[o2]
+                    known_value = _values[phi]
                     if known_value is self:
                         # the existing value matches the newly observed value.
                         # until there, masked-formula-similitude is preserved.
@@ -6453,14 +6458,14 @@ class SimpleObjct(TheoreticalObject):
                 else:
                     # the value is not present in the dictionary.
                     # until there, masked-formula-similitude is preserved.
-                    _values[o2] = self
+                    _values[phi] = self
                     return True, _values
-        if not isinstance(o2, SimpleObjct):
+        if not isinstance(phi, SimpleObjct):
             # o1 (self) is a simple-objct, and o2 is something else.
             # in consequence, masked-formula-similitude is no longer preserved.
             return False, _values
         # o2 is not a variable.
-        return self.is_formula_syntactically_equivalent_to(o2), _values
+        return self.is_formula_syntactically_equivalent_to(phi), _values
 
     def is_strictly_propositional(self) -> bool:
         """A simple-object if propositional if and only if it is truth or the falsehood."""
@@ -6992,7 +6997,8 @@ def verify_definition_inclusion(t: TheoryDerivation, input_value: FlexibleDefini
 def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (None, str) = None,
         form: (None, FlexibleFormula) = None, mask: (None, frozenset[FreeVariable]) = None,
         is_strictly_propositional: (None, bool) = None, raise_exception: bool = True,
-        error_code: (None, ErrorCode) = None) -> tuple[bool, (None, Formula), (None, str)]:
+        error_code: (None, ErrorCode) = None) -> tuple[
+    bool, (None, TheoreticalObject), (None, str)]:
     """Many punctilious pythonic methods or functions expect some formula as input parameters. This function assures that the input value is a proper formula and that it is consistent with possible contraints imposed on that formula.
 
     If ⌜input_value⌝ is of type formula, it is already well typed.
@@ -7008,7 +7014,7 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
     :return:
     """
     ok: bool
-    formula: (None, Formula) = None
+    formula: (None, TheoreticalObject) = None
     msg: (None, str) = None
     if isinstance(input_value, Formula):
         # the input is already correctly typed as a Formula.
@@ -7055,7 +7061,7 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
                 msg=f'The form ⌜{form}⌝ passed to verify the structure of formula ⌜{formula}⌝ is not a proper formula.',
                 argument=input_value, u=u, form=form, mask=mask)
         form: Formula
-        is_of_form: bool = form.is_masked_formula_similar_to(o2=formula, mask=mask)
+        is_of_form: bool = form.is_masked_formula_similar_to(phi=formula, mask=mask)
         if not is_of_form:
             # a certain form is required for the formula,
             # and the form of the formula does not match that required form.
@@ -10280,8 +10286,7 @@ class UniverseOfDiscourse(SymbolicObject):
         :param symbol:
         :return:
         """
-        x = FreeVariable(universe_of_discourse=self, nameset=symbol,
-            status=FreeVariable.scope_initialization_status,
+        x = FreeVariable(u=self, symbol=symbol, status=FreeVariable.scope_initialization_status,
             is_strictly_propositional=is_strictly_propositional, echo=echo)
         return x
 
@@ -10304,7 +10309,7 @@ class UniverseOfDiscourse(SymbolicObject):
             echo: bool = None):
         """Declare a new theory in this universe-of-discourse.
 
-        Shortcut for Theory(universe_of_discourse, ...).
+        Shortcut for Theory(u, ...).
 
         :param nameset:
         :param is_theory_foundation_system:

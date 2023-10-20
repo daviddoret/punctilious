@@ -19,7 +19,7 @@ class TestVariableSubstitution(TestCase):
         p_statement = t.i.axiom_interpretation.infer_formula_statement(a=ap, p=p_formula, echo=True)
         # y_sequence = tuple()
         p_prime = t.i.vs.infer_formula_statement(p=p_statement, phi=u.r.tupl(), echo=True)
-        self.assertTrue(p_prime.is_formula_syntactically_equivalent_to(p_statement))
+        self.assertTrue(p_prime.is_formula_syntactically_equivalent_to(phi=p_statement))
         self.assertEqual('𝑟₁(𝑟₂(𝑜₁, 𝑜₂))', p_prime.rep_formula(encoding=pu.encodings.unicode))
 
     def test_variable_substitution_with_free_variables(self):
@@ -45,4 +45,4 @@ class TestVariableSubstitution(TestCase):
         p_prime = t.i.vs.infer_formula_statement(p=p_statement, phi=u.r.tupl(o4, o6, o5), echo=True)
         self.assertEqual('𝑓(𝑔(𝑔(𝑜₄, 𝑔(𝑓(𝑜₆), 𝑜₅)), 𝑔(𝑜₆, 𝑜₅)))',
             p_prime.rep_formula(encoding=pu.encodings.unicode))
-        p_prime.is_formula_syntactically_equivalent_to(o2=f(g(g(o4, g(f(o6), o5)), g(o6, o5))))
+        p_prime.is_formula_syntactically_equivalent_to(phi=f(g(g(o4, g(f(o6), o5)), g(o6, o5))))

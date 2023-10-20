@@ -15,7 +15,7 @@ class TestDestructiveDilemma(TestCase):
         theory_axiom: pu.AxiomInclusion = test.theory_axiom
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
-            o2=u.r.lnot(o1) | u.r.lor | u.r.lnot(o3)))
+            phi=u.r.lnot(o1) | u.r.lor | u.r.lnot(o3)))
         # Syntax error
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.destructive_dilemma.infer_formula_statement(p_implies_q=o1 | u.r.implies | o2,
