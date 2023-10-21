@@ -10,6 +10,7 @@ This table of contents references the key mathematical concepts used by punctili
    :titlesonly:
    :caption: Table of contents
 
+   alpha-equivalence<math/concept/alpha_equivalence_math_concept>
    axiom<math/concept/axiom_math_concept>
    axiomatic-method<math/concept/axiomatic_method_math_concept>
    definition<math/concept/definition_math_concept>

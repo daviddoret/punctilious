@@ -5182,6 +5182,7 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         p__in__p_implies_q: Formula = p_implies_q.parameters[0]
 
         # CORRECT BUG #237
+        print(1 / 0)
 
         # TODO: A situation that may be difficult to troubleshoot is when two objects (e.g. variables) are given identical symbols.
         # In this situation, the error message will look weird.

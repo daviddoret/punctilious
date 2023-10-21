@@ -34,6 +34,7 @@ Tags overview
     double-negation-introduction (4) <double-negation-introduction.rst>
     equal-terms-substitution (4) <equal-terms-substitution.rst>
     equality-commutativity (4) <equality-commutativity.rst>
+    equivalence (1) <equivalence.rst>
     hypothetical-syllogism (4) <hypothetical-syllogism.rst>
     inclusion (33) <inclusion.rst>
     inconsistency-introduction-1 (4) <inconsistency-introduction-1.rst>
