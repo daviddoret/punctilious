@@ -19,6 +19,9 @@ Quotes
    Expressions :math:`\mathcal{E}`, :math:`\mathcal{E}'` which differ only in the names of bound variables will be regarded by us as identical. This is sometimes expressed by saying that :math:`\mathcal{E}` and :math:`\mathcal{E}'` are :math:`\alpha`-equivalent. In other words, we are only interested in certain equivalence classes of (the concrete representations of) expressions, expressions "modulo renaming of bound variables".
    :cite:p:`troelstra_2000_basicprooftheory{p. 3}`
 
+
+
+
 Sources
 ----------
 
