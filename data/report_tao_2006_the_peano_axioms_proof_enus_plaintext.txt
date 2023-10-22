@@ -6,23 +6,23 @@ Stabilized: False
 Extended theory: N/A
 
 # Simple-objects declarations
-Let "natural-number", "0", "1", "2", "3", "4", "5", "6" be simple-objects in U4.
+Let "natural-number", "0", "1", "2", "3", "4", "5", "6" be simple-objects in U48.
 
 # Relations
-Let "++", "Inc" be unary-relations in U4.
-Let "and", "neq", "is-a", "=", "==>" be binary-relations in U4.
+Let "++", "Inc" be unary-relations in U48.
+Let "=", "==>", "neq", "and", "is-a" be binary-relations in U48.
 
 # Inference rules
 The following inference rules are considered valid under this theory:
-Let "axiom-interpretation" be an inference-rule defined as "(A, P |- P)" in U4.
-Let "conjunction-introduction" be an inference-rule defined as "(P8, Q5 |- (P8 and Q5))" in U4.
-Let "definition-interpretation" be an inference-rule defined as "(D, x, y |- (x = y))" in U4.
-Let "equal-terms-substitution" be an inference-rule defined as "(P6, (x3 = y3) |- Q4)" in U4.
-Let "equality-commutativity" be an inference-rule defined as "((x1 = y1) |- (y1 = x1))" in U4.
-Let "inconsistency-introduction-2" be an inference-rule defined as "((P9 = Q6), (P9 neq Q6) |- Inc(T1))" in U4.
-Let "modus-ponens" be an inference-rule defined as "((P3 ==> Q2), P3 |- Q2)" in U4.
-Let "proof-by-refutation-2" be an inference-rule defined as "((H1 formulate (x7 = y7)), Inc(H1) |- (x7 neq y7))" in U4.
-Let "variable-substitution" be an inference-rule defined as "(P1, O1 |- Q1)" in U4.
+Let "axiom-interpretation" be an inference-rule defined as "(A, P |- P)" in U48.
+Let "conjunction-introduction" be an inference-rule defined as "(P8, Q5 |- (P8 and Q5))" in U48.
+Let "definition-interpretation" be an inference-rule defined as "(D, x, y |- (x = y))" in U48.
+Let "equal-terms-substitution" be an inference-rule defined as "(P6, (x3 = y3) |- Q4)" in U48.
+Let "equality-commutativity" be an inference-rule defined as "((x1 = y1) |- (y1 = x1))" in U48.
+Let "inconsistency-introduction-2" be an inference-rule defined as "((P9 = Q6), (P9 neq Q6) |- Inc(T1))" in U48.
+Let "modus-ponens" be an inference-rule defined as "((P3 ==> Q2), P3 |- Q2)" in U48.
+Let "proof-by-refutation-2" be an inference-rule defined as "((H1 formulate (x7 = y7)), Inc(H1) |- (x7 neq y7))" in U48.
+Let "variable-substitution" be an inference-rule defined as "(P1, O1 |- Q1)" in U48.
 
 # Theory elaboration sequence
 # 2: The natural numbers

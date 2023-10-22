@@ -13,7 +13,7 @@ t1 = u.t(echo=True)
 a = t1.include_axiom(a=a1)
 t1.i.axiom_interpretation.infer_formula_statement(a=a, p=f(o1, o2), lock=False)
 t1.i.axiom_interpretation.infer_formula_statement(a=a, p=f(o2, o3), lock=False)
-with u.v('x') as x, u.v('y') as y, u.v('z') as z:
+with u.with_variable('x') as x, u.with_variable('y') as y, u.with_variable('z') as z:
     implication = t1.i.axiom_interpretation.infer_formula_statement(a=a,
         p=(f(x, y) | u.r.land | f(y, z)) | u.r.implies | u.r.lnot(f(x, z)), lock=True)
 t1.stabilize()

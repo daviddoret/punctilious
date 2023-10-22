@@ -71,6 +71,7 @@ My tags: python
     ../python/class/proof_by_refutation_2_declaration_python_class.rst
     ../python/class/proof_by_refutation_2_inclusion_python_class.rst
     ../python/class/universe_of_discourse_python_class.rst
+    ../python/class/variable_python_class.rst
     ../python/class/variable_substitution_declaration_python_class.rst
     ../python/class/variable_substitution_inclusion_python_class.rst
     ../python/sample/absorption_python_sample.rst
@@ -103,4 +104,5 @@ My tags: python
     ../python/sample/proof_by_contradiction_2_python_sample.rst
     ../python/sample/proof_by_refutation_1_python_sample.rst
     ../python/sample/proof_by_refutation_2_python_sample.rst
+    ../python/sample/variable_python_sample.rst
     ../python/sample/variable_substitution_python_sample.rst

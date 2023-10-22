@@ -29,6 +29,7 @@ class MGZ2021ClassicalLogicK0(pu.Package):
             natural_language=f'¬¬𝐴 ⊃ 𝐴')
         self.pl12_inclusion = t.include_axiom(ref='PL12', symbol=axiom_symbol, index=1,
             a=self.pl12_declaration)
-        with u.v(symbol='A', auto_index=False) as a, u.v(symbol='B', auto_index=False) as b:
+        with u.with_variable(symbol='A', auto_index=False) as a, u.with_variable(symbol='B',
+                auto_index=False) as b:
             self.pl12_statement = t.i.axiom_interpretation.infer_formula_statement(
                 a=self.pl12_inclusion, p=u.r.lnot(u.r.lnot(a)) | u.r.implies | a, lock=True)

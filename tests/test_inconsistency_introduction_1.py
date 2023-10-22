@@ -30,7 +30,7 @@ class TestInconsistencyIntroduction1(TestCase):
             lock=False)
         t1_p2 = t1.i.axiom_interpretation.infer_formula_statement(a=axiom_theory, p=r1(o2, o3),
             lock=False)
-        with u.v() as x, u.v() as y, u.v() as z:
+        with u.with_variable() as x, u.with_variable() as y, u.with_variable() as z:
             t1_p3_implication = t1.i.axiom_interpretation.infer_formula_statement(a=axiom_theory,
                 p=((r1(x, y) | u.r.land | r1(y, z)) | u.r.implies | r1(x, z)), lock=True)
         t1.stabilize()

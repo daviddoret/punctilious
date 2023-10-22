@@ -35,4 +35,5 @@ My tags: sample
     ../python/sample/proof_by_contradiction_2_python_sample.rst
     ../python/sample/proof_by_refutation_1_python_sample.rst
     ../python/sample/proof_by_refutation_2_python_sample.rst
+    ../python/sample/variable_python_sample.rst
     ../python/sample/variable_substitution_python_sample.rst

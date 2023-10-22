@@ -15,7 +15,7 @@ Tags overview
     biconditional-elimination-1 (4) <biconditional-elimination-1.rst>
     biconditional-elimination-2 (4) <biconditional-elimination-2.rst>
     biconditional-introduction (4) <biconditional-introduction.rst>
-    class (68) <class.rst>
+    class (69) <class.rst>
     collection (2) <collection.rst>
     concept (31) <concept.rst>
     conjunction-elimination-1 (4) <conjunction-elimination-1.rst>
@@ -49,8 +49,9 @@ Tags overview
     proof-by-contradiction-2 (4) <proof-by-contradiction-2.rst>
     proof-by-refutation-1 (4) <proof-by-refutation-1.rst>
     proof-by-refutation-2 (4) <proof-by-refutation-2.rst>
-    python (99) <python.rst>
-    sample (31) <sample.rst>
+    python (101) <python.rst>
+    sample (32) <sample.rst>
     statement (1) <statement.rst>
     universe-of-discourse (1) <universe-of-discourse.rst>
+    variable (2) <variable.rst>
     variable-substitution (4) <variable-substitution.rst>

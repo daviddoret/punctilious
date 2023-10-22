@@ -16,7 +16,7 @@ class TestTheoryElaboration(TestCase):
         pu.configuration.echo_default = True
         robust_theory = u.t()
         ap1 = robust_theory.include_axiom(a=a1)
-        with u.v() as x, u.v() as y, u.v() as z:
+        with u.with_variable() as x, u.with_variable() as y, u.with_variable() as z:
             implication = robust_theory.i.axiom_interpretation.infer_formula_statement(a=ap1,
                 p=u.f(u.r.implies, u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)), u.f(r1, x, z)),
                 lock=False)

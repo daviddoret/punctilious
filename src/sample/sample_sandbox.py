@@ -17,15 +17,15 @@ b = u.o.declare()
 c = u.o.declare()
 d = u.o.declare()
 
-with u.v() as x, u.v() as y:
+with u.with_variable() as x, u.with_variable() as y:
     phi: pu.Formula = (a | u.r.implies | x) | u.r.iff | (y | u.r.land | b)
     print(phi)
 
-with u.v() as x, u.v() as y:
+with u.with_variable() as x, u.with_variable() as y:
     psi: pu.Formula = (x | u.r.implies | x) | u.r.iff | (y | u.r.land | b)
     print(psi)
 
-v = frozenset(phi.get_variable_ordered_set()).union(psi.get_variable_ordered_set())
+v = frozenset(phi.v).union(psi.v)
 
 print(phi.is_masked_formula_similar_to(phi=psi, mask=v))
 print(psi.is_masked_formula_similar_to(phi=phi, mask=v))

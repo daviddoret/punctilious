@@ -30,24 +30,24 @@ class TestValidateFormulaStatement(TestCase):
         _, phi_form_ok_1, _ = pu.verify_formula_statement(t=t, input_value=phi, form=phi)
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi=phi_form_ok_1))
         # Successful form validations
-        with u.v('x') as x:
+        with u.with_variable('x') as x:
             _, phi_form_ok_1, _ = pu.verify_formula_statement(t=t, input_value=phi, form=(r1, x),
                 mask=[x])
             self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi=phi_form_ok_1))
-        with u.v('x') as x:
+        with u.with_variable('x') as x:
             _, phi_form_ok_1, _ = pu.verify_formula_statement(t=t, input_value=phi, form=(x, o1),
                 mask=[x])
             self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi=phi_form_ok_1))
-        with u.v('x') as x, u.v('y') as y:
+        with u.with_variable('x') as x, u.with_variable('y') as y:
             _, phi_form_ok_1, _ = pu.verify_formula_statement(t=t, input_value=phi, form=(x, y),
                 mask=[x, y])
             self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi=phi_form_ok_1))
         # Failed form validations
         with self.assertRaises(pu.PunctiliousException):
-            with u.v('x') as x:
+            with u.with_variable('x') as x:
                 pu.verify_formula_statement(t=t, input_value=phi, form=(r2, x), mask=[x])
         with self.assertRaises(pu.PunctiliousException):
-            with u.v('x') as x:
+            with u.with_variable('x') as x:
                 pu.verify_formula_statement(t=t, input_value=phi, form=(x, o2), mask=[x])
         # Inconsistent relation universe
         with self.assertRaises(pu.PunctiliousException):

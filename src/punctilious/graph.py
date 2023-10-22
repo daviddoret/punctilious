@@ -14,8 +14,8 @@ def graph_symbolic_object(g: nx.MultiDiGraph, o: pu.SymbolicObject):
         graph_theory(g, o)
     elif pu.is_in_class(o, pu.classes.relation):
         graph_relation(g, o)
-    elif pu.is_in_class(o, pu.classes.free_variable):
-        graph_free_variable(g, o)
+    elif pu.is_in_class(o, pu.classes.variable):
+        graph_variable(g, o)
     elif pu.is_in_class(o, pu.classes.formula):
         graph_formula(g, o)
     elif pu.is_in_class(o, pu.classes.formula_statement):
@@ -34,7 +34,7 @@ def graph_formula_statement(g: nx.MultiDiGraph, s: pu.TheoryDerivation):
     g.add_edge(s.valid_proposition.rep_name(), t.rep_name())
 
 
-def graph_free_variable(g: nx.MultiDiGraph, x: pu.FreeVariable):
+def graph_variable(g: nx.MultiDiGraph, x: pu.Variable):
     g.add_node(x.rep_name())
 
 

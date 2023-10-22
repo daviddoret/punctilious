@@ -11,11 +11,11 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 # Elaborate a dummy theory with inconsistent propositions
 pu.configuration.echo_proof = False
 theory_axiom = t1.include_axiom(axiom)
-f_o1_eq_f_02 = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom,
-    (f(o1) | u.r.eq | f(o2)))
-with u.v('x') as x, u.v('y') as y:
+f_o1_eq_f_02 = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
+    p=f(o1) | u.r.eq | f(o2), lock=False)
+with u.with_variable('x') as x, u.with_variable('y') as y:
     implication = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
-        p=(f(x) | u.r.eq | f(y)) | u.r.implies | (x | u.r.eq | y))
+        p=(f(x) | u.r.eq | f(y)) | u.r.implies | (x | u.r.eq | y), lock=True)
 t1.stabilize()
 
 # Pose the inequality hypothesis
@@ -39,39 +39,39 @@ proposition_of_interest = t1.i.proof_by_contradiction_2.infer_formula_statement(
 
 pass
 
-Let "U59" be a universe-of-discourse.
+Let "U67" be a universe-of-discourse.
 
-Let "T1" be a theory-derivation in U59.
+Let "T1" be a theory-derivation in U67.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 
-Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A2, P1 |- P1)" be included and considered valid in T1.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A, P |- P)" be included and considered valid in T1.
 
 Proposition (T1.P1): (f(o1) = f(o2)).
 
-Proposition (T1.P2): ((f(x3) = f(y3)) ==> (x3 = y3)).
+Proposition (T1.P2): ((f(x1) = f(y1)) ==> (x1 = y1)).
 
-Axiom (H1.A2): Let axiom A4 "By hypothesis, assume (o1 neq o2) is true." be included (postulated) in H1.
+Axiom (H1.A2): Let axiom A2 "By hypothesis, assume (o1 neq o2) is true." be included (postulated) in H1.
 
-Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A2, P1 |- P1)" be included and considered valid in H1.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A, P |- P)" be included and considered valid in H1.
 
 Proposition (H1.P3): (o1 neq o2).
 
 Hypothesis (T1.H1) - We pose the negation hypothesis: (o1 neq o2). This hypothesis is elaborated in theory H1.
 
-Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P3, O1 |- Q1)" be included and considered valid in H1.
+Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P1, O1 |- Q1)" be included and considered valid in H1.
 
 Proposition (H1.P4): ((f(o1) = f(o2)) ==> (o1 = o2)).
 
-Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "((P5 ==> Q2), P5 |- Q2)" be included and considered valid in H1.
+Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "((P3 ==> Q2), P3 |- Q2)" be included and considered valid in H1.
 
 Proposition (H1.P5): (o1 = o2).
 
-Inference rule (inconsistency-introduction-2): Let inference-rule inconsistency-introduction-2 defined as "((P8 = Q4), (P8 neq Q4) |- Inc(T1))" be included and considered valid in T1.
+Inference rule (inconsistency-introduction-2): Let inference-rule inconsistency-introduction-2 defined as "((P6 = Q4), (P6 neq Q4) |- Inc(T1))" be included and considered valid in T1.
 
-Proposition (T1.P6) - Proof of hypothesis inconsistency: Inc(H1). Proof: Let (P = Q) := (o1 = o2) follows from prop. (P5). Let (P neq Q)) := (o1 neq o2) follows from prop. (P3). Therefore, by the  inference rule: ((P8 = Q4), (P8 neq Q4) |- Inc(T1)), it follows that Inc(H1). QED
+Proposition (T1.P6) - Proof of hypothesis inconsistency: Inc(H1). Proof: Let (P = Q) := (o1 = o2) follows from prop. (P5). Let (P neq Q)) := (o1 neq o2) follows from prop. (P3).  Therefore, by the inconsistency-introduction-2 inference rule: ((P6 = Q4), (P6 neq Q4) |- Inc(T1)), it follows that Inc(H1). QED
 
-Inference rule (proof-by-contradiction-2): Let inference-rule proof-by-contradiction-2 defined as "((H1 formulate (x6 neq y6)), Inc(H1) |- (x6 = y6))" be included and considered valid in T1.
+Inference rule (proof-by-contradiction-2): Let inference-rule proof-by-contradiction-2 defined as "((H1 formulate (x4 neq y4)), Inc(H1) |- (x4 = y4))" be included and considered valid in T1.
 
-Proposition (T1.P7) - The proposition of interest: (o1 = o2). Proof: Let hyp. (H1) be the hypothesis (o1 neq o2). Inc(H1) follows from prop. (P6).Therefore, by the  inference rule: ((H1 formulate (x6 neq y6)), Inc(H1) |- (x6 = y6)), it follows that (o1 = o2). QED
+Proposition (T1.P7) - The proposition of interest: (o1 = o2). Proof: Let hyp. (H1) be the hypothesis (o1 neq o2). Inc(H1) follows from prop. (P6). Therefore, by the proof-by-contradiction-2 inference rule: ((H1 formulate (x4 neq y4)), Inc(H1) |- (x4 = y4)), it follows that (o1 = o2). QED
 

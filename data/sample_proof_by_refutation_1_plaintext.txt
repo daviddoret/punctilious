@@ -11,11 +11,11 @@ t1 = u.t(echo=True)
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
 a = t1.include_axiom(a=a1)
-t1.i.axiom_interpretation.infer_formula_statement(a=a, p=f(o1, o2))
-t1.i.axiom_interpretation.infer_formula_statement(a=a, p=f(o2, o3))
-with u.v('x') as x, u.v('y') as y, u.v('z') as z:
+t1.i.axiom_interpretation.infer_formula_statement(a=a, p=f(o1, o2), lock=False)
+t1.i.axiom_interpretation.infer_formula_statement(a=a, p=f(o2, o3), lock=False)
+with u.with_variable('x') as x, u.with_variable('y') as y, u.with_variable('z') as z:
     implication = t1.i.axiom_interpretation.infer_formula_statement(a=a,
-        p=(f(x, y) | u.r.land | f(y, z)) | u.r.implies | u.r.lnot(f(x, z)))
+        p=(f(x, y) | u.r.land | f(y, z)) | u.r.implies | u.r.lnot(f(x, z)), lock=True)
 t1.stabilize()
 
 # Pose the negation hypothesis
@@ -35,45 +35,45 @@ h_inconsistency = t1.i.inconsistency_introduction_1.infer_formula_statement(p=h.
 proposition_of_interest = t1.i.proof_by_refutation_1.infer_formula_statement(h=h,
     inc_h=h_inconsistency, subtitle='The proposition of interest')
 
-Let "U61" be a universe-of-discourse.
+Let "U69" be a universe-of-discourse.
 
-Let "T1" be a theory-derivation in U61.
+Let "T1" be a theory-derivation in U69.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom to establish some ground propositions." be included (postulated) in T1.
 
-Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A2, P1 |- P1)" be included and considered valid in T1.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A, P |- P)" be included and considered valid in T1.
 
-Proposition (T1.P1): f1(o1, o2). Proof: "Dummy axiom to establish some ground propositions." is postulated by axiom (A1). f1(o1, o2) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that f1(o1, o2). QED
+Proposition (T1.P1): f1(o1, o2). Proof: "Dummy axiom to establish some ground propositions." is postulated by axiom (A1). f1(o1, o2) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that f1(o1, o2). QED
 
-Proposition (T1.P2): f1(o2, o3). Proof: "Dummy axiom to establish some ground propositions." is postulated by axiom (A1). f1(o2, o3) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that f1(o2, o3). QED
+Proposition (T1.P2): f1(o2, o3). Proof: "Dummy axiom to establish some ground propositions." is postulated by axiom (A1). f1(o2, o3) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that f1(o2, o3). QED
 
-Proposition (T1.P3): ((f1(x3, y3) and f1(y3, z1)) ==> not(f1(x3, z1))). Proof: "Dummy axiom to establish some ground propositions." is postulated by axiom (A1). ((f1(x3, y3) and f1(y3, z1)) ==> not(f1(x3, z1))) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that ((f1(x3, y3) and f1(y3, z1)) ==> not(f1(x3, z1))). QED
+Proposition (T1.P3): ((f1(x1, y1) and f1(y1, z1)) ==> not(f1(x1, z1))). Proof: "Dummy axiom to establish some ground propositions." is postulated by axiom (A1). ((f1(x1, y1) and f1(y1, z1)) ==> not(f1(x1, z1))) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that ((f1(x1, y1) and f1(y1, z1)) ==> not(f1(x1, z1))). QED
 
-Axiom (H1.A2): Let axiom A4 "By hypothesis, assume f1(o1, o3) is true." be included (postulated) in H1.
+Axiom (H1.A2): Let axiom A2 "By hypothesis, assume f1(o1, o3) is true." be included (postulated) in H1.
 
-Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A2, P1 |- P1)" be included and considered valid in H1.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A, P |- P)" be included and considered valid in H1.
 
-Proposition (H1.P4): f1(o1, o3). Proof: "By hypothesis, assume f1(o1, o3) is true." is postulated by axiom (A2). f1(o1, o3) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that f1(o1, o3). QED
+Proposition (H1.P4): f1(o1, o3). Proof: "By hypothesis, assume f1(o1, o3) is true." is postulated by axiom (A2). f1(o1, o3) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that f1(o1, o3). QED
 
 Hypothesis (T1.H1) - We pose the positive hypothesis: f1(o1, o3). This hypothesis is elaborated in theory H1.
 
-Inference rule (conjunction-introduction): Let inference-rule conjunction-introduction defined as "(P3, Q1 |- (P3 and Q1))" be included and considered valid in H1.
+Inference rule (conjunction-introduction): Let inference-rule conjunction-introduction defined as "(P1, Q1 |- (P1 and Q1))" be included and considered valid in H1.
 
-Proposition (H1.P5): (f1(o1, o2) and f1(o2, o3)). Proof: f1(o1, o2), of the form P3, follows from prop. (P1). f1(o2, o3), of the form Q1, follows from prop. (P2). Therefore, by the  inference rule: (P3, Q1 |- (P3 and Q1)), it follows that (f1(o1, o2) and f1(o2, o3)). QED
+Proposition (H1.P5): (f1(o1, o2) and f1(o2, o3)). Proof: f1(o1, o2), of the form P1, follows from prop. (P1). f1(o2, o3), of the form Q1, follows from prop. (P2).  Therefore, by the conjunction-introduction inference rule: (P1, Q1 |- (P1 and Q1)), it follows that (f1(o1, o2) and f1(o2, o3)). QED
 
-Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P4, O1 |- Q2)" be included and considered valid in H1.
+Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P2, O1 |- Q2)" be included and considered valid in H1.
 
-Proposition (H1.P6): ((f1(o1, o2) and f1(o2, o3)) ==> not(f1(o1, o3))). Proof: ((f1(x3, y3) and f1(y3, z1)) ==> not(f1(x3, z1))) follows from prop. (P3). Let x3 = o1, y3 = o2, z1 = o3.Therefore, by the  inference rule: (P4, O1 |- Q2), it follows that ((f1(o1, o2) and f1(o2, o3)) ==> not(f1(o1, o3))). QED
+Proposition (H1.P6): ((f1(o1, o2) and f1(o2, o3)) ==> not(f1(o1, o3))). Proof: ((f1(x1, y1) and f1(y1, z1)) ==> not(f1(x1, z1))) follows from prop. (P3). Let x1 = o1, y1 = o2, z1 = o3. Therefore, by the variable-substitution inference rule: (P2, O1 |- Q2), it follows that ((f1(o1, o2) and f1(o2, o3)) ==> not(f1(o1, o3))). QED
 
-Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "((P6 ==> Q3), P6 |- Q3)" be included and considered valid in H1.
+Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "((P4 ==> Q3), P4 |- Q3)" be included and considered valid in H1.
 
-Proposition (H1.P7): not(f1(o1, o3)). Proof: ((f1(o1, o2) and f1(o2, o3)) ==> not(f1(o1, o3))) follows from prop. (P6).(f1(o1, o2) and f1(o2, o3)) follows from prop. (P5).Therefore, by the  inference rule: ((P6 ==> Q3), P6 |- Q3), it follows that not(f1(o1, o3)). QED
+Proposition (H1.P7): not(f1(o1, o3)). Proof: ((f1(o1, o2) and f1(o2, o3)) ==> not(f1(o1, o3))) follows from prop. (P6).(f1(o1, o2) and f1(o2, o3)) follows from prop. (P5). Therefore, by the modus-ponens inference rule: ((P4 ==> Q3), P4 |- Q3), it follows that not(f1(o1, o3)). QED
 
-Inference rule (inconsistency-introduction-1): Let inference-rule inconsistency-introduction-1 defined as "(P9, not(P9) |- Inc(T1))" be included and considered valid in T1.
+Inference rule (inconsistency-introduction-1): Let inference-rule inconsistency-introduction-1 defined as "(P7, not(P7) |- Inc(T1))" be included and considered valid in T1.
 
-Proposition (T1.P8) - Proof of the hypothesis inconsistency: Inc(H1). Proof: Let P := f1(o1, o3), which follows from prop. (P4). Let not(P) := not(f1(o1, o3)), which follows from prop. (P7). Therefore, by the  inference rule: (P9, not(P9) |- Inc(T1)), it follows that Inc(H1). QED
+Proposition (T1.P8) - Proof of the hypothesis inconsistency: Inc(H1). Proof: Let P := f1(o1, o3), which follows from prop. (P4). Let not(P) := not(f1(o1, o3)), which follows from prop. (P7).  Therefore, by the inconsistency-introduction-1 inference rule: (P7, not(P7) |- Inc(T1)), it follows that Inc(H1). QED
 
-Inference rule (proof-by-refutation-1): Let inference-rule proof-by-refutation-1 defined as "((H1 formulate P12), Inc(H1) |- not(P12))" be included and considered valid in T1.
+Inference rule (proof-by-refutation-1): Let inference-rule proof-by-refutation-1 defined as "((H1 formulate P10), Inc(H1) |- not(P10))" be included and considered valid in T1.
 
-Proposition (T1.P9) - The proposition of interest: not(f1(o1, o3)). Proof: Let hyp. (H1) be the hypothesis f1(o1, o3). Inc(H1) follows from prop. (P8).Therefore, by the  inference rule: ((H1 formulate P12), Inc(H1) |- not(P12)), it follows that not(f1(o1, o3)). QED
+Proposition (T1.P9) - The proposition of interest: not(f1(o1, o3)). Proof: Let hyp. (H1) be the hypothesis f1(o1, o3). Inc(H1) follows from prop. (P8). Therefore, by the proof-by-refutation-1 inference rule: ((H1 formulate P10), Inc(H1) |- not(P10)), it follows that not(f1(o1, o3)). QED
 

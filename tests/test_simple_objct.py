@@ -4,7 +4,7 @@ import punctilious as pu
 
 class TestSimpleObjct(TestCase):
     def test_simple_objct(self):
-        pu.configuration.echo_free_variable_declaration = True
+        pu.configuration.echo_variable_declaration = True
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
         self.assertEqual('o1', o1.rep(pu.encodings.plaintext))

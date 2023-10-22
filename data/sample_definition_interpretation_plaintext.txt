@@ -23,7 +23,7 @@ Let "T1" be a theory-derivation in U19.
 
 Definition (T1.D1): Let definition D1 "Dummy definition for demonstration purposes" be included (postulated) in T1.
 
-Inference rule (definition-interpretation): Let inference-rule definition-interpretation defined as "(D2, x1, y1 |- (x1 = y1))" be included and considered valid in T1.
+Inference rule (definition-interpretation): Let inference-rule definition-interpretation defined as "(D, x, y |- (x = y))" be included and considered valid in T1.
 
-Proposition (T1.P1) - The proposition of interest: (r1(o1, o2) = r2(o3)). Proof: "Dummy definition for demonstration purposes" is postulated by def. (D1). r1(o1, o2) is an interpretation of that definition.Therefore, by the  inference rule: (D2, x1, y1 |- (x1 = y1)), it follows that (r1(o1, o2) = r2(o3)). QED
+Proposition (T1.P1) - The proposition of interest: (r1(o1, o2) = r2(o3)). Proof: "Dummy definition for demonstration purposes" is postulated by def. (D1). r1(o1, o2) is an interpretation of that definition. Therefore, by the definition-interpretation inference rule: (D, x, y |- (x = y)), it follows that (r1(o1, o2) = r2(o3)). QED
 

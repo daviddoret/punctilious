@@ -28,7 +28,8 @@ class MGZ2021IntuitionisticLogicJ0(pu.Package):
             natural_language=f'¬𝐴 ⊃ (𝐴 ⊃ 𝐵)')
         self.pl11_inclusion = t.include_axiom(ref='PL11', symbol=axiom_symbol, index=1,
             a=self.pl11_declaration)
-        with u.v(symbol='A', auto_index=False) as a, u.v(symbol='B', auto_index=False) as b:
+        with u.with_variable(symbol='A', auto_index=False) as a, u.with_variable(symbol='B',
+                auto_index=False) as b:
             self.pl11_statement = t.i.axiom_interpretation.infer_formula_statement(
                 a=self.pl11_inclusion, p=u.r.lnot(a) | u.r.implies | (a | u.r.implies | b),
                 lock=True)

@@ -9,9 +9,10 @@ axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes
 
 # Elaborate a dummy theory with inconsistent propositions
 theory_axiom = t1.include_axiom(axiom)
-x_equal_y = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom, (o1 | u.r.equal | o2))
+x_equal_y = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom, (o1 | u.r.equal | o2),
+    lock=False)
 x_unequal_y = t1.i.axiom_interpretation.infer_formula_statement(theory_axiom,
-    (o1 | u.r.unequal | o2))
+    (o1 | u.r.unequal | o2), lock=True)
 t1.stabilize()
 
 # Use a distinct theory T2 to demonstrate the inconsistency of T1
@@ -22,21 +23,21 @@ t2 = u.t(echo=True)
 proposition_of_interest = t2.i.inconsistency_introduction_2.infer_formula_statement(
     x_equal_y=x_equal_y, x_unequal_y=x_unequal_y, t=t1, subtitle='The proposition of interest')
 
-Let "U47" be a universe-of-discourse.
+Let "U55" be a universe-of-discourse.
 
-Let "T1" be a theory-derivation in U47.
+Let "T1" be a theory-derivation in U55.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 
-Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A2, P1 |- P1)" be included and considered valid in T1.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A, P |- P)" be included and considered valid in T1.
 
-Proposition (T1.P1): (o1 = o2). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). (o1 = o2) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that (o1 = o2). QED
+Proposition (T1.P1): (o1 = o2). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). (o1 = o2) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that (o1 = o2). QED
 
-Proposition (T1.P2): (o1 neq o2). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). (o1 neq o2) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that (o1 neq o2). QED
+Proposition (T1.P2): (o1 neq o2). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). (o1 neq o2) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that (o1 neq o2). QED
 
-Let "T2" be a theory-derivation in U47.
+Let "T2" be a theory-derivation in U55.
 
-Inference rule (inconsistency-introduction-2): Let inference-rule inconsistency-introduction-2 defined as "((P3 = Q1), (P3 neq Q1) |- Inc(T1))" be included and considered valid in T2.
+Inference rule (inconsistency-introduction-2): Let inference-rule inconsistency-introduction-2 defined as "((P1 = Q1), (P1 neq Q1) |- Inc(T1))" be included and considered valid in T2.
 
-Proposition (T2.P3) - The proposition of interest: Inc(T1). Proof: Let (P = Q) := (o1 = o2) follows from prop. (P1). Let (P neq Q)) := (o1 neq o2) follows from prop. (P2). Therefore, by the  inference rule: ((P3 = Q1), (P3 neq Q1) |- Inc(T1)), it follows that Inc(T1). QED
+Proposition (T2.P3) - The proposition of interest: Inc(T1). Proof: Let (P = Q) := (o1 = o2) follows from prop. (P1). Let (P neq Q)) := (o1 neq o2) follows from prop. (P2).  Therefore, by the inconsistency-introduction-2 inference rule: ((P1 = Q1), (P1 neq Q1) |- Inc(T1)), it follows that Inc(T1). QED
 
