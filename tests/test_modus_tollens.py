@@ -15,8 +15,8 @@ class TestModusTollens(TestCase):
         r1: pu.Relation = test.r1
         r2: pu.Relation = test.r2
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
-        self.assertTrue(
-            proposition_of_interest.is_formula_syntactically_equivalent_to(o2=u.r.lnot(r1(o1, o2))))
+        self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
+            phi=u.r.lnot(r1(o1, o2))))
         self.assertEqual('not(r1(o1, o2))',
             proposition_of_interest.rep_formula(pu.encodings.plaintext))
         # Syntax error

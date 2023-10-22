@@ -20,7 +20,7 @@ class TestTheoreticalObjct(TestCase):
         f2 = u.f(r1, o3)
         f3 = u.f(r2, f1, f2)
         self.assertEqual({f1, f2, f3, r1, r2, o1, o3},
-                         set(f3.iterate_theoretical_objcts_references()))
+            set(f3.iterate_theoretical_objcts_references()))
 
     def test_list_relations_recursively(self):
         u = pu.UniverseOfDiscourse()
@@ -42,11 +42,12 @@ class TestTheoreticalObjct(TestCase):
     def test_get_variable_ordered_set_1(self):
         u = pu.UniverseOfDiscourse()
         r = u.r.declare(2)
-        with u.v('x') as x, u.v('y') as y, u.v('z') as z, u.v('a') as a, u.v('b') as b, u.v(
-                'c') as c:
+        with u.with_variable('x') as x, u.with_variable('y') as y, u.with_variable(
+                'z') as z, u.with_variable('a') as a, u.with_variable('b') as b, u.with_variable(
+            'c') as c:
             phi1 = u.f(r, b, u.f(r, z, u.f(x, y, u.f(a, a, z))), echo=True)
-            oset1 = phi1.get_variable_ordered_set()
+            oset1 = phi1.v
             self.assertEqual((b, z, x, y, a), oset1)
             phi2 = u.f(r, a, u.f(y, y, u.f(z, b, u.f(r, c, z))), echo=True)
-            oset2 = phi2.get_variable_ordered_set()
+            oset2 = phi2.v
             self.assertEqual((a, y, z, b, c), oset2)

@@ -16,7 +16,7 @@ class TestConjunctionIntroduction(TestCase):
         theory_axiom: pu.AxiomInclusion = test.theory_axiom
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
-            o2=r1(o1, o2) | u.r.land | r2(o3)))
+            phi=r1(o1, o2) | u.r.land | r2(o3)))
         self.assertEqual('(r1(o1, o2) and r2(o3))',
             proposition_of_interest.rep_formula(pu.encodings.plaintext))
         self.assertEqual('(𝑟₁(𝑜₁, 𝑜₂) ∧ 𝑟₂(𝑜₃))',

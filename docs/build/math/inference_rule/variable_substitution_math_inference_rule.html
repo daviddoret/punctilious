@@ -247,8 +247,8 @@
                                                         class="std std-ref">formula-statement</span></a> that includes
                                                 <span class="math notranslate nohighlight">\(n\)</span> <a
                                                         class="reference internal"
-                                                        href="../concept/free_variable_math_concept.html#free-variable-math-concept"><span
-                                                        class="std std-ref">free-variables</span></a>, where <span
+                                                        href="../concept/variable_math_concept.html#variable-math-concept"><span
+                                                        class="std std-ref">variables</span></a>, where <span
                                                         class="math notranslate nohighlight">\(n\)</span> is a
                                                 natural-number</p></li>
                                             <li><p><span
@@ -258,8 +258,8 @@
                                                 formulae,</p></li>
                                             <li><p><span class="math notranslate nohighlight">\(\boldsymbol{P}\)</span>
                                                 is a modified version of <span class="math notranslate nohighlight">\(\boldsymbol{P}\)</span>
-                                                whose free-variables have been substituted with the corresponding
-                                                formulae in <span class="math notranslate nohighlight">\(\boldsymbol{\Phi}\)</span>
+                                                whose variables have been substituted with the corresponding formulae in
+                                                <span class="math notranslate nohighlight">\(\boldsymbol{\Phi}\)</span>
                                             </p></li>
                                         </ul>
                                     </div>
@@ -272,20 +272,19 @@
                                             <li><p>Parse <span
                                                     class="math notranslate nohighlight">\(\boldsymbol{P}\)</span>
                                                 top-down first, left-right second</p></li>
-                                            <li><p>Whenever a free-variable is newly encountered during parsing, assign
-                                                it a sequential number</p></li>
-                                            <li><p>Following order, pair every free-variable in that sequence of
-                                                free-variables with formulae in <span
-                                                        class="math notranslate nohighlight">\(\boldsymbol{P}\)</span>
+                                            <li><p>Whenever a variable is newly encountered during parsing, assign it a
+                                                sequential number</p></li>
+                                            <li><p>Following order, pair every variable in that sequence of variables
+                                                with formulae in <span class="math notranslate nohighlight">\(\boldsymbol{P}\)</span>
                                             </p></li>
                                             <li><p>Parse <span
                                                     class="math notranslate nohighlight">\(\boldsymbol{P}\)</span> and
-                                                substitute every occurrence of free-variables with its paired formula
-                                            </p></li>
+                                                substitute every occurrence of variables with its paired formula</p>
+                                            </li>
                                         </ol>
                                     </div>
                                 </blockquote>
-                                <p>In straightforward language, by substituting the free-variables in <span
+                                <p>In straightforward language, by substituting the variables in <span
                                         class="math notranslate nohighlight">\(\boldsymbol{P}\)</span> with the formulae
                                     in <span class="math notranslate nohighlight">\(\boldsymbol{P}\)</span>, a new
                                     statement <span class="math notranslate nohighlight">\(P'\)</span> follows.</p>

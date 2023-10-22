@@ -15,9 +15,9 @@ Note that :math:`o_1` may be a formula and :math:`o_2` a formula-statement, or v
 
 ## Implementations
 
-* `TheoreticalObjct.is_formula_syntactically_equivalent_to(self, o2: TheoreticalObject) -> bool`
-* `Formula.is_formula_syntactically_equivalent_to(self, o2: TheoreticalObject) -> bool`
-* `Statement.is_formula_syntactically_equivalent_to(self, o2: TheoreticalObject) -> bool`
+* `TheoreticalObjct.is_formula_syntactically_equivalent_to(self, phi: FlexibleFormula) -> bool`
+* `Formula.is_formula_syntactically_equivalent_to(self, phi: FlexibleFormula) -> bool`
+* `Statement.is_formula_syntactically_equivalent_to(self, phi: FlexibleFormula) -> bool`
 
 ## Note
 

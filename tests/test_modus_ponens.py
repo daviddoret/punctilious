@@ -15,7 +15,7 @@ class TestModusPonens(TestCase):
         r1: pu.Relation = test.r1
         r2: pu.Relation = test.r2
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
-        self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(o2=r2(o3)))
+        self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(phi=r2(o3)))
         self.assertEqual('r2(o3)', proposition_of_interest.rep_formula(pu.encodings.plaintext))
         self.assertEqual('𝑟₂(𝑜₃)', proposition_of_interest.rep_formula(pu.encodings.unicode))
         # Syntax error
@@ -29,7 +29,7 @@ class TestModusPonens(TestCase):
         self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,
             error.exception.error_code)
 
-    def test_modus_ponens_with_free_variables(self):
+    def test_modus_ponens_with_variables(self):
         pu.configuration.echo_default = True
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
@@ -39,7 +39,7 @@ class TestModusPonens(TestCase):
         t = u.t()
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
-        with u.v() as x, u.v() as y, u.v() as z:
+        with u.with_variable() as x, u.with_variable() as y, u.with_variable() as z:
             p_implies_q = t.i.axiom_interpretation.infer_formula_statement(ap,
                 (r1(x, y) | u.r.land | r1(y, z)) | u.r.implies | r1(x, z), echo=True, lock=False)
         t.i.axiom_interpretation.infer_formula_statement(a=ap, p=r1(o1, o2), lock=False)

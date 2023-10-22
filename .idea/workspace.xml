@@ -4,9 +4,441 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 1.0.10:&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.">
+      <change afterPath="$PROJECT_DIR$/data/sample_export_all_articles_plaintext.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/sample_export_all_articles_unicode.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/sample_sandbox_plaintext.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/sample_sandbox_unicode.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/sample_variable_plaintext.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/sample_variable_unicode.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/python/class/variable_python_class.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/python/sample/variable_python_sample.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sample/sample_variable.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/theory_derivation_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/concept/theory_derivation_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_noproof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_noproof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_noproof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_noproof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_proof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_proof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_proof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_proof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_noproof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_noproof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_noproof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_noproof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_noproof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_noproof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_noproof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_noproof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_proof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_proof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_proof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_proof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_absorption_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_absorption_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_absorption_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_absorption_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_axiom_interpretation_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_axiom_interpretation_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_axiom_interpretation_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_axiom_interpretation_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_elimination_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_biconditional_elimination_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_elimination_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_biconditional_elimination_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_elimination_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_biconditional_elimination_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_elimination_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_biconditional_elimination_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_introduction_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_biconditional_introduction_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_introduction_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_biconditional_introduction_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_elimination_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_conjunction_elimination_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_elimination_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_conjunction_elimination_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_elimination_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_conjunction_elimination_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_elimination_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_conjunction_elimination_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_introduction_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_conjunction_introduction_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_introduction_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_conjunction_introduction_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_constructive_dilemma_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_constructive_dilemma_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_constructive_dilemma_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_constructive_dilemma_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_definition_interpretation_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_definition_interpretation_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_definition_interpretation_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_definition_interpretation_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_destructive_dilemma_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_destructive_dilemma_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_destructive_dilemma_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_destructive_dilemma_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunction_introduction_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_disjunction_introduction_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunction_introduction_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_disjunction_introduction_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunction_introduction_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_disjunction_introduction_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunction_introduction_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_disjunction_introduction_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunctive_resolution_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_disjunctive_resolution_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunctive_resolution_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_disjunctive_resolution_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_elimination_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_double_negation_elimination_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_elimination_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_double_negation_elimination_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_introduction_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_double_negation_introduction_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_introduction_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_double_negation_introduction_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equal_terms_substitution_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equal_terms_substitution_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equal_terms_substitution_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equal_terms_substitution_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equality_commutativity_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equality_commutativity_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equality_commutativity_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equality_commutativity_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_hypothesis_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_hypothesis_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_hypothesis_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_hypothesis_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_hypothetical_syllogism_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_hypothetical_syllogism_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_hypothetical_syllogism_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_hypothetical_syllogism_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_3_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_3_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_3_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_inconsistency_introduction_3_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_modus_ponens_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_modus_ponens_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_modus_ponens_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_modus_ponens_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_modus_tollens_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_modus_tollens_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_modus_tollens_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_modus_tollens_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_pet_theory_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_pet_theory_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_pet_theory_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_pet_theory_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_contradiction_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_contradiction_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_contradiction_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_contradiction_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_refutation_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_refutation_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_refutation_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_refutation_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_refutation_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_refutation_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_refutation_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_proof_by_refutation_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_variable_substitution_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_variable_substitution_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_variable_substitution_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_variable_substitution_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.buildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.buildinfo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/class.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/class.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/python.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/python.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/_tags/tagsindex.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/tagsindex.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/alpha_equivalence_math_concept.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/alpha_equivalence_math_concept.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/variable_substitution_math_inference_rule.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/variable_substitution_math_inference_rule.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/mgz_2021/classical_logic_k0.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/mgz_2021/classical_logic_k0.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/mgz_2021/intuitionistic_logic_j0.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/mgz_2021/intuitionistic_logic_j0.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/mgz_2021/minimal_logic_m0.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/mgz_2021/minimal_logic_m0.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/tao_2006/the_peano_axioms.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/tao_2006/the_peano_axioms.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math_concept.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math_concept.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/inference_rule_inclusion_collection_python_class.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/class/inference_rule_inclusion_collection_python_class.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/class/universe_of_discourse_python_class.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/class/universe_of_discourse_python_class.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/absorption_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/absorption_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/axiom_interpretation_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/axiom_interpretation_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/biconditional_elimination_1_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/biconditional_elimination_1_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/biconditional_elimination_2_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/biconditional_elimination_2_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/biconditional_introduction_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/biconditional_introduction_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/conjunction_elimination_1_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/conjunction_elimination_1_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/conjunction_elimination_2_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/conjunction_elimination_2_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/conjunction_introduction_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/conjunction_introduction_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/constructive_dilemma_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/constructive_dilemma_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/definition_interpretation_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/definition_interpretation_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/destructive_dilemma_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/destructive_dilemma_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/disjunction_introduction_1_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/disjunction_introduction_1_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/disjunction_introduction_2_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/disjunction_introduction_2_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/disjunctive_resolution_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/disjunctive_resolution_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/disjunctive_syllogism_1_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/disjunctive_syllogism_1_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/disjunctive_syllogism_2_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/disjunctive_syllogism_2_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/double_negation_elimination_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/double_negation_elimination_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/double_negation_introduction_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/double_negation_introduction_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/equal_terms_substitution_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/equal_terms_substitution_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/equality_commutativity_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/equality_commutativity_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/hypothetical_syllogism_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/hypothetical_syllogism_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/inconsistency_introduction_1_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/inconsistency_introduction_1_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/inconsistency_introduction_2_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/inconsistency_introduction_2_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/inconsistency_introduction_3_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/inconsistency_introduction_3_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/modus_ponens_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/modus_ponens_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/modus_tollens_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/modus_tollens_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/proof_by_contradiction_1_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/proof_by_contradiction_1_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/proof_by_contradiction_2_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/proof_by_contradiction_2_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/proof_by_refutation_1_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/proof_by_refutation_1_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/proof_by_refutation_2_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/proof_by_refutation_2_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/variable_substitution_python_sample.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/variable_substitution_python_sample.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python_class_index.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python_class_index.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/python_sample_index.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/python_sample_index.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/class.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/class.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/python.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/python.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/sample.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/sample.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/_tags/tagsindex.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/tagsindex.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/concept/alpha_equivalence_math_concept.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/alpha_equivalence_math_concept.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/math/concept/free_variable_math_concept.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/free_variable_math_concept.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/math_concept.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/math_concept.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python_class_index.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python_class_index.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/python_sample_index.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/python_sample_index.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/basic.css" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/basic.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/css/fonts/fontawesome-webfont.svg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/css/fonts/fontawesome-webfont.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/doctools.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/doctools.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/documentation_options.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/documentation_options.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/graphviz.css" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/graphviz.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/jquery.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/jquery.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/language_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/language_data.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-compact-light.svg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-compact-light.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-full-light.svg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-full-light.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/searchtools.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/searchtools.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/absorption.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/absorption.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/axiom-interpretation.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/axiom-interpretation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/axiom.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/axiom.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/biconditional-elimination-1.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/biconditional-elimination-1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/biconditional-elimination-2.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/biconditional-elimination-2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/biconditional-introduction.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/biconditional-introduction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/collection.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/collection.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/conjunction-elimination-1.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/conjunction-elimination-1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/conjunction-elimination-2.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/conjunction-elimination-2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/conjunction-introduction.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/conjunction-introduction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/constructive-dilemma.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/constructive-dilemma.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/declaration.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/declaration.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/definition-interpretation.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/definition-interpretation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/destructive-dilemma.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/destructive-dilemma.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/disjunction-introduction-1.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/disjunction-introduction-1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/disjunction-introduction-2.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/disjunction-introduction-2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/disjunctive-resolution.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/disjunctive-resolution.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/disjunctive-syllogism-1.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/disjunctive-syllogism-1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/disjunctive-syllogism-2.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/disjunctive-syllogism-2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/double-negation-elimination.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/double-negation-elimination.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/double-negation-introduction.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/double-negation-introduction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/equal-terms-substitution.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/equal-terms-substitution.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/equality-commutativity.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/equality-commutativity.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/equivalence.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/equivalence.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/hypothetical-syllogism.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/hypothetical-syllogism.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/inclusion.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/inclusion.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/inconsistency-introduction-1.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/inconsistency-introduction-1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/inconsistency-introduction-2.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/inconsistency-introduction-2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/inconsistency-introduction-3.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/inconsistency-introduction-3.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/inference-rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/inference-rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/inferred-statement.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/inferred-statement.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/math.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/math.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/modus-ponens.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/modus-ponens.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/modus-tollens.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/modus-tollens.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/proof-by-contradiction-1.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/proof-by-contradiction-1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/proof-by-contradiction-2.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/proof-by-contradiction-2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/proof-by-refutation-1.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/proof-by-refutation-1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/proof-by-refutation-2.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/proof-by-refutation-2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/python.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/statement.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/statement.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/tagsindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/tagsindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/universe-of-discourse.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/universe-of-discourse.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/variable-substitution.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/variable-substitution.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/back_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/back_matter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/back_matter/bibliography_back_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/back_matter/bibliography_back_matter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/back_matter_reference_table.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/back_matter_reference_table.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/front_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/front_matter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/front_matter/about_front_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/front_matter/about_front_matter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/front_matter/contributing_front_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/front_matter/contributing_front_matter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/front_matter/project_front_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/front_matter/project_front_matter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/front_matter/roadmap_front_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/front_matter/roadmap_front_matter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/front_matter/support_front_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/front_matter/support_front_matter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/front_matter/title_front_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/front_matter/title_front_matter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/genindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/genindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/alpha_equivalence_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/alpha_equivalence_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/axiom_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/axiom_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/axiomatic_method_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/axiomatic_method_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/definition_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/definition_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/elimination_rule_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/elimination_rule_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/formula_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/formula_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/formula_statement_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/formula_statement_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/free_variable_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/free_variable_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/hypothesis_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/hypothesis_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/inference_rule_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/inference_rule_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/inferred_statement_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/inferred_statement_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/introduction_rule_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/introduction_rule_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/is_a_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/is_a_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/meta_object_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/meta_object_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/notation_form_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/notation_form_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/object_creation_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/object_creation_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/object_declaration_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/object_declaration_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/object_inclusion_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/object_inclusion_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/object_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/object_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/paragraph_proof_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/paragraph_proof_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/relation_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/relation_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/statement_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/statement_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/theory_derivation_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/theory_derivation_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/universe_of_discourse_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/universe_of_discourse_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/validity_of_formula_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/validity_of_formula_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/absorption_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/absorption_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/axiom_interpretation_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/axiom_interpretation_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_1_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_2_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_2_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_introduction_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_introduction_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_elimination_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_elimination_1_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_elimination_2_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_elimination_2_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_introduction_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/conjunction_introduction_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/constructive_dilemma_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/constructive_dilemma_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/definition_interpretation_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/definition_interpretation_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/destructive_dilemma_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/destructive_dilemma_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunction_introduction_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunction_introduction_1_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunction_introduction_2_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunction_introduction_2_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunctive_resolution_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunctive_resolution_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunctive_syllogism_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunctive_syllogism_1_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunctive_syllogism_2_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/disjunctive_syllogism_2_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/double_negation_elimination_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/double_negation_elimination_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/double_negation_introduction_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/double_negation_introduction_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/equal_terms_substitution_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/equal_terms_substitution_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/equality_commutativity_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/equality_commutativity_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/hypothetical_syllogism_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/hypothetical_syllogism_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_1_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_2_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_2_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_3_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/inconsistency_introduction_3_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/modus_ponens_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/modus_ponens_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/modus_tollens_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/modus_tollens_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_contradiction_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_contradiction_1_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_contradiction_2_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_contradiction_2_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_refutation_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_refutation_1_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_refutation_2_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/proof_by_refutation_2_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/variable_substitution_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/variable_substitution_math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/theory/mgz_2021/classical_logic_k0.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/theory/mgz_2021/classical_logic_k0.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/theory/mgz_2021/intuitionistic_logic_j0.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/theory/mgz_2021/intuitionistic_logic_j0.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/theory/mgz_2021/minimal_logic_m0.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/theory/mgz_2021/minimal_logic_m0.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/theory/tao_2006/the_peano_axioms.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math_inference_rule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math_theory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math_theory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/objects.inv" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/objects.inv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/absorption_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/absorption_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/absorption_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/absorption_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/axiom_interpretation_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/axiom_interpretation_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/axiom_interpretation_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/axiom_interpretation_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/biconditional_elimination_1_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/biconditional_elimination_1_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/biconditional_elimination_1_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/biconditional_elimination_1_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/biconditional_elimination_2_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/biconditional_elimination_2_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/biconditional_elimination_2_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/biconditional_elimination_2_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/biconditional_introduction_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/biconditional_introduction_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/biconditional_introduction_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/biconditional_introduction_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/conjunction_elimination_1_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/conjunction_elimination_1_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/conjunction_elimination_1_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/conjunction_elimination_1_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/conjunction_elimination_2_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/conjunction_elimination_2_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/conjunction_elimination_2_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/conjunction_elimination_2_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/conjunction_introduction_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/conjunction_introduction_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/conjunction_introduction_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/conjunction_introduction_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemma_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemma_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemma_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/constructive_dilemma_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/definition_interpretation_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/definition_interpretation_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/definition_interpretation_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/definition_interpretation_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemma_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemma_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemma_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/destructive_dilemma_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_1_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_1_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_1_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_1_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_2_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_2_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_2_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/disjunction_introduction_2_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunctive_resolution_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/disjunctive_resolution_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunctive_resolution_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/disjunctive_resolution_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunctive_syllogism_1_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/disjunctive_syllogism_1_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunctive_syllogism_1_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/disjunctive_syllogism_1_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunctive_syllogism_2_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/disjunctive_syllogism_2_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/disjunctive_syllogism_2_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/disjunctive_syllogism_2_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/double_negation_elimination_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/double_negation_elimination_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/double_negation_elimination_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/double_negation_elimination_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/double_negation_introduction_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/double_negation_introduction_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/double_negation_introduction_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/double_negation_introduction_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/equal_terms_substitution_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/equal_terms_substitution_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/equal_terms_substitution_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/equal_terms_substitution_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/equality_commutativity_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/equality_commutativity_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/equality_commutativity_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/equality_commutativity_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/hypothetical_syllogism_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/hypothetical_syllogism_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/hypothetical_syllogism_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/hypothetical_syllogism_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/inconsistency_introduction_1_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/inconsistency_introduction_1_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/inconsistency_introduction_1_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/inconsistency_introduction_1_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/inconsistency_introduction_2_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/inconsistency_introduction_2_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/inconsistency_introduction_2_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/inconsistency_introduction_2_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/inconsistency_introduction_3_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/inconsistency_introduction_3_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/inconsistency_introduction_3_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/inconsistency_introduction_3_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/inference_rule_declaration_collection_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/inference_rule_declaration_collection_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/inference_rule_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/inference_rule_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/inference_rule_inclusion_collection_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/inference_rule_inclusion_collection_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/inference_rule_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/inference_rule_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/inferred_statement_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/inferred_statement_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/modus_ponens_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/modus_ponens_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/modus_ponens_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/modus_ponens_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/modus_tollens_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/modus_tollens_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/modus_tollens_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/modus_tollens_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/proof_by_contradiction_1_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/proof_by_contradiction_1_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/proof_by_contradiction_1_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/proof_by_contradiction_1_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/proof_by_contradiction_2_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/proof_by_contradiction_2_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/proof_by_contradiction_2_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/proof_by_contradiction_2_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/proof_by_refutation_1_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/proof_by_refutation_1_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/proof_by_refutation_1_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/proof_by_refutation_1_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/proof_by_refutation_2_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/proof_by_refutation_2_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/proof_by_refutation_2_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/proof_by_refutation_2_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/universe_of_discourse_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/universe_of_discourse_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/variable_substitution_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/variable_substitution_declaration_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/variable_substitution_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/variable_substitution_inclusion_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/function/create_universe_of_discourse.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/function/create_universe_of_discourse.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/installation_python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/installation_python.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/prerequisites_python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/prerequisites_python.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/absorption_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/absorption_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/axiom_interpretation_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/axiom_interpretation_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/biconditional_elimination_1_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/biconditional_elimination_1_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/biconditional_elimination_2_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/biconditional_elimination_2_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/biconditional_introduction_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/biconditional_introduction_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/conjunction_elimination_1_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/conjunction_elimination_1_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/conjunction_elimination_2_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/conjunction_elimination_2_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/conjunction_introduction_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/conjunction_introduction_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/constructive_dilemma_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/constructive_dilemma_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/definition_interpretation_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/definition_interpretation_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/destructive_dilemma_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/destructive_dilemma_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/disjunction_introduction_1_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/disjunction_introduction_1_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/disjunction_introduction_2_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/disjunction_introduction_2_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/disjunctive_resolution_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/disjunctive_resolution_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/disjunctive_syllogism_1_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/disjunctive_syllogism_1_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/disjunctive_syllogism_2_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/disjunctive_syllogism_2_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/double_negation_elimination_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/double_negation_elimination_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/double_negation_introduction_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/double_negation_introduction_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/equal_terms_substitution_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/equal_terms_substitution_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/equality_commutativity_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/equality_commutativity_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/hypothetical_syllogism_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/hypothetical_syllogism_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/inconsistency_introduction_1_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/inconsistency_introduction_1_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/inconsistency_introduction_2_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/inconsistency_introduction_2_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/inconsistency_introduction_3_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/inconsistency_introduction_3_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/modus_ponens_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/modus_ponens_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/modus_tollens_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/modus_tollens_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/proof_by_contradiction_1_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/proof_by_contradiction_1_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/proof_by_contradiction_2_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/proof_by_contradiction_2_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/proof_by_refutation_1_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/proof_by_refutation_1_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/proof_by_refutation_2_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/proof_by_refutation_2_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/variable_substitution_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/variable_substitution_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/source_code_repository_python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/source_code_repository_python.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python_class_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python_class_index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python_function_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python_function_index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python_sample_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python_sample_index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/reference_table/inference_rule_reference_table.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/reference_table/inference_rule_reference_table.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/search.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/searchindex.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/theory_mgz_2021.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/theory_mgz_2021.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/theory_tao_2006.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/theory_tao_2006.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/python.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/python.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/tagsindex.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/_tags/tagsindex.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/alpha_equivalence_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/concept/alpha_equivalence_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/free_variable_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/concept/variable_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/variable_substitution_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math/inference_rule/variable_substitution_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python_class_index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python_class_index.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python_sample_index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/python_sample_index.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/variable_substitution.md" beforeDir="false" afterPath="$PROJECT_DIR$/project/docs_to_integrate/variable_substitution.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious.egg-info/SOURCES.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious.egg-info/SOURCES.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/graph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/locale_en_us.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/locale_en_us.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_disjunctive_resolution.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_disjunctive_resolution.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_hypothesis.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_hypothesis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_pet_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_pet_theory_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_contradiction_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_proof_by_refutation_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_sandbox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_variable_substitution.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_variable_substitution.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/punctilious_2023_metatheory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/punctilious_2023_metatheory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/theory_mgz_2021_classical_logic_j0.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_mgz_2021_classical_logic_j0.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/theory_mgz_2021_intuitionistic_logic_j0.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_mgz_2021_intuitionistic_logic_j0.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/theory_mgz_2021_minimal_logic_m0.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_mgz_2021_minimal_logic_m0.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula_is_mask_similar_to.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula_is_mask_similar_to.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_free_variable.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_free_variable.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_modus_ponens.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_modus_ponens.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_simple_objct.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_simple_objct.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_theoretical_objct.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_theoretical_objct.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_theory_derivation_stabilized.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_theory_derivation_stabilized.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_validate_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_validate_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_validate_formula_statement.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_validate_formula_statement.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_variable_substitution.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_variable_substitution.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,10 +538,10 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\sample" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\python\sample" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\python\class" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\concept" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\theory" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\theory\mancosou_2021" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\src\theory" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source" />
@@ -159,6 +591,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/build_samples.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="generate_sample_outputs" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/continuous_integration/scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/continuous_integration/scripts/generate_sample_outputs.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -231,7 +684,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="sample_export_all_articles (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="theory_mgz_2021_minimal_logic_m0" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -239,53 +692,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/theory" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_export_all_articles.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="sample_export_all_articles" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\David\PycharmProjects\punctilious\src\sample\sample_export_all_articles.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="sample_sandbox" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_sandbox.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/theory/theory_mgz_2021_minimal_logic_m0.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -355,7 +766,7 @@
       <option name="docutils_open_in_browser" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in test_theory_derivation.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_modus_ponens.TestModusPonens" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -365,7 +776,21 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_theory_derivation.py&quot;" />
+      <option name="_new_target" value="&quot;test_modus_ponens.TestModusPonens&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests in test_formula_is_mask_similar_to.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_formula_is_mask_similar_to.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -390,12 +815,12 @@
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.build" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
-      <item itemvalue="Python.sample_sandbox" />
-      <item itemvalue="Python.sample_export_all_articles" />
-      <item itemvalue="Python.sample_export_all_articles (1)" />
+      <item itemvalue="Python.generate_sample_outputs" />
+      <item itemvalue="Python.theory_mgz_2021_minimal_logic_m0" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.Python tests in test_theory_derivation.py" />
+      <item itemvalue="Python tests.Python tests for test_modus_ponens.TestModusPonens" />
+      <item itemvalue="Python tests.Python tests in test_formula_is_mask_similar_to.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
@@ -403,10 +828,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="PowerShell.build_docs.ps1" />
-        <item itemvalue="Python tests.Python tests in test_theory_derivation.py" />
-        <item itemvalue="Python.sample_sandbox" />
-        <item itemvalue="Python.sample_export_all_articles (1)" />
-        <item itemvalue="Python.sample_export_all_articles" />
+        <item itemvalue="Python tests.Python tests in test_formula_is_mask_similar_to.py" />
+        <item itemvalue="Python tests.Python tests for test_modus_ponens.TestModusPonens" />
+        <item itemvalue="Python.theory_mgz_2021_minimal_logic_m0" />
+        <item itemvalue="Python.generate_sample_outputs" />
       </list>
     </recent_temporary>
   </component>
@@ -418,46 +843,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00337" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
-      <option name="closed" value="true" />
-      <created>1696331518332</created>
-      <option name="number" value="00337" />
-      <option name="presentableId" value="LOCAL-00337" />
-      <option name="project" value="LOCAL" />
-      <updated>1696331518332</updated>
-    </task>
-    <task id="LOCAL-00338" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
-      <option name="closed" value="true" />
-      <created>1696332797135</created>
-      <option name="number" value="00338" />
-      <option name="presentableId" value="LOCAL-00338" />
-      <option name="project" value="LOCAL" />
-      <updated>1696332797135</updated>
-    </task>
-    <task id="LOCAL-00339" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
-      <option name="closed" value="true" />
-      <created>1696420598709</created>
-      <option name="number" value="00339" />
-      <option name="presentableId" value="LOCAL-00339" />
-      <option name="project" value="LOCAL" />
-      <updated>1696420598709</updated>
-    </task>
-    <task id="LOCAL-00340" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
-      <option name="closed" value="true" />
-      <created>1696455720416</created>
-      <option name="number" value="00340" />
-      <option name="presentableId" value="LOCAL-00340" />
-      <option name="project" value="LOCAL" />
-      <updated>1696455720416</updated>
-    </task>
-    <task id="LOCAL-00341" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
-      <option name="closed" value="true" />
-      <created>1696615807682</created>
-      <option name="number" value="00341" />
-      <option name="presentableId" value="LOCAL-00341" />
-      <option name="project" value="LOCAL" />
-      <updated>1696615807683</updated>
     </task>
     <task id="LOCAL-00342" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
       <option name="closed" value="true" />
@@ -811,7 +1196,47 @@
       <option name="project" value="LOCAL" />
       <updated>1697716191029</updated>
     </task>
-    <option name="localTasksCounter" value="386" />
+    <task id="LOCAL-00386" summary="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.">
+      <option name="closed" value="true" />
+      <created>1697716672838</created>
+      <option name="number" value="00386" />
+      <option name="presentableId" value="LOCAL-00386" />
+      <option name="project" value="LOCAL" />
+      <updated>1697716672838</updated>
+    </task>
+    <task id="LOCAL-00387" summary="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.">
+      <option name="closed" value="true" />
+      <created>1697830061253</created>
+      <option name="number" value="00387" />
+      <option name="presentableId" value="LOCAL-00387" />
+      <option name="project" value="LOCAL" />
+      <updated>1697830061253</updated>
+    </task>
+    <task id="LOCAL-00388" summary="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.">
+      <option name="closed" value="true" />
+      <created>1697833802354</created>
+      <option name="number" value="00388" />
+      <option name="presentableId" value="LOCAL-00388" />
+      <option name="project" value="LOCAL" />
+      <updated>1697833802354</updated>
+    </task>
+    <task id="LOCAL-00389" summary="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.">
+      <option name="closed" value="true" />
+      <created>1697922077915</created>
+      <option name="number" value="00389" />
+      <option name="presentableId" value="LOCAL-00389" />
+      <option name="project" value="LOCAL" />
+      <updated>1697922077915</updated>
+    </task>
+    <task id="LOCAL-00390" summary="version 1.0.10:&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.">
+      <option name="closed" value="true" />
+      <created>1697922221832</created>
+      <option name="number" value="00390" />
+      <option name="presentableId" value="LOCAL-00390" />
+      <option name="project" value="LOCAL" />
+      <updated>1697922221832</updated>
+    </task>
+    <option name="localTasksCounter" value="391" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -843,8 +1268,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="testing #181 + setup #47 + include theories in sphinx documentation. readthedocs seem not to support python 3.11. make an attempt with 3.10 to support at the very least the match syntax." />
-    <MESSAGE value="continuous-integration #47, include: bumpver setup, powershell scripts for Windows build, etc." />
     <MESSAGE value="Merge remote-tracking branch 'origin/master' into dev" />
     <MESSAGE value="#47: scripts for the installation to pypi" />
     <MESSAGE value="#47: scripts for the installation from pypi" />
@@ -868,7 +1291,9 @@
     <MESSAGE value="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory." />
     <MESSAGE value="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory." />
     <MESSAGE value="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate." />
-    <option name="LAST_COMMIT_MESSAGE" value="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate." />
+    <MESSAGE value="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions." />
+    <MESSAGE value="version 1.0.10:&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions." />
+    <option name="LAST_COMMIT_MESSAGE" value="version 1.0.10:&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -876,33 +1301,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>4497</line>
+          <line>4509</line>
           <option name="timeStamp" value="73" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>4478</line>
+          <line>4490</line>
           <option name="timeStamp" value="74" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>5897</line>
-          <option name="timeStamp" value="84" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_validate_formula.py</url>
           <line>24</line>
           <option name="timeStamp" value="86" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>10232</line>
-          <option name="timeStamp" value="89" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/sample/sample_sandbox.py</url>
-          <line>12</line>
-          <option name="timeStamp" value="92" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

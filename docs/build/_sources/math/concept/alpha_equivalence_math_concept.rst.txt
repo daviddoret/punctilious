@@ -1,0 +1,28 @@
+.. _alpha_equivalence_math_concept:
+
+.. tags:: equivalence
+
+alpha-equivalence
+===================
+
+.. seealso::
+   :ref:`formula<formula_math_concept>`
+
+Definition
+-----------
+
+Two formulas :math:`\phi` and :math:`\psi` are :math:`\alpha\text{-equivalent}` if and only if they only differ by the names (i.e. symbolic representations) given to their variables.
+
+.. note::
+   As of today, *punctilious* is focused on the development of propositional logic. This definition applies to propositional logic but is not accurate for first-order logic. Considering the definition provided by :cite:p:`troelstra_2000_basicprooftheory`, in first-order logic *alpha-equivalence* should account for bound-variables but not free-variables. For this reason, once the development of *punctiolious* will cover first-order logic, we will need to refine these definitions and probably distinguish several types of *alpha-equivalences*.
+
+Quotes
+------
+
+   Expressions :math:`\mathcal{E}`, :math:`\mathcal{E}'` which differ only in the names of bound variables will be regarded by us as identical. This is sometimes expressed by saying that :math:`\mathcal{E}` and :math:`\mathcal{E}'` are :math:`\alpha\text{-equivalent}` . In other words, we are only interested in certain equivalence classes of (the concrete representations of) expressions, expressions "modulo renaming of bound variables".
+   :cite:p:`troelstra_2000_basicprooftheory{p. 3}`
+
+Sources
+----------
+
+* :cite:p:`troelstra_2000_basicprooftheory`

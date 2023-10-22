@@ -70,7 +70,7 @@ ft.i.axiom_interpretation.infer_formula_statement(nla_09,
 nla_01b = ft.include_axiom(
     u.declare_axiom('= is a binary relation such that, given any two theoretical-objcts x and y, '
                     'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.'))
-with u.v('x') as x1, u.v('y') as x2:
+with u.with_variable('x') as x1, u.with_variable('y') as x2:
     x1_equal_x2 = u.f(u.r.equal, x1, x2)
     x2_equal_x1 = u.f(u.r.equal, x2, x1)
     ft.commutativity_of_equality = ft.i.axiom_interpretation.infer_formula_statement(nla_01b,
@@ -78,7 +78,7 @@ with u.v('x') as x1, u.v('y') as x2:
 
 d_55 = u.declare_definition('Inequality is defined as the negation of equality.')
 nld_55 = ft.include_definition(d=d_55)
-with u.v('x') as x, u.v('y') as y:
+with u.with_variable('x') as x, u.with_variable('y') as y:
     ft.i.definition_interpretation.infer_formula_statement(nld_55,
         u.f(u.r.equal, u.f(u.r.neq, x, y), u.f(u.r.lnot, u.f(u.r.equal, x, y))))
 
@@ -108,7 +108,7 @@ nla_30 = ft.include_axiom(u.declare_axiom('¬ is a unary relation. '
 
 # DOUBLE-NEGATION
 nla_09_50 = ft.include_axiom(u.declare_axiom('If P has-truth-value t, ¬(¬(P)) has-truth-value t.'))
-with u.v() as p, u.v() as t:
+with u.with_variable() as p, u.with_variable() as t:
     fa_09_51 = ft.i.axiom_interpretation.infer_formula_statement(nla_09_50,
         u.f(u.r.implication, u.f(has_truth_value, p, t),
             u.f(has_truth_value, u.f(u.r.lnot, u.f(u.r.lnot, p)), t)))
@@ -148,7 +148,7 @@ nla_40 = ft.include_axiom(
                                      'then this theory is an element of contradictory-theory class.'))
 contradictory_theories = u.o.declare('contradictory-theory')
 contradictory_statements = u.o.declare('contradictory-statement')
-with u.v('φ') as phi:
+with u.with_variable('φ') as phi:
     ft.i.axiom_interpretation.infer_formula_statement(nla_40, u.f(u.r.implication,
         u.f(u.r.conjunction, u.f(has_truth_value, phi, truth),
             u.f(has_truth_value, phi, falsehood)), u.f(element_of, phi, contradictory_statements)))
@@ -197,9 +197,9 @@ def elaborate_foundation_theory():
         subst = u.r.declare(arity=3, nameset='subst', signal_theoretical_morphism=True,
             implementation=substitute_xy)
         # if x = y, implies subst(o, x, y)
-        x = u.v()
-        y = u.v()
-        o = u.v()
+        x = u.with_variable()
+        y = u.with_variable()
+        o = u.with_variable()
         r1x1 = u.f(implies, u.f(equality, x, y), u.f(subst, o, x, y))
         equality_substitution = ft.i.axiom_interpretation.infer_formula_statement(axiom2, r1x1)
 

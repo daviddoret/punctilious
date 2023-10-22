@@ -34,8 +34,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html"/>
     <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="next" title="VariableSubstitutionDeclaration (python class)"
-          href="variable_substitution_declaration_python_class.html"/>
+    <link rel="next" title="Variable (python class)" href="variable_python_class.html"/>
     <link rel="prev" title="ProofByRefutation2Inclusion (python class)"
           href="proof_by_refutation_2_inclusion_python_class.html"/>
 </head>
@@ -257,6 +256,8 @@
                                     </li>
                                     <li class="toctree-l3 current"><a class="current reference internal" href="#">UniverseOfDiscourse</a>
                                     </li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="variable_python_class.html">Variable</a></li>
                                     <li class="toctree-l3"><a class="reference internal"
                                                               href="variable_substitution_declaration_python_class.html">VariableSubstitutionDeclaration</a>
                                     </li>
@@ -671,54 +672,6 @@
 
                                     <dl class="py method">
                                         <dt class="sig sig-object py"
-                                            id="punctilious.UniverseOfDiscourse.declare_free_variable">
-                                            <span class="sig-name descname"><span
-                                                    class="pre">declare_free_variable</span></span><span
-                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">symbol</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">dashed_name</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">acronym</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">abridged_name</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span class="pre">is_strictly_propositional</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em><span
-                                                class="sig-paren">)</span><a class="headerlink"
-                                                                             href="#punctilious.UniverseOfDiscourse.declare_free_variable"
-                                                                             title="Permalink to this definition"></a>
-                                        </dt>
-                                        <dd><p>Declare a free-variable in this universe-of-discourse.</p>
-                                            <p>A shortcut function for FreeVariable(universe_of_discourse=u, …)</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd"><p><strong>symbol</strong> – </p>
-                                                </dd>
-                                                <dt class="field-even">Returns</dt>
-                                                <dd class="field-even"><p></p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="py method">
-                                        <dt class="sig sig-object py"
                                             id="punctilious.UniverseOfDiscourse.declare_theory">
                                             <span class="sig-name descname"><span
                                                     class="pre">declare_theory</span></span><span
@@ -766,7 +719,7 @@
                                                 href="#punctilious.UniverseOfDiscourse.declare_theory"
                                                 title="Permalink to this definition"></a></dt>
                                         <dd><p>Declare a new theory in this universe-of-discourse.</p>
-                                            <p>Shortcut for Theory(universe_of_discourse, …).</p>
+                                            <p>Shortcut for Theory(u, …).</p>
                                             <dl class="field-list simple">
                                                 <dt class="field-odd">Parameters</dt>
                                                 <dd class="field-odd">
@@ -775,6 +728,54 @@
                                                         <li><p><strong>is_theory_foundation_system</strong> – </p></li>
                                                         <li><p><strong>extended_theory</strong> – </p></li>
                                                     </ul>
+                                                </dd>
+                                                <dt class="field-even">Returns</dt>
+                                                <dd class="field-even"><p></p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt class="sig sig-object py"
+                                            id="punctilious.UniverseOfDiscourse.declare_variable">
+                                            <span class="sig-name descname"><span
+                                                    class="pre">declare_variable</span></span><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">symbol</span></span><span class="o"><span
+                                                class="pre">=</span></span><span class="default_value"><span
+                                                class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">dashed_name</span></span><span
+                                                class="o"><span class="pre">=</span></span><span
+                                                class="default_value"><span class="pre">None</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span
+                                                class="pre">acronym</span></span><span class="o"><span
+                                                class="pre">=</span></span><span class="default_value"><span
+                                                class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">abridged_name</span></span><span
+                                                class="o"><span class="pre">=</span></span><span
+                                                class="default_value"><span class="pre">None</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span
+                                                class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span
+                                                class="default_value"><span class="pre">None</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span
+                                                class="o"><span class="pre">=</span></span><span
+                                                class="default_value"><span class="pre">None</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span class="pre">is_strictly_propositional</span></span><span
+                                                class="o"><span class="pre">=</span></span><span
+                                                class="default_value"><span class="pre">None</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span
+                                                class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span
+                                                class="default_value"><span class="pre">None</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#punctilious.UniverseOfDiscourse.declare_variable"
+                                                                             title="Permalink to this definition"></a>
+                                        </dt>
+                                        <dd><p>Declare a variable in this universe-of-discourse.</p>
+                                            <p>A shortcut function for FreeVariable(universe_of_discourse=u, …)</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd"><p><strong>symbol</strong> – </p>
                                                 </dd>
                                                 <dt class="field-even">Returns</dt>
                                                 <dd class="field-even"><p></p>
@@ -1122,8 +1123,10 @@
                                     </dl>
 
                                     <dl class="py method">
-                                        <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.v">
-                                            <span class="sig-name descname"><span class="pre">v</span></span><span
+                                        <dt class="sig sig-object py"
+                                            id="punctilious.UniverseOfDiscourse.with_variable">
+                                            <span class="sig-name descname"><span
+                                                    class="pre">with_variable</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                                                 class="pre">symbol</span></span><span class="o"><span
                                                 class="pre">=</span></span><span class="default_value"><span
@@ -1154,17 +1157,17 @@
                                                 class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span
                                                 class="default_value"><span class="pre">None</span></span></em><span
                                                 class="sig-paren">)</span><a class="headerlink"
-                                                                             href="#punctilious.UniverseOfDiscourse.v"
+                                                                             href="#punctilious.UniverseOfDiscourse.with_variable"
                                                                              title="Permalink to this definition"></a>
                                         </dt>
-                                        <dd><p>Declare a free-variable in this universe-of-discourse.</p>
+                                        <dd><p>Declare a variable in this universe-of-discourse.</p>
                                             <p>This method is expected to be as in a with statement,
                                                 it yields an instance of FreeVariable,
                                                 and automatically lock the variable scope when the with left.</p>
                                             <p>Example: with u.v(‘x’) as x, u.v(‘y’) as y:
                                                 some code…</p>
                                             <p>To manage variable scope extensions and locking expressly,
-                                                use declare_free_variable() instead.</p>
+                                                use declare_variable() instead.</p>
                                         </dd>
                                     </dl>
 
@@ -1181,10 +1184,9 @@
                         <a href="proof_by_refutation_2_inclusion_python_class.html" class="btn btn-neutral float-left"
                            title="ProofByRefutation2Inclusion (python class)" accesskey="p" rel="prev"><span
                                 class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-                        <a href="variable_substitution_declaration_python_class.html"
-                           class="btn btn-neutral float-right" title="VariableSubstitutionDeclaration (python class)"
-                           accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"
-                                                               aria-hidden="true"></span></a>
+                        <a href="variable_python_class.html" class="btn btn-neutral float-right"
+                           title="Variable (python class)" accesskey="n" rel="next">Next <span
+                                class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
                     </div>
 
                     <hr/>

@@ -10,13 +10,13 @@ This table of contents references the key mathematical concepts used by punctili
    :titlesonly:
    :caption: Table of contents
 
+   alpha-equivalence<math/concept/alpha_equivalence_math_concept>
    axiom<math/concept/axiom_math_concept>
    axiomatic-method<math/concept/axiomatic_method_math_concept>
    definition<math/concept/definition_math_concept>
    elimination-rule<math/concept/elimination_rule_math_concept>
    formula<math/concept/formula_math_concept>
    formula-statement<math/concept/formula_statement_math_concept>
-   free-variable<math/concept/free_variable_math_concept>
    hypothesis<math/concept/hypothesis_math_concept>
    inference-rule<math/concept/inference_rule_math_concept>
    inferred-statement<math/concept/inferred_statement_math_concept>
@@ -33,6 +33,7 @@ This table of contents references the key mathematical concepts used by punctili
    statement<math/concept/statement_math_concept>
    theory-derivation<math/concept/theory_derivation_math_concept>
    validity-of-formula<math/concept/validity_of_formula_math_concept>
+   variable<math/concept/variable_math_concept>
    universe-of-discourse<math/concept/universe_of_discourse_math_concept>
 
 

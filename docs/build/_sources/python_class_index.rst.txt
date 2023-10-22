@@ -66,5 +66,6 @@ Python classes
    ProofByRefutation2Declaration<python/class/proof_by_refutation_2_declaration_python_class>
    ProofByRefutation2Inclusion<python/class/proof_by_refutation_2_inclusion_python_class>
    UniverseOfDiscourse<python/class/universe_of_discourse_python_class>
+   Variable<python/class/variable_python_class>
    VariableSubstitutionDeclaration<python/class/variable_substitution_declaration_python_class>
    VariableSubstitutionInclusion<python/class/variable_substitution_inclusion_python_class>

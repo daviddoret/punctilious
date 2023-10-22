@@ -726,7 +726,7 @@ class LocaleEnUs(Locale):
         return True
 
     def compose_theory_article(self, t: TheoryDerivation, proof: (None, bool) = None) -> \
-    collections.abc.Generator[Composable, Composable, bool]:
+            collections.abc.Generator[Composable, Composable, bool]:
 
         yield self.paragraph_start
         yield from t.rep_name()
@@ -825,9 +825,9 @@ class LocaleEnUs(Locale):
         yield from p.compose_ref_link()
         yield SansSerifNormal('.')
         yield SansSerifNormal(' Let ')
-        free_variables = p.get_variable_ordered_set()
+        variables = p.v
         parameter_o: Formula = o.parameters[1]
-        mapping = zip(free_variables, parameter_o.parameters)
+        mapping = zip(variables, parameter_o.parameters)
         first_pair = True
         for k, v in mapping:
             if not first_pair:

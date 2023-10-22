@@ -1,6 +1,6 @@
-.. _free_variable_math_concept:
+.. _variable_math_concept:
 
-free-variable
+variable
 ================
 
 Definition

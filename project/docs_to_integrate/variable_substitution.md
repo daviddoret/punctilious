@@ -18,19 +18,19 @@ _variable substitution_
 
         """An inference-rule: P, X→Y ⊢ P' where:
          - P is an input statement,
-         - X→Y is a mapping between the free-variables in P and their substitution values,
-         - P' is a new formula identical to P except that free-variables have been
+         - X→Y is a mapping between the variables in P and their substitution values,
+         - P' is a new formula identical to P except that variables have been
            substituted according to the X→Y mapping.
 
         In practice, the mapping X→Y is implicit. A sequence Y' of substitution values
         is provided as an input, where substitution values are indexed by the canonical-order
-        of their corresponding free-variables in the ordered set of free-variables in P.
+        of their corresponding variables in the ordered set of variables in P.
 
         Abridged property: u.i.vs
 
         Formal definition:
         Given a statement P whose formula contains an ordered set
-        of n free-variables, ordered by their canonical order of
+        of n variables, ordered by their canonical order of
         appearance in the formula,
         given an ordered set of theoretical-objcts O of cardinality n,
         the _variable substitution_ _inference rule_ returns a new
@@ -51,20 +51,21 @@ _variable substitution_
         """
 
 An inference-rule: P, X→Y ⊢ P' where:
+
 - P is an input statement,
-- X→Y is a mapping between the free-variables in P and their substitution values,
-- P' is a new formula identical to P except that free-variables have been
-substituted according to the X→Y mapping.
+- X→Y is a mapping between the variables in P and their substitution values,
+- P' is a new formula identical to P except that variables have been
+  substituted according to the X→Y mapping.
 
         In practice, the mapping X→Y is implicit. A sequence Y' of substitution values
         is provided as an input, where substitution values are indexed by the canonical-order
-        of their corresponding free-variables in the ordered set of free-variables in P.
+        of their corresponding variables in the ordered set of variables in P.
 
         Abridged property: u.i.vs
 
         Formal definition:
         Given a statement P whose formula contains an ordered set
-        of n free-variables, ordered by their canonical order of
+        of n variables, ordered by their canonical order of
         appearance in the formula,
         given an ordered set of theoretical-objcts O of cardinality n,
         the _variable substitution_ _inference rule_ returns a new

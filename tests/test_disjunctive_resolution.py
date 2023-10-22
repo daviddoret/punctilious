@@ -15,7 +15,7 @@ class TestDisjunctiveResolution(TestCase):
         theory_axiom: pu.AxiomInclusion = test.theory_axiom
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         self.assertTrue(
-            proposition_of_interest.is_formula_syntactically_equivalent_to(o2=o2 | u.r.lor | o4))
+            proposition_of_interest.is_formula_syntactically_equivalent_to(phi=o2 | u.r.lor | o4))
         # Syntax error
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.disjunctive_resolution.infer_formula_statement(p_or_q=o1 | u.r.iff | o2,

@@ -15,7 +15,7 @@ class TestProofByRefutation1(TestCase):
         h: pu.Relation = test.h
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         self.assertTrue(
-            proposition_of_interest.is_formula_syntactically_equivalent_to(o2=u.r.lnot(f(o1, o3))))
+            proposition_of_interest.is_formula_syntactically_equivalent_to(phi=u.r.lnot(f(o1, o3))))
         self.assertEqual('not(f1(o1, o3))',
             proposition_of_interest.rep_formula(pu.encodings.plaintext))
         self.assertEqual('¬(𝑓₁(𝑜₁, 𝑜₃))', proposition_of_interest.rep_formula(pu.encodings.unicode))

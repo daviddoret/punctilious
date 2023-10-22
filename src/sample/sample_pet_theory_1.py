@@ -15,7 +15,7 @@ mira_is_a_dog = t1.i.axiom_interpretation.infer_formula_statement(a=a1, p=mira |
 
 a2d = u.declare_axiom(natural_language=f'If 𝒙 is a {dog_name}, then 𝒙 is a {mammal_name}.')
 a2 = t1.include_axiom(a=a2d)
-with u.v('x') as x:
+with u.with_variable('x') as x:
     x_is_a_dog = x | u.r.is_a | dog
     x_is_a_mammal = x | u.r.is_a | mammal
     if_x_is_a_dog_then_x_is_a_mammal_formula = x_is_a_dog | u.relations.implies | x_is_a_mammal

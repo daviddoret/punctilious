@@ -9,16 +9,16 @@ Definition
 
 Where:
 
-   * :math:`\boldsymbol{P}` is a :ref:`formula-statement<formula_statement_math_concept>` that includes :math:`n` :ref:`free-variables<free_variable_math_concept>`, where :math:`n` is a natural-number
+   * :math:`\boldsymbol{P}` is a :ref:`formula-statement<formula_statement_math_concept>` that includes :math:`n` :ref:`variables<variable_math_concept>`, where :math:`n` is a natural-number
    * :math:`\boldsymbol{\Phi}` is a finite tuple of :math:`n` well-formed formulae,
-   * :math:`\boldsymbol{P}` is a modified version of :math:`\boldsymbol{P}` whose free-variables have been substituted with the corresponding formulae in :math:`\boldsymbol{\Phi}`
+   * :math:`\boldsymbol{P}` is a modified version of :math:`\boldsymbol{P}` whose variables have been substituted with the corresponding formulae in :math:`\boldsymbol{\Phi}`
 
 Multiple algorithms are possible to implement *variable-substitution*. *Punctilious* uses the following algorithm:
 
    1. Parse :math:`\boldsymbol{P}` top-down first, left-right second
-   2. Whenever a free-variable is newly encountered during parsing, assign it a sequential number
-   3. Following order, pair every free-variable in that sequence of free-variables with formulae in :math:`\boldsymbol{P}`
-   4. Parse :math:`\boldsymbol{P}` and substitute every occurrence of free-variables with its paired formula
+   2. Whenever a variable is newly encountered during parsing, assign it a sequential number
+   3. Following order, pair every variable in that sequence of variables with formulae in :math:`\boldsymbol{P}`
+   4. Parse :math:`\boldsymbol{P}` and substitute every occurrence of variables with its paired formula
 
-In straightforward language, by substituting the free-variables in :math:`\boldsymbol{P}` with the formulae in :math:`\boldsymbol{P}`, a new statement :math:`P'` follows.
+In straightforward language, by substituting the variables in :math:`\boldsymbol{P}` with the formulae in :math:`\boldsymbol{P}`, a new statement :math:`P'` follows.
 

@@ -23,7 +23,7 @@ Let "T1" be a theory-derivation in U3.
 
 Axiom (T1.A1): Let axiom A1 "Dummy axiom for demonstration purposes" be included (postulated) in T1.
 
-Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A2, P1 |- P1)" be included and considered valid in T1.
+Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A, P |- P)" be included and considered valid in T1.
 
-Proposition (T1.P1) - The proposition of interest: (r1(o1, o2) ==> r2(o3)). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). (r1(o1, o2) ==> r2(o3)) is a valid formula statement interpreted from that axiom.Therefore, by the  inference rule: (A2, P1 |- P1), it follows that (r1(o1, o2) ==> r2(o3)). QED
+Proposition (T1.P1) - The proposition of interest: (r1(o1, o2) ==> r2(o3)). Proof: "Dummy axiom for demonstration purposes" is postulated by axiom (A1). (r1(o1, o2) ==> r2(o3)) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that (r1(o1, o2) ==> r2(o3)). QED
 

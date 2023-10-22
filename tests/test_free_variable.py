@@ -6,14 +6,14 @@ class TestFreeVariable(TestCase):
     def test_1(self):
         pu.configuration.encoding = pu.encodings.unicode
         u = pu.UniverseOfDiscourse()
-        with u.v(symbol='x') as x1:
+        with u.with_variable(symbol='x') as x1:
             pass
         x1.echo()
 
     def test_with_statement(self):
-        pu.configuration.echo_free_variable_declaration = True
+        pu.configuration.echo_variable_declaration = True
         u = pu.UniverseOfDiscourse()
-        with u.v('x', echo=True) as x, u.v('y', echo=True) as y:
+        with u.with_variable('x', echo=True) as x, u.with_variable('y', echo=True) as y:
             r = u.r.declare(arity=2)
             phi = u.f(r, x, y)
             self.assertIs(x, phi.parameters[0])

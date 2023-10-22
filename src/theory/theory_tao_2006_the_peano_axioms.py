@@ -77,7 +77,7 @@ class Tao2006ThePeanoAxioms(pu.Package):
         self.axiom_2_2 = axiom_2_2
         """"""
 
-        with u.v('n') as n:
+        with u.with_variable('n') as n:
             p002 = t.i.axiom_interpretation.infer_formula_statement(axiom_2_2, (
                     (n | u.r.is_a | natural_number) | u.r.implies | (
                     (n & plusplus) | u.r.is_a | natural_number)))
@@ -153,7 +153,7 @@ class Tao2006ThePeanoAxioms(pu.Package):
             '0 is not the successor of any natural number; i.e., we have n++ ≠ 0 for '
             'every natural number n.'), ref='2.3')
 
-        with u.v('n') as n:
+        with u.with_variable('n') as n:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₂₈): ((𝐧₂ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((𝐧₂)++ ≠ 0)).
             p028 = t.i.axiom_interpretation.infer_formula_statement(a=a05,
                 p=u.f(u.r.implies, (n | u.r.is_a | natural_number),
@@ -176,13 +176,13 @@ class Tao2006ThePeanoAxioms(pu.Package):
                             'm are natural numbers and n ≠ m, then n++ ≠ m++. Equivalently, '
                             'if n++ = m++, then we must have n = m.'), ref='2.4')
 
-        with u.v('n') as n, u.v('m') as m:
+        with u.with_variable('n') as n, u.with_variable('m') as m:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₂): ((((𝐧₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐦₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (𝐧₃ ≠ 𝐦₁)) ⟹ ((𝐧₃)++ ≠ (𝐦₁)++)).
             p032 = t.i.axiom_interpretation.infer_formula_statement(a=axiom_2_4, p=u.f(u.r.implies,
                 u.f(u.r.land, u.f(u.r.land, u.f(u.r.is_a, n, natural_number),
                     u.f(u.r.is_a, m, natural_number)), u.f(u.r.neq, n, m)),
                 u.f(u.r.neq, u.f(plusplus, n), u.f(plusplus, m))), lock=False)
-        with u.v('n') as n, u.v('m') as m:
+        with u.with_variable('n') as n, u.with_variable('m') as m:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₂): ((((𝐧₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐦₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (𝐧₃ ≠ 𝐦₁)) ⟹ ((𝐧₃)++ ≠ (𝐦₁)++)).
             p032b = t.i.axiom_interpretation.infer_formula_statement(a=axiom_2_4, p=u.f(u.r.implies,
                 u.f(u.r.land, u.f(u.r.land, u.f(u.r.is_a, n, natural_number),
@@ -326,7 +326,7 @@ class Tao2006ThePeanoAxioms(pu.Package):
             paragraph_header=pu.paragraph_headers.axiom_schema_inclusion,
             subtitle='Principle of mathematical induction')
 
-        with u.v('P') as p, u.v('n') as n, u.v('m') as m:
+        with u.with_variable('P') as p, u.with_variable('n') as n, u.with_variable('m') as m:
             # P is-a unary-relation
             # phi1 = (p | u.r.is_a | u.o.relation)
             # n is-a natural-number

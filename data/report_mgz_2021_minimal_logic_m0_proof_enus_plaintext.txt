@@ -6,18 +6,20 @@ Stabilized: False
 Extended theory: N/A
 
 # Simple-objects declarations
-Let  be simple-objects in U1.
+Let  be simple-objects in U45.
 
 # Relations
-Let "not" be a unary-relation in U1.
-Let "==>", "and", "or" be binary-relations in U1.
+Let "not" be a unary-relation in U45.
+Let "==>", "or", "and" be binary-relations in U45.
 
 # Inference rules
 The following inference rules are considered valid under this theory:
-Let "axiom-interpretation" be an inference-rule defined as "(A, P |- P)" in U1.
+Let "axiom-interpretation" be an inference-rule defined as "(A, P |- P)" in U45.
+Let "variable-substitution" be an inference-rule defined as "(P1, O1 |- Q1)" in U45.
 
 # Theory elaboration sequence
 # 1: Minimal logic
+## 1.1: Axioms
 Axiom PL1 (M0.PL1): Let axiom PL1 "A  (A  A)" be included (postulated) in M0.
 Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A, P |- P)" be included and considered valid in M0.
 Proposition (M0.P1): (A ==> (A and A)). Proof: "A  (A  A)" is postulated by axiom PL1 (PL1). (A ==> (A and A)) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that (A ==> (A and A)). QED
@@ -32,10 +34,14 @@ Proposition (M0.P5): (B ==> (A ==> B)). Proof: "B  (A  B)" is postulated by axio
 Axiom PL6 (M0.PL6): Let axiom PL6 "(A  (A  B))  B" be included (postulated) in M0.
 Proposition (M0.P6): ((A and (A ==> B)) ==> B). Proof: "(A  (A  B))  B" is postulated by axiom PL6 (PL6). ((A and (A ==> B)) ==> B) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that ((A and (A ==> B)) ==> B). QED
 Axiom PL7 (M0.PL7): Let axiom PL7 "A  (A  B)" be included (postulated) in M0.
-Proposition (M0.P7): (A ==> (A or B)). Proof: "A  (A  B)" is postulated by axiom PL7 (PL7). (A ==> (A or B)) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that (A ==> (A or B)). QED
+Proposition PL7 (M0.P7): (A ==> (A or B)). Proof: "A  (A  B)" is postulated by axiom PL7 (PL7). (A ==> (A or B)) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that (A ==> (A or B)). QED
 Axiom PL8 (M0.PL8): Let axiom PL8 "(A  B)  (B  A)" be included (postulated) in M0.
 Proposition (M0.P8): ((A or B) ==> (B or A)). Proof: "(A  B)  (B  A)" is postulated by axiom PL8 (PL8). ((A or B) ==> (B or A)) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that ((A or B) ==> (B or A)). QED
 Axiom PL9 (M0.PL9): Let axiom PL9 "[(A  C)  (B  C)]  [(A  B)  C]" be included (postulated) in M0.
 Proposition (M0.P9): (((A ==> C) and (B ==> C)) ==> ((A or B) ==> C)). Proof: "[(A  C)  (B  C)]  [(A  B)  C]" is postulated by axiom PL9 (PL9). (((A ==> C) and (B ==> C)) ==> ((A or B) ==> C)) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that (((A ==> C) and (B ==> C)) ==> ((A or B) ==> C)). QED
 Axiom PL10 (M0.PL10): Let axiom PL10 "[(A  B)  (A  !B)]  !A" be included (postulated) in M0.
 Proposition (M0.P10): (((A ==> B) and (A ==> not(B))) ==> not(A)). Proof: "[(A  B)  (A  !B)]  !A" is postulated by axiom PL10 (PL10). (((A ==> B) and (A ==> not(B))) ==> not(A)) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that (((A ==> B) and (A ==> not(B))) ==> not(A)). QED
+## 1.2: First derivation
+Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P1, O1 |- Q1)" be included and considered valid in M0.
+Proposition (M0.P11): (p1 ==> (p1 or p2)). Proof: (A ==> (A or B)) follows from prop. PL7 (P7). Let A = 𝐩₁, B = 𝐩₂. Therefore, by the variable-substitution inference rule: (P1, O1 |- Q1), it follows that (p1 ==> (p1 or p2)). QED
+Proposition (M0.P12): ((p1 ==> (p1 or p2)) ==> (((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2)))). Proof: (B ==> (A ==> B)) follows from prop. (P5). Let B = (𝐩₁ ⟹ (𝐩₁ ∨ 𝐩₂)), A = ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)). Therefore, by the variable-substitution inference rule: (P1, O1 |- Q1), it follows that ((p1 ==> (p1 or p2)) ==> (((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2)))). QED

@@ -16,7 +16,7 @@ class TestHypotheticalSyllogism(TestCase):
         r2: pu.Relation = test.r2
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
-            o2=r1(o1, o2) | u.r.implies | r1(o3, o1)))
+            phi=r1(o1, o2) | u.r.implies | r1(o3, o1)))
         # Syntax error
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.hypothetical_syllogism.infer_formula_statement(p_implies_q=o3 | u.r.implies | o2,

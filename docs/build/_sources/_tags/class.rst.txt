@@ -71,5 +71,6 @@ My tags: class
     ../python/class/proof_by_refutation_2_declaration_python_class.rst
     ../python/class/proof_by_refutation_2_inclusion_python_class.rst
     ../python/class/universe_of_discourse_python_class.rst
+    ../python/class/variable_python_class.rst
     ../python/class/variable_substitution_declaration_python_class.rst
     ../python/class/variable_substitution_inclusion_python_class.rst

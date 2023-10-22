@@ -12,19 +12,19 @@ class TestFormulaIsMaskSimilarTo(TestCase):
         o1 = u.o.declare()
         o2 = u.o.declare()
         phi1a = u.f(r1a, o1)
-        with u.v() as x:
+        with u.with_variable() as x:
             phi1b = u.f(r1a, x)
             self.assertTrue(phi1a.is_masked_formula_similar_to(phi1b, {x}))
             self.assertTrue(phi1b.is_masked_formula_similar_to(phi1a, {x}))
-        with u.v() as x:
+        with u.with_variable() as x:
             phi1c = u.f(r1b, x)
             self.assertFalse(phi1a.is_masked_formula_similar_to(phi1c, {x}))
             self.assertFalse(phi1c.is_masked_formula_similar_to(phi1a, {x}))
-        with u.v() as x:
+        with u.with_variable() as x:
             phi1d = u.f(x, o1)
             self.assertTrue(phi1a.is_masked_formula_similar_to(phi1d, {x}))
             self.assertTrue(phi1d.is_masked_formula_similar_to(phi1a, {x}))
-        with u.v() as x:
+        with u.with_variable() as x:
             phi1e = u.f(x, o2)
             self.assertFalse(phi1a.is_masked_formula_similar_to(phi1e, {x}))
             self.assertFalse(phi1e.is_masked_formula_similar_to(phi1a, {x}))
@@ -38,15 +38,15 @@ class TestFormulaIsMaskSimilarTo(TestCase):
         o2 = u.o.declare()
         o3 = u.o.declare()
         phi1a = u.f(r1a, o1, o2)
-        with u.v() as x, u.v() as y:
+        with u.with_variable() as x, u.with_variable() as y:
             phi1b = u.f(r1a, x, y)
             self.assertTrue(phi1a.is_masked_formula_similar_to(phi1b, {x, y}))
             self.assertTrue(phi1b.is_masked_formula_similar_to(phi1a, {x, y}))
-        with u.v() as x, u.v() as y:
+        with u.with_variable() as x, u.with_variable() as y:
             phi1c = u.f(r1b, x, y)
             self.assertFalse(phi1a.is_masked_formula_similar_to(phi1c, {x, y}))
             self.assertFalse(phi1c.is_masked_formula_similar_to(phi1a, {x, y}))
-        with u.v() as x, u.v() as y, u.v() as z:
+        with u.with_variable() as x, u.with_variable() as y, u.with_variable() as z:
             phi1d = u.f(r1b, x, z)
             self.assertFalse(phi1a.is_masked_formula_similar_to(phi1d, {x, y}))
             self.assertFalse(phi1d.is_masked_formula_similar_to(phi1a, {x, y}))
@@ -60,12 +60,12 @@ class TestFormulaIsMaskSimilarTo(TestCase):
         o2 = u.o.declare()
         o3 = u.o.declare()
         phi1a = u.f(r1a, u.f(r1b, o2, o3), o3)
-        with u.v() as x, u.v() as y:
+        with u.with_variable() as x, u.with_variable() as y:
             phi1b = u.f(r1a, u.f(r1b, x, o3), y)
             self.assertTrue(phi1a.is_masked_formula_similar_to(phi1b, {x, y}))
             self.assertTrue(phi1b.is_masked_formula_similar_to(phi1a, {x, y}))
         phi1c = u.f(u.r.land, u.f(r1b, o1, o2), u.f(r1b, o2, o3))
-        with u.v() as x1, u.v() as x2, u.v() as x3:
+        with u.with_variable() as x1, u.with_variable() as x2, u.with_variable() as x3:
             phi1d = u.f(u.r.land, u.f(r1b, x1, x2), u.f(r1b, x2, x3))
             self.assertTrue(phi1c.is_masked_formula_similar_to(phi1d, {x1, x2, x3}))
             self.assertTrue(phi1d.is_masked_formula_similar_to(phi1c, {x1, x2, x3}))
@@ -84,7 +84,7 @@ class TestFormulaIsMaskSimilarTo(TestCase):
         antecedent_statement = t.i.ci.infer_formula_statement(phi1, phi2)
         antecedent = antecedent_statement.valid_proposition
 
-        with u.v() as x, u.v() as y, u.v() as z:
+        with u.with_variable() as x, u.with_variable() as y, u.with_variable() as z:
             variable_set = {x, y, z}
             implication = t.i.axiom_interpretation.infer_formula_statement(a=ap,
                 p=u.f(u.r.implies, u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)), u.f(r1, x, z)),
