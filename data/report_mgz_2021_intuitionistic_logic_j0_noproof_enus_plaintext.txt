@@ -6,18 +6,18 @@ Stabilized: False
 Extended theory: 𝗆𝗂𝗇𝗂𝗆𝖺𝗅 𝗅𝗈𝗀𝗂𝖼 (𝖬₀)
 
 # Simple-objects declarations
-Let  be simple-objects in U46.
+Let  be simple-objects in U2.
 
 # Relations
-Let "not" be a unary-relation in U46.
-Let "==>", "and", "or" be binary-relations in U46.
+Let "not" be a unary-relation in U2.
+Let "==>", "or", "and" be binary-relations in U2.
 
 # Inference rules
 The following inference rules are considered valid under this theory:
-Let "axiom-interpretation" be an inference-rule defined as "(A, P |- P)" in U46.
+Let "axiom-interpretation" be an inference-rule defined as "(A, P |- P)" in U2.
 
 # Theory elaboration sequence
 # 1: Intuitionistic logic
 Axiom PL11 (J0.PL1): Let axiom PL11 "!A  (A  B)" be included (postulated) in J0.
 Inference rule (axiom-interpretation): Let inference-rule axiom-interpretation defined as "(A, P |- P)" be included and considered valid in J0.
-Proposition (J0.P13): (not(A) ==> (A ==> B)).
+Proposition (J0.P22): (not(A) ==> (A ==> B)).

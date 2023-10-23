@@ -17,6 +17,7 @@ class MGZ2021MinimalLogicM0(pu.Package):
         self.m0 = t
 
         section_1 = t.open_section(section_title='Minimal Logic', section_number=1)
+
         section_1_1 = t.open_section(section_title='Axioms', section_number=1,
             section_parent=section_1)
 
@@ -138,8 +139,8 @@ class MGZ2021MinimalLogicM0(pu.Package):
         # Original: 𝑝1 ⊃ (𝑝1 ∨ 𝑝2)
         # Punctilious: 𝐩₁ ⟹ (𝐩₁ ∨ 𝐩₂)
         with u.with_variable(symbol='p', index=1) as p1, u.with_variable(symbol='p', index=2) as p2:
-            line_1 = t.i.variable_substitution.infer_formula_statement(p=self.pl7_statement,
-                phi=u.r.tupl(p1, p2))
+            line_1 = t.i.variable_substitution.infer_formula_statement(ref='1',
+                p=self.pl7_statement, phi=u.r.tupl(p1, p2))
             pass
 
         # Original: [𝑝1 ⊃ (𝑝1 ∨ 𝑝2)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))]
@@ -153,14 +154,87 @@ class MGZ2021MinimalLogicM0(pu.Package):
             # Note that the order of variables is not alphabetical,
             # instead it must comply with the order of appearance in the formula!
             substitution_tuple: pu.Formula = u.r.tupl(b, a)
-            line_2 = t.i.variable_substitution.infer_formula_statement(p=self.pl5_statement,
-                phi=substitution_tuple)
+            line_2 = t.i.variable_substitution.infer_formula_statement(ref='2',
+                p=self.pl5_statement, phi=substitution_tuple)
 
         # Original: ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))
-        print(p1)
-        # line_2b = t.i.variable_substitution.infer_formula_statement(p=line_1, phi=u.r.tupl(p1, p2))
+        # Punctilious: (((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)) ⟹ (𝐩₁ ⟹ (𝐩₁ ∨ 𝐩₂)))
+        line_3 = t.i.modus_ponens.infer_formula_statement(ref='3', p_implies_q=line_2, p=line_1)
 
-        line_3 = t.i.modus_ponens.infer_formula_statement(p_implies_q=line_2, p=line_1)
+        # Original: ⊢ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] ⊃[{((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} ⊃ {(𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))}]
+        # Punctilious: ((((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)) ⟹ (𝐩₁ ⟹ (𝐩₁ ∨ 𝐩₂))) ⟹ ((((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)) ∧ ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁))) ⟹ ((𝐩₁ ⟹ (𝐩₁ ∨ 𝐩₂)) ∧ ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)))))
+        with u.with_variable(symbol='p', index=1) as p1, u.with_variable(symbol='p', index=2) as p2:
+            # A --> ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))
+            a = (p1 | u.r.lor | p2) | u.r.implies | (p2 | u.r.lor | p1)
+            # B --> (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))
+            b = p1 | u.r.implies | (p1 | u.r.lor | p2)
+            # C --> ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))
+            c = (p1 | u.r.lor | p2) | u.r.implies | (p2 | u.r.lor | p1)
+            # Substitution tuple
+            # Note that the order of variables is not alphabetical,
+            # instead it must comply with the order of appearance in the formula!
+            substitution_tuple: pu.Formula = u.r.tupl(a, b, c)
+            line_4 = t.i.variable_substitution.infer_formula_statement(ref='4',
+                p=self.pl3_statement, phi=substitution_tuple)
 
+        # Original: ⊢ {((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} ⊃ {(𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))}
+        # Punctilious: ((((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)) ∧ ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁))) ⟹ ((𝐩₁ ⟹ (𝐩₁ ∨ 𝐩₂)) ∧ ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁))))
+        line_5 = t.i.modus_ponens.infer_formula_statement(ref='5', p_implies_q=line_4, p=line_3)
 
-p = MGZ2021MinimalLogicM0()
+        # Original: ⊢ [(𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))]
+        # Punctilious: (((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)) ⟹ (((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)) ∧ ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁))))
+        with u.with_variable(symbol='p', index=1) as p1, u.with_variable(symbol='p', index=2) as p2:
+            # A --> [(𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)]
+            a = (p1 | u.r.lor | p2) | u.r.implies | (p2 | u.r.lor | p1)
+            # Substitution tuple
+            # Note that the order of variables is not alphabetical,
+            # instead it must comply with the order of appearance in the formula!
+            substitution_tuple: pu.Formula = u.r.tupl(a)
+            line_6 = t.i.variable_substitution.infer_formula_statement(ref='6',
+                p=self.pl1_statement, phi=substitution_tuple)
+
+        # Original: ⊢ (𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)
+        # Punctilious: ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁))
+        # PL8: (𝐴 ∨ 𝐵) ⊃ (𝐵 ∨ 𝐴)
+        with u.with_variable(symbol='p', index=1) as p1, u.with_variable(symbol='p', index=2) as p2:
+            # A --> 𝑝1
+            # B --> 𝑝2
+            a = p1
+            b = p2
+            # Substitution tuple
+            # Note that the order of variables is not alphabetical,
+            # instead it must comply with the order of appearance in the formula!
+            substitution_tuple: pu.Formula = u.r.tupl(a, b)
+            line_7 = t.i.variable_substitution.infer_formula_statement(ref='7',
+                p=self.pl8_statement, phi=substitution_tuple)
+
+        # Original: ⊢ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))
+        # Punctilious: (((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)) ∧ ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)))
+        line_8 = t.i.modus_ponens.infer_formula_statement(ref='8', p_implies_q=line_6, p=line_7)
+
+        # Original: ⊢ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))
+        # Punctilious: ((𝐩₁ ⟹ (𝐩₁ ∨ 𝐩₂)) ∧ ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)))
+        line_9 = t.i.modus_ponens.infer_formula_statement(ref='9', p_implies_q=line_5, p=line_8)
+
+        # Original: ⊢ [((𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))] ⊃ (𝑝1 ⊃ (𝑝2 ∨ 𝑝1))
+        # Punctilious: (((𝐩₁ ⟹ (𝐩₁ ∨ 𝐩₂)) ∧ ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁))) ⟹ (𝐩₁ ⟹ (𝐩₂ ∨ 𝐩₁)))
+        # PL4. [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
+        with u.with_variable(symbol='p', index=1) as p1, u.with_variable(symbol='p', index=2) as p2:
+            # A --> 𝑝1
+            a = p1
+            # B --> (𝑝1 ∨ 𝑝2)
+            b = p1 | u.r.lor | p2
+            # C --> (𝑝2 ∨ 𝑝1)
+            c = p2 | u.r.lor | p1
+            # Substitution tuple
+            # Note that the order of variables is not alphabetical,
+            # instead it must comply with the order of appearance in the formula!
+            substitution_tuple: pu.Formula = u.r.tupl(a, b, c)
+            line_10 = t.i.variable_substitution.infer_formula_statement(ref='10',
+                p=self.pl4_statement, phi=substitution_tuple)
+
+        # Original: ⊢ 𝑝1 ⊃ (𝑝2 ∨ 𝑝1)
+        # Punctilious: (𝐩₁ ⟹ (𝐩₂ ∨ 𝐩₁))
+        line_11 = t.i.modus_ponens.infer_formula_statement(ref='11', p_implies_q=line_10, p=line_9)
+
+# p = MGZ2021MinimalLogicM0()
