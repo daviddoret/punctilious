@@ -141,7 +141,9 @@ class MGZ2021MinimalLogicM0(pu.Package):
         with u.with_variable(symbol='p', index=1) as p1, u.with_variable(symbol='p', index=2) as p2:
             line_1 = t.i.variable_substitution.infer_formula_statement(ref='1',
                 p=self.pl7_statement, phi=u.r.tupl(p1, p2))
-            pass
+
+        t.take_note(
+            content='"For instance, the formula on line 1, 𝑝1 ⊃ (𝑝1 ∨ 𝑝2), is an instance of axiom PL7, i.e., of 𝐴 ⊃ (𝐴 ∨ 𝐵): it is obtained by replacing 𝐴 by 𝑝1 and 𝐵 by 𝑝2. (...) In general: an instance of an instance of an axiom is an axiom", [MGZ21, p. 21]')
 
         # Original: [𝑝1 ⊃ (𝑝1 ∨ 𝑝2)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))]
         # Punctilious: ((𝐩₁ ⟹ (𝐩₁ ∨ 𝐩₂)) ⟹ (((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)) ⟹ (𝐩₁ ⟹ (𝐩₁ ∨ 𝐩₂))))
@@ -236,5 +238,17 @@ class MGZ2021MinimalLogicM0(pu.Package):
         # Original: ⊢ 𝑝1 ⊃ (𝑝2 ∨ 𝑝1)
         # Punctilious: (𝐩₁ ⟹ (𝐩₂ ∨ 𝐩₁))
         line_11 = t.i.modus_ponens.infer_formula_statement(ref='11', p_implies_q=line_10, p=line_9)
+
+        # Meta derivation
+
+        section_1_3 = t.open_section(section_title='Meta derivation', section_number=3,
+            section_parent=section_1)
+
+        t.take_note(
+            content='"It will be instructive to analyze the structure of the derivation. One way to understand the proof we just gave schematically is to see its first nine lines as an instance of the following (meta)derivation, where we take 𝐶 to abbreviate 𝑝 1 ⊃ (𝑝1 ∨ 𝑝2) and 𝐷 to abbreviate (𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1).", [MGZ21, p. 21]')
+
+        # TODO: Create a new inference-rule variable assignment.
+        
+        # t.i.variable_assignment.infer_formula_statement ?????
 
 # p = MGZ2021MinimalLogicM0()

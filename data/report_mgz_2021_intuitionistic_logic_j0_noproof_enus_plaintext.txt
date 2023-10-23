@@ -10,7 +10,7 @@ Let  be simple-objects in U2.
 
 # Relations
 Let "not" be a unary-relation in U2.
-Let "==>", "or", "and" be binary-relations in U2.
+Let "==>", "and", "or" be binary-relations in U2.
 
 # Inference rules
 The following inference rules are considered valid under this theory:

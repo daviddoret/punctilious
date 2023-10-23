@@ -5,21 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 1.0.10:&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.">
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/_tags/variable.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/variable_math_concept.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/class/variable_python_class.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/.doctrees/python/sample/variable_python_sample.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/_tags/variable.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/math/concept/variable_math_concept.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/python/class/variable_python_class.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_sources/python/sample/variable_python_sample.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/_tags/variable.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/math/concept/variable_math_concept.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/python/class/variable_python_class.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/python/sample/variable_python_sample.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/_tags/variable.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_generate_theory_reports.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_generate_theory_reports.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_noproof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_noproof_enus_plaintext.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_noproof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_noproof_enus_unicode.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_proof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_proof_enus_plaintext.txt" afterDir="false" />
@@ -28,24 +14,25 @@
       <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_noproof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_noproof_enus_unicode.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_plaintext.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_unicode.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_noproof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_noproof_enus_plaintext.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_noproof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_noproof_enus_unicode.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_proof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_proof_enus_plaintext.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_proof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_proof_enus_unicode.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_plaintext.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_unicode.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_plaintext.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.buildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.buildinfo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/alpha_equivalence_math_concept.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/concept/alpha_equivalence_math_concept.doctree" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/variable_substitution_math_inference_rule.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/inference_rule/variable_substitution_math_inference_rule.doctree" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/mgz_2021/classical_logic_k0.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/mgz_2021/classical_logic_k0.doctree" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/mgz_2021/intuitionistic_logic_j0.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/mgz_2021/intuitionistic_logic_j0.doctree" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/mgz_2021/minimal_logic_m0.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/mgz_2021/minimal_logic_m0.doctree" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/tao_2006/the_peano_axioms.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/math/theory/tao_2006/the_peano_axioms.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/basic.css" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/basic.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/css/fonts/fontawesome-webfont.svg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/css/fonts/fontawesome-webfont.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/doctools.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/doctools.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/documentation_options.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/documentation_options.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/graphviz.css" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/graphviz.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/jquery.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/jquery.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/language_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/language_data.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-compact-light.svg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-compact-light.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-full-light.svg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/punctilious-logo-full-light.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/searchtools.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/searchtools.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/absorption.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/absorption.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/axiom-interpretation.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/axiom-interpretation.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/axiom.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/axiom.html" afterDir="false" />
@@ -92,6 +79,7 @@
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/tagsindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/tagsindex.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/universe-of-discourse.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/universe-of-discourse.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_tags/variable-substitution.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/variable-substitution.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_tags/variable.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_tags/variable.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/back_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/back_matter.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/back_matter/bibliography_back_matter.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/back_matter/bibliography_back_matter.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/back_matter_reference_table.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/back_matter_reference_table.html" afterDir="false" />
@@ -129,6 +117,7 @@
       <change beforePath="$PROJECT_DIR$/docs/build/math/concept/theory_derivation_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/theory_derivation_math_concept.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/concept/universe_of_discourse_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/universe_of_discourse_math_concept.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/concept/validity_of_formula_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/validity_of_formula_math_concept.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/math/concept/variable_math_concept.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/concept/variable_math_concept.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/absorption_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/absorption_math_inference_rule.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/axiom_interpretation_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/axiom_interpretation_math_inference_rule.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_1_math_inference_rule.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/math/inference_rule/biconditional_elimination_1_math_inference_rule.html" afterDir="false" />
@@ -234,6 +223,7 @@
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/proof_by_refutation_2_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/proof_by_refutation_2_declaration_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/proof_by_refutation_2_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/proof_by_refutation_2_inclusion_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/universe_of_discourse_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/universe_of_discourse_python_class.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/class/variable_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/variable_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/variable_substitution_declaration_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/variable_substitution_declaration_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/class/variable_substitution_inclusion_python_class.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/class/variable_substitution_inclusion_python_class.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/function/create_universe_of_discourse.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/function/create_universe_of_discourse.html" afterDir="false" />
@@ -269,6 +259,7 @@
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/proof_by_contradiction_2_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/proof_by_contradiction_2_python_sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/proof_by_refutation_1_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/proof_by_refutation_1_python_sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/proof_by_refutation_2_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/proof_by_refutation_2_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/variable_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/variable_python_sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/sample/variable_substitution_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/variable_substitution_python_sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python/source_code_repository_python.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/source_code_repository_python.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/python_class_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python_class_index.html" afterDir="false" />
@@ -280,7 +271,6 @@
       <change beforePath="$PROJECT_DIR$/docs/build/theory_mgz_2021.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/theory_mgz_2021.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/theory_tao_2006.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/theory_tao_2006.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/theory/theory_mgz_2021_minimal_logic_m0.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_mgz_2021_minimal_logic_m0.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -393,7 +383,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\inference_rules" />
     </key>
   </component>
-  <component name="RunManager" selected="PowerShell.build_docs.ps1">
+  <component name="RunManager" selected="Python docs.Sphinx HTML">
     <configuration name="build_docs.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/build_docs.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
       <envs />
       <method v="2" />
@@ -676,9 +666,9 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="PowerShell.build_docs.ps1" />
         <item itemvalue="Python.sample_export_all_articles" />
         <item itemvalue="Python.prebuild_generate_theory_reports (1)" />
+        <item itemvalue="PowerShell.build_docs.ps1" />
         <item itemvalue="Python.theory_mgz_2021_minimal_logic_m0" />
         <item itemvalue="Python tests.Python tests in test_formula_is_mask_similar_to.py" />
       </list>
@@ -692,14 +682,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00342" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
-      <option name="closed" value="true" />
-      <created>1696622920055</created>
-      <option name="number" value="00342" />
-      <option name="presentableId" value="LOCAL-00342" />
-      <option name="project" value="LOCAL" />
-      <updated>1696622920055</updated>
     </task>
     <task id="LOCAL-00343" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
       <option name="closed" value="true" />
@@ -1085,7 +1067,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697922221832</updated>
     </task>
-    <option name="localTasksCounter" value="391" />
+    <task id="LOCAL-00391" summary="version 1.0.10:&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.">
+      <option name="closed" value="true" />
+      <created>1698094827702</created>
+      <option name="number" value="00391" />
+      <option name="presentableId" value="LOCAL-00391" />
+      <option name="project" value="LOCAL" />
+      <updated>1698094827702</updated>
+    </task>
+    <option name="localTasksCounter" value="392" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
