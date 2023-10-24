@@ -166,6 +166,15 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('. ')
         return True
 
+    def compose_constant_declaration(self, o: ConstantDeclaration) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        yield SansSerifNormal('Let ')
+        yield from o.compose_symbol()
+        yield SansSerifNormal(' be the constant ⌜')
+        yield from o.value.compose()
+        yield SansSerifNormal('⌝. ')
+        return True
+
     def compose_constructive_dilemma_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         parameter_p_implies_q: Formula = o.inference_rule.definition.parameters[0].parameters[0]

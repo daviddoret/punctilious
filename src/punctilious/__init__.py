@@ -13,8 +13,9 @@ from punctilious.core import AbsorptionDeclaration, AbsorptionInclusion, Article
     ComposableBlockSequence, ComposableText, configuration, ConjunctionElimination1Declaration, \
     ConjunctionElimination1Inclusion, ConjunctionElimination2Declaration, \
     ConjunctionElimination2Inclusion, ConjunctionIntroductionDeclaration, \
-    ConjunctionIntroductionInclusion, consistency_values, ConstructiveDilemmaDeclaration, \
-    ConstructiveDilemmaInclusion, create_universe_of_discourse, DashedName, DefinitionInclusion, \
+    ConjunctionIntroductionInclusion, consistency_values, ConstantDeclaration, \
+    ConstantDeclarationDict, ConstructiveDilemmaDeclaration, ConstructiveDilemmaInclusion, \
+    create_universe_of_discourse, DashedName, DefinitionInclusion, \
     DefinitionInterpretationDeclaration, DefinitionInterpretationInclusion, \
     DestructiveDilemmaDeclaration, DestructiveDilemmaInclusion, DisjunctionIntroduction1Declaration, \
     DisjunctionIntroduction1Inclusion, DisjunctionIntroduction2Declaration, \

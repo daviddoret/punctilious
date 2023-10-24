@@ -1022,6 +1022,7 @@ class Configuration:
         self.auto_index = None
         self.default_axiom_declaration_symbol = None
         self.default_axiom_inclusion_symbol = None
+        self.default_constant_symbol = None
         self.default_definition_declaration_symbol = None
         self.default_definition_inclusion_symbol = None
         self.default_formula_symbol = None
@@ -1143,6 +1144,7 @@ class DeclarativeClassList(repm.ValueName):
             'atheoretical-statement')
         self.axiom = DeclarativeClass('axiom', 'axiom')
         self.axiom_inclusion = DeclarativeClass('axiom_inclusion', 'axiom-inclusion')
+        self.constant_declaration = DeclarativeClass('constant_declaration', 'constant-declaration')
         self.definition = DeclarativeClass('definition', 'definition')
         self.definition_inclusion = DeclarativeClass('definition_inclusion', 'definition-inclusion')
         self.direct_axiom_inference = DeclarativeClass('direct_axiom_inference',
@@ -2619,6 +2621,45 @@ class Variable(TheoreticalObject):
         :return:
         """
         return self._scope
+
+
+class ConstantDeclaration(TheoreticalObject):
+    def __init__(self, value: FlexibleFormula, u: UniverseOfDiscourse,
+            symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, echo: (None, bool) = None):
+        """
+        """
+        echo = prioritize_value(echo, configuration.echo_formula_declaration,
+            configuration.echo_default, False)
+        if isinstance(symbol, str):
+            symbol = SerifNormal(symbol)
+        if symbol is None:
+            symbol = configuration.default_constant_symbol
+        self._value = value
+        super().__init__(symbol=symbol, auto_index=auto_index, index=index, u=u, echo=False)
+        super()._declare_class_membership(declarative_class_list.constant_declaration)
+        u.cross_reference_constant(self)
+        verify(assertion=value.u is self.u,
+            msg=f'The universe-of-discourse ⌜{self.u}⌝ of the constant ⌜{self}⌝ is inconsistent with the universe-of-discourse of its value ⌜{value}⌝.')
+        if echo:
+            self.echo()
+
+    def __repr__(self):
+        return self.rep(expand=True)
+
+    def __str__(self):
+        return self.rep(expand=True)
+
+    def compose(self, **kwargs) -> collections.abc.Generator[Composable, Composable, bool]:
+        output = yield from configuration.locale.compose_constant_declaration(o=self)
+        return output
+
+    def is_strictly_propositional(self) -> bool:
+        return self.value.is_strictly_propositional
+
+    @property
+    def value(self) -> TheoreticalObject:
+        return self._value
 
 
 class Formula(TheoreticalObject):
@@ -6904,6 +6945,22 @@ class RelationDict(collections.UserDict):
         return self.inequality
 
 
+class ConstantDeclarationDict(collections.UserDict):
+    """A dictionary that exposes well-known constants as properties.
+
+    """
+
+    def __init__(self, u: UniverseOfDiscourse):
+        self.u = u
+        super().__init__()
+
+    def declare(self, value: FlexibleFormula, symbol: (None, str, StyledText) = None,
+            index: (None, int, str) = None, auto_index: (None, bool) = None,
+            echo: (None, bool) = None) -> ConstantDeclaration:
+        return ConstantDeclaration(u=self.u, value=value, symbol=symbol, index=index,
+            auto_index=auto_index, echo=echo)
+
+
 FlexibleAxiom = typing.Union[AxiomDeclaration, AxiomInclusion, str]
 """A flexible composite data type to pass axioms as arguments.
 
@@ -10153,6 +10210,7 @@ class UniverseOfDiscourse(SymbolicObject):
         echo = prioritize_value(echo, configuration.echo_universe_of_discourse_declaration,
             configuration.echo_default, False)
         self.axioms = dict()
+        self._c = ConstantDeclarationDict(u=self)
         self.definitions = dict()
         self.formulae = dict()
         self._inference_rules = InferenceRuleDeclarationCollection(u=self)
@@ -10185,6 +10243,11 @@ class UniverseOfDiscourse(SymbolicObject):
         if echo:
             self.echo()
 
+    @property
+    def c(self) -> ConstantDeclarationDict:
+        """The collection of constants contained in this universe-of-discourse."""
+        return self._c
+
     def compose_class(self) -> collections.abc.Generator[Composable, Composable, bool]:
         yield SerifItalic(plaintext='universe-of-discourse')
         return True
@@ -10211,6 +10274,17 @@ class UniverseOfDiscourse(SymbolicObject):
             'universe-of-discourse.', a=a, universe_of_discourse=self)
         if a not in self.axioms:
             self.axioms[a.nameset] = a
+            return True
+        else:
+            return False
+
+    def cross_reference_constant(self, c: ConstantDeclaration) -> bool:
+        """Cross-references a constant in this universe-of-discourse.
+
+        :parameter c: a constant-declaration.
+        """
+        if c not in self.c:
+            self.c[c.nameset] = c
             return True
         else:
             return False
@@ -10732,6 +10806,7 @@ def reset_configuration(configuration: Configuration) -> None:
     configuration._echo_default = False
     configuration.default_axiom_declaration_symbol = ScriptNormal('A')
     configuration.default_axiom_inclusion_symbol = SerifItalic('A')
+    configuration.default_constant_symbol = SerifNormal(plaintext='c', unicode='c')
     configuration.default_definition_declaration_symbol = ScriptNormal('D')
     configuration.default_definition_inclusion_symbol = SerifItalic('D')
     configuration.default_formula_symbol = SerifItalic(plaintext='phi', unicode='𝜑')
