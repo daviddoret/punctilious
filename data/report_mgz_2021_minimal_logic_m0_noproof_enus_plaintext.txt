@@ -6,16 +6,17 @@ Stabilized: False
 Extended theory: N/A
 
 # Simple-objects declarations
-Let  be simple-objects in U45.
+Let  be simple-objects in U1.
 
 # Relations
-Let "not" be a unary-relation in U45.
-Let "==>", "or", "and" be binary-relations in U45.
+Let "not" be a unary-relation in U1.
+Let "==>", "or", "and" be binary-relations in U1.
 
 # Inference rules
 The following inference rules are considered valid under this theory:
-Let "axiom-interpretation" be an inference-rule defined as "(A, P |- P)" in U45.
-Let "variable-substitution" be an inference-rule defined as "(P1, O1 |- Q1)" in U45.
+Let "axiom-interpretation" be an inference-rule defined as "(A, P |- P)" in U1.
+Let "modus-ponens" be an inference-rule defined as "((P3 ==> Q2), P3 |- Q2)" in U1.
+Let "variable-substitution" be an inference-rule defined as "(P1, O1 |- Q1)" in U1.
 
 # Theory elaboration sequence
 # 1: Minimal logic
@@ -43,5 +44,15 @@ Axiom PL10 (M0.PL10): Let axiom PL10 "[(A  B)  (A  !B)]  !A" be included (postul
 Proposition (M0.P10): (((A ==> B) and (A ==> not(B))) ==> not(A)).
 ## 1.2: First derivation
 Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P1, O1 |- Q1)" be included and considered valid in M0.
-Proposition (M0.P11): (p1 ==> (p1 or p2)).
-Proposition (M0.P12): ((p1 ==> (p1 or p2)) ==> (((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2)))).
+Proposition 1 (M0.P11): (p1 ==> (p1 or p2)).
+Proposition 2 (M0.P12): ((p1 ==> (p1 or p2)) ==> (((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2)))).
+Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "((P3 ==> Q2), P3 |- Q2)" be included and considered valid in M0.
+Proposition 3 (M0.P13): (((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2))).
+Proposition 4 (M0.P14): ((((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2))) ==> ((((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1))) ==> ((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1))))).
+Proposition 5 (M0.P15): ((((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1))) ==> ((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1)))).
+Proposition 6 (M0.P16): (((p1 or p2) ==> (p2 or p1)) ==> (((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1)))).
+Proposition 7 (M0.P17): ((p1 or p2) ==> (p2 or p1)).
+Proposition 8 (M0.P18): (((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1))).
+Proposition 9 (M0.P19): ((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1))).
+Proposition 10 (M0.P20): (((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1))) ==> (p1 ==> (p2 or p1))).
+Proposition 11 (M0.P21): (p1 ==> (p2 or p1)).

@@ -4,19 +4,10 @@ import punctilious as pu
 
 class Tao2006ThePeanoAxioms(pu.Package):
 
-    def __init__(self, t: (None, pu.TheoryDerivation) = None,
-            u: (None, pu.UniverseOfDiscourse) = None):
+    def __init__(self, u: (None, pu.UniverseOfDiscourse) = None):
+        if u is None:
+            u = pu.UniverseOfDiscourse()
         self.u = u
-        self.t = t
-        if self.u is None and self.t is None:
-            self.u = pu.UniverseOfDiscourse()
-            self.t = self.u.declare_theory()
-        elif self.u is None and self.t is not None:
-            self.u = self.t.u
-        elif self.u is not None and self.t is None:
-            self.t = self.u.declare_theory()
-        u = self.u
-        t = self.t
 
         # Naming conventions in Tao06
         t = self.u.declare_theory(dashed_name='peano-axioms', name='the Peano axioms',

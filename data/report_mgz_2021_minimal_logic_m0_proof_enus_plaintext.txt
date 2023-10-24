@@ -6,16 +6,17 @@ Stabilized: False
 Extended theory: N/A
 
 # Simple-objects declarations
-Let  be simple-objects in U45.
+Let  be simple-objects in U1.
 
 # Relations
-Let "not" be a unary-relation in U45.
-Let "==>", "or", "and" be binary-relations in U45.
+Let "not" be a unary-relation in U1.
+Let "==>", "or", "and" be binary-relations in U1.
 
 # Inference rules
 The following inference rules are considered valid under this theory:
-Let "axiom-interpretation" be an inference-rule defined as "(A, P |- P)" in U45.
-Let "variable-substitution" be an inference-rule defined as "(P1, O1 |- Q1)" in U45.
+Let "axiom-interpretation" be an inference-rule defined as "(A, P |- P)" in U1.
+Let "modus-ponens" be an inference-rule defined as "((P3 ==> Q2), P3 |- Q2)" in U1.
+Let "variable-substitution" be an inference-rule defined as "(P1, O1 |- Q1)" in U1.
 
 # Theory elaboration sequence
 # 1: Minimal logic
@@ -43,5 +44,15 @@ Axiom PL10 (M0.PL10): Let axiom PL10 "[(A  B)  (A  !B)]  !A" be included (postul
 Proposition (M0.P10): (((A ==> B) and (A ==> not(B))) ==> not(A)). Proof: "[(A  B)  (A  !B)]  !A" is postulated by axiom PL10 (PL10). (((A ==> B) and (A ==> not(B))) ==> not(A)) is a propositional formula interpreted from that axiom. Therefore, by the axiom-interpretation inference rule: (A, P |- P), it follows that (((A ==> B) and (A ==> not(B))) ==> not(A)). QED
 ## 1.2: First derivation
 Inference rule (variable-substitution): Let inference-rule variable-substitution defined as "(P1, O1 |- Q1)" be included and considered valid in M0.
-Proposition (M0.P11): (p1 ==> (p1 or p2)). Proof: (A ==> (A or B)) follows from prop. PL7 (P7). Let A = 𝐩₁, B = 𝐩₂. Therefore, by the variable-substitution inference rule: (P1, O1 |- Q1), it follows that (p1 ==> (p1 or p2)). QED
-Proposition (M0.P12): ((p1 ==> (p1 or p2)) ==> (((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2)))). Proof: (B ==> (A ==> B)) follows from prop. (P5). Let B = (𝐩₁ ⟹ (𝐩₁ ∨ 𝐩₂)), A = ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)). Therefore, by the variable-substitution inference rule: (P1, O1 |- Q1), it follows that ((p1 ==> (p1 or p2)) ==> (((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2)))). QED
+Proposition 1 (M0.P11): (p1 ==> (p1 or p2)). Proof: (A ==> (A or B)) follows from prop. PL7 (P7). Let A = 𝐩₁, B = 𝐩₂. Therefore, by the variable-substitution inference rule: (P1, O1 |- Q1), it follows that (p1 ==> (p1 or p2)). QED
+Proposition 2 (M0.P12): ((p1 ==> (p1 or p2)) ==> (((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2)))). Proof: (B ==> (A ==> B)) follows from prop. (P5). Let B = (𝐩₁ ⟹ (𝐩₁ ∨ 𝐩₂)), A = ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)). Therefore, by the variable-substitution inference rule: (P1, O1 |- Q1), it follows that ((p1 ==> (p1 or p2)) ==> (((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2)))). QED
+Inference rule (modus-ponens): Let inference-rule modus-ponens defined as "((P3 ==> Q2), P3 |- Q2)" be included and considered valid in M0.
+Proposition 3 (M0.P13): (((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2))). Proof: ((p1 ==> (p1 or p2)) ==> (((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2)))) follows from prop. 2 (P12).(p1 ==> (p1 or p2)) follows from prop. 1 (P11). Therefore, by the modus-ponens inference rule: ((P3 ==> Q2), P3 |- Q2), it follows that (((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2))). QED
+Proposition 4 (M0.P14): ((((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2))) ==> ((((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1))) ==> ((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1))))). Proof: ((A ==> B) ==> ((A and C) ==> (B and C))) follows from prop. (P3). Let A = ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)), B = (𝐩₁ ⟹ (𝐩₁ ∨ 𝐩₂)), C = ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)). Therefore, by the variable-substitution inference rule: (P1, O1 |- Q1), it follows that ((((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2))) ==> ((((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1))) ==> ((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1))))). QED
+Proposition 5 (M0.P15): ((((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1))) ==> ((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1)))). Proof: ((((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2))) ==> ((((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1))) ==> ((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1))))) follows from prop. 4 (P14).(((p1 or p2) ==> (p2 or p1)) ==> (p1 ==> (p1 or p2))) follows from prop. 3 (P13). Therefore, by the modus-ponens inference rule: ((P3 ==> Q2), P3 |- Q2), it follows that ((((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1))) ==> ((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1)))). QED
+Proposition 6 (M0.P16): (((p1 or p2) ==> (p2 or p1)) ==> (((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1)))). Proof: (A ==> (A and A)) follows from prop. (P1). Let A = ((𝐩₁ ∨ 𝐩₂) ⟹ (𝐩₂ ∨ 𝐩₁)). Therefore, by the variable-substitution inference rule: (P1, O1 |- Q1), it follows that (((p1 or p2) ==> (p2 or p1)) ==> (((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1)))). QED
+Proposition 7 (M0.P17): ((p1 or p2) ==> (p2 or p1)). Proof: ((A or B) ==> (B or A)) follows from prop. (P8). Let A = 𝐩₁, B = 𝐩₂. Therefore, by the variable-substitution inference rule: (P1, O1 |- Q1), it follows that ((p1 or p2) ==> (p2 or p1)). QED
+Proposition 8 (M0.P18): (((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1))). Proof: (((p1 or p2) ==> (p2 or p1)) ==> (((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1)))) follows from prop. 6 (P16).((p1 or p2) ==> (p2 or p1)) follows from prop. 7 (P17). Therefore, by the modus-ponens inference rule: ((P3 ==> Q2), P3 |- Q2), it follows that (((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1))). QED
+Proposition 9 (M0.P19): ((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1))). Proof: ((((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1))) ==> ((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1)))) follows from prop. 5 (P15).(((p1 or p2) ==> (p2 or p1)) and ((p1 or p2) ==> (p2 or p1))) follows from prop. 8 (P18). Therefore, by the modus-ponens inference rule: ((P3 ==> Q2), P3 |- Q2), it follows that ((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1))). QED
+Proposition 10 (M0.P20): (((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1))) ==> (p1 ==> (p2 or p1))). Proof: (((A ==> B) and (B ==> C)) ==> (A ==> C)) follows from prop. (P4). Let A = 𝐩₁, B = (𝐩₁ ∨ 𝐩₂), C = (𝐩₂ ∨ 𝐩₁). Therefore, by the variable-substitution inference rule: (P1, O1 |- Q1), it follows that (((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1))) ==> (p1 ==> (p2 or p1))). QED
+Proposition 11 (M0.P21): (p1 ==> (p2 or p1)). Proof: (((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1))) ==> (p1 ==> (p2 or p1))) follows from prop. 10 (P20).((p1 ==> (p1 or p2)) and ((p1 or p2) ==> (p2 or p1))) follows from prop. 9 (P19). Therefore, by the modus-ponens inference rule: ((P3 ==> Q2), P3 |- Q2), it follows that (p1 ==> (p2 or p1)). QED
