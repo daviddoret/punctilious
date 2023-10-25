@@ -170,9 +170,9 @@ class LocaleEnUs(Locale):
         Composable, Composable, bool]:
         yield SansSerifNormal('Let ')
         yield from o.compose_symbol()
-        yield SansSerifNormal(' be the constant ⌜')
-        yield from o.value.compose()
-        yield SansSerifNormal('⌝. ')
+        yield SansSerifNormal(' be the constant ')
+        yield from o.value.compose_formula()
+        yield SansSerifNormal('. ')
         return True
 
     def compose_constructive_dilemma_paragraph_proof(self, o: InferredStatement) -> \
