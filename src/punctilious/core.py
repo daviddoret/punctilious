@@ -1994,6 +1994,27 @@ class InfixPartialFormula:
     # def __ror__(self, other=None):  #    """Hack to provide support for pseudo-infix notation, as in: p |implies| q.  #    """  #    print(f'IPF.__ror__: self = {self}, other = {other}')  #    if not isinstance(other, InfixPartialFormula):  #        return InfixPartialFormula(a=self, b=other)  # return self.a.u.f(self.b, self.a, other)  #    else:  #        verify(assertion=1 == 2, msg='failed infix notation', slf_a=self.a, slf_b=self.b)  #        return self.a.u.f(self.a, self.b, self)
 
 
+def iterate_components(u: UniverseOfDiscourse, phi: FlexibleFormula) -> Generator[
+    FlexibleFormula, None, None]:
+    """Iterate through the components of a formula, in canonical-order."""
+    _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
+    print(phi)
+    if isinstance(phi, ConstantDeclaration):
+        # Constants are not considered for alpha-equivalence,
+        # but their internal value is.
+        phi = phi.value
+    if isinstance(phi, FormulaStatement):
+        # It is the formula content of formula-statements
+        # that is being considered for alpha-equivalence.
+        phi = phi.valid_proposition
+    if isinstance(phi, Formula):
+        yield from iterate_alpha_equivalence_components(u=u, phi=phi.relation)
+        for p in phi.parameters:
+            yield from iterate_alpha_equivalence_components(u=u, phi=p)
+    else:
+        yield phi
+
+
 def iterate_alpha_equivalence_components(u: UniverseOfDiscourse, phi: FlexibleFormula) -> Generator[
     FlexibleFormula, None, None]:
     """Iterate through the components of a formula that are alpha-equivalence meaningful, in canonical-order."""
@@ -2015,7 +2036,35 @@ def iterate_alpha_equivalence_components(u: UniverseOfDiscourse, phi: FlexibleFo
         yield phi
 
 
-def get_unique_variable_ordered_set(u: UniverseOfDiscourse, phi: FlexibleFormula) -> tuple[
+def formula_alpha_contains(u: UniverseOfDiscourse, phi: FlexibleFormula, psi: FlexibleFormula):
+    """Returns True if psi is alpha-contained in phi, including the extreme case when psi is alpha-equivalent to phi."""
+    _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
+    _, psi, _ = verify_formula(u=u, input_value=psi, arg='psi')
+    if is_alpha_equivalent_to(u=u, phi=phi, psi=psi):
+        return True
+    for component in iterate_alpha_equivalence_components(u=u, phi=phi):
+        TODO: This is where
+        the
+        bug is.Formula
+        instances
+        are
+        not returned
+        by
+        the
+        iterate_alpha_equivalence.
+        We
+        must
+        develope
+        a
+        different
+        iterator
+        function.
+        if is_alpha_equivalent_to(u=u, phi=component, psi=psi):
+            return True
+    return False
+
+
+def get_formula_unique_variable_ordered_set(u: UniverseOfDiscourse, phi: FlexibleFormula) -> tuple[
     Variable]:
     """Return the ordered-set of unique variables contained in ⌜self⌝,
     ordered in canonical-order (TODO: add link to doc on canonical-order).
@@ -2044,8 +2093,8 @@ def is_alpha_equivalent_to(u: UniverseOfDiscourse, phi: FlexibleFormula,
     _, psi, _ = verify_formula(u=u, input_value=psi, arg='psi')
     psi: TheoreticalObject
 
-    phi_variables: tuple[Variable] = get_unique_variable_ordered_set(u=u, phi=phi)
-    psi_variables: tuple[Variable] = get_unique_variable_ordered_set(u=u, phi=psi)
+    phi_variables: tuple[Variable] = get_formula_unique_variable_ordered_set(u=u, phi=phi)
+    psi_variables: tuple[Variable] = get_formula_unique_variable_ordered_set(u=u, phi=psi)
 
     if len(phi_variables) != len(psi_variables):
         return False
@@ -2189,28 +2238,6 @@ class TheoreticalObject(SymbolicObject):
         NetworkX automatically and quietly ignores nodes and edges that are already present."""
         g.add_node(self.rep_name())
         self.u.add_to_graph(g)
-
-    def get_unique_variable_ordered_set_OBSOLETE(self,
-            substitute_constants_with_values: bool = True) -> tuple[Variable]:
-        """Return the ordered-set of unique variables contained in ⌜self⌝,
-        ordered in canonical-order (TODO: add link to doc on canonical-order).
-
-        This function recursively traverse formula components (relation + parameters)
-        to compile the set of variables contained in o.
-
-        Internally, it uses a mutable python list, which is natively ordered,
-        to proxy an ordered-set. It then returns an immutable python tuple
-        for stability.
-        """
-        ordered_set: list[Variable] = list()
-        for element in self.iterate_theoretical_objcts_references(include_root=False,
-                substitute_constants_with_values=substitute_constants_with_values):
-            if isinstance(element, Variable):
-                if element not in ordered_set:
-                    ordered_set.append(element)
-        # Make the ordered-set proxy immutable.
-        ordered_set: tuple[Variable] = tuple(ordered_set)
-        return ordered_set
 
     def is_formula_syntactically_equivalent_to(self, phi: FlexibleFormula) -> bool:
         """Returns true if ⌜self⌝ is formula-syntactically-equivalent to ⌜o2⌝.
@@ -2444,7 +2471,7 @@ class TheoreticalObject(SymbolicObject):
             yield self
             visited.update({self})
 
-    def contains_theoretical_objct(self, o: TheoreticalObject):
+    def contains_theoretical_objct_OBSOLETE(self, o: TheoreticalObject):
         """Return True if o is in this theory's hierarchy, False otherwise.
         """
         return o in self.iterate_theoretical_objcts_references(include_root=True)
@@ -3886,7 +3913,7 @@ class Morphism(FormulaStatement):
     def __init__(self, source_statement, nameset=None, theory=None, paragraphe_header=None):
         assert isinstance(theory, TheoryDerivation)
         assert isinstance(source_statement, FormulaStatement)
-        assert theory.contains_theoretical_objct(source_statement)
+        assert theory.contains_theoretical_objct_OBSOLETE(source_statement)
         self.source_statement = source_statement
         assert source_statement.valid_proposition.relation.signal_theoretical_morphism
         self.morphism_implementation = source_statement.valid_proposition.relation.implementation
@@ -3938,9 +3965,9 @@ class PropositionStatement:
         assert isinstance(theory, TheoryDerivation)
         assert isinstance(position, int) and position > 0
         assert isinstance(phi, Formula)
-        assert theory.contains_theoretical_objct(phi)
+        assert theory.contains_theoretical_objct_OBSOLETE(phi)
         assert isinstance(proof, Proof)
-        assert theory.contains_theoretical_objct(proof)
+        assert theory.contains_theoretical_objct_OBSOLETE(proof)
         self.theory = theory
         self.position = position
         self.phi = phi
@@ -7341,7 +7368,7 @@ def verify_formula_statement(t: TheoryDerivation, input_value: FlexibleFormula,
 
     # At this point we have a properly typed FormulaStatement.
     formula_ok, msg = verify(raise_exception=raise_exception, error_code=error_code,
-        assertion=t.contains_theoretical_objct(formula_statement),
+        assertion=t.contains_theoretical_objct_OBSOLETE(formula_statement),
         msg=f'The formula-statement {formula_statement} passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not contained in the theory-derivation ⌜{t}⌝.',
         formula=formula, t=t)
     if not formula_ok:
@@ -7371,7 +7398,7 @@ def verify_hypothesis(t: TheoryDerivation, input_value: FlexibleFormula, arg: (N
         input_value=input_value, t=t, u=u)
     hypothesis: Hypothesis = input_value
     verify(raise_exception=raise_exception, error_code=error_code,
-        assertion=t.contains_theoretical_objct(hypothesis),
+        assertion=t.contains_theoretical_objct_OBSOLETE(hypothesis),
         msg=f'The hypothesis ⌜{arg}⌝⌜({hypothesis}) is not contained in theory-derivation ⌜t⌝({t}).',
         arg=arg, hypothesis=hypothesis, t=t, u=u)
     verify(raise_exception=raise_exception, error_code=error_code,

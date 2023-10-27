@@ -12,5 +12,5 @@ class TestHypothesis(TestCase):
         f: pu.Relation = test.f
         h: pu.Hypothesis = test.h
         self.assertTrue(h.child_statement.is_formula_syntactically_equivalent_to(phi=f(o1, o2)))
-        self.assertTrue(h.child_theory.contains_theoretical_objct(test.predecessor))
-        self.assertFalse(h.child_theory.contains_theoretical_objct(test.successor))
+        self.assertTrue(h.child_theory.contains_theoretical_objct_OBSOLETE(test.predecessor))
+        self.assertFalse(h.child_theory.contains_theoretical_objct_OBSOLETE(test.successor))
