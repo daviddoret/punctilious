@@ -13,6 +13,7 @@ import pyvis
 import punctilious.unicode_utilities as unicode_utilities
 from punctilious.plaintext import Plaintext
 from punctilious.unicode_utilities import Unicode2
+import itertools
 
 
 # import punctilious.caller_info as caller_info
@@ -1993,6 +1994,89 @@ class InfixPartialFormula:
     # def __ror__(self, other=None):  #    """Hack to provide support for pseudo-infix notation, as in: p |implies| q.  #    """  #    print(f'IPF.__ror__: self = {self}, other = {other}')  #    if not isinstance(other, InfixPartialFormula):  #        return InfixPartialFormula(a=self, b=other)  # return self.a.u.f(self.b, self.a, other)  #    else:  #        verify(assertion=1 == 2, msg='failed infix notation', slf_a=self.a, slf_b=self.b)  #        return self.a.u.f(self.a, self.b, self)
 
 
+def iterate_alpha_equivalence_components(u: UniverseOfDiscourse, phi: FlexibleFormula) -> Generator[
+    FlexibleFormula, None, None]:
+    """Iterate through the components of a formula that are alpha-equivalence meaningful, in canonical-order."""
+    _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
+    print(phi)
+    if isinstance(phi, ConstantDeclaration):
+        # Constants are not considered for alpha-equivalence,
+        # but their internal value is.
+        phi = phi.value
+    if isinstance(phi, FormulaStatement):
+        # It is the formula content of formula-statements
+        # that is being considered for alpha-equivalence.
+        phi = phi.valid_proposition
+    if isinstance(phi, Formula):
+        yield from iterate_alpha_equivalence_components(u=u, phi=phi.relation)
+        for p in phi.parameters:
+            yield from iterate_alpha_equivalence_components(u=u, phi=p)
+    else:
+        yield phi
+
+
+def get_unique_variable_ordered_set(u: UniverseOfDiscourse, phi: FlexibleFormula) -> tuple[
+    Variable]:
+    """Return the ordered-set of unique variables contained in ⌜self⌝,
+    ordered in canonical-order (TODO: add link to doc on canonical-order).
+    """
+    _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
+    phi: TheoreticalObject
+
+    ordered_set: list[Variable] = list()
+    for element in iterate_alpha_equivalence_components(u=u, phi=phi):
+        if isinstance(element, Variable) and element not in ordered_set:
+            ordered_set.append(element)
+    # Make the ordered-set proxy immutable.
+    ordered_set: tuple[Variable] = tuple(ordered_set)
+    return ordered_set
+
+
+def is_alpha_equivalent_to(u: UniverseOfDiscourse, phi: FlexibleFormula,
+        psi: FlexibleFormula) -> bool:
+    """Return True if phi is :ref:alpha-equivalent`<alpha_equivalence_math_concept>` to psi.
+
+    :param phi: Another theoretical-object.
+    :return:
+    """
+    _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
+    phi: TheoreticalObject
+    _, psi, _ = verify_formula(u=u, input_value=psi, arg='psi')
+    psi: TheoreticalObject
+
+    phi_variables: tuple[Variable] = get_unique_variable_ordered_set(u=u, phi=phi)
+    psi_variables: tuple[Variable] = get_unique_variable_ordered_set(u=u, phi=psi)
+
+    if len(phi_variables) != len(psi_variables):
+        return False
+
+    phi_generator = iterate_alpha_equivalence_components(u=u, phi=phi)
+    psi_generator = iterate_alpha_equivalence_components(u=u, phi=psi)
+
+    for phi_element, psi_element in itertools.zip_longest(phi_generator, psi_generator,
+            fillvalue=None):
+        # print(f'{phi_element}|{psi_element}')
+        if phi_element is None or psi_element is None:
+            # If phi and psi do not contain the same number of symbols,
+            # the are not alpha-equivalent.
+            return False
+        if type(phi_element) is not type(psi_element):
+            # If a symbol in phi is of a different class
+            # than its corresponding symbol in psi,
+            # phi and psi are not alpha-equivalent.
+            return False
+        if isinstance(phi_element, Variable) and isinstance(psi_element, Variable):
+            # print(f'{phi_variables.index(phi_element)}|{psi_variables.index(psi_element)}')
+            if phi_variables.index(phi_element) != psi_variables.index(psi_element):
+                # Variables are only compared by their position in the formula.
+                return False
+        elif phi_element is not psi_element:
+            return False
+    # If all the above checks passed successfuly,
+    # phi and psi are alpha-equivalent.
+    return True
+
+
 class TheoreticalObject(SymbolicObject):
     """
     Definition
@@ -2106,9 +2190,9 @@ class TheoreticalObject(SymbolicObject):
         g.add_node(self.rep_name())
         self.u.add_to_graph(g)
 
-    @property
-    def v(self) -> tuple[Variable]:
-        """Return the ordered-set of variables contained in ⌜self⌝,
+    def get_unique_variable_ordered_set_OBSOLETE(self,
+            substitute_constants_with_values: bool = True) -> tuple[Variable]:
+        """Return the ordered-set of unique variables contained in ⌜self⌝,
         ordered in canonical-order (TODO: add link to doc on canonical-order).
 
         This function recursively traverse formula components (relation + parameters)
@@ -2119,27 +2203,14 @@ class TheoreticalObject(SymbolicObject):
         for stability.
         """
         ordered_set: list[Variable] = list()
-        self._get_variable_ordered_set(ordered_set)
+        for element in self.iterate_theoretical_objcts_references(include_root=False,
+                substitute_constants_with_values=substitute_constants_with_values):
+            if isinstance(element, Variable):
+                if element not in ordered_set:
+                    ordered_set.append(element)
         # Make the ordered-set proxy immutable.
         ordered_set: tuple[Variable] = tuple(ordered_set)
         return ordered_set
-
-    def _get_variable_ordered_set(self, ordered_set=None) -> list[Variable]:
-        """This private method uses a mutable python list,
-        which is natively ordered, to proxy an ordered-set,
-        and populate the variable oredered-set during formula traversal."""
-        if is_in_class(self, classes.formula_statement):
-            # Unpack the formula statement to
-            # retrieve the variables contained in its formula.
-            self.valid_proposition._get_variable_ordered_set(ordered_set)
-        if is_in_class(self, classes.formula):
-            self.relation._get_variable_ordered_set(ordered_set)
-            # Uses for i in range() to preserve parameter order.
-            for i in range(0, len(self.parameters)):
-                self.parameters[i]._get_variable_ordered_set(ordered_set)
-        elif is_in_class(self, classes.variable):
-            if self not in ordered_set:
-                ordered_set.append(self)
 
     def is_formula_syntactically_equivalent_to(self, phi: FlexibleFormula) -> bool:
         """Returns true if ⌜self⌝ is formula-syntactically-equivalent to ⌜o2⌝.
@@ -2267,17 +2338,6 @@ class TheoreticalObject(SymbolicObject):
                 _values[variable] = newly_observed_value
         return True, _values
 
-    def is_alpha_equivalent_to(self, phi: FlexibleFormula) -> bool:
-        """Return True if phi is :ref:alpha-equivalent`<alpha_equivalence_math_concept>` to psi.
-
-        :param phi: Another theoretical-object.
-        :return:
-        """
-        _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
-        phi: TheoreticalObject
-        mask: frozenset[Variable] = frozenset(self.v + phi.v)
-        return self.is_masked_formula_similar_to(phi=phi, mask=mask)
-
     @property
     @abc.abstractmethod
     def is_strictly_propositional(self) -> bool:
@@ -2288,7 +2348,8 @@ class TheoreticalObject(SymbolicObject):
         raise NotImplementedError(
             'The is_strictly_propositional property is abstract, it must be implemented by the child class.')
 
-    def substitute(self, substitution_map: dict, lock_variable_scope=None):
+    def substitute(self, substitution_map: dict, lock_variable_scope=None,
+            substitute_constants_with_values: bool = True):
         """Given a theoretical-objct o₁ (self),
         and a substitution map 𝐌,
         return a theoretical-objct o₂
@@ -2329,7 +2390,8 @@ class TheoreticalObject(SymbolicObject):
         # Because the scope of variables is locked, the substituted formula must create "duplicates" of all variables.
         # During this process, we reuse the variable symbols, but we let auto-indexing re-numbering the new variables.
         # During this process, we must of course assure the consistency of the is_strictly_propositional property.
-        variables_list = self.v
+        variables_list = self.get_unique_variable_ordered_set(
+            substitute_constants_with_values=substitute_constants_with_values)
         x: Variable
         for x in variables_list:
             variable_is_strictly_propositional: bool = x.is_strictly_propositional
@@ -2372,7 +2434,9 @@ class TheoreticalObject(SymbolicObject):
             is_in_class(r, classes.relation))
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
-            visited: (None, set) = None):
+            visited: (None, set) = None, substitute_constants_with_values: bool = True,
+            substitute_statements_with_formula: bool = True,
+            substitute_formula_with_components: bool = True):
         """Iterate through this and all the theoretical-objcts it contains recursively.
         """
         visited = set() if visited is None else visited
@@ -2656,6 +2720,18 @@ class ConstantDeclaration(TheoreticalObject):
 
     def is_strictly_propositional(self) -> bool:
         return self.value.is_strictly_propositional
+
+    def iterate_theoretical_objcts_references(self, include_root: bool = True,
+            visited: (None, set) = None, substitute_constants_with_values: bool = True):
+        """Iterate through this and all the theoretical-objcts it contains recursively."""
+        visited = set() if visited is None else visited
+        if substitute_constants_with_values:
+            yield from self.value.iterate_theoretical_objcts_references(include_root=include_root,
+                visited=visited, substitute_constants_with_values=substitute_constants_with_values)
+        else:
+            if include_root and self not in visited:
+                yield self
+                visited.update({self})
 
     @property
     def value(self) -> TheoreticalObject:
@@ -2948,7 +3024,7 @@ class Formula(TheoreticalObject):
             return self.relation.signal_proposition
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
-            visited: (None, set) = None):
+            visited: (None, set) = None, substitute_constants_with_values: bool = True):
         """Iterate through this and all the theoretical-objcts it contains recursively."""
         visited = set() if visited is None else visited
         if include_root and self not in visited:
@@ -2958,12 +3034,12 @@ class Formula(TheoreticalObject):
             yield self.relation
             visited.update({self.relation})
             yield from self.relation.iterate_theoretical_objcts_references(include_root=False,
-                visited=visited)
+                visited=visited, substitute_constants_with_values=substitute_constants_with_values)
         for parameter in set(self.parameters).difference(visited):
             yield parameter
             visited.update({parameter})
             yield from parameter.iterate_theoretical_objcts_references(include_root=False,
-                visited=visited)
+                visited=visited, substitute_constants_with_values=substitute_constants_with_values)
 
     def list_theoretical_objcts_recursively_OBSOLETE(self, ol: (None, frozenset) = None,
             extension_limit: (None, Statement) = None):
@@ -2977,10 +3053,11 @@ class Formula(TheoreticalObject):
                 ol = ol.union(p.list_theoretical_objcts_recursively_OBSOLETE(ol=ol))
         return ol
 
-    def lock_variable_scope(self):
+    def lock_variable_scope(self, substitute_constants_with_values: bool = True):
         """Variable scope must be locked when the formula construction
         is completed."""
-        variables_list = self.v
+        variables_list = self.get_unique_variable_ordered_set(
+            substitute_constants_with_values=substitute_constants_with_values)
         for x in variables_list:
             x.lock_scope()
 
@@ -3759,7 +3836,7 @@ class FormulaStatement(Statement):
         return self.valid_proposition.is_formula_syntactically_equivalent_to(phi=phi)
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
-            visited: (None, set) = None):
+            visited: (None, set) = None, substitute_constants_with_values: bool = True):
         """Iterate through this and all the theoretical-objcts it contains recursively."""
         visited = set() if visited is None else visited
         if include_root and self not in visited:
@@ -3769,7 +3846,8 @@ class FormulaStatement(Statement):
             yield self.valid_proposition
             visited.update({self.valid_proposition})
             yield from self.valid_proposition.iterate_theoretical_objcts_references(
-                include_root=False, visited=visited)
+                include_root=False, visited=visited,
+                substitute_constants_with_values=substitute_constants_with_values)
 
     def list_theoretical_objcts_recursively_OBSOLETE(self, ol: (None, frozenset) = None,
             extension_limit: (None, Statement) = None):
@@ -5236,8 +5314,8 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         p: Formula
         p__in__p_implies_q: Formula = p_implies_q.parameters[0]
         # TODO: A situation that may be difficult to troubleshoot is when two objects (e.g. variables) are given identical symbols. In this situation, the error message will look weird. To facilitate troubleshotting, we should highlight objects having the same names.
-        verify(assertion=p__in__p_implies_q.is_alpha_equivalent_to(phi=p),
-            msg=f'The ⌜p⌝({p__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the formula argument ⌜p⌝({p})',
+        verify(assertion=is_alpha_equivalent_to(u=self.u, phi=p__in__p_implies_q, psi=p),
+            msg=f'The ⌜p⌝({p__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not alpha-equivalent to the formula argument ⌜p⌝({p})',
             raise_exception=True, error_code=error_code)
         q__in__p_implies_q: Formula = p_implies_q.parameters[1]
         output: Formula = q__in__p_implies_q
@@ -5578,10 +5656,11 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         verify(assertion=isinstance(phi, Formula) and phi.relation is self.u.r.tupl,
             msg=f'The argument ⌜phi⌝({phi}) is not a mathematical tuple (u.r.tupl) of theoretical-objects.',
             raise_exception=True, error_code=error_code)
-        verify(assertion=len(phi.parameters) == len(p.v),
+        verify(assertion=len(phi.parameters) == len(
+            p.get_unique_variable_ordered_set(substitute_constants_with_values=True)),
             msg=f'The number of theoretical-objects in the collection argument ⌜phi⌝({phi}) is not equal to the number of variables in the propositional formula ⌜p⌝{p}.',
             raise_exception=True, error_code=error_code)
-        x_oset = p.v
+        x_oset = p.get_unique_variable_ordered_set(substitute_constants_with_values=True)
         x_y_map = dict((x, y) for x, y in zip(x_oset, phi.parameters))
         output: Formula = p.substitute(substitution_map=x_y_map)
         # TODO: VariableSubstitutionDeclaration.construct_formula(): change the following verification step. the construct_formula() may generate a formula that is only possibly propositional. but the check_premises_validity() method must require strict-propositionality.
@@ -5967,7 +6046,7 @@ theory-elaboration."""
         return False
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
-            visited: (None, set) = None):
+            visited: (None, set) = None, substitute_constants_with_values: bool = True):
         """Iterate through this and all the theoretical-objcts it references recursively.
 
         Theoretical-objcts may contain references to multiple and diverse other theoretical-objcts. Do not confuse this iteration of all references with iterations of objects in the theory-chain.
@@ -5985,7 +6064,8 @@ theory-elaboration."""
                 yield statement
                 visited.update({statement})
                 yield from statement.iterate_theoretical_objcts_references(include_root=False,
-                    visited=visited)
+                    visited=visited,
+                    substitute_constants_with_values=substitute_constants_with_values)
         if self.extended_theory is not None and self.extended_theory not in visited:
             # Iterate the extended-theory.
             if self.extended_theory_limit is not None:
@@ -6000,7 +6080,8 @@ theory-elaboration."""
             yield self.extended_theory
             visited.update({self.extended_theory})
             yield from self.extended_theory.iterate_theoretical_objcts_references(
-                include_root=False, visited=visited)
+                include_root=False, visited=visited,
+                substitute_constants_with_values=substitute_constants_with_values)
 
     def include_axiom(self, a: AxiomDeclaration, symbol: (None, str, StyledText) = None,
             index: (None, int) = None, auto_index: (None, bool) = None,
@@ -6641,7 +6722,7 @@ class RelationDict(collections.UserDict):
     def disjunction(self):
         """The well-known disjunction relation.
 
-        Abridged property: u.r.land
+        Abridged property: u.r.lor
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -7139,6 +7220,10 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
         # the input is typed as a FormulaStatement,
         # we must unpack it to retrieve its internal Formula.
         formula = input_value.valid_proposition
+    elif isinstance(input_value, ConstantDeclaration):
+        # the input is typed as a ConstantDeclaration,
+        # we must unpack it to retrieve its internal Formula.
+        formula = input_value.value
     elif isinstance(input_value, tuple):
         # the input is a tuple,
         # assuming a data structure of the form:

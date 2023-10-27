@@ -26,6 +26,6 @@ class TestConstantDeclaration(TestCase):
         self.assertEqual('c2', c2.rep_formula(pu.encodings.plaintext))
         self.assertEqual('r1(o2, o3)', c2.value.rep_formula(pu.encodings.plaintext))
         with u.with_variable(symbol='x') as x, u.with_variable('y') as y:
-            self.assertTrue(c3.value.is_alpha_equivalent_to(phi=x | r1 | y))
+            self.assertTrue(pu.is_alpha_equivalent_to(u=u, phi=c3.value, psi=x | r1 | y))
             self.assertEqual('c3', c3.rep_formula(pu.encodings.plaintext))
             self.assertEqual('r1(x1, y1)', c3.value.rep_formula(pu.encodings.plaintext))

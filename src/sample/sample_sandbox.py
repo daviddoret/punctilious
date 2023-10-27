@@ -25,7 +25,7 @@ with u.with_variable() as x, u.with_variable() as y:
     psi: pu.Formula = (x | u.r.implies | x) | u.r.iff | (y | u.r.land | b)
     print(psi)
 
-v = frozenset(phi.v).union(psi.v)
+v = frozenset(phi.get_unique_variable_ordered_set).union(psi.get_unique_variable_ordered_set)
 
 print(phi.is_masked_formula_similar_to(phi=psi, mask=v))
 print(psi.is_masked_formula_similar_to(phi=phi, mask=v))

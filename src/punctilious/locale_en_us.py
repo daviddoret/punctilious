@@ -834,7 +834,7 @@ class LocaleEnUs(Locale):
         yield from p.compose_ref_link()
         yield SansSerifNormal('.')
         yield SansSerifNormal(' Let ')
-        variables = p.v
+        variables = p.get_unique_variable_ordered_set
         parameter_o: Formula = o.parameters[1]
         mapping = zip(variables, parameter_o.parameters)
         first_pair = True
