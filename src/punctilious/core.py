@@ -2108,12 +2108,12 @@ class TheoreticalObject(SymbolicObject):
     * variable
     """
 
-    def __init__(self, u: UniverseOfDiscourse, is_theory_foundation_system: bool = False,
-            symbol: (None, str, StyledText) = None, index: (None, int) = None,
-            auto_index: (None, bool) = None, namespace: (None, SymbolicObject) = None,
-            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
-            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
-            explicit_name: (None, str, StyledText) = None,
+    def __init__(self, u: UniverseOfDiscourse, is_universe_of_discourse: (None, bool) = None,
+            is_theory_foundation_system: bool = False, symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None,
+            namespace: (None, SymbolicObject) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
             paragraph_header: (None, ParagraphHeader) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
@@ -2123,13 +2123,14 @@ class TheoreticalObject(SymbolicObject):
         # miserably (e.g. because of context managers),
         # thus, implementing explicit functional-types will prove
         # more robust and allow for duck typing.
-        super().__init__(u=u, is_theory_foundation_system=is_theory_foundation_system,
-            symbol=symbol, index=index, auto_index=auto_index, namespace=namespace,
-            dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref,
-            subtitle=subtitle, nameset=nameset, echo=False)
+        super().__init__(u=u, is_universe_of_discourse=is_universe_of_discourse,
+            is_theory_foundation_system=is_theory_foundation_system, symbol=symbol, index=index,
+            auto_index=auto_index, namespace=namespace, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name,
+            paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
+            echo=False)
         super()._declare_class_membership(classes.theoretical_objct)
-        if not is_in_class(self, classes.universe_of_discourse):
+        if not isinstance(self, UniverseOfDiscourse):
             # The universe-of-discourse is the only object that may not
             # be contained in a universe-of-discourse.
             # All other objects must be contained in a universe-of-discourse.
@@ -10273,7 +10274,7 @@ class InferenceRuleInclusionCollection(collections.UserDict):
         return self.variable_substitution
 
 
-class UniverseOfDiscourse(SymbolicObject):
+class UniverseOfDiscourse(TheoreticalObject):
     """This python class models a :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
 
@@ -10602,6 +10603,10 @@ class UniverseOfDiscourse(SymbolicObject):
         Abridged name: i
         """
         return self._inference_rules
+
+    @property
+    def is_strictly_propositional(self) -> bool:
+        return False
 
     @property
     def o(self) -> SimpleObjctDict:

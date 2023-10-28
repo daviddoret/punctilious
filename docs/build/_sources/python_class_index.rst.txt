@@ -1,3 +1,5 @@
+.. _python_class_index:
+
 Python classes
 ========================
 

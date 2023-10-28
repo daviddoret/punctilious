@@ -108,26 +108,64 @@
                             <h1>Class diagram<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
                             <div class="admonition seealso">
                                 <p class="admonition-title">See also</p>
-                                <p><span class="xref std std-ref">python classes</span></p>
+                                <p><a class="reference internal"
+                                      href="../../python_class_index.html#python-class-index"><span class="std std-ref">python classes</span></a>
+                                </p>
                             </div>
                             <div class="graphviz"><img
-                                    src="../../_images/graphviz-ab43f4369e443bb2993cdb4cb10cd19a62d64dec.png"
+                                    src="../../_images/graphviz-3590656f4551a0dbca0de148093af3e2164158b4.png"
                                     alt="digraph &quot;Punctilious data model&quot; {
+   rankdir = LR;
+   node [shape=box];
+   fontname=&quot;Arial&quot;;
+   fontsize=&quot;20pt&quot;;
+
+   TheoreticalObject [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   Formula [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   AxiomDeclaration [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   DefinitionDeclaration [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   InferenceRuleDeclaration [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   Relation [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   SimpleObjct [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   Statement [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   TheoryDerivation [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   UniverseOfDiscourse [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   Variable [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   AxiomInclusion [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   DefinitionInclusion [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   FormulaStatement [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   Hypothesis [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   InferenceRuleInclusion [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   ModusPonensInclusion [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   ModusTollensInclusion [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   ModusPonensDeclaration [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   ModusTollensDeclaration [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   InferredStatement [style=filled, fillcolor=&quot;#FEFE62&quot;];
+
+   AtheoreticalObject [style=dashed];
+   NoteInclusion [style=dashed];
+
    &quot;SymbolicObject&quot; -&gt; &quot;AtheoreticalObject&quot;;
    &quot;SymbolicObject&quot; -&gt; &quot;TheoreticalObject&quot;;
-   &quot;SymbolicObject&quot; -&gt; &quot;UniverseOfDiscourse&quot;;
    &quot;TheoreticalObject&quot; -&gt; &quot;Formula&quot;;
+   &quot;TheoreticalObject&quot; -&gt; &quot;AxiomDeclaration&quot;;
    &quot;TheoreticalObject&quot; -&gt; &quot;DefinitionDeclaration&quot;;
    &quot;TheoreticalObject&quot; -&gt; &quot;InferenceRuleDeclaration&quot;;
    &quot;TheoreticalObject&quot; -&gt; &quot;Relation&quot;;
    &quot;TheoreticalObject&quot; -&gt; &quot;SimpleObjct&quot;;
    &quot;TheoreticalObject&quot; -&gt; &quot;Statement&quot;;
    &quot;TheoreticalObject&quot; -&gt; &quot;TheoryDerivation&quot;;
+   &quot;TheoreticalObject&quot; -&gt; &quot;UniverseOfDiscourse&quot;;
    &quot;TheoreticalObject&quot; -&gt; &quot;Variable&quot;;
+   &quot;Statement&quot; -&gt; &quot;AxiomInclusion&quot;;
    &quot;Statement&quot; -&gt; &quot;DefinitionInclusion&quot;;
    &quot;Statement&quot; -&gt; &quot;FormulaStatement&quot;;
    &quot;Statement&quot; -&gt; &quot;Hypothesis&quot;;
    &quot;Statement&quot; -&gt; &quot;InferenceRuleInclusion&quot;;
+   &quot;InferenceRuleInclusion&quot; -&gt; &quot;ModusPonensInclusion&quot;;
+   &quot;InferenceRuleInclusion&quot; -&gt; &quot;ModusTollensInclusion&quot;;
+   &quot;InferenceRuleDeclaration&quot; -&gt; &quot;ModusPonensDeclaration&quot;;
+   &quot;InferenceRuleDeclaration&quot; -&gt; &quot;ModusTollensDeclaration&quot;;
    &quot;AtheoreticalObject&quot; -&gt; &quot;NoteInclusion&quot;;
    &quot;FormulaStatement&quot; -&gt; &quot;InferredStatement&quot;;
 
