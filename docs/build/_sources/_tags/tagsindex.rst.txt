@@ -15,13 +15,14 @@ Tags overview
     biconditional-elimination-1 (4) <biconditional-elimination-1.rst>
     biconditional-elimination-2 (4) <biconditional-elimination-2.rst>
     biconditional-introduction (4) <biconditional-introduction.rst>
-    class (69) <class.rst>
+    class (70) <class.rst>
     collection (2) <collection.rst>
     concept (31) <concept.rst>
     conjunction-elimination-1 (4) <conjunction-elimination-1.rst>
     conjunction-elimination-2 (4) <conjunction-elimination-2.rst>
     conjunction-introduction (4) <conjunction-introduction.rst>
     constructive-dilemma (4) <constructive-dilemma.rst>
+    data-model (1) <data-model.rst>
     declaration (33) <declaration.rst>
     definition-interpretation (4) <definition-interpretation.rst>
     destructive-dilemma (4) <destructive-dilemma.rst>
@@ -35,6 +36,7 @@ Tags overview
     equal-terms-substitution (4) <equal-terms-substitution.rst>
     equality-commutativity (4) <equality-commutativity.rst>
     equivalence (1) <equivalence.rst>
+    formula (2) <formula.rst>
     hypothetical-syllogism (4) <hypothetical-syllogism.rst>
     inclusion (33) <inclusion.rst>
     inconsistency-introduction-1 (4) <inconsistency-introduction-1.rst>
@@ -49,7 +51,7 @@ Tags overview
     proof-by-contradiction-2 (4) <proof-by-contradiction-2.rst>
     proof-by-refutation-1 (4) <proof-by-refutation-1.rst>
     proof-by-refutation-2 (4) <proof-by-refutation-2.rst>
-    python (101) <python.rst>
+    python (102) <python.rst>
     sample (32) <sample.rst>
     statement (1) <statement.rst>
     universe-of-discourse (1) <universe-of-discourse.rst>

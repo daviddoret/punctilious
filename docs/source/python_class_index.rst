@@ -5,6 +5,8 @@ Python classes
    :maxdepth: 1
    :caption: Class
 
+   Class diagram<python/class/class_diagram>
+
    AbsorptionDeclaration<python/class/absorption_declaration_python_class>
    AbsorptionInclusion<python/class/absorption_inclusion_python_class>
    BiconditionalElimination1Declaration<python/class/biconditional_elimination_1_declaration_python_class>

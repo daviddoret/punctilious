@@ -46,8 +46,8 @@ class TestTheoreticalObjct(TestCase):
                 'z') as z, u.with_variable('a') as a, u.with_variable('b') as b, u.with_variable(
             'c') as c:
             phi1 = u.f(r, b, u.f(r, z, u.f(x, y, u.f(a, a, z))), echo=True)
-            oset1 = phi1.get_formula_unique_variable_ordered_set
+            oset1 = pu.get_formula_unique_variable_ordered_set(u=u, phi=phi1)
             self.assertEqual((b, z, x, y, a), oset1)
             phi2 = u.f(r, a, u.f(y, y, u.f(z, b, u.f(r, c, z))), echo=True)
-            oset2 = phi2.get_formula_unique_variable_ordered_set
+            oset2 = pu.get_formula_unique_variable_ordered_set(u=u, phi=phi2)
             self.assertEqual((a, y, z, b, c), oset2)

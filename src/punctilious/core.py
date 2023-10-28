@@ -1132,59 +1132,18 @@ consistency_values = ConsistencyValues('consistency-values')
 class DeclarativeClass(repm.ValueName):
     """The DeclarativeClass python class models a declarative-class."""
 
-    def __init__(self, name, natural_language_name):
+    def __init__(self, name, natural_language_name, python_type: [None, type] = None):
+        self._natural_language_name = natural_language_name
+        self._python_type = python_type
         super().__init__(name)
 
+    @property
+    def natural_language_name(self) -> str:
+        return self._natural_language_name
 
-class DeclarativeClassList(repm.ValueName):
-    """A list of of well-known declarative-classes."""
-
-    def __init__(self, name, natural_language_name):
-        super().__init__(name)
-        self.atheoretical_statement = DeclarativeClass('atheoretical_statement',
-            'atheoretical-statement')
-        self.axiom = DeclarativeClass('axiom', 'axiom')
-        self.axiom_inclusion = DeclarativeClass('axiom_inclusion', 'axiom-inclusion')
-        self.constant_declaration = DeclarativeClass('constant_declaration', 'constant-declaration')
-        self.definition = DeclarativeClass('definition', 'definition')
-        self.definition_inclusion = DeclarativeClass('definition_inclusion', 'definition-inclusion')
-        self.direct_axiom_inference = DeclarativeClass('direct_axiom_inference',
-            'direct-axiom-inference')
-        self.direct_definition_inference = DeclarativeClass('direct_definition_inference',
-            'direct-definition-inference')
-        self.formula = DeclarativeClass('formula', 'formula')
-        self.formula_statement = DeclarativeClass('formula_statement', 'formula-statement')
-        self.variable = DeclarativeClass('variable', 'variable')
-        self.hypothesis = DeclarativeClass('hypothesis', 'hypothesis')
-        self.inference_rule = DeclarativeClass('inference_rule', 'inference-rule')
-        self.inference_rule_inclusion = DeclarativeClass('inference_rule_inclusion',
-            'inference-rule-inclusion')
-        self.inferred_proposition = DeclarativeClass('inferred_proposition', 'inferred-proposition')
-        self.note = DeclarativeClass('note', 'note')
-        self.proposition = DeclarativeClass('proposition', 'proposition')
-        self.relation = DeclarativeClass('relation', 'relation')
-        self.simple_objct = DeclarativeClass('simple_objct', 'simple-objct')
-        self.statement = DeclarativeClass('statement', 'statement')
-        self.symbolic_objct = DeclarativeClass('symbolic_objct', 'symbolic-objct')
-        self.theoretical_objct = DeclarativeClass('theoretical_objct', 'theoretical-objct')
-        self.theory_derivation = DeclarativeClass('theory', 'theory')
-        self.universe_of_discourse = DeclarativeClass('universe_of_discourse',
-            'universe-of-discourse')
-        # Shortcuts
-        self.a = self.axiom
-        self.dai = self.direct_axiom_inference
-        self.ddi = self.direct_definition_inference
-        self.f = self.formula
-        self.r = self.relation
-        self.t = self.theory_derivation
-        self.u = self.universe_of_discourse
-
-
-"""A list of well-known declarative-classes."""
-declarative_class_list = DeclarativeClassList('declarative_class_list', 'declarative-class-list')
-
-"""A list of well-known declarative-classes. A shortcut for p.declarative_class_list."""
-classes = declarative_class_list
+    @property
+    def python_type(self) -> [None, type]:
+        return self._python_type
 
 
 def is_in_class(o: TheoreticalObject, c: DeclarativeClass) -> bool:
@@ -1994,29 +1953,43 @@ class InfixPartialFormula:
     # def __ror__(self, other=None):  #    """Hack to provide support for pseudo-infix notation, as in: p |implies| q.  #    """  #    print(f'IPF.__ror__: self = {self}, other = {other}')  #    if not isinstance(other, InfixPartialFormula):  #        return InfixPartialFormula(a=self, b=other)  # return self.a.u.f(self.b, self.a, other)  #    else:  #        verify(assertion=1 == 2, msg='failed infix notation', slf_a=self.a, slf_b=self.b)  #        return self.a.u.f(self.a, self.b, self)
 
 
-def iterate_components(u: UniverseOfDiscourse, phi: FlexibleFormula) -> Generator[
-    FlexibleFormula, None, None]:
-    """Iterate through the components of a formula, in canonical-order."""
-    _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
-    print(phi)
+class TheoreticalClass(type):
+    """A meta-class for python classes that implement theoretical-objects in the punctilious data-model.
+
+    TODO: This is just an idea to facilitate the programmatical discovery of the data-model,
+    an idea to be investigated further.
+    """
+
+    def __init__(cls, name, bases, attrs):
+        attrs['some_custom_attribute'] = 'This is a custom class attribute.'
+        super().__init__(name, bases, attrs)
+
+
+def iterate_formula_data_model_components(u: UniverseOfDiscourse, phi: TheoreticalObject,
+        recurse_constant_value: bool = True, recurse_formula_relation: bool = True,
+        recurse_formula_parameters: bool = True, recurse_statement_proposition: bool = True,
+        yield_classes: frozenset = None) -> Generator[FlexibleFormula, None, None]:
+    """Iterate through the data-model components of a formula in canonical-order.
+
+    This is a general-purpose iterator. The rationale behind it is to facilitate the """
+    XXXXXXXXXXXXXXXXXXX
+    yield phi
     if isinstance(phi, ConstantDeclaration):
-        # Constants are not considered for alpha-equivalence,
-        # but their internal value is.
-        phi = phi.value
+        if recurse_constant_value:
+            yield from iterate_formula_data_model_components(u=u, phi=phi.value)
     if isinstance(phi, FormulaStatement):
-        # It is the formula content of formula-statements
-        # that is being considered for alpha-equivalence.
-        phi = phi.valid_proposition
+        if recurse_statement_proposition:
+            yield from iterate_formula_data_model_components(u=u, phi=phi.valid_proposition)
     if isinstance(phi, Formula):
-        yield from iterate_alpha_equivalence_components(u=u, phi=phi.relation)
-        for p in phi.parameters:
-            yield from iterate_alpha_equivalence_components(u=u, phi=p)
-    else:
-        yield phi
+        if recurse_formula_relation:
+            yield from iterate_formula_data_model_components(u=u, phi=phi.relation)
+        if recurse_formula_parameters:
+            for p in phi.parameters:
+                yield from iterate_formula_data_model_components(u=u, phi=p)
 
 
-def iterate_alpha_equivalence_components(u: UniverseOfDiscourse, phi: FlexibleFormula) -> Generator[
-    FlexibleFormula, None, None]:
+def iterate_formula_alpha_equivalence_components(u: UniverseOfDiscourse, phi: FlexibleFormula) -> \
+        Generator[FlexibleFormula, None, None]:
     """Iterate through the components of a formula that are alpha-equivalence meaningful, in canonical-order."""
     _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
     print(phi)
@@ -2029,36 +2002,23 @@ def iterate_alpha_equivalence_components(u: UniverseOfDiscourse, phi: FlexibleFo
         # that is being considered for alpha-equivalence.
         phi = phi.valid_proposition
     if isinstance(phi, Formula):
-        yield from iterate_alpha_equivalence_components(u=u, phi=phi.relation)
+        yield from iterate_formula_alpha_equivalence_components(u=u, phi=phi.relation)
         for p in phi.parameters:
-            yield from iterate_alpha_equivalence_components(u=u, phi=p)
+            yield from iterate_formula_alpha_equivalence_components(u=u, phi=p)
     else:
         yield phi
 
 
 def formula_alpha_contains(u: UniverseOfDiscourse, phi: FlexibleFormula, psi: FlexibleFormula):
-    """Returns True if psi is alpha-contained in phi, including the extreme case when psi is alpha-equivalent to phi."""
+    """Returns True if phi contains a component that is alpha-equivalent to psi, including the extreme case where phi is alpha-equivalent to psi."""
     _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
     _, psi, _ = verify_formula(u=u, input_value=psi, arg='psi')
     if is_alpha_equivalent_to(u=u, phi=phi, psi=psi):
         return True
-    for component in iterate_alpha_equivalence_components(u=u, phi=phi):
-        TODO: This is where
-        the
-        bug is.Formula
-        instances
-        are
-        not returned
-        by
-        the
-        iterate_alpha_equivalence.
-        We
-        must
-        develope
-        a
-        different
-        iterator
-        function.
+    for component in iterate_formula_alpha_equivalence_components(u=u, phi=phi):
+        # TODO: This is where the bug is. Formula instances are not returned by the iterate_alpha_equivalence.
+        #  We must develope a different iterator function
+        raise NotImplementedError()
         if is_alpha_equivalent_to(u=u, phi=component, psi=psi):
             return True
     return False
@@ -2073,7 +2033,7 @@ def get_formula_unique_variable_ordered_set(u: UniverseOfDiscourse, phi: Flexibl
     phi: TheoreticalObject
 
     ordered_set: list[Variable] = list()
-    for element in iterate_alpha_equivalence_components(u=u, phi=phi):
+    for element in iterate_formula_alpha_equivalence_components(u=u, phi=phi):
         if isinstance(element, Variable) and element not in ordered_set:
             ordered_set.append(element)
     # Make the ordered-set proxy immutable.
@@ -2099,8 +2059,8 @@ def is_alpha_equivalent_to(u: UniverseOfDiscourse, phi: FlexibleFormula,
     if len(phi_variables) != len(psi_variables):
         return False
 
-    phi_generator = iterate_alpha_equivalence_components(u=u, phi=phi)
-    psi_generator = iterate_alpha_equivalence_components(u=u, phi=psi)
+    phi_generator = iterate_formula_alpha_equivalence_components(u=u, phi=phi)
+    psi_generator = iterate_formula_alpha_equivalence_components(u=u, phi=psi)
 
     for phi_element, psi_element in itertools.zip_longest(phi_generator, psi_generator,
             fillvalue=None):
@@ -2417,8 +2377,8 @@ class TheoreticalObject(SymbolicObject):
         # Because the scope of variables is locked, the substituted formula must create "duplicates" of all variables.
         # During this process, we reuse the variable symbols, but we let auto-indexing re-numbering the new variables.
         # During this process, we must of course assure the consistency of the is_strictly_propositional property.
-        variables_list = self.get_unique_variable_ordered_set(
-            substitute_constants_with_values=substitute_constants_with_values)
+        variables_list = get_formula_unique_variable_ordered_set(u=self.u, phi=self)
+        # self.get_unique_variable_ordered_set(substitute_constants_with_values=substitute_constants_with_values))
         x: Variable
         for x in variables_list:
             variable_is_strictly_propositional: bool = x.is_strictly_propositional
@@ -3083,8 +3043,9 @@ class Formula(TheoreticalObject):
     def lock_variable_scope(self, substitute_constants_with_values: bool = True):
         """Variable scope must be locked when the formula construction
         is completed."""
-        variables_list = self.get_unique_variable_ordered_set(
-            substitute_constants_with_values=substitute_constants_with_values)
+        variables_list = get_formula_unique_variable_ordered_set(u=self.u, phi=self)
+        # variables_list = self.get_unique_variable_ordered_set(
+        #    substitute_constants_with_values=substitute_constants_with_values)
         for x in variables_list:
             x.lock_scope()
 
@@ -5683,11 +5644,10 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         verify(assertion=isinstance(phi, Formula) and phi.relation is self.u.r.tupl,
             msg=f'The argument ⌜phi⌝({phi}) is not a mathematical tuple (u.r.tupl) of theoretical-objects.',
             raise_exception=True, error_code=error_code)
-        verify(assertion=len(phi.parameters) == len(
-            p.get_unique_variable_ordered_set(substitute_constants_with_values=True)),
+        x_oset = get_formula_unique_variable_ordered_set(u=self.u, phi=p)
+        verify(assertion=len(phi.parameters) == len(x_oset),
             msg=f'The number of theoretical-objects in the collection argument ⌜phi⌝({phi}) is not equal to the number of variables in the propositional formula ⌜p⌝{p}.',
             raise_exception=True, error_code=error_code)
-        x_oset = p.get_unique_variable_ordered_set(substitute_constants_with_values=True)
         x_y_map = dict((x, y) for x, y in zip(x_oset, phi.parameters))
         output: Formula = p.substitute(substitution_map=x_y_map)
         # TODO: VariableSubstitutionDeclaration.construct_formula(): change the following verification step. the construct_formula() may generate a formula that is only possibly propositional. but the check_premises_validity() method must require strict-propositionality.
@@ -7055,6 +7015,7 @@ class RelationDict(collections.UserDict):
 
 class ConstantDeclarationDict(collections.UserDict):
     """A dictionary that exposes well-known constants as properties.
+    It is exposed as the c property on the UniverseOfDiscourse class.
 
     """
 
@@ -10983,5 +10944,64 @@ class Article:
     def write_element(self, element: SymbolicObject):
         self._elements.append(element)
 
+
+class DeclarativeClassList(repm.ValueName):
+    """The idea of this class is to expose programmatically the data-model of punctilious. To be reworked, this is messy."""
+
+    def __init__(self, name, natural_language_name):
+        super().__init__(name)
+        self.atheoretical_statement = DeclarativeClass('atheoretical_statement',
+            'atheoretical-statement', python_type=AtheoreticalStatement)
+        self.axiom = DeclarativeClass('axiom', 'axiom', python_type=AxiomDeclaration)
+        self.axiom_inclusion = DeclarativeClass('axiom_inclusion', 'axiom-inclusion',
+            python_type=AxiomInclusion)
+        self.constant_declaration = DeclarativeClass('constant_declaration', 'constant-declaration',
+            python_type=ConstantDeclaration)
+        self.definition = DeclarativeClass('definition', 'definition',
+            python_type=DefinitionDeclaration)
+        self.definition_inclusion = DeclarativeClass('definition_inclusion', 'definition-inclusion',
+            python_type=DefinitionInclusion)
+        self.axiom_interpretation_declaration = DeclarativeClass('axiom_interpretation_declaration',
+            'axiom-interpretation-declaration', python_type=AxiomInterpretationDeclaration)
+        self.axiom_interpretation_inclusion = DeclarativeClass('axiom_interpretation_inclusion',
+            'axiom-interpretation-inclusion', python_type=AxiomInterpretationInclusion)
+        self.direct_definition_inference = DeclarativeClass('direct_definition_inference',
+            'direct-definition-inference')
+        self.formula = DeclarativeClass('formula', 'formula', python_type=Formula)
+        self.formula_statement = DeclarativeClass('formula_statement', 'formula-statement',
+            python_type=FormulaStatement)
+        self.variable = DeclarativeClass('variable', 'variable', python_type=Variable)
+        self.hypothesis = DeclarativeClass('hypothesis', 'hypothesis', python_type=Hypothesis)
+        self.inference_rule = DeclarativeClass('inference_rule', 'inference-rule')
+        self.inference_rule_inclusion = DeclarativeClass('inference_rule_inclusion',
+            'inference-rule-inclusion')
+        self.inferred_proposition = DeclarativeClass('inferred_proposition', 'inferred-proposition')
+        self.note = DeclarativeClass('note', 'note')
+        self.proposition = DeclarativeClass('proposition', 'proposition')
+        self.relation = DeclarativeClass('relation', 'relation', python_type=Relation)
+        self.simple_objct = DeclarativeClass('simple_objct', 'simple-objct',
+            python_type=SimpleObjct)
+        self.statement = DeclarativeClass('statement', 'statement')
+        self.symbolic_objct = DeclarativeClass('symbolic_objct', 'symbolic-objct')
+        self.theoretical_objct = DeclarativeClass('theoretical_objct', 'theoretical-objct',
+            python_type=TheoreticalObject)
+        self.theory_derivation = DeclarativeClass('theory', 'theory', python_type=TheoryDerivation)
+        self.universe_of_discourse = DeclarativeClass('universe_of_discourse',
+            'universe-of-discourse', python_type=UniverseOfDiscourse)
+        # Shortcuts
+        self.a = self.axiom
+        self.dai = self.axiom_interpretation_declaration
+        self.ddi = self.direct_definition_inference
+        self.f = self.formula
+        self.r = self.relation
+        self.t = self.theory_derivation
+        self.u = self.universe_of_discourse
+
+
+"""A list of well-known declarative-classes."""
+declarative_class_list = DeclarativeClassList('declarative_class_list', 'declarative-class-list')
+
+"""A list of well-known declarative-classes. A shortcut for p.declarative_class_list."""
+classes = declarative_class_list
 
 pass
