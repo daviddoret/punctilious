@@ -155,7 +155,7 @@ class MGZ2021MinimalLogicM0(pu.Package):
             # Substitution tuple
             # Note that the order of variables is not alphabetical,
             # instead it must comply with the order of appearance in the formula!
-            substitution_tuple: pu.Formula = u.r.tupl(b, a)
+            substitution_tuple: pu.CompoundFormula = u.r.tupl(b, a)
             line_2 = t.i.variable_substitution.infer_formula_statement(ref='2',
                 p=self.pl5_statement, phi=substitution_tuple)
 
@@ -175,7 +175,7 @@ class MGZ2021MinimalLogicM0(pu.Package):
             # Substitution tuple
             # Note that the order of variables is not alphabetical,
             # instead it must comply with the order of appearance in the formula!
-            substitution_tuple: pu.Formula = u.r.tupl(a, b, c)
+            substitution_tuple: pu.CompoundFormula = u.r.tupl(a, b, c)
             line_4 = t.i.variable_substitution.infer_formula_statement(ref='4',
                 p=self.pl3_statement, phi=substitution_tuple)
 
@@ -191,7 +191,7 @@ class MGZ2021MinimalLogicM0(pu.Package):
             # Substitution tuple
             # Note that the order of variables is not alphabetical,
             # instead it must comply with the order of appearance in the formula!
-            substitution_tuple: pu.Formula = u.r.tupl(a)
+            substitution_tuple: pu.CompoundFormula = u.r.tupl(a)
             line_6 = t.i.variable_substitution.infer_formula_statement(ref='6',
                 p=self.pl1_statement, phi=substitution_tuple)
 
@@ -206,7 +206,7 @@ class MGZ2021MinimalLogicM0(pu.Package):
             # Substitution tuple
             # Note that the order of variables is not alphabetical,
             # instead it must comply with the order of appearance in the formula!
-            substitution_tuple: pu.Formula = u.r.tupl(a, b)
+            substitution_tuple: pu.CompoundFormula = u.r.tupl(a, b)
             line_7 = t.i.variable_substitution.infer_formula_statement(ref='7',
                 p=self.pl8_statement, phi=substitution_tuple)
 
@@ -231,7 +231,7 @@ class MGZ2021MinimalLogicM0(pu.Package):
             # Substitution tuple
             # Note that the order of variables is not alphabetical,
             # instead it must comply with the order of appearance in the formula!
-            substitution_tuple: pu.Formula = u.r.tupl(a, b, c)
+            substitution_tuple: pu.CompoundFormula = u.r.tupl(a, b, c)
             line_10 = t.i.variable_substitution.infer_formula_statement(ref='10',
                 p=self.pl4_statement, phi=substitution_tuple)
 
@@ -247,8 +247,40 @@ class MGZ2021MinimalLogicM0(pu.Package):
         t.take_note(
             content='"It will be instructive to analyze the structure of the derivation. One way to understand the proof we just gave schematically is to see its first nine lines as an instance of the following (meta)derivation, where we take 𝐶 to abbreviate 𝑝 1 ⊃ (𝑝1 ∨ 𝑝2) and 𝐷 to abbreviate (𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1).", [MGZ21, p. 21]')
 
-        # TODO: Create a new inference-rule variable assignment.
-        
-        # t.i.variable_assignment.infer_formula_statement ?????
+        with u.with_variable(symbol='p', index=1) as p1, u.with_variable(symbol='p', index=2) as p2:
+            c = u.c.declare(symbol='C', auto_index=False,
+                value=p1 | u.r.implies | (p1 | u.r.lor | p2), echo=True)
 
-# p = MGZ2021MinimalLogicM0()
+        with u.with_variable(symbol='p', index=1) as p1, u.with_variable(symbol='p', index=2) as p2:
+            d = u.c.declare(symbol='D', auto_index=False,
+                value=(p1 | u.r.lor | p2) | u.r.implies | (p2 | u.r.lor | p1), echo=True)
+
+        # print(t.get_first_syntactically_equivalent_statement(''
+        #    formula=c))  # t.i.variable_substitution.infer_formula_statement(p=self.pl1_inclusion, phi=u.r.tupl(  #    c))  # t.i.variable_substitution.infer_formula_statement(p=line_1, phi=u.r.tupl(c, d))
+
+        # h1: pu.Hypothesis = t.pose_hypothesis(hypothesis_formula=c)
+        # h1 = t.i.variable_substitution
+
+        # 2. ⊢ 𝐶 ⊃ (𝐷 ⊃ 𝐶)
+        h1_l2 = t.i.variable_substitution.infer_formula_statement(p=self.pl5_statement,
+            phi=u.r.tupl(c, d))
+
+        # 3. ⊢ 𝐷 ⊃ 𝐶  # h1_l3 = t.i.modus_ponens.infer_formula_statement(p_implies_q=h1_l2, p=c)
+        print(pu.verify_formula(u=u, input_value=c))
+
+        phi: pu.TheoreticalObject = self.pl7_statement
+        print(phi)
+        psi: pu.TheoreticalObject = c.value
+        print(psi)
+        mask: frozenset[pu.Variable] = frozenset(pu.get_formula_unique_variable_ordered_set(u=u,
+            phi=phi) + pu.get_formula_unique_variable_ordered_set(u=u, phi=psi))
+        print(mask)
+        print(pu.is_alpha_equivalent_to(u=u, phi=phi, psi=psi))
+        print(phi.is_masked_formula_similar_to(phi=psi, mask=mask))
+
+        # print(self.pl7_statement)  # print(c.value)  # print(c.value.is_alpha_equivalent_to(phi=self.pl1_statement))
+
+        # print(pu.verify_formula_statement(t=t, input_value=c.value))
+
+
+p = MGZ2021MinimalLogicM0()

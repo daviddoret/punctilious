@@ -14,20 +14,20 @@ class TestFormulaIsMaskSimilarTo(TestCase):
         phi1a = u.f(r1a, o1)
         with u.with_variable() as x:
             phi1b = u.f(r1a, x)
-            self.assertTrue(phi1a.is_masked_formula_similar_to(phi1b, {x}))
-            self.assertTrue(phi1b.is_masked_formula_similar_to(phi1a, {x}))
+            self.assertTrue(phi1a.is_masked_formula_similar_to(phi=phi1b, mask={x}))
+            self.assertTrue(phi1b.is_masked_formula_similar_to(phi=phi1a, mask={x}))
         with u.with_variable() as x:
             phi1c = u.f(r1b, x)
-            self.assertFalse(phi1a.is_masked_formula_similar_to(phi1c, {x}))
-            self.assertFalse(phi1c.is_masked_formula_similar_to(phi1a, {x}))
+            self.assertFalse(phi1a.is_masked_formula_similar_to(phi=phi1c, mask={x}))
+            self.assertFalse(phi1c.is_masked_formula_similar_to(phi=phi1a, mask={x}))
         with u.with_variable() as x:
             phi1d = u.f(x, o1)
-            self.assertTrue(phi1a.is_masked_formula_similar_to(phi1d, {x}))
-            self.assertTrue(phi1d.is_masked_formula_similar_to(phi1a, {x}))
+            self.assertTrue(phi1a.is_masked_formula_similar_to(phi=phi1d, mask={x}))
+            self.assertTrue(phi1d.is_masked_formula_similar_to(phi=phi1a, mask={x}))
         with u.with_variable() as x:
             phi1e = u.f(x, o2)
-            self.assertFalse(phi1a.is_masked_formula_similar_to(phi1e, {x}))
-            self.assertFalse(phi1e.is_masked_formula_similar_to(phi1a, {x}))
+            self.assertFalse(phi1a.is_masked_formula_similar_to(phi=phi1e, mask={x}))
+            self.assertFalse(phi1e.is_masked_formula_similar_to(phi=phi1a, mask={x}))
 
     def test_formula_is_mask_similar_to_binary_relation(self):
         pu.configuration.echo_axiom_declaration = True

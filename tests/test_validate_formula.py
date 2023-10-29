@@ -56,12 +56,13 @@ class TestValidateFormula(TestCase):
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
         o2 = u.o.declare()
-        r1 = u.r.declare(arity=2, formula_rep=pu.Formula.infix, symbol='*', auto_index=False)
+        r1 = u.r.declare(arity=2, formula_rep=pu.CompoundFormula.infix, symbol='*',
+            auto_index=False)
         self.assertEqual('(o1 * o2)', u.f(r1, o1, o2).rep_formula())
-        phi1: pu.Formula
+        phi1: pu.CompoundFormula
         _, phi1, _ = pu.verify_formula(u=u, input_value=(r1, o1, o2))
         self.assertEqual('(o1 * o2)', phi1.rep_formula())
-        phi2: pu.Formula
+        phi2: pu.CompoundFormula
         _, phi2, _ = pu.verify_formula(u=u, input_value=o1 | r1 | o2)
         self.assertEqual('(o1 * o2)', phi2.rep_formula())
 
@@ -71,12 +72,12 @@ class TestValidateFormula(TestCase):
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
         o2 = u.o.declare()
-        r1 = u.r.declare(arity=2, formula_rep=pu.Formula.function_call, symbol='*',
+        r1 = u.r.declare(arity=2, formula_rep=pu.CompoundFormula.function_call, symbol='*',
             auto_index=False)
         self.assertEqual('*(o1, o2)', u.f(r1, o1, o2).rep_formula())
-        phi1: pu.Formula
+        phi1: pu.CompoundFormula
         _, phi1, _ = pu.verify_formula(u=u, input_value=(r1, o1, o2))
         self.assertEqual('*(o1, o2)', phi1.rep_formula(encoding=pu.encodings.plaintext))
-        phi2: pu.Formula
+        phi2: pu.CompoundFormula
         _, phi2, _ = pu.verify_formula(u=u, input_value=o1 | r1 | o2)
         self.assertEqual('*(o1, o2)', phi2.rep_formula(encoding=pu.encodings.plaintext))

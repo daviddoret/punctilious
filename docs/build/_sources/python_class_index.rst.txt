@@ -1,9 +1,13 @@
+.. _python_class_index:
+
 Python classes
 ========================
 
 .. toctree::
    :maxdepth: 1
    :caption: Class
+
+   Class diagram<python/class/class_diagram>
 
    AbsorptionDeclaration<python/class/absorption_declaration_python_class>
    AbsorptionInclusion<python/class/absorption_inclusion_python_class>

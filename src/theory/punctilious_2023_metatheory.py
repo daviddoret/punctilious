@@ -20,7 +20,7 @@ axiom_03 = ft.include_axiom(
     u.declare_axiom('The class of classes is the class of all classes defined in the '
                     'universe-of-discourse (TODO: Or foundation theory?).'))
 class_of_classes = u.o.declare('class-of-classes')
-element_of = u.r.declare(2, '∈', formula_rep=core.Formula.infix, signal_proposition=True,
+element_of = u.r.declare(2, '∈', formula_rep=core.CompoundFormula.infix, signal_proposition=True,
     dashed_name='element-of')
 fa1 = ft.i.axiom_interpretation.infer_formula_statement(axiom_02,
     u.f(element_of, class_of_classes, class_of_classes))
@@ -95,7 +95,8 @@ ft.i.axiom_interpretation.infer_formula_statement(nla_10,
 nla_20 = ft.include_axiom(
     u.declare_axiom('If P is a proposition, then either the statement P has truth value true,'
                     'or the statement P has truth value falsehood.'))
-has_truth_value = u.r.declare(2, 'is', formula_rep=core.Formula.infix, signal_proposition=True)
+has_truth_value = u.r.declare(2, 'is', formula_rep=core.CompoundFormula.infix,
+    signal_proposition=True)
 ft.i.axiom_interpretation.infer_formula_statement(nla_10, u.f(has_truth_value, truth, truth))
 ft.i.axiom_interpretation.infer_formula_statement(nla_10,
     u.f(has_truth_value, falsehood, falsehood))

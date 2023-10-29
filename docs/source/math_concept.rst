@@ -11,8 +11,10 @@ This table of contents references the key mathematical concepts used by punctili
    :caption: Table of contents
 
    alpha-equivalence<math/concept/alpha_equivalence_math_concept>
+   atomic-formula<math/concept/atomic_formula_math_concept>
    axiom<math/concept/axiom_math_concept>
    axiomatic-method<math/concept/axiomatic_method_math_concept>
+   compound-formula<math/concept/compound_formula_math_concept>
    definition<math/concept/definition_math_concept>
    elimination-rule<math/concept/elimination_rule_math_concept>
    formula<math/concept/formula_math_concept>
