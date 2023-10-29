@@ -18,11 +18,11 @@ c = u.o.declare()
 d = u.o.declare()
 
 with u.with_variable() as x, u.with_variable() as y:
-    phi: pu.Formula = (a | u.r.implies | x) | u.r.iff | (y | u.r.land | b)
+    phi: pu.CompoundFormula = (a | u.r.implies | x) | u.r.iff | (y | u.r.land | b)
     print(phi)
 
 with u.with_variable() as x, u.with_variable() as y:
-    psi: pu.Formula = (x | u.r.implies | x) | u.r.iff | (y | u.r.land | b)
+    psi: pu.CompoundFormula = (x | u.r.implies | x) | u.r.iff | (y | u.r.land | b)
     print(psi)
 
 v = frozenset(phi.get_unique_variable_ordered_set).union(psi.get_unique_variable_ordered_set)

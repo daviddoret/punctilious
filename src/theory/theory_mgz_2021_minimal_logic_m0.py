@@ -155,7 +155,7 @@ class MGZ2021MinimalLogicM0(pu.Package):
             # Substitution tuple
             # Note that the order of variables is not alphabetical,
             # instead it must comply with the order of appearance in the formula!
-            substitution_tuple: pu.Formula = u.r.tupl(b, a)
+            substitution_tuple: pu.CompoundFormula = u.r.tupl(b, a)
             line_2 = t.i.variable_substitution.infer_formula_statement(ref='2',
                 p=self.pl5_statement, phi=substitution_tuple)
 
@@ -175,7 +175,7 @@ class MGZ2021MinimalLogicM0(pu.Package):
             # Substitution tuple
             # Note that the order of variables is not alphabetical,
             # instead it must comply with the order of appearance in the formula!
-            substitution_tuple: pu.Formula = u.r.tupl(a, b, c)
+            substitution_tuple: pu.CompoundFormula = u.r.tupl(a, b, c)
             line_4 = t.i.variable_substitution.infer_formula_statement(ref='4',
                 p=self.pl3_statement, phi=substitution_tuple)
 
@@ -191,7 +191,7 @@ class MGZ2021MinimalLogicM0(pu.Package):
             # Substitution tuple
             # Note that the order of variables is not alphabetical,
             # instead it must comply with the order of appearance in the formula!
-            substitution_tuple: pu.Formula = u.r.tupl(a)
+            substitution_tuple: pu.CompoundFormula = u.r.tupl(a)
             line_6 = t.i.variable_substitution.infer_formula_statement(ref='6',
                 p=self.pl1_statement, phi=substitution_tuple)
 
@@ -206,7 +206,7 @@ class MGZ2021MinimalLogicM0(pu.Package):
             # Substitution tuple
             # Note that the order of variables is not alphabetical,
             # instead it must comply with the order of appearance in the formula!
-            substitution_tuple: pu.Formula = u.r.tupl(a, b)
+            substitution_tuple: pu.CompoundFormula = u.r.tupl(a, b)
             line_7 = t.i.variable_substitution.infer_formula_statement(ref='7',
                 p=self.pl8_statement, phi=substitution_tuple)
 
@@ -231,7 +231,7 @@ class MGZ2021MinimalLogicM0(pu.Package):
             # Substitution tuple
             # Note that the order of variables is not alphabetical,
             # instead it must comply with the order of appearance in the formula!
-            substitution_tuple: pu.Formula = u.r.tupl(a, b, c)
+            substitution_tuple: pu.CompoundFormula = u.r.tupl(a, b, c)
             line_10 = t.i.variable_substitution.infer_formula_statement(ref='10',
                 p=self.pl4_statement, phi=substitution_tuple)
 

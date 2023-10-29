@@ -20,8 +20,8 @@ Class diagram
       fontsize="20pt";
 
       TheoreticalObject [style=filled, fillcolor="#FEFE62"];
-      Formula [style=filled, fillcolor="#FEFE62"];
       AxiomDeclaration [style=filled, fillcolor="#FEFE62"];
+      CompoundFormula [style=filled, fillcolor="#FEFE62"];
       DefinitionDeclaration [style=filled, fillcolor="#FEFE62"];
       InferenceRuleDeclaration [style=filled, fillcolor="#FEFE62"];
       Relation [style=filled, fillcolor="#FEFE62"];
@@ -46,8 +46,8 @@ Class diagram
 
       "SymbolicObject" -> "AtheoreticalObject";
       "SymbolicObject" -> "TheoreticalObject";
-      "TheoreticalObject" -> "Formula";
       "TheoreticalObject" -> "AxiomDeclaration";
+      "TheoreticalObject" -> "CompoundFormula";
       "TheoreticalObject" -> "DefinitionDeclaration";
       "TheoreticalObject" -> "InferenceRuleDeclaration";
       "TheoreticalObject" -> "Relation";

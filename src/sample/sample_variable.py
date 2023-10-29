@@ -8,7 +8,7 @@ o3 = u.o.declare()
 pu.configuration.auto_index = False
 f = u.r.declare(symbol='f')
 g = u.r.declare(symbol='g')
-plus = u.r.declare(symbol='+', formula_rep=pu.Formula.infix)
+plus = u.r.declare(symbol='+', formula_rep=pu.CompoundFormula.infix)
 
 # Variables have a scope. But often, when we write mathematical formulas,
 # their scope is implicit. Typically, we use "x" multiple times and imply

@@ -27,8 +27,8 @@ from punctilious.core import (AbsorptionDeclaration, AbsorptionInclusion, Articl
     DoubleNegationIntroductionInclusion, Encoding, encodings, EqualityCommutativityDeclaration, \
     EqualityCommutativityInclusion, EqualTermsSubstitutionDeclaration, \
     EqualTermsSubstitutionInclusion, ErrorCode, error_codes, formula_alpha_contains,
-    get_formula_unique_variable_ordered_set, PunctiliousException, Formula, Variable, Header,
-    Hypothesis, HypotheticalSyllogismDeclaration, HypotheticalSyllogismInclusion,
+    get_formula_unique_variable_ordered_set, PunctiliousException, CompoundFormula, Variable,
+    Header, Hypothesis, HypotheticalSyllogismDeclaration, HypotheticalSyllogismInclusion,
     InconsistencyIntroduction1Declaration, InconsistencyIntroduction1Inclusion,
     InconsistencyIntroduction2Declaration, InconsistencyIntroduction2Inclusion,
     InconsistencyIntroduction3Declaration, InconsistencyIntroduction3Inclusion,

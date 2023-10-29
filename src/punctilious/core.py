@@ -93,7 +93,7 @@ def rep_composition(composition: collections.abc.Generator[Composable, Composabl
             elif isinstance(item, int):
                 representation = representation + str(item)
                 cap = False
-            elif isinstance(item, Formula):
+            elif isinstance(item, CompoundFormula):
                 representation = representation + item.rep_formula(encoding=encoding)
                 cap = False
             else:
@@ -1094,7 +1094,7 @@ class PyvisConfiguration:
 pyvis_configuration = PyvisConfiguration()
 
 
-def unpack_formula(o: (TheoreticalObject, Formula, FormulaStatement)) -> Formula:
+def unpack_formula(o: (TheoreticalObject, CompoundFormula, FormulaStatement)) -> CompoundFormula:
     """Receive a theoretical-objct and unpack its formula if it is a statement that contains a
     formula."""
     verify(is_in_class(o, classes.theoretical_objct),
@@ -1980,7 +1980,7 @@ def iterate_formula_data_model_components(u: UniverseOfDiscourse, phi: Theoretic
     if isinstance(phi, FormulaStatement):
         if recurse_statement_proposition:
             yield from iterate_formula_data_model_components(u=u, phi=phi.valid_proposition)
-    if isinstance(phi, Formula):
+    if isinstance(phi, CompoundFormula):
         if recurse_formula_relation:
             yield from iterate_formula_data_model_components(u=u, phi=phi.relation)
         if recurse_formula_parameters:
@@ -2001,7 +2001,7 @@ def iterate_formula_alpha_equivalence_components(u: UniverseOfDiscourse, phi: Fl
         # It is the formula content of formula-statements
         # that is being considered for alpha-equivalence.
         phi = phi.valid_proposition
-    if isinstance(phi, Formula):
+    if isinstance(phi, CompoundFormula):
         yield from iterate_formula_alpha_equivalence_components(u=u, phi=phi.relation)
         for p in phi.parameters:
             yield from iterate_formula_alpha_equivalence_components(u=u, phi=p)
@@ -2146,7 +2146,7 @@ class TheoreticalObject(SymbolicObject):
         """
         # print(f'TO.__and__: self = {self}, other = {other}')
         ok: bool
-        formula: (None, Formula)
+        formula: (None, CompoundFormula)
         msg: (None, str)
         ok, formula, msg = verify_formula(u=self.u, input_value=(other, self), raise_exception=True)
         return formula
@@ -2156,7 +2156,7 @@ class TheoreticalObject(SymbolicObject):
         """
         # print(f'TO.__call__: self = {self}, parameters = {parameters}')
         ok: bool
-        formula: (None, Formula)
+        formula: (None, CompoundFormula)
         msg: (None, str)
         ok, formula, msg = verify_formula(u=self.u, input_value=(self, *parameters),
             raise_exception=True)
@@ -2170,7 +2170,7 @@ class TheoreticalObject(SymbolicObject):
         """
         # print(f'TO.__xor__: self = {self}, other = {other}')
         ok: bool
-        formula: (None, Formula)
+        formula: (None, CompoundFormula)
         msg: (None, str)
         ok, formula, msg = verify_formula(u=self.u, input_value=(self, other), raise_exception=True)
         return formula
@@ -2187,7 +2187,7 @@ class TheoreticalObject(SymbolicObject):
         else:
             # return self.u.f(self, other.a, other.b)
             ok: bool
-            formula: (None, Formula)
+            formula: (None, CompoundFormula)
             msg: (None, str)
             ok, formula, msg = verify_formula(u=self.u, input_value=(self, other.a, other.b),
                 raise_exception=True)
@@ -2250,8 +2250,8 @@ class TheoreticalObject(SymbolicObject):
         output, _values = self._is_masked_formula_similar_to(phi=phi, mask=mask)
         return output
 
-    def _is_masked_formula_similar_to(self,
-            phi: (Formula, FormulaStatement, Variable, Relation, SimpleObjct, TheoreticalObject),
+    def _is_masked_formula_similar_to(self, phi: (
+            CompoundFormula, FormulaStatement, Variable, Relation, SimpleObjct, TheoreticalObject),
             mask: (None, frozenset[Variable]) = None, _values: (None, dict) = None) -> (bool, dict):
         """A "private" version of the is_masked_formula_similar_to method,
         with the "internal" parameter _values.
@@ -2285,8 +2285,8 @@ class TheoreticalObject(SymbolicObject):
         if o1.is_formula_syntactically_equivalent_to(phi=phi):
             # Sufficient condition.
             return True, _values
-        if isinstance(o1, (Formula, FormulaStatement)) and isinstance(phi,
-                (Formula, FormulaStatement)):
+        if isinstance(o1, (CompoundFormula, FormulaStatement)) and isinstance(phi,
+                (CompoundFormula, FormulaStatement)):
             # When both o1 and o2 are formula,
             # verify that their components are masked-formula-similar.
             relation_output, _values = o1.relation._is_masked_formula_similar_to(phi=phi.relation,
@@ -2393,7 +2393,7 @@ class TheoreticalObject(SymbolicObject):
         # Now we may proceed with substitution.
         if self in substitution_map:
             return substitution_map[self]
-        elif isinstance(self, Formula):
+        elif isinstance(self, CompoundFormula):
             # If both key / value are formulae,
             #   we must check for formula-equivalence,
             #   rather than python-object-equality.
@@ -2565,7 +2565,7 @@ class Variable(TheoreticalObject):
     closed_scope_status = Status('closed_scope_status')
 
     def __init__(self, u: UniverseOfDiscourse, status: (None, Variable.Status) = None,
-            scope: (None, Formula, typing.FrozenSet[Formula]) = None,
+            scope: (None, CompoundFormula, typing.FrozenSet[CompoundFormula]) = None,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
             auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
@@ -2577,7 +2577,7 @@ class Variable(TheoreticalObject):
         status = prioritize_value(status, Variable.scope_initialization_status)
         scope = prioritize_value(scope, frozenset())
         self._is_strictly_propositional = prioritize_value(is_strictly_propositional, False)
-        scope = {scope} if isinstance(scope, Formula) else scope
+        scope = {scope} if isinstance(scope, CompoundFormula) else scope
         verify(isinstance(scope, frozenset),
             'The scope of a FreeVariable must be of python type frozenset.')
         verify(isinstance(status, Variable.Status),
@@ -2615,7 +2615,7 @@ class Variable(TheoreticalObject):
         verify(self._status == Variable.scope_initialization_status,
             'The scope of an instance of FreeVariable can only be extended if it is open.')
         # Close variable scope
-        verify(isinstance(phi, Formula),
+        verify(isinstance(phi, CompoundFormula),
             'Scope extensions of FreeVariable must be of type Formula.')
         self._scope = self._scope.union({phi})
 
@@ -2726,7 +2726,7 @@ class ConstantDeclaration(TheoreticalObject):
         return self._value
 
 
-class Formula(TheoreticalObject):
+class CompoundFormula(TheoreticalObject):
     """A formula is a theoretical-objct.
     It is also a tuple (U, r, p1, p1, p2, ..., pn)
 
@@ -2870,15 +2870,15 @@ class Formula(TheoreticalObject):
             yield from self.compose_function_call()
         else:
             match self.relation.formula_rep:
-                case Formula.function_call:
+                case CompoundFormula.function_call:
                     yield from self.compose_function_call()
-                case Formula.infix:
+                case CompoundFormula.infix:
                     yield from self.compose_infix_operator()
-                case Formula.prefix:
+                case CompoundFormula.prefix:
                     yield from self.compose_prefix_operator()
-                case Formula.postfix:
+                case CompoundFormula.postfix:
                     yield from self.compose_postfix_operator()
-                case Formula.collection:
+                case CompoundFormula.collection:
                     yield from self.compose_collection_operator()
                 case _:
                     # Fallback notation.
@@ -2989,7 +2989,7 @@ class Formula(TheoreticalObject):
         if self is phi:
             # Trivial case.
             return True
-        if not isinstance(phi, Formula):
+        if not isinstance(phi, CompoundFormula):
             return False
         if not self.relation.is_formula_syntactically_equivalent_to(phi=phi.relation):
             return False
@@ -3512,7 +3512,7 @@ class InferenceRuleInclusion(Statement):
         return output
 
     @property
-    def definition(self) -> Formula:
+    def definition(self) -> CompoundFormula:
         """This python property returns a formal definition of the object.
 
         :return: a formula.
@@ -3531,7 +3531,7 @@ class InferenceRuleInclusion(Statement):
 
     @property
     @abc.abstractmethod
-    def construct_formula(self, **kwargs) -> Formula:
+    def construct_formula(self, **kwargs) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -3746,7 +3746,7 @@ class FormulaStatement(Statement):
 
     """
 
-    def __init__(self, theory: TheoryDerivation, valid_proposition: Formula,
+    def __init__(self, theory: TheoryDerivation, valid_proposition: CompoundFormula,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
             auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
@@ -3926,7 +3926,7 @@ class PropositionStatement:
     def __init__(self, theory, position, phi, proof):
         assert isinstance(theory, TheoryDerivation)
         assert isinstance(position, int) and position > 0
-        assert isinstance(phi, Formula)
+        assert isinstance(phi, CompoundFormula)
         assert theory.contains_theoretical_objct_OBSOLETE(phi)
         assert isinstance(proof, Proof)
         assert theory.contains_theoretical_objct_OBSOLETE(proof)
@@ -3959,7 +3959,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
     """
 
-    def __init__(self, u: UniverseOfDiscourse, definition: (None, Formula) = None,
+    def __init__(self, u: UniverseOfDiscourse, definition: (None, CompoundFormula) = None,
             compose_paragraph_proof_method: (None, collections.abc.Callable) = None,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
             auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
@@ -4004,7 +4004,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
 
     @property
     @abc.abstractmethod
-    def construct_formula(self, **kwargs) -> Formula:
+    def construct_formula(self, **kwargs) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4013,7 +4013,7 @@ class InferenceRuleDeclaration(TheoreticalObject):
             'The ⌜construct_formula⌝ method is abstract. It must be implemented in the child class.')
 
     @property
-    def definition(self) -> Formula:
+    def definition(self) -> CompoundFormula:
         """This python property returns a formal definition of the object.
 
         :return: a formula.
@@ -4060,7 +4060,7 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_implies_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_implies_q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4069,10 +4069,10 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
         _, p_implies_q, _ = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
             form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask,
             raise_exception=True, error_code=error_code)
-        p_implies_q: Formula
-        p: Formula = p_implies_q.parameters[0]  # TODO: Use composed type hints
-        q: Formula = p_implies_q.parameters[1]  # TODO: Use composed type hints
-        output: Formula = p | self.u.r.implies | (p | self.u.r.land | q)
+        p_implies_q: CompoundFormula
+        p: CompoundFormula = p_implies_q.parameters[0]  # TODO: Use composed type hints
+        q: CompoundFormula = p_implies_q.parameters[1]  # TODO: Use composed type hints
+        output: CompoundFormula = p | self.u.r.implies | (p | self.u.r.land | q)
         return output
 
 
@@ -4115,7 +4115,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, a: FlexibleAxiom, p: FlexibleFormula) -> Formula:
+    def construct_formula(self, a: FlexibleAxiom, p: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4125,12 +4125,12 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
             error_code=error_code)
         _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
             error_code=error_code)
-        p: Formula
+        p: CompoundFormula
         # TODO: Bug #217: assure that atomic formula are supported by verify_formula and verify_formula_statements #217
         # validate_formula does not support basic masks like: ⌜P⌝ where P is a variable.
         # validate_formula(u=self.u, input_value=p, form=self.i.parameter_p,
         #    mask=self.i.parameter_p_mask)
-        output: Formula = p
+        output: CompoundFormula = p
         return output
 
 
@@ -4161,7 +4161,7 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_iff_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_iff_q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4170,10 +4170,10 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
         _, p_iff_q, _ = verify_formula(arg='p_iff_q', input_value=p_iff_q, u=self.u,
             form=self.parameter_p_iff_q, mask=self.parameter_p_iff_q_mask, raise_exception=True,
             error_code=error_code)
-        p_iff_q: Formula
-        p: Formula = p_iff_q.parameters[0]
-        q: Formula = p_iff_q.parameters[1]
-        output: Formula = (p | self.u.r.implies | q)
+        p_iff_q: CompoundFormula
+        p: CompoundFormula = p_iff_q.parameters[0]
+        q: CompoundFormula = p_iff_q.parameters[1]
+        output: CompoundFormula = (p | self.u.r.implies | q)
         return output
 
 
@@ -4204,7 +4204,7 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_iff_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_iff_q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4213,10 +4213,10 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
         _, p_iff_q, _ = verify_formula(arg='p_iff_q', input_value=p_iff_q, u=self.u,
             form=self.parameter_p_iff_q, mask=self.parameter_p_iff_q_mask, raise_exception=True,
             error_code=error_code)
-        p_iff_q: Formula
-        p: Formula = p_iff_q.parameters[0]
-        q: Formula = p_iff_q.parameters[1]
-        output: Formula = (q | self.u.r.implies | p)
+        p_iff_q: CompoundFormula
+        p: CompoundFormula = p_iff_q.parameters[0]
+        q: CompoundFormula = p_iff_q.parameters[1]
+        output: CompoundFormula = (q | self.u.r.implies | p)
         return output
 
 
@@ -4253,7 +4253,7 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
             explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_implies_q: FlexibleFormula,
-            q_implies_p: FlexibleFormula) -> Formula:
+            q_implies_p: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4262,15 +4262,15 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
         _, p_implies_q, _ = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
             form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask,
             raise_exception=True, error_code=error_code)
-        p_implies_q: Formula
+        p_implies_q: CompoundFormula
         _, q_implies_p, _ = verify_formula(arg='q_implies_p', input_value=q_implies_p, u=self.u,
             form=self.parameter_q_implies_p, mask=self.parameter_q_implies_p_mask,
             raise_exception=True, error_code=error_code)
-        q_implies_p: Formula
-        p_implies_q__p: Formula = p_implies_q.parameters[0]
-        p_implies_q__q: Formula = p_implies_q.parameters[1]
-        q_implies_p__q: Formula = q_implies_p.parameters[0]
-        q_implies_p__p: Formula = q_implies_p.parameters[1]
+        q_implies_p: CompoundFormula
+        p_implies_q__p: CompoundFormula = p_implies_q.parameters[0]
+        p_implies_q__q: CompoundFormula = p_implies_q.parameters[1]
+        q_implies_p__q: CompoundFormula = q_implies_p.parameters[0]
+        q_implies_p__p: CompoundFormula = q_implies_p.parameters[1]
         verify(assertion=p_implies_q__p.is_formula_syntactically_equivalent_to(phi=q_implies_p__p),
             msg='The ⌜p⌝ in ⌜p_implies_q⌝ is not syntactically-equivalent to the ⌜p⌝ in  ⌜q_implies_p⌝.',
             severity=verification_severities.error, raise_exception=True, p_implies_q=p_implies_q,
@@ -4279,7 +4279,7 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
             msg='The ⌜q⌝ in ⌜p_implies_q⌝ is not syntactically-equivalent to the ⌜q⌝ in  ⌜q_implies_p⌝.',
             severity=verification_severities.error, raise_exception=True, p_implies_q=p_implies_q,
             p_implies_q__q=p_implies_q__q, q_implies_p=q_implies_p, q_implies_p__q=q_implies_p__q)
-        output: Formula = p_implies_q__p | self.u.r.iff | p_implies_q__q
+        output: CompoundFormula = p_implies_q__p | self.u.r.iff | p_implies_q__q
         return output
 
 
@@ -4310,7 +4310,7 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_and_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_and_q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4319,9 +4319,9 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
         _, p_and_q, _ = verify_formula(arg='p_and_q', input_value=p_and_q, u=self.u,
             form=self.parameter_p_and_q, mask=self.parameter_p_and_q_mask, raise_exception=True,
             error_code=error_code)
-        p_and_q: Formula
-        p: Formula = p_and_q.parameters[0]
-        output: Formula = p
+        p_and_q: CompoundFormula
+        p: CompoundFormula = p_and_q.parameters[0]
+        output: CompoundFormula = p
         return output
 
 
@@ -4356,7 +4356,7 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_and_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_and_q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4365,9 +4365,9 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
         _, p_and_q, _ = verify_formula(arg='p_and_q', input_value=p_and_q, u=self.u,
             form=self.parameter_p_and_q, mask=self.parameter_p_and_q_mask, raise_exception=True,
             error_code=error_code)
-        p_and_q: Formula
-        q: Formula = p_and_q.parameters[1]
-        output: Formula = q
+        p_and_q: CompoundFormula
+        q: CompoundFormula = p_and_q.parameters[1]
+        output: CompoundFormula = q
         return output
 
 
@@ -4394,7 +4394,7 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4402,11 +4402,11 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
         _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
             error_code=error_code)
-        p: Formula
+        p: CompoundFormula
         _, q, _ = verify_formula(arg='q', input_value=q, u=self.u, raise_exception=True,
             error_code=error_code)
-        q: Formula
-        output: Formula = p | self.u.r.land | q
+        q: CompoundFormula
+        output: CompoundFormula = p | self.u.r.land | q
         return output
 
 
@@ -4448,7 +4448,7 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
             explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
-            p_or_r: FlexibleFormula) -> Formula:
+            p_or_r: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4457,30 +4457,30 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
         _, p_implies_q, _ = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
             form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask,
             raise_exception=True, error_code=error_code)
-        p_implies_q: Formula
+        p_implies_q: CompoundFormula
         _, r_implies_s, _ = verify_formula(arg='r_implies_s', input_value=r_implies_s, u=self.u,
             form=self.parameter_r_implies_s, mask=self.parameter_r_implies_s_mask,
             raise_exception=True, error_code=error_code)
-        r_implies_s: Formula
+        r_implies_s: CompoundFormula
         _, p_or_r, _ = verify_formula(arg='p_or_r', input_value=p_or_r, u=self.u,
             form=self.parameter_p_or_r, mask=self.parameter_p_or_r_mask, raise_exception=True,
             error_code=error_code)
-        p_or_r: Formula
-        p__in__p_implies_q: Formula = p_implies_q.parameters[0]
-        p__in__p_or_r: Formula = p_or_r.parameters[0]
+        p_or_r: CompoundFormula
+        p__in__p_implies_q: CompoundFormula = p_implies_q.parameters[0]
+        p__in__p_or_r: CompoundFormula = p_or_r.parameters[0]
         verify(
             assertion=p__in__p_implies_q.is_formula_syntactically_equivalent_to(phi=p__in__p_or_r),
             msg=f'The ⌜p⌝({p__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜p⌝({p__in__p_or_r}) in the formula argument ⌜p_or_r⌝({p_or_r})',
             raise_exception=True, error_code=error_code)
-        r__in__r_implies_s: Formula = r_implies_s.parameters[0]
-        r__in__p_or_r: Formula = p_or_r.parameters[1]
+        r__in__r_implies_s: CompoundFormula = r_implies_s.parameters[0]
+        r__in__p_or_r: CompoundFormula = p_or_r.parameters[1]
         verify(
             assertion=r__in__r_implies_s.is_formula_syntactically_equivalent_to(phi=r__in__p_or_r),
             msg=f'The ⌜r⌝({r__in__r_implies_s}) in the formula argument ⌜r_implies_s⌝({r_implies_s}) is not syntaxically-equivalent to the ⌜r⌝({r__in__p_or_r}) in the formula argument ⌜p_or_r⌝({p_or_r})',
             raise_exception=True, error_code=error_code)
-        q: Formula = p_implies_q.parameters[1]
-        s: Formula = r_implies_s.parameters[1]
-        output: Formula = q | self.u.r.lor | s
+        q: CompoundFormula = p_implies_q.parameters[1]
+        s: CompoundFormula = r_implies_s.parameters[1]
+        output: CompoundFormula = q | self.u.r.lor | s
         return output
 
 
@@ -4533,24 +4533,24 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
             explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, d: DefinitionInclusion, x: FlexibleFormula,
-            y: FlexibleFormula) -> Formula:
+            y: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
         """
         ok: bool
-        output: Formula
+        output: CompoundFormula
         msg: (None, str)
         error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
         _, d, _ = verify_definition_declaration(arg='d', input_value=d, u=self.u,
             raise_exception=True, error_code=error_code)
         _, x, _ = verify_formula(arg='x', input_value=x, u=self.u, raise_exception=True,
             error_code=error_code)
-        x: Formula
+        x: CompoundFormula
         _, y, _ = verify_formula(arg='y', input_value=y, u=self.u, raise_exception=True,
             error_code=error_code)
-        y: Formula
-        output: Formula = x | self.u.r.equal | y
+        y: CompoundFormula
+        output: CompoundFormula = x | self.u.r.equal | y
         return output
 
 
@@ -4590,7 +4590,7 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
                 explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
-            not_q_or_not_s: FlexibleFormula) -> Formula:
+            not_q_or_not_s: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4599,30 +4599,30 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
         _, p_implies_q, _ = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
             form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask,
             raise_exception=True, error_code=error_code)
-        p_implies_q: Formula
+        p_implies_q: CompoundFormula
         _, r_implies_s, _ = verify_formula(arg='r_implies_s', input_value=r_implies_s, u=self.u,
             form=self.parameter_r_implies_s, mask=self.parameter_r_implies_s_mask,
             raise_exception=True, error_code=error_code)
-        r_implies_s: Formula
+        r_implies_s: CompoundFormula
         _, not_q_or_not_s, _ = verify_formula(arg='not_q_or_not_s', input_value=not_q_or_not_s,
             u=self.u, form=self.parameter_not_q_or_not_s, mask=self.parameter_not_q_or_not_s_mask,
             raise_exception=True, error_code=error_code)
-        not_q_or_not_s: Formula
-        q__in__p_implies_q: Formula = p_implies_q.parameters[1]
-        q__in__not_q_or_not_s: Formula = not_q_or_not_s.parameters[0].parameters[0]
+        not_q_or_not_s: CompoundFormula
+        q__in__p_implies_q: CompoundFormula = p_implies_q.parameters[1]
+        q__in__not_q_or_not_s: CompoundFormula = not_q_or_not_s.parameters[0].parameters[0]
         verify(assertion=q__in__p_implies_q.is_formula_syntactically_equivalent_to(
             phi=q__in__p_implies_q),
             msg=f'The ⌜q⌝({q__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜q⌝({q__in__not_q_or_not_s}) in the formula argument ⌜not_q_or_not_s⌝({not_q_or_not_s})',
             raise_exception=True, error_code=error_code)
-        s__in__r_implies_s: Formula = r_implies_s.parameters[1]
-        s__in__not_q_or_not_s: Formula = not_q_or_not_s.parameters[1].parameters[0]
+        s__in__r_implies_s: CompoundFormula = r_implies_s.parameters[1]
+        s__in__not_q_or_not_s: CompoundFormula = not_q_or_not_s.parameters[1].parameters[0]
         verify(assertion=s__in__r_implies_s.is_formula_syntactically_equivalent_to(
             phi=s__in__not_q_or_not_s),
             msg=f'The ⌜s⌝({s__in__r_implies_s}) in the formula argument ⌜r_implies_s⌝({r_implies_s}) is not syntaxically-equivalent to the ⌜s⌝({s__in__not_q_or_not_s}) in the formula argument ⌜not_q_or_not_s⌝({not_q_or_not_s})',
             raise_exception=True, error_code=error_code)
-        p: Formula = p_implies_q.parameters[0]
-        r: Formula = r_implies_s.parameters[0]
-        output: Formula = self.u.r.lnot(p) | self.u.r.lor | self.u.r.lnot(r)
+        p: CompoundFormula = p_implies_q.parameters[0]
+        r: CompoundFormula = r_implies_s.parameters[0]
+        output: CompoundFormula = self.u.r.lnot(p) | self.u.r.lor | self.u.r.lnot(r)
         return output
 
 
@@ -4649,7 +4649,7 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4657,11 +4657,11 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
         error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
         _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
             error_code=error_code)
-        p: Formula
+        p: CompoundFormula
         _, q, _ = verify_formula(arg='q', input_value=q, u=self.u, raise_exception=True,
             error_code=error_code)
-        q: Formula
-        output: Formula = q | self.u.r.lor | p
+        q: CompoundFormula
+        output: CompoundFormula = q | self.u.r.lor | p
         return output
 
 
@@ -4688,7 +4688,7 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4696,11 +4696,11 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
         error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
         _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
             error_code=error_code)
-        p: Formula
+        p: CompoundFormula
         _, q, _ = verify_formula(arg='q', input_value=q, u=self.u, raise_exception=True,
             error_code=error_code)
-        q: Formula
-        output: Formula = p | self.u.r.lor | q
+        q: CompoundFormula
+        output: CompoundFormula = p | self.u.r.lor | q
         return output
 
 
@@ -4735,7 +4735,8 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_or_q: FlexibleFormula, not_p_or_r: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_or_q: FlexibleFormula,
+            not_p_or_r: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4744,20 +4745,20 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
         _, p_or_q, _ = verify_formula(arg='p_or_q', input_value=p_or_q, u=self.u,
             form=self.parameter_p_or_q, mask=self.parameter_p_or_q_mask, raise_exception=True,
             error_code=error_code)
-        p_or_q: Formula
+        p_or_q: CompoundFormula
         _, not_p_or_r, _ = verify_formula(arg='not_p_or_r', input_value=not_p_or_r, u=self.u,
             form=self.parameter_not_p_or_r, mask=self.parameter_not_p_or_r_mask,
             raise_exception=True, error_code=error_code)
-        not_p_or_r: Formula
-        p__in__p_or_q: Formula = p_or_q.parameters[0]
-        p__in__not_p_or_r: Formula = not_p_or_r.parameters[0].parameters[0]
+        not_p_or_r: CompoundFormula
+        p__in__p_or_q: CompoundFormula = p_or_q.parameters[0]
+        p__in__not_p_or_r: CompoundFormula = not_p_or_r.parameters[0].parameters[0]
         verify(
             assertion=p__in__p_or_q.is_formula_syntactically_equivalent_to(phi=p__in__not_p_or_r),
             msg=f'The ⌜p⌝({p__in__p_or_q}) in the formula argument ⌜p_or_q⌝({p_or_q}) is not syntaxically-equivalent to the ⌜p⌝({p__in__not_p_or_r}) in the formula argument ⌜not_p_or_r⌝({not_p_or_r})',
             raise_exception=True, error_code=error_code)
-        q: Formula = p_or_q.parameters[1]
-        r: Formula = not_p_or_r.parameters[1]
-        output: Formula = q | self.u.r.lor | r
+        q: CompoundFormula = p_or_q.parameters[1]
+        r: CompoundFormula = not_p_or_r.parameters[1]
+        output: CompoundFormula = q | self.u.r.lor | r
         return output
 
 
@@ -4790,7 +4791,7 @@ class DisjunctiveSyllogism1Declaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_or_q: FlexibleFormula, not_p: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_or_q: FlexibleFormula, not_p: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4799,18 +4800,18 @@ class DisjunctiveSyllogism1Declaration(InferenceRuleDeclaration):
         _, p_or_q, _ = verify_formula(arg='p_or_q', input_value=p_or_q, u=self.u,
             form=self.parameter_p_or_q, mask=self.parameter_p_or_q_mask, raise_exception=True,
             error_code=error_code)
-        p_or_q: Formula
+        p_or_q: CompoundFormula
         _, not_p, _ = verify_formula(arg='not_p', input_value=not_p, u=self.u,
             form=self.parameter_not_p, mask=self.parameter_not_p_mask, raise_exception=True,
             error_code=error_code)
-        not_p: Formula
-        p__in__p_or_q: Formula = p_or_q.parameters[0]
-        p__in__not_p: Formula = not_p.parameters[0]
+        not_p: CompoundFormula
+        p__in__p_or_q: CompoundFormula = p_or_q.parameters[0]
+        p__in__not_p: CompoundFormula = not_p.parameters[0]
         verify(assertion=p__in__p_or_q.is_formula_syntactically_equivalent_to(phi=p__in__not_p),
             msg=f'The ⌜p⌝({p__in__p_or_q}) in the formula argument ⌜p_or_q⌝({p_or_q}) is not syntaxically-equivalent to the ⌜p⌝({p__in__not_p}) in the formula argument ⌜not_p⌝({not_p})',
             raise_exception=True, error_code=error_code)
-        q: Formula = p_or_q.parameters[1]
-        output: Formula = q
+        q: CompoundFormula = p_or_q.parameters[1]
+        output: CompoundFormula = q
         return output
 
 
@@ -4843,7 +4844,7 @@ class DisjunctiveSyllogism2Declaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_or_q: FlexibleFormula, not_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_or_q: FlexibleFormula, not_q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4852,18 +4853,18 @@ class DisjunctiveSyllogism2Declaration(InferenceRuleDeclaration):
         _, p_or_q, _ = verify_formula(arg='p_or_q', input_value=p_or_q, u=self.u,
             form=self.parameter_p_or_q, mask=self.parameter_p_or_q_mask, raise_exception=True,
             error_code=error_code)
-        p_or_q: Formula
+        p_or_q: CompoundFormula
         _, not_q, _ = verify_formula(arg='not_q', input_value=not_q, u=self.u,
             form=self.parameter_not_q, mask=self.parameter_not_q_mask, raise_exception=True,
             error_code=error_code)
-        not_q: Formula
-        q__in__p_or_q: Formula = p_or_q.parameters[1]
-        q__in__not_q: Formula = not_q.parameters[0]
+        not_q: CompoundFormula
+        q__in__p_or_q: CompoundFormula = p_or_q.parameters[1]
+        q__in__not_q: CompoundFormula = not_q.parameters[0]
         verify(assertion=q__in__p_or_q.is_formula_syntactically_equivalent_to(phi=q__in__not_q),
             msg=f'The ⌜p⌝({q__in__p_or_q}) in the formula argument ⌜p_or_q⌝({p_or_q}) is not syntaxically-equivalent to the ⌜p⌝({q__in__not_q}) in the formula argument ⌜not_q⌝({not_q})',
             raise_exception=True, error_code=error_code)
-        q: Formula = p_or_q.parameters[0]
-        output: Formula = q
+        q: CompoundFormula = p_or_q.parameters[0]
+        output: CompoundFormula = q
         return output
 
 
@@ -4898,7 +4899,7 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, not_not_p: FlexibleFormula) -> Formula:
+    def construct_formula(self, not_not_p: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4907,9 +4908,9 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
         _, not_not_p, _ = verify_formula(arg='not_not_p', input_value=not_not_p, u=self.u,
             form=self.parameter_not_not_p, mask=self.parameter_not_not_p_mask, raise_exception=True,
             error_code=error_code)
-        not_not_p: Formula
-        p: Formula = not_not_p.parameters[0].parameters[0]
-        output: Formula = p
+        not_not_p: CompoundFormula
+        p: CompoundFormula = not_not_p.parameters[0].parameters[0]
+        output: CompoundFormula = p
         return output
 
 
@@ -4938,7 +4939,7 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p: FlexibleFormula) -> Formula:
+    def construct_formula(self, p: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4946,9 +4947,9 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
         error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
         _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
             error_code=error_code)
-        p: Formula
-        not_not_p: Formula = self.u.r.lnot(self.u.r.lnot(p))
-        output: Formula = not_not_p
+        p: CompoundFormula
+        not_not_p: CompoundFormula = self.u.r.lnot(self.u.r.lnot(p))
+        output: CompoundFormula = not_not_p
         return output
 
 
@@ -4974,7 +4975,7 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, x_equal_y: FlexibleFormula) -> Formula:
+    def construct_formula(self, x_equal_y: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -4983,10 +4984,10 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
         _, x_equal_y, _ = verify_formula(arg='x_equal_y', input_value=x_equal_y, u=self.u,
             form=self.parameter_x_equal_y, mask=self.parameter_x_equal_y_mask, raise_exception=True,
             error_code=error_code)
-        x_equal_y: Formula
-        x__in__x_equal_y: Formula = x_equal_y.parameters[0]
-        y__in__x_equal_y: Formula = x_equal_y.parameters[1]
-        output: Formula = y__in__x_equal_y | self.u.r.equal | x__in__x_equal_y
+        x_equal_y: CompoundFormula
+        x__in__x_equal_y: CompoundFormula = x_equal_y.parameters[0]
+        y__in__x_equal_y: CompoundFormula = x_equal_y.parameters[1]
+        output: CompoundFormula = y__in__x_equal_y | self.u.r.equal | x__in__x_equal_y
         return output
 
 
@@ -5017,7 +5018,7 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p: FlexibleFormula, x_equal_y: FlexibleFormula) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, x_equal_y: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -5025,16 +5026,17 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
         error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
         _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
             error_code=error_code)
-        p: Formula
+        p: CompoundFormula
         _, x_equal_y, _ = verify_formula(arg='x_equal_y', input_value=x_equal_y, u=self.u,
             form=self.parameter_x_equal_y, mask=self.parameter_x_equal_y_mask, raise_exception=True,
             error_code=error_code)
-        x_equal_y: Formula
-        x__in__x_equal_y: Formula = x_equal_y.parameters[0]
-        y__in__x_equal_y: Formula = x_equal_y.parameters[1]
+        x_equal_y: CompoundFormula
+        x__in__x_equal_y: CompoundFormula = x_equal_y.parameters[0]
+        y__in__x_equal_y: CompoundFormula = x_equal_y.parameters[1]
         substitution_map = {x__in__x_equal_y: y__in__x_equal_y}
-        q: Formula = p.substitute(substitution_map=substitution_map, lock_variable_scope=True)
-        output: Formula = q
+        q: CompoundFormula = p.substitute(substitution_map=substitution_map,
+            lock_variable_scope=True)
+        output: CompoundFormula = q
         return output
 
 
@@ -5069,7 +5071,7 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
             explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p_implies_q: FlexibleFormula,
-            q_implies_r: FlexibleFormula) -> Formula:
+            q_implies_r: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -5078,18 +5080,19 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
         _, p_implies_q, _ = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
             form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask,
             raise_exception=True, error_code=error_code)
-        p_implies_q: Formula
+        p_implies_q: CompoundFormula
         _, q_implies_r, _ = verify_formula(arg='q_implies_r', input_value=q_implies_r, u=self.u,
             form=self.parameter_q_implies_r, mask=self.parameter_q_implies_r_mask,
             raise_exception=True, error_code=error_code)
-        q_implies_r: Formula
-        q__in__p_implies_q: Formula = p_implies_q.parameters[1]
-        q__in__q_implies_r: Formula = q_implies_r.parameters[0]
+        q_implies_r: CompoundFormula
+        q__in__p_implies_q: CompoundFormula = p_implies_q.parameters[1]
+        q__in__q_implies_r: CompoundFormula = q_implies_r.parameters[0]
         verify(assertion=q__in__p_implies_q.is_formula_syntactically_equivalent_to(
             phi=q__in__q_implies_r),
             msg=f'The ⌜q⌝({q__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜q⌝({q__in__q_implies_r}) in the formula argument ⌜q_implies_r⌝({q_implies_r})',
             raise_exception=True, error_code=error_code)
-        output: Formula = p_implies_q.parameters[0] | self.u.r.implies | q_implies_r.parameters[1]
+        output: CompoundFormula = p_implies_q.parameters[0] | self.u.r.implies | \
+                                  q_implies_r.parameters[1]
         return output
 
 
@@ -5125,7 +5128,7 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
             explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, p: FlexibleFormula, not_p: FlexibleFormula,
-            t: TheoryDerivation) -> Formula:
+            t: TheoryDerivation) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -5133,19 +5136,19 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
         error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
         _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
             error_code=error_code)
-        p: Formula
+        p: CompoundFormula
         _, not_p, _ = verify_formula(arg='not_p', input_value=not_p, u=self.u,
             form=self.parameter_not_p, mask=self.parameter_not_p_mask, raise_exception=True,
             error_code=error_code)
-        not_p: Formula
-        p__in__not_p: Formula = not_p.parameters[0]
+        not_p: CompoundFormula
+        p__in__not_p: CompoundFormula = not_p.parameters[0]
         verify(assertion=p.is_formula_syntactically_equivalent_to(phi=p__in__not_p),
             msg=f'The formula argument ⌜p⌝({p}) is not syntaxically-equivalent to the ⌜p⌝({p__in__not_p}) in the formula argument ⌜not_q⌝({not_p})',
             raise_exception=True, error_code=error_code)
         verify(assertion=isinstance(t, TheoryDerivation),
             msg=f'The argument ⌜t⌝({t}) is not a theory-derivation.', raise_exception=True,
             error_code=error_code)
-        output: Formula = self.u.r.inc(t)
+        output: CompoundFormula = self.u.r.inc(t)
         return output
 
 
@@ -5182,7 +5185,7 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
             explicit_name=explicit_name, echo=echo)
 
     def construct_formula(self, x_equal_y: FlexibleFormula, x_unequal_y: FlexibleFormula,
-            t: TheoryDerivation) -> Formula:
+            t: TheoryDerivation) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -5191,19 +5194,19 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
         _, x_equal_y, _ = verify_formula(arg='x_equal_y', input_value=x_equal_y, u=self.u,
             form=self.parameter_x_equal_y, mask=self.parameter_x_equal_y_mask, raise_exception=True,
             error_code=error_code)
-        x_equal_y: Formula
+        x_equal_y: CompoundFormula
         _, x_unequal_y, _ = verify_formula(arg='x_unequal_y', input_value=x_unequal_y, u=self.u,
             form=self.parameter_x_unequal_y, mask=self.parameter_x_unequal_y_mask,
             raise_exception=True, error_code=error_code)
-        x_unequal_y: Formula
-        x__in__x_equal_y: Formula = x_equal_y.parameters[0]
-        x__in__x_unequal_y: Formula = x_unequal_y.parameters[0]
+        x_unequal_y: CompoundFormula
+        x__in__x_equal_y: CompoundFormula = x_equal_y.parameters[0]
+        x__in__x_unequal_y: CompoundFormula = x_unequal_y.parameters[0]
         verify(assertion=x__in__x_equal_y.is_formula_syntactically_equivalent_to(
             phi=x__in__x_unequal_y),
             msg=f'The ⌜x⌝({x__in__x_equal_y}) in the formula argument ⌜x_equal_y⌝({x_equal_y}) is not syntaxically-equivalent to the ⌜x⌝({x__in__x_unequal_y}) in the formula argument ⌜x_unequal_y⌝({x_unequal_y})',
             raise_exception=True, error_code=error_code)
-        y__in__x_equal_y: Formula = x_equal_y.parameters[1]
-        y__in__x_unequal_y: Formula = x_unequal_y.parameters[1]
+        y__in__x_equal_y: CompoundFormula = x_equal_y.parameters[1]
+        y__in__x_unequal_y: CompoundFormula = x_unequal_y.parameters[1]
         verify(assertion=y__in__x_equal_y.is_formula_syntactically_equivalent_to(
             phi=y__in__x_unequal_y),
             msg=f'The ⌜y⌝({y__in__x_equal_y}) in the formula argument ⌜x_equal_y⌝({x_equal_y}) is not syntaxically-equivalent to the ⌜y⌝({y__in__x_unequal_y}) in the formula argument ⌜y_unequal_y⌝({x_unequal_y})',
@@ -5211,7 +5214,7 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
         verify(assertion=isinstance(t, TheoryDerivation),
             msg=f'The argument ⌜t⌝({t}) is not a theory-derivation.', raise_exception=True,
             error_code=error_code)
-        output: Formula = self.u.r.inc(t)
+        output: CompoundFormula = self.u.r.inc(t)
         return output
 
 
@@ -5242,7 +5245,8 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, x_unequal_x: FlexibleFormula, t: TheoryDerivation) -> Formula:
+    def construct_formula(self, x_unequal_x: FlexibleFormula,
+            t: TheoryDerivation) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -5251,11 +5255,11 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
         _, x_unequal_x, _ = verify_formula(arg='x_unequal_x', input_value=x_unequal_x, u=self.u,
             form=self.parameter_x_unequal_x, mask=self.parameter_x_unequal_x_mask,
             raise_exception=True, error_code=error_code)
-        x_unequal_x: Formula
+        x_unequal_x: CompoundFormula
         verify(assertion=isinstance(t, TheoryDerivation),
             msg=f'The argument ⌜t⌝({t}) is not a theory-derivation.', raise_exception=True,
             error_code=error_code)
-        output: Formula = self.u.r.inc(t)
+        output: CompoundFormula = self.u.r.inc(t)
         return output
 
 
@@ -5288,7 +5292,8 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_implies_q: FlexibleFormula, p: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_implies_q: FlexibleFormula,
+            p: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -5297,17 +5302,17 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         _, p_implies_q, _ = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
             form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask,
             raise_exception=True, error_code=error_code)
-        p_implies_q: Formula
+        p_implies_q: CompoundFormula
         _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
             error_code=error_code)
-        p: Formula
-        p__in__p_implies_q: Formula = p_implies_q.parameters[0]
+        p: CompoundFormula
+        p__in__p_implies_q: CompoundFormula = p_implies_q.parameters[0]
         # TODO: A situation that may be difficult to troubleshoot is when two objects (e.g. variables) are given identical symbols. In this situation, the error message will look weird. To facilitate troubleshotting, we should highlight objects having the same names.
         verify(assertion=is_alpha_equivalent_to(u=self.u, phi=p__in__p_implies_q, psi=p),
             msg=f'The ⌜p⌝({p__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not alpha-equivalent to the formula argument ⌜p⌝({p})',
             raise_exception=True, error_code=error_code)
-        q__in__p_implies_q: Formula = p_implies_q.parameters[1]
-        output: Formula = q__in__p_implies_q
+        q__in__p_implies_q: CompoundFormula = p_implies_q.parameters[1]
+        output: CompoundFormula = q__in__p_implies_q
         return output
 
 
@@ -5340,7 +5345,8 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p_implies_q: FlexibleFormula, not_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_implies_q: FlexibleFormula,
+            not_q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -5349,19 +5355,19 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
         _, p_implies_q, _ = verify_formula(arg='p_implies_q', input_value=p_implies_q, u=self.u,
             form=self.parameter_p_implies_q, mask=self.parameter_p_implies_q_mask,
             raise_exception=True, error_code=error_code)
-        p_implies_q: Formula
+        p_implies_q: CompoundFormula
         _, not_q, _ = verify_formula(arg='not_q', input_value=not_q, u=self.u,
             form=self.parameter_not_q, mask=self.parameter_not_q_mask, raise_exception=True,
             error_code=error_code)
-        not_q: Formula
-        q__in__p_implies_q: Formula = p_implies_q.parameters[1]
-        q__in__not_q: Formula = not_q.parameters[0]
+        not_q: CompoundFormula
+        q__in__p_implies_q: CompoundFormula = p_implies_q.parameters[1]
+        q__in__not_q: CompoundFormula = not_q.parameters[0]
         verify(
             assertion=q__in__p_implies_q.is_formula_syntactically_equivalent_to(phi=q__in__not_q),
             msg=f'The ⌜q⌝({q__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜q⌝({q__in__not_q}) in formula argument ⌜not_q⌝({not_q})',
             raise_exception=True, error_code=error_code)
-        p__in__p_implies_q: Formula = p_implies_q.parameters[0]
-        output: Formula = self.u.r.lnot(p__in__p_implies_q)
+        p__in__p_implies_q: CompoundFormula = p_implies_q.parameters[0]
+        output: CompoundFormula = self.u.r.lnot(p__in__p_implies_q)
         return output
 
 
@@ -5393,7 +5399,7 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
             echo=echo)
 
-    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
+    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -5405,19 +5411,19 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
         _, not_p, _ = verify_formula(arg='h.not_p', input_value=h.hypothesis_formula, u=self.u,
             form=self.parameter_not_p, mask=self.parameter_not_p_mask, raise_exception=True,
             error_code=error_code)
-        not_p: Formula
+        not_p: CompoundFormula
         _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u,
             form=self.parameter_inc_h, mask=self.parameter_inc_h_mask, raise_exception=True,
             error_code=error_code)
-        h__in__inc_h: Formula = inc_h.parameters[0]
+        h__in__inc_h: CompoundFormula = inc_h.parameters[0]
         verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
             raise_exception=True, error_code=error_code)
-        p__in__not_p: Formula = not_p.parameters[0]
-        output: Formula = p__in__not_p
+        p__in__not_p: CompoundFormula = not_p.parameters[0]
+        output: CompoundFormula = p__in__not_p
         return output
 
 
@@ -5451,7 +5457,7 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
             echo=echo)
 
-    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
+    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -5463,20 +5469,20 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
         _, x_unequal_y, _ = verify_formula(arg='h.x_unequal_y', input_value=h.hypothesis_formula,
             u=self.u, form=self.parameter_x_unequal_y, mask=self.parameter_x_unequal_y_mask,
             raise_exception=True, error_code=error_code)
-        x_unequal_y: Formula
+        x_unequal_y: CompoundFormula
         _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u,
             form=self.parameter_inc_h, mask=self.parameter_inc_h_mask, raise_exception=True,
             error_code=error_code)
-        h__in__inc_h: Formula = inc_h.parameters[0]
+        h__in__inc_h: CompoundFormula = inc_h.parameters[0]
         verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
             raise_exception=True, error_code=error_code)
-        x__in__x_unequal_y: Formula = x_unequal_y.parameters[0]
-        y__in__x_unequal_y: Formula = x_unequal_y.parameters[1]
-        output: Formula = x__in__x_unequal_y | self.u.r.equal | y__in__x_unequal_y
+        x__in__x_unequal_y: CompoundFormula = x_unequal_y.parameters[0]
+        y__in__x_unequal_y: CompoundFormula = x_unequal_y.parameters[1]
+        output: CompoundFormula = x__in__x_unequal_y | self.u.r.equal | y__in__x_unequal_y
         return output
 
 
@@ -5508,7 +5514,7 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
             echo=echo)
 
-    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
+    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -5519,18 +5525,18 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
         h: Hypothesis
         _, p, _ = verify_formula(arg='h.p', input_value=h.hypothesis_formula, u=self.u,
             raise_exception=True, error_code=error_code)
-        p: Formula
+        p: CompoundFormula
         _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u,
             form=self.parameter_inc_h, mask=self.parameter_inc_h_mask, raise_exception=True,
             error_code=error_code)
-        h__in__inc_h: Formula = inc_h.parameters[0]
+        h__in__inc_h: CompoundFormula = inc_h.parameters[0]
         verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
             raise_exception=True, error_code=error_code)
-        output: Formula = self.u.r.lnot(p)
+        output: CompoundFormula = self.u.r.lnot(p)
         return output
 
 
@@ -5567,7 +5573,7 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, name=name, explicit_name=explicit_name,
             echo=echo)
 
-    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
+    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -5579,20 +5585,20 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
         _, x_equal_y, _ = verify_formula(arg='h.x_equal_y', input_value=h.hypothesis_formula,
             u=self.u, form=self.parameter_x_equal_y, mask=self.parameter_x_equal_y_mask,
             raise_exception=True, error_code=error_code)
-        x_equal_y: Formula
+        x_equal_y: CompoundFormula
         _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u,
             form=self.parameter_inc_h, mask=self.parameter_inc_h_mask, raise_exception=True,
             error_code=error_code)
-        h__in__inc_h: Formula = inc_h.parameters[0]
+        h__in__inc_h: CompoundFormula = inc_h.parameters[0]
         verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
             raise_exception=True, error_code=error_code)
-        x__in__x_equal_y: Formula = x_equal_y.parameters[0]
-        y__in__x_equal_y: Formula = x_equal_y.parameters[1]
-        output: Formula = x__in__x_equal_y | self.u.r.unequal | y__in__x_equal_y
+        x__in__x_equal_y: CompoundFormula = x_equal_y.parameters[0]
+        y__in__x_equal_y: CompoundFormula = x_equal_y.parameters[1]
+        output: CompoundFormula = x__in__x_equal_y | self.u.r.unequal | y__in__x_equal_y
         return output
 
 
@@ -5627,7 +5633,7 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
 
-    def construct_formula(self, p: FlexibleFormula, phi: FlexibleFormula) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, phi: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -5635,14 +5641,14 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
         _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True,
             error_code=error_code)
-        p: Formula
+        p: CompoundFormula
         _, phi, _ = verify_formula(arg='phi', input_value=phi, u=self.u, raise_exception=True,
             error_code=error_code)
-        phi: Formula
+        phi: CompoundFormula
         # See the TO DO above.
         # Currently this type of parameter cannot be expressed with a form and mask.
         # In consequence we must check its syntax consistency here in an ad hoc manner.
-        verify(assertion=isinstance(phi, Formula) and phi.relation is self.u.r.tupl,
+        verify(assertion=isinstance(phi, CompoundFormula) and phi.relation is self.u.r.tupl,
             msg=f'The argument ⌜phi⌝({phi}) is not a mathematical tuple (u.r.tupl) of theoretical-objects.',
             raise_exception=True, error_code=error_code)
         x_oset = get_formula_unique_variable_ordered_set(u=self.u, phi=p)
@@ -5650,7 +5656,7 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
             msg=f'The number of theoretical-objects in the collection argument ⌜phi⌝({phi}) is not equal to the number of variables in the propositional formula ⌜p⌝{p}.',
             raise_exception=True, error_code=error_code)
         x_y_map = dict((x, y) for x, y in zip(x_oset, phi.parameters))
-        output: Formula = p.substitute(substitution_map=x_y_map)
+        output: CompoundFormula = p.substitute(substitution_map=x_y_map)
         # TODO: VariableSubstitutionDeclaration.construct_formula(): change the following verification step. the construct_formula() may generate a formula that is only possibly propositional. but the check_premises_validity() method must require strict-propositionality.
         verify(assertion=output.is_strictly_propositional,
             msg=f'The formula ({output}) resulting from the application of the variable-substitution inference-rule is not strictly-propositional.',
@@ -6097,7 +6103,7 @@ theory-elaboration."""
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
 
-    def iterate_statements_in_theory_chain(self, formula: (None, Formula) = None):
+    def iterate_statements_in_theory_chain(self, formula: (None, CompoundFormula) = None):
         """Iterate through the (proven or sound) statements in the current theory-chain.
 
         :param formula: (conditional) Filters on formula-statements that are formula-syntactically-equivalent.
@@ -6172,7 +6178,7 @@ theory-elaboration."""
         return self.include_definition(natural_language=natural_language, nameset=symbol,
             reference=reference, title=title)
 
-    def get_first_syntactically_equivalent_statement(self, formula: Formula):
+    def get_first_syntactically_equivalent_statement(self, formula: CompoundFormula):
         """Given a formula, return the first statement that is syntactically-equivalent with it, or None if none are found.
 
         :param formula:
@@ -6180,12 +6186,13 @@ theory-elaboration."""
         """
         return next(self.iterate_statements_in_theory_chain(formula=formula), None)
 
-    def pose_hypothesis(self, hypothesis_formula: Formula, symbol: (None, str, StyledText) = None,
-            index: (None, int) = None, auto_index: (None, bool) = None,
-            dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
-            abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
-            explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
-            subtitle: (None, str, StyledText) = None, echo: (None, bool) = None) -> Hypothesis:
+    def pose_hypothesis(self, hypothesis_formula: CompoundFormula,
+            symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+            acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+            name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+            ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+            echo: (None, bool) = None) -> Hypothesis:
         """Pose a new hypothesis in the current theory."""
         _, hypothesis_formula, _ = verify_formula(u=self.u, input_value=hypothesis_formula)
         return Hypothesis(t=self, hypothesis_formula=hypothesis_formula, symbol=symbol, index=index,
@@ -6227,7 +6234,7 @@ theory-elaboration."""
          proves the inconsistency of a theory."""
         verify(is_in_class(proof, classes.inferred_proposition),
             '⌜proof⌝ must be an inferred-statement.', proof=proof, slf=self)
-        proof: Formula
+        proof: CompoundFormula
         proof = unpack_formula(proof)
         verify(proof.relation is self.u.r.inconsistency,
             'The relation of the ⌜proof⌝ formula must be ⌜inconsistency⌝.',
@@ -6275,7 +6282,7 @@ theory-elaboration."""
 
 class Hypothesis(Statement):
     # TODO: QUESTION: Hypothesis class: consider a data model modification where Hypothesis would be split into a Declaration in the universe and an Inclusion in a Theory.
-    def __init__(self, t: TheoryDerivation, hypothesis_formula: Formula,
+    def __init__(self, t: TheoryDerivation, hypothesis_formula: CompoundFormula,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
             auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
             acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
@@ -6365,7 +6372,7 @@ class Hypothesis(Statement):
         return self._hypothesis_axiom_inclusion_in_child_theory
 
     @property
-    def hypothesis_formula(self) -> Formula:
+    def hypothesis_formula(self) -> CompoundFormula:
         """When a hypothesis is posed in a theory 𝒯₁,
         the hypothesis is declared (aka postulated) as an axiom in the universe-of-discourse,
         a hypothetical-theory 𝒯₂ is created to store the hypothesis elaboration,
@@ -6449,7 +6456,7 @@ class Relation(TheoreticalObject):
         assert isinstance(signal_proposition, bool)
         assert isinstance(signal_theoretical_morphism, bool)
         cat = paragraph_headers.relation_declaration
-        self.formula_rep = Formula.function_call if formula_rep is None else formula_rep
+        self.formula_rep = CompoundFormula.function_call if formula_rep is None else formula_rep
         self.signal_proposition = signal_proposition
         self.signal_theoretical_morphism = signal_theoretical_morphism
         self.implementation = implementation
@@ -6669,7 +6676,7 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         if self._addition is None:
-            self._addition = self.declare(arity=2, formula_rep=Formula.infix,
+            self._addition = self.declare(arity=2, formula_rep=CompoundFormula.infix,
                 signal_proposition=True, symbol=SerifItalic(plaintext='+', unicode='+', latex='+'),
                 auto_index=False, dashed_name='addition', name='addition')
         return self._addition
@@ -6684,7 +6691,7 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         if self._biconditional is None:
-            self._biconditional = self.declare(arity=2, formula_rep=Formula.infix,
+            self._biconditional = self.declare(arity=2, formula_rep=CompoundFormula.infix,
                 signal_proposition=True,
                 symbol=SerifItalic(plaintext='<==>', unicode='⟺', latex='\\iff'), auto_index=False,
                 dashed_name='biconditional', name='biconditional')
@@ -6700,7 +6707,7 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         if self._conjunction is None:
-            self._conjunction = self.declare(arity=2, formula_rep=Formula.infix,
+            self._conjunction = self.declare(arity=2, formula_rep=CompoundFormula.infix,
                 signal_proposition=True,
                 symbol=SerifItalic(plaintext='and', unicode='∧', latex='\\land'), auto_index=False,
                 name='and', explicit_name='conjunction')
@@ -6716,7 +6723,7 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         if self._disjunction is None:
-            self._disjunction = self.declare(arity=2, formula_rep=Formula.infix,
+            self._disjunction = self.declare(arity=2, formula_rep=CompoundFormula.infix,
                 signal_proposition=True, auto_index=False,
                 symbol=SerifItalic(unicode='∨', latex='\\lor', plaintext='or'), name='or',
                 explicit_name='disjunction')
@@ -6754,7 +6761,7 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         if self._equality is None:
-            self._equality = self.declare(arity=2, formula_rep=Formula.infix,
+            self._equality = self.declare(arity=2, formula_rep=CompoundFormula.infix,
                 signal_proposition=True, symbol='=', auto_index=False, dashed_name='equality')
         return self._equality
 
@@ -6770,7 +6777,7 @@ class RelationDict(collections.UserDict):
         H formulate P is True if and only if P is the (only) formulated hypothesis of H
         """
         if self._formulates is None:
-            self._formulates = self.declare(arity=2, formula_rep=Formula.infix,
+            self._formulates = self.declare(arity=2, formula_rep=CompoundFormula.infix,
                 signal_proposition=True,
                 symbol=SerifItalic(plaintext='formulate', unicode='formulate',
                     latex='\\operatorname{formulate}'), auto_index=False, dashed_name='formulate',
@@ -6802,7 +6809,7 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         if self._implication is None:
-            self._implication = self.declare(arity=2, formula_rep=Formula.infix,
+            self._implication = self.declare(arity=2, formula_rep=CompoundFormula.infix,
                 signal_proposition=True,
                 symbol=SerifItalic(plaintext='==>', unicode='⟹', latex=r'\implies'),
                 auto_index=False, name='implication', explicit_name='logical implication')
@@ -6832,7 +6839,7 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         if self._inconsistency is None:
-            self._inconsistency = self.declare(arity=1, formula_rep=Formula.function_call,
+            self._inconsistency = self.declare(arity=1, formula_rep=CompoundFormula.function_call,
                 signal_proposition=True, symbol='Inc', auto_index=False, acronym='inc.',
                 name='inconsistent')
         return self._inconsistency
@@ -6847,7 +6854,7 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         if self._inequality is None:
-            self._inequality = self.declare(arity=2, formula_rep=Formula.infix,
+            self._inequality = self.declare(arity=2, formula_rep=CompoundFormula.infix,
                 signal_proposition=True,
                 symbol=SerifItalic(plaintext='neq', unicode='≠', latex='\\neq'), auto_index=False,
                 acronym='neq', name='not equal')
@@ -6856,7 +6863,8 @@ class RelationDict(collections.UserDict):
     @property
     def is_a(self):
         if self._is_a is None:
-            self._is_a = self.declare(arity=2, formula_rep=Formula.infix, signal_proposition=True,
+            self._is_a = self.declare(arity=2, formula_rep=CompoundFormula.infix,
+                signal_proposition=True,
                 symbol=SerifItalic(plaintext='is-a', unicode='is-a', latex='is-a'),
                 auto_index=False, acronym=None, name='is a')
         return self._is_a
@@ -6904,7 +6912,8 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         if self._map is None:
-            self._map = self.declare(arity=1, formula_rep=Formula.prefix, signal_proposition=True,
+            self._map = self.declare(arity=1, formula_rep=CompoundFormula.prefix,
+                signal_proposition=True,
                 symbol=SerifItalic(plaintext='-->', unicode='\u2192', latex='\\rightarrow'),
                 auto_index=False, name='map')
         return self._map
@@ -6919,7 +6928,7 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         if self._negation is None:
-            self._negation = self.declare(arity=1, formula_rep=Formula.prefix,
+            self._negation = self.declare(arity=1, formula_rep=CompoundFormula.prefix,
                 signal_proposition=True,
                 symbol=SerifItalic(plaintext='not', unicode='¬', latex='\\neg'), auto_index=False,
                 abridged_name='not', name='negation')
@@ -6965,7 +6974,7 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         if self._substraction is None:
-            self._substraction = self.declare(arity=2, formula_rep=Formula.infix,
+            self._substraction = self.declare(arity=2, formula_rep=CompoundFormula.infix,
                 signal_proposition=True, symbol=SerifItalic(plaintext='-', unicode='-', latex='-'),
                 auto_index=False, dashed_name='substraction', name='substraction')
         return self._substraction
@@ -6978,7 +6987,7 @@ class RelationDict(collections.UserDict):
         """
         global text_dict
         if self._tupl is None:
-            self._tupl = self.declare(formula_rep=Formula.collection,
+            self._tupl = self.declare(formula_rep=CompoundFormula.collection,
                 collection_start=text_dict.empty_string, collection_separator=text_dict.comma,
                 collection_end=text_dict.empty_string, signal_proposition=True,
                 symbol=SerifItalic(plaintext=',', unicode=',', latex=','), auto_index=False,
@@ -6995,7 +7004,7 @@ class RelationDict(collections.UserDict):
         declares it automatically.
         """
         if self._syntactic_entailment is None:
-            self._syntactic_entailment = self.declare(arity=2, formula_rep=Formula.infix,
+            self._syntactic_entailment = self.declare(arity=2, formula_rep=CompoundFormula.infix,
                 signal_proposition=True,
                 symbol=SerifItalic(plaintext='|-', unicode='⊢', latex='\\vdash'), auto_index=False,
                 dashed_name='syntactic-entailment', abridged_name='proves',
@@ -7041,7 +7050,7 @@ FlexibleDefinition = typing.Union[DefinitionDeclaration, DefinitionInclusion, st
 
 """
 
-FlexibleFormula = typing.Union[TheoreticalObject, FormulaStatement, Formula, tuple, list]
+FlexibleFormula = typing.Union[TheoreticalObject, FormulaStatement, CompoundFormula, tuple, list]
 """See validate_flexible_statement_formula() for details."""
 
 
@@ -7202,7 +7211,7 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
     ok: bool
     formula: (None, TheoreticalObject) = None
     msg: (None, str) = None
-    if isinstance(input_value, Formula):
+    if isinstance(input_value, CompoundFormula):
         # the input is already correctly typed as a Formula.
         formula = input_value
     elif isinstance(input_value, FormulaStatement):
@@ -7250,7 +7259,7 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
             verify(raise_exception=raise_exception, error_code=error_code, assertion=False,
                 msg=f'The form ⌜{form}⌝ passed to verify the structure of formula ⌜{formula}⌝ is not a proper formula.',
                 argument=input_value, u=u, form=form, mask=mask)
-        form: Formula
+        form: CompoundFormula
         is_of_form: bool = form.is_masked_formula_similar_to(phi=formula, mask=mask)
         if not is_of_form:
             # a certain form is required for the formula,
@@ -7301,7 +7310,7 @@ def verify_formula_statement(t: TheoryDerivation, input_value: FlexibleFormula,
     formula_ok: bool
     msg: (None, str)
     formula_statement: (None, FormulaStatement) = None
-    formula: (None, Formula) = None
+    formula: (None, CompoundFormula) = None
     u: UniverseOfDiscourse = t.u
 
     if isinstance(input_value, FormulaStatement):
@@ -7313,7 +7322,7 @@ def verify_formula_statement(t: TheoryDerivation, input_value: FlexibleFormula,
             mask=None, raise_exception=raise_exception, error_code=error_code)
         if not formula_ok:
             return formula_ok, None, msg
-        formula: Formula
+        formula: CompoundFormula
         # We only received a formula, not a formula-statement.
         # Since we require a formula-statement,
         # we attempt to automatically retrieve the first occurrence
@@ -7337,7 +7346,7 @@ def verify_formula_statement(t: TheoryDerivation, input_value: FlexibleFormula,
         return formula_ok, None, msg
 
     # Validate the form, etc. of the underlying formula.
-    formula: Formula = formula_statement.valid_proposition
+    formula: CompoundFormula = formula_statement.valid_proposition
     formula_ok, formula, msg = verify_formula(u=u, input_value=formula, arg=arg, form=form,
         mask=mask, raise_exception=raise_exception, error_code=error_code)
     if not formula_ok:
@@ -7796,7 +7805,7 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_absorption_paragraph_proof(o=o)
         return output
 
-    def construct_formula(self, p_implies_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_implies_q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -7870,7 +7879,7 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         return output
 
     def construct_formula(self, a: FlexibleAxiom, p: FlexibleFormula,
-            echo: (None, bool) = None) -> Formula:
+            echo: (None, bool) = None) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -7944,7 +7953,7 @@ class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    def construct_formula(self, p_iff_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_iff_q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8007,7 +8016,7 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
             o=o)
         return output
 
-    def construct_formula(self, p_iff_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_iff_q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8076,7 +8085,7 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
         return output
 
     def construct_formula(self, p_implies_q: FlexibleFormula,
-            q_implies_p: FlexibleFormula) -> Formula:
+            q_implies_p: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8141,7 +8150,7 @@ class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
         i: ConjunctionElimination1Declaration = super().i
         return i
 
-    def construct_formula(self, p_and_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_and_q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8199,7 +8208,7 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
         i: ConjunctionElimination2Declaration = super().i
         return i
 
-    def construct_formula(self, p_and_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_and_q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8259,7 +8268,7 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
         i: ConjunctionIntroductionDeclaration = super().i
         return i
 
-    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8301,16 +8310,16 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
             input_value=p_implies_q, form=self.i.parameter_p_implies_q,
             mask=self.i.parameter_p_implies_q_mask, is_strictly_propositional=True,
             raise_exception=True, error_code=error_code)
-        p_implies_q: Formula
+        p_implies_q: CompoundFormula
         _, r_implies_s, _ = verify_formula_statement(arg='r_implies_s', t=self.t,
             input_value=r_implies_s, form=self.i.parameter_r_implies_s,
             mask=self.i.parameter_r_implies_s_mask, is_strictly_propositional=True,
             raise_exception=True, error_code=error_code)
-        r_implies_s: Formula
+        r_implies_s: CompoundFormula
         _, p_or_r, _ = verify_formula_statement(arg='p_or_r', t=self.t, input_value=p_or_r,
             form=self.i.parameter_p_or_r, mask=self.i.parameter_p_or_r_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        p_or_r: Formula
+        p_or_r: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: ConstructiveDilemmaDeclaration.Premises = ConstructiveDilemmaDeclaration.Premises(
             p_implies_q=p_implies_q, r_implies_s=r_implies_s, p_or_r=p_or_r)
@@ -8329,7 +8338,7 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
         return i
 
     def construct_formula(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
-            p_or_r: FlexibleFormula) -> Formula:
+            p_or_r: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8404,7 +8413,7 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
         return i
 
     def construct_formula(self, d: FlexibleDefinition, x: FlexibleFormula,
-            y: FlexibleFormula) -> Formula:
+            y: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8466,17 +8475,17 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
             input_value=p_implies_q, form=self.i.parameter_p_implies_q,
             mask=self.i.parameter_p_implies_q_mask, is_strictly_propositional=True,
             raise_exception=True, error_code=error_code)
-        p_implies_q: Formula
+        p_implies_q: CompoundFormula
         _, r_implies_s, _ = verify_formula_statement(arg='r_implies_s', t=self.t,
             input_value=r_implies_s, form=self.i.parameter_r_implies_s,
             mask=self.i.parameter_r_implies_s_mask, is_strictly_propositional=True,
             raise_exception=True, error_code=error_code)
-        r_implies_s: Formula
+        r_implies_s: CompoundFormula
         _, not_q_or_not_s, _ = verify_formula_statement(arg='not_q_or_not_s', t=self.t,
             input_value=not_q_or_not_s, form=self.i.parameter_not_q_or_not_s,
             mask=self.i.parameter_not_q_or_not_s_mask, is_strictly_propositional=True,
             raise_exception=True, error_code=error_code)
-        not_q_or_not_s: Formula
+        not_q_or_not_s: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: DestructiveDilemmaDeclaration.Premises = DestructiveDilemmaDeclaration.Premises(
             p_implies_q=p_implies_q, r_implies_s=r_implies_s, not_q_or_not_s=not_q_or_not_s)
@@ -8489,7 +8498,7 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
         return i
 
     def construct_formula(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
-            not_q_or_not_s: FlexibleFormula) -> Formula:
+            not_q_or_not_s: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8552,7 +8561,7 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
         i: DisjunctionIntroduction1Declaration = super().i
         return i
 
-    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8612,7 +8621,7 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
         i: DisjunctionIntroduction2Declaration = super().i
         return i
 
-    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8653,12 +8662,12 @@ class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
         _, p_or_q, _ = verify_formula_statement(arg='p_or_q', t=self.t, input_value=p_or_q,
             form=self.i.parameter_p_or_q, mask=self.i.parameter_p_or_q_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        p_or_q: Formula
+        p_or_q: CompoundFormula
         _, not_p_or_r, _ = verify_formula_statement(arg='not_p_or_r', t=self.t,
             input_value=not_p_or_r, form=self.i.parameter_not_p_or_r,
             mask=self.i.parameter_not_p_or_r_mask, is_strictly_propositional=True,
             raise_exception=True, error_code=error_code)
-        not_p_or_r: Formula
+        not_p_or_r: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: DisjunctiveResolutionDeclaration.Premises = DisjunctiveResolutionDeclaration.Premises(
             p_or_q=p_or_q, not_p_or_r=not_p_or_r)
@@ -8676,7 +8685,8 @@ class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
         i: DisjunctiveResolutionDeclaration = super().i
         return i
 
-    def construct_formula(self, p_or_q: FlexibleFormula, not_p_or_r: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_or_q: FlexibleFormula,
+            not_p_or_r: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8724,11 +8734,11 @@ class DisjunctiveSyllogism1Inclusion(InferenceRuleInclusion):
         _, p_or_q, _ = verify_formula_statement(arg='p_or_q', t=self.t, input_value=p_or_q,
             form=self.i.parameter_p_or_q, mask=self.i.parameter_p_or_q_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        not_p: Formula
+        not_p: CompoundFormula
         _, not_p, _ = verify_formula_statement(arg='not_p', t=self.t, input_value=not_p,
             form=self.i.parameter_not_p, mask=self.i.parameter_not_p_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        not_p: Formula
+        not_p: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: DisjunctiveSyllogism1Declaration.Premises = DisjunctiveSyllogism1Declaration.Premises(
             p_or_q=p_or_q, not_p=not_p)
@@ -8740,7 +8750,7 @@ class DisjunctiveSyllogism1Inclusion(InferenceRuleInclusion):
         i: DisjunctiveSyllogism1Declaration = super().i
         return i
 
-    def construct_formula(self, p_or_q: FlexibleFormula, not_p: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_or_q: FlexibleFormula, not_p: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8788,11 +8798,11 @@ class DisjunctiveSyllogism2Inclusion(InferenceRuleInclusion):
         _, p_or_q, _ = verify_formula_statement(arg='p_or_q', t=self.t, input_value=p_or_q,
             form=self.i.parameter_p_or_q, mask=self.i.parameter_p_or_q_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        p_or_q: Formula
+        p_or_q: CompoundFormula
         _, not_q, _ = verify_formula_statement(arg='not_q', t=self.t, input_value=not_q,
             form=self.i.parameter_not_q, mask=self.i.parameter_not_q_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        not_q: Formula
+        not_q: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: DisjunctiveSyllogism1Declaration.Premises = DisjunctiveSyllogism2Declaration.Premises(
             p_or_q=p_or_q, not_q=not_q)
@@ -8804,7 +8814,7 @@ class DisjunctiveSyllogism2Inclusion(InferenceRuleInclusion):
         i: DisjunctiveSyllogism2Declaration = super().i
         return i
 
-    def construct_formula(self, p_or_q: FlexibleFormula, not_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_or_q: FlexibleFormula, not_q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8851,7 +8861,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
         _, not_not_p, _ = verify_formula_statement(arg='not_not_p', t=self.t, input_value=not_not_p,
             form=self.i.parameter_not_not_p, mask=self.i.parameter_not_not_p_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        not_not_p: Formula
+        not_not_p: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: DoubleNegationEliminationDeclaration.Premises = DoubleNegationEliminationDeclaration.Premises(
             not_not_p=not_not_p)
@@ -8863,7 +8873,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
         i: DoubleNegationEliminationDeclaration = super().i
         return i
 
-    def construct_formula(self, not_not_p: FlexibleFormula) -> Formula:
+    def construct_formula(self, not_not_p: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8910,7 +8920,7 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
         # Validate that expected formula-statements are formula-statements in the current theory.
         _, p, _ = verify_formula_statement(arg='p', t=self.t, input_value=p,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        p: Formula
+        p: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: DoubleNegationIntroductionDeclaration.Premises = DoubleNegationIntroductionDeclaration.Premises(
             p=p)
@@ -8922,7 +8932,7 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
         i: DoubleNegationIntroductionDeclaration = super().i
         return i
 
-    def construct_formula(self, p: FlexibleFormula) -> Formula:
+    def construct_formula(self, p: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -8968,7 +8978,7 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
         _, x_equal_y, _ = verify_formula_statement(arg='x_equal_y', t=self.t, input_value=x_equal_y,
             form=self.i.parameter_x_equal_y, mask=self.i.parameter_x_equal_y_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        x_equal_y: Formula
+        x_equal_y: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: EqualityCommutativityDeclaration.Premises = EqualityCommutativityDeclaration.Premises(
             x_equal_y=x_equal_y)
@@ -8980,7 +8990,7 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
         i: EqualityCommutativityDeclaration = super().i
         return i
 
-    def construct_formula(self, x_equal_y: FlexibleFormula) -> Formula:
+    def construct_formula(self, x_equal_y: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -9026,11 +9036,11 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
         # Validate that expected formula-statements are formula-statements in the current theory.
         _, p, _ = verify_formula_statement(arg='p', t=self.t, input_value=p,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        p: Formula
+        p: CompoundFormula
         _, x_equal_y, _ = verify_formula_statement(arg='x_equal_y', t=self.t, input_value=x_equal_y,
             form=self.i.parameter_x_equal_y, mask=self.i.parameter_x_equal_y_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        x_equal_y: Formula
+        x_equal_y: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: EqualTermsSubstitutionDeclaration.Premises = EqualTermsSubstitutionDeclaration.Premises(
             p=p, x_equal_y=x_equal_y)
@@ -9042,7 +9052,7 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
         i: EqualTermsSubstitutionDeclaration = super().i
         return i
 
-    def construct_formula(self, p: FlexibleFormula, x_equal_y: FlexibleFormula) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, x_equal_y: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -9090,12 +9100,12 @@ class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
             input_value=p_implies_q, form=self.i.parameter_p_implies_q,
             mask=self.i.parameter_p_implies_q_mask, is_strictly_propositional=True,
             raise_exception=True, error_code=error_code)
-        p_implies_q: Formula
+        p_implies_q: CompoundFormula
         _, q_implies_r, _ = verify_formula_statement(arg='q_implies_r', t=self.t,
             input_value=q_implies_r, form=self.i.parameter_q_implies_r,
             mask=self.i.parameter_q_implies_r_mask, is_strictly_propositional=True,
             raise_exception=True, error_code=error_code)
-        q_implies_r: Formula
+        q_implies_r: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: HypotheticalSyllogismDeclaration.Premises = HypotheticalSyllogismDeclaration.Premises(
             p_implies_q=p_implies_q, q_implies_r=q_implies_r)
@@ -9108,7 +9118,7 @@ class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
         return i
 
     def construct_formula(self, p_implies_q: FlexibleFormula,
-            q_implies_r: FlexibleFormula) -> Formula:
+            q_implies_r: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -9154,11 +9164,11 @@ class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
         # Validate that expected formula-statements are formula-statements in the current theory.
         _, p, _ = verify_formula_statement(arg='p', t=t, input_value=p,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        p: Formula
+        p: CompoundFormula
         _, not_p, _ = verify_formula_statement(arg='not_p', t=t, input_value=not_p,
             form=self.i.parameter_not_p, mask=self.i.parameter_not_p_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        not_p: Formula
+        not_p: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: InconsistencyIntroduction1Declaration.Premises = InconsistencyIntroduction1Declaration.Premises(
             p=p, not_p=not_p, t=t)
@@ -9171,7 +9181,7 @@ class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
         return i
 
     def construct_formula(self, p: FlexibleFormula, not_p: FlexibleFormula,
-            t: TheoryDerivation) -> Formula:
+            t: TheoryDerivation) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -9219,12 +9229,12 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
         _, x_equal_y, _ = verify_formula_statement(arg='x_equal_y', t=t, input_value=x_equal_y,
             form=self.i.parameter_x_equal_y, mask=self.i.parameter_x_equal_y_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        x_equal_y: Formula
+        x_equal_y: CompoundFormula
         _, x_unequal_y, _ = verify_formula_statement(arg='x_unequal_y', t=t,
             input_value=x_unequal_y, form=self.i.parameter_x_unequal_y,
             mask=self.i.parameter_x_unequal_y_mask, is_strictly_propositional=True,
             raise_exception=True, error_code=error_code)
-        x_unequal_y: Formula
+        x_unequal_y: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: InconsistencyIntroduction2Declaration.Premises = InconsistencyIntroduction2Declaration.Premises(
             x_equal_y=x_equal_y, x_unequal_y=x_unequal_y, t=t)
@@ -9237,7 +9247,7 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
         return i
 
     def construct_formula(self, x_equal_y: FlexibleFormula, x_unequal_y: FlexibleFormula,
-            t: TheoryDerivation) -> Formula:
+            t: TheoryDerivation) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -9286,7 +9296,7 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
             input_value=x_unequal_x, form=self.i.parameter_x_unequal_x,
             mask=self.i.parameter_x_unequal_x_mask, is_strictly_propositional=True,
             raise_exception=True, error_code=error_code)
-        x_unequal_x: Formula
+        x_unequal_x: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: InconsistencyIntroduction3Declaration.Premises = InconsistencyIntroduction3Declaration.Premises(
             x_unequal_x=x_unequal_x, t=t)
@@ -9298,7 +9308,8 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
         i: InconsistencyIntroduction3Declaration = super().i
         return i
 
-    def construct_formula(self, x_unequal_x: FlexibleFormula, t: TheoryDerivation) -> Formula:
+    def construct_formula(self, x_unequal_x: FlexibleFormula,
+            t: TheoryDerivation) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -9340,10 +9351,10 @@ class ModusPonensInclusion(InferenceRuleInclusion):
             input_value=p_implies_q, form=self.i.parameter_p_implies_q,
             mask=self.i.parameter_p_implies_q_mask, is_strictly_propositional=True,
             raise_exception=True, error_code=error_code)
-        p_implies_q: Formula
+        p_implies_q: CompoundFormula
         _, p, _ = verify_formula_statement(arg='p', t=self.t, input_value=p,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        p: Formula
+        p: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: ModusPonensDeclaration.Premises = ModusPonensDeclaration.Premises(
             p_implies_q=p_implies_q, p=p)
@@ -9361,7 +9372,8 @@ class ModusPonensInclusion(InferenceRuleInclusion):
         i: ModusPonensDeclaration = super().i
         return i
 
-    def construct_formula(self, p_implies_q: FlexibleFormula, p: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_implies_q: FlexibleFormula,
+            p: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -9403,11 +9415,11 @@ class ModusTollensInclusion(InferenceRuleInclusion):
             input_value=p_implies_q, form=self.i.parameter_p_implies_q,
             mask=self.i.parameter_p_implies_q_mask, is_strictly_propositional=True,
             raise_exception=True, error_code=error_code)
-        p_implies_q: Formula
+        p_implies_q: CompoundFormula
         _, not_q, _ = verify_formula_statement(arg='not_q', t=self.t, input_value=not_q,
             form=self.i.parameter_not_q, mask=self.i.parameter_not_q_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        not_q: Formula
+        not_q: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: ModusTollensDeclaration.Premises = ModusTollensDeclaration.Premises(
             p_implies_q=p_implies_q, not_q=not_q)
@@ -9424,7 +9436,8 @@ class ModusTollensInclusion(InferenceRuleInclusion):
         i: ModusTollensDeclaration = super().i
         return i
 
-    def construct_formula(self, p_implies_q: FlexibleFormula, not_q: FlexibleFormula) -> Formula:
+    def construct_formula(self, p_implies_q: FlexibleFormula,
+            not_q: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -9469,7 +9482,7 @@ class ProofByContradiction1Inclusion(InferenceRuleInclusion):
         _, inc_h, _ = verify_formula_statement(arg='inc_h', t=self.t, input_value=inc_h,
             form=self.i.parameter_inc_h, mask=self.i.parameter_inc_h_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        inc_h: Formula
+        inc_h: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: ProofByContradiction1Declaration.Premises = ProofByContradiction1Declaration.Premises(
             h=h, inc_h=inc_h)
@@ -9487,7 +9500,7 @@ class ProofByContradiction1Inclusion(InferenceRuleInclusion):
         i: ProofByContradiction1Declaration = super().i
         return i
 
-    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
+    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -9533,7 +9546,7 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
         _, inc_h, _ = verify_formula_statement(arg='inc_h', t=self.t, input_value=inc_h,
             form=self.i.parameter_inc_h, mask=self.i.parameter_inc_h_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        inc_h: Formula
+        inc_h: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: ProofByContradiction2Declaration.Premises = ProofByContradiction2Declaration.Premises(
             h=h, inc_h=inc_h)
@@ -9551,7 +9564,7 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
         i: ProofByContradiction2Declaration = super().i
         return i
 
-    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
+    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -9595,7 +9608,7 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
         _, inc_h, _ = verify_formula_statement(arg='inc_h', t=self.t, input_value=inc_h,
             form=self.i.parameter_inc_h, mask=self.i.parameter_inc_h_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        inc_h: Formula
+        inc_h: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: ProofByRefutation1Declaration.Premises = ProofByRefutation1Declaration.Premises(
             h=h, inc_h=inc_h)
@@ -9612,7 +9625,7 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
         i: ProofByRefutation1Declaration = super().i
         return i
 
-    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
+    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -9664,7 +9677,7 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
         _, inc_h, _ = verify_formula_statement(arg='inc_h', t=self.t, input_value=inc_h,
             form=self.i.parameter_inc_h, mask=self.i.parameter_inc_h_mask,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        inc_h: Formula
+        inc_h: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: ProofByRefutation2Declaration.Premises = ProofByRefutation2Declaration.Premises(
             h=h, inc_h=inc_h)
@@ -9676,7 +9689,7 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
         i: ProofByRefutation2Declaration = super().i
         return i
 
-    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Formula:
+    def construct_formula(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -9716,7 +9729,7 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
         # Validate that expected formula-statements are formula-statements in the current theory.
         _, p, _ = verify_formula_statement(arg='p', t=self.t, input_value=p,
             is_strictly_propositional=True, raise_exception=True, error_code=error_code)
-        p: Formula
+        p: CompoundFormula
         # The method either raises an exception during validation, or return True.
         valid_premises: VariableSubstitutionDeclaration.Premises = VariableSubstitutionDeclaration.Premises(
             p=p, phi=phi)
@@ -9735,7 +9748,7 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
         i: VariableSubstitutionDeclaration = super().i
         return i
 
-    def construct_formula(self, p: FlexibleFormula, phi: FlexibleFormula) -> Formula:
+    def construct_formula(self, p: FlexibleFormula, phi: FlexibleFormula) -> CompoundFormula:
         """
         .. include:: ../../include/construct_formula_python_method.rstinc
 
@@ -10377,7 +10390,7 @@ class UniverseOfDiscourse(TheoreticalObject):
         else:
             return False
 
-    def cross_reference_formula(self, phi: Formula):
+    def cross_reference_formula(self, phi: CompoundFormula):
         """Cross-references a formula in this universe-of-discourse.
 
         :param phi: a formula.
@@ -10478,7 +10491,7 @@ class UniverseOfDiscourse(TheoreticalObject):
         A formula is *declared* in a theory, and not *stated*, because it is not a statement,
         i.e. it is not necessarily true in this theory.
         """
-        phi = Formula(relation=relation, parameters=parameters, u=self, nameset=nameset,
+        phi = CompoundFormula(relation=relation, parameters=parameters, u=self, nameset=nameset,
             lock_variable_scope=lock_variable_scope, echo=echo)
         return phi
 
@@ -10828,12 +10841,12 @@ def rep_two_columns_proof_end(left: str) -> str:
     return report
 
 
-def apply_negation(phi: Formula) -> Formula:
+def apply_negation(phi: CompoundFormula) -> CompoundFormula:
     """Apply negation to a formula phi."""
     return phi.u.f(phi.u.r.lnot, phi.u.f(phi.u.r.lnot, phi))
 
 
-def apply_double_negation(phi: Formula) -> Formula:
+def apply_double_negation(phi: CompoundFormula) -> CompoundFormula:
     """Apply double-negation to a formula phi."""
     return apply_negation(apply_negation(phi))
 
@@ -10972,7 +10985,7 @@ class DeclarativeClassList(repm.ValueName):
             'axiom-interpretation-inclusion', python_type=AxiomInterpretationInclusion)
         self.direct_definition_inference = DeclarativeClass('direct_definition_inference',
             'direct-definition-inference')
-        self.formula = DeclarativeClass('formula', 'formula', python_type=Formula)
+        self.formula = DeclarativeClass('formula', 'formula', python_type=CompoundFormula)
         self.formula_statement = DeclarativeClass('formula_statement', 'formula-statement',
             python_type=FormulaStatement)
         self.variable = DeclarativeClass('variable', 'variable', python_type=Variable)

@@ -37,7 +37,7 @@ class Tao2006ThePeanoAxioms(pu.Package):
 
         # relations
         plusplus = u.r.declare(arity=1, symbol='++', auto_index=False, name='successor',
-            formula_rep=pu.Formula.postfix)
+            formula_rep=pu.CompoundFormula.postfix)
         self.plusplus = plusplus
 
         t.open_section('Informal definition of natural number', section_parent=section_2_1,

@@ -38,7 +38,7 @@ def graph_variable(g: nx.MultiDiGraph, x: pu.Variable):
     g.add_node(x.rep_name())
 
 
-def graph_simple_objct(g: nx.MultiDiGraph, o: pu.Formula):
+def graph_simple_objct(g: nx.MultiDiGraph, o: pu.CompoundFormula):
     g.add_node(o.rep_name())
 
 
@@ -46,7 +46,7 @@ def graph_relation(g: nx.MultiDiGraph, r: pu.Relation):
     g.add_node(r.rep_name())
 
 
-def graph_formula(g: nx.MultiDiGraph, f: pu.Formula):
+def graph_formula(g: nx.MultiDiGraph, f: pu.CompoundFormula):
     g.add_node(f.rep_name())
     if f.relation.arity == 1:
         graph_symbolic_object(g, f.relation)

@@ -11,18 +11,18 @@ class TestFormulaAlphaContains(TestCase):
         r1 = u.r.declare(signal_proposition=True)
         r2 = u.r.declare(signal_proposition=True)
 
-        phi1: pu.Formula = o1 | r2 | o2
+        phi1: pu.CompoundFormula = o1 | r2 | o2
         # A formula is always alpha-equivalent to itself
         self.assertTrue(pu.formula_alpha_contains(u=u, phi=phi1, psi=phi1))
-        psi1: pu.Formula = o1 | r2 | o2
+        psi1: pu.CompoundFormula = o1 | r2 | o2
         # If two distinct python objects represent the same formula "content",
         # they are alpha-equivalent
         self.assertTrue(pu.formula_alpha_contains(u=u, phi=phi1, psi=psi1))
 
         with u.with_variable(symbol='x', auto_index=False) as x:
-            phi2: pu.Formula = o1 | r2 | x
+            phi2: pu.CompoundFormula = o1 | r2 | x
         with u.with_variable(symbol='y', auto_index=False) as y:
-            psi2: pu.Formula = o1 | r2 | y
+            psi2: pu.CompoundFormula = o1 | r2 | y
         # Two formula that are the same except for variable names
         # are still alpha-equivalent
         self.assertTrue(pu.formula_alpha_contains(u=u, phi=phi2, psi=psi2))
@@ -31,7 +31,8 @@ class TestFormulaAlphaContains(TestCase):
         # Embedding
         with u.with_variable(symbol='x', auto_index=False) as x, u.with_variable(symbol='y',
                 auto_index=False) as y:
-            phi3: pu.Formula = r2(o1, x, x, (o1 | r2 | o2), y, ((r2(o1 | r2 | x) | r1 | o1)), x, x,
+            phi3: pu.CompoundFormula = r2(o1, x, x, (o1 | r2 | o2), y,
+                ((r2(o1 | r2 | x) | r1 | o1)), x, x,
                 y)  # self.assertTrue(pu.formula_alpha_contains(u=u, phi=phi3, psi=phi1))
 
         # TODO: Manage the case where we have variables inside constants. This require a little analysis.

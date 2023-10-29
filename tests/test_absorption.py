@@ -28,7 +28,7 @@ class TestAbsorption(TestCase):
         o3: pu.SimpleObjct = test.o3
         r1: pu.Relation = test.r1
         r2: pu.Relation = test.r2
-        p_implies_q: pu.Formula = r1(o1, o3) | u.r.implies | r2(o3)
+        p_implies_q: pu.CompoundFormula = r1(o1, o3) | u.r.implies | r2(o3)
 
         with self.assertRaises(pu.PunctiliousException) as context:
             proposition_error = t1.i.absorption.infer_formula_statement(p_implies_q=p_implies_q,
@@ -45,7 +45,7 @@ class TestAbsorption(TestCase):
         o3: pu.SimpleObjct = test.o3
         r1: pu.Relation = test.r1
         r2: pu.Relation = test.r2
-        p_implies_q: pu.Formula = r1(o1, o2) | u.r.iff | r2(o3)
+        p_implies_q: pu.CompoundFormula = r1(o1, o2) | u.r.iff | r2(o3)
 
         with self.assertRaises(pu.PunctiliousException) as context:
             proposition_error = t1.i.absorption.infer_formula_statement(p_implies_q=p_implies_q,

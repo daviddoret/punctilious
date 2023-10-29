@@ -37,6 +37,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html"/>
     <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="next" title="axiom" href="axiom_math_concept.html"/>
+    <link rel="prev" title="alpha-equivalence" href="alpha_equivalence_math_concept.html"/>
 </head>
 
 <body class="wy-body-for-nav">
@@ -82,6 +84,8 @@
                 <div role="navigation" aria-label="Page navigation">
                     <ul class="wy-breadcrumbs">
                         <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+                        <li class="breadcrumb-item"><a href="../../math.html">Math</a></li>
+                        <li class="breadcrumb-item"><a href="../../math_concept.html">Math concept</a></li>
                         <li class="breadcrumb-item active">atomic-formula</li>
                         <li class="wy-breadcrumbs-aside">
                             <a href="../../_sources/math/concept/atomic_formula_math_concept.rst.txt" rel="nofollow">
@@ -112,8 +116,19 @@
                                                  title="Link to this heading"></a></h2>
                                 <p>An <em>atomic-formula</em> is a <a class="reference internal"
                                                                       href="formula_math_concept.html#formula-math-concept"><span
-                                        class="std std-ref">formula</span></a> that is composed of a single predicate
-                                    followed by n terms.</p>
+                                        class="std std-ref">formula</span></a> that is not composed of a connective and
+                                    terms. Equivalently, it is a leaf is a formula tree.</p>
+                                <p>Note that several definitions may be found in the litterature. <span id="id1">[<a
+                                        class="reference internal"
+                                        href="../../back_matter/bibliography_back_matter.html#id6"
+                                        title="Roy T. Cook. A Dictionary of Philosophical Logic. Edinburgh University Press, 2009. ISBN 978-0-7486-2559-8.">Coo09</a>, p. 20]</span>
+                                    defines it as a single-n-ary predicate followed by n singular terms. In the context
+                                    of <em>punctilious</em>, we rather adopt the definition proposed by <span id="id2">[<a
+                                            class="reference internal"
+                                            href="../../back_matter/bibliography_back_matter.html#id12"
+                                            title="Faron Moller and Georg Struth. Modelling Computing Systems. Undergraduate Topics in Computer Science. Springer London, 2013. ISBN 978-1-84800-321-7 978-1-84800-322-4. doi:10.1007/978-1-84800-322-4.">MS13</a>, p. 55]</span>
+                                    where variables, <em>true</em>, and <em>false</em> are examples of atomic formula
+                                    and where single-predicate formulae are considered compound formulae.</p>
                             </section>
                             <section id="quotes">
                                 <h2>Quotes<a class="headerlink" href="#quotes" title="Link to this heading"></a></h2>
@@ -121,17 +136,43 @@
                                     <div><p>An atomic formula (or atom, or simple formula) is a formula that consists of
                                         a single n-ary predicate followed by n singular terms. Note that the terms might
                                         be simple or complex, and might be, or contain, either constants or variables.
-                                        <span id="id1">[<a class="reference internal"
+                                        <span id="id3">[<a class="reference internal"
                                                            href="../../back_matter/bibliography_back_matter.html#id6"
                                                            title="Roy T. Cook. A Dictionary of Philosophical Logic. Edinburgh University Press, 2009. ISBN 978-0-7486-2559-8.">Coo09</a>, p. 20]</span>
                                     </p>
-                                        <p><em>atomic formula</em> Let L be a first order language. An atomic formula is
-                                            an expression which has the form P(t1,…,tn), where P is an n-place predicate
-                                            symbol of L and t1,…,tn are terms of L. If L contains equality (=), then =
-                                            is viewed as a two-place predicate. Consequently, if t1 and t2 are terms,
-                                            then t1 = t2 is an atomic formula.
-                                            <span id="id2">[<a class="reference internal"
-                                                               href="../../back_matter/bibliography_back_matter.html#id5">CH</a>, p. 5]</span>
+                                    </div>
+                                </blockquote>
+                                <hr class="docutils"/>
+                                <blockquote>
+                                    <div><p><em>atomic formula</em> Let L be a first order language. An atomic formula
+                                        is an expression which has the form P(t1,…,tn), where P is an n-place predicate
+                                        symbol of L and t1,…,tn are terms of L. If L contains equality (=), then = is
+                                        viewed as a two-place predicate. Consequently, if t1 and t2 are terms, then t1 =
+                                        t2 is an atomic formula.
+                                        <span id="id4">[<a class="reference internal"
+                                                           href="../../back_matter/bibliography_back_matter.html#id5"
+                                                           title="Catherine Cavagnaro and William T. Haight, editors. Dictionary of Classical and Theoretical Mathematics. CRC Press, 2001. ISBN ISBN 1-58488-050-3 (alk. paper).">CH01</a>, p. 5]</span>
+                                    </p>
+                                    </div>
+                                </blockquote>
+                                <hr class="docutils"/>
+                                <blockquote>
+                                    <div><p>(…) A statement written in propositional logic is called a <em>propositional
+                                        formula</em>, and is either:</p>
+                                        <ul class="simple">
+                                            <li><p>an <em>atomic formula</em>, typically represented by a variable such
+                                                as P, Q, or R; or</p></li>
+                                            <li><p>a <em>compound formula</em>, in which case it is built up using the
+                                                above propositional connectives as summarised in Figure 1.1</p></li>
+                                        </ul>
+                                        <p>There are two special atomic propositional formulae, <em>true</em>
+                                            (representing the proposition which is always true) and <em>false</em>
+                                            (representing the proposition which is always false).</p>
+                                        <p>The above define the <em>syntax</em> of the language of propositional
+                                            formulae. (…)
+                                            <span id="id5">[<a class="reference internal"
+                                                               href="../../back_matter/bibliography_back_matter.html#id12"
+                                                               title="Faron Moller and Georg Struth. Modelling Computing Systems. Undergraduate Topics in Computer Science. Springer London, 2013. ISBN 978-1-84800-321-7 978-1-84800-322-4. doi:10.1007/978-1-84800-322-4.">MS13</a>, p. 55]</span>
                                         </p>
                                     </div>
                                 </blockquote>
@@ -139,7 +180,7 @@
                             <section id="sources">
                                 <h2>Sources<a class="headerlink" href="#sources" title="Link to this heading"></a></h2>
                                 <ul class="simple">
-                                    <li><p><span id="id3">[<a class="reference internal"
+                                    <li><p><span id="id6">[<a class="reference internal"
                                                               href="../../back_matter/bibliography_back_matter.html#id6"
                                                               title="Roy T. Cook. A Dictionary of Philosophical Logic. Edinburgh University Press, 2009. ISBN 978-0-7486-2559-8.">Coo09</a>]</span>
                                     </p></li>
@@ -151,6 +192,14 @@
                     </div>
                 </div>
                 <footer>
+                    <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+                        <a href="alpha_equivalence_math_concept.html" class="btn btn-neutral float-left"
+                           title="alpha-equivalence" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"
+                                                                                    aria-hidden="true"></span> Previous</a>
+                        <a href="axiom_math_concept.html" class="btn btn-neutral float-right" title="axiom"
+                           accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"
+                                                               aria-hidden="true"></span></a>
+                    </div>
 
                     <hr/>
 
