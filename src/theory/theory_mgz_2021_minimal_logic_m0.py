@@ -268,9 +268,9 @@ class MGZ2021MinimalLogicM0(pu.Package):
         # 3. ⊢ 𝐷 ⊃ 𝐶  # h1_l3 = t.i.modus_ponens.infer_formula_statement(p_implies_q=h1_l2, p=c)
         print(pu.verify_formula(u=u, input_value=c))
 
-        phi: pu.TheoreticalObject = self.pl7_statement
+        phi: pu.Formula = self.pl7_statement
         print(phi)
-        psi: pu.TheoreticalObject = c.value
+        psi: pu.Formula = c.value
         print(psi)
         mask: frozenset[pu.Variable] = frozenset(pu.get_formula_unique_variable_ordered_set(u=u,
             phi=phi) + pu.get_formula_unique_variable_ordered_set(u=u, phi=psi))

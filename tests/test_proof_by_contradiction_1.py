@@ -10,8 +10,8 @@ class TestProofByContradiction1(TestCase):
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         o3: pu.SimpleObjct = test.o3
-        f: pu.Relation = test.f
-        h: pu.Relation = test.h
+        f: pu.Connective = test.f
+        h: pu.Connective = test.h
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         self.assertTrue(
             proposition_of_interest.is_formula_syntactically_equivalent_to(phi=f(o1, o3)))

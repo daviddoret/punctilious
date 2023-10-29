@@ -22,11 +22,11 @@ class TestTheoreticalObjct(TestCase):
         self.assertEqual({f1, f2, f3, r1, r2, o1, o3},
             set(f3.iterate_theoretical_objcts_references()))
 
-    def test_list_relations_recursively(self):
+    def test_list_connectives_recursively(self):
         u = pu.UniverseOfDiscourse()
         t = u.t()
         r1 = u.r.declare(1)
-        self.assertEqual({r1}, set(r1.iterate_relations()))
+        self.assertEqual({r1}, set(r1.iterate_connectives()))
         r2 = u.r.declare(2)
         o1 = u.o.declare()
         o2 = u.o.declare()
@@ -34,10 +34,10 @@ class TestTheoreticalObjct(TestCase):
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
         f1 = u.f(r1, o1)
-        self.assertEqual({r1}, set(f1.iterate_relations()))
+        self.assertEqual({r1}, set(f1.iterate_connectives()))
         f2 = u.f(r1, o3)
         f3 = u.f(r2, f1, f2)
-        self.assertEqual({r1, r2}, set(f3.iterate_relations()))
+        self.assertEqual({r1, r2}, set(f3.iterate_connectives()))
 
     def test_get_variable_ordered_set_1(self):
         u = pu.UniverseOfDiscourse()

@@ -4,7 +4,7 @@ import punctilious.random_data as random_data
 
 
 class TestFormulaIsMaskSimilarTo(TestCase):
-    def test_formula_is_mask_similar_to_unary_relation(self):
+    def test_formula_is_mask_similar_to_unary_connective(self):
         pu.configuration.echo_axiom_declaration = True
         u = pu.UniverseOfDiscourse()
         r1a = u.r.declare(1)
@@ -29,7 +29,7 @@ class TestFormulaIsMaskSimilarTo(TestCase):
             self.assertFalse(phi1a.is_masked_formula_similar_to(phi=phi1e, mask={x}))
             self.assertFalse(phi1e.is_masked_formula_similar_to(phi=phi1a, mask={x}))
 
-    def test_formula_is_mask_similar_to_binary_relation(self):
+    def test_formula_is_mask_similar_to_binary_connective(self):
         pu.configuration.echo_axiom_declaration = True
         u = pu.UniverseOfDiscourse()
         r1a = u.r.declare(2)

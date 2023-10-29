@@ -12,8 +12,8 @@ class TestHypotheticalSyllogism(TestCase):
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         o3: pu.SimpleObjct = test.o3
-        r1: pu.Relation = test.r1
-        r2: pu.Relation = test.r2
+        r1: pu.Connective = test.r1
+        r2: pu.Connective = test.r2
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
             phi=r1(o1, o2) | u.r.implies | r1(o3, o1)))

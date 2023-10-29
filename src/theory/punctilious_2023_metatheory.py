@@ -37,7 +37,7 @@ fa2c = ft.i.axiom_interpretation.infer_formula_statement(axiom_02,
 # Truth values
 nla_05 = ft.include_axiom(
     u.declare_axiom(natural_language='truth-values is the class whose elements are '
-                                     'the theoretical-objects truth and falsehood.'))
+                                     'the formulas truth and falsehood.'))
 falsehood = u.o.declare('false')
 truth = u.o.declare('true')
 truth_values = u.o.declare('truth-values')
@@ -48,27 +48,27 @@ proposition_070 = ft.i.axiom_interpretation.infer_formula_statement(axiom_03,
 proposition_080 = ft.i.axiom_interpretation.infer_formula_statement(axiom_03,
     u.f(element_of, falsehood, truth_values))
 
-# foundation propositional relations
+# foundation propositional connectives
 nla_09 = ft.include_axiom(
-    u.declare_axiom(natural_language='propositional-relations is the class whose elements are '
-                                     'the relations: conjunction, disjunction, implication, and negation, '
-                                     'and any relation defined from these.'))
-propositional_relations_class = u.o.declare('propositional-relations-class')
+    u.declare_axiom(natural_language='propositional-connectives is the class whose elements are '
+                                     'the connectives: conjunction, disjunction, implication, and negation, '
+                                     'and any connective defined from these.'))
+propositional_connectives_class = u.o.declare('propositional-connectives-class')
 ft.i.axiom_interpretation.infer_formula_statement(axiom_03,
-    u.f(element_of, propositional_relations_class, class_of_classes))
+    u.f(element_of, propositional_connectives_class, class_of_classes))
 
 ft.i.axiom_interpretation.infer_formula_statement(nla_09,
-    u.f(element_of, u.r.conjunction, propositional_relations_class))
+    u.f(element_of, u.r.conjunction, propositional_connectives_class))
 ft.i.axiom_interpretation.infer_formula_statement(nla_09,
-    u.f(element_of, u.r.disjunction, propositional_relations_class))
+    u.f(element_of, u.r.disjunction, propositional_connectives_class))
 ft.i.axiom_interpretation.infer_formula_statement(nla_09,
-    u.f(element_of, u.r.implication, propositional_relations_class))
+    u.f(element_of, u.r.implication, propositional_connectives_class))
 ft.i.axiom_interpretation.infer_formula_statement(nla_09,
-    u.f(element_of, u.r.lnot, propositional_relations_class))
+    u.f(element_of, u.r.lnot, propositional_connectives_class))
 ft.i.axiom_interpretation.infer_formula_statement(nla_09,
-    u.f(element_of, u.r.neq, propositional_relations_class))
+    u.f(element_of, u.r.neq, propositional_connectives_class))
 nla_01b = ft.include_axiom(
-    u.declare_axiom('= is a binary relation such that, given any two theoretical-objcts x and y, '
+    u.declare_axiom('= is a binary connective such that, given any two theoretical-objcts x and y, '
                     'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.'))
 with u.with_variable('x') as x1, u.with_variable('y') as x2:
     x1_equal_x2 = u.f(u.r.equal, x1, x2)
@@ -84,8 +84,8 @@ with u.with_variable('x') as x, u.with_variable('y') as y:
 
 nla_10 = ft.include_axiom(u.declare_axiom('propositions is a class whose elements are '
                                           'truth, falsehood, all elements of the theory-formula-statement class, '
-                                          'whose relation is an element-of propositional-relations-class, '
-                                          'and all theory-formula-statements whose relation is defined '
+                                          'whose connective is an element-of propositional-connectives-class, '
+                                          'and all theory-formula-statements whose connective is defined '
                                           'from these. Its elements are called propositions.'))
 proposition_class = u.o.declare('proposition-class')
 ft.i.axiom_interpretation.infer_formula_statement(nla_10, u.f(element_of, truth, class_of_classes))
@@ -101,7 +101,7 @@ ft.i.axiom_interpretation.infer_formula_statement(nla_10, u.f(has_truth_value, t
 ft.i.axiom_interpretation.infer_formula_statement(nla_10,
     u.f(has_truth_value, falsehood, falsehood))
 
-nla_30 = ft.include_axiom(u.declare_axiom('¬ is a unary relation. '
+nla_30 = ft.include_axiom(u.declare_axiom('¬ is a unary connective. '
                                           'If P is a proposition and it has truth-value truth, '
                                           'then ¬P has-truth-value false. '
                                           'Conversely, if P is a proposition and it has truth-value falsehood, '
@@ -132,7 +132,7 @@ def section_200_theory_consistency():
                                  'and if ¬𝝋 is a statement in 𝓣, '
                                  'then 𝓣 is inconsistent.', title='Theory inconsistency')
 
-    proposition_200_1 = u.implication_relation(u.f(u.im))
+    proposition_200_1 = u.implication_connective(u.f(u.im))
 
 
 def define_biconditional():
@@ -154,7 +154,7 @@ with u.with_variable('φ') as phi:
         u.f(u.r.conjunction, u.f(has_truth_value, phi, truth),
             u.f(has_truth_value, phi, falsehood)), u.f(element_of, phi, contradictory_statements)))
 
-_relation_declaration = u.r.declare(2, 'relation-declaration')
+_connective_declaration = u.r.declare(2, 'connective-declaration')
 _simple_objct_declaration = u.r.declare(2, 'simple-objct-declaration')
 _theory_declaration = u.r.declare(2, 'theory-declaration')
 _theory_extension = u.r.declare(2, 'theory-extension')
@@ -192,7 +192,7 @@ def elaborate_foundation_theory():
         global foundation_theory
         global tru
         def1 = ft.d(
-            natural_language='substitution is the process that consists in taking 3 theoretical-object o, p and q, that may be a composed-object such as a formula, and replacing in there all occurences of p by q.')
+            natural_language='substitution is the process that consists in taking 3 formula o, p and q, that may be a composed-object such as a formula, and replacing in there all occurences of p by q.')
         axiom2 = ft.include_axiom(
             'If x = y, o = subst(o, x, y) where o, x, and y are theoretical-objcts.')
         subst = u.r.declare(arity=3, nameset='subst', signal_theoretical_morphism=True,

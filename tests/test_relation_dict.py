@@ -2,8 +2,8 @@ from unittest import TestCase
 import punctilious as pu
 
 
-class TestRelationDict(TestCase):
-    def test_relation_dict(self):
+class TestConnectiveDict(TestCase):
+    def test_connective_dict(self):
         pu.configuration.echo_default = False
         pu.configuration.encoding = pu.encodings.plaintext
         u = pu.UniverseOfDiscourse()

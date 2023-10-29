@@ -782,16 +782,16 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('.')
         yield self.paragraph_end
 
-        yield Header(plaintext='Relations', level=1)
+        yield Header(plaintext='Connectives', level=1)
         # TODO: Show default notations (infix, postfix, prefix)
-        arities = frozenset(r.arity for r in t.iterate_relations())
+        arities = frozenset(r.arity for r in t.iterate_connectives())
         for a in arities:
             yield self.paragraph_start
             yield SansSerifNormal('Let ')
             first_item = True
             plural = False
-            for r in (r for r in t.iterate_relations() if r.arity == a):
-                r: Relation
+            for r in (r for r in t.iterate_connectives() if r.arity == a):
+                r: Connective
                 if not first_item:
                     yield SansSerifNormal(', ')
                     plural = True
@@ -802,11 +802,11 @@ class LocaleEnUs(Locale):
             yield SansSerifNormal(' be ')
             if plural:
                 yield SerifItalic(rep_arity_as_text(a))
-                yield SerifItalic('-relations')
+                yield SerifItalic('-connectives')
             else:
                 yield SansSerifNormal('a ')
                 yield SerifItalic(rep_arity_as_text(a))
-                yield SerifItalic('-relation')
+                yield SerifItalic('-connective')
             yield SansSerifNormal(' in ')
             yield from t.u.compose_symbol()
             yield SansSerifNormal('.')

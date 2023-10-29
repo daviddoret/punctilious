@@ -9,7 +9,7 @@ class TestHypothesis(TestCase):
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         o3: pu.SimpleObjct = test.o3
-        f: pu.Relation = test.f
+        f: pu.Connective = test.f
         h: pu.Hypothesis = test.h
         self.assertTrue(h.child_statement.is_formula_syntactically_equivalent_to(phi=f(o1, o2)))
         self.assertTrue(h.child_theory.contains_theoretical_objct_OBSOLETE(test.predecessor))

@@ -18,10 +18,10 @@ a2 = t1.include_axiom(a=a2d)
 with u.with_variable('x') as x:
     x_is_a_dog = x | u.r.is_a | dog
     x_is_a_mammal = x | u.r.is_a | mammal
-    if_x_is_a_dog_then_x_is_a_mammal_formula = x_is_a_dog | u.relations.implies | x_is_a_mammal
+    if_x_is_a_dog_then_x_is_a_mammal_formula = x_is_a_dog | u.connectives.implies | x_is_a_mammal
     if_x_is_a_dog_then_x_is_a_mammal = t1.i.axiom_interpretation.infer_formula_statement(a=a2,
         p=if_x_is_a_dog_then_x_is_a_mammal_formula)
-    # mira_is_a_mammal_formula = core.Formula(theory=t1, relation=is_a, parameters=(mira, mammal))
+    # mira_is_a_mammal_formula = core.Formula(theory=t1, connective=is_a, parameters=(mira, mammal))
 
     vs = t1.i.vs.infer_formula_statement(p=if_x_is_a_dog_then_x_is_a_mammal, phi=u.r.tupl(mira))
 

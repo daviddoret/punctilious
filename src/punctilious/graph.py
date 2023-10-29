@@ -12,7 +12,7 @@ def graph_symbolic_object(g: nx.MultiDiGraph, o: pu.SymbolicObject):
         graph_simpl_objct(g, o)
     elif pu.is_in_class(o, pu.classes.theory_derivation):
         graph_theory(g, o)
-    elif pu.is_in_class(o, pu.classes.relation):
+    elif pu.is_in_class(o, pu.classes.connective):
         graph_relation(g, o)
     elif pu.is_in_class(o, pu.classes.variable):
         graph_variable(g, o)
@@ -42,20 +42,20 @@ def graph_simple_objct(g: nx.MultiDiGraph, o: pu.CompoundFormula):
     g.add_node(o.rep_name())
 
 
-def graph_relation(g: nx.MultiDiGraph, r: pu.Relation):
+def graph_relation(g: nx.MultiDiGraph, r: pu.Connective):
     g.add_node(r.rep_name())
 
 
 def graph_formula(g: nx.MultiDiGraph, f: pu.CompoundFormula):
     g.add_node(f.rep_name())
-    if f.relation.arity == 1:
-        graph_symbolic_object(g, f.relation)
-        g.add_edge(f.relation.rep_name(), f.rep_name())
+    if f.connective.arity == 1:
+        graph_symbolic_object(g, f.connective)
+        g.add_edge(f.connective.rep_name(), f.rep_name())
         graph_symbolic_object(g, f.parameters[0])
         g.add_edge(f.parameters[0].rep_name(), f.rep_name())
-    if f.relation.arity == 2:
-        graph_symbolic_object(g, f.relation)
-        g.add_edge(f.relation.rep_name(), f.rep_name())
+    if f.connective.arity == 2:
+        graph_symbolic_object(g, f.connective)
+        g.add_edge(f.connective.rep_name(), f.rep_name())
         graph_symbolic_object(g, f.parameters[0])
         g.add_edge(f.parameters[0].rep_name(), f.rep_name())
         graph_symbolic_object(g, f.parameters[1])

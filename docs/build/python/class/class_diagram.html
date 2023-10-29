@@ -120,12 +120,12 @@
    fontname=&quot;Arial&quot;;
    fontsize=&quot;20pt&quot;;
 
-   TheoreticalObject [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   Formula [style=filled, fillcolor=&quot;#FEFE62&quot;];
    AxiomDeclaration [style=filled, fillcolor=&quot;#FEFE62&quot;];
    CompoundFormula [style=filled, fillcolor=&quot;#FEFE62&quot;];
    DefinitionDeclaration [style=filled, fillcolor=&quot;#FEFE62&quot;];
    InferenceRuleDeclaration [style=filled, fillcolor=&quot;#FEFE62&quot;];
-   Relation [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   Connective [style=filled, fillcolor=&quot;#FEFE62&quot;];
    SimpleObjct [style=filled, fillcolor=&quot;#FEFE62&quot;];
    Statement [style=filled, fillcolor=&quot;#FEFE62&quot;];
    TheoryDerivation [style=filled, fillcolor=&quot;#FEFE62&quot;];
@@ -146,17 +146,17 @@
    NoteInclusion [style=dashed];
 
    &quot;SymbolicObject&quot; -&gt; &quot;AtheoreticalObject&quot;;
-   &quot;SymbolicObject&quot; -&gt; &quot;TheoreticalObject&quot;;
-   &quot;TheoreticalObject&quot; -&gt; &quot;AxiomDeclaration&quot;;
-   &quot;TheoreticalObject&quot; -&gt; &quot;CompoundFormula&quot;;
-   &quot;TheoreticalObject&quot; -&gt; &quot;DefinitionDeclaration&quot;;
-   &quot;TheoreticalObject&quot; -&gt; &quot;InferenceRuleDeclaration&quot;;
-   &quot;TheoreticalObject&quot; -&gt; &quot;Relation&quot;;
-   &quot;TheoreticalObject&quot; -&gt; &quot;SimpleObjct&quot;;
-   &quot;TheoreticalObject&quot; -&gt; &quot;Statement&quot;;
-   &quot;TheoreticalObject&quot; -&gt; &quot;TheoryDerivation&quot;;
-   &quot;TheoreticalObject&quot; -&gt; &quot;UniverseOfDiscourse&quot;;
-   &quot;TheoreticalObject&quot; -&gt; &quot;Variable&quot;;
+   &quot;SymbolicObject&quot; -&gt; &quot;Formula&quot;;
+   &quot;Formula&quot; -&gt; &quot;AxiomDeclaration&quot;;
+   &quot;Formula&quot; -&gt; &quot;CompoundFormula&quot;;
+   &quot;Formula&quot; -&gt; &quot;DefinitionDeclaration&quot;;
+   &quot;Formula&quot; -&gt; &quot;InferenceRuleDeclaration&quot;;
+   &quot;Formula&quot; -&gt; &quot;Connective&quot;;
+   &quot;Formula&quot; -&gt; &quot;SimpleObjct&quot;;
+   &quot;Formula&quot; -&gt; &quot;Statement&quot;;
+   &quot;Formula&quot; -&gt; &quot;TheoryDerivation&quot;;
+   &quot;Formula&quot; -&gt; &quot;UniverseOfDiscourse&quot;;
+   &quot;Formula&quot; -&gt; &quot;Variable&quot;;
    &quot;Statement&quot; -&gt; &quot;AxiomInclusion&quot;;
    &quot;Statement&quot; -&gt; &quot;DefinitionInclusion&quot;;
    &quot;Statement&quot; -&gt; &quot;FormulaStatement&quot;;

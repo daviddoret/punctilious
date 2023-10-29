@@ -104,7 +104,7 @@ tests/test_proof_by_contradiction_2.py
 tests/test_proof_by_refutation_1.py
 tests/test_proof_by_refutation_2.py
 tests/test_quasi_quotes.py
-tests/test_relation_dict.py
+tests/test_connective_dict.py
 tests/test_sans_serif_bold.py
 tests/test_sans_serif_normal.py
 tests/test_script_normal.py

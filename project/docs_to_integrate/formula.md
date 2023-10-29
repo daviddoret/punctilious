@@ -5,7 +5,7 @@
 A _formula_ is a tuple (𝒰, 𝑟, 𝘗) where:
 
 - 𝒰 is the universe-of-discourse,
-- 𝑟 is a relation,
+- 𝑟 is a connective,
 - 𝘗 is a finite ordered-set of parameters of cardinality > 0.
 
 ## Python implementation
@@ -21,7 +21,7 @@ title: Formula python class diagram
 classDiagram
     TheoreticalObjct <|-- Formula
     class Formula {
-        +Relation relation
+        +Connective connective
     }
     class TheoreticalObjct {
     }

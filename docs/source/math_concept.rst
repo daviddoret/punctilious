@@ -31,7 +31,7 @@ This table of contents references the key mathematical concepts used by punctili
    object-declaration<math/concept/object_declaration_math_concept>
    object-inclusion<math/concept/object_inclusion_math_concept>
    paragraph-proof<math/concept/paragraph_proof_math_concept>
-   relation<math/concept/relation_math_concept>
+   connective<math/concept/connective_math_concept>
    statement<math/concept/statement_math_concept>
    theory-derivation<math/concept/theory_derivation_math_concept>
    validity-of-formula<math/concept/validity_of_formula_math_concept>

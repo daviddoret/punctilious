@@ -1033,7 +1033,7 @@ class Configuration:
         self.default_inference_rule_declaration_symbol = None
         self.default_inference_rule_inclusion_symbol = None
         self.default_note_symbol = None
-        self.default_relation_symbol = None
+        self.default_connective_symbol = None
         self.default_statement_symbol = None
         self.default_symbolic_object_symbol = None
         self.default_theory_symbol = None
@@ -1047,7 +1047,7 @@ class Configuration:
         self.echo_hypothesis = None
         self.echo_inferred_statement = None
         self.echo_note = None
-        self.echo_relation = None
+        self.echo_connective = None
         self.echo_simple_objct_declaration = None
         self.echo_statement = None
         self.echo_proof = None
@@ -1094,7 +1094,7 @@ class PyvisConfiguration:
 pyvis_configuration = PyvisConfiguration()
 
 
-def unpack_formula(o: (TheoreticalObject, CompoundFormula, FormulaStatement)) -> CompoundFormula:
+def unpack_formula(o: (Formula, CompoundFormula, FormulaStatement)) -> CompoundFormula:
     """Receive a theoretical-objct and unpack its formula if it is a statement that contains a
     formula."""
     verify(is_in_class(o, classes.theoretical_objct),
@@ -1146,7 +1146,7 @@ class DeclarativeClass(repm.ValueName):
         return self._python_type
 
 
-def is_in_class(o: TheoreticalObject, c: DeclarativeClass) -> bool:
+def is_in_class(o: Formula, c: DeclarativeClass) -> bool:
     """Return True if o is a member of the declarative-class c, False otherwise.
 
     :param o: An arbitrary python object.
@@ -1191,7 +1191,7 @@ class NoNameSolutionException(LookupError):
 class NameSet(Composable):
     """A set of qualified names used to identify an object.
 
-    TODO: Enhancement: for relations in particular, add a verb NameType (e.g. implies).
+    TODO: Enhancement: for connectives in particular, add a verb NameType (e.g. implies).
     """
 
     def __init__(self, s: (None, str) = None, symbol: (None, str, StyledText) = None,
@@ -1844,11 +1844,11 @@ class SymbolicObject(abc.ABC):
 
         Note:
         -----
-        The symbol-equivalence relation allows to compare any pair of symbolic-objcts, including:
+        The symbol-equivalence connective allows to compare any pair of symbolic-objcts, including:
          * Both theoretical and atheoretical objects.
          * Symbolic-objcts linked to distinct theory.
         """
-        # A theoretical-object can only be compared with a theoretical-object
+        # A formula can only be compared with a formula
         assert isinstance(o2, SymbolicObject)
         if self is o2:
             # If the current symbolic-objct is referencing the same
@@ -1942,10 +1942,10 @@ class InfixPartialFormula:
         and glueing all this together with the InfixPartialFormula class.
         """
         # print(f'IPF.__or__: self = {self}, other = {other}')
-        relation = self.b
+        connective = self.b
         first_parameter = self.a
         second_parameter = other
-        return self.a.u.f(relation, first_parameter, second_parameter)
+        return self.a.u.f(connective, first_parameter, second_parameter)
 
     def __str__(self):
         return f'InfixPartialFormula(a = {self.a}, b = {self.b})'
@@ -1954,7 +1954,7 @@ class InfixPartialFormula:
 
 
 class TheoreticalClass(type):
-    """A meta-class for python classes that implement theoretical-objects in the punctilious data-model.
+    """A meta-class for python classes that implement formulas in the punctilious data-model.
 
     TODO: This is just an idea to facilitate the programmatical discovery of the data-model,
     an idea to be investigated further.
@@ -1965,8 +1965,8 @@ class TheoreticalClass(type):
         super().__init__(name, bases, attrs)
 
 
-def iterate_formula_data_model_components(u: UniverseOfDiscourse, phi: TheoreticalObject,
-        recurse_constant_value: bool = True, recurse_formula_relation: bool = True,
+def iterate_formula_data_model_components(u: UniverseOfDiscourse, phi: Formula,
+        recurse_constant_value: bool = True, recurse_formula_connective: bool = True,
         recurse_formula_parameters: bool = True, recurse_statement_proposition: bool = True,
         yield_classes: frozenset = None) -> Generator[FlexibleFormula, None, None]:
     """Iterate through the data-model components of a formula in canonical-order.
@@ -1981,8 +1981,8 @@ def iterate_formula_data_model_components(u: UniverseOfDiscourse, phi: Theoretic
         if recurse_statement_proposition:
             yield from iterate_formula_data_model_components(u=u, phi=phi.valid_proposition)
     if isinstance(phi, CompoundFormula):
-        if recurse_formula_relation:
-            yield from iterate_formula_data_model_components(u=u, phi=phi.relation)
+        if recurse_formula_connective:
+            yield from iterate_formula_data_model_components(u=u, phi=phi.connective)
         if recurse_formula_parameters:
             for p in phi.parameters:
                 yield from iterate_formula_data_model_components(u=u, phi=p)
@@ -2002,7 +2002,7 @@ def iterate_formula_alpha_equivalence_components(u: UniverseOfDiscourse, phi: Fl
         # that is being considered for alpha-equivalence.
         phi = phi.valid_proposition
     if isinstance(phi, CompoundFormula):
-        yield from iterate_formula_alpha_equivalence_components(u=u, phi=phi.relation)
+        yield from iterate_formula_alpha_equivalence_components(u=u, phi=phi.connective)
         for p in phi.parameters:
             yield from iterate_formula_alpha_equivalence_components(u=u, phi=p)
     else:
@@ -2030,7 +2030,7 @@ def get_formula_unique_variable_ordered_set(u: UniverseOfDiscourse, phi: Flexibl
     ordered in canonical-order (TODO: add link to doc on canonical-order).
     """
     _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
-    phi: TheoreticalObject
+    phi: Formula
 
     ordered_set: list[Variable] = list()
     for element in iterate_formula_alpha_equivalence_components(u=u, phi=phi):
@@ -2045,13 +2045,13 @@ def is_alpha_equivalent_to(u: UniverseOfDiscourse, phi: FlexibleFormula,
         psi: FlexibleFormula) -> bool:
     """Return True if phi is :ref:alpha-equivalent`<alpha_equivalence_math_concept>` to psi.
 
-    :param phi: Another theoretical-object.
+    :param phi: Another formula.
     :return:
     """
     _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
-    phi: TheoreticalObject
+    phi: Formula
     _, psi, _ = verify_formula(u=u, input_value=psi, arg='psi')
-    psi: TheoreticalObject
+    psi: Formula
 
     phi_variables: tuple[Variable] = get_formula_unique_variable_ordered_set(u=u, phi=phi)
     psi_variables: tuple[Variable] = get_formula_unique_variable_ordered_set(u=u, phi=psi)
@@ -2086,22 +2086,18 @@ def is_alpha_equivalent_to(u: UniverseOfDiscourse, phi: FlexibleFormula,
     return True
 
 
-class TheoreticalObject(SymbolicObject):
+class Formula(SymbolicObject):
     """
     Definition
     ----------
-    Given a theory 𝒯, a theoretical-object ℴ is an object that:
-     * is constitutive of 𝒯,
-     * may be referenced in 𝒯 formulae (i.e. 𝒯 may "talk about" ℴ),
-     * that may be but is not necessarily a statement in 𝒯 (e.g. it may be an invalid or
-     inconsistent formula).
+    A formula phi is an object that may be referenced in compound-formulas.
 
-    The following are supported classes of theoretical-objects:
+    The following are supported classes of formula:
     * axiom
     * formula
     * lemma
     * proposition
-    * relation
+    * connective
     * simple-object
     * theorem
     * theory
@@ -2205,8 +2201,8 @@ class TheoreticalObject(SymbolicObject):
 
         Parameters:
         -----------
-        o2 : TheoreticalObject
-            The theoretical-object with which to verify formula-equivalence.
+        o2 : Formula
+            The formula with which to verify formula-equivalence.
 
         """
         _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
@@ -2214,18 +2210,18 @@ class TheoreticalObject(SymbolicObject):
 
     def is_masked_formula_similar_to(self, phi: FlexibleFormula,
             mask: (None, frozenset[Variable]) = None) -> bool:
-        """Given two theoretical-objects o₁ (self) and o₂,
+        """Given two formulas o₁ (self) and o₂,
         and a finite set of variables 𝐌,
         return True if o₁ and o₂ are masked-formula-similar, False otherwise.
 
         Definition
         ----------
-        Given two theoretical-objects o₁ (self) and o₂,
+        Given two formulas o₁ (self) and o₂,
         and a finite set of variables 𝐌,
         o₁ and o₂ are masked-formula-similar if and only if:
          1. o₁ is formula-syntactically-equivalent to o₂, including the special case
             when both o₁ and o₂ are symbolic-equivalent to a variable 𝐱 in 𝐌,
-         2. or the weaker condition that strictly one theoretical-object o₁ or o₂
+         2. or the weaker condition that strictly one formula o₁ or o₂
             is symbolic-equivalent to a variable 𝐱 in 𝐌,
             and, denoting the other object the variable-observed-value,
             every variable-observed-value of 𝐱 are formula-syntactically-equivalent.
@@ -2240,8 +2236,8 @@ class TheoreticalObject(SymbolicObject):
 
         Parameters
         ----------
-        phi : TheoreticalObject
-            A theoretical-object with which to verify masked-formula-similitude.
+        phi : Formula
+            A formula with which to verify masked-formula-similitude.
 
         mask: set
             Set of FreeVariable elements. If None, the empty set is assumed.
@@ -2250,16 +2246,16 @@ class TheoreticalObject(SymbolicObject):
         output, _values = self._is_masked_formula_similar_to(phi=phi, mask=mask)
         return output
 
-    def _is_masked_formula_similar_to(self, phi: (
-            CompoundFormula, FormulaStatement, Variable, Relation, SimpleObjct, TheoreticalObject),
+    def _is_masked_formula_similar_to(self,
+            phi: (CompoundFormula, FormulaStatement, Variable, Connective, SimpleObjct, Formula),
             mask: (None, frozenset[Variable]) = None, _values: (None, dict) = None) -> (bool, dict):
         """A "private" version of the is_masked_formula_similar_to method,
         with the "internal" parameter _values.
 
         Parameters
         ----------
-        phi : TheoreticalObject
-            A theoretical-object with which to verify masked-formula-similitude.
+        phi : Formula
+            A formula with which to verify masked-formula-similitude.
 
         mask: set
             Set of FreeVariable elements. If None, the empty set is assumed.
@@ -2289,9 +2285,9 @@ class TheoreticalObject(SymbolicObject):
                 (CompoundFormula, FormulaStatement)):
             # When both o1 and o2 are formula,
             # verify that their components are masked-formula-similar.
-            relation_output, _values = o1.relation._is_masked_formula_similar_to(phi=phi.relation,
-                mask=mask, _values=_values)
-            if not relation_output:
+            connective_output, _values = o1.connective._is_masked_formula_similar_to(
+                phi=phi.connective, mask=mask, _values=_values)
+            if not connective_output:
                 return False, _values
             # Arities are necessarily equal.
             for i in range(len(o1.parameters)):
@@ -2329,9 +2325,9 @@ class TheoreticalObject(SymbolicObject):
     @property
     @abc.abstractmethod
     def is_strictly_propositional(self) -> bool:
-        """Informs if a theoretical-object is propositional.
+        """Informs if a formula is propositional.
 
-        :return: True if the theoretical-object is propositional, False otherwise.
+        :return: True if the formula is propositional, False otherwise.
         """
         raise NotImplementedError(
             'The is_strictly_propositional property is abstract, it must be implemented by the child class.')
@@ -2356,7 +2352,7 @@ class TheoreticalObject(SymbolicObject):
         The result of substitution depends on the order
         of traversal of o₁. The substitution() method
         uses the canonical-traversal-method which is:
-        top-down, left-to-right, depth-first, relation-before-parameters.
+        top-down, left-to-right, depth-first, connective-before-parameters.
 
         Parameters
         ----------
@@ -2374,7 +2370,7 @@ class TheoreticalObject(SymbolicObject):
         for key, value in substitution_map.items():
             # FreeVariable instances may be of type contextlib._GeneratorContextManager
             # when used inside a with statement.
-            pass  # assert isinstance(key, TheoreticalObjct)  ##### XXXXX  # verify(  #  #  #  #  # isinstance(value, (  #    TheoreticalObjct, contextlib._GeneratorContextManager)),  #    'The value component of this key/value pair in this '  #    'substitution map is  #    not an instance of TheoreticalObjct.',  #    key=key, value=value,  #    value_type=type(value), self2=self)  # A formula relation cannot be replaced by  #    a simple-objct.  # But a simple-object could be replaced by a formula,  # if that formula "yields" such simple-objects.  # TODO: Implement clever rules here  #  to avoid ill-formed formula,  #   or let the formula constructor do the work.  #  #  assert type(key) == type(value) or isinstance(  #    value, FreeVariable) or  #  #  #  isinstance(  #    key, FreeVariable)  # If these are formula, their arity must be  #  equal  # to prevent the creation of an ill-formed formula.  # NO, THIS IS WRONG.  #  TODO: Re-analyze this point.  # assert not isinstance(key, Formula) or key.arity  #   == value.arity
+            pass  # assert isinstance(key, TheoreticalObjct)  ##### XXXXX  # verify(  #  #  #  #  # isinstance(value, (  #    TheoreticalObjct, contextlib._GeneratorContextManager)),  #    'The value component of this key/value pair in this '  #    'substitution map is  #    not an instance of TheoreticalObjct.',  #    key=key, value=value,  #    value_type=type(value), self2=self)  # A formula connective cannot be replaced by  #    a simple-objct.  # But a simple-object could be replaced by a formula,  # if that formula "yields" such simple-objects.  # TODO: Implement clever rules here  #  to avoid ill-formed formula,  #   or let the formula constructor do the work.  #  #  assert type(key) == type(value) or isinstance(  #    value, FreeVariable) or  #  #  #  isinstance(  #    key, FreeVariable)  # If these are formula, their arity must be  #  equal  # to prevent the creation of an ill-formed formula.  # NO, THIS IS WRONG.  #  TODO: Re-analyze this point.  # assert not isinstance(key, Formula) or key.arity  #   == value.arity
         # Because the scope of variables is locked, the substituted formula must create "duplicates" of all variables.
         # During this process, we reuse the variable symbols, but we let auto-indexing re-numbering the new variables.
         # During this process, we must of course assure the consistency of the is_strictly_propositional property.
@@ -2403,23 +2399,23 @@ class TheoreticalObject(SymbolicObject):
 
             # If the formula itself is not matched,
             # the next step consist in decomposing it
-            # into its constituent parts, i.e. relation and parameters,
+            # into its constituent parts, i.e. connective and parameters,
             # to apply the substitution operation on these.
-            relation = self.relation.substitute(substitution_map=substitution_map,
+            connective = self.connective.substitute(substitution_map=substitution_map,
                 lock_variable_scope=lock_variable_scope)
             parameters = tuple(
                 p.substitute(substitution_map=substitution_map, lock_variable_scope=False) for p in
                     self.parameters)
-            phi = self.u.f(relation, *parameters, lock_variable_scope=lock_variable_scope)
+            phi = self.u.f(connective, *parameters, lock_variable_scope=lock_variable_scope)
             return phi
         else:
             return self
 
-    def iterate_relations(self, include_root: bool = True):
+    def iterate_connectives(self, include_root: bool = True):
         """Iterate through this and all the theoretical-objcts it contains recursively, providing
-        they are relations."""
+        they are connectives."""
         return (r for r in self.iterate_theoretical_objcts_references(include_root=include_root) if
-            is_in_class(r, classes.relation))
+            is_in_class(r, classes.connective))
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
             visited: (None, set) = None, substitute_constants_with_values: bool = True,
@@ -2432,7 +2428,7 @@ class TheoreticalObject(SymbolicObject):
             yield self
             visited.update({self})
 
-    def contains_theoretical_objct_OBSOLETE(self, o: TheoreticalObject):
+    def contains_theoretical_objct_OBSOLETE(self, o: Formula):
         """Return True if o is in this theory's hierarchy, False otherwise.
         """
         return o in self.iterate_theoretical_objcts_references(include_root=True)
@@ -2448,7 +2444,7 @@ class TheoreticalObject(SymbolicObject):
     def export_interactive_graph(self, output_path: str, pyvis_graph: (None, pyvis.network) = None,
             encoding: (None, Encoding) = None, label_wrap_size: (None, int) = None,
             title_wrap_size: (None, int) = None) -> None:
-        """Export a theoretical-object as a statement dependency graph in an HTML page with
+        """Export a formula as a statement dependency graph in an HTML page with
         visJS, thanks to the pyvis theory."""
         pyvis_graph = prioritize_value(pyvis_graph, pyvis.network.Network(directed=True))
         label_wrap_size = prioritize_value(label_wrap_size, pyvis_configuration.label_wrap_size)
@@ -2511,7 +2507,7 @@ class TheoreticalObject(SymbolicObject):
         if is_in_class(self, classes.theory_derivation):
             self: TheoryDerivation
             for statement in self.statements:
-                # Bug fix: sections should not be TheoreticalObjects but DecorativeObjects!
+                # Bug fix: sections should not be Formulas but DecorativeObjects!
                 if not isinstance(statement, Section):
                     statement.export_interactive_graph(output_path=None, pyvis_graph=pyvis_graph,
                         encoding=encoding, label_wrap_size=label_wrap_size,
@@ -2541,13 +2537,13 @@ class TheoreticalObject(SymbolicObject):
 
 def substitute_xy(o, x, y):
     """Return the result of a *substitution* of x with y on o."""
-    verify(isinstance(o, TheoreticalObject), msg='o is not a TheoreticalObjct.')
-    verify(isinstance(x, TheoreticalObject), msg='x is not a TheoreticalObjct.')
-    verify(isinstance(y, TheoreticalObject), msg='y is not a TheoreticalObjct.')
+    verify(isinstance(o, Formula), msg='o is not a TheoreticalObjct.')
+    verify(isinstance(x, Formula), msg='x is not a TheoreticalObjct.')
+    verify(isinstance(y, Formula), msg='y is not a TheoreticalObjct.')
     return o.substitute(substitution_map={x: y})
 
 
-class Variable(TheoreticalObject):
+class Variable(Formula):
     """
 
 
@@ -2620,8 +2616,8 @@ class Variable(TheoreticalObject):
         self._scope = self._scope.union({phi})
 
     def is_masked_formula_similar_to(self, phi, mask, _values):
-        # TODO: Remove this method and use only a central method on TheoreticalObject.
-        assert isinstance(phi, TheoreticalObject)
+        # TODO: Remove this method and use only a central method on Formula.
+        assert isinstance(phi, Formula)
         if isinstance(phi, Variable):
             if phi in mask:
                 # o2 is a variable, and it is present in the mask.
@@ -2675,7 +2671,7 @@ class Variable(TheoreticalObject):
         return self._scope
 
 
-class ConstantDeclaration(TheoreticalObject):
+class ConstantDeclaration(Formula):
     def __init__(self, value: FlexibleFormula, u: UniverseOfDiscourse,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
             auto_index: (None, bool) = None, echo: (None, bool) = None):
@@ -2722,38 +2718,38 @@ class ConstantDeclaration(TheoreticalObject):
                 visited.update({self})
 
     @property
-    def value(self) -> TheoreticalObject:
+    def value(self) -> Formula:
         return self._value
 
 
-class CompoundFormula(TheoreticalObject):
+class CompoundFormula(Formula):
     """A formula is a theoretical-objct.
     It is also a tuple (U, r, p1, p1, p2, ..., pn)
 
     Definition
     ----------
     A formula 𝜑 is a tuple (◆, 𝒳) where:
-     * ◆ is a relation.
+     * ◆ is a connective.
      * 𝒳 is a finite tuple of parameters
-       whose elements are theoretical-objects, possibly formulae.
+       whose elements are formulas, possibly formulae.
 
     Defining properties:
     --------------------
     The defining-properties of a formula are:
      * Being a formula.
-     * A relation r.
+     * A connective r.
      * A finite tuple of parameters.
 
      To do list
      ----------
-     - TODO: Question: supporting relation as subformula, where the subformula
-        would be a function whose domain would be the class of relations,
+     - TODO: Question: supporting connective as subformula, where the subformula
+        would be a function whose domain would be the class of connectives,
         could be an interesting approach to extend the expressiveness of
         Punctilious as a formal language. Consider this in later developments.
 
     Attributes
     ----------
-    relation : (Relation, Variable)
+    connective : (Connective, Variable)
 
     """
 
@@ -2763,9 +2759,10 @@ class CompoundFormula(TheoreticalObject):
     postfix = repm.ValueName('postfix-operator')
     collection = repm.ValueName('collection-operator')
 
-    def __init__(self, relation: (Relation, Variable), parameters: tuple, u: UniverseOfDiscourse,
-            nameset: (None, str, NameSet) = None, lock_variable_scope: bool = False,
-            dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
+    def __init__(self, connective: (Connective, Variable), parameters: tuple,
+            u: UniverseOfDiscourse, nameset: (None, str, NameSet) = None,
+            lock_variable_scope: bool = False, dashed_name: (None, str, DashedName) = None,
+            echo: (None, bool) = None):
         """
         """
         echo = prioritize_value(echo, configuration.echo_formula_declaration,
@@ -2783,40 +2780,41 @@ class CompoundFormula(TheoreticalObject):
             symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
             index = u.index_symbol(symbol=symbol)
             nameset = NameSet(symbol=symbol, index=index)
-        self.relation = relation
+        self.connective = connective
         parameters = parameters if isinstance(parameters, tuple) else tuple([parameters])
         # verify(assertion=len(parameters) > 0,
-        #     msg='Ill-formed formula error. The number of parameters in this formula is zero. 0-ary relations are currently not supported. Use a simple-object instead.',
-        #     severity=verification_severities.error, raise_exception=True, relation=self.relation,
+        #     msg='Ill-formed formula error. The number of parameters in this formula is zero. 0-ary connectives are currently not supported. Use a simple-object instead.',
+        #     severity=verification_severities.error, raise_exception=True, connective=self.connective,
         #     len_parameters=len(parameters))
-        if not is_in_class(self.relation, classes.variable):
-            verify(self.relation.arity is None or self.relation.arity == len(parameters),
-                msg=f'Ill-formed formula error. Relation ⌜{self.relation}⌝ is defined with a fixed arity constraint of {self.relation.arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
+        if not is_in_class(self.connective, classes.variable):
+            verify(self.connective.arity is None or self.connective.arity == len(parameters),
+                msg=f'Ill-formed formula error. Connective ⌜{self.connective}⌝ is defined with a fixed arity constraint of {self.connective.arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
                 severity=verification_severities.error, raise_exception=True,
-                relation=self.relation, relation_arity=self.relation.arity,
+                connective=self.connective, connective_arity=self.connective.arity,
                 len_parameters=len(parameters), parameters=parameters)
-            verify(self.relation.min_arity is None or self.relation.min_arity >= len(parameters),
-                msg=f'Ill-formed formula error. Relation ⌜{self.relation}⌝ is defined with a minimum arity constraint of {self.relation.min_arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
+            verify(
+                self.connective.min_arity is None or self.connective.min_arity >= len(parameters),
+                msg=f'Ill-formed formula error. Connective ⌜{self.connective}⌝ is defined with a minimum arity constraint of {self.connective.min_arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
                 severity=verification_severities.error, raise_exception=True,
-                relation=self.relation, relation_min_arity=self.relation.min_arity,
+                connective=self.connective, connective_min_arity=self.connective.min_arity,
                 len_parameters=len(parameters), parameters=parameters)
-            verify(assertion=self.relation.max_arity is None or self.relation.max_arity >= len(
+            verify(assertion=self.connective.max_arity is None or self.connective.max_arity >= len(
                 parameters),
-                msg=f'Ill-formed formula error. Relation ⌜{self.relation}⌝ is defined with a maximum arity constraint of {self.relation.max_arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
+                msg=f'Ill-formed formula error. Connective ⌜{self.connective}⌝ is defined with a maximum arity constraint of {self.connective.max_arity} but the number of parameters provided to construct this formula is {len(parameters)}.',
                 severity=verification_severities.error, raise_exception=True,
-                relation=self.relation, relation_max_arity=self.relation.max_arity,
+                connective=self.connective, connective_max_arity=self.connective.max_arity,
                 len_parameters=len(parameters), parameters=parameters)
         self.arity = len(parameters)
         self.parameters = parameters
         super().__init__(nameset=nameset, u=u, echo=False)
         super()._declare_class_membership(declarative_class_list.formula)
         u.cross_reference_formula(self)
-        verify(assertion=is_in_class(relation, classes.relation) or is_in_class(relation,
-            classes.variable), msg='The relation of this formula is neither a relation, nor a '
-                                   'variable.', formula=self, relation=relation)
-        verify(assertion=relation.u is self.u,
-            msg=f'The universe-of-discourse ⌜{relation.u}⌝ of the relation in the formula is inconsistent with the universe-of-discourse ⌜{self.u}⌝ of the formula.',
-            formula=self, relation=relation)
+        verify(assertion=is_in_class(connective, classes.connective) or is_in_class(connective,
+            classes.variable), msg='The connective of this formula is neither a connective, nor a '
+                                   'variable.', formula=self, connective=connective)
+        verify(assertion=connective.u is self.u,
+            msg=f'The universe-of-discourse ⌜{connective.u}⌝ of the connective in the formula is inconsistent with the universe-of-discourse ⌜{self.u}⌝ of the formula.',
+            formula=self, connective=connective)
         self.cross_reference_variables()
         for p in parameters:
             verify(is_in_class(p, classes.theoretical_objct), 'p is not a theoretical-objct.',
@@ -2843,10 +2841,10 @@ class CompoundFormula(TheoreticalObject):
 
     def compose_collection_operator(self) -> collections.abc.Generator[Composable, None, None]:
         global text_dict
-        start: StyledText = prioritize_value(self.relation.collection_start,
+        start: StyledText = prioritize_value(self.connective.collection_start,
             text_dict.open_parenthesis)
-        sep: StyledText = prioritize_value(self.relation.collection_separator, text_dict.comma)
-        end: StyledText = prioritize_value(self.relation.collection_end,
+        sep: StyledText = prioritize_value(self.connective.collection_separator, text_dict.comma)
+        end: StyledText = prioritize_value(self.connective.collection_end,
             text_dict.close_parenthesis)
         yield start
         first_p: bool = True
@@ -2859,8 +2857,8 @@ class CompoundFormula(TheoreticalObject):
         yield end
 
     def compose_formula(self) -> collections.abc.Generator[Composable, None, None]:
-        if is_in_class(self.relation, classes.variable):
-            # If the relation of this formula is a variable,
+        if is_in_class(self.connective, classes.variable):
+            # If the connective of this formula is a variable,
             # it has no arity, neither a representation-mode.
             # In this situation, our design-choice is to
             # fallback on the function-call representation-mode.
@@ -2869,7 +2867,7 @@ class CompoundFormula(TheoreticalObject):
             # and presentation-mode to improve readability.
             yield from self.compose_function_call()
         else:
-            match self.relation.formula_rep:
+            match self.connective.formula_rep:
                 case CompoundFormula.function_call:
                     yield from self.compose_function_call()
                 case CompoundFormula.infix:
@@ -2886,7 +2884,7 @@ class CompoundFormula(TheoreticalObject):
 
     def compose_function_call(self) -> collections.abc.Generator[Composable, None, None]:
         global text_dict
-        yield from self.relation.compose_formula()
+        yield from self.connective.compose_formula()
         yield text_dict.open_parenthesis
         first_item = True
         for p in self.parameters:
@@ -2897,14 +2895,14 @@ class CompoundFormula(TheoreticalObject):
         yield text_dict.close_parenthesis
 
     def compose_infix_operator(self) -> collections.abc.Generator[Composable, None, None]:
-        verify(assertion=self.relation.arity == 2,
-            msg='Relation is not binary, formula-representation-style is infix.',
-            relation=self.relation, slf=self)
+        verify(assertion=self.connective.arity == 2,
+            msg='Connective is not binary, formula-representation-style is infix.',
+            connective=self.connective, slf=self)
         global text_dict
         yield text_dict.open_parenthesis
         yield from self.parameters[0].compose_formula()
         yield text_dict.space
-        yield from self.relation.compose_formula()
+        yield from self.connective.compose_formula()
         yield text_dict.space
         yield from self.parameters[1].compose_formula()
         yield text_dict.close_parenthesis
@@ -2917,14 +2915,14 @@ class CompoundFormula(TheoreticalObject):
         yield text_dict.open_parenthesis
         yield from self.parameters[0].compose_formula()
         yield text_dict.close_parenthesis
-        yield from self.relation.compose_formula()
+        yield from self.connective.compose_formula()
 
     def compose_prefix_operator(self) -> collections.abc.Generator[Composable, None, None]:
         verify(assertion=len(self.parameters) == 1,
             msg='Prefix-operator formula representation is used but arity is not equal to 1',
             slf=self)
         global text_dict
-        yield from self.relation.compose_formula()
+        yield from self.connective.compose_formula()
         yield text_dict.open_parenthesis
         yield from self.parameters[0].compose_formula()
         yield text_dict.close_parenthesis
@@ -2977,8 +2975,8 @@ class CompoundFormula(TheoreticalObject):
 
         Parameters:
         -----------
-        o2 : TheoreticalObject
-            The theoretical-object with which to verify formula-equivalence.
+        o2 : Formula
+            The formula with which to verify formula-equivalence.
 
         """
         if self is phi:
@@ -2991,7 +2989,7 @@ class CompoundFormula(TheoreticalObject):
             return True
         if not isinstance(phi, CompoundFormula):
             return False
-        if not self.relation.is_formula_syntactically_equivalent_to(phi=phi.relation):
+        if not self.connective.is_formula_syntactically_equivalent_to(phi=phi.connective):
             return False
         # Arities are necessarily equal.
         for i in range(len(self.parameters)):
@@ -3004,12 +3002,12 @@ class CompoundFormula(TheoreticalObject):
         """Tell if the formula is a logic-proposition.
 
         This property is directly inherited from the formula-is-proposition
-        attribute of the formula's relation."""
-        if is_in_class(self.relation, classes.variable):
+        attribute of the formula's connective."""
+        if is_in_class(self.connective, classes.variable):
             # TODO: IDEA: Is it a good idea to equip FreeVariable with a strictly-proposition property?
             return False
         else:
-            return self.relation.signal_proposition
+            return self.connective.signal_proposition
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
             visited: (None, set) = None, substitute_constants_with_values: bool = True):
@@ -3018,10 +3016,10 @@ class CompoundFormula(TheoreticalObject):
         if include_root and self not in visited:
             yield self
             visited.update({self})
-        if self.relation not in visited:
-            yield self.relation
-            visited.update({self.relation})
-            yield from self.relation.iterate_theoretical_objcts_references(include_root=False,
+        if self.connective not in visited:
+            yield self.connective
+            visited.update({self.connective})
+            yield from self.connective.iterate_theoretical_objcts_references(include_root=False,
                 visited=visited, substitute_constants_with_values=substitute_constants_with_values)
         for parameter in set(self.parameters).difference(visited):
             yield parameter
@@ -3034,8 +3032,8 @@ class CompoundFormula(TheoreticalObject):
         """Return a python frozenset of this formula and all theoretical_objcts it contains."""
         ol = frozenset() if ol is None else ol
         ol = ol.union({self})
-        if self.relation not in ol:
-            ol = ol.union(self.relation.list_theoretical_objcts_recursively_OBSOLETE(ol=ol))
+        if self.connective not in ol:
+            ol = ol.union(self.connective.list_theoretical_objcts_recursively_OBSOLETE(ol=ol))
         for p in self.parameters:
             if p not in ol:
                 ol = ol.union(p.list_theoretical_objcts_recursively_OBSOLETE(ol=ol))
@@ -3088,7 +3086,7 @@ class SimpleObjctDict(collections.UserDict):
         super().__init__()
         # Well-known objects
         self._falsehood = None
-        self._relation = None
+        self._connective = None
         self._truth = None
 
     def declare(self, symbol: (None, str, StyledText) = None, index: (None, int) = None,
@@ -3116,11 +3114,11 @@ class SimpleObjctDict(collections.UserDict):
         return self._falsehood
 
     @property
-    def relation(self):
-        if self._relation is None:
-            self._relation = self.declare(symbol='relation', name='relation', auto_index=False,
-                abridged_name='rel.')
-        return self._relation
+    def connective(self):
+        if self._connective is None:
+            self._connective = self.declare(symbol='connective', name='connective',
+                auto_index=False, abridged_name='rel.')
+        return self._connective
 
     @property
     def tru(self):
@@ -3182,7 +3180,7 @@ class ParagraphHeaders(repm.ValueName):
     inferred_proposition = ('inferred_proposition', 's', 'inferred-proposition')
     lemma = ParagraphHeader('lemma', 's', 'lemma', 'lem.')
     proposition = ParagraphHeader('proposition', 's', 'proposition', 'prop.')
-    relation_declaration = ParagraphHeader('relation_declaration', 's', 'proposition', 'prop.')
+    connective_declaration = ParagraphHeader('connective_declaration', 's', 'proposition', 'prop.')
     theorem = ParagraphHeader('theorem', 's', 'theorem', 'thrm.')
     theory_derivation = ParagraphHeader('theory_derivation', 't', 'theory derivation sequence',
         'theo.')
@@ -3209,12 +3207,12 @@ class ParagraphHeaders(repm.ValueName):
 paragraph_headers = ParagraphHeaders('paragraph_headers')
 
 
-class Statement(TheoreticalObject):
+class Statement(Formula):
     """
 
     Definition
     ----------
-    Given a theory 𝒯, a statement 𝒮 is a theoretical-object that:
+    Given a theory 𝒯, a statement 𝒮 is a formula that:
      * announces some truth in 𝒯.
 
     There are three broad categories of statements:
@@ -3302,7 +3300,7 @@ class Statement(TheoreticalObject):
         return self._u
 
 
-class AxiomDeclaration(TheoreticalObject):
+class AxiomDeclaration(Formula):
     """The Axiom pythonic class models the elaboration of a _contentual_ _axiom_ in a
     _universe-of-discourse_.
 
@@ -3579,7 +3577,7 @@ class InferenceRuleInclusion(Statement):
     # def verify_compatibility(self, *args):  #    return self.inference_rule.check_inference_validity(*args, t=self.theory)
 
 
-class DefinitionDeclaration(TheoreticalObject):
+class DefinitionDeclaration(Formula):
     """The Definition pythonic class models the elaboration of a _contentual_ _definition_ in a
     _universe-of-discourse_.
 
@@ -3779,10 +3777,10 @@ class FormulaStatement(Statement):
             paragraph_header=paragraphe_header, echo=False)
         # manage theoretical-morphisms
         self.morphism_output = None
-        if self.valid_proposition.relation.signal_theoretical_morphism:
+        if self.valid_proposition.connective.signal_theoretical_morphism:
             # this formula-statement is a theoretical-morphism.
             # it follows that this statement "yields" new statements in the theory.
-            assert self.valid_proposition.relation.implementation is not None
+            assert self.valid_proposition.connective.implementation is not None
             self.morphism_output = Morphism(theory=theory, source_statement=self)
         super()._declare_class_membership(declarative_class_list.formula_statement)
         if echo:
@@ -3805,18 +3803,18 @@ class FormulaStatement(Statement):
         return self.valid_proposition.parameters
 
     @property
-    def relation(self):
-        """The relation of a formula-statement
-        is the relation of the valid-proposition-formula it contains."""
-        return self.valid_proposition.relation
+    def connective(self):
+        """The connective of a formula-statement
+        is the connective of the valid-proposition-formula it contains."""
+        return self.valid_proposition.connective
 
     def is_formula_syntactically_equivalent_to(self, phi: FlexibleFormula) -> bool:
         """Return true if ⌜self⌝ is formula-syntactically-equivalent to ⌜o2⌝.
 
         Parameters:
         -----------
-        o2 : TheoreticalObject
-            The theoretical-object with which to verify formula-equivalence.
+        o2 : Formula
+            The formula with which to verify formula-equivalence.
 
         """
         _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
@@ -3877,8 +3875,8 @@ class Morphism(FormulaStatement):
         assert isinstance(source_statement, FormulaStatement)
         assert theory.contains_theoretical_objct_OBSOLETE(source_statement)
         self.source_statement = source_statement
-        assert source_statement.valid_proposition.relation.signal_theoretical_morphism
-        self.morphism_implementation = source_statement.valid_proposition.relation.implementation
+        assert source_statement.valid_proposition.connective.signal_theoretical_morphism
+        self.morphism_implementation = source_statement.valid_proposition.connective.implementation
         valid_proposition = self.morphism_implementation(self.source_statement.valid_proposition)
         super().__init__(theory=theory, valid_proposition=valid_proposition, nameset=nameset,
             paragraphe_header=paragraphe_header)
@@ -3906,7 +3904,7 @@ class Morphism(FormulaStatement):
         output = output + f'\n\t' \
                           f'{self.source_statement.valid_proposition.rep_formula(expand=True):<70} │ Follows from {repm.serif_bold(self.source_statement.rep_symbol())}.'
         output = output + f'\n\t{self.valid_proposition.rep_formula(expand=True):<70} │ Output of ' \
-                          f'{repm.serif_bold(self.source_statement.valid_proposition.relation.rep_symbol())} morphism.'
+                          f'{repm.serif_bold(self.source_statement.valid_proposition.connective.rep_symbol())} morphism.'
         return output
 
 
@@ -3918,7 +3916,7 @@ class PropositionStatement:
     * 𝒯 is a theory
     * n is a natural number representing the unique position of 𝒮 in 𝒯
     * 𝜑 is a valid-formula in 𝒯 of the form ⟨◆, 𝒯, 𝜓⟩ where:
-        * ◆ is a theoretical-relation
+        * ◆ is a theoretical-connective
         * 𝜓 is a free-formula
     * 𝒫 is a proof of 𝜑's validity in 𝒯 solely based on predecessors of 𝒮
     """
@@ -3954,7 +3952,7 @@ def index_universe_of_discourse_symbol(base):
     return universe_of_discourse_symbol_indexes[base]
 
 
-class InferenceRuleDeclaration(TheoreticalObject):
+class InferenceRuleDeclaration(Formula):
     """This python abstract class models the :ref:`declaration<object_declaration_math_concept>` of an :ref:`inference-rule<inference_rule_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
 
     """
@@ -4513,8 +4511,8 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
         with u.with_variable(symbol=StyledText(plaintext='D', text_style=text_styles.script_bold),
                 auto_index=False) as d, u.with_variable(symbol='x',
             auto_index=False) as x, u.with_variable(symbol='y', auto_index=False) as y:
-            # Feature #216: provide support for n-ary relations
-            # Provide support for n-ary relations. First need: sequent-comma, or collection-comma.
+            # Feature #216: provide support for n-ary connectives
+            # Provide support for n-ary connectives. First need: sequent-comma, or collection-comma.
             # definition = u.r.sequent_comma(d, x, y) | u.r.proves | (x | u.r.equal | y)
             # Meanwhile, I use combined 2-ary formulae:
             definition = d | u.r.tupl | (x | u.r.tupl | y) | u.r.proves | (x | u.r.equal | y)
@@ -5648,12 +5646,12 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         # See the TO DO above.
         # Currently this type of parameter cannot be expressed with a form and mask.
         # In consequence we must check its syntax consistency here in an ad hoc manner.
-        verify(assertion=isinstance(phi, CompoundFormula) and phi.relation is self.u.r.tupl,
-            msg=f'The argument ⌜phi⌝({phi}) is not a mathematical tuple (u.r.tupl) of theoretical-objects.',
+        verify(assertion=isinstance(phi, CompoundFormula) and phi.connective is self.u.r.tupl,
+            msg=f'The argument ⌜phi⌝({phi}) is not a mathematical tuple (u.r.tupl) of formulas.',
             raise_exception=True, error_code=error_code)
         x_oset = get_formula_unique_variable_ordered_set(u=self.u, phi=p)
         verify(assertion=len(phi.parameters) == len(x_oset),
-            msg=f'The number of theoretical-objects in the collection argument ⌜phi⌝({phi}) is not equal to the number of variables in the propositional formula ⌜p⌝{p}.',
+            msg=f'The number of formulas in the collection argument ⌜phi⌝({phi}) is not equal to the number of variables in the propositional formula ⌜p⌝{p}.',
             raise_exception=True, error_code=error_code)
         x_y_map = dict((x, y) for x, y in zip(x_oset, phi.parameters))
         output: CompoundFormula = p.substitute(substitution_map=x_y_map)
@@ -5856,7 +5854,7 @@ class Section(AtheoreticalStatement):
         return self._section_title
 
 
-class TheoryDerivation(TheoreticalObject):
+class TheoryDerivation(Formula):
     """The TheoryElaboration pythonic class models a [theory-elaboration](theory-elaboration).
 
     """
@@ -6027,8 +6025,8 @@ theory-elaboration."""
 
         Parameters:
         -----------
-        o2 : TheoreticalObject
-            The theoretical-object with which to verify formula-equivalence.
+        o2 : Formula
+            The formula with which to verify formula-equivalence.
 
         """
         _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
@@ -6236,9 +6234,9 @@ theory-elaboration."""
             '⌜proof⌝ must be an inferred-statement.', proof=proof, slf=self)
         proof: CompoundFormula
         proof = unpack_formula(proof)
-        verify(proof.relation is self.u.r.inconsistency,
-            'The relation of the ⌜proof⌝ formula must be ⌜inconsistency⌝.',
-            proof_relation=proof.relation, proof=proof, slf=self)
+        verify(proof.connective is self.u.r.inconsistency,
+            'The connective of the ⌜proof⌝ formula must be ⌜inconsistency⌝.',
+            proof_connective=proof.connective, proof=proof, slf=self)
         verify(proof.parameters[0] is self,
             'The parameter of the ⌜proof⌝ formula must be the current theory, i.e. ⌜self⌝.',
             proof_parameter=proof.parameters[0], proof=proof, slf=self)
@@ -6405,8 +6403,8 @@ class Hypothesis(Statement):
         return False
 
 
-class Relation(TheoreticalObject):
-    """The Relation pythonic class is the implementation of the relation theoretical-object.
+class Connective(Formula):
+    """The Connective pythonic class is the implementation of the connective formula.
     """
 
     def __init__(self, u: UniverseOfDiscourse, arity: (None, int) = None,
@@ -6424,19 +6422,19 @@ class Relation(TheoreticalObject):
         """
 
         :param u:
-        :param arity: A fixed arity constraint for well-formed formula. Formulae based on this relation with distinct arity are ill-formed. Equivalent to passing the same value to both min_arity, and max_arity.
-        :param min_arity: A fixed minimum (inclusive) arity constraint for well-formed formula. Formulae based on this relation with lesser arity are ill-formed.
-        :param max_arity: A fixed maximum (inclusive) arity constraint for well-formed formula. Formulae based on this relation with greater arity are ill-formed.
+        :param arity: A fixed arity constraint for well-formed formula. Formulae based on this connective with distinct arity are ill-formed. Equivalent to passing the same value to both min_arity, and max_arity.
+        :param min_arity: A fixed minimum (inclusive) arity constraint for well-formed formula. Formulae based on this connective with lesser arity are ill-formed.
+        :param max_arity: A fixed maximum (inclusive) arity constraint for well-formed formula. Formulae based on this connective with greater arity are ill-formed.
         :param symbol:
         :param index:
         :param auto_index:
-        :param formula_rep: The default representation method for formulae based on this relation, including: function-call, infix-operator, postfix-operator, and collection.
+        :param formula_rep: The default representation method for formulae based on this connective, including: function-call, infix-operator, postfix-operator, and collection.
         :param signal_proposition:
         :param signal_theoretical_morphism:
         :param implementation:
-        :param collection_start: If representation of formulae based on this relation should support collection style, the starting element (e.g. an opening parenthesis).
-        :param collection_separator: If representation of formulae based on this relation should support collection style, the separator element (e.g. a comma).
-        :param collection_end: If representation of formulae based on this relation should support collection style, the ending element (e.g. an closing parenthesis).
+        :param collection_start: If representation of formulae based on this connective should support collection style, the starting element (e.g. an opening parenthesis).
+        :param collection_separator: If representation of formulae based on this connective should support collection style, the separator element (e.g. a comma).
+        :param collection_end: If representation of formulae based on this connective should support collection style, the ending element (e.g. an closing parenthesis).
         :param dashed_name:
         :param acronym:
         :param abridged_name:
@@ -6447,7 +6445,7 @@ class Relation(TheoreticalObject):
         :param nameset:
         :param echo:
         """
-        echo = prioritize_value(echo, configuration.echo_relation, configuration.echo_default,
+        echo = prioritize_value(echo, configuration.echo_connective, configuration.echo_default,
             False)
         auto_index = prioritize_value(auto_index, configuration.auto_index, True)
         assert isinstance(u, UniverseOfDiscourse)
@@ -6455,7 +6453,7 @@ class Relation(TheoreticalObject):
         signal_theoretical_morphism = False if signal_theoretical_morphism is None else signal_theoretical_morphism
         assert isinstance(signal_proposition, bool)
         assert isinstance(signal_theoretical_morphism, bool)
-        cat = paragraph_headers.relation_declaration
+        cat = paragraph_headers.connective_declaration
         self.formula_rep = CompoundFormula.function_call if formula_rep is None else formula_rep
         self.signal_proposition = signal_proposition
         self.signal_theoretical_morphism = signal_theoretical_morphism
@@ -6467,14 +6465,14 @@ class Relation(TheoreticalObject):
         self.collection_separator = collection_separator
         self.collection_end = collection_end
         if nameset is None:
-            symbol = configuration.default_relation_symbol if symbol is None else symbol
+            symbol = configuration.default_connective_symbol if symbol is None else symbol
             index = u.index_symbol(symbol=symbol) if auto_index else index
             nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name, acronym=acronym,
                 abridged_name=abridged_name, name=name, explicit_name=explicit_name,
                 paragraph_header=cat, ref=ref, subtitle=subtitle)
         super().__init__(u=u, nameset=nameset, echo=False)
-        self.u.cross_reference_relation(r=self)
-        super()._declare_class_membership(classes.relation)
+        self.u.cross_reference_connective(r=self)
+        super()._declare_class_membership(classes.connective)
         if echo:
             self.echo()
 
@@ -6482,11 +6480,11 @@ class Relation(TheoreticalObject):
         return hash(self) == hash(other)
 
     def __hash__(self):
-        return hash((Relation, self.nameset, self.arity))
+        return hash((Connective, self.nameset, self.arity))
 
     def compose_class(self) -> collections.abc.Generator[Composable, Composable, bool]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
-        yield SerifItalic(plaintext='relation')
+        yield SerifItalic(plaintext='connective')
         return True
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
@@ -6503,7 +6501,7 @@ class Relation(TheoreticalObject):
         yield SansSerifNormal(' be a ')
         yield rep_arity_as_text(self.arity)
         yield text_dict.space
-        yield SerifItalic('relation')
+        yield SerifItalic('connective')
         yield SansSerifNormal(' in ')
         yield from self.u.compose_symbol()
         yield SansSerifNormal(' (default notation: ')
@@ -6515,7 +6513,7 @@ class Relation(TheoreticalObject):
         repm.prnt(self.rep_report())
 
     def is_strictly_propositional(self) -> bool:
-        "A relation is not a propositional object by definition. But note that formulae based on a relation are propositional if the relation signals a proposition."
+        "A connective is not a propositional object by definition. But note that formulae based on a connective are propositional if the connective signals a proposition."
         return False
 
 
@@ -6531,11 +6529,11 @@ def rep_arity_as_text(n):
             return f'{n}-ary'
 
 
-class SimpleObjct(TheoreticalObject):
+class SimpleObjct(Formula):
     """
     Definition
     ----------
-    A simple-objct-component ℴ is a theoretical-object that has no special attribute,
+    A simple-objct-component ℴ is a formula that has no special attribute,
     and whose sole function is to provide the meaning of being itself.
 
     TODO: SimpleObjct: By design, a SimpleObjct should also be a Formula. As an immediate measure, I implement the method is_syntactic_equivalent() to make it compatible, but the data model should be improved.
@@ -6574,8 +6572,8 @@ class SimpleObjct(TheoreticalObject):
         repm.prnt(self.rep_report())
 
     def is_masked_formula_similar_to_OBSOLETE(self, phi, mask, _values):
-        # TODO: Remove this method and use only a central method on TheoreticalObject.
-        assert isinstance(phi, TheoreticalObject)
+        # TODO: Remove this method and use only a central method on Formula.
+        assert isinstance(phi, Formula)
         if isinstance(phi, Variable):
             if phi in mask:
                 # o2 is a variable, and it is present in the mask.
@@ -6618,8 +6616,8 @@ class Tuple(tuple):
     pass
 
 
-class RelationDict(collections.UserDict):
-    """A dictionary that exposes well-known relations as properties.
+class ConnectiveDict(collections.UserDict):
+    """A dictionary that exposes well-known connectives as properties.
 
     """
 
@@ -6655,9 +6653,9 @@ class RelationDict(collections.UserDict):
             explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
-        """Declare a new relation in this universe-of-discourse.
+        """Declare a new connective in this universe-of-discourse.
         """
-        return Relation(arity=arity, min_arity=min_arity, max_arity=max_arity,
+        return Connective(arity=arity, min_arity=min_arity, max_arity=max_arity,
             formula_rep=formula_rep, collection_start=collection_start,
             collection_separator=collection_separator, collection_end=collection_end,
             signal_proposition=signal_proposition,
@@ -6668,7 +6666,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def addition(self):
-        """The well-known addition relation.
+        """The well-known addition connective.
 
         Abridged property: u.r.plus
 
@@ -6683,7 +6681,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def biconditional(self):
-        """The well-known biconditional relation.
+        """The well-known biconditional connective.
 
         Abridged property: u.r.iif
 
@@ -6699,7 +6697,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def conjunction(self):
-        """The well-known conjunction relation.
+        """The well-known conjunction connective.
 
         Abridged property: u.r.land
 
@@ -6715,7 +6713,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def disjunction(self):
-        """The well-known disjunction relation.
+        """The well-known disjunction connective.
 
         Abridged property: u.r.lor
 
@@ -6731,9 +6729,9 @@ class RelationDict(collections.UserDict):
 
     @property
     def eq(self):
-        """The well-known equality relation.
+        """The well-known equality connective.
 
-        Unabridged property: universe_of_discourse.relations.equality
+        Unabridged property: universe_of_discourse.connectives.equality
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -6742,9 +6740,9 @@ class RelationDict(collections.UserDict):
 
     @property
     def equal(self):
-        """The well-known equality relation.
+        """The well-known equality connective.
 
-        Unabridged property: universe_of_discourse.relations.equality
+        Unabridged property: universe_of_discourse.connectives.equality
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
@@ -6753,7 +6751,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def equality(self):
-        """The well-known equality relation.
+        """The well-known equality connective.
 
         Abridged property: u.r.equal
 
@@ -6767,7 +6765,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def formulates(self):
-        """a meta-theory relation stating that an hypothesis theory-derivation H formulates an hypothesis propositional formula P, and only P.
+        """a meta-theory connective stating that an hypothesis theory-derivation H formulates an hypothesis propositional formula P, and only P.
 
         H formulate P
         where:
@@ -6786,7 +6784,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def inc(self):
-        """The well-known (theory-)inconsistent relation.
+        """The well-known (theory-)inconsistent connective.
 
         Unabridged property: u.r.inconsistent
 
@@ -6801,7 +6799,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def implication(self):
-        """The well-known implication relation.
+        """The well-known implication connective.
 
         Abridged property: u.r.implies
 
@@ -6817,7 +6815,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def implies(self):
-        """The well-known implication relation.
+        """The well-known implication connective.
 
         Unabridged property: u.r.implication
 
@@ -6828,7 +6826,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def inconsistency(self):
-        """The well-known (theory-)inconsistent relation.
+        """The well-known (theory-)inconsistent connective.
 
         By convention:
         - inc(T) means that theory-derivation T is inconsistent.
@@ -6846,7 +6844,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def inequality(self):
-        """The well-known inequality relation.
+        """The well-known inequality connective.
 
         Abridged property: u.r.neq
 
@@ -6871,7 +6869,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def land(self):
-        """The well-known conjunction relation.
+        """The well-known conjunction connective.
 
         Unabridged property: u.r.conjunction
 
@@ -6882,7 +6880,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def lnot(self):
-        """The well-known negation relation.
+        """The well-known negation connective.
 
         Abridged property: u.r.negation
 
@@ -6893,7 +6891,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def lor(self):
-        """The well-known disjunction relation.
+        """The well-known disjunction connective.
 
         Unabridged property: u.r.disjunction
 
@@ -6904,7 +6902,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def map(self):
-        """The well-known map relation.
+        """The well-known map connective.
 
         Abridged property: u.r.map
 
@@ -6920,7 +6918,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def negation(self):
-        """The well-known negation relation.
+        """The well-known negation connective.
 
         Abridged property: u.r.lnot
 
@@ -6936,7 +6934,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def neq(self):
-        """The well-known inequality relation.
+        """The well-known inequality connective.
 
         Unabridged property: u.r.inequality
 
@@ -6955,7 +6953,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def proves(self):
-        """The well-known syntactic-entailment relation.
+        """The well-known syntactic-entailment connective.
 
         Unabridged property: u.r.syntactic_entailment
 
@@ -6966,7 +6964,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def substraction(self):
-        """The well-known substraction relation.
+        """The well-known substraction connective.
 
         Abridged property: u.r.minus
 
@@ -6996,7 +6994,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def syntactic_entailment(self):
-        """The well-known syntactic-entailment relation.
+        """The well-known syntactic-entailment connective.
 
         Abridged property: u.r.proves
 
@@ -7013,7 +7011,7 @@ class RelationDict(collections.UserDict):
 
     @property
     def unequal(self):
-        """The well-known inequality relation.
+        """The well-known inequality connective.
 
         Unabridged property: u.r.inequality
 
@@ -7050,7 +7048,7 @@ FlexibleDefinition = typing.Union[DefinitionDeclaration, DefinitionInclusion, st
 
 """
 
-FlexibleFormula = typing.Union[TheoreticalObject, FormulaStatement, CompoundFormula, tuple, list]
+FlexibleFormula = typing.Union[Formula, FormulaStatement, CompoundFormula, tuple, list]
 """See validate_flexible_statement_formula() for details."""
 
 
@@ -7192,15 +7190,14 @@ def verify_definition_inclusion(t: TheoryDerivation, input_value: FlexibleDefini
 def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (None, str) = None,
         form: (None, FlexibleFormula) = None, mask: (None, frozenset[Variable]) = None,
         is_strictly_propositional: (None, bool) = None, raise_exception: bool = True,
-        error_code: (None, ErrorCode) = None) -> tuple[
-    bool, (None, TheoreticalObject), (None, str)]:
+        error_code: (None, ErrorCode) = None) -> tuple[bool, (None, Formula), (None, str)]:
     """Many punctilious pythonic methods or functions expect some formula as input parameters. This function assures that the input value is a proper formula and that it is consistent with possible contraints imposed on that formula.
 
     If ⌜input_value⌝ is of type formula, it is already well typed.
 
     If ⌜argument⌝ is of type statement-variable, retrieve its valid-proposition property.
 
-    If ⌜argument⌝ is of type iterable, such as tuple, e.g.: (implies, q, p), we assume it is a formula in the form (relation, a1, a2, ... an) where ai are arguments.
+    If ⌜argument⌝ is of type iterable, such as tuple, e.g.: (implies, q, p), we assume it is a formula in the form (connective, a1, a2, ... an) where ai are arguments.
 
     Note that this is complementary with the pseudo-infix notation, which uses the __or__ method and | operator to transform: p |r| q to (r, p, q).
 
@@ -7209,7 +7206,7 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
     :return:
     """
     ok: bool
-    formula: (None, TheoreticalObject) = None
+    formula: (None, Formula) = None
     msg: (None, str) = None
     if isinstance(input_value, CompoundFormula):
         # the input is already correctly typed as a Formula.
@@ -7225,13 +7222,13 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
     elif isinstance(input_value, tuple):
         # the input is a tuple,
         # assuming a data structure of the form:
-        # (relation, argument_1, argument_2, ..., argument_n)
-        # where the relation and/or the arguments may be variables.
+        # (connective, argument_1, argument_2, ..., argument_n)
+        # where the connective and/or the arguments may be variables.
         formula = u.f(input_value[0], *input_value[1:])
-    elif isinstance(input_value, TheoreticalObject):
-        # the input is typed as an individual theoretical-object.
+    elif isinstance(input_value, Formula):
+        # the input is typed as an individual formula.
         # this is a meta-theory formula, i.e. it is a formula
-        # whose object is a theoretical-object.
+        # whose object is a formula.
         formula = input_value
     else:
         # the input argument could not be interpreted as a formula
@@ -7247,7 +7244,7 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
             return ok, None, msg
 
     # Note: it is not necessary to verify that the universe
-    # of the formula relation is consistent with the universe of the formula,
+    # of the formula connective is consistent with the universe of the formula,
     # because this is already verified in the formula constructor.
     # Note: it is not necessary to verify that the universe
     # of the formula parameters are consistent with the universe of the formula,
@@ -7297,7 +7294,7 @@ def verify_formula_statement(t: TheoryDerivation, input_value: FlexibleFormula,
     bool, (None, FormulaStatement), (None, str)]:
     """Many punctilious pythonic methods expect some FormulaStatement as input parameters (e.g. the infer_statement() of inference-rules). This is syntactically robust, but it may read theory code less readable. In effect, one must store all formula-statements in variables to reuse them in formula. If the number of formula-statements get large, readability suffers. To provide a friendler interface for humans, we allow passing formula-statements as formula, tuple, and lists and apply the following interpretation rules:
 
-    If ⌜argument⌝ is of type iterable, such as tuple, e.g.: (implies, q, p), we assume it is a formula in the form (relation, a1, a2, ... an) where ai are arguments.
+    If ⌜argument⌝ is of type iterable, such as tuple, e.g.: (implies, q, p), we assume it is a formula in the form (connective, a1, a2, ... an) where ai are arguments.
 
     Note that this is complementary with the pseudo-infix notation, which transforms: p |implies| q into a formula.
 
@@ -10287,7 +10284,7 @@ class InferenceRuleInclusionCollection(collections.UserDict):
         return self.variable_substitution
 
 
-class UniverseOfDiscourse(TheoreticalObject):
+class UniverseOfDiscourse(Formula):
     """This python class models a :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
 
@@ -10301,7 +10298,7 @@ class UniverseOfDiscourse(TheoreticalObject):
         self.definitions = dict()
         self.formulae = dict()
         self._inference_rules = InferenceRuleDeclarationCollection(u=self)
-        self._relations = RelationDict(u=self)
+        self._connectives = ConnectiveDict(u=self)
         self.theories = dict()
         self._simple_objcts = SimpleObjctDict(u=self)
         self.symbolic_objcts = dict()
@@ -10422,19 +10419,19 @@ class UniverseOfDiscourse(TheoreticalObject):
         else:
             return False
 
-    def cross_reference_relation(self, r: Relation):
-        """Cross-references a relation in this universe-of-discourse.
+    def cross_reference_connective(self, r: Connective):
+        """Cross-references a connective in this universe-of-discourse.
 
-        :param r: a relation.
+        :param r: a connective.
         """
-        verify(isinstance(r, Relation),
-            'Cross-referencing a relation in a universe-of-discourse requires '
-            'an object of type Relation.')
-        verify(r.nameset not in self.relations.keys() or r is self.relations[r.nameset],
-            'Cross-referencing a relation in a universe-of-discourse requires '
+        verify(isinstance(r, Connective),
+            'Cross-referencing a connective in a universe-of-discourse requires '
+            'an object of type Connective.')
+        verify(r.nameset not in self.connectives.keys() or r is self.connectives[r.nameset],
+            'Cross-referencing a connective in a universe-of-discourse requires '
             'that it is referenced with a unique symbol.', r_symbol=r.nameset, r=r, slf=self)
-        if r not in self.relations:
-            self.relations[r.nameset] = r
+        if r not in self.connectives:
+            self.connectives[r.nameset] = r
 
     def cross_reference_simple_objct(self, o: SimpleObjct):
         """Cross-references a simple-objct in this universe-of-discourse.
@@ -10451,7 +10448,7 @@ class UniverseOfDiscourse(TheoreticalObject):
         if o not in self.simple_objcts:
             self.simple_objcts[o.nameset] = o
 
-    def cross_reference_symbolic_objct(self, o: TheoreticalObject):
+    def cross_reference_symbolic_objct(self, o: Formula):
         """Cross-references a symbolic-objct in this universe-of-discourse.
 
         :param o: a symbolic-objct.
@@ -10482,8 +10479,9 @@ class UniverseOfDiscourse(TheoreticalObject):
         if t not in self.theories:
             self.theories[t.nameset] = t
 
-    def declare_formula(self, relation: Relation, *parameters, nameset: (None, str, NameSet) = None,
-            lock_variable_scope: (None, bool) = None, echo: (None, bool) = None):
+    def declare_formula(self, connective: Connective, *parameters,
+            nameset: (None, str, NameSet) = None, lock_variable_scope: (None, bool) = None,
+            echo: (None, bool) = None):
         """Declare a new formula in this universe-of-discourse.
 
         This method is a shortcut for Formula(universe_of_discourse=self, . . d.).
@@ -10491,7 +10489,7 @@ class UniverseOfDiscourse(TheoreticalObject):
         A formula is *declared* in a theory, and not *stated*, because it is not a statement,
         i.e. it is not necessarily true in this theory.
         """
-        phi = CompoundFormula(relation=relation, parameters=parameters, u=self, nameset=nameset,
+        phi = CompoundFormula(connective=connective, parameters=parameters, u=self, nameset=nameset,
             lock_variable_scope=lock_variable_scope, echo=echo)
         return phi
 
@@ -10574,12 +10572,13 @@ class UniverseOfDiscourse(TheoreticalObject):
     def echo(self):
         return repm.prnt(self.rep_creation(cap=True))
 
-    def f(self, relation: (Relation, Variable), *parameters, nameset: (None, str, NameSet) = None,
-            lock_variable_scope: (None, bool) = None, echo: (None, bool) = None):
+    def f(self, connective: (Connective, Variable), *parameters,
+            nameset: (None, str, NameSet) = None, lock_variable_scope: (None, bool) = None,
+            echo: (None, bool) = None):
         """Declare a new formula in this universe-of-discourse.
 
         Shortcut for self.elaborate_formula(. . .)."""
-        return self.declare_formula(relation, *parameters, nameset=nameset,
+        return self.declare_formula(connective, *parameters, nameset=nameset,
             lock_variable_scope=lock_variable_scope, echo=echo)
 
     def get_symbol_max_index(self, symbol: ComposableText) -> int:
@@ -10634,16 +10633,16 @@ class UniverseOfDiscourse(TheoreticalObject):
         return self.simple_objcts
 
     @property
-    def r(self) -> RelationDict:
-        """A python dictionary of relations contained in this universe-of-discourse,
-        where well-known relations are directly available as properties."""
-        return self.relations
+    def r(self) -> ConnectiveDict:
+        """A python dictionary of connectives contained in this universe-of-discourse,
+        where well-known connectives are directly available as properties."""
+        return self.connectives
 
     @property
-    def relations(self) -> RelationDict:
-        """A python dictionary of relations contained in this universe-of-discourse,
-        where well-known relations are directly available as properties."""
-        return self._relations
+    def connectives(self) -> ConnectiveDict:
+        """A python dictionary of connectives contained in this universe-of-discourse,
+        where well-known connectives are directly available as properties."""
+        return self._connectives
 
     def rep_creation(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         return rep_composition(composition=self.compose_creation(), encoding=encoding, cap=cap)
@@ -10771,7 +10770,7 @@ class InferredStatement(FormulaStatement):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
             subtitle=subtitle, nameset=nameset, paragraphe_header=paragraph_header, echo=False)
         super()._declare_class_membership(declarative_class_list.inferred_proposition)
-        if self.valid_proposition.relation is self.t.u.r.inconsistency and is_in_class(
+        if self.valid_proposition.connective is self.t.u.r.inconsistency and is_in_class(
                 self.valid_proposition.parameters[0], classes.theory_derivation):
             # This inferred-statement proves the inconsistency of its argument,
             # its argument is a theory-derivation (i.e. it is not a variable),
@@ -10908,7 +10907,7 @@ def reset_configuration(configuration: Configuration) -> None:
     configuration.default_inference_rule_declaration_symbol = SerifItalic('I')
     configuration.default_inference_rule_inclusion_symbol = SerifItalic('I')
     configuration.default_note_symbol = SerifItalic('note')
-    configuration.default_relation_symbol = SerifItalic('r')
+    configuration.default_connective_symbol = SerifItalic('r')
     configuration.default_statement_symbol = SerifItalic('P')
     configuration.default_symbolic_object_symbol = SerifItalic('o')
     configuration.default_theory_symbol = ScriptNormal('T')
@@ -10928,7 +10927,7 @@ def reset_configuration(configuration: Configuration) -> None:
     configuration.echo_inferred_statement = True
     configuration.echo_note = True
     configuration.echo_proof = True
-    configuration.echo_relation = None
+    configuration.echo_connective = None
     configuration.echo_simple_objct_declaration = None
     configuration.echo_statement = True
     configuration.echo_symbolic_objct = None
@@ -10996,13 +10995,13 @@ class DeclarativeClassList(repm.ValueName):
         self.inferred_proposition = DeclarativeClass('inferred_proposition', 'inferred-proposition')
         self.note = DeclarativeClass('note', 'note')
         self.proposition = DeclarativeClass('proposition', 'proposition')
-        self.relation = DeclarativeClass('relation', 'relation', python_type=Relation)
+        self.connective = DeclarativeClass('connective', 'connective', python_type=Connective)
         self.simple_objct = DeclarativeClass('simple_objct', 'simple-objct',
             python_type=SimpleObjct)
         self.statement = DeclarativeClass('statement', 'statement')
         self.symbolic_objct = DeclarativeClass('symbolic_objct', 'symbolic-objct')
         self.theoretical_objct = DeclarativeClass('theoretical_objct', 'theoretical-objct',
-            python_type=TheoreticalObject)
+            python_type=Formula)
         self.theory_derivation = DeclarativeClass('theory', 'theory', python_type=TheoryDerivation)
         self.universe_of_discourse = DeclarativeClass('universe_of_discourse',
             'universe-of-discourse', python_type=UniverseOfDiscourse)
@@ -11011,7 +11010,7 @@ class DeclarativeClassList(repm.ValueName):
         self.dai = self.axiom_interpretation_declaration
         self.ddi = self.direct_definition_inference
         self.f = self.formula
-        self.r = self.relation
+        self.r = self.connective
         self.t = self.theory_derivation
         self.u = self.universe_of_discourse
 

@@ -19,7 +19,7 @@
           href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7"/>
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=a491ee77"/>
     <!--[if lt IE 9]>
-      <script src="../../_static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -199,13 +199,13 @@
                                                 class="headerlink"
                                                 href="#punctilious.Variable.is_masked_formula_similar_to"
                                                 title="Link to this definition"></a></dt>
-                                        <dd><p>Given two theoretical-objects o₁ (self) and o₂,
+                                        <dd><p>Given two formulas o₁ (self) and o₂,
                                             and a finite set of variables 𝐌,
                                             return True if o₁ and o₂ are masked-formula-similar, False otherwise.</p>
                                             <section id="definition">
                                                 <h2>Definition<a class="headerlink" href="#definition"
                                                                  title="Link to this heading"></a></h2>
-                                                <p>Given two theoretical-objects o₁ (self) and o₂,
+                                                <p>Given two formulas o₁ (self) and o₂,
                                                     and a finite set of variables 𝐌,
                                                     o₁ and o₂ are masked-formula-similar if and only if:</p>
                                                 <blockquote>
@@ -216,7 +216,7 @@
                                                                 when both o₁ and o₂ are symbolic-equivalent to a
                                                                 variable 𝐱 in 𝐌,</p></li>
                                                             <li><p>or the weaker condition that strictly one
-                                                                theoretical-object o₁ or o₂
+                                                                formula o₁ or o₂
                                                                 is symbolic-equivalent to a variable 𝐱 in 𝐌,
                                                                 and, denoting the other object the
                                                                 variable-observed-value,
@@ -241,8 +241,8 @@
                                                 <h2>Parameters<a class="headerlink" href="#parameters"
                                                                  title="Link to this heading"></a></h2>
                                                 <dl class="simple">
-                                                    <dt>phi<span class="classifier">TheoreticalObject</span></dt>
-                                                    <dd><p>A theoretical-object with which to verify
+                                                    <dt>phi<span class="classifier">Formula</span></dt>
+                                                    <dd><p>A formula with which to verify
                                                         masked-formula-similitude.</p>
                                                     </dd>
                                                     <dt>mask: set</dt>

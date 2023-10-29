@@ -9,8 +9,8 @@ class TestAbsorption(TestCase):
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         o3: pu.SimpleObjct = test.o3
-        r1: pu.Relation = test.r1
-        r2: pu.Relation = test.r2
+        r1: pu.Connective = test.r1
+        r2: pu.Connective = test.r2
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
             (r1(o1, o2) | u.r.implies | (r1(o1, o2) | u.r.land | r2(o3)))))
@@ -22,12 +22,12 @@ class TestAbsorption(TestCase):
     def test_absorption_2_validity_error(self):
         import sample.sample_absorption as test
         u: pu.UniverseOfDiscourse = test.u
-        t1: pu.TheoreticalObject = test.t1
+        t1: pu.Formula = test.t1
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         o3: pu.SimpleObjct = test.o3
-        r1: pu.Relation = test.r1
-        r2: pu.Relation = test.r2
+        r1: pu.Connective = test.r1
+        r2: pu.Connective = test.r2
         p_implies_q: pu.CompoundFormula = r1(o1, o3) | u.r.implies | r2(o3)
 
         with self.assertRaises(pu.PunctiliousException) as context:
@@ -43,8 +43,8 @@ class TestAbsorption(TestCase):
         o1: pu.SimpleObjct = test.o1
         o2: pu.SimpleObjct = test.o2
         o3: pu.SimpleObjct = test.o3
-        r1: pu.Relation = test.r1
-        r2: pu.Relation = test.r2
+        r1: pu.Connective = test.r1
+        r2: pu.Connective = test.r2
         p_implies_q: pu.CompoundFormula = r1(o1, o2) | u.r.iff | r2(o3)
 
         with self.assertRaises(pu.PunctiliousException) as context:

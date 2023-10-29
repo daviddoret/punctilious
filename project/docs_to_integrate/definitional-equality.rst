@@ -8,7 +8,7 @@
 
 ## Definition
 
-Two theoretical-objects 𝑜₁ and 𝑜₂ are definition-equal if and only if:
+Two formulas 𝑜₁ and 𝑜₂ are definition-equal if and only if:
 
 * 𝑜₁ and 𝑜₂ are reference to the same object-declaration.
 

@@ -40,11 +40,11 @@ from punctilious.core import (AbsorptionDeclaration, AbsorptionInclusion, Articl
     ProofByContradiction1Inclusion, ProofByContradiction2Declaration,
     ProofByContradiction2Inclusion, ProofByRefutation1Declaration, ProofByRefutation1Inclusion,
     ProofByRefutation2Declaration, ProofByRefutation2Inclusion, PunctiliousException,
-    QuasiQuotation, Relation, rep_two_columns_proof_item, SansSerifBold, SansSerifNormal,
+    QuasiQuotation, Connective, rep_two_columns_proof_item, SansSerifBold, SansSerifNormal,
     ScriptNormal, SerifBoldItalic, SerifItalic, SerifNormal, SimpleObjct, SimpleObjctDict,
-    Statement, StyledText, Subscript, subscriptify, SymbolicObject, text_styles, TextStyle,
-    TheoreticalObject, TheoryDerivation, Package, UniverseOfDiscourse, verify_formula, \
-    verify_formula_statement, VariableSubstitutionDeclaration, VariableSubstitutionInclusion)
+    Statement, StyledText, Subscript, subscriptify, SymbolicObject, text_styles, TextStyle, Formula,
+    TheoryDerivation, Package, UniverseOfDiscourse, verify_formula, verify_formula_statement,
+    VariableSubstitutionDeclaration, VariableSubstitutionInclusion)
 
 # from foundation_system_1 import foundation_system_1, ft, u
 

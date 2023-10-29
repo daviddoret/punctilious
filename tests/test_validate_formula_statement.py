@@ -49,7 +49,7 @@ class TestValidateFormulaStatement(TestCase):
         with self.assertRaises(pu.PunctiliousException):
             with u.with_variable('x') as x:
                 pu.verify_formula_statement(t=t, input_value=phi, form=(x, o2), mask=[x])
-        # Inconsistent relation universe
+        # Inconsistent connective universe
         with self.assertRaises(pu.PunctiliousException):
             pu.verify_formula_statement(t=t, input_value=(r1_in_u2, o1))
         # Inconsistent parameter universe

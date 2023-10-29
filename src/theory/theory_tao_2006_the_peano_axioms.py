@@ -35,7 +35,7 @@ class Tao2006ThePeanoAxioms(pu.Package):
         six = u.o.declare(symbol='6', auto_index=False)
         self.six = six
 
-        # relations
+        # connectives
         plusplus = u.r.declare(arity=1, symbol='++', auto_index=False, name='successor',
             formula_rep=pu.CompoundFormula.postfix)
         self.plusplus = plusplus
@@ -318,8 +318,8 @@ class Tao2006ThePeanoAxioms(pu.Package):
             subtitle='Principle of mathematical induction')
 
         with u.with_variable('P') as p, u.with_variable('n') as n, u.with_variable('m') as m:
-            # P is-a unary-relation
-            # phi1 = (p | u.r.is_a | u.o.relation)
+            # P is-a unary-connective
+            # phi1 = (p | u.r.is_a | u.o.connective)
             # n is-a natural-number
             phi2 = (n | u.r.is_a | natural_number)
             # P(0)
