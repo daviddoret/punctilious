@@ -89,7 +89,7 @@ class TestFormulaIsMaskSimilarTo(TestCase):
             implication = t.i.axiom_interpretation.infer_formula_statement(a=ap,
                 p=u.f(u.r.implies, u.f(u.r.land, u.f(r1, x, y), u.f(r1, y, z)), u.f(r1, x, z)),
                 lock=True)
-            antecedent_with_variables = implication.valid_proposition.parameters[0]
+            antecedent_with_variables = implication.valid_proposition.terms[0]
             self.assertTrue(
                 antecedent_with_variables.is_masked_formula_similar_to(antecedent, variable_set))
             self.assertTrue(

@@ -19,7 +19,7 @@
           href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7"/>
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=a491ee77"/>
     <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
+      <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -147,6 +147,22 @@
                                         </dd>
                                     </dl>
 
+                                    <dl class="py property">
+                                        <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.connectives">
+                                            <em class="property"><span class="pre">property</span><span
+                                                    class="w"> </span></em><span class="sig-name descname"><span
+                                                class="pre">connectives</span></span><em class="property"><span
+                                                class="p"><span class="pre">:</span></span><span class="w"> </span><span
+                                                class="pre">ConnectiveDict</span></em><a class="headerlink"
+                                                                                         href="#punctilious.UniverseOfDiscourse.connectives"
+                                                                                         title="Link to this definition"></a>
+                                        </dt>
+                                        <dd><p>A python dictionary of connectives contained in this
+                                            universe-of-discourse,
+                                            where well-known connectives are directly available as properties.</p>
+                                        </dd>
+                                    </dl>
+
                                     <dl class="py method">
                                         <dt class="sig sig-object py"
                                             id="punctilious.UniverseOfDiscourse.cross_reference_axiom">
@@ -169,6 +185,27 @@
                                                 <dd class="field-even"><p><code
                                                         class="xref py py-class docutils literal notranslate"><span
                                                         class="pre">bool</span></code></p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt class="sig sig-object py"
+                                            id="punctilious.UniverseOfDiscourse.cross_reference_connective">
+                                            <span class="sig-name descname"><span
+                                                    class="pre">cross_reference_connective</span></span><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">r</span></span></em><span class="sig-paren">)</span><a
+                                                class="headerlink"
+                                                href="#punctilious.UniverseOfDiscourse.cross_reference_connective"
+                                                title="Link to this definition"></a></dt>
+                                        <dd><p>Cross-references a connective in this universe-of-discourse.</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                                                <dd class="field-odd"><p><strong>r</strong> (<code
+                                                        class="xref py py-class docutils literal notranslate"><span
+                                                        class="pre">Connective</span></code>) – a connective.</p>
                                                 </dd>
                                             </dl>
                                         </dd>
@@ -280,27 +317,6 @@
 
                                     <dl class="py method">
                                         <dt class="sig sig-object py"
-                                            id="punctilious.UniverseOfDiscourse.cross_reference_relation">
-                                            <span class="sig-name descname"><span
-                                                    class="pre">cross_reference_relation</span></span><span
-                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">r</span></span></em><span class="sig-paren">)</span><a
-                                                class="headerlink"
-                                                href="#punctilious.UniverseOfDiscourse.cross_reference_relation"
-                                                title="Link to this definition"></a></dt>
-                                        <dd><p>Cross-references a relation in this universe-of-discourse.</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                                                <dd class="field-odd"><p><strong>r</strong> (<code
-                                                        class="xref py py-class docutils literal notranslate"><span
-                                                        class="pre">Connective</span></code>) – a relation.</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="py method">
-                                        <dt class="sig sig-object py"
                                             id="punctilious.UniverseOfDiscourse.cross_reference_simple_objct">
                                             <span class="sig-name descname"><span class="pre">cross_reference_simple_objct</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
@@ -333,8 +349,7 @@
                                                 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
                                                 <dd class="field-odd"><p><strong>o</strong> (<code
                                                         class="xref py py-class docutils literal notranslate"><span
-                                                        class="pre">Formula</span></code>) – a symbolic-objct.
-                                                </p>
+                                                        class="pre">Formula</span></code>) – a symbolic-objct.</p>
                                                 </dd>
                                             </dl>
                                         </dd>
@@ -478,7 +493,7 @@
                                             <span class="sig-name descname"><span
                                                     class="pre">declare_formula</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">relation</span></span></em>, <em class="sig-param"><span
+                                                class="pre">connective</span></span></em>, <em class="sig-param"><span
                                                 class="o"><span class="pre">*</span></span><span class="n"><span
                                                 class="pre">parameters</span></span></em>, <em class="sig-param"><span
                                                 class="n"><span class="pre">nameset</span></span><span class="o"><span
@@ -619,7 +634,7 @@
                                         <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.f">
                                             <span class="sig-name descname"><span class="pre">f</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">relation</span></span></em>, <em class="sig-param"><span
+                                                class="pre">connective</span></span></em>, <em class="sig-param"><span
                                                 class="o"><span class="pre">*</span></span><span class="n"><span
                                                 class="pre">parameters</span></span></em>, <em class="sig-param"><span
                                                 class="n"><span class="pre">nameset</span></span><span class="o"><span
@@ -750,8 +765,8 @@
                                         <dd><p>Informs if a formula is propositional.</p>
                                             <dl class="field-list simple">
                                                 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-                                                <dd class="field-odd"><p>True if the formula is
-                                                    propositional, False otherwise.</p>
+                                                <dd class="field-odd"><p>True if the formula is propositional, False
+                                                    otherwise.</p>
                                                 </dd>
                                             </dl>
                                         </dd>
@@ -784,21 +799,9 @@
                                                 class="pre">:</span></span><span class="w"> </span><span class="pre">ConnectiveDict</span></em><a
                                                 class="headerlink" href="#punctilious.UniverseOfDiscourse.r"
                                                 title="Link to this definition"></a></dt>
-                                        <dd><p>A python dictionary of relations contained in this universe-of-discourse,
-                                            where well-known relations are directly available as properties.</p>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="py property">
-                                        <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.relations">
-                                            <em class="property"><span class="pre">property</span><span
-                                                    class="w"> </span></em><span class="sig-name descname"><span
-                                                class="pre">relations</span></span><em class="property"><span class="p"><span
-                                                class="pre">:</span></span><span class="w"> </span><span class="pre">ConnectiveDict</span></em><a
-                                                class="headerlink" href="#punctilious.UniverseOfDiscourse.relations"
-                                                title="Link to this definition"></a></dt>
-                                        <dd><p>A python dictionary of relations contained in this universe-of-discourse,
-                                            where well-known relations are directly available as properties.</p>
+                                        <dd><p>A python dictionary of connectives contained in this
+                                            universe-of-discourse,
+                                            where well-known connectives are directly available as properties.</p>
                                         </dd>
                                     </dl>
 

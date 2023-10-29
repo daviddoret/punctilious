@@ -16,10 +16,10 @@ class TestFreeVariable(TestCase):
         with u.with_variable('x', echo=True) as x, u.with_variable('y', echo=True) as y:
             r = u.r.declare(arity=2)
             phi = u.f(r, x, y)
-            self.assertIs(x, phi.parameters[0])
-            self.assertIs(y, phi.parameters[1])
-            self.assertIsNot(y, phi.parameters[0])
-            self.assertIsNot(x, phi.parameters[1])
+            self.assertIs(x, phi.terms[0])
+            self.assertIs(y, phi.terms[1])
+            self.assertIsNot(y, phi.terms[0])
+            self.assertIsNot(x, phi.terms[1])
         with self.assertRaises(pu.PunctiliousException):
             # Outside the with statement, scope is locked.
             # Trying to extend the scope raises an exception.

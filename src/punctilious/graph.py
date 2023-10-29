@@ -51,15 +51,15 @@ def graph_formula(g: nx.MultiDiGraph, f: pu.CompoundFormula):
     if f.connective.arity == 1:
         graph_symbolic_object(g, f.connective)
         g.add_edge(f.connective.rep_name(), f.rep_name())
-        graph_symbolic_object(g, f.parameters[0])
-        g.add_edge(f.parameters[0].rep_name(), f.rep_name())
+        graph_symbolic_object(g, f.terms[0])
+        g.add_edge(f.terms[0].rep_name(), f.rep_name())
     if f.connective.arity == 2:
         graph_symbolic_object(g, f.connective)
         g.add_edge(f.connective.rep_name(), f.rep_name())
-        graph_symbolic_object(g, f.parameters[0])
-        g.add_edge(f.parameters[0].rep_name(), f.rep_name())
-        graph_symbolic_object(g, f.parameters[1])
-        g.add_edge(f.parameters[1].rep_name(), f.rep_name())
+        graph_symbolic_object(g, f.terms[0])
+        g.add_edge(f.terms[0].rep_name(), f.rep_name())
+        graph_symbolic_object(g, f.terms[1])
+        g.add_edge(f.terms[1].rep_name(), f.rep_name())
 
 
 g = nx.Graph()

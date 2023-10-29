@@ -1,19 +1,19 @@
-.. _relation_math_concept:
+.. _connective_math_concept:
 
-relation
+connective
 ==========
 
 Definition
 ----------
 
-A *relation* is a set of ordered pairs :cite:p:`downing_dictionary_2009` .
+A *connective* is a set of ordered pairs :cite:p:`downing_dictionary_2009` .
 Equivalently, it is a property of sets such that, for any two members of sets :math:`a` and :math:`b`, :math:`aRb` is either true or false :cite:p:`mcadams_all_2014` .
 
-Syntactically, a *relation* is represented with a
-    A relation ◆ is a formula for formula.
+Syntactically, a *connective* is represented with a
+    A connective ◆ is a formula for formula.
     It assigns the following meaning to its composite formula 𝜑:
-    𝜑 establishes a relation between its parameters.
-    A relation ◆ has a fixed arity.
+    𝜑 establishes a connective between its parameters.
+    A connective ◆ has a fixed arity.
 
 Key properties
 -------------------
@@ -27,9 +27,9 @@ Punctilious data model
 
 .. graphviz::
 
-   digraph relation {
+   digraph connective {
         rankdir = BT;
-        "relation" -> "formula" [arrowhead=onormal];
+        "connective" -> "formula" [arrowhead=onormal];
    }
 
 

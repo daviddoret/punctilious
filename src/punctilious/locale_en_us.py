@@ -11,8 +11,8 @@ class LocaleEnUs(Locale):
     def compose_absorption_paragraph_proof(self, o: InferredStatement) -> collections.abc.Generator[
         Composable, Composable, bool]:
         global text_dict
-        # Retrieve the parameters from the statement
-        p: FormulaStatement = o.parameters[0]
+        # Retrieve the terms from the statement
+        p: FormulaStatement = o.terms[0]
         yield from p.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
         yield from p.compose_ref_link()
@@ -65,11 +65,11 @@ class LocaleEnUs(Locale):
     def compose_axiom_interpretation_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
-        # Retrieve the parameters from the statement
+        # Retrieve the terms from the statement
         a: AxiomInclusion
         p: CompoundFormula
-        a = o.parameters[0]
-        p = o.parameters[1]
+        a = o.terms[0]
+        p = o.terms[1]
         yield from a.axiom.compose_natural_language()
         yield SansSerifNormal(' is postulated by ')
         yield from a.compose_ref_link()
@@ -80,8 +80,8 @@ class LocaleEnUs(Locale):
 
     def compose_biconditional_elimination_1_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        p0 = o.inference_rule.definition.parameters[0]
-        p_iff_q: FormulaStatement = o.parameters[0]
+        p0 = o.inference_rule.definition.terms[0]
+        p_iff_q: FormulaStatement = o.terms[0]
         yield from p_iff_q.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
         yield p0.compose_formula()
@@ -92,8 +92,8 @@ class LocaleEnUs(Locale):
 
     def compose_biconditional_elimination_2_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        p0 = o.inference_rule.definition.parameters[0]
-        q_iff_p: FormulaStatement = o.parameters[0]
+        p0 = o.inference_rule.definition.terms[0]
+        q_iff_p: FormulaStatement = o.terms[0]
         yield from q_iff_p.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
         yield from p0.compose_formula()
@@ -104,21 +104,19 @@ class LocaleEnUs(Locale):
 
     def compose_biconditional_introduction_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        parameter_p_implies_q: CompoundFormula = \
-            o.inference_rule.definition.parameters[0].parameters[0]
-        p_implies_q: FormulaStatement = o.parameters[0]
+        term_p_implies_q: CompoundFormula = o.inference_rule.definition.terms[0].terms[0]
+        p_implies_q: FormulaStatement = o.terms[0]
         yield from p_implies_q.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_p_implies_q.compose_formula()
+        yield from term_p_implies_q.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from p_implies_q.compose_ref_link()
         yield SansSerifNormal('. ')
-        parameter_q_implies_p: CompoundFormula = \
-            o.inference_rule.definition.parameters[0].parameters[1]
-        q_implies_p: FormulaStatement = o.parameters[1]
+        term_q_implies_p: CompoundFormula = o.inference_rule.definition.terms[0].terms[1]
+        q_implies_p: FormulaStatement = o.terms[1]
         yield from q_implies_p.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_q_implies_p.compose_formula()
+        yield from term_q_implies_p.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from q_implies_p.compose_ref_link()
         yield SansSerifNormal('. ')
@@ -126,8 +124,8 @@ class LocaleEnUs(Locale):
 
     def compose_conjunction_elimination_1_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        p0 = o.inference_rule.definition.parameters[0]
-        p_and_q: FormulaStatement = o.parameters[0]
+        p0 = o.inference_rule.definition.terms[0]
+        p_and_q: FormulaStatement = o.terms[0]
         yield from p_and_q.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
         yield p0.compose_formula()
@@ -138,8 +136,8 @@ class LocaleEnUs(Locale):
 
     def compose_conjunction_elimination_2_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        p_and_q: FormulaStatement = o.parameters[0]
-        p0 = o.inference_rule.definition.parameters[0]
+        p_and_q: FormulaStatement = o.terms[0]
+        p0 = o.inference_rule.definition.terms[0]
         yield from p_and_q.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
         yield p0.compose_formula()
@@ -150,19 +148,19 @@ class LocaleEnUs(Locale):
 
     def compose_conjunction_introduction_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        parameter_p: CompoundFormula = o.inference_rule.definition.parameters[0].parameters[0]
-        p: FormulaStatement = o.parameters[0]
+        term_p: CompoundFormula = o.inference_rule.definition.terms[0].terms[0]
+        p: FormulaStatement = o.terms[0]
         yield from p.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_p.compose_formula()
+        yield from term_p.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from p.compose_ref_link()
         yield SansSerifNormal('. ')
-        parameter_q: CompoundFormula = o.inference_rule.definition.parameters[0].parameters[1]
-        q: FormulaStatement = o.parameters[1]
+        term_q: CompoundFormula = o.inference_rule.definition.terms[0].terms[1]
+        q: FormulaStatement = o.terms[1]
         yield from q.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_q.compose_formula()
+        yield from term_q.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from q.compose_ref_link()
         yield SansSerifNormal('. ')
@@ -179,29 +177,27 @@ class LocaleEnUs(Locale):
 
     def compose_constructive_dilemma_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        parameter_p_implies_q: CompoundFormula = \
-            o.inference_rule.definition.parameters[0].parameters[0]
-        p_implies_q: FormulaStatement = o.parameters[0]
+        term_p_implies_q: CompoundFormula = o.inference_rule.definition.terms[0].terms[0]
+        p_implies_q: FormulaStatement = o.terms[0]
         yield from p_implies_q.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_p_implies_q.compose_formula()
+        yield from term_p_implies_q.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from p_implies_q.compose_ref_link()
         yield SansSerifNormal('. ')
-        parameter_r_implies_s: CompoundFormula = \
-            o.inference_rule.definition.parameters[0].parameters[1]
-        r_implies_s: FormulaStatement = o.parameters[1]
+        term_r_implies_s: CompoundFormula = o.inference_rule.definition.terms[0].terms[1]
+        r_implies_s: FormulaStatement = o.terms[1]
         yield from r_implies_s.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_r_implies_s.compose_formula()
+        yield from term_r_implies_s.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from r_implies_s.compose_ref_link()
         yield SansSerifNormal('. ')
-        parameter_p_or_r: CompoundFormula = o.inference_rule.definition.parameters[0].parameters[2]
-        p_or_r: FormulaStatement = o.parameters[2]
+        term_p_or_r: CompoundFormula = o.inference_rule.definition.terms[0].terms[2]
+        p_or_r: FormulaStatement = o.terms[2]
         yield from p_or_r.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_p_or_r.compose_formula()
+        yield from term_p_or_r.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from p_or_r.compose_ref_link()
         yield SansSerifNormal('. ')
@@ -247,11 +243,11 @@ class LocaleEnUs(Locale):
     def compose_definition_interpretation_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
-        # Retrieve the parameters from the statement
+        # Retrieve the terms from the statement
         a: DefinitionInclusion
         p: CompoundFormula
-        a = o.parameters[0]
-        p = o.parameters[1]
+        a = o.terms[0]
+        p = o.terms[1]
         yield from a.d.compose_natural_language()
         yield SansSerifNormal(' is postulated by ')
         yield from a.compose_ref_link()
@@ -262,30 +258,27 @@ class LocaleEnUs(Locale):
 
     def compose_destructive_dilemma_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        parameter_p_implies_q: CompoundFormula = \
-            o.inference_rule.definition.parameters[0].parameters[0]
-        p_implies_q: FormulaStatement = o.parameters[0]
+        term_p_implies_q: CompoundFormula = o.inference_rule.definition.terms[0].terms[0]
+        p_implies_q: FormulaStatement = o.terms[0]
         yield from p_implies_q.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_p_implies_q.compose_formula()
+        yield from term_p_implies_q.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from p_implies_q.compose_ref_link()
         yield SansSerifNormal('. ')
-        parameter_r_implies_s: CompoundFormula = \
-            o.inference_rule.definition.parameters[0].parameters[1]
-        r_implies_s: FormulaStatement = o.parameters[1]
+        term_r_implies_s: CompoundFormula = o.inference_rule.definition.terms[0].terms[1]
+        r_implies_s: FormulaStatement = o.terms[1]
         yield from r_implies_s.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_r_implies_s.compose_formula()
+        yield from term_r_implies_s.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from r_implies_s.compose_ref_link()
         yield SansSerifNormal('. ')
-        parameter_not_q_or_not_s: CompoundFormula = \
-            o.inference_rule.definition.parameters[0].parameters[2]
-        not_q_or_not_s: FormulaStatement = o.parameters[2]
+        term_not_q_or_not_s: CompoundFormula = o.inference_rule.definition.terms[0].terms[2]
+        not_q_or_not_s: FormulaStatement = o.terms[2]
         yield from not_q_or_not_s.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_not_q_or_not_s.compose_formula()
+        yield from term_not_q_or_not_s.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from not_q_or_not_s.compose_ref_link()
         yield SansSerifNormal('. ')
@@ -293,102 +286,101 @@ class LocaleEnUs(Locale):
 
     def compose_disjunction_introduction_1_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        parameter_p: CompoundFormula = o.inference_rule.definition.parameters[0]
-        p: FormulaStatement = o.parameters[0]
+        term_p: CompoundFormula = o.inference_rule.definition.terms[0]
+        p: FormulaStatement = o.terms[0]
         yield from p.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_p.compose_formula()
+        yield from term_p.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from p.compose_ref_link()
         yield SansSerifNormal('. ')
-        parameter_q: CompoundFormula = o.inference_rule.definition.parameters[1].parameters[0]
-        q: FormulaStatement = o.parameters[1]
+        term_q: CompoundFormula = o.inference_rule.definition.terms[1].terms[0]
+        q: FormulaStatement = o.terms[1]
         yield from q.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_q.compose_formula()
+        yield from term_q.compose_formula()
         yield SansSerifNormal(', is given. ')
         return True
 
     def compose_disjunction_introduction_2_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        parameter_p: CompoundFormula = o.inference_rule.definition.parameters[0]
-        p: FormulaStatement = o.parameters[0]
+        term_p: CompoundFormula = o.inference_rule.definition.terms[0]
+        p: FormulaStatement = o.terms[0]
         yield from p.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_p.compose_formula()
+        yield from term_p.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from p.compose_ref_link()
         yield SansSerifNormal('. ')
-        parameter_q: CompoundFormula = o.inference_rule.definition.parameters[1].parameters[1]
-        q: FormulaStatement = o.parameters[1]
+        term_q: CompoundFormula = o.inference_rule.definition.terms[1].terms[1]
+        q: FormulaStatement = o.terms[1]
         yield from q.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_q.compose_formula()
+        yield from term_q.compose_formula()
         yield SansSerifNormal(', is given. ')
         return True
 
     def compose_disjunctive_resolution_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        parameter_p_or_q: CompoundFormula = o.inference_rule.definition.parameters[0].parameters[0]
-        p_or_q: FormulaStatement = o.parameters[0]
+        term_p_or_q: CompoundFormula = o.inference_rule.definition.terms[0].terms[0]
+        p_or_q: FormulaStatement = o.terms[0]
         yield from p_or_q.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_p_or_q.compose_formula()
+        yield from term_p_or_q.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from p_or_q.compose_ref_link()
         yield SansSerifNormal('. ')
-        parameter_not_p_or_r: CompoundFormula = \
-            o.inference_rule.definition.parameters[0].parameters[1]
-        not_p_or_r: FormulaStatement = o.parameters[1]
+        term_not_p_or_r: CompoundFormula = o.inference_rule.definition.terms[0].terms[1]
+        not_p_or_r: FormulaStatement = o.terms[1]
         yield from not_p_or_r.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_not_p_or_r.compose_formula()
+        yield from term_not_p_or_r.compose_formula()
         yield SansSerifNormal(', is given. ')
         return True
 
     def compose_disjunctive_syllogism_1_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        parameter_p_or_q: CompoundFormula = o.inference_rule.definition.parameters[0].parameters[0]
-        p_or_q: FormulaStatement = o.parameters[0]
+        term_p_or_q: CompoundFormula = o.inference_rule.definition.terms[0].terms[0]
+        p_or_q: FormulaStatement = o.terms[0]
         yield from p_or_q.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_p_or_q.compose_formula()
+        yield from term_p_or_q.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from p_or_q.compose_ref_link()
         yield SansSerifNormal('. ')
-        parameter_not_p: CompoundFormula = o.inference_rule.definition.parameters[0].parameters[1]
-        not_p: FormulaStatement = o.parameters[1]
+        term_not_p: CompoundFormula = o.inference_rule.definition.terms[0].terms[1]
+        not_p: FormulaStatement = o.terms[1]
         yield from not_p.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_not_p.compose_formula()
+        yield from term_not_p.compose_formula()
         yield SansSerifNormal(', is given. ')
         return True
 
     def compose_disjunctive_syllogism_2_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        parameter_p_or_q: CompoundFormula = o.inference_rule.definition.parameters[0].parameters[0]
-        p_or_q: FormulaStatement = o.parameters[0]
+        term_p_or_q: CompoundFormula = o.inference_rule.definition.terms[0].terms[0]
+        p_or_q: FormulaStatement = o.terms[0]
         yield from p_or_q.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_p_or_q.compose_formula()
+        yield from term_p_or_q.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from p_or_q.compose_ref_link()
         yield SansSerifNormal('. ')
-        parameter_not_q: CompoundFormula = o.inference_rule.definition.parameters[0].parameters[1]
-        not_q: FormulaStatement = o.parameters[1]
+        term_not_q: CompoundFormula = o.inference_rule.definition.terms[0].terms[1]
+        not_q: FormulaStatement = o.terms[1]
         yield from not_q.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_not_q.compose_formula()
+        yield from term_not_q.compose_formula()
         yield SansSerifNormal(', is given. ')
         return True
 
     def compose_double_negation_elimination_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        parameter_not_not_p: CompoundFormula = o.inference_rule.definition.parameters[0]
-        not_not_p: FormulaStatement = o.parameters[0]
+        term_not_not_p: CompoundFormula = o.inference_rule.definition.terms[0]
+        not_not_p: FormulaStatement = o.terms[0]
         yield from not_not_p.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_not_not_p.compose_formula()
+        yield from term_not_not_p.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from not_not_p.compose_ref_link()
         yield SansSerifNormal('. ')
@@ -396,11 +388,11 @@ class LocaleEnUs(Locale):
 
     def compose_double_negation_introduction_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
-        parameter_p: CompoundFormula = o.inference_rule.definition.parameters[0]
-        p: FormulaStatement = o.parameters[0]
+        term_p: CompoundFormula = o.inference_rule.definition.terms[0]
+        p: FormulaStatement = o.terms[0]
         yield from p.valid_proposition.compose_formula()
         yield SansSerifNormal(', of the form ')
-        yield from parameter_p.compose_formula()
+        yield from term_p.compose_formula()
         yield SansSerifNormal(', follows from ')
         yield from p.compose_ref_link()
         yield SansSerifNormal('. ')
@@ -409,9 +401,9 @@ class LocaleEnUs(Locale):
     def compose_equality_commutativity_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
-        # Retrieve the parameters from the statement
+        # Retrieve the terms from the statement
         p_eq_q: FormulaStatement
-        p_eq_q = o.parameters[0]
+        p_eq_q = o.terms[0]
         yield from p_eq_q.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
         yield from p_eq_q.compose_ref_link()
@@ -421,9 +413,9 @@ class LocaleEnUs(Locale):
     def compose_equal_terms_substitution_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
-        # Retrieve the parameters from the statement
-        p: FormulaStatement = o.parameters[0]
-        p_eq_q: FormulaStatement = o.parameters[1]
+        # Retrieve the terms from the statement
+        p: FormulaStatement = o.terms[0]
+        p_eq_q: FormulaStatement = o.terms[1]
         yield from p.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
         yield from p.compose_ref_link()
@@ -437,9 +429,9 @@ class LocaleEnUs(Locale):
     def compose_hypothetical_syllogism_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
-        # Retrieve the parameters from the statement
-        p_implies_q: FormulaStatement = o.parameters[0]
-        q_implies_r: FormulaStatement = o.parameters[1]
+        # Retrieve the terms from the statement
+        p_implies_q: FormulaStatement = o.terms[0]
+        q_implies_r: FormulaStatement = o.terms[1]
         yield from p_implies_q.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
         yield from p_implies_q.compose_ref_link()
@@ -453,11 +445,11 @@ class LocaleEnUs(Locale):
     def compose_inconsistency_introduction_1_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
-        # Retrieve the parameters from the statement
+        # Retrieve the terms from the statement
         p0 = StyledText(plaintext='P', unicode='𝑷')
         p1 = StyledText(plaintext='not(P)', unicode='¬(𝑷)')
-        p: FormulaStatement = o.parameters[0]
-        not_p: FormulaStatement = o.parameters[1]
+        p: FormulaStatement = o.terms[0]
+        not_p: FormulaStatement = o.terms[1]
         yield SansSerifNormal('Let ')
         yield p0
         yield SerifItalic(' := ')
@@ -480,8 +472,8 @@ class LocaleEnUs(Locale):
         # Retrieve the parameters from the statement
         p0: StyledText = StyledText(plaintext='(P = Q)', unicode='(𝑷 = 𝑸)')
         p1: StyledText = StyledText(plaintext='(P neq Q))', unicode='(𝑷 ≠ 𝑸)')
-        p_eq_q: FormulaStatement = o.parameters[0]
-        p_neq_q: FormulaStatement = o.parameters[1]
+        p_eq_q: FormulaStatement = o.terms[0]
+        p_neq_q: FormulaStatement = o.terms[1]
         yield SansSerifNormal('Let ')
         yield p0
         yield SerifItalic(' := ')
@@ -503,7 +495,7 @@ class LocaleEnUs(Locale):
         global text_dict
         # Retrieve the parameters from the statement
         p0: StyledText = StyledText(plaintext='(P neq P)', unicode='(𝑷 ≠ 𝑷)')
-        p_neq_p: FormulaStatement = o.parameters[0]
+        p_neq_p: FormulaStatement = o.terms[0]
         yield SansSerifNormal('Let ')
         yield p0
         yield SerifItalic(' := ')
@@ -559,8 +551,8 @@ class LocaleEnUs(Locale):
         """Generic paragraph proof composition for inferred-statements.
         This method makes a best effort at composing a paragraph proof,
         but should rather be overridden by the inference-rule specialized class."""
-        for i in range(len(o.parameters)):
-            parameter = o.parameters[i]
+        for i in range(len(o.terms)):
+            parameter = o.terms[i]
             if isinstance(parameter, FormulaStatement):
                 parameter: FormulaStatement
                 yield from parameter.valid_proposition.compose_formula()
@@ -598,8 +590,8 @@ class LocaleEnUs(Locale):
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
-        p_implies_q: FormulaStatement = o.parameters[0]
-        p: FormulaStatement = o.parameters[1]
+        p_implies_q: FormulaStatement = o.terms[0]
+        p: FormulaStatement = o.terms[1]
         yield from p_implies_q.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
         yield from p_implies_q.compose_ref_link()
@@ -614,8 +606,8 @@ class LocaleEnUs(Locale):
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
-        p_implies_q: FormulaStatement = o.parameters[0]
-        not_q: FormulaStatement = o.parameters[1]
+        p_implies_q: FormulaStatement = o.terms[0]
+        not_q: FormulaStatement = o.terms[1]
         yield from p_implies_q.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
         yield from p_implies_q.compose_ref_link()
@@ -650,13 +642,13 @@ class LocaleEnUs(Locale):
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
-        p_eq_q: Hypothesis = o.parameters[0]
+        p_eq_q: Hypothesis = o.terms[0]
         yield SansSerifNormal('Let ')
         yield from p_eq_q.compose_ref_link()
         yield SansSerifNormal(' be the hypothesis ')
         yield from p_eq_q.hypothesis_formula.compose_formula()
         yield SansSerifNormal('. ')
-        inc_p_eq_q: FormulaStatement = o.parameters[1]
+        inc_p_eq_q: FormulaStatement = o.terms[1]
         yield from inc_p_eq_q.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
         yield from inc_p_eq_q.compose_ref_link()
@@ -667,13 +659,13 @@ class LocaleEnUs(Locale):
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
-        p_eq_q: Hypothesis = o.parameters[0]
+        p_eq_q: Hypothesis = o.terms[0]
         yield SansSerifNormal('Let ')
         yield from p_eq_q.compose_ref_link()
         yield SansSerifNormal(' be the hypothesis ')
         yield from p_eq_q.hypothesis_formula.compose_formula()
         yield SansSerifNormal('. ')
-        inc_p_eq_q: FormulaStatement = o.parameters[1]
+        inc_p_eq_q: FormulaStatement = o.terms[1]
         yield from inc_p_eq_q.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
         yield from inc_p_eq_q.compose_ref_link()
@@ -684,13 +676,13 @@ class LocaleEnUs(Locale):
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
-        p_eq_q: Hypothesis = o.parameters[0]
+        p_eq_q: Hypothesis = o.terms[0]
         yield SansSerifNormal('Let ')
         yield from p_eq_q.compose_ref_link()
         yield SansSerifNormal(' be the hypothesis ')
         yield from p_eq_q.hypothesis_formula.compose_formula()
         yield SansSerifNormal('. ')
-        inc_p_eq_q: FormulaStatement = o.parameters[1]
+        inc_p_eq_q: FormulaStatement = o.terms[1]
         yield from inc_p_eq_q.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
         yield from inc_p_eq_q.compose_ref_link()
@@ -701,13 +693,13 @@ class LocaleEnUs(Locale):
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
-        p_eq_q: Hypothesis = o.parameters[0]
+        p_eq_q: Hypothesis = o.terms[0]
         yield SansSerifNormal('Let ')
         yield from p_eq_q.compose_ref_link()
         yield SansSerifNormal(' be the hypothesis ')
         yield from p_eq_q.hypothesis_formula.compose_formula()
         yield SansSerifNormal('. ')
-        inc_p_eq_q: FormulaStatement = o.parameters[1]
+        inc_p_eq_q: FormulaStatement = o.terms[1]
         yield from inc_p_eq_q.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
         yield from inc_p_eq_q.compose_ref_link()
@@ -836,15 +828,15 @@ class LocaleEnUs(Locale):
             collections.abc.Generator[Composable, Composable, bool]:
         global text_dict
         # Retrieve the parameters from the statement
-        p = o.parameters[0]
+        p = o.terms[0]
         yield from p.valid_proposition.compose_formula()
         yield SansSerifNormal(' follows from ')
         yield from p.compose_ref_link()
         yield SansSerifNormal('.')
         yield SansSerifNormal(' Let ')
         variables = get_formula_unique_variable_ordered_set(u=o.u, phi=p)
-        parameter_o: CompoundFormula = o.parameters[1]
-        mapping = zip(variables, parameter_o.parameters)
+        parameter_o: CompoundFormula = o.terms[1]
+        mapping = zip(variables, parameter_o.terms)
         first_pair = True
         for k, v in mapping:
             if not first_pair:
