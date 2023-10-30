@@ -31,8 +31,7 @@ class TestFormulaAlphaContains(TestCase):
         # Embedding
         with u.with_variable(symbol='x', auto_index=False) as x, u.with_variable(symbol='y',
                 auto_index=False) as y:
-            phi3: pu.CompoundFormula = r2(o1, x, x, (o1 | r2 | o2), y,
-                ((r2(o1 | r2 | x) | r1 | o1)), x, x,
-                y)  # self.assertTrue(pu.formula_alpha_contains(u=u, phi=phi3, psi=phi1))
+            phi3: pu.CompoundFormula = o1 | r1 | phi1
+            self.assertTrue(pu.formula_alpha_contains(u=u, phi=phi3, psi=phi1))
 
         # TODO: Manage the case where we have variables inside constants. This require a little analysis.

@@ -1966,47 +1966,80 @@ class TheoreticalClass(type):
 
 
 def iterate_formula_data_model_components(u: UniverseOfDiscourse, phi: Formula,
-        recurse_constant_value: bool = True, recurse_formula_connective: bool = True,
-        recurse_formula_terms: bool = True, recurse_statement_proposition: bool = True,
-        yield_classes: frozenset = None) -> Generator[FlexibleFormula, None, None]:
+        yield_parent_constant: bool = True, recurse_constant_value: bool = True,
+        yield_parent_compound_formula: bool = True,
+        recurse_compound_formula_connective: bool = True,
+        recurse_compound_formula_terms: bool = True, yield_parent_statement: bool = True,
+        recurse_statement_proposition: bool = True, yield_classes: (None, tuple) = None) -> \
+        Generator[FlexibleFormula, None, None]:
     """Iterate through the data-model components of a formula in canonical-order.
 
-    This is a general-purpose iterator. The rationale behind it is to facilitate the """
-    XXXXXXXXXXXXXXXXXXX
-    yield phi
+    This is a general-purpose iterator. The function allows to select which properties of the
+    data-model must be recursively visited by the iteration, and which classes of objects must be yield."""
+    _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
     if isinstance(phi, ConstantDeclaration):
-        if recurse_constant_value:
-            yield from iterate_formula_data_model_components(u=u, phi=phi.value)
-    if isinstance(phi, FormulaStatement):
+        if yield_parent_constant and (yield_classes is None or isinstance(phi, yield_classes)):
+            yield phi
+            if recurse_constant_value:
+                yield from iterate_formula_data_model_components(u=u, phi=phi.value,
+                    yield_parent_constant=yield_parent_constant,
+                    recurse_constant_value=recurse_constant_value,
+                    yield_parent_compound_formula=yield_parent_compound_formula,
+                    recurse_compound_formula_connective=recurse_compound_formula_connective,
+                    recurse_compound_formula_terms=recurse_compound_formula_terms,
+                    yield_parent_statement=yield_parent_statement,
+                    recurse_statement_proposition=recurse_statement_proposition,
+                    yield_classes=yield_classes)
+    elif isinstance(phi, FormulaStatement):
+        if yield_parent_statement and (yield_classes is None or isinstance(phi, yield_classes)):
+            yield phi
         if recurse_statement_proposition:
-            yield from iterate_formula_data_model_components(u=u, phi=phi.valid_proposition)
-    if isinstance(phi, CompoundFormula):
-        if recurse_formula_connective:
-            yield from iterate_formula_data_model_components(u=u, phi=phi.connective)
-        if recurse_formula_terms:
+            yield from iterate_formula_data_model_components(u=u, phi=phi.valid_proposition,
+                yield_parent_constant=yield_parent_constant,
+                recurse_constant_value=recurse_constant_value,
+                yield_parent_compound_formula=yield_parent_compound_formula,
+                recurse_compound_formula_connective=recurse_compound_formula_connective,
+                recurse_compound_formula_terms=recurse_compound_formula_terms,
+                yield_parent_statement=yield_parent_statement,
+                recurse_statement_proposition=recurse_statement_proposition,
+                yield_classes=yield_classes)
+    elif isinstance(phi, CompoundFormula):
+        if yield_parent_compound_formula and (
+                yield_classes is None or isinstance(phi, yield_classes)):
+            yield phi
+        if recurse_compound_formula_connective:
+            yield from iterate_formula_data_model_components(u=u, phi=phi.connective,
+                yield_parent_constant=yield_parent_constant,
+                recurse_constant_value=recurse_constant_value,
+                yield_parent_compound_formula=yield_parent_compound_formula,
+                recurse_compound_formula_connective=recurse_compound_formula_connective,
+                recurse_compound_formula_terms=recurse_compound_formula_terms,
+                yield_parent_statement=yield_parent_statement,
+                recurse_statement_proposition=recurse_statement_proposition,
+                yield_classes=yield_classes)
+        if recurse_compound_formula_terms:
             for p in phi.terms:
-                yield from iterate_formula_data_model_components(u=u, phi=p)
+                yield from iterate_formula_data_model_components(u=u, phi=p,
+                    yield_parent_constant=yield_parent_constant,
+                    recurse_constant_value=recurse_constant_value,
+                    yield_parent_compound_formula=yield_parent_compound_formula,
+                    recurse_compound_formula_connective=recurse_compound_formula_connective,
+                    recurse_compound_formula_terms=recurse_compound_formula_terms,
+                    yield_parent_statement=yield_parent_statement,
+                    recurse_statement_proposition=recurse_statement_proposition,
+                    yield_classes=yield_classes)
+    else:
+        if yield_classes is None or isinstance(phi, yield_classes):
+            yield phi
 
 
 def iterate_formula_alpha_equivalence_components(u: UniverseOfDiscourse, phi: FlexibleFormula) -> \
         Generator[FlexibleFormula, None, None]:
     """Iterate through the components of a formula that are alpha-equivalence meaningful, in canonical-order."""
-    _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
-    print(phi)
-    if isinstance(phi, ConstantDeclaration):
-        # Constants are not considered for alpha-equivalence,
-        # but their internal value is.
-        phi = phi.value
-    if isinstance(phi, FormulaStatement):
-        # It is the formula content of formula-statements
-        # that is being considered for alpha-equivalence.
-        phi = phi.valid_proposition
-    if isinstance(phi, CompoundFormula):
-        yield from iterate_formula_alpha_equivalence_components(u=u, phi=phi.connective)
-        for p in phi.terms:
-            yield from iterate_formula_alpha_equivalence_components(u=u, phi=p)
-    else:
-        yield phi
+    yield from (iterate_formula_data_model_components(u=u, phi=phi, yield_parent_constant=False,
+        recurse_constant_value=True, yield_parent_compound_formula=False,
+        recurse_compound_formula_connective=True, recurse_compound_formula_terms=True,
+        yield_parent_statement=False, recurse_statement_proposition=True, yield_classes=None))
 
 
 def formula_alpha_contains(u: UniverseOfDiscourse, phi: FlexibleFormula, psi: FlexibleFormula):
@@ -2015,10 +2048,10 @@ def formula_alpha_contains(u: UniverseOfDiscourse, phi: FlexibleFormula, psi: Fl
     _, psi, _ = verify_formula(u=u, input_value=psi, arg='psi')
     if is_alpha_equivalent_to(u=u, phi=phi, psi=psi):
         return True
-    for component in iterate_formula_alpha_equivalence_components(u=u, phi=phi):
-        # TODO: This is where the bug is. Formula instances are not returned by the iterate_alpha_equivalence.
-        #  We must develope a different iterator function
-        raise NotImplementedError()
+    for component in iterate_formula_data_model_components(u=u, phi=phi,
+            yield_parent_constant=False, recurse_constant_value=True,
+            recurse_compound_formula_connective=True, recurse_compound_formula_terms=True,
+            recurse_statement_proposition=True, yield_classes=None):
         if is_alpha_equivalent_to(u=u, phi=component, psi=psi):
             return True
     return False

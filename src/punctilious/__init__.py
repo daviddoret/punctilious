@@ -34,17 +34,17 @@ from punctilious.core import (AbsorptionDeclaration, AbsorptionInclusion, Articl
     InconsistencyIntroduction3Declaration, InconsistencyIntroduction3Inclusion,
     InconsistencyWarning, InferenceRuleDeclaration, InferenceRuleDeclarationCollection,
     InferenceRuleInclusion, InferenceRuleInclusionCollection, InferredStatement,
-    is_alpha_equivalent_to, is_in_class, ModusPonensDeclaration, ModusPonensInclusion,
-    ModusTollensDeclaration, ModusTollensInclusion, NameSet, NoteInclusion, Paragraph,
-    paragraph_headers, ParagraphHeader, prioritize_value, ProofByContradiction1Declaration,
-    ProofByContradiction1Inclusion, ProofByContradiction2Declaration,
-    ProofByContradiction2Inclusion, ProofByRefutation1Declaration, ProofByRefutation1Inclusion,
-    ProofByRefutation2Declaration, ProofByRefutation2Inclusion, PunctiliousException,
-    QuasiQuotation, Connective, rep_two_columns_proof_item, SansSerifBold, SansSerifNormal,
-    ScriptNormal, SerifBoldItalic, SerifItalic, SerifNormal, SimpleObjct, SimpleObjctDict,
-    Statement, StyledText, Subscript, subscriptify, SymbolicObject, text_styles, TextStyle, Formula,
-    TheoryDerivation, Package, UniverseOfDiscourse, verify_formula, verify_formula_statement,
-    VariableSubstitutionDeclaration, VariableSubstitutionInclusion)
+    is_alpha_equivalent_to, is_in_class, iterate_formula_data_model_components,
+    ModusPonensDeclaration, ModusPonensInclusion, ModusTollensDeclaration, ModusTollensInclusion,
+    NameSet, NoteInclusion, Paragraph, paragraph_headers, ParagraphHeader, prioritize_value,
+    ProofByContradiction1Declaration, ProofByContradiction1Inclusion,
+    ProofByContradiction2Declaration, ProofByContradiction2Inclusion, ProofByRefutation1Declaration,
+    ProofByRefutation1Inclusion, ProofByRefutation2Declaration, ProofByRefutation2Inclusion,
+    PunctiliousException, QuasiQuotation, Connective, rep_two_columns_proof_item, SansSerifBold,
+    SansSerifNormal, ScriptNormal, SerifBoldItalic, SerifItalic, SerifNormal, SimpleObjct,
+    SimpleObjctDict, Statement, StyledText, Subscript, subscriptify, SymbolicObject, text_styles,
+    TextStyle, Formula, TheoryDerivation, Package, UniverseOfDiscourse, verify_formula,
+    verify_formula_statement, VariableSubstitutionDeclaration, VariableSubstitutionInclusion)
 
 # from foundation_system_1 import foundation_system_1, ft, u
 
