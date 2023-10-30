@@ -54,4 +54,4 @@ output8 = tuple(pu.iterate_formula_data_model_components(u=u, phi=phi3, yield_pa
     recurse_constant_value=True, recurse_compound_formula_connective=True,
     recurse_compound_formula_terms=False, recurse_statement_proposition=True,
     yield_classes=(pu.Connective, pu.Variable)))
-print(f'output7: {output7}')
+print(f'output8: {output8}')

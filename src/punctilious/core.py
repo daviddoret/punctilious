@@ -2119,6 +2119,12 @@ def is_alpha_equivalent_to(u: UniverseOfDiscourse, phi: FlexibleFormula,
     return True
 
 
+def is_alpha_equivalent_to_iterable(u: UniverseOfDiscourse, phi: typing.Iterable[FlexibleFormula],
+        psi: typing.Iterable[FlexibleFormula]) -> bool:
+    return (is_alpha_equivalent_to(u=u, phi=phi_element, psi=psi_element) for
+        (phi_element, psi_element) in itertools.zip_longest(phi, psi, fillvalue=None))
+
+
 class Formula(SymbolicObject):
     """
     Definition
