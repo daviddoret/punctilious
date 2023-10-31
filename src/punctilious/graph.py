@@ -16,7 +16,7 @@ def graph_symbolic_object(g: nx.MultiDiGraph, o: pu.SymbolicObject):
         graph_relation(g, o)
     elif pu.is_in_class(o, pu.classes.variable):
         graph_variable(g, o)
-    elif pu.is_in_class(o, pu.classes.formula):
+    elif pu.is_in_class(o, pu.classes.compound_formula):
         graph_formula(g, o)
     elif pu.is_in_class(o, pu.classes.formula_statement):
         graph_formula_statement(g, o)

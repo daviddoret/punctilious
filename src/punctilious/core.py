@@ -1095,9 +1095,9 @@ pyvis_configuration = PyvisConfiguration()
 
 
 def unpack_formula(o: (Formula, CompoundFormula, FormulaStatement)) -> CompoundFormula:
-    """Receive a theoretical-objct and unpack its formula if it is a statement that contains a
+    """Receive a formula and unpack its formula if it is a statement that contains a
     formula."""
-    verify(is_in_class(o, classes.theoretical_objct),
+    verify(is_in_class(o, classes.formula),
         'Parameter ⌜o⌝ must be an element of the theoretical-objct declarative-class.', o=o)
     if hasattr(o, 'valid_proposition'):
         # Unpack python objects that "contain" their formula,
@@ -2121,6 +2121,7 @@ def is_alpha_equivalent_to(u: UniverseOfDiscourse, phi: FlexibleFormula,
 
 def is_alpha_equivalent_to_iterable(u: UniverseOfDiscourse, phi: typing.Iterable[FlexibleFormula],
         psi: typing.Iterable[FlexibleFormula]) -> bool:
+    """See function is_alpha_equivalent_to."""
     return (is_alpha_equivalent_to(u=u, phi=phi_element, psi=psi_element) for
         (phi_element, psi_element) in itertools.zip_longest(phi, psi, fillvalue=None))
 
@@ -2164,7 +2165,7 @@ class Formula(SymbolicObject):
             abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
             echo=False)
-        super()._declare_class_membership(classes.theoretical_objct)
+        super()._declare_class_membership(classes.formula)
         if not isinstance(self, UniverseOfDiscourse):
             # The universe-of-discourse is the only object that may not
             # be contained in a universe-of-discourse.
@@ -2373,9 +2374,9 @@ class Formula(SymbolicObject):
 
     def substitute(self, substitution_map: dict, lock_variable_scope=None,
             substitute_constants_with_values: bool = True):
-        """Given a theoretical-objct o₁ (self),
+        """Given a formula o₁ (self),
         and a substitution map 𝐌,
-        return a theoretical-objct o₂
+        return a formula o₂
         where all components, including o₂ itself,
         have been substituted if present in 𝐌.
 
@@ -2396,9 +2397,9 @@ class Formula(SymbolicObject):
         Parameters
         ----------
         substitution_map : dict
-            A dictionary of theoretical-objct pairs (o, o'),
-            where o is the original theoretical-objct in o₁,
-            and o' is the substitute theoretical-objct in o₂.
+            A dictionary of formula pairs (o, o'),
+            where o is the original formula in o₁,
+            and o' is the substitute formula in o₂.
 
         """
         # TODO: substitute() method: add a data validation step to verify that variables are in the same universe as the root formula.
@@ -2451,7 +2452,7 @@ class Formula(SymbolicObject):
             return self
 
     def iterate_connectives(self, include_root: bool = True):
-        """Iterate through this and all the theoretical-objcts it contains recursively, providing
+        """Iterate through this and all the formulas it contains recursively, providing
         they are connectives."""
         return (r for r in self.iterate_theoretical_objcts_references(include_root=include_root) if
             is_in_class(r, classes.connective))
@@ -2460,7 +2461,7 @@ class Formula(SymbolicObject):
             visited: (None, set) = None, substitute_constants_with_values: bool = True,
             substitute_statements_with_formula: bool = True,
             substitute_formula_with_components: bool = True):
-        """Iterate through this and all the theoretical-objcts it contains recursively.
+        """Iterate through this and all the formulas it contains recursively.
         """
         visited = set() if visited is None else visited
         if include_root and self not in visited:
@@ -2743,7 +2744,7 @@ class ConstantDeclaration(Formula):
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
             visited: (None, set) = None, substitute_constants_with_values: bool = True):
-        """Iterate through this and all the theoretical-objcts it contains recursively."""
+        """Iterate through this and all the formulas it contains recursively."""
         visited = set() if visited is None else visited
         if substitute_constants_with_values:
             yield from self.value.iterate_theoretical_objcts_references(include_root=include_root,
@@ -2759,7 +2760,7 @@ class ConstantDeclaration(Formula):
 
 
 class CompoundFormula(Formula):
-    """A formula is a theoretical-objct.
+    """A compoud-formula is a formula.
     It is also a tuple (U, r, p1, p1, p2, ..., pn)
 
     Definition
@@ -2841,7 +2842,7 @@ class CompoundFormula(Formula):
         self.arity = len(terms)
         self.terms = terms
         super().__init__(nameset=nameset, u=u, echo=False)
-        super()._declare_class_membership(declarative_class_list.formula)
+        super()._declare_class_membership(declarative_class_list.compound_formula)
         u.cross_reference_formula(self)
         verify(assertion=is_in_class(connective, classes.connective) or is_in_class(connective,
             classes.variable), msg='The connective of this formula is neither a connective, nor a '
@@ -2851,8 +2852,7 @@ class CompoundFormula(Formula):
             formula=self, connective=connective)
         self.cross_reference_variables()
         for p in terms:
-            verify(is_in_class(p, classes.theoretical_objct), 'p is not a theoretical-objct.',
-                formula=self, p=p)
+            verify(is_in_class(p, classes.formula), 'p is not a formula.', formula=self, p=p)
             if is_in_class(p, classes.variable):
                 p.extend_scope(self)
             verify(p.u is self.u,
@@ -3045,7 +3045,7 @@ class CompoundFormula(Formula):
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
             visited: (None, set) = None, substitute_constants_with_values: bool = True):
-        """Iterate through this and all the theoretical-objcts it contains recursively."""
+        """Iterate through this and all the formulas it contains recursively."""
         visited = set() if visited is None else visited
         if include_root and self not in visited:
             yield self
@@ -3858,7 +3858,7 @@ class FormulaStatement(Statement):
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
             visited: (None, set) = None, substitute_constants_with_values: bool = True):
-        """Iterate through this and all the theoretical-objcts it contains recursively."""
+        """Iterate through this and all the formulas it contains recursively."""
         visited = set() if visited is None else visited
         if include_root and self not in visited:
             yield self
@@ -3874,7 +3874,7 @@ class FormulaStatement(Statement):
             extension_limit: (None, Statement) = None):
         """Return a python frozenset containing this formula-statement,
          and all theoretical_objcts it contains. If a statement-limit is provided,
-         does not yield statements whose index is greater than the theoretical-objct."""
+         does not yield statements whose index is greater than the formula."""
         ol = frozenset() if ol is None else ol
         if extension_limit is not None and extension_limit.theory == self.theory and extension_limit.statement_index >= self.statement_index:
             ol = ol.union({self})
@@ -6064,9 +6064,9 @@ theory-elaboration."""
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True,
             visited: (None, set) = None, substitute_constants_with_values: bool = True):
-        """Iterate through this and all the theoretical-objcts it references recursively.
+        """Iterate through this and all the formulas it references recursively.
 
-        Theoretical-objcts may contain references to multiple and diverse other theoretical-objcts. Do not confuse this iteration of all references with iterations of objects in the theory-chain.
+        Theoretical-objcts may contain references to multiple and diverse other formulas. Do not confuse this iteration of all references with iterations of objects in the theory-chain.
 
         :term include_root:
         :term visited:
@@ -6299,7 +6299,7 @@ theory-elaboration."""
         list = set()
         for s in self.statements:
             list.add(s)
-            if is_in_class(s, classes.formula):
+            if is_in_class(s, classes.compound_formula):
                 list.add()
 
 
@@ -7360,6 +7360,7 @@ def verify_formula_statement(t: TheoryDerivation, input_value: FlexibleFormula,
             return formula_ok, None, msg
 
     # At this point we have a properly typed FormulaStatement.
+
     formula_ok, msg = verify(raise_exception=raise_exception, error_code=error_code,
         assertion=t.contains_theoretical_objct_OBSOLETE(formula_statement),
         msg=f'The formula-statement {formula_statement} passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not contained in the theory-derivation ⌜{t}⌝.',
@@ -10414,7 +10415,7 @@ class UniverseOfDiscourse(Formula):
 
         :param phi: a formula.
         """
-        verify(is_in_class(phi, classes.formula),
+        verify(is_in_class(phi, classes.compound_formula),
             'Cross-referencing a formula in a universe-of-discourse requires '
             'an object of type Formula.', phi=phi, slf=self)
         verify(phi.nameset not in self.formulae.keys() or phi is self.formulae[phi.nameset],
@@ -11004,7 +11005,8 @@ class DeclarativeClassList(repm.ValueName):
             'axiom-interpretation-inclusion', python_type=AxiomInterpretationInclusion)
         self.direct_definition_inference = DeclarativeClass('direct_definition_inference',
             'direct-definition-inference')
-        self.formula = DeclarativeClass('formula', 'formula', python_type=CompoundFormula)
+        self.compound_formula = DeclarativeClass('compound_formula', 'compound-formula',
+            python_type=CompoundFormula)
         self.formula_statement = DeclarativeClass('formula_statement', 'formula-statement',
             python_type=FormulaStatement)
         self.variable = DeclarativeClass('variable', 'variable', python_type=Variable)
@@ -11020,8 +11022,7 @@ class DeclarativeClassList(repm.ValueName):
             python_type=SimpleObjct)
         self.statement = DeclarativeClass('statement', 'statement')
         self.symbolic_objct = DeclarativeClass('symbolic_objct', 'symbolic-objct')
-        self.theoretical_objct = DeclarativeClass('theoretical_objct', 'theoretical-objct',
-            python_type=Formula)
+        self.formula = DeclarativeClass('formula', 'formula', python_type=Formula)
         self.theory_derivation = DeclarativeClass('theory', 'theory', python_type=TheoryDerivation)
         self.universe_of_discourse = DeclarativeClass('universe_of_discourse',
             'universe-of-discourse', python_type=UniverseOfDiscourse)
@@ -11029,7 +11030,7 @@ class DeclarativeClassList(repm.ValueName):
         self.a = self.axiom
         self.dai = self.axiom_interpretation_declaration
         self.ddi = self.direct_definition_inference
-        self.f = self.formula
+        self.f = self.compound_formula
         self.r = self.connective
         self.t = self.theory_derivation
         self.u = self.universe_of_discourse
