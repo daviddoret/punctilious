@@ -15,9 +15,10 @@ Tags overview
     biconditional-elimination-1 (4) <biconditional-elimination-1.rst>
     biconditional-elimination-2 (4) <biconditional-elimination-2.rst>
     biconditional-introduction (4) <biconditional-introduction.rst>
+    bound-variable (1) <bound-variable.rst>
     class (70) <class.rst>
     collection (2) <collection.rst>
-    concept (31) <concept.rst>
+    concept (34) <concept.rst>
     conjunction-elimination-1 (4) <conjunction-elimination-1.rst>
     conjunction-elimination-2 (4) <conjunction-elimination-2.rst>
     conjunction-introduction (4) <conjunction-introduction.rst>
@@ -37,6 +38,7 @@ Tags overview
     equality-commutativity (4) <equality-commutativity.rst>
     equivalence (1) <equivalence.rst>
     formula (2) <formula.rst>
+    free-variable (3) <free-variable.rst>
     hypothetical-syllogism (4) <hypothetical-syllogism.rst>
     inclusion (33) <inclusion.rst>
     inconsistency-introduction-1 (4) <inconsistency-introduction-1.rst>
@@ -44,7 +46,7 @@ Tags overview
     inconsistency-introduction-3 (4) <inconsistency-introduction-3.rst>
     inference-rule (37) <inference-rule.rst>
     inferred-statement (2) <inferred-statement.rst>
-    math (31) <math.rst>
+    math (34) <math.rst>
     modus-ponens (4) <modus-ponens.rst>
     modus-tollens (4) <modus-tollens.rst>
     proof-by-contradiction-1 (4) <proof-by-contradiction-1.rst>
@@ -55,5 +57,5 @@ Tags overview
     sample (32) <sample.rst>
     statement (1) <statement.rst>
     universe-of-discourse (1) <universe-of-discourse.rst>
-    variable (2) <variable.rst>
+    variable (5) <variable.rst>
     variable-substitution (4) <variable-substitution.rst>

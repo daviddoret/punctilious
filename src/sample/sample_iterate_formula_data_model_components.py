@@ -37,21 +37,21 @@ print(f'output4: {output4}')
 
 output5 = tuple(pu.iterate_formula_data_model_components(u=u, phi=phi3, recurse_constant_value=True,
     recurse_compound_formula_connective=True, recurse_compound_formula_terms=True,
-    recurse_statement_proposition=True, yield_classes=(pu.Connective, pu.Variable)))
+    recurse_statement_proposition=True, yield_classes=(pu.Connective, pu.FreeVariable)))
 print(f'output5: {output5}')
 
 output6 = tuple(pu.iterate_formula_data_model_components(u=u, phi=phi3, recurse_constant_value=True,
     recurse_compound_formula_connective=False, recurse_compound_formula_terms=True,
-    recurse_statement_proposition=True, yield_classes=(pu.Connective, pu.Variable)))
+    recurse_statement_proposition=True, yield_classes=(pu.Connective, pu.FreeVariable)))
 print(f'output6: {output6}')
 
 output7 = tuple(pu.iterate_formula_data_model_components(u=u, phi=phi3, recurse_constant_value=True,
     recurse_compound_formula_connective=True, recurse_compound_formula_terms=False,
-    recurse_statement_proposition=True, yield_classes=(pu.Connective, pu.Variable)))
+    recurse_statement_proposition=True, yield_classes=(pu.Connective, pu.FreeVariable)))
 print(f'output7: {output7}')
 
 output8 = tuple(pu.iterate_formula_data_model_components(u=u, phi=phi3, yield_parent_constant=False,
     recurse_constant_value=True, recurse_compound_formula_connective=True,
     recurse_compound_formula_terms=False, recurse_statement_proposition=True,
-    yield_classes=(pu.Connective, pu.Variable)))
+    yield_classes=(pu.Connective, pu.FreeVariable)))
 print(f'output8: {output8}')

@@ -2058,19 +2058,19 @@ def formula_alpha_contains(u: UniverseOfDiscourse, phi: FlexibleFormula, psi: Fl
 
 
 def get_formula_unique_variable_ordered_set(u: UniverseOfDiscourse, phi: FlexibleFormula) -> tuple[
-    Variable]:
+    FreeVariable]:
     """Return the ordered-set of unique variables contained in ⌜self⌝,
     ordered in canonical-order (TODO: add link to doc on canonical-order).
     """
     _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
     phi: Formula
 
-    ordered_set: list[Variable] = list()
+    ordered_set: list[FreeVariable] = list()
     for element in iterate_formula_alpha_equivalence_components(u=u, phi=phi):
-        if isinstance(element, Variable) and element not in ordered_set:
+        if isinstance(element, FreeVariable) and element not in ordered_set:
             ordered_set.append(element)
     # Make the ordered-set proxy immutable.
-    ordered_set: tuple[Variable] = tuple(ordered_set)
+    ordered_set: tuple[FreeVariable] = tuple(ordered_set)
     return ordered_set
 
 
@@ -2086,8 +2086,8 @@ def is_alpha_equivalent_to(u: UniverseOfDiscourse, phi: FlexibleFormula,
     _, psi, _ = verify_formula(u=u, input_value=psi, arg='psi')
     psi: Formula
 
-    phi_variables: tuple[Variable] = get_formula_unique_variable_ordered_set(u=u, phi=phi)
-    psi_variables: tuple[Variable] = get_formula_unique_variable_ordered_set(u=u, phi=psi)
+    phi_variables: tuple[FreeVariable] = get_formula_unique_variable_ordered_set(u=u, phi=phi)
+    psi_variables: tuple[FreeVariable] = get_formula_unique_variable_ordered_set(u=u, phi=psi)
 
     if len(phi_variables) != len(psi_variables):
         return False
@@ -2107,7 +2107,7 @@ def is_alpha_equivalent_to(u: UniverseOfDiscourse, phi: FlexibleFormula,
             # than its corresponding symbol in psi,
             # phi and psi are not alpha-equivalent.
             return False
-        if isinstance(phi_element, Variable) and isinstance(psi_element, Variable):
+        if isinstance(phi_element, FreeVariable) and isinstance(psi_element, FreeVariable):
             # print(f'{phi_variables.index(phi_element)}|{psi_variables.index(psi_element)}')
             if phi_variables.index(phi_element) != psi_variables.index(psi_element):
                 # Variables are only compared by their position in the formula.
@@ -2249,7 +2249,7 @@ class Formula(SymbolicObject):
         return self is phi
 
     def is_masked_formula_similar_to(self, phi: FlexibleFormula,
-            mask: (None, frozenset[Variable]) = None) -> bool:
+            mask: (None, frozenset[FreeVariable]) = None) -> bool:
         """Given two formulas o₁ (self) and o₂,
         and a finite set of variables 𝐌,
         return True if o₁ and o₂ are masked-formula-similar, False otherwise.
@@ -2286,9 +2286,10 @@ class Formula(SymbolicObject):
         output, _values = self._is_masked_formula_similar_to(phi=phi, mask=mask)
         return output
 
-    def _is_masked_formula_similar_to(self,
-            phi: (CompoundFormula, FormulaStatement, Variable, Connective, SimpleObjct, Formula),
-            mask: (None, frozenset[Variable]) = None, _values: (None, dict) = None) -> (bool, dict):
+    def _is_masked_formula_similar_to(self, phi: (
+            CompoundFormula, FormulaStatement, FreeVariable, Connective, SimpleObjct, Formula),
+            mask: (None, frozenset[FreeVariable]) = None, _values: (None, dict) = None) -> (
+            bool, dict):
         """A "private" version of the is_masked_formula_similar_to method,
         with the "internal" term _values.
 
@@ -2416,7 +2417,7 @@ class Formula(SymbolicObject):
         # During this process, we must of course assure the consistency of the is_strictly_propositional property.
         variables_list = get_formula_unique_variable_ordered_set(u=self.u, phi=self)
         # self.get_unique_variable_ordered_set(substitute_constants_with_values=substitute_constants_with_values))
-        x: Variable
+        x: FreeVariable
         for x in variables_list:
             variable_is_strictly_propositional: bool = x.is_strictly_propositional
             if x not in substitution_map.keys():
@@ -2584,6 +2585,16 @@ def substitute_xy(o, x, y):
 
 
 class Variable(Formula):
+    """For future development."""
+    pass
+
+
+class BoundVariable(Variable):
+    """For future development."""
+    pass
+
+
+class FreeVariable(Variable):
     """
 
     The defining-properties of a variable are:
@@ -2598,7 +2609,7 @@ class Variable(Formula):
     scope_initialization_status = Status('scope_initialization_status')
     closed_scope_status = Status('closed_scope_status')
 
-    def __init__(self, u: UniverseOfDiscourse, status: (None, Variable.Status) = None,
+    def __init__(self, u: UniverseOfDiscourse, status: (None, FreeVariable.Status) = None,
             scope: (None, CompoundFormula, typing.FrozenSet[CompoundFormula]) = None,
             symbol: (None, str, StyledText) = None, index: (None, int) = None,
             auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
@@ -2608,13 +2619,13 @@ class Variable(Formula):
             echo: (None, bool) = None) -> None:
         echo = prioritize_value(echo, configuration.echo_variable_declaration,
             configuration.echo_default, False)
-        status = prioritize_value(status, Variable.scope_initialization_status)
+        status = prioritize_value(status, FreeVariable.scope_initialization_status)
         scope = prioritize_value(scope, frozenset())
         self._is_strictly_propositional = prioritize_value(is_strictly_propositional, False)
         scope = {scope} if isinstance(scope, CompoundFormula) else scope
         verify(isinstance(scope, frozenset),
             'The scope of a FreeVariable must be of python type frozenset.')
-        verify(isinstance(status, Variable.Status),
+        verify(isinstance(status, FreeVariable.Status),
             'The status of a FreeVariable must be of the FreeVariable.Status type.')
         self._status = status
         self._scope = scope
@@ -2646,7 +2657,7 @@ class Variable(Formula):
     def extend_scope(self, phi):
         # Support for the with pythonic syntax
         # Start building  variable scope
-        verify(self._status == Variable.scope_initialization_status,
+        verify(self._status == FreeVariable.scope_initialization_status,
             'The scope of an instance of FreeVariable can only be extended if it is open.')
         # Close variable scope
         verify(isinstance(phi, CompoundFormula),
@@ -2655,7 +2666,7 @@ class Variable(Formula):
 
     def is_masked_formula_similar_to(self, phi, mask, _values):
         assert isinstance(phi, Formula)
-        if isinstance(phi, Variable):
+        if isinstance(phi, FreeVariable):
             if phi in mask:
                 # o2 is a variable, and it is present in the mask.
                 # first, we must check if it is already in the dictionary of values.
@@ -2693,7 +2704,7 @@ class Variable(Formula):
     def lock_scope(self):
         # Support for the "with u.v:" pythonic syntax.
         # If the variable scope was already closed, this method has no effect.
-        self._status = Variable.closed_scope_status
+        self._status = FreeVariable.closed_scope_status
 
     def rep_report(self, encoding: (None, Encoding) = None, proof: (None, bool) = None):
         return f'Let {self.rep_name(encoding=encoding)} be a variable in ' \
@@ -2786,7 +2797,7 @@ class CompoundFormula(Formula):
 
     Attributes
     ----------
-    connective : (Connective, Variable)
+    connective : (Connective, FreeVariable)
 
     """
 
@@ -2796,7 +2807,7 @@ class CompoundFormula(Formula):
     postfix = repm.ValueName('postfix-operator')
     collection = repm.ValueName('collection-operator')
 
-    def __init__(self, connective: (Connective, Variable), terms: tuple, u: UniverseOfDiscourse,
+    def __init__(self, connective: (Connective, FreeVariable), terms: tuple, u: UniverseOfDiscourse,
             nameset: (None, str, NameSet) = None, lock_variable_scope: bool = False,
             dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
         """
@@ -2989,7 +3000,7 @@ class CompoundFormula(Formula):
         """During construction, cross-reference a variable 𝓍
         with its parent formula if it is not already cross-referenced,
         and return its 0-based index in Formula.variables."""
-        assert isinstance(x, Variable)
+        assert isinstance(x, FreeVariable)
         x.formula = self if x.formula is None else x.formula
         assert x.formula is self
         if x not in self.variables:
@@ -6599,7 +6610,7 @@ class SimpleObjct(Formula):
     def is_masked_formula_similar_to_OBSOLETE(self, phi, mask, _values):
         # TODO: Remove this method and use only a central method on Formula.
         assert isinstance(phi, Formula)
-        if isinstance(phi, Variable):
+        if isinstance(phi, FreeVariable):
             if phi in mask:
                 # o2 is a variable, and it is present in the mask.
                 # first, we must check if it is already in the dictionary of values.
@@ -7213,7 +7224,7 @@ def verify_definition_inclusion(t: TheoryDerivation, input_value: FlexibleDefini
 
 
 def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (None, str) = None,
-        form: (None, FlexibleFormula) = None, mask: (None, frozenset[Variable]) = None,
+        form: (None, FlexibleFormula) = None, mask: (None, frozenset[FreeVariable]) = None,
         is_strictly_propositional: (None, bool) = None, raise_exception: bool = True,
         error_code: (None, ErrorCode) = None) -> tuple[bool, (None, Formula), (None, str)]:
     """Many punctilious pythonic methods or functions expect some formula as input terms. This function assures that the input value is a proper formula and that it is consistent with possible contraints imposed on that formula.
@@ -7314,9 +7325,9 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
 
 def verify_formula_statement(t: TheoryDerivation, input_value: FlexibleFormula,
         arg: (None, str) = None, form: (None, FlexibleFormula) = None,
-        mask: (None, frozenset[Variable]) = None, is_strictly_propositional: (None, bool) = None,
-        raise_exception: bool = True, error_code: (None, ErrorCode) = None) -> tuple[
-    bool, (None, FormulaStatement), (None, str)]:
+        mask: (None, frozenset[FreeVariable]) = None,
+        is_strictly_propositional: (None, bool) = None, raise_exception: bool = True,
+        error_code: (None, ErrorCode) = None) -> tuple[bool, (None, FormulaStatement), (None, str)]:
     """Many punctilious pythonic methods expect some FormulaStatement as input terms (e.g. the infer_statement() of inference-rules). This is syntactically robust, but it may read theory code less readable. In effect, one must store all formula-statements in variables to reuse them in formula. If the number of formula-statements get large, readability suffers. To provide a friendler interface for humans, we allow passing formula-statements as formula, tuple, and lists and apply the following interpretation rules:
 
     If ⌜argument⌝ is of type iterable, such as tuple, e.g.: (implies, q, p), we assume it is a formula in the form (connective, a1, a2, ... an) where ai are arguments.
@@ -7380,7 +7391,7 @@ def verify_formula_statement(t: TheoryDerivation, input_value: FlexibleFormula,
 
 def verify_hypothesis(t: TheoryDerivation, input_value: FlexibleFormula, arg: (None, str) = None,
         hypothesis_form: (None, FlexibleFormula) = None,
-        hypothesis_mask: (None, frozenset[Variable]) = None,
+        hypothesis_mask: (None, frozenset[FreeVariable]) = None,
         is_strictly_propositional: (None, bool) = None, raise_exception: bool = True,
         error_code: (None, ErrorCode) = None) -> tuple[bool, (None, Hypothesis), (None, str)]:
     formula_ok: bool
@@ -10527,7 +10538,7 @@ class UniverseOfDiscourse(Formula):
         :param symbol:
         :return:
         """
-        x = Variable(u=self, symbol=symbol, status=Variable.scope_initialization_status,
+        x = FreeVariable(u=self, symbol=symbol, status=FreeVariable.scope_initialization_status,
             is_strictly_propositional=is_strictly_propositional, echo=echo)
         return x
 
@@ -10594,8 +10605,9 @@ class UniverseOfDiscourse(Formula):
     def echo(self):
         return repm.prnt(self.rep_creation(cap=True))
 
-    def f(self, connective: (Connective, Variable), *terms, nameset: (None, str, NameSet) = None,
-            lock_variable_scope: (None, bool) = None, echo: (None, bool) = None):
+    def f(self, connective: (Connective, FreeVariable), *terms,
+            nameset: (None, str, NameSet) = None, lock_variable_scope: (None, bool) = None,
+            echo: (None, bool) = None):
         """Declare a new formula in this universe-of-discourse.
 
         Shortcut for self.elaborate_formula(. . .)."""
@@ -10741,8 +10753,8 @@ class UniverseOfDiscourse(Formula):
         To manage variable scope extensions and locking expressly,
         use declare_variable() instead.
         """
-        status = Variable.scope_initialization_status
-        x = Variable(u=self, status=status, symbol=symbol, index=index, auto_index=auto_index,
+        status = FreeVariable.scope_initialization_status
+        x = FreeVariable(u=self, status=status, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo)
         yield x
@@ -11009,7 +11021,7 @@ class DeclarativeClassList(repm.ValueName):
             python_type=CompoundFormula)
         self.formula_statement = DeclarativeClass('formula_statement', 'formula-statement',
             python_type=FormulaStatement)
-        self.variable = DeclarativeClass('variable', 'variable', python_type=Variable)
+        self.variable = DeclarativeClass('variable', 'variable', python_type=FreeVariable)
         self.hypothesis = DeclarativeClass('hypothesis', 'hypothesis', python_type=Hypothesis)
         self.inference_rule = DeclarativeClass('inference_rule', 'inference-rule')
         self.inference_rule_inclusion = DeclarativeClass('inference_rule_inclusion',

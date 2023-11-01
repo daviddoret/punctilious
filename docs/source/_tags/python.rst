@@ -46,6 +46,7 @@ My tags: python
     ../python/class/equal_terms_substitution_inclusion_python_class.rst
     ../python/class/equality_commutativity_declaration_python_class.rst
     ../python/class/equality_commutativity_inclusion_python_class.rst
+    ../python/class/free_variable_python_class.rst
     ../python/class/hypothetical_syllogism_declaration_python_class.rst
     ../python/class/hypothetical_syllogism_inclusion_python_class.rst
     ../python/class/inconsistency_introduction_1_declaration_python_class.rst
@@ -72,7 +73,6 @@ My tags: python
     ../python/class/proof_by_refutation_2_declaration_python_class.rst
     ../python/class/proof_by_refutation_2_inclusion_python_class.rst
     ../python/class/universe_of_discourse_python_class.rst
-    ../python/class/variable_python_class.rst
     ../python/class/variable_substitution_declaration_python_class.rst
     ../python/class/variable_substitution_inclusion_python_class.rst
     ../python/sample/absorption_python_sample.rst
@@ -95,6 +95,7 @@ My tags: python
     ../python/sample/double_negation_introduction_python_sample.rst
     ../python/sample/equal_terms_substitution_python_sample.rst
     ../python/sample/equality_commutativity_python_sample.rst
+    ../python/sample/free_variable_python_sample.rst
     ../python/sample/hypothetical_syllogism_python_sample.rst
     ../python/sample/inconsistency_introduction_1_python_sample.rst
     ../python/sample/inconsistency_introduction_2_python_sample.rst
@@ -105,5 +106,4 @@ My tags: python
     ../python/sample/proof_by_contradiction_2_python_sample.rst
     ../python/sample/proof_by_refutation_1_python_sample.rst
     ../python/sample/proof_by_refutation_2_python_sample.rst
-    ../python/sample/variable_python_sample.rst
     ../python/sample/variable_substitution_python_sample.rst

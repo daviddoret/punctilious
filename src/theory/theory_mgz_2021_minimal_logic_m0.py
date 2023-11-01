@@ -272,7 +272,7 @@ class MGZ2021MinimalLogicM0(pu.Package):
         print(phi)
         psi: pu.Formula = c.value
         print(psi)
-        mask: frozenset[pu.Variable] = frozenset(pu.get_formula_unique_variable_ordered_set(u=u,
+        mask: frozenset[pu.FreeVariable] = frozenset(pu.get_formula_unique_variable_ordered_set(u=u,
             phi=phi) + pu.get_formula_unique_variable_ordered_set(u=u, phi=psi))
         print(mask)
         print(pu.is_alpha_equivalent_to(u=u, phi=phi, psi=psi))

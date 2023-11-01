@@ -29,7 +29,7 @@ Class diagram
       Statement [style=filled, fillcolor="#FEFE62"];
       TheoryDerivation [style=filled, fillcolor="#FEFE62"];
       UniverseOfDiscourse [style=filled, fillcolor="#FEFE62"];
-      Variable [style=filled, fillcolor="#FEFE62"];
+      FreeVariable [style=filled, fillcolor="#FEFE62"];
       AxiomInclusion [style=filled, fillcolor="#FEFE62"];
       DefinitionInclusion [style=filled, fillcolor="#FEFE62"];
       FormulaStatement [style=filled, fillcolor="#FEFE62"];
@@ -56,6 +56,8 @@ Class diagram
       "Formula" -> "TheoryDerivation";
       "Formula" -> "UniverseOfDiscourse";
       "Formula" -> "Variable";
+      "Variable" -> "FreeVariable";
+      "Variable" -> "BoundVariable";
       "Statement" -> "AxiomInclusion";
       "Statement" -> "DefinitionInclusion";
       "Statement" -> "FormulaStatement";

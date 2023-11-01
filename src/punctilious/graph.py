@@ -34,7 +34,7 @@ def graph_formula_statement(g: nx.MultiDiGraph, s: pu.TheoryDerivation):
     g.add_edge(s.valid_proposition.rep_name(), t.rep_name())
 
 
-def graph_variable(g: nx.MultiDiGraph, x: pu.Variable):
+def graph_variable(g: nx.MultiDiGraph, x: pu.FreeVariable):
     g.add_node(x.rep_name())
 
 

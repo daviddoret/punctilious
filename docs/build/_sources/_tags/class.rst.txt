@@ -46,6 +46,7 @@ My tags: class
     ../python/class/equal_terms_substitution_inclusion_python_class.rst
     ../python/class/equality_commutativity_declaration_python_class.rst
     ../python/class/equality_commutativity_inclusion_python_class.rst
+    ../python/class/free_variable_python_class.rst
     ../python/class/hypothetical_syllogism_declaration_python_class.rst
     ../python/class/hypothetical_syllogism_inclusion_python_class.rst
     ../python/class/inconsistency_introduction_1_declaration_python_class.rst
@@ -72,6 +73,5 @@ My tags: class
     ../python/class/proof_by_refutation_2_declaration_python_class.rst
     ../python/class/proof_by_refutation_2_inclusion_python_class.rst
     ../python/class/universe_of_discourse_python_class.rst
-    ../python/class/variable_python_class.rst
     ../python/class/variable_substitution_declaration_python_class.rst
     ../python/class/variable_substitution_inclusion_python_class.rst

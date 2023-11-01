@@ -11,7 +11,7 @@ class TestIterateFormulaDataModelComponents(TestCase):
         o3: pu.SimpleObjct = test.o3
         r1: pu.Connective = test.r1
         r2: pu.Connective = test.r2
-        x1: pu.Variable = test.x
+        x1: pu.FreeVariable = test.x
         y1: pu.Connective = test.y
         phi1: pu.CompoundFormula = test.phi1
 

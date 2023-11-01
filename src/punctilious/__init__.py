@@ -9,13 +9,13 @@ from punctilious.core import (AbsorptionDeclaration, AbsorptionInclusion, Articl
     AxiomInclusion, AxiomInterpretationDeclaration, AxiomInterpretationInclusion, \
     BiconditionalElimination1Declaration, BiconditionalElimination1Inclusion, \
     BiconditionalElimination2Declaration, BiconditionalElimination2Inclusion, \
-    BiconditionalIntroductionDeclaration, BiconditionalIntroductionInclusion, classes, \
-    ComposableBlockSequence, ComposableText, configuration, ConjunctionElimination1Declaration, \
-    ConjunctionElimination1Inclusion, ConjunctionElimination2Declaration, \
-    ConjunctionElimination2Inclusion, ConjunctionIntroductionDeclaration, \
-    ConjunctionIntroductionInclusion, consistency_values, ConstantDeclaration, \
-    ConstantDeclarationDict, ConstructiveDilemmaDeclaration, ConstructiveDilemmaInclusion, \
-    create_universe_of_discourse, DashedName, DefinitionInclusion, \
+    BiconditionalIntroductionDeclaration, BiconditionalIntroductionInclusion, BoundVariable,
+    classes, ComposableBlockSequence, ComposableText, configuration,
+    ConjunctionElimination1Declaration, ConjunctionElimination1Inclusion,
+    ConjunctionElimination2Declaration, ConjunctionElimination2Inclusion,
+    ConjunctionIntroductionDeclaration, ConjunctionIntroductionInclusion, consistency_values,
+    ConstantDeclaration, ConstantDeclarationDict, ConstructiveDilemmaDeclaration,
+    ConstructiveDilemmaInclusion, create_universe_of_discourse, DashedName, DefinitionInclusion, \
     DefinitionInterpretationDeclaration, DefinitionInterpretationInclusion, \
     DestructiveDilemmaDeclaration, DestructiveDilemmaInclusion, DisjunctionIntroduction1Declaration, \
     DisjunctionIntroduction1Inclusion, DisjunctionIntroduction2Declaration, \
@@ -27,7 +27,7 @@ from punctilious.core import (AbsorptionDeclaration, AbsorptionInclusion, Articl
     DoubleNegationIntroductionInclusion, Encoding, encodings, EqualityCommutativityDeclaration, \
     EqualityCommutativityInclusion, EqualTermsSubstitutionDeclaration, \
     EqualTermsSubstitutionInclusion, ErrorCode, error_codes, formula_alpha_contains,
-    get_formula_unique_variable_ordered_set, PunctiliousException, CompoundFormula, Variable,
+    get_formula_unique_variable_ordered_set, PunctiliousException, CompoundFormula, FreeVariable,
     Header, Hypothesis, HypotheticalSyllogismDeclaration, HypotheticalSyllogismInclusion,
     InconsistencyIntroduction1Declaration, InconsistencyIntroduction1Inclusion,
     InconsistencyIntroduction2Declaration, InconsistencyIntroduction2Inclusion,
@@ -44,8 +44,8 @@ from punctilious.core import (AbsorptionDeclaration, AbsorptionInclusion, Articl
     QuasiQuotation, Connective, rep_two_columns_proof_item, SansSerifBold, SansSerifNormal,
     ScriptNormal, SerifBoldItalic, SerifItalic, SerifNormal, SimpleObjct, SimpleObjctDict,
     Statement, StyledText, Subscript, subscriptify, SymbolicObject, text_styles, TextStyle, Formula,
-    TheoryDerivation, Package, UniverseOfDiscourse, verify_formula, verify_formula_statement,
-    VariableSubstitutionDeclaration, VariableSubstitutionInclusion)
+    TheoryDerivation, Package, UniverseOfDiscourse, Variable, VariableSubstitutionDeclaration,
+    VariableSubstitutionInclusion, verify_formula, verify_formula_statement)
 
 # from foundation_system_1 import foundation_system_1, ft, u
 
