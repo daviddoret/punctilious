@@ -149,6 +149,18 @@
                                     </dl>
 
                                     <dl class="py property">
+                                        <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.c2">
+                                            <em class="property"><span class="pre">property</span><span
+                                                    class="w"> </span></em><span class="sig-name descname"><span
+                                                class="pre">c2</span></span><em class="property"><span class="p"><span
+                                                class="pre">:</span></span><span class="w"> </span><span class="pre">Class2DeclarationDict</span></em><a
+                                                class="headerlink" href="#punctilious.UniverseOfDiscourse.c2"
+                                                title="Link to this definition"></a></dt>
+                                        <dd><p>The collection of classes contained in this universe-of-discourse.</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py property">
                                         <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.connectives">
                                             <em class="property"><span class="pre">property</span><span
                                                     class="w"> </span></em><span class="sig-name descname"><span
@@ -181,6 +193,33 @@
                                                         class="xref py py-class docutils literal notranslate"><span
                                                         class="pre">AxiomDeclaration</span></code>) – an
                                                     axiom-declaration.</p>
+                                                </dd>
+                                                <dt class="field-even">Return type<span class="colon">:</span></dt>
+                                                <dd class="field-even"><p><code
+                                                        class="xref py py-class docutils literal notranslate"><span
+                                                        class="pre">bool</span></code></p>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt class="sig sig-object py"
+                                            id="punctilious.UniverseOfDiscourse.cross_reference_class">
+                                            <span class="sig-name descname"><span
+                                                    class="pre">cross_reference_class</span></span><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">c</span></span></em><span class="sig-paren">)</span><a
+                                                class="headerlink"
+                                                href="#punctilious.UniverseOfDiscourse.cross_reference_class"
+                                                title="Link to this definition"></a></dt>
+                                        <dd><p>Cross-references a class in this universe-of-discourse.</p>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                                                <dd class="field-odd"><p><strong>c</strong> (<code
+                                                        class="xref py py-class docutils literal notranslate"><span
+                                                        class="pre">CollectionDeclaration</span></code>) – a
+                                                    constant-declaration.</p>
                                                 </dd>
                                                 <dt class="field-even">Return type<span class="colon">:</span></dt>
                                                 <dd class="field-even"><p><code
@@ -438,6 +477,43 @@
 
                                     <dl class="py method">
                                         <dt class="sig sig-object py"
+                                            id="punctilious.UniverseOfDiscourse.declare_compound_formula">
+                                            <span class="sig-name descname"><span
+                                                    class="pre">declare_compound_formula</span></span><span
+                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                class="pre">connective</span></span></em>, <em class="sig-param"><span
+                                                class="o"><span class="pre">*</span></span><span class="n"><span
+                                                class="pre">terms</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">lock_variable_scope</span></span><span
+                                                class="o"><span class="pre">=</span></span><span
+                                                class="default_value"><span class="pre">None</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span class="pre">symbol</span></span><span
+                                                class="o"><span class="pre">=</span></span><span
+                                                class="default_value"><span class="pre">None</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span
+                                                class="pre">index</span></span><span class="o"><span
+                                                class="pre">=</span></span><span class="default_value"><span
+                                                class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">auto_index</span></span><span
+                                                class="o"><span class="pre">=</span></span><span
+                                                class="default_value"><span class="pre">None</span></span></em>, <em
+                                                class="sig-param"><span class="n"><span
+                                                class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span
+                                                class="default_value"><span class="pre">None</span></span></em><span
+                                                class="sig-paren">)</span><a class="headerlink"
+                                                                             href="#punctilious.UniverseOfDiscourse.declare_compound_formula"
+                                                                             title="Link to this definition"></a></dt>
+                                        <dd><p>Declare a new formula in this universe-of-discourse.</p>
+                                            <p>This method is a shortcut for Formula(universe_of_discourse=self, . .
+                                                d.).</p>
+                                            <p>A formula is <em>declared</em> in a theory, and not <em>stated</em>,
+                                                because it is not a statement,
+                                                i.e. it is not necessarily true in this theory.</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py method">
+                                        <dt class="sig sig-object py"
                                             id="punctilious.UniverseOfDiscourse.declare_definition">
                                             <span class="sig-name descname"><span class="pre">declare_definition</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
@@ -485,36 +561,6 @@
                                                 href="#punctilious.UniverseOfDiscourse.declare_definition"
                                                 title="Link to this definition"></a></dt>
                                         <dd><p>Elaborate a new axiom 𝑎 in this universe-of-discourse.</p>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="py method">
-                                        <dt class="sig sig-object py"
-                                            id="punctilious.UniverseOfDiscourse.declare_formula">
-                                            <span class="sig-name descname"><span
-                                                    class="pre">declare_formula</span></span><span
-                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">connective</span></span></em>, <em class="sig-param"><span
-                                                class="o"><span class="pre">*</span></span><span class="n"><span
-                                                class="pre">terms</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">nameset</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">lock_variable_scope</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em><span
-                                                class="sig-paren">)</span><a class="headerlink"
-                                                                             href="#punctilious.UniverseOfDiscourse.declare_formula"
-                                                                             title="Link to this definition"></a></dt>
-                                        <dd><p>Declare a new formula in this universe-of-discourse.</p>
-                                            <p>This method is a shortcut for Formula(universe_of_discourse=self, . .
-                                                d.).</p>
-                                            <p>A formula is <em>declared</em> in a theory, and not <em>stated</em>,
-                                                because it is not a statement,
-                                                i.e. it is not necessarily true in this theory.</p>
                                         </dd>
                                     </dl>
 
@@ -628,30 +674,6 @@
                                                 <dd class="field-even"><p></p>
                                                 </dd>
                                             </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="py method">
-                                        <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.f">
-                                            <span class="sig-name descname"><span class="pre">f</span></span><span
-                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">connective</span></span></em>, <em class="sig-param"><span
-                                                class="o"><span class="pre">*</span></span><span class="n"><span
-                                                class="pre">terms</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">nameset</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">lock_variable_scope</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">echo</span></span><span class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em><span
-                                                class="sig-paren">)</span><a class="headerlink"
-                                                                             href="#punctilious.UniverseOfDiscourse.f"
-                                                                             title="Link to this definition"></a></dt>
-                                        <dd><p>Declare a new formula in this universe-of-discourse.</p>
-                                            <p>Shortcut for self.elaborate_formula(…).</p>
                                         </dd>
                                     </dl>
 

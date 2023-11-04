@@ -19,7 +19,7 @@
           href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7"/>
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=a491ee77"/>
     <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
+      <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -209,48 +209,50 @@
                                                 class="n">infer_formula_statement</span><span class="p">(</span><span
                                                 class="n">a</span><span class="o">=</span><span
                                                 class="n">theory_axiom</span><span class="p">,</span>
-    <span class="n">p</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span
-                                                class="n">f</span><span class="p">(</span><span class="n">u</span><span
-                                                class="o">.</span><span class="n">r</span><span class="o">.</span><span
+    <span class="n">p</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">declare_compound_formula</span><span
+                                                class="p">(</span><span class="n">u</span><span class="o">.</span><span
+                                                class="n">r</span><span class="o">.</span><span
                                                 class="n">equal</span><span class="p">,</span> <span
-                                                class="n">u</span><span class="o">.</span><span class="n">f</span><span
+                                                class="n">u</span><span class="o">.</span><span class="n">declare_compound_formula</span><span
                                                 class="p">(</span><span class="n">r1</span><span
                                                 class="p">,</span> <span class="n">o1</span><span
-                                                class="p">,</span> <span class="n">o2</span><span
-                                                class="p">),</span> <span class="n">u</span><span
-                                                class="o">.</span><span class="n">f</span><span class="p">(</span><span
-                                                class="n">r2</span><span class="p">,</span> <span
-                                                class="n">o3</span><span class="p">)),</span> <span
-                                                class="n">lock</span><span class="o">=</span><span
+                                                class="p">,</span> <span class="n">o2</span><span class="p">),</span>
+        <span class="n">u</span><span class="o">.</span><span class="n">declare_compound_formula</span><span
+                                                class="p">(</span><span class="n">r2</span><span
+                                                class="p">,</span> <span class="n">o3</span><span
+                                                class="p">)),</span> <span class="n">lock</span><span class="o">=</span><span
                                                 class="kc">False</span><span class="p">)</span>
 <span class="n">dummy_proposition</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
                                                 class="o">.</span><span class="n">infer_formula_statement</span><span
                                                 class="p">(</span><span class="n">a</span><span class="o">=</span><span
                                                 class="n">theory_axiom</span><span class="p">,</span>
-    <span class="n">p</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span
-                                                class="n">f</span><span class="p">(</span><span class="n">r1</span><span
+    <span class="n">p</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">declare_compound_formula</span><span
+                                                class="p">(</span><span class="n">r1</span><span
                                                 class="p">,</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">f</span><span class="p">(</span><span class="n">r1</span><span
+                                                class="n">declare_compound_formula</span><span class="p">(</span><span
+                                                class="n">r1</span><span class="p">,</span>
+        <span class="n">u</span><span class="o">.</span><span class="n">declare_compound_formula</span><span
+                                                class="p">(</span><span class="n">r1</span><span
                                                 class="p">,</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">f</span><span class="p">(</span><span class="n">r1</span><span
-                                                class="p">,</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">f</span><span class="p">(</span><span class="n">r1</span><span
-                                                class="p">,</span> <span class="n">o1</span><span
-                                                class="p">,</span> <span class="n">o2</span><span
-                                                class="p">),</span> <span class="n">u</span><span
-                                                class="o">.</span><span class="n">f</span><span class="p">(</span><span
+                                                class="n">declare_compound_formula</span><span class="p">(</span><span
                                                 class="n">r1</span><span class="p">,</span> <span
                                                 class="n">o1</span><span class="p">,</span> <span
-                                                class="n">o2</span><span class="p">)),</span> <span
-                                                class="n">o2</span><span class="p">),</span> <span
-                                                class="n">u</span><span class="o">.</span><span class="n">f</span><span
+                                                class="n">o2</span><span class="p">),</span>
+            <span class="n">u</span><span class="o">.</span><span class="n">declare_compound_formula</span><span
+                                                class="p">(</span><span class="n">r1</span><span
+                                                class="p">,</span> <span class="n">o1</span><span
+                                                class="p">,</span> <span class="n">o2</span><span
+                                                class="p">)),</span> <span class="n">o2</span><span class="p">),</span>
+        <span class="n">u</span><span class="o">.</span><span class="n">declare_compound_formula</span><span
                                                 class="p">(</span><span class="n">r2</span><span
                                                 class="p">,</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">f</span><span class="p">(</span><span class="n">r1</span><span
-                                                class="p">,</span> <span class="n">o1</span><span
-                                                class="p">,</span> <span class="n">o2</span><span class="p">))),</span>
-    <span class="n">lock</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                                                class="n">declare_compound_formula</span><span class="p">(</span><span
+                                                class="n">r1</span><span class="p">,</span> <span
+                                                class="n">o1</span><span class="p">,</span> <span
+                                                class="n">o2</span><span class="p">))),</span> <span
+                                                class="n">lock</span><span class="o">=</span><span
+                                                class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># And finally, use the equal-terms-substitution inference-rule:</span>
 <span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t1</span><span
