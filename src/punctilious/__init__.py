@@ -6,11 +6,11 @@ __version__ = "1.0.10"
 from punctilious.plaintext import force_plaintext, Plaintext, unidecode
 from punctilious.repm import monospace, prnt, serif_bold
 from punctilious.core import (AbsorptionDeclaration, AbsorptionInclusion, Article, AxiomDeclaration, \
-    AxiomInclusion, AxiomInterpretationDeclaration, AxiomInterpretationInclusion, \
-    BiconditionalElimination1Declaration, BiconditionalElimination1Inclusion, \
-    BiconditionalElimination2Declaration, BiconditionalElimination2Inclusion, \
+    AxiomInclusion, AxiomInterpretationDeclaration, AxiomInterpretationInclusion,
+    BiconditionalElimination1Declaration, BiconditionalElimination1Inclusion,
+    BiconditionalElimination2Declaration, BiconditionalElimination2Inclusion,
     BiconditionalIntroductionDeclaration, BiconditionalIntroductionInclusion, BoundVariable,
-    classes, ComposableBlockSequence, ComposableText, configuration,
+    CollectionDeclaration, classes, ComposableBlockSequence, ComposableText, configuration,
     ConjunctionElimination1Declaration, ConjunctionElimination1Inclusion,
     ConjunctionElimination2Declaration, ConjunctionElimination2Inclusion,
     ConjunctionIntroductionDeclaration, ConjunctionIntroductionInclusion, consistency_values,
@@ -44,7 +44,7 @@ from punctilious.core import (AbsorptionDeclaration, AbsorptionInclusion, Articl
     QuasiQuotation, Connective, rep_two_columns_proof_item, SansSerifBold, SansSerifNormal,
     ScriptNormal, SerifBoldItalic, SerifItalic, SerifNormal, SimpleObjct, SimpleObjctDict,
     Statement, StyledText, Subscript, subscriptify, SymbolicObject, text_styles, TextStyle, Formula,
-    TheoryDerivation, Package, UniverseOfDiscourse, Variable, VariableSubstitutionDeclaration,
+    TheoryDerivation, TheoryPackage, UniverseOfDiscourse, Variable, VariableSubstitutionDeclaration,
     VariableSubstitutionInclusion, verify_formula, verify_formula_statement)
 
 # from foundation_system_1 import foundation_system_1, ft, u

@@ -2,9 +2,10 @@
 import punctilious as pu
 
 
-class MGZ2021MinimalLogicM0(pu.Package):
+class MGZ2021MinimalLogicM0(pu.TheoryPackage):
 
     def __init__(self, u: (None, pu.UniverseOfDiscourse) = None):
+        super().__init__()
         if u is None:
             u = pu.UniverseOfDiscourse()
         self.u = u
@@ -281,6 +282,3 @@ class MGZ2021MinimalLogicM0(pu.Package):
         # print(self.pl7_statement)  # print(c.value)  # print(c.value.is_alpha_equivalent_to(phi=self.pl1_statement))
 
         # print(pu.verify_formula_statement(t=t, input_value=c.value))
-
-
-p = MGZ2021MinimalLogicM0()

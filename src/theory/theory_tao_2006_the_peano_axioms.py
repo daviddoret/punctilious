@@ -2,12 +2,12 @@
 import punctilious as pu
 
 
-class Tao2006ThePeanoAxioms(pu.Package):
+class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
     def __init__(self, u: (None, pu.UniverseOfDiscourse) = None):
         if u is None:
             u = pu.UniverseOfDiscourse()
-        self.u = u
+        super().__init__(u=u)
 
         # Naming conventions in Tao06
         t = self.u.declare_theory(dashed_name='peano-axioms', name='the Peano axioms',

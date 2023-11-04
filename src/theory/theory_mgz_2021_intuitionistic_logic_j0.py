@@ -3,9 +3,10 @@ import punctilious as pu
 from theory.theory_mgz_2021_minimal_logic_m0 import MGZ2021MinimalLogicM0
 
 
-class MGZ2021IntuitionisticLogicJ0(pu.Package):
+class MGZ2021IntuitionisticLogicJ0(pu.TheoryPackage):
 
     def __init__(self, u: (None, pu.UniverseOfDiscourse) = None):
+        super().__init__()
         if u is None:
             u = pu.UniverseOfDiscourse()
         self.u = u

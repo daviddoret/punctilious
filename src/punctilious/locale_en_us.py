@@ -122,6 +122,20 @@ class LocaleEnUs(Locale):
         yield SansSerifNormal('. ')
         return True
 
+    def compose_class_declaration(self, o: SimpleObjct) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        global text_dict
+        yield SansSerifNormal('Let ')
+        yield text_dict.open_quasi_quote
+        yield from o.compose_symbol()
+        yield text_dict.close_quasi_quote
+        yield SansSerifNormal(' be a ')
+        yield SerifItalic('class')
+        yield SansSerifNormal(' in ')
+        yield from o.u.compose_symbol()
+        yield SansSerifNormal('.')
+        return True
+
     def compose_conjunction_elimination_1_paragraph_proof(self, o: InferredStatement) -> \
             collections.abc.Generator[Composable, Composable, bool]:
         p0 = o.inference_rule.definition.terms[0]

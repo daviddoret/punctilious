@@ -21,16 +21,18 @@ Class diagram
 
       Formula [style=filled, fillcolor="#FEFE62"];
       AxiomDeclaration [style=filled, fillcolor="#FEFE62"];
+      AxiomInclusion [style=filled, fillcolor="#FEFE62"];
+      BoundVariable [style=filled, fillcolor="#FEFE62"];
       CompoundFormula [style=filled, fillcolor="#FEFE62"];
-      DefinitionDeclaration [style=filled, fillcolor="#FEFE62"];
-      InferenceRuleDeclaration [style=filled, fillcolor="#FEFE62"];
       Connective [style=filled, fillcolor="#FEFE62"];
+      DefinitionDeclaration [style=filled, fillcolor="#FEFE62"];
+      FreeVariable [style=filled, fillcolor="#FEFE62"];
+      InferenceRuleDeclaration [style=filled, fillcolor="#FEFE62"];
       SimpleObjct [style=filled, fillcolor="#FEFE62"];
       Statement [style=filled, fillcolor="#FEFE62"];
       TheoryDerivation [style=filled, fillcolor="#FEFE62"];
       UniverseOfDiscourse [style=filled, fillcolor="#FEFE62"];
       Variable [style=filled, fillcolor="#FEFE62"];
-      AxiomInclusion [style=filled, fillcolor="#FEFE62"];
       DefinitionInclusion [style=filled, fillcolor="#FEFE62"];
       FormulaStatement [style=filled, fillcolor="#FEFE62"];
       Hypothesis [style=filled, fillcolor="#FEFE62"];
@@ -56,6 +58,8 @@ Class diagram
       "Formula" -> "TheoryDerivation";
       "Formula" -> "UniverseOfDiscourse";
       "Formula" -> "Variable";
+      "Variable" -> "BoundVariable";
+      "Variable" -> "FreeVariable";
       "Statement" -> "AxiomInclusion";
       "Statement" -> "DefinitionInclusion";
       "Statement" -> "FormulaStatement";

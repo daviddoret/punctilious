@@ -113,7 +113,7 @@
                                 </p>
                             </div>
                             <div class="graphviz"><img
-                                    src="../../_images/graphviz-17579c1f8cad2170f3220a651b21ab44907bc039.png"
+                                    src="../../_images/graphviz-e5e42efdc9c5cd8a165c4c020c807f35118aa1f0.png"
                                     alt="digraph &quot;Punctilious data model&quot; {
    rankdir = LR;
    node [shape=box];
@@ -122,16 +122,18 @@
 
    Formula [style=filled, fillcolor=&quot;#FEFE62&quot;];
    AxiomDeclaration [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   AxiomInclusion [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   BoundVariable [style=filled, fillcolor=&quot;#FEFE62&quot;];
    CompoundFormula [style=filled, fillcolor=&quot;#FEFE62&quot;];
-   DefinitionDeclaration [style=filled, fillcolor=&quot;#FEFE62&quot;];
-   InferenceRuleDeclaration [style=filled, fillcolor=&quot;#FEFE62&quot;];
    Connective [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   DefinitionDeclaration [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   FreeVariable [style=filled, fillcolor=&quot;#FEFE62&quot;];
+   InferenceRuleDeclaration [style=filled, fillcolor=&quot;#FEFE62&quot;];
    SimpleObjct [style=filled, fillcolor=&quot;#FEFE62&quot;];
    Statement [style=filled, fillcolor=&quot;#FEFE62&quot;];
    TheoryDerivation [style=filled, fillcolor=&quot;#FEFE62&quot;];
    UniverseOfDiscourse [style=filled, fillcolor=&quot;#FEFE62&quot;];
    Variable [style=filled, fillcolor=&quot;#FEFE62&quot;];
-   AxiomInclusion [style=filled, fillcolor=&quot;#FEFE62&quot;];
    DefinitionInclusion [style=filled, fillcolor=&quot;#FEFE62&quot;];
    FormulaStatement [style=filled, fillcolor=&quot;#FEFE62&quot;];
    Hypothesis [style=filled, fillcolor=&quot;#FEFE62&quot;];
@@ -157,6 +159,8 @@
    &quot;Formula&quot; -&gt; &quot;TheoryDerivation&quot;;
    &quot;Formula&quot; -&gt; &quot;UniverseOfDiscourse&quot;;
    &quot;Formula&quot; -&gt; &quot;Variable&quot;;
+   &quot;Variable&quot; -&gt; &quot;BoundVariable&quot;;
+   &quot;Variable&quot; -&gt; &quot;FreeVariable&quot;;
    &quot;Statement&quot; -&gt; &quot;AxiomInclusion&quot;;
    &quot;Statement&quot; -&gt; &quot;DefinitionInclusion&quot;;
    &quot;Statement&quot; -&gt; &quot;FormulaStatement&quot;;

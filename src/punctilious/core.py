@@ -2153,18 +2153,13 @@ class Formula(SymbolicObject):
             paragraph_header: (None, ParagraphHeader) = None, ref: (None, str, StyledText) = None,
             subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
             echo: (None, bool) = None):
-        # pseudo-class properties. these must be overwritten by
-        # the parent constructor after calling __init__().
-        # the rationale is that checking python types fails
-        # miserably (e.g. because of context managers),
-        # thus, implementing explicit functional-types will prove
-        # more robust and allow for duck typing.
         super().__init__(u=u, is_universe_of_discourse=is_universe_of_discourse,
             is_theory_foundation_system=is_theory_foundation_system, symbol=symbol, index=index,
             auto_index=auto_index, namespace=namespace, dashed_name=dashed_name, acronym=acronym,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
             echo=False)
+        self._collections = frozenset()
         super()._declare_class_membership(classes.formula)
         if not isinstance(self, UniverseOfDiscourse):
             # The universe-of-discourse is the only object that may not
@@ -2228,6 +2223,11 @@ class Formula(SymbolicObject):
             ok, formula, msg = verify_formula(u=self.u, input_value=(self, other.a, other.b),
                 raise_exception=True)
             return formula
+
+    def _cross_reference_collection(self, c: CollectionDeclaration):
+        """A private method called by the CollectionDeclaration class to cross-reference objects
+        contained in the collection. This allows to list the collections an object is a member of from the object itself."""
+        self._collections = self._collections.union({c})
 
     def add_to_graph(self, g):
         """Add this theoretical object as a node in the target graph g.
@@ -3837,21 +3837,24 @@ class FormulaStatement(Statement):
     def __str__(self):
         return self.rep(expand=True)
 
+    def alpha_contains(self, psi: FlexibleFormula) -> bool:
+        return formula_alpha_contains(u=self.u, phi=self, psi=psi)
+
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
         yield SerifItalic(plaintext='formula-statement')
-
-    @property
-    def terms(self):
-        """The terms of a formula-statement
-        are the terms of the valid-proposition-formula it contains."""
-        return self.valid_proposition.terms
 
     @property
     def connective(self):
         """The connective of a formula-statement
         is the connective of the valid-proposition-formula it contains."""
         return self.valid_proposition.connective
+
+    @property
+    def terms(self):
+        """The terms of a formula-statement
+        are the terms of the valid-proposition-formula it contains."""
+        return self.valid_proposition.terms
 
     def is_formula_syntactically_equivalent_to(self, phi: FlexibleFormula) -> bool:
         """Return true if ⌜self⌝ is formula-syntactically-equivalent to ⌜o2⌝.
@@ -6645,6 +6648,55 @@ class SimpleObjct(Formula):
             return False
 
 
+class CollectionDeclaration(Formula):
+    """A collection is not a formally defined mathematical concept but it is useful to denote
+    "groups" of mathematical objects. In punctilious we use the CollectionDeclaration python class
+    to model a collection defined by comprehension, but iteratively. By comprehension
+    because objects are specifically listed, iteratively because it is assumed that the collection
+    is partially defined and may be further extended with new objects as they are known.
+    """
+
+    def __init__(self, u: UniverseOfDiscourse, symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None, echo: (None, bool) = None):
+        echo = prioritize_value(echo, configuration.echo_simple_objct_declaration,
+            configuration.echo_default, False)
+        super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, echo=False)
+        self.u.cross_reference_class(c=self)
+        self._internal_container = frozenset()
+        if echo:
+            self.echo()
+
+    def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
+        yield SerifItalic(plaintext='class')
+
+    def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[
+        Composable, Composable, bool]:
+        """
+        .. include:: ../../include/compose_report_python_method.rstinc
+
+        """
+        output = yield from configuration.locale.compose_class_declaration(o=self)
+        return output
+
+    def echo(self):
+        repm.prnt(self.rep_report())
+
+    def extend(self, phi: FlexibleFormula) -> None:
+        """Add an object to the collection."""
+        _, phi, _ = verify_formula(u=self.u, input_value=phi)
+        phi: Formula
+        phi._cross_reference_collection(c=self)
+        self._internal_container = self._internal_container.union({phi})
+
+    def contains(self, phi: FlexibleFormula) -> bool:
+        """Returns True if phi is contained in the collection, False otherwise."""
+        phi = verify_formula(u=self.u, input_value=phi)
+        return phi in self._internal_container
+
+    def is_strictly_propositional(self) -> bool:
+        return False
+
+
 class Tuple(tuple):
     """Tuple subclasses the native tuple class.
     The resulting supports setattr, getattr, hasattr,
@@ -6845,7 +6897,7 @@ class ConnectiveDict(collections.UserDict):
         if self._implication is None:
             self._implication = self.declare(arity=2, formula_rep=CompoundFormula.infix,
                 signal_proposition=True,
-                symbol=SerifItalic(plaintext='==>', unicode='⟹', latex=r'\implies'),
+                symbol=SerifItalic(plaintext='implies', unicode='⊃', latex=r'\supset'),
                 auto_index=False, name='implication', explicit_name='logical implication')
         return self._implication
 
@@ -7072,6 +7124,22 @@ class ConstantDeclarationDict(collections.UserDict):
             echo: (None, bool) = None) -> ConstantDeclaration:
         return ConstantDeclaration(u=self.u, value=value, symbol=symbol, index=index,
             auto_index=auto_index, echo=echo)
+
+
+class Class2DeclarationDict(collections.UserDict):
+    """A dictionary that exposes well-known classes as properties.
+    It is exposed as the c2 property on the UniverseOfDiscourse class.
+
+    """
+
+    def __init__(self, u: UniverseOfDiscourse):
+        self.u = u
+        super().__init__()
+
+    def declare(self, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
+            auto_index: (None, bool) = None, echo: (None, bool) = None) -> CollectionDeclaration:
+        return CollectionDeclaration(u=self.u, symbol=symbol, index=index, auto_index=auto_index,
+            echo=echo)
 
 
 FlexibleAxiom = typing.Union[AxiomDeclaration, AxiomInclusion, str]
@@ -10329,6 +10397,7 @@ class UniverseOfDiscourse(Formula):
             configuration.echo_default, False)
         self.axioms = dict()
         self._c = ConstantDeclarationDict(u=self)
+        self._c2 = Class2DeclarationDict(u=self)
         self.definitions = dict()
         self.formulae = dict()
         self._inference_rules = InferenceRuleDeclarationCollection(u=self)
@@ -10366,6 +10435,11 @@ class UniverseOfDiscourse(Formula):
         """The collection of constants contained in this universe-of-discourse."""
         return self._c
 
+    @property
+    def c2(self) -> Class2DeclarationDict:
+        """The collection of classes contained in this universe-of-discourse."""
+        return self._c2
+
     def compose_class(self) -> collections.abc.Generator[Composable, Composable, bool]:
         yield SerifItalic(plaintext='universe-of-discourse')
         return True
@@ -10392,6 +10466,17 @@ class UniverseOfDiscourse(Formula):
             'universe-of-discourse.', a=a, universe_of_discourse=self)
         if a not in self.axioms:
             self.axioms[a.nameset] = a
+            return True
+        else:
+            return False
+
+    def cross_reference_class(self, c: CollectionDeclaration) -> bool:
+        """Cross-references a class in this universe-of-discourse.
+
+        :parameter c: a constant-declaration.
+        """
+        if c not in self.c2:
+            self.c2[c.nameset] = c
             return True
         else:
             return False
@@ -10980,9 +11065,13 @@ def reset_configuration(configuration: Configuration) -> None:
 reset_configuration(configuration=configuration)
 
 
-class Package:
-    def __init__(self):
-        pass
+class TheoryPackage:
+    def __init__(self, u: UniverseOfDiscourse):
+        self._u = u
+
+    @property
+    def u(self) -> UniverseOfDiscourse:
+        return self._u
 
 
 class Article:
