@@ -1945,12 +1945,12 @@ class InfixPartialFormula:
         connective = self.b
         first_term = self.a
         second_term = other
-        return self.a.u.f(connective, first_term, second_term)
+        return self.a.u.declare_compound_formula(connective, first_term, second_term)
 
     def __str__(self):
         return f'InfixPartialFormula(a = {self.a}, b = {self.b})'
 
-    # def __ror__(self, other=None):  #    """Hack to provide support for pseudo-infix notation, as in: p |implies| q.  #    """  #    print(f'IPF.__ror__: self = {self}, other = {other}')  #    if not isinstance(other, InfixPartialFormula):  #        return InfixPartialFormula(a=self, b=other)  # return self.a.u.f(self.b, self.a, other)  #    else:  #        verify(assertion=1 == 2, msg='failed infix notation', slf_a=self.a, slf_b=self.b)  #        return self.a.u.f(self.a, self.b, self)
+    # def __ror__(self, other=None):  #    """Hack to provide support for pseudo-infix notation, as in: p |implies| q.  #    """  #    print(f'IPF.__ror__: self = {self}, other = {other}')  #    if not isinstance(other, InfixPartialFormula):  #        return InfixPartialFormula(a=self, b=other)  # return self.a.u.declare_compound_formula(self.b, self.a, other)  #    else:  #        verify(assertion=1 == 2, msg='failed infix notation', slf_a=self.a, slf_b=self.b)  #        return self.a.u.declare_compound_formula(self.a, self.b, self)
 
 
 class TheoreticalClass(type):
@@ -2216,7 +2216,7 @@ class Formula(SymbolicObject):
         if not isinstance(other, InfixPartialFormula):
             return InfixPartialFormula(a=self, b=other)
         else:
-            # return self.u.f(self, other.a, other.b)
+            # return self.u.declare_compound_formula(self, other.a, other.b)
             ok: bool
             formula: (None, CompoundFormula)
             msg: (None, str)
@@ -2447,7 +2447,8 @@ class Formula(SymbolicObject):
             terms = tuple(
                 p.substitute(substitution_map=substitution_map, lock_variable_scope=False) for p in
                     self.terms)
-            phi = self.u.f(connective, *terms, lock_variable_scope=lock_variable_scope)
+            phi = self.u.declare_compound_formula(connective, *terms,
+                lock_variable_scope=lock_variable_scope)
             return phi
         else:
             return self
@@ -2808,25 +2809,28 @@ class CompoundFormula(Formula):
     collection = repm.ValueName('collection-operator')
 
     def __init__(self, connective: (Connective, FreeVariable), terms: tuple, u: UniverseOfDiscourse,
-            nameset: (None, str, NameSet) = None, lock_variable_scope: bool = False,
-            dashed_name: (None, str, DashedName) = None, echo: (None, bool) = None):
+            symbol: (None, str, StyledText) = None, index: (None, int) = None,
+            auto_index: (None, bool) = None, lock_variable_scope: bool = False,
+            echo: (None, bool) = None):
         """
         """
         echo = prioritize_value(echo, configuration.echo_formula_declaration,
             configuration.echo_default, False)
         self.variables = dict()  # TODO: Check how to make dict immutable after construction.
         # self.formula_index = theory.crossreference_formula(self)
-        if nameset is None:
+        if symbol is None:
             symbol = configuration.default_formula_symbol
-            index = u.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
-        if isinstance(nameset, str):
-            # If symbol was passed as a string,
-            # assume the base was passed without index.
-            # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
-            index = u.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index)
+        # if nameset is None:
+        #    symbol = configuration.default_formula_symbol
+        #    index = u.index_symbol(symbol=symbol)
+        #    nameset = NameSet(symbol=symbol, index=index)
+        # if isinstance(nameset, str):
+        #    # If symbol was passed as a string,
+        #    # assume the base was passed without index.
+        #    # TODO: Analyse the string if it ends with index in subscript characters.
+        #    symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
+        #    index = u.index_symbol(symbol=symbol)
+        #    nameset = NameSet(symbol=symbol, index=index)
         self.connective = connective
         terms = terms if isinstance(terms, tuple) else tuple([terms])
         # verify(assertion=len(terms) > 0,
@@ -2852,7 +2856,8 @@ class CompoundFormula(Formula):
                 len_terms=len(terms), terms=terms)
         self.arity = len(terms)
         self.terms = terms
-        super().__init__(nameset=nameset, u=u, echo=False)
+        # super().__init__(nameset=nameset, u=u, echo=False)
+        super().__init__(symbol=symbol, index=index, auto_index=auto_index, u=u, echo=False)
         super()._declare_class_membership(declarative_class_list.compound_formula)
         u.cross_reference_formula(self)
         verify(assertion=is_in_class(connective, classes.connective) or is_in_class(connective,
@@ -7328,7 +7333,7 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
         # assuming a data structure of the form:
         # (connective, argument_1, argument_2, ..., argument_n)
         # where the connective and/or the arguments may be variables.
-        formula = u.f(input_value[0], *input_value[1:])
+        formula = u.declare_compound_formula(input_value[0], *input_value[1:])
     elif isinstance(input_value, Formula):
         # the input is typed as an individual formula.
         # this is a meta-theory formula, i.e. it is a formula
@@ -10598,8 +10603,9 @@ class UniverseOfDiscourse(Formula):
         if t not in self.theories:
             self.theories[t.nameset] = t
 
-    def declare_formula(self, connective: Connective, *terms, nameset: (None, str, NameSet) = None,
-            lock_variable_scope: (None, bool) = None, echo: (None, bool) = None):
+    def declare_compound_formula(self, connective: Connective, *terms,
+            lock_variable_scope: (None, bool) = None, symbol: (None, str, StyledText) = None,
+            index: (None, int) = None, auto_index: (None, bool) = None, echo: (None, bool) = None):
         """Declare a new formula in this universe-of-discourse.
 
         This method is a shortcut for Formula(universe_of_discourse=self, . . d.).
@@ -10607,8 +10613,9 @@ class UniverseOfDiscourse(Formula):
         A formula is *declared* in a theory, and not *stated*, because it is not a statement,
         i.e. it is not necessarily true in this theory.
         """
-        phi = CompoundFormula(connective=connective, terms=terms, u=self, nameset=nameset,
-            lock_variable_scope=lock_variable_scope, echo=echo)
+        phi = CompoundFormula(connective=connective, terms=terms, u=self,
+            lock_variable_scope=lock_variable_scope, symbol=symbol, index=index,
+            auto_index=auto_index, echo=echo)
         return phi
 
     def declare_variable(self, symbol: (None, str, StyledText) = None,
@@ -10689,15 +10696,6 @@ class UniverseOfDiscourse(Formula):
 
     def echo(self):
         return repm.prnt(self.rep_creation(cap=True))
-
-    def f(self, connective: (Connective, FreeVariable), *terms,
-            nameset: (None, str, NameSet) = None, lock_variable_scope: (None, bool) = None,
-            echo: (None, bool) = None):
-        """Declare a new formula in this universe-of-discourse.
-
-        Shortcut for self.elaborate_formula(. . .)."""
-        return self.declare_formula(connective, *terms, nameset=nameset,
-            lock_variable_scope=lock_variable_scope, echo=echo)
 
     def get_symbol_max_index(self, symbol: ComposableText) -> int:
         """Return the highest index for that symbol-base in the universe-of-discourse."""
@@ -10960,7 +10958,8 @@ def rep_two_columns_proof_end(left: str) -> str:
 
 def apply_negation(phi: CompoundFormula) -> CompoundFormula:
     """Apply negation to a formula phi."""
-    return phi.u.f(phi.u.r.lnot, phi.u.f(phi.u.r.lnot, phi))
+    return phi.u.declare_compound_formula(phi.u.r.lnot,
+        phi.u.declare_compound_formula(phi.u.r.lnot, phi))
 
 
 def apply_double_negation(phi: CompoundFormula) -> CompoundFormula:

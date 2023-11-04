@@ -84,9 +84,13 @@ class Language(pu.CollectionDeclaration):
             text_style=pu.text_styles.sans_serif_normal)
         super().__init__(u=self._u, symbol=symbol)
         self.lnot = self._u.r.lnot
+        self._extend(phi=self.lnot)
         self.lor = self._u.r.lor
+        self._extend(phi=self.lor)
         self.land = self._u.r.land
+        self._extend(phi=self.land)
         self.implies = self._u.r.implies
+        self._extend(phi=self.implies)
 
     @contextlib.contextmanager
     def with_propositional_variable(self, echo: (None, bool) = None):
@@ -109,7 +113,50 @@ class Language(pu.CollectionDeclaration):
         super().extend(phi=phi)
 
     def extend(self, phi: FlexibleFormula) -> None:
-        """Manually extending the propositional-language collection is forbidden. In effect,
+        """Override the extend() method to forbid manual extensions of the collection.
+
+        Manually extending the propositional-language collection is forbidden. In effect,
+        the extremal clause of the language definition prevents any object that is not defined in the first and second clause.
+        TODO: Provide reference to MGZ definition 2.1 and 2.2.
+        use the with_propositional_variable() method to declare new propositional variables.
+        """
+        raise pu.PunctiliousException("")
+
+
+class Formulae(pu.CollectionDeclaration):
+    """The formulae of propositional logic."""
+
+    def __init__(self, theory_package: pu.TheoryPackage):
+        self._theory_package = theory_package
+        self._u = theory_package.u
+        symbol = pu.StyledText(plaintext='Phi', unicode='𝛷', latex=r'\Phi',
+            text_style=pu.text_styles.sans_serif_normal)
+        self._formula_symbol = pu.StyledText(plaintext='phi', unicode='𝜙', latex=r'\phi',
+            text_style=pu.text_styles.sans_serif_normal)
+        super().__init__(u=self._u, symbol=symbol)
+
+    def declare_compound_formula(self, connective: pu.Connective, *terms,
+            lock_variable_scope: (None, bool) = None, echo: (None, bool) = None):
+        """Declare a new formula in this universe-of-discourse.
+
+        This method is a shortcut for Formula(universe_of_discourse=self, . . d.).
+
+        A formula is *declared* in a theory, and not *stated*, because it is not a statement,
+        i.e. it is not necessarily true in this theory.
+        """
+        phi = pu.CompoundFormula(connective=connective, terms=terms, u=self,
+            symbol=self._formula_symbol, lock_variable_scope=lock_variable_scope, echo=echo)
+        self._extend(phi=phi)
+        return phi
+
+    def _extend(self, phi: FlexibleFormula) -> None:
+        """This private method extends the language collection in an authorized manner."""
+        super().extend(phi=phi)
+
+    def extend(self, phi: FlexibleFormula) -> None:
+        """Override the extend() method to forbid manual extensions of the collection.
+
+        Manually extending the propositional-language collection is forbidden. In effect,
         the extremal clause of the language definition prevents any object that is not defined in the first and second clause.
         TODO: Provide reference to MGZ definition 2.1 and 2.2.
         use the with_propositional_variable() method to declare new propositional variables.

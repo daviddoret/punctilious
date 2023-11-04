@@ -101,13 +101,13 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
             phi=u.r.tupl(zero_plusplus))
         p010 = t.i.mp.infer_formula_statement(p009, p004)
         self.p010 = p010
-        zero_plus_plus_plusplus = u.f(plusplus, zero_plusplus)
+        zero_plus_plus_plusplus = u.declare_compound_formula(plusplus, zero_plusplus)
         p011 = t.i.variable_substitution.infer_formula_statement(p=p002,
             phi=u.r.tupl(zero_plus_plus_plusplus))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₁₂): ((((0)++)++)++ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).
         p012 = t.i.mp.infer_formula_statement(p011, p010)
         self.p012 = p012
-        zero_plus_plus_plus_plusplus = u.f(plusplus, zero_plus_plus_plusplus)
+        zero_plus_plus_plus_plusplus = u.declare_compound_formula(plusplus, zero_plus_plus_plusplus)
         p013 = t.i.variable_substitution.infer_formula_statement(p=p002,
             phi=u.r.tupl(zero_plus_plus_plus_plusplus))
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₁₄): (((((0)++)++)++)++ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟).
@@ -147,8 +147,9 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         with u.with_variable('n') as n:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₂₈): ((𝐧₂ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((𝐧₂)++ ≠ 0)).
             p028 = t.i.axiom_interpretation.infer_formula_statement(a=a05,
-                p=u.f(u.r.implies, (n | u.r.is_a | natural_number),
-                    u.f(u.r.neq, u.f(plusplus, n), zero)))
+                p=u.declare_compound_formula(u.r.implies, (n | u.r.is_a | natural_number),
+                    u.declare_compound_formula(u.r.neq, u.declare_compound_formula(plusplus, n),
+                        zero)))
 
         t.open_section('4 is not equal to 0.', section_parent=section_2_1, numbering=False)
         # Proposition 2.1.6. 4 is not equal to 0.
@@ -169,17 +170,24 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         with u.with_variable('n') as n, u.with_variable('m') as m:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₂): ((((𝐧₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐦₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (𝐧₃ ≠ 𝐦₁)) ⟹ ((𝐧₃)++ ≠ (𝐦₁)++)).
-            p032 = t.i.axiom_interpretation.infer_formula_statement(a=axiom_2_4, p=u.f(u.r.implies,
-                u.f(u.r.land, u.f(u.r.land, u.f(u.r.is_a, n, natural_number),
-                    u.f(u.r.is_a, m, natural_number)), u.f(u.r.neq, n, m)),
-                u.f(u.r.neq, u.f(plusplus, n), u.f(plusplus, m))), lock=False)
+            p032 = t.i.axiom_interpretation.infer_formula_statement(a=axiom_2_4,
+                p=u.declare_compound_formula(u.r.implies, u.declare_compound_formula(u.r.land,
+                    u.declare_compound_formula(u.r.land,
+                        u.declare_compound_formula(u.r.is_a, n, natural_number),
+                        u.declare_compound_formula(u.r.is_a, m, natural_number)),
+                    u.declare_compound_formula(u.r.neq, n, m)),
+                    u.declare_compound_formula(u.r.neq, u.declare_compound_formula(plusplus, n),
+                        u.declare_compound_formula(plusplus, m))), lock=False)
         with u.with_variable('n') as n, u.with_variable('m') as m:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₂): ((((𝐧₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐦₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (𝐧₃ ≠ 𝐦₁)) ⟹ ((𝐧₃)++ ≠ (𝐦₁)++)).
-            p032b = t.i.axiom_interpretation.infer_formula_statement(a=axiom_2_4, p=u.f(u.r.implies,
-                u.f(u.r.land, u.f(u.r.land, u.f(u.r.is_a, n, natural_number),
-                    u.f(u.r.is_a, m, natural_number)),
-                    u.f(u.r.equal, u.f(plusplus, n), u.f(plusplus, m))), u.f(u.r.equal, n, m)),
-                lock=True)
+            p032b = t.i.axiom_interpretation.infer_formula_statement(a=axiom_2_4,
+                p=u.declare_compound_formula(u.r.implies, u.declare_compound_formula(u.r.land,
+                    u.declare_compound_formula(u.r.land,
+                        u.declare_compound_formula(u.r.is_a, n, natural_number),
+                        u.declare_compound_formula(u.r.is_a, m, natural_number)),
+                    u.declare_compound_formula(u.r.equal, u.declare_compound_formula(plusplus, n),
+                        u.declare_compound_formula(plusplus, m))),
+                    u.declare_compound_formula(u.r.equal, n, m)), lock=True)
 
         s55 = t.open_section('6 is not equal to 2.', section_parent=section_2_1, numbering=False)
 

@@ -19,7 +19,7 @@
           href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7"/>
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=a491ee77"/>
     <!--[if lt IE 9]>
-      <script src="../../_static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -326,9 +326,9 @@ axiom = u.declare_axiom(natural_language=&#39;Dummy axiom for demonstration purp
 t1 = u.t(echo=True)
 theory_axiom = t1.include_axiom(a=axiom)
 proposition_x_equal_y = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
-    p=u.f(u.r.equal, u.f(r1, o1, o2), u.f(r2, o3)), lock=False)
+    p=u.declare_compound_formula(u.r.equal, u.declare_compound_formula(r1, o1, o2), u.declare_compound_formula(r2, o3)), lock=False)
 dummy_proposition = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
-    p=u.f(r1, u.f(r1, u.f(r1, u.f(r1, o1, o2), u.f(r1, o1, o2)), o2), u.f(r2, u.f(r1, o1, o2))),
+    p=u.declare_compound_formula(r1, u.declare_compound_formula(r1, u.declare_compound_formula(r1, u.declare_compound_formula(r1, o1, o2), u.declare_compound_formula(r1, o1, o2)), o2), u.declare_compound_formula(r2, u.declare_compound_formula(r1, o1, o2))),
     lock=True)
 
 # And finally, use the equal-terms-substitution inference-rule:

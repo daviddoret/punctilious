@@ -15,7 +15,7 @@ class TestFreeVariable(TestCase):
         u = pu.UniverseOfDiscourse()
         with u.with_variable('x', echo=True) as x, u.with_variable('y', echo=True) as y:
             r = u.r.declare(arity=2)
-            phi = u.f(r, x, y)
+            phi = u.declare_compound_formula(r, x, y)
             self.assertIs(x, phi.terms[0])
             self.assertIs(y, phi.terms[1])
             self.assertIsNot(y, phi.terms[0])
@@ -23,4 +23,4 @@ class TestFreeVariable(TestCase):
         with self.assertRaises(pu.PunctiliousException):
             # Outside the with statement, scope is locked.
             # Trying to extend the scope raises an exception.
-            psi = u.f(r, y, x)
+            psi = u.declare_compound_formula(r, y, x)

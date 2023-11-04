@@ -11,9 +11,13 @@ class TestTao2006ThePeanoAxioms(unittest.TestCase):
         t = tpa.t
         u = t.u
         plusplus = tpa.plusplus
-        phi1 = u.f(u.r.is_a, u.f(plusplus, tpa.zero), tpa.natural_number)
-        phi2 = u.f(u.r.is_a, u.f(plusplus, u.f(plusplus, tpa.zero)), tpa.natural_number)
-        phi3 = u.f(u.r.is_a, u.f(plusplus, u.f(plusplus, u.f(plusplus, tpa.zero))),
+        phi1 = u.declare_compound_formula(u.r.is_a, u.declare_compound_formula(plusplus, tpa.zero),
+            tpa.natural_number)
+        phi2 = u.declare_compound_formula(u.r.is_a,
+            u.declare_compound_formula(plusplus, u.declare_compound_formula(plusplus, tpa.zero)),
+            tpa.natural_number)
+        phi3 = u.declare_compound_formula(u.r.is_a, u.declare_compound_formula(plusplus,
+            u.declare_compound_formula(plusplus, u.declare_compound_formula(plusplus, tpa.zero))),
             tpa.natural_number)
 
         self.assertTrue(
@@ -31,7 +35,7 @@ class TestTao2006ThePeanoAxioms(unittest.TestCase):
         self.assertFalse(tpa.p012.valid_proposition.is_formula_syntactically_equivalent_to(phi1))
         self.assertFalse(tpa.p012.valid_proposition.is_formula_syntactically_equivalent_to(phi2))
 
-        phi4 = u.f(u.r.is_a, tpa.three, tpa.natural_number)
+        phi4 = u.declare_compound_formula(u.r.is_a, tpa.three, tpa.natural_number)
         self.assertTrue(
             tpa.proposition_2_1_4.valid_proposition.is_formula_syntactically_equivalent_to(phi4))
 

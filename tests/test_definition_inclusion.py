@@ -31,7 +31,9 @@ class TestDefinitionInclusion(TestCase):
         qux = u.o.declare(nameset=pu.NameSet(symbol='qux', index=None))
         f = u.r.declare(1, nameset=pu.NameSet(symbol='f', index=None), signal_proposition=True)
         g = u.r.declare(2, nameset=pu.NameSet(symbol='g', index=None), signal_proposition=True)
-        dii1 = t.i.definition_interpretation.infer_formula_statement(d=di1, x=u.f(f, foo),
-            y=u.f(g, bar, qux), echo=True)
+        dii1 = t.i.definition_interpretation.infer_formula_statement(d=di1,
+            x=u.declare_compound_formula(f, foo), y=u.declare_compound_formula(g, bar, qux),
+            echo=True)
         self.assertTrue(dii1.valid_proposition.is_formula_syntactically_equivalent_to(
-            u.f(u.r.equal, u.f(f, foo), u.f(g, bar, qux))))
+            u.declare_compound_formula(u.r.equal, u.declare_compound_formula(f, foo),
+                u.declare_compound_formula(g, bar, qux))))

@@ -34,7 +34,8 @@ class TestInconsistencyIntroduction1(TestCase):
             t1_p3_implication = t1.i.axiom_interpretation.infer_formula_statement(a=axiom_theory,
                 p=((r1(x, y) | u.r.land | r1(y, z)) | u.r.implies | r1(x, z)), lock=True)
         t1.stabilize()
-        hypothetical_formula = u.f(u.r.lnot, u.f(r1, o1, o3))
+        hypothetical_formula = u.declare_compound_formula(u.r.lnot,
+            u.declare_compound_formula(r1, o1, o3))
         # H1: ¬(𝑟₁(𝑜₁, 𝑜₃))
         t1_h1 = t1.pose_hypothesis(hypothesis_formula=hypothetical_formula)
         t2 = t1_h1.hypothesis_child_theory

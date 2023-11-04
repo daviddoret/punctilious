@@ -44,13 +44,13 @@ class TestAxiomInterpretation(TestCase):
         o2 = u.o.declare()
         r1 = u.r.declare(arity=2, signal_proposition=True)
         r2 = u.r.declare(arity=1)
-        phi1 = u.f(r1, o1, o2)
+        phi1 = u.declare_compound_formula(r1, o1, o2)
         # Elaborate the theory
         t = u.t()
         a2 = t.include_axiom(a1)
         p1 = t.i.axiom_interpretation.infer_formula_statement(a2, phi1)
-        self.assertTrue(
-            p1.valid_proposition.is_formula_syntactically_equivalent_to(u.f(r1, o1, o2)))
+        self.assertTrue(p1.valid_proposition.is_formula_syntactically_equivalent_to(
+            u.declare_compound_formula(r1, o1, o2)))
         # Validity error
         with self.assertRaises(pu.PunctiliousException) as error:
             t.i.axiom_interpretation.infer_formula_statement(a2, r2(o1))
