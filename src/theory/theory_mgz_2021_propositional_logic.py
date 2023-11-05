@@ -138,6 +138,8 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
       # TODO: dans cette formule, le term est une variable. Et là, on souhaite
       #  "meta-parler" de la variable et on ne souhaite pas "utiliser" la variable.
       #  comment distinguer les deux choses?
+      # La solution sera d'utiliser un connective symbolic-reference avec une
+      # composition: ⌜x⌝ où x est la nom de l'objet.
       ???????????????????????????????????????????????
       pu.verify_formula_statement(t=self.metatheory, input_value=term | self.is_a | self.propositional_formula,
         arg='term', error_code=error_codes.error_101_invalid_propositional_formula_components)
