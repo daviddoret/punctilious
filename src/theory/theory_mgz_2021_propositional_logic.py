@@ -6,164 +6,189 @@ import punctilious as pu
 from punctilious.core import FlexibleFormula
 
 
+class ErrorCodes:
+  # TODO: Extend the system error codes instead of declaring a new class?
+  def __init__(self):
+    self.error_101_invalid_propositional_formula_components = pu.ErrorCode(101, 'Invalid propositional formula '
+                                                                                'components')
+
+
+error_codes = ErrorCodes()
+
+
 class MGZ2021PropositionalLogic(pu.TheoryPackage):
 
-    def __init__(self, u: (None, pu.UniverseOfDiscourse) = None):
-        if u is None:
-            u = pu.UniverseOfDiscourse()
-        super().__init__(u=u)
-        self._l = Language(theory_package=self)
-        # Naming conventions in MGZ21
-        theory_symbol = pu.StyledText(plaintext='L', text_style=pu.text_styles.script_normal)
-        t = self.u.declare_theory(symbol=theory_symbol, index=1, dashed_name='propositional-logic',
-            name='propositional logic', explicit_name='propositional logic [MGZ21]')
-        self.t = t
-        self.l1 = t
+  def __init__(self, u: (None, pu.UniverseOfDiscourse) = None):
+    if u is None:
+      u = pu.UniverseOfDiscourse()
+    super().__init__(u=u)
 
-        # meta-theory
-        metatheory = self.u.declare_theory(symbol=theory_symbol, index=1,
-            dashed_name='meta-propositional-logic', name='meta propositional logic')
-        self.metatheory = metatheory
+    # Naming conventions in MGZ21
+    self._formula_symbol = pu.StyledText(plaintext='phi', unicode='𝜑', latex=r'\phi',
+      text_style=pu.text_styles.serif_italic)
+    self._propositional_variable_symbol = pu.StyledText(plaintext='p', text_style=pu.text_styles.serif_italic)
 
-        section_2 = t.open_section(section_title='Axiomatic Calculi', section_number=2)
-        section_2_1 = t.open_section(section_parent=section_2, section_title='Propositional Logic',
-            section_number=1)
+    # meta-theory
+    metatheory: pu.TheoryDerivation = self.u.declare_theory(
+      symbol=pu.StyledText(plaintext='PLM', text_style=pu.text_styles.script_normal), index=None, auto_index=False,
+      dashed_name='propositional-logic-metatheory', name='propositional logic metatheory')
+    self._metatheory = metatheory
 
-        # Definition 2.1
-        def_2_1_declaration = u.declare_axiom(natural_language="""The language of 
+    section_2 = metatheory.open_section(section_title='Axiomatic Calculi', section_number=2)
+    section_2_1 = metatheory.open_section(section_parent=section_2, section_title='Propositional Logic',
+      section_number=1)
+
+    # Definition 2.1
+    def_2_1_declaration = u.declare_axiom(natural_language="""The language of 
         propositional logic consists of:
         1. A denumerable set of propositional variables 𝑝1, 𝑝2, 𝑝3, ...
         2. Connectives: ¬, ∨, ∧, ⊃
         3. Parenthesis: (,)""")
-        self.def_2_1_declaration = def_2_1_declaration
-        def_2_1_inclusion = t.include_axiom(ref='2.1', index=1, a=self.def_2_1_declaration)
-        self.def_2_1_inclusion = def_2_1_inclusion
+    self.def_2_1_declaration = def_2_1_declaration
+    def_2_1 = metatheory.include_axiom(ref='2.1', index=1, a=self.def_2_1_declaration)
+    self.def_2_1 = def_2_1
+    metatheory.take_note(subtitle='Regarding parenthesis in definition 2.1',
+      content='Punctilious models compound-formulas as trees. It follows '
+              'that parenthesis are not needed as objects of the theory, '
+              'but parenthesis are automatically displayed when formulae '
+              'are composed.')
 
-        self.is_a = u.r.is_a
-        is_a = self.is_a
-        self.propositional_variable = u.c2.declare(symbol='propositional-variable',
-            auto_index=False)
-        self.lnot = u.r.lnot
-        self.lor = u.r.lor
-        self.land = u.r.land
-        self.implies = u.r.implies
-        propositional_variable = self.propositional_variable
-        lnot = self.lnot
-        lor = self.lor
-        land = self.land
-        implies = self.implies
+    # Declares the propositional-connective class
+    propositional_connective = u.c2.declare(symbol='propositional-connective', auto_index=False)
+    self.propositional_connective: pu.ClassDeclaration = propositional_connective
 
-        # Definition 2.2
-        self.def_2_2_declaration = u.declare_axiom(natural_language="""The formulas are defined as 
+    is_a: pu.Connective = u.r.is_a
+    self.is_a = is_a
+
+    # Add all members to the propositional-connective class
+    self.lnot: pu.Connective = u.r.lnot
+    self.lor: pu.Connective = u.r.lor
+    self.land: pu.Connective = u.r.land
+    self.implies: pu.Connective = u.r.implies
+    lnot: pu.Connective = self.lnot
+    lor: pu.Connective = self.lor
+    land: pu.Connective = self.land
+    implies: pu.Connective = self.implies
+    metatheory.i.axiom_interpretation.infer_formula_statement(a=def_2_1, p=lnot | is_a | propositional_connective,
+      lock=False)
+    metatheory.i.axiom_interpretation.infer_formula_statement(a=def_2_1, p=lor | is_a | propositional_connective,
+      lock=False)
+    metatheory.i.axiom_interpretation.infer_formula_statement(a=def_2_1, p=land | is_a | propositional_connective,
+      lock=False)
+    metatheory.i.axiom_interpretation.infer_formula_statement(a=def_2_1, p=implies | is_a | propositional_connective,
+      lock=False)
+    # TODO: We should find a way here to "lock" the propositional-connective class because we
+    #  have defined all of its members. We want to prevent any accidental addition of another
+    #  connective. One possibility would be to postulate a statement saying that if an object
+    #  is a propositional-connective and is not one of the above, then the theory is
+    #  inconsistent. But this should be analysed further.
+
+    self.propositional_variable: pu.ClassDeclaration = u.c2.declare(symbol='propositional-variable', auto_index=False)
+    propositional_variable: pu.ClassDeclaration = self.propositional_variable
+
+    # Definition 2.2
+    self.def_2_2_declaration = u.declare_axiom(natural_language="""The formulas are defined as 
         follows: 
         1. Basis clause: Each propositional variable is a formula (called an atomic formula). 
         2. Inductive clause: If 𝐴 and 𝐵 are formulas so are ¬𝐴, (𝐴 ∧ 𝐵), (𝐴 ∨ 𝐵), and (𝐴 ⊃ 𝐵). 
         3. Extremal clause: Nothing else is a formula.""")
-        self.def_2_2_inclusion = t.include_axiom(ref='2.2', index=1, a=self.def_2_2_declaration)
+    def_2_2 = metatheory.include_axiom(ref='2.2', index=1, a=self.def_2_2_declaration)
+    self.def_2_2 = def_2_2
 
-        self.propositional_formula = u.c2.declare(symbol='propositional-formula', auto_index=False)
-        propositional_formula = self.propositional_formula
-        with u.with_variable(symbol='p') as p:
-            t.i.axiom_interpretation.infer_formula_statement(a=self.def_2_1_inclusion,
-                p=(p | is_a | propositional_variable) | implies | (
-                        p | is_a | propositional_formula))  # t.i.modus_ponens.infer_formula_statement(a=self.def_2_2_inclusion,  #    p=(p | is_a | propositional_variable) | implies | (  #            p | is_a | propositional_formula))
+    self.propositional_formula: pu.ClassDeclaration = u.c2.declare(symbol='propositional-formula', auto_index=False)
+    propositional_formula: pu.ClassDeclaration = self.propositional_formula
 
-    @property
-    def l(self) -> Language:
-        return self._l
+    with u.with_variable(symbol='A') as a:
+      self.meta_10 = metatheory.i.axiom_interpretation.infer_formula_statement(lock=False, a=def_2_2,
+        p=(a | is_a | propositional_variable) | implies | (a | is_a | propositional_formula))
+    with u.with_variable(symbol='A') as a:
+      self.meta_11 = metatheory.i.axiom_interpretation.infer_formula_statement(lock=False, a=def_2_2,
+        p=(a | is_a | propositional_formula) | implies | (lnot(a) | is_a | propositional_formula))
+    with u.with_variable(symbol='A') as a, u.with_variable(symbol='B') as b:
+      self.meta_12 = metatheory.i.axiom_interpretation.infer_formula_statement(lock=False, a=def_2_2,
+        p=((a | is_a | propositional_formula) | land | (b | is_a | propositional_formula)) | implies | (
+          (a | lor | b) | is_a | propositional_formula))
+    with u.with_variable(symbol='A') as a, u.with_variable(symbol='B') as b:
+      self.meta_13 = metatheory.i.axiom_interpretation.infer_formula_statement(lock=False, a=def_2_2,
+        p=((a | is_a | propositional_formula) | land | (b | is_a | propositional_formula)) | implies | (
+          (a | land | b) | is_a | propositional_formula))
+    with u.with_variable(symbol='A') as a, u.with_variable(symbol='B') as b:
+      self.meta_14 = metatheory.i.axiom_interpretation.infer_formula_statement(lock=True, a=def_2_2,
+        p=((a | is_a | propositional_formula) | land | (b | is_a | propositional_formula)) | implies | (
+          (a | implies | b) | is_a | propositional_formula))
 
+    # Declare the propositional-logic theory
+    t = self.u.declare_theory(symbol=pu.StyledText(plaintext='L', text_style=pu.text_styles.script_normal), index=1,
+      dashed_name='propositional-logic', name='propositional logic', explicit_name='propositional logic [MGZ21]')
+    self.t = t
+    self.l1 = t
 
-class Language(pu.CollectionDeclaration):
-    """The language of propositional logic."""
+  def declare_compound_formula(self, connective: pu.Connective, *terms, lock_variable_scope: (None, bool) = None,
+    echo: (None, bool) = None):
+    """Declare a new formula in this universe-of-discourse.
 
-    def __init__(self, theory_package: pu.TheoryPackage):
-        self._theory_package = theory_package
-        self._u = theory_package.u
-        symbol = pu.StyledText(plaintext='L', text_style=pu.text_styles.script_normal)
-        self._propositional_variable_symbol = pu.StyledText(plaintext='p',
-            text_style=pu.text_styles.sans_serif_normal)
-        super().__init__(u=self._u, symbol=symbol)
-        self.lnot = self._u.r.lnot
-        self._extend(phi=self.lnot)
-        self.lor = self._u.r.lor
-        self._extend(phi=self.lor)
-        self.land = self._u.r.land
-        self._extend(phi=self.land)
-        self.implies = self._u.r.implies
-        self._extend(phi=self.implies)
+    This method is a shortcut for Formula(universe_of_discourse=self, . . d.).
 
-    @contextlib.contextmanager
-    def with_propositional_variable(self, echo: (None, bool) = None):
-        """Yield a new propositional-variable.
+    A formula is *declared* in a theory, and not *stated*, because it is not a statement,
+    i.e. it is not necessarily true in this theory.
+    """
+    pu.verify_formula_statement(t=self.metatheory, input_value=connective | self.is_a | self.propositional_connective,
+      arg='connective', error_code=error_codes.error_101_invalid_propositional_formula_components)
+    for term in terms:
+      # TODO: dans cette formule, le term est une variable. Et là, on souhaite
+      #  "meta-parler" de la variable et on ne souhaite pas "utiliser" la variable.
+      #  comment distinguer les deux choses?
+      ???????????????????????????????????????????????
+      pu.verify_formula_statement(t=self.metatheory, input_value=term | self.is_a | self.propositional_formula,
+        arg='term', error_code=error_codes.error_101_invalid_propositional_formula_components)
+    phi = pu.CompoundFormula(connective=connective, terms=terms, u=self.u, symbol=self._formula_symbol,
+      lock_variable_scope=lock_variable_scope, echo=echo)
+    match connective:
+      case self.lnot:
+        p1 = terms[0] | self.is_a | self.propositional_formula
+        self.metatheory.i.modus_ponens.infer_formula_statement(p_implies_q=self.meta_11, p=p1)
+      case self.lor:
+        p2 = terms[0] | self.is_a | self.propositional_formula
+        q2 = terms[1] | self.is_a | self.propositional_formula
+        p3 = self.metatheory.i.conjunction_introduction.infer_formula_statement(p=p2, q=q2)
+        self.metatheory.i.modus_ponens.infer_formula_statement(p_implies_q=self.meta_12, p=p3)
+      case self.land:
+        p2 = terms[0] | self.is_a | self.propositional_formula
+        q2 = terms[1] | self.is_a | self.propositional_formula
+        p3 = self.metatheory.i.conjunction_introduction.infer_formula_statement(p=p2, q=q2)
+        self.metatheory.i.modus_ponens.infer_formula_statement(p_implies_q=self.meta_13, p=p3)
+      case self.implies:
+        p2 = terms[0] | self.is_a | self.propositional_formula
+        q2 = terms[1] | self.is_a | self.propositional_formula
+        p3 = self.metatheory.i.conjunction_introduction.infer_formula_statement(p=p2, q=q2)
+        self.metatheory.i.modus_ponens.infer_formula_statement(p_implies_q=self.meta_14, p=p3)
+    return phi
 
-        :param symbol:
-        :param index:
-        :param auto_index:
-        :param echo:
-        :return:
-        """
-        with self.u.with_variable(symbol=self._propositional_variable_symbol, index=None,
-                auto_index=True, echo=echo) as p:
-            # Extend the language collection to include this new propositional-variable.
-            self._extend(phi=p)
-            yield p
+  @property
+  def metatheory(self) -> pu.TheoryDerivation:
+    return self._metatheory
 
-    def _extend(self, phi: FlexibleFormula) -> None:
-        """This private method extends the language collection in an authorized manner."""
-        super().extend(phi=phi)
+  @contextlib.contextmanager
+  def with_propositional_variable(self, echo: (None, bool) = None):
+    """Declare and yield a new propositional-variable.
 
-    def extend(self, phi: FlexibleFormula) -> None:
-        """Override the extend() method to forbid manual extensions of the collection.
-
-        Manually extending the propositional-language collection is forbidden. In effect,
-        the extremal clause of the language definition prevents any object that is not defined in the first and second clause.
-        TODO: Provide reference to MGZ definition 2.1 and 2.2.
-        use the with_propositional_variable() method to declare new propositional variables.
-        """
-        raise pu.PunctiliousException("")
-
-
-class Formulae(pu.CollectionDeclaration):
-    """The formulae of propositional logic."""
-
-    def __init__(self, theory_package: pu.TheoryPackage):
-        self._theory_package = theory_package
-        self._u = theory_package.u
-        symbol = pu.StyledText(plaintext='Phi', unicode='𝛷', latex=r'\Phi',
-            text_style=pu.text_styles.sans_serif_normal)
-        self._formula_symbol = pu.StyledText(plaintext='phi', unicode='𝜙', latex=r'\phi',
-            text_style=pu.text_styles.sans_serif_normal)
-        super().__init__(u=self._u, symbol=symbol)
-
-    def declare_compound_formula(self, connective: pu.Connective, *terms,
-            lock_variable_scope: (None, bool) = None, echo: (None, bool) = None):
-        """Declare a new formula in this universe-of-discourse.
-
-        This method is a shortcut for Formula(universe_of_discourse=self, . . d.).
-
-        A formula is *declared* in a theory, and not *stated*, because it is not a statement,
-        i.e. it is not necessarily true in this theory.
-        """
-        phi = pu.CompoundFormula(connective=connective, terms=terms, u=self,
-            symbol=self._formula_symbol, lock_variable_scope=lock_variable_scope, echo=echo)
-        self._extend(phi=phi)
-        return phi
-
-    def _extend(self, phi: FlexibleFormula) -> None:
-        """This private method extends the language collection in an authorized manner."""
-        super().extend(phi=phi)
-
-    def extend(self, phi: FlexibleFormula) -> None:
-        """Override the extend() method to forbid manual extensions of the collection.
-
-        Manually extending the propositional-language collection is forbidden. In effect,
-        the extremal clause of the language definition prevents any object that is not defined in the first and second clause.
-        TODO: Provide reference to MGZ definition 2.1 and 2.2.
-        use the with_propositional_variable() method to declare new propositional variables.
-        """
-        raise pu.PunctiliousException("")
+    :param symbol:
+    :param index:
+    :param auto_index:
+    :param echo:
+    :return:
+    """
+    with self.u.with_variable(symbol=self._propositional_variable_symbol, index=None, auto_index=True, echo=echo) as p:
+      # Extend the language collection to include this new propositional-variable.
+      p1 = self.metatheory.i.axiom_interpretation.infer_formula_statement(lock=False, a=self.def_2_1,
+        p=p | self.is_a | self.propositional_variable)
+      p_implies_q = self.metatheory.i.variable_substitution.infer_formula_statement(p=self.meta_10,
+        phi=self.u.r.tupl(p))
+      self.metatheory.i.modus_ponens.infer_formula_statement(p_implies_q=p_implies_q, p=p1)
+      yield p
 
 
 x = MGZ2021PropositionalLogic()
-with x.l.with_propositional_variable(echo=True) as pa:
-    print('hello')
+with x.with_propositional_variable(echo=True) as pa:
+  x.declare_compound_formula(x.lnot, pa)
+  print('hello')

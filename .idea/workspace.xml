@@ -6,28 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 1.0.10:&#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sample_equal_terms_substitution_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_equal_terms_substitution_plaintext.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/equal_terms_substitution_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/equal_terms_substitution_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_equal_terms_substitution.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_equal_terms_substitution.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/theory/punctilious_2023_metatheory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/punctilious_2023_metatheory.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/theory/theory_mgz_2021_propositional_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_mgz_2021_propositional_logic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_axiom_inclusion.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiom_inclusion.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_axiom_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiom_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_definition_inclusion.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_definition_inclusion.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_equal_terms_substitution.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_equal_terms_substitution.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula_2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula_is_mask_similar_to.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula_is_mask_similar_to.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_free_variable.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_free_variable.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_note.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_note.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_tao_2006_the_peano_axioms.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_tao_2006_the_peano_axioms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_theory_derivation_stabilized.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_theory_derivation_stabilized.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_theory_extension.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_theory_extension.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_validate_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_validate_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_validate_formula_statement.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_validate_formula_statement.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,7 +94,7 @@
     "git-widget-placeholder": "dev",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/src/theory",
-    "settings.editor.selected.configurable": "preferences.externalTools"
+    "settings.editor.selected.configurable": "preferences.sourceCode.Python"
   }
 }]]></component>
   <component name="PyConsoleOptionsProvider">
@@ -140,7 +121,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in tests">
+  <component name="RunManager" selected="Python.theory_mgz_2021_propositional_logic">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -408,18 +389,18 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
-      <item itemvalue="Python.build_samples" />
-      <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.build" />
+      <item itemvalue="Python.build_samples" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
-      <item itemvalue="Python.theory_mgz_2021_propositional_logic" />
+      <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
+      <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.sample_iterate_formula_data_model_components" />
+      <item itemvalue="Python.theory_mgz_2021_propositional_logic" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.Python tests for test_iterate_formula_data_model_components.TestIterateFormulaDataModelComponents.test_iterate_formula_data_model_components" />
       <item itemvalue="Python tests.Python tests for test_formula_alpha_equivalence.TestFormulaIsAlphaEquivalentTo.test_formula_is_alpha_equivalent_to" />
       <item itemvalue="Python tests.Python tests in test_formula_alpha_equivalence.py" />
+      <item itemvalue="Python tests.Python tests for test_iterate_formula_data_model_components.TestIterateFormulaDataModelComponents.test_iterate_formula_data_model_components" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
@@ -428,9 +409,9 @@
       <list>
         <item itemvalue="Python.theory_mgz_2021_propositional_logic" />
         <item itemvalue="Python tests.Python tests for test_iterate_formula_data_model_components.TestIterateFormulaDataModelComponents.test_iterate_formula_data_model_components" />
-        <item itemvalue="Python.sample_iterate_formula_data_model_components" />
-        <item itemvalue="Python tests.Python tests for test_formula_alpha_equivalence.TestFormulaIsAlphaEquivalentTo.test_formula_is_alpha_equivalent_to" />
         <item itemvalue="Python tests.Python tests in test_formula_alpha_equivalence.py" />
+        <item itemvalue="Python tests.Python tests for test_formula_alpha_equivalence.TestFormulaIsAlphaEquivalentTo.test_formula_is_alpha_equivalent_to" />
+        <item itemvalue="Python.sample_iterate_formula_data_model_components" />
       </list>
     </recent_temporary>
   </component>
@@ -442,22 +423,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00359" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
-      <option name="closed" value="true" />
-      <created>1697313776725</created>
-      <option name="number" value="00359" />
-      <option name="presentableId" value="LOCAL-00359" />
-      <option name="project" value="LOCAL" />
-      <updated>1697313776725</updated>
-    </task>
-    <task id="LOCAL-00360" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
-      <option name="closed" value="true" />
-      <created>1697358282403</created>
-      <option name="number" value="00360" />
-      <option name="presentableId" value="LOCAL-00360" />
-      <option name="project" value="LOCAL" />
-      <updated>1697358282403</updated>
     </task>
     <task id="LOCAL-00361" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
       <option name="closed" value="true" />
@@ -835,7 +800,23 @@
       <option name="project" value="LOCAL" />
       <updated>1699117334818</updated>
     </task>
-    <option name="localTasksCounter" value="408" />
+    <task id="LOCAL-00408" summary="version 1.0.10:&#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <option name="closed" value="true" />
+      <created>1699124017834</created>
+      <option name="number" value="00408" />
+      <option name="presentableId" value="LOCAL-00408" />
+      <option name="project" value="LOCAL" />
+      <updated>1699124017834</updated>
+    </task>
+    <task id="LOCAL-00409" summary="version 1.0.10:&#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <option name="closed" value="true" />
+      <created>1699124100768</created>
+      <option name="number" value="00409" />
+      <option name="presentableId" value="LOCAL-00409" />
+      <option name="project" value="LOCAL" />
+      <updated>1699124100768</updated>
+    </task>
+    <option name="localTasksCounter" value="410" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -900,7 +881,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>4649</line>
+          <line>4423</line>
           <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
