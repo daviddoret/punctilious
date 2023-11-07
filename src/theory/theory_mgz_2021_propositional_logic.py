@@ -59,6 +59,8 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
 
     is_a: pu.Connective = u.r.is_a
     self.is_a = is_a
+    object_reference: pu.Connective = u.r.object_reference
+    self.object_reference = object_reference
 
     # Add all members to the propositional-connective class
     self.lnot: pu.Connective = u.r.lnot
@@ -135,33 +137,32 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
     pu.verify_formula_statement(t=self.metatheory, input_value=connective | self.is_a | self.propositional_connective,
       arg='connective', error_code=error_codes.error_101_invalid_propositional_formula_components)
     for term in terms:
-      # TODO: dans cette formule, le term est une variable. Et là, on souhaite
-      #  "meta-parler" de la variable et on ne souhaite pas "utiliser" la variable.
-      #  comment distinguer les deux choses?
-      # La solution sera d'utiliser un connective symbolic-reference avec une
-      # composition: ⌜x⌝ où x est la nom de l'objet.
-      ???????????????????????????????????????????????
-      pu.verify_formula_statement(t=self.metatheory, input_value=term | self.is_a | self.propositional_formula,
-        arg='term', error_code=error_codes.error_101_invalid_propositional_formula_components)
+      # We intend to make a meta statement about this variable.
+      # Note that the scope of the variable is closed, prohibiting its usage in formulas.
+      # But here we don't use the formula, we reference it.
+      # To solve this difficulty we use the object-reference connective.
+      pu.verify_formula_statement(t=self.metatheory,
+        input_value=self.object_reference(term) | self.is_a | self.propositional_formula, arg='term',
+        error_code=error_codes.error_101_invalid_propositional_formula_components)
     phi = pu.CompoundFormula(connective=connective, terms=terms, u=self.u, symbol=self._formula_symbol,
       lock_variable_scope=lock_variable_scope, echo=echo)
     match connective:
       case self.lnot:
-        p1 = terms[0] | self.is_a | self.propositional_formula
+        p1 = self.object_reference(terms[0]) | self.is_a | self.propositional_formula
         self.metatheory.i.modus_ponens.infer_formula_statement(p_implies_q=self.meta_11, p=p1)
       case self.lor:
-        p2 = terms[0] | self.is_a | self.propositional_formula
-        q2 = terms[1] | self.is_a | self.propositional_formula
+        p2 = self.object_reference(terms[0]) | self.is_a | self.propositional_formula
+        q2 = self.object_reference(terms[1]) | self.is_a | self.propositional_formula
         p3 = self.metatheory.i.conjunction_introduction.infer_formula_statement(p=p2, q=q2)
         self.metatheory.i.modus_ponens.infer_formula_statement(p_implies_q=self.meta_12, p=p3)
       case self.land:
-        p2 = terms[0] | self.is_a | self.propositional_formula
-        q2 = terms[1] | self.is_a | self.propositional_formula
+        p2 = self.object_reference(terms[0]) | self.is_a | self.propositional_formula
+        q2 = self.object_reference(terms[1]) | self.is_a | self.propositional_formula
         p3 = self.metatheory.i.conjunction_introduction.infer_formula_statement(p=p2, q=q2)
         self.metatheory.i.modus_ponens.infer_formula_statement(p_implies_q=self.meta_13, p=p3)
       case self.implies:
-        p2 = terms[0] | self.is_a | self.propositional_formula
-        q2 = terms[1] | self.is_a | self.propositional_formula
+        p2 = self.object_reference(terms[0]) | self.is_a | self.propositional_formula
+        q2 = self.object_reference(terms[1]) | self.is_a | self.propositional_formula
         p3 = self.metatheory.i.conjunction_introduction.infer_formula_statement(p=p2, q=q2)
         self.metatheory.i.modus_ponens.infer_formula_statement(p_implies_q=self.meta_14, p=p3)
     return phi
@@ -183,9 +184,9 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
     with self.u.with_variable(symbol=self._propositional_variable_symbol, index=None, auto_index=True, echo=echo) as p:
       # Extend the language collection to include this new propositional-variable.
       p1 = self.metatheory.i.axiom_interpretation.infer_formula_statement(lock=False, a=self.def_2_1,
-        p=p | self.is_a | self.propositional_variable)
+        p=self.object_reference(p) | self.is_a | self.propositional_variable)
       p_implies_q = self.metatheory.i.variable_substitution.infer_formula_statement(p=self.meta_10,
-        phi=self.u.r.tupl(p))
+        phi=self.u.r.tupl(self.object_reference(p)))
       self.metatheory.i.modus_ponens.infer_formula_statement(p_implies_q=p_implies_q, p=p1)
       yield p
 

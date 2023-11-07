@@ -1964,15 +1964,23 @@ def formula_alpha_contains(u: UniverseOfDiscourse, phi: FlexibleFormula, psi: Fl
 
 def get_formula_unique_variable_ordered_set(u: UniverseOfDiscourse, phi: FlexibleFormula) -> tuple[FreeVariable]:
   """Return the ordered-set of unique variables contained in ⌜self⌝,
-    ordered in canonical-order (TODO: add link to doc on canonical-order).
+    ordered in canonical-order (TODO: add link to doc on canonical-order),
+    and excluding variables contained in object-reference statements (TODO: document object-reference mechanim and
+    reference doc here).
     """
   _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
   phi: Formula
 
   ordered_set: list[FreeVariable] = list()
+  before_element: Formula = None
   for element in iterate_formula_alpha_equivalence_components(u=u, phi=phi):
-    if isinstance(element, FreeVariable) and element not in ordered_set:
-      ordered_set.append(element)
+    if isinstance(element, FreeVariable):
+      if element not in ordered_set:
+        if before_element is not u.r.object_reference:
+          # Exception: if the variable is referenced as an object,
+          # do not close its scope automatically.
+          ordered_set.append(element)
+    before_element = element
   # Make the ordered-set proxy immutable.
   ordered_set: tuple[FreeVariable] = tuple(ordered_set)
   return ordered_set
@@ -1998,6 +2006,9 @@ def is_alpha_equivalent_to(u: UniverseOfDiscourse, phi: FlexibleFormula, psi: Fl
   phi_generator = iterate_formula_alpha_equivalence_components(u=u, phi=phi)
   psi_generator = iterate_formula_alpha_equivalence_components(u=u, phi=psi)
 
+  before_phi_element: Formula = None
+  before_psi_element: Formula = None
+
   for phi_element, psi_element in itertools.zip_longest(phi_generator, psi_generator, fillvalue=None):
     # print(f'{phi_element}|{psi_element}')
     if phi_element is None or psi_element is None:
@@ -2011,11 +2022,23 @@ def is_alpha_equivalent_to(u: UniverseOfDiscourse, phi: FlexibleFormula, psi: Fl
       return False
     if isinstance(phi_element, FreeVariable) and isinstance(psi_element, FreeVariable):
       # print(f'{phi_variables.index(phi_element)}|{psi_variables.index(psi_element)}')
-      if phi_variables.index(phi_element) != psi_variables.index(psi_element):
-        # Variables are only compared by their position in the formula.
+      if before_psi_element is u.r.object_reference and before_phi_element is u.r.object_reference:
+        # The variables are referenced as objects, we can compare them directly.
+        if phi_element is not psi_element:
+          return False
+      elif before_psi_element is not u.r.object_reference and before_phi_element is not u.r.object_reference:
+        if phi_variables.index(phi_element) != psi_variables.index(psi_element):
+          # Variables are only compared by their position in the formula.
+          return False
+      else:
+        # One variable is referenced as an object and the other is used as a variable,
+        # this is not alpha-equivalent.
         return False
     elif phi_element is not psi_element:
       return False
+    before_phi_element = phi_element
+    before_psi_element = psi_element
+
   # If all the above checks passed successfuly,
   # phi and psi are alpha-equivalent.
   return True
@@ -2537,7 +2560,7 @@ class FreeVariable(Variable):
     # Support for the with pythonic syntax
     # Start building  variable scope
     verify(self._status == FreeVariable.scope_initialization_status,
-      'The scope of an instance of FreeVariable can only be extended if it is open.')
+      'The scope of an instance of FreeVariable can only be extended if it is open.', phi=phi, self2=self)
     # Close variable scope
     verify(isinstance(phi, CompoundFormula), 'Scope extensions of FreeVariable must be of type Formula.')
     self._scope = self._scope.union({phi})
@@ -2738,7 +2761,7 @@ class CompoundFormula(Formula):
     self.cross_reference_variables()
     for p in terms:
       verify(is_in_class(p, classes.formula), 'p is not a formula.', formula=self, p=p)
-      if is_in_class(p, classes.variable):
+      if is_in_class(p, classes.variable) and self.connective is not self.u.r.object_reference:
         p.extend_scope(self)
       verify(p.u is self.u,
         f'The universe-of-discourse ⌜p_u⌝ of the term ⌜p⌝ in the formula ⌜formula⌝ is inconsistent with the universe-of-discourse ⌜formula_u⌝ of the formula.',
@@ -6379,7 +6402,8 @@ class ConnectiveDict(collections.UserDict):
     self._is_a = None
     self._map = None
     self._negation = None
-    self._substraction = None
+    self._object_reference = None
+    self._subtraction = None
     self._syntactic_entailment = None
     self._tupl = None
 
@@ -6669,7 +6693,26 @@ class ConnectiveDict(collections.UserDict):
 
   @property
   def minus(self):
-    return self.substraction
+    return self.subtraction
+
+  @property
+  def object_reference(self):
+    """A unary connective to reference variables as objects in formulas, without using them.
+
+    Default composition:
+     ⌜x⌝
+    Where x is a variable.
+
+    Example:
+      ⌜x⌝ is-a natural-number
+      x > 4
+    """
+    if self._object_reference is None:
+      self._object_reference = self.declare(formula_rep=CompoundFormula.collection,
+        collection_start=text_dict.open_quasi_quote, collection_separator=text_dict.comma,
+        collection_end=text_dict.close_quasi_quote, signal_proposition=True, symbol='object-reference',
+        auto_index=False, dashed_name='object-reference', name='object reference', explicit_name='object reference')
+    return self._object_reference
 
   @property
   def plus(self):
@@ -6687,19 +6730,19 @@ class ConnectiveDict(collections.UserDict):
     return self.syntactic_entailment
 
   @property
-  def substraction(self):
-    """The well-known substraction connective.
+  def subtraction(self):
+    """The well-known subtraction connective.
 
         Abridged property: u.r.minus
 
         If it does not exist in the universe-of-discourse,
         declares it automatically.
         """
-    if self._substraction is None:
-      self._substraction = self.declare(arity=2, formula_rep=CompoundFormula.infix, signal_proposition=True,
-        symbol=SerifItalic(plaintext='-', unicode='-', latex='-'), auto_index=False, dashed_name='substraction',
-        name='substraction')
-    return self._substraction
+    if self._subtraction is None:
+      self._subtraction = self.declare(arity=2, formula_rep=CompoundFormula.infix, signal_proposition=True,
+        symbol=SerifItalic(plaintext='-', unicode='-', latex='-'), auto_index=False, dashed_name='subtraction',
+        name='subtraction')
+    return self._subtraction
 
   @property
   def tupl(self):
@@ -6711,8 +6754,7 @@ class ConnectiveDict(collections.UserDict):
     if self._tupl is None:
       self._tupl = self.declare(formula_rep=CompoundFormula.collection, collection_start=text_dict.empty_string,
         collection_separator=text_dict.comma, collection_end=text_dict.empty_string, signal_proposition=True,
-        symbol=SerifItalic(plaintext=',', unicode=',', latex=','), auto_index=False, dashed_name='tuple', name='tuple',
-        explicit_name='tuple')
+        symbol='tuple', auto_index=False, dashed_name='tuple', name='tuple', explicit_name='tuple')
     return self._tupl
 
   @property
