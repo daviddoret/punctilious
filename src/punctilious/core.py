@@ -2249,11 +2249,22 @@ class Formula(SymbolicObject):
       if not connective_output:
         return False, _values
       # Arities are necessarily equal.
-      for i in range(len(o1.terms)):
-        term_output, _values = o1.terms[i]._is_masked_formula_similar_to(phi=phi.terms[i], mask=mask, _values=_values)
+      if o1.connective is self.u.r.object_reference:
+        # The unary object-reference is a special case,
+        # we are referencing objects (especially variables).
+        # Instead of recursively calling is_masked_formula_similar_to(),
+        # we test for alpha-equivalence.
+        phi_variable = o1.terms[0]
+        psi_variable = phi.terms[0]
+        term_output = is_alpha_equivalent_to(u=u, phi=phi_variable, psi=psi_variable)
         if not term_output:
           return False, _values
-      return True, _values
+      else:
+        for i in range(len(o1.terms)):
+          term_output, _values = o1.terms[i]._is_masked_formula_similar_to(phi=phi.terms[i], mask=mask, _values=_values)
+          if not term_output:
+            return False, _values
+        return True, _values
     if o1 not in mask and phi not in mask:
       # We know o1 and o2 are not formula-syntactically-equivalent,
       # and we know they are not in the mask.
