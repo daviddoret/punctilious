@@ -1114,8 +1114,8 @@ class DeclarativeClass_OBSOLETE(repm.ValueName):
         return self._python_type
 
 
-def is_provably_member_of_class(u: UniverseOfDiscourse, phi: FlexibleFormula, c: ClassDeclaration) -> bool:
-    """Returns True if and only if phi is provably a member of class c. Returns False otherwise.
+def is_declaratively_member_of_class(u: UniverseOfDiscourse, phi: FlexibleFormula, c: ClassDeclaration) -> bool:
+    """Returns True if and only if phi is declaratively a member of class c. Returns False otherwise.
 
     See minimal-metatheory for more details."""
     _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
@@ -7261,7 +7261,7 @@ def verify_formula_statement(t: TheoryDerivation, input_value: FlexibleFormula, 
         c: ClassDeclaration
         if isinstance(c, ClassDeclaration):
             c: ClassDeclaration
-            if is_provably_member_of_class(u=u, phi=formula.terms[0], c=c):
+            if is_declaratively_member_of_class(u=u, phi=formula.terms[0], c=c):
                 return True, formula, None
 
     formula_ok, msg = verify(raise_exception=raise_exception, error_code=error_code,
