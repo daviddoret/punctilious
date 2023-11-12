@@ -29,7 +29,7 @@ class TestDoubleNegationIntroduction(TestCase):
         phi1 = t.i.axiom_interpretation.infer_formula_statement(ap, r1(o1, o2))
         self.assertEqual('r1(o1, o2)', phi1.rep_formula(encoding=pu.encodings.plaintext))
         self.assertEqual('𝑟₁(𝑜₁, 𝑜₂)', phi1.rep_formula(encoding=pu.encodings.unicode))
-        print(u.inference_rules.double_negation_introduction)
+        print(u.i.double_negation_introduction)
         print(t.inference_rule_inclusions.double_negation_introduction)
         # Trying to pass a formula that is not a valid formula-statement must raise an Exception
         with self.assertRaises(pu.PunctiliousException):
