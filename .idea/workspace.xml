@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 1.0.10:&#10; - new minimal metatheory to support is_provably_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_is_provably_a_class_member.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_is_provably_a_class_member.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -318,7 +316,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_is_provably_a_class_member.IsProvablyMemberOfClass.test_is_provably_member_of_class" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_is_declaratively_a_class_member.IsDeclarativelyMemberOfClass.test_is_declaratively_member_of_class" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -328,7 +326,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_is_provably_a_class_member.IsProvablyMemberOfClass.test_is_provably_member_of_class&quot;" />
+      <option name="_new_target" value="&quot;test_is_declaratively_a_class_member.IsDeclarativelyMemberOfClass.test_is_declaratively_member_of_class&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -382,9 +380,9 @@
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
+      <item itemvalue="Python tests.Python tests for test_is_declaratively_a_class_member.IsDeclarativelyMemberOfClass.test_is_declaratively_member_of_class" />
       <item itemvalue="Python tests.Python tests for test_free_variable.TestFreeVariable.test_1" />
       <item itemvalue="Python tests.Python tests for test_free_variable.TestFreeVariable.test_with_statement" />
-      <item itemvalue="Python tests.Python tests for test_is_provably_a_class_member.IsProvablyMemberOfClass.test_is_provably_member_of_class" />
       <item itemvalue="Python tests.Python tests in test_absorption.py" />
       <item itemvalue="Python tests.Python tests in test_free_variable.py" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -394,7 +392,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.Python tests in test_absorption.py" />
-        <item itemvalue="Python tests.Python tests for test_is_provably_a_class_member.IsProvablyMemberOfClass.test_is_provably_member_of_class" />
+        <item itemvalue="Python tests.Python tests for test_is_declaratively_a_class_member.IsDeclarativelyMemberOfClass.test_is_declaratively_member_of_class" />
         <item itemvalue="Python tests.Python tests for test_free_variable.TestFreeVariable.test_with_statement" />
         <item itemvalue="Python tests.Python tests for test_free_variable.TestFreeVariable.test_1" />
         <item itemvalue="Python tests.Python tests in test_free_variable.py" />
@@ -409,14 +407,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00368" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
-      <option name="closed" value="true" />
-      <created>1697469723330</created>
-      <option name="number" value="00368" />
-      <option name="presentableId" value="LOCAL-00368" />
-      <option name="project" value="LOCAL" />
-      <updated>1697469723330</updated>
     </task>
     <task id="LOCAL-00369" summary="documentation #195 + inference validation #126 + support for the composition of collection-like formulae + usage of sequent-collection-comma to define inference-rules + enhanced exceptions with user-friendly reports + #220 interdiction of variable-substitution of propositional objects with non-propositional objects.">
       <option name="closed" value="true" />
@@ -802,7 +792,15 @@
       <option name="project" value="LOCAL" />
       <updated>1699735664462</updated>
     </task>
-    <option name="localTasksCounter" value="417" />
+    <task id="LOCAL-00417" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <option name="closed" value="true" />
+      <created>1699774854474</created>
+      <option name="number" value="00417" />
+      <option name="presentableId" value="LOCAL-00417" />
+      <option name="project" value="LOCAL" />
+      <updated>1699774854474</updated>
+    </task>
+    <option name="localTasksCounter" value="418" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -834,7 +832,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="#201" />
     <MESSAGE value="#201 + #195 + correcting proofs by contradiction and refutation with corresponding samples and tests" />
     <MESSAGE value="#201 + #195" />
     <MESSAGE value="cleanup + branding" />
@@ -859,7 +856,8 @@
     <MESSAGE value="version 1.0.10:&#10;&#10;feature #242: constant-declaration&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;rename Formula to CompoundFormula.&#10;&#10;rename Relation to Connective.&#10;&#10;rename Parameter to Terms (in the contect of CompoundFormula).&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10;&#10;design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject" />
     <MESSAGE value="version 1.0.10:&#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic." />
     <MESSAGE value="version 1.0.10:&#10; - new minimal metatheory to support is_provably_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic." />
-    <option name="LAST_COMMIT_MESSAGE" value="version 1.0.10:&#10; - new minimal metatheory to support is_provably_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic." />
+    <MESSAGE value="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic." />
+    <option name="LAST_COMMIT_MESSAGE" value="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

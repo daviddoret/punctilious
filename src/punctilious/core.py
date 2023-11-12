@@ -10752,7 +10752,8 @@ class PunctiliousMinimalMetatheory(TheoryPackage):
 
         # Axiom: a1
         a1_natural_language = """When an object is declared in the universe-of-discourse, it may be assigned some 
-        classes. Usually this is introduced by some written statement such as 'Let x be a c1, c2, ..., cn.' where x 
+        classes. In such circumstances, we say that the object is declaratively a member of that class. Usually this is 
+        introduced by some written statement such as 'Let x be a c1, c2, ..., cn.' where x 
         is a designation for the newly declared object, and c1, c2, ..., cn are designations of the classes assigned 
         to the object. When an object x has been declared and assigned a class c, it follows that the statement x 
         is-a c is a valid statement."""
@@ -10761,7 +10762,8 @@ class PunctiliousMinimalMetatheory(TheoryPackage):
 
         t.take_note('While the positive statement x is-a c is valid if the object x was declared and assigned the '
                     'class c, note that it is not possible to infer that not(x is-a c) if the object x was declared '
-                    'and not assigned class c.')
+                    'and not assigned class c. In effect, it may be the case that object x is still a member of c'
+                    'but not because it was declared as such, but by theoretical derivation.')
 
     @property
     def a1(self) -> AxiomInclusion:
