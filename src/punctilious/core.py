@@ -1117,6 +1117,9 @@ class DeclarativeClass_OBSOLETE(repm.ValueName):
 def is_declaratively_member_of_class(u: UniverseOfDiscourse, phi: FlexibleFormula, c: ClassDeclaration) -> bool:
     """Returns True if and only if phi is declaratively a member of class c. Returns False otherwise.
 
+    Note: this functions does not tell if phi is a member of c. In effect, phi may be a member of c by theoretical
+    derivation, and not by declaration.
+
     See minimal-metatheory for more details."""
     _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
     _, c, _ = verify_class(u=u, c=c, arg='c')
