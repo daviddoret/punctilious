@@ -9,9 +9,9 @@ class TestFormulaIsAlphaEquivalentTo(TestCase):
         o1 = u.o.declare()
         o2 = u.o.declare()
         o3 = u.o.declare()
-        r1 = u.r.declare(signal_proposition=True)
-        r2 = u.r.declare(signal_proposition=True)
-        r3 = u.r.declare()
+        r1 = u.c1.declare(signal_proposition=True)
+        r2 = u.c1.declare(signal_proposition=True)
+        r3 = u.c1.declare()
 
         phi1: pu.CompoundFormula = o1 | r2 | o2
         # A formula is always alpha-equivalent to itself
@@ -63,7 +63,7 @@ class TestFormulaIsAlphaEquivalentTo(TestCase):
 
         # A variable reference is alpha-equivalent with itself.
         with u.with_variable(symbol='x', auto_index=False) as x:
-            psi10a: pu.CompoundFormula = u.r.object_reference(x)
+            psi10a: pu.CompoundFormula = u.c1.object_reference(x)
         self.assertTrue(pu.is_alpha_equivalent_to(u=u, phi=psi10a, psi=psi10a))
 
         # Two formulas using the same variable are alpha-equivalent.
@@ -76,7 +76,7 @@ class TestFormulaIsAlphaEquivalentTo(TestCase):
         with u.with_variable(symbol='x', auto_index=False) as x:
             psi8a: pu.CompoundFormula = x
         with u.with_variable(symbol='x', auto_index=False) as x:
-            psi8b: pu.CompoundFormula = u.r.object_reference(x)
+            psi8b: pu.CompoundFormula = u.c1.object_reference(x)
         self.assertFalse(pu.is_alpha_equivalent_to(u=u, phi=psi8a, psi=psi8b))
 
         # TODO: Manage the case where we have variables inside constants. This require a little analysis.

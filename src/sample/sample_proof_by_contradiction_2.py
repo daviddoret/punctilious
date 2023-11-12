@@ -4,24 +4,24 @@ import punctilious as pu
 u = pu.UniverseOfDiscourse(echo=True)
 o1 = u.o.declare()
 o2 = u.o.declare()
-f = u.r.declare(arity=1, symbol='f', auto_index=False)
+f = u.c1.declare(arity=1, symbol='f', auto_index=False)
 t1 = u.declare_theory(echo=True)
 axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes')
 
 # Elaborate a dummy theory with inconsistent propositions
 pu.configuration.echo_proof = False
 theory_axiom = t1.include_axiom(axiom)
-f_o1_eq_f_02 = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom, p=f(o1) | u.r.eq | f(o2), lock=False)
+f_o1_eq_f_02 = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom, p=f(o1) | u.c1.eq | f(o2), lock=False)
 with u.with_variable('x') as x, u.with_variable('y') as y:
     implication = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom,
-        p=(f(x) | u.r.eq | f(y)) | u.r.implies | (x | u.r.eq | y), lock=True)
+        p=(f(x) | u.c1.eq | f(y)) | u.c1.implies | (x | u.c1.eq | y), lock=True)
 t1.stabilize()
 
 # Pose the inequality hypothesis
-h = t1.pose_hypothesis(hypothesis_formula=o1 | u.r.neq | o2, subtitle='We pose the negation hypothesis')
+h = t1.pose_hypothesis(hypothesis_formula=o1 | u.c1.neq | o2, subtitle='We pose the negation hypothesis')
 
 # Elaborate on the hypothesis to uncover its inconsistency
-substitution = h.child_theory.i.variable_substitution.infer_formula_statement(p=implication, phi=u.r.tupl(o1, o2))
+substitution = h.child_theory.i.variable_substitution.infer_formula_statement(p=implication, phi=u.c1.tupl(o1, o2))
 equality = h.child_theory.i.modus_ponens.infer_formula_statement(p_implies_q=substitution, p=f_o1_eq_f_02)
 
 # Prove hypothesis inconsistency

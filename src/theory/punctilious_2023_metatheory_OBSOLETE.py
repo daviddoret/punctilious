@@ -18,7 +18,7 @@ axiom_02 = ft.include_axiom(u.declare_axiom('An (axiomatic) class is a collectio
 axiom_03 = ft.include_axiom(u.declare_axiom('The class of classes is the class of all classes defined in the '
                                             'universe-of-discourse (TODO: Or foundation theory?).'))
 class_of_classes = u.o.declare('class-of-classes')
-element_of = u.r.declare(2, '∈', formula_rep=core.CompoundFormula.infix, signal_proposition=True,
+element_of = u.c1.declare(2, '∈', formula_rep=core.CompoundFormula.infix, signal_proposition=True,
     dashed_name='element-of')
 fa1 = ft.i.axiom_interpretation.infer_formula_statement(axiom_02,
     u.declare_compound_formula(element_of, class_of_classes, class_of_classes))
@@ -54,30 +54,30 @@ ft.i.axiom_interpretation.infer_formula_statement(axiom_03,
     u.declare_compound_formula(element_of, propositional_connectives_class, class_of_classes))
 
 ft.i.axiom_interpretation.infer_formula_statement(nla_09,
-    u.declare_compound_formula(element_of, u.r.conjunction, propositional_connectives_class))
+    u.declare_compound_formula(element_of, u.c1.conjunction, propositional_connectives_class))
 ft.i.axiom_interpretation.infer_formula_statement(nla_09,
-    u.declare_compound_formula(element_of, u.r.disjunction, propositional_connectives_class))
+    u.declare_compound_formula(element_of, u.c1.disjunction, propositional_connectives_class))
 ft.i.axiom_interpretation.infer_formula_statement(nla_09,
-    u.declare_compound_formula(element_of, u.r.implication, propositional_connectives_class))
+    u.declare_compound_formula(element_of, u.c1.implication, propositional_connectives_class))
 ft.i.axiom_interpretation.infer_formula_statement(nla_09,
-    u.declare_compound_formula(element_of, u.r.lnot, propositional_connectives_class))
+    u.declare_compound_formula(element_of, u.c1.lnot, propositional_connectives_class))
 ft.i.axiom_interpretation.infer_formula_statement(nla_09,
-    u.declare_compound_formula(element_of, u.r.neq, propositional_connectives_class))
+    u.declare_compound_formula(element_of, u.c1.neq, propositional_connectives_class))
 nla_01b = ft.include_axiom(
     u.declare_axiom('= is a binary connective such that, given any two theoretical-objcts x and y, '
                     'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.'))
 with u.with_variable('x') as x1, u.with_variable('y') as x2:
-    x1_equal_x2 = u.declare_compound_formula(u.r.equal, x1, x2)
-    x2_equal_x1 = u.declare_compound_formula(u.r.equal, x2, x1)
+    x1_equal_x2 = u.declare_compound_formula(u.c1.equal, x1, x2)
+    x2_equal_x1 = u.declare_compound_formula(u.c1.equal, x2, x1)
     ft.commutativity_of_equality = ft.i.axiom_interpretation.infer_formula_statement(nla_01b,
-        u.declare_compound_formula(u.r.implication, x1_equal_x2, x2_equal_x1))
+        u.declare_compound_formula(u.c1.implication, x1_equal_x2, x2_equal_x1))
 
 d_55 = u.declare_definition('Inequality is defined as the negation of equality.')
 nld_55 = ft.include_definition(d=d_55)
 with u.with_variable('x') as x, u.with_variable('y') as y:
     ft.i.definition_interpretation.infer_formula_statement(nld_55,
-        u.declare_compound_formula(u.r.equal, u.declare_compound_formula(u.r.neq, x, y),
-            u.declare_compound_formula(u.r.lnot, u.declare_compound_formula(u.r.equal, x, y))))
+        u.declare_compound_formula(u.c1.equal, u.declare_compound_formula(u.c1.neq, x, y),
+            u.declare_compound_formula(u.c1.lnot, u.declare_compound_formula(u.c1.equal, x, y))))
 
 nla_10 = ft.include_axiom(u.declare_axiom('propositions is a class whose elements are '
                                           'truth, falsehood, all elements of the theory-formula-statement class, '
@@ -92,7 +92,7 @@ ft.i.axiom_interpretation.infer_formula_statement(nla_10,
 
 nla_20 = ft.include_axiom(u.declare_axiom('If P is a proposition, then either the statement P has truth value true,'
                                           'or the statement P has truth value falsehood.'))
-has_truth_value = u.r.declare(2, 'is', formula_rep=core.CompoundFormula.infix, signal_proposition=True)
+has_truth_value = u.c1.declare(2, 'is', formula_rep=core.CompoundFormula.infix, signal_proposition=True)
 ft.i.axiom_interpretation.infer_formula_statement(nla_10, u.declare_compound_formula(has_truth_value, truth, truth))
 ft.i.axiom_interpretation.infer_formula_statement(nla_10,
     u.declare_compound_formula(has_truth_value, falsehood, falsehood))
@@ -107,9 +107,9 @@ nla_30 = ft.include_axiom(u.declare_axiom('¬ is a unary connective. '
 nla_09_50 = ft.include_axiom(u.declare_axiom('If P has-truth-value t, ¬(¬(P)) has-truth-value t.'))
 with u.with_variable() as p, u.with_variable() as t:
     fa_09_51 = ft.i.axiom_interpretation.infer_formula_statement(nla_09_50,
-        u.declare_compound_formula(u.r.implication, u.declare_compound_formula(has_truth_value, p, t),
+        u.declare_compound_formula(u.c1.implication, u.declare_compound_formula(has_truth_value, p, t),
             u.declare_compound_formula(has_truth_value,
-                u.declare_compound_formula(u.r.lnot, u.declare_compound_formula(u.r.lnot, p)), t)))
+                u.declare_compound_formula(u.c1.lnot, u.declare_compound_formula(u.c1.lnot, p)), t)))
 
 
 # CONJUNCTION
@@ -147,16 +147,16 @@ nla_40 = ft.include_axiom(
 contradictory_theories = u.o.declare('contradictory-theory')
 contradictory_statements = u.o.declare('contradictory-statement')
 with u.with_variable('φ') as phi:
-    ft.i.axiom_interpretation.infer_formula_statement(nla_40, u.declare_compound_formula(u.r.implication,
-        u.declare_compound_formula(u.r.conjunction, u.declare_compound_formula(has_truth_value, phi, truth),
+    ft.i.axiom_interpretation.infer_formula_statement(nla_40, u.declare_compound_formula(u.c1.implication,
+        u.declare_compound_formula(u.c1.conjunction, u.declare_compound_formula(has_truth_value, phi, truth),
             u.declare_compound_formula(has_truth_value, phi, falsehood)),
         u.declare_compound_formula(element_of, phi, contradictory_statements)))
 
-_connective_declaration = u.r.declare(2, 'connective-declaration')
-_simple_objct_declaration = u.r.declare(2, 'simple-objct-declaration')
-_theory_declaration = u.r.declare(2, 'theory-declaration')
-_theory_extension = u.r.declare(2, 'theory-extension')
-_variable_declaration = u.r.declare(2, 'variable-declaration')
+_connective_declaration = u.c1.declare(2, 'connective-declaration')
+_simple_objct_declaration = u.c1.declare(2, 'simple-objct-declaration')
+_theory_declaration = u.c1.declare(2, 'theory-declaration')
+_theory_extension = u.c1.declare(2, 'theory-extension')
+_variable_declaration = u.c1.declare(2, 'variable-declaration')
 
 # t.prnt()
 
@@ -192,7 +192,7 @@ def elaborate_foundation_theory():
         def1 = ft.d(
             natural_language='substitution is the process that consists in taking 3 formula o, p and q, that may be a composed-object such as a formula, and replacing in there all occurences of p by q.')
         axiom2 = ft.include_axiom('If x = y, o = subst(o, x, y) where o, x, and y are theoretical-objcts.')
-        subst = u.r.declare(arity=3, nameset='subst', signal_theoretical_morphism=True, implementation=substitute_xy)
+        subst = u.c1.declare(arity=3, nameset='subst', signal_theoretical_morphism=True, implementation=substitute_xy)
         # if x = y, implies subst(o, x, y)
         x = u.with_variable()
         y = u.with_variable()

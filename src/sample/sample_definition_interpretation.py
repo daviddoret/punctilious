@@ -5,8 +5,8 @@ u = pu.UniverseOfDiscourse(echo=True)
 o1 = u.o.declare()
 o2 = u.o.declare()
 o3 = u.o.declare()
-r1 = u.r.declare(2, signal_proposition=True)
-r2 = u.r.declare(1, signal_proposition=True)
+r1 = u.c1.declare(2, signal_proposition=True)
+r2 = u.c1.declare(1, signal_proposition=True)
 definition = u.declare_definition(natural_language='Dummy definition for demonstration purposes')
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration

@@ -14,7 +14,7 @@ class TestFreeVariable(TestCase):
         pu.configuration.echo_variable_declaration = True
         u = pu.UniverseOfDiscourse()
         with u.with_variable('x', echo=True) as x, u.with_variable('y', echo=True) as y:
-            r = u.r.declare(arity=2)
+            r = u.c1.declare(arity=2)
             phi = u.declare_compound_formula(r, x, y)
             self.assertIs(x, phi.terms[0])
             self.assertIs(y, phi.terms[1])

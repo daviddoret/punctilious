@@ -17,7 +17,7 @@ class TestAxiomInterpretation(TestCase):
         r2: pu.Connective = test.r2
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
         self.assertTrue(
-            proposition_of_interest.is_formula_syntactically_equivalent_to((r1(o1, o2) | u.r.implies | r2(o3))))
+            proposition_of_interest.is_formula_syntactically_equivalent_to((r1(o1, o2) | u.c1.implies | r2(o3))))
         self.assertEqual('(r1(o1, o2) implies r2(o3))', proposition_of_interest.rep_formula(pu.encodings.plaintext))
         # Syntax error
         with self.assertRaises(pu.PunctiliousException) as error:
@@ -39,8 +39,8 @@ class TestAxiomInterpretation(TestCase):
         a1 = u.declare_axiom(natural_language=random_data.random_sentence())
         o1 = u.o.declare()
         o2 = u.o.declare()
-        r1 = u.r.declare(arity=2, signal_proposition=True)
-        r2 = u.r.declare(arity=1)
+        r1 = u.c1.declare(arity=2, signal_proposition=True)
+        r2 = u.c1.declare(arity=1)
         phi1 = u.declare_compound_formula(r1, o1, o2)
         # Elaborate the theory
         t = u.declare_theory()

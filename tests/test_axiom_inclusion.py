@@ -33,8 +33,8 @@ class TestAxiomInclusion(TestCase):
         o1 = u.o.declare()
         o2 = u.o.declare()
         o3 = u.o.declare()
-        r1 = u.r.declare(1, nameset='r', signal_proposition=True)
-        r2 = u.r.declare(2, nameset='r', signal_proposition=True)
+        r1 = u.c1.declare(1, nameset='r', signal_proposition=True)
+        r2 = u.c1.declare(2, nameset='r', signal_proposition=True)
         aii1 = t.i.axiom_interpretation.infer_formula_statement(ai1, u.declare_compound_formula(r1, o1))
         self.assertTrue(
             aii1.valid_proposition.is_formula_syntactically_equivalent_to(u.declare_compound_formula(r1, o1)))

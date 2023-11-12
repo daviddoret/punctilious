@@ -6,7 +6,7 @@ a1 = u.declare_axiom(natural_language='Dummy axiom to establish some ground prop
 o1 = u.o.declare()
 o2 = u.o.declare()
 o3 = u.o.declare()
-f = u.r.declare(arity=2, symbol='f', signal_proposition=True)
+f = u.c1.declare(arity=2, symbol='f', signal_proposition=True)
 t1 = u.declare_theory(echo=True)
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
@@ -17,7 +17,7 @@ a = t1.include_axiom(a=a1)
 predecessor = t1.i.axiom_interpretation.infer_formula_statement(a=a, p=f(o2, o3), lock=False)
 with u.with_variable('x') as x, u.with_variable('y') as y, u.with_variable('z') as z:
     implication = t1.i.axiom_interpretation.infer_formula_statement(a=a,
-        p=(f(x, y) | u.r.land | f(y, z)) | u.r.implies | f(x, z), lock=True)
+        p=(f(x, y) | u.c1.land | f(y, z)) | u.c1.implies | f(x, z), lock=True)
 t1.stabilize()
 t1.take_note(
     content='Until this point, statements are predecessors to the hypothesis, and they are contained in the (coming) h hypothesis.')
@@ -27,7 +27,7 @@ t1.take_note(
 h = t1.pose_hypothesis(hypothesis_formula=f(o1, o2), subtitle='Pose some hypothesis')
 conjunction_introduction = h.child_theory.i.conjunction_introduction.infer_formula_statement(p=f(o1, o2), q=f(o2, o3))
 variable_substitution = h.child_theory.i.variable_substitution.infer_formula_statement(p=implication,
-    phi=u.r.tupl(o1, o2, o3))
+    phi=u.c1.tupl(o1, o2, o3))
 proposition_of_interest = h.child_theory.i.modus_ponens.infer_formula_statement(p_implies_q=variable_substitution,
     p=conjunction_introduction)
 h.child_theory.take_note(content='Note that without the f(o1, o2) hypothesis, we could not infer f(o1, o3).')

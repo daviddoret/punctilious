@@ -8,7 +8,7 @@ class TestNoteIntroduction(TestCase):
         pu.configuration.encoding = pu.encodings.unicode
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
-        r1 = u.r.declare(1, signal_proposition=True)
+        r1 = u.c1.declare(1, signal_proposition=True)
         t = u.declare_theory()
         a = u.declare_axiom('The arbitrary axiom of testing.')
         ap = t.include_axiom(a)

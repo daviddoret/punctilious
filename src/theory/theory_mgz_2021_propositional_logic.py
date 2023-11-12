@@ -57,16 +57,16 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
         propositional_connective = u.c2.declare(symbol='propositional-connective', auto_index=False)
         self.propositional_connective: pu.ClassDeclaration = propositional_connective
 
-        is_a: pu.Connective = u.r.is_a
+        is_a: pu.Connective = u.c1.is_a
         self.is_a = is_a
-        object_reference: pu.Connective = u.r.object_reference
+        object_reference: pu.Connective = u.c1.object_reference
         self.object_reference = object_reference
 
         # Add all members to the propositional-connective class
-        self.lnot: pu.Connective = u.r.lnot
-        self.lor: pu.Connective = u.r.lor
-        self.land: pu.Connective = u.r.land
-        self.implies: pu.Connective = u.r.implies
+        self.lnot: pu.Connective = u.c1.lnot
+        self.lor: pu.Connective = u.c1.lor
+        self.land: pu.Connective = u.c1.land
+        self.implies: pu.Connective = u.c1.implies
         lnot: pu.Connective = self.lnot
         lor: pu.Connective = self.lor
         land: pu.Connective = self.land
@@ -110,15 +110,15 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
         with u.with_variable(symbol='A') as a, u.with_variable(symbol='B') as b:
             self.meta_12 = metatheory.i.axiom_interpretation.infer_formula_statement(lock=False, a=def_2_2,
                 p=((a | is_a | propositional_formula) | land | (b | is_a | propositional_formula)) | implies | (
-                  (a | lor | b) | is_a | propositional_formula))
+                    (a | lor | b) | is_a | propositional_formula))
         with u.with_variable(symbol='A') as a, u.with_variable(symbol='B') as b:
             self.meta_13 = metatheory.i.axiom_interpretation.infer_formula_statement(lock=False, a=def_2_2,
                 p=((a | is_a | propositional_formula) | land | (b | is_a | propositional_formula)) | implies | (
-                  (a | land | b) | is_a | propositional_formula))
+                    (a | land | b) | is_a | propositional_formula))
         with u.with_variable(symbol='A') as a, u.with_variable(symbol='B') as b:
             self.meta_14 = metatheory.i.axiom_interpretation.infer_formula_statement(lock=True, a=def_2_2,
                 p=((a | is_a | propositional_formula) | land | (b | is_a | propositional_formula)) | implies | (
-                  (a | implies | b) | is_a | propositional_formula))
+                    (a | implies | b) | is_a | propositional_formula))
 
         # Declare the propositional-logic theory
         t = self.u.declare_theory(symbol=pu.StyledText(plaintext='L', text_style=pu.text_styles.script_normal), index=1,
@@ -127,7 +127,7 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
         self.l1 = t
 
     def declare_compound_formula(self, connective: pu.Connective, *terms, lock_variable_scope: (None, bool) = None,
-      echo: (None, bool) = None):
+        echo: (None, bool) = None):
         """Declare a new formula in this universe-of-discourse.
 
         This method is a shortcut for Formula(universe_of_discourse=self, . . d.).
@@ -156,7 +156,7 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
                 # self.meta_11:
                 # (a | is_a | propositional_formula) | implies | (lnot(a) | is_a | propositional_formula))
                 p_implies_q = self.metatheory.i.variable_substitution.infer_formula_statement(p=self.meta_11,
-                    phi=self.u.r.tupl(psi_reference))
+                    phi=self.u.c1.tupl(psi_reference))
                 p = psi_reference | self.is_a | self.propositional_formula
                 self.metatheory.i.modus_ponens.infer_formula_statement(p_implies_q=p_implies_q, p=p)
             case self.lor:
@@ -191,12 +191,12 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
         :return:
         """
         with self.u.with_variable(symbol=self._propositional_variable_symbol, index=None, auto_index=True,
-          echo=echo) as p:
+            echo=echo) as p:
             # Extend the language collection to include this new propositional-variable.
             p1 = self.metatheory.i.axiom_interpretation.infer_formula_statement(lock=False, a=self.def_2_1,
                 p=self.object_reference(p) | self.is_a | self.propositional_variable)
             p_implies_q = self.metatheory.i.variable_substitution.infer_formula_statement(p=self.meta_10,
-                phi=self.u.r.tupl(self.object_reference(p)))
+                phi=self.u.c1.tupl(self.object_reference(p)))
             self.metatheory.i.modus_ponens.infer_formula_statement(p_implies_q=p_implies_q, p=p1)
             yield p
 

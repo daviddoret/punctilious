@@ -6,8 +6,8 @@ a1 = u.declare_axiom(natural_language='Dummy axiom to establish some ground prop
 o1 = u.o.declare()
 o2 = u.o.declare()
 o3 = u.o.declare()
-r1 = u.r.declare()
-r2 = u.r.declare()
+r1 = u.c1.declare()
+r2 = u.c1.declare()
 phi1 = o1 | r1 | o2
 phi2 = o3 | r2 | phi1
 const1 = u.c3.declare(value=o2)

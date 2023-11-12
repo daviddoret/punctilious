@@ -7,9 +7,9 @@ class TestTheoreticalObjct(TestCase):
     def test_list_theoretical_objcts_recursively(self):
         u = pu.UniverseOfDiscourse()
         t = u.declare_theory()
-        r1 = u.r.declare(1)
+        r1 = u.c1.declare(1)
         self.assertEqual({r1}, set(r1.iterate_theoretical_objcts_references()))
-        r2 = u.r.declare(2)
+        r2 = u.c1.declare(2)
         o1 = u.o.declare()
         o2 = u.o.declare()
         o3 = u.o.declare()
@@ -24,9 +24,9 @@ class TestTheoreticalObjct(TestCase):
     def test_list_connectives_recursively(self):
         u = pu.UniverseOfDiscourse()
         t = u.declare_theory()
-        r1 = u.r.declare(1)
+        r1 = u.c1.declare(1)
         self.assertEqual({r1}, set(r1.iterate_connectives()))
-        r2 = u.r.declare(2)
+        r2 = u.c1.declare(2)
         o1 = u.o.declare()
         o2 = u.o.declare()
         o3 = u.o.declare()
@@ -40,7 +40,7 @@ class TestTheoreticalObjct(TestCase):
 
     def test_get_variable_ordered_set_1(self):
         u = pu.UniverseOfDiscourse()
-        r = u.r.declare(2)
+        r = u.c1.declare(2)
         with u.with_variable('x') as x, u.with_variable('y') as y, u.with_variable('z') as z, u.with_variable(
             'a') as a, u.with_variable('b') as b, u.with_variable('c') as c:
             phi1 = u.declare_compound_formula(r, b,

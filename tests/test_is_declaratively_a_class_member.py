@@ -9,7 +9,7 @@ class IsDeclarativelyMemberOfClass(TestCase):
         with u.with_variable(symbol='x') as x1:
             self.assertTrue(pu.is_declaratively_member_of_class(u=u, phi=x1, c=u.c2.formula))
             self.assertTrue(pu.is_declaratively_member_of_class(u=u, phi=x1, c=u.c2.free_variable))
-        r = u.r.declare()
+        r = u.c1.declare()
         self.assertTrue(pu.is_declaratively_member_of_class(u=u, phi=r, c=u.c2.formula))
         self.assertTrue(pu.is_declaratively_member_of_class(u=u, phi=r, c=u.c2.connective))
         o = u.o.declare()

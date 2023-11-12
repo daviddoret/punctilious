@@ -10,5 +10,5 @@ class TestInconsistencyIntroduction3(TestCase):
         t1: pu.TheoryDerivation = test.t1
         inc_proof: pu.InferredStatement = test.proposition_of_interest
         self.assertIs(pu.consistency_values.proved_inconsistent, t1.consistency)
-        self.assertTrue(inc_proof.is_formula_syntactically_equivalent_to(u.r.inc(t1)))
+        self.assertTrue(inc_proof.is_formula_syntactically_equivalent_to(u.c1.inc(t1)))
         self.assertEqual('𝐼𝑛𝑐(𝒯₁)', inc_proof.rep_formula(encoding=pu.encodings.unicode))

@@ -1123,7 +1123,7 @@ def is_derivably_member_of_class(u: UniverseOfDiscourse, phi: FlexibleFormula, c
     in the minimal metatheory of u. But if the statement (phi is-a c) has been derived in the minimal metatheory of u,
     stating that phi is a member of c is a valid statement.
     """
-    phi_is_a_c = phi | u.r.is_a | c
+    phi_is_a_c = phi | u.c1.is_a | c
     is_valid = is_declaratively_member_of_class(u=u, phi=phi, c=c)
     if is_valid:
         return is_valid
@@ -2035,7 +2035,7 @@ def get_formula_unique_variable_ordered_set(u: UniverseOfDiscourse, phi: Flexibl
     for element in iterate_formula_alpha_equivalence_components(u=u, phi=phi):
         if isinstance(element, FreeVariable):
             if element not in ordered_set:
-                if before_element is not u.r.object_reference:
+                if before_element is not u.c1.object_reference:
                     # Exception: if the variable is referenced as an object,
                     # do not close its scope automatically.
                     ordered_set.append(element)
@@ -2081,11 +2081,11 @@ def is_alpha_equivalent_to(u: UniverseOfDiscourse, phi: FlexibleFormula, psi: Fl
             return False
         if isinstance(phi_element, FreeVariable) and isinstance(psi_element, FreeVariable):
             # print(f'{phi_variables.index(phi_element)}|{psi_variables.index(psi_element)}')
-            if before_psi_element is u.r.object_reference and before_phi_element is u.r.object_reference:
+            if before_psi_element is u.c1.object_reference and before_phi_element is u.c1.object_reference:
                 # The variables are referenced as objects, we can compare them directly.
                 if phi_element is not psi_element:
                     return False
-            elif before_psi_element is not u.r.object_reference and before_phi_element is not u.r.object_reference:
+            elif before_psi_element is not u.c1.object_reference and before_phi_element is not u.c1.object_reference:
                 if phi_variables.index(phi_element) != psi_variables.index(psi_element):
                     # Variables are only compared by their position in the formula.
                     return False
@@ -2321,7 +2321,7 @@ class Formula(SymbolicObject):
             if not connective_output:
                 return False, _values
             # Arities are necessarily equal.
-            if o1.connective is self.u.r.object_reference:
+            if o1.connective is self.u.c1.object_reference:
                 # The unary object-reference is a special case,
                 # we are referencing objects (especially variables).
                 # Instead of recursively calling is_masked_formula_similar_to(),
@@ -2848,7 +2848,7 @@ class CompoundFormula(Formula):
         self.cross_reference_variables()
         for p in terms:
             verify(is_in_class_OBSOLETE(p, classes.formula), 'p is not a formula.', formula=self, p=p)
-            if is_in_class_OBSOLETE(p, classes.variable) and self.connective is not self.u.r.object_reference:
+            if is_in_class_OBSOLETE(p, classes.variable) and self.connective is not self.u.c1.object_reference:
                 p.extend_scope(self)
             verify(p.u is self.u,
                 f'The universe-of-discourse ⌜p_u⌝ of the term ⌜p⌝ in the formula ⌜formula⌝ is inconsistent with the universe-of-discourse ⌜formula_u⌝ of the formula.',
@@ -4031,9 +4031,9 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'absorption inference rule'
         name = 'absorption'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            definition = u.r.tupl(p | u.r.implies | q) | u.r.proves | (p | u.r.implies | (p | u.r.land | q))
+            definition = u.c1.tupl(p | u.c1.implies | q) | u.c1.proves | (p | u.c1.implies | (p | u.c1.land | q))
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_p_implies_q = p | u.r.implies | q
+            self.term_p_implies_q = p | u.c1.implies | q
             self.term_p_implies_q_mask = frozenset([p, q])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4049,7 +4049,7 @@ class AbsorptionDeclaration(InferenceRuleDeclaration):
         p_implies_q: CompoundFormula
         p: CompoundFormula = p_implies_q.terms[0]  # TODO: Use composed type hints
         q: CompoundFormula = p_implies_q.terms[1]  # TODO: Use composed type hints
-        output: CompoundFormula = p | self.u.r.implies | (p | self.u.r.land | q)
+        output: CompoundFormula = p | self.u.c1.implies | (p | self.u.c1.land | q)
         return output
 
 
@@ -4080,7 +4080,7 @@ class AxiomInterpretationDeclaration(InferenceRuleDeclaration):
         name = 'axiom interpretation'
         with u.with_variable(symbol=StyledText(plaintext='A', text_style=text_styles.script_bold),
             auto_index=False) as a, u.with_variable(symbol='P', auto_index=False) as p:
-            definition = u.r.tupl(a, p) | u.r.proves | p
+            definition = u.c1.tupl(a, p) | u.c1.proves | p
         with u.with_variable(symbol=StyledText(plaintext='A', text_style=text_styles.script_bold),
             auto_index=False) as a:
             self.term_a = a
@@ -4128,9 +4128,9 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
         explicit_name = 'biconditional elimination #1 inference rule'
         name = 'biconditional elimination #1'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            definition = ((p | u.r.iff | q) | u.r.proves | (p | u.r.implies | q))
+            definition = ((p | u.c1.iff | q) | u.c1.proves | (p | u.c1.implies | q))
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_p_iff_q = p | u.r.iff | q
+            self.term_p_iff_q = p | u.c1.iff | q
             self.term_p_iff_q_mask = frozenset([p, q])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4146,7 +4146,7 @@ class BiconditionalElimination1Declaration(InferenceRuleDeclaration):
         p_iff_q: CompoundFormula
         p: CompoundFormula = p_iff_q.terms[0]
         q: CompoundFormula = p_iff_q.terms[1]
-        output: CompoundFormula = (p | self.u.r.implies | q)
+        output: CompoundFormula = (p | self.u.c1.implies | q)
         return output
 
 
@@ -4169,9 +4169,9 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
         explicit_name = 'biconditional elimination #2 inference rule'
         name = 'biconditional elimination #2'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            definition = ((p | u.r.iff | q) | u.r.proves | (q | u.r.implies | p))
+            definition = ((p | u.c1.iff | q) | u.c1.proves | (q | u.c1.implies | p))
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_p_iff_q = p | u.r.iff | q
+            self.term_p_iff_q = p | u.c1.iff | q
             self.term_p_iff_q_mask = frozenset([p, q])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4187,7 +4187,7 @@ class BiconditionalElimination2Declaration(InferenceRuleDeclaration):
         p_iff_q: CompoundFormula
         p: CompoundFormula = p_iff_q.terms[0]
         q: CompoundFormula = p_iff_q.terms[1]
-        output: CompoundFormula = (q | self.u.r.implies | p)
+        output: CompoundFormula = (q | self.u.c1.implies | p)
         return output
 
 
@@ -4211,12 +4211,12 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'biconditional introduction inference rule'
         name = 'biconditional introduction'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            definition = u.r.tupl(p | u.r.implies | q, q | u.r.implies | p) | u.r.proves | (p | u.r.iff | q)
+            definition = u.c1.tupl(p | u.c1.implies | q, q | u.c1.implies | p) | u.c1.proves | (p | u.c1.iff | q)
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_p_implies_q = p | u.r.implies | q
+            self.term_p_implies_q = p | u.c1.implies | q
             self.term_p_implies_q_mask = frozenset([p, q])
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_q_implies_p = q | u.r.implies | p
+            self.term_q_implies_p = q | u.c1.implies | p
             self.term_q_implies_p_mask = frozenset([p, q])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4245,7 +4245,7 @@ class BiconditionalIntroductionDeclaration(InferenceRuleDeclaration):
             msg='The ⌜q⌝ in ⌜p_implies_q⌝ is not syntactically-equivalent to the ⌜q⌝ in  ⌜q_implies_p⌝.',
             severity=verification_severities.error, raise_exception=True, p_implies_q=p_implies_q,
             p_implies_q__q=p_implies_q__q, q_implies_p=q_implies_p, q_implies_p__q=q_implies_p__q)
-        output: CompoundFormula = p_implies_q__p | self.u.r.iff | p_implies_q__q
+        output: CompoundFormula = p_implies_q__p | self.u.c1.iff | p_implies_q__q
         return output
 
 
@@ -4268,9 +4268,9 @@ class ConjunctionElimination1Declaration(InferenceRuleDeclaration):
         explicit_name = 'conjunction elimination #1 inference rule'
         name = 'conjunction elimination #1'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            definition = ((p | u.r.land | q) | u.r.proves | p)
+            definition = ((p | u.c1.land | q) | u.c1.proves | p)
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_p_and_q = p | u.r.land | q
+            self.term_p_and_q = p | u.c1.land | q
             self.term_p_and_q_mask = frozenset([p, q])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4312,9 +4312,9 @@ class ConjunctionElimination2Declaration(InferenceRuleDeclaration):
         explicit_name = 'conjunction elimination #2 inference rule'
         name = 'conjunction elimination #2'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            definition = ((p | u.r.land | q) | u.r.proves | q)
+            definition = ((p | u.c1.land | q) | u.c1.proves | q)
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_p_and_q = p | u.r.land | q
+            self.term_p_and_q = p | u.c1.land | q
             self.term_p_and_q_mask = frozenset([p, q])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4351,7 +4351,7 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'conjunction introduction inference rule'
         name = 'conjunction introduction'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            definition = u.r.tupl(p, q) | u.r.proves | (p | u.r.land | q)
+            definition = u.c1.tupl(p, q) | u.c1.proves | (p | u.c1.land | q)
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
@@ -4365,7 +4365,7 @@ class ConjunctionIntroductionDeclaration(InferenceRuleDeclaration):
         p: CompoundFormula
         _, q, _ = verify_formula(arg='q', input_value=q, u=self.u, raise_exception=True, error_code=error_code)
         q: CompoundFormula
-        output: CompoundFormula = p | self.u.r.land | q
+        output: CompoundFormula = p | self.u.c1.land | q
         return output
 
 
@@ -4391,16 +4391,16 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
         name = 'constructive dilemma'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q, u.with_variable(
             symbol='R') as r, u.with_variable(symbol='S') as s:
-            definition = u.r.tupl((p | u.r.implies | q), (r | u.r.implies | s), (p | u.r.lor | r)) | u.r.proves | (
-                q | u.r.lor | s)
+            definition = u.c1.tupl((p | u.c1.implies | q), (r | u.c1.implies | s), (p | u.c1.lor | r)) | u.c1.proves | (
+                q | u.c1.lor | s)
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_p_implies_q = p | u.r.implies | q
+            self.term_p_implies_q = p | u.c1.implies | q
             self.term_p_implies_q_mask = frozenset([p, q])
         with u.with_variable(symbol='R') as r, u.with_variable(symbol='S') as s:
-            self.term_r_implies_s = r | u.r.implies | s
+            self.term_r_implies_s = r | u.c1.implies | s
             self.term_r_implies_s_mask = frozenset([r, s])
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='R') as r:
-            self.term_p_or_r = p | u.r.lor | r
+            self.term_p_or_r = p | u.c1.lor | r
             self.term_p_or_r_mask = frozenset([p, r])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4433,7 +4433,7 @@ class ConstructiveDilemmaDeclaration(InferenceRuleDeclaration):
             raise_exception=True, error_code=error_code)
         q: CompoundFormula = p_implies_q.terms[1]
         s: CompoundFormula = r_implies_s.terms[1]
-        output: CompoundFormula = q | self.u.r.lor | s
+        output: CompoundFormula = q | self.u.c1.lor | s
         return output
 
 
@@ -4470,7 +4470,7 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
             # Provide support for n-ary connectives. First need: sequent-comma, or collection-comma.
             # definition = u.r.sequent_comma(d, x, y) | u.r.proves | (x | u.r.equal | y)
             # Meanwhile, I use combined 2-ary formulae:
-            definition = d | u.r.tupl | (x | u.r.tupl | y) | u.r.proves | (x | u.r.equal | y)
+            definition = d | u.c1.tupl | (x | u.c1.tupl | y) | u.c1.proves | (x | u.c1.equal | y)
         with u.with_variable(symbol=StyledText(plaintext='D', text_style=text_styles.script_bold),
             auto_index=False) as d:
             self.term_d = d
@@ -4499,7 +4499,7 @@ class DefinitionInterpretationDeclaration(InferenceRuleDeclaration):
         x: CompoundFormula
         _, y, _ = verify_formula(arg='y', input_value=y, u=self.u, raise_exception=True, error_code=error_code)
         y: CompoundFormula
-        output: CompoundFormula = x | self.u.r.equal | y
+        output: CompoundFormula = x | self.u.c1.equal | y
         return output
 
 
@@ -4523,16 +4523,16 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
         name = 'destructive dilemma'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q, u.with_variable(
             symbol='R') as r, u.with_variable(symbol='S') as s:
-            definition = u.r.tupl((p | u.r.implies | q), (r | u.r.implies | s), (p | u.r.lor | r)) | u.r.proves | (
-                q | u.r.lor | s)
+            definition = u.c1.tupl((p | u.c1.implies | q), (r | u.c1.implies | s), (p | u.c1.lor | r)) | u.c1.proves | (
+                q | u.c1.lor | s)
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_p_implies_q = p | u.r.implies | q
+            self.term_p_implies_q = p | u.c1.implies | q
             self.term_p_implies_q_mask = frozenset([p, q])
         with u.with_variable(symbol='R') as r, u.with_variable(symbol='S') as s:
-            self.term_r_implies_s = r | u.r.implies | s
+            self.term_r_implies_s = r | u.c1.implies | s
             self.term_r_implies_s_mask = frozenset([r, s])
         with u.with_variable(symbol='Q') as q, u.with_variable(symbol='S') as s:
-            self.term_not_q_or_not_s = u.r.lnot(q) | u.r.lor | u.r.lnot(s)
+            self.term_not_q_or_not_s = u.c1.lnot(q) | u.c1.lor | u.c1.lnot(s)
             self.term_not_q_or_not_s_mask = frozenset([q, s])
             super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
                 acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4566,7 +4566,7 @@ class DestructiveDilemmaDeclaration(InferenceRuleDeclaration):
             raise_exception=True, error_code=error_code)
         p: CompoundFormula = p_implies_q.terms[0]
         r: CompoundFormula = r_implies_s.terms[0]
-        output: CompoundFormula = self.u.r.lnot(p) | self.u.r.lor | self.u.r.lnot(r)
+        output: CompoundFormula = self.u.c1.lnot(p) | self.u.c1.lor | self.u.c1.lnot(r)
         return output
 
 
@@ -4588,7 +4588,7 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
         explicit_name = 'disjunction introduction #1 inference rule'
         name = 'disjunction introduction #1'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            definition = (p | u.r.proves | (q | u.r.lor | p))
+            definition = (p | u.c1.proves | (q | u.c1.lor | p))
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
@@ -4602,7 +4602,7 @@ class DisjunctionIntroduction1Declaration(InferenceRuleDeclaration):
         p: CompoundFormula
         _, q, _ = verify_formula(arg='q', input_value=q, u=self.u, raise_exception=True, error_code=error_code)
         q: CompoundFormula
-        output: CompoundFormula = q | self.u.r.lor | p
+        output: CompoundFormula = q | self.u.c1.lor | p
         return output
 
 
@@ -4624,7 +4624,7 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
         explicit_name = 'disjunction introduction #2 inference rule'
         name = 'disjunction introduction #2'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            definition = (p | u.r.proves | (p | u.r.lor | q))
+            definition = (p | u.c1.proves | (p | u.c1.lor | q))
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
 
@@ -4638,7 +4638,7 @@ class DisjunctionIntroduction2Declaration(InferenceRuleDeclaration):
         p: CompoundFormula
         _, q, _ = verify_formula(arg='q', input_value=q, u=self.u, raise_exception=True, error_code=error_code)
         q: CompoundFormula
-        output: CompoundFormula = p | self.u.r.lor | q
+        output: CompoundFormula = p | self.u.c1.lor | q
         return output
 
 
@@ -4660,12 +4660,13 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'disjunctive resolution inference rule'
         name = 'disjunctive resolution'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q, u.with_variable(symbol='R') as r:
-            definition = (((p | u.r.lor | q) | u.r.tupl | (u.r.lnot(p) | u.r.lor | r)) | u.r.proves | (p | u.r.lor | r))
+            definition = (
+                ((p | u.c1.lor | q) | u.c1.tupl | (u.c1.lnot(p) | u.c1.lor | r)) | u.c1.proves | (p | u.c1.lor | r))
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_p_or_q = p | u.r.lor | q
+            self.term_p_or_q = p | u.c1.lor | q
             self.term_p_or_q_mask = frozenset([p, q])
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='R') as r:
-            self.term_not_p_or_r = u.r.lnot(p) | u.r.lor | r
+            self.term_not_p_or_r = u.c1.lnot(p) | u.c1.lor | r
             self.term_not_p_or_r_mask = frozenset([p, r])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4689,7 +4690,7 @@ class DisjunctiveResolutionDeclaration(InferenceRuleDeclaration):
             raise_exception=True, error_code=error_code)
         q: CompoundFormula = p_or_q.terms[1]
         r: CompoundFormula = not_p_or_r.terms[1]
-        output: CompoundFormula = q | self.u.r.lor | r
+        output: CompoundFormula = q | self.u.c1.lor | r
         return output
 
 
@@ -4711,12 +4712,12 @@ class DisjunctiveSyllogism1Declaration(InferenceRuleDeclaration):
         explicit_name = 'disjunctive syllogism inference rule'
         name = 'disjunctive syllogism'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            definition = (((p | u.r.lor | q) | u.r.tupl | u.r.lnot(p)) | u.r.proves | (q))
+            definition = (((p | u.c1.lor | q) | u.c1.tupl | u.c1.lnot(p)) | u.c1.proves | (q))
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_p_or_q = p | u.r.lor | q
+            self.term_p_or_q = p | u.c1.lor | q
             self.term_p_or_q_mask = frozenset([p, q])
         with u.with_variable(symbol='P') as p:
-            self.term_not_p = u.r.lnot(p)
+            self.term_not_p = u.c1.lnot(p)
             self.term_not_p_mask = frozenset([p])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4761,12 +4762,12 @@ class DisjunctiveSyllogism2Declaration(InferenceRuleDeclaration):
         explicit_name = 'disjunctive syllogism inference rule'
         name = 'disjunctive syllogism'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            definition = (((p | u.r.lor | q) | u.r.tupl | u.r.lnot(p)) | u.r.proves | (q))
+            definition = (((p | u.c1.lor | q) | u.c1.tupl | u.c1.lnot(p)) | u.c1.proves | (q))
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_p_or_q = p | u.r.lor | q
+            self.term_p_or_q = p | u.c1.lor | q
             self.term_p_or_q_mask = frozenset([p, q])
         with u.with_variable(symbol='Q') as q:
-            self.term_not_q = u.r.lnot(q)
+            self.term_not_q = u.c1.lnot(q)
             self.term_not_q_mask = frozenset([q])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4816,9 +4817,9 @@ class DoubleNegationEliminationDeclaration(InferenceRuleDeclaration):
         explicit_name = 'double negation elimination inference rule'
         name = 'double negation elimination'
         with u.with_variable(symbol='P') as p:
-            definition = (u.r.lnot(u.r.lnot(p)) | u.r.proves | p)
+            definition = (u.c1.lnot(u.c1.lnot(p)) | u.c1.proves | p)
         with u.with_variable(symbol='P') as p:
-            self.term_not_not_p = u.r.lnot(u.r.lnot(p))
+            self.term_not_not_p = u.c1.lnot(u.c1.lnot(p))
             self.term_not_not_p_mask = frozenset([p])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4854,7 +4855,7 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
         explicit_name = 'double negation introduction inference rule'
         name = 'double negation introduction'
         with u.with_variable(symbol='P') as p:
-            definition = (p | u.r.proves | u.r.lnot(u.r.lnot(p)))
+            definition = (p | u.c1.proves | u.c1.lnot(u.c1.lnot(p)))
         with u.with_variable(symbol='P') as p:
             self.term_p = p
             self.term_p_mask = frozenset([p])
@@ -4869,7 +4870,7 @@ class DoubleNegationIntroductionDeclaration(InferenceRuleDeclaration):
         error_code: ErrorCode = error_codes.error_002_inference_premise_syntax_error
         _, p, _ = verify_formula(arg='p', input_value=p, u=self.u, raise_exception=True, error_code=error_code)
         p: CompoundFormula
-        not_not_p: CompoundFormula = self.u.r.lnot(self.u.r.lnot(p))
+        not_not_p: CompoundFormula = self.u.c1.lnot(self.u.c1.lnot(p))
         output: CompoundFormula = not_not_p
         return output
 
@@ -4888,9 +4889,9 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
         explicit_name = 'equality commutativity inference rule'
         name = 'equality commutativity'
         with u.with_variable(symbol='x') as x, u.with_variable(symbol='y') as y:
-            definition = (x | u.r.equal | y) | u.r.proves | (y | u.r.equal | x)
+            definition = (x | u.c1.equal | y) | u.c1.proves | (y | u.c1.equal | x)
         with u.with_variable(symbol='x') as x, u.with_variable(symbol='y') as y:
-            self.term_x_equal_y = x | u.r.equal | y
+            self.term_x_equal_y = x | u.c1.equal | y
             self.term_x_equal_y_mask = frozenset([x, y])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4906,7 +4907,7 @@ class EqualityCommutativityDeclaration(InferenceRuleDeclaration):
         x_equal_y: CompoundFormula
         x__in__x_equal_y: CompoundFormula = x_equal_y.terms[0]
         y__in__x_equal_y: CompoundFormula = x_equal_y.terms[1]
-        output: CompoundFormula = y__in__x_equal_y | self.u.r.equal | x__in__x_equal_y
+        output: CompoundFormula = y__in__x_equal_y | self.u.c1.equal | x__in__x_equal_y
         return output
 
 
@@ -4926,12 +4927,12 @@ class EqualTermsSubstitutionDeclaration(InferenceRuleDeclaration):
         name = 'equal terms substitution'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q, u.with_variable(
             symbol='x') as x, u.with_variable(symbol='y') as y:
-            definition = (p | u.r.tupl | (x | u.r.equal | y)) | u.r.proves | q
+            definition = (p | u.c1.tupl | (x | u.c1.equal | y)) | u.c1.proves | q
         with u.with_variable(symbol='P') as p:
             self.term_p = p
             self.term_p_mask = frozenset([p])
         with u.with_variable(symbol='x') as x, u.with_variable(symbol='y') as y:
-            self.term_x_equal_y = x | u.r.equal | y
+            self.term_x_equal_y = x | u.c1.equal | y
             self.term_x_equal_y_mask = frozenset([x, y])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4972,12 +4973,12 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
         explicit_name = 'hypothetical syllogism inference rule'
         name = 'hypothetical syllogism'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q, u.with_variable(symbol='R') as r:
-            definition = u.r.tupl((p | u.r.implies | q), (q | u.r.implies | r)) | u.r.proves | (p | u.r.land | r)
+            definition = u.c1.tupl((p | u.c1.implies | q), (q | u.c1.implies | r)) | u.c1.proves | (p | u.c1.land | r)
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_p_implies_q = p | u.r.implies | q
+            self.term_p_implies_q = p | u.c1.implies | q
             self.term_p_implies_q_mask = frozenset([p, q])
         with u.with_variable(symbol='Q') as q, u.with_variable(symbol='R') as r:
-            self.term_q_implies_r = q | u.r.implies | r
+            self.term_q_implies_r = q | u.c1.implies | r
             self.term_q_implies_r_mask = frozenset([q, r])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -4999,7 +5000,7 @@ class HypotheticalSyllogismDeclaration(InferenceRuleDeclaration):
         verify(assertion=q__in__p_implies_q.is_formula_syntactically_equivalent_to(phi=q__in__q_implies_r),
             msg=f'The ⌜q⌝({q__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜q⌝({q__in__q_implies_r}) in the formula argument ⌜q_implies_r⌝({q_implies_r})',
             raise_exception=True, error_code=error_code)
-        output: CompoundFormula = p_implies_q.terms[0] | self.u.r.implies | q_implies_r.terms[1]
+        output: CompoundFormula = p_implies_q.terms[0] | self.u.c1.implies | q_implies_r.terms[1]
         return output
 
 
@@ -5023,12 +5024,12 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
         # definition = StyledText(plaintext='(P, not(P)) |- (T)', unicode='(𝑷, ¬(𝑷)) ⊢ 𝐼𝑛𝑐(𝓣)')
         with u.with_variable(symbol='P') as p, u.with_variable(
             symbol=StyledText(s='T', text_style=text_styles.script_normal)) as t:
-            definition = (p | u.r.tupl | (u.r.lnot(p))) | u.r.proves | u.r.inc(t)
+            definition = (p | u.c1.tupl | (u.c1.lnot(p))) | u.c1.proves | u.c1.inc(t)
         with u.with_variable(symbol='P') as p:
             self.term_p = p
             self.term_p_mask = frozenset([p])
         with u.with_variable(symbol='P') as p:
-            self.term_not_p = u.r.lnot(p)
+            self.term_not_p = u.c1.lnot(p)
             self.term_not_p_mask = frozenset([p])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -5050,7 +5051,7 @@ class InconsistencyIntroduction1Declaration(InferenceRuleDeclaration):
             raise_exception=True, error_code=error_code)
         verify(assertion=isinstance(t, TheoryDerivation), msg=f'The argument ⌜t⌝({t}) is not a theory-derivation.',
             raise_exception=True, error_code=error_code)
-        output: CompoundFormula = self.u.r.inc(t)
+        output: CompoundFormula = self.u.c1.inc(t)
         return output
 
 
@@ -5074,12 +5075,12 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
         # definition = StyledText(plaintext='((P = Q), (P neq Q)) |- Inc(T)',unicode='((𝑷 = 𝑸), (𝑷 ≠ 𝑸)) ⊢ 𝐼𝑛𝑐(𝒯)')
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q, u.with_variable(
             symbol=StyledText(s='T', text_style=text_styles.script_normal)) as t:
-            definition = ((p | u.r.equal | q) | u.r.tupl | (p | u.r.unequal | q)) | u.r.proves | u.r.inc(t)
+            definition = ((p | u.c1.equal | q) | u.c1.tupl | (p | u.c1.unequal | q)) | u.c1.proves | u.c1.inc(t)
         with u.with_variable(symbol='x') as x, u.with_variable(symbol='y') as y:
-            self.term_x_equal_y = x | u.r.equal | y
+            self.term_x_equal_y = x | u.c1.equal | y
             self.term_x_equal_y_mask = frozenset([x, y])
         with u.with_variable(symbol='x') as x, u.with_variable(symbol='y') as y:
-            self.term_x_unequal_y = x | u.r.unequal | y
+            self.term_x_unequal_y = x | u.c1.unequal | y
             self.term_x_unequal_y_mask = frozenset([x, y])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -5109,7 +5110,7 @@ class InconsistencyIntroduction2Declaration(InferenceRuleDeclaration):
             raise_exception=True, error_code=error_code)
         verify(assertion=isinstance(t, TheoryDerivation), msg=f'The argument ⌜t⌝({t}) is not a theory-derivation.',
             raise_exception=True, error_code=error_code)
-        output: CompoundFormula = self.u.r.inc(t)
+        output: CompoundFormula = self.u.c1.inc(t)
         return output
 
 
@@ -5132,9 +5133,9 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
         # definition = StyledText(plaintext='(P neq P) |- Inc(T)', unicode='(𝑷 ≠ 𝑷) ⊢ Inc(𝒯)')
         with u.with_variable(symbol='P') as p, u.with_variable(
             symbol=StyledText(s='T', text_style=text_styles.script_normal)) as t:
-            definition = (p | u.r.unequal | p) | u.r.proves | u.r.inc(t)
+            definition = (p | u.c1.unequal | p) | u.c1.proves | u.c1.inc(t)
         with u.with_variable(symbol='x') as x:
-            self.term_x_unequal_x = x | u.r.unequal | x
+            self.term_x_unequal_x = x | u.c1.unequal | x
             self.term_x_unequal_x_mask = frozenset([x])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -5150,7 +5151,7 @@ class InconsistencyIntroduction3Declaration(InferenceRuleDeclaration):
         x_unequal_x: CompoundFormula
         verify(assertion=isinstance(t, TheoryDerivation), msg=f'The argument ⌜t⌝({t}) is not a theory-derivation.',
             raise_exception=True, error_code=error_code)
-        output: CompoundFormula = self.u.r.inc(t)
+        output: CompoundFormula = self.u.c1.inc(t)
         return output
 
 
@@ -5172,9 +5173,9 @@ class ModusPonensDeclaration(InferenceRuleDeclaration):
         explicit_name = 'modus ponens inference rule'
         name = 'modus ponens'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            definition = ((p | u.r.implies | q) | u.r.tupl | p) | u.r.proves | q
+            definition = ((p | u.c1.implies | q) | u.c1.tupl | p) | u.c1.proves | q
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_p_implies_q = p | u.r.implies | q
+            self.term_p_implies_q = p | u.c1.implies | q
             self.term_p_implies_q_mask = frozenset([p, q])
         with u.with_variable(symbol='P') as p:
             self.term_p = p
@@ -5221,12 +5222,12 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
         explicit_name = 'modus tollens inference rule'
         name = 'modus tollens'
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            definition = ((p | u.r.implies | q) | u.r.tupl | u.r.lnot(q)) | u.r.proves | u.r.lnot(p)
+            definition = ((p | u.c1.implies | q) | u.c1.tupl | u.c1.lnot(q)) | u.c1.proves | u.c1.lnot(p)
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='Q') as q:
-            self.term_p_implies_q = p | u.r.implies | q
+            self.term_p_implies_q = p | u.c1.implies | q
             self.term_p_implies_q_mask = frozenset([p, q])
         with u.with_variable(symbol='Q') as q:
-            self.term_not_q = u.r.lnot(q)
+            self.term_not_q = u.c1.lnot(q)
             self.term_not_q_mask = frozenset([q])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -5249,7 +5250,7 @@ class ModusTollensDeclaration(InferenceRuleDeclaration):
             msg=f'The ⌜q⌝({q__in__p_implies_q}) in the formula argument ⌜p_implies_q⌝({p_implies_q}) is not syntaxically-equivalent to the ⌜q⌝({q__in__not_q}) in formula argument ⌜not_q⌝({not_q})',
             raise_exception=True, error_code=error_code)
         p__in__p_implies_q: CompoundFormula = p_implies_q.terms[0]
-        output: CompoundFormula = self.u.r.lnot(p__in__p_implies_q)
+        output: CompoundFormula = self.u.c1.lnot(p__in__p_implies_q)
         return output
 
 
@@ -5266,15 +5267,15 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
         explicit_name = 'proof by contradiction #1 inference rule'
         name = 'proof by contradiction #1'
         with u.with_variable(symbol='H') as h, u.with_variable(symbol='P') as p:
-            definition = u.r.tupl(h | u.r.formulates | u.r.lnot(p), u.r.inc(h)) | u.r.proves | p
+            definition = u.c1.tupl(h | u.c1.formulates | u.c1.lnot(p), u.c1.inc(h)) | u.c1.proves | p
         with u.with_variable(symbol='P') as p:
-            self.term_not_p = u.r.lnot(p)
+            self.term_not_p = u.c1.lnot(p)
             self.term_not_p_mask = frozenset([p])
         with u.with_variable(symbol='H') as h:
             self.term_h = h
             self.term_h_mask = frozenset([h])
         with u.with_variable(symbol='H') as h:
-            self.term_inc_h = u.r.inc(h)
+            self.term_inc_h = u.c1.inc(h)
             self.term_inc_h_mask = frozenset([h])
 
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
@@ -5320,16 +5321,16 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
         name = 'proof by contradiction #2'
         # definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 ≠ 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 = 𝑸)'
         with u.with_variable(symbol='H') as h, u.with_variable(symbol='x') as x, u.with_variable(symbol='y') as y:
-            definition = u.r.tupl(h | u.r.formulates | (x | u.r.unequal | y), u.r.inc(h)) | u.r.proves | (
-                x | u.r.equal | y)
+            definition = u.c1.tupl(h | u.c1.formulates | (x | u.c1.unequal | y), u.c1.inc(h)) | u.c1.proves | (
+                x | u.c1.equal | y)
         with  u.with_variable(symbol='x') as x, u.with_variable(symbol='y') as y:
-            self.term_x_unequal_y = (x | u.r.unequal | y)
+            self.term_x_unequal_y = (x | u.c1.unequal | y)
             self.term_x_unequal_y_mask = frozenset([x, y])
         with u.with_variable(symbol='H') as h:
             self.term_h = h
             self.term_h_mask = frozenset([h])
         with u.with_variable(symbol='H') as h:
-            self.term_inc_h = u.r.inc(h)
+            self.term_inc_h = u.c1.inc(h)
             self.term_inc_h_mask = frozenset([h])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, name=name, explicit_name=explicit_name, echo=echo)
@@ -5357,7 +5358,7 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
             raise_exception=True, error_code=error_code)
         x__in__x_unequal_y: CompoundFormula = x_unequal_y.terms[0]
         y__in__x_unequal_y: CompoundFormula = x_unequal_y.terms[1]
-        output: CompoundFormula = x__in__x_unequal_y | self.u.r.equal | y__in__x_unequal_y
+        output: CompoundFormula = x__in__x_unequal_y | self.u.c1.equal | y__in__x_unequal_y
         return output
 
 
@@ -5375,7 +5376,7 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
         name = 'proof by refutation #1'
         # definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 𝑷, 𝐼𝑛𝑐(𝓗)) ⊢ ¬𝑷'
         with u.with_variable(symbol='H') as h, u.with_variable(symbol='P') as p:
-            definition = u.r.tupl(h | u.r.formulates | p, u.r.inc(h)) | u.r.proves | u.r.lnot(p)
+            definition = u.c1.tupl(h | u.c1.formulates | p, u.c1.inc(h)) | u.c1.proves | u.c1.lnot(p)
         with u.with_variable(symbol='P') as p:
             self.term_p = p
             self.term_p_mask = frozenset([p])
@@ -5383,7 +5384,7 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
             self.term_h = h
             self.term_h_mask = frozenset([h])
         with u.with_variable(symbol='H') as h:
-            self.term_inc_h = u.r.inc(h)
+            self.term_inc_h = u.c1.inc(h)
             self.term_inc_h_mask = frozenset([h])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, name=name, explicit_name=explicit_name, echo=echo)
@@ -5409,7 +5410,7 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not syntaxically-equivalent to the formula argument ⌜h⌝({h})',
             raise_exception=True, error_code=error_code)
-        output: CompoundFormula = self.u.r.lnot(p)
+        output: CompoundFormula = self.u.c1.lnot(p)
         return output
 
 
@@ -5430,16 +5431,16 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
         name = 'proof by refutation #2'
         # definition = '(𝓗 𝑎𝑠𝑠𝑢𝑚𝑒 (𝑷 = 𝑸), 𝐼𝑛𝑐(𝓗)) ⊢ (𝑷 ≠ 𝑸)'
         with u.with_variable(symbol='H') as h, u.with_variable(symbol='x') as x, u.with_variable(symbol='y') as y:
-            definition = u.r.tupl(h | u.r.formulates | (x | u.r.equal | y), u.r.inc(h)) | u.r.proves | (
-                x | u.r.unequal | y)
+            definition = u.c1.tupl(h | u.c1.formulates | (x | u.c1.equal | y), u.c1.inc(h)) | u.c1.proves | (
+                x | u.c1.unequal | y)
         with  u.with_variable(symbol='x') as x, u.with_variable(symbol='y') as y:
-            self.term_x_equal_y = (x | u.r.equal | y)
+            self.term_x_equal_y = (x | u.c1.equal | y)
             self.term_x_equal_y_mask = frozenset([x, y])
         with u.with_variable(symbol='H') as h:
             self.term_h = h
             self.term_h_mask = frozenset([h])
         with u.with_variable(symbol='H') as h:
-            self.term_inc_h = u.r.inc(h)
+            self.term_inc_h = u.c1.inc(h)
             self.term_inc_h_mask = frozenset([h])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, name=name, explicit_name=explicit_name, echo=echo)
@@ -5467,7 +5468,7 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
             raise_exception=True, error_code=error_code)
         x__in__x_equal_y: CompoundFormula = x_equal_y.terms[0]
         y__in__x_equal_y: CompoundFormula = x_equal_y.terms[1]
-        output: CompoundFormula = x__in__x_equal_y | self.u.r.unequal | y__in__x_equal_y
+        output: CompoundFormula = x__in__x_equal_y | self.u.c1.unequal | y__in__x_equal_y
         return output
 
 
@@ -5486,7 +5487,7 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         name = 'variable substitution'
         # definition = StyledText(plaintext='(P, Phi) |- P\'', unicode='(P, 𝛷) ⊢ P\'')
         with u.with_variable(symbol='P') as p, u.with_variable(symbol='O') as o, u.with_variable(symbol='Q') as q:
-            definition = (p | u.r.tupl | o) | u.r.proves | q
+            definition = (p | u.c1.tupl | o) | u.c1.proves | q
         with u.with_variable(symbol='P') as p:
             self.term_p = p
             self.term_p_mask = frozenset([p])
@@ -5494,7 +5495,7 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
             latex='\Phi')) as phi:
             # TODO: VariableSubstitutionDeclaration: Provide a standard library of greek letters.
             # TODO: VariableSubstitutionDeclaration: Enrich how inference-rule terms may be defined to allow an expression like (v1, v2, ..., v3) using collection-defined-by-extension with n elements.
-            self.term_phi = u.r.tupl
+            self.term_phi = u.c1.tupl
             self.term_phi_mask = frozenset([phi])
         super().__init__(definition=definition, u=u, symbol=symbol, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=echo)
@@ -5512,7 +5513,7 @@ class VariableSubstitutionDeclaration(InferenceRuleDeclaration):
         # See the TO DO above.
         # Currently this type of term cannot be expressed with a form and mask.
         # In consequence we must check its syntax consistency here in an ad hoc manner.
-        verify(assertion=isinstance(phi, CompoundFormula) and phi.connective is self.u.r.tupl,
+        verify(assertion=isinstance(phi, CompoundFormula) and phi.connective is self.u.c1.tupl,
             msg=f'The argument ⌜phi⌝({phi}) is not a mathematical tuple (u.r.tupl) of formulas.', raise_exception=True,
             error_code=error_code)
         x_oset = get_formula_unique_variable_ordered_set(u=self.u, phi=p)
@@ -6073,7 +6074,7 @@ theory-elaboration."""
             proof=proof, slf=self)
         proof: CompoundFormula
         proof = unpack_formula(proof)
-        verify(proof.connective is self.u.r.inconsistency,
+        verify(proof.connective is self.u.c1.inconsistency,
             'The connective of the ⌜proof⌝ formula must be ⌜inconsistency⌝.', proof_connective=proof.connective,
             proof=proof, slf=self)
         verify(proof.terms[0] is self, 'The term of the ⌜proof⌝ formula must be the current theory, i.e. ⌜self⌝.',
@@ -7277,7 +7278,7 @@ def verify_formula_statement(t: TheoryDerivation, input_value: FlexibleFormula, 
     # valid if x was declared as a member of c.
     # We treat this as a special case in such a way as to NOT make it
     # necessary to populate all (x is-a c) statements in the metatheory.
-    if isinstance(formula, CompoundFormula) and formula.connective is u.r.is_a and formula.arity == 2:
+    if isinstance(formula, CompoundFormula) and formula.connective is u.c1.is_a and formula.arity == 2:
         formula: CompoundFormula
         # This is a formula of the form (x is-a c).
         # We must check now that c is a class.
@@ -10108,9 +10109,9 @@ class UniverseOfDiscourse(Formula):
         self._c2 = ClassDeclarationDict(u=self)
         self._c3 = ConstantDeclarationDict(u=self)
         self._d = dict()
-        self.formulae = dict()
+        self._phi = dict()
         self._inference_rules = InferenceRuleDeclarationCollection(u=self)
-        self._connectives = ConnectiveDict(u=self)
+        self._c1 = ConnectiveDict(u=self)
         self._simple_objcts = SimpleObjctDict(u=self)
         self._o = SimpleObjctDict(u=self)
         self.theories = dict()
@@ -10226,11 +10227,11 @@ class UniverseOfDiscourse(Formula):
         verify(is_in_class_OBSOLETE(phi, classes.compound_formula),
             'Cross-referencing a formula in a universe-of-discourse requires '
             'an object of type Formula.', phi=phi, slf=self)
-        verify(phi.nameset not in self.formulae.keys() or phi is self.formulae[phi.nameset],
+        verify(phi.nameset not in self.phi.keys() or phi is self.phi[phi.nameset],
             'Cross-referencing a formula in a universe-of-discourse requires '
             'that it is referenced with a unique symbol.', phi_symbol=phi.nameset, phi=phi, slf=self)
-        if phi not in self.formulae:
-            self.formulae[phi.nameset] = phi
+        if phi not in self.phi:
+            self.phi[phi.nameset] = phi
 
     def cross_reference_inference_rule(self, ir: InferenceRuleDeclaration) -> bool:
         """Cross-references an inference-rule in this universe-of-discourse.
@@ -10260,8 +10261,8 @@ class UniverseOfDiscourse(Formula):
         #     'Cross-referencing a connective in a universe-of-discourse requires '
         #     'that it is referenced with a unique symbol.', r_symbol=r.nameset, r=r, slf=self)
         # ...instead of using a dictionary, the idea will be to use a collection.
-        if r not in self.connectives:
-            self.connectives[r.nameset] = r
+        if r not in self.c1:
+            self.c1[r.nameset] = r
 
     def cross_reference_simple_objct(self, o: SimpleObjct):
         """Cross-references a simple-objct in this universe-of-discourse.
@@ -10458,16 +10459,14 @@ class UniverseOfDiscourse(Formula):
         return self._o
 
     @property
-    def r(self) -> ConnectiveDict:
-        """A python dictionary of connectives contained in this universe-of-discourse,
-        where well-known connectives are directly available as properties."""
-        return self.connectives
+    def phi(self):
+        return self._phi
 
     @property
-    def connectives(self) -> ConnectiveDict:
+    def c1(self) -> ConnectiveDict:
         """A python dictionary of connectives contained in this universe-of-discourse,
         where well-known connectives are directly available as properties."""
-        return self._connectives
+        return self._c1
 
     def rep_creation(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         return rep_composition(composition=self.compose_creation(), encoding=encoding, cap=cap)
@@ -10572,7 +10571,7 @@ class InferredStatement(FormulaStatement):
             explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset,
             paragraphe_header=paragraph_header, echo=False)
         super()._declare_class_membership(declarative_class_list.inferred_proposition)
-        if self.valid_proposition.connective is self.t.u.r.inconsistency and is_in_class_OBSOLETE(
+        if self.valid_proposition.connective is self.t.u.c1.inconsistency and is_in_class_OBSOLETE(
             self.valid_proposition.terms[0], classes.theory_derivation):
             # This inferred-statement proves the inconsistency of its argument,
             # its argument is a theory-derivation (i.e. it is not a variable),
@@ -10643,7 +10642,7 @@ def rep_two_columns_proof_end(left: str) -> str:
 
 def apply_negation(phi: CompoundFormula) -> CompoundFormula:
     """Apply negation to a formula phi."""
-    return phi.u.declare_compound_formula(phi.u.r.lnot, phi.u.declare_compound_formula(phi.u.r.lnot, phi))
+    return phi.u.declare_compound_formula(phi.u.c1.lnot, phi.u.declare_compound_formula(phi.u.c1.lnot, phi))
 
 
 def apply_double_negation(phi: CompoundFormula) -> CompoundFormula:
