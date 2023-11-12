@@ -3959,7 +3959,7 @@ class InferenceRuleDeclaration(Formula):
             explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
             echo=False)
         super()._declare_class_membership(declarative_class_list.inference_rule)
-        u.cross_reference_inference_rule(self)
+        u.i.declare(self)
         echo = prioritize_value(echo, configuration.echo_inference_rule_declaration, configuration.echo_declaration,
             configuration.echo_default, False)
         if echo:
@@ -6446,7 +6446,7 @@ class ClassDeclaration(Formula):
         echo = prioritize_value(echo, configuration.echo_simple_objct_declaration, configuration.echo_default, False)
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, echo=False)
         self._python_class = python_class
-        self.u.cross_reference_class(c=self)
+        u.c2.declare_instance(c=self)
         self._internal_container = frozenset()
         if echo:
             self.echo()
@@ -6482,25 +6482,30 @@ class ClassDeclaration(Formula):
         return self._python_class
 
 
-class AdditiveCollection(set):
+class UniverseOfDiscourseCollectionProperty(set):
     """A basic collection that does not allow the removal of elements."""
 
-    def __init__(self):
+    def __init__(self, u: UniverseOfDiscourse):
+        self._u = u
         super().__init__()
 
     def remove(self, element):
-        raise Exception('Elements cannot be removed from an additive collection')
+        raise Exception('universe-of-discourse collection properties are only additive, i.e. you cannot remove '
+                        'elements from them.')
+
+    @property
+    def u(self) -> UniverseOfDiscourse:
+        return self._u
 
 
-class ClassDeclarationCollection(AdditiveCollection):
+class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     """A collection of class-declarations that exposes some well-known classes.
     It is exposed as the c2 property on the UniverseOfDiscourse class.
 
     """
 
     def __init__(self, u: UniverseOfDiscourse):
-        self.u = u
-        super().__init__()
+        super().__init__(u=u)
         self._connective = None
         self._formula = None
         self._free_variable = None
@@ -6517,9 +6522,23 @@ class ClassDeclarationCollection(AdditiveCollection):
     def declare(self, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
         auto_index: (None, bool) = None, python_class: (None, type) = None,
         echo: (None, bool) = None) -> ClassDeclaration:
-        c = ClassDeclaration(u=self.u, symbol=symbol, index=index, auto_index=auto_index, python_class=python_class,
-            echo=echo)
-        super().add(c)
+        c: ClassDeclaration = ClassDeclaration(u=self.u, symbol=symbol, index=index, auto_index=auto_index,
+            python_class=python_class, echo=echo)
+        c = self.declare_instance(c=c)
+        return c
+
+    def declare_instance(self, c: ClassDeclaration):
+        verify(assertion=c.u is self.u, msg='The universe-of-discourse of c is distinct from the '
+                                            'universe-of-discourse of this collection.')
+        if c in self:
+            # c == some element of the collection.
+            # but it may be that c is not that element.
+            # in this particular situation,
+            # we retrieve and return the existing element,
+            # and discard the original c argument.
+            c = next((element for element in self if element == c), None)
+        else:
+            super().add(c)
         return c
 
     @property
@@ -7400,15 +7419,14 @@ def verify_theory_derivation(input_value: (None, FlexibleFormula), arg: str, rai
         return False, None, msg
 
 
-class InferenceRuleDeclarationCollection(collections.UserDict):
+class InferenceRuleDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     """This python class models the collection of :ref:`inference-rules<inference_rule_math_concept>` :ref:`declared<object_declaration_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
 
     In complement, it conveniently exposes as python properties a catalog of natively supported :ref:`inference-rules<inference_rule_math_concept>` that are automatically :ref:`declared<object_declaration_math_concept>` in the :ref:`universe-of-discourse<universe_of_discourse_math_concept>` when they are accessed for the first time.
     """
 
     def __init__(self, u: UniverseOfDiscourse):
-        self.u = u
-        super().__init__()
+        super().__init__(u=u)
         # Well-known objects
         self._absorption = None
         self._axiom_interpretation = None
@@ -7446,6 +7464,9 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
     @property
     def absorb(self) -> AbsorptionDeclaration:
         return self.absorption
+
+    def add(self, element):
+        raise Exception('Please use the declare method.')
 
     @property
     def absorption(self) -> AbsorptionDeclaration:
@@ -7535,10 +7556,17 @@ class InferenceRuleDeclarationCollection(collections.UserDict):
             self._constructive_dilemma = ConstructiveDilemmaDeclaration(u=self.u)
         return self._constructive_dilemma
 
+    def declare(self, i: InferenceRuleDeclaration):
+        verify(assertion=i.u is self.u, msg='The universe-of-discourse of the inference-rule is distinct from the '
+                                            'universe-of-discourse of the inference-rule collection.')
+        super().add(i)
+
     @property
     def definition_interpretation(self) -> DefinitionInterpretationDeclaration:
         if self._definition_interpretation is None:
-            self._definition_interpretation = DefinitionInterpretationDeclaration(u=self.u)
+            i: DefinitionInterpretationDeclaration = DefinitionInterpretationDeclaration(u=self.u)
+            self.declare(i)
+            self._definition_interpretation = i
         return self._definition_interpretation
 
     @property
