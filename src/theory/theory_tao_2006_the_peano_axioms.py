@@ -52,7 +52,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         t.open_section('Axiom 2.1', section_parent=section_2_1, numbering=False)
 
-        a01 = u.declare_axiom(f'0 is a natural number.')
+        a01 = u.a.declare(f'0 is a natural number.')
         axiom_2_1 = t.include_axiom(a01, ref='2.1')
         self.axiom_2_1 = axiom_2_1
 
@@ -61,7 +61,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         t.open_section('Axiom 2.2', section_parent=section_2_1, numbering=False)
 
-        a03 = u.declare_axiom('If n is a natural number, then n++ is a natural number.')
+        a03 = u.a.declare('If n is a natural number, then n++ is a natural number.')
         axiom_2_2 = t.include_axiom(a03, ref='2.2')
         self.axiom_2_2 = axiom_2_2
         """"""
@@ -131,9 +131,8 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         t.open_section('Axiom 2.3', section_parent=section_2_1, numbering=False)
 
-        a05 = t.include_axiom(
-            a=u.declare_axiom('0 is not the successor of any natural number; i.e., we have n++ ≠ 0 for '
-                              'every natural number n.'), ref='2.3')
+        a05 = t.include_axiom(a=u.a.declare('0 is not the successor of any natural number; i.e., we have n++ ≠ 0 for '
+                                            'every natural number n.'), ref='2.3')
 
         with u.with_variable('n') as n:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₂₈): ((𝐧₂ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((𝐧₂)++ ≠ 0)).
@@ -153,10 +152,9 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         t.open_section('Axiom 2.4', section_parent=section_2_1, numbering=False)
 
-        axiom_2_4 = t.include_axiom(
-            u.declare_axiom('Different natural numbers must have different successors; i.e., if n, '
-                            'm are natural numbers and n ≠ m, then n++ ≠ m++. Equivalently, '
-                            'if n++ = m++, then we must have n = m.'), ref='2.4')
+        axiom_2_4 = t.include_axiom(u.a.declare('Different natural numbers must have different successors; i.e., if n, '
+                                                'm are natural numbers and n ≠ m, then n++ ≠ m++. Equivalently, '
+                                                'if n++ = m++, then we must have n = m.'), ref='2.4')
 
         with u.with_variable('n') as n, u.with_variable('m') as m:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₂): ((((𝐧₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐦₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (𝐧₃ ≠ 𝐦₁)) ⟹ ((𝐧₃)++ ≠ (𝐦₁)++)).
@@ -295,7 +293,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         t.open_section('Axiom 2.5: The principle of mathematical induction', section_parent=section_2_1,
             numbering=False)
 
-        a_2_5 = u.declare_axiom(paragraph_header=pu.paragraph_headers.axiom_schema_declaration,
+        a_2_5 = u.a.declare(paragraph_header=pu.paragraph_headers.axiom_schema_declaration,
             subtitle='Principle of mathematical induction',
             natural_language='Let P(n) be any property pertaining to a natural number n. Suppose that P(O) is true, and suppose that whenever P(n) is true, P(n++) is also true. Then P(n) is true for every natural number n.')
 

@@ -30,7 +30,7 @@ class TestEqualTermsSubstitution(TestCase):
         r1 = u.c1.declare(2, signal_proposition=True)
         r2 = u.c1.declare(1, signal_proposition=True)
         t1 = u.declare_theory()
-        a = u.declare_axiom(random_data.random_sentence())
+        a = u.a.declare(random_data.random_sentence())
         ap = t1.include_axiom(a)
         q_equal_r = t1.i.axiom_interpretation.infer_formula_statement(ap,
             u.declare_compound_formula(u.c1.equal, u.declare_compound_formula(r1, o1, o2),

@@ -17,7 +17,7 @@ class TestValidateFormulaStatement(TestCase):
         r2 = u.c1.declare(arity=1, signal_proposition=True)
         phi = u.declare_compound_formula(r1, o1)
         t = u.declare_theory()
-        a = t.include_axiom(a=u.declare_axiom(natural_language='Dummy axiom for testing purposes'))
+        a = t.include_axiom(a=u.a.declare(natural_language='Dummy axiom for testing purposes'))
         t.i.axiom_interpretation.infer_formula_statement(a=a, p=phi)
         _, phi1_formula, _ = pu.verify_formula_statement(t=t, input_value=u.declare_compound_formula(r1, o1))
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi=phi1_formula))

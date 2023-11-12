@@ -18,7 +18,7 @@ class TestInconsistencyIntroduction1(TestCase):
         pu.configuration.echo_default = True
         # Prepare the universe of discourse
         u = pu.UniverseOfDiscourse()
-        axiom = u.declare_axiom(natural_language='Dummy axiom for testing purposes')
+        axiom = u.a.declare(natural_language='Dummy axiom for testing purposes')
         o1 = u.o.declare()
         o2 = u.o.declare()
         o3 = u.o.declare()

@@ -25,7 +25,7 @@ class MGZ2021ClassicalLogicK0(pu.TheoryPackage):
         section_1 = t.open_section(section_title='Classical Logic', section_number=1)
 
         # Axiom: PL12
-        self.pl12_declaration = u.declare_axiom(symbol=axiom_symbol, index=12, natural_language=f'¬¬𝐴 ⊃ 𝐴')
+        self.pl12_declaration = u.a.declare(symbol=axiom_symbol, index=12, natural_language=f'¬¬𝐴 ⊃ 𝐴')
         self.pl12_inclusion = t.include_axiom(ref='PL12', symbol=axiom_symbol, index=1, a=self.pl12_declaration)
         with u.with_variable(symbol='A', auto_index=False) as a, u.with_variable(symbol='B', auto_index=False) as b:
             self.pl12_statement = t.i.axiom_interpretation.infer_formula_statement(a=self.pl12_inclusion,

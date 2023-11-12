@@ -6,7 +6,7 @@ o1 = u.o.declare()
 o2 = u.o.declare()
 f = u.c1.declare(arity=1, symbol='f', auto_index=False)
 t1 = u.declare_theory(echo=True)
-axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes')
+axiom = u.a.declare(natural_language='Dummy axiom for demonstration purposes')
 
 # Elaborate a dummy theory with inconsistent propositions
 pu.configuration.echo_proof = False

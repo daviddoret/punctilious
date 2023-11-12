@@ -9,21 +9,21 @@ import core
 u = core.UniverseOfDiscourse()
 ft = u.declare_theory(nameset=core.NameSet(symbol='foundation-theory-1'))
 
-axiom_01 = ft.include_axiom(u.declare_axiom('A theory is a... (define punctilious data model).'))
+axiom_01 = ft.include_axiom(u.a.declare('A theory is a... (define punctilious data model).'))
 
 # The (axiomatic) class of (axiomatic) classes
-axiom_02 = ft.include_axiom(u.declare_axiom('An (axiomatic) class is a collection of theoretical objects that are '
-                                            'unambiguously defined by the axioms of the theory it belongs to.'))
+axiom_02 = ft.include_axiom(u.a.declare('An (axiomatic) class is a collection of theoretical objects that are '
+                                        'unambiguously defined by the axioms of the theory it belongs to.'))
 
-axiom_03 = ft.include_axiom(u.declare_axiom('The class of classes is the class of all classes defined in the '
-                                            'universe-of-discourse (TODO: Or foundation theory?).'))
+axiom_03 = ft.include_axiom(u.a.declare('The class of classes is the class of all classes defined in the '
+                                        'universe-of-discourse (TODO: Or foundation theory?).'))
 class_of_classes = u.o.declare('class-of-classes')
 element_of = u.c1.declare(2, '∈', formula_rep=core.CompoundFormula.infix, signal_proposition=True,
     dashed_name='element-of')
 fa1 = ft.i.axiom_interpretation.infer_formula_statement(axiom_02,
     u.declare_compound_formula(element_of, class_of_classes, class_of_classes))
 
-nla_04 = ft.include_axiom(u.declare_axiom('The theory-class is the class of all theory'))
+nla_04 = ft.include_axiom(u.a.declare('The theory-class is the class of all theory'))
 theory_class = u.o.declare('theory-class')
 fa2b = ft.i.axiom_interpretation.infer_formula_statement(axiom_02,
     u.declare_compound_formula(element_of, theory_class, class_of_classes))
@@ -33,8 +33,8 @@ fa2c = ft.i.axiom_interpretation.infer_formula_statement(axiom_02,
 #   for every existing and new theory that is declared?
 
 # Truth values
-nla_05 = ft.include_axiom(u.declare_axiom(natural_language='truth-values is the class whose elements are '
-                                                           'the formulas truth and falsehood.'))
+nla_05 = ft.include_axiom(u.a.declare(natural_language='truth-values is the class whose elements are '
+                                                       'the formulas truth and falsehood.'))
 falsehood = u.o.declare('false')
 truth = u.o.declare('true')
 truth_values = u.o.declare('truth-values')
@@ -46,9 +46,9 @@ proposition_080 = ft.i.axiom_interpretation.infer_formula_statement(axiom_03,
     u.declare_compound_formula(element_of, falsehood, truth_values))
 
 # foundation propositional connectives
-nla_09 = ft.include_axiom(u.declare_axiom(natural_language='propositional-connectives is the class whose elements are '
-                                                           'the connectives: conjunction, disjunction, implication, and negation, '
-                                                           'and any connective defined from these.'))
+nla_09 = ft.include_axiom(u.a.declare(natural_language='propositional-connectives is the class whose elements are '
+                                                       'the connectives: conjunction, disjunction, implication, and negation, '
+                                                       'and any connective defined from these.'))
 propositional_connectives_class = u.o.declare('propositional-connectives-class')
 ft.i.axiom_interpretation.infer_formula_statement(axiom_03,
     u.declare_compound_formula(element_of, propositional_connectives_class, class_of_classes))
@@ -63,9 +63,8 @@ ft.i.axiom_interpretation.infer_formula_statement(nla_09,
     u.declare_compound_formula(element_of, u.c1.lnot, propositional_connectives_class))
 ft.i.axiom_interpretation.infer_formula_statement(nla_09,
     u.declare_compound_formula(element_of, u.c1.neq, propositional_connectives_class))
-nla_01b = ft.include_axiom(
-    u.declare_axiom('= is a binary connective such that, given any two theoretical-objcts x and y, '
-                    'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.'))
+nla_01b = ft.include_axiom(u.a.declare('= is a binary connective such that, given any two theoretical-objcts x and y, '
+                                       'if x=y then y=x, and for every statement s, s is valid iif subst s is valid.'))
 with u.with_variable('x') as x1, u.with_variable('y') as x2:
     x1_equal_x2 = u.declare_compound_formula(u.c1.equal, x1, x2)
     x2_equal_x1 = u.declare_compound_formula(u.c1.equal, x2, x1)
@@ -79,32 +78,32 @@ with u.with_variable('x') as x, u.with_variable('y') as y:
         u.declare_compound_formula(u.c1.equal, u.declare_compound_formula(u.c1.neq, x, y),
             u.declare_compound_formula(u.c1.lnot, u.declare_compound_formula(u.c1.equal, x, y))))
 
-nla_10 = ft.include_axiom(u.declare_axiom('propositions is a class whose elements are '
-                                          'truth, falsehood, all elements of the theory-formula-statement class, '
-                                          'whose connective is an element-of propositional-connectives-class, '
-                                          'and all theory-formula-statements whose connective is defined '
-                                          'from these. Its elements are called propositions.'))
+nla_10 = ft.include_axiom(u.a.declare('propositions is a class whose elements are '
+                                      'truth, falsehood, all elements of the theory-formula-statement class, '
+                                      'whose connective is an element-of propositional-connectives-class, '
+                                      'and all theory-formula-statements whose connective is defined '
+                                      'from these. Its elements are called propositions.'))
 proposition_class = u.o.declare('proposition-class')
 ft.i.axiom_interpretation.infer_formula_statement(nla_10,
     u.declare_compound_formula(element_of, truth, class_of_classes))
 ft.i.axiom_interpretation.infer_formula_statement(nla_10,
     u.declare_compound_formula(element_of, falsehood, class_of_classes))
 
-nla_20 = ft.include_axiom(u.declare_axiom('If P is a proposition, then either the statement P has truth value true,'
-                                          'or the statement P has truth value falsehood.'))
+nla_20 = ft.include_axiom(u.a.declare('If P is a proposition, then either the statement P has truth value true,'
+                                      'or the statement P has truth value falsehood.'))
 has_truth_value = u.c1.declare(2, 'is', formula_rep=core.CompoundFormula.infix, signal_proposition=True)
 ft.i.axiom_interpretation.infer_formula_statement(nla_10, u.declare_compound_formula(has_truth_value, truth, truth))
 ft.i.axiom_interpretation.infer_formula_statement(nla_10,
     u.declare_compound_formula(has_truth_value, falsehood, falsehood))
 
-nla_30 = ft.include_axiom(u.declare_axiom('¬ is a unary connective. '
-                                          'If P is a proposition and it has truth-value truth, '
-                                          'then ¬P has-truth-value false. '
-                                          'Conversely, if P is a proposition and it has truth-value falsehood, '
-                                          'then ¬P has truth-value true.'))
+nla_30 = ft.include_axiom(u.a.declare('¬ is a unary connective. '
+                                      'If P is a proposition and it has truth-value truth, '
+                                      'then ¬P has-truth-value false. '
+                                      'Conversely, if P is a proposition and it has truth-value falsehood, '
+                                      'then ¬P has truth-value true.'))
 
 # DOUBLE-NEGATION
-nla_09_50 = ft.include_axiom(u.declare_axiom('If P has-truth-value t, ¬(¬(P)) has-truth-value t.'))
+nla_09_50 = ft.include_axiom(u.a.declare('If P has-truth-value t, ¬(¬(P)) has-truth-value t.'))
 with u.with_variable() as p, u.with_variable() as t:
     fa_09_51 = ft.i.axiom_interpretation.infer_formula_statement(nla_09_50,
         u.declare_compound_formula(u.c1.implication, u.declare_compound_formula(has_truth_value, p, t),
@@ -114,10 +113,10 @@ with u.with_variable() as p, u.with_variable() as t:
 
 # CONJUNCTION
 def define_conjunction():
-    nla_39 = ft.include_axiom(u.declare_axiom('If P and Q are logical propositions, '
-                                              '(P ∧ Q) is true if and only if '
-                                              'both P and Q are true, '
-                                              'otherwise it is false.'))
+    nla_39 = ft.include_axiom(u.a.declare('If P and Q are logical propositions, '
+                                          '(P ∧ Q) is true if and only if '
+                                          'both P and Q are true, '
+                                          'otherwise it is false.'))
 
 
 define_conjunction()
@@ -133,17 +132,16 @@ def section_200_theory_consistency():
 
 
 def define_biconditional():
-    nla = ft.include_axiom(u.declare_axiom(natural_language='If P and Q are logical propositions, '
-                                                            '(P ⇔ Q) is true if and only if '
-                                                            '((P ⇒ Q) ∧ (Q ⇒ P)), '
-                                                            'otherwise it is false.'))
+    nla = ft.include_axiom(u.a.declare(natural_language='If P and Q are logical propositions, '
+                                                        '(P ⇔ Q) is true if and only if '
+                                                        '((P ⇒ Q) ∧ (Q ⇒ P)), '
+                                                        'otherwise it is false.'))
 
 
 define_biconditional()
 
-nla_40 = ft.include_axiom(
-    u.declare_axiom(natural_language='If T is a theory, and both P is valid and ¬P is valid in T, '
-                                     'then this theory is an element of contradictory-theory class.'))
+nla_40 = ft.include_axiom(u.a.declare(natural_language='If T is a theory, and both P is valid and ¬P is valid in T, '
+                                                       'then this theory is an element of contradictory-theory class.'))
 contradictory_theories = u.o.declare('contradictory-theory')
 contradictory_statements = u.o.declare('contradictory-statement')
 with u.with_variable('φ') as phi:

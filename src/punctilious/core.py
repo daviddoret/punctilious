@@ -1167,8 +1167,8 @@ def is_in_class_OBSOLETE(o: Formula, c: DeclarativeClass_OBSOLETE) -> bool:
     """
     verify(o is not None, 'o is None.', o=o, c=c)
     # verify(hasattr(o, 'is_in_class'), 'o does not have attribute is_in_class.', o=o, c=c)
-    verify(callable(getattr(o, 'is_in_class')), 'o.is_in_class() is not callable.', o=o, c=c)
-    return o.is_in_class(c)
+    verify(callable(getattr(o, 'is_in_class_OBSOLETE')), 'o.is_in_class() is not callable.', o=o, c=c)
+    return o.is_in_class_OBSOLETE(c)
 
 
 def set_attr(o, a, v):
@@ -1695,10 +1695,10 @@ class SymbolicObject(abc.ABC):
                 ref=ref, subtitle=subtitle)
         self._nameset = nameset
         self.is_theory_foundation_system = is_theory_foundation_system
-        self._declare_class_membership(classes.symbolic_objct)
+        self._declare_class_membership_OBSOLETE(classes.symbolic_objct)
         if not is_universe_of_discourse:
             self._u = u
-            self._u.cross_reference_symbolic_objct(o=self)
+            self._u.cross_reference_symbolic_objct_OBSOLETE(o=self)
         else:
             self._u = None
         if echo:
@@ -1777,11 +1777,11 @@ class SymbolicObject(abc.ABC):
         return output
 
     @property
-    def declarative_classes(self) -> frozenset[DeclarativeClass_OBSOLETE]:
+    def declarative_classes_OBSOLETE(self) -> frozenset[DeclarativeClass_OBSOLETE]:
         """The set of declarative-classes this symbolic-objct is a member of."""
         return self._declarative_classes
 
-    def _declare_class_membership(self, c: DeclarativeClass_OBSOLETE):
+    def _declare_class_membership_OBSOLETE(self, c: DeclarativeClass_OBSOLETE):
         """During construction (__init__()), add the declarative-classes this symboli-objct is
         being made a member of."""
         if not hasattr(self, '_declarative_classes'):
@@ -1791,18 +1791,18 @@ class SymbolicObject(abc.ABC):
     def echo(self):
         repm.prnt(self.rep())
 
-    def is_declarative_class_member(self, c: DeclarativeClass_OBSOLETE) -> bool:
+    def is_declarative_class_member_OBSOLETE(self, c: DeclarativeClass_OBSOLETE) -> bool:
         """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise."""
         if hasattr(self, '_declarative_classes'):
             return c in self._declarative_classes
         else:
             return False
 
-    def is_in_class(self, c: DeclarativeClass_OBSOLETE) -> bool:
+    def is_in_class_OBSOLETE(self, c: DeclarativeClass_OBSOLETE) -> bool:
         """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise.
 
         A shortcut for o.is_declarative_class_member(...)."""
-        return self.is_declarative_class_member(c=c)
+        return self.is_declarative_class_member_OBSOLETE(c=c)
 
     def is_symbol_equivalent(self, o2) -> bool:
         """Returns true if this object and o2 are symbol-equivalent.
@@ -2142,7 +2142,7 @@ class Formula(SymbolicObject):
             explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
             echo=False)
         self._collections = frozenset()
-        super()._declare_class_membership(classes.formula)
+        super()._declare_class_membership_OBSOLETE(classes.formula)
         if not isinstance(self, UniverseOfDiscourse):
             # The universe-of-discourse is the only object that may not
             # be contained in a universe-of-discourse.
@@ -2627,7 +2627,7 @@ class FreeVariable(Variable):
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, nameset=nameset,
             echo=False)
-        super()._declare_class_membership(declarative_class_list.variable)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.variable)
         if echo:
             self.echo()
 
@@ -2714,8 +2714,8 @@ class ConstantDeclaration(Formula):
             symbol = configuration.default_constant_symbol
         self._value = value
         super().__init__(symbol=symbol, auto_index=auto_index, index=index, u=u, echo=False)
-        super()._declare_class_membership(declarative_class_list.constant_declaration)
-        u.cross_reference_constant(self)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.constant_declaration)
+        u.cross_reference_constant_OBSOLETE(self)
         verify(assertion=value.u is self.u,
             msg=f'The universe-of-discourse ⌜{self.u}⌝ of the constant ⌜{self}⌝ is inconsistent with the universe-of-discourse of its value ⌜{value}⌝.')
         if echo:
@@ -2832,8 +2832,8 @@ class CompoundFormula(Formula):
         self.terms = terms
         # super().__init__(nameset=nameset, u=u, echo=False)
         super().__init__(symbol=symbol, index=index, auto_index=auto_index, u=u, echo=False)
-        super()._declare_class_membership(declarative_class_list.compound_formula)
-        u.cross_reference_formula(self)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.compound_formula)
+        u.cross_reference_formula_OBSOLETE(self)
         verify(assertion=is_in_class_OBSOLETE(connective, classes.connective) or is_in_class_OBSOLETE(connective,
             classes.variable), msg='The connective of this formula is neither a connective, nor a '
                                    'variable.', formula=self, connective=connective)
@@ -3248,7 +3248,7 @@ class Statement(Formula):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
             echo=echo)
-        super()._declare_class_membership(declarative_class_list.statement)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.statement)
         if echo:
             self.echo()
 
@@ -3341,8 +3341,8 @@ class AxiomDeclaration(Formula):
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
             subtitle=subtitle, paragraph_header=paragraph_header, nameset=nameset, echo=False)
-        super()._declare_class_membership(declarative_class_list.axiom)
-        u.cross_reference_axiom(self)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.axiom)
+        u.a.declare_instance(a=self)
         if echo:
             self.echo()
 
@@ -3406,7 +3406,7 @@ class AxiomInclusion(Statement):
         super().__init__(theory=t, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
-        super()._declare_class_membership(declarative_class_list.axiom_inclusion)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.axiom_inclusion)
         if echo:
             self.echo()
 
@@ -3479,7 +3479,7 @@ class InferenceRuleInclusion(Statement):
         super().__init__(theory=t, paragraph_header=paragraph_headers, symbol=symbol, index=index, nameset=nameset,
             echo=False)
         t.crossreference_inference_rule_inclusion(self)
-        super()._declare_class_membership(declarative_class_list.inference_rule_inclusion)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.inference_rule_inclusion)
         echo = prioritize_value(echo, configuration.echo_inference_rule_inclusion, configuration.echo_inclusion,
             configuration.echo_default, False)
         if echo:
@@ -3603,8 +3603,8 @@ class DefinitionDeclaration(Formula):
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, paragraph_header=cat,
             ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
-        super()._declare_class_membership(declarative_class_list.definition)
-        u.cross_reference_definition(self)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.definition)
+        u.cross_reference_definition_OBSOLETE(self)
         if echo:
             self.echo()
 
@@ -3666,7 +3666,7 @@ class DefinitionInclusion(Statement):
         super().__init__(theory=t, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, paragraph_header=cat,
             ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
-        super()._declare_class_membership(declarative_class_list.definition_inclusion)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.definition_inclusion)
         if echo:
             self.echo()
 
@@ -3761,7 +3761,7 @@ class FormulaStatement(Statement):
             # it follows that this statement "yields" new statements in the theory.
             assert self.valid_proposition.connective.implementation is not None
             self.morphism_output = Morphism(theory=theory, source_statement=self)
-        super()._declare_class_membership(declarative_class_list.formula_statement)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.formula_statement)
         if echo:
             self.echo()
 
@@ -3953,7 +3953,7 @@ class InferenceRuleDeclaration(Formula):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
             echo=False)
-        super()._declare_class_membership(declarative_class_list.inference_rule)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.inference_rule)
         u.i.declare_instance(i=self)
         echo = prioritize_value(echo, configuration.echo_inference_rule_declaration, configuration.echo_declaration,
             configuration.echo_default, False)
@@ -5291,7 +5291,7 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
         _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u, form=self.term_inc_h,
             mask=self.term_inc_h_mask, raise_exception=True, error_code=error_code)
         h__in__inc_h: CompoundFormula = inc_h.terms[0]
-        verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
+        verify(assertion=h__in__inc_h.is_in_class_OBSOLETE(classes.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
@@ -5345,7 +5345,7 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
         _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u, form=self.term_inc_h,
             mask=self.term_inc_h_mask, raise_exception=True, error_code=error_code)
         h__in__inc_h: CompoundFormula = inc_h.terms[0]
-        verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
+        verify(assertion=h__in__inc_h.is_in_class_OBSOLETE(classes.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
@@ -5399,7 +5399,7 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
         _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u, form=self.term_inc_h,
             mask=self.term_inc_h_mask, raise_exception=True, error_code=error_code)
         h__in__inc_h: CompoundFormula = inc_h.terms[0]
-        verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
+        verify(assertion=h__in__inc_h.is_in_class_OBSOLETE(classes.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
@@ -5455,7 +5455,7 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
         _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u, form=self.term_inc_h,
             mask=self.term_inc_h_mask, raise_exception=True, error_code=error_code)
         h__in__inc_h: CompoundFormula = inc_h.terms[0]
-        verify(assertion=h__in__inc_h.is_in_class(classes.theory_derivation),
+        verify(assertion=h__in__inc_h.is_in_class_OBSOLETE(classes.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
@@ -5545,7 +5545,7 @@ class AtheoreticalStatement(SymbolicObject):
         super().__init__(u=theory.u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
-        super()._declare_class_membership(classes.atheoretical_statement)
+        super()._declare_class_membership_OBSOLETE(classes.atheoretical_statement)
 
 
 class NoteInclusion(AtheoreticalStatement):
@@ -5585,7 +5585,7 @@ class NoteInclusion(AtheoreticalStatement):
             paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
         if echo:
             self.echo()
-        super()._declare_class_membership(declarative_class_list.note)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.note)
 
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
@@ -5644,7 +5644,7 @@ class Section(AtheoreticalStatement):
         self.category = section_category
         symbol = NameSet(symbol=self.category.symbol_base, index=self.statement_index)
         super().__init__(nameset=symbol, theory=t, echo=False)
-        super()._declare_class_membership(declarative_class_list.note)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.note)
         if echo:
             self.echo()
 
@@ -5743,7 +5743,7 @@ class TheoryDerivation(Formula):
             extended_theory is not None and is_in_class_OBSOLETE(extended_theory_limit,
             classes.statement) and extended_theory_limit in extended_theory.statements),
             'Parameter "theory_extension_statement_limit" is inconsistent.', u=u)
-        super()._declare_class_membership(classes.theory_derivation)
+        super()._declare_class_membership_OBSOLETE(classes.theory_derivation)
         if stabilized:
             # It is a design choice to stabilize the theory-elaboration
             # at the very end of construction (__init__()). Note that it
@@ -6131,11 +6131,11 @@ class Hypothesis(Statement):
             index = t.u.index_symbol(symbol=symbol)
         super().__init__(theory=t, symbol=symbol, index=index, paragraph_header=paragraph_header, subtitle=subtitle,
             dashed_name=dashed_name, echo=False)
-        super()._declare_class_membership(declarative_class_list.hypothesis)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.hypothesis)
         self._hypothesis_formula = hypothesis_formula
         # When a hypothesis is posed in a theory 𝒯₁,
         # ...the hypothesis is declared (aka postulated) as an axiom in the universe-of-discourse,
-        self._hypothesis_axiom_declaration = self.u.declare_axiom(
+        self._hypothesis_axiom_declaration = self.u.a.declare(
             f'By hypothesis, assume {hypothesis_formula.rep_formula()} is true.', echo=echo)
         # ...a hypothetical-theory 𝒯₂ is created to store the hypothesis elaboration,
         self._hypothesis_child_theory = t.u.declare_theory(extended_theory=t, extended_theory_limit=self,
@@ -6295,8 +6295,8 @@ class Connective(Formula):
                 abridged_name=abridged_name, name=name, explicit_name=explicit_name, paragraph_header=cat, ref=ref,
                 subtitle=subtitle)
         super().__init__(u=u, nameset=nameset, echo=False)
-        self.u.cross_reference_connective(r=self)
-        super()._declare_class_membership(classes.connective)
+        self.u.cross_reference_connective_OBSOLETE(r=self)
+        super()._declare_class_membership_OBSOLETE(classes.connective)
         if echo:
             self.echo()
 
@@ -6373,7 +6373,7 @@ class SimpleObjct(Formula):
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
             subtitle=subtitle, nameset=nameset, echo=False)
-        self.u.cross_reference_simple_objct(o=self)
+        self.u.cross_reference_simple_objct_OBSOLETE(o=self)
         if echo:
             self.echo()
 
@@ -6437,10 +6437,12 @@ class ClassDeclaration(Formula):
     """
 
     def __init__(self, u: UniverseOfDiscourse, symbol: (None, str, StyledText) = None, index: (None, int) = None,
-        auto_index: (None, bool) = None, python_class: (None, type) = None, echo: (None, bool) = None):
+        auto_index: (None, bool) = None, python_class: (None, type) = None, is_class_of_class: (None, bool) = None,
+        echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_simple_objct_declaration, configuration.echo_default, False)
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, echo=False)
         self._python_class = python_class
+        self._is_class_of_class = is_class_of_class
         u.c2.declare_instance(c=self)
         self._internal_container = frozenset()
         if echo:
@@ -6460,6 +6462,10 @@ class ClassDeclaration(Formula):
 
     def echo(self):
         repm.prnt(self.rep_report())
+
+    @property
+    def is_class_of_class(self) -> bool:
+        return self._is_class_of_class
 
     def is_strictly_propositional(self) -> bool:
         # OBSOLETE PROPERTY
@@ -6490,6 +6496,7 @@ class UniverseOfDiscourseCollectionProperty(set, abc.ABC):
     def add_formula(self, phi: Formula):
         verify(assertion=phi.u is self.u, msg='The universe-of-discourse of phi is not consistent with the '
                                               'universe-of-discourse of this collection.')
+        self.verify_element(phi=phi)
         if phi in self:
             # phi == some existing element of the collection.
             # but it may be that phi *is* not that element.
@@ -6514,6 +6521,41 @@ class UniverseOfDiscourseCollectionProperty(set, abc.ABC):
         raise Exception('This is an abstract method.')
 
 
+class AxiomDeclarationCollection(UniverseOfDiscourseCollectionProperty):
+    """A collection of axiom-declarations.
+    It is exposed as the a property on the UniverseOfDiscourse class.
+
+    """
+
+    def __init__(self, u: UniverseOfDiscourse):
+        super().__init__(u=u)
+
+    def declare(self, natural_language: str, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
+        auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+        acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+        name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+        paragraph_header: (None, ParagraphHeader) = None, nameset: (None, str, NameSet) = None,
+        echo: (None, bool) = None) -> AxiomDeclaration:
+        """:ref:`Declare<object_declaration_math_concept>` a new axiom in this universe-of-discourse.
+        """
+        a: AxiomDeclaration = AxiomDeclaration(u=self.u, natural_language=natural_language, symbol=symbol, index=index,
+            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
+            explicit_name=explicit_name, ref=ref, subtitle=subtitle, paragraph_header=paragraph_header, nameset=nameset,
+            echo=echo)
+        a = self.declare_instance(a=a)  # Return the existing axiom if there is an axiom a' such that a' == a.
+        return a
+
+    def declare_instance(self, a: AxiomDeclaration) -> AxiomDeclaration:
+        a = super().add_formula(phi=a)
+        return a
+
+    def verify_element(self, phi: FlexibleFormula):
+        _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
+        verify(assertion=is_declaratively_member_of_class(u=self.u, phi=phi, c=self.u.c2.axiom_declaration),
+            msg='phi is not an axiom-declaration')
+
+
 class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     """A collection of class-declarations that exposes some well-known classes.
     It is exposed as the c2 property on the UniverseOfDiscourse class.
@@ -6522,18 +6564,30 @@ class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
 
     def __init__(self, u: UniverseOfDiscourse):
         super().__init__(u=u)
+        self._axiom_declaration = None
         self._class2 = None
+        self._class_of_class_is_declared = False
         self._connective = None
         self._formula = None
         self._free_variable = None
+        self._inference_rule = None
         self._simple_object = None
         self._statement = None
+
+    @property
+    def axiom_declaration(self) -> ClassDeclaration:
+        """The axiom-declaration class."""
+        if self._axiom_declaration is None:
+            self._axiom_declaration = self.declare(symbol='axiom-declaration', auto_index=False,
+                python_class=AxiomDeclaration)
+        return self._axiom_declaration
 
     @property
     def class2(self) -> ClassDeclaration:
         """The class class."""
         if self._class2 is None:
-            self._class2 = self.declare(symbol='class', auto_index=False, python_class=ClassDeclaration)
+            self._class2 = self.declare(symbol='class', auto_index=False, python_class=ClassDeclaration,
+                is_class_of_class=True)
         return self._class2
 
     @property
@@ -6544,14 +6598,18 @@ class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
         return self._connective
 
     def declare(self, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
-        auto_index: (None, bool) = None, python_class: (None, type) = None,
+        auto_index: (None, bool) = None, python_class: (None, type) = None, is_class_of_class: (None, bool) = None,
         echo: (None, bool) = None) -> ClassDeclaration:
         c: ClassDeclaration = ClassDeclaration(u=self.u, symbol=symbol, index=index, auto_index=auto_index,
-            python_class=python_class, echo=echo)
-        c = self.declare_instance(c=c)
+            python_class=python_class, is_class_of_class=is_class_of_class, echo=echo)
+        if not c.is_class_of_class:
+            # There is a special case with the class of class.
+            # In effect, we cannot call twice the declare_instance
+            # method because we check that it is only declared once.
+            c = self.declare_instance(c=c)  # Return the existing class if there is a class c' such that c' == c.
         return c
 
-    def declare_instance(self, c: ClassDeclaration):
+    def declare_instance(self, c: ClassDeclaration) -> ClassDeclaration:
         c = super().add_formula(phi=c)
         return c
 
@@ -6601,8 +6659,20 @@ class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
 
     def verify_element(self, phi: FlexibleFormula):
         _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
-        verify(assetion=is_declaratively_member_of_class(u=self.u, phi=phi, c=self.u.c2.class2),
-            msg='phi is not a class')
+        if phi.is_class_of_class:
+            if not self._class_of_class_is_declared:
+                # The class of class is a special case. In effect, it cannot verify
+                # that it is of the class "class of class", because the "class of class"
+                # is not yet contained in the u.c2 collection of classes.
+                # Making this verification would lead to an infinite loop.
+                # In consequence we relax the verification step for this special case,
+                # but only for the initial creation of the class of class.
+                self._class_of_class_is_declared = True
+            else:
+                raise Exception('The class-of-class is already declared.')
+        else:
+            verify(assertion=is_declaratively_member_of_class(u=self.u, phi=phi, c=self.u.c2.class2),
+                msg='phi is not a class')
 
 
 # class Tuple(tuple):
@@ -7598,11 +7668,13 @@ class InferenceRuleDeclarationCollection(UniverseOfDiscourseCollectionProperty):
             self._constructive_dilemma = i
         return self._constructive_dilemma
 
-    def declare(self):
+    def declare(self) -> InferenceRuleDeclaration:
+        # Return the existing inference-rule if there is an inference-rule i' such that i' == i.
         raise Exception('Not implemented yet, sorry.')
 
-    def declare_instance(self, i: InferenceRuleDeclaration):
-        super().add_formula(i)
+    def declare_instance(self, i: InferenceRuleDeclaration) -> InferenceRuleDeclaration:
+        i = super().add_formula(phi=i)
+        return i
 
     @property
     def definition_interpretation(self) -> DefinitionInterpretationDeclaration:
@@ -7847,7 +7919,7 @@ class InferenceRuleDeclarationCollection(UniverseOfDiscourseCollectionProperty):
 
     def verify_element(self, phi: InferenceRuleDeclaration):
         _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
-        verify(assetion=is_declaratively_member_of_class(u=self.u, phi=phi, c=self.u.c2.inference_rule),
+        verify(assertion=is_declaratively_member_of_class(u=self.u, phi=phi, c=self.u.c2.inference_rule),
             msg='phi is not an inference-rule')
 
     @property
@@ -10242,7 +10314,7 @@ class UniverseOfDiscourse(Formula):
         echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_universe_of_discourse_declaration, configuration.echo_default,
             False)
-        self._a = dict()
+        self._a = AxiomDeclarationCollection(u=self)
         self._c1 = ConnectiveDict(u=self)
         self._c2 = ClassDeclarationCollection(u=self)
         self._c3 = ConstantDeclarationDict(u=self)
@@ -10272,12 +10344,13 @@ class UniverseOfDiscourse(Formula):
             nameset = NameSet(s=nameset, index=index, name=name)
         super().__init__(is_universe_of_discourse=True, is_theory_foundation_system=False, nameset=nameset, u=None,
             echo=False)
-        super()._declare_class_membership(classes.universe_of_discourse)
+        super()._declare_class_membership_OBSOLETE(classes.universe_of_discourse)
         if echo:
             self.echo()
 
     @property
-    def a(self):
+    def a(self) -> AxiomDeclarationCollection:
+        """The collection of axioms declared in this universe-of-discourse."""
         return self._a
 
     @property
@@ -10312,21 +10385,7 @@ class UniverseOfDiscourse(Formula):
         yield text_dict.period
         return True
 
-    def cross_reference_axiom(self, a: AxiomDeclaration) -> bool:
-        """Cross-references an axiom in this universe-of-discourse.
-
-        :parameter a: an axiom-declaration.
-        """
-        verify(a.nameset not in self.a.keys() or a is self.a[a.nameset],
-            'The symbol of term ⌜a⌝ is already referenced as a distinct axiom in this '
-            'universe-of-discourse.', a=a, universe_of_discourse=self)
-        if a not in self.a:
-            self.a[a.nameset] = a
-            return True
-        else:
-            return False
-
-    def cross_reference_constant(self, c: ConstantDeclaration) -> bool:
+    def cross_reference_constant_OBSOLETE(self, c: ConstantDeclaration) -> bool:
         """Cross-references a constant in this universe-of-discourse.
 
         :parameter c: a constant-declaration.
@@ -10337,7 +10396,7 @@ class UniverseOfDiscourse(Formula):
         else:
             return False
 
-    def cross_reference_definition(self, d: DefinitionDeclaration) -> bool:
+    def cross_reference_definition_OBSOLETE(self, d: DefinitionDeclaration) -> bool:
         """Cross-references a definition in this universe-of-discourse.
 
         :parameter d: a definition.
@@ -10351,7 +10410,7 @@ class UniverseOfDiscourse(Formula):
         else:
             return False
 
-    def cross_reference_formula(self, phi: CompoundFormula):
+    def cross_reference_formula_OBSOLETE(self, phi: CompoundFormula):
         """Cross-references a formula in this universe-of-discourse.
 
         :param phi: a formula.
@@ -10365,7 +10424,7 @@ class UniverseOfDiscourse(Formula):
         if phi not in self.phi:
             self.phi[phi.nameset] = phi
 
-    def cross_reference_connective(self, r: Connective):
+    def cross_reference_connective_OBSOLETE(self, r: Connective):
         """Cross-references a connective in this universe-of-discourse.
 
         :param r: a connective.
@@ -10380,7 +10439,7 @@ class UniverseOfDiscourse(Formula):
         if r not in self.c1:
             self.c1[r.nameset] = r
 
-    def cross_reference_simple_objct(self, o: SimpleObjct):
+    def cross_reference_simple_objct_OBSOLETE(self, o: SimpleObjct):
         """Cross-references a simple-objct in this universe-of-discourse.
 
         :param o: a simple-objct.
@@ -10394,7 +10453,7 @@ class UniverseOfDiscourse(Formula):
         if o not in self.simple_objcts:
             self.simple_objcts[o.nameset] = o
 
-    def cross_reference_symbolic_objct(self, o: Formula):
+    def cross_reference_symbolic_objct_OBSOLETE(self, o: Formula):
         """Cross-references a symbolic-objct in this universe-of-discourse.
 
         :param o: a symbolic-objct.
@@ -10485,20 +10544,6 @@ class UniverseOfDiscourse(Formula):
         return TheoryDerivation(u=self, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             name=name, explicit_name=explicit_name, ref=ref, subtitle=subtitle, extended_theory=extended_theory,
             extended_theory_limit=extended_theory_limit, stabilized=stabilized, echo=echo)
-
-    def declare_axiom(self, natural_language: str, symbol: (None, str, StyledText) = None,
-        index: (None, int, str) = None, auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
-        acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
-        name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        paragraph_header: (None, ParagraphHeader) = None, nameset: (None, str, NameSet) = None,
-        echo: (None, bool) = None) -> AxiomDeclaration:
-        """:ref:`Declare<object_declaration_math_concept>` a new axiom in this universe-of-discourse.
-        """
-        return AxiomDeclaration(u=self, natural_language=natural_language, symbol=symbol, index=index,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, ref=ref, subtitle=subtitle, paragraph_header=paragraph_header, nameset=nameset,
-            echo=echo)
 
     def declare_definition(self, natural_language: str, symbol: (None, str, StyledText) = None,
         index: (None, int) = None, auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
@@ -10672,7 +10717,7 @@ class InferredStatement(FormulaStatement):
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset,
             paragraphe_header=paragraph_header, echo=False)
-        super()._declare_class_membership(declarative_class_list.inferred_proposition)
+        super()._declare_class_membership_OBSOLETE(declarative_class_list.inferred_proposition)
         if self.valid_proposition.connective is self.t.u.c1.inconsistency and is_in_class_OBSOLETE(
             self.valid_proposition.terms[0], classes.theory_derivation):
             # This inferred-statement proves the inconsistency of its argument,
@@ -10876,7 +10921,7 @@ class PunctiliousMinimalMetatheory(TheoryPackage):
         is a designation for the newly declared object, and c1, c2, ..., cn are designations of the classes assigned 
         to the object. When an object x has been declared and assigned a class c, it follows that the statement x 
         is-a c is a valid statement."""
-        self._a1_declaration = u.declare_axiom(symbol='a', index=1, natural_language=a1_natural_language)
+        self._a1_declaration = u.a.declare(symbol='a', index=1, natural_language=a1_natural_language)
         self._a1_inclusion = t.include_axiom(symbol='a', index=1, a=self._a1_declaration)
 
         t.take_note('While the positive statement x is-a c is valid if the object x was declared and assigned the '

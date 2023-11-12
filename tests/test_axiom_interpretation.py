@@ -23,7 +23,7 @@ class TestAxiomInterpretation(TestCase):
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.axiom_interpretation.infer_formula_statement(a=r2(o1), p=r1(o1, o3))
         self.assertIs(pu.error_codes.error_002_inference_premise_syntax_error, error.exception.error_code)
-        # Validity error  # with self.assertRaises(pu.PunctiliousException) as error:  #    axiom_2 = u.declare_axiom('Some axiom')  #    t1.i.axiom_interpretation.infer_formula_statement(a=axiom_2, p=r1(o1, o3))  # self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,  #    error.exception.error_code)
+        # Validity error  # with self.assertRaises(pu.PunctiliousException) as error:  #    axiom_2 = u.a.declare('Some axiom')  #    t1.i.axiom_interpretation.infer_formula_statement(a=axiom_2, p=r1(o1, o3))  # self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,  #    error.exception.error_code)
         # Validity error - lock
         a.locked = True
         with self.assertRaises(pu.PunctiliousException) as error:
@@ -36,7 +36,7 @@ class TestAxiomInterpretation(TestCase):
         pu.configuration.echo_default = False
         u = pu.UniverseOfDiscourse()
         # Prepare the universe-of-discourse
-        a1 = u.declare_axiom(natural_language=random_data.random_sentence())
+        a1 = u.a.declare(natural_language=random_data.random_sentence())
         o1 = u.o.declare()
         o2 = u.o.declare()
         r1 = u.c1.declare(arity=2, signal_proposition=True)

@@ -8,7 +8,7 @@ class TestTheoryElaboration(TestCase):
         pu.configuration.echo_default = False
         u = pu.UniverseOfDiscourse()
         blah_blah_blah = random_data.random_sentence(min_words=8)
-        a1 = u.declare_axiom(blah_blah_blah)
+        a1 = u.a.declare(blah_blah_blah)
         o1 = u.o.declare()
         o2 = u.o.declare()
         o3 = u.o.declare()

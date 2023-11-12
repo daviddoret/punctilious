@@ -30,7 +30,7 @@ class TestTheory(TestCase):
         f1 = u.declare_compound_formula(r1, o1, o2)
         f2 = u.declare_compound_formula(r1, o2, o3)
         f3 = u.declare_compound_formula(r2, o3, f1)
-        a1 = u.declare_axiom(random_data.random_sentence())
+        a1 = u.a.declare(random_data.random_sentence())
         ap1 = t1.include_axiom(a1)
         t1.i.axiom_interpretation.infer_formula_statement(ap1, f1)
         return None

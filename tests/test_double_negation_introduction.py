@@ -24,7 +24,7 @@ class TestDoubleNegationIntroduction(TestCase):
         o3 = u.o.declare()
         r1 = u.c1.declare(2, signal_proposition=True)
         t = u.declare_theory()
-        a = u.declare_axiom(random_data.random_sentence())
+        a = u.a.declare(random_data.random_sentence())
         ap = t.include_axiom(a)
         phi1 = t.i.axiom_interpretation.infer_formula_statement(ap, r1(o1, o2))
         self.assertEqual('r1(o1, o2)', phi1.rep_formula(encoding=pu.encodings.plaintext))

@@ -39,7 +39,7 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
             section_number=1)
 
         # Definition 2.1
-        def_2_1_declaration = u.declare_axiom(natural_language="""The language of 
+        def_2_1_declaration = u.a.declare(natural_language="""The language of 
         propositional logic consists of:
         1. A denumerable set of propositional variables 𝑝1, 𝑝2, 𝑝3, ...
         2. Connectives: ¬, ∨, ∧, ⊃
@@ -90,7 +90,7 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
         propositional_variable: pu.ClassDeclaration = self.propositional_variable
 
         # Definition 2.2
-        self.def_2_2_declaration = u.declare_axiom(natural_language="""The formulas are defined as 
+        self.def_2_2_declaration = u.a.declare(natural_language="""The formulas are defined as 
         follows: 
         1. Basis clause: Each propositional variable is a formula (called an atomic formula). 
         2. Inductive clause: If 𝐴 and 𝐵 are formulas so are ¬𝐴, (𝐴 ∧ 𝐵), (𝐴 ∨ 𝐵), and (𝐴 ⊃ 𝐵). 

@@ -6,7 +6,7 @@ o1 = u.o.declare()
 o2 = u.o.declare()
 o3 = u.o.declare()
 o4 = u.o.declare()
-axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes')
+axiom = u.a.declare(natural_language='Dummy axiom for demonstration purposes')
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
 t1 = u.declare_theory(echo=True)

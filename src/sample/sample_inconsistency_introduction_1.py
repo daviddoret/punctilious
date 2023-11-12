@@ -6,7 +6,7 @@ o1 = u.o.declare()
 o2 = u.o.declare()
 r1 = u.c1.declare(2, signal_proposition=True)
 t1 = u.declare_theory(echo=True)
-axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes')
+axiom = u.a.declare(natural_language='Dummy axiom for demonstration purposes')
 
 # Elaborate a dummy theory with inconsistent propositions
 theory_axiom = t1.include_axiom(axiom)

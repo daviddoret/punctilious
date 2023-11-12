@@ -13,7 +13,7 @@ class TestVariableSubstitution(TestCase):
         r1 = u.c1.declare(arity=1, signal_proposition=True)
         r2 = u.c1.declare(arity=2, signal_proposition=True)
         t = u.declare_theory()
-        a = u.declare_axiom(natural_language=random_data.random_sentence())
+        a = u.a.declare(natural_language=random_data.random_sentence())
         ap = t.include_axiom(a=a)
         p_formula = r1(r2(o1, o2))
         p_statement = t.i.axiom_interpretation.infer_formula_statement(a=ap, p=p_formula, echo=True)
@@ -34,7 +34,7 @@ class TestVariableSubstitution(TestCase):
         f = u.c1.declare(arity=1, signal_proposition=True, symbol='f', auto_index=False)
         g = u.c1.declare(arity=2, signal_proposition=True, symbol='g', auto_index=False)
         t = u.declare_theory()
-        a = u.declare_axiom(random_data.random_sentence())
+        a = u.a.declare(random_data.random_sentence())
         ap = t.include_axiom(a)
         with u.with_variable(symbol='x', auto_index=False) as x, u.with_variable(symbol='y',
             auto_index=False) as y, u.with_variable(symbol='z', auto_index=False) as z:
