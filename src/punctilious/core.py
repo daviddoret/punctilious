@@ -6482,8 +6482,18 @@ class ClassDeclaration(Formula):
         return self._python_class
 
 
-class ClassDeclarationDict(collections.UserDict):
-    """A dictionary that exposes well-known classes as properties.
+class AdditiveCollection(set):
+    """A basic collection that does not allow the removal of elements."""
+
+    def __init__(self):
+        super().__init__()
+
+    def remove(self, element):
+        raise Exception('Elements cannot be removed from an additive collection')
+
+
+class ClassDeclarationCollection(AdditiveCollection):
+    """A collection of class-declarations that exposes some well-known classes.
     It is exposed as the c2 property on the UniverseOfDiscourse class.
 
     """
@@ -6509,6 +6519,7 @@ class ClassDeclarationDict(collections.UserDict):
         echo: (None, bool) = None) -> ClassDeclaration:
         c = ClassDeclaration(u=self.u, symbol=symbol, index=index, auto_index=auto_index, python_class=python_class,
             echo=echo)
+        super().add(c)
         return c
 
     @property
@@ -6538,6 +6549,14 @@ class ClassDeclarationDict(collections.UserDict):
         if self._statement is None:
             self._statement = self.declare(symbol='_statement', auto_index=False, python_class=Statement)
         return self._statement
+
+    @property
+    def universe_of_discourse(self) -> ClassDeclaration:
+        """The universe-of-discourse class."""
+        if self._universe_of_discourse is None:
+            self._universe_of_discourse = self.declare(symbol='universe-of-discourse', auto_index=False,
+                python_class=UniverseOfDiscourse)
+        return self._universe_of_discourse
 
 
 # class Tuple(tuple):
@@ -10107,7 +10126,7 @@ class UniverseOfDiscourse(Formula):
             False)
         self._a = dict()
         self._c1 = ConnectiveDict(u=self)
-        self._c2 = ClassDeclarationDict(u=self)
+        self._c2 = ClassDeclarationCollection(u=self)
         self._c3 = ConstantDeclarationDict(u=self)
         self._d = dict()
         self._i = InferenceRuleDeclarationCollection(u=self)
@@ -10144,7 +10163,13 @@ class UniverseOfDiscourse(Formula):
         return self._a
 
     @property
-    def c2(self) -> ClassDeclarationDict:
+    def c1(self) -> ConnectiveDict:
+        """A python dictionary of connectives contained in this universe-of-discourse,
+        where well-known connectives are directly available as properties."""
+        return self._c1
+
+    @property
+    def c2(self) -> ClassDeclarationCollection:
         """The collection of classes declared in this universe-of-discourse."""
         return self._c2
 
@@ -10409,6 +10434,14 @@ class UniverseOfDiscourse(Formula):
             nameset.symbol == symbol and nameset.index_as_int is not None))
         return max(same_symbols, default=0)
 
+    @property
+    def i(self) -> InferenceRuleDeclarationCollection:
+        """The (possibly empty) collection of :ref:`inference-rules<inference_rule_math_concept>` declared in this in this :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
+
+        Abridged name: i
+        """
+        return self._i
+
     def index_symbol(self, symbol: StyledText) -> int:
         """Given a symbol-base S (i.e. an unindexed symbol), returns a unique integer n
         such that (S, n) is a unique identifier in this instance of UniverseOfDiscourse.
@@ -10417,14 +10450,6 @@ class UniverseOfDiscourse(Formula):
         :return:
         """
         return self.get_symbol_max_index(symbol) + 1
-
-    @property
-    def i(self) -> InferenceRuleDeclarationCollection:
-        """The (possibly empty) collection of :ref:`inference-rules<inference_rule_math_concept>` declared in this in this :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
-
-        Abridged name: i
-        """
-        return self._i
 
     @property
     def is_strictly_propositional(self) -> bool:
@@ -10453,12 +10478,6 @@ class UniverseOfDiscourse(Formula):
     @property
     def phi(self):
         return self._phi
-
-    @property
-    def c1(self) -> ConnectiveDict:
-        """A python dictionary of connectives contained in this universe-of-discourse,
-        where well-known connectives are directly available as properties."""
-        return self._c1
 
     def rep_creation(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
         return rep_composition(composition=self.compose_creation(), encoding=encoding, cap=cap)
