@@ -14,14 +14,13 @@ class TestTheoryElaboration(TestCase):
         o3 = u.o.declare()
         r1 = u.r.declare(2, signal_proposition=True)
         pu.configuration.echo_default = True
-        robust_theory = u.t()
+        robust_theory = u.declare_theory()
         ap1 = robust_theory.include_axiom(a=a1)
         with u.with_variable() as x, u.with_variable() as y, u.with_variable() as z:
             implication = robust_theory.i.axiom_interpretation.infer_formula_statement(a=ap1,
                 p=u.declare_compound_formula(u.r.implies,
                     u.declare_compound_formula(u.r.land, u.declare_compound_formula(r1, x, y),
-                        u.declare_compound_formula(r1, y, z)),
-                    u.declare_compound_formula(r1, x, z)), lock=False)
+                        u.declare_compound_formula(r1, y, z)), u.declare_compound_formula(r1, x, z)), lock=False)
         r1o1o2 = robust_theory.i.axiom_interpretation.infer_formula_statement(a=ap1,
             p=u.declare_compound_formula(r1, o1, o2), lock=False)
         r1o2o3 = robust_theory.i.axiom_interpretation.infer_formula_statement(a=ap1,
@@ -31,9 +30,7 @@ class TestTheoryElaboration(TestCase):
             phi=u.r.tupl(o1, o2, o3))
         robust_theory.i.mp.infer_formula_statement(p_implies_q=implication_2, p=r1o1o2_and_r1o2o3)
         robust_theory.stabilize()
-        self.assertTrue(robust_theory.stabilized,
-            'The stabilized property of the original-theory is not True.')
+        self.assertTrue(robust_theory.stabilized, 'The stabilized property of the original-theory is not True.')
 
-        hypothesis = robust_theory.pose_hypothesis(
-            hypothesis_formula=u.declare_compound_formula(r1, o2, o3))
+        hypothesis = robust_theory.pose_hypothesis(hypothesis_formula=u.declare_compound_formula(r1, o2, o3))
         hypothesis_theory = hypothesis.hypothesis_child_theory

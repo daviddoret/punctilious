@@ -13,7 +13,7 @@ class TestAxiomInclusion(TestCase):
         content2 = random_data.random_sentence(min_words=30)
         ad1 = u.declare_axiom(content1)
         ad2 = u.declare_axiom(content2)
-        t = u.t()
+        t = u.declare_theory()
         ai1 = t.include_axiom(ad1)
         ai2 = t.include_axiom(ad2)
         pu.prnt(ai1.rep_report())
@@ -27,7 +27,7 @@ class TestAxiomInclusion(TestCase):
         content2 = random_data.random_sentence(min_words=30)
         ad1 = u.declare_axiom(content1)
         ad2 = u.declare_axiom(content2)
-        t = u.t()
+        t = u.declare_theory()
         ai1 = t.include_axiom(ad1)
         ai2 = t.include_axiom(ad2)
         o1 = u.o.declare()
@@ -35,8 +35,7 @@ class TestAxiomInclusion(TestCase):
         o3 = u.o.declare()
         r1 = u.r.declare(1, nameset='r', signal_proposition=True)
         r2 = u.r.declare(2, nameset='r', signal_proposition=True)
-        aii1 = t.i.axiom_interpretation.infer_formula_statement(ai1,
-            u.declare_compound_formula(r1, o1))
-        self.assertTrue(aii1.valid_proposition.is_formula_syntactically_equivalent_to(
-            u.declare_compound_formula(r1, o1)))
+        aii1 = t.i.axiom_interpretation.infer_formula_statement(ai1, u.declare_compound_formula(r1, o1))
+        self.assertTrue(
+            aii1.valid_proposition.is_formula_syntactically_equivalent_to(u.declare_compound_formula(r1, o1)))
         print(aii1.rep_report())

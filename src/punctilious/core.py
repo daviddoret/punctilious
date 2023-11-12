@@ -1114,11 +1114,33 @@ class DeclarativeClass_OBSOLETE(repm.ValueName):
         return self._python_type
 
 
+def is_derivably_member_of_class(u: UniverseOfDiscourse, phi: FlexibleFormula, c: ClassDeclaration) -> bool:
+    """Returns True if and only if phi has been proved / derived as being a member of class c in the minimal metatheory
+    of u.
+
+    Note: when False is returned, this functions does not tell if phi is a member of c. In effect, it may be
+    provable (derivable) that phi is a member of c, even though that derivation has not been performed yet
+    in the minimal metatheory of u. But if the statement (phi is-a c) has been derived in the minimal metatheory of u,
+    stating that phi is a member of c is a valid statement.
+    """
+    phi_is_a_c = phi | u.r.is_a | c
+    is_valid = is_declaratively_member_of_class(u=u, phi=phi, c=c)
+    if is_valid:
+        return is_valid
+    else:
+        is_valid, _, _ = verify_formula_statement(t=u.metatheory.t, input_value=phi_is_a_c, arg='phi_is_a_c',
+            raise_exception=False)
+        return is_valid
+
+
 def is_declaratively_member_of_class(u: UniverseOfDiscourse, phi: FlexibleFormula, c: ClassDeclaration) -> bool:
     """Returns True if and only if phi is declaratively a member of class c. Returns False otherwise.
 
-    Note: this functions does not tell if phi is a member of c. In effect, phi may be a member of c by theoretical
-    derivation, and not by declaration.
+    Note: when False is returned, this functions does not tell if phi is a member of c. In effect, phi may be a
+    member of c by theoretical derivation, and not by declaration. But if phi is a member of c because of the
+    declaration of phi in u, stating that phi is a member of c is a valid statement.
+
+    See also: function is_proved_member_of_class()
 
     See minimal-metatheory for more details."""
     _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
@@ -1130,7 +1152,7 @@ def is_declaratively_member_of_class(u: UniverseOfDiscourse, phi: FlexibleFormul
         # that models the declaration of objects of that class.
         # If phi is a python object that is an instance of that python class,
         # it follows that the mathematical object phi is provably a member of the corresponding mathematical calss.
-        # TODO: Populate a statement in the metatheory? Or make it a configuration setting and a parameter?
+        # TODO: Should we populate a statement in the metatheory? Or make it a configuration setting and a parameter?
         return True
     else:
         return False
@@ -6120,7 +6142,7 @@ class Hypothesis(Statement):
         self._hypothesis_axiom_declaration = self.u.declare_axiom(
             f'By hypothesis, assume {hypothesis_formula.rep_formula()} is true.', echo=echo)
         # ...a hypothetical-theory 𝒯₂ is created to store the hypothesis elaboration,
-        self._hypothesis_child_theory = t.u.t(extended_theory=t, extended_theory_limit=self,
+        self._hypothesis_child_theory = t.u.declare_theory(extended_theory=t, extended_theory_limit=self,
             symbol=configuration.default_child_hypothesis_theory_symbol, echo=echo)
         # ...the axiom is included in 𝒯₂,
         self._hypothesis_axiom_inclusion_in_child_theory = self.hypothesis_child_theory.include_axiom(
@@ -10082,15 +10104,15 @@ class UniverseOfDiscourse(Formula):
         echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_universe_of_discourse_declaration, configuration.echo_default,
             False)
-        self.axioms = dict()
+        self._a = dict()
         self._c2 = ClassDeclarationDict(u=self)
         self._c3 = ConstantDeclarationDict(u=self)
-        self.definitions = dict()
+        self._d = dict()
         self.formulae = dict()
         self._inference_rules = InferenceRuleDeclarationCollection(u=self)
         self._connectives = ConnectiveDict(u=self)
         self._simple_objcts = SimpleObjctDict(u=self)
-        self.symbolic_objcts = dict()
+        self._o = SimpleObjctDict(u=self)
         self.theories = dict()
         # self.variables = dict()
         # Unique name indexes
@@ -10115,6 +10137,10 @@ class UniverseOfDiscourse(Formula):
         super()._declare_class_membership(classes.universe_of_discourse)
         if echo:
             self.echo()
+
+    @property
+    def a(self):
+        return self._a
 
     @property
     def c2(self) -> ClassDeclarationDict:
@@ -10147,11 +10173,11 @@ class UniverseOfDiscourse(Formula):
 
         :parameter a: an axiom-declaration.
         """
-        verify(a.nameset not in self.axioms.keys() or a is self.axioms[a.nameset],
+        verify(a.nameset not in self.a.keys() or a is self.a[a.nameset],
             'The symbol of term ⌜a⌝ is already referenced as a distinct axiom in this '
             'universe-of-discourse.', a=a, universe_of_discourse=self)
-        if a not in self.axioms:
-            self.axioms[a.nameset] = a
+        if a not in self.a:
+            self.a[a.nameset] = a
             return True
         else:
             return False
@@ -10183,11 +10209,11 @@ class UniverseOfDiscourse(Formula):
 
         :parameter d: a definition.
         """
-        verify(d.nameset not in self.definitions.keys() or d is self.definitions[d.nameset],
+        verify(d.nameset not in self.d.keys() or d is self.d[d.nameset],
             'The symbol of term ⌜d⌝ is already referenced as a distinct definition in this '
             'universe-of-discourse.', a=d, universe_of_discourse=self)
-        if d not in self.definitions:
-            self.definitions[d.nameset] = d
+        if d not in self.d:
+            self.d[d.nameset] = d
             return True
         else:
             return False
@@ -10262,11 +10288,11 @@ class UniverseOfDiscourse(Formula):
         verify(is_in_class_OBSOLETE(o=o, c=classes.symbolic_objct),
             'Cross-referencing a symbolic-objct in a universe-of-discourse requires '
             'an object of type SymbolicObjct.', o=o, slf=self)
-        duplicate = self.symbolic_objcts.get(o.nameset)
+        duplicate = self.o.get(o.nameset)
         verify(severity=verification_severities.verbose, assertion=duplicate is None,
             msg=f'A symbolic-object {duplicate} already exists in the current universe-of-discourse {self} with a '
                 'duplicate designation (symbol and index).', o=o, duplicate=duplicate, slf=self)
-        self.symbolic_objcts[o.nameset] = o
+        self.o[o.nameset] = o
 
     def cross_reference_theory(self, t: TheoryDerivation):
         """Cross-references a theory in this universe-of-discourse.
@@ -10281,6 +10307,10 @@ class UniverseOfDiscourse(Formula):
             'that it is referenced with a unique symbol.', t_symbol=t.nameset, t=t, slf=self)
         if t not in self.theories:
             self.theories[t.nameset] = t
+
+    @property
+    def d(self):
+        return self._d
 
     def declare_compound_formula(self, connective: Connective, *terms, lock_variable_scope: (None, bool) = None,
         symbol: (None, str, StyledText) = None, index: (None, int) = None, auto_index: (None, bool) = None,
@@ -10374,7 +10404,7 @@ class UniverseOfDiscourse(Formula):
         #    return self.symbol_indexes[symbol]
         # else:
         #    return 0
-        same_symbols = tuple((nameset.index_as_int for nameset in self.symbolic_objcts.keys() if
+        same_symbols = tuple((nameset.index_as_int for nameset in self.o.keys() if
             nameset.symbol == symbol and nameset.index_as_int is not None))
         return max(same_symbols, default=0)
 
@@ -10425,7 +10455,7 @@ class UniverseOfDiscourse(Formula):
         simple-objct is declared in the universe-of-discourse the first time its property is
         accessed.
         """
-        return self.simple_objcts
+        return self._o
 
     @property
     def r(self) -> ConnectiveDict:
@@ -10458,21 +10488,6 @@ class UniverseOfDiscourse(Formula):
 
     def so(self, symbol=None):
         return self.declare_symbolic_objct(symbol=symbol)
-
-    def t(self, symbol: (None, str, StyledText) = None, ref: (None, str) = None, subtitle: (None, str) = None,
-        extended_theory: (None, TheoryDerivation) = None, extended_theory_limit: (None, Statement) = None,
-        stabilized: bool = False, echo: bool = None):
-        """Declare a new theory in this universe-of-discourse.
-
-        Shortcut for self.declare_theory(...).
-
-        :param nameset:
-        :param is_theory_foundation_system:
-        :param extended_theory:
-        :return:
-        """
-        return self.declare_theory(symbol=symbol, ref=ref, subtitle=subtitle, extended_theory=extended_theory,
-            extended_theory_limit=extended_theory_limit, stabilized=stabilized, echo=echo)
 
     def take_note(self, t: TheoryDerivation, content: str, symbol: (None, str, StyledText) = None,
         index: (None, int) = None, auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,

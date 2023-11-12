@@ -16,22 +16,19 @@ class TestAxiomInterpretation(TestCase):
         r1: pu.Connective = test.r1
         r2: pu.Connective = test.r2
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
-        self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
-            (r1(o1, o2) | u.r.implies | r2(o3))))
-        self.assertEqual('(r1(o1, o2) implies r2(o3))',
-            proposition_of_interest.rep_formula(pu.encodings.plaintext))
+        self.assertTrue(
+            proposition_of_interest.is_formula_syntactically_equivalent_to((r1(o1, o2) | u.r.implies | r2(o3))))
+        self.assertEqual('(r1(o1, o2) implies r2(o3))', proposition_of_interest.rep_formula(pu.encodings.plaintext))
         # Syntax error
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.axiom_interpretation.infer_formula_statement(a=r2(o1), p=r1(o1, o3))
-        self.assertIs(pu.error_codes.error_002_inference_premise_syntax_error,
-            error.exception.error_code)
+        self.assertIs(pu.error_codes.error_002_inference_premise_syntax_error, error.exception.error_code)
         # Validity error  # with self.assertRaises(pu.PunctiliousException) as error:  #    axiom_2 = u.declare_axiom('Some axiom')  #    t1.i.axiom_interpretation.infer_formula_statement(a=axiom_2, p=r1(o1, o3))  # self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,  #    error.exception.error_code)
         # Validity error - lock
         a.locked = True
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.axiom_interpretation.infer_formula_statement(a=a, p=r1(o1, o3))
-        self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,
-            error.exception.error_code)
+        self.assertIs(pu.error_codes.error_003_inference_premise_validity_error, error.exception.error_code)
 
     def test_axiom_interpretation_2(self):
         pu.configuration.echo_default = False
@@ -46,13 +43,12 @@ class TestAxiomInterpretation(TestCase):
         r2 = u.r.declare(arity=1)
         phi1 = u.declare_compound_formula(r1, o1, o2)
         # Elaborate the theory
-        t = u.t()
+        t = u.declare_theory()
         a2 = t.include_axiom(a1)
         p1 = t.i.axiom_interpretation.infer_formula_statement(a2, phi1)
-        self.assertTrue(p1.valid_proposition.is_formula_syntactically_equivalent_to(
-            u.declare_compound_formula(r1, o1, o2)))
+        self.assertTrue(
+            p1.valid_proposition.is_formula_syntactically_equivalent_to(u.declare_compound_formula(r1, o1, o2)))
         # Validity error
         with self.assertRaises(pu.PunctiliousException) as error:
             t.i.axiom_interpretation.infer_formula_statement(a2, r2(o1))
-        self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,
-            error.exception.error_code)
+        self.assertIs(pu.error_codes.error_003_inference_premise_validity_error, error.exception.error_code)

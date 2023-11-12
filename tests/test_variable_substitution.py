@@ -12,7 +12,7 @@ class TestVariableSubstitution(TestCase):
         o2 = u.o.declare()
         r1 = u.r.declare(arity=1, signal_proposition=True)
         r2 = u.r.declare(arity=2, signal_proposition=True)
-        t = u.t()
+        t = u.declare_theory()
         a = u.declare_axiom(natural_language=random_data.random_sentence())
         ap = t.include_axiom(a=a)
         p_formula = r1(r2(o1, o2))
@@ -33,16 +33,14 @@ class TestVariableSubstitution(TestCase):
         o6 = u.o.declare()
         f = u.r.declare(arity=1, signal_proposition=True, symbol='f', auto_index=False)
         g = u.r.declare(arity=2, signal_proposition=True, symbol='g', auto_index=False)
-        t = u.t()
+        t = u.declare_theory()
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
         with u.with_variable(symbol='x', auto_index=False) as x, u.with_variable(symbol='y',
-                auto_index=False) as y, u.with_variable(symbol='z', auto_index=False) as z:
-            p_statement = t.i.axiom_interpretation.infer_formula_statement(a=ap,
-                p=f(g(g(z, g(f(x), y)), g(x, y))), echo=True)
-        self.assertEqual('𝑓(𝑔(𝑔(𝐳, 𝑔(𝑓(𝐱), 𝐲)), 𝑔(𝐱, 𝐲)))',
-            p_statement.rep_formula(encoding=pu.encodings.unicode))
+            auto_index=False) as y, u.with_variable(symbol='z', auto_index=False) as z:
+            p_statement = t.i.axiom_interpretation.infer_formula_statement(a=ap, p=f(g(g(z, g(f(x), y)), g(x, y))),
+                echo=True)
+        self.assertEqual('𝑓(𝑔(𝑔(𝐳, 𝑔(𝑓(𝐱), 𝐲)), 𝑔(𝐱, 𝐲)))', p_statement.rep_formula(encoding=pu.encodings.unicode))
         p_prime = t.i.vs.infer_formula_statement(p=p_statement, phi=u.r.tupl(o4, o6, o5), echo=True)
-        self.assertEqual('𝑓(𝑔(𝑔(𝑜₄, 𝑔(𝑓(𝑜₆), 𝑜₅)), 𝑔(𝑜₆, 𝑜₅)))',
-            p_prime.rep_formula(encoding=pu.encodings.unicode))
+        self.assertEqual('𝑓(𝑔(𝑔(𝑜₄, 𝑔(𝑓(𝑜₆), 𝑜₅)), 𝑔(𝑜₆, 𝑜₅)))', p_prime.rep_formula(encoding=pu.encodings.unicode))
         p_prime.is_formula_syntactically_equivalent_to(phi=f(g(g(o4, g(f(o6), o5)), g(o6, o5))))

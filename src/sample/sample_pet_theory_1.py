@@ -5,7 +5,7 @@ dog_name = 'dog'  # random_data.random_word()
 mammal_name = 'mammal'  # random_data.random_word()
 
 u = pu.UniverseOfDiscourse(dashed_name='The-world-of-Mira')
-t1 = u.t()
+t1 = u.declare_theory()
 mira = u.o.declare(symbol=mira_name, auto_index=False)
 dog = u.o.declare(symbol=dog_name, auto_index=False)
 mammal = u.o.declare(symbol=mammal_name, auto_index=False)

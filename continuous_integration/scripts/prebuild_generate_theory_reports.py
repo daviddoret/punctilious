@@ -12,4 +12,4 @@ for package, filename in {
             proof_text = 'proof' if proof else 'noproof'
             output_file = f'..\\..\\data\\theory_{filename}_report_{proof_text}_enus_{str(encoding)}.txt'
             print(output_file)
-            package.t.export_article_to_file(output_file, encoding=encoding, proof=proof)
+            package.declare_theory.export_article_to_file(output_file, encoding=encoding, proof=proof)

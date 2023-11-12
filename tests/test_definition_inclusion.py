@@ -13,7 +13,7 @@ class TestDefinitionInclusion(TestCase):
         content2 = random_data.random_sentence(min_words=30)
         ad1 = u.declare_definition(content1)
         ad2 = u.declare_definition(content2)
-        t = u.t()
+        t = u.declare_theory()
         ai1 = t.include_definition(ad1)
         ai2 = t.include_definition(ad2)
         pu.prnt(ai1.rep_report())
@@ -24,16 +24,15 @@ class TestDefinitionInclusion(TestCase):
         pu.configuration.echo_definition_inclusion = False
         u = pu.UniverseOfDiscourse()
         dd1 = u.declare_definition(natural_language='Let f(foo) be defined as g(bar,qux).')
-        t = u.t()
+        t = u.declare_theory()
         di1 = t.include_definition(dd1, echo=True)
         foo = u.o.declare(nameset=pu.NameSet(symbol='foo', index=None))
         bar = u.o.declare(nameset=pu.NameSet(symbol='bar', index=None))
         qux = u.o.declare(nameset=pu.NameSet(symbol='qux', index=None))
         f = u.r.declare(1, nameset=pu.NameSet(symbol='f', index=None), signal_proposition=True)
         g = u.r.declare(2, nameset=pu.NameSet(symbol='g', index=None), signal_proposition=True)
-        dii1 = t.i.definition_interpretation.infer_formula_statement(d=di1,
-            x=u.declare_compound_formula(f, foo), y=u.declare_compound_formula(g, bar, qux),
-            echo=True)
+        dii1 = t.i.definition_interpretation.infer_formula_statement(d=di1, x=u.declare_compound_formula(f, foo),
+            y=u.declare_compound_formula(g, bar, qux), echo=True)
         self.assertTrue(dii1.valid_proposition.is_formula_syntactically_equivalent_to(
             u.declare_compound_formula(u.r.equal, u.declare_compound_formula(f, foo),
                 u.declare_compound_formula(g, bar, qux))))

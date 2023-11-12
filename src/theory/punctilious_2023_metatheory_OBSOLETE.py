@@ -7,18 +7,16 @@ Status: Restart from scratch.
 import core
 
 u = core.UniverseOfDiscourse()
-ft = u.t(nameset=core.NameSet(symbol='foundation-theory-1'))
+ft = u.declare_theory(nameset=core.NameSet(symbol='foundation-theory-1'))
 
 axiom_01 = ft.include_axiom(u.declare_axiom('A theory is a... (define punctilious data model).'))
 
 # The (axiomatic) class of (axiomatic) classes
-axiom_02 = ft.include_axiom(
-    u.declare_axiom('An (axiomatic) class is a collection of theoretical objects that are '
-                    'unambiguously defined by the axioms of the theory it belongs to.'))
+axiom_02 = ft.include_axiom(u.declare_axiom('An (axiomatic) class is a collection of theoretical objects that are '
+                                            'unambiguously defined by the axioms of the theory it belongs to.'))
 
-axiom_03 = ft.include_axiom(
-    u.declare_axiom('The class of classes is the class of all classes defined in the '
-                    'universe-of-discourse (TODO: Or foundation theory?).'))
+axiom_03 = ft.include_axiom(u.declare_axiom('The class of classes is the class of all classes defined in the '
+                                            'universe-of-discourse (TODO: Or foundation theory?).'))
 class_of_classes = u.o.declare('class-of-classes')
 element_of = u.r.declare(2, '∈', formula_rep=core.CompoundFormula.infix, signal_proposition=True,
     dashed_name='element-of')
@@ -35,9 +33,8 @@ fa2c = ft.i.axiom_interpretation.infer_formula_statement(axiom_02,
 #   for every existing and new theory that is declared?
 
 # Truth values
-nla_05 = ft.include_axiom(
-    u.declare_axiom(natural_language='truth-values is the class whose elements are '
-                                     'the formulas truth and falsehood.'))
+nla_05 = ft.include_axiom(u.declare_axiom(natural_language='truth-values is the class whose elements are '
+                                                           'the formulas truth and falsehood.'))
 falsehood = u.o.declare('false')
 truth = u.o.declare('true')
 truth_values = u.o.declare('truth-values')
@@ -49,10 +46,9 @@ proposition_080 = ft.i.axiom_interpretation.infer_formula_statement(axiom_03,
     u.declare_compound_formula(element_of, falsehood, truth_values))
 
 # foundation propositional connectives
-nla_09 = ft.include_axiom(
-    u.declare_axiom(natural_language='propositional-connectives is the class whose elements are '
-                                     'the connectives: conjunction, disjunction, implication, and negation, '
-                                     'and any connective defined from these.'))
+nla_09 = ft.include_axiom(u.declare_axiom(natural_language='propositional-connectives is the class whose elements are '
+                                                           'the connectives: conjunction, disjunction, implication, and negation, '
+                                                           'and any connective defined from these.'))
 propositional_connectives_class = u.o.declare('propositional-connectives-class')
 ft.i.axiom_interpretation.infer_formula_statement(axiom_03,
     u.declare_compound_formula(element_of, propositional_connectives_class, class_of_classes))
@@ -94,13 +90,10 @@ ft.i.axiom_interpretation.infer_formula_statement(nla_10,
 ft.i.axiom_interpretation.infer_formula_statement(nla_10,
     u.declare_compound_formula(element_of, falsehood, class_of_classes))
 
-nla_20 = ft.include_axiom(
-    u.declare_axiom('If P is a proposition, then either the statement P has truth value true,'
-                    'or the statement P has truth value falsehood.'))
-has_truth_value = u.r.declare(2, 'is', formula_rep=core.CompoundFormula.infix,
-    signal_proposition=True)
-ft.i.axiom_interpretation.infer_formula_statement(nla_10,
-    u.declare_compound_formula(has_truth_value, truth, truth))
+nla_20 = ft.include_axiom(u.declare_axiom('If P is a proposition, then either the statement P has truth value true,'
+                                          'or the statement P has truth value falsehood.'))
+has_truth_value = u.r.declare(2, 'is', formula_rep=core.CompoundFormula.infix, signal_proposition=True)
+ft.i.axiom_interpretation.infer_formula_statement(nla_10, u.declare_compound_formula(has_truth_value, truth, truth))
 ft.i.axiom_interpretation.infer_formula_statement(nla_10,
     u.declare_compound_formula(has_truth_value, falsehood, falsehood))
 
@@ -114,8 +107,7 @@ nla_30 = ft.include_axiom(u.declare_axiom('¬ is a unary connective. '
 nla_09_50 = ft.include_axiom(u.declare_axiom('If P has-truth-value t, ¬(¬(P)) has-truth-value t.'))
 with u.with_variable() as p, u.with_variable() as t:
     fa_09_51 = ft.i.axiom_interpretation.infer_formula_statement(nla_09_50,
-        u.declare_compound_formula(u.r.implication,
-            u.declare_compound_formula(has_truth_value, p, t),
+        u.declare_compound_formula(u.r.implication, u.declare_compound_formula(has_truth_value, p, t),
             u.declare_compound_formula(has_truth_value,
                 u.declare_compound_formula(u.r.lnot, u.declare_compound_formula(u.r.lnot, p)), t)))
 
@@ -155,11 +147,10 @@ nla_40 = ft.include_axiom(
 contradictory_theories = u.o.declare('contradictory-theory')
 contradictory_statements = u.o.declare('contradictory-statement')
 with u.with_variable('φ') as phi:
-    ft.i.axiom_interpretation.infer_formula_statement(nla_40,
-        u.declare_compound_formula(u.r.implication, u.declare_compound_formula(u.r.conjunction,
-            u.declare_compound_formula(has_truth_value, phi, truth),
+    ft.i.axiom_interpretation.infer_formula_statement(nla_40, u.declare_compound_formula(u.r.implication,
+        u.declare_compound_formula(u.r.conjunction, u.declare_compound_formula(has_truth_value, phi, truth),
             u.declare_compound_formula(has_truth_value, phi, falsehood)),
-            u.declare_compound_formula(element_of, phi, contradictory_statements)))
+        u.declare_compound_formula(element_of, phi, contradictory_statements)))
 
 _connective_declaration = u.r.declare(2, 'connective-declaration')
 _simple_objct_declaration = u.r.declare(2, 'simple-objct-declaration')
@@ -200,10 +191,8 @@ def elaborate_foundation_theory():
         global tru
         def1 = ft.d(
             natural_language='substitution is the process that consists in taking 3 formula o, p and q, that may be a composed-object such as a formula, and replacing in there all occurences of p by q.')
-        axiom2 = ft.include_axiom(
-            'If x = y, o = subst(o, x, y) where o, x, and y are theoretical-objcts.')
-        subst = u.r.declare(arity=3, nameset='subst', signal_theoretical_morphism=True,
-            implementation=substitute_xy)
+        axiom2 = ft.include_axiom('If x = y, o = subst(o, x, y) where o, x, and y are theoretical-objcts.')
+        subst = u.r.declare(arity=3, nameset='subst', signal_theoretical_morphism=True, implementation=substitute_xy)
         # if x = y, implies subst(o, x, y)
         x = u.with_variable()
         y = u.with_variable()

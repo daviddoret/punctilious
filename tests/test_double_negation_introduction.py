@@ -11,12 +11,10 @@ class TestDoubleNegationIntroduction(TestCase):
         o2: pu.SimpleObjct = test.o2
         r1: pu.Connective = test.r1
         proposition_of_interest: pu.InferredStatement = test.proposition_of_interest
-        self.assertTrue(proposition_of_interest.is_formula_syntactically_equivalent_to(
-            phi=u.r.lnot(u.r.lnot(r1(o1, o2)))))
-        self.assertEqual('not(not(r1(o1, o2)))',
-            proposition_of_interest.rep_formula(pu.encodings.plaintext))
-        self.assertEqual('¬(¬(𝑟₁(𝑜₁, 𝑜₂)))',
-            proposition_of_interest.rep_formula(pu.encodings.unicode))
+        self.assertTrue(
+            proposition_of_interest.is_formula_syntactically_equivalent_to(phi=u.r.lnot(u.r.lnot(r1(o1, o2)))))
+        self.assertEqual('not(not(r1(o1, o2)))', proposition_of_interest.rep_formula(pu.encodings.plaintext))
+        self.assertEqual('¬(¬(𝑟₁(𝑜₁, 𝑜₂)))', proposition_of_interest.rep_formula(pu.encodings.unicode))
 
     def test_dni_failure(self):
         pu.configuration.echo_default = True
@@ -25,7 +23,7 @@ class TestDoubleNegationIntroduction(TestCase):
         o2 = u.o.declare()
         o3 = u.o.declare()
         r1 = u.r.declare(2, signal_proposition=True)
-        t = u.t()
+        t = u.declare_theory()
         a = u.declare_axiom(random_data.random_sentence())
         ap = t.include_axiom(a)
         phi1 = t.i.axiom_interpretation.infer_formula_statement(ap, r1(o1, o2))

@@ -8,7 +8,7 @@ r1 = u.r.declare(arity=2, signal_proposition=True)
 axiom = u.declare_axiom(natural_language='Dummy axiom for demonstration purposes')
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
-t1 = u.t(echo=True)
+t1 = u.declare_theory(echo=True)
 theory_axiom = t1.include_axiom(a=axiom)
 p = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom, p=r1(o1, o2))
 
