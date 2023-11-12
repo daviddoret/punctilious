@@ -2217,11 +2217,6 @@ class Formula(SymbolicObject):
             ok, formula, msg = verify_formula(u=self.u, input_value=(self, other.a, other.b), raise_exception=True)
             return formula
 
-    def _cross_reference_class(self, c: ClassDeclaration):
-        """A private method called by the CollectionDeclaration class to cross-reference objects
-        contained in the collection. This allows to list the collections an object is a member of from the object itself."""
-        self._collections = self._collections.union({c})
-
     def add_to_graph(self, g):
         """Add this theoretical object as a node in the target graph g.
         Recursively add directly linked objects unless they are already present in g.
@@ -3959,7 +3954,7 @@ class InferenceRuleDeclaration(Formula):
             explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
             echo=False)
         super()._declare_class_membership(declarative_class_list.inference_rule)
-        u.i.declare(self)
+        u.i.declare_instance(i=self)
         echo = prioritize_value(echo, configuration.echo_inference_rule_declaration, configuration.echo_declaration,
             configuration.echo_default, False)
         if echo:
@@ -6482,12 +6477,29 @@ class ClassDeclaration(Formula):
         return self._python_class
 
 
-class UniverseOfDiscourseCollectionProperty(set):
+class UniverseOfDiscourseCollectionProperty(set, abc.ABC):
     """A basic collection that does not allow the removal of elements."""
 
     def __init__(self, u: UniverseOfDiscourse):
         self._u = u
         super().__init__()
+
+    def add(self, element):
+        raise Exception('Please use the add_formula() method.')
+
+    def add_formula(self, phi: Formula):
+        verify(assertion=phi.u is self.u, msg='The universe-of-discourse of phi is not consistent with the '
+                                              'universe-of-discourse of this collection.')
+        if phi in self:
+            # phi == some existing element of the collection.
+            # but it may be that phi *is* not that element.
+            # in this particular situation,
+            # we retrieve and return the existing element,
+            # and discard the original *phi* argument.
+            phi = next((element for element in self if element == phi), None)
+        else:
+            super().add(phi)
+        return phi
 
     def remove(self, element):
         raise Exception('universe-of-discourse collection properties are only additive, i.e. you cannot remove '
@@ -6496,6 +6508,10 @@ class UniverseOfDiscourseCollectionProperty(set):
     @property
     def u(self) -> UniverseOfDiscourse:
         return self._u
+
+    @abc.abstractmethod
+    def verify_element(self, phi: FlexibleFormula):
+        raise Exception('This is an abstract method.')
 
 
 class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
@@ -6506,11 +6522,19 @@ class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
 
     def __init__(self, u: UniverseOfDiscourse):
         super().__init__(u=u)
+        self._class2 = None
         self._connective = None
         self._formula = None
         self._free_variable = None
         self._simple_object = None
         self._statement = None
+
+    @property
+    def class2(self) -> ClassDeclaration:
+        """The class class."""
+        if self._class2 is None:
+            self._class2 = self.declare(symbol='class', auto_index=False, python_class=ClassDeclaration)
+        return self._class2
 
     @property
     def connective(self) -> ClassDeclaration:
@@ -6528,17 +6552,7 @@ class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
         return c
 
     def declare_instance(self, c: ClassDeclaration):
-        verify(assertion=c.u is self.u, msg='The universe-of-discourse of c is distinct from the '
-                                            'universe-of-discourse of this collection.')
-        if c in self:
-            # c == some element of the collection.
-            # but it may be that c is not that element.
-            # in this particular situation,
-            # we retrieve and return the existing element,
-            # and discard the original c argument.
-            c = next((element for element in self if element == c), None)
-        else:
-            super().add(c)
+        c = super().add_formula(phi=c)
         return c
 
     @property
@@ -6554,6 +6568,14 @@ class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
         if self._free_variable is None:
             self._free_variable = self.declare(symbol='free-variable', auto_index=False, python_class=FreeVariable)
         return self._free_variable
+
+    @property
+    def inference_rule(self) -> ClassDeclaration:
+        """The inference-rule class."""
+        if self._inference_rule is None:
+            self._inference_rule = self.declare(symbol='inference-rule', auto_index=False,
+                python_class=InferenceRuleDeclaration)
+        return self._inference_rule
 
     @property
     def simple_object(self) -> ClassDeclaration:
@@ -6576,6 +6598,11 @@ class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
             self._universe_of_discourse = self.declare(symbol='universe-of-discourse', auto_index=False,
                 python_class=UniverseOfDiscourse)
         return self._universe_of_discourse
+
+    def verify_element(self, phi: FlexibleFormula):
+        _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
+        verify(assetion=is_declaratively_member_of_class(u=self.u, phi=phi, c=self.u.c2.class2),
+            msg='phi is not a class')
 
 
 # class Tuple(tuple):
@@ -7465,19 +7492,20 @@ class InferenceRuleDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     def absorb(self) -> AbsorptionDeclaration:
         return self.absorption
 
-    def add(self, element):
-        raise Exception('Please use the declare method.')
-
     @property
     def absorption(self) -> AbsorptionDeclaration:
         if self._absorption is None:
-            self._absorption = AbsorptionDeclaration(u=self.u)
+            i: AbsorptionDeclaration = AbsorptionDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._absorption = i
         return self._absorption
 
     @property
     def axiom_interpretation(self) -> AxiomInterpretationDeclaration:
         if self._axiom_interpretation is None:
-            self._axiom_interpretation = AxiomInterpretationDeclaration(u=self.u)
+            i: AxiomInterpretationDeclaration = AxiomInterpretationDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._axiom_interpretation = i
         return self._axiom_interpretation
 
     @property
@@ -7495,19 +7523,25 @@ class InferenceRuleDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     @property
     def biconditional_elimination_1(self) -> BiconditionalElimination1Declaration:
         if self._biconditional_elimination_1 is None:
-            self._biconditional_elimination_1 = BiconditionalElimination1Declaration(u=self.u)
+            i: BiconditionalElimination1Declaration = BiconditionalElimination1Declaration(u=self.u)
+            self.declare_instance(i=i)
+            self._biconditional_elimination_1 = i
         return self._biconditional_elimination_1
 
     @property
     def biconditional_elimination_2(self) -> BiconditionalElimination2Declaration:
         if self._biconditional_elimination_2 is None:
-            self._biconditional_elimination_2 = BiconditionalElimination2Declaration(u=self.u)
+            i: BiconditionalElimination2Declaration = BiconditionalElimination2Declaration(u=self.u)
+            self.declare_instance(i=i)
+            self._biconditional_elimination_2 = i
         return self._biconditional_elimination_2
 
     @property
     def biconditional_introduction(self) -> BiconditionalIntroductionDeclaration:
         if self._biconditional_introduction is None:
-            self._biconditional_introduction = BiconditionalIntroductionDeclaration(u=self.u)
+            i: BiconditionalIntroductionDeclaration = BiconditionalIntroductionDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._biconditional_introduction = i
         return self._biconditional_introduction
 
     @property
@@ -7535,44 +7569,55 @@ class InferenceRuleDeclarationCollection(UniverseOfDiscourseCollectionProperty):
         # TODO: inference-rule: conjunction_elimination_1: Migrate to specialized classes
 
         if self._conjunction_elimination_1 is None:
-            self._conjunction_elimination_1 = ConjunctionElimination1Declaration(u=self.u)
+            i: ConjunctionElimination1Declaration = (ConjunctionElimination1Declaration(u=self.u))
+            self.declare_instance(i=i)
+            self._conjunction_elimination_1 = i
         return self._conjunction_elimination_1
 
     @property
     def conjunction_elimination_2(self) -> ConjunctionElimination2Declaration:
         if self._conjunction_elimination_2 is None:
-            self._conjunction_elimination_2 = ConjunctionElimination2Declaration(u=self.u)
+            i: ConjunctionElimination2Declaration = ConjunctionElimination2Declaration(u=self.u)
+            self.declare_instance(i=i)
+            self._conjunction_elimination_2 = i
         return self._conjunction_elimination_2
 
     @property
     def conjunction_introduction(self) -> ConjunctionIntroductionDeclaration:
         if self._conjunction_introduction is None:
-            self._conjunction_introduction = ConjunctionIntroductionDeclaration(u=self.u)
+            i: ConjunctionIntroductionDeclaration = ConjunctionIntroductionDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._conjunction_introduction = i
         return self._conjunction_introduction
 
     @property
     def constructive_dilemma(self) -> ConstructiveDilemmaDeclaration:
         if self._constructive_dilemma is None:
-            self._constructive_dilemma = ConstructiveDilemmaDeclaration(u=self.u)
+            i: ConstructiveDilemmaDeclaration = ConstructiveDilemmaDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._constructive_dilemma = i
         return self._constructive_dilemma
 
-    def declare(self, i: InferenceRuleDeclaration):
-        verify(assertion=i.u is self.u, msg='The universe-of-discourse of the inference-rule is distinct from the '
-                                            'universe-of-discourse of the inference-rule collection.')
-        super().add(i)
+    def declare(self):
+        raise Exception('Not implemented yet, sorry.')
+
+    def declare_instance(self, i: InferenceRuleDeclaration):
+        super().add_formula(i)
 
     @property
     def definition_interpretation(self) -> DefinitionInterpretationDeclaration:
         if self._definition_interpretation is None:
             i: DefinitionInterpretationDeclaration = DefinitionInterpretationDeclaration(u=self.u)
-            self.declare(i)
+            self.declare_instance(i=i)
             self._definition_interpretation = i
         return self._definition_interpretation
 
     @property
     def destructive_dilemma(self) -> DestructiveDilemmaDeclaration:
         if self._destructive_dilemma is None:
-            self._destructive_dilemma = DestructiveDilemmaDeclaration(u=self.u)
+            i: DestructiveDilemmaDeclaration = DestructiveDilemmaDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._destructive_dilemma = i
         return self._destructive_dilemma
 
     @property
@@ -7586,31 +7631,41 @@ class InferenceRuleDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     @property
     def disjunction_introduction_1(self) -> DisjunctionIntroduction1Declaration:
         if self._disjunction_introduction_1 is None:
-            self._disjunction_introduction_1 = DisjunctionIntroduction1Declaration(u=self.u)
+            i: DisjunctionIntroduction1Declaration = DisjunctionIntroduction1Declaration(u=self.u)
+            self.declare_instance(i=i)
+            self._disjunction_introduction_1 = i
         return self._disjunction_introduction_1
 
     @property
     def disjunction_introduction_2(self) -> DisjunctionIntroduction2Declaration:
         if self._disjunction_introduction_2 is None:
-            self._disjunction_introduction_2 = DisjunctionIntroduction2Declaration(u=self.u)
+            i: DisjunctionIntroduction2Declaration = DisjunctionIntroduction2Declaration(u=self.u)
+            self.declare_instance(i=i)
+            self._disjunction_introduction_2 = i
         return self._disjunction_introduction_2
 
     @property
     def disjunctive_resolution(self) -> DisjunctiveResolutionDeclaration:
         if self._disjunctive_resolution is None:
-            self._disjunctive_resolution = DisjunctiveResolutionDeclaration(u=self.u)
+            i: DisjunctiveResolutionDeclaration = DisjunctiveResolutionDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._disjunctive_resolution = i
         return self._disjunctive_resolution
 
     @property
     def disjunctive_syllogism_1(self) -> DisjunctiveSyllogism1Declaration:
         if self._disjunctive_syllogism_1 is None:
-            self._disjunctive_syllogism_1 = DisjunctiveSyllogism1Declaration(u=self.u)
+            i: DisjunctiveSyllogism1Declaration = DisjunctiveSyllogism1Declaration(u=self.u)
+            self.declare_instance(i=i)
+            self._disjunctive_syllogism_1 = i
         return self._disjunctive_syllogism_1
 
     @property
     def disjunctive_syllogism_2(self) -> DisjunctiveSyllogism2Declaration:
         if self._disjunctive_syllogism_2 is None:
-            self._disjunctive_syllogism_2 = DisjunctiveSyllogism2Declaration(u=self.u)
+            i: DisjunctiveSyllogism2Declaration = DisjunctiveSyllogism2Declaration(u=self.u)
+            self.declare_instance(i=i)
+            self._disjunctive_syllogism_2 = i
         return self._disjunctive_syllogism_2
 
     @property
@@ -7624,13 +7679,17 @@ class InferenceRuleDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     @property
     def double_negation_elimination(self) -> DoubleNegationEliminationDeclaration:
         if self._double_negation_elimination is None:
-            self._double_negation_elimination = DoubleNegationEliminationDeclaration(u=self.u)
+            i: DoubleNegationEliminationDeclaration = DoubleNegationEliminationDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._double_negation_elimination = i
         return self._double_negation_elimination
 
     @property
     def double_negation_introduction(self) -> DoubleNegationIntroductionDeclaration:
         if self._double_negation_introduction is None:
-            self._double_negation_introduction = DoubleNegationIntroductionDeclaration(u=self.u)
+            i: DoubleNegationIntroductionDeclaration = DoubleNegationIntroductionDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._double_negation_introduction = i
         return self._double_negation_introduction
 
     @property
@@ -7640,13 +7699,17 @@ class InferenceRuleDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     @property
     def equality_commutativity(self) -> EqualityCommutativityDeclaration:
         if self._equality_commutativity is None:
-            self._equality_commutativity = EqualityCommutativityDeclaration(u=self.u)
+            i: EqualityCommutativityDeclaration = EqualityCommutativityDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._equality_commutativity = i
         return self._equality_commutativity
 
     @property
     def equal_terms_substitution(self) -> EqualTermsSubstitutionDeclaration:
         if self._equal_terms_substitution is None:
-            self._equal_terms_substitution = EqualTermsSubstitutionDeclaration(u=self.u)
+            i: EqualTermsSubstitutionDeclaration = EqualTermsSubstitutionDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._equal_terms_substitution = i
         return self._equal_terms_substitution
 
     @property
@@ -7656,7 +7719,9 @@ class InferenceRuleDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     @property
     def hypothetical_syllogism(self) -> HypotheticalSyllogismDeclaration:
         if self._hypothetical_syllogism is None:
-            self._hypothetical_syllogism = HypotheticalSyllogismDeclaration(u=self.u)
+            i: HypotheticalSyllogismDeclaration = HypotheticalSyllogismDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._hypothetical_syllogism = i
         return self._hypothetical_syllogism
 
     @property
@@ -7678,19 +7743,25 @@ class InferenceRuleDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     @property
     def inconsistency_introduction_1(self) -> InconsistencyIntroduction1Declaration:
         if self._inconsistency_introduction_1 is None:
-            self._inconsistency_introduction_1 = InconsistencyIntroduction1Declaration(u=self.u)
+            i: InconsistencyIntroduction1Declaration = InconsistencyIntroduction1Declaration(u=self.u)
+            self.declare_instance(i=i)
+            self._inconsistency_introduction_1 = i
         return self._inconsistency_introduction_1
 
     @property
     def inconsistency_introduction_2(self) -> InconsistencyIntroduction2Declaration:
         if self._inconsistency_introduction_2 is None:
-            self._inconsistency_introduction_2 = InconsistencyIntroduction2Declaration(u=self.u)
+            i: InconsistencyIntroduction2Declaration = InconsistencyIntroduction2Declaration(u=self.u)
+            self.declare_instance(i=i)
+            self._inconsistency_introduction_2 = i
         return self._inconsistency_introduction_2
 
     @property
     def inconsistency_introduction_3(self) -> InconsistencyIntroduction3Declaration:
         if self._inconsistency_introduction_3 is None:
-            self._inconsistency_introduction_3 = InconsistencyIntroduction3Declaration(u=self.u)
+            i: InconsistencyIntroduction3Declaration = InconsistencyIntroduction3Declaration(u=self.u)
+            self.declare_instance(i=i)
+            self._inconsistency_introduction_3 = i
         return self._inconsistency_introduction_3
 
     @property
@@ -7701,13 +7772,17 @@ class InferenceRuleDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     @property
     def modus_ponens(self) -> ModusPonensDeclaration:
         if self._modus_ponens is None:
-            self._modus_ponens = ModusPonensDeclaration(u=self.u)
+            i: ModusPonensDeclaration = ModusPonensDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._modus_ponens = i
         return self._modus_ponens
 
     @property
     def modus_tollens(self) -> ModusTollensDeclaration:
         if self._modus_tollens is None:
-            self._modus_tollens = ModusTollensDeclaration(u=self.u)
+            i: ModusTollensDeclaration = ModusTollensDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._modus_tollens = i
         return self._modus_tollens
 
     @property
@@ -7733,32 +7808,47 @@ class InferenceRuleDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     @property
     def proof_by_contradiction_1(self) -> ProofByContradiction1Declaration:
         if self._proof_by_contradiction_1 is None:
-            self._proof_by_contradiction_1 = ProofByContradiction1Declaration(u=self.u)
+            i: ProofByContradiction1Declaration = ProofByContradiction1Declaration(u=self.u)
+            self.declare_instance(i=i)
+            self._proof_by_contradiction_1 = i
         return self._proof_by_contradiction_1
 
     @property
     def proof_by_contradiction_2(self) -> ProofByContradiction2Declaration:
         if self._proof_by_contradiction_2 is None:
-            self._proof_by_contradiction_2 = ProofByContradiction2Declaration(u=self.u)
+            i: ProofByContradiction2Declaration = ProofByContradiction2Declaration(u=self.u)
+            self.declare_instance(i=i)
+            self._proof_by_contradiction_2 = i
         return self._proof_by_contradiction_2
 
     @property
     def proof_by_refutation_1(self) -> ProofByRefutation1Declaration:
         if self._proof_by_refutation_1 is None:
-            self._proof_by_refutation_1 = ProofByRefutation1Declaration(u=self.u)
+            i: ProofByRefutation1Declaration = ProofByRefutation1Declaration(u=self.u)
+            self.declare_instance(i=i)
+            self._proof_by_refutation_1 = i
         return self._proof_by_refutation_1
 
     @property
     def proof_by_refutation_2(self) -> ProofByRefutation2Declaration:
         if self._proof_by_refutation_2 is None:
-            self._proof_by_refutation_2 = ProofByRefutation2Declaration(u=self.u)
+            i: ProofByRefutation2Declaration = ProofByRefutation2Declaration(u=self.u)
+            self.declare_instance(i=i)
+            self._proof_by_refutation_2 = i
         return self._proof_by_refutation_2
 
     @property
     def variable_substitution(self) -> VariableSubstitutionDeclaration:
         if self._variable_substitution is None:
-            self._variable_substitution = VariableSubstitutionDeclaration(u=self.u)
+            i: VariableSubstitutionDeclaration = VariableSubstitutionDeclaration(u=self.u)
+            self.declare_instance(i=i)
+            self._variable_substitution = i
         return self._variable_substitution
+
+    def verify_element(self, phi: InferenceRuleDeclaration):
+        _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
+        verify(assetion=is_declaratively_member_of_class(u=self.u, phi=phi, c=self.u.c2.inference_rule),
+            msg='phi is not an inference-rule')
 
     @property
     def vs(self) -> VariableSubstitutionDeclaration:
@@ -10236,17 +10326,6 @@ class UniverseOfDiscourse(Formula):
         else:
             return False
 
-    def cross_reference_class(self, c: ClassDeclaration) -> bool:
-        """Cross-references a class in this universe-of-discourse.
-
-        :parameter c: a constant-declaration.
-        """
-        if c not in self.c2:
-            self.c2[c.nameset] = c
-            return True
-        else:
-            return False
-
     def cross_reference_constant(self, c: ConstantDeclaration) -> bool:
         """Cross-references a constant in this universe-of-discourse.
 
@@ -10285,22 +10364,6 @@ class UniverseOfDiscourse(Formula):
             'that it is referenced with a unique symbol.', phi_symbol=phi.nameset, phi=phi, slf=self)
         if phi not in self.phi:
             self.phi[phi.nameset] = phi
-
-    def cross_reference_inference_rule(self, ir: InferenceRuleDeclaration) -> bool:
-        """Cross-references an inference-rule in this universe-of-discourse.
-
-        :param ir: an inference-rule.
-        """
-        verify(is_in_class_OBSOLETE(ir, classes.inference_rule), 'Parameter ⌜ir⌝ is not an inference-rule.', ir=ir,
-            universe_of_discourse=self)
-        verify(ir.nameset not in self.i.keys() or ir is self.i[ir.nameset],
-            'The symbol of term ⌜ir⌝ is already referenced as a distinct inference-rule in '
-            'this universe-of-discourse.', ir=ir, universe_of_discourse=self)
-        if ir not in self.i:
-            self.i[ir.nameset] = ir
-            return True
-        else:
-            return False
 
     def cross_reference_connective(self, r: Connective):
         """Cross-references a connective in this universe-of-discourse.
