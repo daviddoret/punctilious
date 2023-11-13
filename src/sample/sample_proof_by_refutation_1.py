@@ -7,7 +7,7 @@ o1 = u.o.declare()
 o2 = u.o.declare()
 o3 = u.o.declare()
 f = u.c1.declare(arity=2, symbol='f', signal_proposition=True)
-t1 = u.declare_theory(echo=True)
+t1 = u.t.declare(echo=True)
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
 a = t1.include_axiom(a=a1)

@@ -29,7 +29,7 @@ class TestEqualTermsSubstitution(TestCase):
         o3 = u.o.declare()
         r1 = u.c1.declare(2, signal_proposition=True)
         r2 = u.c1.declare(1, signal_proposition=True)
-        t1 = u.declare_theory()
+        t1 = u.t.declare()
         a = u.a.declare(random_data.random_sentence())
         ap = t1.include_axiom(a)
         q_equal_r = t1.i.axiom_interpretation.infer_formula_statement(ap,
@@ -42,7 +42,7 @@ class TestEqualTermsSubstitution(TestCase):
             u.declare_compound_formula(r2, u.declare_compound_formula(r1, o1, o2))), lock=True)
         self.assertEqual('r1(r1(r1(r1(o1, o2), r1(o1, o2)), o2), r2(r1(o1, o2)))',
             p.rep_formula(encoding=pu.encodings.plaintext))
-        t2 = u.declare_theory(extended_theory=t1, extended_theory_limit=p)
+        t2 = u.t.declare(extended_theory=t1, extended_theory_limit=p)
         p_prime = t2.i.ets.infer_formula_statement(p=p, x_equal_y=q_equal_r)
         self.assertEqual('r1(r1(r1(r2(o3), r2(o3)), o2), r2(r2(o3)))',
             p_prime.rep_formula(encoding=pu.encodings.plaintext))

@@ -43,7 +43,7 @@ class TestAxiomInterpretation(TestCase):
         r2 = u.c1.declare(arity=1)
         phi1 = u.declare_compound_formula(r1, o1, o2)
         # Elaborate the theory
-        t = u.declare_theory()
+        t = u.t.declare()
         a2 = t.include_axiom(a1)
         p1 = t.i.axiom_interpretation.infer_formula_statement(a2, phi1)
         self.assertTrue(

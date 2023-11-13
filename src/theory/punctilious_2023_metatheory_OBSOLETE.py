@@ -7,7 +7,7 @@ Status: Restart from scratch.
 import core
 
 u = core.UniverseOfDiscourse()
-ft = u.declare_theory(nameset=core.NameSet(symbol='foundation-theory-1'))
+ft = u.t.declare(nameset=core.NameSet(symbol='foundation-theory-1'))
 
 axiom_01 = ft.include_axiom(u.a.declare('A theory is a... (define punctilious data model).'))
 

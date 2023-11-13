@@ -24,7 +24,7 @@ class TestInconsistencyIntroduction1(TestCase):
         o3 = u.o.declare()
         r1 = u.c1.declare(2, signal_proposition=True)
         # Elaborate the parent theory
-        t1 = u.declare_theory()
+        t1 = u.t.declare()
         axiom_theory = t1.include_axiom(a=axiom)
         t1_p1 = t1.i.axiom_interpretation.infer_formula_statement(a=axiom_theory, p=r1(o1, o2), lock=False)
         t1_p2 = t1.i.axiom_interpretation.infer_formula_statement(a=axiom_theory, p=r1(o2, o3), lock=False)

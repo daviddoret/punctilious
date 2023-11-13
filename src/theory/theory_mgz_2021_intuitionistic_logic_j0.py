@@ -15,7 +15,7 @@ class MGZ2021IntuitionisticLogicJ0(pu.TheoryPackage):
         axiom_symbol = pu.StyledText(plaintext='PL', text_style=pu.text_styles.sans_serif_normal)
         theory_symbol = pu.StyledText(plaintext='J', text_style=pu.text_styles.sans_serif_normal)
         self.m0_package = MGZ2021MinimalLogicM0(u=u)
-        t = self.u.declare_theory(symbol=theory_symbol, index=0, dashed_name='intuitionistic-logic',
+        t = self.u.t.declare(symbol=theory_symbol, index=0, dashed_name='intuitionistic-logic',
             name='intuitionistic logic', explicit_name='intuitionistic logic [MGZ21]',
             extended_theory=self.m0_package.m0)
         self.t = t

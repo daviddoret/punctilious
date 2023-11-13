@@ -10,7 +10,7 @@ r2 = u.c1.declare(1, signal_proposition=True)
 definition = u.d.declare(natural_language='Dummy definition for demonstration purposes')
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
-t1 = u.declare_theory(echo=True)
+t1 = u.t.declare(echo=True)
 theory_definition = t1.include_definition(d=definition)
 
 # And finally, use the absorption inference-rule:

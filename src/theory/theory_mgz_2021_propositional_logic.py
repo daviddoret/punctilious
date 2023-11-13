@@ -29,7 +29,7 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
         self._propositional_variable_symbol = pu.StyledText(plaintext='p', text_style=pu.text_styles.serif_italic)
 
         # meta-theory
-        metatheory: pu.TheoryDerivation = self.u.declare_theory(
+        metatheory: pu.TheoryDerivation = self.u.t.declare(
             symbol=pu.StyledText(plaintext='PLM', text_style=pu.text_styles.script_normal), index=None,
             auto_index=False, dashed_name='propositional-logic-metatheory', name='propositional logic metatheory')
         self._metatheory = metatheory
@@ -121,7 +121,7 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
                     (a | implies | b) | is_a | propositional_formula))
 
         # Declare the propositional-logic theory
-        t = self.u.declare_theory(symbol=pu.StyledText(plaintext='L', text_style=pu.text_styles.script_normal), index=1,
+        t = self.u.t.declare(symbol=pu.StyledText(plaintext='L', text_style=pu.text_styles.script_normal), index=1,
             dashed_name='propositional-logic', name='propositional logic', explicit_name='propositional logic [MGZ21]')
         self.t = t
         self.l1 = t

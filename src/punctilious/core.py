@@ -5752,7 +5752,7 @@ class TheoryDerivation(Formula):
             extended_theory is not None and is_in_class_OBSOLETE(extended_theory_limit,
             classes.statement) and extended_theory_limit in extended_theory.statements),
             'Parameter "theory_extension_statement_limit" is inconsistent.', u=u)
-        super()._declare_class_membership_OBSOLETE(classes.theory_derivation)
+        u.t.declare_instance(t=self)
         if stabilized:
             # It is a design choice to stabilize the theory-elaboration
             # at the very end of construction (__init__()). Note that it
@@ -6147,7 +6147,7 @@ class Hypothesis(Statement):
         self._hypothesis_axiom_declaration = self.u.a.declare(
             f'By hypothesis, assume {hypothesis_formula.rep_formula()} is true.', echo=echo)
         # ...a hypothetical-theory 𝒯₂ is created to store the hypothesis elaboration,
-        self._hypothesis_child_theory = t.u.declare_theory(extended_theory=t, extended_theory_limit=self,
+        self._hypothesis_child_theory = t.u.t.declare(extended_theory=t, extended_theory_limit=self,
             symbol=configuration.default_child_hypothesis_theory_symbol, echo=echo)
         # ...the axiom is included in 𝒯₂,
         self._hypothesis_axiom_inclusion_in_child_theory = self.hypothesis_child_theory.include_axiom(
@@ -6567,7 +6567,7 @@ class AxiomDeclarationCollection(UniverseOfDiscourseCollectionProperty):
 
 class DefinitionDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     """A collection of definition-declarations.
-    It is exposed as the a property on the UniverseOfDiscourse class.
+    It is exposed as the d property on the UniverseOfDiscourse class.
 
     """
 
@@ -6598,6 +6598,40 @@ class DefinitionDeclarationCollection(UniverseOfDiscourseCollectionProperty):
         _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
         verify(assertion=is_declaratively_member_of_class(u=self.u, phi=phi, c=self.u.c2.definition_declaration),
             msg='phi is not an definition-declaration')
+
+
+class TheoryDerivationDeclarationCollection(UniverseOfDiscourseCollectionProperty):
+    """A collection of theory-derivation declarations.
+    It is exposed as the t property on the UniverseOfDiscourse class.
+
+    """
+
+    def __init__(self, u: UniverseOfDiscourse):
+        super().__init__(u=u)
+
+    def declare(self, extended_theory: (None, TheoryDerivation) = None, extended_theory_limit: (None, Statement) = None,
+        stabilized: bool = False, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
+        auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+        name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+        echo: (None, bool) = None) -> TheoryDerivation:
+        """:ref:`Declare<object_declaration_math_concept>` a new axiom in this universe-of-discourse.
+        """
+        t: TheoryDerivation = TheoryDerivation(u=self.u, extended_theory=extended_theory,
+            extended_theory_limit=extended_theory_limit, stabilized=stabilized, symbol=symbol, index=index,
+            auto_index=auto_index, dashed_name=dashed_name, name=name, explicit_name=explicit_name, ref=ref,
+            subtitle=subtitle, echo=echo)
+        t = self.declare_instance(t=t)  # Return the existing axiom if there is an axiom a' such that a' == a.
+        return t
+
+    def declare_instance(self, t: TheoryDerivation) -> TheoryDerivation:
+        t = super().add_formula(phi=t)
+        return t
+
+    def verify_element(self, phi: FlexibleFormula):
+        _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
+        verify(assertion=is_declaratively_member_of_class(u=self.u, phi=phi, c=self.u.c2.theory_derivation),
+            msg='phi is not an axiom-declaration')
 
 
 class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
@@ -10420,7 +10454,7 @@ class UniverseOfDiscourse(Formula):
         self._o = SimpleObjctDict(u=self)
         self._phi = dict()
         self._simple_objcts = SimpleObjctDict(u=self)
-        self.theories = dict()
+        self._t = TheoryDerivationDeclarationCollection(u=self)
         # self.variables = dict()
         # Unique name indexes
         # self.symbol_indexes = dict()
@@ -10552,20 +10586,6 @@ class UniverseOfDiscourse(Formula):
             msg=f'A symbolic-object {duplicate} already exists in the current universe-of-discourse {self} with a '
                 'duplicate designation (symbol and index).', o=o, duplicate=duplicate, slf=self)
         self.o[o.nameset] = o
-
-    def cross_reference_theory(self, t: TheoryDerivation):
-        """Cross-references a theory in this universe-of-discourse.
-
-        :param t: a formula.
-        """
-        verify(is_in_class_OBSOLETE(t, classes.theory_derivation),
-            'Cross-referencing a theory in a universe-of-discourse requires '
-            'an object of type Theory.', t=t, slf=self)
-        verify(t.nameset not in self.theories.keys() or t is self.theories[t.nameset],
-            'Cross-referencing a theory in a universe-of-discourse requires '
-            'that it is referenced with a unique symbol.', t_symbol=t.nameset, t=t, slf=self)
-        if t not in self.theories:
-            self.theories[t.nameset] = t
 
     @property
     def d(self) -> DefinitionDeclarationCollection:
@@ -10722,6 +10742,11 @@ class UniverseOfDiscourse(Formula):
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
             echo=echo)
+
+    @property
+    def t(self) -> TheoryDerivationDeclarationCollection:
+        """The collection of theory-derivations declared in this universe-of-discourse."""
+        return self._t
 
     # @FreeVariableContext()
     @contextlib.contextmanager
@@ -10982,7 +11007,7 @@ class PunctiliousMinimalMetatheory(TheoryPackage):
             u = UniverseOfDiscourse()
         super().__init__(u=u)
         # Naming conventions in MGZ21
-        t = self.u.declare_theory(symbol='minimal-metatheory', index=0, dashed_name='minimal-metatheory',
+        t = self.u.t.declare(symbol='minimal-metatheory', index=0, dashed_name='minimal-metatheory',
             name='minimal metatheory', explicit_name='punctilious minimal metatheory')
         self._t = t
 

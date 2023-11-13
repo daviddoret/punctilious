@@ -10,7 +10,7 @@ r2 = u.c1.declare(1, signal_proposition=True)
 axiom = u.a.declare(natural_language='Dummy axiom for demonstration purposes')
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
-t1 = u.declare_theory(echo=True)
+t1 = u.t.declare(echo=True)
 theory_axiom = t1.include_axiom(a=axiom)
 
 # And finally, use the absorption inference-rule:

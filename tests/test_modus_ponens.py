@@ -34,7 +34,7 @@ class TestModusPonens(TestCase):
         o2 = u.o.declare()
         o3 = u.o.declare()
         r1 = u.c1.declare(2, signal_proposition=True)
-        t = u.declare_theory()
+        t = u.t.declare()
         a = u.a.declare(random_data.random_sentence())
         ap = t.include_axiom(a)
         with u.with_variable() as x, u.with_variable() as y, u.with_variable() as z:

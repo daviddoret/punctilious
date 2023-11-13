@@ -10,7 +10,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         super().__init__(u=u)
 
         # Naming conventions in Tao06
-        t = self.u.declare_theory(dashed_name='peano-axioms', name='the Peano axioms',
+        t = self.u.t.declare(dashed_name='peano-axioms', name='the Peano axioms',
             explicit_name='the Peano axioms [Tao06]')
         self.t = t
 

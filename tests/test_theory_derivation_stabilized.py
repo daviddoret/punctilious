@@ -14,7 +14,7 @@ class TestTheoryElaboration(TestCase):
         o3 = u.o.declare()
         r1 = u.c1.declare(2, signal_proposition=True)
         pu.configuration.echo_default = True
-        robust_theory = u.declare_theory()
+        robust_theory = u.t.declare()
         ap1 = robust_theory.include_axiom(a=a1)
         with u.with_variable() as x, u.with_variable() as y, u.with_variable() as z:
             implication = robust_theory.i.axiom_interpretation.infer_formula_statement(a=ap1,

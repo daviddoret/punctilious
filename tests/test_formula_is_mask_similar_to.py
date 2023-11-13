@@ -78,7 +78,7 @@ class TestFormulaIsMaskSimilarTo(TestCase):
         o2 = u.o.declare()
         o3 = u.o.declare()
         r1 = u.c1.declare(2, signal_proposition=True)
-        t = u.declare_theory()
+        t = u.t.declare()
         a = u.a.declare(random_data.random_sentence())
         ap = t.include_axiom(a)
         phi1 = t.i.axiom_interpretation.infer_formula_statement(a=ap, p=u.declare_compound_formula(r1, o1, o2),

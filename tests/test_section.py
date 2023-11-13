@@ -6,7 +6,7 @@ class TestSection(TestCase):
     def test_section(self):
         pu.configuration.echo_note = True
         u = pu.UniverseOfDiscourse()
-        t = u.declare_theory(subtitle='A test theory')
+        t = u.t.declare(subtitle='A test theory')
         s_1 = t.open_section('something interesting')
         self.assertEqual('# 𝟭: 𝗦𝗼𝗺𝗲𝘁𝗵𝗶𝗻𝗴 𝗶𝗻𝘁𝗲𝗿𝗲𝘀𝘁𝗶𝗻𝗴', s_1.rep_report(encoding=pu.encodings.unicode))
         s_2 = t.open_section('something else')

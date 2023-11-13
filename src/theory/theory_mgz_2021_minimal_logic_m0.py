@@ -12,7 +12,7 @@ class MGZ2021MinimalLogicM0(pu.TheoryPackage):
         # Naming conventions in MGZ21
         axiom_symbol = pu.StyledText(plaintext='PL', text_style=pu.text_styles.sans_serif_normal)
         theory_symbol = pu.StyledText(plaintext='M', text_style=pu.text_styles.sans_serif_normal)
-        t = self.u.declare_theory(symbol=theory_symbol, index=0, dashed_name='minimal-logic', name='minimal logic',
+        t = self.u.t.declare(symbol=theory_symbol, index=0, dashed_name='minimal-logic', name='minimal logic',
             explicit_name='minimal logic [MGZ21]')
         self.t = t
         self.m0 = t

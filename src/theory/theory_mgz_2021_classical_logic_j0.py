@@ -15,7 +15,7 @@ class MGZ2021ClassicalLogicK0(pu.TheoryPackage):
         axiom_symbol = pu.StyledText(plaintext='PL', text_style=pu.text_styles.sans_serif_normal)
         theory_symbol = pu.StyledText(plaintext='K', text_style=pu.text_styles.sans_serif_normal)
         self.j0_package = MGZ2021IntuitionisticLogicJ0(u=u)
-        t = self.u.declare_theory(symbol=theory_symbol, index=0, dashed_name='classical-logic', name='classical logic',
+        t = self.u.t.declare(symbol=theory_symbol, index=0, dashed_name='classical-logic', name='classical logic',
             explicit_name='classical logic [MGZ21]', extended_theory=self.j0_package.j0)
         self.t = t
         self.m0 = self.j0_package.m0

@@ -9,7 +9,7 @@ o4 = u.o.declare()
 axiom = u.a.declare(natural_language='Dummy axiom for demonstration purposes')
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
-t1 = u.declare_theory(echo=True)
+t1 = u.t.declare(echo=True)
 theory_axiom = t1.include_axiom(a=axiom)
 phi1 = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom, p=o1 | u.c1.lor | o2, lock=False)
 phi2 = t1.i.axiom_interpretation.infer_formula_statement(a=theory_axiom, p=u.c1.lnot(o1) | u.c1.lor | o3, lock=True)

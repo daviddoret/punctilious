@@ -9,7 +9,7 @@ class TestNoteIntroduction(TestCase):
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
         r1 = u.c1.declare(1, signal_proposition=True)
-        t = u.declare_theory()
+        t = u.t.declare()
         a = u.a.declare('The arbitrary axiom of testing.')
         ap = t.include_axiom(a)
         t.i.axiom_interpretation.infer_formula_statement(ap, u.declare_compound_formula(r1, o1))

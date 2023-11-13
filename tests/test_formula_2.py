@@ -6,7 +6,7 @@ import punctilious.random_data as random_data
 class TestTheoreticalObjct(TestCase):
     def test_list_theoretical_objcts_recursively(self):
         u = pu.UniverseOfDiscourse()
-        t = u.declare_theory()
+        t = u.t.declare()
         r1 = u.c1.declare(1)
         self.assertEqual({r1}, set(r1.iterate_theoretical_objcts_references()))
         r2 = u.c1.declare(2)
@@ -23,7 +23,7 @@ class TestTheoreticalObjct(TestCase):
 
     def test_list_connectives_recursively(self):
         u = pu.UniverseOfDiscourse()
-        t = u.declare_theory()
+        t = u.t.declare()
         r1 = u.c1.declare(1)
         self.assertEqual({r1}, set(r1.iterate_connectives()))
         r2 = u.c1.declare(2)
