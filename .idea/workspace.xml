@@ -6,15 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sample_definition_interpretation_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sample_definition_interpretation_plaintext.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/definition_interpretation_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/definition_interpretation_python_sample.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample_definition_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_definition_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/theory/punctilious_2023_metatheory_OBSOLETE.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/punctilious_2023_metatheory_OBSOLETE.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_definition_declaration.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_definition_declaration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_definition_inclusion.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_definition_inclusion.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_definition_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_definition_interpretation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +120,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in tests">
+  <component name="RunManager" selected="Python tests.Python tests for test_definition_declaration.TestDefinitionDeclaration.test_title">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -296,7 +289,7 @@
       <option name="docutils_open_in_browser" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_free_variable.TestFreeVariable.test_with_statement" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_definition_declaration.TestDefinitionDeclaration.test_title" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -306,21 +299,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_free_variable.TestFreeVariable.test_with_statement&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests for test_is_declaratively_a_class_member.IsDeclarativelyMemberOfClass.test_is_declaratively_member_of_class" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_is_declaratively_a_class_member.IsDeclarativelyMemberOfClass.test_is_declaratively_member_of_class&quot;" />
+      <option name="_new_target" value="&quot;test_definition_declaration.TestDefinitionDeclaration.test_title&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -382,6 +361,21 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="Unittests for test_definition_declaration" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\David\PycharmProjects\PythonVirtualEnvironments\Scripts\python.exe" />
+      <option name="SDK_NAME" value="Python 3.11 (PythonVirtualEnvironments)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_definition_declaration&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
@@ -390,10 +384,10 @@
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.Python tests for test_is_declaratively_a_class_member.IsDeclarativelyMemberOfClass.test_is_declaratively_member_of_class" />
+      <item itemvalue="Python tests.Python tests for test_definition_declaration.TestDefinitionDeclaration.test_title" />
       <item itemvalue="Python tests.Unittests for test_absorption" />
       <item itemvalue="Python tests.Unittests for test_absorption.TestAbsorption.test_absorption_1" />
-      <item itemvalue="Python tests.Python tests for test_free_variable.TestFreeVariable.test_with_statement" />
+      <item itemvalue="Python tests.Unittests for test_definition_declaration" />
       <item itemvalue="Python tests.Python tests in test_absorption.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -401,11 +395,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Python tests for test_definition_declaration.TestDefinitionDeclaration.test_title" />
+        <item itemvalue="Python tests.Unittests for test_definition_declaration" />
         <item itemvalue="Python tests.Python tests in test_absorption.py" />
         <item itemvalue="Python tests.Unittests for test_absorption.TestAbsorption.test_absorption_1" />
         <item itemvalue="Python tests.Unittests for test_absorption" />
-        <item itemvalue="Python tests.Python tests for test_is_declaratively_a_class_member.IsDeclarativelyMemberOfClass.test_is_declaratively_member_of_class" />
-        <item itemvalue="Python tests.Python tests for test_free_variable.TestFreeVariable.test_with_statement" />
       </list>
     </recent_temporary>
   </component>
@@ -417,14 +411,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00379" summary="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.">
-      <option name="closed" value="true" />
-      <created>1697662883278</created>
-      <option name="number" value="00379" />
-      <option name="presentableId" value="LOCAL-00379" />
-      <option name="project" value="LOCAL" />
-      <updated>1697662883278</updated>
     </task>
     <task id="LOCAL-00380" summary="version 1.0.10:&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.">
       <option name="closed" value="true" />
@@ -810,7 +796,15 @@
       <option name="project" value="LOCAL" />
       <updated>1699857400135</updated>
     </task>
-    <option name="localTasksCounter" value="428" />
+    <task id="LOCAL-00428" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <option name="closed" value="true" />
+      <created>1699858918968</created>
+      <option name="number" value="00428" />
+      <option name="presentableId" value="LOCAL-00428" />
+      <option name="project" value="LOCAL" />
+      <updated>1699858918968</updated>
+    </task>
+    <option name="localTasksCounter" value="429" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

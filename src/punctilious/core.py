@@ -6687,7 +6687,7 @@ class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
         """The definition-declaration class."""
         if self._definition_declaration is None:
             self._definition_declaration = self.declare(symbol='definition-declaration', auto_index=False,
-                python_class=AxiomDeclaration, is_class_of_class=False)
+                python_class=DefinitionDeclaration, is_class_of_class=False)
         return self._definition_declaration
 
     @property
