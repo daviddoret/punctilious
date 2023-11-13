@@ -2541,7 +2541,7 @@ class Formula(SymbolicObject):
                         term_node_id = term.rep_symbol(encoding=encodings.plaintext)
                         if term_node_id in pyvis_graph.get_nodes():
                             pyvis_graph.add_edge(source=term_node_id, to=node_id)
-        if is_in_class_OBSOLETE(self, classes.theory_derivation):
+        if is_derivably_member_of_class(u=self.u, phi=self, c=self.u.c2.theory_derivation):
             self: TheoryDerivation
             for statement in self.statements:
                 # Bug fix: sections should not be Formulas but DecorativeObjects!
@@ -5300,7 +5300,7 @@ class ProofByContradiction1Declaration(InferenceRuleDeclaration):
         _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u, form=self.term_inc_h,
             mask=self.term_inc_h_mask, raise_exception=True, error_code=error_code)
         h__in__inc_h: CompoundFormula = inc_h.terms[0]
-        verify(assertion=h__in__inc_h.is_in_class_OBSOLETE(classes.theory_derivation),
+        verify(assertion=is_derivably_member_of_class(u=self.u, phi=h__in__inc_h, c=self.u.c2.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
@@ -5354,7 +5354,7 @@ class ProofByContradiction2Declaration(InferenceRuleDeclaration):
         _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u, form=self.term_inc_h,
             mask=self.term_inc_h_mask, raise_exception=True, error_code=error_code)
         h__in__inc_h: CompoundFormula = inc_h.terms[0]
-        verify(assertion=h__in__inc_h.is_in_class_OBSOLETE(classes.theory_derivation),
+        verify(assertion=is_derivably_member_of_class(u=self.u, phi=h__in__inc_h, c=self.u.c2.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
@@ -5408,7 +5408,7 @@ class ProofByRefutation1Declaration(InferenceRuleDeclaration):
         _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u, form=self.term_inc_h,
             mask=self.term_inc_h_mask, raise_exception=True, error_code=error_code)
         h__in__inc_h: CompoundFormula = inc_h.terms[0]
-        verify(assertion=h__in__inc_h.is_in_class_OBSOLETE(classes.theory_derivation),
+        verify(assertion=is_derivably_member_of_class(u=self.u, phi=h__in__inc_h, c=self.u.c2.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
@@ -5464,7 +5464,7 @@ class ProofByRefutation2Declaration(InferenceRuleDeclaration):
         _, inc_h, _ = verify_formula(arg='inc_h', input_value=inc_h, u=self.u, form=self.term_inc_h,
             mask=self.term_inc_h_mask, raise_exception=True, error_code=error_code)
         h__in__inc_h: CompoundFormula = inc_h.terms[0]
-        verify(assertion=h__in__inc_h.is_in_class_OBSOLETE(classes.theory_derivation),
+        verify(assertion=is_derivably_member_of_class(u=self.u, phi=h__in__inc_h, c=self.u.c2.theory_derivation),
             msg=f'The ⌜h⌝({h__in__inc_h}) in the formula argument ⌜inc_h⌝({inc_h}) is not a theory-derivation. A typical mistake is to pass the hypothesis instead of the hypothesis child theory as the argument.',
             raise_exception=True, error_code=error_code)
         verify(assertion=h__in__inc_h.is_formula_syntactically_equivalent_to(phi=h.child_theory),
@@ -5570,7 +5570,8 @@ class NoteInclusion(AtheoreticalStatement):
         subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
 
         echo = prioritize_value(echo, configuration.echo_note, configuration.echo_default, False)
-        verify(is_in_class_OBSOLETE(t, classes.t), 'theory is not a member of declarative-class theory.', t=t, slf=self)
+        verify(assertion=is_derivably_member_of_class(u=t.u, phi=t, c=t.u.c2.theory_derivation),
+            msg='theory is not a member of declarative-class theory.', t=t, slf=self)
         u = t.u
         paragraph_header = paragraph_headers.note if paragraph_header is None else paragraph_header
         #  self.statement_index = theory.crossreference_statement(self)
@@ -5746,7 +5747,8 @@ class TheoryDerivation(Formula):
             is_theory_foundation_system=True if extended_theory is None else False, u=u, echo=False)
         verify(is_in_class_OBSOLETE(u, classes.universe_of_discourse),
             'Parameter "u" is not a member of declarative-class universe-of-discourse.', u=u)
-        verify(extended_theory is None or is_in_class_OBSOLETE(extended_theory, classes.theory_derivation),
+        verify(
+            extended_theory is None or is_derivably_member_of_class(u=u, phi=extended_theory, c=u.c2.theory_derivation),
             'Parameter "extended_theory" is neither None nor a member of declarative-class theory.', u=u)
         verify(extended_theory_limit is None or (
             extended_theory is not None and is_in_class_OBSOLETE(extended_theory_limit,
@@ -6773,7 +6775,7 @@ class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
         return self._statement
 
     @property
-    def theory_derivation(self) -> TheoryDerivation:
+    def theory_derivation(self) -> ClassDeclaration:
         """The theory-derivation class."""
         if self._theory_derivation is None:
             self._theory_derivation = self.declare(symbol='theory-derivation', auto_index=False,
@@ -10815,8 +10817,8 @@ class InferredStatement(FormulaStatement):
             explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset,
             paragraphe_header=paragraph_header, echo=False)
         super()._declare_class_membership_OBSOLETE(declarative_class_list.inferred_proposition)
-        if self.valid_proposition.connective is self.t.u.c1.inconsistency and is_in_class_OBSOLETE(
-            self.valid_proposition.terms[0], classes.theory_derivation):
+        if self.valid_proposition.connective is self.t.u.c1.inconsistency and is_derivably_member_of_class(u=self.u,
+            phi=self.valid_proposition.terms[0], c=self.u.c2.theory_derivation):
             # This inferred-statement proves the inconsistency of its argument,
             # its argument is a theory-derivation (i.e. it is not a variable),
             # it follows that we must change the consistency attribute of that theory.
