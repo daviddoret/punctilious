@@ -8,17 +8,17 @@ u = pet.u
 
 
 def graph_symbolic_object(g: nx.MultiDiGraph, o: pu.SymbolicObject):
-    if pu.is_in_class_OBSOLETE(o, pu.classes.simple_objct):
+    if pu.is_in_class_OBSOLETE(o, pu.classes_OBSOLETE.simple_objct):
         graph_simpl_objct(g, o)
-    elif pu.is_in_class_OBSOLETE(o, pu.classes.theory_derivation):
+    elif pu.is_in_class_OBSOLETE(o, pu.classes_OBSOLETE.theory_derivation):
         graph_theory(g, o)
-    elif pu.is_in_class_OBSOLETE(o, pu.classes.connective):
+    elif pu.is_in_class_OBSOLETE(o, pu.classes_OBSOLETE.connective):
         graph_relation(g, o)
-    elif pu.is_in_class_OBSOLETE(o, pu.classes.variable):
+    elif pu.is_in_class_OBSOLETE(o, pu.classes_OBSOLETE.variable):
         graph_variable(g, o)
-    elif pu.is_in_class_OBSOLETE(o, pu.classes.compound_formula):
+    elif pu.is_in_class_OBSOLETE(o, pu.classes_OBSOLETE.compound_formula):
         graph_formula(g, o)
-    elif pu.is_in_class_OBSOLETE(o, pu.classes.formula_statement):
+    elif pu.is_in_class_OBSOLETE(o, pu.classes_OBSOLETE.formula_statement):
         graph_formula_statement(g, o)
 
 
