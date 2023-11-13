@@ -10,10 +10,9 @@ class TestDefinitionDeclaration(TestCase):
         pu.configuration.encoding = pu.encodings.plaintext
         u = pu.UniverseOfDiscourse()
         content1 = random_data.random_sentence()
-        a1 = u.declare_definition(content1)
+        a1 = u.a.declare(content1)
         self.assertEqual('Definition (D1)', a1.rep_title(cap=True, encoding=pu.encodings.plaintext))
-        self.assertEqual('definition (D1)',
-                         a1.rep_title(cap=False, encoding=pu.encodings.plaintext))
+        self.assertEqual('definition (D1)', a1.rep_title(cap=False, encoding=pu.encodings.plaintext))
         self.assertEqual('𝗗𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 (𝒟₁)', a1.rep_title(cap=True, encoding=pu.encodings.unicode))
         self.assertEqual('𝗱𝗲𝗳𝗶𝗻𝗶𝘁𝗶𝗼𝗻 (𝒟₁)', a1.rep_title(cap=False, encoding=pu.encodings.unicode))
 
@@ -28,12 +27,11 @@ class TestDefinitionDeclaration(TestCase):
         content3 = '𝒷𝓇𝓎ℯ𝒷𝓇𝒾 𝒷𝓎𝒶𝒷𝓇𝓎ℴ𝒷ℴ𝓊 𝒷𝓊𝒷𝒾.'  # random_data.random_sentence()
         content4 = '𝒷𝓁ℴ𝓁ℯ 𝒷𝓁ℴ𝒿ℯ 𝒽𝓎𝓊ℊ𝓃ℯℯ.'  # random_data.random_sentence()
         content5 = '𝒹𝒾𝓅𝒾𝓋𝒾 𝓈𝓉𝒾𝓂ℴ𝓋ℴ 𝒻𝓇𝒾𝒻𝓊𝒷𝓊 𝒹ℴ𝒷ℯ 𝒹𝓇𝓊𝓂𝓊𝒹ℴ𝒾𝓉𝓊.'  # random_data.random_sentence()
-        a1 = u.declare_definition(content1)
-        a2 = u.declare_definition(content2)
-        a3 = u.declare_definition(content3, symbol='b')
-        a4 = u.declare_definition(content4, symbol='c', name='the definition of test')
-        a5 = u.declare_definition(content5, acronym='oaot', symbol='d',
-                                  name='the other definition of test')
+        a1 = u.a.declare(content1)
+        a2 = u.a.declare(content2)
+        a3 = u.a.declare(content3, symbol='b')
+        a4 = u.a.declare(content4, symbol='c', name='the definition of test')
+        a5 = u.a.declare(content5, acronym='oaot', symbol='d', name='the other definition of test')
         self.assertEqual(
             f'𝖫𝖾𝗍 ⌜𝒟₁⌝ 𝖻𝖾 𝗍𝗁𝖾 𝑑𝑒𝑓𝑖𝑛𝑖𝑡𝑖𝑜𝑛 ⌜𝒷ℴℴ𝓇ℴ𝒶 𝒷ℯℯ𝒹𝓊 𝓇𝒾ℴ𝒷𝓁ℴ 𝒷𝓎𝓊𝒹𝒾ℯ𝓀𝓊.⌝ 𝗂𝗇 {u_unicode}.',
             a1.rep_report(encoding=pu.encodings.unicode, wrap=False))

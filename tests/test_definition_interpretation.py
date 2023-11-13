@@ -23,7 +23,7 @@ class TestDefinitionInterpretation(TestCase):
         with self.assertRaises(pu.PunctiliousException) as error:
             t1.i.definition_interpretation.infer_formula_statement(d=r2(o1), x=o1, y=o3)
         self.assertIs(pu.error_codes.error_002_inference_premise_syntax_error, error.exception.error_code)
-        # Validity error  # with self.assertRaises(pu.PunctiliousException) as error:  #    definition_2 = u.declare_definition('Some definition')  #    t1.i.definition_interpretation.infer_formula_statement(a=definition_2, p=r1(o1, o3))  # self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,  #    error.exception.error_code)
+        # Validity error  # with self.assertRaises(pu.PunctiliousException) as error:  #    definition_2 = u.d.declare('Some definition')  #    t1.i.definition_interpretation.infer_formula_statement(a=definition_2, p=r1(o1, o3))  # self.assertIs(pu.error_codes.error_003_inference_premise_validity_error,  #    error.exception.error_code)
         # Validity error - lock
         d.locked = True
         with self.assertRaises(pu.PunctiliousException) as error:

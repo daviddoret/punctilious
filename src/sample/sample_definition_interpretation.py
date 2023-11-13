@@ -7,7 +7,7 @@ o2 = u.o.declare()
 o3 = u.o.declare()
 r1 = u.c1.declare(2, signal_proposition=True)
 r2 = u.c1.declare(1, signal_proposition=True)
-definition = u.declare_definition(natural_language='Dummy definition for demonstration purposes')
+definition = u.d.declare(natural_language='Dummy definition for demonstration purposes')
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
 t1 = u.declare_theory(echo=True)

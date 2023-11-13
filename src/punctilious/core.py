@@ -3591,7 +3591,8 @@ class DefinitionDeclaration(Formula):
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
         ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        nameset: (None, str, NameSet) = None, paragraph_header: (None, ParagraphHeader) = None,
+        echo: (None, bool) = None):
         """
 
         :param natural_language: The definition's content in natural-language.
@@ -3605,14 +3606,14 @@ class DefinitionDeclaration(Formula):
             verify(natural_language != '', 'Parameter natural-language is an empty string (after trimming).')
             natural_language = SansSerifItalic(natural_language)
         self._natural_language = natural_language
-        cat = paragraph_headers.definition_declaration
+        paragraph_header = prioritize_value(paragraph_header, paragraph_headers.definition_declaration)
         if nameset is None and symbol is None:
             symbol = configuration.default_definition_declaration_symbol
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
-            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, paragraph_header=cat,
-            ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
+            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
+            subtitle=subtitle, nameset=nameset, paragraph_header=paragraph_header, echo=False)
         super()._declare_class_membership_OBSOLETE(declarative_class_list.definition)
-        u.cross_reference_definition_OBSOLETE(self)
+        u.d.declare_instance(d=self)
         if echo:
             self.echo()
 
@@ -6564,6 +6565,41 @@ class AxiomDeclarationCollection(UniverseOfDiscourseCollectionProperty):
             msg='phi is not an axiom-declaration')
 
 
+class DefinitionDeclarationCollection(UniverseOfDiscourseCollectionProperty):
+    """A collection of definition-declarations.
+    It is exposed as the a property on the UniverseOfDiscourse class.
+
+    """
+
+    def __init__(self, u: UniverseOfDiscourse):
+        super().__init__(u=u)
+
+    def declare(self, natural_language: str, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
+        auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+        acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+        name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+        paragraph_header: (None, ParagraphHeader) = None, nameset: (None, str, NameSet) = None,
+        echo: (None, bool) = None) -> DefinitionDeclaration:
+        """:ref:`Declare<object_declaration_math_concept>` a new definition in this universe-of-discourse.
+        """
+        d: DefinitionDeclaration = DefinitionDeclaration(u=self.u, natural_language=natural_language, symbol=symbol,
+            index=index, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name,
+            name=name, explicit_name=explicit_name, ref=ref, subtitle=subtitle, paragraph_header=paragraph_header,
+            nameset=nameset, echo=echo)
+        d = self.declare_instance(d=d)  # Return the existing definition if there is an definition a' such that a' == a.
+        return d
+
+    def declare_instance(self, d: DefinitionDeclaration) -> DefinitionDeclaration:
+        d = super().add_formula(phi=d)
+        return d
+
+    def verify_element(self, phi: FlexibleFormula):
+        _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
+        verify(assertion=is_declaratively_member_of_class(u=self.u, phi=phi, c=self.u.c2.definition_declaration),
+            msg='phi is not an definition-declaration')
+
+
 class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     """A collection of class-declarations that exposes some well-known classes.
     It is exposed as the c2 property on the UniverseOfDiscourse class.
@@ -6573,21 +6609,29 @@ class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
     def __init__(self, u: UniverseOfDiscourse):
         super().__init__(u=u)
         self._axiom_declaration = None
+        self._axiom_inclusion = None
         self._class2 = None
         self._class_of_class_is_declared = False
+        self._compound_formula = None
         self._connective = None
+        self._constant_declaration = None
+        self._definition_declaration = None
+        self._definition_inclusion = None
         self._formula = None
+        self._formula_statement = None
         self._free_variable = None
         self._inference_rule = None
         self._simple_object = None
         self._statement = None
+        self._theory_derivation = None
+        self._universe_of_discourse = None
 
     @property
     def axiom_declaration(self) -> ClassDeclaration:
         """The axiom-declaration class."""
         if self._axiom_declaration is None:
             self._axiom_declaration = self.declare(symbol='axiom-declaration', auto_index=False,
-                python_class=AxiomDeclaration)
+                python_class=AxiomDeclaration, is_class_of_class=False)
         return self._axiom_declaration
 
     @property
@@ -6599,11 +6643,28 @@ class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
         return self._class2
 
     @property
+    def compound_formula(self) -> ClassDeclaration:
+        """The compound-formula class."""
+        if self._compound_formula is None:
+            self._compound_formula = self.declare(symbol='compound-formula', auto_index=False,
+                python_class=ClassDeclaration, is_class_of_class=False)
+        return self._compound_formula
+
+    @property
     def connective(self) -> ClassDeclaration:
         """The connective class."""
         if self._connective is None:
-            self._connective = self.declare(symbol='connective', auto_index=False, python_class=Connective)
+            self._connective = self.declare(symbol='connective', auto_index=False, python_class=Connective,
+                is_class_of_class=False)
         return self._connective
+
+    @property
+    def constant_declaration(self) -> ClassDeclaration:
+        """The constant-declaration class."""
+        if self._constant_declaration is None:
+            self._constant_declaration = self.declare(symbol='constant-declaration', auto_index=False,
+                python_class=ConstantDeclaration, is_class_of_class=False)
+        return self._constant_declaration
 
     def declare(self, symbol: (None, str, StyledText) = None, index: (None, int, str) = None,
         auto_index: (None, bool) = None, python_class: (None, type) = None, is_class_of_class: (None, bool) = None,
@@ -6622,17 +6683,35 @@ class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
         return c
 
     @property
+    def definition_declaration(self) -> ClassDeclaration:
+        """The definition-declaration class."""
+        if self._definition_declaration is None:
+            self._definition_declaration = self.declare(symbol='definition-declaration', auto_index=False,
+                python_class=AxiomDeclaration, is_class_of_class=False)
+        return self._definition_declaration
+
+    @property
     def formula(self) -> ClassDeclaration:
         """The formula class."""
         if self._formula is None:
-            self._formula = self.declare(symbol='formula', auto_index=False, python_class=Formula)
+            self._formula = self.declare(symbol='formula', auto_index=False, python_class=Formula,
+                is_class_of_class=False)
         return self._formula
+
+    @property
+    def formula_statement(self) -> ClassDeclaration:
+        """The formula-statement class."""
+        if self._formula_statement is None:
+            self._formula_statement = self.declare(symbol='formula-statement', auto_index=False, python_class=Formula,
+                is_class_of_class=False)
+        return self._formula_statement
 
     @property
     def free_variable(self) -> ClassDeclaration:
         """The free-variable class."""
         if self._free_variable is None:
-            self._free_variable = self.declare(symbol='free-variable', auto_index=False, python_class=FreeVariable)
+            self._free_variable = self.declare(symbol='free-variable', auto_index=False, python_class=FreeVariable,
+                is_class_of_class=False)
         return self._free_variable
 
     @property
@@ -6640,29 +6719,39 @@ class ClassDeclarationCollection(UniverseOfDiscourseCollectionProperty):
         """The inference-rule class."""
         if self._inference_rule is None:
             self._inference_rule = self.declare(symbol='inference-rule', auto_index=False,
-                python_class=InferenceRuleDeclaration)
+                python_class=InferenceRuleDeclaration, is_class_of_class=False)
         return self._inference_rule
 
     @property
     def simple_object(self) -> ClassDeclaration:
         """The simple-object class."""
         if self._simple_object is None:
-            self._simple_object = self.declare(symbol='simple-object', auto_index=False, python_class=SimpleObjct)
+            self._simple_object = self.declare(symbol='simple-object', auto_index=False, python_class=SimpleObjct,
+                is_class_of_class=False)
         return self._simple_object
 
     @property
     def statement(self) -> ClassDeclaration:
         """The statement class."""
         if self._statement is None:
-            self._statement = self.declare(symbol='_statement', auto_index=False, python_class=Statement)
+            self._statement = self.declare(symbol='statement', auto_index=False, python_class=Statement,
+                is_class_of_class=False)
         return self._statement
+
+    @property
+    def theory_derivation(self) -> TheoryDerivation:
+        """The theory-derivation class."""
+        if self._theory_derivation is None:
+            self._theory_derivation = self.declare(symbol='theory-derivation', auto_index=False,
+                python_class=TheoryDerivation, is_class_of_class=False)
+        return self._theory_derivation
 
     @property
     def universe_of_discourse(self) -> ClassDeclaration:
         """The universe-of-discourse class."""
         if self._universe_of_discourse is None:
             self._universe_of_discourse = self.declare(symbol='universe-of-discourse', auto_index=False,
-                python_class=UniverseOfDiscourse)
+                python_class=UniverseOfDiscourse, is_class_of_class=False)
         return self._universe_of_discourse
 
     def verify_element(self, phi: FlexibleFormula):
@@ -10326,7 +10415,7 @@ class UniverseOfDiscourse(Formula):
         self._c1 = ConnectiveDict(u=self)
         self._c2 = ClassDeclarationCollection(u=self)
         self._c3 = ConstantDeclarationDict(u=self)
-        self._d = dict()
+        self._d = DefinitionDeclarationCollection(u=self)
         self._i = InferenceRuleDeclarationCollection(u=self)
         self._o = SimpleObjctDict(u=self)
         self._phi = dict()
@@ -10400,20 +10489,6 @@ class UniverseOfDiscourse(Formula):
         """
         if c not in self.c3:
             self.c3[c.nameset] = c
-            return True
-        else:
-            return False
-
-    def cross_reference_definition_OBSOLETE(self, d: DefinitionDeclaration) -> bool:
-        """Cross-references a definition in this universe-of-discourse.
-
-        :parameter d: a definition.
-        """
-        verify(d.nameset not in self.d.keys() or d is self.d[d.nameset],
-            'The symbol of term ⌜d⌝ is already referenced as a distinct definition in this '
-            'universe-of-discourse.', a=d, universe_of_discourse=self)
-        if d not in self.d:
-            self.d[d.nameset] = d
             return True
         else:
             return False
@@ -10493,7 +10568,8 @@ class UniverseOfDiscourse(Formula):
             self.theories[t.nameset] = t
 
     @property
-    def d(self):
+    def d(self) -> DefinitionDeclarationCollection:
+        """The collection of axioms declared in this universe-of-discourse."""
         return self._d
 
     def declare_compound_formula(self, connective: Connective, *terms, lock_variable_scope: (None, bool) = None,
@@ -10552,18 +10628,6 @@ class UniverseOfDiscourse(Formula):
         return TheoryDerivation(u=self, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             name=name, explicit_name=explicit_name, ref=ref, subtitle=subtitle, extended_theory=extended_theory,
             extended_theory_limit=extended_theory_limit, stabilized=stabilized, echo=echo)
-
-    def declare_definition(self, natural_language: str, symbol: (None, str, StyledText) = None,
-        index: (None, int) = None, auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
-        acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
-        name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
-        """Elaborate a new axiom 𝑎 in this universe-of-discourse.
-        """
-        return DefinitionDeclaration(u=self, natural_language=natural_language, symbol=symbol, index=index,
-            auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
 
     def echo(self):
         return repm.prnt(self.rep_creation(cap=True))

@@ -11,8 +11,8 @@ class TestDefinitionInclusion(TestCase):
         u = pu.UniverseOfDiscourse()
         content1 = random_data.random_sentence()
         content2 = random_data.random_sentence(min_words=30)
-        ad1 = u.declare_definition(content1)
-        ad2 = u.declare_definition(content2)
+        ad1 = u.a.declare(content1)
+        ad2 = u.a.declare(content2)
         t = u.declare_theory()
         ai1 = t.include_definition(ad1)
         ai2 = t.include_definition(ad2)
@@ -23,7 +23,7 @@ class TestDefinitionInclusion(TestCase):
         pu.configuration.echo_definition_declaration = False
         pu.configuration.echo_definition_inclusion = False
         u = pu.UniverseOfDiscourse()
-        dd1 = u.declare_definition(natural_language='Let f(foo) be defined as g(bar,qux).')
+        dd1 = u.d.declare(natural_language='Let f(foo) be defined as g(bar,qux).')
         t = u.declare_theory()
         di1 = t.include_definition(dd1, echo=True)
         foo = u.o.declare(nameset=pu.NameSet(symbol='foo', index=None))

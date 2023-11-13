@@ -74,7 +74,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         self.proposition_2_2_3 = p004
 
         # DEFINITION 2.1.3
-        d01 = u.declare_definition(
+        d01 = u.d.declare(
             natural_language='We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number '
                              '((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text '
                              'I use "x := y" to denote the statement that x is defined to equal y.)', ref='2.1.3')

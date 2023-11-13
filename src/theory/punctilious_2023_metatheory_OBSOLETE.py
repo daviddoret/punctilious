@@ -71,7 +71,7 @@ with u.with_variable('x') as x1, u.with_variable('y') as x2:
     ft.commutativity_of_equality = ft.i.axiom_interpretation.infer_formula_statement(nla_01b,
         u.declare_compound_formula(u.c1.implication, x1_equal_x2, x2_equal_x1))
 
-d_55 = u.declare_definition('Inequality is defined as the negation of equality.')
+d_55 = u.d.declare('Inequality is defined as the negation of equality.')
 nld_55 = ft.include_definition(d=d_55)
 with u.with_variable('x') as x, u.with_variable('y') as y:
     ft.i.definition_interpretation.infer_formula_statement(nld_55,
