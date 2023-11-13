@@ -179,25 +179,25 @@
                                                 class="n">o</span><span class="o">.</span><span class="n">declare</span><span
                                                 class="p">()</span>
 <span class="n">r1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span class="n">declare</span><span
-                                                class="p">(</span><span class="mi">2</span><span
-                                                class="p">,</span> <span class="n">signal_proposition</span><span
+                                                class="n">c1</span><span class="o">.</span><span
+                                                class="n">declare</span><span class="p">(</span><span
+                                                class="mi">2</span><span class="p">,</span> <span class="n">signal_proposition</span><span
                                                 class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">r2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span class="n">declare</span><span
-                                                class="p">(</span><span class="mi">1</span><span
-                                                class="p">,</span> <span class="n">signal_proposition</span><span
+                                                class="n">c1</span><span class="o">.</span><span
+                                                class="n">declare</span><span class="p">(</span><span
+                                                class="mi">1</span><span class="p">,</span> <span class="n">signal_proposition</span><span
                                                 class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_axiom</span><span
+<span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">a</span><span class="o">.</span><span class="n">declare</span><span
                                                 class="p">(</span><span class="n">natural_language</span><span
                                                 class="o">=</span><span class="s1">&#39;Dummy axiom for demonstration purposes&#39;</span><span
                                                 class="p">)</span>
 
 <span class="c1"># Elaborate a dummy theory with a set of propositions necessary for our demonstration</span>
-<span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">t</span><span class="p">(</span><span
-                                                class="n">echo</span><span class="o">=</span><span
-                                                class="kc">True</span><span class="p">)</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_theory</span><span
+                                                class="p">(</span><span class="n">echo</span><span
+                                                class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">theory_axiom</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">include_axiom</span><span class="p">(</span><span
                                                 class="n">a</span><span class="o">=</span><span
@@ -206,30 +206,30 @@
                                                 class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
                                                 class="o">.</span><span class="n">infer_formula_statement</span><span
                                                 class="p">(</span><span class="n">a</span><span class="o">=</span><span
-                                                class="n">theory_axiom</span><span class="p">,</span>
-    <span class="n">p</span><span class="o">=</span><span class="n">r1</span><span class="p">(</span><span
-                                                class="n">o1</span><span class="p">,</span> <span
-                                                class="n">o2</span><span class="p">)</span> <span
-                                                class="o">|</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span class="n">implies</span> <span
+                                                class="n">theory_axiom</span><span class="p">,</span> <span
+                                                class="n">p</span><span class="o">=</span><span class="n">r1</span><span
+                                                class="p">(</span><span class="n">o1</span><span
+                                                class="p">,</span> <span class="n">o2</span><span
+                                                class="p">)</span> <span class="o">|</span> <span
+                                                class="n">u</span><span class="o">.</span><span class="n">c1</span><span
+                                                class="o">.</span><span class="n">implies</span> <span
                                                 class="o">|</span> <span class="n">r2</span><span
-                                                class="p">(</span><span class="n">o3</span><span
-                                                class="p">),</span> <span class="n">lock</span><span
-                                                class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                                                class="p">(</span><span class="n">o3</span><span class="p">),</span>
+    <span class="n">lock</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">phi2</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
                                                 class="o">.</span><span class="n">infer_formula_statement</span><span
                                                 class="p">(</span><span class="n">a</span><span class="o">=</span><span
-                                                class="n">theory_axiom</span><span class="p">,</span>
-    <span class="n">p</span><span class="o">=</span><span class="n">r2</span><span class="p">(</span><span
-                                                class="n">o3</span><span class="p">)</span> <span
-                                                class="o">|</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span class="n">implies</span> <span
+                                                class="n">theory_axiom</span><span class="p">,</span> <span
+                                                class="n">p</span><span class="o">=</span><span class="n">r2</span><span
+                                                class="p">(</span><span class="n">o3</span><span
+                                                class="p">)</span> <span class="o">|</span> <span
+                                                class="n">u</span><span class="o">.</span><span class="n">c1</span><span
+                                                class="o">.</span><span class="n">implies</span> <span
                                                 class="o">|</span> <span class="n">r1</span><span
                                                 class="p">(</span><span class="n">o1</span><span
-                                                class="p">,</span> <span class="n">o2</span><span
-                                                class="p">),</span> <span class="n">lock</span><span
-                                                class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                                                class="p">,</span> <span class="n">o2</span><span class="p">),</span>
+    <span class="n">lock</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># And finally, use the biconditional-introduction inference-rule:</span>
 <span class="n">biconditional_inference</span> <span class="o">=</span> <span class="n">t1</span><span

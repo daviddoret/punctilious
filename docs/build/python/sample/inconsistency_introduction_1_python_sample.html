@@ -19,7 +19,7 @@
           href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7"/>
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=a491ee77"/>
     <!--[if lt IE 9]>
-      <script src="../../_static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -40,7 +40,7 @@
     <link rel="search" title="Search" href="../../search.html"/>
     <link rel="next" title="inconsistency-introduction-2 (python sample)"
           href="inconsistency_introduction_2_python_sample.html"/>
-    <link rel="prev" title="equality-commutativity (python sample)" href="equality_commutativity_python_sample.html"/>
+    <link rel="prev" title="variable (python sample)" href="free_variable_python_sample.html"/>
 </head>
 
 <body class="wy-body-for-nav">
@@ -175,15 +175,15 @@
                                                 class="n">o</span><span class="o">.</span><span class="n">declare</span><span
                                                 class="p">()</span>
 <span class="n">r1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span class="n">declare</span><span
-                                                class="p">(</span><span class="mi">2</span><span
-                                                class="p">,</span> <span class="n">signal_proposition</span><span
+                                                class="n">c1</span><span class="o">.</span><span
+                                                class="n">declare</span><span class="p">(</span><span
+                                                class="mi">2</span><span class="p">,</span> <span class="n">signal_proposition</span><span
                                                 class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">t</span><span class="p">(</span><span
-                                                class="n">echo</span><span class="o">=</span><span
-                                                class="kc">True</span><span class="p">)</span>
-<span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_axiom</span><span
+<span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_theory</span><span
+                                                class="p">(</span><span class="n">echo</span><span
+                                                class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">a</span><span class="o">.</span><span class="n">declare</span><span
                                                 class="p">(</span><span class="n">natural_language</span><span
                                                 class="o">=</span><span class="s1">&#39;Dummy axiom for demonstration purposes&#39;</span><span
                                                 class="p">)</span>
@@ -206,18 +206,19 @@
                                                 class="o">.</span><span class="n">infer_formula_statement</span><span
                                                 class="p">(</span><span class="n">theory_axiom</span><span
                                                 class="p">,</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span
+                                                class="n">c1</span><span class="o">.</span><span
                                                 class="n">lnot</span><span class="p">(</span><span
                                                 class="n">r1</span><span class="p">(</span><span
                                                 class="n">o1</span><span class="p">,</span> <span
-                                                class="n">o2</span><span class="p">)),</span>
-    <span class="n">lock</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                                                class="n">o2</span><span class="p">)),</span> <span
+                                                class="n">lock</span><span class="o">=</span><span
+                                                class="kc">True</span><span class="p">)</span>
 <span class="n">t1</span><span class="o">.</span><span class="n">stabilize</span><span class="p">()</span>
 
 <span class="c1"># Use a distinct theory T2 to demonstrate the inconsistency of T1</span>
 <span class="c1"># because T1 could not prove its own inconsistency because it is inconsistent!</span>
-<span class="n">t2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">t</span><span class="p">()</span>
+<span class="n">t2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_theory</span><span
+                                                class="p">()</span>
 
 <span class="c1"># And finally, use the inconsistency-introduction-1 inference-rule:</span>
 <span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t2</span><span
@@ -225,12 +226,12 @@
                                                 class="n">inconsistency_introduction_1</span><span
                                                 class="o">.</span><span class="n">infer_formula_statement</span><span
                                                 class="p">(</span><span class="n">p</span><span class="o">=</span><span
-                                                class="n">p</span><span class="p">,</span>
-    <span class="n">not_p</span><span class="o">=</span><span class="n">not_p</span><span class="p">,</span> <span
+                                                class="n">p</span><span class="p">,</span> <span
+                                                class="n">not_p</span><span class="o">=</span><span
+                                                class="n">not_p</span><span class="p">,</span> <span
                                                 class="n">t</span><span class="o">=</span><span class="n">t1</span><span
-                                                class="p">,</span> <span class="n">subtitle</span><span
-                                                class="o">=</span><span
-                                                class="s1">&#39;The proposition of interest&#39;</span><span
+                                                class="p">,</span>
+    <span class="n">subtitle</span><span class="o">=</span><span class="s1">&#39;The proposition of interest&#39;</span><span
                                                 class="p">)</span>
 </pre>
                                     </div>
@@ -343,8 +344,8 @@ Proposition (T2.P3) - The proposition of interest: Inc(T1). Proof: Let P := r1(o
                 </div>
                 <footer>
                     <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-                        <a href="equality_commutativity_python_sample.html" class="btn btn-neutral float-left"
-                           title="equality-commutativity (python sample)" accesskey="p" rel="prev"><span
+                        <a href="free_variable_python_sample.html" class="btn btn-neutral float-left"
+                           title="variable (python sample)" accesskey="p" rel="prev"><span
                                 class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
                         <a href="inconsistency_introduction_2_python_sample.html" class="btn btn-neutral float-right"
                            title="inconsistency-introduction-2 (python sample)" accesskey="n" rel="next">Next <span

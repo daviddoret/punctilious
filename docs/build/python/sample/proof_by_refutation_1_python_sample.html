@@ -167,7 +167,8 @@
 <span class="n">u</span> <span class="o">=</span> <span class="n">pu</span><span class="o">.</span><span class="n">create_universe_of_discourse</span><span
                                                 class="p">(</span><span class="n">echo</span><span
                                                 class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">a1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_axiom</span><span
+<span class="n">a1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">a</span><span class="o">.</span><span class="n">declare</span><span
                                                 class="p">(</span><span class="n">natural_language</span><span
                                                 class="o">=</span><span class="s1">&#39;Dummy axiom to establish some ground propositions.&#39;</span><span
                                                 class="p">)</span>
@@ -181,16 +182,16 @@
                                                 class="n">o</span><span class="o">.</span><span class="n">declare</span><span
                                                 class="p">()</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span class="n">declare</span><span
-                                                class="p">(</span><span class="n">arity</span><span
-                                                class="o">=</span><span class="mi">2</span><span
-                                                class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span
-                                                class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="n">signal_proposition</span><span
+                                                class="n">c1</span><span class="o">.</span><span
+                                                class="n">declare</span><span class="p">(</span><span
+                                                class="n">arity</span><span class="o">=</span><span
+                                                class="mi">2</span><span class="p">,</span> <span
+                                                class="n">symbol</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span
+                                                class="p">,</span> <span class="n">signal_proposition</span><span
                                                 class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">t</span><span class="p">(</span><span
-                                                class="n">echo</span><span class="o">=</span><span
-                                                class="kc">True</span><span class="p">)</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_theory</span><span
+                                                class="p">(</span><span class="n">echo</span><span
+                                                class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Elaborate a dummy theory with a set of propositions necessary for our demonstration</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">include_axiom</span><span
@@ -232,15 +233,15 @@
         <span class="n">p</span><span class="o">=</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span
                                                 class="n">x</span><span class="p">,</span> <span class="n">y</span><span
                                                 class="p">)</span> <span class="o">|</span> <span
-                                                class="n">u</span><span class="o">.</span><span class="n">r</span><span
+                                                class="n">u</span><span class="o">.</span><span class="n">c1</span><span
                                                 class="o">.</span><span class="n">land</span> <span
                                                 class="o">|</span> <span class="n">f</span><span class="p">(</span><span
                                                 class="n">y</span><span class="p">,</span> <span class="n">z</span><span
                                                 class="p">))</span> <span class="o">|</span> <span
-                                                class="n">u</span><span class="o">.</span><span class="n">r</span><span
+                                                class="n">u</span><span class="o">.</span><span class="n">c1</span><span
                                                 class="o">.</span><span class="n">implies</span> <span
                                                 class="o">|</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span
+                                                class="n">c1</span><span class="o">.</span><span
                                                 class="n">lnot</span><span class="p">(</span><span
                                                 class="n">f</span><span class="p">(</span><span class="n">x</span><span
                                                 class="p">,</span> <span class="n">z</span><span
@@ -260,33 +261,36 @@
                                                 class="o">.</span><span class="n">child_theory</span><span
                                                 class="o">.</span><span class="n">i</span><span class="o">.</span><span
                                                 class="n">conjunction_introduction</span><span class="o">.</span><span
-                                                class="n">infer_formula_statement</span><span class="p">(</span>
-    <span class="n">p</span><span class="o">=</span><span class="n">f</span><span class="p">(</span><span
-                                                class="n">o1</span><span class="p">,</span> <span
-                                                class="n">o2</span><span class="p">),</span> <span
-                                                class="n">q</span><span class="o">=</span><span class="n">f</span><span
-                                                class="p">(</span><span class="n">o2</span><span
-                                                class="p">,</span> <span class="n">o3</span><span class="p">))</span>
+                                                class="n">infer_formula_statement</span><span class="p">(</span><span
+                                                class="n">p</span><span class="o">=</span><span class="n">f</span><span
+                                                class="p">(</span><span class="n">o1</span><span
+                                                class="p">,</span> <span class="n">o2</span><span
+                                                class="p">),</span> <span class="n">q</span><span
+                                                class="o">=</span><span class="n">f</span><span class="p">(</span><span
+                                                class="n">o2</span><span class="p">,</span> <span
+                                                class="n">o3</span><span class="p">))</span>
 <span class="n">variable_substitution</span> <span class="o">=</span> <span class="n">h</span><span
                                                 class="o">.</span><span class="n">child_theory</span><span
                                                 class="o">.</span><span class="n">i</span><span class="o">.</span><span
                                                 class="n">variable_substitution</span><span class="o">.</span><span
-                                                class="n">infer_formula_statement</span><span class="p">(</span>
-    <span class="n">p</span><span class="o">=</span><span class="n">implication</span><span class="p">,</span> <span
-                                                class="n">phi</span><span class="o">=</span><span
-                                                class="n">u</span><span class="o">.</span><span class="n">r</span><span
-                                                class="o">.</span><span class="n">tupl</span><span
-                                                class="p">(</span><span class="n">o1</span><span
-                                                class="p">,</span> <span class="n">o2</span><span
-                                                class="p">,</span> <span class="n">o3</span><span class="p">))</span>
+                                                class="n">infer_formula_statement</span><span class="p">(</span><span
+                                                class="n">p</span><span class="o">=</span><span
+                                                class="n">implication</span><span class="p">,</span>
+    <span class="n">phi</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span
+                                                class="n">c1</span><span class="o">.</span><span
+                                                class="n">tupl</span><span class="p">(</span><span
+                                                class="n">o1</span><span class="p">,</span> <span
+                                                class="n">o2</span><span class="p">,</span> <span
+                                                class="n">o3</span><span class="p">))</span>
 <span class="n">modus_ponens</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span
                                                 class="n">child_theory</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span
                                                 class="n">modus_ponens</span><span class="o">.</span><span class="n">infer_formula_statement</span><span
-                                                class="p">(</span>
-    <span class="n">p_implies_q</span><span class="o">=</span><span class="n">variable_substitution</span><span
-                                                class="p">,</span> <span class="n">p</span><span class="o">=</span><span
-                                                class="n">conjunction_introduction</span><span class="p">)</span>
+                                                class="p">(</span><span class="n">p_implies_q</span><span
+                                                class="o">=</span><span class="n">variable_substitution</span><span
+                                                class="p">,</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">conjunction_introduction</span><span
+                                                class="p">)</span>
 
 <span class="c1"># Prove hypothesis inconsistency</span>
 <span class="n">h_inconsistency</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
@@ -294,11 +298,11 @@
                                                 class="o">.</span><span class="n">infer_formula_statement</span><span
                                                 class="p">(</span><span class="n">p</span><span class="o">=</span><span
                                                 class="n">h</span><span class="o">.</span><span class="n">child_statement</span><span
+                                                class="p">,</span> <span class="n">not_p</span><span
+                                                class="o">=</span><span class="n">modus_ponens</span><span
                                                 class="p">,</span>
-    <span class="n">not_p</span><span class="o">=</span><span class="n">modus_ponens</span><span
-                                                class="p">,</span> <span class="n">t</span><span class="o">=</span><span
-                                                class="n">h</span><span class="o">.</span><span
-                                                class="n">child_theory</span><span class="p">,</span> <span class="n">subtitle</span><span
+    <span class="n">t</span><span class="o">=</span><span class="n">h</span><span class="o">.</span><span class="n">child_theory</span><span
+                                                class="p">,</span> <span class="n">subtitle</span><span
                                                 class="o">=</span><span class="s1">&#39;Proof of the hypothesis inconsistency&#39;</span><span
                                                 class="p">)</span>
 
@@ -308,11 +312,9 @@
                                                 class="n">proof_by_refutation_1</span><span class="o">.</span><span
                                                 class="n">infer_formula_statement</span><span class="p">(</span><span
                                                 class="n">h</span><span class="o">=</span><span class="n">h</span><span
-                                                class="p">,</span>
-    <span class="n">inc_h</span><span class="o">=</span><span class="n">h_inconsistency</span><span
-                                                class="p">,</span> <span class="n">subtitle</span><span
-                                                class="o">=</span><span
-                                                class="s1">&#39;The proposition of interest&#39;</span><span
+                                                class="p">,</span> <span class="n">inc_h</span><span
+                                                class="o">=</span><span class="n">h_inconsistency</span><span class="p">,</span>
+    <span class="n">subtitle</span><span class="o">=</span><span class="s1">&#39;The proposition of interest&#39;</span><span
                                                 class="p">)</span>
 </pre>
                                     </div>

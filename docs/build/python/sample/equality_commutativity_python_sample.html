@@ -19,7 +19,7 @@
           href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7"/>
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=a491ee77"/>
     <!--[if lt IE 9]>
-      <script src="../../_static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -38,8 +38,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html"/>
     <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="next" title="inconsistency-introduction-1 (python sample)"
-          href="inconsistency_introduction_1_python_sample.html"/>
+    <link rel="next" title="variable (python sample)" href="free_variable_python_sample.html"/>
     <link rel="prev" title="equal-terms-substitution (python sample)"
           href="equal_terms_substitution_python_sample.html"/>
 </head>
@@ -178,27 +177,27 @@
                                                 class="n">o</span><span class="o">.</span><span class="n">declare</span><span
                                                 class="p">()</span>
 <span class="n">r1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span class="n">declare</span><span
-                                                class="p">(</span><span class="n">arity</span><span
-                                                class="o">=</span><span class="mi">2</span><span
-                                                class="p">,</span> <span class="n">signal_proposition</span><span
+                                                class="n">c1</span><span class="o">.</span><span
+                                                class="n">declare</span><span class="p">(</span><span
+                                                class="n">arity</span><span class="o">=</span><span
+                                                class="mi">2</span><span class="p">,</span> <span class="n">signal_proposition</span><span
                                                 class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">r2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span class="n">declare</span><span
-                                                class="p">(</span><span class="n">arity</span><span
-                                                class="o">=</span><span class="mi">1</span><span
-                                                class="p">,</span> <span class="n">signal_proposition</span><span
+                                                class="n">c1</span><span class="o">.</span><span
+                                                class="n">declare</span><span class="p">(</span><span
+                                                class="n">arity</span><span class="o">=</span><span
+                                                class="mi">1</span><span class="p">,</span> <span class="n">signal_proposition</span><span
                                                 class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_axiom</span><span
+<span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">a</span><span class="o">.</span><span class="n">declare</span><span
                                                 class="p">(</span><span class="n">natural_language</span><span
                                                 class="o">=</span><span class="s1">&#39;Dummy axiom for demonstration purposes&#39;</span><span
                                                 class="p">)</span>
 
 <span class="c1"># Elaborate a dummy theory with a set of propositions necessary for our demonstration</span>
-<span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">t</span><span class="p">(</span><span
-                                                class="n">echo</span><span class="o">=</span><span
-                                                class="kc">True</span><span class="p">)</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_theory</span><span
+                                                class="p">(</span><span class="n">echo</span><span
+                                                class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">theory_axiom</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">include_axiom</span><span class="p">(</span><span
                                                 class="n">a</span><span class="o">=</span><span
@@ -207,13 +206,13 @@
                                                 class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
                                                 class="o">.</span><span class="n">infer_formula_statement</span><span
                                                 class="p">(</span><span class="n">a</span><span class="o">=</span><span
-                                                class="n">theory_axiom</span><span class="p">,</span>
-    <span class="n">p</span><span class="o">=</span><span class="n">r1</span><span class="p">(</span><span
-                                                class="n">o1</span><span class="p">,</span> <span
-                                                class="n">o2</span><span class="p">)</span> <span
-                                                class="o">|</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span
-                                                class="n">equal</span> <span class="o">|</span> <span
+                                                class="n">theory_axiom</span><span class="p">,</span> <span
+                                                class="n">p</span><span class="o">=</span><span class="n">r1</span><span
+                                                class="p">(</span><span class="n">o1</span><span
+                                                class="p">,</span> <span class="n">o2</span><span
+                                                class="p">)</span> <span class="o">|</span> <span
+                                                class="n">u</span><span class="o">.</span><span class="n">c1</span><span
+                                                class="o">.</span><span class="n">equal</span> <span class="o">|</span> <span
                                                 class="n">r2</span><span class="p">(</span><span
                                                 class="n">o3</span><span class="p">))</span>
 
@@ -332,8 +331,8 @@ Proposition (T1.P2) - The proposition of interest: (r2(o3) = r1(o1, o2)). Proof:
                         <a href="equal_terms_substitution_python_sample.html" class="btn btn-neutral float-left"
                            title="equal-terms-substitution (python sample)" accesskey="p" rel="prev"><span
                                 class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-                        <a href="inconsistency_introduction_1_python_sample.html" class="btn btn-neutral float-right"
-                           title="inconsistency-introduction-1 (python sample)" accesskey="n" rel="next">Next <span
+                        <a href="free_variable_python_sample.html" class="btn btn-neutral float-right"
+                           title="variable (python sample)" accesskey="n" rel="next">Next <span
                                 class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
                     </div>
 

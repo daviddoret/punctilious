@@ -1793,6 +1793,8 @@ class SymbolicObject(abc.ABC):
 
     def is_declarative_class_member_OBSOLETE(self, c: DeclarativeClass_OBSOLETE) -> bool:
         """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise."""
+        # TODO: This is a design flaw. A formula (previously theoretical object) may
+        #   be a member of a class, but not a symbolic object.
         if hasattr(self, '_declarative_classes'):
             return c in self._declarative_classes
         else:
@@ -2224,6 +2226,12 @@ class Formula(SymbolicObject):
         g.add_node(self.rep_name())
         self.u.add_to_graph(g)
 
+    def is_declaratively_member_of_class(self, c: ClassDeclaration) -> bool:
+        return is_declaratively_member_of_class(u=self.u, phi=self, c=c)
+
+    def is_derivably_member_of_class(self, c: ClassDeclaration) -> bool:
+        return is_derivably_member_of_class(u=self.u, phi=self, c=c)
+
     def is_formula_syntactically_equivalent_to(self, phi: FlexibleFormula) -> bool:
         """Returns true if ⌜self⌝ is formula-syntactically-equivalent to ⌜o2⌝.
 
@@ -2449,7 +2457,7 @@ class Formula(SymbolicObject):
         """Iterate through this and all the formulas it contains recursively, providing
         they are connectives."""
         return (r for r in self.iterate_theoretical_objcts_references(include_root=include_root) if
-            is_in_class_OBSOLETE(r, classes.connective))
+            r.is_derivably_member_of_class(c=self.u.c2.connective))
 
     def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None,
         substitute_constants_with_values: bool = True, substitute_statements_with_formula: bool = True,

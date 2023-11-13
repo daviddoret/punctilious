@@ -19,7 +19,7 @@
           href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7"/>
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=a491ee77"/>
     <!--[if lt IE 9]>
-      <script src="../../_static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -175,11 +175,11 @@
 <span class="n">o2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
                                                 class="n">o</span><span class="o">.</span><span class="n">declare</span><span
                                                 class="p">()</span>
-<span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">t</span><span class="p">(</span><span
-                                                class="n">echo</span><span class="o">=</span><span
-                                                class="kc">True</span><span class="p">)</span>
-<span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_axiom</span><span
+<span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_theory</span><span
+                                                class="p">(</span><span class="n">echo</span><span
+                                                class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">a</span><span class="o">.</span><span class="n">declare</span><span
                                                 class="p">(</span><span class="n">natural_language</span><span
                                                 class="o">=</span><span class="s1">&#39;Dummy axiom for demonstration purposes&#39;</span><span
                                                 class="p">)</span>
@@ -194,41 +194,42 @@
                                                 class="p">(</span><span class="n">theory_axiom</span><span
                                                 class="p">,</span> <span class="p">(</span><span
                                                 class="n">o1</span> <span class="o">|</span> <span
-                                                class="n">u</span><span class="o">.</span><span class="n">r</span><span
+                                                class="n">u</span><span class="o">.</span><span class="n">c1</span><span
                                                 class="o">.</span><span class="n">equal</span> <span class="o">|</span> <span
-                                                class="n">o2</span><span class="p">),</span>
-    <span class="n">lock</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                                                class="n">o2</span><span class="p">),</span> <span class="n">lock</span><span
+                                                class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">x_unequal_y</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
                                                 class="o">.</span><span class="n">infer_formula_statement</span><span
                                                 class="p">(</span><span class="n">theory_axiom</span><span
-                                                class="p">,</span>
-    <span class="p">(</span><span class="n">o1</span> <span class="o">|</span> <span class="n">u</span><span
-                                                class="o">.</span><span class="n">r</span><span class="o">.</span><span
-                                                class="n">unequal</span> <span class="o">|</span> <span
-                                                class="n">o2</span><span class="p">),</span> <span class="n">lock</span><span
+                                                class="p">,</span> <span class="p">(</span><span
+                                                class="n">o1</span> <span class="o">|</span> <span
+                                                class="n">u</span><span class="o">.</span><span class="n">c1</span><span
+                                                class="o">.</span><span class="n">unequal</span> <span
+                                                class="o">|</span> <span class="n">o2</span><span
+                                                class="p">),</span> <span class="n">lock</span><span
                                                 class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">t1</span><span class="o">.</span><span class="n">stabilize</span><span class="p">()</span>
 
 <span class="c1"># Use a distinct theory T2 to demonstrate the inconsistency of T1</span>
 <span class="c1"># because T1 could not prove its own inconsistency because it is inconsistent!</span>
-<span class="n">t2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">t</span><span class="p">(</span><span
-                                                class="n">echo</span><span class="o">=</span><span
-                                                class="kc">True</span><span class="p">)</span>
+<span class="n">t2</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_theory</span><span
+                                                class="p">(</span><span class="n">echo</span><span
+                                                class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># And finally, use the inconsistency-introduction-2 inference-rule:</span>
 <span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t2</span><span
                                                 class="o">.</span><span class="n">i</span><span class="o">.</span><span
                                                 class="n">inconsistency_introduction_2</span><span
                                                 class="o">.</span><span class="n">infer_formula_statement</span><span
-                                                class="p">(</span>
-    <span class="n">x_equal_y</span><span class="o">=</span><span class="n">x_equal_y</span><span
-                                                class="p">,</span> <span class="n">x_unequal_y</span><span
-                                                class="o">=</span><span class="n">x_unequal_y</span><span
-                                                class="p">,</span> <span class="n">t</span><span class="o">=</span><span
-                                                class="n">t1</span><span class="p">,</span> <span
-                                                class="n">subtitle</span><span class="o">=</span><span class="s1">&#39;The proposition of interest&#39;</span><span
+                                                class="p">(</span><span class="n">x_equal_y</span><span
+                                                class="o">=</span><span class="n">x_equal_y</span><span
+                                                class="p">,</span>
+    <span class="n">x_unequal_y</span><span class="o">=</span><span class="n">x_unequal_y</span><span class="p">,</span> <span
+                                                class="n">t</span><span class="o">=</span><span class="n">t1</span><span
+                                                class="p">,</span> <span class="n">subtitle</span><span
+                                                class="o">=</span><span
+                                                class="s1">&#39;The proposition of interest&#39;</span><span
                                                 class="p">)</span>
 </pre>
                                     </div>

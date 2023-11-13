@@ -19,7 +19,7 @@
           href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7"/>
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=a491ee77"/>
     <!--[if lt IE 9]>
-      <script src="../../_static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -137,14 +137,28 @@
                                                                      href="../../math/concept/universe_of_discourse_math_concept.html#universe-of-discourse-math-concept"><span
                                         class="std std-ref">universe-of-discourse</span></a> .</p>
                                     <dl class="py property">
-                                        <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.c">
+                                        <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.a">
                                             <em class="property"><span class="pre">property</span><span
                                                     class="w"> </span></em><span class="sig-name descname"><span
-                                                class="pre">c</span></span><em class="property"><span class="p"><span
-                                                class="pre">:</span></span><span class="w"> </span><span class="pre">ConstantDeclarationDict</span></em><a
-                                                class="headerlink" href="#punctilious.UniverseOfDiscourse.c"
+                                                class="pre">a</span></span><em class="property"><span class="p"><span
+                                                class="pre">:</span></span><span class="w"> </span><span class="pre">AxiomDeclarationCollection</span></em><a
+                                                class="headerlink" href="#punctilious.UniverseOfDiscourse.a"
                                                 title="Link to this definition"></a></dt>
-                                        <dd><p>The collection of constants contained in this universe-of-discourse.</p>
+                                        <dd><p>The collection of axioms declared in this universe-of-discourse.</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py property">
+                                        <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.c1">
+                                            <em class="property"><span class="pre">property</span><span
+                                                    class="w"> </span></em><span class="sig-name descname"><span
+                                                class="pre">c1</span></span><em class="property"><span class="p"><span
+                                                class="pre">:</span></span><span class="w"> </span><span class="pre">ConnectiveDict</span></em><a
+                                                class="headerlink" href="#punctilious.UniverseOfDiscourse.c1"
+                                                title="Link to this definition"></a></dt>
+                                        <dd><p>A python dictionary of connectives contained in this
+                                            universe-of-discourse,
+                                            where well-known connectives are directly available as properties.</p>
                                         </dd>
                                     </dl>
 
@@ -153,92 +167,33 @@
                                             <em class="property"><span class="pre">property</span><span
                                                     class="w"> </span></em><span class="sig-name descname"><span
                                                 class="pre">c2</span></span><em class="property"><span class="p"><span
-                                                class="pre">:</span></span><span class="w"> </span><span class="pre">Class2DeclarationDict</span></em><a
+                                                class="pre">:</span></span><span class="w"> </span><span class="pre">ClassDeclarationCollection</span></em><a
                                                 class="headerlink" href="#punctilious.UniverseOfDiscourse.c2"
                                                 title="Link to this definition"></a></dt>
-                                        <dd><p>The collection of classes contained in this universe-of-discourse.</p>
+                                        <dd><p>The collection of classes declared in this universe-of-discourse.</p>
                                         </dd>
                                     </dl>
 
                                     <dl class="py property">
-                                        <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.connectives">
+                                        <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.c3">
                                             <em class="property"><span class="pre">property</span><span
                                                     class="w"> </span></em><span class="sig-name descname"><span
-                                                class="pre">connectives</span></span><em class="property"><span
-                                                class="p"><span class="pre">:</span></span><span class="w"> </span><span
-                                                class="pre">ConnectiveDict</span></em><a class="headerlink"
-                                                                                         href="#punctilious.UniverseOfDiscourse.connectives"
-                                                                                         title="Link to this definition"></a>
-                                        </dt>
-                                        <dd><p>A python dictionary of connectives contained in this
-                                            universe-of-discourse,
-                                            where well-known connectives are directly available as properties.</p>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="py method">
-                                        <dt class="sig sig-object py"
-                                            id="punctilious.UniverseOfDiscourse.cross_reference_axiom">
-                                            <span class="sig-name descname"><span
-                                                    class="pre">cross_reference_axiom</span></span><span
-                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">a</span></span></em><span class="sig-paren">)</span><a
-                                                class="headerlink"
-                                                href="#punctilious.UniverseOfDiscourse.cross_reference_axiom"
+                                                class="pre">c3</span></span><em class="property"><span class="p"><span
+                                                class="pre">:</span></span><span class="w"> </span><span class="pre">ConstantDeclarationDict</span></em><a
+                                                class="headerlink" href="#punctilious.UniverseOfDiscourse.c3"
                                                 title="Link to this definition"></a></dt>
-                                        <dd><p>Cross-references an axiom in this universe-of-discourse.</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                                                <dd class="field-odd"><p><strong>a</strong> (<code
-                                                        class="xref py py-class docutils literal notranslate"><span
-                                                        class="pre">AxiomDeclaration</span></code>) – an
-                                                    axiom-declaration.</p>
-                                                </dd>
-                                                <dt class="field-even">Return type<span class="colon">:</span></dt>
-                                                <dd class="field-even"><p><code
-                                                        class="xref py py-class docutils literal notranslate"><span
-                                                        class="pre">bool</span></code></p>
-                                                </dd>
-                                            </dl>
+                                        <dd><p>The collection of constants declared in this universe-of-discourse.</p>
                                         </dd>
                                     </dl>
 
                                     <dl class="py method">
                                         <dt class="sig sig-object py"
-                                            id="punctilious.UniverseOfDiscourse.cross_reference_class">
-                                            <span class="sig-name descname"><span
-                                                    class="pre">cross_reference_class</span></span><span
-                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">c</span></span></em><span class="sig-paren">)</span><a
-                                                class="headerlink"
-                                                href="#punctilious.UniverseOfDiscourse.cross_reference_class"
-                                                title="Link to this definition"></a></dt>
-                                        <dd><p>Cross-references a class in this universe-of-discourse.</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                                                <dd class="field-odd"><p><strong>c</strong> (<code
-                                                        class="xref py py-class docutils literal notranslate"><span
-                                                        class="pre">CollectionDeclaration</span></code>) – a
-                                                    constant-declaration.</p>
-                                                </dd>
-                                                <dt class="field-even">Return type<span class="colon">:</span></dt>
-                                                <dd class="field-even"><p><code
-                                                        class="xref py py-class docutils literal notranslate"><span
-                                                        class="pre">bool</span></code></p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="py method">
-                                        <dt class="sig sig-object py"
-                                            id="punctilious.UniverseOfDiscourse.cross_reference_connective">
-                                            <span class="sig-name descname"><span
-                                                    class="pre">cross_reference_connective</span></span><span
+                                            id="punctilious.UniverseOfDiscourse.cross_reference_connective_OBSOLETE">
+                                            <span class="sig-name descname"><span class="pre">cross_reference_connective_OBSOLETE</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                                                 class="pre">r</span></span></em><span class="sig-paren">)</span><a
                                                 class="headerlink"
-                                                href="#punctilious.UniverseOfDiscourse.cross_reference_connective"
+                                                href="#punctilious.UniverseOfDiscourse.cross_reference_connective_OBSOLETE"
                                                 title="Link to this definition"></a></dt>
                                         <dd><p>Cross-references a connective in this universe-of-discourse.</p>
                                             <dl class="field-list simple">
@@ -253,13 +208,12 @@
 
                                     <dl class="py method">
                                         <dt class="sig sig-object py"
-                                            id="punctilious.UniverseOfDiscourse.cross_reference_constant">
-                                            <span class="sig-name descname"><span
-                                                    class="pre">cross_reference_constant</span></span><span
+                                            id="punctilious.UniverseOfDiscourse.cross_reference_constant_OBSOLETE">
+                                            <span class="sig-name descname"><span class="pre">cross_reference_constant_OBSOLETE</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                                                 class="pre">c</span></span></em><span class="sig-paren">)</span><a
                                                 class="headerlink"
-                                                href="#punctilious.UniverseOfDiscourse.cross_reference_constant"
+                                                href="#punctilious.UniverseOfDiscourse.cross_reference_constant_OBSOLETE"
                                                 title="Link to this definition"></a></dt>
                                         <dd><p>Cross-references a constant in this universe-of-discourse.</p>
                                             <dl class="field-list simple">
@@ -280,13 +234,12 @@
 
                                     <dl class="py method">
                                         <dt class="sig sig-object py"
-                                            id="punctilious.UniverseOfDiscourse.cross_reference_definition">
-                                            <span class="sig-name descname"><span
-                                                    class="pre">cross_reference_definition</span></span><span
+                                            id="punctilious.UniverseOfDiscourse.cross_reference_definition_OBSOLETE">
+                                            <span class="sig-name descname"><span class="pre">cross_reference_definition_OBSOLETE</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                                                 class="pre">d</span></span></em><span class="sig-paren">)</span><a
                                                 class="headerlink"
-                                                href="#punctilious.UniverseOfDiscourse.cross_reference_definition"
+                                                href="#punctilious.UniverseOfDiscourse.cross_reference_definition_OBSOLETE"
                                                 title="Link to this definition"></a></dt>
                                         <dd><p>Cross-references a definition in this universe-of-discourse.</p>
                                             <dl class="field-list simple">
@@ -307,13 +260,12 @@
 
                                     <dl class="py method">
                                         <dt class="sig sig-object py"
-                                            id="punctilious.UniverseOfDiscourse.cross_reference_formula">
-                                            <span class="sig-name descname"><span
-                                                    class="pre">cross_reference_formula</span></span><span
+                                            id="punctilious.UniverseOfDiscourse.cross_reference_formula_OBSOLETE">
+                                            <span class="sig-name descname"><span class="pre">cross_reference_formula_OBSOLETE</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                                                 class="pre">phi</span></span></em><span class="sig-paren">)</span><a
                                                 class="headerlink"
-                                                href="#punctilious.UniverseOfDiscourse.cross_reference_formula"
+                                                href="#punctilious.UniverseOfDiscourse.cross_reference_formula_OBSOLETE"
                                                 title="Link to this definition"></a></dt>
                                         <dd><p>Cross-references a formula in this universe-of-discourse.</p>
                                             <dl class="field-list simple">
@@ -328,41 +280,12 @@
 
                                     <dl class="py method">
                                         <dt class="sig sig-object py"
-                                            id="punctilious.UniverseOfDiscourse.cross_reference_inference_rule">
-                                            <span class="sig-name descname"><span class="pre">cross_reference_inference_rule</span></span><span
-                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">ir</span></span></em><span class="sig-paren">)</span><a
-                                                class="headerlink"
-                                                href="#punctilious.UniverseOfDiscourse.cross_reference_inference_rule"
-                                                title="Link to this definition"></a></dt>
-                                        <dd><p>Cross-references an inference-rule in this universe-of-discourse.</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                                                <dd class="field-odd"><p><strong>ir</strong> (<a
-                                                        class="reference internal"
-                                                        href="inference_rule_declaration_python_class.html#punctilious.InferenceRuleDeclaration"
-                                                        title="punctilious.core.InferenceRuleDeclaration"><code
-                                                        class="xref py py-class docutils literal notranslate"><span
-                                                        class="pre">InferenceRuleDeclaration</span></code></a>) – an
-                                                    inference-rule.</p>
-                                                </dd>
-                                                <dt class="field-even">Return type<span class="colon">:</span></dt>
-                                                <dd class="field-even"><p><code
-                                                        class="xref py py-class docutils literal notranslate"><span
-                                                        class="pre">bool</span></code></p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="py method">
-                                        <dt class="sig sig-object py"
-                                            id="punctilious.UniverseOfDiscourse.cross_reference_simple_objct">
-                                            <span class="sig-name descname"><span class="pre">cross_reference_simple_objct</span></span><span
+                                            id="punctilious.UniverseOfDiscourse.cross_reference_simple_objct_OBSOLETE">
+                                            <span class="sig-name descname"><span class="pre">cross_reference_simple_objct_OBSOLETE</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                                                 class="pre">o</span></span></em><span class="sig-paren">)</span><a
                                                 class="headerlink"
-                                                href="#punctilious.UniverseOfDiscourse.cross_reference_simple_objct"
+                                                href="#punctilious.UniverseOfDiscourse.cross_reference_simple_objct_OBSOLETE"
                                                 title="Link to this definition"></a></dt>
                                         <dd><p>Cross-references a simple-objct in this universe-of-discourse.</p>
                                             <dl class="field-list simple">
@@ -377,12 +300,12 @@
 
                                     <dl class="py method">
                                         <dt class="sig sig-object py"
-                                            id="punctilious.UniverseOfDiscourse.cross_reference_symbolic_objct">
-                                            <span class="sig-name descname"><span class="pre">cross_reference_symbolic_objct</span></span><span
+                                            id="punctilious.UniverseOfDiscourse.cross_reference_symbolic_objct_OBSOLETE">
+                                            <span class="sig-name descname"><span class="pre">cross_reference_symbolic_objct_OBSOLETE</span></span><span
                                                 class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                                                 class="pre">o</span></span></em><span class="sig-paren">)</span><a
                                                 class="headerlink"
-                                                href="#punctilious.UniverseOfDiscourse.cross_reference_symbolic_objct"
+                                                href="#punctilious.UniverseOfDiscourse.cross_reference_symbolic_objct_OBSOLETE"
                                                 title="Link to this definition"></a></dt>
                                         <dd><p>Cross-references a symbolic-objct in this universe-of-discourse.</p>
                                             <dl class="field-list simple">
@@ -413,65 +336,6 @@
                                                         class="pre">TheoryDerivation</span></code>) – a formula.</p>
                                                 </dd>
                                             </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="py method">
-                                        <dt class="sig sig-object py"
-                                            id="punctilious.UniverseOfDiscourse.declare_axiom">
-                                            <span class="sig-name descname"><span
-                                                    class="pre">declare_axiom</span></span><span
-                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">natural_language</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span class="pre">symbol</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">index</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">auto_index</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">dashed_name</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">acronym</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">abridged_name</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span class="pre">explicit_name</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">subtitle</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">paragraph_header</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">nameset</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">echo</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em><span class="sig-paren">)</span><a
-                                                class="headerlink" href="#punctilious.UniverseOfDiscourse.declare_axiom"
-                                                title="Link to this definition"></a></dt>
-                                        <dd><p><a class="reference internal"
-                                                  href="../../math/concept/object_declaration_math_concept.html#object-declaration-math-concept"><span
-                                                class="std std-ref">Declare</span></a> a new axiom in this
-                                            universe-of-discourse.</p>
                                         </dd>
                                     </dl>
 
@@ -713,11 +577,11 @@
                                                 title="Link to this definition"></a></dt>
                                         <dd><p>The (possibly empty) collection of <a class="reference internal"
                                                                                      href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
-                                                class="std std-ref">inference-rules</span></a> declared in this <a
-                                                class="reference internal"
-                                                href="../../math/concept/universe_of_discourse_math_concept.html#universe-of-discourse-math-concept"><span
-                                                class="std std-ref">universe-of-discourse</span></a> .</p>
-                                            <p>Unabridged name: inference_rule</p>
+                                                class="std std-ref">inference-rules</span></a> declared in this in this
+                                            <a class="reference internal"
+                                               href="../../math/concept/universe_of_discourse_math_concept.html#universe-of-discourse-math-concept"><span
+                                                    class="std std-ref">universe-of-discourse</span></a> .</p>
+                                            <p>Abridged name: i</p>
                                         </dd>
                                     </dl>
 
@@ -752,30 +616,6 @@
 
                                     <dl class="py property">
                                         <dt class="sig sig-object py"
-                                            id="punctilious.UniverseOfDiscourse.inference_rules">
-                                            <em class="property"><span class="pre">property</span><span
-                                                    class="w"> </span></em><span class="sig-name descname"><span
-                                                class="pre">inference_rules</span></span><em class="property"><span
-                                                class="p"><span class="pre">:</span></span><span class="w"> </span><a
-                                                class="reference internal"
-                                                href="inference_rule_declaration_collection_python_class.html#punctilious.InferenceRuleDeclarationCollection"
-                                                title="punctilious.core.InferenceRuleDeclarationCollection"><span
-                                                class="pre">InferenceRuleDeclarationCollection</span></a></em><a
-                                                class="headerlink"
-                                                href="#punctilious.UniverseOfDiscourse.inference_rules"
-                                                title="Link to this definition"></a></dt>
-                                        <dd><p>The (possibly empty) collection of <a class="reference internal"
-                                                                                     href="../../math/concept/inference_rule_math_concept.html#inference-rule-math-concept"><span
-                                                class="std std-ref">inference-rules</span></a> declared in this in this
-                                            <a class="reference internal"
-                                               href="../../math/concept/universe_of_discourse_math_concept.html#universe-of-discourse-math-concept"><span
-                                                    class="std std-ref">universe-of-discourse</span></a> .</p>
-                                            <p>Abridged name: i</p>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="py property">
-                                        <dt class="sig sig-object py"
                                             id="punctilious.UniverseOfDiscourse.is_strictly_propositional">
                                             <em class="property"><span class="pre">property</span><span
                                                     class="w"> </span></em><span class="sig-name descname"><span
@@ -796,6 +636,19 @@
                                     </dl>
 
                                     <dl class="py property">
+                                        <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.metatheory">
+                                            <em class="property"><span class="pre">property</span><span
+                                                    class="w"> </span></em><span class="sig-name descname"><span
+                                                class="pre">metatheory</span></span><em class="property"><span
+                                                class="p"><span class="pre">:</span></span><span class="w"> </span><span
+                                                class="pre">PunctiliousMinimalMetatheory</span></em><a
+                                                class="headerlink" href="#punctilious.UniverseOfDiscourse.metatheory"
+                                                title="Link to this definition"></a></dt>
+                                        <dd><p>A minimal metatheory for this universe-of-discourse.</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="py property">
                                         <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.o">
                                             <em class="property"><span class="pre">property</span><span
                                                     class="w"> </span></em><span class="sig-name descname"><span
@@ -811,20 +664,6 @@
                                                 simple-objct is declared in the universe-of-discourse the first time its
                                                 property is
                                                 accessed.</p>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="py property">
-                                        <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.r">
-                                            <em class="property"><span class="pre">property</span><span
-                                                    class="w"> </span></em><span class="sig-name descname"><span
-                                                class="pre">r</span></span><em class="property"><span class="p"><span
-                                                class="pre">:</span></span><span class="w"> </span><span class="pre">ConnectiveDict</span></em><a
-                                                class="headerlink" href="#punctilious.UniverseOfDiscourse.r"
-                                                title="Link to this definition"></a></dt>
-                                        <dd><p>A python dictionary of connectives contained in this
-                                            universe-of-discourse,
-                                            where well-known connectives are directly available as properties.</p>
                                         </dd>
                                     </dl>
 
@@ -849,52 +688,6 @@
                                             <dl class="field-list simple">
                                                 <dt class="field-odd">Returns<span class="colon">:</span></dt>
                                                 <dd class="field-odd"><p></p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="py method">
-                                        <dt class="sig sig-object py" id="punctilious.UniverseOfDiscourse.t">
-                                            <span class="sig-name descname"><span class="pre">t</span></span><span
-                                                class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                                                class="pre">symbol</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">ref</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">subtitle</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">extended_theory</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span class="pre">extended_theory_limit</span></span><span
-                                                class="o"><span class="pre">=</span></span><span
-                                                class="default_value"><span class="pre">None</span></span></em>, <em
-                                                class="sig-param"><span class="n"><span
-                                                class="pre">stabilized</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">False</span></span></em>, <em class="sig-param"><span
-                                                class="n"><span class="pre">echo</span></span><span class="o"><span
-                                                class="pre">=</span></span><span class="default_value"><span
-                                                class="pre">None</span></span></em><span class="sig-paren">)</span><a
-                                                class="headerlink" href="#punctilious.UniverseOfDiscourse.t"
-                                                title="Link to this definition"></a></dt>
-                                        <dd><p>Declare a new theory in this universe-of-discourse.</p>
-                                            <p>Shortcut for self.declare_theory(…).</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                                                <dd class="field-odd">
-                                                    <ul class="simple">
-                                                        <li><p><strong>nameset</strong> – </p></li>
-                                                        <li><p><strong>is_theory_foundation_system</strong> – </p></li>
-                                                        <li><p><strong>extended_theory</strong> – </p></li>
-                                                    </ul>
-                                                </dd>
-                                                <dt class="field-even">Returns<span class="colon">:</span></dt>
-                                                <dd class="field-even"><p></p>
                                                 </dd>
                                             </dl>
                                         </dd>

@@ -19,7 +19,7 @@
           href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7"/>
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=a491ee77"/>
     <!--[if lt IE 9]>
-      <script src="../../_static/js/html5shiv.min.js"></script>
+    <script src="../../_static/js/html5shiv.min.js"></script>
     <![endif]-->
 
     <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -38,6 +38,9 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html"/>
     <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="next" title="inconsistency-introduction-1 (python sample)"
+          href="inconsistency_introduction_1_python_sample.html"/>
+    <link rel="prev" title="equality-commutativity (python sample)" href="equality_commutativity_python_sample.html"/>
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,6 +86,8 @@
                 <div role="navigation" aria-label="Page navigation">
                     <ul class="wy-breadcrumbs">
                         <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+                        <li class="breadcrumb-item"><a href="../../python.html">Python</a></li>
+                        <li class="breadcrumb-item"><a href="../../python_sample_index.html">Python samples</a></li>
                         <li class="breadcrumb-item active">variable (python sample)</li>
                         <li class="wy-breadcrumbs-aside">
                             <a href="../../_sources/python/sample/free_variable_python_sample.rst.txt" rel="nofollow">
@@ -197,19 +202,19 @@
 <span class="n">pu</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span
                                                 class="n">auto_index</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span class="n">declare</span><span
-                                                class="p">(</span><span class="n">symbol</span><span
-                                                class="o">=</span><span class="s1">&#39;f&#39;</span><span
+                                                class="n">c1</span><span class="o">.</span><span
+                                                class="n">declare</span><span class="p">(</span><span
+                                                class="n">symbol</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span
                                                 class="p">)</span>
 <span class="n">g</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span class="n">declare</span><span
-                                                class="p">(</span><span class="n">symbol</span><span
-                                                class="o">=</span><span class="s1">&#39;g&#39;</span><span
+                                                class="n">c1</span><span class="o">.</span><span
+                                                class="n">declare</span><span class="p">(</span><span
+                                                class="n">symbol</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span
                                                 class="p">)</span>
 <span class="n">plus</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span class="n">declare</span><span
-                                                class="p">(</span><span class="n">symbol</span><span
-                                                class="o">=</span><span class="s1">&#39;+&#39;</span><span
+                                                class="n">c1</span><span class="o">.</span><span
+                                                class="n">declare</span><span class="p">(</span><span
+                                                class="n">symbol</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span
                                                 class="p">,</span> <span class="n">formula_rep</span><span
                                                 class="o">=</span><span class="n">pu</span><span class="o">.</span><span
                                                 class="n">CompoundFormula</span><span class="o">.</span><span class="n">infix</span><span
@@ -251,16 +256,16 @@
     <span class="n">psi</span> <span class="o">=</span> <span class="p">(</span><span class="n">g</span><span class="p">(</span><span
                                                 class="n">x</span><span class="p">)</span> <span
                                                 class="o">|</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span
+                                                class="n">c1</span><span class="o">.</span><span
                                                 class="n">plus</span> <span class="o">|</span> <span
                                                 class="p">(</span><span class="n">f</span><span class="p">(</span><span
                                                 class="n">x</span><span class="p">)</span> <span
                                                 class="o">|</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span
+                                                class="n">c1</span><span class="o">.</span><span
                                                 class="n">plus</span> <span class="o">|</span> <span
                                                 class="n">g</span><span class="p">(</span><span class="n">y</span><span
                                                 class="p">)))</span> <span class="o">|</span> <span
-                                                class="n">u</span><span class="o">.</span><span class="n">r</span><span
+                                                class="n">u</span><span class="o">.</span><span class="n">c1</span><span
                                                 class="o">.</span><span class="n">plus</span> <span
                                                 class="o">|</span> <span class="n">x</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
@@ -284,7 +289,7 @@
 <span class="n">omega</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span
                                                 class="n">x</span><span class="p">)</span> <span
                                                 class="o">|</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span
+                                                class="n">c1</span><span class="o">.</span><span
                                                 class="n">plus</span> <span class="o">|</span> <span class="n">x</span>
 <span class="n">omega</span><span class="o">.</span><span class="n">lock_variable_scope</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
@@ -412,6 +417,14 @@ f(x)
                     </div>
                 </div>
                 <footer>
+                    <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+                        <a href="equality_commutativity_python_sample.html" class="btn btn-neutral float-left"
+                           title="equality-commutativity (python sample)" accesskey="p" rel="prev"><span
+                                class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+                        <a href="inconsistency_introduction_1_python_sample.html" class="btn btn-neutral float-right"
+                           title="inconsistency-introduction-1 (python sample)" accesskey="n" rel="next">Next <span
+                                class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+                    </div>
 
                     <hr/>
 

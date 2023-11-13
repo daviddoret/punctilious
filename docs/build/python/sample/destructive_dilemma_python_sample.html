@@ -175,16 +175,16 @@
 <span class="n">o4</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
                                                 class="n">o</span><span class="o">.</span><span class="n">declare</span><span
                                                 class="p">()</span>
-<span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_axiom</span><span
+<span class="n">axiom</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+                                                class="n">a</span><span class="o">.</span><span class="n">declare</span><span
                                                 class="p">(</span><span class="n">natural_language</span><span
                                                 class="o">=</span><span class="s1">&#39;Dummy axiom for demonstration purposes&#39;</span><span
                                                 class="p">)</span>
 
 <span class="c1"># Elaborate a dummy theory with a set of propositions necessary for our demonstration</span>
-<span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">t</span><span class="p">(</span><span
-                                                class="n">echo</span><span class="o">=</span><span
-                                                class="kc">True</span><span class="p">)</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">declare_theory</span><span
+                                                class="p">(</span><span class="n">echo</span><span
+                                                class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">theory_axiom</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">include_axiom</span><span class="p">(</span><span
                                                 class="n">a</span><span class="o">=</span><span
@@ -196,10 +196,11 @@
                                                 class="n">theory_axiom</span><span class="p">,</span> <span
                                                 class="n">p</span><span class="o">=</span><span
                                                 class="n">o1</span> <span class="o">|</span> <span
-                                                class="n">u</span><span class="o">.</span><span class="n">r</span><span
+                                                class="n">u</span><span class="o">.</span><span class="n">c1</span><span
                                                 class="o">.</span><span class="n">implies</span> <span
-                                                class="o">|</span> <span class="n">o2</span><span class="p">,</span>
-    <span class="n">lock</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                                                class="o">|</span> <span class="n">o2</span><span
+                                                class="p">,</span> <span class="n">lock</span><span
+                                                class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">phi2</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
                                                 class="o">.</span><span class="n">infer_formula_statement</span><span
@@ -207,27 +208,27 @@
                                                 class="n">theory_axiom</span><span class="p">,</span> <span
                                                 class="n">p</span><span class="o">=</span><span
                                                 class="n">o3</span> <span class="o">|</span> <span
-                                                class="n">u</span><span class="o">.</span><span class="n">r</span><span
+                                                class="n">u</span><span class="o">.</span><span class="n">c1</span><span
                                                 class="o">.</span><span class="n">implies</span> <span
-                                                class="o">|</span> <span class="n">o4</span><span class="p">,</span>
-    <span class="n">lock</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                                                class="o">|</span> <span class="n">o4</span><span
+                                                class="p">,</span> <span class="n">lock</span><span
+                                                class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">phi3</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span
                                                 class="n">i</span><span class="o">.</span><span class="n">axiom_interpretation</span><span
                                                 class="o">.</span><span class="n">infer_formula_statement</span><span
                                                 class="p">(</span><span class="n">a</span><span class="o">=</span><span
-                                                class="n">theory_axiom</span><span class="p">,</span>
-    <span class="n">p</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span
+                                                class="n">theory_axiom</span><span class="p">,</span> <span
+                                                class="n">p</span><span class="o">=</span><span class="n">u</span><span
+                                                class="o">.</span><span class="n">c1</span><span class="o">.</span><span
                                                 class="n">lnot</span><span class="p">(</span><span
                                                 class="n">o2</span><span class="p">)</span> <span
                                                 class="o">|</span> <span class="n">u</span><span class="o">.</span><span
-                                                class="n">r</span><span class="o">.</span><span
+                                                class="n">c1</span><span class="o">.</span><span
                                                 class="n">lor</span> <span class="o">|</span> <span
-                                                class="n">u</span><span class="o">.</span><span class="n">r</span><span
+                                                class="n">u</span><span class="o">.</span><span class="n">c1</span><span
                                                 class="o">.</span><span class="n">lnot</span><span
-                                                class="p">(</span><span class="n">o4</span><span
-                                                class="p">),</span> <span class="n">lock</span><span
-                                                class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                                                class="p">(</span><span class="n">o4</span><span class="p">),</span>
+    <span class="n">lock</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># And finally, use the conjunction-introduction inference-rule:</span>
 <span class="n">proposition_of_interest</span> <span class="o">=</span> <span class="n">t1</span><span
@@ -235,9 +236,9 @@
                                                 class="n">destructive_dilemma</span><span class="o">.</span><span
                                                 class="n">infer_formula_statement</span><span class="p">(</span><span
                                                 class="n">p_implies_q</span><span class="o">=</span><span
-                                                class="n">phi1</span><span class="p">,</span>
-    <span class="n">r_implies_s</span><span class="o">=</span><span class="n">phi2</span><span class="p">,</span> <span
-                                                class="n">not_q_or_not_s</span><span class="o">=</span><span class="n">phi3</span><span
+                                                class="n">phi1</span><span class="p">,</span> <span class="n">r_implies_s</span><span
+                                                class="o">=</span><span class="n">phi2</span><span class="p">,</span>
+    <span class="n">not_q_or_not_s</span><span class="o">=</span><span class="n">phi3</span><span
                                                 class="p">,</span> <span class="n">subtitle</span><span
                                                 class="o">=</span><span
                                                 class="s1">&#39;The proposition of interest&#39;</span><span
