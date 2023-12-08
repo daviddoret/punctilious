@@ -80,4 +80,5 @@ The documentation of the *punctilious* package is hosted on [ReadTheDocs](https:
 
 ## Acknowledgments
 
-The list of dependencies is being compiled. Please wait...
+We express our gratitude to all projects we depend on, and their contributors:
+<p align="center"><a href="https://github.com/daviddoret/punctilious/network/dependencies">Project dependencies</a></p>
