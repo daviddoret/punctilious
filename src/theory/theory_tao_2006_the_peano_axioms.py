@@ -18,7 +18,8 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         section_2_1 = t.open_section('The Peano axioms', section_parent=section_2)
 
         # objects
-        natural_number = u.o.declare(symbol='natural-number', auto_index=False)
+        # natural_number = u.o.declare(symbol='natural-number', auto_index=False)
+        natural_number: pu.ClassDeclaration = u.c2.declare(symbol='natural-number', auto_index=False)
         self.natural_number = natural_number
         zero = u.o.declare(symbol='0', auto_index=False)
         self.zero = zero

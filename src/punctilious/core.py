@@ -1,5 +1,5 @@
 from __future__ import annotations
-import dataclasses
+# import dataclasses
 import collections.abc
 import textwrap
 import typing
@@ -7477,7 +7477,7 @@ def verify_class(u: UniverseOfDiscourse, c: FlexibleFormula, arg: (None, str) = 
     formula: (None, Formula) = None
     msg: (None, str) = None
     if isinstance(c, ClassDeclaration):
-        # the input is already correctly typed as a ClassDeclaration.
+        # the input is of python type ClassDeclaration.
         ok, msg = verify(raise_exception=raise_exception, error_code=error_code, assertion=c.u is u,
             msg=f'The universe-of-discourse ⌜{u}⌝ is distinct from the universe-of-discourse ⌜{c.u}⌝ '
                 f' of the class ⌜{c}⌝.', c=c, u=u)
