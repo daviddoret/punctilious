@@ -5562,8 +5562,9 @@ class Section(AtheoreticalStatement):
         self.statement_index = t.crossreference_statement(self)
         self._max_subsection_number = 0
         self.category = section_category
-        symbol = NameSet(symbol=self.category.symbol_base, index=self.statement_index)
-        super().__init__(nameset=symbol, theory=t, echo=False)
+        index = self.statement_index
+        symbol = self.category.symbol_base
+        super().__init__(symbol=symbol, index=index, theory=t, echo=False)
         super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.note)
         if echo:
             self.echo()
@@ -6421,7 +6422,7 @@ class SymbolicObjectAccretor(set, abc.ABC):
         """Return the highest index for that base symbol in the collection."""
         _, symbol, _ = verify_symbol(input_value=symbol)
         equivalent_symbols = tuple((symbolic_object.nameset.index_as_int for symbolic_object in self if
-            symbolic_object.is_base_symbol_equivalent(symbol)))
+            symbolic_object.is_base_symbol_equivalent(symbol) and symbolic_object.nameset.index_as_int is not None))
         return max(equivalent_symbols, default=0)
 
     def index_symbol(self, symbol: (str, StyledText)) -> int:
