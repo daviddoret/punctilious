@@ -3587,8 +3587,7 @@ class DefinitionInclusion(Statement):
         index: (None, int) = None, auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None, echo: (None, bool) = None):
         """Endorsement (aka include, endorse) an definition in a theory-elaboration.
         """
         echo = prioritize_value(echo, configuration.echo_definition_inclusion, configuration.echo_default, False)
@@ -3596,11 +3595,10 @@ class DefinitionInclusion(Statement):
         self._locked = False
         t.crossreference_definition_endorsement(self)
         cat = paragraph_headers.definition_inclusion
-        if nameset is None and symbol is None:
-            symbol = configuration.default_definition_inclusion_symbol
+        symbol = prioritize_value(symbol, configuration.default_definition_inclusion_symbol)
         super().__init__(theory=t, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, paragraph_header=cat,
-            ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
+            ref=ref, subtitle=subtitle, echo=False)
         super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.definition_inclusion)
         if echo:
             self.echo()
@@ -5855,11 +5853,11 @@ theory-elaboration."""
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
         ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        nameset: (None, str, NameSet) = None, echo: (None, bool) = None) -> DefinitionInclusion:
+        echo: (None, bool) = None) -> DefinitionInclusion:
         """Include a definition in this theory-derivation."""
         return DefinitionInclusion(d=d, t=self, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
+            explicit_name=explicit_name, ref=ref, subtitle=subtitle, echo=echo)
 
     def iterate_statements_in_theory_chain(self, formula: (None, CompoundFormula) = None):
         """Iterate through the (proven or sound) statements in the current theory-chain.
