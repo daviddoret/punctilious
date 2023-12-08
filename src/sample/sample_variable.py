@@ -6,9 +6,9 @@ o1 = u.o.declare()
 o2 = u.o.declare()
 o3 = u.o.declare()
 pu.configuration.auto_index = False
-f = u.r.declare(symbol='f')
-g = u.r.declare(symbol='g')
-plus = u.r.declare(symbol='+', formula_rep=pu.CompoundFormula.infix)
+f = u.c1.declare(symbol='f')
+g = u.c1.declare(symbol='g')
+plus = u.c1.declare(symbol='+', formula_rep=pu.CompoundFormula.infix)
 
 # Variables have a scope. But often, when we write mathematical formulas,
 # their scope is implicit. Typically, we use "x" multiple times and imply
@@ -29,7 +29,7 @@ with u.with_variable(symbol='x') as x:
 # Declare two variables and declare a formula that uses them.
 # In this example, the scope of the variable "x" is the formula "((g(x) + (f(x) + g(y))) + x)".
 with u.with_variable(symbol='x') as x, u.with_variable(symbol='y') as y:
-    psi = (g(x) | u.r.plus | (f(x) | u.r.plus | g(y))) | u.r.plus | x
+    psi = (g(x) | u.c1.plus | (f(x) | u.c1.plus | g(y))) | u.c1.plus | x
     print(psi)
 
 # Note that we created above two distinct "x" variable objects with two distinct scopes:
@@ -45,7 +45,7 @@ with u.with_variable(symbol='x') as x, u.with_variable(symbol='y') as y:
 # SAMPLE 3
 # Declare a variable and close its scope expressly.
 x = u.declare_variable(symbol='x')
-omega = f(x) | u.r.plus | x
+omega = f(x) | u.c1.plus | x
 omega.lock_variable_scope()
 print(omega)
 

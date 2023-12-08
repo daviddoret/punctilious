@@ -5,6 +5,9 @@ My tags: math
     :maxdepth: 1
     :caption: With this tag
 
+    ../math/concept/bound_variable_math_concept.rst
+    ../math/concept/free_variable_math_concept.rst
+    ../math/concept/variable_math_concept.rst
     ../math/inference_rule/absorption_math_inference_rule.rst
     ../math/inference_rule/axiom_interpretation_math_inference_rule.rst
     ../math/inference_rule/biconditional_elimination_1_math_inference_rule.rst

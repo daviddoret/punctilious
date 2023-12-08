@@ -25,6 +25,7 @@ My tags: sample
     ../python/sample/double_negation_introduction_python_sample.rst
     ../python/sample/equal_terms_substitution_python_sample.rst
     ../python/sample/equality_commutativity_python_sample.rst
+    ../python/sample/free_variable_python_sample.rst
     ../python/sample/hypothetical_syllogism_python_sample.rst
     ../python/sample/inconsistency_introduction_1_python_sample.rst
     ../python/sample/inconsistency_introduction_2_python_sample.rst
@@ -35,5 +36,4 @@ My tags: sample
     ../python/sample/proof_by_contradiction_2_python_sample.rst
     ../python/sample/proof_by_refutation_1_python_sample.rst
     ../python/sample/proof_by_refutation_2_python_sample.rst
-    ../python/sample/variable_python_sample.rst
     ../python/sample/variable_substitution_python_sample.rst

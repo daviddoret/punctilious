@@ -8,17 +8,17 @@ u = pet.u
 
 
 def graph_symbolic_object(g: nx.MultiDiGraph, o: pu.SymbolicObject):
-    if pu.is_in_class(o, pu.classes.simple_objct):
+    if pu.is_in_class_OBSOLETE(o, pu.classes_OBSOLETE.simple_objct):
         graph_simpl_objct(g, o)
-    elif pu.is_in_class(o, pu.classes.theory_derivation):
+    elif pu.is_in_class_OBSOLETE(o, pu.classes_OBSOLETE.theory_derivation):
         graph_theory(g, o)
-    elif pu.is_in_class(o, pu.classes.relation):
+    elif pu.is_in_class_OBSOLETE(o, pu.classes_OBSOLETE.connective):
         graph_relation(g, o)
-    elif pu.is_in_class(o, pu.classes.variable):
+    elif pu.is_in_class_OBSOLETE(o, pu.classes_OBSOLETE.variable):
         graph_variable(g, o)
-    elif pu.is_in_class(o, pu.classes.formula):
+    elif pu.is_in_class_OBSOLETE(o, pu.classes_OBSOLETE.compound_formula):
         graph_formula(g, o)
-    elif pu.is_in_class(o, pu.classes.formula_statement):
+    elif pu.is_in_class_OBSOLETE(o, pu.classes_OBSOLETE.formula_statement):
         graph_formula_statement(g, o)
 
 
@@ -34,7 +34,7 @@ def graph_formula_statement(g: nx.MultiDiGraph, s: pu.TheoryDerivation):
     g.add_edge(s.valid_proposition.rep_name(), t.rep_name())
 
 
-def graph_variable(g: nx.MultiDiGraph, x: pu.Variable):
+def graph_variable(g: nx.MultiDiGraph, x: pu.FreeVariable):
     g.add_node(x.rep_name())
 
 
@@ -42,24 +42,24 @@ def graph_simple_objct(g: nx.MultiDiGraph, o: pu.CompoundFormula):
     g.add_node(o.rep_name())
 
 
-def graph_relation(g: nx.MultiDiGraph, r: pu.Relation):
+def graph_relation(g: nx.MultiDiGraph, r: pu.Connective):
     g.add_node(r.rep_name())
 
 
 def graph_formula(g: nx.MultiDiGraph, f: pu.CompoundFormula):
     g.add_node(f.rep_name())
-    if f.relation.arity == 1:
-        graph_symbolic_object(g, f.relation)
-        g.add_edge(f.relation.rep_name(), f.rep_name())
-        graph_symbolic_object(g, f.parameters[0])
-        g.add_edge(f.parameters[0].rep_name(), f.rep_name())
-    if f.relation.arity == 2:
-        graph_symbolic_object(g, f.relation)
-        g.add_edge(f.relation.rep_name(), f.rep_name())
-        graph_symbolic_object(g, f.parameters[0])
-        g.add_edge(f.parameters[0].rep_name(), f.rep_name())
-        graph_symbolic_object(g, f.parameters[1])
-        g.add_edge(f.parameters[1].rep_name(), f.rep_name())
+    if f.connective.arity == 1:
+        graph_symbolic_object(g, f.connective)
+        g.add_edge(f.connective.rep_name(), f.rep_name())
+        graph_symbolic_object(g, f.terms[0])
+        g.add_edge(f.terms[0].rep_name(), f.rep_name())
+    if f.connective.arity == 2:
+        graph_symbolic_object(g, f.connective)
+        g.add_edge(f.connective.rep_name(), f.rep_name())
+        graph_symbolic_object(g, f.terms[0])
+        g.add_edge(f.terms[0].rep_name(), f.rep_name())
+        graph_symbolic_object(g, f.terms[1])
+        g.add_edge(f.terms[1].rep_name(), f.rep_name())
 
 
 g = nx.Graph()

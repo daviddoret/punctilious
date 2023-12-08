@@ -24,6 +24,7 @@ src/sample/sample_biconditional_introduction.py
 src/sample/sample_conjunction_elimination_1.py
 src/sample/sample_conjunction_elimination_2.py
 src/sample/sample_conjunction_introduction.py
+src/sample/sample_constant.py
 src/sample/sample_constructive_dilemma.py
 src/sample/sample_definition_interpretation.py
 src/sample/sample_destructive_dilemma.py
@@ -42,6 +43,7 @@ src/sample/sample_hypothetical_syllogism.py
 src/sample/sample_inconsistency_introduction_1.py
 src/sample/sample_inconsistency_introduction_2.py
 src/sample/sample_inconsistency_introduction_3.py
+src/sample/sample_iterate_formula_data_model_components.py
 src/sample/sample_modus_ponens.py
 src/sample/sample_modus_tollens.py
 src/sample/sample_pet_theory_1.py
@@ -50,13 +52,16 @@ src/sample/sample_proof_by_contradiction_2.py
 src/sample/sample_proof_by_refutation_1.py
 src/sample/sample_proof_by_refutation_2.py
 src/sample/sample_sandbox.py
+src/sample/sample_universe_of_discourse.py
 src/sample/sample_variable.py
 src/sample/sample_variable_substitution.py
 src/theory/__init__.py
-src/theory/punctilious_2023_metatheory.py
+src/theory/punctilious_2023_metatheory_OBSOLETE.py
 src/theory/theory_mgz_2021_classical_logic_j0.py
 src/theory/theory_mgz_2021_intuitionistic_logic_j0.py
 src/theory/theory_mgz_2021_minimal_logic_m0.py
+src/theory/theory_mgz_2021_propositional_logic.py
+src/theory/theory_punctilious_minimal_metatheory.py
 src/theory/theory_tao_2006_the_peano_axioms.py
 tests/test_absorption.py
 tests/test_auto_index.py
@@ -70,6 +75,7 @@ tests/test_block.py
 tests/test_conjunction_elimination_1.py
 tests/test_conjunction_elimination_2.py
 tests/test_conjunction_introduction.py
+tests/test_constant_declaration.py
 tests/test_constructive_dilemma.py
 tests/test_dashed_name.py
 tests/test_definition_declaration.py
@@ -86,6 +92,9 @@ tests/test_double_negation_introduction.py
 tests/test_equal_terms_substitution.py
 tests/test_equality_commutativity.py
 tests/test_formula.py
+tests/test_formula_2.py
+tests/test_formula_alpha_contains.py
+tests/test_formula_alpha_equivalence.py
 tests/test_formula_is_mask_similar_to.py
 tests/test_free_variable.py
 tests/test_hypothesis.py
@@ -93,6 +102,8 @@ tests/test_hypothetical_syllogism.py
 tests/test_inconsistency_introduction_1.py
 tests/test_inconsistency_introduction_2.py
 tests/test_inconsistency_introduction_3.py
+tests/test_is_declaratively_a_class_member.py
+tests/test_iterate_formula_data_model_components.py
 tests/test_modus_ponens.py
 tests/test_modus_tollens.py
 tests/test_nameset.py
@@ -115,7 +126,6 @@ tests/test_subscript.py
 tests/test_subscriptify.py
 tests/test_tao_2006_the_peano_axioms.py
 tests/test_text.py
-tests/test_theoretical_objct.py
 tests/test_theory_derivation.py
 tests/test_theory_derivation_stabilized.py
 tests/test_theory_extension.py

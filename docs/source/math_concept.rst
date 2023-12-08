@@ -14,11 +14,13 @@ This table of contents references the key mathematical concepts used by punctili
    atomic-formula<math/concept/atomic_formula_math_concept>
    axiom<math/concept/axiom_math_concept>
    axiomatic-method<math/concept/axiomatic_method_math_concept>
+   bound-variable<math/concept/bound_variable_math_concept>
    compound-formula<math/concept/compound_formula_math_concept>
    definition<math/concept/definition_math_concept>
    elimination-rule<math/concept/elimination_rule_math_concept>
    formula<math/concept/formula_math_concept>
    formula-statement<math/concept/formula_statement_math_concept>
+   free-variable<math/concept/free_variable_math_concept>
    hypothesis<math/concept/hypothesis_math_concept>
    inference-rule<math/concept/inference_rule_math_concept>
    inferred-statement<math/concept/inferred_statement_math_concept>
@@ -31,7 +33,7 @@ This table of contents references the key mathematical concepts used by punctili
    object-declaration<math/concept/object_declaration_math_concept>
    object-inclusion<math/concept/object_inclusion_math_concept>
    paragraph-proof<math/concept/paragraph_proof_math_concept>
-   relation<math/concept/relation_math_concept>
+   connective<math/concept/connective_math_concept>
    statement<math/concept/statement_math_concept>
    theory-derivation<math/concept/theory_derivation_math_concept>
    validity-of-formula<math/concept/validity_of_formula_math_concept>

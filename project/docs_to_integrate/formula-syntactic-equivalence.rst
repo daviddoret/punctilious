@@ -4,10 +4,10 @@
 
 ## Definition
 
-Two theoretical-objects :math:`o_1` and :math:`o_2` are formula-syntactically-equivalent if and only if:
+Two formulas :math:`o_1` and :math:`o_2` are formula-syntactically-equivalent if and only if:
 
 * :math:`o_1` and :math:`o_2` are declared in the same universe-of-discourse,
-* if :math:`o_1` and :math:`o_2` are formula or formula-statements, their relations are formula-equivalent,
+* if :math:`o_1` and :math:`o_2` are formula or formula-statements, their connectives are formula-equivalent,
 * if :math:`o_1` and :math:`o_2` are formula or formula-statements, their parameters are pairwise formula-equivalent,
 * if :math:`o_1` and :math:`o_2` are neither formula nor statements, :math:`o_1` and :math:`o_2` are definition-equal.
 

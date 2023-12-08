@@ -29,10 +29,10 @@ The algorithm for formula substitution is:
 
 - EqualTermsSubstitutionInclusion: the inference-rule inclusion-class.
 
-- TheoryElaborationSequence.relations.equal_terms_substitution: A shortcut to access the inference-rule
+- TheoryElaborationSequence.connectives.equal_terms_substitution: A shortcut to access the inference-rule
   inclusion. If the inference-rule is not yet included in the current theory, it is automatically included.
 
-- UniverseOfDiscourse.relations.equal_terms_substitution: A shortcut to access the inference-rule
+- UniverseOfDiscourse.connectives.equal_terms_substitution: A shortcut to access the inference-rule
   declaration in the universe-of-discourse. If the inference-rule is not yet declared in the current
   universe-of-discourse, it is automatically declared.
 

@@ -7,7 +7,7 @@ class TestTheoryElaborationSequence(TestCase):
         u1 = pu.UniverseOfDiscourse()
         u_plaintext = u1.nameset.rep_symbol(encoding=pu.encodings.plaintext)
         u_unicode = u1.nameset.rep_symbol(encoding=pu.encodings.unicode)
-        t1 = u1.declare_theory()
+        t1 = u1.t.declare()
         self.assertEqual('T1', t1.rep(encoding=pu.encodings.plaintext))
         self.assertEqual('𝒯₁', t1.rep(encoding=pu.encodings.unicode))
         self.assertEqual(f'Let "T1" be a theory-derivation in {u_plaintext}.',

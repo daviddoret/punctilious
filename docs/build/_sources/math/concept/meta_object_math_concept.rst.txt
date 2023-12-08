@@ -15,7 +15,7 @@ List
     :noindex:
 .. autoclass:: SimpleObjctDict
     :noindex:
-    :members: relation
+    :members: connective
 
 Bibliography
 ------------

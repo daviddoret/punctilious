@@ -10,7 +10,7 @@ f = u.r.declare(symbol='f')
 g = u.r.declare(symbol='g')
 plus = u.r.declare(symbol='+', formula_rep=pu.Formula.infix)
 
-# Variables have a scope. But often, when we write mathematical formulas,
+# FreeVariables have a scope. But often, when we write mathematical formulas,
 # their scope is implicit. Typically, we use "x" multiple times and imply
 # that different occurrences of "x" or not necessarily the same variable "x".
 

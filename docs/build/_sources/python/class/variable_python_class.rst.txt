@@ -1,4 +1,4 @@
-.. _variable_python_class:
+.. _free_variable_python_class:
 .. _Variable:
 
 .. role:: python(code)

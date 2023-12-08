@@ -1,4 +1,4 @@
-.. _variable_python_sample:
+.. _free_variable_python_sample:
 
 .. role:: python(code)
     :language: py
@@ -6,12 +6,12 @@
 variable (python sample)
 ============================================
 
-.. tags:: variable, python, sample
+.. tags:: free-variable, variable, python, sample
 
 .. seealso::
-   :ref:`math concept<variable_math_concept>` | :ref:`python class<variable_python_class>`
+   :ref:`math concept<free_variable_math_concept>` | :ref:`python class<free_variable_python_class>`
 
-This page shows how to declare :ref:`variables<variable_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
+This page shows how to declare :ref:`free-variables<free_variable_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
 
 Usage 1
 ----------------------

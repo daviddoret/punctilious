@@ -45,6 +45,7 @@ Python classes
    EqualTermsSubstitutionInclusion<python/class/equal_terms_substitution_inclusion_python_class>
    EqualityCommutativityDeclaration<python/class/equality_commutativity_declaration_python_class>
    EqualityCommutativityInclusion<python/class/equality_commutativity_inclusion_python_class>
+   FreeVariable<python/class/free_variable_python_class>
    HypotheticalSyllogismDeclaration<python/class/hypothetical_syllogism_declaration_python_class>
    HypotheticalSyllogismInclusion<python/class/hypothetical_syllogism_inclusion_python_class>
    InconsistencyIntroduction1Declaration<python/class/inconsistency_introduction_1_declaration_python_class>
@@ -54,7 +55,7 @@ Python classes
    InconsistencyIntroduction3Declaration<python/class/inconsistency_introduction_3_declaration_python_class>
    InconsistencyIntroduction3Inclusion<python/class/inconsistency_introduction_3_inclusion_python_class>
    InferenceRuleDeclaration<python/class/inference_rule_declaration_python_class>
-   InferenceRuleDeclarationCollection<python/class/inference_rule_declaration_collection_python_class>
+   InferenceRuleDeclarationAccretor<python/class/inference_rule_declaration_collection_python_class>
    InferenceRuleInclusion<python/class/inference_rule_inclusion_python_class>
    InferenceRuleInclusionCollection<python/class/inference_rule_inclusion_collection_python_class>
    ModusPonensDeclaration<python/class/modus_ponens_declaration_python_class>
@@ -70,6 +71,5 @@ Python classes
    ProofByRefutation2Declaration<python/class/proof_by_refutation_2_declaration_python_class>
    ProofByRefutation2Inclusion<python/class/proof_by_refutation_2_inclusion_python_class>
    UniverseOfDiscourse<python/class/universe_of_discourse_python_class>
-   Variable<python/class/variable_python_class>
    VariableSubstitutionDeclaration<python/class/variable_substitution_declaration_python_class>
    VariableSubstitutionInclusion<python/class/variable_substitution_inclusion_python_class>

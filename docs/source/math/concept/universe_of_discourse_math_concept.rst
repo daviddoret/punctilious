@@ -42,7 +42,7 @@ Where:
 * :math:`\mathcal{A}` is a (possibly empty) collection of axiom declarations
 * :math:`\mathcal{D}` is a (possibly empty) collection of definition declarations
 * :math:`\mathcal{O}` is a (possibly empty) collection of simple object declarations
-* :math:`\mathcal{R}` is a (possibly empty) collection of relation declarations
+* :math:`\mathcal{R}` is a (possibly empty) collection of connective declarations
 * :math:`\mathcal{\Phi}` is a (possibly empty) collection of formulae declarations
 * :math:`\mathcal{T}` is a (possibly empty) collection of theory declarations
 

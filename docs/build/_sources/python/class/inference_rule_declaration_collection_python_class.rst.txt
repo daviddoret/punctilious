@@ -5,10 +5,10 @@
 
 .. tags:: inference-rule, declaration, class, python, collection
 
-InferenceRuleDeclarationCollection (python class)
+InferenceRuleDeclarationAccretor (python class)
 =======================================================
 
 .. module:: punctilious
    :noindex:
-.. autoclass:: InferenceRuleDeclarationCollection
+.. autoclass:: InferenceRuleDeclarationAccretor
    :members:

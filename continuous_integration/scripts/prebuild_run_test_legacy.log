@@ -43,7 +43,7 @@ collected 80 items
 ..\tests\test_proof_by_refutation_1.py .                                 [ 68%]
 ..\tests\test_proof_by_refutation_2.py .                                 [ 70%]
 ..\tests\test_quasi_quotes.py .                                          [ 71%]
-..\tests\test_relation_dict.py .                                         [ 72%]
+..\tests\test_connective_dict.py .                                         [ 72%]
 ..\tests\test_sans_serif_bold.py .                                       [ 73%]
 ..\tests\test_sans_serif_normal.py .                                     [ 75%]
 ..\tests\test_script_normal.py .                                         [ 76%]

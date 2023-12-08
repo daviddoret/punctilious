@@ -8,8 +8,8 @@ class TestFormulaAlphaContains(TestCase):
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
         o2 = u.o.declare()
-        r1 = u.r.declare(signal_proposition=True)
-        r2 = u.r.declare(signal_proposition=True)
+        r1 = u.c1.declare(signal_proposition=True)
+        r2 = u.c1.declare(signal_proposition=True)
 
         phi1: pu.CompoundFormula = o1 | r2 | o2
         # A formula is always alpha-equivalent to itself
@@ -29,10 +29,8 @@ class TestFormulaAlphaContains(TestCase):
         # self.assertFalse(pu.formula_alpha_contains(u=u, phi=phi2, psi=psi1))
 
         # Embedding
-        with u.with_variable(symbol='x', auto_index=False) as x, u.with_variable(symbol='y',
-                auto_index=False) as y:
-            phi3: pu.CompoundFormula = r2(o1, x, x, (o1 | r2 | o2), y,
-                ((r2(o1 | r2 | x) | r1 | o1)), x, x,
-                y)  # self.assertTrue(pu.formula_alpha_contains(u=u, phi=phi3, psi=phi1))
+        with u.with_variable(symbol='x', auto_index=False) as x, u.with_variable(symbol='y', auto_index=False) as y:
+            phi3: pu.CompoundFormula = o1 | r1 | phi1
+            self.assertTrue(pu.formula_alpha_contains(u=u, phi=phi3, psi=phi1))
 
         # TODO: Manage the case where we have variables inside constants. This require a little analysis.

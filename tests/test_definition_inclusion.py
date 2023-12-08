@@ -11,9 +11,9 @@ class TestDefinitionInclusion(TestCase):
         u = pu.UniverseOfDiscourse()
         content1 = random_data.random_sentence()
         content2 = random_data.random_sentence(min_words=30)
-        ad1 = u.declare_definition(content1)
-        ad2 = u.declare_definition(content2)
-        t = u.t()
+        ad1 = u.a.declare(content1)
+        ad2 = u.a.declare(content2)
+        t = u.t.declare()
         ai1 = t.include_definition(ad1)
         ai2 = t.include_definition(ad2)
         pu.prnt(ai1.rep_report())
@@ -23,15 +23,16 @@ class TestDefinitionInclusion(TestCase):
         pu.configuration.echo_definition_declaration = False
         pu.configuration.echo_definition_inclusion = False
         u = pu.UniverseOfDiscourse()
-        dd1 = u.declare_definition(natural_language='Let f(foo) be defined as g(bar,qux).')
-        t = u.t()
+        dd1 = u.d.declare(natural_language='Let f(foo) be defined as g(bar,qux).')
+        t = u.t.declare()
         di1 = t.include_definition(dd1, echo=True)
-        foo = u.o.declare(nameset=pu.NameSet(symbol='foo', index=None))
-        bar = u.o.declare(nameset=pu.NameSet(symbol='bar', index=None))
-        qux = u.o.declare(nameset=pu.NameSet(symbol='qux', index=None))
-        f = u.r.declare(1, nameset=pu.NameSet(symbol='f', index=None), signal_proposition=True)
-        g = u.r.declare(2, nameset=pu.NameSet(symbol='g', index=None), signal_proposition=True)
-        dii1 = t.i.definition_interpretation.infer_formula_statement(d=di1, x=u.f(f, foo),
-            y=u.f(g, bar, qux), echo=True)
+        foo = u.o.declare(symbol='foo', auto_index=False)
+        bar = u.o.declare(symbol='bar', auto_index=False)
+        qux = u.o.declare(symbol='qux', auto_index=False)
+        f = u.c1.declare(1, symbol='f', auto_index=False, signal_proposition=True)
+        g = u.c1.declare(2, symbol='g', auto_index=False, signal_proposition=True)
+        dii1 = t.i.definition_interpretation.infer_formula_statement(d=di1, x=u.declare_compound_formula(f, foo),
+            y=u.declare_compound_formula(g, bar, qux), echo=True)
         self.assertTrue(dii1.valid_proposition.is_formula_syntactically_equivalent_to(
-            u.f(u.r.equal, u.f(f, foo), u.f(g, bar, qux))))
+            u.declare_compound_formula(u.c1.equal, u.declare_compound_formula(f, foo),
+                u.declare_compound_formula(g, bar, qux))))

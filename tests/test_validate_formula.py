@@ -12,11 +12,11 @@ class TestValidateFormula(TestCase):
         o1 = u.o.declare(symbol='o', index=1)
         o1_in_u2 = u2.o.declare(symbol='o', index=1)
         o2 = u.o.declare()
-        r1 = u.r.declare(arity=1, symbol='r', index=1)
-        r1_in_u2 = u2.r.declare(arity=1, symbol='r', index=1)
-        r2 = u.r.declare(arity=1)
-        phi = u.f(r1, o1)
-        _, phi1_formula, _ = pu.verify_formula(u=u, input_value=u.f(r1, o1))
+        r1 = u.c1.declare(arity=1, symbol='r', index=1)
+        r1_in_u2 = u2.c1.declare(arity=1, symbol='r', index=1)
+        r2 = u.c1.declare(arity=1)
+        phi = u.declare_compound_formula(r1, o1)
+        _, phi1_formula, _ = pu.verify_formula(u=u, input_value=u.declare_compound_formula(r1, o1))
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_formula))
         _, phi1_tuple, _ = pu.verify_formula(u=u, input_value=(r1, o1))
         self.assertTrue(phi.is_formula_syntactically_equivalent_to(phi1_tuple))
@@ -43,7 +43,7 @@ class TestValidateFormula(TestCase):
         with self.assertRaises(pu.PunctiliousException):
             with u.with_variable('x') as x:
                 pu.verify_formula(u=u, input_value=phi, form=(x, o2), mask=[x])
-        # Inconsistent relation universe
+        # Inconsistent connective universe
         with self.assertRaises(pu.PunctiliousException):
             pu.verify_formula(u=u, input_value=(r1_in_u2, o1))
         # Inconsistent parameter universe
@@ -56,9 +56,8 @@ class TestValidateFormula(TestCase):
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
         o2 = u.o.declare()
-        r1 = u.r.declare(arity=2, formula_rep=pu.CompoundFormula.infix, symbol='*',
-            auto_index=False)
-        self.assertEqual('(o1 * o2)', u.f(r1, o1, o2).rep_formula())
+        r1 = u.c1.declare(arity=2, formula_rep=pu.CompoundFormula.infix, symbol='*', auto_index=False)
+        self.assertEqual('(o1 * o2)', u.declare_compound_formula(r1, o1, o2).rep_formula())
         phi1: pu.CompoundFormula
         _, phi1, _ = pu.verify_formula(u=u, input_value=(r1, o1, o2))
         self.assertEqual('(o1 * o2)', phi1.rep_formula())
@@ -72,9 +71,8 @@ class TestValidateFormula(TestCase):
         u = pu.UniverseOfDiscourse()
         o1 = u.o.declare()
         o2 = u.o.declare()
-        r1 = u.r.declare(arity=2, formula_rep=pu.CompoundFormula.function_call, symbol='*',
-            auto_index=False)
-        self.assertEqual('*(o1, o2)', u.f(r1, o1, o2).rep_formula())
+        r1 = u.c1.declare(arity=2, formula_rep=pu.CompoundFormula.function_call, symbol='*', auto_index=False)
+        self.assertEqual('*(o1, o2)', u.declare_compound_formula(r1, o1, o2).rep_formula())
         phi1: pu.CompoundFormula
         _, phi1, _ = pu.verify_formula(u=u, input_value=(r1, o1, o2))
         self.assertEqual('*(o1, o2)', phi1.rep_formula(encoding=pu.encodings.plaintext))

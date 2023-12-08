@@ -10,7 +10,7 @@ Let theory-class be a simple-objct in 𝒰₁.
 Let false be a simple-objct in 𝒰₁.
 Let true be a simple-objct in 𝒰₁.
 Let truth-values be a simple-objct in 𝒰₁.
-Let propositional-relations-class be a simple-objct in 𝒰₁.
+Let propositional-connectives-class be a simple-objct in 𝒰₁.
 Let proposition-class be a simple-objct in 𝒰₁.
 Let contradictory-theories be a simple-objct in 𝒰₁.
 Let contradictory-statement be a simple-objct in 𝒰₁.
@@ -45,7 +45,7 @@ Proposition 5: (theory-class ∈ class-of-classes)
 Proposition 6: (inference rule 1 ∈ theory-class)
 
 Axiom 10: “truth-values is the class whose elements are the
-	theoretical-objects truth and falsehood.”
+	formulas truth and falsehood.”
 
 Proposition 8: (truth-values ∈ class-of-classes)
 
@@ -53,23 +53,23 @@ Proposition 9: (true ∈ truth-values)
 
 Proposition 10: (false ∈ truth-values)
 
-Axiom 12: “propositional-relations is the class whose elements are the
-	relations: conjunction, disjunction, implication, and negation, and
-	any relation defined from these.”
+Axiom 12: “propositional-connectives is the class whose elements are the
+	connectives: conjunction, disjunction, implication, and negation, and
+	any connective defined from these.”
 
-Proposition 12: (propositional-relations-class ∈ class-of-classes)
+Proposition 12: (propositional-connectives-class ∈ class-of-classes)
 
-Proposition 13: (∧ ∈ propositional-relations-class)
+Proposition 13: (∧ ∈ propositional-connectives-class)
 
-Proposition 14: (∨ ∈ propositional-relations-class)
+Proposition 14: (∨ ∈ propositional-connectives-class)
 
-Proposition 15: (⟹ ∈ propositional-relations-class)
+Proposition 15: (⟹ ∈ propositional-connectives-class)
 
-Proposition 16: (¬ ∈ propositional-relations-class)
+Proposition 16: (¬ ∈ propositional-connectives-class)
 
-Proposition 17: (≠ ∈ propositional-relations-class)
+Proposition 17: (≠ ∈ propositional-connectives-class)
 
-Axiom 14: “= is a binary relation such that, given any two
+Axiom 14: “= is a binary connective such that, given any two
 	theoretical-objcts x and y, if x=y then y=x, and for every statement
 	s, s is valid iif subst s is valid.”
 
@@ -81,8 +81,8 @@ Formal definition 21: ((x₂ ≠ y₂) = ¬((x₂ = y₂)))
 
 Axiom 16: “propositions is a class whose elements are truth,
 	falsehood, all elements of the theory-formula-statement class, whose
-	relation is an element-of propositional-relations-class, and all
-	theory-formula-statements whose relation is defined from these. Its
+	connective is an element-of propositional-connectives-class, and all
+	theory-formula-statements whose connective is defined from these. Its
 	elements are called propositions.”
 
 Proposition 23: (true ∈ class-of-classes)
@@ -96,7 +96,7 @@ Proposition 26: (true is true)
 
 Proposition 27: (false is false)
 
-Axiom 20: “¬ is a unary relation. If P is a proposition and it has
+Axiom 20: “¬ is a unary connective. If P is a proposition and it has
 	truth-value truth, then ¬P has-truth-value false. Conversely, if P is
 	a proposition and it has truth-value falsehood, then ¬P has
 	truth-value true.”

@@ -20,6 +20,7 @@ Python samples
    double_negation_introduction_python_sample<python/sample/double_negation_introduction_python_sample>
    equal_terms_substitution_python_sample<python/sample/equal_terms_substitution_python_sample>
    equality_commutativity_python_sample<python/sample/equality_commutativity_python_sample>
+   free_variable_python_sample<python/sample/free_variable_python_sample>
    inconsistency_introduction_1_python_sample<python/sample/inconsistency_introduction_1_python_sample>
    inconsistency_introduction_2_python_sample<python/sample/inconsistency_introduction_2_python_sample>
    inconsistency_introduction_3_python_sample<python/sample/inconsistency_introduction_3_python_sample>
@@ -28,5 +29,4 @@ Python samples
    proof_by_contradiction_2_python_sample<python/sample/proof_by_contradiction_2_python_sample>
    proof_by_refutation_1_python_sample<python/sample/proof_by_refutation_1_python_sample>
    proof_by_refutation_2_python_sample<python/sample/proof_by_refutation_2_python_sample>
-   variable_python_sample<python/sample/variable_python_sample>
    variable_substitution_python_sample<python/sample/variable_substitution_python_sample>
