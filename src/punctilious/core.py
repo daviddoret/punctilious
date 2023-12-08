@@ -988,6 +988,8 @@ class Configuration:
     """
 
     def __init__(self):
+        self.echo_inference_rule_declaration = None
+        self.default_inference_rule_symbol = None
         self.auto_index = None
         self.default_axiom_declaration_symbol = None
         self.default_axiom_inclusion_symbol = None
@@ -1065,8 +1067,8 @@ pyvis_configuration = PyvisConfiguration()
 def unpack_formula(o: (Formula, CompoundFormula, FormulaStatement)) -> CompoundFormula:
     """Receive a formula and unpack its formula if it is a statement that contains a
     formula."""
-    verify(is_in_class_OBSOLETE(o, classes_OBSOLETE.formula),
-        'Parameter ⌜o⌝ must be an element of the theoretical-objct declarative-class.', o=o)
+    u: UniverseOfDiscourse = o.u
+    verify(is_declaratively_member_of_class(u=u, phi=o, c=u.c2.formula), 'Parameter ⌜o⌝ must a formula.', o=o)
     if hasattr(o, 'valid_proposition'):
         # Unpack python objects that "contain" their formula,
         # such as FormulaStatement, DirectAxiomInference, etc.
@@ -1295,18 +1297,6 @@ class NameSet(Composable):
     def acronym(self) -> ComposableText:
         return self._acronym
 
-    @property
-    def paragraph_header(self) -> ParagraphHeader:
-        """The category of this statement."""
-        return self._paragraph_header
-
-    @paragraph_header.setter
-    def paragraph_header(self, paragraph_header: ParagraphHeader):
-        """TODO: Remove this property setter to only set property values at init-time,
-        and make the hash stable. This quick-fix was necessary while migrating from
-        the old approach that used the obsolete Title class."""
-        self._paragraph_header = paragraph_header
-
     def compose(self, pre: (None, str, Composable) = None, post: (None, str, Composable) = None) -> \
         collections.abc.Generator[Composable, Composable, bool]:
         something = yield from self.compose_symbol(pre=pre, post=post)
@@ -1484,6 +1474,18 @@ class NameSet(Composable):
         """Especially for auto-indexing purposes, exposes the index as an int if it is an int."""
         return self._index_as_int
 
+    def is_base_symbol_equivalent(self, symbol: FlexibleSymbol):
+        """Return True if two NameSet instances have equal base symbols, False otherwise."""
+        _, symbol, _ = verify_symbol(input_value=symbol)
+        return self.symbol == symbol.symbol
+
+    def is_qualified_symbol_equivalent(self, symbol: FlexibleSymbol):
+        _, symbol, _ = verify_symbol(input_value=symbol)
+        """Return True if two NameSet instances have equal base symbols, and complementary symbolic properties such 
+        as index, False otherwise."""
+        # TODO: Provide support for exponent, etc.
+        return self.is_base_symbol_equivalent(symbol) and self.index == symbol.index
+
     @property
     def name(self) -> StyledText:
         return self._name
@@ -1496,6 +1498,18 @@ class NameSet(Composable):
         :return:
         """
         return self._namespace
+
+    @property
+    def paragraph_header(self) -> ParagraphHeader:
+        """The category of this statement."""
+        return self._paragraph_header
+
+    @paragraph_header.setter
+    def paragraph_header(self, paragraph_header: ParagraphHeader):
+        """TODO: Remove this property setter to only set property values at init-time,
+        and make the hash stable. This quick-fix was necessary while migrating from
+        the old approach that used the obsolete Title class."""
+        self._paragraph_header = paragraph_header
 
     @property
     def ref(self) -> str:
@@ -1684,51 +1698,41 @@ class SymbolicObject(abc.ABC):
         dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
         abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
         explicit_name: (None, str, StyledText) = None, paragraph_header: (None, ParagraphHeader) = None,
-        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None, echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_symbolic_objct, configuration.echo_default, False)
         auto_index = prioritize_value(auto_index, configuration.auto_index, True)
         self._declarative_classes = frozenset()
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
         is_universe_of_discourse = False if is_universe_of_discourse is None else is_universe_of_discourse
-        if nameset is None:
-            symbol = configuration.default_symbolic_object_symbol if symbol is None else symbol
-            if isinstance(symbol, str):
-                symbol = SerifItalic(symbol)
-            index = u.index_symbol(symbol=symbol) if (index is None and auto_index) else index
-            if paragraph_header is None:
-                paragraph_header = paragraph_headers.uncategorized
-            nameset = NameSet(symbol=symbol, index=index, namespace=namespace, dashed_name=dashed_name, acronym=acronym,
-                abridged_name=abridged_name, name=name, explicit_name=explicit_name, paragraph_header=paragraph_header,
-                ref=ref, subtitle=subtitle)
-        if isinstance(nameset, str):
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
-            index = u.index_symbol(symbol=symbol)
-            nameset = NameSet(symbol=symbol, index=index, namespace=namespace, dashed_name=dashed_name, acronym=acronym,
-                abridged_name=abridged_name, name=name, explicit_name=explicit_name, paragraph_header=paragraph_header,
-                ref=ref, subtitle=subtitle)
+        symbol = SerifItalic(symbol) if isinstance(symbol, str) else symbol
+        symbol = configuration.default_symbolic_object_symbol if symbol is None else symbol
+        if u is not None:
+            index = u.symbolic_objects.index_symbol(symbol=symbol) if (index is None and auto_index) else index
+        if paragraph_header is None:
+            paragraph_header = paragraph_headers.uncategorized
+        nameset = NameSet(symbol=symbol, index=index, namespace=namespace, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, paragraph_header=paragraph_header,
+            ref=ref, subtitle=subtitle)
         self._nameset = nameset
         self.is_theory_foundation_system = is_theory_foundation_system
         self._declare_class_membership_OBSOLETE(classes_OBSOLETE.symbolic_objct)
         if not is_universe_of_discourse:
-            self._u = u
-            self._u.cross_reference_symbolic_objct_OBSOLETE(o=self)
+            self._u = u  # self._u.cross_reference_symbolic_objct_OBSOLETE(o=self)
         else:
             self._u = None
+        if u is not None:
+            u.symbolic_objects.add_symbolic_object(symbolic_object=self)
         if echo:
             repm.prnt(self.rep_report())
 
-    def __hash__(self):
-        # Symbols are unique within their universe-of-discourse,
-        # thus hashing can be safely based on the key: U + symbol.
-        # With a special case for the universe-of-discourse itself,
-        # where hash of the symbol is sufficient.
-        return hash(self.nameset) if is_in_class_OBSOLETE(self, classes_OBSOLETE.u) else hash((self.u, self.nameset))
+    def __eq__(self, other):
+        """python equality is implemented as strict object equality, but not as symbolic equivalence."""
+        return hash(self) == hash(other)
 
-    # def __lt__(self, other):
-    #    """WARNING: Only used for support with the sorted() function, no intention to transmit
-    #    any mathematical meaning."""
-    #    return str(self) < str(other)
+    def __hash__(self):
+        """Because our intention is to allow distinct formulae to have identical (non-unique) names, to have no or
+        multiple names, the only underlying identifier we can rely on is the native python id function."""
+        return hash(id(self))
 
     def __repr__(self):
         return self.rep_symbol(encoding=encodings.plaintext)
@@ -1820,37 +1824,17 @@ class SymbolicObject(abc.ABC):
         A shortcut for o.is_declarative_class_member(...)."""
         return self.is_declarative_class_member_OBSOLETE(c=c)
 
-    def is_symbol_equivalent(self, o2) -> bool:
-        """Returns true if this object and o2 are symbol-equivalent.
-
-        Definition:
-        -----------
-        Two symbolic-objects o₁ and o₂ are symbol-equivalent if and only if:
-         1. o₁ and o₂ have symbol-equivalent theory.¹
-         2. o₁ and o₂ have equal symbols.²
-
-        ¹. Theories are symbolic-objects. This recursive condition
-           yields a complete path between the objects and the universe-of-discourse.
-        ². Remember that every symbolic-object has a unique symbol in its parent theory.
-
-        Note:
-        -----
-        The symbol-equivalence connective allows to compare any pair of symbolic-objcts, including:
-         * Both theoretical and atheoretical objects.
-         * Symbolic-objcts linked to distinct theory.
+    def is_base_symbol_equivalent(self, o2: FlexibleSymbol) -> bool:
+        """Return True if this object and o2 are base-symbol-equivalent, False otherwise.
         """
         # A formula can only be compared with a formula
-        assert isinstance(o2, SymbolicObject)
-        if self is o2:
-            # If the current symbolic-objct is referencing the same
-            # python object instance, by definitions the two python references
-            # are referencing the same object.
-            return True
-        if not self.u.is_symbol_equivalent(o2.u):
-            return False
-        if self.nameset != o2.nameset:
-            return False
-        return True
+        return self.nameset.is_base_symbol_equivalent(o2)
+
+    def is_qualified_symbol_equivalent(self, o2: FlexibleSymbol) -> bool:
+        """Return True if this object and o2 are qualified-symbol-equivalent, False otherwise.
+        """
+        # A formula can only be compared with a formula
+        return self.nameset.is_qualified_symbol_equivalent(o2)
 
     def prnt(self, encoding: (None, Encoding) = None, expand=False):
         repm.prnt(self.nameset.rep(encoding=encoding, expand=expand))
@@ -2150,20 +2134,18 @@ class Formula(SymbolicObject):
         dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
         abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
         explicit_name: (None, str, StyledText) = None, paragraph_header: (None, ParagraphHeader) = None,
-        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None, echo: (None, bool) = None):
         super().__init__(u=u, is_universe_of_discourse=is_universe_of_discourse,
             is_theory_foundation_system=is_theory_foundation_system, symbol=symbol, index=index, auto_index=auto_index,
             namespace=namespace, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
-            echo=False)
-        self._collections = frozenset()
-        super()._declare_class_membership_OBSOLETE(classes_OBSOLETE.formula)
+            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, echo=False)
+        self._collections = frozenset()  # TODO: Probably an OBSOLETE member
         if not isinstance(self, UniverseOfDiscourse):
             # The universe-of-discourse is the only object that may not
             # be contained in a universe-of-discourse.
             # All other objects must be contained in a universe-of-discourse.
             verify_universe_of_discourse(u=u)
+            u.phi.declare_formula_instance(phi=self)
         if echo:
             repm.prnt(self.rep_fully_qualified_name())
 
@@ -2623,8 +2605,8 @@ class FreeVariable(Variable):
         symbol: (None, str, StyledText) = None, index: (None, int) = None, auto_index: (None, bool) = None,
         dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
         abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
-        explicit_name: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
-        is_strictly_propositional: (None, bool) = None, echo: (None, bool) = None) -> None:
+        explicit_name: (None, str, StyledText) = None, is_strictly_propositional: (None, bool) = None,
+        echo: (None, bool) = None) -> None:
         echo = prioritize_value(echo, configuration.echo_variable_declaration, configuration.echo_default, False)
         status = prioritize_value(status, FreeVariable.scope_initialization_status)
         scope = prioritize_value(scope, frozenset())
@@ -2636,19 +2618,12 @@ class FreeVariable(Variable):
         self._status = status
         self._scope = scope
         assert isinstance(u, UniverseOfDiscourse)
-        if symbol is None:
-            symbol = configuration.default_variable_symbol
-            index = u.index_symbol(symbol=symbol)
+        symbol = prioritize_value(symbol, configuration.default_variable_symbol)
         if isinstance(symbol, str):
-            # If symbol was passed as a string,
-            # assume the base was passed without index.
-            # TODO: Analyse the string if it ends with index in subscript characters.
+            # By default, variables are represented in bold style.
             symbol = StyledText(plaintext=symbol, text_style=text_styles.serif_bold)
-            if index is None and auto_index:
-                index = u.index_symbol(symbol=symbol)
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
-            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, nameset=nameset,
-            echo=False)
+            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=False)
         super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.variable)
         if echo:
             self.echo()
@@ -2855,7 +2830,6 @@ class CompoundFormula(Formula):
         # super().__init__(nameset=nameset, u=u, echo=False)
         super().__init__(symbol=symbol, index=index, auto_index=auto_index, u=u, echo=False)
         super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.compound_formula)
-        u.cross_reference_formula_OBSOLETE(self)
         verify(assertion=is_declaratively_member_of_class(u=self.u, phi=connective,
             c=self.u.c2.connective) or is_in_class_OBSOLETE(connective, classes_OBSOLETE.variable),
             msg='The connective of this formula is neither a connective, nor a variable.', formula=self,
@@ -2865,7 +2839,7 @@ class CompoundFormula(Formula):
             formula=self, connective=connective)
         self.cross_reference_variables()
         for p in terms:
-            verify(is_in_class_OBSOLETE(p, classes_OBSOLETE.formula), 'p is not a formula.', formula=self, p=p)
+            verify_formula(u=self.u, input_value=p, arg='p')
             if is_in_class_OBSOLETE(p, classes_OBSOLETE.variable) and self.connective is not self.u.c1.object_reference:
                 p.extend_scope(self)
             verify(p.u is self.u,
@@ -3119,59 +3093,6 @@ class CompoundFormula(Formula):
         return rep_composition(composition=self.compose_formula(), encoding=encoding)
 
 
-class SimpleObjctDict(collections.UserDict):
-
-    def __init__(self, u: UniverseOfDiscourse):
-        self.u = u
-        super().__init__()
-        # Well-known objects
-        self._falsehood = None
-        self._connective = None
-        self._truth = None
-
-    def declare(self, symbol: (None, str, StyledText) = None, index: (None, int) = None,
-        auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
-        acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
-        name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        nameset: (None, str, NameSet) = None, echo: (None, bool) = None) -> SimpleObjct:
-        return SimpleObjct(symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
-            abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref, subtitle=subtitle,
-            nameset=nameset, u=self.u, echo=echo)
-
-    @property
-    def fals(self):
-        return self.falsehood
-
-    @property
-    def falsehood(self):
-        if self._falsehood is None:
-            self._falsehood = self.declare(nameset=NameSet(
-                symbol=StyledText(unicode='⊥', latex='\\bot', plaintext='false', text_style=text_styles.serif_normal),
-                name=ComposableText(plaintext='false'), explicit_name=ComposableText(plaintext='falsehood'),
-                index=None))
-        return self._falsehood
-
-    @property
-    def connective(self):
-        if self._connective is None:
-            self._connective = self.declare(symbol='connective', name='connective', auto_index=False,
-                abridged_name='rel.')
-        return self._connective
-
-    @property
-    def tru(self):
-        return self.truth
-
-    @property
-    def truth(self):
-        if self._truth is None:
-            self._truth = self.declare(nameset=NameSet(
-                symbol=StyledText(unicode='⊤', latex='\\top', plaintext='true', text_style=text_styles.serif_normal),
-                name=ComposableText(plaintext='true'), explicit_name=ComposableText(plaintext='truth'), index=None))
-        return self._truth
-
-
 class ParagraphHeader(repm.ValueName):
     """TODO: Replace this with ComposableText"""
 
@@ -3258,8 +3179,7 @@ class Statement(Formula):
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
         ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        nameset: (None, str, NameSet) = None, paragraph_header: (None, ParagraphHeader) = None,
-        echo: (None, bool) = None):
+        paragraph_header: (None, ParagraphHeader) = None, echo: (None, bool) = None):
         self._theory = theory
         echo = prioritize_value(echo, configuration.echo_statement, configuration.echo_default, False)
         u = theory.u
@@ -3269,8 +3189,7 @@ class Statement(Formula):
         # the statement is ugly, there's something wrong with the data model, correct it.
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, namespace=namespace,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
-            echo=echo)
+            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, echo=echo)
         super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.statement)
         if echo:
             self.echo()
@@ -3340,7 +3259,7 @@ class AxiomDeclaration(Formula):
         abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
         explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
         subtitle: (None, str, StyledText) = None, paragraph_header: (None, ParagraphHeader) = None,
-        nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        echo: (None, bool) = None):
         """
 
         :param natural_language: The axiom's content in natural-language.
@@ -3359,11 +3278,10 @@ class AxiomDeclaration(Formula):
             assertion=paragraph_header is paragraph_headers.axiom_declaration or paragraph_header is paragraph_headers.axiom_schema_declaration,
             msg='paragraph-header must be either axiom-declaration, or axiom-schema-declaration.',
             paragraph_header=paragraph_header)
-        if nameset is None and symbol is None:
-            symbol = configuration.default_axiom_declaration_symbol
+        symbol = prioritize_value(symbol, configuration.default_axiom_declaration_symbol)
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
-            subtitle=subtitle, paragraph_header=paragraph_header, nameset=nameset, echo=False)
+            subtitle=subtitle, paragraph_header=paragraph_header, echo=False)
         # super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.axiom)
         u.a.declare_instance(a=self)
         if echo:
@@ -3413,8 +3331,7 @@ class AxiomInclusion(Statement):
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
         ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        paragraph_header: (None, ParagraphHeader) = None, nameset: (None, str, NameSet) = None,
-        echo: (None, bool) = None):
+        paragraph_header: (None, ParagraphHeader) = None, echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_axiom_inclusion, configuration.echo_default, False)
         self._a = a
         self._locked = False
@@ -3424,11 +3341,10 @@ class AxiomInclusion(Statement):
             assertion=paragraph_header is paragraph_headers.axiom_inclusion or paragraph_header is paragraph_headers.axiom_schema_inclusion,
             msg='paragraph-header must be either axiom-inclusion, or axiom-schema-inclusion.',
             paragraph_header=paragraph_header)
-        if nameset is None and symbol is None:
-            symbol = configuration.default_axiom_inclusion_symbol
+        symbol = prioritize_value(symbol, configuration.default_axiom_inclusion_symbol)
         super().__init__(theory=t, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-            paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
+            paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, echo=False)
         super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.axiom_inclusion)
         if echo:
             self.echo()
@@ -3489,18 +3405,16 @@ class InferenceRuleInclusion(Statement):
     """
 
     def __init__(self, i: InferenceRuleDeclaration, t: TheoryDerivation, symbol: (None, str, StyledText) = None,
-        dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
-        abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
-        explicit_name: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None, echo: (None, bool) = None,
-        proof: (None, bool) = None):
+        index: (None, int) = None, auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+        acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+        name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+        nameset: (None, str, NameSet) = None, echo: (None, bool) = None, proof: (None, bool) = None):
         verify_theory_derivation(input_value=t, arg='t')
         self._inference_rule = i
         paragraph_header = paragraph_headers.inference_rule_inclusion
-        if symbol is None:
-            symbol = configuration.default_inference_rule_inclusion_symbol if symbol is None else symbol
-            index = t.u.index_symbol(symbol=symbol)
-        super().__init__(theory=t, paragraph_header=paragraph_headers, symbol=symbol, index=index, nameset=nameset,
-            echo=False)
+        symbol = prioritize_value(symbol, configuration.default_inference_rule_inclusion_symbol)
+        super().__init__(theory=t, paragraph_header=paragraph_headers, symbol=symbol, index=index,
+            auto_index=auto_index, echo=False)
         t.crossreference_inference_rule_inclusion(self)
         super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.inference_rule_inclusion)
         echo = prioritize_value(echo, configuration.echo_inference_rule_inclusion, configuration.echo_inclusion,
@@ -3756,7 +3670,7 @@ class FormulaStatement(Statement):
         abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
         explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
         subtitle: (None, str, StyledText) = None, paragraphe_header: (None, ParagraphHeader) = None,
-        nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_statement, configuration.echo_default, False)
         verify(assertion=theory.u is valid_proposition.u,
             msg='The universe-of-discourse of this formula-statement''s theory-elaboration is '
@@ -3772,11 +3686,10 @@ class FormulaStatement(Statement):
         self.statement_index = theory.crossreference_statement(self)
         paragraphe_header = prioritize_value(paragraphe_header, paragraph_headers.proposition)
         # TODO: Check that cat is a valid statement cat (prop., lem., cor., theorem)
-        if nameset is None and symbol is None:
-            symbol = configuration.default_statement_symbol
+        symbol = prioritize_value(symbol, configuration.default_statement_symbol)
         super().__init__(theory=theory, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
-            subtitle=subtitle, nameset=nameset, paragraph_header=paragraphe_header, echo=False)
+            subtitle=subtitle, paragraph_header=paragraphe_header, echo=False)
         # manage theoretical-morphisms
         self.morphism_output = None
         if self.valid_proposition.connective.signal_theoretical_morphism:
@@ -3965,17 +3878,14 @@ class InferenceRuleDeclaration(Formula):
         index: (None, int) = None, auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None, echo: (None, bool) = None):
         self._definition = definition
         self._compose_paragraph_proof_method = compose_paragraph_proof_method
-        if nameset is None and symbol is None:
-            symbol = configuration.default_inference_rule_symbol
+        symbol = prioritize_value(symbol, configuration.default_inference_rule_symbol)
         paragraph_header = paragraph_headers.inference_rule_declaration
         super().__init__(u=u, is_theory_foundation_system=False, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
-            echo=False)
+            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, echo=False)
         u.i.declare_instance(i=self)
         echo = prioritize_value(echo, configuration.echo_inference_rule_declaration, configuration.echo_declaration,
             configuration.echo_default, False)
@@ -5562,11 +5472,11 @@ class AtheoreticalStatement(SymbolicObject):
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
         paragraph_header: (None, ParagraphHeader) = None, ref: (None, str, StyledText) = None,
-        subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        subtitle: (None, str, StyledText) = None, echo: (None, bool) = None):
         self.theory = theory
         super().__init__(u=theory.u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-            paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
+            paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, echo=echo)
         super()._declare_class_membership_OBSOLETE(classes_OBSOLETE.atheoretical_statement)
 
 
@@ -5580,7 +5490,7 @@ class NoteInclusion(AtheoreticalStatement):
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
         paragraph_header: (None, ParagraphHeader) = None, ref: (None, str, StyledText) = None,
-        subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        subtitle: (None, str, StyledText) = None, echo: (None, bool) = None):
 
         echo = prioritize_value(echo, configuration.echo_note, configuration.echo_default, False)
         verify(assertion=is_derivably_member_of_class(u=t.u, phi=t, c=t.u.c2.theory_derivation),
@@ -5593,19 +5503,10 @@ class NoteInclusion(AtheoreticalStatement):
             content = SansSerifNormal(content)
         self._natural_language = content
         self.category = paragraph_header
-        if nameset is None and symbol is None:
-            # symbol = self.category.symbol_base
-            symbol = paragraph_header.symbol_base
-            index = u.index_symbol(symbol=symbol) if auto_index else index
-        if isinstance(nameset, str):
-            # If symbol was passed as a string,
-            # assume the base was passed without index.
-            # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = StyledText(plaintext=nameset, text_style=text_styles.serif_italic)
-            index = u.index_symbol(symbol=symbol) if auto_index else index
+        symbol = prioritize_value(symbol, paragraph_header.symbol_base)
         super().__init__(theory=t, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-            paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset, echo=False)
+            paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, echo=False)
         if echo:
             self.echo()
         super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.note)
@@ -5752,9 +5653,7 @@ class TheoryDerivation(Formula):
         self._extended_theory = extended_theory
         self._extended_theory_limit = extended_theory_limit
         self._interpretation_disclaimer = False
-        if symbol is None:
-            symbol = prioritize_value(symbol, configuration.default_theory_symbol)
-            index = u.index_symbol(symbol=symbol)
+        symbol = prioritize_value(symbol, configuration.default_theory_symbol)
         super().__init__(symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name, name=name,
             explicit_name=explicit_name, paragraph_header=paragraph_headers.theory_derivation,
             is_theory_foundation_system=True if extended_theory is None else False, u=u, echo=False)
@@ -5947,12 +5846,11 @@ theory-elaboration."""
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
         ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        nameset: (None, str, NameSet) = None, paragraph_header: (None, ParagraphHeader) = None,
-        echo: (None, bool) = None) -> AxiomInclusion:
+        paragraph_header: (None, ParagraphHeader) = None, echo: (None, bool) = None) -> AxiomInclusion:
         """Include an axiom in this theory-derivation."""
         return AxiomInclusion(a=a, t=self, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
-            subtitle=subtitle, paragraph_header=paragraph_header, nameset=nameset, echo=echo)
+            subtitle=subtitle, paragraph_header=paragraph_header, echo=echo)
 
     def include_definition(self, d: DefinitionDeclaration, symbol: (None, str, StyledText) = None,
         index: (None, int) = None, auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
@@ -6114,14 +6012,12 @@ theory-elaboration."""
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
         paragraph_header: (None, ParagraphHeader) = None, ref: (None, str, StyledText) = None,
-        subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None,
-        echo: (None, bool) = None) -> NoteInclusion:
+        subtitle: (None, str, StyledText) = None, echo: (None, bool) = None) -> NoteInclusion:
         """Take a note, make a comment, or remark in this theory.
         """
         return self.u.take_note(t=self, content=content, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
-            echo=echo)
+            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, echo=echo)
 
     @property
     def theoretical_objcts(self):
@@ -6265,7 +6161,7 @@ class Connective(Formula):
         dashed_name: (None, str, StyledText) = None, acronym: (None, str, StyledText) = None,
         abridged_name: (None, str, StyledText) = None, name: (None, str, StyledText) = None,
         explicit_name: (None, str, StyledText) = None, ref: (None, str, StyledText) = None,
-        subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        subtitle: (None, str, StyledText) = None, echo: (None, bool) = None):
         """
 
         :param u:
@@ -6310,13 +6206,10 @@ class Connective(Formula):
         self.collection_start = collection_start
         self.collection_separator = collection_separator
         self.collection_end = collection_end
-        if nameset is None:
-            symbol = configuration.default_connective_symbol if symbol is None else symbol
-            index = u.index_symbol(symbol=symbol) if auto_index else index
-            nameset = NameSet(symbol=symbol, index=index, dashed_name=dashed_name, acronym=acronym,
-                abridged_name=abridged_name, name=name, explicit_name=explicit_name, paragraph_header=cat, ref=ref,
-                subtitle=subtitle)
-        super().__init__(u=u, nameset=nameset, echo=False)
+        symbol = configuration.default_connective_symbol if symbol is None else symbol
+        super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
+            acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, paragraph_header=cat,
+            ref=ref, subtitle=subtitle, echo=False)
         self.u.c1.declare_instance(c=self)
         if echo:
             self.echo()
@@ -6388,13 +6281,12 @@ class SimpleObjct(Formula):
         auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None, echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_simple_objct_declaration, configuration.echo_default, False)
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
-            subtitle=subtitle, nameset=nameset, echo=False)
-        self.u.cross_reference_simple_objct_OBSOLETE(o=self)
+            subtitle=subtitle, echo=False)
+        self.u.o.declare_instance(o=self)
         if echo:
             self.echo()
 
@@ -6504,6 +6396,65 @@ class ClassDeclaration(Formula):
         return self._python_class
 
 
+class SymbolicObjectAccretor(set, abc.ABC):
+    """A basic collection that does not allow the removal of symbols."""
+
+    def __init__(self, container: (None, SymbolicObject)):
+        self._container = container
+        super().__init__()
+
+    def add(self, symbolic_object: object):
+        if isinstance(symbolic_object, SymbolicObject):
+            self.add_symbolic_object(symbolic_object)
+        else:
+            raise Exception('This class only supports adding elements of the SymbolicObject type.')
+
+    def add_symbolic_object(self, symbolic_object: SymbolicObject):
+        self.verify(symbolic_object=symbolic_object)
+        if symbolic_object not in self:
+            # For symbols, python-equality is strict object instance equality.
+            # We add the object to the collection only if it is not already there.
+            super().add(symbolic_object)
+        return symbolic_object
+
+    @property
+    def container(self) -> SymbolicObject:
+        return self._container
+
+    def get_base_symbol_max_index(self, symbol: FlexibleSymbol) -> int:
+        """Return the highest index for that base symbol in the collection."""
+        _, symbol, _ = verify_symbol(input_value=symbol)
+        equivalent_symbols = tuple((symbolic_object.nameset.index_as_int for symbolic_object in self if
+            symbolic_object.is_base_symbol_equivalent(symbol)))
+        return max(equivalent_symbols, default=0)
+
+    def index_symbol(self, symbol: (str, StyledText)) -> int:
+        """Given a symbol-base S (i.e. an unindexed symbol), returns a unique integer n
+        such that (S, n) is a unique identifier in this instance of UniverseOfDiscourse.
+
+        :param symbol: The symbol-base.
+        :return:
+        """
+        if isinstance(symbol, str):
+            # The default symbol format is sans-serif italic.
+            symbol = SansSerifItalic(symbol)
+        return self.get_base_symbol_max_index(symbol) + 1
+
+    def remove(self, element: object):
+        raise Exception('This class forbids the removal of elements.')
+
+    def verify(self, symbolic_object: SymbolicObject, raise_exception: bool = True) -> (bool, Formula, str):
+        """This method is called before adding new elements. It is expected to raise an exception if the element does
+         not meet the requirements for the collection."""
+        if not isinstance(symbolic_object, SymbolicObject):
+            msg: str = 'symbolic_object is not of type SymbolicObject.'
+            if raise_exception:
+                raise Exception(msg)
+            else:
+                return False, None, msg
+        return True, symbolic_object, str
+
+
 class FormulaAccretor(set, abc.ABC):
     """A basic collection that does not allow the removal of elements."""
 
@@ -6578,12 +6529,36 @@ class MultiverseFormulaAccretor(FormulaAccretor):
 multiverse = MultiverseFormulaAccretor()
 
 
+class UniverseOfDiscourseSymbolicObjectAccretor(SymbolicObjectAccretor):
+    """A basic collection that does not allow the removal of elements."""
+
+    def __init__(self, u: UniverseOfDiscourse):
+        self._u = u
+        super().__init__(container=u)
+
+    def declare_symbolic_object_instance(self, symbolic_object: SymbolicObject) -> SymbolicObject:
+        return super().add_symbolic_object(symbolic_object=symbolic_object)
+
+    @property
+    def u(self) -> UniverseOfDiscourse:
+        return self._u
+
+    def verify(self, symbolic_object: SymbolicObject, raise_exception: bool = True):
+        ok: bool
+        msg: str
+        ok, phi, msg = verify_symbolic_object(u=self.u, input_value=symbolic_object, raise_exception=raise_exception)
+        return ok, phi, msg
+
+
 class UniverseOfDiscourseFormulaAccretor(FormulaAccretor):
     """A basic collection that does not allow the removal of elements."""
 
     def __init__(self, u: UniverseOfDiscourse):
         self._u = u
         super().__init__(container=u)
+
+    def declare_formula_instance(self, phi: Formula) -> Formula:
+        return super().add_formula(phi=phi)
 
     @property
     def u(self) -> UniverseOfDiscourse:
@@ -6596,7 +6571,66 @@ class UniverseOfDiscourseFormulaAccretor(FormulaAccretor):
         return ok, phi, msg
 
 
-class AxiomDeclarationCollection(UniverseOfDiscourseFormulaAccretor):
+class SimpleObjctDict(UniverseOfDiscourseFormulaAccretor):
+
+    def __init__(self, u: UniverseOfDiscourse):
+        super().__init__(u=u)
+        # Well-known objects
+        self._falsehood = None
+        self._truth = None
+
+    def declare(self, symbol: (None, str, StyledText) = None, index: (None, int) = None,
+        auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
+        acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
+        name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
+        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
+        echo: (None, bool) = None) -> SimpleObjct:
+        return SimpleObjct(symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym,
+            abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref, subtitle=subtitle, u=self.u,
+            echo=echo)
+
+    def declare_instance(self, o: SimpleObjct) -> SimpleObjct:
+        return super().add_formula(phi=o)
+
+    @property
+    def fals(self):
+        return self.falsehood
+
+    @property
+    def falsehood(self):
+        if self._falsehood is None:
+            self._falsehood = self.declare(nameset=NameSet(
+                symbol=StyledText(unicode='⊥', latex='\\bot', plaintext='false', text_style=text_styles.serif_normal),
+                name=ComposableText(plaintext='false'), explicit_name=ComposableText(plaintext='falsehood'),
+                index=None))
+        return self._falsehood
+
+    @property
+    def connective(self):
+        if self._connective is None:
+            self._connective = self.declare(symbol='connective', name='connective', auto_index=False,
+                abridged_name='rel.')
+        return self._connective
+
+    @property
+    def tru(self):
+        return self.truth
+
+    @property
+    def truth(self):
+        if self._truth is None:
+            self._truth = self.declare(nameset=NameSet(
+                symbol=StyledText(unicode='⊤', latex='\\top', plaintext='true', text_style=text_styles.serif_normal),
+                name=ComposableText(plaintext='true'), explicit_name=ComposableText(plaintext='truth'), index=None))
+        return self._truth
+
+    def verify_element(self, phi: FlexibleFormula):
+        _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
+        verify(assertion=is_declaratively_member_of_class(u=self.u, phi=phi, c=self.u.c2.simple_object),
+            msg='phi is not a simple-object')
+
+
+class AxiomDeclarationAccretor(UniverseOfDiscourseFormulaAccretor):
     """A collection of axiom-declarations.
     It is exposed as the a property on the UniverseOfDiscourse class.
 
@@ -6610,20 +6644,15 @@ class AxiomDeclarationCollection(UniverseOfDiscourseFormulaAccretor):
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
         ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        paragraph_header: (None, ParagraphHeader) = None, nameset: (None, str, NameSet) = None,
-        echo: (None, bool) = None) -> AxiomDeclaration:
+        paragraph_header: (None, ParagraphHeader) = None, echo: (None, bool) = None) -> AxiomDeclaration:
         """:ref:`Declare<object_declaration_math_concept>` a new axiom in this universe-of-discourse.
         """
-        a: AxiomDeclaration = AxiomDeclaration(u=self.u, natural_language=natural_language, symbol=symbol, index=index,
+        return AxiomDeclaration(u=self.u, natural_language=natural_language, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, ref=ref, subtitle=subtitle, paragraph_header=paragraph_header, nameset=nameset,
-            echo=echo)
-        a = self.declare_instance(a=a)  # Return the existing axiom if there is an axiom a' such that a' == a.
-        return a
+            explicit_name=explicit_name, ref=ref, subtitle=subtitle, paragraph_header=paragraph_header, echo=echo)
 
     def declare_instance(self, a: AxiomDeclaration) -> AxiomDeclaration:
-        a = super().add_formula(phi=a)
-        return a
+        return super().add_formula(phi=a)
 
     def verify_element(self, phi: FlexibleFormula):
         _, phi, _ = verify_formula(u=self.u, input_value=phi, arg='phi')
@@ -6631,7 +6660,7 @@ class AxiomDeclarationCollection(UniverseOfDiscourseFormulaAccretor):
             msg='phi is not an axiom-declaration')
 
 
-class DefinitionDeclarationCollection(UniverseOfDiscourseFormulaAccretor):
+class DefinitionDeclarationAccretor(UniverseOfDiscourseFormulaAccretor):
     """A collection of definition-declarations.
     It is exposed as the d property on the UniverseOfDiscourse class.
 
@@ -6666,7 +6695,7 @@ class DefinitionDeclarationCollection(UniverseOfDiscourseFormulaAccretor):
             msg='phi is not an definition-declaration')
 
 
-class TheoryDerivationDeclarationCollection(UniverseOfDiscourseFormulaAccretor):
+class TheoryDerivationDeclarationAccretor(UniverseOfDiscourseFormulaAccretor):
     """A collection of theory-derivation declarations.
     It is exposed as the t property on the UniverseOfDiscourse class.
 
@@ -6700,7 +6729,7 @@ class TheoryDerivationDeclarationCollection(UniverseOfDiscourseFormulaAccretor):
             msg='phi is not an axiom-declaration')
 
 
-class ClassDeclarationCollection(UniverseOfDiscourseFormulaAccretor):
+class ClassDeclarationAccretor(UniverseOfDiscourseFormulaAccretor):
     """A collection of class-declarations that exposes some well-known classes.
     It is exposed as the c2 property on the UniverseOfDiscourse class.
 
@@ -6879,7 +6908,7 @@ class ClassDeclarationCollection(UniverseOfDiscourseFormulaAccretor):
 #  pass
 
 
-class ConnectiveCollection(UniverseOfDiscourseFormulaAccretor):
+class ConnectiveAccretor(UniverseOfDiscourseFormulaAccretor):
     """A dictionary that exposes well-known connectives as properties.
 
     """
@@ -6956,8 +6985,7 @@ class ConnectiveCollection(UniverseOfDiscourseFormulaAccretor):
         collection_end: (None, str, StyledText) = None, dashed_name: (None, str, StyledText) = None,
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
-        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None, echo: (None, bool) = None):
         """Declare a new connective in this universe-of-discourse.
         """
         c: Connective = Connective(arity=arity, min_arity=min_arity, max_arity=max_arity, formula_rep=formula_rep,
@@ -6965,7 +6993,7 @@ class ConnectiveCollection(UniverseOfDiscourseFormulaAccretor):
             signal_proposition=signal_proposition, signal_theoretical_morphism=signal_theoretical_morphism,
             implementation=implementation, u=self.u, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset, echo=echo)
+            explicit_name=explicit_name, ref=ref, subtitle=subtitle, echo=echo)
         c = self.declare_instance(c=c)  # Return the existing axiom if there is an axiom a' such that a' == a.
         return c
 
@@ -7324,6 +7352,8 @@ FlexibleDefinition = typing.Union[DefinitionDeclaration, DefinitionInclusion, st
 FlexibleFormula = typing.Union[Formula, FormulaStatement, CompoundFormula, tuple, list]
 """See validate_flexible_statement_formula() for details."""
 
+FlexibleSymbol = typing.Union[str, SymbolicObject, StyledText]
+
 
 def verify_axiom_declaration(u: UniverseOfDiscourse, input_value: FlexibleAxiom, arg: (None, str) = None,
     raise_exception: bool = True, error_code: (None, ErrorCode) = None) -> tuple[
@@ -7468,6 +7498,34 @@ def verify_class(u: UniverseOfDiscourse, c: FlexibleFormula, arg: (None, str) = 
         verify(raise_exception=raise_exception, error_code=error_code, assertion=False,
             msg=f'The argument ⌜{arg}⌝ is not of python class ClassDeclaration.', c=c, u=u)
         return False, None, msg
+
+
+def verify_symbol(input_value: FlexibleSymbol, arg: (None, str) = None, raise_exception: bool = True,
+    error_code: (None, ErrorCode) = None) -> tuple[bool, (None, NameSet), (None, str)]:
+    ok: bool
+    msg: (None, str)
+    if isinstance(input_value, str):
+        input_value = NameSet(symbol=SerifItalic(input_value))
+    elif isinstance(input_value, SymbolicObject):
+        input_value = input_value.nameset
+    elif isinstance(input_value, StyledText):
+        input_value = NameSet(symbol=input_value)
+    ok, msg = verify(raise_exception=raise_exception, error_code=error_code, assertion=isinstance(input_value, NameSet),
+        msg=f'⌜{input_value}⌝ of pythonic type ⌜{type(input_value).__name__}⌝'
+            f'{"" if arg is None else "".join([" passed as argument ⌜", arg, "⌝"])}'
+            f' could not be coerced to a NameSet instance.', argument=input_value)
+    return ok, input_value, msg
+
+
+def verify_symbolic_object(u: UniverseOfDiscourse, input_value: SymbolicObject, arg: (None, str) = None,
+    raise_exception: bool = True, error_code: (None, ErrorCode) = None) -> tuple[
+    bool, (None, SymbolicObject), (None, str)]:
+    ok: bool
+    msg: (None, str)
+    ok, msg = verify(raise_exception=raise_exception, error_code=error_code, assertion=input_value.u is u,
+        msg=f'The universe-of-discourse ⌜{input_value.u}⌝ of the symbolic-object ⌜{input_value.u}⌝{"" if arg is None else "".join([" passed as argument ⌜", arg, "⌝"])} is not the expected universe-of-discourse python instance ⌜{u}⌝.',
+        argument=input_value, u=u)
+    return ok, input_value, msg
 
 
 def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (None, str) = None,
@@ -7723,7 +7781,7 @@ def verify_theory_derivation(input_value: (None, FlexibleFormula), arg: str, rai
         return False, None, msg
 
 
-class InferenceRuleDeclarationCollection(UniverseOfDiscourseFormulaAccretor):
+class InferenceRuleDeclarationAccretor(UniverseOfDiscourseFormulaAccretor):
     """This python class models the collection of :ref:`inference-rules<inference_rule_math_concept>` :ref:`declared<object_declaration_math_concept>` in a :ref:`universe-of-discourse<universe_of_discourse_math_concept>`.
 
     In complement, it conveniently exposes as python properties a catalog of natively supported :ref:`inference-rules<inference_rule_math_concept>` that are automatically :ref:`declared<object_declaration_math_concept>` in the :ref:`universe-of-discourse<universe_of_discourse_math_concept>` when they are accessed for the first time.
@@ -10516,60 +10574,50 @@ class UniverseOfDiscourse(Formula):
     """This python class models a :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
     """
 
-    def __init__(self, nameset: (None, str, NameSet) = None, symbol: (None, str, StyledText) = None,
-        dashed_name: (None, str, StyledText) = None, name: (None, str, ComposableText) = None,
-        echo: (None, bool) = None):
+    def __init__(self, symbol: (None, str, StyledText) = None, dashed_name: (None, str, StyledText) = None,
+        name: (None, str, ComposableText) = None, echo: (None, bool) = None):
         global multiverse
         echo = prioritize_value(echo, configuration.echo_universe_of_discourse_declaration, configuration.echo_default,
             False)
-        self._a = AxiomDeclarationCollection(u=self)
-        self._c1 = ConnectiveCollection(u=self)
-        self._c2 = ClassDeclarationCollection(u=self)
+        self._a = AxiomDeclarationAccretor(u=self)
+        self._c1 = ConnectiveAccretor(u=self)
+        self._c2 = ClassDeclarationAccretor(u=self)
         self._c3 = ConstantDeclarationDict(u=self)
-        self._d = DefinitionDeclarationCollection(u=self)
-        self._i = InferenceRuleDeclarationCollection(u=self)
+        self._d = DefinitionDeclarationAccretor(u=self)
+        self._i = InferenceRuleDeclarationAccretor(u=self)
         self._o = SimpleObjctDict(u=self)
-        self._phi = dict()
+        self._phi = UniverseOfDiscourseFormulaAccretor(u=self)
         self._simple_objcts = SimpleObjctDict(u=self)
-        self._t = TheoryDerivationDeclarationCollection(u=self)
+        self._symbolic_objects = UniverseOfDiscourseSymbolicObjectAccretor(u=self)
+        self._t = TheoryDerivationDeclarationAccretor(u=self)
         # self.variables = dict()
         # Unique name indexes
         # self.symbol_indexes = dict()
         # self.titles = dict()
         self._metatheory = None
-
-        if nameset is None:
-            symbol = prioritize_value(symbol, StyledText(plaintext='U', text_style=text_styles.script_normal))
-            dashed_name = prioritize_value(symbol,
-                StyledText(plaintext='universe-of-discourse-', text_style=text_styles.serif_italic))
-            index = index_universe_of_discourse_symbol(base=symbol)
-            nameset = NameSet(symbol=symbol, dashed_name=dashed_name, index=index, name=name)
-        elif isinstance(nameset, str):
-            # If symbol was passed as a string,
-            # assume the base was passed without index.
-            # TODO: Analyse the string if it ends with index in subscript characters.
-            index = index_universe_of_discourse_symbol(base=nameset)
-            nameset = NameSet(s=nameset, index=index, name=name)
-        super().__init__(is_universe_of_discourse=True, is_theory_foundation_system=False, nameset=nameset, u=None,
-            echo=False)
+        symbol = prioritize_value(symbol, StyledText(plaintext='U', text_style=text_styles.script_normal))
+        dashed_name = prioritize_value(symbol,
+            StyledText(plaintext='universe-of-discourse-', text_style=text_styles.serif_italic))
+        index = prioritize_value(symbol, index_universe_of_discourse_symbol(base=symbol))
+        super().__init__(is_universe_of_discourse=True, is_theory_foundation_system=False, u=None, echo=False)
         multiverse.create_instance(u=self)
         # super()._declare_class_membership_OBSOLETE(classes_OBSOLETE.universe_of_discourse)
         if echo:
             self.echo()
 
     @property
-    def a(self) -> AxiomDeclarationCollection:
+    def a(self) -> AxiomDeclarationAccretor:
         """The collection of axioms declared in this universe-of-discourse."""
         return self._a
 
     @property
-    def c1(self) -> ConnectiveCollection:
+    def c1(self) -> ConnectiveAccretor:
         """A python dictionary of connectives contained in this universe-of-discourse,
         where well-known connectives are directly available as properties."""
         return self._c1
 
     @property
-    def c2(self) -> ClassDeclarationCollection:
+    def c2(self) -> ClassDeclarationAccretor:
         """The collection of classes declared in this universe-of-discourse."""
         return self._c2
 
@@ -10605,53 +10653,8 @@ class UniverseOfDiscourse(Formula):
         else:
             return False
 
-    def cross_reference_formula_OBSOLETE(self, phi: CompoundFormula):
-        """Cross-references a formula in this universe-of-discourse.
-
-        :param phi: a formula.
-        """
-        verify(is_in_class_OBSOLETE(phi, classes_OBSOLETE.compound_formula),
-            'Cross-referencing a formula in a universe-of-discourse requires '
-            'an object of type Formula.', phi=phi, slf=self)
-        verify(phi.nameset not in self.phi.keys() or phi is self.phi[phi.nameset],
-            'Cross-referencing a formula in a universe-of-discourse requires '
-            'that it is referenced with a unique symbol.', phi_symbol=phi.nameset, phi=phi, slf=self)
-        if phi not in self.phi:
-            self.phi[phi.nameset] = phi
-
-    def cross_reference_simple_objct_OBSOLETE(self, o: SimpleObjct):
-        """Cross-references a simple-objct in this universe-of-discourse.
-
-        :param o: a simple-objct.
-        """
-        verify(isinstance(o, SimpleObjct), 'Cross-referencing a simple-objct in a universe-of-discourse requires '
-                                           'an object of type SimpleObjct.')
-        # The unicity of object names is no longer a requirement.
-        # verify(o.nameset not in self.simple_objcts.keys() or o is self.simple_objcts[o.nameset],
-        #    'Cross-referencing a simple-objct in a universe-of-discourse requires '
-        #    'that it is referenced with a unique symbol.', o_symbol=o.nameset, o=o, slf=self)
-        if o not in self.simple_objcts:
-            self.simple_objcts[o.nameset] = o
-
-    def cross_reference_symbolic_objct_OBSOLETE(self, o: Formula):
-        """Cross-references a symbolic-objct in this universe-of-discourse.
-
-        :param o: a symbolic-objct.
-        """
-        if o.nameset.symbol.plaintext == 'variable-substitution':
-            pass
-        #    raise Exception('ooooops')
-        verify(is_in_class_OBSOLETE(o=o, c=classes_OBSOLETE.symbolic_objct),
-            'Cross-referencing a symbolic-objct in a universe-of-discourse requires '
-            'an object of type SymbolicObjct.', o=o, slf=self)
-        duplicate = self.o.get(o.nameset)
-        verify(severity=verification_severities.verbose, assertion=duplicate is None,
-            msg=f'A symbolic-object {duplicate} already exists in the current universe-of-discourse {self} with a '
-                'duplicate designation (symbol and index).', o=o, duplicate=duplicate, slf=self)
-        self.o[o.nameset] = o
-
     @property
-    def d(self) -> DefinitionDeclarationCollection:
+    def d(self) -> DefinitionDeclarationAccretor:
         """The collection of axioms declared in this universe-of-discourse."""
         return self._d
 
@@ -10715,32 +10718,13 @@ class UniverseOfDiscourse(Formula):
     def echo(self):
         return repm.prnt(self.rep_creation(cap=True))
 
-    def get_symbol_max_index(self, symbol: ComposableText) -> int:
-        """Return the highest index for that symbol-base in the universe-of-discourse."""
-        # if symbol in self.symbol_indexes.keys():
-        #    return self.symbol_indexes[symbol]
-        # else:
-        #    return 0
-        same_symbols = tuple((nameset.index_as_int for nameset in self.o.keys() if
-            nameset.symbol == symbol and nameset.index_as_int is not None))
-        return max(same_symbols, default=0)
-
     @property
-    def i(self) -> InferenceRuleDeclarationCollection:
+    def i(self) -> InferenceRuleDeclarationAccretor:
         """The (possibly empty) collection of :ref:`inference-rules<inference_rule_math_concept>` declared in this in this :ref:`universe-of-discourse<universe_of_discourse_math_concept>` .
 
         Abridged name: i
         """
         return self._i
-
-    def index_symbol(self, symbol: StyledText) -> int:
-        """Given a symbol-base S (i.e. an unindexed symbol), returns a unique integer n
-        such that (S, n) is a unique identifier in this instance of UniverseOfDiscourse.
-
-        :param symbol: The symbol-base.
-        :return:
-        """
-        return self.get_symbol_max_index(symbol) + 1
 
     @property
     def is_strictly_propositional(self) -> bool:
@@ -10767,7 +10751,7 @@ class UniverseOfDiscourse(Formula):
         return self._o
 
     @property
-    def phi(self):
+    def phi(self) -> UniverseOfDiscourseFormulaAccretor:
         return self._phi
 
     def rep_creation(self, encoding: (None, Encoding) = None, cap: (None, bool) = None) -> str:
@@ -10790,12 +10774,17 @@ class UniverseOfDiscourse(Formula):
     def so(self, symbol=None):
         return self.declare_symbolic_objct(symbol=symbol)
 
+    @property
+    def symbolic_objects(self) -> UniverseOfDiscourseSymbolicObjectAccretor:
+        """The collection of axioms declared in this universe-of-discourse."""
+        return self._symbolic_objects
+
     def take_note(self, t: TheoryDerivation, content: str, symbol: (None, str, StyledText) = None,
         index: (None, int) = None, auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
         paragraph_header: (None, ParagraphHeader) = None, ref: (None, str, StyledText) = None,
-        subtitle: (None, str, StyledText) = None, nameset: (None, str, NameSet) = None, echo: (None, bool) = None):
+        subtitle: (None, str, StyledText) = None, echo: (None, bool) = None):
         """Take a note, make a comment, or remark."""
         verify(t.u is self, 'This universe-of-discourse 𝑢₁ (self) is distinct from the universe-of-discourse 𝑢₂ '
                             'of the theory '
@@ -10803,11 +10792,10 @@ class UniverseOfDiscourse(Formula):
 
         return NoteInclusion(t=t, content=content, symbol=symbol, index=index, auto_index=auto_index,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, nameset=nameset,
-            echo=echo)
+            explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, echo=echo)
 
     @property
-    def t(self) -> TheoryDerivationDeclarationCollection:
+    def t(self) -> TheoryDerivationDeclarationAccretor:
         """The collection of theory-derivations declared in this universe-of-discourse."""
         return self._t
 
@@ -10853,8 +10841,7 @@ class InferredStatement(FormulaStatement):
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
         ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        paragraph_header: (None, ParagraphHeader) = None, nameset: (None, str, NameSet) = None,
-        echo: (None, bool) = None, echo_proof: (None, bool) = None):
+        paragraph_header: (None, ParagraphHeader) = None, echo: (None, bool) = None, echo_proof: (None, bool) = None):
         """Include (aka allow) an inference_rule in a theory-elaboration.
         """
         echo = prioritize_value(echo, configuration.echo_inferred_statement, configuration.echo_statement,
@@ -10875,8 +10862,7 @@ class InferredStatement(FormulaStatement):
         self._premises = premises
         super().__init__(theory=t, valid_proposition=valid_proposition, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
-            explicit_name=explicit_name, ref=ref, subtitle=subtitle, nameset=nameset,
-            paragraphe_header=paragraph_header, echo=False)
+            explicit_name=explicit_name, ref=ref, subtitle=subtitle, paragraphe_header=paragraph_header, echo=False)
         super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.inferred_proposition)
         if self.valid_proposition.connective is self.t.u.c1.inconsistency and is_derivably_member_of_class(u=self.u,
             phi=self.valid_proposition.terms[0], c=self.u.c2.theory_derivation):

@@ -21,11 +21,11 @@ from punctilious.core import (AbsorptionDeclaration, AbsorptionInclusion, Articl
     DoubleNegationEliminationDeclaration, DoubleNegationEliminationInclusion, DoubleNegationIntroductionDeclaration, \
     DoubleNegationIntroductionInclusion, Encoding, encodings, EqualityCommutativityDeclaration, \
     EqualityCommutativityInclusion, EqualTermsSubstitutionDeclaration, EqualTermsSubstitutionInclusion, ErrorCode,
-    error_codes, formula_alpha_contains, get_formula_unique_variable_ordered_set, PunctiliousException, CompoundFormula,
-    FreeVariable, Header, Hypothesis, HypotheticalSyllogismDeclaration, HypotheticalSyllogismInclusion,
+    error_codes, FormulaAccretor, formula_alpha_contains, get_formula_unique_variable_ordered_set, PunctiliousException,
+    CompoundFormula, FreeVariable, Header, Hypothesis, HypotheticalSyllogismDeclaration, HypotheticalSyllogismInclusion,
     InconsistencyIntroduction1Declaration, InconsistencyIntroduction1Inclusion, InconsistencyIntroduction2Declaration,
     InconsistencyIntroduction2Inclusion, InconsistencyIntroduction3Declaration, InconsistencyIntroduction3Inclusion,
-    InconsistencyWarning, InferenceRuleDeclaration, InferenceRuleDeclarationCollection, InferenceRuleInclusion,
+    InconsistencyWarning, InferenceRuleDeclaration, InferenceRuleDeclarationAccretor, InferenceRuleInclusion,
     InferenceRuleInclusionCollection, InferredStatement, is_alpha_equivalent_to, is_alpha_equivalent_to_iterable,
     is_in_class_OBSOLETE, iterate_formula_data_model_components, is_declaratively_member_of_class,
     is_derivably_member_of_class, ModusPonensDeclaration, ModusPonensInclusion, ModusTollensDeclaration,
@@ -36,7 +36,7 @@ from punctilious.core import (AbsorptionDeclaration, AbsorptionInclusion, Articl
     rep_two_columns_proof_item, SansSerifBold, SansSerifNormal, ScriptNormal, SerifBoldItalic, SerifItalic, SerifNormal,
     SimpleObjct, SimpleObjctDict, Statement, StyledText, Subscript, subscriptify, SymbolicObject, text_styles,
     TextStyle, Formula, TheoryDerivation, TheoryPackage, UniverseOfDiscourse, Variable, VariableSubstitutionDeclaration,
-    VariableSubstitutionInclusion, verify, verify_formula, verify_formula_statement)
+    VariableSubstitutionInclusion, verify, verify_formula, verify_formula_statement, verify_universe_of_discourse)
 
 # from foundation_system_1 import foundation_system_1, ft, u
 
