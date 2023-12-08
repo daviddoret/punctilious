@@ -8193,7 +8193,8 @@ class AbsorptionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, p_implies_q: FlexibleFormula) -> Tuple[bool, AbsorptionDeclaration.Premises]:
+    def check_premises_validity(self, p_implies_q: FlexibleFormula) -> typing.Tuple[
+        bool, AbsorptionDeclaration.Premises]:
         """
         .. include:: ../../include/check_premises_validity_python_method.rstinc
 
@@ -8253,7 +8254,7 @@ class AxiomInterpretationInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, a: FlexibleAxiom, p: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, a: FlexibleAxiom, p: FlexibleFormula) -> typing.Tuple[
         bool, AxiomInterpretationDeclaration.Premises]:
         """
         .. include:: ../../include/check_premises_validity_python_method.rstinc
@@ -8330,7 +8331,7 @@ class BiconditionalElimination1Inclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, p_iff_q: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p_iff_q: FlexibleFormula) -> typing.Tuple[
         bool, BiconditionalElimination1Declaration.Premises]:
         """
         .. include:: ../../include/check_premises_validity_python_method.rstinc
@@ -8389,7 +8390,7 @@ class BiconditionalElimination2Inclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, p_iff_q: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p_iff_q: FlexibleFormula) -> typing.Tuple[
         bool, BiconditionalElimination2Declaration.Premises]:
         """
         .. include:: ../../include/check_premises_validity_python_method.rstinc
@@ -8448,7 +8449,7 @@ class BiconditionalIntroductionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, p_implies_q: FlexibleFormula, q_implies_p: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p_implies_q: FlexibleFormula, q_implies_p: FlexibleFormula) -> typing.Tuple[
         bool, BiconditionalIntroductionDeclaration.Premises]:
         """
         .. include:: ../../include/check_premises_validity_python_method.rstinc
@@ -8511,7 +8512,7 @@ class ConjunctionElimination1Inclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, p_and_q: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p_and_q: FlexibleFormula) -> typing.Tuple[
         bool, ConjunctionElimination1Declaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -8569,7 +8570,7 @@ class ConjunctionElimination2Inclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_conjunction_elimination_2_paragraph_proof(o=o)
         return output
 
-    def check_premises_validity(self, p_and_q: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p_and_q: FlexibleFormula) -> typing.Tuple[
         bool, ConjunctionElimination2Declaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -8619,7 +8620,7 @@ class ConjunctionIntroductionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, p: FlexibleFormula, q: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p: FlexibleFormula, q: FlexibleFormula) -> typing.Tuple[
         bool, ConjunctionIntroductionDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -8677,7 +8678,7 @@ class ConstructiveDilemmaInclusion(InferenceRuleInclusion):
             explicit_name=explicit_name, echo=echo, proof=proof)
 
     def check_premises_validity(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
-        p_or_r: FlexibleFormula) -> Tuple[bool, ConstructiveDilemmaDeclaration.Premises]:
+        p_or_r: FlexibleFormula) -> typing.Tuple[bool, ConstructiveDilemmaDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
         _, p_implies_q, _ = verify_formula_statement(arg='p_implies_q', t=self.t, input_value=p_implies_q,
@@ -8743,7 +8744,7 @@ class DefinitionInterpretationInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, d: FlexibleDefinition, x: FlexibleFormula, y: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, d: FlexibleDefinition, x: FlexibleFormula, y: FlexibleFormula) -> typing.Tuple[
         bool, DefinitionInterpretationDeclaration.Premises]:
         """
         .. include:: ../../include/check_premises_validity_python_method.rstinc
@@ -8826,7 +8827,7 @@ class DestructiveDilemmaInclusion(InferenceRuleInclusion):
         return output
 
     def check_premises_validity(self, p_implies_q: FlexibleFormula, r_implies_s: FlexibleFormula,
-        not_q_or_not_s: FlexibleFormula) -> Tuple[bool, DestructiveDilemmaDeclaration.Premises]:
+        not_q_or_not_s: FlexibleFormula) -> typing.Tuple[bool, DestructiveDilemmaDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
         _, p_implies_q, _ = verify_formula_statement(arg='p_implies_q', t=self.t, input_value=p_implies_q,
@@ -8891,7 +8892,7 @@ class DisjunctionIntroduction1Inclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_disjunction_introduction_1_paragraph_proof(o=o)
         return output
 
-    def check_premises_validity(self, p: FlexibleFormula, q: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p: FlexibleFormula, q: FlexibleFormula) -> typing.Tuple[
         bool, ConjunctionIntroductionDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -8948,7 +8949,7 @@ class DisjunctionIntroduction2Inclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_disjunction_introduction_2_paragraph_proof(o=o)
         return output
 
-    def check_premises_validity(self, p: FlexibleFormula, q: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p: FlexibleFormula, q: FlexibleFormula) -> typing.Tuple[
         bool, ConjunctionIntroductionDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9000,7 +9001,7 @@ class DisjunctiveResolutionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, p_or_q: FlexibleFormula, not_p_or_r: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p_or_q: FlexibleFormula, not_p_or_r: FlexibleFormula) -> typing.Tuple[
         bool, ConstructiveDilemmaDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9065,7 +9066,7 @@ class DisjunctiveSyllogism1Inclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_disjunctive_syllogism_1_paragraph_proof(o=o)
         return output
 
-    def check_premises_validity(self, p_or_q: FlexibleFormula, not_p: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p_or_q: FlexibleFormula, not_p: FlexibleFormula) -> typing.Tuple[
         bool, DisjunctiveSyllogism1Declaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9124,7 +9125,7 @@ class DisjunctiveSyllogism2Inclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_disjunctive_syllogism_2_paragraph_proof(o=o)
         return output
 
-    def check_premises_validity(self, p_or_q: FlexibleFormula, not_q: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p_or_q: FlexibleFormula, not_q: FlexibleFormula) -> typing.Tuple[
         bool, DisjunctiveSyllogism2Declaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9182,7 +9183,7 @@ class DoubleNegationEliminationInclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_double_negation_elimination_paragraph_proof(o=o)
         return output
 
-    def check_premises_validity(self, not_not_p: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, not_not_p: FlexibleFormula) -> typing.Tuple[
         bool, DoubleNegationEliminationDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9239,7 +9240,7 @@ class DoubleNegationIntroductionInclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_double_negation_introduction_paragraph_proof(o=o)
         return output
 
-    def check_premises_validity(self, p: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p: FlexibleFormula) -> typing.Tuple[
         bool, DoubleNegationIntroductionDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9294,7 +9295,7 @@ class EqualityCommutativityInclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_equality_commutativity_paragraph_proof(o=o)
         return output
 
-    def check_premises_validity(self, x_equal_y: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, x_equal_y: FlexibleFormula) -> typing.Tuple[
         bool, EqualityCommutativityDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9350,7 +9351,7 @@ class EqualTermsSubstitutionInclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_equal_terms_substitution_paragraph_proof(o=o)
         return output
 
-    def check_premises_validity(self, p: FlexibleFormula, x_equal_y: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p: FlexibleFormula, x_equal_y: FlexibleFormula) -> typing.Tuple[
         bool, EqualTermsSubstitutionDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9410,7 +9411,7 @@ class HypotheticalSyllogismInclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_hypothetical_syllogism_paragraph_proof(o=o)
         return output
 
-    def check_premises_validity(self, p_implies_q: FlexibleFormula, q_implies_r: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p_implies_q: FlexibleFormula, q_implies_r: FlexibleFormula) -> typing.Tuple[
         bool, HypotheticalSyllogismDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9470,7 +9471,7 @@ class InconsistencyIntroduction1Inclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_inconsistency_introduction_1_paragraph_proof(o=o)
         return output
 
-    def check_premises_validity(self, p: FlexibleFormula, not_p: FlexibleFormula, t: TheoryDerivation) -> Tuple[
+    def check_premises_validity(self, p: FlexibleFormula, not_p: FlexibleFormula, t: TheoryDerivation) -> typing.Tuple[
         bool, InconsistencyIntroduction1Declaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9529,7 +9530,7 @@ class InconsistencyIntroduction2Inclusion(InferenceRuleInclusion):
         return output
 
     def check_premises_validity(self, x_equal_y: FlexibleFormula, x_unequal_y: FlexibleFormula, t: TheoryDerivation) -> \
-        Tuple[bool, InconsistencyIntroduction2Declaration.Premises]:
+        typing.Tuple[bool, InconsistencyIntroduction2Declaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
         _, x_equal_y, _ = verify_formula_statement(arg='x_equal_y', t=t, input_value=x_equal_y,
@@ -9589,7 +9590,7 @@ class InconsistencyIntroduction3Inclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_inconsistency_introduction_3_paragraph_proof(o=o)
         return output
 
-    def check_premises_validity(self, x_unequal_x: FlexibleFormula, t: TheoryDerivation) -> Tuple[
+    def check_premises_validity(self, x_unequal_x: FlexibleFormula, t: TheoryDerivation) -> typing.Tuple[
         bool, InconsistencyIntroduction3Declaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9641,7 +9642,7 @@ class ModusPonensInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, p_implies_q: FlexibleFormula, p: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p_implies_q: FlexibleFormula, p: FlexibleFormula) -> typing.Tuple[
         bool, ModusPonensDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9700,7 +9701,7 @@ class ModusTollensInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, p_implies_q: FlexibleFormula, not_q: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p_implies_q: FlexibleFormula, not_q: FlexibleFormula) -> typing.Tuple[
         bool, ModusTollensDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9759,7 +9760,7 @@ class ProofByContradiction1Inclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> typing.Tuple[
         bool, ProofByContradiction1Declaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9818,7 +9819,7 @@ class ProofByContradiction2Inclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> typing.Tuple[
         bool, ProofByContradiction2Declaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9877,7 +9878,7 @@ class ProofByRefutation1Inclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> typing.Tuple[
         bool, ProofByRefutation1Declaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9940,7 +9941,7 @@ class ProofByRefutation2Inclusion(InferenceRuleInclusion):
         output = yield from configuration.locale.compose_proof_by_refutation_2_paragraph_proof(o=o)
         return output
 
-    def check_premises_validity(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, h: FlexibleFormula, inc_h: FlexibleFormula) -> typing.Tuple[
         bool, ProofByRefutation2Declaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.
@@ -9995,7 +9996,7 @@ class VariableSubstitutionInclusion(InferenceRuleInclusion):
         super().__init__(t=t, i=i, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, echo=echo, proof=proof)
 
-    def check_premises_validity(self, p: FlexibleFormula, phi: FlexibleFormula) -> Tuple[
+    def check_premises_validity(self, p: FlexibleFormula, phi: FlexibleFormula) -> typing.Tuple[
         bool, VariableSubstitutionDeclaration.Premises]:
         error_code: ErrorCode = error_codes.error_003_inference_premise_validity_error
         # Validate that expected formula-statements are formula-statements in the current theory.

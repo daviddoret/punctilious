@@ -55,7 +55,7 @@ Python classes
    InconsistencyIntroduction3Declaration<python/class/inconsistency_introduction_3_declaration_python_class>
    InconsistencyIntroduction3Inclusion<python/class/inconsistency_introduction_3_inclusion_python_class>
    InferenceRuleDeclaration<python/class/inference_rule_declaration_python_class>
-   InferenceRuleDeclarationCollection<python/class/inference_rule_declaration_collection_python_class>
+   InferenceRuleDeclarationAccretor<python/class/inference_rule_declaration_collection_python_class>
    InferenceRuleInclusion<python/class/inference_rule_inclusion_python_class>
    InferenceRuleInclusionCollection<python/class/inference_rule_inclusion_collection_python_class>
    ModusPonensDeclaration<python/class/modus_ponens_declaration_python_class>
