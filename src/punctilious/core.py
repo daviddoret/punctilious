@@ -3520,8 +3520,7 @@ class DefinitionDeclaration(Formula):
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
         ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        nameset: (None, str, NameSet) = None, paragraph_header: (None, ParagraphHeader) = None,
-        echo: (None, bool) = None):
+        paragraph_header: (None, ParagraphHeader) = None, echo: (None, bool) = None):
         """
 
         :param natural_language: The definition's content in natural-language.
@@ -3536,11 +3535,10 @@ class DefinitionDeclaration(Formula):
             natural_language = SansSerifItalic(natural_language)
         self._natural_language = natural_language
         paragraph_header = prioritize_value(paragraph_header, paragraph_headers.definition_declaration)
-        if nameset is None and symbol is None:
-            symbol = configuration.default_definition_declaration_symbol
+        symbol = prioritize_value(symbol, configuration.default_definition_declaration_symbol)
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, ref=ref,
-            subtitle=subtitle, nameset=nameset, paragraph_header=paragraph_header, echo=False)
+            subtitle=subtitle, paragraph_header=paragraph_header, echo=False)
         u.d.declare_instance(d=self)
         if echo:
             self.echo()
@@ -6674,14 +6672,13 @@ class DefinitionDeclarationAccretor(UniverseOfDiscourseFormulaAccretor):
         acronym: (None, str, StyledText) = None, abridged_name: (None, str, StyledText) = None,
         name: (None, str, StyledText) = None, explicit_name: (None, str, StyledText) = None,
         ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None,
-        paragraph_header: (None, ParagraphHeader) = None, nameset: (None, str, NameSet) = None,
-        echo: (None, bool) = None) -> DefinitionDeclaration:
+        paragraph_header: (None, ParagraphHeader) = None, echo: (None, bool) = None) -> DefinitionDeclaration:
         """:ref:`Declare<object_declaration_math_concept>` a new definition in this universe-of-discourse.
         """
         d: DefinitionDeclaration = DefinitionDeclaration(u=self.u, natural_language=natural_language, symbol=symbol,
             index=index, auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name,
             name=name, explicit_name=explicit_name, ref=ref, subtitle=subtitle, paragraph_header=paragraph_header,
-            nameset=nameset, echo=echo)
+            echo=echo)
         d = self.declare_instance(d=d)  # Return the existing definition if there is an definition a' such that a' == a.
         return d
 
