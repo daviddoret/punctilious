@@ -6035,17 +6035,9 @@ class Hypothesis(Statement):
         paragraph_header = paragraph_headers.hypothesis
         # TODO: Check that all components of the hypothetical-proposition
         #  are elements of the source theory-branch.
-        if isinstance(symbol, str):
-            # If symbol was passed as a string,
-            # assume the base was passed without index.
-            # TODO: Analyse the string if it ends with index in subscript characters.
-            symbol = StyledText(plaintext=symbol, text_style=text_styles.serif_italic)
-            index = t.u.index_symbol(symbol=symbol)
-        elif symbol is None:
-            symbol = configuration.default_parent_hypothesis_statement_symbol
-            index = t.u.index_symbol(symbol=symbol)
-        super().__init__(theory=t, symbol=symbol, index=index, paragraph_header=paragraph_header, subtitle=subtitle,
-            dashed_name=dashed_name, echo=False)
+        symbol = prioritize_value(symbol, configuration.default_parent_hypothesis_statement_symbol)
+        super().__init__(theory=t, symbol=symbol, index=index, auto_index=auto_index, paragraph_header=paragraph_header,
+            subtitle=subtitle, dashed_name=dashed_name, echo=False)
         super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.hypothesis)
         self._hypothesis_formula = hypothesis_formula
         # When a hypothesis is posed in a theory 𝒯₁,
