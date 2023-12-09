@@ -1145,7 +1145,14 @@ def is_declaratively_member_of_class(u: UniverseOfDiscourse, phi: FlexibleFormul
     See also: function is_proved_member_of_class()
 
     See minimal-metatheory for more details."""
-    _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
+
+    # BUG: verify_formula unpacks the inferred_statement internal formula.
+    # but we don't want to do that, because we may want to test
+    # that the object is of the class inferred_statement!
+    # There is an ambiguity here, between "formula" as the generic
+    # object of all Punctilious data model, and "formula" as
+    # a syntactic construction.
+    _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi', unpack_statement=False)
     _, c, _ = verify_class(u=u, c=c, arg='c')
     phi: Formula
     c: ClassDeclaration
@@ -5657,14 +5664,12 @@ class TheoryDerivation(Formula):
         super().__init__(symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name, name=name,
             explicit_name=explicit_name, paragraph_header=paragraph_headers.theory_derivation,
             is_theory_foundation_system=True if extended_theory is None else False, u=u, echo=False)
-        verify_universe_of_discourse(u=u)
-        verify(
-            extended_theory is None or is_derivably_member_of_class(u=u, phi=extended_theory, c=u.c2.theory_derivation),
-            'Parameter "extended_theory" is neither None nor a member of declarative-class theory.', u=u)
-        verify(extended_theory_limit is None or (
-            extended_theory is not None and is_declaratively_member_of_class(u=u, phi=extended_theory_limit,
-            c=u.c2.statement) and extended_theory_limit in extended_theory.statements),
-            'Parameter "theory_extension_statement_limit" is inconsistent.', u=u)
+        if extended_theory is not None:
+            verify(is_derivably_member_of_class(u=u, phi=extended_theory, c=u.c2.theory_derivation),
+                'Parameter "extended_theory" is neither None nor a member of declarative-class theory.', u=u)
+            verify(extended_theory_limit is None or (is_declaratively_member_of_class(u=u, phi=extended_theory_limit,
+                c=u.c2.statement) and extended_theory_limit in extended_theory.statements),
+                'Parameter "theory_extension_statement_limit" is inconsistent.', u=u)
         u.t.declare_instance(t=self)
         if stabilized:
             # It is a design choice to stabilize the theory-elaboration
@@ -5820,8 +5825,7 @@ theory-elaboration."""
             yield self
             visited.update({self})
         for statement in set(self.statements).difference(visited):
-            if not is_declaratively_member_of_class(u=self.u, phi=statement, c=self.u.c2.atheoretical_statement):
-                # if not is_in_class_OBSOLETE(statement, declarative_class_list_OBSOLETE.atheoretical_statement):
+            if not isinstance(statement, AtheoreticalStatement):
                 yield statement
                 visited.update({statement})
                 yield from statement.iterate_theoretical_objcts_references(include_root=False, visited=visited,
@@ -5864,21 +5868,31 @@ theory-elaboration."""
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, ref=ref, subtitle=subtitle, echo=echo)
 
-    def iterate_statements_in_theory_chain(self, formula: (None, CompoundFormula) = None):
+    def iterate_statements_in_theory_chain(self, formula_syntactic_equivalence_filter: (None, CompoundFormula) = None,
+        formula_alpha_equivalence_filter: (None, CompoundFormula) = None):
         """Iterate through the (proven or sound) statements in the current theory-chain.
 
-        :param formula: (conditional) Filters on formula-statements that are formula-syntactically-equivalent.
+        :param formula_syntactic_equivalence_filter: (conditional) Filters on formula-statements that are formula-syntactically-equivalent.
         :return:
         """
-        if formula is not None:
-            _, formula, _ = verify_formula(u=self.u, input_value=formula, raise_exception=True)
+        if formula_syntactic_equivalence_filter is not None:
+            _, formula_syntactic_equivalence_filter, _ = verify_formula(u=self.u,
+                input_value=formula_syntactic_equivalence_filter, raise_exception=True)
         for t in self.iterate_theory_chain():
             for s in t.statements:
-                if formula is None or (is_declaratively_member_of_class(u=self.u, phi=s,
-                    c=self.u.c2.formula_statement) and s.is_formula_syntactically_equivalent_to(formula)):
-                    # if formula is None or (is_in_class_OBSOLETE(s,
-                    #    classes_OBSOLETE.formula_statement) and s.is_formula_syntactically_equivalent_to(formula)):
-                    yield s
+                if not isinstance(s, AtheoreticalStatement):
+                    # Getting read of non-sense objects such as section, etc.
+                    if (formula_syntactic_equivalence_filter is not None and s.is_formula_syntactically_equivalent_to(
+                        formula_syntactic_equivalence_filter)) or (
+                        formula_alpha_equivalence_filter is not None and is_alpha_equivalent_to(u=self.u,
+                        phi=formula_alpha_equivalence_filter, psi=s)) or (
+                        formula_syntactic_equivalence_filter is None and formula_alpha_equivalence_filter is None):
+                        # if formula_syntactic_equivalence_filter is None or (is_declaratively_member_of_class(u=self.u, phi=s,
+                        #    c=self.u.c2.formula_statement) and s.is_formula_syntactically_equivalent_to(
+                        #    formula_syntactic_equivalence_filter)):
+                        # if formula is None or (is_in_class_OBSOLETE(s,
+                        #    classes_OBSOLETE.formula_statement) and s.is_formula_syntactically_equivalent_to(formula)):
+                        yield s
 
     def iterate_theory_chain(self, visited: (None, set) = None):
         """Iterate over the theory-chain of this theory.
@@ -5923,6 +5937,11 @@ theory-elaboration."""
         - undetermined."""
         return self._consistency
 
+    def contains_statement_in_theory_chain(self, phi: FlexibleStatement):
+        """Returns True if this theory-derivation contains phi in its theory-chain, False otherwise."""
+        # _, phi, _ = verify_formula_statement(t=self, input_value=phi, arg='phi', raise_exception=True)
+        return any(self.iterate_statements_in_theory_chain(formula_alpha_equivalence_filter=phi))
+
     @property
     def inconsistency_introduction_inference_rule_is_included(self):
         """True if the inconsistency-introduction inference-rule is included in this theory,
@@ -5946,7 +5965,7 @@ theory-elaboration."""
         :param formula:
         :return:
         """
-        return next(self.iterate_statements_in_theory_chain(formula=formula), None)
+        return next(self.iterate_statements_in_theory_chain(formula_syntactic_equivalence_filter=formula), None)
 
     def pose_hypothesis(self, hypothesis_formula: CompoundFormula, symbol: (None, str, StyledText) = None,
         index: (None, int) = None, auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
@@ -5988,7 +6007,7 @@ theory-elaboration."""
     def report_inconsistency_proof(self, proof: InferredStatement):
         """This method is called by InferredStatement.__init__() when the inferred-statement
          proves the inconsistency of a theory."""
-        verify(is_in_class_OBSOLETE(proof, classes_OBSOLETE.inferred_proposition),
+        verify(is_declaratively_member_of_class(u=self.u, phi=proof, c=self.u.c2.inferred_statement),
             '⌜proof⌝ must be an inferred-statement.', proof=proof, slf=self)
         proof: CompoundFormula
         proof = unpack_formula(proof)
@@ -6745,6 +6764,7 @@ class ClassDeclarationAccretor(UniverseOfDiscourseFormulaAccretor):
         self._formula_statement = None
         self._free_variable = None
         self._inference_rule = None
+        self._inferred_statement = None
         self._simple_object = None
         self._statement = None
         self._theory_derivation = None
@@ -6853,6 +6873,14 @@ class ClassDeclarationAccretor(UniverseOfDiscourseFormulaAccretor):
             self._inference_rule = self.declare(symbol='inference-rule', auto_index=False,
                 python_class=InferenceRuleDeclaration, is_class_of_class=False)
         return self._inference_rule
+
+    @property
+    def inferred_statement(self) -> ClassDeclaration:
+        """The inferred-statement class."""
+        if self._inferred_statement is None:
+            self._inferred_statement = self.declare(symbol='inferred-statement', auto_index=False,
+                python_class=InferredStatement, is_class_of_class=False)
+        return self._inferred_statement
 
     @property
     def simple_object(self) -> ClassDeclaration:
@@ -7533,20 +7561,26 @@ def verify_symbolic_object(u: UniverseOfDiscourse, input_value: SymbolicObject, 
 
 def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (None, str) = None,
     form: (None, FlexibleFormula) = None, mask: (None, frozenset[FreeVariable]) = None,
-    is_strictly_propositional: (None, bool) = None, raise_exception: bool = True,
-    error_code: (None, ErrorCode) = None) -> tuple[bool, (None, Formula), (None, str)]:
+    is_strictly_propositional: (None, bool) = None, raise_exception: bool = True, error_code: (None, ErrorCode) = None,
+    unpack_statement: bool = True) -> tuple[bool, (None, Formula), (None, str)]:
     """Many punctilious pythonic methods or functions expect some formula as input terms. This function assures that the input value is a proper formula and that it is consistent with possible contraints imposed on that formula.
 
     If ⌜input_value⌝ is of type formula, it is already well typed.
-
-    If ⌜argument⌝ is of type statement-variable, retrieve its valid-proposition property.
 
     If ⌜argument⌝ is of type iterable, such as tuple, e.g.: (implies, q, p), we assume it is a formula in the form (connective, a1, a2, ... an) where ai are arguments.
 
     Note that this is complementary with the pseudo-infix notation, which uses the __or__ method and | operator to transform: p |r| q to (r, p, q).
 
-    :param t:
+    :param u:
     :param input_value:
+    :param arg:
+    :param form:
+    :param mask:
+    :param is_strictly_propositional:
+    :param raise_exception:
+    :param error_code:
+    :param unpack_statement: if input_value is a statement, return its internal formula instead of the statement
+    object itself. Default: True.
     :return:
     """
     ok: bool
@@ -7558,7 +7592,10 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
     elif isinstance(input_value, FormulaStatement):
         # the input is typed as a FormulaStatement,
         # we must unpack it to retrieve its internal Formula.
-        formula = input_value.valid_proposition
+        if unpack_statement:
+            formula = input_value.valid_proposition
+        else:
+            formula = input_value
     elif isinstance(input_value, ConstantDeclaration):
         # the input is typed as a ConstantDeclaration,
         # we must unpack it to retrieve its internal Formula.
@@ -7586,13 +7623,6 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
             argument=input_value, u=u)
         if not ok:
             return ok, None, msg
-
-    # Note: it is not necessary to verify that the universe
-    # of the formula connective is consistent with the universe of the formula,
-    # because this is already verified in the formula constructor.
-    # Note: it is not necessary to verify that the universe
-    # of the formula terms are consistent with the universe of the formula,
-    # because this is already verified in the formula constructor.
     if form is not None:
         ok, form, msg = verify_formula(u=u, input_value=form,
             raise_exception=True)  # The form itself may be a flexible formula.
@@ -7694,9 +7724,10 @@ def verify_formula_statement(t: TheoryDerivation, input_value: FlexibleFormula, 
                 return True, formula, None
 
     formula_ok, msg = verify(raise_exception=raise_exception, error_code=error_code,
-        assertion=t.contains_theoretical_objct_OBSOLETE(formula_statement),
+        assertion=t.contains_statement_in_theory_chain(phi=formula_statement),
         msg=f'The formula-statement {formula_statement} passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not contained in the theory-derivation ⌜{t}⌝.',
         formula=formula, t=t)
+
     if not formula_ok:
         return formula_ok, None, msg
 
