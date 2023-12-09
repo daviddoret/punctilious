@@ -120,7 +120,11 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in tests">
+  <component name="RunManager" selected="PowerShell.build_docs.ps1">
+    <configuration name="build_docs.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/build_docs.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
+      <envs />
+      <method v="2" />
+    </configuration>
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -338,21 +342,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for test_equal_terms_substitution.TestEqualTermsSubstitution.test_equal_terms_substitution_with_theory_extension" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="C:\Users\David\PycharmProjects\PythonVirtualEnvironments\Scripts\python.exe" />
-      <option name="SDK_NAME" value="Python 3.11 (PythonVirtualEnvironments)" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_equal_terms_substitution.TestEqualTermsSubstitution.test_equal_terms_substitution_with_theory_extension&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="Unittests for test_inconsistency_introduction_1.TestInconsistencyIntroduction1.test_inconsistency_introduction_1" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -384,6 +373,7 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="PowerShell.build_docs.ps1" />
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
@@ -393,7 +383,6 @@
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.Python tests in test_hypothesis.py" />
-      <item itemvalue="Python tests.Unittests for test_equal_terms_substitution.TestEqualTermsSubstitution.test_equal_terms_substitution_with_theory_extension" />
       <item itemvalue="Python tests.Unittests for test_inconsistency_introduction_1.TestInconsistencyIntroduction1.test_inconsistency_introduction_1" />
       <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms.test_2_2" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -402,11 +391,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="PowerShell.build_docs.ps1" />
         <item itemvalue="Python tests.Python tests in test_hypothesis.py" />
         <item itemvalue="Python.sample_hypothesis" />
         <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms.test_2_2" />
         <item itemvalue="Python tests.Unittests for test_inconsistency_introduction_1.TestInconsistencyIntroduction1.test_inconsistency_introduction_1" />
-        <item itemvalue="Python tests.Unittests for test_equal_terms_substitution.TestEqualTermsSubstitution.test_equal_terms_substitution_with_theory_extension" />
       </list>
     </recent_temporary>
   </component>
