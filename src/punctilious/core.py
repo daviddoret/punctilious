@@ -1145,7 +1145,14 @@ def is_declaratively_member_of_class(u: UniverseOfDiscourse, phi: FlexibleFormul
     See also: function is_proved_member_of_class()
 
     See minimal-metatheory for more details."""
-    _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi')
+
+    # BUG: verify_formula unpacks the inferred_statement internal formula.
+    # but we don't want to do that, because we may want to test
+    # that the object is of the class inferred_statement!
+    # There is an ambiguity here, between "formula" as the generic
+    # object of all Punctilious data model, and "formula" as
+    # a syntactic construction.
+    _, phi, _ = verify_formula(u=u, input_value=phi, arg='phi', unpack_statement=False)
     _, c, _ = verify_class(u=u, c=c, arg='c')
     phi: Formula
     c: ClassDeclaration
@@ -1174,17 +1181,16 @@ def is_declaratively_member_of_class_universe_of_discourse(u: UniverseOfDiscours
         return False
 
 
-def is_in_class_OBSOLETE(o: Formula, c: DeclarativeClass_OBSOLETE) -> bool:
-    """Return True if o is a member of the declarative-class c, False otherwise.
-
-    :param o: An arbitrary python object.
-    :param c: A declarative-class.
-    :return: (bool).
-    """
-    verify(o is not None, 'o is None.', o=o, c=c)
-    # verify(hasattr(o, 'is_in_class'), 'o does not have attribute is_in_class.', o=o, c=c)
-    verify(callable(getattr(o, 'is_in_class_OBSOLETE')), 'o.is_in_class() is not callable.', o=o, c=c)
-    return o.is_in_class_OBSOLETE(c)
+# def is_in_class_OBSOLETE(o: Formula, c: DeclarativeClass_OBSOLETE) -> bool:
+#    """Return True if o is a member of the declarative-class c, False otherwise.
+#    :param o: An arbitrary python object.
+#    :param c: A declarative-class.
+#    :return: (bool).
+#   """
+#    verify(o is not None, 'o is None.', o=o, c=c)
+#    # verify(hasattr(o, 'is_in_class'), 'o does not have attribute is_in_class.', o=o, c=c)
+#    verify(callable(getattr(o, 'is_in_class_OBSOLETE')), 'o.is_in_class() is not callable.', o=o, c=c)
+#    return o.is_in_class_OBSOLETE(c)
 
 
 def set_attr(o, a, v):
@@ -1701,7 +1707,7 @@ class SymbolicObject(abc.ABC):
         ref: (None, str, StyledText) = None, subtitle: (None, str, StyledText) = None, echo: (None, bool) = None):
         echo = prioritize_value(echo, configuration.echo_symbolic_objct, configuration.echo_default, False)
         auto_index = prioritize_value(auto_index, configuration.auto_index, True)
-        self._declarative_classes = frozenset()
+        # self._declarative_classes = frozenset()
         is_theory_foundation_system = False if is_theory_foundation_system is None else is_theory_foundation_system
         is_universe_of_discourse = False if is_universe_of_discourse is None else is_universe_of_discourse
         symbol = SerifItalic(symbol) if isinstance(symbol, str) else symbol
@@ -1715,9 +1721,8 @@ class SymbolicObject(abc.ABC):
             ref=ref, subtitle=subtitle)
         self._nameset = nameset
         self.is_theory_foundation_system = is_theory_foundation_system
-        self._declare_class_membership_OBSOLETE(classes_OBSOLETE.symbolic_objct)
         if not is_universe_of_discourse:
-            self._u = u  # self._u.cross_reference_symbolic_objct_OBSOLETE(o=self)
+            self._u = u
         else:
             self._u = None
         if u is not None:
@@ -1794,35 +1799,8 @@ class SymbolicObject(abc.ABC):
         output = yield from self.nameset.compose_title(cap=cap)
         return output
 
-    @property
-    def declarative_classes_OBSOLETE(self) -> frozenset[DeclarativeClass_OBSOLETE]:
-        """The set of declarative-classes this symbolic-objct is a member of."""
-        return self._declarative_classes
-
-    def _declare_class_membership_OBSOLETE(self, c: DeclarativeClass_OBSOLETE):
-        """During construction (__init__()), add the declarative-classes this symboli-objct is
-        being made a member of."""
-        if not hasattr(self, '_declarative_classes'):
-            setattr(self, '_declarative_classes', frozenset())
-        self._declarative_classes = self._declarative_classes.union({c})
-
     def echo(self):
         repm.prnt(self.rep())
-
-    def is_declarative_class_member_OBSOLETE(self, c: DeclarativeClass_OBSOLETE) -> bool:
-        """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise."""
-        # TODO: This is a design flaw. A formula (previously theoretical object) may
-        #   be a member of a class, but not a symbolic object.
-        if hasattr(self, '_declarative_classes'):
-            return c in self._declarative_classes
-        else:
-            return False
-
-    def is_in_class_OBSOLETE(self, c: DeclarativeClass_OBSOLETE) -> bool:
-        """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise.
-
-        A shortcut for o.is_declarative_class_member(...)."""
-        return self.is_declarative_class_member_OBSOLETE(c=c)
 
     def is_base_symbol_equivalent(self, o2: FlexibleSymbol) -> bool:
         """Return True if this object and o2 are base-symbol-equivalent, False otherwise.
@@ -2460,15 +2438,11 @@ class Formula(SymbolicObject):
         substitute_formula_with_components: bool = True):
         """Iterate through this and all the formulas it contains recursively.
         """
+        # TODO: Merge methods iterate_statements_in_theory_chain and iterate_theoretical_objcts_references
         visited = set() if visited is None else visited
         if include_root and self not in visited:
             yield self
             visited.update({self})
-
-    def contains_theoretical_objct_OBSOLETE(self, o: Formula):
-        """Return True if o is in this theory's hierarchy, False otherwise.
-        """
-        return o in self.iterate_theoretical_objcts_references(include_root=True)
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[Composable, None, None]:
         """
@@ -2624,7 +2598,7 @@ class FreeVariable(Variable):
             symbol = StyledText(plaintext=symbol, text_style=text_styles.serif_bold)
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, echo=False)
-        super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.variable)
+        # super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.variable)
         if echo:
             self.echo()
 
@@ -2711,7 +2685,7 @@ class ConstantDeclaration(Formula):
             symbol = configuration.default_constant_symbol
         self._value = value
         super().__init__(symbol=symbol, auto_index=auto_index, index=index, u=u, echo=False)
-        super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.constant_declaration)
+        # super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.constant_declaration)
         u.cross_reference_constant_OBSOLETE(self)
         verify(assertion=value.u is self.u,
             msg=f'The universe-of-discourse ⌜{self.u}⌝ of the constant ⌜{self}⌝ is inconsistent with the universe-of-discourse of its value ⌜{value}⌝.')
@@ -2734,6 +2708,7 @@ class ConstantDeclaration(Formula):
     def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None,
         substitute_constants_with_values: bool = True):
         """Iterate through this and all the formulas it contains recursively."""
+        # TODO: Merge methods iterate_statements_in_theory_chain and iterate_theoretical_objcts_references
         visited = set() if visited is None else visited
         if substitute_constants_with_values:
             yield from self.value.iterate_theoretical_objcts_references(include_root=include_root, visited=visited,
@@ -2812,7 +2787,8 @@ class CompoundFormula(Formula):
         #     msg='Ill-formed formula error. The number of terms in this formula is zero. 0-ary connectives are currently not supported. Use a simple-object instead.',
         #     severity=verification_severities.error, raise_exception=True, connective=self.connective,
         #     len_terms=len(terms))
-        if not is_in_class_OBSOLETE(self.connective, classes_OBSOLETE.variable):
+        if not is_declaratively_member_of_class(u=u, phi=self.connective, c=u.c2.free_variable):
+            # if not is_in_class_OBSOLETE(self.connective, classes_OBSOLETE.variable):
             verify(self.connective.arity is None or self.connective.arity == len(terms),
                 msg=f'Ill-formed formula error. Connective ⌜{self.connective}⌝ is defined with a fixed arity constraint of {self.connective.arity} but the number of terms provided to construct this formula is {len(terms)}.',
                 severity=verification_severities.error, raise_exception=True, connective=self.connective,
@@ -2829,18 +2805,21 @@ class CompoundFormula(Formula):
         self.terms = terms
         # super().__init__(nameset=nameset, u=u, echo=False)
         super().__init__(symbol=symbol, index=index, auto_index=auto_index, u=u, echo=False)
-        super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.compound_formula)
+        # super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.compound_formula)
         verify(assertion=is_declaratively_member_of_class(u=self.u, phi=connective,
-            c=self.u.c2.connective) or is_in_class_OBSOLETE(connective, classes_OBSOLETE.variable),
-            msg='The connective of this formula is neither a connective, nor a variable.', formula=self,
-            connective=connective)
+            c=self.u.c2.connective) or is_declaratively_member_of_class(u=self.u, phi=connective,
+            c=self.u.c2.free_variable), msg='The connective of this formula is neither a connective, nor a variable.',
+            formula=self, connective=connective)
         verify(assertion=connective.u is self.u,
             msg=f'The universe-of-discourse ⌜{connective.u}⌝ of the connective in the formula is inconsistent with the universe-of-discourse ⌜{self.u}⌝ of the formula.',
             formula=self, connective=connective)
         self.cross_reference_variables()
         for p in terms:
             verify_formula(u=self.u, input_value=p, arg='p')
-            if is_in_class_OBSOLETE(p, classes_OBSOLETE.variable) and self.connective is not self.u.c1.object_reference:
+            if is_declaratively_member_of_class(u=self.u, phi=p,
+                c=self.u.c2.free_variable) and self.connective is not self.u.c1.object_reference:
+                # if is_in_class_OBSOLETE(p, classes_OBSOLETE.variable) and self.connective is not
+                # self.u.c1.object_reference:
                 p.extend_scope(self)
             verify(p.u is self.u,
                 f'The universe-of-discourse ⌜p_u⌝ of the term ⌜p⌝ in the formula ⌜formula⌝ is inconsistent with the universe-of-discourse ⌜formula_u⌝ of the formula.',
@@ -2876,7 +2855,8 @@ class CompoundFormula(Formula):
         yield end
 
     def compose_formula(self) -> collections.abc.Generator[Composable, None, None]:
-        if is_in_class_OBSOLETE(self.connective, classes_OBSOLETE.variable):
+        # if is_in_class_OBSOLETE(self.connective, classes_OBSOLETE.variable):
+        if is_declaratively_member_of_class(u=self.u, phi=self.connective, c=self.u.c2.free_variable):
             # If the connective of this formula is a variable,
             # it has no arity, neither a representation-mode.
             # In this situation, our design-choice is to
@@ -3019,7 +2999,8 @@ class CompoundFormula(Formula):
 
         This property is directly inherited from the formula-is-proposition
         attribute of the formula's connective."""
-        if is_in_class_OBSOLETE(self.connective, classes_OBSOLETE.variable):
+        # if is_in_class_OBSOLETE(self.connective, classes_OBSOLETE.variable):
+        if is_declaratively_member_of_class(u=self.u, phi=self.connective, c=self.u.c2.free_variable):
             # TODO: IDEA: Is it a good idea to equip FreeVariable with a strictly-proposition property?
             return False
         else:
@@ -3028,6 +3009,7 @@ class CompoundFormula(Formula):
     def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None,
         substitute_constants_with_values: bool = True):
         """Iterate through this and all the formulas it contains recursively."""
+        # TODO: Merge methods iterate_statements_in_theory_chain and iterate_theoretical_objcts_references
         visited = set() if visited is None else visited
         if include_root and self not in visited:
             yield self
@@ -3190,7 +3172,7 @@ class Statement(Formula):
         super().__init__(u=u, symbol=symbol, index=index, auto_index=auto_index, namespace=namespace,
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, echo=echo)
-        super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.statement)
+        # super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.statement)
         if echo:
             self.echo()
 
@@ -3345,7 +3327,7 @@ class AxiomInclusion(Statement):
         super().__init__(theory=t, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, echo=False)
-        super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.axiom_inclusion)
+        # super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.axiom_inclusion)
         if echo:
             self.echo()
 
@@ -3416,7 +3398,7 @@ class InferenceRuleInclusion(Statement):
         super().__init__(theory=t, paragraph_header=paragraph_headers, symbol=symbol, index=index,
             auto_index=auto_index, echo=False)
         t.crossreference_inference_rule_inclusion(self)
-        super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.inference_rule_inclusion)
+        # super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.inference_rule_inclusion)
         echo = prioritize_value(echo, configuration.echo_inference_rule_inclusion, configuration.echo_inclusion,
             configuration.echo_default, False)
         if echo:
@@ -3599,7 +3581,7 @@ class DefinitionInclusion(Statement):
         super().__init__(theory=t, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name, paragraph_header=cat,
             ref=ref, subtitle=subtitle, echo=False)
-        super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.definition_inclusion)
+        # super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.definition_inclusion)
         if echo:
             self.echo()
 
@@ -3693,7 +3675,7 @@ class FormulaStatement(Statement):
             # it follows that this statement "yields" new statements in the theory.
             assert self.valid_proposition.connective.implementation is not None
             self.morphism_output = Morphism(theory=theory, source_statement=self)
-        super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.formula_statement)
+        # super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.formula_statement)
         if echo:
             self.echo()
 
@@ -3739,6 +3721,7 @@ class FormulaStatement(Statement):
     def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None,
         substitute_constants_with_values: bool = True):
         """Iterate through this and all the formulas it contains recursively."""
+        # TODO: Merge methods iterate_statements_in_theory_chain and iterate_theoretical_objcts_references
         visited = set() if visited is None else visited
         if include_root and self not in visited:
             yield self
@@ -3785,7 +3768,7 @@ class Morphism(FormulaStatement):
     def __init__(self, source_statement, nameset=None, theory=None, paragraphe_header=None):
         assert isinstance(theory, TheoryDerivation)
         assert isinstance(source_statement, FormulaStatement)
-        assert theory.contains_theoretical_objct_OBSOLETE(source_statement)
+        assert theory.contains_statement_in_theory_chain(phi=source_statement)
         self.source_statement = source_statement
         assert source_statement.valid_proposition.connective.signal_theoretical_morphism
         self.morphism_implementation = source_statement.valid_proposition.connective.implementation
@@ -3837,9 +3820,9 @@ class PropositionStatement:
         assert isinstance(theory, TheoryDerivation)
         assert isinstance(position, int) and position > 0
         assert isinstance(phi, CompoundFormula)
-        assert theory.contains_theoretical_objct_OBSOLETE(phi)
+        assert theory.contains_statement_in_theory_chain(phi=phi)
         assert isinstance(proof, Proof)
-        assert theory.contains_theoretical_objct_OBSOLETE(proof)
+        verify(assertion=theory.contains_statement_in_theory_chain(phi=proof))
         self.theory = theory
         self.position = position
         self.phi = phi
@@ -5472,8 +5455,8 @@ class AtheoreticalStatement(SymbolicObject):
         self.theory = theory
         super().__init__(u=theory.u, symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name,
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
-            paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, echo=echo)
-        super()._declare_class_membership_OBSOLETE(classes_OBSOLETE.atheoretical_statement)
+            paragraph_header=paragraph_header, ref=ref, subtitle=subtitle,
+            echo=echo)  # super()._declare_class_membership_OBSOLETE(classes_OBSOLETE.atheoretical_statement)
 
 
 class NoteInclusion(AtheoreticalStatement):
@@ -5504,8 +5487,7 @@ class NoteInclusion(AtheoreticalStatement):
             acronym=acronym, abridged_name=abridged_name, name=name, explicit_name=explicit_name,
             paragraph_header=paragraph_header, ref=ref, subtitle=subtitle, echo=False)
         if echo:
-            self.echo()
-        super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.note)
+            self.echo()  # super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.note)
 
     def compose_class(self) -> collections.abc.Generator[Composable, None, None]:
         # TODO: Instead of hard-coding the class name, use a meta-theory.
@@ -5565,7 +5547,7 @@ class Section(AtheoreticalStatement):
         index = self.statement_index
         symbol = self.category.symbol_base
         super().__init__(symbol=symbol, index=index, theory=t, echo=False)
-        super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.note)
+        # super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.note)
         if echo:
             self.echo()
 
@@ -5654,14 +5636,12 @@ class TheoryDerivation(Formula):
         super().__init__(symbol=symbol, index=index, auto_index=auto_index, dashed_name=dashed_name, name=name,
             explicit_name=explicit_name, paragraph_header=paragraph_headers.theory_derivation,
             is_theory_foundation_system=True if extended_theory is None else False, u=u, echo=False)
-        verify_universe_of_discourse(u=u)
-        verify(
-            extended_theory is None or is_derivably_member_of_class(u=u, phi=extended_theory, c=u.c2.theory_derivation),
-            'Parameter "extended_theory" is neither None nor a member of declarative-class theory.', u=u)
-        verify(extended_theory_limit is None or (
-            extended_theory is not None and is_in_class_OBSOLETE(extended_theory_limit,
-            classes_OBSOLETE.statement) and extended_theory_limit in extended_theory.statements),
-            'Parameter "theory_extension_statement_limit" is inconsistent.', u=u)
+        if extended_theory is not None:
+            verify(is_derivably_member_of_class(u=u, phi=extended_theory, c=u.c2.theory_derivation),
+                'Parameter "extended_theory" is neither None nor a member of declarative-class theory.', u=u)
+            verify(extended_theory_limit is None or (is_declaratively_member_of_class(u=u, phi=extended_theory_limit,
+                c=u.c2.statement) and extended_theory_limit in extended_theory.statements),
+                'Parameter "theory_extension_statement_limit" is inconsistent.', u=u)
         u.t.declare_instance(t=self)
         if stabilized:
             # It is a design choice to stabilize the theory-elaboration
@@ -5812,12 +5792,13 @@ theory-elaboration."""
         :term visited:
         :return:
         """
+        # TODO: Merge methods iterate_statements_in_theory_chain and iterate_theoretical_objcts_references
         visited = set() if visited is None else visited
         if include_root and self not in visited:
             yield self
             visited.update({self})
         for statement in set(self.statements).difference(visited):
-            if not is_in_class_OBSOLETE(statement, declarative_class_list_OBSOLETE.atheoretical_statement):
+            if not isinstance(statement, AtheoreticalStatement):
                 yield statement
                 visited.update({statement})
                 yield from statement.iterate_theoretical_objcts_references(include_root=False, visited=visited,
@@ -5860,19 +5841,33 @@ theory-elaboration."""
             dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, ref=ref, subtitle=subtitle, echo=echo)
 
-    def iterate_statements_in_theory_chain(self, formula: (None, CompoundFormula) = None):
+    def iterate_statements_in_theory_chain(self, formula_syntactic_equivalence_filter: (None, CompoundFormula) = None,
+        formula_alpha_equivalence_filter: (None, CompoundFormula) = None):
         """Iterate through the (proven or sound) statements in the current theory-chain.
 
-        :param formula: (conditional) Filters on formula-statements that are formula-syntactically-equivalent.
+        :param formula_syntactic_equivalence_filter: (conditional) Filters on formula-statements that are formula-syntactically-equivalent.
         :return:
         """
-        if formula is not None:
-            _, formula, _ = verify_formula(u=self.u, input_value=formula, raise_exception=True)
+        # TODO: Merge methods iterate_statements_in_theory_chain and iterate_theoretical_objcts_references
+        # TODO: This iterator function does not support theory_extension_limit which is mandatory when posing hypothesis.
+        if formula_syntactic_equivalence_filter is not None:
+            _, formula_syntactic_equivalence_filter, _ = verify_formula(u=self.u,
+                input_value=formula_syntactic_equivalence_filter, raise_exception=True)
         for t in self.iterate_theory_chain():
             for s in t.statements:
-                if formula is None or (is_in_class_OBSOLETE(s,
-                    classes_OBSOLETE.formula_statement) and s.is_formula_syntactically_equivalent_to(formula)):
-                    yield s
+                if not isinstance(s, AtheoreticalStatement):
+                    # Getting read of non-sense objects such as section, etc.
+                    if (formula_syntactic_equivalence_filter is not None and s.is_formula_syntactically_equivalent_to(
+                        formula_syntactic_equivalence_filter)) or (
+                        formula_alpha_equivalence_filter is not None and is_alpha_equivalent_to(u=self.u,
+                        phi=formula_alpha_equivalence_filter, psi=s)) or (
+                        formula_syntactic_equivalence_filter is None and formula_alpha_equivalence_filter is None):
+                        # if formula_syntactic_equivalence_filter is None or (is_declaratively_member_of_class(u=self.u, phi=s,
+                        #    c=self.u.c2.formula_statement) and s.is_formula_syntactically_equivalent_to(
+                        #    formula_syntactic_equivalence_filter)):
+                        # if formula is None or (is_in_class_OBSOLETE(s,
+                        #    classes_OBSOLETE.formula_statement) and s.is_formula_syntactically_equivalent_to(formula)):
+                        yield s
 
     def iterate_theory_chain(self, visited: (None, set) = None):
         """Iterate over the theory-chain of this theory.
@@ -5917,6 +5912,13 @@ theory-elaboration."""
         - undetermined."""
         return self._consistency
 
+    def contains_statement_in_theory_chain(self, phi: FlexibleStatement):
+        """Returns True if this theory-derivation contains phi in its theory-chain, False otherwise."""
+        # _, phi, _ = verify_formula_statement(t=self, input_value=phi, arg='phi', raise_exception=True)
+        # return any(self.iterate_statements_in_theory_chain(formula_alpha_equivalence_filter=phi))
+        return any(psi for psi in self.iterate_theoretical_objcts_references() if
+            is_alpha_equivalent_to(u=self.u, phi=phi, psi=psi))
+
     @property
     def inconsistency_introduction_inference_rule_is_included(self):
         """True if the inconsistency-introduction inference-rule is included in this theory,
@@ -5940,7 +5942,7 @@ theory-elaboration."""
         :param formula:
         :return:
         """
-        return next(self.iterate_statements_in_theory_chain(formula=formula), None)
+        return next(self.iterate_statements_in_theory_chain(formula_syntactic_equivalence_filter=formula), None)
 
     def pose_hypothesis(self, hypothesis_formula: CompoundFormula, symbol: (None, str, StyledText) = None,
         index: (None, int) = None, auto_index: (None, bool) = None, dashed_name: (None, str, StyledText) = None,
@@ -5982,7 +5984,7 @@ theory-elaboration."""
     def report_inconsistency_proof(self, proof: InferredStatement):
         """This method is called by InferredStatement.__init__() when the inferred-statement
          proves the inconsistency of a theory."""
-        verify(is_in_class_OBSOLETE(proof, classes_OBSOLETE.inferred_proposition),
+        verify(is_declaratively_member_of_class(u=self.u, phi=proof, c=self.u.c2.inferred_statement),
             '⌜proof⌝ must be an inferred-statement.', proof=proof, slf=self)
         proof: CompoundFormula
         proof = unpack_formula(proof)
@@ -6038,7 +6040,7 @@ class Hypothesis(Statement):
         symbol = prioritize_value(symbol, configuration.default_parent_hypothesis_statement_symbol)
         super().__init__(theory=t, symbol=symbol, index=index, auto_index=auto_index, paragraph_header=paragraph_header,
             subtitle=subtitle, dashed_name=dashed_name, echo=False)
-        super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.hypothesis)
+        # super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.hypothesis)
         self._hypothesis_formula = hypothesis_formula
         # When a hypothesis is posed in a theory 𝒯₁,
         # ...the hypothesis is declared (aka postulated) as an axiom in the universe-of-discourse,
@@ -6725,6 +6727,7 @@ class ClassDeclarationAccretor(UniverseOfDiscourseFormulaAccretor):
 
     def __init__(self, u: UniverseOfDiscourse):
         super().__init__(u=u)
+        self._atheoretical_statement = None
         self._axiom_declaration = None
         self._axiom_inclusion = None
         self._class2 = None
@@ -6738,10 +6741,19 @@ class ClassDeclarationAccretor(UniverseOfDiscourseFormulaAccretor):
         self._formula_statement = None
         self._free_variable = None
         self._inference_rule = None
+        self._inferred_statement = None
         self._simple_object = None
         self._statement = None
         self._theory_derivation = None
         self._universe_of_discourse = None
+
+    @property
+    def atheoretical_statement(self) -> ClassDeclaration:
+        """The atheoretical-statement class."""
+        if self._atheoretical_statement is None:
+            self._atheoretical_statement = self.declare(symbol='atheoretical-statement', auto_index=False,
+                python_class=AtheoreticalStatement, is_class_of_class=False)
+        return self._atheoretical_statement
 
     @property
     def axiom_declaration(self) -> ClassDeclaration:
@@ -6838,6 +6850,14 @@ class ClassDeclarationAccretor(UniverseOfDiscourseFormulaAccretor):
             self._inference_rule = self.declare(symbol='inference-rule', auto_index=False,
                 python_class=InferenceRuleDeclaration, is_class_of_class=False)
         return self._inference_rule
+
+    @property
+    def inferred_statement(self) -> ClassDeclaration:
+        """The inferred-statement class."""
+        if self._inferred_statement is None:
+            self._inferred_statement = self.declare(symbol='inferred-statement', auto_index=False,
+                python_class=InferredStatement, is_class_of_class=False)
+        return self._inferred_statement
 
     @property
     def simple_object(self) -> ClassDeclaration:
@@ -7518,20 +7538,26 @@ def verify_symbolic_object(u: UniverseOfDiscourse, input_value: SymbolicObject, 
 
 def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (None, str) = None,
     form: (None, FlexibleFormula) = None, mask: (None, frozenset[FreeVariable]) = None,
-    is_strictly_propositional: (None, bool) = None, raise_exception: bool = True,
-    error_code: (None, ErrorCode) = None) -> tuple[bool, (None, Formula), (None, str)]:
+    is_strictly_propositional: (None, bool) = None, raise_exception: bool = True, error_code: (None, ErrorCode) = None,
+    unpack_statement: bool = True) -> tuple[bool, (None, Formula), (None, str)]:
     """Many punctilious pythonic methods or functions expect some formula as input terms. This function assures that the input value is a proper formula and that it is consistent with possible contraints imposed on that formula.
 
     If ⌜input_value⌝ is of type formula, it is already well typed.
-
-    If ⌜argument⌝ is of type statement-variable, retrieve its valid-proposition property.
 
     If ⌜argument⌝ is of type iterable, such as tuple, e.g.: (implies, q, p), we assume it is a formula in the form (connective, a1, a2, ... an) where ai are arguments.
 
     Note that this is complementary with the pseudo-infix notation, which uses the __or__ method and | operator to transform: p |r| q to (r, p, q).
 
-    :param t:
+    :param u:
     :param input_value:
+    :param arg:
+    :param form:
+    :param mask:
+    :param is_strictly_propositional:
+    :param raise_exception:
+    :param error_code:
+    :param unpack_statement: if input_value is a statement, return its internal formula instead of the statement
+    object itself. Default: True.
     :return:
     """
     ok: bool
@@ -7543,7 +7569,10 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
     elif isinstance(input_value, FormulaStatement):
         # the input is typed as a FormulaStatement,
         # we must unpack it to retrieve its internal Formula.
-        formula = input_value.valid_proposition
+        if unpack_statement:
+            formula = input_value.valid_proposition
+        else:
+            formula = input_value
     elif isinstance(input_value, ConstantDeclaration):
         # the input is typed as a ConstantDeclaration,
         # we must unpack it to retrieve its internal Formula.
@@ -7571,13 +7600,6 @@ def verify_formula(u: UniverseOfDiscourse, input_value: FlexibleFormula, arg: (N
             argument=input_value, u=u)
         if not ok:
             return ok, None, msg
-
-    # Note: it is not necessary to verify that the universe
-    # of the formula connective is consistent with the universe of the formula,
-    # because this is already verified in the formula constructor.
-    # Note: it is not necessary to verify that the universe
-    # of the formula terms are consistent with the universe of the formula,
-    # because this is already verified in the formula constructor.
     if form is not None:
         ok, form, msg = verify_formula(u=u, input_value=form,
             raise_exception=True)  # The form itself may be a flexible formula.
@@ -7679,9 +7701,10 @@ def verify_formula_statement(t: TheoryDerivation, input_value: FlexibleFormula, 
                 return True, formula, None
 
     formula_ok, msg = verify(raise_exception=raise_exception, error_code=error_code,
-        assertion=t.contains_theoretical_objct_OBSOLETE(formula_statement),
+        assertion=t.contains_statement_in_theory_chain(phi=formula_statement),
         msg=f'The formula-statement {formula_statement} passed as argument {"" if arg is None else "".join(["⌜", arg, "⌝ "])}is not contained in the theory-derivation ⌜{t}⌝.',
         formula=formula, t=t)
+
     if not formula_ok:
         return formula_ok, None, msg
 
@@ -7707,7 +7730,7 @@ def verify_hypothesis(t: TheoryDerivation, input_value: FlexibleFormula, arg: (N
         msg=f'The formula ⌜{arg}⌝⌜({input_value}) is not an hypothesis.', arg=arg, input_value=input_value, t=t, u=u)
     hypothesis: Hypothesis = input_value
     verify(raise_exception=raise_exception, error_code=error_code,
-        assertion=t.contains_theoretical_objct_OBSOLETE(hypothesis),
+        assertion=t.contains_statement_in_theory_chain(phi=hypothesis),
         msg=f'The hypothesis ⌜{arg}⌝⌜({hypothesis}) is not contained in theory-derivation ⌜t⌝({t}).', arg=arg,
         hypothesis=hypothesis, t=t, u=u)
     verify(raise_exception=raise_exception, error_code=error_code,
@@ -10852,7 +10875,7 @@ class InferredStatement(FormulaStatement):
         super().__init__(theory=t, valid_proposition=valid_proposition, symbol=symbol, index=index,
             auto_index=auto_index, dashed_name=dashed_name, acronym=acronym, abridged_name=abridged_name, name=name,
             explicit_name=explicit_name, ref=ref, subtitle=subtitle, paragraphe_header=paragraph_header, echo=False)
-        super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.inferred_proposition)
+        # super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.inferred_proposition)
         if self.valid_proposition.connective is self.t.u.c1.inconsistency and is_derivably_member_of_class(u=self.u,
             phi=self.valid_proposition.terms[0], c=self.u.c2.theory_derivation):
             # This inferred-statement proves the inconsistency of its argument,

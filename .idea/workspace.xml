@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic." />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/constructive_dilemma_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/constructive_dilemma_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/disjunctive_syllogism_2_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/disjunctive_syllogism_2_python_sample.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/python/sample/equal_terms_substitution_python_sample.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/python/sample/equal_terms_substitution_python_sample.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -116,8 +120,12 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs" />
     </key>
   </component>
-  <component name="RunManager" selected="PowerShell.build_docs.ps1">
+  <component name="RunManager" selected="PowerShell.build_package.ps1">
     <configuration name="build_docs.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/build_docs.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="build_package.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/build_package.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
       <envs />
       <method v="2" />
     </configuration>
@@ -228,6 +236,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="sample_hypothesis" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_hypothesis.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest tests" type="ShConfigurationType">
       <option name="SCRIPT_TEXT" value="pytest tests" />
       <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
@@ -289,7 +318,7 @@
       <option name="docutils_open_in_browser" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in test_modus_ponens.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests in test_hypothesis.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -299,7 +328,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_modus_ponens.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_hypothesis.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -317,7 +346,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for test_definition_declaration" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms.test_2_2" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -328,64 +357,34 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_definition_declaration&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Unittests for test_note.TestNoteIntroduction.test_note_introduction" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="C:\Users\David\PycharmProjects\PythonVirtualEnvironments\Scripts\python.exe" />
-      <option name="SDK_NAME" value="Python 3.11 (PythonVirtualEnvironments)" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_note.TestNoteIntroduction.test_note_introduction&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Unittests for test_section" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="C:\Users\David\PycharmProjects\PythonVirtualEnvironments\Scripts\python.exe" />
-      <option name="SDK_NAME" value="Python 3.11 (PythonVirtualEnvironments)" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_section&quot;" />
+      <option name="_new_target" value="&quot;test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms.test_2_2&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <list>
       <item itemvalue="PowerShell.build_docs.ps1" />
+      <item itemvalue="PowerShell.build_package.ps1" />
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
+      <item itemvalue="Python.sample_hypothesis" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.Python tests in test_modus_ponens.py" />
-      <item itemvalue="Python tests.Unittests for test_definition_declaration" />
-      <item itemvalue="Python tests.Unittests for test_note.TestNoteIntroduction.test_note_introduction" />
-      <item itemvalue="Python tests.Unittests for test_section" />
+      <item itemvalue="Python tests.Python tests in test_hypothesis.py" />
+      <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms.test_2_2" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="PowerShell.build_package.ps1" />
         <item itemvalue="PowerShell.build_docs.ps1" />
-        <item itemvalue="Python tests.Python tests in test_modus_ponens.py" />
-        <item itemvalue="Python tests.Unittests for test_section" />
-        <item itemvalue="Python tests.Unittests for test_definition_declaration" />
-        <item itemvalue="Python tests.Unittests for test_note.TestNoteIntroduction.test_note_introduction" />
+        <item itemvalue="Python tests.Python tests in test_hypothesis.py" />
+        <item itemvalue="Python.sample_hypothesis" />
+        <item itemvalue="Python tests.Unittests for test_tao_2006_the_peano_axioms.TestTao2006ThePeanoAxioms.test_2_2" />
       </list>
     </recent_temporary>
   </component>
@@ -397,70 +396,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00391" summary="version 1.0.10:&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.">
-      <option name="closed" value="true" />
-      <created>1698094827702</created>
-      <option name="number" value="00391" />
-      <option name="presentableId" value="LOCAL-00391" />
-      <option name="project" value="LOCAL" />
-      <updated>1698094827702</updated>
-    </task>
-    <task id="LOCAL-00392" summary="version 1.0.10:&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.">
-      <option name="closed" value="true" />
-      <created>1698096120869</created>
-      <option name="number" value="00392" />
-      <option name="presentableId" value="LOCAL-00392" />
-      <option name="project" value="LOCAL" />
-      <updated>1698096120869</updated>
-    </task>
-    <task id="LOCAL-00393" summary="version 1.0.10:&#10;&#10;feature #242: constant-declaration&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.">
-      <option name="closed" value="true" />
-      <created>1698181862457</created>
-      <option name="number" value="00393" />
-      <option name="presentableId" value="LOCAL-00393" />
-      <option name="project" value="LOCAL" />
-      <updated>1698181862457</updated>
-    </task>
-    <task id="LOCAL-00394" summary="version 1.0.10:&#10;&#10;feature #242: constant-declaration&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.">
-      <option name="closed" value="true" />
-      <created>1698229813365</created>
-      <option name="number" value="00394" />
-      <option name="presentableId" value="LOCAL-00394" />
-      <option name="project" value="LOCAL" />
-      <updated>1698229813365</updated>
-    </task>
-    <task id="LOCAL-00395" summary="version 1.0.10:&#10;&#10;feature #242: constant-declaration&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.">
-      <option name="closed" value="true" />
-      <created>1698407077677</created>
-      <option name="number" value="00395" />
-      <option name="presentableId" value="LOCAL-00395" />
-      <option name="project" value="LOCAL" />
-      <updated>1698407077677</updated>
-    </task>
-    <task id="LOCAL-00396" summary="version 1.0.10:&#10;&#10;feature #242: constant-declaration&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.">
-      <option name="closed" value="true" />
-      <created>1698438022736</created>
-      <option name="number" value="00396" />
-      <option name="presentableId" value="LOCAL-00396" />
-      <option name="project" value="LOCAL" />
-      <updated>1698438022736</updated>
-    </task>
-    <task id="LOCAL-00397" summary="version 1.0.10:&#10;&#10;feature #242: constant-declaration&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.">
-      <option name="closed" value="true" />
-      <created>1698529891023</created>
-      <option name="number" value="00397" />
-      <option name="presentableId" value="LOCAL-00397" />
-      <option name="project" value="LOCAL" />
-      <updated>1698529891023</updated>
-    </task>
-    <task id="LOCAL-00398" summary="version 1.0.10:&#10;&#10;feature #242: constant-declaration&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10;&#10;design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject">
-      <option name="closed" value="true" />
-      <created>1698532559164</created>
-      <option name="number" value="00398" />
-      <option name="presentableId" value="LOCAL-00398" />
-      <option name="project" value="LOCAL" />
-      <updated>1698532559164</updated>
     </task>
     <task id="LOCAL-00399" summary="version 1.0.10:&#10;&#10;feature #242: constant-declaration&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;rename Formula to CompoundFormula.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10;&#10;design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject">
       <option name="closed" value="true" />
@@ -790,7 +725,71 @@
       <option name="project" value="LOCAL" />
       <updated>1702073025925</updated>
     </task>
-    <option name="localTasksCounter" value="440" />
+    <task id="LOCAL-00440" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <option name="closed" value="true" />
+      <created>1702073482423</created>
+      <option name="number" value="00440" />
+      <option name="presentableId" value="LOCAL-00440" />
+      <option name="project" value="LOCAL" />
+      <updated>1702073482423</updated>
+    </task>
+    <task id="LOCAL-00441" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <option name="closed" value="true" />
+      <created>1702108767873</created>
+      <option name="number" value="00441" />
+      <option name="presentableId" value="LOCAL-00441" />
+      <option name="project" value="LOCAL" />
+      <updated>1702108767873</updated>
+    </task>
+    <task id="LOCAL-00442" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <option name="closed" value="true" />
+      <created>1702112022427</created>
+      <option name="number" value="00442" />
+      <option name="presentableId" value="LOCAL-00442" />
+      <option name="project" value="LOCAL" />
+      <updated>1702112022427</updated>
+    </task>
+    <task id="LOCAL-00443" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <option name="closed" value="true" />
+      <created>1702112324592</created>
+      <option name="number" value="00443" />
+      <option name="presentableId" value="LOCAL-00443" />
+      <option name="project" value="LOCAL" />
+      <updated>1702112324592</updated>
+    </task>
+    <task id="LOCAL-00444" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <option name="closed" value="true" />
+      <created>1702151200765</created>
+      <option name="number" value="00444" />
+      <option name="presentableId" value="LOCAL-00444" />
+      <option name="project" value="LOCAL" />
+      <updated>1702151200765</updated>
+    </task>
+    <task id="LOCAL-00445" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <option name="closed" value="true" />
+      <created>1702151579220</created>
+      <option name="number" value="00445" />
+      <option name="presentableId" value="LOCAL-00445" />
+      <option name="project" value="LOCAL" />
+      <updated>1702151579220</updated>
+    </task>
+    <task id="LOCAL-00446" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <option name="closed" value="true" />
+      <created>1702159898096</created>
+      <option name="number" value="00446" />
+      <option name="presentableId" value="LOCAL-00446" />
+      <option name="project" value="LOCAL" />
+      <updated>1702159898096</updated>
+    </task>
+    <task id="LOCAL-00447" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <option name="closed" value="true" />
+      <created>1702160324449</created>
+      <option name="number" value="00447" />
+      <option name="presentableId" value="LOCAL-00447" />
+      <option name="project" value="LOCAL" />
+      <updated>1702160324449</updated>
+    </task>
+    <option name="localTasksCounter" value="448" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -855,7 +854,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>4469</line>
+          <line>4452</line>
           <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -890,18 +889,33 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>10119</line>
-          <option name="timeStamp" value="110" />
+          <line>5641</line>
+          <option name="timeStamp" value="114" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_auto_index.py</url>
-          <line>12</line>
-          <option name="timeStamp" value="111" />
+          <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
+          <line>5986</line>
+          <option name="timeStamp" value="115" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_auto_index.py</url>
-          <line>6</line>
-          <option name="timeStamp" value="112" />
+          <url>file://$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py</url>
+          <line>7</line>
+          <option name="timeStamp" value="116" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py</url>
+          <line>72</line>
+          <option name="timeStamp" value="118" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
+          <line>7597</line>
+          <option name="timeStamp" value="119" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_hypothesis.py</url>
+          <line>17</line>
+          <option name="timeStamp" value="120" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
