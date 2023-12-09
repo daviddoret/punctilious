@@ -1721,9 +1721,8 @@ class SymbolicObject(abc.ABC):
             ref=ref, subtitle=subtitle)
         self._nameset = nameset
         self.is_theory_foundation_system = is_theory_foundation_system
-        # self._declare_class_membership_OBSOLETE(classes_OBSOLETE.symbolic_objct)
         if not is_universe_of_discourse:
-            self._u = u  # self._u.cross_reference_symbolic_objct_OBSOLETE(o=self)
+            self._u = u
         else:
             self._u = None
         if u is not None:
@@ -1800,34 +1799,8 @@ class SymbolicObject(abc.ABC):
         output = yield from self.nameset.compose_title(cap=cap)
         return output
 
-    # @property
-    # def declarative_classes_OBSOLETE(self) -> frozenset[DeclarativeClass_OBSOLETE]:
-    #    """The set of declarative-classes this symbolic-objct is a member of."""
-    #    return self._declarative_classes
-
-    # def _declare_class_membership_OBSOLETE(self, c: DeclarativeClass_OBSOLETE):
-    #    """During construction (__init__()), add the declarative-classes this symboli-objct is
-    #    being made a member of."""
-    #    if not hasattr(self, '_declarative_classes'):
-    #        setattr(self, '_declarative_classes', frozenset())
-    #    self._declarative_classes = self._declarative_classes.union({c})
-
     def echo(self):
         repm.prnt(self.rep())
-
-    # def is_declarative_class_member_OBSOLETE(self, c: DeclarativeClass_OBSOLETE) -> bool:
-    #    """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise."""
-    #    # TODO: This is a design flaw. A formula (previously theoretical object) may
-    #    #   be a member of a class, but not a symbolic object.
-    #    if hasattr(self, '_declarative_classes'):
-    #        return c in self._declarative_classes
-    #    else:
-    #        return False
-
-    # def is_in_class_OBSOLETE(self, c: DeclarativeClass_OBSOLETE) -> bool:
-    #    """True if this symbolic-objct is a member of declarative-class 𝒞, False, otherwise.
-    #    A shortcut for o.is_declarative_class_member(...)."""
-    #    return self.is_declarative_class_member_OBSOLETE(c=c)
 
     def is_base_symbol_equivalent(self, o2: FlexibleSymbol) -> bool:
         """Return True if this object and o2 are base-symbol-equivalent, False otherwise.
@@ -3796,7 +3769,7 @@ class Morphism(FormulaStatement):
     def __init__(self, source_statement, nameset=None, theory=None, paragraphe_header=None):
         assert isinstance(theory, TheoryDerivation)
         assert isinstance(source_statement, FormulaStatement)
-        assert theory.contains_theoretical_objct_OBSOLETE(source_statement)
+        assert theory.contains_statement_in_theory_chain(phi=source_statement)
         self.source_statement = source_statement
         assert source_statement.valid_proposition.connective.signal_theoretical_morphism
         self.morphism_implementation = source_statement.valid_proposition.connective.implementation
@@ -3848,7 +3821,7 @@ class PropositionStatement:
         assert isinstance(theory, TheoryDerivation)
         assert isinstance(position, int) and position > 0
         assert isinstance(phi, CompoundFormula)
-        assert theory.contains_theoretical_objct_OBSOLETE(phi)
+        assert theory.contains_statement_in_theory_chain(phi=phi)
         assert isinstance(proof, Proof)
         assert theory.contains_theoretical_objct_OBSOLETE(proof)
         self.theory = theory
