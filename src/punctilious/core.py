@@ -2438,15 +2438,11 @@ class Formula(SymbolicObject):
         substitute_formula_with_components: bool = True):
         """Iterate through this and all the formulas it contains recursively.
         """
+        # TODO: Merge methods iterate_statements_in_theory_chain and iterate_theoretical_objcts_references
         visited = set() if visited is None else visited
         if include_root and self not in visited:
             yield self
             visited.update({self})
-
-    def contains_theoretical_objct_OBSOLETE(self, o: Formula):
-        """Return True if o is in this theory's hierarchy, False otherwise.
-        """
-        return o in self.iterate_theoretical_objcts_references(include_root=True)
 
     def compose_report(self, proof: (None, bool) = None, **kwargs) -> collections.abc.Generator[Composable, None, None]:
         """
@@ -2712,6 +2708,7 @@ class ConstantDeclaration(Formula):
     def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None,
         substitute_constants_with_values: bool = True):
         """Iterate through this and all the formulas it contains recursively."""
+        # TODO: Merge methods iterate_statements_in_theory_chain and iterate_theoretical_objcts_references
         visited = set() if visited is None else visited
         if substitute_constants_with_values:
             yield from self.value.iterate_theoretical_objcts_references(include_root=include_root, visited=visited,
@@ -3012,6 +3009,7 @@ class CompoundFormula(Formula):
     def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None,
         substitute_constants_with_values: bool = True):
         """Iterate through this and all the formulas it contains recursively."""
+        # TODO: Merge methods iterate_statements_in_theory_chain and iterate_theoretical_objcts_references
         visited = set() if visited is None else visited
         if include_root and self not in visited:
             yield self
@@ -3723,6 +3721,7 @@ class FormulaStatement(Statement):
     def iterate_theoretical_objcts_references(self, include_root: bool = True, visited: (None, set) = None,
         substitute_constants_with_values: bool = True):
         """Iterate through this and all the formulas it contains recursively."""
+        # TODO: Merge methods iterate_statements_in_theory_chain and iterate_theoretical_objcts_references
         visited = set() if visited is None else visited
         if include_root and self not in visited:
             yield self
@@ -3823,7 +3822,7 @@ class PropositionStatement:
         assert isinstance(phi, CompoundFormula)
         assert theory.contains_statement_in_theory_chain(phi=phi)
         assert isinstance(proof, Proof)
-        assert theory.contains_theoretical_objct_OBSOLETE(proof)
+        verify(assertion=theory.contains_statement_in_theory_chain(phi=proof))
         self.theory = theory
         self.position = position
         self.phi = phi
@@ -5793,6 +5792,7 @@ theory-elaboration."""
         :term visited:
         :return:
         """
+        # TODO: Merge methods iterate_statements_in_theory_chain and iterate_theoretical_objcts_references
         visited = set() if visited is None else visited
         if include_root and self not in visited:
             yield self
@@ -5848,6 +5848,8 @@ theory-elaboration."""
         :param formula_syntactic_equivalence_filter: (conditional) Filters on formula-statements that are formula-syntactically-equivalent.
         :return:
         """
+        # TODO: Merge methods iterate_statements_in_theory_chain and iterate_theoretical_objcts_references
+        # TODO: This iterator function does not support theory_extension_limit which is mandatory when posing hypothesis.
         if formula_syntactic_equivalence_filter is not None:
             _, formula_syntactic_equivalence_filter, _ = verify_formula(u=self.u,
                 input_value=formula_syntactic_equivalence_filter, raise_exception=True)
@@ -5913,7 +5915,9 @@ theory-elaboration."""
     def contains_statement_in_theory_chain(self, phi: FlexibleStatement):
         """Returns True if this theory-derivation contains phi in its theory-chain, False otherwise."""
         # _, phi, _ = verify_formula_statement(t=self, input_value=phi, arg='phi', raise_exception=True)
-        return any(self.iterate_statements_in_theory_chain(formula_alpha_equivalence_filter=phi))
+        # return any(self.iterate_statements_in_theory_chain(formula_alpha_equivalence_filter=phi))
+        return any(psi for psi in self.iterate_theoretical_objcts_references() if
+            is_alpha_equivalent_to(u=self.u, phi=phi, psi=psi))
 
     @property
     def inconsistency_introduction_inference_rule_is_included(self):
@@ -7726,7 +7730,7 @@ def verify_hypothesis(t: TheoryDerivation, input_value: FlexibleFormula, arg: (N
         msg=f'The formula ⌜{arg}⌝⌜({input_value}) is not an hypothesis.', arg=arg, input_value=input_value, t=t, u=u)
     hypothesis: Hypothesis = input_value
     verify(raise_exception=raise_exception, error_code=error_code,
-        assertion=t.contains_theoretical_objct_OBSOLETE(hypothesis),
+        assertion=t.contains_statement_in_theory_chain(phi=hypothesis),
         msg=f'The hypothesis ⌜{arg}⌝⌜({hypothesis}) is not contained in theory-derivation ⌜t⌝({t}).', arg=arg,
         hypothesis=hypothesis, t=t, u=u)
     verify(raise_exception=raise_exception, error_code=error_code,
