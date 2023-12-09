@@ -2830,9 +2830,9 @@ class CompoundFormula(Formula):
         super().__init__(symbol=symbol, index=index, auto_index=auto_index, u=u, echo=False)
         # super()._declare_class_membership_OBSOLETE(declarative_class_list_OBSOLETE.compound_formula)
         verify(assertion=is_declaratively_member_of_class(u=self.u, phi=connective,
-            c=self.u.c2.connective) or is_in_class_OBSOLETE(connective, classes_OBSOLETE.variable),
-            msg='The connective of this formula is neither a connective, nor a variable.', formula=self,
-            connective=connective)
+            c=self.u.c2.connective) or is_declaratively_member_of_class(u=self.u, phi=connective,
+            c=self.u.c2.free_variable), msg='The connective of this formula is neither a connective, nor a variable.',
+            formula=self, connective=connective)
         verify(assertion=connective.u is self.u,
             msg=f'The universe-of-discourse ⌜{connective.u}⌝ of the connective in the formula is inconsistent with the universe-of-discourse ⌜{self.u}⌝ of the formula.',
             formula=self, connective=connective)
@@ -5662,8 +5662,8 @@ class TheoryDerivation(Formula):
             extended_theory is None or is_derivably_member_of_class(u=u, phi=extended_theory, c=u.c2.theory_derivation),
             'Parameter "extended_theory" is neither None nor a member of declarative-class theory.', u=u)
         verify(extended_theory_limit is None or (
-            extended_theory is not None and is_in_class_OBSOLETE(extended_theory_limit,
-            classes_OBSOLETE.statement) and extended_theory_limit in extended_theory.statements),
+            extended_theory is not None and is_declaratively_member_of_class(u=u, phi=extended_theory_limit,
+            c=u.c2.statement) and extended_theory_limit in extended_theory.statements),
             'Parameter "theory_extension_statement_limit" is inconsistent.', u=u)
         u.t.declare_instance(t=self)
         if stabilized:
