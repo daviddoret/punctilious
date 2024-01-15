@@ -13,9 +13,9 @@ package_list = {'mgz_2021_minimal_logic_m0': pu_theory.MGZ2021MinimalLogicM0(),
 for underscored_name, package in package_list.items():
     package.t.export_article_to_file(proof=False, encoding=pu.encodings.plaintext,
         file_path=f'../../data/report_{underscored_name}_noproof_enus_plaintext.txt')
-    package.t.export_article_to_file(proof=False, encoding=pu.encodings.unicode,
+    package.t.export_article_to_file(proof=False, encoding=pu.encodings.unicode_extended,
         file_path=f'../../data/report_{underscored_name}_noproof_enus_unicode.txt')
     package.t.export_article_to_file(proof=True, encoding=pu.encodings.plaintext,
         file_path=f'../../data/report_{underscored_name}_proof_enus_plaintext.txt')
-    package.t.export_article_to_file(proof=True, encoding=pu.encodings.unicode,
+    package.t.export_article_to_file(proof=True, encoding=pu.encodings.unicode_extended,
         file_path=f'../../data/report_{underscored_name}_proof_enus_unicode.txt')

@@ -4,7 +4,126 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic." />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <change afterPath="$PROJECT_DIR$/data/base_symbols_database.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/base_symbols_database.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/references/latex-unicode.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/references/stix-tbl.asc98feb26.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/references/unicode-latex (converted).txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/references/unicode-latex.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/references/unicode.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/formula_enumeration.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/formula_enumeration.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/n_enumeration.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/formal_language.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/pl1.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/pl1_en_us.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/pl1_fr_ch.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/pl2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/typesetting.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/typesetting_obsolete_20240114.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious_obsolete_20240114/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious_obsolete_20240114/typesetting.backup_20240107" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_equal_terms_substitution.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/generate_docs_inference_rules.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/generate_docs_inference_rules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/generate_sample_outputs.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/generate_sample_outputs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/install_in_venv_from_pypi__windows.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/install_in_venv_from_pypi__windows.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_generate_theory_interactive_graphs.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_generate_theory_interactive_graphs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_generate_theory_reports.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_generate_theory_reports.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/punctilious-1.0.10-py3-none-any.whl" beforeDir="false" afterPath="$PROJECT_DIR$/dist/punctilious-1.0.10-py3-none-any.whl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/punctilious-1.0.10.tar.gz" beforeDir="false" afterPath="$PROJECT_DIR$/dist/punctilious-1.0.10.tar.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/conf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/_TODO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/caller_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete_20240114/caller_info.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete_20240114/core.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete_20240114/graph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/locale_en_us.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete_20240114/locale_en_us.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/plaintext.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete_20240114/plaintext.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/random_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete_20240114/random_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/repm.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete_20240114/repm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/reserved_words.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete_20240114/reserved_words.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/unicode_utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete_20240114/unicode_utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_export_all_articles.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_export_all_articles.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample_variable.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample_variable.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/punctilious_2023_metatheory_OBSOLETE.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/punctilious_2023_metatheory_OBSOLETE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theory/theory_tao_2006_the_peano_axioms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_absorption.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_absorption.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_auto_index.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_auto_index.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_axiom_declaration.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_axiom_declaration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_axiom_inclusion.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_axiom_inclusion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_axiom_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_axiom_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_biconditional_elimination_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_biconditional_elimination_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_biconditional_elimination_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_biconditional_elimination_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_biconditional_introduction.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_biconditional_introduction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_block.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_block.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_conjunction_elimination_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_conjunction_elimination_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_conjunction_elimination_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_conjunction_elimination_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_conjunction_introduction.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_conjunction_introduction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_constant_declaration.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_constant_declaration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_constructive_dilemma.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_constructive_dilemma.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_dashed_name.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_dashed_name.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_definition_declaration.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_definition_declaration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_definition_inclusion.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_definition_inclusion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_definition_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_definition_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_destructive_dilemma.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_destructive_dilemma.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_disjunction_introduction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_disjunction_introduction_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_disjunction_introduction_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_disjunction_introduction_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_disjunctive_resolution.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_disjunctive_resolution.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_disjunctive_syllogism_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_disjunctive_syllogism_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_disjunctive_syllogism_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_disjunctive_syllogism_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_double_negation_elimination.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_double_negation_elimination.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_double_negation_introduction.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_double_negation_introduction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_equal_terms_substitution.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_equality_commutativity.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_equality_commutativity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_formula_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula_alpha_contains.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_formula_alpha_contains.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula_alpha_equivalence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_formula_alpha_equivalence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula_is_mask_similar_to.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_formula_is_mask_similar_to.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_free_variable.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_free_variable.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_hypothesis.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_hypothesis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_hypothetical_syllogism.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_hypothetical_syllogism.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_inconsistency_introduction_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_inconsistency_introduction_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_inconsistency_introduction_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_inconsistency_introduction_3.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_inconsistency_introduction_3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_is_declaratively_a_class_member.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_is_declaratively_a_class_member.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_iterate_formula_data_model_components.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_iterate_formula_data_model_components.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_modus_ponens.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_modus_ponens.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_modus_tollens.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_modus_tollens.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_nameset.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_nameset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_note.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_note.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_paragraph.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_paragraph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_plaintext.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_plaintext.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_proof_by_contradiction_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_proof_by_contradiction_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_proof_by_contradiction_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_proof_by_contradiction_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_proof_by_refutation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_proof_by_refutation_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_proof_by_refutation_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_proof_by_refutation_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_quasi_quotes.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_quasi_quotes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_relation_dict.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_relation_dict.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_sans_serif_bold.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_sans_serif_bold.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_sans_serif_normal.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_sans_serif_normal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_script_normal.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_script_normal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_section.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_section.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_serif_normal.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_serif_normal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_simple_objct.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_simple_objct.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_subscript.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_subscript.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_subscriptify.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_subscriptify.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_tao_2006_the_peano_axioms.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_tao_2006_the_peano_axioms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_text.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_text.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_theory_derivation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_theory_derivation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_theory_derivation_stabilized.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_theory_derivation_stabilized.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_theory_extension.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_theory_extension.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_universe_of_discourse.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_universe_of_discourse.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_universe_of_discourse_inference_rules.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_universe_of_discourse_inference_rules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_validate_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_validate_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_validate_formula_statement.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_validate_formula_statement.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_variable_substitution.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_obsolete_20240114/test_variable_substitution.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -81,17 +200,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/tests",
-    "settings.editor.selected.configurable": "preferences.sourceCode.Python"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/David/PycharmProjects/punctilious/src/punctilious&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Python&quot;
   }
-}]]></component>
+}</component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings module-name="2023_05_02_PyCharmProject_Maths" is-module-sdk="true">
@@ -102,33 +222,21 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\David\PycharmProjects\punctilious\src\punctilious" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\tests" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\theory" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\math\concept" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\quote" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\src\sample" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\David\PycharmProjects\punctilious\src\punctilious2" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious\project" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\python\class" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\reference_table" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\table" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\docs" />
     </key>
   </component>
-  <component name="RunManager" selected="PowerShell.increment_package_version_patch.ps1">
-    <configuration name="build_docs.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/build_docs.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
-      <envs />
-      <method v="2" />
-    </configuration>
-    <configuration name="build_package.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/build_package.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
-      <envs />
-      <method v="2" />
-    </configuration>
-    <configuration name="increment_package_version_patch.ps1" type="PowerShellRunType" factoryName="PowerShell" temporary="true" scriptUrl="$PROJECT_DIR$/continuous_integration/scripts/increment_package_version_patch.ps1" workingDirectory="C:\Users\David" executablePath="$PROJECT_DIR$/../../../../WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe">
-      <envs />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.pl1_en_us">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -164,6 +272,48 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/build_samples.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="n_enumeration" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/project" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/project/n_enumeration.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pl1_en_us" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/pl1_en_us.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -236,7 +386,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="sample_hypothesis" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="typesetting" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -244,11 +394,53 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sample" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sample/sample_hypothesis.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\David\PycharmProjects\punctilious\src\punctilious2\typesetting.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="typesetting" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\David\PycharmProjects\punctilious\src\punctilious\typesetting.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="typesetting_obsolete_20240114" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\David\PycharmProjects\punctilious\src\punctilious\typesetting_obsolete_20240114.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -318,58 +510,44 @@
       <option name="docutils_open_in_browser" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in test_hypothesis.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_hypothesis.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="Python tests in tests" type="tests" factoryName="Autodetect">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests_obsolete_20240114" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests_obsolete_20240114&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="PowerShell.build_docs.ps1" />
-      <item itemvalue="PowerShell.build_package.ps1" />
-      <item itemvalue="PowerShell.increment_package_version_patch.ps1" />
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
-      <item itemvalue="Python.sample_hypothesis" />
+      <item itemvalue="Python.pl1_en_us" />
+      <item itemvalue="Python.typesetting2" />
+      <item itemvalue="Python.typesetting_obsolete_20240114" />
+      <item itemvalue="Python.n_enumeration" />
+      <item itemvalue="Python.typesetting" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.Python tests in test_hypothesis.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="PowerShell.increment_package_version_patch.ps1" />
-        <item itemvalue="PowerShell.increment_package_version_patch.ps1" />
-        <item itemvalue="PowerShell.build_package.ps1" />
-        <item itemvalue="PowerShell.build_docs.ps1" />
-        <item itemvalue="Python tests.Python tests in test_hypothesis.py" />
+        <item itemvalue="Python.pl1_en_us" />
+        <item itemvalue="Python.typesetting2" />
+        <item itemvalue="Python.typesetting_obsolete_20240114" />
+        <item itemvalue="Python.typesetting" />
+        <item itemvalue="Python.n_enumeration" />
       </list>
     </recent_temporary>
   </component>
@@ -381,14 +559,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00400" summary="version 1.0.10:&#10;&#10;feature #242: constant-declaration&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;rename Formula to CompoundFormula.&#10;&#10;rename Relation to Connective.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10;&#10;design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject">
-      <option name="closed" value="true" />
-      <created>1698605076588</created>
-      <option name="number" value="00400" />
-      <option name="presentableId" value="LOCAL-00400" />
-      <option name="project" value="LOCAL" />
-      <updated>1698605076588</updated>
     </task>
     <task id="LOCAL-00401" summary="version 1.0.10:&#10;&#10;feature #242: constant-declaration&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;rename Formula to CompoundFormula.&#10;&#10;rename Relation to Connective.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10;&#10;design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject">
       <option name="closed" value="true" />
@@ -774,7 +944,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702160375913</updated>
     </task>
-    <option name="localTasksCounter" value="449" />
+    <task id="LOCAL-00449" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
+      <option name="closed" value="true" />
+      <created>1702160936569</created>
+      <option name="number" value="00449" />
+      <option name="presentableId" value="LOCAL-00449" />
+      <option name="project" value="LOCAL" />
+      <updated>1702160936569</updated>
+    </task>
+    <option name="localTasksCounter" value="450" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -838,12 +1016,12 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>4452</line>
+          <url>file://$PROJECT_DIR$/src/punctilious_obsolete_20240114/core.py</url>
+          <line>4521</line>
           <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_validate_formula.py</url>
+          <url>file://$PROJECT_DIR$/tests_obsolete_20240114/test_validate_formula.py</url>
           <line>24</line>
           <option name="timeStamp" value="86" />
         </line-breakpoint>
@@ -868,22 +1046,22 @@
           <option name="timeStamp" value="108" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_free_variable.py</url>
+          <url>file://$PROJECT_DIR$/tests_obsolete_20240114/test_free_variable.py</url>
           <line>13</line>
           <option name="timeStamp" value="109" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>5641</line>
+          <url>file://$PROJECT_DIR$/src/punctilious_obsolete_20240114/core.py</url>
+          <line>5739</line>
           <option name="timeStamp" value="114" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>5986</line>
+          <url>file://$PROJECT_DIR$/src/punctilious_obsolete_20240114/core.py</url>
+          <line>6091</line>
           <option name="timeStamp" value="115" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_inconsistency_introduction_1.py</url>
+          <url>file://$PROJECT_DIR$/tests_obsolete_20240114/test_inconsistency_introduction_1.py</url>
           <line>7</line>
           <option name="timeStamp" value="116" />
         </line-breakpoint>
@@ -893,14 +1071,29 @@
           <option name="timeStamp" value="118" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/core.py</url>
-          <line>7597</line>
+          <url>file://$PROJECT_DIR$/src/punctilious_obsolete_20240114/core.py</url>
+          <line>7747</line>
           <option name="timeStamp" value="119" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_hypothesis.py</url>
+          <url>file://$PROJECT_DIR$/tests_obsolete_20240114/test_hypothesis.py</url>
           <line>17</line>
           <option name="timeStamp" value="120" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/project/formula_enumeration.py</url>
+          <line>30</line>
+          <option name="timeStamp" value="123" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/pl1_en_us.py</url>
+          <line>21</line>
+          <option name="timeStamp" value="134" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/typesetting.py</url>
+          <line>246</line>
+          <option name="timeStamp" value="135" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

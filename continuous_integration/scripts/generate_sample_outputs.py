@@ -1,5 +1,5 @@
-"""Pre-build script that iterates over all sample *punctilious* python script files, executes them, and saves their outputs with in different formats (*punctilious* encodings) in the data folder.
-Like this, the output of sample *punctilious* python script files can be included in the documentation.
+"""Pre-build script that iterates over all sample *punctilious_obsolete_20240114* python script files, executes them, and saves their outputs with in different formats (*punctilious_obsolete_20240114* encodings) in the data folder.
+Like this, the output of sample *punctilious_obsolete_20240114* python script files can be included in the documentation.
 
 """
 
@@ -7,7 +7,7 @@ from pathlib import Path
 import contextlib
 import punctilious as pu
 
-"""For every inference-rule in the punctilious package,
+"""For every inference-rule in the punctilious_obsolete_20240114 package,
 generate the restructured text documentation page.
 """
 
@@ -43,7 +43,7 @@ def export_sample_output(sample_file: Path):
     output_file = output_file.replace(sample_path, data_path)
     with open(output_file, 'w', encoding='utf-8') as f:
         with contextlib.redirect_stdout(f):
-            pu.configuration.encoding = pu.encodings.unicode
+            pu.configuration.encoding = pu.encodings.unicode_extended
             exec(source_code)
 
 

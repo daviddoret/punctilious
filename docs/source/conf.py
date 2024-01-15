@@ -5,10 +5,10 @@ import sys
 print(f'os.getcwd()={os.getcwd()}')
 sys.path.insert(0, os.path.abspath(os.path.join('', '../..')))
 sys.path.insert(0, os.path.abspath(os.path.join('', '../..', 'src')))
-sys.path.insert(0, os.path.abspath(os.path.join('', '../..', 'src', 'punctilious')))
+sys.path.insert(0, os.path.abspath(os.path.join('', '../..', 'src', 'punctilious_obsolete_20240114')))
 sys.path.insert(0, os.path.abspath(os.path.join('', '../..', 'src', 'sample')))
 sys.path.insert(0, os.path.abspath(os.path.join('', '../..', 'src', 'theory')))
-# sys.path.insert(0, 'C:\\Users\\David\\PycharmProjects\\punctilious\\src')
+# sys.path.insert(0, 'C:\\Users\\David\\PycharmProjects\\punctilious_obsolete_20240114\\src')
 print(sys.path)
 # Configuration file for the Sphinx documentation builder.
 #
@@ -18,7 +18,7 @@ print(sys.path)
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'punctilious'
+project = 'punctilious_obsolete_20240114'
 copyright = '2023, David Doret'
 author = 'David Doret'
 release = "1.0.10"
@@ -31,8 +31,8 @@ release = "1.0.10"
 # https://pypi.org/project/sphinxcontrib-bibtex/
 extensions = [  # 'sphinxcontrib-inlinesyntaxhighlight',
     'sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinx_autodoc_typehints', 'sphinx.ext.graphviz',
-    'sphinx_togglebutton', 'sphinx_rtd_theme', 'sphinx_favicon', 'sphinx_tabs.tabs', 'sphinx_tags',
-    'sphinx_design', 'sphinxcontrib.bibtex']
+    'sphinx_togglebutton', 'sphinx_rtd_theme', 'sphinx_favicon', 'sphinx_tabs.tabs', 'sphinx_tags', 'sphinx_design',
+    'sphinxcontrib.bibtex']
 # 'sphinxawesome_theme',
 # 'sphinx_exec_code',
 bibtex_bibfiles = ['bibliography_bibtex.bib']
@@ -67,7 +67,7 @@ html_theme_options = {'sticky_navigation': False, 'navigation_depth': -1, 'title
 # exec_code_source_folders = ['../..']
 # exec_code_example_dir = '../../sample'
 
-favicons = [{'href': 'punctilious-logo-compact-light.svg'},  # => use `_static/icon.svg`
-    {'href': 'punctilious-logo-compact-light-16x16-white.png'},
-    {'href': 'punctilious-logo-compact-light-32x32-white.png'},
-    {'rel': 'apple-touch-icon', 'href': 'punctilious-logo-compact-light-180x180-white.png', }, ]
+favicons = [{'href': 'punctilious_obsolete_20240114-logo-compact-light.svg'},  # => use `_static/icon.svg`
+    {'href': 'punctilious_obsolete_20240114-logo-compact-light-16x16-white.png'},
+    {'href': 'punctilious_obsolete_20240114-logo-compact-light-32x32-white.png'},
+    {'rel': 'apple-touch-icon', 'href': 'punctilious_obsolete_20240114-logo-compact-light-180x180-white.png', }, ]

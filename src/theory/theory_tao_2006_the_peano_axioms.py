@@ -232,7 +232,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         t.open_section('Proof by contradiction', section_parent=s55, numbering=False)
 
         t.take_note(
-            content='First, we follow (Tao 2006)''s proof by contradiction. In punctilious, we use the term proof-by-refutation-of-equality to designate this specific method of proof.')
+            content='First, we follow (Tao 2006)''s proof by contradiction. In punctilious_obsolete_20240114, we use the term proof-by-refutation-of-equality to designate this specific method of proof.')
 
         # Proof.
         # Suppose for sake of contradiction that 6 = 2.
@@ -278,7 +278,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         t.open_section('Direct proof', section_parent=s55, numbering=False)
 
         t.take_note(
-            content='In (Tao, 2006), proposition 2.1.8 uses proof by contradiction. Note that in punctilious, this specific proof method is called a proof by refutation of equality. Nevertheless, proofs by contradictions are somehow indirect proofs. As an alternative, we now propose a direct proof.')
+            content='In (Tao, 2006), proposition 2.1.8 uses proof by contradiction. Note that in punctilious_obsolete_20240114, this specific proof method is called a proof by refutation of equality. Nevertheless, proofs by contradictions are somehow indirect proofs. As an alternative, we now propose a direct proof.')
         p018 = t.i.equal_terms_substitution.infer_formula_statement(p=p017, x_equal_y=p015)
         # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻: (5 ≠ 1).
         p048 = t.i.equal_terms_substitution.infer_formula_statement(p=p047, x_equal_y=p015)

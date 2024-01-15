@@ -14,7 +14,7 @@ plus = u.c1.declare(symbol='+', formula_rep=pu.CompoundFormula.infix)
 # their scope is implicit. Typically, we use "x" multiple times and imply
 # that different occurrences of "x" or not necessarily the same variable "x".
 
-# With punctilious, a simple way to declare variables with a precise
+# With punctilious_obsolete_20240114, a simple way to declare variables with a precise
 # scope is to use the with_variable() method on an instance of UniverseOfDiscourse.
 # Here are two examples:
 

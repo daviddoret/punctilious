@@ -1,0 +1,48 @@
+C:\Users\David\PycharmProjects\PythonVirtualEnvironments\Scripts\python.exe C:\Users\David\PycharmProjects\punctilious\project\formula_enumeration.py
+_____
+n = 1
+s1 = s0 ∪ a1
+Let a1 be an atomic proposition.
+|a1| = 1
+|s1| = 1
+Complement: 1
+|s1| = 2
+|c1| = |s1| - |a1| = 1
+_____
+n = 2
+s2 = s1 ∪ a2
+Let a3 be an atomic proposition.
+|a2| = 2
+|s2| = 3
+Complement: 5
+|s2| = 8
+|c2| = |s2| - |a2| = 6
+_____
+n = 3
+s3 = s2 ∪ a3
+Let a9 be an atomic proposition.
+|a3| = 3
+|s3| = 9
+Complement: 43
+|s3| = 52
+|c3| = |s3| - |a3| = 49
+_____
+n = 4
+s4 = s3 ∪ a4
+Let a53 be an atomic proposition.
+|a4| = 4
+|s4| = 53
+Complement: 1638
+|s4| = 1691
+|c4| = |s4| - |a4| = 1687
+_____
+n = 5
+s5 = s4 ∪ a5
+Let a1692 be an atomic proposition.
+|a5| = 5
+|s5| = 1692
+Complement: 1714912
+|s5| = 1716604
+|c5| = |s5| - |a5| = 1716599
+
+Process finished with exit code 0

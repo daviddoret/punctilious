@@ -18,8 +18,8 @@ Write-Information "Script: $script. Step: $current_step / $total_step. pip insta
 Invoke-Expression -Command "python -m pip install --upgrade pip"
 
 $current_step = 4
-Write-Information "Script: $script. Step: $current_step / $total_step. pip install punctilious --upgrade"
-Invoke-Expression -Command "pip install punctilious"
+Write-Information "Script: $script. Step: $current_step / $total_step. pip install punctilious_obsolete_20240114 --upgrade"
+Invoke-Expression -Command "pip install punctilious_obsolete_20240114"
 
 $current_step = 5
 Write-Information "Script: $script. Step: $current_step / $total_step. deactivate"

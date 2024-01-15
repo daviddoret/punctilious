@@ -9,7 +9,7 @@ import core
 u = core.UniverseOfDiscourse()
 ft = u.t.declare(nameset=core.NameSet(symbol='foundation-theory-1'))
 
-axiom_01 = ft.include_axiom(u.a.declare('A theory is a... (define punctilious data model).'))
+axiom_01 = ft.include_axiom(u.a.declare('A theory is a... (define punctilious_obsolete_20240114 data model).'))
 
 # The (axiomatic) class of (axiomatic) classes
 axiom_02 = ft.include_axiom(u.a.declare('An (axiomatic) class is a collection of theoretical objects that are '
