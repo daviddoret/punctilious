@@ -8,12 +8,7 @@ import typing
 import formal_language
 
 
-class MetaLanguageConnective(formal_language.Connective):
-    def __init__(self):
-        super().__init__()
-
-
-class MetaLanguageVariable(formal_language.AtomicObject):
+class MetaLanguageVariable(formal_language.LeafObject):
     def __init__(self):
         super().__init__()
 
@@ -23,22 +18,17 @@ class MetaLanguage(formal_language.FormalLanguage):
         super().__init__()
 
 
-class PropositionalVariable:
+class PropositionalVariable(formal_language.LeafObject):
     def __init__(self):
         super().__init__()
 
 
-class Connective(formal_language.Connective):
+class Negation(formal_language.UnarityConnective):
     def __init__(self):
         super().__init__()
 
 
-class Negation(Connective):
-    def __init__(self):
-        super().__init__()
-
-
-class MaterialImplication(Connective):
+class MaterialImplication(formal_language.BinaryConnective):
     """In [Vernant 2022], the term conditional is used instead. The term material-implication is preferred here."""
 
     def __init__(self):
