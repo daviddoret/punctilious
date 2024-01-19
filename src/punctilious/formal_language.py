@@ -11,15 +11,35 @@ import log
 class Accretor(set, abc.ABC):
     """A generic collection that allows the addition of elements of a certain python-type, but not their removal."""
 
-    def __init__(self):
+    def __init__(self, valid_python_types: typing.Optional[tuple[type, ...]]):
+        self._is_locked = False
         self._container = set()
+        self._valid_python_types: typing.Optional[tuple[type], ...] = valid_python_types
         super().__init__()
 
+    def __iter__(self):
+        return iter(self._container)
+
+    def __len__(self):
+        return len(self._container)
+
     def add(self, element: object):
+        if self._is_locked:
+            log.error(msg='Trying to call add() on a locked Accretor.')
+        if self._valid_python_types is not None and not (any(isinstance(element, t) for t in self.valid_python_types)):
+            log.error(msg='Invalid python-type when adding element to accretor.')
         self._container.add(element)
+
+    def lock(self):
+        """Forbid the further addition of elements in the accretor."""
+        self._is_locked = True
 
     def remove(self, element: object):
         raise Exception('The Accretor class forbids the removal of elements.')
+
+    @property
+    def valid_python_types(self) -> typing.Optional[tuple[type], ...]:
+        return self._valid_python_types
 
 
 class FormalObject(typesetting.TypesettableObject):
@@ -34,7 +54,7 @@ class FormalObject(typesetting.TypesettableObject):
 
 
 class Connective(FormalObject):
-    """A connective is a formal-object that may be used as a connective to build complex formulas in a
+    """A connective is a formal-object that may be used as a connective to build compound-formulas in a
     formal-language."""
 
     def __init__(self):
@@ -42,8 +62,8 @@ class Connective(FormalObject):
 
 
 class VariableArityConnective(Connective):
-    """A variable-arity connective, aka n-ary connective, is a connective whose arity is not predefined when the
-    connective is declared, but determined when formulas are declared using this connective."""
+    """A variable-arity connective, aka n-ary connective, is a connective whose arity is not predefined / fixed
+    when the connective is declared, but determined when compound-formulas based on that connective are declared."""
 
     def __init__(self, arity_as_int: int):
         self._arity_as_int = arity_as_int

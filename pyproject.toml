@@ -39,6 +39,7 @@ pythonpath = "src"
 addopts = [
     "--import-mode=importlib",
 ]
+
 [tool.bumpver]
 current_version = "1.0.10"
 version_pattern = "MAJOR.MINOR.PATCH"
