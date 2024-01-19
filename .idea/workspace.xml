@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/log.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formal_language.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pl1.py" afterDir="false" />
@@ -417,7 +416,6 @@
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.pl1_en_us" />
-      <item itemvalue="Python.typesetting2" />
       <item itemvalue="Python.typesetting_obsolete_20240114" />
       <item itemvalue="Python.n_enumeration" />
       <item itemvalue="Python.typesetting" />
@@ -430,7 +428,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.pl1_en_us" />
-        <item itemvalue="Python.typesetting2" />
         <item itemvalue="Python.typesetting_obsolete_20240114" />
         <item itemvalue="Python.typesetting" />
         <item itemvalue="Python.n_enumeration" />

@@ -23,15 +23,11 @@ class Accretor(set, abc.ABC):
 
 
 class FormalObject(typesetting.TypesettableObject):
-    """A formal-object is an object that is manipulated as part of a formal-system."""
+    """A formal-object is an object that is manipulated as part of a formal-system.
 
-    def __init__(self):
-        super().__init__()
-
-
-class LeafObject(FormalObject):
-    """A leaf-object is a formal-object that may be used as a leaf object to build simple formulas in a
-    formal-language. It can be viewed as a 0-arity connective."""
+    A formal-object may be declared as an atomic-formula in a formal-language. Then, it can be viewed as a formula
+    composed of a 0-arity connective and no terms.
+    """
 
     def __init__(self):
         super().__init__()
@@ -46,7 +42,7 @@ class Connective(FormalObject):
 
 
 class VariableArityConnective(Connective):
-    """A variable-arity connective, aka n-ary connecive, is a connective whose arity is not predefined when the
+    """A variable-arity connective, aka n-ary connective, is a connective whose arity is not predefined when the
     connective is declared, but determined when formulas are declared using this connective."""
 
     def __init__(self, arity_as_int: int):
@@ -85,8 +81,8 @@ class BinaryConnective(FixedArityConnective):
         super().__init__(arity_as_int=2)
 
 
-class ComposedFormula(FormalObject):
-    """A composed-formula is a formal-object and a tree-structure of leaf-objects and composed-formulas."""
+class CompoundFormula(FormalObject):
+    """A compound-formula is a formal-object and a tree-structure of atomic-formulas and compound-formulas."""
 
     def __init__(self, connective: Connective, terms: typing.Tuple[FormalObject]):
         if isinstance(connective, FixedArityConnective):
@@ -114,7 +110,7 @@ class ComposedFormula(FormalObject):
         return self._terms
 
 
-class FixedArityFormula(ComposedFormula):
+class FixedArityFormula(CompoundFormula):
     """A fixed-arity-formula is a formula with a fixed-arity connective."""
 
     def __init__(self, connective: FixedArityConnective, terms: typing.Tuple[FormalObject]):

@@ -8,7 +8,7 @@ import typing
 import formal_language
 
 
-class MetaLanguageVariable(formal_language.LeafObject):
+class MetaLanguageVariable(formal_language.FormalObject):
     def __init__(self):
         super().__init__()
 
@@ -18,7 +18,7 @@ class MetaLanguage(formal_language.FormalLanguage):
         super().__init__()
 
 
-class PropositionalVariable(formal_language.LeafObject):
+class PropositionalVariable(formal_language.FormalObject):
     def __init__(self):
         super().__init__()
 
