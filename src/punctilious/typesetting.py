@@ -351,12 +351,6 @@ register_typesetting_method(method=typeset_symbol, python_type=Symbol, treatment
     flavor=flavors.default, language=languages.default)
 
 
-# print(symbols.not_sign.to_string(protocol=protocols.unicode_extended))
-# print(symbols.not_sign.to_string(protocol=protocols.latex))
-# print(symbols.rightwards_arrow.to_string(protocol=protocols.unicode_extended))
-# print(symbols.rightwards_arrow.to_string(protocol=protocols.latex))
-
-
 def register_symbol(python_type: type, symbol: Symbol, treatment: Treatment, flavor: Flavor, language: Language):
     """Register a typesetting-method for a python-type that outputs an atomic symbol."""
 

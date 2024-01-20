@@ -10,59 +10,58 @@ import log
 
 class FormalObject(typesetting.TypesettableObject):
     """A formal-object is an object that is manipulated as part of a formal-system.
-
-    A formal-object may be declared as an atomic-formula in a formal-language. Then, it can be viewed as a formula
-    composed of a 0-arity connective and no terms.
     """
 
     def __init__(self):
         super().__init__()
 
 
-class FormalClass(FormalObject, abc.ABC):
-    """A formal-class is a formal-object for which a has-element relation is defined."""
+class FormalLanguageClass(FormalObject, abc.ABC):
+    """A FormalLanguage is defined as a tuple of class. The FormalLanguageClass python-class is designed to
+    facilitate navigation between the formal-language, its classes, and their class elements."""
 
-    def __init__(self):
+    def __init__(self, formal_language: FormalLanguage):
+        self._is_locked: bool = False
+        self._container: set[FormalObject] = set()
+        self._formal_language: FormalLanguage = formal_language
         super().__init__()
 
-    @abc.abstractmethod
-    def has_element(self, x: FormalObject) -> bool:
-        """Return True if x is an element of the formal-class."""
-        log.error(msg='Calling an abstract method.')
-        return False
+    def __contains__(self, x: FormalObject) -> bool:
+        """Allows the in operator."""
+        return x in self._container
 
+    def __iter__(self):
+        return iter(self._container)
 
-class FormalPythonClass(FormalClass):
-    """A formal-python-class is a formal-class that is linked to a python-class,
-    where the python-class is interpreted as the definition of the formal-class,
-    with all instances of the python-class interpreted as members of that formal-class,
-    and nothing else."""
+    def __len__(self):
+        return len(self._container)
 
-    def __init__(self, python_class: type):
-        super().__init__()
-        self._python_class = python_class
-
-    def has_element(self, x: FormalObject) -> bool:
-        """Return True if x is an element of the formal-class."""
-        return isinstance(x, self.python_class)
+    def _add_formal_object(self, x: FormalObject) -> None:
+        """This is a protected method, it is only intended to be called from inherited classes."""
+        if self.is_locked:
+            log.error(msg='This class is locked.')
+        else:
+            self._container.add(x)
 
     @property
-    def python_class(self) -> type:
-        return self._python_class
+    def formal_language(self) -> FormalLanguage:
+        return self._formal_language
+
+    @property
+    def is_locked(self) -> bool:
+        return self._is_locked
+
+    def lock(self):
+        """Forbid the further addition of elements in the accretor."""
+        self._is_locked = True
 
 
-_formal_object_class: FormalPythonClass = FormalPythonClass(python_class=FormalObject)
-_formal_class_class: FormalPythonClass = FormalPythonClass(python_class=FormalClass)
+class FormalLanguage(FormalObject, abc.ABC):
+    """A formal language is defined as an accretor-tuple of accretor-tuples."""
 
-
-class AccretorTuple(FormalObject, abc.ABC):
-    """An accretor-tuple is generic collection that allows the addition of elements of some formal-classes,
-    but not their removal."""
-
-    def __init__(self, valid_formal_classes: tuple[FormalClass, ...]):
-        self._is_locked = False
-        self._container = set()
-        self._valid_formal_classes: tuple[FormalClass, ...] = valid_formal_classes
+    def __init__(self):
+        self._is_locked: bool = False
+        self._container: set = set()
         super().__init__()
 
     def __iter__(self):
@@ -71,23 +70,33 @@ class AccretorTuple(FormalObject, abc.ABC):
     def __len__(self):
         return len(self._container)
 
-    def add(self, x: FormalObject) -> None:
-        if self._is_locked:
-            log.error(msg='Trying to call add() on a locked AccretorTuple.')
-        if not (any(t.has_element(x=x) for t in self.valid_formal_classes)):
-            log.error(msg='x is not an element of any of the valid formal-classes for this AccretorTuple.')
-        self._container.add(x)
+    def _add_class(self, x: FormalLanguageClass) -> None:
+        """This is a protected method, it is only intended to be called from inherited classes."""
+        if self.is_locked:
+            log.error(msg='This formal-language is locked.')
+        else:
+            self._container.add(x)
+
+    @property
+    def is_locked(self) -> bool:
+        return self._is_locked
 
     def lock(self):
         """Forbid the further addition of elements in the accretor."""
         self._is_locked = True
 
-    def remove(self, x: FormalObject):
-        raise Exception('The Accretor class forbids the removal of elements.')
+
+class MetaLanguage(FormalLanguage):
+    """A meta-language is a formal-language that is linked to another formal-language and denoted as the
+    meta-language of that formal-language."""
+
+    def __init__(self, formal_language: FormalLanguage):
+        super().__init__()
+        self._formal_language = formal_language
 
     @property
-    def valid_formal_classes(self) -> tuple[FormalClass, ...]:
-        return self._valid_formal_classes
+    def formal_language(self) -> FormalLanguage:
+        return self._formal_language
 
 
 class Connective(FormalObject):
@@ -98,7 +107,7 @@ class Connective(FormalObject):
         super().__init__()
 
 
-_connective_class: FormalPythonClass = FormalPythonClass(python_class=Connective)
+# _connective_class: FormalPythonClass = FormalPythonClass(python_class=Connective)
 
 
 class VariableArityConnective(Connective):
@@ -139,6 +148,37 @@ class BinaryConnective(FixedArityConnective):
 
     def __init__(self):
         super().__init__(arity_as_int=2)
+
+
+class ConnectiveClass(FormalLanguageClass):
+    def __init__(self, formal_language: FormalLanguage):
+        super().__init__(formal_language=formal_language)
+
+    def declare_unary_connective(self) -> UnaryConnective:
+        x: UnaryConnective = UnaryConnective()
+        self._add_formal_object(x=x)
+        return x
+
+    def declare_binary_connective(self) -> BinaryConnective:
+        x: BinaryConnective = BinaryConnective()
+        self._add_formal_object(x=x)
+        return x
+
+
+class FormulaClass(FormalLanguageClass):
+    def __init__(self, formal_language: FormalLanguage):
+        super().__init__(formal_language=formal_language)
+
+    def declare_unary_formula(self, connective: UnaryConnective, term: FormalObject) -> UnaryFormula:
+        x: UnaryFormula = UnaryFormula(connective=connective, term=term)
+        self._add_formal_object(x=x)
+        return x
+
+    def declare_binary_formula(self, connective: BinaryConnective, term_1: FormalObject, term_2: FormalObject) -> (
+        BinaryFormula):
+        x: BinaryFormula = BinaryFormula(connective=connective, term_1=term_1, term_2=term_2)
+        self._add_formal_object(x=x)
+        return x
 
 
 class CompoundFormula(FormalObject):
@@ -203,50 +243,8 @@ class BinaryFormula(FixedArityFormula):
         return self.terms[1]
 
 
-class FormalLanguage(AccretorTuple):
-    """A formal language is defined as an accretor-tuple of formal-objects."""
+class ML1(FormalLanguageClass, abc.ABC):
+    """ML1 is a rather minimalist meta-language designed to facilite the construction of formal-languages."""
 
-    def __init__(self):
-        global _formal_object_class
-        super().__init__(valid_formal_classes=(_formal_object_class,))
-
-
-class FormalClassAccretorTuple(AccretorTuple):
-    def __init__(self):
-        global _formal_class_class
-        super().__init__(valid_formal_classes=(_formal_class_class,))
-
-
-class MetaLanguageClassAccretor(FormalClassAccretorTuple):
-    def __init__(self):
-        global _connective_class
-        global _formal_object_class
-        super().__init__()
-        self._connective_class: FormalPythonClass = _connective_class
-        self.add(x=self._connective_class)
-        self._formal_object_class: FormalPythonClass = _formal_object_class
-        self.add(x=self._formal_object_class)
-
-    @property
-    def connective_class(self) -> FormalPythonClass:
-        """The class of all connectives."""
-        return self._connective_class
-
-    @property
-    def formal_object_class(self) -> FormalPythonClass:
-        """The class of all formal-objects."""
-        return self._formal_object_class
-
-
-class MetaLanguage(FormalLanguage):
-    """The basic punctilious meta-language implements some punctilious fundamental classes,
-    and may be extended to define meta-languages with complementary classes."""
-
-    def __init__(self):
-        super().__init__()
-        self._formal_classes: MetaLanguageClassAccretor = MetaLanguageClassAccretor()
-        self.add(x=self._formal_classes)
-
-    @property
-    def formal_classes(self) -> MetaLanguageClassAccretor:
-        return self._formal_classes
+    def __init__(self, formal_language: FormalLanguage):
+        super().__init__(formal_language=formal_language)
