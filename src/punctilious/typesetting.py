@@ -361,8 +361,7 @@ def register_symbol(python_type: type, symbol: Symbol, treatment: Treatment, fla
     """Register a typesetting-method for a python-type that outputs an atomic symbol."""
 
     # dynamically generate the desired typesetting-method.
-    def typesetting_method(o: formal_language.FormalObject, protocol: Protocol, treatment: Treatment, flavor: Flavor,
-        language: Language):
+    def typesetting_method(o: object, protocol: Protocol, treatment: Treatment, flavor: Flavor, language: Language):
         return typeset_symbol(o=symbol, protocol=protocol)
 
     # register that typesetting-method.
@@ -377,10 +376,20 @@ def register_styledstring(python_type: type, text: str, treatment: Treatment, fl
     """
 
     # dynamically generate the desired typesetting-method.
-    def typesetting_method(o: formal_language.FormalObject, protocol: Protocol, treatment: Treatment, flavor: Flavor,
-        language: Language):
+    def typesetting_method(o: object, protocol: Protocol, treatment: Treatment, flavor: Flavor, language: Language):
         yield text
 
     # register that typesetting-method.
     register_typesetting_method(method=typesetting_method, python_type=python_type, treatment=treatment, flavor=flavor,
         language=language)
+
+
+def fallback_typesetting_method(o: object, protocol: Protocol, treatment: Treatment, flavor: Flavor,
+    language: Language):
+    """The fallback-typesetting-method assure a minimalist representation for all python objects."""
+    yield f"{type(o).__name__}-{id(o)}"
+
+
+# register that typesetting-method.
+register_typesetting_method(method=fallback_typesetting_method, python_type=object, treatment=treatments.default,
+    flavor=flavors.default, language=languages.default)
