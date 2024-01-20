@@ -13,7 +13,7 @@ class MetaVariable(formal_language.FormalObject):
         super().__init__()
 
 
-class MetaVariableAccretor(formal_language.Accretor):
+class MetaVariableAccretorTuple(formal_language.AccretorTuple):
     """An accretor for meta-variables."""
 
     def __init__(self):
@@ -23,7 +23,7 @@ class MetaVariableAccretor(formal_language.Accretor):
 class MetaLanguage(formal_language.FormalLanguage):
     def __init__(self):
         super().__init__()
-        self._variables = MetaVariableAccretor()
+        self._variables = MetaVariableAccretorTuple()
 
     @property
     def variables(self):
@@ -35,12 +35,12 @@ class PropositionalVariable(formal_language.FormalObject):
         super().__init__()
 
 
-class PropositionalVariableAccretor(formal_language.Accretor):
+class PropositionalVariableAccretorTuple(formal_language.AccretorTuple):
     def __init__(self):
         super().__init__(valid_python_types=(PropositionalVariable,))
 
 
-class Negation(formal_language.UnarityConnective):
+class Negation(formal_language.UnaryConnective):
     def __init__(self):
         super().__init__()
 
@@ -52,7 +52,7 @@ class MaterialImplication(formal_language.BinaryConnective):
         super().__init__()
 
 
-class PropositionalConnectiveAccretor(formal_language.Accretor):
+class PropositionalConnectiveAccretorTuple(formal_language.AccretorTuple):
     def __init__(self):
         super().__init__(valid_python_types=(MaterialImplication, Negation,))
         self._material_implication = MaterialImplication()
@@ -65,10 +65,10 @@ class PL1(formal_language.FormalLanguage):
     def __init__(self):
         super().__init__()
         self._metalanguage = MetaLanguage()
-        self._connectives = PropositionalConnectiveAccretor()
+        self._connectives = PropositionalConnectiveAccretorTuple()
 
     @property
-    def connectives(self) -> PropositionalConnectiveAccretor:
+    def connectives(self) -> PropositionalConnectiveAccretorTuple:
         return self._connectives
 
     @property

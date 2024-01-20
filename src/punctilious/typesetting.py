@@ -357,14 +357,29 @@ register_typesetting_method(method=typeset_symbol, python_type=Symbol, treatment
 # print(symbols.rightwards_arrow.to_string(protocol=protocols.latex))
 
 
-def register_symbol_typesetting_method(python_type: type, symbol: Symbol, treatment: Treatment, flavor: Flavor,
-    language: Language):
+def register_symbol(python_type: type, symbol: Symbol, treatment: Treatment, flavor: Flavor, language: Language):
     """Register a typesetting-method for a python-type that outputs an atomic symbol."""
 
     # dynamically generate the desired typesetting-method.
     def typesetting_method(o: formal_language.FormalObject, protocol: Protocol, treatment: Treatment, flavor: Flavor,
         language: Language):
         return typeset_symbol(o=symbol, protocol=protocol)
+
+    # register that typesetting-method.
+    register_typesetting_method(method=typesetting_method, python_type=python_type, treatment=treatment, flavor=flavor,
+        language=language)
+
+
+def register_styledstring(python_type: type, text: str, treatment: Treatment, flavor: Flavor, language: Language):
+    """Register a typesetting-method for a python-type that outputs a string.
+
+    TODO: modify this function to use StyledString instead of str.
+    """
+
+    # dynamically generate the desired typesetting-method.
+    def typesetting_method(o: formal_language.FormalObject, protocol: Protocol, treatment: Treatment, flavor: Flavor,
+        language: Language):
+        yield text
 
     # register that typesetting-method.
     register_typesetting_method(method=typesetting_method, python_type=python_type, treatment=treatment, flavor=flavor,
