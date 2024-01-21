@@ -1,19 +1,19 @@
 import pytest
-from punctilious import formal_language as fl
+from punctilious import *
 
 
 class TestConnective:
     def test_typesetting(self):
-        c = fl.Connective()
-        print(c)
+        c = fl1.Connective()
+        assert (c.to_string(protocol=ts.protocols.unicode_limited) == "*")
 
 
 class TestAccretor:
     def test_add(self):
-        ml: fl.MetaLanguage = fl.MetaLanguage()
-        a: fl.AccretorTuple = fl.AccretorTuple(valid_formal_classes=(ml.formal_classes.formal_object_class,))
+        ml: fl1.MetaLanguage = fl1.MetaLanguage()
+        a: fl1.AccretorTuple = fl1.AccretorTuple(valid_formal_classes=(ml.formal_classes.formal_object_class,))
         assert len(a) == 0
-        x: fl.FormalObject = fl.FormalObject()
+        x: fl1.FormalObject = fl1.FormalObject()
         a.add(x)
         assert len(a) == 1
         a.add(x)
@@ -26,7 +26,7 @@ class TestAccretor:
         assert len(a) == 1
         a.lock()
         with pytest.raises(Exception) as e_info:
-            z: fl.FormalObject = fl.FormalObject()
+            z: fl1.FormalObject = fl1.FormalObject()
             a.add(z)
         assert len(a) == 1
         pass
@@ -35,10 +35,10 @@ class TestAccretor:
 class TestFormalPythonClass:
 
     def test_has_element(self):
-        ml: fl.MetaLanguage = fl.MetaLanguage()
-        x: fl.FormalObject = fl.FormalObject()
+        ml: fl1.MetaLanguage = fl1.MetaLanguage()
+        x: fl1.FormalObject = fl1.FormalObject()
         assert ml.formal_classes.formal_object_class.has_element(x=x)
         assert not ml.formal_classes.connective_class.has_element(x=x)
-        y: fl.FormalObject = fl.Connective()
+        y: fl1.FormalObject = fl1.Connective()
         assert ml.formal_classes.formal_object_class.has_element(x=y)
         assert ml.formal_classes.connective_class.has_element(x=y)

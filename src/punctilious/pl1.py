@@ -5,9 +5,10 @@ from __future__ import annotations
 import abc
 import typing
 
-import formal_language as fl
+import fl1 as fl
 import log
-from formal_language import FormalObject
+import pl1_typesetting
+from fl1 import FormalObject
 
 
 class MetaVariable(fl.FormalObject):
@@ -60,7 +61,9 @@ class ConnectiveClass(fl.ConnectiveClass):
         super().__init__(formal_language=formal_language)
         # exhaustive declaration of PL1 connectives.
         self._material_implication: fl.BinaryConnective = self.declare_binary_connective()
+        self._material_implication.tag(pl1_typesetting.connective_material_implication)
         self._negation: fl.UnaryConnective = self.declare_unary_connective()
+        self._negation.tag(pl1_typesetting.connective_negation)
         self.lock()
 
     @property
@@ -145,6 +148,4 @@ class PL1(fl.FormalLanguage):
         return self._propositional_variables
 
 
-# _well_formed_formula_class: fl.FormalExtensionalClass = fl.FormalExtensionalClass(has_element=is_well_formed_formula)
-# TODO: add the well_formed_formula_class to PL1
-pass
+log.debug(f"Module {__name__}: loaded.")

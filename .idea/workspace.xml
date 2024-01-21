@@ -5,18 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/formal_language_en_us_default.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/formal_language_tags.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/pl1_tags.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/fl1_cl_enus.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/fl1_sr.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/fl1_typesetting.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/pl1_cl_chfr.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/pl1_cl_enus.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/pl1_sr_classical.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/pl1_sr_polish.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/pl1_typesetting.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language_en_us.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/fl1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language_en_us_default.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/fl1_cl_chfr.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language_tags.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/log.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/log.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pl1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pl1_en_us.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pl1_en_us_default.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pl1_fr_ch.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pl1_fr_ch_default.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pl1_en_us_default.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pl1_fr_ch_default.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pl1_tags.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pl2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pl2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/typesetting.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/typesetting.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_fl1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_pl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pl1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -131,7 +140,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\reference_table" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for tests.test_formal_language.TestConnective">
+  <component name="RunManager" selected="Python tests.pytest in test_pl1.py">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -351,7 +360,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_pl1.TestPL1.test_formulas" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for tests.test_fl1.TestConnective" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -363,11 +372,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_pl1.TestPL1.test_formulas&quot;" />
+      <option name="_new_target" value="&quot;tests.test_fl1.TestConnective&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for tests.test_formal_language.TestConnective" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for tests.test_pl1.TestPL1.test_connectives" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -379,11 +388,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.test_formal_language.TestConnective&quot;" />
+      <option name="_new_target" value="&quot;tests.test_pl1.TestPL1.test_connectives&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_formal_language.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for tests.test_pl1.TestPL1.test_formulas" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -395,8 +404,8 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_formal_language.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <option name="_new_target" value="&quot;tests.test_pl1.TestPL1.test_formulas&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <configuration name="pytest in test_pl1.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
@@ -424,9 +433,9 @@
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_connectives" />
-      <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_formulas" />
-      <item itemvalue="Python tests.pytest for tests.test_formal_language.TestConnective" />
-      <item itemvalue="Python tests.pytest in test_formal_language.py" />
+      <item itemvalue="Python tests.pytest for tests.test_fl1.TestConnective" />
+      <item itemvalue="Python tests.pytest for tests.test_pl1.TestPL1.test_connectives" />
+      <item itemvalue="Python tests.pytest for tests.test_pl1.TestPL1.test_formulas" />
       <item itemvalue="Python tests.pytest in test_pl1.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -434,11 +443,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for tests.test_formal_language.TestConnective" />
-        <item itemvalue="Python tests.pytest in test_formal_language.py" />
-        <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_connectives" />
         <item itemvalue="Python tests.pytest in test_pl1.py" />
-        <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_formulas" />
+        <item itemvalue="Python tests.pytest for tests.test_pl1.TestPL1.test_connectives" />
+        <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_connectives" />
+        <item itemvalue="Python tests.pytest for tests.test_pl1.TestPL1.test_formulas" />
+        <item itemvalue="Python tests.pytest for tests.test_fl1.TestConnective" />
       </list>
     </recent_temporary>
   </component>
@@ -450,14 +459,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00409" summary="version 1.0.10:&#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
-      <option name="closed" value="true" />
-      <created>1699124100768</created>
-      <option name="number" value="00409" />
-      <option name="presentableId" value="LOCAL-00409" />
-      <option name="project" value="LOCAL" />
-      <updated>1699124100768</updated>
     </task>
     <task id="LOCAL-00410" summary="version 1.0.10:&#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
       <option name="closed" value="true" />
@@ -843,7 +844,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705790749012</updated>
     </task>
-    <option name="localTasksCounter" value="458" />
+    <task id="LOCAL-00458" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1705837119726</created>
+      <option name="number" value="00458" />
+      <option name="presentableId" value="LOCAL-00458" />
+      <option name="project" value="LOCAL" />
+      <updated>1705837119726</updated>
+    </task>
+    <option name="localTasksCounter" value="459" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -977,24 +986,24 @@
           <option name="timeStamp" value="123" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/formal_language_en_us_default.py</url>
+          <url>file://$PROJECT_DIR$/src/punctilious/fl1_sr.py</url>
           <line>16</line>
           <option name="timeStamp" value="140" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_formal_language.py</url>
-          <line>42</line>
+          <url>file://$PROJECT_DIR$/tests/test_fl1.py</url>
+          <line>43</line>
           <option name="timeStamp" value="146" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_pl1.py</url>
-          <line>14</line>
-          <option name="timeStamp" value="147" />
+          <line>9</line>
+          <option name="timeStamp" value="150" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_formal_language.py</url>
-          <line>7</line>
-          <option name="timeStamp" value="148" />
+          <url>file://$PROJECT_DIR$/src/punctilious/typesetting.py</url>
+          <line>303</line>
+          <option name="timeStamp" value="152" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

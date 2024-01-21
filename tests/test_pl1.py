@@ -1,10 +1,5 @@
 import pytest
-# from punctilious import formal_language as fl
-# import formal_language_en_us
-from punctilious import typesetting as ts
-from punctilious import pl1 as pl1
-import pl1_en_us_default
-import pl1_fr_ch_default
+from punctilious import *
 
 
 class TestPL1:

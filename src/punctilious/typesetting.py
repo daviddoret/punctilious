@@ -8,6 +8,8 @@ import warnings
 import logging
 import collections
 
+import log
+
 
 class Tag:
     """A typesetting tag is a class of objects to which we wish to link some typesetting methods."""
@@ -57,6 +59,12 @@ class Protocol:
 
 class Protocols:
     """A catalog of out-of-the-box typesetting protocols."""
+    _singleton = None
+
+    def __new__(cls):
+        if cls._singleton is None:
+            cls._singleton = super(Protocols, cls).__new__(cls)
+        return cls._singleton
 
     def __init__(self):
         self._latex = Protocol('LaTeX')
@@ -127,20 +135,20 @@ class Treatment:
 
 class Treatments:
     """A catalog of out-of-the-box treatments."""
+    _singleton = None
+
+    def __new__(cls):
+        if cls._singleton is None:
+            cls._singleton = super(Treatments, cls).__new__(cls)
+        return cls._singleton
 
     def __init__(self):
         self._default = Treatment('default')
-        self._symbol_representation = Treatment('symbolic representation')
 
     @property
     def default(self) -> Treatment:
         """If no treatment is specified, typesetting uses the default treatment."""
         return self._default
-
-    @property
-    def symbolic_representation(self) -> Treatment:
-        """Represent the formal-object as a symbol."""
-        return self._symbol_representation
 
 
 treatments = Treatments()
@@ -176,7 +184,13 @@ class Flavor:
 
 
 class Flavors:
-    """A catalog of out-of-the-box flavors."""
+    """A catalog of out-of-the-box flavors."""''
+    _singleton = None
+
+    def __new__(cls):
+        if cls._singleton is None:
+            cls._singleton = super(Flavors, cls).__new__(cls)
+        return cls._singleton
 
     def __init__(self):
         self._default = Flavor('Default')
@@ -215,11 +229,17 @@ class Language:
 
 class Languages:
     """A catalog of out-of-the-box languages."""
+    _singleton = None
+
+    def __new__(cls):
+        if cls._singleton is None:
+            cls._singleton = super(Languages, cls).__new__(cls)
+        return cls._singleton
 
     def __init__(self):
-        self._fr_ch = Language('French (Switzerland)')
-        self._en_us = Language('English (US)')
-        self._default = self._en_us
+        self._enus = Language('English (US)')
+        self._frch = Language('French (Switzerland)')
+        self._default = self._enus
 
     @property
     def default(self) -> Language:
@@ -227,15 +247,31 @@ class Languages:
         return self._default
 
     @property
-    def en_us(self) -> Language:
-        """The american English language."""
-        return self._en_us
+    def enus(self) -> Language:
+        """The English (US) language."""
+        return self._enus
+
+    @property
+    def frch(self) -> Language:
+        """The French (Swiss) language."""
+        return self._frch
 
 
 languages = Languages()
 
+
+class TypesettingMethods(dict):
+    _singleton = None
+
+    def __new__(cls):
+        if cls._singleton is None:
+            cls._singleton = super(TypesettingMethods, cls).__new__(cls)
+        return cls._singleton
+
+
 typesetting_methods: typing.Dict[
-    typing.FrozenSet[Tag, Treatment], typing.Dict[typing.FrozenSet[Tag, Flavor, Language], typing.Callable]] = (dict())
+    typing.FrozenSet[Tag, Treatment], typing.Dict[typing.FrozenSet[Tag, Flavor, Language], typing.Callable]] = (
+    TypesettingMethods())
 
 
 def register_typesetting_method(method: typing.Callable, tag: Tag, treatment: Treatment, flavor: Flavor,
@@ -266,7 +302,9 @@ def typeset(o: Typesettable, protocol: Protocol, treatment: Treatment, flavor: t
     global languages
 
     if treatment is None:
-        treatment: Treatment = treatments.default
+        treatment: Treatment = o.default_treatment
+        if treatment is None:
+            treatment: Treatment = treatments.default
     if flavor is None:
         flavor: Flavor = flavors.default
     if language is None:
@@ -274,31 +312,31 @@ def typeset(o: Typesettable, protocol: Protocol, treatment: Treatment, flavor: t
 
     keys: set[typing.FrozenSet[Tag, Treatment]] = {frozenset([tag, treatment]) for tag in o.typesetting_tags}
     available_keys: set[typing.FrozenSet[Tag, Treatment]] = keys.intersection(typesetting_methods)
-    if len(available_keys) == 0:
+
+    # some typesetting methods were found, choose the best one.
+    best_key: typing.Optional[typing.FrozenSet[Tag, Treatment]] = None
+    best_solution: typing.Optional[typing.FrozenSet[Tag, Flavor, Language]] = None
+    best_score = 0
+    key: typing.FrozenSet[Tag, Treatment]
+    solution: typing.FrozenSet[Tag, Flavor, Language]
+    for key in available_keys:
+        for solution in typesetting_methods[key]:
+            # solution is of the form set[tag,flavour,language,].
+            # our preference goes to tag.preference, then flavour, then language.
+            # specialized tags are always preferred (weight: x * 4 with x > 0).
+            # then flavour (weight: 2).
+            # finally, language (weight: 1).
+            score = next(iter(solution.intersection(o.typesetting_tags))).specialization
+            score = score + (2 if flavor in solution else 0)
+            score = score + (1 if languages in solution else 0)
+            if score > best_score:
+                best_key = key
+                best_solution = solution
+    if best_key is None:
         # no typesetting method found, use fallback typesetting instead.
         yield from fallback_typesetting_method(o=o, protocol=protocol, treatment=treatment, flavor=flavor,
             language=language)
     else:
-        # some typesetting methods were found, choose the best one.
-        best_key: typing.Optional[typing.FrozenSet[Tag, Treatment]] = None
-        best_solution: typing.Optional[typing.FrozenSet[Tag, Flavor, Language]] = None
-        best_score = 0
-        key: typing.FrozenSet[Tag, Treatment]
-        solution: typing.FrozenSet[Tag, Flavor, Language]
-        for key in available_keys:
-            for solution in typesetting_methods[key]:
-                # solution is of the form set[tag,flavour,language,].
-                # our preference goes to tag.preference, then flavour, then language.
-                # specialized tags are always preferred (weight: x * 4 with x > 0).
-                # then flavour (weight: 2).
-                # finally, language (weight: 1).
-                score = next(iter(solution.intersection(o.typesetting_tags))).specialization
-                score = score + 2 if flavor in solution else 0
-                score = score + 1 if languages in solution else 0
-                print(f"score: {score}")
-                if score > best_score:
-                    best_key = key
-                    best_solution = solution
         generator: typing.Generator[str, None, None] = typesetting_methods[best_key][best_solution](o=o,
             protocol=protocol, treatment=treatment, flavor=flavor, language=language)
         yield from generator
@@ -313,14 +351,19 @@ class Typesettable(abc.ABC):
     """The typesettable abstract class makes it possible to equip some object in such a way
     that may be typeset by registering typesetting methods for the desired treatments and languages."""
 
-    def __init__(self):
+    def __init__(self, default_treatment: typing.Optional[Treatment] = None):
         self._typesetting_tags: set[Tag, ...] = set()
+        self._default_treatment: typing.Optional[Treatment] = default_treatment
 
     def __repr__(self):
         return self.to_string(protocol=protocols.unicode_limited)
 
     def __str__(self):
         return self.to_string(protocol=protocols.unicode_limited)
+
+    @property
+    def default_treatment(self) -> typing.Optional[Treatment]:
+        return self._default_treatment
 
     def tag(self, tag: Tag):
         self.typesetting_tags.add(tag)
@@ -378,6 +421,12 @@ def typeset_symbol(o: Symbol, protocol: typing.Optional[Protocol] = None, treatm
 
 class Symbols:
     """A catalog of out-of-the-box symbols."""
+    _singleton = None
+
+    def __new__(cls):
+        if cls._singleton is None:
+            cls._singleton = super(Symbols, cls).__new__(cls)
+        return cls._singleton
 
     def __init__(self):
         self._asterisk_operator = Symbol(latex_math='\\ast', unicode_extended='∗', unicode_limited='*')
@@ -438,3 +487,6 @@ def fallback_typesetting_method(o: Typesettable, protocol: Protocol, treatment: 
     language: Language):
     """The fallback-typesetting-method assure a minimalist representation for all TypesettableObject."""
     yield f"{type(o).__name__}-{id(o)}"
+
+
+log.debug(f"Module {__name__}: loaded.")

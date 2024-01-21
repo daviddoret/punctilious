@@ -4,17 +4,25 @@ from __future__ import annotations
 
 import abc
 import typing
-import typesetting
+
 import log
-import formal_language_tags as fl_tags
+import typesetting as ts
+import fl1_typesetting as fl1_ts
 
 
-class FormalObject(typesetting.Typesettable):
+class FormalObject(ts.Typesettable):
     """A formal-object is an object that is manipulated as part of a formal-system.
     """
 
     def __init__(self):
-        super().__init__()  # Make the formal-object typesettable.
+        super().__init__(
+            default_treatment=fl1_ts.treatments.symbolic_representation)  # Make the formal-object  # typesettable.
+
+    def __repr__(self):
+        super().to_string(protocol=ts.protocols.unicode_limited, treatment=fl1_ts.treatments.symbolic_representation)
+
+    def __str__(self):
+        super().to_string(protocol=ts.protocols.unicode_limited, treatment=fl1_ts.treatments.symbolic_representation)
 
 
 class FormalLanguageClass(FormalObject, abc.ABC):
@@ -106,7 +114,7 @@ class Connective(FormalObject):
 
     def __init__(self):
         super().__init__()
-        self.tag(fl_tags.connective)
+        self.tag(fl1_ts.connective)
 
 
 # _connective_class: FormalPythonClass = FormalPythonClass(python_class=Connective)
@@ -215,7 +223,7 @@ class CompoundFormula(FormalObject):
 class FixedArityFormula(CompoundFormula):
     """A fixed-arity-formula is a formula with a fixed-arity connective."""
 
-    def __init__(self, connective: FixedArityConnective, terms: typing.Tuple[FormalObject]):
+    def __init__(self, connective: FixedArityConnective, terms: typing.Tuple[FormalObject, ...]):
         super().__init__(connective=connective, terms=terms)
 
 
@@ -250,3 +258,6 @@ class ML1(FormalLanguageClass, abc.ABC):
 
     def __init__(self, formal_language: FormalLanguage):
         super().__init__(formal_language=formal_language)
+
+
+log.debug(f"Module {__name__}: loaded.")
