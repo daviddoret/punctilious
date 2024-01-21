@@ -2,6 +2,12 @@ import pytest
 from punctilious import formal_language as fl
 
 
+class TestConnective:
+    def test_typesetting(self):
+        c = fl.Connective()
+        print(c)
+
+
 class TestAccretor:
     def test_add(self):
         ml: fl.MetaLanguage = fl.MetaLanguage()

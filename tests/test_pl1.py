@@ -3,8 +3,8 @@ import pytest
 # import formal_language_en_us
 from punctilious import typesetting as ts
 from punctilious import pl1 as pl1
-import pl1_en_us
-import pl1_fr_ch
+import pl1_en_us_default
+import pl1_fr_ch_default
 
 
 class TestPL1:

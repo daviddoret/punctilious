@@ -6,6 +6,30 @@ import os
 import csv
 import warnings
 import logging
+import collections
+
+
+class Tag:
+    """A typesetting tag is a class of objects to which we wish to link some typesetting methods."""
+
+    def __init__(self, name: str, specializes: typing.Optional[Tag] = None):
+        self._name = name
+        self._specialization = 4 if specializes is None else specializes.specialization + 4
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return f"tag: {self.name}"
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def specialization(self) -> int:
+        """A score that orders tags by degree of specialization."""
+        return self._specialization
 
 
 class Protocol:
@@ -211,10 +235,10 @@ class Languages:
 languages = Languages()
 
 typesetting_methods: typing.Dict[
-    type, typing.Dict[Treatment, typing.Dict[Flavor, typing.Dict[Language, typing.Callable]]]] = dict()
+    typing.FrozenSet[Tag, Treatment], typing.Dict[typing.FrozenSet[Tag, Flavor, Language], typing.Callable]] = (dict())
 
 
-def register_typesetting_method(method: typing.Callable, python_type: type, treatment: Treatment, flavor: Flavor,
+def register_typesetting_method(method: typing.Callable, tag: Tag, treatment: Treatment, flavor: Flavor,
     language: Language) -> None:
     """Register a typesetting method for the given protocol, treatment, and language.
     If protocol, treatment, and/or language are not specified, use the defaults.
@@ -222,59 +246,75 @@ def register_typesetting_method(method: typing.Callable, python_type: type, trea
     If a typesetting method was already registered for the given protocol, treatment, and language, substitute
     the previously registered method with the new one."""
     global typesetting_methods
-    global protocols
-    global treatments
-    global favors
-    global languages
-    if python_type not in typesetting_methods:
-        typesetting_methods[python_type] = dict()
-    if treatment not in typesetting_methods[python_type]:
-        typesetting_methods[python_type][treatment] = dict()
-    if flavor not in typesetting_methods[python_type][treatment]:
-        typesetting_methods[python_type][treatment][flavor] = dict()
-    typesetting_methods[python_type][treatment][flavor][language]: typing.Callable = method
+    key: typing.FrozenSet[Tag, Treatment] = frozenset([tag, treatment])
+    if key not in typesetting_methods:
+        typesetting_methods[key] = dict()
+    solution: typing.FrozenSet[Tag, Flavor, Language] = frozenset([tag, flavor, language])
+    typesetting_methods[key][solution]: typing.Callable = method
+    if treatment is not treatments.default:
+        # the first registered typesetting_method is promoted as the default typesetting_method
+        register_typesetting_method(method=method, tag=tag, treatment=treatments.default, flavor=flavor,
+            language=language)
 
 
-def typeset(o: TypesettableObject, protocol: Protocol, treatment: typing.Optional[Treatment],
-    flavor: typing.Optional[Flavor], language: typing.Optional[Language]) -> typing.Generator[str, None, None]:
+def typeset(o: Typesettable, protocol: Protocol, treatment: Treatment, flavor: typing.Optional[Flavor],
+    language: typing.Optional[Language]) -> typing.Generator[str, None, None]:
     global typesetting_methods
     global protocols
     global treatments
     global flavors
     global languages
-    ordered_types: typing.Generator[type, any, None] = (t for t in o.__class__.mro())  # A tuple of types ordered by
-    # inheritance.
-    python_type: typing.Optional[type] = next(t for t in ordered_types if t in typesetting_methods)
-    if python_type is None:
-        raise Exception('Unsupported python type.')
-    if treatment not in typesetting_methods[python_type]:
-        unsupported_treatment: Treatment = treatment
-        treatment = next(iter(typesetting_methods[python_type]))
-        logging.debug(msg=f'None or unsupported treatment {unsupported_treatment} replaced by {treatment}.')
-    if flavor not in typesetting_methods[python_type][treatment]:
-        unsupported_flavor: Flavor = flavor
-        flavor = next(iter(typesetting_methods[python_type][treatment]))
-        logging.debug(msg=f'None or unsupported flavor {unsupported_flavor} replaced by {flavor}.')
-    if language not in typesetting_methods[python_type][treatment][flavor]:
-        unsupported_language: Language = language
-        language = next(iter(typesetting_methods[python_type][treatment][flavor]))
-        logging.debug(msg=f'None or unsupported language {unsupported_language} replaced by {language}.')
-    generator: typing.Generator[str, None, None] = typesetting_methods[python_type][treatment][flavor][language](o=o,
-        protocol=protocol, treatment=treatment, flavor=flavor, language=language)
-    yield from generator
+
+    if treatment is None:
+        treatment: Treatment = treatments.default
+    if flavor is None:
+        flavor: Flavor = flavors.default
+    if language is None:
+        language: Language = languages.default
+
+    keys: set[typing.FrozenSet[Tag, Treatment]] = {frozenset([tag, treatment]) for tag in o.typesetting_tags}
+    available_keys: set[typing.FrozenSet[Tag, Treatment]] = keys.intersection(typesetting_methods)
+    if len(available_keys) == 0:
+        # no typesetting method found, use fallback typesetting instead.
+        yield from fallback_typesetting_method(o=o, protocol=protocol, treatment=treatment, flavor=flavor,
+            language=language)
+    else:
+        # some typesetting methods were found, choose the best one.
+        best_key: typing.Optional[typing.FrozenSet[Tag, Treatment]] = None
+        best_solution: typing.Optional[typing.FrozenSet[Tag, Flavor, Language]] = None
+        best_score = 0
+        key: typing.FrozenSet[Tag, Treatment]
+        solution: typing.FrozenSet[Tag, Flavor, Language]
+        for key in available_keys:
+            for solution in typesetting_methods[key]:
+                # solution is of the form set[tag,flavour,language,].
+                # our preference goes to tag.preference, then flavour, then language.
+                # specialized tags are always preferred (weight: x * 4 with x > 0).
+                # then flavour (weight: 2).
+                # finally, language (weight: 1).
+                score = next(iter(solution.intersection(o.typesetting_tags))).specialization
+                score = score + 2 if flavor in solution else 0
+                score = score + 1 if languages in solution else 0
+                print(f"score: {score}")
+                if score > best_score:
+                    best_key = key
+                    best_solution = solution
+        generator: typing.Generator[str, None, None] = typesetting_methods[best_key][best_solution](o=o,
+            protocol=protocol, treatment=treatment, flavor=flavor, language=language)
+        yield from generator
 
 
-def to_string(o: TypesettableObject, protocol: Protocol, treatment: typing.Optional[Treatment],
+def to_string(o: Typesettable, protocol: Protocol, treatment: typing.Optional[Treatment],
     flavor: typing.Optional[Flavor], language: typing.Optional[Language]) -> str:
     return ''.join(typeset(o=o, protocol=protocol, treatment=treatment, flavor=flavor, language=language))
 
 
-class TypesettableObject(abc.ABC):
-    """The typesettable-object abstract class makes it possible to equip some object in such a way
+class Typesettable(abc.ABC):
+    """The typesettable abstract class makes it possible to equip some object in such a way
     that may be typeset by registering typesetting methods for the desired treatments and languages."""
 
     def __init__(self):
-        pass
+        self._typesetting_tags: set[Tag, ...] = set()
 
     def __repr__(self):
         return self.to_string(protocol=protocols.unicode_limited)
@@ -282,9 +322,16 @@ class TypesettableObject(abc.ABC):
     def __str__(self):
         return self.to_string(protocol=protocols.unicode_limited)
 
+    def tag(self, tag: Tag):
+        self.typesetting_tags.add(tag)
+
     def to_string(self, protocol: typing.Optional[Protocol] = None, treatment: typing.Optional[Treatment] = None,
         flavor: typing.Optional[Flavor] = None, language: typing.Optional[Language] = None) -> str:
         return to_string(o=self, protocol=protocol, treatment=treatment, flavor=flavor, language=language)
+
+    @property
+    def typesetting_tags(self) -> set[Tag, ...]:
+        return self._typesetting_tags
 
     def typeset(self, protocol: typing.Optional[Protocol] = None, treatment: typing.Optional[Treatment] = None,
         language: typing.Optional[Language] = None, flavor: typing.Optional[Flavor] = None) -> typing.Generator[
@@ -293,7 +340,7 @@ class TypesettableObject(abc.ABC):
         yield from typeset(o=self, protocol=protocol, treatment=treatment, flavor=flavor, language=language)
 
 
-class Symbol(TypesettableObject):
+class Symbol(Typesettable):
     """An atomic symbol."""
 
     def __init__(self, latex_math: str, unicode_extended: str, unicode_limited: str):
@@ -333,8 +380,13 @@ class Symbols:
     """A catalog of out-of-the-box symbols."""
 
     def __init__(self):
+        self._asterisk_operator = Symbol(latex_math='\\ast', unicode_extended='∗', unicode_limited='*')
         self._not_sign = Symbol(latex_math='\\lnot', unicode_extended='¬', unicode_limited='lnot')
         self._rightwards_arrow = Symbol(latex_math='\\rightarrow', unicode_extended='→', unicode_limited='-->')
+
+    @property
+    def asterisk_operator(self) -> Symbol:
+        return self._asterisk_operator
 
     @property
     def not_sign(self) -> Symbol:
@@ -347,43 +399,42 @@ class Symbols:
 
 symbols = Symbols()
 
-register_typesetting_method(method=typeset_symbol, python_type=Symbol, treatment=treatments.default,
+atomic_symbol_tag = Tag(name="atomic_symbol")
+
+register_typesetting_method(method=typeset_symbol, tag=atomic_symbol_tag, treatment=treatments.default,
     flavor=flavors.default, language=languages.default)
 
 
-def register_symbol(python_type: type, symbol: Symbol, treatment: Treatment, flavor: Flavor, language: Language):
-    """Register a typesetting-method for a python-type that outputs an atomic symbol."""
+def register_symbol(tag: Tag, symbol: Symbol, treatment: Treatment, flavor: Flavor, language: Language):
+    """Register a typesetting-method that outputs an atomic symbol."""
 
     # dynamically generate the desired typesetting-method.
-    def typesetting_method(o: object, protocol: Protocol, treatment: Treatment, flavor: Flavor, language: Language):
+    def typesetting_method(o: Typesettable, protocol: Protocol, treatment: Treatment, flavor: Flavor,
+        language: Language):
         return typeset_symbol(o=symbol, protocol=protocol)
 
     # register that typesetting-method.
-    register_typesetting_method(method=typesetting_method, python_type=python_type, treatment=treatment, flavor=flavor,
+    register_typesetting_method(method=typesetting_method, tag=tag, treatment=treatment, flavor=flavor,
         language=language)
 
 
-def register_styledstring(python_type: type, text: str, treatment: Treatment, flavor: Flavor, language: Language):
+def register_styledstring(tag: Tag, text: str, treatment: Treatment, flavor: Flavor, language: Language):
     """Register a typesetting-method for a python-type that outputs a string.
 
     TODO: modify this function to use StyledString instead of str.
     """
 
     # dynamically generate the desired typesetting-method.
-    def typesetting_method(o: object, protocol: Protocol, treatment: Treatment, flavor: Flavor, language: Language):
+    def typesetting_method(o: Typesettable, protocol: Protocol, treatment: Treatment, flavor: Flavor,
+        language: Language):
         yield text
 
     # register that typesetting-method.
-    register_typesetting_method(method=typesetting_method, python_type=python_type, treatment=treatment, flavor=flavor,
+    register_typesetting_method(method=typesetting_method, tag=tag, treatment=treatment, flavor=flavor,
         language=language)
 
 
-def fallback_typesetting_method(o: object, protocol: Protocol, treatment: Treatment, flavor: Flavor,
+def fallback_typesetting_method(o: Typesettable, protocol: Protocol, treatment: Treatment, flavor: Flavor,
     language: Language):
-    """The fallback-typesetting-method assure a minimalist representation for all python objects."""
+    """The fallback-typesetting-method assure a minimalist representation for all TypesettableObject."""
     yield f"{type(o).__name__}-{id(o)}"
-
-
-# register that typesetting-method.
-register_typesetting_method(method=fallback_typesetting_method, python_type=object, treatment=treatments.default,
-    flavor=flavors.default, language=languages.default)

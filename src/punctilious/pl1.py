@@ -133,7 +133,7 @@ class PL1(fl.FormalLanguage):
             return True
         elif phi in self.formulas:
             # if phi is a PL1 formula, then it is a well-formed-formula,
-            # because declaration as a formula requires validation.
+            # because declaration as an element of pl1 formula-class requires validation.
             return True
         else:
             # otherwise, return False, i.e.: phi is not a well-formed-formula.

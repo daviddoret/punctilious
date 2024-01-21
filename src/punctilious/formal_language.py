@@ -6,14 +6,15 @@ import abc
 import typing
 import typesetting
 import log
+import formal_language_tags as fl_tags
 
 
-class FormalObject(typesetting.TypesettableObject):
+class FormalObject(typesetting.Typesettable):
     """A formal-object is an object that is manipulated as part of a formal-system.
     """
 
     def __init__(self):
-        super().__init__()
+        super().__init__()  # Make the formal-object typesettable.
 
 
 class FormalLanguageClass(FormalObject, abc.ABC):
@@ -105,6 +106,7 @@ class Connective(FormalObject):
 
     def __init__(self):
         super().__init__()
+        self.tag(fl_tags.connective)
 
 
 # _connective_class: FormalPythonClass = FormalPythonClass(python_class=Connective)
