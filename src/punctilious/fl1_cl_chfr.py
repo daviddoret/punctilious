@@ -11,7 +11,7 @@ def load():
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.frch
 
-    ts.register_styledstring(tag=fl_tags.connective, text="connecteur", treatment=treatment, flavor=flavor,
+    ts.register_styledstring(tag="fl1.connective", text="connecteur", treatment=treatment, flavor=flavor,
         language=language)
 
 

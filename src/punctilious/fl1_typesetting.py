@@ -28,8 +28,12 @@ class Treatments(ts.Treatments):
 
 treatments = Treatments()
 
-# Typesetting tags
 
-connective = ts.Tag(name="connective")
+# TAGS
+def load():
+    ts.tags.set(key="fl1.connective")
+
+
+load()
 
 log.debug(f"Module {__name__}: loaded.")

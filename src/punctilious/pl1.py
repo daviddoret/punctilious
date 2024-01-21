@@ -61,9 +61,9 @@ class ConnectiveClass(fl.ConnectiveClass):
         super().__init__(formal_language=formal_language)
         # exhaustive declaration of PL1 connectives.
         self._material_implication: fl.BinaryConnective = self.declare_binary_connective()
-        self._material_implication.tag(pl1_typesetting.connective_material_implication)
+        self._material_implication.tag("pl1.connective.material_implication")
         self._negation: fl.UnaryConnective = self.declare_unary_connective()
-        self._negation.tag(pl1_typesetting.connective_negation)
+        self._negation.tag("pl1.connective.negation")
         self.lock()
 
     @property

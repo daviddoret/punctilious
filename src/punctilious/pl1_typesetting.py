@@ -51,7 +51,12 @@ class Flavors(ts.Flavors):
 
 flavors = Flavors()
 
-connective_material_implication = ts.Tag(name="connective_material_implication", specializes=fl1_ts.connective)
-connective_negation = ts.Tag(name="connective_negation", specializes=fl1_ts.connective)
 
+# TAGS
+def load():
+    ts.tags.set(key="pl1.connective.material_implication", specializes="fl1.connective")
+    ts.tags.set(key="pl1.connective.negation", specializes="fl1.connective")
+
+
+load()
 log.debug(f"Module {__name__}: loaded.")
