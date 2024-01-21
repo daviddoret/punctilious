@@ -54,8 +54,8 @@ flavors = Flavors()
 
 # TAGS
 def load():
-    ts.tags.set(key="pl1.connective.material_implication", specializes="fl1.connective")
-    ts.tags.set(key="pl1.connective.negation", specializes="fl1.connective")
+    ts.tags.set(key="pl1.connective.material_implication", specialized_key="fl1.connective")
+    ts.tags.set(key="pl1.connective.negation", specialized_key="fl1.connective")
 
 
 load()

@@ -14,10 +14,11 @@ import log
 class Tag:
     """A typesetting tag is a class of objects to which we wish to link some typesetting methods."""
 
-    def __init__(self, key: str, specializes: typing.Optional[str] = None):
+    def __init__(self, key: str, specialized_key: typing.Optional[str] = None):
         self._key = key
-        specializes_object: typing.Optional[Tag] = None if specializes is None else tags.get(key=specializes)
-        self._specialization: int = 4 if specializes_object is None else specializes_object.specialization + 4
+        self._specialized_tag: typing.Optional[Tag] = None
+        self._specialization: int = 0
+        self.set_specialized_tag(key=specialized_key)
 
     def __str__(self):
         return self.key
@@ -33,6 +34,19 @@ class Tag:
     def specialization(self) -> int:
         """A score that orders tags by degree of specialization."""
         return self._specialization
+
+    @property
+    def specialized_tag(self) -> typing.Optional[Tag]:
+        return self._specialized_tag
+
+    def set_specialized_tag(self, key: typing.Optional[str]):
+        if key is not None:
+            specialized_tag: Tag = tags.get(key=key)
+            self._specialized_tag = specialized_tag
+            self._specialization: int = specialized_tag.specialization + 4
+        else:
+            self._specialized_tag = None
+            self._specialization: int = 4
 
 
 class Tags:
@@ -53,14 +67,14 @@ class Tags:
             self.set(key=key)
         return self._internal_dictionary[key]
 
-    def set(self, key: str, specializes: typing.Optional[str] = None) -> Tag:
+    def set(self, key: str, specialized_key: typing.Optional[str] = None) -> Tag:
         if key in self._internal_dictionary:
             log.warning(msg=f"Tags: name '{key}' already present. Reuse tag.")
             tag: Tag = self.get(key=key)
-            # TODO: update property specializes
+            tag.set_specialized_tag(key=specialized_key)
             return tag
         else:
-            tag: Tag = Tag(key=key, specializes=specializes)
+            tag: Tag = Tag(key=key, specialized_key=specialized_key)
             self._internal_dictionary[key] = tag
             return tag
 
