@@ -2,13 +2,13 @@ import punctilious as pu
 
 # Create a universe-of-discourse.
 u = pu.create_universe_of_discourse(echo=True)
-o1 = u.o.declare()
-o2 = u.o.declare()
-o3 = u.o.declare()
+o1 = u.o.register()
+o2 = u.o.register()
+o3 = u.o.register()
 pu.configuration.auto_index = False
-f = u.c1.declare(symbol='f')
-g = u.c1.declare(symbol='g')
-plus = u.c1.declare(symbol='+', formula_rep=pu.CompoundFormula.infix)
+f = u.c1.register(symbol='f')
+g = u.c1.register(symbol='g')
+plus = u.c1.register(symbol='+', formula_rep=pu.CompoundFormula.infix)
 
 # Variables have a scope. But often, when we write mathematical formulas,
 # their scope is implicit. Typically, we use "x" multiple times and imply

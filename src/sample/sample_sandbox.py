@@ -12,10 +12,10 @@ target_folder = '../../data/'
 
 u = pu.create_universe_of_discourse()
 
-a = u.o.declare()
-b = u.o.declare()
-c = u.o.declare()
-d = u.o.declare()
+a = u.o.register()
+b = u.o.register()
+c = u.o.register()
+d = u.o.register()
 
 with u.with_variable() as x, u.with_variable() as y:
     phi: pu.CompoundFormula = (a | u.c1.implies | x) | u.c1.iff | (y | u.c1.land | b)

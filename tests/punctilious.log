@@ -1,0 +1,16 @@
+2024-01-22 23:19:49,050 - DEBUG - Module typesetting: loaded.
+2024-01-22 23:19:49,052 - DEBUG - tag: fl1.connective, weight: 1000
+2024-01-22 23:19:49,052 - DEBUG - Module fl1_typesetting: loaded.
+2024-01-22 23:19:49,054 - DEBUG - Module fl1: loaded.
+2024-01-22 23:19:49,055 - DEBUG - Module fl1_sr: loaded.
+2024-01-22 23:19:49,056 - DEBUG - tag: pl1.connective.conditional, weight: 2000
+2024-01-22 23:19:49,056 - DEBUG - tag: pl1.connective.negation, weight: 2000
+2024-01-22 23:19:49,056 - DEBUG - Module pl1_typesetting: loaded.
+2024-01-22 23:19:49,057 - DEBUG - Module pl1: loaded.
+2024-01-22 23:19:49,058 - DEBUG - Module pl1_cl_enus: loaded.
+2024-01-22 23:19:49,070 - DEBUG - Module pl1_cl_chfr: loaded.
+2024-01-22 23:19:49,071 - DEBUG - Module pl1_sr_classical: loaded.
+2024-01-22 23:19:49,072 - DEBUG - Module pl1_sr_polish: loaded.
+2024-01-22 23:19:49,072 - DEBUG - Module punctilious: loaded.
+2024-01-22 23:19:49,123 - ERROR - connective is not a pl1-connective.
+2024-01-22 23:19:49,123 - ERROR - term is not a pl1-well-formed-formula.

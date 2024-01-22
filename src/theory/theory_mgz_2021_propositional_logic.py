@@ -29,7 +29,7 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
         self._propositional_variable_symbol = pu.StyledText(plaintext='p', text_style=pu.text_styles.serif_italic)
 
         # meta-theory
-        metatheory: pu.TheoryDerivation = self.u.t.declare(
+        metatheory: pu.TheoryDerivation = self.u.t.register(
             symbol=pu.StyledText(plaintext='PLM', text_style=pu.text_styles.script_normal), index=None,
             auto_index=False, dashed_name='propositional-logic-metatheory', name='propositional logic metatheory')
         self._metatheory = metatheory
@@ -39,7 +39,7 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
             section_number=1)
 
         # Definition 2.1
-        def_2_1_declaration = u.a.declare(natural_language="""The language of 
+        def_2_1_declaration = u.a.register(natural_language="""The language of 
         propositional logic consists of:
         1. A denumerable set of propositional variables 𝑝1, 𝑝2, 𝑝3, ...
         2. Connectives: ¬, ∨, ∧, ⊃
@@ -54,7 +54,7 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
                     'are composed.')
 
         # Declares the propositional-connective class
-        propositional_connective = u.c2.declare(symbol='propositional-connective', auto_index=False)
+        propositional_connective = u.c2.register(symbol='propositional-connective', auto_index=False)
         self.propositional_connective: pu.ClassDeclaration = propositional_connective
 
         is_a: pu.Connective = u.c1.is_a
@@ -85,12 +85,12 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
         #  is a propositional-connective and is not one of the above, then the theory is
         #  inconsistent. But this should be analysed further.
 
-        self.propositional_variable: pu.ClassDeclaration = u.c2.declare(symbol='propositional-variable',
+        self.propositional_variable: pu.ClassDeclaration = u.c2.register(symbol='propositional-variable',
             auto_index=False)
         propositional_variable: pu.ClassDeclaration = self.propositional_variable
 
         # Definition 2.2
-        self.def_2_2_declaration = u.a.declare(natural_language="""The formulas are defined as 
+        self.def_2_2_declaration = u.a.register(natural_language="""The formulas are defined as 
         follows: 
         1. Basis clause: Each propositional variable is a formula (called an atomic formula). 
         2. Inductive clause: If 𝐴 and 𝐵 are formulas so are ¬𝐴, (𝐴 ∧ 𝐵), (𝐴 ∨ 𝐵), and (𝐴 ⊃ 𝐵). 
@@ -98,7 +98,8 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
         def_2_2 = metatheory.include_axiom(ref='2.2', index=1, a=self.def_2_2_declaration)
         self.def_2_2 = def_2_2
 
-        self.propositional_formula: pu.ClassDeclaration = u.c2.declare(symbol='propositional-formula', auto_index=False)
+        self.propositional_formula: pu.ClassDeclaration = u.c2.register(symbol='propositional-formula',
+            auto_index=False)
         propositional_formula: pu.ClassDeclaration = self.propositional_formula
 
         with u.with_variable(symbol='A') as a:
@@ -121,7 +122,7 @@ class MGZ2021PropositionalLogic(pu.TheoryPackage):
                     (a | implies | b) | is_a | propositional_formula))
 
         # Declare the propositional-logic theory
-        t = self.u.t.declare(symbol=pu.StyledText(plaintext='L', text_style=pu.text_styles.script_normal), index=1,
+        t = self.u.t.register(symbol=pu.StyledText(plaintext='L', text_style=pu.text_styles.script_normal), index=1,
             dashed_name='propositional-logic', name='propositional logic', explicit_name='propositional logic [MGZ21]')
         self.t = t
         self.l1 = t

@@ -10,7 +10,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         super().__init__(u=u)
 
         # Naming conventions in Tao06
-        t = self.u.t.declare(dashed_name='peano-axioms', name='the Peano axioms',
+        t = self.u.t.register(dashed_name='peano-axioms', name='the Peano axioms',
             explicit_name='the Peano axioms [Tao06]')
         self.t = t
 
@@ -19,25 +19,25 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         # objects
         # natural_number = u.o.declare(symbol='natural-number', auto_index=False)
-        natural_number: pu.ClassDeclaration = u.c2.declare(symbol='natural-number', auto_index=False)
+        natural_number: pu.ClassDeclaration = u.c2.register(symbol='natural-number', auto_index=False)
         self.natural_number = natural_number
-        zero = u.o.declare(symbol='0', auto_index=False)
+        zero = u.o.register(symbol='0', auto_index=False)
         self.zero = zero
-        one = u.o.declare(symbol='1', auto_index=False)
+        one = u.o.register(symbol='1', auto_index=False)
         self.one = one
-        two = u.o.declare(symbol='2', auto_index=False)
+        two = u.o.register(symbol='2', auto_index=False)
         self.two = two
-        three = u.o.declare(symbol='3', auto_index=False)
+        three = u.o.register(symbol='3', auto_index=False)
         self.three = three
-        four = u.o.declare(symbol='4', auto_index=False)
+        four = u.o.register(symbol='4', auto_index=False)
         self.four = four
-        five = u.o.declare(symbol='5', auto_index=False)
+        five = u.o.register(symbol='5', auto_index=False)
         self.five = five
-        six = u.o.declare(symbol='6', auto_index=False)
+        six = u.o.register(symbol='6', auto_index=False)
         self.six = six
 
         # connectives
-        plusplus = u.c1.declare(arity=1, symbol='++', auto_index=False, name='successor',
+        plusplus = u.c1.register(arity=1, symbol='++', auto_index=False, name='successor',
             formula_rep=pu.CompoundFormula.postfix)
         self.plusplus = plusplus
 
@@ -53,7 +53,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         t.open_section('Axiom 2.1', section_parent=section_2_1, numbering=False)
 
-        a01 = u.a.declare(f'0 is a natural number.')
+        a01 = u.a.register(f'0 is a natural number.')
         axiom_2_1 = t.include_axiom(a01, ref='2.1')
         self.axiom_2_1 = axiom_2_1
 
@@ -62,7 +62,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         t.open_section('Axiom 2.2', section_parent=section_2_1, numbering=False)
 
-        a03 = u.a.declare('If n is a natural number, then n++ is a natural number.')
+        a03 = u.a.register('If n is a natural number, then n++ is a natural number.')
         axiom_2_2 = t.include_axiom(a03, ref='2.2')
         self.axiom_2_2 = axiom_2_2
         """"""
@@ -75,7 +75,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         self.proposition_2_2_3 = p004
 
         # DEFINITION 2.1.3
-        d01 = u.d.declare(
+        d01 = u.d.register(
             natural_language='We define 1 to be the number 0++, 2 to be the number (0++)++, 3 to be the number '
                              '((0++)++)++,etc. (In other words, 1 := 0++, 2 := 1++, 3 := 2++, etc. In this text '
                              'I use "x := y" to denote the statement that x is defined to equal y.)', ref='2.1.3')
@@ -132,8 +132,8 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         t.open_section('Axiom 2.3', section_parent=section_2_1, numbering=False)
 
-        a05 = t.include_axiom(a=u.a.declare('0 is not the successor of any natural number; i.e., we have n++ ≠ 0 for '
-                                            'every natural number n.'), ref='2.3')
+        a05 = t.include_axiom(a=u.a.register('0 is not the successor of any natural number; i.e., we have n++ ≠ 0 for '
+                                             'every natural number n.'), ref='2.3')
 
         with u.with_variable('n') as n:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₂₈): ((𝐧₂ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ⟹ ((𝐧₂)++ ≠ 0)).
@@ -153,9 +153,10 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
 
         t.open_section('Axiom 2.4', section_parent=section_2_1, numbering=False)
 
-        axiom_2_4 = t.include_axiom(u.a.declare('Different natural numbers must have different successors; i.e., if n, '
-                                                'm are natural numbers and n ≠ m, then n++ ≠ m++. Equivalently, '
-                                                'if n++ = m++, then we must have n = m.'), ref='2.4')
+        axiom_2_4 = t.include_axiom(
+            u.a.register('Different natural numbers must have different successors; i.e., if n, '
+                         'm are natural numbers and n ≠ m, then n++ ≠ m++. Equivalently, '
+                         'if n++ = m++, then we must have n = m.'), ref='2.4')
 
         with u.with_variable('n') as n, u.with_variable('m') as m:
             # 𝗣𝗿𝗼𝗽𝗼𝘀𝗶𝘁𝗶𝗼𝗻 (P₃₂): ((((𝐧₃ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟) ∧ (𝐦₁ 𝑖𝑠-𝑎 𝑛𝑎𝑡𝑢𝑟𝑎𝑙-𝑛𝑢𝑚𝑏𝑒𝑟)) ∧ (𝐧₃ ≠ 𝐦₁)) ⟹ ((𝐧₃)++ ≠ (𝐦₁)++)).
@@ -294,7 +295,7 @@ class Tao2006ThePeanoAxioms(pu.TheoryPackage):
         t.open_section('Axiom 2.5: The principle of mathematical induction', section_parent=section_2_1,
             numbering=False)
 
-        a_2_5 = u.a.declare(paragraph_header=pu.paragraph_headers.axiom_schema_declaration,
+        a_2_5 = u.a.register(paragraph_header=pu.paragraph_headers.axiom_schema_declaration,
             subtitle='Principle of mathematical induction',
             natural_language='Let P(n) be any property pertaining to a natural number n. Suppose that P(O) is true, and suppose that whenever P(n) is true, P(n++) is also true. Then P(n) is true for every natural number n.')
 

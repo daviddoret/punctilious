@@ -4,7 +4,7 @@ import typesetting as ts
 
 # Treatments
 
-class Treatments(ts.Treatments):
+class Treatments:
     _singleton = None
 
     def __new__(cls):
@@ -30,10 +30,24 @@ treatments = Treatments()
 
 
 # TAGS
-def load():
-    ts.tags.set(key="fl1.connective")
+
+class Tags:
+    _singleton = None
+
+    def __new__(cls):
+        if cls._singleton is None:
+            cls._singleton = super(Tags, cls).__new__(cls)
+        return cls._singleton
+
+    def __init__(self):
+        super().__init__()
+        self._connective = ts.Tag(name="fl1.connective")
+
+    @property
+    def connective(self) -> ts.Tag:
+        return self._connective
 
 
-load()
+tags = Tags()
 
 log.debug(f"Module {__name__}: loaded.")

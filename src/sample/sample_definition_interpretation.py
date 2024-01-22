@@ -2,15 +2,15 @@ import punctilious as pu
 
 # Create a universe-of-discourse with basic objects for the sake of this example.
 u = pu.UniverseOfDiscourse(echo=True)
-o1 = u.o.declare()
-o2 = u.o.declare()
-o3 = u.o.declare()
-r1 = u.c1.declare(2, signal_proposition=True)
-r2 = u.c1.declare(1, signal_proposition=True)
-definition = u.d.declare(natural_language='Dummy definition for demonstration purposes')
+o1 = u.o.register()
+o2 = u.o.register()
+o3 = u.o.register()
+r1 = u.c1.register(2, signal_proposition=True)
+r2 = u.c1.register(1, signal_proposition=True)
+definition = u.d.register(natural_language='Dummy definition for demonstration purposes')
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
-t1 = u.t.declare(echo=True)
+t1 = u.t.register(echo=True)
 theory_definition = t1.include_definition(d=definition)
 
 # And finally, use the absorption inference-rule:

@@ -2,16 +2,16 @@ import punctilious as pu
 
 # Create a universe-of-discourse with basic objects for the sake of this example.
 u = pu.create_universe_of_discourse(echo=True)
-a1 = u.a.declare(natural_language='Dummy axiom to establish some ground propositions.')
-o1 = u.o.declare()
-o2 = u.o.declare()
-o3 = u.o.declare()
-r1 = u.c1.declare()
-r2 = u.c1.declare()
+a1 = u.a.register(natural_language='Dummy axiom to establish some ground propositions.')
+o1 = u.o.register()
+o2 = u.o.register()
+o3 = u.o.register()
+r1 = u.c1.register()
+r2 = u.c1.register()
 phi1 = o1 | r1 | o2
 phi2 = o3 | r2 | phi1
-const1 = u.c3.declare(value=o2)
-const2 = u.c3.declare(value=phi2)
+const1 = u.c3.register(value=o2)
+const2 = u.c3.register(value=phi2)
 with u.with_variable(symbol='x') as x, u.with_variable(symbol='y') as y:
     phi3 = (phi2 | r2 | y) | r1 | (x | r2 | (const2 | r1 | (y | r1 | const1)))
 

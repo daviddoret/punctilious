@@ -5,10 +5,10 @@ from __future__ import annotations
 import abc
 import typing
 
-import fl1 as fl
 import log
-import pl1_typesetting
+import fl1 as fl
 from fl1 import FormalObject
+import pl1_typesetting as pl1_ts
 
 
 class MetaVariable(fl.FormalObject):
@@ -60,16 +60,16 @@ class ConnectiveClass(fl.ConnectiveClass):
     def __init__(self, formal_language: PL1):
         super().__init__(formal_language=formal_language)
         # exhaustive declaration of PL1 connectives.
-        self._material_implication: fl.BinaryConnective = self.declare_binary_connective()
-        self._material_implication.tag("pl1.connective.material_implication")
+        self._conditional: fl.BinaryConnective = self.declare_binary_connective()
+        self._conditional.tag(tag=pl1_ts.tags.conditional)
         self._negation: fl.UnaryConnective = self.declare_unary_connective()
-        self._negation.tag("pl1.connective.negation")
+        self._negation.tag(tag=pl1_ts.tags.negation)
         self.lock()
 
     @property
-    def material_implication(self) -> fl.BinaryConnective:
-        """The material implication binary connective."""
-        return self._material_implication
+    def conditional(self) -> fl.BinaryConnective:
+        """The conditional binary connective."""
+        return self._conditional
 
     @property
     def negation(self) -> fl.UnaryConnective:

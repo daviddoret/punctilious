@@ -6,7 +6,7 @@ class TestPL1:
     def test_connectives(self):
         l: pu.pl1.PL1 = pu.pl1.PL1()
 
-        y = l.connectives.material_implication
+        y = l.connectives.conditional
         assert y.to_string(protocol=pu.ts.protocols.latex) == "\\rightarrow"
         assert y.to_string(protocol=pu.ts.protocols.unicode_extended) == "→"
         assert y.to_string(protocol=pu.ts.protocols.unicode_limited) == "-->"
@@ -23,7 +23,7 @@ class TestPL1:
         assert phi1 in l1.formulas
 
         pb = l1.propositional_variables.declare_proposition_variable()
-        phi2 = l1.formulas.declare_binary_formula(connective=l1.connectives.material_implication, term_1=pa, term_2=pb)
+        phi2 = l1.formulas.declare_binary_formula(connective=l1.connectives.conditional, term_1=pa, term_2=pb)
         assert phi2 in l1.formulas
 
         l2: pu.pl1.PL1 = pu.pl1.PL1()
@@ -37,8 +37,7 @@ class TestPL1:
             l1.formulas.declare_unary_formula(connective=l1.connectives.negation, term=l2_pa)
 
         # compound of compound formula
-        phi3 = l1.formulas.declare_binary_formula(connective=l1.connectives.material_implication, term_1=phi1,
-            term_2=phi2)
+        phi3 = l1.formulas.declare_binary_formula(connective=l1.connectives.conditional, term_1=phi1, term_2=phi2)
         assert phi3 in l1.formulas
 
         pass

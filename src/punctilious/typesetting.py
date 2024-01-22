@@ -14,39 +14,36 @@ import log
 class Tag:
     """A typesetting tag is a class of objects to which we wish to link some typesetting methods."""
 
-    def __init__(self, key: str, specialized_key: typing.Optional[str] = None):
-        self._key = key
-        self._specialized_tag: typing.Optional[Tag] = None
-        self._specialization: int = 0
-        self.set_specialized_tag(key=specialized_key)
+    def __init__(self, name: str, specialized_tag: typing.Optional[Tag] = None):
+        self._name = name
+        self._specialized_tag: typing.Optional[Tag] = specialized_tag
+        self._weight: int = 1000 if specialized_tag is None else specialized_tag.weight + 1000
+        log.debug(f"tag: {name}, weight: {self._weight}")
 
-    def __str__(self):
-        return self.key
+    def __eq__(self, other):
+        return self is other
+
+    def __hash__(self):
+        return hash(id(self))
 
     def __repr__(self):
-        return f"tag: {self.key}"
+        return f"{self.name} (tag {id(self)})"
+
+    def __str__(self):
+        return self.name
 
     @property
-    def key(self) -> str:
-        return self._key
+    def name(self) -> str:
+        return self._name
 
     @property
-    def specialization(self) -> int:
+    def weight(self) -> int:
         """A score that orders tags by degree of specialization."""
-        return self._specialization
+        return self._weight
 
     @property
     def specialized_tag(self) -> typing.Optional[Tag]:
         return self._specialized_tag
-
-    def set_specialized_tag(self, key: typing.Optional[str]):
-        if key is not None:
-            specialized_tag: Tag = tags.get(key=key)
-            self._specialized_tag = specialized_tag
-            self._specialization: int = specialized_tag.specialization + 4
-        else:
-            self._specialized_tag = None
-            self._specialization: int = 4
 
 
 class Tags:
@@ -58,23 +55,22 @@ class Tags:
         return cls._singleton
 
     def __init__(self):
-        print("hello world")
         self._internal_dictionary: dict[str, Tag] = dict()
 
     def get(self, key: str) -> Tag:
         if key not in self._internal_dictionary:
             log.warning(msg=f"Tags: name '{key}' not found. Create tag.")
-            self.set(key=key)
+            self.register(key=key)
         return self._internal_dictionary[key]
 
-    def set(self, key: str, specialized_key: typing.Optional[str] = None) -> Tag:
+    def register(self, key: str, specialized_tag: typing.Optional[Tag] = None) -> Tag:
         if key in self._internal_dictionary:
             log.warning(msg=f"Tags: name '{key}' already present. Reuse tag.")
             tag: Tag = self.get(key=key)
-            tag.set_specialized_tag(key=specialized_key)
+            tag.set_specialized_tag(key=specialized_tag)
             return tag
         else:
-            tag: Tag = Tag(key=key, specialized_key=specialized_key)
+            tag: Tag = Tag(name=key, specialized_tag=specialized_tag)
             self._internal_dictionary[key] = tag
             return tag
 
@@ -322,7 +318,7 @@ typesetting_methods: typing.Dict[
     TypesettingMethods())
 
 
-def register_typesetting_method(method: typing.Callable, tag: str, treatment: Treatment, flavor: Flavor,
+def register_typesetting_method(method: typing.Callable, tag: Tag, treatment: Treatment, flavor: Flavor,
     language: Language) -> None:
     """Register a typesetting method for the given protocol, treatment, and language.
     If protocol, treatment, and/or language are not specified, use the defaults.
@@ -330,13 +326,11 @@ def register_typesetting_method(method: typing.Callable, tag: str, treatment: Tr
     If a typesetting method was already registered for the given protocol, treatment, and language, substitute
     the previously registered method with the new one."""
 
-    tag_object: Tag = tags.get(key=tag)
-
     global typesetting_methods
-    key: typing.FrozenSet[Tag, Treatment] = frozenset([tag_object, treatment])
+    key: typing.FrozenSet[Tag, Treatment] = frozenset([tag, treatment])
     if key not in typesetting_methods:
         typesetting_methods[key] = dict()
-    solution: typing.FrozenSet[Tag, Flavor, Language] = frozenset([tag_object, flavor, language])
+    solution: typing.FrozenSet[Tag, Flavor, Language] = frozenset([tag, flavor, language])
     typesetting_methods[key][solution]: typing.Callable = method
     if treatment is not treatments.default:
         # the first registered typesetting_method is promoted as the default typesetting_method
@@ -377,7 +371,7 @@ def typeset(o: Typesettable, protocol: Protocol, treatment: Treatment, flavor: t
             # specialized tags are always preferred (weight: x * 4 with x > 0).
             # then flavour (weight: 2).
             # finally, language (weight: 1).
-            score = next(iter(solution.intersection(o.typesetting_tags))).specialization
+            score = next(iter(solution.intersection(o.typesetting_tags))).weight
             score = score + (2 if flavor in solution else 0)
             score = score + (1 if languages in solution else 0)
             if score > best_score:
@@ -416,9 +410,8 @@ class Typesettable(abc.ABC):
     def default_treatment(self) -> typing.Optional[Treatment]:
         return self._default_treatment
 
-    def tag(self, tag: str):
-        tag_object = tags.get(key=tag)
-        self.typesetting_tags.add(tag_object)
+    def tag(self, tag: Tag):
+        self.typesetting_tags.add(tag)
 
     def to_string(self, protocol: typing.Optional[Protocol] = None, treatment: typing.Optional[Treatment] = None,
         flavor: typing.Optional[Flavor] = None, language: typing.Optional[Language] = None) -> str:
@@ -501,7 +494,7 @@ class Symbols:
 symbols = Symbols()
 
 
-def register_symbol(tag: str, symbol: Symbol, treatment: Treatment, flavor: Flavor, language: Language):
+def register_symbol(tag: Tag, symbol: Symbol, treatment: Treatment, flavor: Flavor, language: Language):
     """Register a typesetting-method that outputs an atomic symbol."""
 
     # dynamically generate the desired typesetting-method.
@@ -514,7 +507,7 @@ def register_symbol(tag: str, symbol: Symbol, treatment: Treatment, flavor: Flav
         language=language)
 
 
-def register_styledstring(tag: str, text: str, treatment: Treatment, flavor: Flavor, language: Language):
+def register_styledstring(tag: Tag, text: str, treatment: Treatment, flavor: Flavor, language: Language):
     """Register a typesetting-method for a python-type that outputs a string.
 
     TODO: modify this function to use StyledString instead of str.

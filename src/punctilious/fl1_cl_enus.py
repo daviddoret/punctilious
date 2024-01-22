@@ -10,8 +10,8 @@ def load():
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.enus
 
-    ts.register_symbol(tag="fl1.connective", symbol=ts.symbols.asterisk_operator, treatment=treatment, flavor=flavor,
-        language=language)
+    ts.register_symbol(tag=fl1_ts.tags.connective, symbol=ts.symbols.asterisk_operator, treatment=treatment,
+        flavor=flavor, language=language)
 
 
 load()

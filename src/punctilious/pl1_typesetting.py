@@ -7,7 +7,7 @@ import fl1_typesetting as fl1_ts
 #   For a good synthesis on notation conventions for propositional logic.
 
 
-class Flavors(ts.Flavors):
+class Flavors:
     _singleton = None
 
     def __new__(cls):
@@ -52,11 +52,28 @@ class Flavors(ts.Flavors):
 flavors = Flavors()
 
 
-# TAGS
-def load():
-    ts.tags.set(key="pl1.connective.material_implication", specialized_key="fl1.connective")
-    ts.tags.set(key="pl1.connective.negation", specialized_key="fl1.connective")
+class Tags:
+    _singleton = None
+
+    def __new__(cls):
+        if cls._singleton is None:
+            cls._singleton = super(Tags, cls).__new__(cls)
+        return cls._singleton
+
+    def __init__(self):
+        super().__init__()
+        self._conditional = ts.Tag(name="pl1.connective.conditional", specialized_tag=fl1_ts.tags.connective)
+        self._negation = ts.Tag(name="pl1.connective.negation", specialized_tag=fl1_ts.tags.connective)
+
+    @property
+    def conditional(self) -> ts.Tag:
+        return self._conditional
+
+    @property
+    def negation(self) -> ts.Tag:
+        return self._negation
 
 
-load()
+tags = Tags()
+
 log.debug(f"Module {__name__}: loaded.")

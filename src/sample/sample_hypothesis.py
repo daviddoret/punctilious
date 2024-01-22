@@ -2,12 +2,12 @@ import punctilious as pu
 
 # Create a universe-of-discourse with basic objects for the sake of this example.
 u = pu.create_universe_of_discourse(echo=True)
-a1 = u.a.declare(natural_language='Dummy axiom to establish some ground propositions.')
-o1 = u.o.declare()
-o2 = u.o.declare()
-o3 = u.o.declare()
-f = u.c1.declare(arity=2, symbol='f', signal_proposition=True)
-t1 = u.t.declare(echo=True)
+a1 = u.a.register(natural_language='Dummy axiom to establish some ground propositions.')
+o1 = u.o.register()
+o2 = u.o.register()
+o3 = u.o.register()
+f = u.c1.register(arity=2, symbol='f', signal_proposition=True)
+t1 = u.t.register(echo=True)
 
 # Elaborate a dummy theory with a set of propositions necessary for our demonstration
 

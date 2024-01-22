@@ -13,10 +13,10 @@ def load():
     # Common Language Representation
     treatment: ts.Treatment = fl1_ts.treatments.common_language
 
-    ts.register_styledstring(tag="pl1.connective.negation", text="négation", treatment=treatment, flavor=flavor,
+    ts.register_styledstring(tag=pl1_ts.tags.conditional, text="conditionnel", treatment=treatment, flavor=flavor,
         language=language)
-    ts.register_styledstring(tag="pl1.connective.material_implication", text="conditionnel", treatment=treatment,
-        flavor=flavor, language=language)
+    ts.register_styledstring(tag=pl1_ts.tags.negation, text="négation", treatment=treatment, flavor=flavor,
+        language=language)
 
 
 load()

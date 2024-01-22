@@ -114,7 +114,7 @@ class Connective(FormalObject):
 
     def __init__(self):
         super().__init__()
-        self.tag(tag="fl1.connective")
+        self.tag(tag=fl1_ts.tags.connective)
 
 
 # _connective_class: FormalPythonClass = FormalPythonClass(python_class=Connective)
