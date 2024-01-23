@@ -8,7 +8,7 @@ def load():
     language: ts.Language = ts.languages.enus
 
     # Classical 1
-    flavor: ts.Flavor = pl1_ts.flavors.classical_1
+    flavor: ts.Flavor = ts.flavors.default
 
     # Common Language Representation
     treatment: ts.Treatment = fl1_ts.treatments.common_language

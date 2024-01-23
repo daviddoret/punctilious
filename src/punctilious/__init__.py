@@ -9,6 +9,5 @@ import pl1
 import pl1_cl_enus
 import pl1_cl_chfr
 import pl1_sr_classical
-import pl1_sr_polish
 
 log.debug(f"Module {__name__}: loaded.")

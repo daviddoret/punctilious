@@ -17,36 +17,17 @@ class Flavors:
 
     def __init__(self):
         super().__init__()
-        self._classical_1 = ts.Flavor(name="Classical 1")
-        self._classical_2 = ts.Flavor(name="Classical 2")
-        self._classical_3 = ts.Flavor(name="Classical 3")
-        self._classical_4 = ts.Flavor(name="Classical 4")
-        self._polish_1 = ts.Flavor(name="Polish 1")
-        self._reverse_polish_1 = ts.Flavor(name="Reverse Polish 1")
+        self._negation_tilde = ts.flavors.register(name="pl1.connective.negation.tilde", predecessor=ts.flavors.default)
+        self._negation_not = ts.flavors.register(name="pl1.connective.negation.not",
+            predecessor=self._negation_tilde)  # define default preference.
 
     @property
-    def classical_1(self) -> ts.Flavor:
-        return self._classical_1
+    def negation_not(self) -> ts.Flavor:
+        return self._negation_not
 
     @property
-    def classical_2(self) -> ts.Flavor:
-        return self._classical_2
-
-    @property
-    def classical_3(self) -> ts.Flavor:
-        return self._classical_3
-
-    @property
-    def classical_4(self) -> ts.Flavor:
-        return self._classical_4
-
-    @property
-    def polish_1(self) -> ts.Flavor:
-        return self._polish_1
-
-    @property
-    def reverse_polish_1(self) -> ts.Flavor:
-        return self._reverse_polish_1
+    def negation_tilde(self) -> ts.Flavor:
+        return self._negation_tilde
 
 
 flavors = Flavors()
@@ -62,8 +43,8 @@ class Tags:
 
     def __init__(self):
         super().__init__()
-        self._conditional = ts.Tag(name="pl1.connective.conditional", specialized_tag=fl1_ts.tags.connective)
-        self._negation = ts.Tag(name="pl1.connective.negation", specialized_tag=fl1_ts.tags.connective)
+        self._conditional = ts.tags.register(name="pl1.connective.conditional", predecessor=fl1_ts.tags.connective)
+        self._negation = ts.tags.register(name="pl1.connective.negation", predecessor=fl1_ts.tags.connective)
 
     @property
     def conditional(self) -> ts.Tag:

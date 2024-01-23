@@ -14,10 +14,10 @@ import log
 class Tag:
     """A typesetting tag is a class of objects to which we wish to link some typesetting methods."""
 
-    def __init__(self, name: str, specialized_tag: typing.Optional[Tag] = None):
+    def __init__(self, name: str, predecessor: typing.Optional[Tag] = None):
         self._name = name
-        self._specialized_tag: typing.Optional[Tag] = specialized_tag
-        self._weight: int = 1000 if specialized_tag is None else specialized_tag.weight + 1000
+        self._predecessor: typing.Optional[Tag] = predecessor
+        self._weight: int = 1000 if predecessor is None else predecessor.weight + 1000
         log.debug(f"tag: {name}, weight: {self._weight}")
 
     def __eq__(self, other):
@@ -27,7 +27,7 @@ class Tag:
         return hash(id(self))
 
     def __repr__(self):
-        return f"{self.name} (tag {id(self)})"
+        return self.name
 
     def __str__(self):
         return self.name
@@ -42,8 +42,8 @@ class Tag:
         return self._weight
 
     @property
-    def specialized_tag(self) -> typing.Optional[Tag]:
-        return self._specialized_tag
+    def predecessor(self) -> typing.Optional[Tag]:
+        return self._predecessor
 
 
 class Tags:
@@ -55,24 +55,12 @@ class Tags:
         return cls._singleton
 
     def __init__(self):
-        self._internal_dictionary: dict[str, Tag] = dict()
+        self._internal_data_structure: set[Tag] = set()
 
-    def get(self, key: str) -> Tag:
-        if key not in self._internal_dictionary:
-            log.warning(msg=f"Tags: name '{key}' not found. Create tag.")
-            self.register(key=key)
-        return self._internal_dictionary[key]
-
-    def register(self, key: str, specialized_tag: typing.Optional[Tag] = None) -> Tag:
-        if key in self._internal_dictionary:
-            log.warning(msg=f"Tags: name '{key}' already present. Reuse tag.")
-            tag: Tag = self.get(key=key)
-            tag.set_specialized_tag(key=specialized_tag)
-            return tag
-        else:
-            tag: Tag = Tag(name=key, specialized_tag=specialized_tag)
-            self._internal_dictionary[key] = tag
-            return tag
+    def register(self, name: str, predecessor: typing.Optional[Tag] = None) -> Tag:
+        tag: Tag = Tag(name=name, predecessor=predecessor)
+        self._internal_data_structure.add(tag)
+        return tag
 
 
 tags = Tags()
@@ -207,24 +195,46 @@ class Flavor:
 
     """
 
-    def __init__(self, name: str):
-        self._name: str = name
+    def __init__(self, name: str, predecessor: typing.Optional[Flavor] = None):
+        self._name = name
+        self._predecessor: typing.Optional[Tag] = predecessor
+        self._weight: int = 100 if predecessor is None else predecessor.weight + 100
+        log.debug(f"flavor: {self.name}, weight: {self.weight}")
 
     def __eq__(self, other):
-        return hash(self) == hash(other)
+        return self is other
 
     def __hash__(self):
         return hash(id(self))
 
     def __repr__(self):
-        return self._name
+        return self.name
 
     def __str__(self):
-        return self._name
+        return self.name
 
     @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def weight(self) -> int:
+        """A score that orders tags by degree of specialization."""
+        return self._weight
+
+    @property
+    def predecessor(self) -> typing.Optional[Flavor]:
+        return self._predecessor
+
+    @predecessor.setter
+    def predecessor(self, predecessor: typing.Optional[Flavor]):
+        """Makes it possible to modify the order of preference between flavours at run-time."""
+        # TODO: BUG: Prevent self-reference
+        # TODO: BUG: Prevent circularity
+        # TODO: BUG: Prevent unlimited weight increase
+        self._predecessor: typing.Optional[Tag] = predecessor
+        self._weight: int = 100 if predecessor is None else predecessor.weight + 100
+        log.debug(f"flavor: {self.name}, weight: {self.weight}")
 
 
 class Flavors:
@@ -237,12 +247,18 @@ class Flavors:
         return cls._singleton
 
     def __init__(self):
-        self._default = Flavor('Default')
+        self._internal_data_structure: set[Flavor] = set()
+        self._default = Flavor('default')
 
     @property
     def default(self) -> Flavor:
         """If no flavor is specified, typesetting uses the default flavor."""
         return self._default
+
+    def register(self, name: str, predecessor: typing.Optional[Flavor] = None) -> Flavor:
+        flavor: Flavor = Flavor(name=name, predecessor=predecessor)
+        self._internal_data_structure.add(flavor)
+        return flavor
 
 
 flavors = Flavors()
@@ -338,8 +354,8 @@ def register_typesetting_method(method: typing.Callable, tag: Tag, treatment: Tr
             language=language)
 
 
-def typeset(o: Typesettable, protocol: Protocol, treatment: Treatment, flavor: typing.Optional[Flavor],
-    language: typing.Optional[Language]) -> typing.Generator[str, None, None]:
+def typeset(o: Typesettable, protocol: Protocol, treatment: Treatment, language: typing.Optional[Language]) -> \
+    typing.Generator[str, None, None]:
     global typesetting_methods
     global protocols
     global treatments
@@ -350,10 +366,10 @@ def typeset(o: Typesettable, protocol: Protocol, treatment: Treatment, flavor: t
         treatment: Treatment = o.default_treatment
         if treatment is None:
             treatment: Treatment = treatments.default
-    if flavor is None:
-        flavor: Flavor = flavors.default
     if language is None:
         language: Language = languages.default
+
+    log.debug(msg=f"protocol: {protocol}")
 
     keys: set[typing.FrozenSet[Tag, Treatment]] = {frozenset([tag, treatment]) for tag in o.typesetting_tags}
     available_keys: set[typing.FrozenSet[Tag, Treatment]] = keys.intersection(typesetting_methods)
@@ -361,35 +377,39 @@ def typeset(o: Typesettable, protocol: Protocol, treatment: Treatment, flavor: t
     # some typesetting methods were found, choose the best one.
     best_key: typing.Optional[typing.FrozenSet[Tag, Treatment]] = None
     best_solution: typing.Optional[typing.FrozenSet[Tag, Flavor, Language]] = None
+    best_flavor: Flavor = None
     best_score = 0
     key: typing.FrozenSet[Tag, Treatment]
     solution: typing.FrozenSet[Tag, Flavor, Language]
     for key in available_keys:
-        for solution in typesetting_methods[key]:
+        for solution, generator in typesetting_methods[key].items():
             # solution is of the form set[tag,flavour,language,].
-            # our preference goes to tag.preference, then flavour, then language.
-            # specialized tags are always preferred (weight: x * 4 with x > 0).
-            # then flavour (weight: 2).
-            # finally, language (weight: 1).
+            flavor: Flavor = next(iter(flavor for flavor in solution if isinstance(flavor, Flavor)))
             score = next(iter(solution.intersection(o.typesetting_tags))).weight
-            score = score + (2 if flavor in solution else 0)
+            score = score + flavor.weight
             score = score + (1 if languages in solution else 0)
             if score > best_score:
+                best_score = score
                 best_key = key
                 best_solution = solution
+                best_flavor = flavor
+                best_generator = generator
+                log.debug(msg=f"New: {best_score} {best_key} {best_solution} {best_flavor}")
     if best_key is None:
         # no typesetting method found, use fallback typesetting instead.
-        yield from fallback_typesetting_method(o=o, protocol=protocol, treatment=treatment, flavor=flavor,
-            language=language)
+        yield from fallback_typesetting_method(o=o, protocol=protocol, treatment=treatment, language=language)
     else:
-        generator: typing.Generator[str, None, None] = typesetting_methods[best_key][best_solution](o=o,
-            protocol=protocol, treatment=treatment, flavor=flavor, language=language)
-        yield from generator
+        # generator: typing.Generator[str, None, None] = typesetting_methods[best_key][best_solution](o=o,
+        #    protocol=protocol, treatment=treatment, flavor=best_flavor, language=language)
+        # generator: typing.Generator[str, None, None] = best_generator(o=o, protocol=protocol, treatment=treatment,
+        #    flavor=best_flavor, language=language)
+        # yield from best_generator
+        yield from best_generator(o=o, protocol=protocol, treatment=treatment, flavor=best_flavor, language=language)
 
 
 def to_string(o: Typesettable, protocol: Protocol, treatment: typing.Optional[Treatment],
-    flavor: typing.Optional[Flavor], language: typing.Optional[Language]) -> str:
-    return ''.join(typeset(o=o, protocol=protocol, treatment=treatment, flavor=flavor, language=language))
+    language: typing.Optional[Language]) -> str:
+    return ''.join(typeset(o=o, protocol=protocol, treatment=treatment, language=language))
 
 
 class Typesettable(abc.ABC):
@@ -414,18 +434,17 @@ class Typesettable(abc.ABC):
         self.typesetting_tags.add(tag)
 
     def to_string(self, protocol: typing.Optional[Protocol] = None, treatment: typing.Optional[Treatment] = None,
-        flavor: typing.Optional[Flavor] = None, language: typing.Optional[Language] = None) -> str:
-        return to_string(o=self, protocol=protocol, treatment=treatment, flavor=flavor, language=language)
+        language: typing.Optional[Language] = None) -> str:
+        return to_string(o=self, protocol=protocol, treatment=treatment, language=language)
 
     @property
     def typesetting_tags(self) -> set[Tag, ...]:
         return self._typesetting_tags
 
     def typeset(self, protocol: typing.Optional[Protocol] = None, treatment: typing.Optional[Treatment] = None,
-        language: typing.Optional[Language] = None, flavor: typing.Optional[Flavor] = None) -> typing.Generator[
-        str, None, None]:
+        language: typing.Optional[Language] = None) -> typing.Generator[str, None, None]:
         """Typeset this object by yielding strings."""
-        yield from typeset(o=self, protocol=protocol, treatment=treatment, flavor=flavor, language=language)
+        yield from typeset(o=self, protocol=protocol, treatment=treatment, language=language)
 
 
 class Symbol(Typesettable):
@@ -477,6 +496,7 @@ class Symbols:
         self._asterisk_operator = Symbol(latex_math='\\ast', unicode_extended='∗', unicode_limited='*')
         self._not_sign = Symbol(latex_math='\\lnot', unicode_extended='¬', unicode_limited='lnot')
         self._rightwards_arrow = Symbol(latex_math='\\rightarrow', unicode_extended='→', unicode_limited='-->')
+        self._tilde = Symbol(latex_math='\\sim', unicode_extended='~', unicode_limited='~')
 
     @property
     def asterisk_operator(self) -> Symbol:
@@ -489,6 +509,10 @@ class Symbols:
     @property
     def rightwards_arrow(self) -> Symbol:
         return self._rightwards_arrow
+
+    @property
+    def tilde(self) -> Symbol:
+        return self._tilde
 
 
 symbols = Symbols()
@@ -523,8 +547,7 @@ def register_styledstring(tag: Tag, text: str, treatment: Treatment, flavor: Fla
         language=language)
 
 
-def fallback_typesetting_method(o: Typesettable, protocol: Protocol, treatment: Treatment, flavor: Flavor,
-    language: Language):
+def fallback_typesetting_method(o: Typesettable, protocol: Protocol, treatment: Treatment, language: Language):
     """The fallback-typesetting-method assure a minimalist representation for all TypesettableObject."""
     yield f"{type(o).__name__}-{id(o)}"
 

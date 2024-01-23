@@ -1,0 +1,16 @@
+2024-01-23 13:19:06,416 - DEBUG - flavor: Default, weight: 100
+2024-01-23 13:19:06,417 - DEBUG - Module typesetting: loaded.
+2024-01-23 13:19:06,417 - DEBUG - tag: fl1.connective, weight: 1000
+2024-01-23 13:19:06,417 - DEBUG - Module fl1_typesetting: loaded.
+2024-01-23 13:19:06,418 - DEBUG - Module fl1: loaded.
+2024-01-23 13:19:06,419 - DEBUG - Module fl1_sr: loaded.
+2024-01-23 13:19:06,429 - DEBUG - flavor: pl1.connective.negation.tilde, weight: 200
+2024-01-23 13:19:06,429 - DEBUG - flavor: pl1.connective.negation.not, weight: 300
+2024-01-23 13:19:06,429 - DEBUG - tag: pl1.connective.conditional, weight: 2000
+2024-01-23 13:19:06,429 - DEBUG - tag: pl1.connective.negation, weight: 2000
+2024-01-23 13:19:06,429 - DEBUG - Module pl1_typesetting: loaded.
+2024-01-23 13:19:06,430 - DEBUG - Module pl1: loaded.
+2024-01-23 13:19:06,431 - DEBUG - Module pl1_cl_enus: loaded.
+2024-01-23 13:19:06,432 - DEBUG - Module pl1_cl_chfr: loaded.
+2024-01-23 13:19:06,433 - DEBUG - Module pl1_sr_classical: loaded.
+2024-01-23 13:19:06,433 - DEBUG - Module __main__: loaded.

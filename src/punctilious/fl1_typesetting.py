@@ -14,8 +14,8 @@ class Treatments:
 
     def __init__(self):
         super().__init__()
-        self._symbolic_representation = ts.Treatment(name="Symbolic Representation")
-        self._common_language = ts.Treatment(name="Common Language")
+        self._symbolic_representation = ts.Treatment(name="symbolic-representation")
+        self._common_language = ts.Treatment(name="common-language")
 
     @property
     def common_language(self) -> ts.Treatment:
@@ -41,7 +41,7 @@ class Tags:
 
     def __init__(self):
         super().__init__()
-        self._connective = ts.Tag(name="fl1.connective")
+        self._connective = ts.tags.register(name="fl1.connective")
 
     @property
     def connective(self) -> ts.Tag:
