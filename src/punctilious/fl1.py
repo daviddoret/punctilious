@@ -19,10 +19,12 @@ class FormalObject(ts.Typesettable):
             default_treatment=fl1_ts.treatments.symbolic_representation)  # Make the formal-object  # typesettable.
 
     def __repr__(self):
-        super().to_string(protocol=ts.protocols.unicode_limited, treatment=fl1_ts.treatments.symbolic_representation)
+        return super().to_string(protocol=ts.protocols.unicode_limited,
+            treatment=fl1_ts.treatments.symbolic_representation)
 
     def __str__(self):
-        super().to_string(protocol=ts.protocols.unicode_limited, treatment=fl1_ts.treatments.symbolic_representation)
+        return super().to_string(protocol=ts.protocols.unicode_limited,
+            treatment=fl1_ts.treatments.symbolic_representation)
 
 
 class FormalLanguageClass(FormalObject, abc.ABC):
@@ -31,26 +33,36 @@ class FormalLanguageClass(FormalObject, abc.ABC):
 
     def __init__(self, formal_language: FormalLanguage):
         self._is_locked: bool = False
-        self._container: set[FormalObject] = set()
+        self._protected_set: set[FormalObject] = set()
         self._formal_language: FormalLanguage = formal_language
         super().__init__()
 
     def __contains__(self, x: FormalObject) -> bool:
         """Allows the in operator."""
-        return x in self._container
+        return x in self._protected_set
 
     def __iter__(self):
-        return iter(self._container)
+        return iter(self._protected_set)
 
     def __len__(self):
-        return len(self._container)
+        return len(self._protected_set)
 
-    def _add_formal_object(self, x: FormalObject) -> None:
+    def _add_formal_object(self, x: FormalObject) -> FormalObject:
         """This is a protected method, it is only intended to be called from inherited classes."""
         if self.is_locked:
             log.error(msg='This class is locked.')
         else:
-            self._container.add(x)
+            if x in self._protected_set:
+                x_prime: FormalObject = next(
+                    iter(x_already_present for x_already_present in self._protected_set if x_already_present == x))
+                if id(x) != id(x_prime):
+                    log.debug(
+                        msg=f"FormalObject '{x}' (python id: {id(x)}) is already present in this FormalLanguageClass as '{x_prime}' (python id: {id(x_prime)}). The existing object is reused and the new object is discarded.")
+                    # Substitute x_prime for x
+                    x = x_prime
+            else:
+                self._protected_set.add(x)
+            return x
 
     @property
     def formal_language(self) -> FormalLanguage:
@@ -175,19 +187,19 @@ class ConnectiveClass(FormalLanguageClass):
         return x
 
 
-class FormulaClass(FormalLanguageClass):
+class CompoundFormulaClass(FormalLanguageClass):
     def __init__(self, formal_language: FormalLanguage):
         super().__init__(formal_language=formal_language)
 
     def declare_unary_formula(self, connective: UnaryConnective, term: FormalObject) -> UnaryFormula:
         x: UnaryFormula = UnaryFormula(connective=connective, term=term)
-        self._add_formal_object(x=x)
+        x = self._add_formal_object(x=x)
         return x
 
     def declare_binary_formula(self, connective: BinaryConnective, term_1: FormalObject, term_2: FormalObject) -> (
         BinaryFormula):
         x: BinaryFormula = BinaryFormula(connective=connective, term_1=term_1, term_2=term_2)
-        self._add_formal_object(x=x)
+        x = self._add_formal_object(x=x)
         return x
 
 
@@ -205,6 +217,12 @@ class CompoundFormula(FormalObject):
         self._connective = connective
         self._terms = terms
         super().__init__()
+
+    def __eq__(self, other):
+        return hash(self) == hash(other)
+
+    def __hash__(self):
+        return hash((self.connective, self.terms,))
 
     @property
     def arity_as_int(self) -> int:

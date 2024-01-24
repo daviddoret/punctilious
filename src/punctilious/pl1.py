@@ -77,7 +77,7 @@ class ConnectiveClass(fl.ConnectiveClass):
         return self._negation
 
 
-class FormulaClass(fl.FormulaClass):
+class CompoundFormulaClass(fl.CompoundFormulaClass):
     """A specialized class for PL1 containing all PL1 free formulas, and that is initially not locked."""
 
     def __init__(self, formal_language: PL1):
@@ -85,20 +85,37 @@ class FormulaClass(fl.FormulaClass):
         super().__init__(formal_language=formal_language)
 
     def declare_unary_formula(self, connective: fl.UnaryConnective, term: FormalObject) -> fl.UnaryFormula:
+        """Declare a well-formed unary formula in PL1.
+
+        IMPORTANT: This method assures that only well-formed unary formulas are declared in PL1.
+
+        :param connective:
+        :param term:
+        :return:
+        """
         if connective not in self.pl1.connectives:
-            log.error("connective is not a pl1-connective.")
+            log.error("connective is not a pl1 connective.")
         if not self.pl1.is_well_formed_formula(phi=term):
-            log.error("term is not a pl1-well-formed-formula.")
+            log.error("term is not a pl1 well-formed-formula.")
         return super().declare_unary_formula(connective=connective, term=term)
 
     def declare_binary_formula(self, connective: fl.BinaryConnective, term_1: FormalObject, term_2: FormalObject) -> (
         fl.BinaryFormula):
+        """Declare a well-formed binary formula in PL1.
+
+        IMPORTANT: This method assures that only well-formed binary formulas are declared in PL1.
+
+        :param connective:
+        :param term_1:
+        :param term_2:
+        :return:
+        """
         if connective not in self.pl1.connectives:
-            log.error("connective is not a pl1-connective.")
+            log.error("connective is not a pl1 connective.")
         if not self.pl1.is_well_formed_formula(phi=term_1):
-            log.error("term_1 is not a pl1-well-formed-formula.")
+            log.error("term_1 is not a pl1 well-formed-formula.")
         if not self.pl1.is_well_formed_formula(phi=term_2):
-            log.error("term_2 is not a pl1-well-formed-formula.")
+            log.error("term_2 is not a pl1 well-formed-formula.")
         return super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
 
     @property
@@ -106,15 +123,38 @@ class FormulaClass(fl.FormulaClass):
         return self._pl1
 
 
+class PL1ML(fl.FormalLanguage):
+    """Propositional Logic 1 Meta Language."""
+
+    def __init__(self):
+        super().__init__()
+        self._meta_variables: MetaVariableClass = MetaVariableClass(formal_language=self)
+        super()._add_class(x=self._meta_variables)
+        self.lock()
+
+    def is_well_formed_formula(self, phi: fl.FormalObject) -> bool:
+        """Return True if phi is a well-formed-formula on PL1, False otherwise."""
+        # TODO: Implement this, i.e. extends PL1 vocabulary to include meta-variables.
+        return True
+
+    @property
+    def meta_variables(self) -> MetaVariableClass:
+        """The collection of propositional variables declared in PL1."""
+        return self._meta_variables
+
+
 class PL1(fl.FormalLanguage):
     """Propositional Logic 1."""
 
     def __init__(self):
         super().__init__()
+        # Meta-language
+        self._meta_language: PL1ML = PL1ML()
+        # Object classes
         self._connectives: ConnectiveClass = ConnectiveClass(formal_language=self)
         super()._add_class(x=self._connectives)
-        self._formulas: FormulaClass = FormulaClass(formal_language=self)
-        super()._add_class(x=self._formulas)
+        self._compound_formulas: CompoundFormulaClass = CompoundFormulaClass(formal_language=self)
+        super()._add_class(x=self._compound_formulas)
         self._propositional_variables: PropositionalVariableClass = PropositionalVariableClass(formal_language=self)
         super()._add_class(x=self._propositional_variables)
         self.lock()
@@ -125,16 +165,16 @@ class PL1(fl.FormalLanguage):
         return self._connectives
 
     @property
-    def formulas(self) -> FormulaClass:
-        """The collection of formulas in PL1."""
-        return self._formulas
+    def compound_formulas(self) -> CompoundFormulaClass:
+        """The collection of declared compound formulas in PL1."""
+        return self._compound_formulas
 
     def is_well_formed_formula(self, phi: fl.FormalObject) -> bool:
         """Return True if phi is a well-formed-formula on PL1, False otherwise."""
         if phi in self.propositional_variables:
             # if phi is a PL1 propositional-variable, then it is a well-formed formula.
             return True
-        elif phi in self.formulas:
+        elif phi in self.compound_formulas:
             # if phi is a PL1 formula, then it is a well-formed-formula,
             # because declaration as an element of pl1 formula-class requires validation.
             return True
@@ -143,8 +183,13 @@ class PL1(fl.FormalLanguage):
             return False
 
     @property
+    def meta_language(self) -> PL1ML:
+        """The meta-language of PL1."""
+        return self._meta_language
+
+    @property
     def propositional_variables(self) -> PropositionalVariableClass:
-        """The collection of propositional variables declared in PL1."""
+        """The collection of declared propositional variables declared in PL1."""
         return self._propositional_variables
 
 
