@@ -17,9 +17,9 @@ def load():
         flavor=flavor, language=language)
 
     ts.register_symbol(tag=pl1_ts.tags.negation, symbol=ts.symbols.not_sign, treatment=treatment,
-        flavor=pl1_ts.flavors.negation_not, language=language)
+        flavor=pl1_ts.flavors.connective_negation_not, language=language)
     ts.register_symbol(tag=pl1_ts.tags.negation, symbol=ts.symbols.tilde, treatment=treatment,
-        flavor=pl1_ts.flavors.negation_tilde, language=language)
+        flavor=pl1_ts.flavors.connective_negation_tilde, language=language)
 
 
 load()

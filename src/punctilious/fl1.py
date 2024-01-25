@@ -278,4 +278,9 @@ class ML1(FormalLanguageClass, abc.ABC):
         super().__init__(formal_language=formal_language)
 
 
+def substitute_formula_elements_from_map(phi, map):
+    # TODO: Implement
+    pass
+
+
 log.debug(f"Module {__name__}: loaded.")

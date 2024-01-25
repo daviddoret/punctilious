@@ -1,20 +1,75 @@
-2024-01-24 23:43:53,074 - DEBUG - tag: default, weight: 1000
-2024-01-24 23:43:53,075 - DEBUG - flavor: default, weight: 100
-2024-01-24 23:43:53,075 - DEBUG - Module typesetting: loaded.
-2024-01-24 23:43:53,076 - DEBUG - tag: fl1.connective, weight: 2000
-2024-01-24 23:43:53,076 - DEBUG - Module fl1_typesetting: loaded.
-2024-01-24 23:43:53,076 - DEBUG - Module fl1: loaded.
-2024-01-24 23:43:53,078 - DEBUG - Module fl1_sr: loaded.
-2024-01-24 23:43:53,079 - DEBUG - flavor: pl1.connective.negation.tilde, weight: 200
-2024-01-24 23:43:53,079 - DEBUG - flavor: pl1.connective.negation.not, weight: 300
-2024-01-24 23:43:53,079 - DEBUG - tag: pl1.connective.conditional, weight: 3000
-2024-01-24 23:43:53,081 - DEBUG - tag: pl1.connective.negation, weight: 3000
-2024-01-24 23:43:53,081 - DEBUG - Module pl1_typesetting: loaded.
-2024-01-24 23:43:53,081 - DEBUG - Module pl1: loaded.
-2024-01-24 23:43:53,082 - DEBUG - Module pl1_cl_enus: loaded.
-2024-01-24 23:43:53,083 - DEBUG - Module pl1_cl_chfr: loaded.
-2024-01-24 23:43:53,085 - DEBUG - Module pl1_sr_classical: loaded.
-2024-01-24 23:43:53,085 - DEBUG - Module punctilious: loaded.
-2024-01-24 23:43:53,091 - DEBUG - protocol: Plain text
-2024-01-24 23:43:53,091 - DEBUG - protocol: Plain text
-2024-01-24 23:43:53,091 - DEBUG - FormalObject 'UnaryFormula-1600877664080' (python id: 1600877664080) is already present in this FormalLanguageClass as 'UnaryFormula-1600877661776' (python id: 1600877661776). The existing object is reused and the new object is discarded.
+2024-01-25 07:40:21,089 - DEBUG - tag: default, weight: 1000
+2024-01-25 07:40:21,089 - DEBUG - flavor: default, weight: 100
+2024-01-25 07:40:21,090 - DEBUG - Module typesetting: loaded.
+2024-01-25 07:40:21,091 - DEBUG - tag: fl1.connective, weight: 2000
+2024-01-25 07:40:21,091 - DEBUG - Module fl1_typesetting: loaded.
+2024-01-25 07:40:21,093 - DEBUG - Module fl1: loaded.
+2024-01-25 07:40:21,094 - DEBUG - Module fl1_sr: loaded.
+2024-01-25 07:40:21,098 - DEBUG - flavor: pl1.connective.negation.tilde, weight: 200
+2024-01-25 07:40:21,098 - DEBUG - flavor: pl1.connective.negation.not, weight: 300
+2024-01-25 07:40:21,098 - DEBUG - flavor: pl1.formula.function_call, weight: 200
+2024-01-25 07:40:21,109 - DEBUG - flavor: pl1.formula.prefix_infix, weight: 300
+2024-01-25 07:40:21,109 - DEBUG - tag: pl1.connective.conditional, weight: 3000
+2024-01-25 07:40:21,109 - DEBUG - tag: pl1.connective.negation, weight: 3000
+2024-01-25 07:40:21,109 - DEBUG - Module pl1_typesetting: loaded.
+2024-01-25 07:40:21,111 - DEBUG - Module pl1: loaded.
+2024-01-25 07:40:21,112 - DEBUG - Module pl1_cl_enus: loaded.
+2024-01-25 07:40:21,113 - DEBUG - Module pl1_cl_chfr: loaded.
+2024-01-25 07:40:21,116 - DEBUG - Module pl1_sr_classical: loaded.
+2024-01-25 07:40:21,116 - DEBUG - Module punctilious: loaded.
+2024-01-25 07:40:21,144 - DEBUG - protocol: Plain text
+2024-01-25 07:40:21,144 - DEBUG - New: 2100 frozenset({fl1.connective, symbolic-representation}) frozenset({fl1.connective, default, English (US)}) default
+2024-01-25 07:40:21,146 - DEBUG - protocol: Plain text
+2024-01-25 07:40:21,146 - DEBUG - FormalObject-2474854289104
+2024-01-25 07:40:21,146 - DEBUG - tag: test-1, weight: 2000
+2024-01-25 07:40:21,146 - DEBUG - protocol: None
+2024-01-25 07:40:21,146 - DEBUG - New: 2100 frozenset({test-1, symbolic-representation}) frozenset({test-1, default, English (US)}) default
+2024-01-25 07:40:21,148 - DEBUG - protocol: LaTeX
+2024-01-25 07:40:21,148 - DEBUG - New: 2100 frozenset({fl1.connective, symbolic-representation}) frozenset({fl1.connective, default, English (US)}) default
+2024-01-25 07:40:21,148 - DEBUG - New: 3100 frozenset({pl1.connective.conditional, symbolic-representation}) frozenset({pl1.connective.conditional, default, English (US)}) default
+2024-01-25 07:40:21,148 - DEBUG - protocol: Unicode
+2024-01-25 07:40:21,148 - DEBUG - New: 2100 frozenset({fl1.connective, symbolic-representation}) frozenset({fl1.connective, default, English (US)}) default
+2024-01-25 07:40:21,148 - DEBUG - New: 3100 frozenset({pl1.connective.conditional, symbolic-representation}) frozenset({pl1.connective.conditional, default, English (US)}) default
+2024-01-25 07:40:21,148 - DEBUG - protocol: Plain text
+2024-01-25 07:40:21,148 - DEBUG - New: 2100 frozenset({fl1.connective, symbolic-representation}) frozenset({fl1.connective, default, English (US)}) default
+2024-01-25 07:40:21,148 - DEBUG - New: 3100 frozenset({pl1.connective.conditional, symbolic-representation}) frozenset({pl1.connective.conditional, default, English (US)}) default
+2024-01-25 07:40:21,150 - DEBUG - protocol: LaTeX
+2024-01-25 07:40:21,150 - DEBUG - New: 2100 frozenset({fl1.connective, symbolic-representation}) frozenset({fl1.connective, default, English (US)}) default
+2024-01-25 07:40:21,150 - DEBUG - New: 3300 frozenset({pl1.connective.negation, symbolic-representation}) frozenset({pl1.connective.negation, pl1.connective.negation.not, English (US)}) pl1.connective.negation.not
+2024-01-25 07:40:21,150 - DEBUG - protocol: Unicode
+2024-01-25 07:40:21,150 - DEBUG - New: 2100 frozenset({fl1.connective, symbolic-representation}) frozenset({fl1.connective, default, English (US)}) default
+2024-01-25 07:40:21,150 - DEBUG - New: 3300 frozenset({pl1.connective.negation, symbolic-representation}) frozenset({pl1.connective.negation, pl1.connective.negation.not, English (US)}) pl1.connective.negation.not
+2024-01-25 07:40:21,150 - DEBUG - protocol: Plain text
+2024-01-25 07:40:21,150 - DEBUG - New: 2100 frozenset({fl1.connective, symbolic-representation}) frozenset({fl1.connective, default, English (US)}) default
+2024-01-25 07:40:21,150 - DEBUG - New: 3300 frozenset({pl1.connective.negation, symbolic-representation}) frozenset({pl1.connective.negation, pl1.connective.negation.not, English (US)}) pl1.connective.negation.not
+2024-01-25 07:40:21,152 - DEBUG - flavor: pl1.connective.negation.tilde, weight: 400
+2024-01-25 07:40:21,152 - DEBUG - protocol: LaTeX
+2024-01-25 07:40:21,152 - DEBUG - New: 2100 frozenset({fl1.connective, symbolic-representation}) frozenset({fl1.connective, default, English (US)}) default
+2024-01-25 07:40:21,153 - DEBUG - New: 3300 frozenset({pl1.connective.negation, symbolic-representation}) frozenset({pl1.connective.negation, pl1.connective.negation.not, English (US)}) pl1.connective.negation.not
+2024-01-25 07:40:21,153 - DEBUG - New: 3400 frozenset({pl1.connective.negation, symbolic-representation}) frozenset({pl1.connective.negation, pl1.connective.negation.tilde, English (US)}) pl1.connective.negation.tilde
+2024-01-25 07:40:21,153 - DEBUG - protocol: Unicode
+2024-01-25 07:40:21,153 - DEBUG - New: 2100 frozenset({fl1.connective, symbolic-representation}) frozenset({fl1.connective, default, English (US)}) default
+2024-01-25 07:40:21,153 - DEBUG - New: 3300 frozenset({pl1.connective.negation, symbolic-representation}) frozenset({pl1.connective.negation, pl1.connective.negation.not, English (US)}) pl1.connective.negation.not
+2024-01-25 07:40:21,153 - DEBUG - New: 3400 frozenset({pl1.connective.negation, symbolic-representation}) frozenset({pl1.connective.negation, pl1.connective.negation.tilde, English (US)}) pl1.connective.negation.tilde
+2024-01-25 07:40:21,153 - DEBUG - protocol: Plain text
+2024-01-25 07:40:21,153 - DEBUG - New: 2100 frozenset({fl1.connective, symbolic-representation}) frozenset({fl1.connective, default, English (US)}) default
+2024-01-25 07:40:21,153 - DEBUG - New: 3300 frozenset({pl1.connective.negation, symbolic-representation}) frozenset({pl1.connective.negation, pl1.connective.negation.not, English (US)}) pl1.connective.negation.not
+2024-01-25 07:40:21,153 - DEBUG - New: 3400 frozenset({pl1.connective.negation, symbolic-representation}) frozenset({pl1.connective.negation, pl1.connective.negation.tilde, English (US)}) pl1.connective.negation.tilde
+2024-01-25 07:40:21,153 - DEBUG - flavor: pl1.connective.negation.not, weight: 500
+2024-01-25 07:40:21,153 - DEBUG - protocol: LaTeX
+2024-01-25 07:40:21,153 - DEBUG - New: 2100 frozenset({fl1.connective, symbolic-representation}) frozenset({fl1.connective, default, English (US)}) default
+2024-01-25 07:40:21,153 - DEBUG - New: 3500 frozenset({pl1.connective.negation, symbolic-representation}) frozenset({pl1.connective.negation, pl1.connective.negation.not, English (US)}) pl1.connective.negation.not
+2024-01-25 07:40:21,154 - DEBUG - protocol: Unicode
+2024-01-25 07:40:21,154 - DEBUG - New: 2100 frozenset({fl1.connective, symbolic-representation}) frozenset({fl1.connective, default, English (US)}) default
+2024-01-25 07:40:21,154 - DEBUG - New: 3500 frozenset({pl1.connective.negation, symbolic-representation}) frozenset({pl1.connective.negation, pl1.connective.negation.not, English (US)}) pl1.connective.negation.not
+2024-01-25 07:40:21,154 - DEBUG - protocol: Plain text
+2024-01-25 07:40:21,154 - DEBUG - New: 2100 frozenset({fl1.connective, symbolic-representation}) frozenset({fl1.connective, default, English (US)}) default
+2024-01-25 07:40:21,154 - DEBUG - New: 3500 frozenset({pl1.connective.negation, symbolic-representation}) frozenset({pl1.connective.negation, pl1.connective.negation.not, English (US)}) pl1.connective.negation.not
+2024-01-25 07:40:21,159 - ERROR - connective is not a pl1 connective.
+2024-01-25 07:40:21,160 - ERROR - term is not a pl1 well-formed-formula.
+2024-01-25 07:40:21,163 - DEBUG - protocol: Plain text
+2024-01-25 07:40:21,164 - DEBUG - protocol: Plain text
+2024-01-25 07:40:21,164 - DEBUG - FormalObject 'UnaryFormula-2474825415312' (python id: 2474825415312) is already present in this FormalLanguageClass as 'UnaryFormula-2474854154576' (python id: 2474854154576). The existing object is reused and the new object is discarded.
+2024-01-25 07:40:21,166 - DEBUG - protocol: Plain text
+2024-01-25 07:40:21,166 - DEBUG - protocol: Plain text
+2024-01-25 07:40:21,166 - DEBUG - UnaryFormula-2474854290832

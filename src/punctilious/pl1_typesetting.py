@@ -17,17 +17,30 @@ class Flavors:
 
     def __init__(self):
         super().__init__()
-        self._negation_tilde = ts.flavors.register(name="pl1.connective.negation.tilde", predecessor=ts.flavors.default)
-        self._negation_not = ts.flavors.register(name="pl1.connective.negation.not",
-            predecessor=self._negation_tilde)  # define default preference.
+        # negation
+        self._connective_negation_tilde: ts.Flavor = ts.flavors.register(name="pl1.connective.negation.tilde")
+        self._connective_negation_not: ts.Flavor = ts.flavors.register(name="pl1.connective.negation.not",
+            predecessor=self._connective_negation_tilde)  # define default preference.
+        # formulas
+        self._formula_function_call: ts.Flavor = ts.flavors.register(name="pl1.formula.function_call")
+        self._formula_prefix_infix: ts.Flavor = ts.flavors.register(name="pl1.formula.prefix_infix",
+            predecessor=self.formula_function_call)
 
     @property
-    def negation_not(self) -> ts.Flavor:
-        return self._negation_not
+    def connective_negation_not(self) -> ts.Flavor:
+        return self._connective_negation_not
 
     @property
-    def negation_tilde(self) -> ts.Flavor:
-        return self._negation_tilde
+    def connective_negation_tilde(self) -> ts.Flavor:
+        return self._connective_negation_tilde
+
+    @property
+    def formula_function_call(self) -> ts.Flavor:
+        return self._formula_function_call
+
+    @property
+    def formula_prefix_infix(self) -> ts.Flavor:
+        return self._formula_prefix_infix
 
 
 flavors = Flavors()
