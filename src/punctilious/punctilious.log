@@ -1,16 +1,23 @@
-2024-01-23 13:19:06,416 - DEBUG - flavor: Default, weight: 100
-2024-01-23 13:19:06,417 - DEBUG - Module typesetting: loaded.
-2024-01-23 13:19:06,417 - DEBUG - tag: fl1.connective, weight: 1000
-2024-01-23 13:19:06,417 - DEBUG - Module fl1_typesetting: loaded.
-2024-01-23 13:19:06,418 - DEBUG - Module fl1: loaded.
-2024-01-23 13:19:06,419 - DEBUG - Module fl1_sr: loaded.
-2024-01-23 13:19:06,429 - DEBUG - flavor: pl1.connective.negation.tilde, weight: 200
-2024-01-23 13:19:06,429 - DEBUG - flavor: pl1.connective.negation.not, weight: 300
-2024-01-23 13:19:06,429 - DEBUG - tag: pl1.connective.conditional, weight: 2000
-2024-01-23 13:19:06,429 - DEBUG - tag: pl1.connective.negation, weight: 2000
-2024-01-23 13:19:06,429 - DEBUG - Module pl1_typesetting: loaded.
-2024-01-23 13:19:06,430 - DEBUG - Module pl1: loaded.
-2024-01-23 13:19:06,431 - DEBUG - Module pl1_cl_enus: loaded.
-2024-01-23 13:19:06,432 - DEBUG - Module pl1_cl_chfr: loaded.
-2024-01-23 13:19:06,433 - DEBUG - Module pl1_sr_classical: loaded.
-2024-01-23 13:19:06,433 - DEBUG - Module __main__: loaded.
+2024-01-25 21:40:03,338 - DEBUG - tag: default, weight: 1000
+2024-01-25 21:40:03,338 - DEBUG - flavor: default, weight: 100
+2024-01-25 21:40:03,338 - DEBUG - Module typesetting: loaded.
+2024-01-25 21:40:03,338 - DEBUG - flavor: fl1.formula.function_call, weight: 200
+2024-01-25 21:40:03,338 - DEBUG - flavor: fl1.formula.prefix_no_parenthesis, weight: 300
+2024-01-25 21:40:03,338 - DEBUG - flavor: fl1.formula.infix, weight: 200
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.binary_connective, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.binary_formula, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.compound_formula, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.compound_formula_class, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.connective, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.connective_class, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.fixed_arity_connective, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.fixed_arity_formula, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.formal_language, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.formal_language_class, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.formal_object, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.meta_language, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.ml1, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.unary_connective, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.unary_formula, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - tag: fl1.variable_arity_connective, weight: 2000
+2024-01-25 21:40:03,339 - DEBUG - Module __main__: loaded.

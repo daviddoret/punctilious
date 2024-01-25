@@ -17,6 +17,7 @@ class FormalObject(ts.Typesettable):
     def __init__(self):
         super().__init__(
             default_treatment=fl1_ts.treatments.symbolic_representation)  # Make the formal-object  # typesettable.
+        self.tag(tag=fl1_ts.tags.formal_object)
 
     def __repr__(self):
         return super().to_string(protocol=ts.protocols.unicode_limited,
@@ -36,6 +37,7 @@ class FormalLanguageClass(FormalObject, abc.ABC):
         self._protected_set: set[FormalObject] = set()
         self._formal_language: FormalLanguage = formal_language
         super().__init__()
+        self.tag(tag=fl1_ts.tags.formal_language_class)
 
     def __contains__(self, x: FormalObject) -> bool:
         """Allows the in operator."""
@@ -84,6 +86,7 @@ class FormalLanguage(FormalObject, abc.ABC):
         self._is_locked: bool = False
         self._container: set = set()
         super().__init__()
+        self.tag(tag=fl1_ts.tags.formal_language)
 
     def __iter__(self):
         return iter(self._container)
@@ -114,6 +117,7 @@ class MetaLanguage(FormalLanguage):
     def __init__(self, formal_language: FormalLanguage):
         super().__init__()
         self._formal_language = formal_language
+        self.tag(tag=fl1_ts.tags.meta_language)
 
     @property
     def formal_language(self) -> FormalLanguage:
@@ -139,6 +143,7 @@ class VariableArityConnective(Connective):
     def __init__(self, arity_as_int: int):
         self._arity_as_int = arity_as_int
         super().__init__()
+        self.tag(tag=fl1_ts.tags.variable_arity_connective)
 
     @property
     def arity_as_int(self) -> int:
@@ -152,6 +157,7 @@ class FixedArityConnective(Connective):
     def __init__(self, arity_as_int: int):
         self._arity_as_int = arity_as_int
         super().__init__()
+        self.tag(tag=fl1_ts.tags.fixed_arity_connective)
 
     @property
     def arity_as_int(self) -> int:
@@ -163,6 +169,7 @@ class UnaryConnective(FixedArityConnective):
 
     def __init__(self):
         super().__init__(arity_as_int=1)
+        self.tag(tag=fl1_ts.tags.unary_connective)
 
 
 class BinaryConnective(FixedArityConnective):
@@ -170,11 +177,13 @@ class BinaryConnective(FixedArityConnective):
 
     def __init__(self):
         super().__init__(arity_as_int=2)
+        self.tag(tag=fl1_ts.tags.binary_connective)
 
 
 class ConnectiveClass(FormalLanguageClass):
     def __init__(self, formal_language: FormalLanguage):
         super().__init__(formal_language=formal_language)
+        self.tag(tag=fl1_ts.tags.connective_class)
 
     def declare_unary_connective(self) -> UnaryConnective:
         x: UnaryConnective = UnaryConnective()
@@ -190,6 +199,7 @@ class ConnectiveClass(FormalLanguageClass):
 class CompoundFormulaClass(FormalLanguageClass):
     def __init__(self, formal_language: FormalLanguage):
         super().__init__(formal_language=formal_language)
+        self.tag(tag=fl1_ts.tags.compound_formula_class)
 
     def declare_unary_formula(self, connective: UnaryConnective, term: FormalObject) -> UnaryFormula:
         x: UnaryFormula = UnaryFormula(connective=connective, term=term)
@@ -217,6 +227,7 @@ class CompoundFormula(FormalObject):
         self._connective = connective
         self._terms = terms
         super().__init__()
+        self.tag(tag=fl1_ts.tags.compound_formula)
 
     def __eq__(self, other):
         return hash(self) == hash(other)
@@ -243,6 +254,7 @@ class FixedArityFormula(CompoundFormula):
 
     def __init__(self, connective: FixedArityConnective, terms: typing.Tuple[FormalObject, ...]):
         super().__init__(connective=connective, terms=terms)
+        self.tag(tag=fl1_ts.tags.fixed_arity_formula)
 
 
 class UnaryFormula(FixedArityFormula):
@@ -250,6 +262,7 @@ class UnaryFormula(FixedArityFormula):
 
     def __init__(self, connective: UnaryConnective, term: FormalObject):
         super().__init__(connective=connective, terms=(term,))
+        self.tag(tag=fl1_ts.tags.unary_formula)
 
     @property
     def term(self) -> FormalObject:
@@ -261,6 +274,7 @@ class BinaryFormula(FixedArityFormula):
 
     def __init__(self, connective: BinaryConnective, term_1: FormalObject, term_2: FormalObject):
         super().__init__(connective=connective, terms=(term_1, term_2,))
+        self.tag(tag=fl1_ts.tags.binary_formula)
 
     @property
     def term_1(self) -> FormalObject:
@@ -276,6 +290,7 @@ class ML1(FormalLanguageClass, abc.ABC):
 
     def __init__(self, formal_language: FormalLanguage):
         super().__init__(formal_language=formal_language)
+        self.tag(tag=fl1_ts.tags.ml1)
 
 
 def substitute_formula_elements_from_map(phi, map):

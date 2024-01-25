@@ -1,6 +1,7 @@
 import pytest
 
 import fl1
+import log
 import punctilious as pu
 
 
@@ -25,13 +26,13 @@ class TestPL1:
         l: pu.pl1.PL1 = pu.pl1.PL1()
         x = l.connectives.negation
         # change flavor preference
-        pu.pl1_ts.flavors.negation_tilde.predecessor = pu.pl1_ts.flavors.negation_not
+        pu.pl1_ts.flavors.connective_negation_tilde.predecessor = pu.pl1_ts.flavors.connective_negation_not
         assert x.to_string(protocol=pu.ts.protocols.latex) == "\\sim"
         assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "~"
         assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "~"
 
         # restore flavor preference
-        pu.pl1_ts.flavors.negation_not.predecessor = pu.pl1_ts.flavors.negation_tilde
+        pu.pl1_ts.flavors.connective_negation_not.predecessor = pu.pl1_ts.flavors.connective_negation_tilde
         assert x.to_string(protocol=pu.ts.protocols.latex) == "\\lnot"
         assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "¬"
         assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "lnot"
@@ -83,11 +84,45 @@ class TestPL1:
 
         pd: fl1.UnaryFormula = l1.compound_formulas.declare_unary_formula(connective=lnot, term=pa)
         pe: fl1.UnaryFormula = l1.compound_formulas.declare_unary_formula(connective=lnot, term=pa)
-        # Check that two equal formulas are only instanciated once in python
+        # Check that only unique formulas are kept in the PL1 formula collection
         assert pd is pe
         assert pd == pe
         assert id(pd) == id(pe)
+        # Check that non-unique formulas are kept
         pf: fl1.UnaryFormula = l1.compound_formulas.declare_unary_formula(connective=lnot, term=pb)
         assert pd is not pf
         assert pd != pf
         assert id(pd) != id(pf)
+
+    def test_declare_binary_formula(self):
+        l1 = pu.pl1.PL1()
+
+        conditional = l1.connectives.conditional
+        pa = l1.propositional_variables.declare_proposition_variable()
+        pb = l1.propositional_variables.declare_proposition_variable()
+
+        pd = l1.compound_formulas.declare_binary_formula(connective=conditional, term_1=pa, term_2=pb)
+        # Check that only unique formulas are kept in the PL1 formula collection
+        s = pd.to_string()
+        log.debug(msg=s)
+        assert (len(s) > 0)
+
+    def test_compounding_formulas_1(self):
+        l1 = pu.pl1.PL1()
+
+        lnot = l1.connectives.negation
+        limplies = l1.connectives.conditional
+
+        # build a compounding formula with several layers of depth
+        pa = l1.propositional_variables.declare_proposition_variable()
+        pb = l1.propositional_variables.declare_proposition_variable()
+        pc = l1.propositional_variables.declare_proposition_variable()
+        pd = l1.compound_formulas.declare_unary_formula(connective=lnot, term=pa)
+        pe = l1.compound_formulas.declare_unary_formula(connective=lnot, term=pd)
+        pf = l1.compound_formulas.declare_binary_formula(connective=limplies, term_1=pe, term_2=pb)
+        pg = l1.compound_formulas.declare_binary_formula(connective=limplies, term_1=pf, term_2=pf)
+        ph = l1.compound_formulas.declare_binary_formula(connective=limplies, term_1=pa, term_2=pg)
+        pi = l1.compound_formulas.declare_unary_formula(connective=lnot, term=ph)
+
+        assert len(str(pi)) > 0
+        log.debug(msg=str(pi))

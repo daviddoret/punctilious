@@ -57,6 +57,7 @@ class Tags:
     def __init__(self):
         self._internal_data_structure: set[Tag] = set()
         self._default = self._register(name="default")
+        self._symbol = self.register(name="symbol")
 
     def _register(self, name: str, predecessor: typing.Optional[Tag] = None) -> Tag:
         """The protected version of the register method is called once for the root element, because it has no predecessor."""
@@ -73,6 +74,10 @@ class Tags:
         if predecessor is None:
             predecessor = self.default
         return self._register(name=name, predecessor=predecessor)
+
+    @property
+    def symbol(self) -> Tag:
+        return self._symbol
 
 
 tags = Tags()
@@ -373,8 +378,8 @@ def register_typesetting_method(python_function: typing.Callable, tag: Tag, trea
     return python_function
 
 
-def typeset(o: Typesettable, protocol: Protocol, treatment: Treatment, language: typing.Optional[Language]) -> \
-    typing.Generator[str, None, None]:
+def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None, treatment: typing.Optional[Treatment] = None,
+    language: typing.Optional[Language] = None, **kwargs) -> typing.Generator[str, None, None]:
     global typesetting_methods
     global protocols
     global treatments
@@ -471,6 +476,7 @@ class Symbol(Typesettable):
         self._unicode_extended = unicode_extended
         self._unicode_limited = unicode_limited
         super().__init__()
+        self.tag(tag=tags.symbol)
 
     @property
     def latex_math(self) -> str:
@@ -485,8 +491,7 @@ class Symbol(Typesettable):
         return self._unicode_limited
 
 
-def typeset_symbol(o: Symbol, protocol: typing.Optional[Protocol] = None, treatment: typing.Optional[Treatment] = None,
-    language: typing.Optional[Language] = None, flavor: typing.Optional[Flavor] = None) -> typing.Generator[
+def typeset_symbol(o: Symbol, protocol: typing.Optional[Protocol] = None, **kwargs) -> typing.Generator[
     str, None, None]:
     if protocol is None:
         protocol = protocols.default
@@ -512,7 +517,10 @@ class Symbols:
 
     def __init__(self):
         self._asterisk_operator = Symbol(latex_math='\\ast', unicode_extended='∗', unicode_limited='*')
+        self._close_parenthesis = Symbol(latex_math='\\right)', unicode_extended=')', unicode_limited=')')
+        self._collection_separator = Symbol(latex_math=', ', unicode_extended=', ', unicode_limited=', ')
         self._not_sign = Symbol(latex_math='\\lnot', unicode_extended='¬', unicode_limited='lnot')
+        self._open_parenthesis = Symbol(latex_math='\\left(', unicode_extended='(', unicode_limited='(')
         self._rightwards_arrow = Symbol(latex_math='\\rightarrow', unicode_extended='→', unicode_limited='-->')
         self._tilde = Symbol(latex_math='\\sim', unicode_extended='~', unicode_limited='~')
 
@@ -521,8 +529,20 @@ class Symbols:
         return self._asterisk_operator
 
     @property
+    def close_parenthesis(self) -> Symbol:
+        return self._close_parenthesis
+
+    @property
+    def collection_separator(self) -> Symbol:
+        return self._collection_separator
+
+    @property
     def not_sign(self) -> Symbol:
         return self._not_sign
+
+    @property
+    def open_parenthesis(self) -> Symbol:
+        return self._open_parenthesis
 
     @property
     def rightwards_arrow(self) -> Symbol:
@@ -536,46 +556,43 @@ class Symbols:
 symbols = Symbols()
 
 
-def register_symbol(tag: Tag, symbol: Symbol, treatment: Treatment, flavor: Flavor,
-    language: Language) -> typing.Callable:
+def register_symbol(tag: Tag, symbol: Symbol, **kwargs1) -> typing.Callable:
     """Register a typesetting-method that outputs an atomic symbol."""
 
     # dynamically generate the desired typesetting-method.
-    def typesetting_method(o: Typesettable, protocol: typing.Optional[Protocol] = None,
-        treatment: typing.Optional[Treatment] = None, flavor: typing.Optional[Flavor] = None,
-        language: typing.Optional[Language] = None) -> typing.Generator[str, None, None]:
-        return typeset_symbol(o=symbol, protocol=protocol)
+    def typesetting_method(o: Typesettable, **kwargs2) -> typing.Generator[str, None, None]:
+        merged_kwargs = {**kwargs1, **kwargs2}  # overwrite kwargs1 with kwargs2
+        return typeset_symbol(o=symbol, **merged_kwargs)
 
     # register that typesetting-method.
     python_function: typing.Callable = register_typesetting_method(python_function=typesetting_method, tag=tag,
-        treatment=treatment, flavor=flavor, language=language)
+        **kwargs1)
 
     return python_function
 
 
-def register_styledstring(tag: Tag, text: str, treatment: Treatment, flavor: Flavor,
-    language: Language) -> typing.Callable:
+def register_styledstring(tag: Tag, text: str, **kwargs1) -> typing.Callable:
     """Register a typesetting-method for a python-type that outputs a string.
 
     TODO: modify this function to use StyledString instead of str.
     """
 
     # dynamically generate the desired typesetting-method.
-    def typesetting_method(o: Typesettable, protocol: typing.Optional[Protocol] = None,
-        treatment: typing.Optional[Treatment] = None, flavor: typing.Optional[Flavor] = None,
-        language: typing.Optional[Language] = None) -> typing.Generator[str, None, None]:
+    def typesetting_method(o: Typesettable, **kwargs2) -> typing.Generator[str, None, None]:
         yield text
 
     # register that typesetting-method.
-    python_function = register_typesetting_method(python_function=typesetting_method, tag=tag, treatment=treatment,
-        flavor=flavor, language=language)
+    python_function = register_typesetting_method(python_function=typesetting_method, tag=tag, **kwargs1)
 
     return python_function
 
 
-def fallback_typesetting_method(o: Typesettable, protocol: Protocol, treatment: Treatment, language: Language):
+def fallback_typesetting_method(o: Typesettable, **kwargs):
     """The fallback-typesetting-method assure a minimalist representation for all TypesettableObject."""
     yield f"{type(o).__name__}-{id(o)}"
 
+
+register_typesetting_method(python_function=typeset_symbol, tag=tags.symbol, treatment=treatments.default,
+    flavor=flavors.default, language=languages.default)
 
 log.debug(f"Module {__name__}: loaded.")

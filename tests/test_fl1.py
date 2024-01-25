@@ -1,6 +1,5 @@
 import pytest
 
-import log
 import punctilious as pu
 
 
@@ -14,7 +13,7 @@ class TestFormalObject:
     def test_formal_object(self):
         o = pu.fl1.FormalObject()
         output_1 = o.to_string(protocol=pu.ts.protocols.unicode_limited)
-        log.debug(output_1)
+        pu.log.debug(output_1)
         assert len(output_1) > 0
         tag1 = pu.ts.tags.register(name="test-1")
         o.tag(tag=tag1)
