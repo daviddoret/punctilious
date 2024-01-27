@@ -18,7 +18,7 @@ class TestFormalObject:
         tag1 = pu.ts.tags.register(name="test-1")
         o.tag(tag=tag1)
         fun = pu.ts.register_styledstring(tag=tag1, text="hello world",
-            treatment=pu.fl1_ts.treatments.symbolic_representation, flavor=pu.ts.flavors.default,
+            treatment=pu.fl1.treatments.symbolic_representation, flavor=pu.ts.flavors.default,
             language=pu.ts.languages.default)
         output_2 = ''.join(fun(o=o))
         assert len(output_2) > 0
