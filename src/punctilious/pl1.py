@@ -136,10 +136,10 @@ class CompoundFormulaClass(fl1.CompoundFormulaClass):
     """A specialized class for PL1 containing all PL1 free formulas, and that is initially not locked."""
 
     def __init__(self, formal_language: PL1):
-        self._pl1 = formal_language
+        self._pl1: PL1 = formal_language
         super().__init__(formal_language=formal_language)
 
-    def declare_unary_formula(self, connective: fl1.UnaryConnective, term: FormalObject) -> fl1.UnaryFormula:
+    def declare_unary_formula(self, connective: fl1.UnaryConnective, term: fl1.FormalObject) -> fl1.UnaryFormula:
         """Declare a well-formed unary formula in PL1.
 
         IMPORTANT: This method assures that only well-formed unary formulas are declared in PL1.
@@ -148,14 +148,14 @@ class CompoundFormulaClass(fl1.CompoundFormulaClass):
         :param term:
         :return:
         """
-        if connective not in self.connectives:
+        if connective not in self.pl1.connectives:
             log.error("connective is not a pl1 connective.")
-        if not self.is_well_formed_formula(phi=term):
+        if not self.pl1.is_well_formed_formula(phi=term):
             log.error("term is not a pl1 well-formed-formula.")
         return super().declare_unary_formula(connective=connective, term=term)
 
-    def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: FormalObject, term_2: FormalObject) -> (
-        fl1.BinaryFormula):
+    def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.FormalObject,
+        term_2: fl1.FormalObject) -> fl1.BinaryFormula:
         """Declare a well-formed binary formula in PL1.
 
         IMPORTANT: This method assures that only well-formed binary formulas are declared in PL1.
@@ -165,11 +165,11 @@ class CompoundFormulaClass(fl1.CompoundFormulaClass):
         :param term_2:
         :return:
         """
-        if connective not in self.connectives:
+        if connective not in self.pl1.connectives:
             log.error("connective is not a pl1 connective.")
-        if not self.is_well_formed_formula(phi=term_1):
+        if not self.pl1.is_well_formed_formula(phi=term_1):
             log.error("term_1 is not a pl1 well-formed-formula.")
-        if not self.is_well_formed_formula(phi=term_2):
+        if not self.pl1.is_well_formed_formula(phi=term_2):
             log.error("term_2 is not a pl1 well-formed-formula.")
         return super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
 
