@@ -5,14 +5,14 @@ import typing
 import log
 
 
-class Tag:
-    """A typesetting tag is a class of objects to which we wish to link some typesetting methods."""
+class Clazz:
+    """A typesetting clazz is a class of objects to which we wish to link some typesetting methods."""
 
-    def __init__(self, name: str, predecessor: typing.Optional[Tag] = None):
+    def __init__(self, name: str, predecessor: typing.Optional[Clazz] = None):
         self._name = name
-        self._predecessor: typing.Optional[Tag] = predecessor
+        self._predecessor: typing.Optional[Clazz] = predecessor
         self._weight: int = 1000 if predecessor is None else predecessor.weight + 1000
-        log.debug(f"tag: {name}, weight: {self._weight}")
+        log.debug(f"clazz: {name}, weight: {self._weight}")
 
     def __eq__(self, other):
         return self is other
@@ -32,59 +32,59 @@ class Tag:
 
     @property
     def weight(self) -> int:
-        """A score that orders tags by degree of specialization."""
+        """A score that orders clazzes by degree of specialization."""
         return self._weight
 
     @property
-    def predecessor(self) -> typing.Optional[Tag]:
+    def predecessor(self) -> typing.Optional[Clazz]:
         return self._predecessor
 
 
-class Tags:
+class Clazzes:
     _singleton = None
 
     def __new__(cls):
         if cls._singleton is None:
-            cls._singleton = super(Tags, cls).__new__(cls)
+            cls._singleton = super(Clazzes, cls).__new__(cls)
         return cls._singleton
 
     def __init__(self):
-        self._internal_data_structure: set[Tag] = set()
-        self._default: Tag = self._register(name="default")
-        self._indexed_symbol: Tag = self._register(name="indexed_symbol")
-        self._styled_text: Tag = self.register(name="styled_text")
-        self._symbol: Tag = self.register(name="symbol")
+        self._internal_data_structure: set[Clazz] = set()
+        self._default: Clazz = self._register(name="default")
+        self._indexed_symbol: Clazz = self._register(name="indexed_symbol")
+        self._styled_text: Clazz = self.register(name="styled_text")
+        self._symbol: Clazz = self.register(name="symbol")
 
-    def _register(self, name: str, predecessor: typing.Optional[Tag] = None) -> Tag:
+    def _register(self, name: str, predecessor: typing.Optional[Clazz] = None) -> Clazz:
         """The protected version of the register method is called once for the root element, because it has no predecessor."""
-        tag: Tag = Tag(name=name, predecessor=predecessor)
-        self._internal_data_structure.add(tag)
-        return tag
+        clazz: Clazz = Clazz(name=name, predecessor=predecessor)
+        self._internal_data_structure.add(clazz)
+        return clazz
 
     @property
-    def default(self) -> Tag:
-        """If no tag is specified, typesetting uses the default tag."""
+    def default(self) -> Clazz:
+        """If no clazz is specified, typesetting uses the default clazz."""
         return self._default
 
     @property
-    def indexed_symbol(self) -> Tag:
+    def indexed_symbol(self) -> Clazz:
         return self._indexed_symbol
 
-    def register(self, name: str, predecessor: typing.Optional[Tag] = None) -> Tag:
+    def register(self, name: str, predecessor: typing.Optional[Clazz] = None) -> Clazz:
         if predecessor is None:
             predecessor = self.default
         return self._register(name=name, predecessor=predecessor)
 
     @property
-    def styled_text(self) -> Tag:
+    def styled_text(self) -> Clazz:
         return self._styled_text
 
     @property
-    def symbol(self) -> Tag:
+    def symbol(self) -> Clazz:
         return self._symbol
 
 
-tags = Tags()
+clazzes = Clazzes()
 
 
 class Protocol:
@@ -218,7 +218,7 @@ class Flavor:
 
     def __init__(self, name: str, predecessor: typing.Optional[Flavor] = None):
         self._name = name
-        self._predecessor: typing.Optional[Tag] = predecessor
+        self._predecessor: typing.Optional[Clazz] = predecessor
         self._weight: int = 100 if predecessor is None else predecessor.weight + 100
         log.debug(f"flavor: {self.name}, weight: {self.weight}")
 
@@ -240,7 +240,7 @@ class Flavor:
 
     @property
     def weight(self) -> int:
-        """A score that orders tags by degree of specialization."""
+        """A score that orders clazzes by degree of specialization."""
         return self._weight
 
     @property
@@ -253,7 +253,7 @@ class Flavor:
         # TODO: BUG: Prevent self-reference
         # TODO: BUG: Prevent circularity
         # TODO: BUG: Prevent unlimited weight increase
-        self._predecessor: typing.Optional[Tag] = predecessor
+        self._predecessor: typing.Optional[Clazz] = predecessor
         self._weight: int = 100 if predecessor is None else predecessor.weight + 100
         log.debug(f"flavor: {self.name}, weight: {self.weight}")
 
@@ -433,11 +433,11 @@ class TypesettingMethods(dict):
 
 
 typesetting_methods: typing.Dict[
-    typing.FrozenSet[Tag, Treatment], typing.Dict[typing.FrozenSet[Tag, Flavor, Language], typing.Callable]] = (
+    typing.FrozenSet[Clazz, Treatment], typing.Dict[typing.FrozenSet[Clazz, Flavor, Language], typing.Callable]] = (
     TypesettingMethods())
 
 
-def register_typesetting_method(python_function: typing.Callable, tag: Tag, treatment: Treatment, flavor: Flavor,
+def register_typesetting_method(python_function: typing.Callable, clazz: Clazz, treatment: Treatment, flavor: Flavor,
     language: Language) -> typing.Callable:
     """Register a typesetting method for the given protocol, treatment, and language.
     If protocol, treatment, and/or language are not specified, use the defaults.
@@ -446,14 +446,14 @@ def register_typesetting_method(python_function: typing.Callable, tag: Tag, trea
     the previously registered method with the new one."""
 
     global typesetting_methods
-    key: typing.FrozenSet[Tag, Treatment] = frozenset([tag, treatment])
+    key: typing.FrozenSet[Clazz, Treatment] = frozenset([clazz, treatment])
     if key not in typesetting_methods:
         typesetting_methods[key] = dict()
-    solution: typing.FrozenSet[Tag, Flavor, Language] = frozenset([tag, flavor, language])
+    solution: typing.FrozenSet[Clazz, Flavor, Language] = frozenset([clazz, flavor, language])
     typesetting_methods[key][solution]: typing.Callable = python_function
     if treatment is not treatments.default:
         # the first registered typesetting_method is promoted as the default typesetting_method
-        register_typesetting_method(python_function=python_function, tag=tag, treatment=treatments.default,
+        register_typesetting_method(python_function=python_function, clazz=clazz, treatment=treatments.default,
             flavor=flavor, language=language)
     return python_function
 
@@ -475,22 +475,22 @@ def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None, treatme
 
     # log.debug(msg=f"protocol: {protocol}")
 
-    keys: set[typing.FrozenSet[Tag, Treatment]] = {frozenset([tag, treatment]) for tag in o.typesetting_tags}
-    available_keys: set[typing.FrozenSet[Tag, Treatment]] = keys.intersection(typesetting_methods)
+    keys: set[typing.FrozenSet[Clazz, Treatment]] = {frozenset([clazz, treatment]) for clazz in o.typesetting_clazzes}
+    available_keys: set[typing.FrozenSet[Clazz, Treatment]] = keys.intersection(typesetting_methods)
 
     # some typesetting methods were found, choose the best one.
     best_generator = None
-    best_key: typing.Optional[typing.FrozenSet[Tag, Treatment]] = None
-    best_solution: typing.Optional[typing.FrozenSet[Tag, Flavor, Language]] = None
+    best_key: typing.Optional[typing.FrozenSet[Clazz, Treatment]] = None
+    best_solution: typing.Optional[typing.FrozenSet[Clazz, Flavor, Language]] = None
     best_flavor: Flavor = None
     best_score = 0
-    key: typing.FrozenSet[Tag, Treatment]
-    solution: typing.FrozenSet[Tag, Flavor, Language]
+    key: typing.FrozenSet[Clazz, Treatment]
+    solution: typing.FrozenSet[Clazz, Flavor, Language]
     for key in available_keys:
         for solution, generator in typesetting_methods[key].items():
-            # solution is of the form set[tag,flavour,language,].
+            # solution is of the form set[clazz,flavour,language,].
             flavor: Flavor = next(iter(flavor for flavor in solution if isinstance(flavor, Flavor)))
-            score = next(iter(solution.intersection(o.typesetting_tags))).weight
+            score = next(iter(solution.intersection(o.typesetting_clazzes))).weight
             score = score + flavor.weight
             score = score + (1 if languages in solution else 0)
             if score > best_score:
@@ -516,8 +516,8 @@ class Typesettable(abc.ABC):
     that may be typeset by registering typesetting methods for the desired treatments and languages."""
 
     def __init__(self, default_treatment: typing.Optional[Treatment] = None):
-        self._typesetting_tags: set[Tag, ...] = set()
-        self.tag(tag=tags.default)
+        self._typesetting_clazzes: set[Clazz, ...] = set()
+        self.declare_clazz_element(clazz=clazzes.default)
         self._default_treatment: typing.Optional[Treatment] = default_treatment
 
     def __repr__(self):
@@ -530,16 +530,16 @@ class Typesettable(abc.ABC):
     def default_treatment(self) -> typing.Optional[Treatment]:
         return self._default_treatment
 
-    def tag(self, tag: Tag):
-        self.typesetting_tags.add(tag)
+    def declare_clazz_element(self, clazz: Clazz):
+        self.typesetting_clazzes.add(clazz)
 
     def to_string(self, protocol: typing.Optional[Protocol] = None, treatment: typing.Optional[Treatment] = None,
         language: typing.Optional[Language] = None) -> str:
         return to_string(o=self, protocol=protocol, treatment=treatment, language=language)
 
     @property
-    def typesetting_tags(self) -> set[Tag, ...]:
-        return self._typesetting_tags
+    def typesetting_clazzes(self) -> set[Clazz, ...]:
+        return self._typesetting_clazzes
 
     def typeset(self, **kwargs) -> typing.Generator[str, None, None]:
         """Typeset this object by yielding strings."""
@@ -554,7 +554,7 @@ class Symbol(Typesettable):
         self._unicode_extended = unicode_extended
         self._unicode_limited = unicode_limited
         super().__init__()
-        self.tag(tag=tags.symbol)
+        self.declare_clazz_element(clazz=clazzes.symbol)
 
     @property
     def latex_math(self) -> str:
@@ -675,7 +675,7 @@ class IndexedSymbol(Typesettable):
         self._symbol: Symbol = symbol
         self._index: int = index
         super().__init__()
-        self.tag(tag=tags.indexed_symbol)
+        self.declare_clazz_element(clazz=clazzes.indexed_symbol)
 
     def __eq__(self, other) -> bool:
         return hash(self) == hash(other)
@@ -712,7 +712,7 @@ def typeset_indexed_symbol(o: IndexedSymbol, protocol: typing.Optional[Protocol]
             raise Exception('Unsupported protocol.')
 
 
-def register_symbol(tag: Tag, symbol: Symbol, **kwargs1) -> typing.Callable:
+def register_symbol(clazz: Clazz, symbol: Symbol, **kwargs1) -> typing.Callable:
     """Register a typesetting-method that outputs an atomic symbol."""
 
     # dynamically generate the desired typesetting-method.
@@ -721,7 +721,7 @@ def register_symbol(tag: Tag, symbol: Symbol, **kwargs1) -> typing.Callable:
         return typeset_symbol(o=symbol, **merged_kwargs)
 
     # register that typesetting-method.
-    python_function: typing.Callable = register_typesetting_method(python_function=typesetting_method, tag=tag,
+    python_function: typing.Callable = register_typesetting_method(python_function=typesetting_method, clazz=clazz,
         **kwargs1)
 
     return python_function
@@ -760,7 +760,7 @@ class StyledText(Typesettable):
     def __init__(self, neutral_text: str):
         self._neutral_text = neutral_text
         super().__init__()
-        self.tag(tag=tags.styled_text)
+        self.declare_clazz_element(clazz=clazzes.styled_text)
 
     @property
     def neutral_text(self) -> str:
@@ -800,7 +800,7 @@ def unicode_subscriptify(s: str = ''):
     return ''.join([unicode_subscript_dictionary.get(c, c) for c in s])
 
 
-def register_styledstring(tag: Tag, text: str, **kwargs1) -> typing.Callable:
+def register_styledstring(clazz: Clazz, text: str, **kwargs1) -> typing.Callable:
     """Register a typesetting-method for a python-type that outputs a string.
 
     TODO: modify this function to use StyledString instead of str.
@@ -811,7 +811,7 @@ def register_styledstring(tag: Tag, text: str, **kwargs1) -> typing.Callable:
         yield text
 
     # register that typesetting-method.
-    python_function = register_typesetting_method(python_function=typesetting_method, tag=tag, **kwargs1)
+    python_function = register_typesetting_method(python_function=typesetting_method, clazz=clazz, **kwargs1)
 
     return python_function
 
@@ -821,11 +821,11 @@ def fallback_typesetting_method(o: Typesettable, **kwargs):
     yield f"{type(o).__name__}-{id(o)}"
 
 
-register_typesetting_method(python_function=typeset_styled_text, tag=tags.symbol, treatment=treatments.default,
+register_typesetting_method(python_function=typeset_styled_text, clazz=clazzes.symbol, treatment=treatments.default,
     flavor=flavors.default, language=languages.default)
-register_typesetting_method(python_function=typeset_symbol, tag=tags.symbol, treatment=treatments.default,
+register_typesetting_method(python_function=typeset_symbol, clazz=clazzes.symbol, treatment=treatments.default,
     flavor=flavors.default, language=languages.default)
-register_typesetting_method(python_function=typeset_indexed_symbol, tag=tags.indexed_symbol,
+register_typesetting_method(python_function=typeset_indexed_symbol, clazz=clazzes.indexed_symbol,
     treatment=treatments.default, flavor=flavors.default, language=languages.default)
 
 log.debug(f"Module {__name__}: loaded.")

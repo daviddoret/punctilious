@@ -44,7 +44,7 @@ def load():
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.enus
 
-    ts.register_styledstring(tag=fl1.tags.connective, text="connective", treatment=treatment, flavor=flavor,
+    ts.register_styledstring(clazz=fl1.clazzes.connective, text="connective", treatment=treatment, flavor=flavor,
         language=language)
 
     # Representation: Common Language
@@ -54,7 +54,7 @@ def load():
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.frch
 
-    ts.register_styledstring(tag=fl1.tags.connective, text="connecteur", treatment=treatment, flavor=flavor,
+    ts.register_styledstring(clazz=fl1.clazzes.connective, text="connecteur", treatment=treatment, flavor=flavor,
         language=language)
 
     # Representation: Symbolic Representation
@@ -65,16 +65,16 @@ def load():
     language: ts.Language = ts.languages.enus
 
     # symbols
-    ts.register_symbol(tag=fl1.tags.connective, symbol=ts.symbols.asterisk_operator, treatment=treatment, flavor=flavor,
-        language=language)
-    ts.register_symbol(tag=fl1.tags.connective, symbol=ts.symbols.asterisk_operator, treatment=treatment, flavor=flavor,
-        language=language)
+    ts.register_symbol(clazz=fl1.clazzes.connective, symbol=ts.symbols.asterisk_operator, treatment=treatment,
+        flavor=flavor, language=language)
+    ts.register_symbol(clazz=fl1.clazzes.connective, symbol=ts.symbols.asterisk_operator, treatment=treatment,
+        flavor=flavor, language=language)
 
     # formulas
     flavor: ts.Flavor = fl1.flavors.formula_function_call
-    ts.register_typesetting_method(python_function=typeset_binary_formula_function_call, tag=fl1.tags.binary_formula,
-        treatment=treatment, flavor=flavor, language=language)
-    ts.register_typesetting_method(python_function=typeset_unary_formula_function_call, tag=fl1.tags.unary_formula,
+    ts.register_typesetting_method(python_function=typeset_binary_formula_function_call,
+        clazz=fl1.clazzes.binary_formula, treatment=treatment, flavor=flavor, language=language)
+    ts.register_typesetting_method(python_function=typeset_unary_formula_function_call, clazz=fl1.clazzes.unary_formula,
         treatment=treatment, flavor=flavor, language=language)
 
 

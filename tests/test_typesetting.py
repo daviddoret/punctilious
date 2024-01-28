@@ -5,5 +5,6 @@ import punctilious as pu
 
 class TestSymbols:
     def test_to_string(self):
-        a = pu.ts.symbols.open_parenthesis.to_string()
-        pu.log.debug(msg=a)
+        assert pu.ts.symbols.p_uppercase_serif_italic.to_string(protocol=pu.ts.protocols.latex) == '\\textit{P}'
+        assert pu.ts.symbols.p_uppercase_serif_italic.to_string(protocol=pu.ts.protocols.unicode_extended) == "𝑃"
+        assert pu.ts.symbols.p_uppercase_serif_italic.to_string(protocol=pu.ts.protocols.unicode_limited) == "P"

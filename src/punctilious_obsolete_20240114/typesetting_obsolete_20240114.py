@@ -373,11 +373,11 @@ class FontVariant:
 
     def __init__(self, name: str, latex_opening_tag: str, latex_closing_tag: str):
         self._name: str = name
-        self._typesetting_tags: typing.Dict[Protocol, typing.Tuple[str, str]] = dict()
-        # Register the default typesetting opening and closing tags for every protocol.
-        self.typesetting_tags[protocols.latex] = (latex_opening_tag, latex_closing_tag)
-        self.typesetting_tags[protocols.unicode_limited] = ('', '')
-        self.typesetting_tags[protocols.unicode_extended] = ('', '')
+        self._typesetting_clazzes: typing.Dict[Protocol, typing.Tuple[str, str]] = dict()
+        # Register the default typesetting opening and closing clazzes for every protocol.
+        self.typesetting_clazzes[protocols.latex] = (latex_opening_tag, latex_closing_tag)
+        self.typesetting_clazzes[protocols.unicode_limited] = ('', '')
+        self.typesetting_clazzes[protocols.unicode_extended] = ('', '')
 
     def __eq__(self, other):
         return hash(self) == hash(other)
@@ -397,14 +397,14 @@ class FontVariant:
 
     def typeset(self, content: typing.Generator[str, None, None], protocol: Protocol) -> typing.Generator[
         str, None, None]:
-        """Typeset some arbitrary content by yielding strings, enclosing content in applicable tags."""
-        yield self.typesetting_tags[protocol][0]  # Opening tag
+        """Typeset some arbitrary content by yielding strings, enclosing content in applicable clazzes."""
+        yield self.typesetting_clazzes[protocol][0]  # Opening tag
         yield from content
-        yield self.typesetting_tags[protocol][1]  # Closing tag
+        yield self.typesetting_clazzes[protocol][1]  # Closing tag
 
     @property
-    def typesetting_tags(self) -> typing.Dict[Protocol, typing.Tuple[str, str]]:
-        return self._typesetting_tags
+    def typesetting_clazzes(self) -> typing.Dict[Protocol, typing.Tuple[str, str]]:
+        return self._typesetting_clazzes
 
 
 class FontVariants:
@@ -444,11 +444,11 @@ class FontWeight:
 
     def __init__(self, name: str, latex_opening_tag: str, latex_closing_tag: str):
         self._name: str = name
-        self._typesetting_tags: typing.Dict[Protocol, typing.Tuple[str, str]] = dict()
-        # Register the default typesetting opening and closing tags for every protocol.
-        self.typesetting_tags[protocols.latex] = (latex_opening_tag, latex_closing_tag)
-        self.typesetting_tags[protocols.unicode_limited] = ('', '')
-        self.typesetting_tags[protocols.unicode_extended] = ('', '')
+        self._typesetting_clazzes: typing.Dict[Protocol, typing.Tuple[str, str]] = dict()
+        # Register the default typesetting opening and closing clazzes for every protocol.
+        self.typesetting_clazzes[protocols.latex] = (latex_opening_tag, latex_closing_tag)
+        self.typesetting_clazzes[protocols.unicode_limited] = ('', '')
+        self.typesetting_clazzes[protocols.unicode_extended] = ('', '')
 
     def __eq__(self, other):
         return hash(self) == hash(other)
@@ -468,14 +468,14 @@ class FontWeight:
 
     def typeset(self, content: typing.Generator[str, None, None], protocol: Protocol) -> typing.Generator[
         str, None, None]:
-        """Typeset some arbitrary content by yielding strings, enclosing content in applicable tags."""
-        yield self.typesetting_tags[protocol][0]  # Opening tag
+        """Typeset some arbitrary content by yielding strings, enclosing content in applicable clazzes."""
+        yield self.typesetting_clazzes[protocol][0]  # Opening tag
         yield from content
-        yield self.typesetting_tags[protocol][1]  # Closing tag
+        yield self.typesetting_clazzes[protocol][1]  # Closing tag
 
     @property
-    def typesetting_tags(self) -> typing.Dict[Protocol, typing.Tuple[str, str]]:
-        return self._typesetting_tags
+    def typesetting_clazzes(self) -> typing.Dict[Protocol, typing.Tuple[str, str]]:
+        return self._typesetting_clazzes
 
 
 class FontWeights:
@@ -926,7 +926,7 @@ class StyledText:
             yield from style_unicode(unicode=self.content, font_family=self.font_family, font_variant=self.font_variant,
                 font_weight=self.font_weight)
         else:
-            # Otherwise, we assume that the protocol is based on tags,
+            # Otherwise, we assume that the protocol is based on clazzes,
             # and that the content can be yield as is.
             # This may evolve in the future with the implementation of other protocols.
             yield self.content

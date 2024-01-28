@@ -15,9 +15,9 @@ class TestFormalObject:
         output_1 = o.to_string(protocol=pu.ts.protocols.unicode_limited)
         pu.log.debug(output_1)
         assert len(output_1) > 0
-        tag1 = pu.ts.tags.register(name="test-1")
-        o.tag(tag=tag1)
-        fun = pu.ts.register_styledstring(tag=tag1, text="hello world",
+        clazz1 = pu.ts.clazzes.register(name="test-1")
+        o.declare_clazz_element(clazz=clazz1)
+        fun = pu.ts.register_styledstring(clazz=clazz1, text="hello world",
             treatment=pu.fl1.treatments.symbolic_representation, flavor=pu.ts.flavors.default,
             language=pu.ts.languages.default)
         output_2 = ''.join(fun(o=o))

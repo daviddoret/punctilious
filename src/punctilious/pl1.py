@@ -41,52 +41,53 @@ class Flavors:
 flavors = Flavors()
 
 
-class Tags:
+class Clazzes:
     _singleton = None
 
     def __new__(cls):
         if cls._singleton is None:
-            cls._singleton = super(Tags, cls).__new__(cls)
+            cls._singleton = super(Clazzes, cls).__new__(cls)
         return cls._singleton
 
     def __init__(self):
         super().__init__()
-        self._conditional = ts.tags.register(name="pl1.connective.conditional", predecessor=fl1.tags.connective)
-        self._negation = ts.tags.register(name="pl1.connective.negation", predecessor=fl1.tags.connective)
-        self._propositional_formula = ts.tags.register(name="pl1.propositional_formula", predecessor=fl1.tags.formula)
-        self._propositional_unary_formula = ts.tags.register(name="pl1.propositional_unary_formula",
-            predecessor=fl1.tags.unary_formula)
-        self._propositional_binary_formula = ts.tags.register(name="pl1.propositional_binary_formula",
-            predecessor=fl1.tags.binary_formula)
-        self._propositional_variable = ts.tags.register(name="pl1.propositional_variable",
-            predecessor=fl1.tags.formal_object)
+        self._conditional = ts.clazzes.register(name="pl1.connective.conditional", predecessor=fl1.clazzes.connective)
+        self._negation = ts.clazzes.register(name="pl1.connective.negation", predecessor=fl1.clazzes.connective)
+        self._propositional_formula = ts.clazzes.register(name="pl1.propositional_formula",
+            predecessor=fl1.clazzes.formula)
+        self._propositional_unary_formula = ts.clazzes.register(name="pl1.propositional_unary_formula",
+            predecessor=fl1.clazzes.unary_formula)
+        self._propositional_binary_formula = ts.clazzes.register(name="pl1.propositional_binary_formula",
+            predecessor=fl1.clazzes.binary_formula)
+        self._propositional_variable = ts.clazzes.register(name="pl1.propositional_variable",
+            predecessor=fl1.clazzes.formal_object)
 
     @property
-    def conditional(self) -> ts.Tag:
+    def conditional(self) -> ts.Clazz:
         return self._conditional
 
     @property
-    def negation(self) -> ts.Tag:
+    def negation(self) -> ts.Clazz:
         return self._negation
 
     @property
-    def propositional_formula(self) -> ts.Tag:
+    def propositional_formula(self) -> ts.Clazz:
         return self._propositional_formula
 
     @property
-    def propositional_unary_formula(self) -> ts.Tag:
+    def propositional_unary_formula(self) -> ts.Clazz:
         return self._propositional_unary_formula
 
     @property
-    def propositional_binary_formula(self) -> ts.Tag:
+    def propositional_binary_formula(self) -> ts.Clazz:
         return self._propositional_binary_formula
 
     @property
-    def propositional_variable(self) -> ts.Tag:
+    def propositional_variable(self) -> ts.Clazz:
         return self._propositional_variable
 
 
-tags = Tags()
+clazzes = Clazzes()
 
 
 class MetaVariable(fl1.FormalObject):
@@ -119,7 +120,7 @@ class MetaLanguage(fl1.FormalLanguage):
 class PropositionalVariable(fl1.AtomicFormula):
     def __init__(self, formal_language_collection: fl1.FormalLanguageCollection):
         super().__init__(formal_language_collection=formal_language_collection)
-        self.tag(tag=tags.propositional_variable)
+        self.declare_clazz_element(clazz=clazzes.propositional_variable)
 
 
 class PropositionalVariableCollection(fl1.FormalLanguageCollection):
@@ -140,9 +141,9 @@ class ConnectiveClass(fl1.ConnectiveCollection):
         super().__init__(formal_language=formal_language)
         # exhaustive declaration of PL1 connectives.
         self._conditional: fl1.BinaryConnective = self.declare_binary_connective()
-        self._conditional.tag(tag=tags.conditional)
+        self._conditional.declare_clazz_element(clazz=clazzes.conditional)
         self._negation: fl1.UnaryConnective = self.declare_unary_connective()
-        self._negation.tag(tag=tags.negation)
+        self._negation.declare_clazz_element(clazz=clazzes.negation)
         self.lock()
 
     @property
@@ -177,8 +178,8 @@ class CompoundFormulaCollection(fl1.CompoundFormulaCollection):
         if not self.pl1.is_well_formed_formula(phi=term):
             log.error("term is not a pl1 well-formed-formula.")
         phi: fl1.UnaryFormula = super().declare_unary_formula(connective=connective, term=term)
-        phi.tag(tag=tags.propositional_formula)
-        phi.tag(tag=tags.propositional_unary_formula)
+        phi.declare_clazz_element(clazz=clazzes.propositional_formula)
+        phi.declare_clazz_element(clazz=clazzes.propositional_unary_formula)
         return phi
 
     def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.FormalObject,
@@ -199,8 +200,8 @@ class CompoundFormulaCollection(fl1.CompoundFormulaCollection):
         if not self.pl1.is_well_formed_formula(phi=term_2):
             log.error("term_2 is not a pl1 well-formed-formula.")
         phi: fl1.BinaryFormula = super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
-        phi.tag(tag=tags.propositional_formula)
-        phi.tag(tag=tags.propositional_binary_formula)
+        phi.declare_clazz_element(clazz=clazzes.propositional_formula)
+        phi.declare_clazz_element(clazz=clazzes.propositional_binary_formula)
         return phi
 
     @property

@@ -79,17 +79,17 @@ def load():
     treatment: ts.Treatment = fl1.treatments.symbolic_representation
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.enus
-    ts.register_styledstring(tag=pl1.tags.conditional, text="material implication", treatment=treatment, flavor=flavor,
+    ts.register_styledstring(clazz=pl1.clazzes.conditional, text="material implication", treatment=treatment,
+        flavor=flavor, language=language)
+    ts.register_styledstring(clazz=pl1.clazzes.negation, text="negation", treatment=treatment, flavor=flavor,
         language=language)
-    ts.register_styledstring(tag=pl1.tags.negation, text="negation", treatment=treatment, flavor=flavor,
-        language=language)
-    ts.register_typesetting_method(tag=pl1.tags.propositional_unary_formula,
+    ts.register_typesetting_method(clazz=pl1.clazzes.propositional_unary_formula,
         python_function=typeset_unary_formula_prefix_without_parenthesis, treatment=treatment, flavor=flavor,
         language=language)
-    ts.register_typesetting_method(tag=pl1.tags.propositional_binary_formula,
+    ts.register_typesetting_method(clazz=pl1.clazzes.propositional_binary_formula,
         python_function=typeset_binary_formula_infix, treatment=treatment, flavor=flavor, language=language)
-    ts.register_typesetting_method(tag=pl1.tags.propositional_variable, python_function=typeset_propositional_variable,
-        treatment=treatment, flavor=flavor, language=language)
+    ts.register_typesetting_method(clazz=pl1.clazzes.propositional_variable,
+        python_function=typeset_propositional_variable, treatment=treatment, flavor=flavor, language=language)
 
     # Representation: Common Language
     # Flavor: Default
@@ -97,9 +97,9 @@ def load():
     treatment: ts.Treatment = fl1.treatments.common_language
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.frch
-    ts.register_styledstring(tag=pl1.tags.conditional, text="conditionnel", treatment=treatment, flavor=flavor,
+    ts.register_styledstring(clazz=pl1.clazzes.conditional, text="conditionnel", treatment=treatment, flavor=flavor,
         language=language)
-    ts.register_styledstring(tag=pl1.tags.negation, text="négation", treatment=treatment, flavor=flavor,
+    ts.register_styledstring(clazz=pl1.clazzes.negation, text="négation", treatment=treatment, flavor=flavor,
         language=language)
 
     # Representation: Symbolic Representation
@@ -108,11 +108,11 @@ def load():
     treatment: ts.Treatment = fl1.treatments.symbolic_representation
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.enus
-    ts.register_symbol(tag=pl1.tags.conditional, symbol=ts.symbols.rightwards_arrow, treatment=treatment, flavor=flavor,
-        language=language)
-    ts.register_symbol(tag=pl1.tags.negation, symbol=ts.symbols.not_sign, treatment=treatment,
+    ts.register_symbol(clazz=pl1.clazzes.conditional, symbol=ts.symbols.rightwards_arrow, treatment=treatment,
+        flavor=flavor, language=language)
+    ts.register_symbol(clazz=pl1.clazzes.negation, symbol=ts.symbols.not_sign, treatment=treatment,
         flavor=pl1.flavors.connective_negation_not, language=language)
-    ts.register_symbol(tag=pl1.tags.negation, symbol=ts.symbols.tilde, treatment=treatment,
+    ts.register_symbol(clazz=pl1.clazzes.negation, symbol=ts.symbols.tilde, treatment=treatment,
         flavor=pl1.flavors.connective_negation_tilde, language=language)
 
 

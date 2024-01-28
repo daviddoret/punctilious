@@ -11,6 +11,8 @@
       <excludeFolder url="file://$MODULE_DIR$/project" />
       <excludeFolder url="file://$MODULE_DIR$/src/punctilious_obsolete_20240114" />
       <excludeFolder url="file://$MODULE_DIR$/theory" />
+      <excludeFolder url="file://$MODULE_DIR$/src/punctilious_obsolete_20240114/sample" />
+      <excludeFolder url="file://$MODULE_DIR$/src/punctilious_obsolete_20240114/theory" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.11 (PythonVirtualEnvironments)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
