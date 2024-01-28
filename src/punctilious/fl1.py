@@ -389,26 +389,33 @@ class CompoundFormulaCollection(FormalLanguageCollection):
 
 
 class Formula(FormalObject):
-    def __init__(self):
+    """In FL1, a formula is necessarily linked to a formal-language via a collection."""
+
+    def __init__(self, formal_language_collection: FormalLanguageCollection):
+        self._formal_language_collection = formal_language_collection
         super().__init__()
         self.tag(tag=tags.formula)
 
-
-class AtomicFormula(FormalObject):
-    def __init__(self, formal_language: FormalLanguage):
-        self._formal_language = formal_language
-        super().__init__()
-        self.tag(tag=tags.atomic_formula)
-
     @property
     def formal_language(self) -> FormalLanguage:
-        return self._formal_language
+        return self.formal_language_collection.formal_language
+
+    @property
+    def formal_language_collection(self) -> FormalLanguageCollection:
+        return self._formal_language_collection
+
+
+class AtomicFormula(Formula):
+    def __init__(self, formal_language_collection: FormalLanguageCollection):
+        super().__init__(formal_language_collection=formal_language_collection)
+        self.tag(tag=tags.atomic_formula)
 
 
 class CompoundFormula(Formula):
     """A compound-formula is a formal-object and a tree-structure of atomic-formulas and compound-formulas."""
 
-    def __init__(self, connective: Connective, terms: typing.Tuple[FormalObject]):
+    def __init__(self, formal_language_collection: FormalLanguageCollection, connective: Connective,
+        terms: typing.Tuple[FormalObject]):
         if isinstance(connective, FixedArityConnective):
             if connective.arity_as_int != len(terms):
                 log.error(msg='The number of arguments is not equal to the arity of the fixed-arity-connective.')
@@ -418,7 +425,7 @@ class CompoundFormula(Formula):
             log.error(msg='Unsupported connective python class.')
         self._connective = connective
         self._terms = terms
-        super().__init__()
+        super().__init__(formal_language_collection=formal_language_collection)
         self.tag(tag=tags.compound_formula)
 
     def __eq__(self, other):
@@ -444,16 +451,18 @@ class CompoundFormula(Formula):
 class FixedArityFormula(CompoundFormula):
     """A fixed-arity-formula is a formula with a fixed-arity connective."""
 
-    def __init__(self, connective: FixedArityConnective, terms: typing.Tuple[FormalObject, ...]):
-        super().__init__(connective=connective, terms=terms)
+    def __init__(self, formal_language_collection: FormalLanguageCollection, connective: FixedArityConnective,
+        terms: typing.Tuple[FormalObject, ...]):
+        super().__init__(formal_language_collection=formal_language_collection, connective=connective, terms=terms)
         self.tag(tag=tags.fixed_arity_formula)
 
 
 class UnaryFormula(FixedArityFormula):
     """A unary-formula is a formula with a fixed unary connective."""
 
-    def __init__(self, connective: UnaryConnective, term: FormalObject):
-        super().__init__(connective=connective, terms=(term,))
+    def __init__(self, formal_language_collection: FormalLanguageCollection, connective: UnaryConnective,
+        term: FormalObject):
+        super().__init__(formal_language_collection=formal_language_collection, connective=connective, terms=(term,))
         self.tag(tag=tags.unary_formula)
 
     @property
@@ -464,8 +473,10 @@ class UnaryFormula(FixedArityFormula):
 class BinaryFormula(FixedArityFormula):
     """A binary-formula is a formula with a fixed binary connective."""
 
-    def __init__(self, connective: BinaryConnective, term_1: FormalObject, term_2: FormalObject):
-        super().__init__(connective=connective, terms=(term_1, term_2,))
+    def __init__(self, formal_language_collection: FormalLanguageCollection, connective: BinaryConnective,
+        term_1: FormalObject, term_2: FormalObject):
+        super().__init__(formal_language_collection=formal_language_collection, connective=connective,
+            terms=(term_1, term_2,))
         self.tag(tag=tags.binary_formula)
 
     @property

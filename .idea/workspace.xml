@@ -8,9 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/fl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/fl1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pl1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pl1_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pl1_presentation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/punctilious.log" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/punctilious.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/typesetting.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/typesetting.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,43 +86,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;PowerShell.increment_package_version_patch.ps1.executor&quot;: &quot;Run&quot;,
-    &quot;PowerShell.release_patch.ps1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in tests.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_compounding_formulas_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_connectives_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_connectives_2.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_connectives_3.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_declare_binary_formula.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_declare_unary_formula.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_formulas.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_propositional_variables.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_fl1.TestFormalObject.test_formal_object.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_fl1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_pl1.TestPL1.test_propositional_variables.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in test_fl1.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in test_pl1.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in test_typesetting.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in tests.executor&quot;: &quot;Run&quot;,
-    &quot;Python.fl1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.fl1_presentation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.fl1_typesetting.executor&quot;: &quot;Run&quot;,
-    &quot;Python.pl1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.pl1_presentation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.typesetting.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/David/PycharmProjects/punctilious/src/punctilious&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PythonContentEntriesConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "PowerShell.increment_package_version_patch.ps1.executor": "Run",
+    "PowerShell.release_patch.ps1.executor": "Run",
+    "Python tests.Python tests in tests.executor": "Run",
+    "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1.test_compounding_formulas_1.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1.test_connectives_1.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1.test_connectives_2.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1.test_connectives_3.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1.test_declare_binary_formula.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1.test_declare_unary_formula.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1.test_formulas.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1.test_propositional_variables.executor": "Run",
+    "Python tests.pytest for tests.test_fl1.TestFormalObject.test_formal_object.executor": "Run",
+    "Python tests.pytest for tests.test_fl1.executor": "Run",
+    "Python tests.pytest for tests.test_pl1.TestPL1.test_propositional_variables.executor": "Run",
+    "Python tests.pytest in test_fl1.py.executor": "Run",
+    "Python tests.pytest in test_pl1.py.executor": "Run",
+    "Python tests.pytest in test_typesetting.py.executor": "Run",
+    "Python tests.pytest in tests.executor": "Run",
+    "Python.fl1.executor": "Debug",
+    "Python.fl1_presentation.executor": "Run",
+    "Python.fl1_typesetting.executor": "Run",
+    "Python.pl1.executor": "Run",
+    "Python.pl1_presentation.executor": "Run",
+    "Python.typesetting.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/src/punctilious",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PythonContentEntriesConfigurable"
   }
-}</component>
+}]]></component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings module-name="2023_05_02_PyCharmProject_Maths" is-module-sdk="true">
@@ -476,14 +474,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00420" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
-      <option name="closed" value="true" />
-      <created>1699805840813</created>
-      <option name="number" value="00420" />
-      <option name="presentableId" value="LOCAL-00420" />
-      <option name="project" value="LOCAL" />
-      <updated>1699805840813</updated>
     </task>
     <task id="LOCAL-00421" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
       <option name="closed" value="true" />
@@ -869,7 +859,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706359123089</updated>
     </task>
-    <option name="localTasksCounter" value="469" />
+    <task id="LOCAL-00469" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1706437389333</created>
+      <option name="number" value="00469" />
+      <option name="presentableId" value="LOCAL-00469" />
+      <option name="project" value="LOCAL" />
+      <updated>1706437389333</updated>
+    </task>
+    <option name="localTasksCounter" value="470" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

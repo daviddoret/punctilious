@@ -99,9 +99,9 @@ class MetaLanguage(fl1.FormalLanguage):
         return self._variables
 
 
-class PropositionalVariable(fl1.FormalObject):
-    def __init__(self):
-        super().__init__()
+class PropositionalVariable(fl1.AtomicFormula):
+    def __init__(self, formal_language_collection: fl1.FormalLanguageCollection):
+        super().__init__(formal_language_collection=formal_language_collection)
         self.tag(tag=tags.propositional_variable)
 
 
@@ -111,7 +111,7 @@ class PropositionalVariableCollection(fl1.FormalLanguageCollection):
 
     def declare_proposition_variable(self) -> PropositionalVariable:
         """Declare a new propositional-variable in PL1."""
-        p: PropositionalVariable = PropositionalVariable()
+        p: PropositionalVariable = PropositionalVariable(formal_language_collection=self)
         super()._add_formal_object(x=p)
         return p
 
