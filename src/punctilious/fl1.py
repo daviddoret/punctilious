@@ -9,33 +9,33 @@ import log
 import typesetting as ts
 
 
-# Treatments
+# Representations
 
-class Treatments:
+class Representations:
     _singleton = None
 
     def __new__(cls):
         if cls._singleton is None:
-            cls._singleton = super(Treatments, cls).__new__(cls)
+            cls._singleton = super(Representations, cls).__new__(cls)
         return cls._singleton
 
     def __init__(self):
         super().__init__()
-        self._symbolic_representation = ts.Treatment(name="symbolic-representation")
-        self._common_language = ts.Treatment(name="common-language")
+        self._symbolic_representation = ts.Representation(name="symbolic-representation")
+        self._common_language = ts.Representation(name="common-language")
 
     @property
-    def common_language(self) -> ts.Treatment:
+    def common_language(self) -> ts.Representation:
         """The common-language representation used in free text."""
         return self._common_language
 
     @property
-    def symbolic_representation(self) -> ts.Treatment:
+    def symbolic_representation(self) -> ts.Representation:
         """The formal representation used in formulas."""
         return self._symbolic_representation
 
 
-treatments: Treatments = Treatments()
+representations: Representations = Representations()
 
 
 class Flavors:
@@ -194,14 +194,16 @@ class FormalObject(ts.Typesettable):
 
     def __init__(self):
         super().__init__(
-            default_treatment=treatments.symbolic_representation)  # Make the formal-object  # typesettable.
+            default_representation=representations.symbolic_representation)  # Make the formal-object  # typesettable.
         self.declare_clazz_element(clazz=clazzes.formal_object)
 
     def __repr__(self):
-        return super().to_string(protocol=ts.protocols.unicode_limited, treatment=treatments.symbolic_representation)
+        return super().to_string(protocol=ts.protocols.unicode_limited,
+            representation=representations.symbolic_representation)
 
     def __str__(self):
-        return super().to_string(protocol=ts.protocols.unicode_limited, treatment=treatments.symbolic_representation)
+        return super().to_string(protocol=ts.protocols.unicode_limited,
+            representation=representations.symbolic_representation)
 
 
 class FormalLanguageCollection(FormalObject, abc.ABC):

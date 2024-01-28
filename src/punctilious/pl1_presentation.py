@@ -14,8 +14,8 @@ def typeset_unary_formula_function_call(o: fl1.UnaryFormula,
     if pl1_propositional_variables is None:
         l: pl1.PL1 = o.formal_language
         pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
-    yield from fl1_presentation.typeset_unary_formula_function_call(o=o,
-        pl1_propositional_variables=pl1_propositional_variables, **kwargs)
+        kwargs['pl1_propositional_variables'] = pl1_propositional_variables
+    yield from fl1_presentation.typeset_unary_formula_function_call(o=o, **kwargs)
 
 
 def typeset_unary_formula_prefix_without_parenthesis(o: fl1.UnaryFormula,
@@ -25,8 +25,8 @@ def typeset_unary_formula_prefix_without_parenthesis(o: fl1.UnaryFormula,
     if pl1_propositional_variables is None:
         l: pl1.PL1 = o.formal_language
         pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
-    yield from fl1_presentation.typeset_unary_formula_prefix_without_parenthesis(o=o,
-        pl1_propositional_variables=pl1_propositional_variables, **kwargs)
+        kwargs['pl1_propositional_variables'] = pl1_propositional_variables
+    yield from fl1_presentation.typeset_unary_formula_prefix_without_parenthesis(o=o, **kwargs)
 
 
 def typeset_binary_formula_function_call(o: fl1.BinaryFormula,
@@ -36,8 +36,8 @@ def typeset_binary_formula_function_call(o: fl1.BinaryFormula,
     if pl1_propositional_variables is None:
         l: pl1.PL1 = o.formal_language
         pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
-    yield from fl1_presentation.typeset_binary_formula_function_call(o=o,
-        pl1_propositional_variables=pl1_propositional_variables, **kwargs)
+        kwargs['pl1_propositional_variables'] = pl1_propositional_variables
+    yield from fl1_presentation.typeset_binary_formula_function_call(o=o, **kwargs)
 
 
 def typeset_binary_formula_infix(o: fl1.BinaryFormula,
@@ -47,8 +47,8 @@ def typeset_binary_formula_infix(o: fl1.BinaryFormula,
     if pl1_propositional_variables is None:
         l: pl1.PL1 = o.formal_language
         pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
-    yield from fl1_presentation.typeset_binary_formula_infix(o=o,
-        pl1_propositional_variables=pl1_propositional_variables, **kwargs)
+        kwargs['pl1_propositional_variables'] = pl1_propositional_variables
+    yield from fl1_presentation.typeset_binary_formula_infix(o=o, **kwargs)
 
 
 def typeset_propositional_variable(o: pl1.PropositionalVariable,
@@ -56,18 +56,18 @@ def typeset_propositional_variable(o: pl1.PropositionalVariable,
     typing.Generator[str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     if pl1_propositional_variables is None:
-        kwargs["treatment"] = ts.treatments.default
+        kwargs["representation"] = ts.representations.default
         yield from ts.typeset(o=ts.symbols.p_uppercase_serif_italic, **kwargs)
     else:
         if len(pl1_propositional_variables) < 4:
             index = pl1_propositional_variables.index(o)
             symbol: ts.Symbol = (ts.symbols.p_uppercase_serif_italic, ts.symbols.q_uppercase_serif_italic,
             ts.symbols.r_uppercase_serif_italic,)[index]
-            kwargs["treatment"] = ts.treatments.default
+            kwargs["representation"] = ts.representations.default
             yield from ts.typeset(o=symbol, **kwargs)
         else:
             index = pl1_propositional_variables.index(o)
-            kwargs["treatment"] = ts.treatments.default
+            kwargs["representation"] = ts.representations.default
             yield from ts.typeset(o=ts.IndexedSymbol(symbol=ts.symbols.p_uppercase_serif_italic, index=index + 1),
                 **kwargs)
 
@@ -76,44 +76,55 @@ def load():
     # Representation: Common Language
     # Flavor: Default
     # Language: EN-US
-    treatment: ts.Treatment = fl1.treatments.symbolic_representation
+    representation: ts.Representation = fl1.representations.symbolic_representation
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.enus
-    ts.register_styledstring(clazz=pl1.clazzes.conditional, text="material implication", treatment=treatment,
+    ts.register_styledstring(clazz=pl1.clazzes.conditional, text="material implication", representation=representation,
         flavor=flavor, language=language)
-    ts.register_styledstring(clazz=pl1.clazzes.negation, text="negation", treatment=treatment, flavor=flavor,
+    ts.register_styledstring(clazz=pl1.clazzes.negation, text="negation", representation=representation, flavor=flavor,
         language=language)
-    ts.register_typesetting_method(clazz=pl1.clazzes.propositional_unary_formula,
-        python_function=typeset_unary_formula_prefix_without_parenthesis, treatment=treatment, flavor=flavor,
-        language=language)
-    ts.register_typesetting_method(clazz=pl1.clazzes.propositional_binary_formula,
-        python_function=typeset_binary_formula_infix, treatment=treatment, flavor=flavor, language=language)
-    ts.register_typesetting_method(clazz=pl1.clazzes.propositional_variable,
-        python_function=typeset_propositional_variable, treatment=treatment, flavor=flavor, language=language)
 
     # Representation: Common Language
     # Flavor: Default
     # Language: FR-CH
-    treatment: ts.Treatment = fl1.treatments.common_language
+    representation: ts.Representation = fl1.representations.common_language
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.frch
-    ts.register_styledstring(clazz=pl1.clazzes.conditional, text="conditionnel", treatment=treatment, flavor=flavor,
-        language=language)
-    ts.register_styledstring(clazz=pl1.clazzes.negation, text="négation", treatment=treatment, flavor=flavor,
+    ts.register_styledstring(clazz=pl1.clazzes.conditional, text="conditionnel", representation=representation,
+        flavor=flavor, language=language)
+    ts.register_styledstring(clazz=pl1.clazzes.negation, text="négation", representation=representation, flavor=flavor,
         language=language)
 
     # Representation: Symbolic Representation
     # Flavor: Default
     # Language: EN-US
-    treatment: ts.Treatment = fl1.treatments.symbolic_representation
+    representation: ts.Representation = fl1.representations.symbolic_representation
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.enus
-    ts.register_symbol(clazz=pl1.clazzes.conditional, symbol=ts.symbols.rightwards_arrow, treatment=treatment,
+    ts.register_symbol(clazz=pl1.clazzes.conditional, symbol=ts.symbols.rightwards_arrow, representation=representation,
         flavor=flavor, language=language)
-    ts.register_symbol(clazz=pl1.clazzes.negation, symbol=ts.symbols.not_sign, treatment=treatment,
+    ts.register_symbol(clazz=pl1.clazzes.negation, symbol=ts.symbols.not_sign, representation=representation,
         flavor=pl1.flavors.connective_negation_not, language=language)
-    ts.register_symbol(clazz=pl1.clazzes.negation, symbol=ts.symbols.tilde, treatment=treatment,
+    ts.register_symbol(clazz=pl1.clazzes.negation, symbol=ts.symbols.tilde, representation=representation,
         flavor=pl1.flavors.connective_negation_tilde, language=language)
+
+    # Formulas
+    flavor: ts.Flavor = fl1.flavors.formula_function_call
+    ts.register_typesetting_method(python_function=typeset_binary_formula_function_call,
+        clazz=pl1.clazzes.propositional_binary_formula, representation=representation, flavor=flavor, language=language)
+    ts.register_typesetting_method(python_function=typeset_unary_formula_function_call,
+        clazz=pl1.clazzes.propositional_unary_formula, representation=representation, flavor=flavor, language=language)
+
+    flavor: ts.Flavor = fl1.flavors.formula_prefix_no_parenthesis
+    ts.register_typesetting_method(clazz=pl1.clazzes.propositional_unary_formula,
+        python_function=typeset_unary_formula_prefix_without_parenthesis, representation=representation, flavor=flavor,
+        language=language)
+    flavor: ts.Flavor = fl1.flavors.formula_infix
+    ts.register_typesetting_method(clazz=pl1.clazzes.propositional_binary_formula,
+        python_function=typeset_binary_formula_infix, representation=representation, flavor=flavor, language=language)
+    flavor: ts.Flavor = ts.flavors.default
+    ts.register_typesetting_method(clazz=pl1.clazzes.propositional_variable,
+        python_function=typeset_propositional_variable, representation=representation, flavor=flavor, language=language)
 
 
 load()

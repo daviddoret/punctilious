@@ -103,7 +103,7 @@ class TestPL1:
 
         pd = l1.compound_formulas.declare_binary_formula(connective=conditional, term_1=pa, term_2=pb)
         # Check that only unique formulas are kept in the PL1 formula collection
-        s = pd.to_string()
+        s = pd.to_string(representation=fl1.representations.symbolic_representation)
         log.debug(msg=s)
         assert (len(s) > 0)
 

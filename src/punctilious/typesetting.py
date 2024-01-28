@@ -156,14 +156,14 @@ class Protocols:
 protocols = Protocols()
 
 
-class Treatment:
-    """A treatment is a typesetting approach used to convey specific information about some object.
+class Representation:
+    """A representation is a typesetting approach used to convey specific information about some object.
 
     Sample 1:
-    Let b be a book, then "Full text", "Summary", "Title", and "ISBN" may be candidate treatments.
+    Let b be a book, then "Full text", "Summary", "Title", and "ISBN" may be candidate representations.
 
     Sample 2:
-    Let phi be a mathematical formula, "Variable name", "Formula", "Tree representation" may be candidate treatments.
+    Let phi be a mathematical formula, "Variable name", "Formula", "Tree representation" may be candidate representations.
     """
 
     def __init__(self, name: str):
@@ -186,31 +186,31 @@ class Treatment:
         return self._name
 
 
-class Treatments:
-    """A catalog of out-of-the-box treatments."""
+class Representations:
+    """A catalog of out-of-the-box representations."""
     _singleton = None
 
     def __new__(cls):
         if cls._singleton is None:
-            cls._singleton = super(Treatments, cls).__new__(cls)
+            cls._singleton = super(Representations, cls).__new__(cls)
         return cls._singleton
 
     def __init__(self):
-        self._default = Treatment('default')
+        self._default = Representation('default')
 
     @property
-    def default(self) -> Treatment:
-        """If no treatment is specified, typesetting uses the default treatment."""
+    def default(self) -> Representation:
+        """If no representation is specified, typesetting uses the default representation."""
         return self._default
 
 
-treatments = Treatments()
+representations = Representations()
 
 
 class Flavor:
-    """A flavor is a refined typesetting approach for a treatment.
+    """A flavor is a refined typesetting approach for a representation.
 
-    For example, if several conventions are possible to typeset a particular object with a particular treatment,
+    For example, if several conventions are possible to typeset a particular object with a particular representation,
     of if several authors use different conventions,
     then flavors may be used to distinguish these.
 
@@ -432,59 +432,60 @@ class TypesettingMethods(dict):
         return cls._singleton
 
 
-typesetting_methods: typing.Dict[
-    typing.FrozenSet[Clazz, Treatment], typing.Dict[typing.FrozenSet[Clazz, Flavor, Language], typing.Callable]] = (
-    TypesettingMethods())
+typesetting_methods: typing.Dict[typing.FrozenSet[Clazz, Representation], typing.Dict[
+    typing.FrozenSet[Clazz, Flavor, Language], typing.Callable]] = (TypesettingMethods())
 
 
-def register_typesetting_method(python_function: typing.Callable, clazz: Clazz, treatment: Treatment, flavor: Flavor,
-    language: Language) -> typing.Callable:
-    """Register a typesetting method for the given protocol, treatment, and language.
-    If protocol, treatment, and/or language are not specified, use the defaults.
-    If default protocol, treatment, and/or language are not defined, use the fail-safe.
-    If a typesetting method was already registered for the given protocol, treatment, and language, substitute
+def register_typesetting_method(python_function: typing.Callable, clazz: Clazz, representation: Representation,
+    flavor: Flavor, language: Language) -> typing.Callable:
+    """Register a typesetting method for the given protocol, representation, and language.
+    If protocol, representation, and/or language are not specified, use the defaults.
+    If default protocol, representation, and/or language are not defined, use the fail-safe.
+    If a typesetting method was already registered for the given protocol, representation, and language, substitute
     the previously registered method with the new one."""
 
     global typesetting_methods
-    key: typing.FrozenSet[Clazz, Treatment] = frozenset([clazz, treatment])
+    key: typing.FrozenSet[Clazz, Representation] = frozenset([clazz, representation])
     if key not in typesetting_methods:
         typesetting_methods[key] = dict()
     solution: typing.FrozenSet[Clazz, Flavor, Language] = frozenset([clazz, flavor, language])
     typesetting_methods[key][solution]: typing.Callable = python_function
-    if treatment is not treatments.default:
+    if representation is not representations.default:
         # the first registered typesetting_method is promoted as the default typesetting_method
-        register_typesetting_method(python_function=python_function, clazz=clazz, treatment=treatments.default,
-            flavor=flavor, language=language)
+        register_typesetting_method(python_function=python_function, clazz=clazz,
+            representation=representations.default, flavor=flavor, language=language)
     return python_function
 
 
-def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None, treatment: typing.Optional[Treatment] = None,
-    language: typing.Optional[Language] = None, **kwargs) -> typing.Generator[str, None, None]:
+def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None,
+    representation: typing.Optional[Representation] = None, language: typing.Optional[Language] = None, **kwargs) -> \
+    typing.Generator[str, None, None]:
     global typesetting_methods
     global protocols
-    global treatments
+    global representations
     global flavors
     global languages
 
-    if treatment is None:
-        treatment: Treatment = o.default_treatment
-        if treatment is None:
-            treatment: Treatment = treatments.default
+    if representation is None:
+        representation: Representation = o.default_representation
+        if representation is None:
+            representation: Representation = representations.default
     if language is None:
         language: Language = languages.default
 
     # log.debug(msg=f"protocol: {protocol}")
 
-    keys: set[typing.FrozenSet[Clazz, Treatment]] = {frozenset([clazz, treatment]) for clazz in o.typesetting_clazzes}
-    available_keys: set[typing.FrozenSet[Clazz, Treatment]] = keys.intersection(typesetting_methods)
+    keys: set[typing.FrozenSet[Clazz, Representation]] = {frozenset([clazz, representation]) for clazz in
+        o.typesetting_clazzes}
+    available_keys: set[typing.FrozenSet[Clazz, Representation]] = keys.intersection(typesetting_methods)
 
     # some typesetting methods were found, choose the best one.
     best_generator = None
-    best_key: typing.Optional[typing.FrozenSet[Clazz, Treatment]] = None
+    best_key: typing.Optional[typing.FrozenSet[Clazz, Representation]] = None
     best_solution: typing.Optional[typing.FrozenSet[Clazz, Flavor, Language]] = None
     best_flavor: Flavor = None
     best_score = 0
-    key: typing.FrozenSet[Clazz, Treatment]
+    key: typing.FrozenSet[Clazz, Representation]
     solution: typing.FrozenSet[Clazz, Flavor, Language]
     for key in available_keys:
         for solution, generator in typesetting_methods[key].items():
@@ -501,24 +502,27 @@ def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None, treatme
                 best_generator = generator  # log.debug(msg=f"New: {best_score} {best_key} {best_solution} {best_flavor}")
     if best_generator is None:
         # no typesetting method found, use fallback typesetting instead.
-        yield from fallback_typesetting_method(o=o, protocol=protocol, treatment=treatment, language=language)
+        kwargs['flavor'] = best_flavor
+        yield from fallback_typesetting_method(o=o, protocol=protocol, representation=representation, language=language,
+            **kwargs)
     else:
-        yield from best_generator(o=o, protocol=protocol, treatment=treatment, flavor=best_flavor, language=language)
+        kwargs['flavor'] = best_flavor
+        yield from best_generator(o=o, protocol=protocol, representation=representation, language=language, **kwargs)
 
 
-def to_string(o: Typesettable, protocol: typing.Optional[Protocol] = None, treatment: typing.Optional[Treatment] = None,
-    language: typing.Optional[Language] = None) -> str:
-    return ''.join(typeset(o=o, protocol=protocol, treatment=treatment, language=language))
+def to_string(o: Typesettable, protocol: typing.Optional[Protocol] = None,
+    representation: typing.Optional[Representation] = None, language: typing.Optional[Language] = None) -> str:
+    return ''.join(typeset(o=o, protocol=protocol, representation=representation, language=language))
 
 
 class Typesettable(abc.ABC):
     """The typesettable abstract class makes it possible to equip some object in such a way
-    that may be typeset by registering typesetting methods for the desired treatments and languages."""
+    that may be typeset by registering typesetting methods for the desired representations and languages."""
 
-    def __init__(self, default_treatment: typing.Optional[Treatment] = None):
+    def __init__(self, default_representation: typing.Optional[Representation] = None):
         self._typesetting_clazzes: set[Clazz, ...] = set()
         self.declare_clazz_element(clazz=clazzes.default)
-        self._default_treatment: typing.Optional[Treatment] = default_treatment
+        self._default_representation: typing.Optional[Representation] = default_representation
 
     def __repr__(self):
         return self.to_string(protocol=protocols.unicode_limited)
@@ -527,15 +531,15 @@ class Typesettable(abc.ABC):
         return self.to_string(protocol=protocols.unicode_limited)
 
     @property
-    def default_treatment(self) -> typing.Optional[Treatment]:
-        return self._default_treatment
+    def default_representation(self) -> typing.Optional[Representation]:
+        return self._default_representation
 
     def declare_clazz_element(self, clazz: Clazz):
         self.typesetting_clazzes.add(clazz)
 
-    def to_string(self, protocol: typing.Optional[Protocol] = None, treatment: typing.Optional[Treatment] = None,
-        language: typing.Optional[Language] = None) -> str:
-        return to_string(o=self, protocol=protocol, treatment=treatment, language=language)
+    def to_string(self, protocol: typing.Optional[Protocol] = None,
+        representation: typing.Optional[Representation] = None, language: typing.Optional[Language] = None) -> str:
+        return to_string(o=self, protocol=protocol, representation=representation, language=language)
 
     @property
     def typesetting_clazzes(self) -> set[Clazz, ...]:
@@ -821,11 +825,11 @@ def fallback_typesetting_method(o: Typesettable, **kwargs):
     yield f"{type(o).__name__}-{id(o)}"
 
 
-register_typesetting_method(python_function=typeset_styled_text, clazz=clazzes.symbol, treatment=treatments.default,
-    flavor=flavors.default, language=languages.default)
-register_typesetting_method(python_function=typeset_symbol, clazz=clazzes.symbol, treatment=treatments.default,
-    flavor=flavors.default, language=languages.default)
+register_typesetting_method(python_function=typeset_styled_text, clazz=clazzes.symbol,
+    representation=representations.default, flavor=flavors.default, language=languages.default)
+register_typesetting_method(python_function=typeset_symbol, clazz=clazzes.symbol,
+    representation=representations.default, flavor=flavors.default, language=languages.default)
 register_typesetting_method(python_function=typeset_indexed_symbol, clazz=clazzes.indexed_symbol,
-    treatment=treatments.default, flavor=flavors.default, language=languages.default)
+    representation=representations.default, flavor=flavors.default, language=languages.default)
 
 log.debug(f"Module {__name__}: loaded.")
