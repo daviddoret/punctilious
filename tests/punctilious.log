@@ -1,64 +1,64 @@
-2024-01-28 21:55:46,342 - DEBUG - clazz: default, weight: 1000
-2024-01-28 21:55:46,342 - DEBUG - clazz: indexed_symbol, weight: 1000
-2024-01-28 21:55:46,342 - DEBUG - clazz: styled_text, weight: 2000
-2024-01-28 21:55:46,342 - DEBUG - clazz: symbol, weight: 2000
-2024-01-28 21:55:46,342 - DEBUG - flavor: default, weight: 100
-2024-01-28 21:55:46,342 - DEBUG - flavor: text_style.serif_normal, weight: 200
-2024-01-28 21:55:46,342 - DEBUG - flavor: text_style.serif_normal, weight: 300
-2024-01-28 21:55:46,342 - DEBUG - flavor: text_style.serif_bold, weight: 300
-2024-01-28 21:55:46,342 - DEBUG - flavor: text_style.serif_italic, weight: 300
-2024-01-28 21:55:46,345 - DEBUG - flavor: text_style.serif_bold_italic, weight: 300
-2024-01-28 21:55:46,345 - DEBUG - flavor: text_style.sans_serif_normal, weight: 300
-2024-01-28 21:55:46,345 - DEBUG - flavor: text_style.sans_serif_bold, weight: 300
-2024-01-28 21:55:46,345 - DEBUG - flavor: text_style.sans_serif_italic, weight: 300
-2024-01-28 21:55:46,345 - DEBUG - flavor: text_style.sans_serif_bold_italic, weight: 300
-2024-01-28 21:55:46,345 - DEBUG - flavor: text_style.script_normal, weight: 300
-2024-01-28 21:55:46,345 - DEBUG - flavor: text_style.script_bold, weight: 300
-2024-01-28 21:55:46,345 - DEBUG - flavor: text_style.fraktur_normal, weight: 300
-2024-01-28 21:55:46,345 - DEBUG - flavor: text_style.fraktur_bold, weight: 300
-2024-01-28 21:55:46,345 - DEBUG - flavor: text_style.monospace, weight: 300
-2024-01-28 21:55:46,345 - DEBUG - flavor: text_style.double_struck, weight: 300
-2024-01-28 21:55:46,345 - DEBUG - Module typesetting: loaded.
-2024-01-28 21:55:46,346 - DEBUG - flavor: fl1.formula.function_call, weight: 200
-2024-01-28 21:55:46,346 - DEBUG - flavor: fl1.formula.prefix_no_parenthesis, weight: 300
-2024-01-28 21:55:46,346 - DEBUG - flavor: fl1.formula.infix, weight: 300
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.formal_object, weight: 2000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.formula, weight: 3000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.atomic_formula, weight: 4000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.compound_formula, weight: 4000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.connective, weight: 2000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.variable_arity_connective, weight: 3000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.fixed_arity_connective, weight: 3000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.binary_connective, weight: 4000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.unary_connective, weight: 4000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.fixed_arity_formula, weight: 3000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.binary_formula, weight: 4000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.unary_formula, weight: 4000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.formal_language_collection, weight: 3000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.compound_formula_collection, weight: 4000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.connective_collection, weight: 4000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.formal_language, weight: 2000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.meta_language, weight: 2000
-2024-01-28 21:55:46,346 - DEBUG - clazz: fl1.ml1, weight: 2000
-2024-01-28 21:55:46,347 - DEBUG - Module fl1: loaded.
-2024-01-28 21:55:46,348 - DEBUG - Module fl1_presentation: loaded.
-2024-01-28 21:55:46,349 - DEBUG - flavor: pl1.connective.negation.tilde, weight: 200
-2024-01-28 21:55:46,349 - DEBUG - flavor: pl1.connective.negation.not, weight: 300
-2024-01-28 21:55:46,349 - DEBUG - clazz: pl1.connective.conditional, weight: 3000
-2024-01-28 21:55:46,349 - DEBUG - clazz: pl1.connective.negation, weight: 3000
-2024-01-28 21:55:46,349 - DEBUG - clazz: pl1.propositional_formula, weight: 4000
-2024-01-28 21:55:46,349 - DEBUG - clazz: pl1.propositional_unary_formula, weight: 5000
-2024-01-28 21:55:46,349 - DEBUG - clazz: pl1.propositional_binary_formula, weight: 5000
-2024-01-28 21:55:46,349 - DEBUG - clazz: pl1.propositional_variable, weight: 3000
-2024-01-28 21:55:46,349 - DEBUG - Module pl1: loaded.
-2024-01-28 21:55:46,350 - DEBUG - Module pl1_presentation: loaded.
-2024-01-28 21:55:46,350 - DEBUG - Module punctilious: loaded.
-2024-01-28 21:55:46,360 - DEBUG - FormalObject-1687330336528
-2024-01-28 21:55:46,360 - DEBUG - clazz: test-1, weight: 2000
-2024-01-28 21:55:46,364 - DEBUG - flavor: pl1.connective.negation.tilde, weight: 400
-2024-01-28 21:55:46,364 - DEBUG - flavor: pl1.connective.negation.not, weight: 500
-2024-01-28 21:55:46,365 - ERROR - connective is not a pl1 connective.
-2024-01-28 21:55:46,366 - ERROR - term is not a pl1 well-formed-formula.
-2024-01-28 21:55:46,368 - DEBUG - FormalObject 'lnot(P)' (python id: 1687355301712) is already present in this FormalLanguageClass as 'lnotP' (python id: 1687355301648). The existing object is reused and the new object is discarded.
-2024-01-28 21:55:46,370 - DEBUG - P --> P
-2024-01-28 21:55:46,372 - DEBUG - lnotP --> lnotlnotP --> P --> lnotlnotP --> P
+2024-01-28 22:14:55,998 - DEBUG - clazz: default, weight: 1000
+2024-01-28 22:14:55,998 - DEBUG - clazz: indexed_symbol, weight: 1000
+2024-01-28 22:14:55,998 - DEBUG - clazz: styled_text, weight: 2000
+2024-01-28 22:14:55,998 - DEBUG - clazz: symbol, weight: 2000
+2024-01-28 22:14:55,998 - DEBUG - flavor: default, weight: 100
+2024-01-28 22:14:55,998 - DEBUG - flavor: text_style.serif_normal, weight: 200
+2024-01-28 22:14:55,998 - DEBUG - flavor: text_style.serif_normal, weight: 300
+2024-01-28 22:14:55,998 - DEBUG - flavor: text_style.serif_bold, weight: 300
+2024-01-28 22:14:55,998 - DEBUG - flavor: text_style.serif_italic, weight: 300
+2024-01-28 22:14:56,009 - DEBUG - flavor: text_style.serif_bold_italic, weight: 300
+2024-01-28 22:14:56,009 - DEBUG - flavor: text_style.sans_serif_normal, weight: 300
+2024-01-28 22:14:56,009 - DEBUG - flavor: text_style.sans_serif_bold, weight: 300
+2024-01-28 22:14:56,009 - DEBUG - flavor: text_style.sans_serif_italic, weight: 300
+2024-01-28 22:14:56,009 - DEBUG - flavor: text_style.sans_serif_bold_italic, weight: 300
+2024-01-28 22:14:56,009 - DEBUG - flavor: text_style.script_normal, weight: 300
+2024-01-28 22:14:56,009 - DEBUG - flavor: text_style.script_bold, weight: 300
+2024-01-28 22:14:56,009 - DEBUG - flavor: text_style.fraktur_normal, weight: 300
+2024-01-28 22:14:56,009 - DEBUG - flavor: text_style.fraktur_bold, weight: 300
+2024-01-28 22:14:56,009 - DEBUG - flavor: text_style.monospace, weight: 300
+2024-01-28 22:14:56,009 - DEBUG - flavor: text_style.double_struck, weight: 300
+2024-01-28 22:14:56,010 - DEBUG - Module typesetting: loaded.
+2024-01-28 22:14:56,011 - DEBUG - flavor: fl1.formula.function_call, weight: 200
+2024-01-28 22:14:56,011 - DEBUG - flavor: fl1.formula.prefix_no_parenthesis, weight: 300
+2024-01-28 22:14:56,011 - DEBUG - flavor: fl1.formula.infix, weight: 300
+2024-01-28 22:14:56,011 - DEBUG - clazz: fl1.formal_object, weight: 2000
+2024-01-28 22:14:56,011 - DEBUG - clazz: fl1.formula, weight: 3000
+2024-01-28 22:14:56,011 - DEBUG - clazz: fl1.atomic_formula, weight: 4000
+2024-01-28 22:14:56,011 - DEBUG - clazz: fl1.compound_formula, weight: 4000
+2024-01-28 22:14:56,011 - DEBUG - clazz: fl1.connective, weight: 2000
+2024-01-28 22:14:56,011 - DEBUG - clazz: fl1.variable_arity_connective, weight: 3000
+2024-01-28 22:14:56,011 - DEBUG - clazz: fl1.fixed_arity_connective, weight: 3000
+2024-01-28 22:14:56,011 - DEBUG - clazz: fl1.binary_connective, weight: 4000
+2024-01-28 22:14:56,011 - DEBUG - clazz: fl1.unary_connective, weight: 4000
+2024-01-28 22:14:56,011 - DEBUG - clazz: fl1.fixed_arity_formula, weight: 3000
+2024-01-28 22:14:56,011 - DEBUG - clazz: fl1.binary_formula, weight: 4000
+2024-01-28 22:14:56,011 - DEBUG - clazz: fl1.unary_formula, weight: 4000
+2024-01-28 22:14:56,011 - DEBUG - clazz: fl1.formal_language_collection, weight: 3000
+2024-01-28 22:14:56,012 - DEBUG - clazz: fl1.compound_formula_collection, weight: 4000
+2024-01-28 22:14:56,012 - DEBUG - clazz: fl1.connective_collection, weight: 4000
+2024-01-28 22:14:56,012 - DEBUG - clazz: fl1.formal_language, weight: 2000
+2024-01-28 22:14:56,012 - DEBUG - clazz: fl1.meta_language, weight: 2000
+2024-01-28 22:14:56,012 - DEBUG - clazz: fl1.ml1, weight: 2000
+2024-01-28 22:14:56,012 - DEBUG - Module fl1: loaded.
+2024-01-28 22:14:56,013 - DEBUG - Module fl1_presentation: loaded.
+2024-01-28 22:14:56,015 - DEBUG - flavor: pl1.connective.negation.tilde, weight: 200
+2024-01-28 22:14:56,015 - DEBUG - flavor: pl1.connective.negation.not, weight: 300
+2024-01-28 22:14:56,015 - DEBUG - clazz: pl1.connective.conditional, weight: 3000
+2024-01-28 22:14:56,015 - DEBUG - clazz: pl1.connective.negation, weight: 3000
+2024-01-28 22:14:56,015 - DEBUG - clazz: pl1.propositional_formula, weight: 4000
+2024-01-28 22:14:56,015 - DEBUG - clazz: pl1.propositional_unary_formula, weight: 5000
+2024-01-28 22:14:56,015 - DEBUG - clazz: pl1.propositional_binary_formula, weight: 5000
+2024-01-28 22:14:56,015 - DEBUG - clazz: pl1.propositional_variable, weight: 3000
+2024-01-28 22:14:56,015 - DEBUG - Module pl1: loaded.
+2024-01-28 22:14:56,017 - DEBUG - Module pl1_presentation: loaded.
+2024-01-28 22:14:56,017 - DEBUG - Module punctilious: loaded.
+2024-01-28 22:14:56,026 - DEBUG - FormalObject-1852997479376
+2024-01-28 22:14:56,026 - DEBUG - clazz: test-1, weight: 2000
+2024-01-28 22:14:56,030 - DEBUG - flavor: pl1.connective.negation.tilde, weight: 400
+2024-01-28 22:14:56,030 - DEBUG - flavor: pl1.connective.negation.not, weight: 500
+2024-01-28 22:14:56,031 - ERROR - connective is not a pl1 connective.
+2024-01-28 22:14:56,032 - ERROR - term is not a pl1 well-formed-formula.
+2024-01-28 22:14:56,034 - DEBUG - FormalObject 'lnot(P)' (python id: 1853022446224) is already present in this FormalLanguageClass as 'lnotP' (python id: 1853022446160). The existing object is reused and the new object is discarded.
+2024-01-28 22:14:56,036 - DEBUG - P --> P
+2024-01-28 22:14:56,038 - DEBUG - lnotP --> lnotlnotP --> P --> lnotlnotP --> P
