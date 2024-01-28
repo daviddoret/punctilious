@@ -53,6 +53,8 @@ class Tags:
         super().__init__()
         self._conditional = ts.tags.register(name="pl1.connective.conditional", predecessor=fl1.tags.connective)
         self._negation = ts.tags.register(name="pl1.connective.negation", predecessor=fl1.tags.connective)
+        self._propositional_variable = ts.tags.register(name="pl1.propositional_variable",
+            predecessor=fl1.tags.formal_object)
 
     @property
     def conditional(self) -> ts.Tag:
@@ -61,6 +63,10 @@ class Tags:
     @property
     def negation(self) -> ts.Tag:
         return self._negation
+
+    @property
+    def propositional_variable(self) -> ts.Tag:
+        return self._propositional_variable
 
 
 tags = Tags()
@@ -71,7 +77,7 @@ class MetaVariable(fl1.FormalObject):
         super().__init__()
 
 
-class MetaVariableClass(fl1.FormalLanguageClass):
+class MetaVariableCollection(fl1.FormalLanguageCollection):
     """An accretor for meta-variables."""
 
     def __init__(self, formal_language: fl1.FormalLanguage):
@@ -83,12 +89,12 @@ class MetaLanguage(fl1.FormalLanguage):
 
     def __init__(self):
         super().__init__()
-        self._variables: MetaVariableClass = MetaVariableClass(formal_language=self)
+        self._variables: MetaVariableCollection = MetaVariableCollection(formal_language=self)
         super()._add_class(x=self._variables)
         self.lock()
 
     @property
-    def variables(self) -> MetaVariableClass:
+    def variables(self) -> MetaVariableCollection:
         """The class of meta-variables in the meta-language of PL1."""
         return self._variables
 
@@ -96,9 +102,10 @@ class MetaLanguage(fl1.FormalLanguage):
 class PropositionalVariable(fl1.FormalObject):
     def __init__(self):
         super().__init__()
+        self.tag(tag=tags.propositional_variable)
 
 
-class PropositionalVariableClass(fl1.FormalLanguageClass):
+class PropositionalVariableCollection(fl1.FormalLanguageCollection):
     def __init__(self, formal_language: PL1):
         super().__init__(formal_language=formal_language)
 
@@ -109,7 +116,7 @@ class PropositionalVariableClass(fl1.FormalLanguageClass):
         return p
 
 
-class ConnectiveClass(fl1.ConnectiveClass):
+class ConnectiveClass(fl1.ConnectiveCollection):
     """A specialized ConnectiveClass for PL1 containing all PL1 connectors, and that is locked."""
 
     def __init__(self, formal_language: PL1):
@@ -132,7 +139,7 @@ class ConnectiveClass(fl1.ConnectiveClass):
         return self._negation
 
 
-class CompoundFormulaClass(fl1.CompoundFormulaClass):
+class CompoundFormulaClass(fl1.CompoundFormulaCollection):
     """A specialized class for PL1 containing all PL1 free formulas, and that is initially not locked."""
 
     def __init__(self, formal_language: PL1):
@@ -183,7 +190,7 @@ class PL1ML(fl1.FormalLanguage):
 
     def __init__(self):
         super().__init__()
-        self._meta_variables: MetaVariableClass = MetaVariableClass(formal_language=self)
+        self._meta_variables: MetaVariableCollection = MetaVariableCollection(formal_language=self)
         super()._add_class(x=self._meta_variables)
         self.lock()
 
@@ -193,7 +200,7 @@ class PL1ML(fl1.FormalLanguage):
         return True
 
     @property
-    def meta_variables(self) -> MetaVariableClass:
+    def meta_variables(self) -> MetaVariableCollection:
         """The collection of propositional variables declared in PL1."""
         return self._meta_variables
 
@@ -210,7 +217,8 @@ class PL1(fl1.FormalLanguage):
         super()._add_class(x=self._connectives)
         self._compound_formulas: CompoundFormulaClass = CompoundFormulaClass(formal_language=self)
         super()._add_class(x=self._compound_formulas)
-        self._propositional_variables: PropositionalVariableClass = PropositionalVariableClass(formal_language=self)
+        self._propositional_variables: PropositionalVariableCollection = PropositionalVariableCollection(
+            formal_language=self)
         super()._add_class(x=self._propositional_variables)
         self.lock()
 
@@ -243,7 +251,7 @@ class PL1(fl1.FormalLanguage):
         return self._meta_language
 
     @property
-    def propositional_variables(self) -> PropositionalVariableClass:
+    def propositional_variables(self) -> PropositionalVariableCollection:
         """The collection of declared propositional variables declared in PL1."""
         return self._propositional_variables
 

@@ -87,21 +87,32 @@ class Tags:
     def __init__(self):
         super().__init__()
         self._formal_object = ts.tags.register(name="fl1.formal_object")
+        self._formula = ts.tags.register(name="fl1.formula", predecessor=self._formal_object)
+        self._atomic_formula = ts.tags.register(name="fl1.atomic_formula", predecessor=self._formula)
+        self._compound_formula = ts.tags.register(name="fl1.compound_formula", predecessor=self._formula)
         self._connective = ts.tags.register(name="fl1.connective")
-        self._fixed_arity_connective = ts.tags.register(name="fl1.fixed_arity_connective")
-        self._variable_arity_connective = ts.tags.register(name="fl1.variable_arity_connective")
-        self._binary_connective = ts.tags.register(name="fl1.binary_connective")
-        self._unary_connective = ts.tags.register(name="fl1.unary_connective")
-        self._compound_formula = ts.tags.register(name="fl1.compound_formula")
+        self._variable_arity_connective = ts.tags.register(name="fl1.variable_arity_connective",
+            predecessor=self._connective)
+        self._fixed_arity_connective = ts.tags.register(name="fl1.fixed_arity_connective", predecessor=self._connective)
+        self._binary_connective = ts.tags.register(name="fl1.binary_connective",
+            predecessor=self._fixed_arity_connective)
+        self._unary_connective = ts.tags.register(name="fl1.unary_connective", predecessor=self._fixed_arity_connective)
         self._fixed_arity_formula = ts.tags.register(name="fl1.fixed_arity_formula", predecessor=self._formal_object)
         self._binary_formula = ts.tags.register(name="fl1.binary_formula", predecessor=self._fixed_arity_formula)
         self._unary_formula = ts.tags.register(name="fl1.unary_formula", predecessor=self._fixed_arity_formula)
-        self._compound_formula_class = ts.tags.register(name="fl1.compound_formula_class")
-        self._connective_class = ts.tags.register(name="fl1.connective_class")
+        self._formal_language_collection = ts.tags.register(name="fl1.formal_language_collection",
+            predecessor=self._formal_object)
+        self._compound_formula_collection = ts.tags.register(name="fl1.compound_formula_collection",
+            predecessor=self._formal_language_collection)
+        self._connective_collection = ts.tags.register(name="fl1.connective_collection",
+            predecessor=self._formal_language_collection)
         self._formal_language = ts.tags.register(name="fl1.formal_language")
-        self._formal_language_class = ts.tags.register(name="fl1.formal_language_class")
         self._meta_language = ts.tags.register(name="fl1.meta_language")
         self._ml1 = ts.tags.register(name="fl1.ml1")
+
+    @property
+    def atomic_formula(self) -> ts.Tag:
+        return self._atomic_formula
 
     @property
     def binary_connective(self) -> ts.Tag:
@@ -116,16 +127,16 @@ class Tags:
         return self._compound_formula
 
     @property
-    def compound_formula_class(self) -> ts.Tag:
-        return self._compound_formula_class
+    def compound_formula_collection(self) -> ts.Tag:
+        return self._compound_formula_collection
 
     @property
     def connective(self) -> ts.Tag:
         return self._connective
 
     @property
-    def connective_class(self) -> ts.Tag:
-        return self._connective_class
+    def connective_collection(self) -> ts.Tag:
+        return self._connective_collection
 
     @property
     def fixed_arity_connective(self) -> ts.Tag:
@@ -140,12 +151,16 @@ class Tags:
         return self._formal_language
 
     @property
-    def formal_language_class(self) -> ts.Tag:
-        return self._formal_language_class
+    def formal_language_collection(self) -> ts.Tag:
+        return self._formal_language_collection
 
     @property
     def formal_object(self) -> ts.Tag:
         return self._formal_object
+
+    @property
+    def formula(self) -> ts.Tag:
+        return self._formula
 
     @property
     def meta_language(self) -> ts.Tag:
@@ -187,8 +202,8 @@ class FormalObject(ts.Typesettable):
         return super().to_string(protocol=ts.protocols.unicode_limited, treatment=treatments.symbolic_representation)
 
 
-class FormalLanguageClass(FormalObject, abc.ABC):
-    """A FormalLanguage is defined as a tuple of class. The FormalLanguageClass python-class is designed to
+class FormalLanguageCollection(FormalObject, abc.ABC):
+    """A FormalLanguage is defined as a tuple of collections. The FormalLanguageCollection python-class is designed to
     facilitate navigation between the formal-language, its classes, and their class elements."""
 
     def __init__(self, formal_language: FormalLanguage):
@@ -196,7 +211,7 @@ class FormalLanguageClass(FormalObject, abc.ABC):
         self._protected_set: set[FormalObject] = set()
         self._formal_language: FormalLanguage = formal_language
         super().__init__()
-        self.tag(tag=tags.formal_language_class)
+        self.tag(tag=tags.formal_language_collection)
 
     def __contains__(self, x: FormalObject) -> bool:
         """Allows the in operator."""
@@ -253,7 +268,7 @@ class FormalLanguage(FormalObject, abc.ABC):
     def __len__(self):
         return len(self._container)
 
-    def _add_class(self, x: FormalLanguageClass) -> None:
+    def _add_class(self, x: FormalLanguageCollection) -> None:
         """This is a protected method, it is only intended to be called from inherited classes."""
         if self.is_locked:
             log.error(msg='This formal-language is locked.')
@@ -339,10 +354,10 @@ class BinaryConnective(FixedArityConnective):
         self.tag(tag=tags.binary_connective)
 
 
-class ConnectiveClass(FormalLanguageClass):
+class ConnectiveCollection(FormalLanguageCollection):
     def __init__(self, formal_language: FormalLanguage):
         super().__init__(formal_language=formal_language)
-        self.tag(tag=tags.connective_class)
+        self.tag(tag=tags.connective_collection)
 
     def declare_unary_connective(self) -> UnaryConnective:
         x: UnaryConnective = UnaryConnective()
@@ -355,24 +370,42 @@ class ConnectiveClass(FormalLanguageClass):
         return x
 
 
-class CompoundFormulaClass(FormalLanguageClass):
+class CompoundFormulaCollection(FormalLanguageCollection):
     def __init__(self, formal_language: FormalLanguage):
         super().__init__(formal_language=formal_language)
-        self.tag(tag=tags.compound_formula_class)
+        self.tag(tag=tags.compound_formula_collection)
 
     def declare_unary_formula(self, connective: UnaryConnective, term: FormalObject) -> UnaryFormula:
-        x: UnaryFormula = UnaryFormula(connective=connective, term=term)
+        x: UnaryFormula = UnaryFormula(formal_language_collection=self, connective=connective, term=term)
         x = self._add_formal_object(x=x)
         return x
 
     def declare_binary_formula(self, connective: BinaryConnective, term_1: FormalObject, term_2: FormalObject) -> (
         BinaryFormula):
-        x: BinaryFormula = BinaryFormula(connective=connective, term_1=term_1, term_2=term_2)
+        x: BinaryFormula = BinaryFormula(formal_language_collection=self, connective=connective, term_1=term_1,
+            term_2=term_2)
         x = self._add_formal_object(x=x)
         return x
 
 
-class CompoundFormula(FormalObject):
+class Formula(FormalObject):
+    def __init__(self):
+        super().__init__()
+        self.tag(tag=tags.formula)
+
+
+class AtomicFormula(FormalObject):
+    def __init__(self, formal_language: FormalLanguage):
+        self._formal_language = formal_language
+        super().__init__()
+        self.tag(tag=tags.atomic_formula)
+
+    @property
+    def formal_language(self) -> FormalLanguage:
+        return self._formal_language
+
+
+class CompoundFormula(Formula):
     """A compound-formula is a formal-object and a tree-structure of atomic-formulas and compound-formulas."""
 
     def __init__(self, connective: Connective, terms: typing.Tuple[FormalObject]):
@@ -444,12 +477,31 @@ class BinaryFormula(FixedArityFormula):
         return self.terms[1]
 
 
-class ML1(FormalLanguageClass, abc.ABC):
+class ML1(FormalLanguageCollection, abc.ABC):
     """ML1 is a rather minimalist meta-language designed to facilite the construction of formal-languages."""
 
     def __init__(self, formal_language: FormalLanguage):
         super().__init__(formal_language=formal_language)
         self.tag(tag=tags.ml1)
+
+
+def iterate_formula_elements(phi: FormalObject):
+    """Iterate through formulas, returning the compound-formula objects, their connectives, and terms, recursively. The order is reproducible: formula terms are read from left to right, depth-first."""
+    yield phi
+    if isinstance(phi, CompoundFormula):
+        phi: CompoundFormula
+        yield phi.connective
+        for term in phi.terms:
+            yield term
+
+
+def generate_unique_values(generator):
+    """Utility function that yields only unique values from a generator."""
+    observed_values = set()
+    for value in generator():
+        if value not in observed_values:
+            observed_values.add(value)
+            yield value
 
 
 def substitute_formula_elements_from_map(phi, map):

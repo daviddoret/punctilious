@@ -1,7 +1,41 @@
+import typing
+
+import fl1_presentation
 import log
 import typesetting as ts
 import fl1
 import pl1
+
+
+def typeset_unary_formula_function_call(o: fl1.UnaryFormula,
+    pl1_propositional_variables: typing.Optional[tuple[pl1.PropositionalVariable]] = None, **kwargs) -> \
+    typing.Generator[str, None, None]:
+    """PQR, else P1, P2, P3, ..."""
+    if pl1_propositional_variables is None:
+        pl1_propositional_variables: tuple[pl1.PropositionalVariable] = pl1.list_propositional_variables(o)
+    yield from fl1_presentation.typeset_unary_formula_function_call(o=o,
+        pl1_propositional_variables=pl1_propositional_variables, **kwargs)
+
+
+def typeset_binary_formula_function_call(o: fl1.BinaryFormula,
+    pl1_propositional_variables: typing.Optional[tuple[pl1.PropositionalVariable]] = None, **kwargs) -> \
+    typing.Generator[str, None, None]:
+    """PQR, else P1, P2, P3, ..."""
+    if pl1_propositional_variables is None:
+        pl1_propositional_variables: tuple[pl1.PropositionalVariable] = pl1.list_propositional_variables(o)
+    yield from fl1_presentation.typeset_binary_formula_function_call(o=o,
+        pl1_propositional_variables=pl1_propositional_variables, **kwargs)
+
+
+def typeset_propositional_variable(o: pl1.PropositionalVariable, **kwargs) -> typing.Generator[str, None, None]:
+    """PQR, else P1, P2, P3, ..."""
+    pl1_propositional_variables: typing.Optional[dict[pl1.PropositionalVariable]] = None
+    if "pl1_propositional_variables" in kwargs:
+        pl1_propositional_variables: dict[pl1.PropositionalVariable] = kwargs["pl1_propositional_variables"]
+    if pl1_propositional_variables is None:
+        yield "P"
+    else:
+        yield pl1_propositional_variables[o]
 
 
 def load():
