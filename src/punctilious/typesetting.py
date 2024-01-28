@@ -2,12 +2,6 @@ from __future__ import annotations
 
 import abc
 import typing
-import os
-import csv
-import warnings
-import logging
-import collections
-
 import log
 
 
@@ -479,7 +473,7 @@ def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None, treatme
     if language is None:
         language: Language = languages.default
 
-    log.debug(msg=f"protocol: {protocol}")
+    # log.debug(msg=f"protocol: {protocol}")
 
     keys: set[typing.FrozenSet[Tag, Treatment]] = {frozenset([tag, treatment]) for tag in o.typesetting_tags}
     available_keys: set[typing.FrozenSet[Tag, Treatment]] = keys.intersection(typesetting_methods)
@@ -504,8 +498,7 @@ def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None, treatme
                 best_key = key
                 best_solution = solution
                 best_flavor = flavor
-                best_generator = generator
-                log.debug(msg=f"New: {best_score} {best_key} {best_solution} {best_flavor}")
+                best_generator = generator  # log.debug(msg=f"New: {best_score} {best_key} {best_solution} {best_flavor}")
     if best_generator is None:
         # no typesetting method found, use fallback typesetting instead.
         yield from fallback_typesetting_method(o=o, protocol=protocol, treatment=treatment, language=language)
@@ -625,6 +618,7 @@ class Symbols:
         self._q_uppercase_serif_italic = Symbol(latex_math='\\textit{Q}', unicode_extended='𝑄', unicode_limited='Q')
         self._r_uppercase_serif_italic = Symbol(latex_math='\\textit{R}', unicode_extended='𝑅', unicode_limited='R')
         self._rightwards_arrow = Symbol(latex_math='\\rightarrow', unicode_extended='→', unicode_limited='-->')
+        self._space = Symbol(latex_math=' ', unicode_extended=' ', unicode_limited=' ')
         self._tilde = Symbol(latex_math='\\sim', unicode_extended='~', unicode_limited='~')
 
     @property
@@ -662,6 +656,10 @@ class Symbols:
     @property
     def rightwards_arrow(self) -> Symbol:
         return self._rightwards_arrow
+
+    @property
+    def space(self) -> Symbol:
+        return self._space
 
     @property
     def tilde(self) -> Symbol:

@@ -404,6 +404,16 @@ class Formula(FormalObject):
     def formal_language_collection(self) -> FormalLanguageCollection:
         return self._formal_language_collection
 
+    def iterate_leaf_elements(self):
+        """Iterate through the formula-tree and return its ordered leaf elements (i.e.: its atomic-formulas). The order is reproducible: formula terms are read from left to right, depth-first."""
+        if isinstance(self, AtomicFormula):
+            yield self
+        elif isinstance(self, CompoundFormula):
+            for term in self.terms:
+                yield from term.iterate_leaf_elements()
+        else:
+            log.error(msg='Unsupported formula type.')
+
 
 class AtomicFormula(Formula):
     def __init__(self, formal_language_collection: FormalLanguageCollection):
@@ -494,16 +504,6 @@ class ML1(FormalLanguageCollection, abc.ABC):
     def __init__(self, formal_language: FormalLanguage):
         super().__init__(formal_language=formal_language)
         self.tag(tag=tags.ml1)
-
-
-def iterate_formula_elements(phi: FormalObject):
-    """Iterate through formulas, returning the compound-formula objects, their connectives, and terms, recursively. The order is reproducible: formula terms are read from left to right, depth-first."""
-    yield phi
-    if isinstance(phi, CompoundFormula):
-        phi: CompoundFormula
-        yield phi.connective
-        for term in phi.terms:
-            yield term
 
 
 def generate_unique_values(generator):

@@ -53,6 +53,11 @@ class Tags:
         super().__init__()
         self._conditional = ts.tags.register(name="pl1.connective.conditional", predecessor=fl1.tags.connective)
         self._negation = ts.tags.register(name="pl1.connective.negation", predecessor=fl1.tags.connective)
+        self._propositional_formula = ts.tags.register(name="pl1.propositional_formula", predecessor=fl1.tags.formula)
+        self._propositional_unary_formula = ts.tags.register(name="pl1.propositional_unary_formula",
+            predecessor=fl1.tags.unary_formula)
+        self._propositional_binary_formula = ts.tags.register(name="pl1.propositional_binary_formula",
+            predecessor=fl1.tags.binary_formula)
         self._propositional_variable = ts.tags.register(name="pl1.propositional_variable",
             predecessor=fl1.tags.formal_object)
 
@@ -63,6 +68,18 @@ class Tags:
     @property
     def negation(self) -> ts.Tag:
         return self._negation
+
+    @property
+    def propositional_formula(self) -> ts.Tag:
+        return self._propositional_formula
+
+    @property
+    def propositional_unary_formula(self) -> ts.Tag:
+        return self._propositional_unary_formula
+
+    @property
+    def propositional_binary_formula(self) -> ts.Tag:
+        return self._propositional_binary_formula
 
     @property
     def propositional_variable(self) -> ts.Tag:
@@ -139,7 +156,7 @@ class ConnectiveClass(fl1.ConnectiveCollection):
         return self._negation
 
 
-class CompoundFormulaClass(fl1.CompoundFormulaCollection):
+class CompoundFormulaCollection(fl1.CompoundFormulaCollection):
     """A specialized class for PL1 containing all PL1 free formulas, and that is initially not locked."""
 
     def __init__(self, formal_language: PL1):
@@ -159,7 +176,10 @@ class CompoundFormulaClass(fl1.CompoundFormulaCollection):
             log.error("connective is not a pl1 connective.")
         if not self.pl1.is_well_formed_formula(phi=term):
             log.error("term is not a pl1 well-formed-formula.")
-        return super().declare_unary_formula(connective=connective, term=term)
+        phi: fl1.UnaryFormula = super().declare_unary_formula(connective=connective, term=term)
+        phi.tag(tag=tags.propositional_formula)
+        phi.tag(tag=tags.propositional_unary_formula)
+        return phi
 
     def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.FormalObject,
         term_2: fl1.FormalObject) -> fl1.BinaryFormula:
@@ -178,7 +198,10 @@ class CompoundFormulaClass(fl1.CompoundFormulaCollection):
             log.error("term_1 is not a pl1 well-formed-formula.")
         if not self.pl1.is_well_formed_formula(phi=term_2):
             log.error("term_2 is not a pl1 well-formed-formula.")
-        return super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
+        phi: fl1.BinaryFormula = super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
+        phi.tag(tag=tags.propositional_formula)
+        phi.tag(tag=tags.propositional_binary_formula)
+        return phi
 
     @property
     def pl1(self) -> PL1:
@@ -215,7 +238,7 @@ class PL1(fl1.FormalLanguage):
         # Object classes
         self._connectives: ConnectiveClass = ConnectiveClass(formal_language=self)
         super()._add_class(x=self._connectives)
-        self._compound_formulas: CompoundFormulaClass = CompoundFormulaClass(formal_language=self)
+        self._compound_formulas: CompoundFormulaCollection = CompoundFormulaCollection(formal_language=self)
         super()._add_class(x=self._compound_formulas)
         self._propositional_variables: PropositionalVariableCollection = PropositionalVariableCollection(
             formal_language=self)
@@ -228,7 +251,7 @@ class PL1(fl1.FormalLanguage):
         return self._connectives
 
     @property
-    def compound_formulas(self) -> CompoundFormulaClass:
+    def compound_formulas(self) -> CompoundFormulaCollection:
         """The collection of declared compound formulas in PL1."""
         return self._compound_formulas
 
@@ -244,6 +267,9 @@ class PL1(fl1.FormalLanguage):
         else:
             # otherwise, return False, i.e.: phi is not a well-formed-formula.
             return False
+
+    def get_propositional_variable_tuple(self, phi: fl1.Formula) -> tuple[PropositionalVariable]:
+        return tuple(p for p in phi.iterate_leaf_elements() if p in self.propositional_variables)
 
     @property
     def meta_language(self) -> PL1ML:

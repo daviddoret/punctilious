@@ -12,8 +12,20 @@ def typeset_unary_formula_function_call(o: fl1.UnaryFormula,
     typing.Generator[str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     if pl1_propositional_variables is None:
-        pl1_propositional_variables: tuple[pl1.PropositionalVariable] = pl1.list_propositional_variables(o)
+        l: pl1.PL1 = o.formal_language
+        pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
     yield from fl1_presentation.typeset_unary_formula_function_call(o=o,
+        pl1_propositional_variables=pl1_propositional_variables, **kwargs)
+
+
+def typeset_unary_formula_prefix_without_parenthesis(o: fl1.UnaryFormula,
+    pl1_propositional_variables: typing.Optional[tuple[pl1.PropositionalVariable]] = None, **kwargs) -> \
+    typing.Generator[str, None, None]:
+    """PQR, else P1, P2, P3, ..."""
+    if pl1_propositional_variables is None:
+        l: pl1.PL1 = o.formal_language
+        pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
+    yield from fl1_presentation.typeset_unary_formula_prefix_without_parenthesis(o=o,
         pl1_propositional_variables=pl1_propositional_variables, **kwargs)
 
 
@@ -22,20 +34,42 @@ def typeset_binary_formula_function_call(o: fl1.BinaryFormula,
     typing.Generator[str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     if pl1_propositional_variables is None:
-        pl1_propositional_variables: tuple[pl1.PropositionalVariable] = pl1.list_propositional_variables(o)
+        l: pl1.PL1 = o.formal_language
+        pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
     yield from fl1_presentation.typeset_binary_formula_function_call(o=o,
         pl1_propositional_variables=pl1_propositional_variables, **kwargs)
 
 
-def typeset_propositional_variable(o: pl1.PropositionalVariable, **kwargs) -> typing.Generator[str, None, None]:
+def typeset_binary_formula_infix(o: fl1.BinaryFormula,
+    pl1_propositional_variables: typing.Optional[tuple[pl1.PropositionalVariable]] = None, **kwargs) -> \
+    typing.Generator[str, None, None]:
     """PQR, else P1, P2, P3, ..."""
-    pl1_propositional_variables: typing.Optional[dict[pl1.PropositionalVariable]] = None
-    if "pl1_propositional_variables" in kwargs:
-        pl1_propositional_variables: dict[pl1.PropositionalVariable] = kwargs["pl1_propositional_variables"]
     if pl1_propositional_variables is None:
-        yield "P"
+        l: pl1.PL1 = o.formal_language
+        pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
+    yield from fl1_presentation.typeset_binary_formula_infix(o=o,
+        pl1_propositional_variables=pl1_propositional_variables, **kwargs)
+
+
+def typeset_propositional_variable(o: pl1.PropositionalVariable,
+    pl1_propositional_variables: typing.Optional[tuple[pl1.PropositionalVariable]] = None, **kwargs) -> \
+    typing.Generator[str, None, None]:
+    """PQR, else P1, P2, P3, ..."""
+    if pl1_propositional_variables is None:
+        kwargs["treatment"] = ts.treatments.default
+        yield from ts.typeset(o=ts.symbols.p_uppercase_serif_italic, **kwargs)
     else:
-        yield pl1_propositional_variables[o]
+        if len(pl1_propositional_variables) < 4:
+            index = pl1_propositional_variables.index(o)
+            symbol: ts.Symbol = (ts.symbols.p_uppercase_serif_italic, ts.symbols.q_uppercase_serif_italic,
+            ts.symbols.r_uppercase_serif_italic,)[index]
+            kwargs["treatment"] = ts.treatments.default
+            yield from ts.typeset(o=symbol, **kwargs)
+        else:
+            index = pl1_propositional_variables.index(o)
+            kwargs["treatment"] = ts.treatments.default
+            yield from ts.typeset(o=ts.IndexedSymbol(symbol=ts.symbols.p_uppercase_serif_italic, index=index + 1),
+                **kwargs)
 
 
 def load():
@@ -49,6 +83,13 @@ def load():
         language=language)
     ts.register_styledstring(tag=pl1.tags.negation, text="negation", treatment=treatment, flavor=flavor,
         language=language)
+    ts.register_typesetting_method(tag=pl1.tags.propositional_unary_formula,
+        python_function=typeset_unary_formula_prefix_without_parenthesis, treatment=treatment, flavor=flavor,
+        language=language)
+    ts.register_typesetting_method(tag=pl1.tags.propositional_binary_formula,
+        python_function=typeset_binary_formula_infix, treatment=treatment, flavor=flavor, language=language)
+    ts.register_typesetting_method(tag=pl1.tags.propositional_variable, python_function=typeset_propositional_variable,
+        treatment=treatment, flavor=flavor, language=language)
 
     # Representation: Common Language
     # Flavor: Default

@@ -13,6 +13,12 @@ def typeset_unary_formula_function_call(o: fl1.UnaryFormula, **kwargs) -> typing
     yield from ts.typeset(o=ts.symbols.close_parenthesis)
 
 
+def typeset_unary_formula_prefix_without_parenthesis(o: fl1.UnaryFormula, **kwargs) -> typing.Generator[
+    str, None, None]:
+    yield from ts.typeset(o=o.connective, **kwargs)
+    yield from ts.typeset(o=o.term, **kwargs)
+
+
 def typeset_binary_formula_function_call(o: fl1.BinaryFormula, **kwargs) -> typing.Generator[str, None, None]:
     yield from ts.typeset(o=o.connective, **kwargs)
     yield from ts.typeset(o=ts.symbols.open_parenthesis)
@@ -20,6 +26,14 @@ def typeset_binary_formula_function_call(o: fl1.BinaryFormula, **kwargs) -> typi
     yield from ts.typeset(o=ts.symbols.collection_separator)
     yield from ts.typeset(o=o.term_2, **kwargs)
     yield from ts.typeset(o=ts.symbols.close_parenthesis)
+
+
+def typeset_binary_formula_infix(o: fl1.BinaryFormula, **kwargs) -> typing.Generator[str, None, None]:
+    yield from ts.typeset(o=o.term_1, **kwargs)
+    yield from ts.typeset(o=ts.symbols.space)
+    yield from ts.typeset(o=o.connective, **kwargs)
+    yield from ts.typeset(o=ts.symbols.space)
+    yield from ts.typeset(o=o.term_2, **kwargs)
 
 
 def load():
