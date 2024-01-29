@@ -197,11 +197,23 @@ class Representations:
 
     def __init__(self):
         self._default = Representation('default')
+        self._symbolic_representation = Representation(name="symbolic-representation")
+        self._common_language = Representation(name="common-language")
+
+    @property
+    def common_language(self) -> Representation:
+        """The common-language representation used in free text."""
+        return self._common_language
 
     @property
     def default(self) -> Representation:
         """If no representation is specified, typesetting uses the default representation."""
         return self._default
+
+    @property
+    def symbolic_representation(self) -> Representation:
+        """The formal representation used in formulas."""
+        return self._symbolic_representation
 
 
 representations = Representations()
@@ -557,7 +569,7 @@ class Symbol(Typesettable):
         self._latex_math = latex_math
         self._unicode_extended = unicode_extended
         self._unicode_limited = unicode_limited
-        super().__init__()
+        super().__init__(default_representation=representations.symbolic_representation)
         self.declare_clazz_element(clazz=clazzes.symbol)
 
     @property
@@ -829,7 +841,11 @@ register_typesetting_method(python_function=typeset_styled_text, clazz=clazzes.s
     representation=representations.default, flavor=flavors.default, language=languages.default)
 register_typesetting_method(python_function=typeset_symbol, clazz=clazzes.symbol,
     representation=representations.default, flavor=flavors.default, language=languages.default)
+register_typesetting_method(python_function=typeset_symbol, clazz=clazzes.symbol,
+    representation=representations.symbolic_representation, flavor=flavors.default, language=languages.default)
 register_typesetting_method(python_function=typeset_indexed_symbol, clazz=clazzes.indexed_symbol,
     representation=representations.default, flavor=flavors.default, language=languages.default)
+register_typesetting_method(python_function=typeset_indexed_symbol, clazz=clazzes.indexed_symbol,
+    representation=representations.symbolic_representation, flavor=flavors.default, language=languages.default)
 
 log.debug(f"Module {__name__}: loaded.")

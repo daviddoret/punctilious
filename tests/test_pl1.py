@@ -42,10 +42,16 @@ class TestPL1:
         pa = l1.propositional_variables.declare_proposition_variable()
         phi1 = l1.compound_formulas.declare_unary_formula(connective=l1.connectives.negation, term=pa)
         assert phi1 in l1.compound_formulas
+        assert phi1.to_string(protocol=pu.ts.protocols.unicode_extended) == '¬𝑃'
+        assert phi1.to_string(protocol=pu.ts.protocols.unicode_limited) == 'lnotP'
+        assert phi1.to_string(protocol=pu.ts.protocols.latex) == '\\lnot\\textit{P}'
 
         pb = l1.propositional_variables.declare_proposition_variable()
         phi2 = l1.compound_formulas.declare_binary_formula(connective=l1.connectives.conditional, term_1=pa, term_2=pb)
         assert phi2 in l1.compound_formulas
+        assert phi1.to_string(protocol=pu.ts.protocols.unicode_extended) == '¬𝑃'
+        assert phi1.to_string(protocol=pu.ts.protocols.unicode_limited) == 'lnotP'
+        assert phi1.to_string(protocol=pu.ts.protocols.latex) == '\\lnot\\textit{P}'
 
         l2: pu.pl1.PL1 = pu.pl1.PL1()
         with pytest.raises(Exception) as e_info:
@@ -103,9 +109,9 @@ class TestPL1:
 
         pd = l1.compound_formulas.declare_binary_formula(connective=conditional, term_1=pa, term_2=pb)
         # Check that only unique formulas are kept in the PL1 formula collection
-        s = pd.to_string(representation=fl1.representations.symbolic_representation)
-        log.debug(msg=s)
-        assert (len(s) > 0)
+        assert pd.to_string(protocol=pu.ts.protocols.unicode_extended) == '𝑃 → 𝑄'
+        assert pd.to_string(protocol=pu.ts.protocols.unicode_limited) == 'P --> Q'
+        assert pd.to_string(protocol=pu.ts.protocols.latex) == '\\textit{P} \\rightarrow \\textit{Q}'
 
     def test_compounding_formulas_1(self):
         l1 = pu.pl1.PL1()

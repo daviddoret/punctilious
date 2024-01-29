@@ -76,7 +76,7 @@ def load():
     # Representation: Common Language
     # Flavor: Default
     # Language: EN-US
-    representation: ts.Representation = fl1.representations.symbolic_representation
+    representation: ts.Representation = ts.representations.symbolic_representation
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.enus
     ts.register_styledstring(clazz=pl1.clazzes.conditional, text="material implication", representation=representation,
@@ -87,7 +87,7 @@ def load():
     # Representation: Common Language
     # Flavor: Default
     # Language: FR-CH
-    representation: ts.Representation = fl1.representations.common_language
+    representation: ts.Representation = ts.representations.common_language
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.frch
     ts.register_styledstring(clazz=pl1.clazzes.conditional, text="conditionnel", representation=representation,
@@ -98,7 +98,7 @@ def load():
     # Representation: Symbolic Representation
     # Flavor: Default
     # Language: EN-US
-    representation: ts.Representation = fl1.representations.symbolic_representation
+    representation: ts.Representation = ts.representations.symbolic_representation
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.enus
     ts.register_symbol(clazz=pl1.clazzes.conditional, symbol=ts.symbols.rightwards_arrow, representation=representation,

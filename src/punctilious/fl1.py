@@ -21,18 +21,6 @@ class Representations:
 
     def __init__(self):
         super().__init__()
-        self._symbolic_representation = ts.Representation(name="symbolic-representation")
-        self._common_language = ts.Representation(name="common-language")
-
-    @property
-    def common_language(self) -> ts.Representation:
-        """The common-language representation used in free text."""
-        return self._common_language
-
-    @property
-    def symbolic_representation(self) -> ts.Representation:
-        """The formal representation used in formulas."""
-        return self._symbolic_representation
 
 
 representations: Representations = Representations()
@@ -193,17 +181,17 @@ class FormalObject(ts.Typesettable):
     """
 
     def __init__(self):
-        super().__init__(
-            default_representation=representations.symbolic_representation)  # Make the formal-object  # typesettable.
+        super().__init__(default_representation=ts.representations.symbolic_representation)  # Make the formal-object  #
+        # typesettable.
         self.declare_clazz_element(clazz=clazzes.formal_object)
 
     def __repr__(self):
         return super().to_string(protocol=ts.protocols.unicode_limited,
-            representation=representations.symbolic_representation)
+            representation=ts.representations.symbolic_representation)
 
     def __str__(self):
         return super().to_string(protocol=ts.protocols.unicode_limited,
-            representation=representations.symbolic_representation)
+            representation=ts.representations.symbolic_representation)
 
 
 class FormalLanguageCollection(FormalObject, abc.ABC):

@@ -40,7 +40,7 @@ def load():
     # Representation: Common Language
     # Flavor: Default
     # Language: EN-US
-    representation: ts.Representation = fl1.representations.common_language
+    representation: ts.Representation = ts.representations.common_language
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.enus
 
@@ -50,7 +50,7 @@ def load():
     # Representation: Common Language
     # Flavor: Default
     # Language: FR-CH
-    representation: ts.Representation = fl1.representations.common_language
+    representation: ts.Representation = ts.representations.common_language
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.frch
 
@@ -60,7 +60,7 @@ def load():
     # Representation: Symbolic Representation
     # Flavor: Default
     # Language: EN-US
-    representation: ts.Representation = fl1.representations.symbolic_representation
+    representation: ts.Representation = ts.representations.symbolic_representation
     flavor: ts.Flavor = ts.flavors.default
     language: ts.Language = ts.languages.enus
 
