@@ -2,26 +2,26 @@
 2024-02-05 09:17:35,587 - DEBUG - clazz: indexed_symbol, weight: 1000
 2024-02-05 09:17:35,587 - DEBUG - clazz: styled_text, weight: 2000
 2024-02-05 09:17:35,587 - DEBUG - clazz: symbol, weight: 2000
-2024-02-05 09:17:35,587 - DEBUG - flavor: default, weight: 100
-2024-02-05 09:17:35,588 - DEBUG - flavor: text_style.serif_normal, weight: 200
-2024-02-05 09:17:35,588 - DEBUG - flavor: text_style.serif_normal, weight: 300
-2024-02-05 09:17:35,588 - DEBUG - flavor: text_style.serif_bold, weight: 300
-2024-02-05 09:17:35,588 - DEBUG - flavor: text_style.serif_italic, weight: 300
-2024-02-05 09:17:35,588 - DEBUG - flavor: text_style.serif_bold_italic, weight: 300
-2024-02-05 09:17:35,588 - DEBUG - flavor: text_style.sans_serif_normal, weight: 300
-2024-02-05 09:17:35,588 - DEBUG - flavor: text_style.sans_serif_bold, weight: 300
-2024-02-05 09:17:35,588 - DEBUG - flavor: text_style.sans_serif_italic, weight: 300
-2024-02-05 09:17:35,588 - DEBUG - flavor: text_style.sans_serif_bold_italic, weight: 300
-2024-02-05 09:17:35,588 - DEBUG - flavor: text_style.script_normal, weight: 300
-2024-02-05 09:17:35,588 - DEBUG - flavor: text_style.script_bold, weight: 300
-2024-02-05 09:17:35,588 - DEBUG - flavor: text_style.fraktur_normal, weight: 300
-2024-02-05 09:17:35,589 - DEBUG - flavor: text_style.fraktur_bold, weight: 300
-2024-02-05 09:17:35,589 - DEBUG - flavor: text_style.monospace, weight: 300
-2024-02-05 09:17:35,589 - DEBUG - flavor: text_style.double_struck, weight: 300
+2024-02-05 09:17:35,587 - DEBUG - preference: default, weight: 100
+2024-02-05 09:17:35,588 - DEBUG - preference: text_style.serif_normal, weight: 200
+2024-02-05 09:17:35,588 - DEBUG - preference: text_style.serif_normal, weight: 300
+2024-02-05 09:17:35,588 - DEBUG - preference: text_style.serif_bold, weight: 300
+2024-02-05 09:17:35,588 - DEBUG - preference: text_style.serif_italic, weight: 300
+2024-02-05 09:17:35,588 - DEBUG - preference: text_style.serif_bold_italic, weight: 300
+2024-02-05 09:17:35,588 - DEBUG - preference: text_style.sans_serif_normal, weight: 300
+2024-02-05 09:17:35,588 - DEBUG - preference: text_style.sans_serif_bold, weight: 300
+2024-02-05 09:17:35,588 - DEBUG - preference: text_style.sans_serif_italic, weight: 300
+2024-02-05 09:17:35,588 - DEBUG - preference: text_style.sans_serif_bold_italic, weight: 300
+2024-02-05 09:17:35,588 - DEBUG - preference: text_style.script_normal, weight: 300
+2024-02-05 09:17:35,588 - DEBUG - preference: text_style.script_bold, weight: 300
+2024-02-05 09:17:35,588 - DEBUG - preference: text_style.fraktur_normal, weight: 300
+2024-02-05 09:17:35,589 - DEBUG - preference: text_style.fraktur_bold, weight: 300
+2024-02-05 09:17:35,589 - DEBUG - preference: text_style.monospace, weight: 300
+2024-02-05 09:17:35,589 - DEBUG - preference: text_style.double_struck, weight: 300
 2024-02-05 09:17:35,589 - DEBUG - Module typesetting: loaded.
-2024-02-05 09:17:35,590 - DEBUG - flavor: fl1.formula.function_call, weight: 200
-2024-02-05 09:17:35,590 - DEBUG - flavor: fl1.formula.prefix_no_parenthesis, weight: 300
-2024-02-05 09:17:35,590 - DEBUG - flavor: fl1.formula.infix, weight: 300
+2024-02-05 09:17:35,590 - DEBUG - preference: fl1.formula.function_call, weight: 200
+2024-02-05 09:17:35,590 - DEBUG - preference: fl1.formula.prefix_no_parenthesis, weight: 300
+2024-02-05 09:17:35,590 - DEBUG - preference: fl1.formula.infix, weight: 300
 2024-02-05 09:17:35,591 - DEBUG - clazz: fl1.formal_object, weight: 2000
 2024-02-05 09:17:35,591 - DEBUG - clazz: fl1.formula, weight: 3000
 2024-02-05 09:17:35,591 - DEBUG - clazz: fl1.atomic_formula, weight: 4000
@@ -42,8 +42,8 @@
 2024-02-05 09:17:35,591 - DEBUG - clazz: fl1.ml1, weight: 2000
 2024-02-05 09:17:35,592 - DEBUG - Module fl1: loaded.
 2024-02-05 09:17:35,593 - DEBUG - Module fl1_presentation: loaded.
-2024-02-05 09:17:35,594 - DEBUG - flavor: pl1.connective.negation.tilde, weight: 200
-2024-02-05 09:17:35,594 - DEBUG - flavor: pl1.connective.negation.not, weight: 300
+2024-02-05 09:17:35,594 - DEBUG - preference: pl1.connective.negation.tilde, weight: 200
+2024-02-05 09:17:35,594 - DEBUG - preference: pl1.connective.negation.not, weight: 300
 2024-02-05 09:17:35,594 - DEBUG - clazz: pl1.connective.conditional, weight: 3000
 2024-02-05 09:17:35,594 - DEBUG - clazz: pl1ml.meta_variable, weight: 4000
 2024-02-05 09:17:35,594 - DEBUG - clazz: pl1.connective.negation, weight: 3000
@@ -56,8 +56,8 @@
 2024-02-05 09:17:35,597 - DEBUG - Module punctilious: loaded.
 2024-02-05 09:17:35,611 - DEBUG - FormalObject-2249564522576
 2024-02-05 09:17:35,611 - DEBUG - clazz: test-1, weight: 2000
-2024-02-05 09:17:35,617 - DEBUG - flavor: pl1.connective.negation.tilde, weight: 400
-2024-02-05 09:17:35,617 - DEBUG - flavor: pl1.connective.negation.not, weight: 500
+2024-02-05 09:17:35,617 - DEBUG - preference: pl1.connective.negation.tilde, weight: 400
+2024-02-05 09:17:35,617 - DEBUG - preference: pl1.connective.negation.not, weight: 500
 2024-02-05 09:17:35,619 - ERROR - connective is not a pl1 connective.
 2024-02-05 09:17:35,619 - ERROR - term is not a pl1 well-formed-formula.
 2024-02-05 09:17:35,627 - DEBUG - FormalObject 'lnotP' (python id: 2249564080208) is already present in this FormalLanguageClass as 'lnotP' (python id: 2249564081104). The existing object is reused and the new object is discarded.

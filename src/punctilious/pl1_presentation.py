@@ -110,59 +110,63 @@ def typeset_propositional_variable(o: pl1.PropositionalVariable,
 
 def load():
     # Representation: Common Language
-    # Flavor: Default
+    # Preference: Default
     # Language: EN-US
     representation: ts.Representation = ts.representations.symbolic_representation
-    flavor: ts.Flavor = ts.flavors.default
+    preference: ts.Preference = ts.preferences.default
     language: ts.Language = ts.languages.enus
     ts.register_styledstring(clazz=pl1.clazzes.conditional, text="material implication", representation=representation,
-        flavor=flavor, language=language)
-    ts.register_styledstring(clazz=pl1.clazzes.negation, text="negation", representation=representation, flavor=flavor,
-        language=language)
+        preference=preference, language=language)
+    ts.register_styledstring(clazz=pl1.clazzes.negation, text="negation", representation=representation,
+        preference=preference, language=language)
 
     # Representation: Common Language
-    # Flavor: Default
+    # Preference: Default
     # Language: FR-CH
     representation: ts.Representation = ts.representations.common_language
-    flavor: ts.Flavor = ts.flavors.default
+    preference: ts.Preference = ts.preferences.default
     language: ts.Language = ts.languages.frch
     ts.register_styledstring(clazz=pl1.clazzes.conditional, text="conditionnel", representation=representation,
-        flavor=flavor, language=language)
-    ts.register_styledstring(clazz=pl1.clazzes.negation, text="négation", representation=representation, flavor=flavor,
-        language=language)
+        preference=preference, language=language)
+    ts.register_styledstring(clazz=pl1.clazzes.negation, text="négation", representation=representation,
+        preference=preference, language=language)
 
     # Representation: Symbolic Representation
-    # Flavor: Default
+    # Preference: Default
     # Language: EN-US
     representation: ts.Representation = ts.representations.symbolic_representation
-    flavor: ts.Flavor = ts.flavors.default
+    preference: ts.Preference = ts.preferences.default
     language: ts.Language = ts.languages.enus
     ts.register_symbol(clazz=pl1.clazzes.conditional, symbol=ts.symbols.rightwards_arrow, representation=representation,
-        flavor=flavor, language=language)
+        preference=preference, language=language)
     ts.register_symbol(clazz=pl1.clazzes.negation, symbol=ts.symbols.not_sign, representation=representation,
-        flavor=pl1.flavors.connective_negation_not, language=language)
+        preference=pl1.preferences.connective_negation_not, language=language)
     ts.register_symbol(clazz=pl1.clazzes.negation, symbol=ts.symbols.tilde, representation=representation,
-        flavor=pl1.flavors.connective_negation_tilde, language=language)
+        preference=pl1.preferences.connective_negation_tilde, language=language)
 
     # Formulas
-    flavor: ts.Flavor = fl1.flavors.formula_function_call
+    preference: ts.Preference = fl1.preferences.formula_function_call
     ts.register_typesetting_method(python_function=typeset_binary_formula_function_call,
-        clazz=pl1.clazzes.propositional_binary_formula, representation=representation, flavor=flavor, language=language)
-    ts.register_typesetting_method(python_function=typeset_unary_formula_function_call,
-        clazz=pl1.clazzes.propositional_unary_formula, representation=representation, flavor=flavor, language=language)
-
-    flavor: ts.Flavor = fl1.flavors.formula_prefix_no_parenthesis
-    ts.register_typesetting_method(clazz=pl1.clazzes.propositional_unary_formula,
-        python_function=typeset_unary_formula_prefix_without_parenthesis, representation=representation, flavor=flavor,
+        clazz=pl1.clazzes.propositional_binary_formula, representation=representation, preference=preference,
         language=language)
-    flavor: ts.Flavor = fl1.flavors.formula_infix
+    ts.register_typesetting_method(python_function=typeset_unary_formula_function_call,
+        clazz=pl1.clazzes.propositional_unary_formula, representation=representation, preference=preference,
+        language=language)
+
+    preference: ts.Preference = fl1.preferences.formula_prefix_no_parenthesis
+    ts.register_typesetting_method(clazz=pl1.clazzes.propositional_unary_formula,
+        python_function=typeset_unary_formula_prefix_without_parenthesis, representation=representation,
+        preference=preference, language=language)
+    preference: ts.Preference = fl1.preferences.formula_infix
     ts.register_typesetting_method(clazz=pl1.clazzes.propositional_binary_formula,
-        python_function=typeset_binary_formula_infix, representation=representation, flavor=flavor, language=language)
-    flavor: ts.Flavor = ts.flavors.default
+        python_function=typeset_binary_formula_infix, representation=representation, preference=preference,
+        language=language)
+    preference: ts.Preference = ts.preferences.default
     ts.register_typesetting_method(clazz=pl1.clazzes.propositional_variable,
-        python_function=typeset_propositional_variable, representation=representation, flavor=flavor, language=language)
+        python_function=typeset_propositional_variable, representation=representation, preference=preference,
+        language=language)
     ts.register_typesetting_method(clazz=pl1.clazzes.meta_variable, python_function=typeset_meta_variable,
-        representation=representation, flavor=flavor, language=language)
+        representation=representation, preference=preference, language=language)
 
 
 load()

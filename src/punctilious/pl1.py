@@ -15,31 +15,31 @@ import fl1
 #   For a good synthesis on notation conventions for propositional logic.
 
 
-class Flavors:
+class Preferences:
     _singleton = None
 
     def __new__(cls):
         if cls._singleton is None:
-            cls._singleton = super(Flavors, cls).__new__(cls)
+            cls._singleton = super(Preferences, cls).__new__(cls)
         return cls._singleton
 
     def __init__(self):
         super().__init__()
         # negation
-        self._connective_negation_tilde: ts.Flavor = ts.flavors.register(name="pl1.connective.negation.tilde")
-        self._connective_negation_not: ts.Flavor = ts.flavors.register(name="pl1.connective.negation.not",
+        self._connective_negation_tilde: ts.Preference = ts.preferences.register(name="pl1.connective.negation.tilde")
+        self._connective_negation_not: ts.Preference = ts.preferences.register(name="pl1.connective.negation.not",
             predecessor=self._connective_negation_tilde)  # define default preference.
 
     @property
-    def connective_negation_not(self) -> ts.Flavor:
+    def connective_negation_not(self) -> ts.Preference:
         return self._connective_negation_not
 
     @property
-    def connective_negation_tilde(self) -> ts.Flavor:
+    def connective_negation_tilde(self) -> ts.Preference:
         return self._connective_negation_tilde
 
 
-flavors = Flavors()
+preferences = Preferences()
 
 
 class Clazzes:

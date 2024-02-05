@@ -18,7 +18,7 @@ class TestFormalObject:
         clazz1 = pu.ts.clazzes.register(name="test-1")
         o.declare_clazz_element(clazz=clazz1)
         fun = pu.ts.register_styledstring(clazz=clazz1, text="hello world",
-            representation=pu.ts.representations.symbolic_representation, flavor=pu.ts.flavors.default,
+            representation=pu.ts.representations.symbolic_representation, preference=pu.ts.preferences.default,
             language=pu.ts.languages.default)
         output_2 = ''.join(fun(o=o))
         assert len(output_2) > 0

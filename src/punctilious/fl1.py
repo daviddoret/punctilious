@@ -27,40 +27,40 @@ class Representations:
 representations: Representations = Representations()
 
 
-class Flavors:
+class Preferences:
     _singleton = None
 
     def __new__(cls):
         if cls._singleton is None:
-            cls._singleton = super(Flavors, cls).__new__(cls)
+            cls._singleton = super(Preferences, cls).__new__(cls)
         return cls._singleton
 
     def __init__(self):
         super().__init__()
         # formulas
-        self._formula_function_call: ts.Flavor = ts.flavors.register(name="fl1.formula.function_call")
-        self._formula_prefix_no_parenthesis: ts.Flavor = ts.flavors.register(name="fl1.formula.prefix_no_parenthesis",
-            predecessor=self.formula_function_call)
-        self._formula_infix: ts.Flavor = ts.flavors.register(name="fl1.formula.infix",
+        self._formula_function_call: ts.Preference = ts.preferences.register(name="fl1.formula.function_call")
+        self._formula_prefix_no_parenthesis: ts.Preference = ts.preferences.register(
+            name="fl1.formula.prefix_no_parenthesis", predecessor=self.formula_function_call)
+        self._formula_infix: ts.Preference = ts.preferences.register(name="fl1.formula.infix",
             predecessor=self._formula_function_call)
 
     @property
-    def formula_function_call(self) -> ts.Flavor:
+    def formula_function_call(self) -> ts.Preference:
         """Typeset formulas with function notation, e.g.: f(x), g(x ,y), h(x ,y ,z), etc."""
         return self._formula_function_call
 
     @property
-    def formula_prefix_no_parenthesis(self) -> ts.Flavor:
+    def formula_prefix_no_parenthesis(self) -> ts.Preference:
         """Typeset unary formulas with prefix notation and without parenthesis, e.g.: fx"""
         return self._formula_prefix_no_parenthesis
 
     @property
-    def formula_infix(self) -> ts.Flavor:
+    def formula_infix(self) -> ts.Preference:
         """Typeset binary formulas with infix notation, e.g.: x f y"""
         return self._formula_infix
 
 
-flavors: Flavors = Flavors()
+preferences: Preferences = Preferences()
 
 
 # TAGS

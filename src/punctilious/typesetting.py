@@ -225,20 +225,20 @@ class Representations:
 representations = Representations()
 
 
-class Flavor:
-    """A flavor is a refined typesetting approach for a representation.
+class Preference:
+    """A preference is a refined typesetting approach for a representation.
 
     For example, if several conventions are possible to typeset a particular object with a particular representation,
     of if several authors use different conventions,
-    then flavors may be used to distinguish these.
+    then preferences may be used to distinguish these.
 
     """
 
-    def __init__(self, name: str, predecessor: typing.Optional[Flavor] = None):
+    def __init__(self, name: str, predecessor: typing.Optional[Preference] = None):
         self._name = name
         self._predecessor: typing.Optional[Clazz] = predecessor
         self._weight: int = 100 if predecessor is None else predecessor.weight + 100
-        log.debug(f"flavor: {self.name}, weight: {self.weight}")
+        log.debug(f"preference: {self.name}, weight: {self.weight}")
 
     def __eq__(self, other):
         return self is other
@@ -262,31 +262,31 @@ class Flavor:
         return self._weight
 
     @property
-    def predecessor(self) -> typing.Optional[Flavor]:
+    def predecessor(self) -> typing.Optional[Preference]:
         return self._predecessor
 
     @predecessor.setter
-    def predecessor(self, predecessor: typing.Optional[Flavor]):
+    def predecessor(self, predecessor: typing.Optional[Preference]):
         """Makes it possible to modify the order of preference between flavours at run-time."""
         # TODO: BUG: Prevent self-reference
         # TODO: BUG: Prevent circularity
         # TODO: BUG: Prevent unlimited weight increase
         self._predecessor: typing.Optional[Clazz] = predecessor
         self._weight: int = 100 if predecessor is None else predecessor.weight + 100
-        log.debug(f"flavor: {self.name}, weight: {self.weight}")
+        log.debug(f"preference: {self.name}, weight: {self.weight}")
 
 
-class Flavors:
-    """A catalog of out-of-the-box flavors."""''
+class Preferences:
+    """A catalog of out-of-the-box preferences."""''
     _singleton = None
 
     def __new__(cls):
         if cls._singleton is None:
-            cls._singleton = super(Flavors, cls).__new__(cls)
+            cls._singleton = super(Preferences, cls).__new__(cls)
         return cls._singleton
 
     def __init__(self):
-        self._internal_data_structure: set[Flavor] = set()
+        self._internal_data_structure: set[Preference] = set()
         self._default = self._register(name='default')
         self._text_style = self.register(name="text_style.serif_normal", predecessor=self._default)
         self._text_style_serif_normal = self.register(name="text_style.serif_normal", predecessor=self._text_style)
@@ -309,80 +309,80 @@ class Flavors:
         self._text_style_monospace = self.register(name="text_style.monospace", predecessor=self._text_style)
         self._text_style_double_struck = self.register(name="text_style.double_struck", predecessor=self._text_style)
 
-    def _register(self, name: str, predecessor: typing.Optional[Flavor] = None) -> Flavor:
+    def _register(self, name: str, predecessor: typing.Optional[Preference] = None) -> Preference:
         """The protected version of the register method is called once for the root element, because it has no predecessor."""
-        flavor: Flavor = Flavor(name=name, predecessor=predecessor)
-        self._internal_data_structure.add(flavor)
-        return flavor
+        preference: Preference = Preference(name=name, predecessor=predecessor)
+        self._internal_data_structure.add(preference)
+        return preference
 
     @property
-    def default(self) -> Flavor:
-        """If no flavor is specified, typesetting uses the default flavor."""
+    def default(self) -> Preference:
+        """If no preference is specified, typesetting uses the default preference."""
         return self._default
 
     @property
-    def text_style_serif_normal(self) -> Flavor:
+    def text_style_serif_normal(self) -> Preference:
         return self._text_style_serif_normal
 
     @property
-    def text_style_serif_bold(self) -> Flavor:
+    def text_style_serif_bold(self) -> Preference:
         return self._text_style_serif_bold
 
     @property
-    def text_style_serif_italic(self) -> Flavor:
+    def text_style_serif_italic(self) -> Preference:
         return self._text_style_serif_italic
 
     @property
-    def text_style_serif_bold_italic(self) -> Flavor:
+    def text_style_serif_bold_italic(self) -> Preference:
         return self._text_style_serif_bold_italic
 
     @property
-    def text_style_sans_serif_normal(self) -> Flavor:
+    def text_style_sans_serif_normal(self) -> Preference:
         return self._text_style_sans_serif_normal
 
     @property
-    def text_style_sans_serif_bold(self) -> Flavor:
+    def text_style_sans_serif_bold(self) -> Preference:
         return self._text_style_sans_serif_bold
 
     @property
-    def text_style_sans_serif_italic(self) -> Flavor:
+    def text_style_sans_serif_italic(self) -> Preference:
         return self._text_style_sans_serif_italic
 
     @property
-    def text_style_sans_serif_bold_italic(self) -> Flavor:
+    def text_style_sans_serif_bold_italic(self) -> Preference:
         return self._text_style_sans_serif_bold_italic
 
     @property
-    def text_style_script_normal(self) -> Flavor:
+    def text_style_script_normal(self) -> Preference:
         return self._text_style_script_normal
 
     @property
-    def text_style_script_bold(self) -> Flavor:
+    def text_style_script_bold(self) -> Preference:
         return self._text_style_script_bold
 
     @property
-    def text_style_fraktur_normal(self) -> Flavor:
+    def text_style_fraktur_normal(self) -> Preference:
         return self._text_style_fraktur_normal
 
     @property
-    def text_style_fraktur_bold(self) -> Flavor:
+    def text_style_fraktur_bold(self) -> Preference:
         return self._text_style_fraktur_bold
 
     @property
-    def text_style_monospace(self) -> Flavor:
+    def text_style_monospace(self) -> Preference:
         return self._text_style_monospace
 
     @property
-    def text_style_double_struck(self) -> Flavor:
+    def text_style_double_struck(self) -> Preference:
         return self._text_style_double_struck
 
-    def register(self, name: str, predecessor: typing.Optional[Flavor] = None) -> Flavor:
+    def register(self, name: str, predecessor: typing.Optional[Preference] = None) -> Preference:
         if predecessor is None:
             predecessor = self.default
         return self._register(name=name, predecessor=predecessor)
 
 
-flavors = Flavors()
+preferences = Preferences()
 
 
 class Language:
@@ -451,11 +451,11 @@ class TypesettingMethods(dict):
 
 
 typesetting_methods: typing.Dict[typing.FrozenSet[Clazz, Representation], typing.Dict[
-    typing.FrozenSet[Clazz, Flavor, Language], typing.Callable]] = (TypesettingMethods())
+    typing.FrozenSet[Clazz, Preference, Language], typing.Callable]] = (TypesettingMethods())
 
 
 def register_typesetting_method(python_function: typing.Callable, clazz: Clazz, representation: Representation,
-    flavor: Flavor, language: Language) -> typing.Callable:
+    preference: Preference, language: Language) -> typing.Callable:
     """Register a typesetting method for the given protocol, representation, and language.
     If protocol, representation, and/or language are not specified, use the defaults.
     If default protocol, representation, and/or language are not defined, use the fail-safe.
@@ -466,12 +466,12 @@ def register_typesetting_method(python_function: typing.Callable, clazz: Clazz, 
     key: typing.FrozenSet[Clazz, Representation] = frozenset([clazz, representation])
     if key not in typesetting_methods:
         typesetting_methods[key] = dict()
-    solution: typing.FrozenSet[Clazz, Flavor, Language] = frozenset([clazz, flavor, language])
+    solution: typing.FrozenSet[Clazz, Preference, Language] = frozenset([clazz, preference, language])
     typesetting_methods[key][solution]: typing.Callable = python_function
     if representation is not representations.technical_representation:
         # the first registered typesetting_method is promoted as the default typesetting_method
         register_typesetting_method(python_function=python_function, clazz=clazz,
-            representation=representations.technical_representation, flavor=flavor, language=language)
+            representation=representations.technical_representation, preference=preference, language=language)
     return python_function
 
 
@@ -481,7 +481,7 @@ def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None,
     global typesetting_methods
     global protocols
     global representations
-    global flavors
+    global preferences
     global languages
 
     if representation is None:
@@ -501,31 +501,32 @@ def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None,
     # some typesetting methods were found, choose the best one.
     best_generator = None
     best_key: typing.Optional[typing.FrozenSet[Clazz, Representation]] = None
-    best_solution: typing.Optional[typing.FrozenSet[Clazz, Flavor, Language]] = None
-    best_flavor: Flavor = None
+    best_solution: typing.Optional[typing.FrozenSet[Clazz, Preference, Language]] = None
+    best_preference: Preference = None
     best_score = 0
     key: typing.FrozenSet[Clazz, Representation]
-    solution: typing.FrozenSet[Clazz, Flavor, Language]
+    solution: typing.FrozenSet[Clazz, Preference, Language]
     for key in available_keys:
         for solution, generator in typesetting_methods[key].items():
             # solution is of the form set[clazz,flavour,language,].
-            flavor: Flavor = next(iter(flavor for flavor in solution if isinstance(flavor, Flavor)))
+            preference: Preference = next(
+                iter(preference for preference in solution if isinstance(preference, Preference)))
             score = next(iter(solution.intersection(o.typesetting_clazzes))).weight
-            score = score + flavor.weight
+            score = score + preference.weight
             score = score + (1 if languages in solution else 0)
             if score > best_score:
                 best_score = score
                 best_key = key
                 best_solution = solution
-                best_flavor = flavor
-                best_generator = generator  # log.debug(msg=f"New: {best_score} {best_key} {best_solution} {best_flavor}")
+                best_preference = preference
+                best_generator = generator  # log.debug(msg=f"New: {best_score} {best_key} {best_solution} {best_preference}")
     if best_generator is None:
         # no typesetting method found, use fallback typesetting instead.
-        kwargs['flavor'] = best_flavor
+        kwargs['preference'] = best_preference
         yield from fallback_typesetting_method(o=o, protocol=protocol, representation=representation, language=language,
             **kwargs)
     else:
-        kwargs['flavor'] = best_flavor
+        kwargs['preference'] = best_preference
         yield from best_generator(o=o, protocol=protocol, representation=representation, language=language, **kwargs)
 
 
@@ -773,13 +774,13 @@ def register_symbol(clazz: Clazz, symbol: Symbol, **kwargs1) -> typing.Callable:
 
 
 class StyledText(Typesettable):
-    unicode_indexes = {flavors.text_style_serif_normal: 0, flavors.text_style_serif_bold: 1,
-        flavors.text_style_serif_italic:                2, flavors.text_style_serif_bold_italic: 3,
-        flavors.text_style_sans_serif_normal:           4, flavors.text_style_sans_serif_bold: 5,
-        flavors.text_style_sans_serif_italic:           6, flavors.text_style_sans_serif_bold_italic: 7,
-        flavors.text_style_script_normal:               8, flavors.text_style_script_bold: 9,
-        flavors.text_style_fraktur_normal:              10, flavors.text_style_fraktur_bold: 11,
-        flavors.text_style_monospace:                   12, flavors.text_style_double_struck: 13}
+    unicode_indexes = {preferences.text_style_serif_normal: 0, preferences.text_style_serif_bold: 1,
+        preferences.text_style_serif_italic:                2, preferences.text_style_serif_bold_italic: 3,
+        preferences.text_style_sans_serif_normal:           4, preferences.text_style_sans_serif_bold: 5,
+        preferences.text_style_sans_serif_italic:           6, preferences.text_style_sans_serif_bold_italic: 7,
+        preferences.text_style_script_normal:               8, preferences.text_style_script_bold: 9,
+        preferences.text_style_fraktur_normal:              10, preferences.text_style_fraktur_bold: 11,
+        preferences.text_style_monospace:                   12, preferences.text_style_double_struck: 13}
     unicode_styled_characters = {'a': 'a𝐚𝑎𝒂𝖺𝗮𝘢𝙖𝒶𝓪𝔞𝖆𝚊𝕒', 'b': 'b𝐛𝑏𝒃𝖻𝗯𝘣𝙗𝒷𝓫𝔟𝖇𝚋𝕓', 'c': 'c𝐜𝑐𝒄𝖼𝗰𝘤𝙘𝒸𝓬𝔠𝖈𝚌𝕔',
         'd':                          'd𝐝𝑑𝒅𝖽𝗱𝘥𝙙𝒹𝓭𝔡𝖉𝚍𝕕', 'e': 'e𝐞𝑒𝒆𝖾𝗲𝘦𝙚ℯ𝓮𝔢𝖊𝚎𝕖', 'f': 'f𝐟𝑓𝒇𝖿𝗳𝘧𝙛𝒻𝓯𝔣𝖋𝚏𝕗',
         'g':                          'g𝐠𝑔𝒈𝗀𝗴𝘨𝙜ℊ𝓰𝔤𝖌𝚐𝕘', 'h': 'h𝐡ℎ𝒉𝗁𝗵𝘩𝙝𝒽𝓱𝔥𝖍𝚑𝕙', 'i': 'i𝐢𝑖𝒊𝗂𝗶𝘪𝙞𝒾𝓲𝔦𝖎𝚒𝕚',
@@ -867,14 +868,14 @@ def fallback_typesetting_method(o: Typesettable, **kwargs):
 
 
 register_typesetting_method(python_function=typeset_styled_text, clazz=clazzes.symbol,
-    representation=representations.technical_representation, flavor=flavors.default, language=languages.default)
+    representation=representations.technical_representation, preference=preferences.default, language=languages.default)
 register_typesetting_method(python_function=typeset_symbol, clazz=clazzes.symbol,
-    representation=representations.technical_representation, flavor=flavors.default, language=languages.default)
+    representation=representations.technical_representation, preference=preferences.default, language=languages.default)
 register_typesetting_method(python_function=typeset_symbol, clazz=clazzes.symbol,
-    representation=representations.symbolic_representation, flavor=flavors.default, language=languages.default)
+    representation=representations.symbolic_representation, preference=preferences.default, language=languages.default)
 register_typesetting_method(python_function=typeset_indexed_symbol, clazz=clazzes.indexed_symbol,
-    representation=representations.technical_representation, flavor=flavors.default, language=languages.default)
+    representation=representations.technical_representation, preference=preferences.default, language=languages.default)
 register_typesetting_method(python_function=typeset_indexed_symbol, clazz=clazzes.indexed_symbol,
-    representation=representations.symbolic_representation, flavor=flavors.default, language=languages.default)
+    representation=representations.symbolic_representation, preference=preferences.default, language=languages.default)
 
 log.debug(f"Module {__name__}: loaded.")
