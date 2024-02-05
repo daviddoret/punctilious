@@ -138,30 +138,38 @@ class TestPL1ML:
     def test_substitute_meta_variables(self):
         l1 = pu.pl1.PL1()
 
-        mv = l1.meta_language.meta_variables.declare_meta_variable()
-        mw = l1.meta_language.meta_variables.declare_meta_variable()
+        va = l1.meta_language.meta_variables.declare_meta_variable()
+        vb = l1.meta_language.meta_variables.declare_meta_variable()
         pa = l1.propositional_variables.declare_proposition_variable()
         pb = l1.propositional_variables.declare_proposition_variable()
         pc = l1.propositional_variables.declare_proposition_variable()
-        m = {mv: pa}
-        m2 = {mv: pa, mw: pb}
+        map1 = {va: pa}
+        map2 = {va: pa, vb: pb}
 
         phi = pa
-        psi = l1.meta_language.substitute_meta_variables(phi=phi, m=m)
+        psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
         assert psi == pa
 
-        phi = mv
-        psi = l1.meta_language.substitute_meta_variables(phi=phi, m=m)
+        phi = va
+        psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
         assert psi == pa
 
         phi = l1.compound_formulas.declare_unary_formula(connective=l1.connectives.negation, term=pa)
-        psi = l1.meta_language.substitute_meta_variables(phi=phi, m=m)
+        psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
         assert psi == phi
 
         phi = l1.meta_language.compound_formulas.declare_binary_formula(connective=l1.connectives.conditional,
-            term_1=pa, term_2=mv)
+            term_1=pa, term_2=va)
         pu.log.info(f'{phi}')
-        psi = l1.meta_language.substitute_meta_variables(phi=phi, m=m)
+        psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
         chi = l1.compound_formulas.declare_binary_formula(connective=l1.connectives.conditional, term_1=pa, term_2=pa)
         pu.log.info(f'{psi} == {chi}')
         assert psi == chi
+
+        phi2 = l1.meta_language.compound_formulas.declare_binary_formula(connective=l1.connectives.conditional,
+            term_1=vb, term_2=phi)
+        pu.log.info(f'{phi2}')
+        psi = l1.meta_language.substitute_meta_variables(phi=phi2, m=map2)
+        chi2 = l1.compound_formulas.declare_binary_formula(connective=l1.connectives.conditional, term_1=pb, term_2=chi)
+        pu.log.info(f'{psi} == {chi2}')
+        assert psi == chi2

@@ -487,6 +487,7 @@ def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None,
     if representation is None:
         representation: Representation = o.default_representation
         if representation is None:
+            # fallback to the fail-safe representation method.
             representation: Representation = representations.technical_representation
     if language is None:
         language: Language = languages.default
