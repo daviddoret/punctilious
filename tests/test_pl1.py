@@ -132,3 +132,36 @@ class TestPL1:
 
         assert len(str(pi)) > 0
         log.debug(msg=str(pi))
+
+
+class TestPL1ML:
+    def test_substitute_meta_variables(self):
+        l1 = pu.pl1.PL1()
+
+        mv = l1.meta_language.meta_variables.declare_meta_variable()
+        mw = l1.meta_language.meta_variables.declare_meta_variable()
+        pa = l1.propositional_variables.declare_proposition_variable()
+        pb = l1.propositional_variables.declare_proposition_variable()
+        pc = l1.propositional_variables.declare_proposition_variable()
+        m = {mv: pa}
+        m2 = {mv: pa, mw: pb}
+
+        phi = pa
+        psi = l1.meta_language.substitute_meta_variables(phi=phi, m=m)
+        assert psi == pa
+
+        phi = mv
+        psi = l1.meta_language.substitute_meta_variables(phi=phi, m=m)
+        assert psi == pa
+
+        phi = l1.compound_formulas.declare_unary_formula(connective=l1.connectives.negation, term=pa)
+        psi = l1.meta_language.substitute_meta_variables(phi=phi, m=m)
+        assert psi == phi
+
+        phi = l1.meta_language.compound_formulas.declare_binary_formula(connective=l1.connectives.conditional,
+            term_1=pa, term_2=mv)
+        pu.log.info(f'{phi}')
+        psi = l1.meta_language.substitute_meta_variables(phi=phi, m=m)
+        chi = l1.compound_formulas.declare_binary_formula(connective=l1.connectives.conditional, term_1=pa, term_2=pa)
+        pu.log.info(f'{psi} == {chi}')
+        assert psi == chi

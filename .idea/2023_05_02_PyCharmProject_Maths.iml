@@ -7,7 +7,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/punctilious" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/punctilious_obsolete" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
-      <excludeFolder url="file://$MODULE_DIR$/tests_obsolete_20240114" />
       <excludeFolder url="file://$MODULE_DIR$/project" />
       <excludeFolder url="file://$MODULE_DIR$/src/punctilious_obsolete_20240114" />
       <excludeFolder url="file://$MODULE_DIR$/theory" />

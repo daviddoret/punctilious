@@ -5,6 +5,7 @@ from __future__ import annotations
 import abc
 import typing
 
+import fl1
 import log
 import typesetting as ts
 
@@ -396,15 +397,42 @@ class Formula(FormalObject):
     def formal_language_collection(self) -> FormalLanguageCollection:
         return self._formal_language_collection
 
-    def iterate_leaf_elements(self):
+    def iterate_leaf_formulas(self) -> typing.Generator[AtomicFormula, None, None]:
         """Iterate through the formula-tree and return its ordered leaf elements (i.e.: its atomic-formulas). The order is reproducible: formula terms are read from left to right, depth-first."""
         if isinstance(self, AtomicFormula):
             yield self
         elif isinstance(self, CompoundFormula):
             for term in self.terms:
-                yield from term.iterate_leaf_elements()
+                yield from term.iterate_leaf_formulas()
         else:
             log.error(msg='Unsupported formula type.')
+
+    def iterate_formulas(self) -> typing.Generator[Formula, None, None]:
+        """Iterate through the formula-tree and return its ordered formulas components in canonical order.
+        Canonical order: top-down, formula terms are read from left to right, depth-first."""
+        yield self
+        if isinstance(self, CompoundFormula):
+            for term in self.terms:
+                yield from term.iterate_formulas()
+
+    def iterate_formulas_inverse(self) -> typing.Generator[Formula, None, None]:
+        """Yields formula in reversed canonical order, """
+        original_sequence: list[Formula] = list(self.iterate_formulas())
+        for phi in reversed(original_sequence):
+            yield phi
+
+    def list_formulas(self, s: typing.Optional[set[fl1.Formula]] = None) -> set[fl1.Formula]:
+        """List all unique formulas in the formula-tree.
+        Let s' be the set of unique formula elements in the formula-tree, returns the set s received as a
+        parameter, union s'.
+        Note that parameter s is a mutable set, so s is transformed during the process.
+        Algorithm: formula terms are read from left to right, depth-first."""
+        if self not in s:
+            s.add(self)
+        if isinstance(self, CompoundFormula):
+            for term in self.terms:
+                term.list_formulas(s=s)
+        return s
 
 
 class AtomicFormula(Formula):
@@ -417,7 +445,7 @@ class CompoundFormula(Formula):
     """A compound-formula is a formal-object and a tree-structure of atomic-formulas and compound-formulas."""
 
     def __init__(self, formal_language_collection: FormalLanguageCollection, connective: Connective,
-        terms: typing.Tuple[FormalObject]):
+        terms: typing.Tuple[Formula]):
         if isinstance(connective, FixedArityConnective):
             if connective.arity_as_int != len(terms):
                 log.error(msg='The number of arguments is not equal to the arity of the fixed-arity-connective.')
@@ -425,8 +453,8 @@ class CompoundFormula(Formula):
             pass
         else:
             log.error(msg='Unsupported connective python class.')
-        self._connective = connective
-        self._terms = terms
+        self._connective: Connective = connective
+        self._terms: typing.Tuple[Formula] = terms
         super().__init__(formal_language_collection=formal_language_collection)
         self.declare_clazz_element(clazz=clazzes.compound_formula)
 
@@ -446,7 +474,7 @@ class CompoundFormula(Formula):
         return self._connective
 
     @property
-    def terms(self) -> typing.Tuple[FormalObject]:
+    def terms(self) -> typing.Tuple[Formula]:
         return self._terms
 
 
@@ -454,7 +482,7 @@ class FixedArityFormula(CompoundFormula):
     """A fixed-arity-formula is a formula with a fixed-arity connective."""
 
     def __init__(self, formal_language_collection: FormalLanguageCollection, connective: FixedArityConnective,
-        terms: typing.Tuple[FormalObject, ...]):
+        terms: typing.Tuple[Formula, ...]):
         super().__init__(formal_language_collection=formal_language_collection, connective=connective, terms=terms)
         self.declare_clazz_element(clazz=clazzes.fixed_arity_formula)
 
@@ -463,12 +491,12 @@ class UnaryFormula(FixedArityFormula):
     """A unary-formula is a formula with a fixed unary connective."""
 
     def __init__(self, formal_language_collection: FormalLanguageCollection, connective: UnaryConnective,
-        term: FormalObject):
+        term: Formula):
         super().__init__(formal_language_collection=formal_language_collection, connective=connective, terms=(term,))
         self.declare_clazz_element(clazz=clazzes.unary_formula)
 
     @property
-    def term(self) -> FormalObject:
+    def term(self) -> Formula:
         return self.terms[0]
 
 
@@ -476,17 +504,17 @@ class BinaryFormula(FixedArityFormula):
     """A binary-formula is a formula with a fixed binary connective."""
 
     def __init__(self, formal_language_collection: FormalLanguageCollection, connective: BinaryConnective,
-        term_1: FormalObject, term_2: FormalObject):
+        term_1: Formula, term_2: Formula):
         super().__init__(formal_language_collection=formal_language_collection, connective=connective,
             terms=(term_1, term_2,))
         self.declare_clazz_element(clazz=clazzes.binary_formula)
 
     @property
-    def term_1(self) -> FormalObject:
+    def term_1(self) -> Formula:
         return self.terms[0]
 
     @property
-    def term_2(self) -> FormalObject:
+    def term_2(self) -> Formula:
         return self.terms[1]
 
 
@@ -505,11 +533,6 @@ def generate_unique_values(generator):
         if value not in observed_values:
             observed_values.add(value)
             yield value
-
-
-def substitute_formula_elements_from_map(phi, map):
-    # TODO: Implement
-    pass
 
 
 log.debug(f"Module {__name__}: loaded.")

@@ -549,6 +549,10 @@ class Typesettable(abc.ABC):
     def declare_clazz_element(self, clazz: Clazz):
         self.typesetting_clazzes.add(clazz)
 
+    def is_an_element_of_clazz(self, c: Clazz):
+        """Return True of this object is an element of clazz c, False otherwise."""
+        return c in self._typesetting_clazzes
+
     def to_string(self, protocol: typing.Optional[Protocol] = None,
         representation: typing.Optional[Representation] = None, language: typing.Optional[Language] = None) -> str:
         return to_string(o=self, protocol=protocol, representation=representation, language=language)
@@ -633,6 +637,12 @@ class Symbols:
         self._p_uppercase_serif_italic = Symbol(latex_math='\\textit{P}', unicode_extended='𝑃', unicode_limited='P')
         self._q_uppercase_serif_italic = Symbol(latex_math='\\textit{Q}', unicode_extended='𝑄', unicode_limited='Q')
         self._r_uppercase_serif_italic = Symbol(latex_math='\\textit{R}', unicode_extended='𝑅', unicode_limited='R')
+        self._p_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{P}}', unicode_extended='𝑷',
+            unicode_limited='PP')
+        self._q_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{Q}}', unicode_extended='𝑸',
+            unicode_limited='QQ')
+        self._r_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{R}}', unicode_extended='𝑹',
+            unicode_limited='RR')
         self._rightwards_arrow = Symbol(latex_math='\\rightarrow', unicode_extended='→', unicode_limited='-->')
         self._space = Symbol(latex_math=' ', unicode_extended=' ', unicode_limited=' ')
         self._tilde = Symbol(latex_math='\\sim', unicode_extended='~', unicode_limited='~')
@@ -662,12 +672,24 @@ class Symbols:
         return self._p_uppercase_serif_italic
 
     @property
+    def p_uppercase_serif_italic_bold(self) -> Symbol:
+        return self._p_uppercase_serif_italic_bold
+
+    @property
     def q_uppercase_serif_italic(self) -> Symbol:
         return self._q_uppercase_serif_italic
 
     @property
+    def q_uppercase_serif_italic_bold(self) -> Symbol:
+        return self._q_uppercase_serif_italic_bold
+
+    @property
     def r_uppercase_serif_italic(self) -> Symbol:
         return self._r_uppercase_serif_italic
+
+    @property
+    def r_uppercase_serif_italic_bold(self) -> Symbol:
+        return self._r_uppercase_serif_italic_bold
 
     @property
     def rightwards_arrow(self) -> Symbol:
