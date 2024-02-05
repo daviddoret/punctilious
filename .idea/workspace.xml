@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/fl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/fl1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/fl1_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/fl1_presentation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pl1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pl1_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pl1_presentation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/punctilious.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/typesetting.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/typesetting.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/punctilious.log" beforeDir="false" afterPath="$PROJECT_DIR$/tests/punctilious.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_fl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_fl1.py" afterDir="false" />
-    </list>
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -129,7 +119,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/src/punctilious",
+    "last_opened_file_path": "C:/Users/David/PycharmProjects/punctilious/tests",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
@@ -150,11 +140,11 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\quote" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\David\PycharmProjects\punctilious\trashcan" />
+      <recent name="C:\Users\David\PycharmProjects\punctilious" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\trashcan" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\punctilious_obsolete_20240114" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\punctilious2" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\project" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\docs\source\python\class" />
     </key>
   </component>
   <component name="RunManager" selected="Python tests.pytest in tests">
@@ -343,7 +333,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests_obsolete_20240114&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -474,14 +464,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00432" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
-      <option name="closed" value="true" />
-      <created>1699911054508</created>
-      <option name="number" value="00432" />
-      <option name="presentableId" value="LOCAL-00432" />
-      <option name="project" value="LOCAL" />
-      <updated>1699911054508</updated>
     </task>
     <task id="LOCAL-00433" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
       <option name="closed" value="true" />
@@ -867,7 +849,15 @@
       <option name="project" value="LOCAL" />
       <updated>1707121789964</updated>
     </task>
-    <option name="localTasksCounter" value="481" />
+    <task id="LOCAL-00481" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1707145548872</created>
+      <option name="number" value="00481" />
+      <option name="presentableId" value="LOCAL-00481" />
+      <option name="project" value="LOCAL" />
+      <updated>1707145548872</updated>
+    </task>
+    <option name="localTasksCounter" value="482" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
