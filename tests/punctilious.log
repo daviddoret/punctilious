@@ -1,72 +1,72 @@
-2024-02-05 16:05:37,030 - DEBUG - clazz: default, weight: 1000
-2024-02-05 16:05:37,031 - DEBUG - clazz: indexed_symbol, weight: 1000
-2024-02-05 16:05:37,031 - DEBUG - clazz: styled_text, weight: 2000
-2024-02-05 16:05:37,031 - DEBUG - clazz: symbol, weight: 2000
-2024-02-05 16:05:37,031 - DEBUG - preference: default, weight: 100
-2024-02-05 16:05:37,031 - DEBUG - preference: text_style.serif_normal, weight: 200
-2024-02-05 16:05:37,031 - DEBUG - preference: text_style.serif_normal, weight: 300
-2024-02-05 16:05:37,031 - DEBUG - preference: text_style.serif_bold, weight: 300
-2024-02-05 16:05:37,031 - DEBUG - preference: text_style.serif_italic, weight: 300
-2024-02-05 16:05:37,036 - DEBUG - preference: text_style.serif_bold_italic, weight: 300
-2024-02-05 16:05:37,036 - DEBUG - preference: text_style.sans_serif_normal, weight: 300
-2024-02-05 16:05:37,036 - DEBUG - preference: text_style.sans_serif_bold, weight: 300
-2024-02-05 16:05:37,036 - DEBUG - preference: text_style.sans_serif_italic, weight: 300
-2024-02-05 16:05:37,036 - DEBUG - preference: text_style.sans_serif_bold_italic, weight: 300
-2024-02-05 16:05:37,036 - DEBUG - preference: text_style.script_normal, weight: 300
-2024-02-05 16:05:37,036 - DEBUG - preference: text_style.script_bold, weight: 300
-2024-02-05 16:05:37,036 - DEBUG - preference: text_style.fraktur_normal, weight: 300
-2024-02-05 16:05:37,037 - DEBUG - preference: text_style.fraktur_bold, weight: 300
-2024-02-05 16:05:37,037 - DEBUG - preference: text_style.monospace, weight: 300
-2024-02-05 16:05:37,037 - DEBUG - preference: text_style.double_struck, weight: 300
-2024-02-05 16:05:37,037 - DEBUG - Module typesetting: loaded.
-2024-02-05 16:05:37,038 - DEBUG - preference: fl1.formula.function_call, weight: 200
-2024-02-05 16:05:37,038 - DEBUG - preference: fl1.formula.prefix_no_parenthesis, weight: 300
-2024-02-05 16:05:37,038 - DEBUG - preference: fl1.formula.infix, weight: 300
-2024-02-05 16:05:37,038 - DEBUG - clazz: fl1.formal_object, weight: 2000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.formula, weight: 3000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.atomic_formula, weight: 4000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.compound_formula, weight: 4000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.connective, weight: 2000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.variable_arity_connective, weight: 3000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.fixed_arity_connective, weight: 3000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.binary_connective, weight: 4000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.unary_connective, weight: 4000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.fixed_arity_formula, weight: 3000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.binary_formula, weight: 4000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.unary_formula, weight: 4000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.formal_language_collection, weight: 3000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.compound_formula_collection, weight: 4000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.connective_collection, weight: 4000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.formal_language, weight: 2000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.meta_language, weight: 2000
-2024-02-05 16:05:37,039 - DEBUG - clazz: fl1.ml1, weight: 2000
-2024-02-05 16:05:37,039 - DEBUG - Module fl1: loaded.
-2024-02-05 16:05:37,041 - DEBUG - Module fl1_presentation: loaded.
-2024-02-05 16:05:37,043 - DEBUG - preference: pl1.connective.negation.tilde, weight: 200
-2024-02-05 16:05:37,043 - DEBUG - preference: pl1.connective.negation.not, weight: 300
-2024-02-05 16:05:37,043 - DEBUG - clazz: pl1.connective.conditional, weight: 3000
-2024-02-05 16:05:37,043 - DEBUG - clazz: pl1ml.meta_variable, weight: 4000
-2024-02-05 16:05:37,043 - DEBUG - clazz: pl1.connective.negation, weight: 3000
-2024-02-05 16:05:37,043 - DEBUG - clazz: pl1.propositional_formula, weight: 4000
-2024-02-05 16:05:37,043 - DEBUG - clazz: pl1.propositional_unary_formula, weight: 5000
-2024-02-05 16:05:37,043 - DEBUG - clazz: pl1.propositional_binary_formula, weight: 5000
-2024-02-05 16:05:37,043 - DEBUG - clazz: pl1.propositional_variable, weight: 3000
-2024-02-05 16:05:37,043 - DEBUG - Module pl1: loaded.
-2024-02-05 16:05:37,045 - DEBUG - Module pl1_presentation: loaded.
-2024-02-05 16:05:37,045 - DEBUG - Module punctilious: loaded.
-2024-02-05 16:05:37,059 - DEBUG - FormalObject-2449239442256
-2024-02-05 16:05:37,059 - DEBUG - clazz: test-1, weight: 2000
-2024-02-05 16:05:37,063 - DEBUG - preference: pl1.connective.negation.tilde, weight: 400
-2024-02-05 16:05:37,063 - DEBUG - preference: pl1.connective.negation.not, weight: 500
-2024-02-05 16:05:37,065 - ERROR - connective is not a pl1 connective.
-2024-02-05 16:05:37,065 - ERROR - term is not a pl1 well-formed-formula.
-2024-02-05 16:05:37,068 - DEBUG - FormalObject 'lnotP' (python id: 2449239119056) is already present in this FormalLanguageClass as 'lnotP' (python id: 2449239124176). The existing object is reused and the new object is discarded.
-2024-02-05 16:05:37,072 - DEBUG - lnotP --> lnotlnotP --> P --> lnotlnotP --> P
-2024-02-05 16:05:37,073 - DEBUG - FormalObject 'lnotP' (python id: 2449238757136) is already present in this FormalLanguageClass as 'lnotP' (python id: 2449238755408). The existing object is reused and the new object is discarded.
-2024-02-05 16:05:37,074 - INFO - P --> PP
-2024-02-05 16:05:37,074 - DEBUG - FormalObject 'P --> P' (python id: 2449239924560) is already present in this FormalLanguageClass as 'P --> P' (python id: 2449239133520). The existing object is reused and the new object is discarded.
-2024-02-05 16:05:37,074 - INFO - P --> P == P --> P
-2024-02-05 16:05:37,074 - INFO - PP --> P --> PP
-2024-02-05 16:05:37,075 - DEBUG - FormalObject 'P --> P' (python id: 2449239412368) is already present in this FormalLanguageClass as 'P --> P' (python id: 2449239133520). The existing object is reused and the new object is discarded.
-2024-02-05 16:05:37,075 - DEBUG - FormalObject 'P --> P --> P' (python id: 2449239412368) is already present in this FormalLanguageClass as 'P --> P --> P' (python id: 2449239420432). The existing object is reused and the new object is discarded.
-2024-02-05 16:05:37,075 - INFO - P --> P --> P == P --> P --> P
+2024-02-05 16:10:33,908 - DEBUG - clazz: default, weight: 1000
+2024-02-05 16:10:33,908 - DEBUG - clazz: indexed_symbol, weight: 1000
+2024-02-05 16:10:33,908 - DEBUG - clazz: styled_text, weight: 2000
+2024-02-05 16:10:33,908 - DEBUG - clazz: symbol, weight: 2000
+2024-02-05 16:10:33,909 - DEBUG - preference: default, weight: 100
+2024-02-05 16:10:33,909 - DEBUG - preference: text_style.serif_normal, weight: 200
+2024-02-05 16:10:33,909 - DEBUG - preference: text_style.serif_normal, weight: 300
+2024-02-05 16:10:33,909 - DEBUG - preference: text_style.serif_bold, weight: 300
+2024-02-05 16:10:33,909 - DEBUG - preference: text_style.serif_italic, weight: 300
+2024-02-05 16:10:33,919 - DEBUG - preference: text_style.serif_bold_italic, weight: 300
+2024-02-05 16:10:33,919 - DEBUG - preference: text_style.sans_serif_normal, weight: 300
+2024-02-05 16:10:33,921 - DEBUG - preference: text_style.sans_serif_bold, weight: 300
+2024-02-05 16:10:33,921 - DEBUG - preference: text_style.sans_serif_italic, weight: 300
+2024-02-05 16:10:33,921 - DEBUG - preference: text_style.sans_serif_bold_italic, weight: 300
+2024-02-05 16:10:33,921 - DEBUG - preference: text_style.script_normal, weight: 300
+2024-02-05 16:10:33,921 - DEBUG - preference: text_style.script_bold, weight: 300
+2024-02-05 16:10:33,921 - DEBUG - preference: text_style.fraktur_normal, weight: 300
+2024-02-05 16:10:33,921 - DEBUG - preference: text_style.fraktur_bold, weight: 300
+2024-02-05 16:10:33,921 - DEBUG - preference: text_style.monospace, weight: 300
+2024-02-05 16:10:33,921 - DEBUG - preference: text_style.double_struck, weight: 300
+2024-02-05 16:10:33,921 - DEBUG - Module typesetting: loaded.
+2024-02-05 16:10:33,923 - DEBUG - preference: fl1.formula.function_call, weight: 200
+2024-02-05 16:10:33,923 - DEBUG - preference: fl1.formula.prefix_no_parenthesis, weight: 300
+2024-02-05 16:10:33,923 - DEBUG - preference: fl1.formula.infix, weight: 300
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.formal_object, weight: 2000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.formula, weight: 3000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.atomic_formula, weight: 4000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.compound_formula, weight: 4000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.connective, weight: 2000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.variable_arity_connective, weight: 3000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.fixed_arity_connective, weight: 3000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.binary_connective, weight: 4000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.unary_connective, weight: 4000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.fixed_arity_formula, weight: 3000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.binary_formula, weight: 4000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.unary_formula, weight: 4000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.formal_language_collection, weight: 3000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.compound_formula_collection, weight: 4000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.connective_collection, weight: 4000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.formal_language, weight: 2000
+2024-02-05 16:10:33,923 - DEBUG - clazz: fl1.meta_language, weight: 2000
+2024-02-05 16:10:33,924 - DEBUG - clazz: fl1.ml1, weight: 2000
+2024-02-05 16:10:33,924 - DEBUG - Module fl1: loaded.
+2024-02-05 16:10:33,925 - DEBUG - Module fl1_presentation: loaded.
+2024-02-05 16:10:33,927 - DEBUG - preference: pl1.connective.negation.tilde, weight: 200
+2024-02-05 16:10:33,927 - DEBUG - preference: pl1.connective.negation.not, weight: 300
+2024-02-05 16:10:33,927 - DEBUG - clazz: pl1.connective.conditional, weight: 3000
+2024-02-05 16:10:33,927 - DEBUG - clazz: pl1ml.meta_variable, weight: 4000
+2024-02-05 16:10:33,927 - DEBUG - clazz: pl1.connective.negation, weight: 3000
+2024-02-05 16:10:33,927 - DEBUG - clazz: pl1.propositional_formula, weight: 4000
+2024-02-05 16:10:33,927 - DEBUG - clazz: pl1.propositional_unary_formula, weight: 5000
+2024-02-05 16:10:33,927 - DEBUG - clazz: pl1.propositional_binary_formula, weight: 5000
+2024-02-05 16:10:33,927 - DEBUG - clazz: pl1.propositional_variable, weight: 3000
+2024-02-05 16:10:33,927 - DEBUG - Module pl1: loaded.
+2024-02-05 16:10:33,929 - DEBUG - Module pl1_presentation: loaded.
+2024-02-05 16:10:33,929 - DEBUG - Module punctilious: loaded.
+2024-02-05 16:10:33,941 - DEBUG - FormalObject-1919263149008
+2024-02-05 16:10:33,941 - DEBUG - clazz: test-1, weight: 2000
+2024-02-05 16:10:33,946 - DEBUG - preference: pl1.connective.negation.tilde, weight: 400
+2024-02-05 16:10:33,946 - DEBUG - preference: pl1.connective.negation.not, weight: 500
+2024-02-05 16:10:33,948 - ERROR - connective is not a pl1 connective.
+2024-02-05 16:10:33,948 - ERROR - term is not a pl1 well-formed-formula.
+2024-02-05 16:10:33,951 - DEBUG - FormalObject 'lnotP' (python id: 1919263052496) is already present in this FormalLanguageClass as 'lnotP' (python id: 1919263051728). The existing object is reused and the new object is discarded.
+2024-02-05 16:10:33,955 - DEBUG - lnotP --> lnotlnotP --> P --> lnotlnotP --> P
+2024-02-05 16:10:33,956 - DEBUG - FormalObject 'lnotP' (python id: 1919263003024) is already present in this FormalLanguageClass as 'lnotP' (python id: 1919263001168). The existing object is reused and the new object is discarded.
+2024-02-05 16:10:33,957 - INFO - P --> PP
+2024-02-05 16:10:33,957 - DEBUG - FormalObject 'P --> P' (python id: 1919263003024) is already present in this FormalLanguageClass as 'P --> P' (python id: 1919262322704). The existing object is reused and the new object is discarded.
+2024-02-05 16:10:33,957 - INFO - P --> P == P --> P
+2024-02-05 16:10:33,957 - INFO - PP --> P --> PP
+2024-02-05 16:10:33,957 - DEBUG - FormalObject 'P --> P' (python id: 1919263154448) is already present in this FormalLanguageClass as 'P --> P' (python id: 1919262322704). The existing object is reused and the new object is discarded.
+2024-02-05 16:10:33,958 - DEBUG - FormalObject 'P --> P --> P' (python id: 1919263154448) is already present in this FormalLanguageClass as 'P --> P --> P' (python id: 1919263158416). The existing object is reused and the new object is discarded.
+2024-02-05 16:10:33,958 - INFO - P --> P --> P == P --> P --> P
