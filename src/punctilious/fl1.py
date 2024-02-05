@@ -65,116 +65,120 @@ preferences: Preferences = Preferences()
 
 # TAGS
 
-class Clazzes:
+class HierarchicalClasses:
     _singleton = None
 
     def __new__(cls):
         if cls._singleton is None:
-            cls._singleton = super(Clazzes, cls).__new__(cls)
+            cls._singleton = super(HierarchicalClasses, cls).__new__(cls)
         return cls._singleton
 
     def __init__(self):
         super().__init__()
-        self._formal_object = ts.clazzes.register(name="fl1.formal_object")
-        self._formula = ts.clazzes.register(name="fl1.formula", predecessor=self._formal_object)
-        self._atomic_formula = ts.clazzes.register(name="fl1.atomic_formula", predecessor=self._formula)
-        self._compound_formula = ts.clazzes.register(name="fl1.compound_formula", predecessor=self._formula)
-        self._connective = ts.clazzes.register(name="fl1.connective")
-        self._variable_arity_connective = ts.clazzes.register(name="fl1.variable_arity_connective",
+        self._formal_object = ts.hierarchical_classes.register(name="fl1.formal_object")
+        self._formula = ts.hierarchical_classes.register(name="fl1.formula", predecessor=self._formal_object)
+        self._atomic_formula = ts.hierarchical_classes.register(name="fl1.atomic_formula", predecessor=self._formula)
+        self._compound_formula = ts.hierarchical_classes.register(name="fl1.compound_formula",
+            predecessor=self._formula)
+        self._connective = ts.hierarchical_classes.register(name="fl1.connective")
+        self._variable_arity_connective = ts.hierarchical_classes.register(name="fl1.variable_arity_connective",
             predecessor=self._connective)
-        self._fixed_arity_connective = ts.clazzes.register(name="fl1.fixed_arity_connective",
+        self._fixed_arity_connective = ts.hierarchical_classes.register(name="fl1.fixed_arity_connective",
             predecessor=self._connective)
-        self._binary_connective = ts.clazzes.register(name="fl1.binary_connective",
+        self._binary_connective = ts.hierarchical_classes.register(name="fl1.binary_connective",
             predecessor=self._fixed_arity_connective)
-        self._unary_connective = ts.clazzes.register(name="fl1.unary_connective",
+        self._unary_connective = ts.hierarchical_classes.register(name="fl1.unary_connective",
             predecessor=self._fixed_arity_connective)
-        self._fixed_arity_formula = ts.clazzes.register(name="fl1.fixed_arity_formula", predecessor=self._formal_object)
-        self._binary_formula = ts.clazzes.register(name="fl1.binary_formula", predecessor=self._fixed_arity_formula)
-        self._unary_formula = ts.clazzes.register(name="fl1.unary_formula", predecessor=self._fixed_arity_formula)
-        self._formal_language_collection = ts.clazzes.register(name="fl1.formal_language_collection",
+        self._fixed_arity_formula = ts.hierarchical_classes.register(name="fl1.fixed_arity_formula",
             predecessor=self._formal_object)
-        self._compound_formula_collection = ts.clazzes.register(name="fl1.compound_formula_collection",
+        self._binary_formula = ts.hierarchical_classes.register(name="fl1.binary_formula",
+            predecessor=self._fixed_arity_formula)
+        self._unary_formula = ts.hierarchical_classes.register(name="fl1.unary_formula",
+            predecessor=self._fixed_arity_formula)
+        self._formal_language_collection = ts.hierarchical_classes.register(name="fl1.formal_language_collection",
+            predecessor=self._formal_object)
+        self._compound_formula_collection = ts.hierarchical_classes.register(name="fl1.compound_formula_collection",
             predecessor=self._formal_language_collection)
-        self._connective_collection = ts.clazzes.register(name="fl1.connective_collection",
+        self._connective_collection = ts.hierarchical_classes.register(name="fl1.connective_collection",
             predecessor=self._formal_language_collection)
-        self._formal_language = ts.clazzes.register(name="fl1.formal_language")
-        self._meta_language = ts.clazzes.register(name="fl1.meta_language")
-        self._ml1 = ts.clazzes.register(name="fl1.ml1")
+        self._formal_language = ts.hierarchical_classes.register(name="fl1.formal_language")
+        self._meta_language = ts.hierarchical_classes.register(name="fl1.meta_language")
+        self._ml1 = ts.hierarchical_classes.register(name="fl1.ml1")
 
     @property
-    def atomic_formula(self) -> ts.Clazz:
+    def atomic_formula(self) -> ts.HierchicalClass:
         return self._atomic_formula
 
     @property
-    def binary_connective(self) -> ts.Clazz:
+    def binary_connective(self) -> ts.HierchicalClass:
         return self._binary_connective
 
     @property
-    def binary_formula(self) -> ts.Clazz:
+    def binary_formula(self) -> ts.HierchicalClass:
         return (self._binary_formula)
 
     @property
-    def compound_formula(self) -> ts.Clazz:
+    def compound_formula(self) -> ts.HierchicalClass:
         return self._compound_formula
 
     @property
-    def compound_formula_collection(self) -> ts.Clazz:
+    def compound_formula_collection(self) -> ts.HierchicalClass:
         return self._compound_formula_collection
 
     @property
-    def connective(self) -> ts.Clazz:
+    def connective(self) -> ts.HierchicalClass:
         return self._connective
 
     @property
-    def connective_collection(self) -> ts.Clazz:
+    def connective_collection(self) -> ts.HierchicalClass:
         return self._connective_collection
 
     @property
-    def fixed_arity_connective(self) -> ts.Clazz:
+    def fixed_arity_connective(self) -> ts.HierchicalClass:
         return self._fixed_arity_connective
 
     @property
-    def fixed_arity_formula(self) -> ts.Clazz:
+    def fixed_arity_formula(self) -> ts.HierchicalClass:
         return self._fixed_arity_formula
 
     @property
-    def formal_language(self) -> ts.Clazz:
+    def formal_language(self) -> ts.HierchicalClass:
         return self._formal_language
 
     @property
-    def formal_language_collection(self) -> ts.Clazz:
+    def formal_language_collection(self) -> ts.HierchicalClass:
         return self._formal_language_collection
 
     @property
-    def formal_object(self) -> ts.Clazz:
+    def formal_object(self) -> ts.HierchicalClass:
         return self._formal_object
 
     @property
-    def formula(self) -> ts.Clazz:
+    def formula(self) -> ts.HierchicalClass:
         return self._formula
 
     @property
-    def meta_language(self) -> ts.Clazz:
+    def meta_language(self) -> ts.HierchicalClass:
         return self._meta_language
 
     @property
-    def ml1(self) -> ts.Clazz:
+    def ml1(self) -> ts.HierchicalClass:
         return self._ml1
 
     @property
-    def unary_connective(self) -> ts.Clazz:
+    def unary_connective(self) -> ts.HierchicalClass:
         return self._unary_connective
 
     @property
-    def unary_formula(self) -> ts.Clazz:
+    def unary_formula(self) -> ts.HierchicalClass:
         return self._unary_formula
 
     @property
-    def variable_arity_connective(self) -> ts.Clazz:
+    def variable_arity_connective(self) -> ts.HierchicalClass:
         return self._variable_arity_connective
 
 
-clazzes = Clazzes()
+hierarchical_classes = HierarchicalClasses()
 
 
 class FormalObject(ts.Typesettable):
@@ -184,7 +188,7 @@ class FormalObject(ts.Typesettable):
     def __init__(self):
         super().__init__(default_representation=ts.representations.symbolic_representation)  # Make the formal-object  #
         # typesettable.
-        self.declare_clazz_element(clazz=clazzes.formal_object)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.formal_object)
 
     def __repr__(self):
         return super().to_string(protocol=ts.protocols.unicode_limited,
@@ -204,7 +208,7 @@ class FormalLanguageCollection(FormalObject, abc.ABC):
         self._protected_set: set[FormalObject] = set()
         self._formal_language: FormalLanguage = formal_language
         super().__init__()
-        self.declare_clazz_element(clazz=clazzes.formal_language_collection)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.formal_language_collection)
 
     def __contains__(self, x: FormalObject) -> bool:
         """Allows the in operator."""
@@ -253,7 +257,7 @@ class FormalLanguage(FormalObject, abc.ABC):
         self._is_locked: bool = False
         self._container: set = set()
         super().__init__()
-        self.declare_clazz_element(clazz=clazzes.formal_language)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.formal_language)
 
     def __iter__(self):
         return iter(self._container)
@@ -284,7 +288,7 @@ class MetaLanguage(FormalLanguage):
     def __init__(self, formal_language: FormalLanguage):
         super().__init__()
         self._formal_language = formal_language
-        self.declare_clazz_element(clazz=clazzes.meta_language)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.meta_language)
 
     @property
     def formal_language(self) -> FormalLanguage:
@@ -297,7 +301,7 @@ class Connective(FormalObject):
 
     def __init__(self):
         super().__init__()
-        self.declare_clazz_element(clazz=clazzes.connective)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.connective)
 
 
 # _connective_class: FormalPythonClass = FormalPythonClass(python_class=Connective)
@@ -310,7 +314,7 @@ class VariableArityConnective(Connective):
     def __init__(self, arity_as_int: int):
         self._arity_as_int = arity_as_int
         super().__init__()
-        self.declare_clazz_element(clazz=clazzes.variable_arity_connective)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.variable_arity_connective)
 
     @property
     def arity_as_int(self) -> int:
@@ -324,7 +328,7 @@ class FixedArityConnective(Connective):
     def __init__(self, arity_as_int: int):
         self._arity_as_int = arity_as_int
         super().__init__()
-        self.declare_clazz_element(clazz=clazzes.fixed_arity_connective)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.fixed_arity_connective)
 
     @property
     def arity_as_int(self) -> int:
@@ -336,7 +340,7 @@ class UnaryConnective(FixedArityConnective):
 
     def __init__(self):
         super().__init__(arity_as_int=1)
-        self.declare_clazz_element(clazz=clazzes.unary_connective)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.unary_connective)
 
 
 class BinaryConnective(FixedArityConnective):
@@ -344,13 +348,13 @@ class BinaryConnective(FixedArityConnective):
 
     def __init__(self):
         super().__init__(arity_as_int=2)
-        self.declare_clazz_element(clazz=clazzes.binary_connective)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.binary_connective)
 
 
 class ConnectiveCollection(FormalLanguageCollection):
     def __init__(self, formal_language: FormalLanguage):
         super().__init__(formal_language=formal_language)
-        self.declare_clazz_element(clazz=clazzes.connective_collection)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.connective_collection)
 
     def declare_unary_connective(self) -> UnaryConnective:
         x: UnaryConnective = UnaryConnective()
@@ -366,7 +370,7 @@ class ConnectiveCollection(FormalLanguageCollection):
 class CompoundFormulaCollection(FormalLanguageCollection):
     def __init__(self, formal_language: FormalLanguage):
         super().__init__(formal_language=formal_language)
-        self.declare_clazz_element(clazz=clazzes.compound_formula_collection)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.compound_formula_collection)
 
     def declare_unary_formula(self, connective: UnaryConnective, term: FormalObject) -> UnaryFormula:
         x: UnaryFormula = UnaryFormula(formal_language_collection=self, connective=connective, term=term)
@@ -387,7 +391,7 @@ class Formula(FormalObject):
     def __init__(self, formal_language_collection: FormalLanguageCollection):
         self._formal_language_collection = formal_language_collection
         super().__init__()
-        self.declare_clazz_element(clazz=clazzes.formula)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.formula)
 
     @property
     def formal_language(self) -> FormalLanguage:
@@ -438,7 +442,7 @@ class Formula(FormalObject):
 class AtomicFormula(Formula):
     def __init__(self, formal_language_collection: FormalLanguageCollection):
         super().__init__(formal_language_collection=formal_language_collection)
-        self.declare_clazz_element(clazz=clazzes.atomic_formula)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.atomic_formula)
 
 
 class CompoundFormula(Formula):
@@ -456,7 +460,7 @@ class CompoundFormula(Formula):
         self._connective: Connective = connective
         self._terms: typing.Tuple[Formula] = terms
         super().__init__(formal_language_collection=formal_language_collection)
-        self.declare_clazz_element(clazz=clazzes.compound_formula)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.compound_formula)
 
     def __eq__(self, other):
         return hash(self) == hash(other)
@@ -484,7 +488,7 @@ class FixedArityFormula(CompoundFormula):
     def __init__(self, formal_language_collection: FormalLanguageCollection, connective: FixedArityConnective,
         terms: typing.Tuple[Formula, ...]):
         super().__init__(formal_language_collection=formal_language_collection, connective=connective, terms=terms)
-        self.declare_clazz_element(clazz=clazzes.fixed_arity_formula)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.fixed_arity_formula)
 
 
 class UnaryFormula(FixedArityFormula):
@@ -493,7 +497,7 @@ class UnaryFormula(FixedArityFormula):
     def __init__(self, formal_language_collection: FormalLanguageCollection, connective: UnaryConnective,
         term: Formula):
         super().__init__(formal_language_collection=formal_language_collection, connective=connective, terms=(term,))
-        self.declare_clazz_element(clazz=clazzes.unary_formula)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.unary_formula)
 
     @property
     def term(self) -> Formula:
@@ -507,7 +511,7 @@ class BinaryFormula(FixedArityFormula):
         term_1: Formula, term_2: Formula):
         super().__init__(formal_language_collection=formal_language_collection, connective=connective,
             terms=(term_1, term_2,))
-        self.declare_clazz_element(clazz=clazzes.binary_formula)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.binary_formula)
 
     @property
     def term_1(self) -> Formula:
@@ -523,7 +527,7 @@ class ML1(FormalLanguageCollection, abc.ABC):
 
     def __init__(self, formal_language: FormalLanguage):
         super().__init__(formal_language=formal_language)
-        self.declare_clazz_element(clazz=clazzes.ml1)
+        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.ml1)
 
 
 def generate_unique_values(generator):
