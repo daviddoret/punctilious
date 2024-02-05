@@ -166,8 +166,9 @@ class Representation:
     Let phi be a mathematical formula, "Variable name", "Formula", "Tree representation" may be candidate representations.
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, predecessor: typing.Optional[Representation]):
         self._name: str = name
+        self._predecessor: typing.Optional[Representation] = predecessor
 
     def __eq__(self, other):
         return hash(self) == hash(other)
@@ -185,6 +186,10 @@ class Representation:
     def name(self) -> str:
         return self._name
 
+    @property
+    def predecessor(self) -> typing.Optional[Representation]:
+        return self._predecessor
+
 
 class Representations:
     """A catalog of out-of-the-box representations."""
@@ -196,9 +201,10 @@ class Representations:
         return cls._singleton
 
     def __init__(self):
-        self._default = Representation('default')
-        self._symbolic_representation = Representation(name="symbolic-representation")
-        self._common_language = Representation(name="common-language")
+        self._technical_representation = Representation(name='technical-representation', predecessor=None)
+        self._symbolic_representation = Representation(name='symbolic-representation',
+            predecessor=self.technical_representation)
+        self._common_language = Representation(name='common-language', predecessor=self.technical_representation)
 
     @property
     def common_language(self) -> Representation:
@@ -206,9 +212,9 @@ class Representations:
         return self._common_language
 
     @property
-    def default(self) -> Representation:
-        """If no representation is specified, typesetting uses the default representation."""
-        return self._default
+    def technical_representation(self) -> Representation:
+        """The root / default representation. It provides a fail-safe unambiguous but verbose typesetting."""
+        return self._technical_representation
 
     @property
     def symbolic_representation(self) -> Representation:
@@ -462,10 +468,10 @@ def register_typesetting_method(python_function: typing.Callable, clazz: Clazz, 
         typesetting_methods[key] = dict()
     solution: typing.FrozenSet[Clazz, Flavor, Language] = frozenset([clazz, flavor, language])
     typesetting_methods[key][solution]: typing.Callable = python_function
-    if representation is not representations.default:
+    if representation is not representations.technical_representation:
         # the first registered typesetting_method is promoted as the default typesetting_method
         register_typesetting_method(python_function=python_function, clazz=clazz,
-            representation=representations.default, flavor=flavor, language=language)
+            representation=representations.technical_representation, flavor=flavor, language=language)
     return python_function
 
 
@@ -481,7 +487,7 @@ def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None,
     if representation is None:
         representation: Representation = o.default_representation
         if representation is None:
-            representation: Representation = representations.default
+            representation: Representation = representations.technical_representation
     if language is None:
         language: Language = languages.default
 
@@ -860,13 +866,13 @@ def fallback_typesetting_method(o: Typesettable, **kwargs):
 
 
 register_typesetting_method(python_function=typeset_styled_text, clazz=clazzes.symbol,
-    representation=representations.default, flavor=flavors.default, language=languages.default)
+    representation=representations.technical_representation, flavor=flavors.default, language=languages.default)
 register_typesetting_method(python_function=typeset_symbol, clazz=clazzes.symbol,
-    representation=representations.default, flavor=flavors.default, language=languages.default)
+    representation=representations.technical_representation, flavor=flavors.default, language=languages.default)
 register_typesetting_method(python_function=typeset_symbol, clazz=clazzes.symbol,
     representation=representations.symbolic_representation, flavor=flavors.default, language=languages.default)
 register_typesetting_method(python_function=typeset_indexed_symbol, clazz=clazzes.indexed_symbol,
-    representation=representations.default, flavor=flavors.default, language=languages.default)
+    representation=representations.technical_representation, flavor=flavors.default, language=languages.default)
 register_typesetting_method(python_function=typeset_indexed_symbol, clazz=clazzes.indexed_symbol,
     representation=representations.symbolic_representation, flavor=flavors.default, language=languages.default)
 

@@ -5,87 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
-      <change afterPath="$PROJECT_DIR$/punctilious.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/fl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/fl1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pl1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/punctilious.log" beforeDir="false" afterPath="$PROJECT_DIR$/punctilious.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pl1_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pl1_presentation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/typesetting.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/typesetting.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/punctilious.log" beforeDir="false" afterPath="$PROJECT_DIR$/tests/punctilious.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_pl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pl1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_absorption.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_auto_index.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_axiom_declaration.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_axiom_inclusion.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_axiom_interpretation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_biconditional_elimination_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_biconditional_elimination_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_biconditional_introduction.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_block.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_conjunction_elimination_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_conjunction_elimination_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_conjunction_introduction.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_constant_declaration.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_constructive_dilemma.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_dashed_name.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_definition_declaration.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_definition_inclusion.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_definition_interpretation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_destructive_dilemma.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_disjunction_introduction_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_disjunction_introduction_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_disjunctive_resolution.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_disjunctive_syllogism_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_disjunctive_syllogism_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_double_negation_elimination.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_double_negation_introduction.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_equal_terms_substitution.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_equality_commutativity.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_formula.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_formula_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_formula_alpha_contains.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_formula_alpha_equivalence.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_formula_is_mask_similar_to.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_free_variable.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_hypothesis.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_hypothetical_syllogism.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_inconsistency_introduction_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_inconsistency_introduction_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_inconsistency_introduction_3.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_is_declaratively_a_class_member.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_iterate_formula_data_model_components.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_modus_ponens.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_modus_tollens.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_nameset.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_note.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_paragraph.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_plaintext.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_proof_by_contradiction_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_proof_by_contradiction_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_proof_by_refutation_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_proof_by_refutation_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_quasi_quotes.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_relation_dict.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_sans_serif_bold.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_sans_serif_normal.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_script_normal.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_section.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_serif_normal.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_simple_objct.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_subscript.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_subscriptify.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_tao_2006_the_peano_axioms.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_text.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_theory_derivation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_theory_derivation_stabilized.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_theory_extension.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_universe_of_discourse.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_universe_of_discourse_inference_rules.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_validate_formula.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_validate_formula_statement.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_obsolete_20240114/test_variable_substitution.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -547,14 +470,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00429" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
-      <option name="closed" value="true" />
-      <created>1699874854197</created>
-      <option name="number" value="00429" />
-      <option name="presentableId" value="LOCAL-00429" />
-      <option name="project" value="LOCAL" />
-      <updated>1699874854197</updated>
-    </task>
     <task id="LOCAL-00430" summary="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic.">
       <option name="closed" value="true" />
       <created>1699875592904</created>
@@ -939,7 +854,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706563292194</updated>
     </task>
-    <option name="localTasksCounter" value="478" />
+    <task id="LOCAL-00478" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1707120372613</created>
+      <option name="number" value="00478" />
+      <option name="presentableId" value="LOCAL-00478" />
+      <option name="project" value="LOCAL" />
+      <updated>1707120372613</updated>
+    </task>
+    <option name="localTasksCounter" value="479" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

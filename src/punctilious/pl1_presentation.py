@@ -71,18 +71,18 @@ def typeset_meta_variable(o: pl1.MetaVariable, pl1ml_meta_variables: typing.Opti
     **kwargs) -> typing.Generator[str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     if pl1ml_meta_variables is None:
-        kwargs["representation"] = ts.representations.default
+        kwargs["representation"] = ts.representations.technical_representation
         yield from ts.typeset(o=ts.symbols.p_uppercase_serif_italic_bold, **kwargs)
     else:
         if len(pl1ml_meta_variables) < 4:
             index = pl1ml_meta_variables.index(o)
             symbol: ts.Symbol = (ts.symbols.p_uppercase_serif_italic_bold, ts.symbols.q_uppercase_serif_italic_bold,
             ts.symbols.r_uppercase_serif_italic_bold,)[index]
-            kwargs["representation"] = ts.representations.default
+            kwargs["representation"] = ts.representations.technical_representation
             yield from ts.typeset(o=symbol, **kwargs)
         else:
             index = pl1ml_meta_variables.index(o)
-            kwargs["representation"] = ts.representations.default
+            kwargs["representation"] = ts.representations.technical_representation
             yield from ts.typeset(o=ts.IndexedSymbol(symbol=ts.symbols.p_uppercase_serif_italic_bold, index=index + 1),
                 **kwargs)
 
@@ -92,18 +92,18 @@ def typeset_propositional_variable(o: pl1.PropositionalVariable,
     typing.Generator[str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     if pl1_propositional_variables is None:
-        kwargs["representation"] = ts.representations.default
+        kwargs["representation"] = ts.representations.technical_representation
         yield from ts.typeset(o=ts.symbols.p_uppercase_serif_italic, **kwargs)
     else:
         if len(pl1_propositional_variables) < 4:
             index = pl1_propositional_variables.index(o)
             symbol: ts.Symbol = (ts.symbols.p_uppercase_serif_italic, ts.symbols.q_uppercase_serif_italic,
             ts.symbols.r_uppercase_serif_italic,)[index]
-            kwargs["representation"] = ts.representations.default
+            kwargs["representation"] = ts.representations.technical_representation
             yield from ts.typeset(o=symbol, **kwargs)
         else:
             index = pl1_propositional_variables.index(o)
-            kwargs["representation"] = ts.representations.default
+            kwargs["representation"] = ts.representations.technical_representation
             yield from ts.typeset(o=ts.IndexedSymbol(symbol=ts.symbols.p_uppercase_serif_italic, index=index + 1),
                 **kwargs)
 
