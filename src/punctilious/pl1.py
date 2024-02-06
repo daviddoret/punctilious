@@ -28,7 +28,7 @@ class Preferences:
         # negation
         self._connective_negation_tilde: ts.Preference = ts.preferences.register(name="pl1.connective.negation.tilde")
         self._connective_negation_not: ts.Preference = ts.preferences.register(name="pl1.connective.negation.not",
-            predecessor=self._connective_negation_tilde)  # define default preference.
+            superclass=self._connective_negation_tilde)  # define default preference.
 
     @property
     def connective_negation_not(self) -> ts.Preference:
@@ -42,67 +42,72 @@ class Preferences:
 preferences = Preferences()
 
 
-class HierarchicalClasses:
+class TypesettingClasses:
     _singleton = None
 
     def __new__(cls):
         if cls._singleton is None:
-            cls._singleton = super(HierarchicalClasses, cls).__new__(cls)
+            cls._singleton = super(TypesettingClasses, cls).__new__(cls)
         return cls._singleton
 
     def __init__(self):
         super().__init__()
-        self._conditional = ts.hierarchical_classes.register(name="pl1.connective.conditional",
-            predecessor=fl1.hierarchical_classes.connective)
-        self._meta_variable = ts.hierarchical_classes.register(name="pl1ml.meta_variable",
-            predecessor=fl1.hierarchical_classes.formula)
-        self._negation = ts.hierarchical_classes.register(name="pl1.connective.negation",
-            predecessor=fl1.hierarchical_classes.connective)
-        self._propositional_formula = ts.hierarchical_classes.register(name="pl1.propositional_formula",
-            predecessor=fl1.hierarchical_classes.formula)
-        self._propositional_unary_formula = ts.hierarchical_classes.register(name="pl1.propositional_unary_formula",
-            predecessor=fl1.hierarchical_classes.unary_formula)
-        self._propositional_binary_formula = ts.hierarchical_classes.register(name="pl1.propositional_binary_formula",
-            predecessor=fl1.hierarchical_classes.binary_formula)
-        self._propositional_variable = ts.hierarchical_classes.register(name="pl1.propositional_variable",
-            predecessor=fl1.hierarchical_classes.formal_object)
+        self._conditional = ts.typesetting_classes.register(name="pl1.connective.conditional",
+            superclass=fl1.typesetting_classes.connective)
+        self._meta_variable = ts.typesetting_classes.register(name="pl1ml.meta_variable",
+            superclass=fl1.typesetting_classes.formula)
+        self._negation = ts.typesetting_classes.register(name="pl1.connective.negation",
+            superclass=fl1.typesetting_classes.connective)
+        self._pl1 = ts.typesetting_classes.register(name="pl1", superclass=fl1.typesetting_classes.formal_language)
+        self._propositional_formula = ts.typesetting_classes.register(name="pl1.propositional_formula",
+            superclass=fl1.typesetting_classes.formula)
+        self._propositional_unary_formula = ts.typesetting_classes.register(name="pl1.propositional_unary_formula",
+            superclass=fl1.typesetting_classes.unary_formula)
+        self._propositional_binary_formula = ts.typesetting_classes.register(name="pl1.propositional_binary_formula",
+            superclass=fl1.typesetting_classes.binary_formula)
+        self._propositional_variable = ts.typesetting_classes.register(name="pl1.propositional_variable",
+            superclass=fl1.typesetting_classes.formal_object)
 
     @property
-    def conditional(self) -> ts.HierchicalClass:
+    def conditional(self) -> ts.TypesettingClass:
         return self._conditional
 
     @property
-    def meta_variable(self) -> ts.HierchicalClass:
+    def meta_variable(self) -> ts.TypesettingClass:
         return self._meta_variable
 
     @property
-    def negation(self) -> ts.HierchicalClass:
+    def negation(self) -> ts.TypesettingClass:
         return self._negation
 
     @property
-    def propositional_formula(self) -> ts.HierchicalClass:
+    def pl1(self) -> ts.TypesettingClass:
+        return self._pl1
+
+    @property
+    def propositional_formula(self) -> ts.TypesettingClass:
         return self._propositional_formula
 
     @property
-    def propositional_unary_formula(self) -> ts.HierchicalClass:
+    def propositional_unary_formula(self) -> ts.TypesettingClass:
         return self._propositional_unary_formula
 
     @property
-    def propositional_binary_formula(self) -> ts.HierchicalClass:
+    def propositional_binary_formula(self) -> ts.TypesettingClass:
         return self._propositional_binary_formula
 
     @property
-    def propositional_variable(self) -> ts.HierchicalClass:
+    def propositional_variable(self) -> ts.TypesettingClass:
         return self._propositional_variable
 
 
-hierarchical_classes = HierarchicalClasses()
+typesetting_classes = TypesettingClasses()
 
 
 class MetaVariable(fl1.AtomicFormula):
     def __init__(self, formal_language_collection: fl1.FormalLanguageCollection):
         super().__init__(formal_language_collection=formal_language_collection)
-        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.meta_variable)
+        self.declare_typesetting_class_element(typesetting_class=typesetting_classes.meta_variable)
 
 
 class MetaVariableCollection(fl1.FormalLanguageCollection):
@@ -136,7 +141,7 @@ class MetaLanguage(fl1.FormalLanguage):
 class PropositionalVariable(fl1.AtomicFormula):
     def __init__(self, formal_language_collection: fl1.FormalLanguageCollection):
         super().__init__(formal_language_collection=formal_language_collection)
-        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.propositional_variable)
+        self.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_variable)
 
 
 class PropositionalVariableCollection(fl1.FormalLanguageCollection):
@@ -157,9 +162,9 @@ class ConnectiveClass(fl1.ConnectiveCollection):
         super().__init__(formal_language=formal_language)
         # exhaustive declaration of PL1 connectives.
         self._conditional: fl1.BinaryConnective = self.declare_binary_connective()
-        self._conditional.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.conditional)
+        self._conditional.declare_typesetting_class_element(typesetting_class=typesetting_classes.conditional)
         self._negation: fl1.UnaryConnective = self.declare_unary_connective()
-        self._negation.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.negation)
+        self._negation.declare_typesetting_class_element(typesetting_class=typesetting_classes.negation)
         self.lock()
 
     @property
@@ -194,8 +199,8 @@ class PL1CompoundFormulaCollection(fl1.CompoundFormulaCollection):
         if not self.pl1.is_well_formed_formula(phi=term):
             log.error("term is not a pl1 well-formed-formula.")
         phi: fl1.UnaryFormula = super().declare_unary_formula(connective=connective, term=term)
-        phi.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.propositional_formula)
-        phi.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.propositional_unary_formula)
+        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_formula)
+        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_unary_formula)
         return phi
 
     def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.FormalObject,
@@ -216,8 +221,8 @@ class PL1CompoundFormulaCollection(fl1.CompoundFormulaCollection):
         if not self.pl1.is_well_formed_formula(phi=term_2):
             log.error("term_2 is not a pl1 well-formed-formula.")
         phi: fl1.BinaryFormula = super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
-        phi.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.propositional_formula)
-        phi.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.propositional_binary_formula)
+        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_formula)
+        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_binary_formula)
         return phi
 
     @property
@@ -247,8 +252,8 @@ class PL1MLCompoundFormulaCollection(fl1.CompoundFormulaCollection):
         if not self.pl1ml.is_well_formed_formula(phi=term):
             log.error("term is not a pl1 meta-language well-formed-formula.")
         phi: fl1.UnaryFormula = super().declare_unary_formula(connective=connective, term=term)
-        phi.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.propositional_formula)
-        phi.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.propositional_unary_formula)
+        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_formula)
+        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_unary_formula)
         return phi
 
     def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.FormalObject,
@@ -269,8 +274,8 @@ class PL1MLCompoundFormulaCollection(fl1.CompoundFormulaCollection):
         if not self.pl1ml.is_well_formed_formula(phi=term_2):
             log.error("term_2 is not a pl1 meta-language well-formed-formula.")
         phi: fl1.BinaryFormula = super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
-        phi.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.propositional_formula)
-        phi.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.propositional_binary_formula)
+        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_formula)
+        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_binary_formula)
         return phi
 
     @property
@@ -345,16 +350,16 @@ class PL1ML(fl1.FormalLanguage):
         if phi in m.keys():
             # direct substitution
             return m[phi]
-        elif phi.is_an_element_of_hierarchical_class(c=pl1.hierarchical_classes.propositional_variable):
+        elif phi.is_an_element_of_typesetting_class(c=pl1.typesetting_classes.propositional_variable):
             return phi
-        elif phi.is_an_element_of_hierarchical_class(c=fl1.hierarchical_classes.unary_formula):
+        elif phi.is_an_element_of_typesetting_class(c=fl1.typesetting_classes.unary_formula):
             phi: fl1.UnaryFormula
             connective: fl1.Connective = phi.connective
             connective: fl1.UnaryConnective
             term: fl1.Formula = self.substitute_meta_variables(phi=phi.term, m=m)
             psi = self.pl1.compound_formulas.declare_unary_formula(connective=connective, term=term)
             return psi
-        elif phi.is_an_element_of_hierarchical_class(c=fl1.hierarchical_classes.binary_formula):
+        elif phi.is_an_element_of_typesetting_class(c=fl1.typesetting_classes.binary_formula):
             phi: fl1.BinaryFormula
             connective: fl1.Connective = phi.connective
             connective: fl1.BinaryConnective
@@ -369,8 +374,12 @@ class PL1ML(fl1.FormalLanguage):
 class PL1(fl1.FormalLanguage):
     """Propositional Logic 1."""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, tc: typing.Optional[TypesettingClasses] = None):
+        if tc is None:
+            tc = typesetting_classes.pl1
+        elif not tc.is_subclass_of(c=typesetting_classes.pl1):
+            log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
+        super().__init__(tc=tc)
         # Meta-language
         self._meta_language: PL1ML = PL1ML(pl1=self)
         # Object classes

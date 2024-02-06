@@ -8267,7 +8267,7 @@ function classesToArray( value ) {
 
 jQuery.fn.extend( {
 	addClass: function( value ) {
-		var classes, elem, cur, curValue, hierarchical_class, j, finalValue,
+		var classes, elem, cur, curValue, typesetting_class, j, finalValue,
 			i = 0;
 
 		if ( isFunction( value ) ) {
@@ -8285,9 +8285,9 @@ jQuery.fn.extend( {
 
 				if ( cur ) {
 					j = 0;
-					while ( ( hierarchical_class = classes[ j++ ] ) ) {
-						if ( cur.indexOf( " " + hierarchical_class + " " ) < 0 ) {
-							cur += hierarchical_class + " ";
+					while ( ( typesetting_class = classes[ j++ ] ) ) {
+						if ( cur.indexOf( " " + typesetting_class + " " ) < 0 ) {
+							cur += typesetting_class + " ";
 						}
 					}
 
@@ -8304,7 +8304,7 @@ jQuery.fn.extend( {
 	},
 
 	removeClass: function( value ) {
-		var classes, elem, cur, curValue, hierarchical_class, j, finalValue,
+		var classes, elem, cur, curValue, typesetting_class, j, finalValue,
 			i = 0;
 
 		if ( isFunction( value ) ) {
@@ -8328,11 +8328,11 @@ jQuery.fn.extend( {
 
 				if ( cur ) {
 					j = 0;
-					while ( ( hierarchical_class = classes[ j++ ] ) ) {
+					while ( ( typesetting_class = classes[ j++ ] ) ) {
 
 						// Remove *all* instances
-						while ( cur.indexOf( " " + hierarchical_class + " " ) > -1 ) {
-							cur = cur.replace( " " + hierarchical_class + " ", " " );
+						while ( cur.indexOf( " " + typesetting_class + " " ) > -1 ) {
+							cur = cur.replace( " " + typesetting_class + " ", " " );
 						}
 					}
 

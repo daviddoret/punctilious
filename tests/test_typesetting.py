@@ -29,3 +29,25 @@ class TestIndexSymbol:
             protocol=pu.ts.protocols.unicode_extended) == "𝑃₆"
         assert pu.ts.IndexedSymbol(symbol=pu.ts.symbols.p_uppercase_serif_italic, index=6).to_string(
             protocol=pu.ts.protocols.unicode_limited) == "P6"
+
+
+class TestTypesettingClass:
+    def test_is_subclass_of(self):
+        c = pu.ts.TypesettingClass("c")
+        d = pu.ts.TypesettingClass("d", superclass=c)
+        e = pu.ts.TypesettingClass("e", superclass=d)
+        f = pu.ts.TypesettingClass("f", superclass=c)
+        g = pu.ts.TypesettingClass("g", superclass=f)
+        assert c.is_subclass_of(c=c)
+        assert d.is_subclass_of(c=c)
+        assert e.is_subclass_of(c=c)
+        assert f.is_subclass_of(c=c)
+        assert g.is_subclass_of(c=c)
+        assert not c.is_subclass_of(c=d)
+        assert not c.is_subclass_of(c=e)
+        assert not c.is_subclass_of(c=f)
+        assert not c.is_subclass_of(c=g)
+        assert not f.is_subclass_of(c=d)
+        assert not d.is_subclass_of(c=f)
+        assert not e.is_subclass_of(c=g)
+        assert not g.is_subclass_of(c=e)

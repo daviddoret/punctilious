@@ -5,12 +5,12 @@ import typing
 import log
 
 
-class HierchicalClass:
-    """A typesetting hierarchical_class is a class of objects to which we wish to link some typesetting methods."""
+class TypesettingClass:
+    """A typesetting typesetting_class is a class of objects to which we wish to link some typesetting methods."""
 
-    def __init__(self, name: str, predecessor: typing.Optional[HierchicalClass] = None):
+    def __init__(self, name: str, superclass: typing.Optional[TypesettingClass] = None):
         self._name = name
-        self._predecessor: typing.Optional[HierchicalClass] = predecessor
+        self._superclass: typing.Optional[TypesettingClass] = superclass
 
     def __eq__(self, other):
         return self is other
@@ -24,60 +24,69 @@ class HierchicalClass:
     def __str__(self):
         return self.name
 
+    def is_subclass_of(self, c: TypesettingClass):
+        """Return True if self is a sub-class of c, False otherwise."""
+        d = self
+        while True:
+            if d == c:
+                return True
+            if d.superclass is None:
+                return False
+            d = d.superclass
+
     @property
     def name(self) -> str:
         return self._name
 
     @property
-    def predecessor(self) -> typing.Optional[HierchicalClass]:
-        return self._predecessor
+    def superclass(self) -> typing.Optional[TypesettingClass]:
+        return self._superclass
 
 
-class HierarchicalClasses:
+class TypesettingClasses:
     _singleton = None
 
     def __new__(cls):
         if cls._singleton is None:
-            cls._singleton = super(HierarchicalClasses, cls).__new__(cls)
+            cls._singleton = super(TypesettingClasses, cls).__new__(cls)
         return cls._singleton
 
     def __init__(self):
-        self._internal_data_structure: set[HierchicalClass] = set()
-        self._default: HierchicalClass = self._register(name="default")
-        self._indexed_symbol: HierchicalClass = self._register(name="indexed_symbol")
-        self._styled_text: HierchicalClass = self.register(name="styled_text")
-        self._symbol: HierchicalClass = self.register(name="symbol")
+        self._typesettable: TypesettingClass = self.register(name="typesettable")
+        self._internal_data_structure: set[TypesettingClass] = set()
+        self._indexed_symbol: TypesettingClass = self._register(name="indexed_symbol", superclass=self._typesettable)
+        self._styled_text: TypesettingClass = self.register(name="styled_text", superclass=self._typesettable)
+        self._symbol: TypesettingClass = self.register(name="symbol", superclass=self._typesettable)
 
-    def _register(self, name: str, predecessor: typing.Optional[HierchicalClass] = None) -> HierchicalClass:
+    def _register(self, name: str, superclass: typing.Optional[TypesettingClass] = None) -> TypesettingClass:
         """The protected version of the register method is called once for the root element, because it has no predecessor."""
-        hierarchical_class: HierchicalClass = HierchicalClass(name=name, predecessor=predecessor)
-        self._internal_data_structure.add(hierarchical_class)
-        return hierarchical_class
+        typesetting_class: TypesettingClass = TypesettingClass(name=name, superclass=superclass)
+        self._internal_data_structure.add(typesetting_class)
+        return typesetting_class
 
     @property
-    def default(self) -> HierchicalClass:
-        """If no hierarchical_class is specified, typesetting uses the default hierarchical_class."""
-        return self._default
-
-    @property
-    def indexed_symbol(self) -> HierchicalClass:
+    def indexed_symbol(self) -> TypesettingClass:
         return self._indexed_symbol
 
-    def register(self, name: str, predecessor: typing.Optional[HierchicalClass] = None) -> HierchicalClass:
-        if predecessor is None:
-            predecessor = self.default
-        return self._register(name=name, predecessor=predecessor)
+    def register(self, name: str, superclass: typing.Optional[TypesettingClass] = None) -> TypesettingClass:
+        if superclass is None:
+            superclass = self.typesettable
+        return self._register(name=name, superclass=superclass)
 
     @property
-    def styled_text(self) -> HierchicalClass:
+    def styled_text(self) -> TypesettingClass:
         return self._styled_text
 
     @property
-    def symbol(self) -> HierchicalClass:
+    def symbol(self) -> TypesettingClass:
         return self._symbol
 
+    @property
+    def typesettable(self) -> TypesettingClass:
+        return self._typesettable
 
-hierarchical_classes = HierarchicalClasses()
+
+typesetting_classes = TypesettingClasses()
 
 
 class Protocol:
@@ -229,7 +238,7 @@ class Preference:
 
     def __init__(self, name: str, predecessor: typing.Optional[Preference] = None):
         self._name = name
-        self._predecessor: typing.Optional[HierchicalClass] = predecessor
+        self._predecessor: typing.Optional[TypesettingClass] = predecessor
         self._weight: int = 100 if predecessor is None else predecessor.weight + 100
         log.debug(f"preference: {self.name}, weight: {self.weight}")
 
@@ -251,7 +260,7 @@ class Preference:
 
     @property
     def weight(self) -> int:
-        """A score that orders hierarchical_classes by degree of specialization."""
+        """A score that orders typesetting_classes by degree of specialization."""
         return self._weight
 
     @property
@@ -264,7 +273,7 @@ class Preference:
         # TODO: BUG: Prevent self-reference
         # TODO: BUG: Prevent circularity
         # TODO: BUG: Prevent unlimited weight increase
-        self._predecessor: typing.Optional[HierchicalClass] = predecessor
+        self._predecessor: typing.Optional[TypesettingClass] = predecessor
         self._weight: int = 100 if predecessor is None else predecessor.weight + 100
         log.debug(f"preference: {self.name}, weight: {self.weight}")
 
@@ -446,7 +455,7 @@ class TypesettingMethods(dict):
 typesetting_methods: typing.Dict[int, typing.Callable] = dict()
 
 
-def register_typesetting_method(python_function: typing.Callable, c: HierchicalClass,
+def register_typesetting_method(python_function: typing.Callable, c: TypesettingClass,
     representation: Representation) -> None:
     """Register a typesetting method for the given representation, and hierarchical-class.
     If a typesetting method was already registered for the given protocol, representation, and language, substitute
@@ -473,18 +482,18 @@ def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None,
     # Find a typesetting method in the class-hierarchy
     # for the required representation.
     typesetting_method: typing.Callable
-    c: HierchicalClass = o.hierarchical_class
+    c: TypesettingClass = o.typesetting_class
     while True:
         key: int = hash((c, representation,))
         if key in typesetting_methods:
             typesetting_method = typesetting_methods[key]
             break
-        if c.predecessor is None:
+        if c.superclass is None:
             # This is the root, use the fallback method.
             typesetting_method = fallback_typesetting_method
             break
         else:
-            c = c.predecessor
+            c = c.superclass
 
     yield from typesetting_method(o=o, protocol=protocol, representation=representation, **kwargs)
 
@@ -508,24 +517,24 @@ def typeset_obsolete(o: Typesettable, protocol: typing.Optional[Protocol] = None
 
     # log.debug(msg=f"protocol: {protocol}")
 
-    keys: set[typing.FrozenSet[HierchicalClass, Representation]] = {frozenset([hierarchical_class, representation]) for
-        hierarchical_class in o.typesetting_hierarchical_classes}
-    available_keys: set[typing.FrozenSet[HierchicalClass, Representation]] = keys.intersection(typesetting_methods)
+    keys: set[typing.FrozenSet[TypesettingClass, Representation]] = {frozenset([typesetting_class, representation]) for
+        typesetting_class in o.typesetting_typesetting_classes}
+    available_keys: set[typing.FrozenSet[TypesettingClass, Representation]] = keys.intersection(typesetting_methods)
 
     # some typesetting methods were found, choose the best one.
     best_generator = None
-    best_key: typing.Optional[typing.FrozenSet[HierchicalClass, Representation]] = None
-    best_solution: typing.Optional[typing.FrozenSet[HierchicalClass, Preference, Language]] = None
+    best_key: typing.Optional[typing.FrozenSet[TypesettingClass, Representation]] = None
+    best_solution: typing.Optional[typing.FrozenSet[TypesettingClass, Preference, Language]] = None
     best_preference: Preference = None
     best_score = 0
-    key: typing.FrozenSet[HierchicalClass, Representation]
-    solution: typing.FrozenSet[HierchicalClass, Preference, Language]
+    key: typing.FrozenSet[TypesettingClass, Representation]
+    solution: typing.FrozenSet[TypesettingClass, Preference, Language]
     for key in available_keys:
         for solution, generator in typesetting_methods[key].items():
-            # solution is of the form set[hierarchical_class,flavour,language,].
+            # solution is of the form set[typesetting_class,flavour,language,].
             preference: Preference = next(
                 iter(preference for preference in solution if isinstance(preference, Preference)))
-            score = next(iter(solution.intersection(o.typesetting_hierarchical_classes))).weight
+            score = next(iter(solution.intersection(o.typesetting_typesetting_classes))).weight
             score = score + preference.weight
             score = score + (1 if languages in solution else 0)
             if score > best_score:
@@ -553,10 +562,15 @@ class Typesettable(abc.ABC):
     """The typesettable abstract class makes it possible to equip some object in such a way
     that may be typeset by registering typesetting methods for the desired representations and languages."""
 
-    def __init__(self, hierarchical_class: HierchicalClass,
+    def __init__(self, tc: typing.Optional[TypesettingClass] = None,
         default_representation: typing.Optional[Representation] = None):
-        self._hierarchical_class: HierchicalClass = hierarchical_class
+        if tc is None:
+            tc = typesetting_classes.typesettable
+        elif not tc.is_subclass_of(c=typesetting_classes.typesettable):
+            log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
+        super().__init__(tc=tc)
         self._default_representation: typing.Optional[Representation] = default_representation
+        self._typesetting_class = tc
 
     def __repr__(self):
         return self.to_string(protocol=protocols.unicode_limited)
@@ -569,23 +583,23 @@ class Typesettable(abc.ABC):
         return self._default_representation
 
     @property
-    def hierarchical_class(self) -> HierchicalClass:
-        return self._hierarchical_class
+    def typesetting_class(self) -> TypesettingClass:
+        return self._typesetting_class
 
-    def is_an_element_of_hierarchical_class(self, c: HierchicalClass) -> bool:
-        """Return True if this object is an element of the hierarchical_class c, False otherwise."""
-        current_class: HierchicalClass = self.hierarchical_class
+    def is_an_element_of_typesetting_class(self, c: TypesettingClass) -> bool:
+        """Return True if this object is an element of the typesetting_class c, False otherwise."""
+        current_class: TypesettingClass = self.typesetting_class
         while True:
             if current_class == c:
                 return True
             else:
-                if current_class.predecessor is None:
+                if current_class.superclass is None:
                     # this was the root class,
                     # it follows that self is not a member of the class.
                     return False
                 else:
                     # climbs the hierarchy.
-                    current_class = current_class.predecessor
+                    current_class = current_class.superclass
 
     def to_string(self, protocol: typing.Optional[Protocol] = None,
         representation: typing.Optional[Representation] = None, language: typing.Optional[Language] = None) -> str:
@@ -603,8 +617,7 @@ class Symbol(Typesettable):
         self._latex_math = latex_math
         self._unicode_extended = unicode_extended
         self._unicode_limited = unicode_limited
-        super().__init__(hierarchical_class=hierarchical_classes.symbol,
-            default_representation=representations.symbolic_representation)
+        super().__init__(tc=typesetting_classes.symbol, default_representation=representations.symbolic_representation)
 
     @property
     def latex_math(self) -> str:
@@ -742,7 +755,7 @@ class IndexedSymbol(Typesettable):
     def __init__(self, symbol: Symbol, index: int):
         self._symbol: Symbol = symbol
         self._index: int = index
-        super().__init__(hierarchical_class=hierarchical_classes.indexed_symbol)
+        super().__init__(typesetting_class=typesetting_classes.indexed_symbol)
 
     def __eq__(self, other) -> bool:
         return hash(self) == hash(other)
@@ -779,7 +792,7 @@ def typeset_indexed_symbol(o: IndexedSymbol, protocol: typing.Optional[Protocol]
             raise Exception('Unsupported protocol.')
 
 
-def register_symbol(c: HierchicalClass, representation: Representation, symbol: Symbol) -> typing.Callable:
+def register_symbol(c: TypesettingClass, representation: Representation, symbol: Symbol) -> typing.Callable:
     """Register a typesetting-method that outputs an atomic symbol."""
 
     # dynamically generate the desired typesetting-method.
@@ -824,7 +837,7 @@ class StyledText(Typesettable):
     def __init__(self, neutral_text: str):
         self._neutral_text = neutral_text
         super().__init__()
-        self.declare_hierarchical_class_element(hierarchical_class=hierarchical_classes.styled_text)
+        self.declare_typesetting_class_element(typesetting_class=typesetting_classes.styled_text)
 
     @property
     def neutral_text(self) -> str:
@@ -864,7 +877,7 @@ def unicode_subscriptify(s: str = ''):
     return ''.join([unicode_subscript_dictionary.get(c, c) for c in s])
 
 
-def register_styledstring(hierarchical_class: HierchicalClass, representation: Representation, text: str) -> None:
+def register_styledstring(typesetting_class: TypesettingClass, representation: Representation, text: str) -> None:
     """Register a typesetting-method for a python-type that outputs a string.
 
     TODO: modify this function to use StyledString instead of str.
@@ -875,7 +888,7 @@ def register_styledstring(hierarchical_class: HierchicalClass, representation: R
         yield text
 
     # register that typesetting-method.
-    register_typesetting_method(python_function=typesetting_method, c=hierarchical_class, representation=representation)
+    register_typesetting_method(python_function=typesetting_method, c=typesetting_class, representation=representation)
 
 
 def fallback_typesetting_method(o: Typesettable, **kwargs):
@@ -883,15 +896,15 @@ def fallback_typesetting_method(o: Typesettable, **kwargs):
     yield f"{type(o).__name__}-{id(o)}"
 
 
-register_typesetting_method(python_function=typeset_styled_text, c=hierarchical_classes.symbol,
+register_typesetting_method(python_function=typeset_styled_text, c=typesetting_classes.symbol,
     representation=representations.technical_representation)
-register_typesetting_method(python_function=typeset_symbol, c=hierarchical_classes.symbol,
+register_typesetting_method(python_function=typeset_symbol, c=typesetting_classes.symbol,
     representation=representations.technical_representation)
-register_typesetting_method(python_function=typeset_symbol, c=hierarchical_classes.symbol,
+register_typesetting_method(python_function=typeset_symbol, c=typesetting_classes.symbol,
     representation=representations.symbolic_representation)
-register_typesetting_method(python_function=typeset_indexed_symbol, c=hierarchical_classes.indexed_symbol,
+register_typesetting_method(python_function=typeset_indexed_symbol, c=typesetting_classes.indexed_symbol,
     representation=representations.technical_representation)
-register_typesetting_method(python_function=typeset_indexed_symbol, c=hierarchical_classes.indexed_symbol,
+register_typesetting_method(python_function=typeset_indexed_symbol, c=typesetting_classes.indexed_symbol,
     representation=representations.symbolic_representation)
 
 log.debug(f"Module {__name__}: loaded.")

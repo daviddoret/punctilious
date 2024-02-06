@@ -26,13 +26,13 @@ class TestPL1:
         l: pu.pl1.PL1 = pu.pl1.PL1()
         x = l.connectives.negation
         # change preference preference
-        pu.pl1.preferences.connective_negation_tilde.predecessor = pu.pl1.preferences.connective_negation_not
+        pu.pl1.preferences.connective_negation_tilde.superclass = pu.pl1.preferences.connective_negation_not
         assert x.to_string(protocol=pu.ts.protocols.latex) == "\\sim"
         assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "~"
         assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "~"
 
         # restore preference preference
-        pu.pl1.preferences.connective_negation_not.predecessor = pu.pl1.preferences.connective_negation_tilde
+        pu.pl1.preferences.connective_negation_not.superclass = pu.pl1.preferences.connective_negation_tilde
         assert x.to_string(protocol=pu.ts.protocols.latex) == "\\lnot"
         assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "¬"
         assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "lnot"

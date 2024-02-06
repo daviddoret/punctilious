@@ -3,6 +3,20 @@
 import logging
 
 
+def force_kwargs_to_string(**kwargs) -> str:
+    output = ''
+    for k, v in kwargs.items():
+        try:
+            k = str(k)
+            v = str(v)
+            if output == '':
+                output = output + ', '
+            output = output + f'{k}: {v}'
+        except Exception as e:
+            output = output + f'{k}: {id(v)}'
+    return output
+
+
 class Logger:
     _singleton = None
 
@@ -33,35 +47,35 @@ class Logger:
         self._logger.addHandler(file_handler)
         self._logger.addHandler(console_handler)
 
-    def debug(self, msg: str):
-        self._logger.debug(msg=msg)
+    def debug(self, msg: str, **kwargs):
+        self._logger.debug(msg=msg + '. ' + force_kwargs_to_string(kwargs=kwargs))
 
-    def error(self, msg: str):
-        self._logger.error(msg=msg)
+    def error(self, msg: str, **kwargs):
+        self._logger.error(msg=msg + '. ' + force_kwargs_to_string(kwargs=kwargs))
         raise Exception(msg)
 
-    def info(self, msg: str):
-        self._logger.info(msg=msg)
+    def info(self, msg: str, **kwargs):
+        self._logger.info(msg=msg + '. ' + force_kwargs_to_string(kwargs=kwargs))
 
-    def warning(self, msg: str):
-        self._logger.warning(msg=msg)
+    def warning(self, msg: str, **kwargs):
+        self._logger.warning(msg=msg + '. ' + force_kwargs_to_string(kwargs=kwargs))
         warning(msg=msg)
 
 
 logger = Logger()
 
 
-def debug(msg: str):
-    logger.debug(msg=msg)
+def debug(msg: str, **kwargs):
+    logger.debug(msg=msg, **kwargs)
 
 
-def error(msg: str):
-    logger.error(msg=msg)
+def error(msg: str, **kwargs):
+    logger.error(msg=msg, **kwargs)
 
 
-def info(msg: str):
-    logger.info(msg=msg)
+def info(msg: str, **kwargs):
+    logger.info(msg=msg, **kwargs)
 
 
-def warning(msg: str):
-    logger.warning(msg=msg)
+def warning(msg: str, **kwargs):
+    logger.warning(msg=msg, **kwargs)
