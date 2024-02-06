@@ -7,6 +7,33 @@ import fl1
 import pl1
 
 
+class Preferences:
+    _singleton = None
+
+    def __new__(cls):
+        if cls._singleton is None:
+            cls._singleton = super(Preferences, cls).__new__(cls)
+        return cls._singleton
+
+    def __init__(self):
+        super().__init__()
+        self._conditional_symbol = ts.SymbolPreference(name='conditional symbol', symbol=ts.symbols.rightwards_arrow)
+        self._negation_symbol = ts.SymbolPreference(name='negation symbol', symbol=ts.symbols.not_sign)
+
+    @property
+    def conditional_symbol(self) -> ts.SymbolPreference:
+        """The condition symbol preference setting."""
+        return self._conditional_symbol
+
+    @property
+    def negation_symbol(self) -> ts.SymbolPreference:
+        """The negation symbol preference setting."""
+        return self._negation_symbol
+
+
+preferences: Preferences = Preferences()
+
+
 def typeset_unary_formula_function_call(o: fl1.UnaryFormula,
     pl1_propositional_variables: typing.Optional[tuple[pl1.PropositionalVariable]] = None,
     pl1ml_meta_variables: typing.Optional[tuple[pl1.MetaVariable]] = None, **kwargs) -> typing.Generator[
@@ -109,54 +136,24 @@ def typeset_propositional_variable(o: pl1.PropositionalVariable,
 
 
 def load():
-    # Representation: Common Language
-    # Preference: Default
-    # Language: EN-US
-    representation: ts.Representation = ts.representations.symbolic_representation
-    preference: ts.Preference = ts.preferences.default
-    language: ts.Language = ts.languages.enus
-    ts.register_styledstring(typesetting_class=pl1.typesetting_classes.conditional, text="material implication",
-        representation=representation)
-    ts.register_styledstring(typesetting_class=pl1.typesetting_classes.negation, text="negation",
-        representation=representation)
-
-    # Representation: Common Language
-    # Preference: Default
-    # Language: FR-CH
-    representation: ts.Representation = ts.representations.common_language
-    preference: ts.Preference = ts.preferences.default
-    language: ts.Language = ts.languages.frch
-    ts.register_styledstring(typesetting_class=pl1.typesetting_classes.conditional, text="conditionnel",
-        representation=representation)
-    ts.register_styledstring(typesetting_class=pl1.typesetting_classes.negation, text="négation",
-        representation=representation)
-
     # Representation: Symbolic Representation
-    # Preference: Default
-    # Language: EN-US
     representation: ts.Representation = ts.representations.symbolic_representation
-    preference: ts.Preference = ts.preferences.default
-    language: ts.Language = ts.languages.enus
-    ts.register_symbol(c=pl1.typesetting_classes.conditional, symbol=ts.symbols.rightwards_arrow,
+    ts.register_symbol(c=pl1.typesetting_classes.conditional, symbol_preference=preferences.conditional_symbol,
         representation=representation)
-    ts.register_symbol(c=pl1.typesetting_classes.negation, symbol=ts.symbols.not_sign, representation=representation)
-    ts.register_symbol(c=pl1.typesetting_classes.negation, symbol=ts.symbols.tilde, representation=representation)
+    ts.register_symbol(c=pl1.typesetting_classes.negation, symbol_preference=preferences.negation_symbol,
+        representation=representation)
 
     # Formulas
-    preference: ts.Preference = fl1.preferences.formula_function_call
     ts.register_typesetting_method(python_function=typeset_binary_formula_function_call,
-        c=pl1.typesetting_classes.propositional_binary_formula, representation=representation)
+        c=pl1.typesetting_classes.pl1_binary_formula, representation=representation)
     ts.register_typesetting_method(python_function=typeset_unary_formula_function_call,
-        c=pl1.typesetting_classes.propositional_unary_formula, representation=representation)
+        c=pl1.typesetting_classes.pl1_unary_formula, representation=representation)
 
-    preference: ts.Preference = fl1.preferences.formula_prefix_no_parenthesis
-    ts.register_typesetting_method(c=pl1.typesetting_classes.propositional_unary_formula,
+    ts.register_typesetting_method(c=pl1.typesetting_classes.pl1_unary_formula,
         python_function=typeset_unary_formula_prefix_without_parenthesis, representation=representation)
-    preference: ts.Preference = fl1.preferences.formula_infix
-    ts.register_typesetting_method(c=pl1.typesetting_classes.propositional_binary_formula,
+    ts.register_typesetting_method(c=pl1.typesetting_classes.pl1_binary_formula,
         python_function=typeset_binary_formula_infix, representation=representation)
-    preference: ts.Preference = ts.preferences.default
-    ts.register_typesetting_method(c=pl1.typesetting_classes.propositional_variable,
+    ts.register_typesetting_method(c=pl1.typesetting_classes.pl1_variable,
         python_function=typeset_propositional_variable, representation=representation)
     ts.register_typesetting_method(c=pl1.typesetting_classes.meta_variable, python_function=typeset_meta_variable,
         representation=representation)

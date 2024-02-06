@@ -226,7 +226,7 @@ class Representations:
 representations = Representations()
 
 
-class Preference:
+class Preference(abc.ABC):
     """A preference is a refined typesetting approach for a representation.
 
     For example, if several conventions are possible to typeset a particular object with a particular representation,
@@ -235,11 +235,8 @@ class Preference:
 
     """
 
-    def __init__(self, name: str, predecessor: typing.Optional[Preference] = None):
+    def __init__(self, name: str):
         self._name = name
-        self._predecessor: typing.Optional[TypesettingClass] = predecessor
-        self._weight: int = 100 if predecessor is None else predecessor.weight + 100
-        log.debug(f"preference: {self.name}, weight: {self.weight}")
 
     def __eq__(self, other):
         return self is other
@@ -257,24 +254,9 @@ class Preference:
     def name(self) -> str:
         return self._name
 
-    @property
-    def weight(self) -> int:
-        """A score that orders typesetting_classes by degree of specialization."""
-        return self._weight
-
-    @property
-    def predecessor(self) -> typing.Optional[Preference]:
-        return self._predecessor
-
-    @predecessor.setter
-    def predecessor(self, predecessor: typing.Optional[Preference]):
-        """Makes it possible to modify the order of preference between flavours at run-time."""
-        # TODO: BUG: Prevent self-reference
-        # TODO: BUG: Prevent circularity
-        # TODO: BUG: Prevent unlimited weight increase
-        self._predecessor: typing.Optional[TypesettingClass] = predecessor
-        self._weight: int = 100 if predecessor is None else predecessor.weight + 100
-        log.debug(f"preference: {self.name}, weight: {self.weight}")
+    @abc.abstractmethod
+    def reset(self) -> None:
+        log.error(msg='calling an abstract method')
 
 
 class Preferences:
@@ -288,98 +270,12 @@ class Preferences:
 
     def __init__(self):
         self._internal_data_structure: set[Preference] = set()
-        self._default = self._register(name='default')
-        self._text_style = self.register(name="text_style.serif_normal", superclass=self._default)
-        self._text_style_serif_normal = self.register(name="text_style.serif_normal", superclass=self._text_style)
-        self._text_style_serif_bold = self.register(name="text_style.serif_bold", superclass=self._text_style)
-        self._text_style_serif_italic = self.register(name="text_style.serif_italic", superclass=self._text_style)
-        self._text_style_serif_bold_italic = self.register(name="text_style.serif_bold_italic",
-            superclass=self._text_style)
-        self._text_style_sans_serif_normal = self.register(name="text_style.sans_serif_normal",
-            superclass=self._text_style)
-        self._text_style_sans_serif_bold = self.register(name="text_style.sans_serif_bold", superclass=self._text_style)
-        self._text_style_sans_serif_italic = self.register(name="text_style.sans_serif_italic",
-            superclass=self._text_style)
-        self._text_style_sans_serif_bold_italic = self.register(name="text_style.sans_serif_bold_italic",
-            superclass=self._text_style)
-        self._text_style_script_normal = self.register(name="text_style.script_normal", superclass=self._text_style)
-        self._text_style_script_bold = self.register(name="text_style.script_bold", superclass=self._text_style)
-        self._text_style_fraktur_normal = self.register(name="text_style.fraktur_normal", superclass=self._text_style)
-        self._text_style_fraktur_bold = self.register(name="text_style.fraktur_bold", superclass=self._text_style)
-        self._text_style_monospace = self.register(name="text_style.monospace", superclass=self._text_style)
-        self._text_style_double_struck = self.register(name="text_style.double_struck", superclass=self._text_style)
 
-    def _register(self, name: str, predecessor: typing.Optional[Preference] = None) -> Preference:
+    def register(self, name: str) -> Preference:
         """The protected version of the register method is called once for the root element, because it has no predecessor."""
-        preference: Preference = Preference(name=name, predecessor=predecessor)
+        preference: Preference = Preference(name=name)
         self._internal_data_structure.add(preference)
         return preference
-
-    @property
-    def default(self) -> Preference:
-        """If no preference is specified, typesetting uses the default preference."""
-        return self._default
-
-    @property
-    def text_style_serif_normal(self) -> Preference:
-        return self._text_style_serif_normal
-
-    @property
-    def text_style_serif_bold(self) -> Preference:
-        return self._text_style_serif_bold
-
-    @property
-    def text_style_serif_italic(self) -> Preference:
-        return self._text_style_serif_italic
-
-    @property
-    def text_style_serif_bold_italic(self) -> Preference:
-        return self._text_style_serif_bold_italic
-
-    @property
-    def text_style_sans_serif_normal(self) -> Preference:
-        return self._text_style_sans_serif_normal
-
-    @property
-    def text_style_sans_serif_bold(self) -> Preference:
-        return self._text_style_sans_serif_bold
-
-    @property
-    def text_style_sans_serif_italic(self) -> Preference:
-        return self._text_style_sans_serif_italic
-
-    @property
-    def text_style_sans_serif_bold_italic(self) -> Preference:
-        return self._text_style_sans_serif_bold_italic
-
-    @property
-    def text_style_script_normal(self) -> Preference:
-        return self._text_style_script_normal
-
-    @property
-    def text_style_script_bold(self) -> Preference:
-        return self._text_style_script_bold
-
-    @property
-    def text_style_fraktur_normal(self) -> Preference:
-        return self._text_style_fraktur_normal
-
-    @property
-    def text_style_fraktur_bold(self) -> Preference:
-        return self._text_style_fraktur_bold
-
-    @property
-    def text_style_monospace(self) -> Preference:
-        return self._text_style_monospace
-
-    @property
-    def text_style_double_struck(self) -> Preference:
-        return self._text_style_double_struck
-
-    def register(self, name: str, superclass: typing.Optional[Preference] = None) -> Preference:
-        if superclass is None:
-            superclass = self.default
-        return self._register(name=name, predecessor=superclass)
 
 
 preferences = Preferences()
@@ -632,6 +528,24 @@ class Symbol(Typesettable):
         return self._unicode_limited
 
 
+class SymbolPreference(Preference):
+    def __init__(self, name: str, symbol: Symbol):
+        super().__init__(name=name)
+        self._symbol: Symbol = symbol
+        self._reset_value: Symbol = symbol
+
+    def reset(self) -> None:
+        self.symbol = self._reset_value
+
+    @property
+    def symbol(self) -> Symbol:
+        return self._symbol
+
+    @symbol.setter
+    def symbol(self, symbol: Symbol):
+        self._symbol = symbol
+
+
 def typeset_styled_text(o: StyledText, protocol: typing.Optional[Protocol] = None, **kwargs) -> typing.Generator[
     str, None, None]:
     if protocol is None:
@@ -750,6 +664,17 @@ class Symbols:
 symbols = Symbols()
 
 
+def validate_tc(tc: typing.Optional[TypesettingClass] = None,
+    superclass: typing.Optional[TypesettingClass] = None) -> TypesettingClass:
+    """A helper function to facilitate the validation of the tc argument."""
+    if tc is None:
+        return superclass
+    elif not tc.is_subclass_of(c=superclass):
+        log.error(msg='inconsistent typesetting class', tc=tc, superclass=superclass)
+    else:
+        return tc
+
+
 class IndexedSymbol(Typesettable):
 
     def __init__(self, symbol: Symbol, index: int):
@@ -792,26 +717,123 @@ def typeset_indexed_symbol(o: IndexedSymbol, protocol: typing.Optional[Protocol]
             raise Exception('Unsupported protocol.')
 
 
-def register_symbol(c: TypesettingClass, representation: Representation, symbol: Symbol) -> typing.Callable:
+def register_symbol(c: TypesettingClass, representation: Representation, symbol_preference: SymbolPreference) -> None:
     """Register a typesetting-method that outputs an atomic symbol."""
 
     # dynamically generate the desired typesetting-method.
     def typesetting_method(o: Typesettable, **kwargs2) -> typing.Generator[str, None, None]:
-        merged_kwargs = {**kwargs2}  # overwrite kwargs1 with kwargs2
-        return typeset_symbol(o=symbol, **merged_kwargs)
+        return typeset_symbol(o=symbol_preference.symbol, **kwargs2)
 
     # register that typesetting-method.
     register_typesetting_method(python_function=typesetting_method, c=c, representation=representation)
 
 
+class TextStyle:
+    def __init__(self, name: str, unicode_index: int):
+        self._name = name
+        self._unicode_index = unicode_index
+
+    def __repr__(self):
+        return self._name
+
+    def __str__(self):
+        return self._name
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def unicode_index(self) -> int:
+        return self._unicode_index
+
+
+class TextStyles:
+    """A catalog of out-of-the-box text_styles."""
+    _singleton = None
+
+    def __new__(cls):
+        if cls._singleton is None:
+            cls._singleton = super(TextStyles, cls).__new__(cls)
+        return cls._singleton
+
+    def __init__(self):
+        self._serif_normal: TextStyle = TextStyle(name='serif normal', unicode_index=0)
+        self._serif_bold: TextStyle = TextStyle(name='serif bold', unicode_index=1)
+        self._serif_italic: TextStyle = TextStyle(name='serif italic', unicode_index=2)
+        self._serif_bold_italic: TextStyle = TextStyle(name='serif bold italic', unicode_index=3)
+        self._sans_serif_normal: TextStyle = TextStyle(name='sans-serif normal', unicode_index=4)
+        self._sans_serif_bold: TextStyle = TextStyle(name='sans-serif bold', unicode_index=5)
+        self._sans_serif_italic: TextStyle = TextStyle(name='sans-serif italic', unicode_index=6)
+        self._sans_serif_bold_italic: TextStyle = TextStyle(name='sans-serif bold italic', unicode_index=7)
+        self._script_normal: TextStyle = TextStyle(name='script normal', unicode_index=8)
+        self._script_bold: TextStyle = TextStyle(name='script bold', unicode_index=9)
+        self._fraktur_normal: TextStyle = TextStyle(name='fraktur normal', unicode_index=10)
+        self._fraktur_bold: TextStyle = TextStyle(name='fraktur bold', unicode_index=11)
+        self._monospace: TextStyle = TextStyle(name='monospace', unicode_index=12)
+        self._double_struck: TextStyle = TextStyle(name='double-struck', unicode_index=13)
+
+    @property
+    def serif_normal(self) -> TextStyle:
+        return self._serif_normal
+
+    @property
+    def serif_bold(self) -> TextStyle:
+        return self._serif_bold
+
+    @property
+    def serif_italic(self) -> TextStyle:
+        return self._serif_italic
+
+    @property
+    def serif_bold_italic(self) -> TextStyle:
+        return self._serif_bold_italic
+
+    @property
+    def sans_serif_normal(self) -> TextStyle:
+        return self._sans_serif_normal
+
+    @property
+    def sans_serif_bold(self) -> TextStyle:
+        return self._sans_serif_bold
+
+    @property
+    def sans_serif_italic(self) -> TextStyle:
+        return self._sans_serif_italic
+
+    @property
+    def sans_serif_bold_italic(self) -> TextStyle:
+        return self.sans_serif_bold_italic
+
+    @property
+    def script_normal(self) -> TextStyle:
+        return self._script_normal
+
+    @property
+    def script_bold(self) -> TextStyle:
+        return self._script_bold
+
+    @property
+    def fraktur_normal(self) -> TextStyle:
+        return self._fraktur_normal
+
+    @property
+    def fraktur_bold(self) -> TextStyle:
+        return self._fraktur_bold
+
+    @property
+    def monospace(self) -> TextStyle:
+        return self._monospace
+
+    @property
+    def double_struck(self) -> TextStyle:
+        return self._double_struck
+
+
+text_styles = TextStyles()
+
+
 class StyledText(Typesettable):
-    unicode_indexes = {preferences.text_style_serif_normal: 0, preferences.text_style_serif_bold: 1,
-        preferences.text_style_serif_italic:                2, preferences.text_style_serif_bold_italic: 3,
-        preferences.text_style_sans_serif_normal:           4, preferences.text_style_sans_serif_bold: 5,
-        preferences.text_style_sans_serif_italic:           6, preferences.text_style_sans_serif_bold_italic: 7,
-        preferences.text_style_script_normal:               8, preferences.text_style_script_bold: 9,
-        preferences.text_style_fraktur_normal:              10, preferences.text_style_fraktur_bold: 11,
-        preferences.text_style_monospace:                   12, preferences.text_style_double_struck: 13}
     unicode_styled_characters = {'a': 'a𝐚𝑎𝒂𝖺𝗮𝘢𝙖𝒶𝓪𝔞𝖆𝚊𝕒', 'b': 'b𝐛𝑏𝒃𝖻𝗯𝘣𝙗𝒷𝓫𝔟𝖇𝚋𝕓', 'c': 'c𝐜𝑐𝒄𝖼𝗰𝘤𝙘𝒸𝓬𝔠𝖈𝚌𝕔',
         'd':                          'd𝐝𝑑𝒅𝖽𝗱𝘥𝙙𝒹𝓭𝔡𝖉𝚍𝕕', 'e': 'e𝐞𝑒𝒆𝖾𝗲𝘦𝙚ℯ𝓮𝔢𝖊𝚎𝕖', 'f': 'f𝐟𝑓𝒇𝖿𝗳𝘧𝙛𝒻𝓯𝔣𝖋𝚏𝕗',
         'g':                          'g𝐠𝑔𝒈𝗀𝗴𝘨𝙜ℊ𝓰𝔤𝖌𝚐𝕘', 'h': 'h𝐡ℎ𝒉𝗁𝗵𝘩𝙝𝒽𝓱𝔥𝖍𝚑𝕙', 'i': 'i𝐢𝑖𝒊𝗂𝗶𝘪𝙞𝒾𝓲𝔦𝖎𝚒𝕚',
@@ -837,7 +859,7 @@ class StyledText(Typesettable):
     def __init__(self, neutral_text: str):
         self._neutral_text = neutral_text
         super().__init__()
-        self.declare_typesetting_class_element(typesetting_class=typesetting_classes.styled_text)
+        self.declare_typesetting_class_element(tc=typesetting_classes.styled_text)
 
     @property
     def neutral_text(self) -> str:

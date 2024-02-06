@@ -6,40 +6,12 @@ import abc
 import typing
 
 import log
-import pl1
 import typesetting as ts
 import fl1
 
 
 # TODO: See Lawler, John. “Notation, Logical (See: Notation, Mathematical),” n.d. https://websites.umich.edu/~jlawler/IELL-LogicalNotation.pdf.
 #   For a good synthesis on notation conventions for propositional logic.
-
-
-class Preferences:
-    _singleton = None
-
-    def __new__(cls):
-        if cls._singleton is None:
-            cls._singleton = super(Preferences, cls).__new__(cls)
-        return cls._singleton
-
-    def __init__(self):
-        super().__init__()
-        # negation
-        self._connective_negation_tilde: ts.Preference = ts.preferences.register(name="pl1.connective.negation.tilde")
-        self._connective_negation_not: ts.Preference = ts.preferences.register(name="pl1.connective.negation.not",
-            superclass=self._connective_negation_tilde)  # define default preference.
-
-    @property
-    def connective_negation_not(self) -> ts.Preference:
-        return self._connective_negation_not
-
-    @property
-    def connective_negation_tilde(self) -> ts.Preference:
-        return self._connective_negation_tilde
-
-
-preferences = Preferences()
 
 
 class TypesettingClasses:
@@ -54,23 +26,38 @@ class TypesettingClasses:
         super().__init__()
         self._conditional = ts.typesetting_classes.register(name="pl1.connective.conditional",
             superclass=fl1.typesetting_classes.binary_connective)
+        self._connective_collection = ts.typesetting_classes.register(name="pl1.connective_collection",
+            superclass=fl1.typesetting_classes.connective_collection)
         self._meta_variable = ts.typesetting_classes.register(name="pl1ml.meta_variable",
-            superclass=fl1.typesetting_classes.formula)
+            superclass=fl1.typesetting_classes.atomic_formula)
         self._negation = ts.typesetting_classes.register(name="pl1.connective.negation",
             superclass=fl1.typesetting_classes.unary_connective)
+        self._pl1ml = ts.typesetting_classes.register(name="pl1ml", superclass=fl1.typesetting_classes.formal_language)
         self._pl1 = ts.typesetting_classes.register(name="pl1", superclass=fl1.typesetting_classes.formal_language)
-        self._propositional_formula = ts.typesetting_classes.register(name="pl1.propositional_formula",
+        # pl1ml is an extension of pl1, all formulas in pl1 are valid in pl1ml + metavariables.
+        self._pl1ml_formula = ts.typesetting_classes.register(name="pl1ml.formula",
             superclass=fl1.typesetting_classes.formula)
-        self._propositional_unary_formula = ts.typesetting_classes.register(name="pl1.propositional_unary_formula",
+        self._pl1ml_unary_formula = ts.typesetting_classes.register(name="pl1ml.unary_formula",
             superclass=fl1.typesetting_classes.unary_formula)
-        self._propositional_binary_formula = ts.typesetting_classes.register(name="pl1.propositional_binary_formula",
+        self._pl1ml_binary_formula = ts.typesetting_classes.register(name="pl1ml.binary_formula",
             superclass=fl1.typesetting_classes.binary_formula)
-        self._propositional_variable = ts.typesetting_classes.register(name="pl1.propositional_variable",
-            superclass=fl1.typesetting_classes.formal_object)
+        # pl1 is a more specialized class.
+        self._pl1_formula = ts.typesetting_classes.register(name="pl1.propositional_formula",
+            superclass=self._pl1ml_formula)
+        self._pl1_unary_formula = ts.typesetting_classes.register(name="pl1.propositional_unary_formula",
+            superclass=self._pl1ml_unary_formula)
+        self._pl1_binary_formula = ts.typesetting_classes.register(name="pl1.propositional_binary_formula",
+            superclass=self._pl1ml_binary_formula)
+        self._pl1_variable = ts.typesetting_classes.register(name="pl1.propositional_variable",
+            superclass=fl1.typesetting_classes.atomic_formula)
 
     @property
     def conditional(self) -> ts.TypesettingClass:
         return self._conditional
+
+    @property
+    def connective_collection(self) -> ts.TypesettingClass:
+        return self._connective_collection
 
     @property
     def meta_variable(self) -> ts.TypesettingClass:
@@ -85,20 +72,36 @@ class TypesettingClasses:
         return self._pl1
 
     @property
-    def propositional_formula(self) -> ts.TypesettingClass:
-        return self._propositional_formula
+    def pl1ml(self) -> ts.TypesettingClass:
+        return self._pl1ml
 
     @property
-    def propositional_unary_formula(self) -> ts.TypesettingClass:
-        return self._propositional_unary_formula
+    def pl1_formula(self) -> ts.TypesettingClass:
+        return self._pl1_formula
 
     @property
-    def propositional_binary_formula(self) -> ts.TypesettingClass:
-        return self._propositional_binary_formula
+    def pl1_unary_formula(self) -> ts.TypesettingClass:
+        return self._pl1_unary_formula
 
     @property
-    def propositional_variable(self) -> ts.TypesettingClass:
-        return self._propositional_variable
+    def pl1_binary_formula(self) -> ts.TypesettingClass:
+        return self._pl1_binary_formula
+
+    @property
+    def pl1_variable(self) -> ts.TypesettingClass:
+        return self._pl1_variable
+
+    @property
+    def pl1ml_formula(self) -> ts.TypesettingClass:
+        return self._pl1ml_formula
+
+    @property
+    def pl1ml_unary_formula(self) -> ts.TypesettingClass:
+        return self._pl1ml_unary_formula
+
+    @property
+    def pl1ml_binary_formula(self) -> ts.TypesettingClass:
+        return self._pl1ml_binary_formula
 
 
 typesetting_classes = TypesettingClasses()
@@ -144,9 +147,11 @@ class MetaLanguage(fl1.FormalLanguage):
 
 
 class PropositionalVariable(fl1.AtomicFormula):
-    def __init__(self, formal_language_collection: fl1.FormalLanguageCollection):
-        super().__init__(formal_language_collection=formal_language_collection)
-        self.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_variable)
+
+    def __init__(self, formal_language_collection: fl1.FormalLanguageCollection,
+        tc: typing.Optional[ts.TypesettingClass] = None):
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.pl1_variable)
+        super().__init__(formal_language_collection=formal_language_collection, tc=tc)
 
 
 class PropositionalVariableCollection(fl1.FormalLanguageCollection):
@@ -163,8 +168,9 @@ class PropositionalVariableCollection(fl1.FormalLanguageCollection):
 class ConnectiveCollection(fl1.ConnectiveCollection):
     """A specialized ConnectiveCollection for PL1 containing all PL1 connectors, and that is locked."""
 
-    def __init__(self, formal_language: PL1):
-        super().__init__(formal_language=formal_language)
+    def __init__(self, formal_language: PL1, tc: typing.Optional[ts.TypesettingClass] = None):
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.connective_collection)
+        super().__init__(formal_language=formal_language, tc=tc)
         # exhaustive declaration of PL1 connectives.
         self._conditional: fl1.BinaryConnective = self.declare_binary_connective(tc=typesetting_classes.conditional)
         self._negation: fl1.UnaryConnective = self.declare_unary_connective(tc=typesetting_classes.negation)
@@ -201,9 +207,8 @@ class PL1CompoundFormulaCollection(fl1.CompoundFormulaCollection):
             log.error("connective is not a pl1 connective.")
         if not self.pl1.is_well_formed_formula(phi=term):
             log.error("term is not a pl1 well-formed-formula.")
-        phi: fl1.UnaryFormula = super().declare_unary_formula(connective=connective, term=term)
-        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_formula)
-        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_unary_formula)
+        tc: ts.TypesettingClass = typesetting_classes.pl1_unary_formula
+        phi: fl1.UnaryFormula = super().declare_unary_formula(connective=connective, term=term, tc=tc)
         return phi
 
     def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.FormalObject,
@@ -223,9 +228,9 @@ class PL1CompoundFormulaCollection(fl1.CompoundFormulaCollection):
             log.error("term_1 is not a pl1 well-formed-formula.")
         if not self.pl1.is_well_formed_formula(phi=term_2):
             log.error("term_2 is not a pl1 well-formed-formula.")
-        phi: fl1.BinaryFormula = super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
-        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_formula)
-        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_binary_formula)
+        tc: ts.TypesettingClass = typesetting_classes.pl1_binary_formula
+        phi: fl1.BinaryFormula = super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2,
+            tc=tc)
         return phi
 
     @property
@@ -254,9 +259,8 @@ class PL1MLCompoundFormulaCollection(fl1.CompoundFormulaCollection):
             log.error("connective is not a pl1 meta-language connective.")
         if not self.pl1ml.is_well_formed_formula(phi=term):
             log.error("term is not a pl1 meta-language well-formed-formula.")
-        phi: fl1.UnaryFormula = super().declare_unary_formula(connective=connective, term=term)
-        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_formula)
-        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_unary_formula)
+        tc: ts.TypesettingClass = typesetting_classes.pl1ml_unary_formula
+        phi: fl1.UnaryFormula = super().declare_unary_formula(connective=connective, term=term, tc=tc)
         return phi
 
     def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.FormalObject,
@@ -276,9 +280,9 @@ class PL1MLCompoundFormulaCollection(fl1.CompoundFormulaCollection):
             log.error("term_1 is not a pl1 meta-language well-formed-formula.")
         if not self.pl1ml.is_well_formed_formula(phi=term_2):
             log.error("term_2 is not a pl1 meta-language well-formed-formula.")
-        phi: fl1.BinaryFormula = super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
-        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_formula)
-        phi.declare_typesetting_class_element(typesetting_class=typesetting_classes.propositional_binary_formula)
+        tc: ts.TypesettingClass = typesetting_classes.pl1ml_binary_formula
+        phi: fl1.BinaryFormula = super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2,
+            tc=tc)
         return phi
 
     @property
@@ -353,7 +357,7 @@ class PL1ML(fl1.FormalLanguage):
         if phi in m.keys():
             # direct substitution
             return m[phi]
-        elif phi.is_an_element_of_typesetting_class(c=pl1.typesetting_classes.propositional_variable):
+        elif phi.is_an_element_of_typesetting_class(c=typesetting_classes.pl1_variable):
             return phi
         elif phi.is_an_element_of_typesetting_class(c=fl1.typesetting_classes.unary_formula):
             phi: fl1.UnaryFormula

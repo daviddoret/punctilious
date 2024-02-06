@@ -25,17 +25,23 @@ class TestPL1:
     def test_connectives_3(self):
         l: pu.pl1.PL1 = pu.pl1.PL1()
         x = l.connectives.negation
+
+        # restore preference preference
+        pu.pl1_presentation.preferences.negation_symbol.symbol = pu.ts.symbols.not_sign
+        assert x.to_string(protocol=pu.ts.protocols.latex) == "\\lnot"
+        assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "¬"
+        assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "not"
+
         # change preference preference
-        pu.pl1.preferences.connective_negation_tilde.superclass = pu.pl1.preferences.connective_negation_not
+        pu.pl1_presentation.preferences.negation_symbol.symbol = pu.ts.symbols.tilde
         assert x.to_string(protocol=pu.ts.protocols.latex) == "\\sim"
         assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "~"
         assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "~"
 
-        # restore preference preference
-        pu.pl1.preferences.connective_negation_not.superclass = pu.pl1.preferences.connective_negation_tilde
+        pu.pl1_presentation.preferences.negation_symbol.reset()
         assert x.to_string(protocol=pu.ts.protocols.latex) == "\\lnot"
         assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "¬"
-        assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "lnot"
+        assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "not"
 
     def test_formulas(self):
         l1: pu.pl1.PL1 = pu.pl1.PL1()
@@ -43,14 +49,14 @@ class TestPL1:
         phi1 = l1.compound_formulas.declare_unary_formula(connective=l1.connectives.negation, term=pa)
         assert phi1 in l1.compound_formulas
         assert phi1.to_string(protocol=pu.ts.protocols.unicode_extended) == '¬𝑃'
-        assert phi1.to_string(protocol=pu.ts.protocols.unicode_limited) == 'lnotP'
+        assert phi1.to_string(protocol=pu.ts.protocols.unicode_limited) == 'notP'
         assert phi1.to_string(protocol=pu.ts.protocols.latex) == '\\lnot\\textit{P}'
 
         pb = l1.propositional_variables.declare_proposition_variable()
         phi2 = l1.compound_formulas.declare_binary_formula(connective=l1.connectives.conditional, term_1=pa, term_2=pb)
         assert phi2 in l1.compound_formulas
         assert phi1.to_string(protocol=pu.ts.protocols.unicode_extended) == '¬𝑃'
-        assert phi1.to_string(protocol=pu.ts.protocols.unicode_limited) == 'lnotP'
+        assert phi1.to_string(protocol=pu.ts.protocols.unicode_limited) == 'notP'
         assert phi1.to_string(protocol=pu.ts.protocols.latex) == '\\lnot\\textit{P}'
 
         l2: pu.pl1.PL1 = pu.pl1.PL1()

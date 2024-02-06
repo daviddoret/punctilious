@@ -4,6 +4,95 @@ import typesetting as ts
 import fl1
 
 
+class BinaryFormulaNotation:
+    def __init__(self, name: str):
+        self._name = name
+
+    def __repr__(self):
+        return self._name
+
+    def __str__(self):
+        return self._name
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+
+class BinaryFormulaNotations:
+    """A catalog of out-of-the-box binary_formula_notations."""
+    _singleton = None
+
+    def __new__(cls):
+        if cls._singleton is None:
+            cls._singleton = super(BinaryFormulaNotations, cls).__new__(cls)
+        return cls._singleton
+
+    def __init__(self):
+        self._function_notation = BinaryFormulaNotation('function notation')
+        self._infix_notation = BinaryFormulaNotation('infix notation')
+
+    @property
+    def function_notation(self) -> BinaryFormulaNotation:
+        """The function notation."""
+        return self._function_notation
+
+    @property
+    def infix_notation(self) -> BinaryFormulaNotation:
+        """The infix notation."""
+        return self._infix_notation
+
+
+binary_formula_notations = BinaryFormulaNotations()
+
+
+class BinaryFormulaNotationPreference(ts.Preference):
+    def __init__(self, name: str, binary_formula_notation: BinaryFormulaNotation):
+        super().__init__(name=name)
+        self._binary_formula_notation: BinaryFormulaNotation = binary_formula_notation
+        self._reset_value: BinaryFormulaNotation = binary_formula_notation
+
+    @property
+    def binary_formula_notation(self) -> BinaryFormulaNotation:
+        return self._binary_formula_notation
+
+    @binary_formula_notation.setter
+    def binary_formula_notation(self, binary_formula_notation: BinaryFormulaNotation):
+        self._binary_formula_notation = binary_formula_notation
+
+    def reset(self) -> None:
+        self.binary_formula_notation = self._reset_value
+
+
+class Preferences:
+    _singleton = None
+
+    def __new__(cls):
+        if cls._singleton is None:
+            cls._singleton = super(Preferences, cls).__new__(cls)
+        return cls._singleton
+
+    def __init__(self):
+        super().__init__()
+        # formulas
+        self._binary_formula_notation = BinaryFormulaNotationPreference(name='binary formula notation',
+            binary_formula_notation=binary_formula_notations.infix_notation)
+        self._connective_symbol = ts.SymbolPreference(name='connective symbol', symbol=ts.symbols.asterisk_operator)
+
+    @property
+    def connective_symbol(self) -> ts.SymbolPreference:
+        """binary formula notation preference"""
+        return self._connective_symbol
+
+    @property
+    def binary_formula_notation(self) -> BinaryFormulaNotationPreference:
+        """binary formula notation preference"""
+        return self._binary_formula_notation
+
+
+preferences: Preferences = Preferences()
+
+
 # Typesetting functions
 
 def typeset_unary_formula_function_call(o: fl1.UnaryFormula, **kwargs) -> typing.Generator[str, None, None]:
@@ -37,51 +126,22 @@ def typeset_binary_formula_infix(o: fl1.BinaryFormula, **kwargs) -> typing.Gener
 
 
 def load():
-    # Representation: Common Language
-    # Preference: Default
-    # Language: EN-US
-    representation: ts.Representation = ts.representations.common_language
-    preference: ts.Preference = ts.preferences.default
-    language: ts.Language = ts.languages.enus
-
-    ts.register_styledstring(typesetting_class=fl1.typesetting_classes.connective, text="connective",
-        representation=representation)
-
-    # Representation: Common Language
-    # Preference: Default
-    # Language: FR-CH
-    representation: ts.Representation = ts.representations.common_language
-    preference: ts.Preference = ts.preferences.default
-    language: ts.Language = ts.languages.frch
-
-    ts.register_styledstring(typesetting_class=fl1.typesetting_classes.connective, text="connecteur",
-        representation=representation)
-
     # Representation: Symbolic Representation
-    # Preference: Default
-    # Language: EN-US
     representation: ts.Representation = ts.representations.symbolic_representation
-    preference: ts.Preference = ts.preferences.default
-    language: ts.Language = ts.languages.enus
 
     # symbols
-    ts.register_symbol(c=fl1.typesetting_classes.connective, symbol=ts.symbols.asterisk_operator,
-        representation=representation)
-    ts.register_symbol(c=fl1.typesetting_classes.connective, symbol=ts.symbols.asterisk_operator,
+    ts.register_symbol(c=fl1.typesetting_classes.connective, symbol_preference=preferences.connective_symbol,
         representation=representation)
 
     # formulas
-    preference: ts.Preference = fl1.preferences.formula_function_call
     ts.register_typesetting_method(python_function=typeset_binary_formula_function_call,
         c=fl1.typesetting_classes.binary_formula, representation=representation)
     ts.register_typesetting_method(python_function=typeset_unary_formula_function_call,
         c=fl1.typesetting_classes.unary_formula, representation=representation)
 
-    preference: ts.Preference = fl1.preferences.formula_prefix_no_parenthesis
     ts.register_typesetting_method(python_function=typeset_unary_formula_prefix_without_parenthesis,
         c=fl1.typesetting_classes.unary_formula, representation=representation)
 
-    preference: ts.Preference = fl1.preferences.formula_infix
     ts.register_typesetting_method(python_function=typeset_binary_formula_infix,
         c=fl1.typesetting_classes.binary_formula, representation=representation)
 

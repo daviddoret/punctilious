@@ -5,7 +5,6 @@ from __future__ import annotations
 import abc
 import typing
 
-import fl1
 import log
 import typesetting as ts
 
@@ -25,42 +24,6 @@ class Representations:
 
 
 representations: Representations = Representations()
-
-
-class Preferences:
-    _singleton = None
-
-    def __new__(cls):
-        if cls._singleton is None:
-            cls._singleton = super(Preferences, cls).__new__(cls)
-        return cls._singleton
-
-    def __init__(self):
-        super().__init__()
-        # formulas
-        self._formula_function_call: ts.Preference = ts.preferences.register(name="fl1.formula.function_call")
-        self._formula_prefix_no_parenthesis: ts.Preference = ts.preferences.register(
-            name="fl1.formula.prefix_no_parenthesis", superclass=self.formula_function_call)
-        self._formula_infix: ts.Preference = ts.preferences.register(name="fl1.formula.infix",
-            superclass=self._formula_function_call)
-
-    @property
-    def formula_function_call(self) -> ts.Preference:
-        """Typeset formulas with function notation, e.g.: f(x), g(x ,y), h(x ,y ,z), etc."""
-        return self._formula_function_call
-
-    @property
-    def formula_prefix_no_parenthesis(self) -> ts.Preference:
-        """Typeset unary formulas with prefix notation and without parenthesis, e.g.: fx"""
-        return self._formula_prefix_no_parenthesis
-
-    @property
-    def formula_infix(self) -> ts.Preference:
-        """Typeset binary formulas with infix notation, e.g.: x f y"""
-        return self._formula_infix
-
-
-preferences: Preferences = Preferences()
 
 
 # TAGS
@@ -91,7 +54,7 @@ class TypesettingClasses:
         self._unary_connective = ts.typesetting_classes.register(name="fl1.unary_connective",
             superclass=self._fixed_arity_connective)
         self._fixed_arity_formula = ts.typesetting_classes.register(name="fl1.fixed_arity_formula",
-            superclass=self._formula)
+            superclass=self._compound_formula)
         self._binary_formula = ts.typesetting_classes.register(name="fl1.binary_formula",
             superclass=self._fixed_arity_formula)
         self._unary_formula = ts.typesetting_classes.register(name="fl1.unary_formula",
@@ -379,8 +342,9 @@ class BinaryConnective(FixedArityConnective):
 
 
 class ConnectiveCollection(FormalLanguageCollection):
-    def __init__(self, formal_language: FormalLanguage):
-        super().__init__(formal_language=formal_language, tc=typesetting_classes.connective_collection)
+    def __init__(self, formal_language: FormalLanguage, tc: typing.Optional[ts.TypesettingClass] = None):
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.connective_collection)
+        super().__init__(formal_language=formal_language, tc=tc)
 
     def declare_unary_connective(self, tc: typing.Optional[ts.TypesettingClass]) -> UnaryConnective:
         x: UnaryConnective = UnaryConnective(tc=tc)
@@ -405,15 +369,18 @@ class CompoundFormulaCollection(FormalLanguageCollection):
         #     default_rep = ts.representations.symbolic_representation
         super().__init__(formal_language=formal_language, tc=tc, default_rep=default_rep)
 
-    def declare_unary_formula(self, connective: UnaryConnective, term: FormalObject) -> UnaryFormula:
-        x: UnaryFormula = UnaryFormula(formal_language_collection=self, connective=connective, term=term)
+    def declare_unary_formula(self, connective: UnaryConnective, term: FormalObject,
+        tc: typing.Optional[ts.TypesettingClass] = None) -> UnaryFormula:
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.unary_formula)
+        x: UnaryFormula = UnaryFormula(formal_language_collection=self, connective=connective, term=term, tc=tc)
         x = self._add_formal_object(x=x)
         return x
 
-    def declare_binary_formula(self, connective: BinaryConnective, term_1: FormalObject, term_2: FormalObject) -> (
-        BinaryFormula):
+    def declare_binary_formula(self, connective: BinaryConnective, term_1: FormalObject, term_2: FormalObject,
+        tc: typing.Optional[ts.TypesettingClass] = None) -> BinaryFormula:
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.binary_formula)
         x: BinaryFormula = BinaryFormula(formal_language_collection=self, connective=connective, term_1=term_1,
-            term_2=term_2)
+            term_2=term_2, tc=tc)
         x = self._add_formal_object(x=x)
         return x
 
@@ -424,10 +391,7 @@ class Formula(FormalObject):
     def __init__(self, formal_language_collection: FormalLanguageCollection,
         tc: typing.Optional[ts.TypesettingClass] = None):
         self._formal_language_collection = formal_language_collection
-        if tc is None:
-            tc = typesetting_classes.formula
-        elif not tc.is_subclass_of(c=typesetting_classes.formula):
-            log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.formula)
         super().__init__(tc=tc)
 
     @property
@@ -478,10 +442,7 @@ class Formula(FormalObject):
 
 class AtomicFormula(Formula):
     def __init__(self, formal_language_collection: FormalLanguageCollection, tc: typing.Optional[ts.TypesettingClass]):
-        if tc is None:
-            tc = typesetting_classes.atomic_formula
-        elif not tc.is_subclass_of(c=typesetting_classes.atomic_formula):
-            log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.atomic_formula)
         super().__init__(formal_language_collection=formal_language_collection, tc=tc)
 
 
@@ -489,7 +450,8 @@ class CompoundFormula(Formula):
     """A compound-formula is a formal-object and a tree-structure of atomic-formulas and compound-formulas."""
 
     def __init__(self, formal_language_collection: FormalLanguageCollection, connective: Connective,
-        terms: typing.Tuple[Formula]):
+        terms: typing.Tuple[Formula], tc: typing.Optional[ts.TypesettingClass]):
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.compound_formula)
         if isinstance(connective, FixedArityConnective):
             if connective.arity_as_int != len(terms):
                 log.error(msg='The number of arguments is not equal to the arity of the fixed-arity-connective.')
@@ -499,8 +461,7 @@ class CompoundFormula(Formula):
             log.error(msg='Unsupported connective python class.')
         self._connective: Connective = connective
         self._terms: typing.Tuple[Formula] = terms
-        super().__init__(formal_language_collection=formal_language_collection,
-            typesetting_class=typesetting_classes.compound_formula)
+        super().__init__(formal_language_collection=formal_language_collection, tc=tc)
 
     def __eq__(self, other):
         return hash(self) == hash(other)
@@ -526,18 +487,20 @@ class FixedArityFormula(CompoundFormula):
     """A fixed-arity-formula is a formula with a fixed-arity connective."""
 
     def __init__(self, formal_language_collection: FormalLanguageCollection, connective: FixedArityConnective,
-        terms: typing.Tuple[Formula, ...]):
+        terms: typing.Tuple[Formula, ...], tc: typing.Optional[ts.TypesettingClass] = None):
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.fixed_arity_formula)
         super().__init__(formal_language_collection=formal_language_collection, connective=connective, terms=terms,
-            typesetting_class=typesetting_classes.fixed_arity_formula)
+            tc=tc)
 
 
 class UnaryFormula(FixedArityFormula):
     """A unary-formula is a formula with a fixed unary connective."""
 
-    def __init__(self, formal_language_collection: FormalLanguageCollection, connective: UnaryConnective,
-        term: Formula):
+    def __init__(self, formal_language_collection: FormalLanguageCollection, connective: UnaryConnective, term: Formula,
+        tc: typing.Optional[ts.TypesettingClass]):
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.unary_formula)
         super().__init__(formal_language_collection=formal_language_collection, connective=connective, terms=(term,),
-            typesetting_class=typesetting_classes.unary_formula)
+            tc=tc)
 
     @property
     def term(self) -> Formula:
@@ -548,9 +511,10 @@ class BinaryFormula(FixedArityFormula):
     """A binary-formula is a formula with a fixed binary connective."""
 
     def __init__(self, formal_language_collection: FormalLanguageCollection, connective: BinaryConnective,
-        term_1: Formula, term_2: Formula):
+        term_1: Formula, term_2: Formula, tc: typing.Optional[ts.TypesettingClass] = None):
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.binary_formula)
         super().__init__(formal_language_collection=formal_language_collection, connective=connective,
-            terms=(term_1, term_2,), typesetting_class=typesetting_classes.binary_formula)
+            terms=(term_1, term_2,), tc=tc)
 
     @property
     def term_1(self) -> Formula:
