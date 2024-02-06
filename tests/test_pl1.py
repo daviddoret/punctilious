@@ -20,7 +20,7 @@ class TestPL1:
         x = l.connectives.negation
         assert x.to_string(protocol=pu.ts.protocols.latex) == "\\lnot"
         assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "¬"
-        assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "lnot"
+        assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "not"
 
     def test_connectives_3(self):
         l: pu.pl1.PL1 = pu.pl1.PL1()

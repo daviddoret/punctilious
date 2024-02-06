@@ -53,11 +53,11 @@ class TypesettingClasses:
     def __init__(self):
         super().__init__()
         self._conditional = ts.typesetting_classes.register(name="pl1.connective.conditional",
-            superclass=fl1.typesetting_classes.connective)
+            superclass=fl1.typesetting_classes.binary_connective)
         self._meta_variable = ts.typesetting_classes.register(name="pl1ml.meta_variable",
             superclass=fl1.typesetting_classes.formula)
         self._negation = ts.typesetting_classes.register(name="pl1.connective.negation",
-            superclass=fl1.typesetting_classes.connective)
+            superclass=fl1.typesetting_classes.unary_connective)
         self._pl1 = ts.typesetting_classes.register(name="pl1", superclass=fl1.typesetting_classes.formal_language)
         self._propositional_formula = ts.typesetting_classes.register(name="pl1.propositional_formula",
             superclass=fl1.typesetting_classes.formula)
@@ -105,9 +105,14 @@ typesetting_classes = TypesettingClasses()
 
 
 class MetaVariable(fl1.AtomicFormula):
-    def __init__(self, formal_language_collection: fl1.FormalLanguageCollection):
-        super().__init__(formal_language_collection=formal_language_collection)
-        self.declare_typesetting_class_element(typesetting_class=typesetting_classes.meta_variable)
+
+    def __init__(self, formal_language_collection: fl1.FormalLanguageCollection,
+        tc: typing.Optional[ts.TypesettingClass] = None):
+        if tc is None:
+            tc = typesetting_classes.meta_variable
+        elif not tc.is_subclass_of(c=typesetting_classes.meta_variable):
+            log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
+        super().__init__(formal_language_collection=formal_language_collection, tc=tc)
 
 
 class MetaVariableCollection(fl1.FormalLanguageCollection):
@@ -155,16 +160,14 @@ class PropositionalVariableCollection(fl1.FormalLanguageCollection):
         return p
 
 
-class ConnectiveClass(fl1.ConnectiveCollection):
-    """A specialized ConnectiveClass for PL1 containing all PL1 connectors, and that is locked."""
+class ConnectiveCollection(fl1.ConnectiveCollection):
+    """A specialized ConnectiveCollection for PL1 containing all PL1 connectors, and that is locked."""
 
     def __init__(self, formal_language: PL1):
         super().__init__(formal_language=formal_language)
         # exhaustive declaration of PL1 connectives.
-        self._conditional: fl1.BinaryConnective = self.declare_binary_connective()
-        self._conditional.declare_typesetting_class_element(typesetting_class=typesetting_classes.conditional)
-        self._negation: fl1.UnaryConnective = self.declare_unary_connective()
-        self._negation.declare_typesetting_class_element(typesetting_class=typesetting_classes.negation)
+        self._conditional: fl1.BinaryConnective = self.declare_binary_connective(tc=typesetting_classes.conditional)
+        self._negation: fl1.UnaryConnective = self.declare_unary_connective(tc=typesetting_classes.negation)
         self.lock()
 
     @property
@@ -383,7 +386,7 @@ class PL1(fl1.FormalLanguage):
         # Meta-language
         self._meta_language: PL1ML = PL1ML(pl1=self)
         # Object classes
-        self._connectives: ConnectiveClass = ConnectiveClass(formal_language=self)
+        self._connectives: ConnectiveCollection = ConnectiveCollection(formal_language=self)
         super()._add_class(x=self._connectives)
         self._compound_formulas: PL1CompoundFormulaCollection = PL1CompoundFormulaCollection(formal_language=self)
         super()._add_class(x=self._compound_formulas)
@@ -393,7 +396,7 @@ class PL1(fl1.FormalLanguage):
         self.lock()
 
     @property
-    def connectives(self) -> ConnectiveClass:
+    def connectives(self) -> ConnectiveCollection:
         """The collection of connectives in PL1."""
         return self._connectives
 

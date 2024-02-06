@@ -44,6 +44,7 @@ class TypesettingClass:
 
 
 class TypesettingClasses:
+    """A collection of typesetting classes."""
     _singleton = None
 
     def __new__(cls):
@@ -52,9 +53,9 @@ class TypesettingClasses:
         return cls._singleton
 
     def __init__(self):
-        self._typesettable: TypesettingClass = self.register(name="typesettable")
         self._internal_data_structure: set[TypesettingClass] = set()
-        self._indexed_symbol: TypesettingClass = self._register(name="indexed_symbol", superclass=self._typesettable)
+        self._typesettable: TypesettingClass = self._register(name="typesettable")
+        self._indexed_symbol: TypesettingClass = self.register(name="indexed_symbol", superclass=self._typesettable)
         self._styled_text: TypesettingClass = self.register(name="styled_text", superclass=self._typesettable)
         self._symbol: TypesettingClass = self.register(name="symbol", superclass=self._typesettable)
 
@@ -68,9 +69,7 @@ class TypesettingClasses:
     def indexed_symbol(self) -> TypesettingClass:
         return self._indexed_symbol
 
-    def register(self, name: str, superclass: typing.Optional[TypesettingClass] = None) -> TypesettingClass:
-        if superclass is None:
-            superclass = self.typesettable
+    def register(self, name: str, superclass: TypesettingClass) -> TypesettingClass:
         return self._register(name=name, superclass=superclass)
 
     @property
@@ -290,26 +289,25 @@ class Preferences:
     def __init__(self):
         self._internal_data_structure: set[Preference] = set()
         self._default = self._register(name='default')
-        self._text_style = self.register(name="text_style.serif_normal", predecessor=self._default)
-        self._text_style_serif_normal = self.register(name="text_style.serif_normal", predecessor=self._text_style)
-        self._text_style_serif_bold = self.register(name="text_style.serif_bold", predecessor=self._text_style)
-        self._text_style_serif_italic = self.register(name="text_style.serif_italic", predecessor=self._text_style)
+        self._text_style = self.register(name="text_style.serif_normal", superclass=self._default)
+        self._text_style_serif_normal = self.register(name="text_style.serif_normal", superclass=self._text_style)
+        self._text_style_serif_bold = self.register(name="text_style.serif_bold", superclass=self._text_style)
+        self._text_style_serif_italic = self.register(name="text_style.serif_italic", superclass=self._text_style)
         self._text_style_serif_bold_italic = self.register(name="text_style.serif_bold_italic",
-            predecessor=self._text_style)
+            superclass=self._text_style)
         self._text_style_sans_serif_normal = self.register(name="text_style.sans_serif_normal",
-            predecessor=self._text_style)
-        self._text_style_sans_serif_bold = self.register(name="text_style.sans_serif_bold",
-            predecessor=self._text_style)
+            superclass=self._text_style)
+        self._text_style_sans_serif_bold = self.register(name="text_style.sans_serif_bold", superclass=self._text_style)
         self._text_style_sans_serif_italic = self.register(name="text_style.sans_serif_italic",
-            predecessor=self._text_style)
+            superclass=self._text_style)
         self._text_style_sans_serif_bold_italic = self.register(name="text_style.sans_serif_bold_italic",
-            predecessor=self._text_style)
-        self._text_style_script_normal = self.register(name="text_style.script_normal", predecessor=self._text_style)
-        self._text_style_script_bold = self.register(name="text_style.script_bold", predecessor=self._text_style)
-        self._text_style_fraktur_normal = self.register(name="text_style.fraktur_normal", predecessor=self._text_style)
-        self._text_style_fraktur_bold = self.register(name="text_style.fraktur_bold", predecessor=self._text_style)
-        self._text_style_monospace = self.register(name="text_style.monospace", predecessor=self._text_style)
-        self._text_style_double_struck = self.register(name="text_style.double_struck", predecessor=self._text_style)
+            superclass=self._text_style)
+        self._text_style_script_normal = self.register(name="text_style.script_normal", superclass=self._text_style)
+        self._text_style_script_bold = self.register(name="text_style.script_bold", superclass=self._text_style)
+        self._text_style_fraktur_normal = self.register(name="text_style.fraktur_normal", superclass=self._text_style)
+        self._text_style_fraktur_bold = self.register(name="text_style.fraktur_bold", superclass=self._text_style)
+        self._text_style_monospace = self.register(name="text_style.monospace", superclass=self._text_style)
+        self._text_style_double_struck = self.register(name="text_style.double_struck", superclass=self._text_style)
 
     def _register(self, name: str, predecessor: typing.Optional[Preference] = None) -> Preference:
         """The protected version of the register method is called once for the root element, because it has no predecessor."""
@@ -378,10 +376,10 @@ class Preferences:
     def text_style_double_struck(self) -> Preference:
         return self._text_style_double_struck
 
-    def register(self, name: str, predecessor: typing.Optional[Preference] = None) -> Preference:
-        if predecessor is None:
-            predecessor = self.default
-        return self._register(name=name, predecessor=predecessor)
+    def register(self, name: str, superclass: typing.Optional[Preference] = None) -> Preference:
+        if superclass is None:
+            superclass = self.default
+        return self._register(name=name, predecessor=superclass)
 
 
 preferences = Preferences()
@@ -563,13 +561,15 @@ class Typesettable(abc.ABC):
     that may be typeset by registering typesetting methods for the desired representations and languages."""
 
     def __init__(self, tc: typing.Optional[TypesettingClass] = None,
-        default_representation: typing.Optional[Representation] = None):
+        default_rep: typing.Optional[Representation] = None):
         if tc is None:
             tc = typesetting_classes.typesettable
         elif not tc.is_subclass_of(c=typesetting_classes.typesettable):
             log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
-        super().__init__(tc=tc)
-        self._default_representation: typing.Optional[Representation] = default_representation
+        if default_rep is None:
+            default_rep = representations.technical_representation
+        super().__init__()
+        self._default_representation: Representation = default_rep
         self._typesetting_class = tc
 
     def __repr__(self):
@@ -579,7 +579,7 @@ class Typesettable(abc.ABC):
         return self.to_string(protocol=protocols.unicode_limited)
 
     @property
-    def default_representation(self) -> typing.Optional[Representation]:
+    def default_representation(self) -> Representation:
         return self._default_representation
 
     @property
@@ -617,7 +617,7 @@ class Symbol(Typesettable):
         self._latex_math = latex_math
         self._unicode_extended = unicode_extended
         self._unicode_limited = unicode_limited
-        super().__init__(tc=typesetting_classes.symbol, default_representation=representations.symbolic_representation)
+        super().__init__(tc=typesetting_classes.symbol, default_rep=representations.symbolic_representation)
 
     @property
     def latex_math(self) -> str:
@@ -675,7 +675,7 @@ class Symbols:
         self._asterisk_operator = Symbol(latex_math='\\ast', unicode_extended='∗', unicode_limited='*')
         self._close_parenthesis = Symbol(latex_math='\\right)', unicode_extended=')', unicode_limited=')')
         self._collection_separator = Symbol(latex_math=', ', unicode_extended=', ', unicode_limited=', ')
-        self._not_sign = Symbol(latex_math='\\lnot', unicode_extended='¬', unicode_limited='lnot')
+        self._not_sign = Symbol(latex_math='\\lnot', unicode_extended='¬', unicode_limited='not')
         self._open_parenthesis = Symbol(latex_math='\\left(', unicode_extended='(', unicode_limited='(')
         self._p_uppercase_serif_italic = Symbol(latex_math='\\textit{P}', unicode_extended='𝑃', unicode_limited='P')
         self._q_uppercase_serif_italic = Symbol(latex_math='\\textit{Q}', unicode_extended='𝑄', unicode_limited='Q')
@@ -755,7 +755,7 @@ class IndexedSymbol(Typesettable):
     def __init__(self, symbol: Symbol, index: int):
         self._symbol: Symbol = symbol
         self._index: int = index
-        super().__init__(typesetting_class=typesetting_classes.indexed_symbol)
+        super().__init__(tc=typesetting_classes.indexed_symbol)
 
     def __eq__(self, other) -> bool:
         return hash(self) == hash(other)

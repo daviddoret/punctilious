@@ -6,18 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/_static/jquery-3.5.1.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/jquery-3.5.1.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/punctilious.log" beforeDir="false" afterPath="$PROJECT_DIR$/punctilious.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/fl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/fl1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/fl1_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/fl1_presentation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/log.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/log.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pl1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pl1_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pl1_presentation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/typesetting.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/typesetting.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/punctilious.log" beforeDir="false" afterPath="$PROJECT_DIR$/tests/punctilious.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_fl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_fl1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_pl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pl1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_typesetting.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_typesetting.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,8 +97,8 @@
     "Python tests.Python tests in tests.executor": "Run",
     "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
     "Python tests.pytest for test_pl1.TestPL1.test_compounding_formulas_1.executor": "Run",
-    "Python tests.pytest for test_pl1.TestPL1.test_connectives_1.executor": "Run",
-    "Python tests.pytest for test_pl1.TestPL1.test_connectives_2.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1.test_connectives_1.executor": "Debug",
+    "Python tests.pytest for test_pl1.TestPL1.test_connectives_2.executor": "Debug",
     "Python tests.pytest for test_pl1.TestPL1.test_connectives_3.executor": "Run",
     "Python tests.pytest for test_pl1.TestPL1.test_declare_binary_formula.executor": "Debug",
     "Python tests.pytest for test_pl1.TestPL1.test_declare_unary_formula.executor": "Run",
@@ -162,7 +156,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\punctilious2" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_pl1.TestPL1.test_connectives_2">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -352,7 +346,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_pl1.TestPL1ML.test_substitute_meta_variables" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_pl1.TestPL1.test_connectives_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -365,7 +359,24 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_pl1.TestPL1ML.test_substitute_meta_variables&quot;" />
+      <option name="_new_target" value="&quot;test_pl1.TestPL1.test_connectives_1&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_pl1.TestPL1.test_connectives_2" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_pl1.TestPL1.test_connectives_2&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -384,23 +395,6 @@
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_typesetting.TestHierarchicalClass.test_is_subclass_of&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest in punctilious" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
     <configuration name="pytest in test_typesetting.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
@@ -445,9 +439,9 @@
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.pytest for test_pl1.TestPL1ML.test_substitute_meta_variables" />
+      <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_connectives_1" />
+      <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_connectives_2" />
       <item itemvalue="Python tests.pytest for test_typesetting.TestHierarchicalClass.test_is_subclass_of" />
-      <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest in test_typesetting.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -456,11 +450,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_connectives_2" />
+        <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_connectives_1" />
         <item itemvalue="Python tests.pytest in test_typesetting.py" />
         <item itemvalue="Python tests.pytest for test_typesetting.TestHierarchicalClass.test_is_subclass_of" />
         <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python tests.pytest for test_pl1.TestPL1ML.test_substitute_meta_variables" />
-        <item itemvalue="Python tests.pytest in punctilious" />
       </list>
     </recent_temporary>
   </component>
@@ -966,14 +960,9 @@
           <option name="timeStamp" value="120" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_fl1.py</url>
-          <line>7</line>
-          <option name="timeStamp" value="189" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/typesetting.py</url>
-          <line>484</line>
-          <option name="timeStamp" value="190" />
+          <url>file://$PROJECT_DIR$/tests/test_pl1.py</url>
+          <line>17</line>
+          <option name="timeStamp" value="192" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

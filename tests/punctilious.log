@@ -1,0 +1,37 @@
+2024-02-06 14:10:55,301 - DEBUG - preference: default, weight: 100. , kwargs: {}
+2024-02-06 14:10:55,302 - DEBUG - preference: text_style.serif_normal, weight: 200. , kwargs: {}
+2024-02-06 14:10:55,302 - DEBUG - preference: text_style.serif_normal, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,302 - DEBUG - preference: text_style.serif_bold, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,302 - DEBUG - preference: text_style.serif_italic, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,302 - DEBUG - preference: text_style.serif_bold_italic, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,303 - DEBUG - preference: text_style.sans_serif_normal, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,313 - DEBUG - preference: text_style.sans_serif_bold, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,313 - DEBUG - preference: text_style.sans_serif_italic, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,313 - DEBUG - preference: text_style.sans_serif_bold_italic, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,313 - DEBUG - preference: text_style.script_normal, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,313 - DEBUG - preference: text_style.script_bold, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,313 - DEBUG - preference: text_style.fraktur_normal, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,314 - DEBUG - preference: text_style.fraktur_bold, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,314 - DEBUG - preference: text_style.monospace, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,314 - DEBUG - preference: text_style.double_struck, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,315 - INFO - Override typesetting-method: (symbol,technical-representation). , kwargs: {}
+2024-02-06 14:10:55,315 - DEBUG - Module typesetting: loaded.. , kwargs: {}
+2024-02-06 14:10:55,315 - DEBUG - preference: fl1.formula.function_call, weight: 200. , kwargs: {}
+2024-02-06 14:10:55,315 - DEBUG - preference: fl1.formula.prefix_no_parenthesis, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,315 - DEBUG - preference: fl1.formula.infix, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,316 - DEBUG - Module fl1: loaded.. , kwargs: {}
+2024-02-06 14:10:55,320 - INFO - Override typesetting-method: (fl1.connective,common-language). , kwargs: {}
+2024-02-06 14:10:55,320 - INFO - Override typesetting-method: (fl1.connective,symbolic-representation). , kwargs: {}
+2024-02-06 14:10:55,320 - INFO - Override typesetting-method: (fl1.unary_formula,symbolic-representation). , kwargs: {}
+2024-02-06 14:10:55,320 - INFO - Override typesetting-method: (fl1.binary_formula,symbolic-representation). , kwargs: {}
+2024-02-06 14:10:55,321 - DEBUG - Module fl1_presentation: loaded.. , kwargs: {}
+2024-02-06 14:10:55,323 - DEBUG - preference: pl1.connective.negation.tilde, weight: 200. , kwargs: {}
+2024-02-06 14:10:55,323 - DEBUG - preference: pl1.connective.negation.not, weight: 300. , kwargs: {}
+2024-02-06 14:10:55,323 - DEBUG - Module pl1: loaded.. , kwargs: {}
+2024-02-06 14:10:55,325 - INFO - Override typesetting-method: (pl1.connective.conditional,symbolic-representation). , kwargs: {}
+2024-02-06 14:10:55,325 - INFO - Override typesetting-method: (pl1.connective.negation,symbolic-representation). , kwargs: {}
+2024-02-06 14:10:55,325 - INFO - Override typesetting-method: (pl1.connective.negation,symbolic-representation). , kwargs: {}
+2024-02-06 14:10:55,326 - INFO - Override typesetting-method: (pl1.propositional_unary_formula,symbolic-representation). , kwargs: {}
+2024-02-06 14:10:55,326 - INFO - Override typesetting-method: (pl1.propositional_binary_formula,symbolic-representation). , kwargs: {}
+2024-02-06 14:10:55,326 - DEBUG - Module pl1_presentation: loaded.. , kwargs: {}
+2024-02-06 14:10:55,326 - DEBUG - Module punctilious: loaded.. , kwargs: {}
