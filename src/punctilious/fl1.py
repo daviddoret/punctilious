@@ -229,7 +229,7 @@ class FormalLanguageCollection(FormalObject, abc.ABC):
 class FormalLanguage(FormalObject, abc.ABC):
     """A formal language is defined as an accretor-tuple of accretor-tuples."""
 
-    def __init__(self, tc: typing.Optional[TypesettingClasses] = None):
+    def __init__(self, tc: typing.Optional[TypesettingClass] = None):
         if tc is None:
             tc = typesetting_classes.formal_language
         elif not tc.is_subclass_of(c=typesetting_classes.formal_language):

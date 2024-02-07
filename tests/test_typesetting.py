@@ -51,3 +51,22 @@ class TestTypesettingClass:
         assert not d.is_subclass_of(c=f)
         assert not e.is_subclass_of(c=g)
         assert not g.is_subclass_of(c=e)
+
+
+class TestProtocolPreference:
+    def test_protocol(self):
+        pu.ts.preferences.protocol.protocol = pu.ts.protocols.unicode_extended
+        assert pu.ts.symbols.asterisk_operator.to_string() == '∗'
+        pu.ts.preferences.protocol.protocol = pu.ts.protocols.unicode_limited
+        assert pu.ts.symbols.asterisk_operator.to_string() == '*'
+        pu.ts.preferences.protocol.protocol = pu.ts.protocols.unicode_extended
+        assert pu.ts.symbols.asterisk_operator.to_string() == '∗'
+        pu.ts.preferences.protocol.reset()  # targeted reset
+        assert pu.ts.symbols.asterisk_operator.to_string() == '*'
+        pu.ts.preferences.protocol.protocol = pu.ts.protocols.unicode_extended
+        assert pu.ts.symbols.asterisk_operator.to_string() == '∗'
+        pu.ts.preferences.reset()  # full reset
+        assert pu.ts.symbols.asterisk_operator.to_string() == '*'
+        pu.ts.preferences.protocol.protocol = pu.ts.protocols.latex
+        assert pu.ts.symbols.asterisk_operator.to_string() == '\\ast'
+        pu.ts.preferences.protocol.reset()

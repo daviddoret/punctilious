@@ -1,24 +1,24 @@
-2024-02-06 22:27:48,183 - INFO - Override typesetting-method: (symbol,technical-representation). , kwargs: {}
-2024-02-06 22:27:48,183 - DEBUG - Module typesetting: loaded.. , kwargs: {}
-2024-02-06 22:27:48,185 - DEBUG - Module fl1: loaded.. , kwargs: {}
-2024-02-06 22:27:48,187 - INFO - Override typesetting-method: (fl1.unary_formula,symbolic-representation). , kwargs: {}
-2024-02-06 22:27:48,187 - INFO - Override typesetting-method: (fl1.binary_formula,symbolic-representation). , kwargs: {}
-2024-02-06 22:27:48,187 - DEBUG - Module fl1_presentation: loaded.. , kwargs: {}
-2024-02-06 22:27:48,188 - DEBUG - Module pl1: loaded.. , kwargs: {}
-2024-02-06 22:27:48,201 - INFO - Override typesetting-method: (pl1.propositional_unary_formula,symbolic-representation). , kwargs: {}
-2024-02-06 22:27:48,201 - INFO - Override typesetting-method: (pl1.propositional_binary_formula,symbolic-representation). , kwargs: {}
-2024-02-06 22:27:48,201 - DEBUG - Module pl1_presentation: loaded.. , kwargs: {}
-2024-02-06 22:27:48,201 - DEBUG - Module punctilious: loaded.. , kwargs: {}
-2024-02-06 22:27:48,214 - DEBUG - FormalObject-1965776861520. , kwargs: {}
-2024-02-06 22:27:48,219 - ERROR - connective is not a pl1 connective.. , kwargs: {}
-2024-02-06 22:27:48,219 - ERROR - term is not a pl1 well-formed-formula.. , kwargs: {}
-2024-02-06 22:27:48,222 - DEBUG - FormalObject 'notP' (python id: 1965776356560) is already present in this FormalLanguageClass as 'notP' (python id: 1965776356240). The existing object is reused and the new object is discarded.. , kwargs: {}
-2024-02-06 22:27:48,225 - DEBUG - notP --> notnotP --> P --> notnotP --> P. , kwargs: {}
-2024-02-06 22:27:48,227 - DEBUG - FormalObject 'notP' (python id: 1965802926544) is already present in this FormalLanguageClass as 'notP' (python id: 1965777438608). The existing object is reused and the new object is discarded.. , kwargs: {}
-2024-02-06 22:27:48,227 - INFO - P --> PP. , kwargs: {}
-2024-02-06 22:27:48,227 - DEBUG - FormalObject 'P --> P' (python id: 1965775905680) is already present in this FormalLanguageClass as 'P --> P' (python id: 1965755753808). The existing object is reused and the new object is discarded.. , kwargs: {}
-2024-02-06 22:27:48,228 - INFO - P --> P == P --> P. , kwargs: {}
-2024-02-06 22:27:48,228 - INFO - PP --> P --> PP. , kwargs: {}
-2024-02-06 22:27:48,228 - DEBUG - FormalObject 'P --> P' (python id: 1965776362320) is already present in this FormalLanguageClass as 'P --> P' (python id: 1965755753808). The existing object is reused and the new object is discarded.. , kwargs: {}
-2024-02-06 22:27:48,228 - DEBUG - FormalObject 'P --> P --> P' (python id: 1965776362320) is already present in this FormalLanguageClass as 'P --> P --> P' (python id: 1965776365008). The existing object is reused and the new object is discarded.. , kwargs: {}
-2024-02-06 22:27:48,228 - INFO - P --> P --> P == P --> P --> P. , kwargs: {}
+2024-02-07 07:20:36,475 - INFO - Override typesetting-method: (symbol,technical-representation). , kwargs: {}
+2024-02-07 07:20:36,475 - DEBUG - Module typesetting: loaded.. , kwargs: {}
+2024-02-07 07:20:36,478 - DEBUG - Module fl1: loaded.. , kwargs: {}
+2024-02-07 07:20:36,480 - INFO - Override typesetting-method: (fl1.unary_formula,symbolic-representation). , kwargs: {}
+2024-02-07 07:20:36,480 - INFO - Override typesetting-method: (fl1.binary_formula,symbolic-representation). , kwargs: {}
+2024-02-07 07:20:36,480 - DEBUG - Module fl1_presentation: loaded.. , kwargs: {}
+2024-02-07 07:20:36,482 - DEBUG - Module pl1: loaded.. , kwargs: {}
+2024-02-07 07:20:36,483 - INFO - Override typesetting-method: (pl1.propositional_unary_formula,symbolic-representation). , kwargs: {}
+2024-02-07 07:20:36,483 - INFO - Override typesetting-method: (pl1.propositional_binary_formula,symbolic-representation). , kwargs: {}
+2024-02-07 07:20:36,483 - DEBUG - Module pl1_presentation: loaded.. , kwargs: {}
+2024-02-07 07:20:36,483 - DEBUG - Module punctilious: loaded.. , kwargs: {}
+2024-02-07 07:20:36,495 - DEBUG - FormalObject-3019314904528. , kwargs: {}
+2024-02-07 07:20:36,501 - ERROR - connective is not a pl1 connective.. , kwargs: {}
+2024-02-07 07:20:36,501 - ERROR - term is not a pl1 well-formed-formula.. , kwargs: {}
+2024-02-07 07:20:36,503 - DEBUG - FormalObject 'notP' (python id: 3019314684176) is already present in this FormalLanguageClass as 'notP' (python id: 3019314691024). The existing object is reused and the new object is discarded.. , kwargs: {}
+2024-02-07 07:20:36,507 - DEBUG - notP --> notnotP --> P --> notnotP --> P. , kwargs: {}
+2024-02-07 07:20:36,509 - DEBUG - FormalObject 'notP' (python id: 3019315255440) is already present in this FormalLanguageClass as 'notP' (python id: 3019314241616). The existing object is reused and the new object is discarded.. , kwargs: {}
+2024-02-07 07:20:36,509 - INFO - P --> PP. , kwargs: {}
+2024-02-07 07:20:36,509 - DEBUG - FormalObject 'P --> P' (python id: 3019314911120) is already present in this FormalLanguageClass as 'P --> P' (python id: 3019315533904). The existing object is reused and the new object is discarded.. , kwargs: {}
+2024-02-07 07:20:36,509 - INFO - P --> P == P --> P. , kwargs: {}
+2024-02-07 07:20:36,509 - INFO - PP --> P --> PP. , kwargs: {}
+2024-02-07 07:20:36,510 - DEBUG - FormalObject 'P --> P' (python id: 3019314916944) is already present in this FormalLanguageClass as 'P --> P' (python id: 3019315533904). The existing object is reused and the new object is discarded.. , kwargs: {}
+2024-02-07 07:20:36,510 - DEBUG - FormalObject 'P --> P --> P' (python id: 3019314916944) is already present in this FormalLanguageClass as 'P --> P --> P' (python id: 3019341095248). The existing object is reused and the new object is discarded.. , kwargs: {}
+2024-02-07 07:20:36,510 - INFO - P --> P --> P == P --> P --> P. , kwargs: {}

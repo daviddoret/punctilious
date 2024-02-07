@@ -381,11 +381,8 @@ class PL1ML(fl1.FormalLanguage):
 class PL1(fl1.FormalLanguage):
     """Propositional Logic 1."""
 
-    def __init__(self, tc: typing.Optional[TypesettingClasses] = None):
-        if tc is None:
-            tc = typesetting_classes.pl1
-        elif not tc.is_subclass_of(c=typesetting_classes.pl1):
-            log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
+    def __init__(self, tc: typing.Optional[TypesettingClass] = None):
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.pl1)
         super().__init__(tc=tc)
         # Meta-language
         self._meta_language: PL1ML = PL1ML(pl1=self)

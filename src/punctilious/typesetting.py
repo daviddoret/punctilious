@@ -5,6 +5,39 @@ import typing
 import log
 
 
+class Preference(abc.ABC):
+    """A preference is a refined typesetting approach for a representation.
+
+    For example, if several conventions are possible to typeset a particular object with a particular representation,
+    of if several authors use different conventions,
+    then preferences may be used to distinguish these.
+
+    """
+
+    def __init__(self, name: str):
+        self._name = name
+
+    def __eq__(self, other):
+        return self is other
+
+    def __hash__(self):
+        return hash(id(self))
+
+    def __repr__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @abc.abstractmethod
+    def reset(self) -> None:
+        log.error(msg='calling an abstract method')
+
+
 class TypesettingClass:
     """A typesetting typesetting_class is a class of objects to which we wish to link some typesetting methods."""
 
@@ -109,6 +142,24 @@ class Protocol:
     @property
     def name(self) -> str:
         return self._name
+
+
+class ProtocolPreference(Preference):
+    def __init__(self, name: str, protocol: Protocol):
+        super().__init__(name=name)
+        self._protocol: Protocol = protocol
+        self._reset_value: Protocol = protocol
+
+    def reset(self) -> None:
+        self.protocol = self._reset_value
+
+    @property
+    def protocol(self) -> Protocol:
+        return self._protocol
+
+    @protocol.setter
+    def protocol(self, protocol: Protocol):
+        self._protocol = protocol
 
 
 class Protocols:
@@ -226,41 +277,8 @@ class Representations:
 representations = Representations()
 
 
-class Preference(abc.ABC):
-    """A preference is a refined typesetting approach for a representation.
-
-    For example, if several conventions are possible to typeset a particular object with a particular representation,
-    of if several authors use different conventions,
-    then preferences may be used to distinguish these.
-
-    """
-
-    def __init__(self, name: str):
-        self._name = name
-
-    def __eq__(self, other):
-        return self is other
-
-    def __hash__(self):
-        return hash(id(self))
-
-    def __repr__(self):
-        return self.name
-
-    def __str__(self):
-        return self.name
-
-    @property
-    def name(self) -> str:
-        return self._name
-
-    @abc.abstractmethod
-    def reset(self) -> None:
-        log.error(msg='calling an abstract method')
-
-
 class Preferences:
-    """A catalog of out-of-the-box preferences."""''
+    """Typesetting global preferences."""''
     _singleton = None
 
     def __new__(cls):
@@ -269,13 +287,21 @@ class Preferences:
         return cls._singleton
 
     def __init__(self):
-        self._internal_data_structure: set[Preference] = set()
+        self._internal_set: set[Preference] = set()
+        self._protocol = ProtocolPreference(name='protocol', protocol=protocols.unicode_limited)
+        self._register(self._protocol)
 
-    def register(self, name: str) -> Preference:
-        """The protected version of the register method is called once for the root element, because it has no predecessor."""
-        preference: Preference = Preference(name=name)
-        self._internal_data_structure.add(preference)
-        return preference
+    def _register(self, preference: Preference) -> None:
+        self._internal_set.add(preference)
+
+    @property
+    def protocol(self) -> ProtocolPreference:
+        """The default protocol preference."""
+        return self._protocol
+
+    def reset(self):
+        for preference in self._internal_set:
+            preference.reset()
 
 
 preferences = Preferences()
@@ -366,6 +392,9 @@ def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None,
     representation: typing.Optional[Representation] = None, **kwargs) -> typing.Generator[str, None, None]:
     global typesetting_methods
     global representations
+
+    if protocol is None:
+        protocol = preferences.protocol.protocol
 
     if representation is None:
         representation: Representation = o.default_representation
