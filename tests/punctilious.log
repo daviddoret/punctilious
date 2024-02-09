@@ -1,10 +1,22 @@
-2024-02-09 14:02:02,133 - INFO - Override typesetting-method: (symbol,technical-representation)
-2024-02-09 14:02:02,133 - DEBUG - Module typesetting: loaded.
-2024-02-09 14:02:02,134 - DEBUG - Module fl1: loaded.
-2024-02-09 14:02:02,137 - INFO - Override typesetting-method: (fl1.unary_formula,symbolic-representation)
-2024-02-09 14:02:02,137 - INFO - Override typesetting-method: (fl1.binary_formula,symbolic-representation)
-2024-02-09 14:02:02,137 - DEBUG - Module fl1_presentation: loaded.
-2024-02-09 14:02:02,138 - DEBUG - Module pl1: loaded.
-2024-02-09 14:02:02,145 - DEBUG - Module pl1_presentation: loaded.
-2024-02-09 14:02:02,146 - DEBUG - Module punctilious: loaded.
-2024-02-09 14:02:02,165 - DEBUG - P1 --> P2 --> P3 --> P4 --> P5
+2024-02-09 21:41:18,913 - INFO - Override typesetting-method: (symbol,technical-representation)
+2024-02-09 21:41:18,914 - DEBUG - Module typesetting: loaded.
+2024-02-09 21:41:18,916 - DEBUG - Module fl1: loaded.
+2024-02-09 21:41:18,917 - INFO - Override typesetting-method: (fl1.unary_formula,symbolic-representation)
+2024-02-09 21:41:18,918 - INFO - Override typesetting-method: (fl1.binary_formula,symbolic-representation)
+2024-02-09 21:41:18,918 - DEBUG - Module fl1_presentation: loaded.
+2024-02-09 21:41:18,920 - DEBUG - Module pl1: loaded.
+2024-02-09 21:41:18,921 - DEBUG - Module pl1_presentation: loaded.
+2024-02-09 21:41:18,923 - DEBUG - Module punctilious: loaded.
+2024-02-09 21:41:18,945 - DEBUG - FormalObject-3022859358992
+2024-02-09 21:41:18,955 - ERROR - connective is not a pl1 connective.
+2024-02-09 21:41:18,955 - ERROR - term is not a pl1 well-formed-formula.
+2024-02-09 21:41:18,964 - DEBUG - FormalObject 'notP' (python id: 3022858207504) is already present in this FormalLanguageClass as 'notP' (python id: 3022858208592). The existing object is reused and the new object is discarded.
+2024-02-09 21:41:18,970 - DEBUG - not(P1 --> (((not(notP1)) --> P3) --> ((not(notP1)) --> P3)))
+2024-02-09 21:41:18,972 - DEBUG - FormalObject 'notP' (python id: 3022884629776) is already present in this FormalLanguageClass as 'notP' (python id: 3022884630864). The existing object is reused and the new object is discarded.
+2024-02-09 21:41:18,973 - INFO - P --> bold-P
+2024-02-09 21:41:18,973 - DEBUG - FormalObject 'P --> P' (python id: 3022858703312) is already present in this FormalLanguageClass as 'P --> P' (python id: 3022859290128). The existing object is reused and the new object is discarded.
+2024-02-09 21:41:18,973 - INFO - P --> P == P --> P
+2024-02-09 21:41:18,973 - INFO - bold-P --> (P --> bold-P)
+2024-02-09 21:41:18,974 - DEBUG - FormalObject 'P --> P' (python id: 3022858749456) is already present in this FormalLanguageClass as 'P --> P' (python id: 3022859290128). The existing object is reused and the new object is discarded.
+2024-02-09 21:41:18,974 - DEBUG - FormalObject 'P --> (Q --> Q)' (python id: 3022858749456) is already present in this FormalLanguageClass as 'P --> (Q --> Q)' (python id: 3022884756816). The existing object is reused and the new object is discarded.
+2024-02-09 21:41:18,975 - INFO - P --> (Q --> Q) == P --> (Q --> Q)

@@ -86,12 +86,13 @@ class TestPL1:
         pu.preferences.typesetting.protocol.protocol = pu.ts.protocols.unicode_extended
 
         phi1 = l.compound_formulas.declare_binary_formula(connective=l.connectives.conditional, term_1=pa, term_2=pb)
+        assert phi1.to_string(protocol=pu.ts.protocols.unicode_limited) == "P --> Q"
         phi2 = l.compound_formulas.declare_binary_formula(connective=l.connectives.conditional, term_1=phi1, term_2=pc)
+        assert phi2.to_string(protocol=pu.ts.protocols.unicode_limited) == "(P --> Q) --> R"
         phi3 = l.compound_formulas.declare_binary_formula(connective=l.connectives.conditional, term_1=phi2, term_2=pd)
+        assert phi3.to_string(protocol=pu.ts.protocols.unicode_limited) == "((P1 --> P2) --> P3) --> P4"
         phi4 = l.compound_formulas.declare_binary_formula(connective=l.connectives.conditional, term_1=phi3, term_2=pe)
-
-        log.debug(msg=phi4)
-        pass
+        assert phi4.to_string(protocol=pu.ts.protocols.unicode_limited) == "(((P1 --> P2) --> P3) --> P4) --> P5"
 
     def test_declare_unary_formula(self):
         l1: pu.pl1.PL1 = pu.pl1.PL1()

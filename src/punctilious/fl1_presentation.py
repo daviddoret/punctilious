@@ -115,24 +115,44 @@ def typeset_unary_formula_function_call(o: fl1.UnaryFormula, **kwargs) -> typing
 def typeset_unary_formula_prefix_without_parenthesis(o: fl1.UnaryFormula, **kwargs) -> typing.Generator[
     str, None, None]:
     yield from ts.typeset(o=o.connective, **kwargs)
+    if isinstance(o.term, fl1.CompoundFormula):
+        yield from ts.typeset(o=ts.symbols.open_parenthesis, **kwargs)
     yield from ts.typeset(o=o.term, **kwargs)
+    if isinstance(o.term, fl1.CompoundFormula):
+        yield from ts.typeset(o=ts.symbols.close_parenthesis, **kwargs)
 
 
 def typeset_binary_formula_function_call(o: fl1.BinaryFormula, **kwargs) -> typing.Generator[str, None, None]:
     yield from ts.typeset(o=o.connective, **kwargs)
     yield from ts.typeset(o=ts.symbols.open_parenthesis, **kwargs)
+    if isinstance(o.term_1, fl1.CompoundFormula):
+        yield from ts.typeset(o=ts.symbols.open_parenthesis, **kwargs)
     yield from ts.typeset(o=o.term_1, **kwargs)
+    if isinstance(o.term_1, fl1.CompoundFormula):
+        yield from ts.typeset(o=ts.symbols.close_parenthesis, **kwargs)
     yield from ts.typeset(o=ts.symbols.collection_separator, **kwargs)
+    if isinstance(o.term_2, fl1.CompoundFormula):
+        yield from ts.typeset(o=ts.symbols.open_parenthesis, **kwargs)
     yield from ts.typeset(o=o.term_2, **kwargs)
+    if isinstance(o.term_2, fl1.CompoundFormula):
+        yield from ts.typeset(o=ts.symbols.close_parenthesis, **kwargs)
     yield from ts.typeset(o=ts.symbols.close_parenthesis, **kwargs)
 
 
 def typeset_binary_formula_infix(o: fl1.BinaryFormula, **kwargs) -> typing.Generator[str, None, None]:
+    if isinstance(o.term_1, fl1.CompoundFormula):
+        yield from ts.typeset(o=ts.symbols.open_parenthesis, **kwargs)
     yield from ts.typeset(o=o.term_1, **kwargs)
+    if isinstance(o.term_1, fl1.CompoundFormula):
+        yield from ts.typeset(o=ts.symbols.close_parenthesis, **kwargs)
     yield from ts.typeset(o=ts.symbols.space, **kwargs)
     yield from ts.typeset(o=o.connective, **kwargs)
     yield from ts.typeset(o=ts.symbols.space, **kwargs)
+    if isinstance(o.term_2, fl1.CompoundFormula):
+        yield from ts.typeset(o=ts.symbols.open_parenthesis, **kwargs)
     yield from ts.typeset(o=o.term_2, **kwargs)
+    if isinstance(o.term_2, fl1.CompoundFormula):
+        yield from ts.typeset(o=ts.symbols.close_parenthesis, **kwargs)
 
 
 def load():
