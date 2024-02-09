@@ -1,18 +1,18 @@
-2024-02-09 21:58:50,629 - INFO - Override typesetting-method: (symbol,technical-representation)
-2024-02-09 21:58:50,629 - DEBUG - Module typesetting: loaded.
-2024-02-09 21:58:50,630 - DEBUG - Module fl1: loaded.
-2024-02-09 21:58:50,632 - INFO - Override typesetting-method: (fl1.unary_formula,symbolic-representation)
-2024-02-09 21:58:50,632 - INFO - Override typesetting-method: (fl1.binary_formula,symbolic-representation)
-2024-02-09 21:58:50,632 - DEBUG - Module fl1_presentation: loaded.
-2024-02-09 21:58:50,633 - DEBUG - Module pl1: loaded.
-2024-02-09 21:58:50,634 - DEBUG - Module pl1_presentation: loaded.
-2024-02-09 21:58:50,635 - DEBUG - Module punctilious: loaded.
-2024-02-09 21:58:50,648 - DEBUG - FormalObject-2896035460496
-2024-02-09 21:58:50,654 - ERROR - connective is not a pl1 connective.
-2024-02-09 21:58:50,654 - ERROR - term is not a pl1 well-formed-formula.
-2024-02-09 21:58:50,657 - DEBUG - FormalObject '星' (python id: 2896035257104) is already present in this FormalLanguageClass as '星' (python id: 2896035260432). The existing object is reused and the new object is discarded.
-2024-02-09 21:58:50,663 - DEBUG - FormalObject '星' (python id: 2896035449168) is already present in this FormalLanguageClass as '星' (python id: 2896035454480). The existing object is reused and the new object is discarded.
-2024-02-09 21:58:50,663 - DEBUG - FormalObject 'P --> P' (python id: 2896035454800) is already present in this FormalLanguageClass as 'P --> P' (python id: 2896035887760). The existing object is reused and the new object is discarded.
-2024-02-09 21:58:50,664 - DEBUG - FormalObject 'P --> P' (python id: 2896035454800) is already present in this FormalLanguageClass as 'P --> P' (python id: 2896035887760). The existing object is reused and the new object is discarded.
-2024-02-09 21:58:50,664 - DEBUG - FormalObject 'P --> (Q --> Q)' (python id: 2896035454800) is already present in this FormalLanguageClass as 'P --> (Q --> Q)' (python id: 2896035894672). The existing object is reused and the new object is discarded.
-2024-02-09 21:58:50,664 - INFO - P --> (Q --> Q) == P --> (Q --> Q)
+2024-02-09 22:03:56,335 - INFO - Override typesetting-method: (symbol,technical-representation)
+2024-02-09 22:03:56,335 - DEBUG - Module typesetting: loaded.
+2024-02-09 22:03:56,337 - DEBUG - Module fl1: loaded.
+2024-02-09 22:03:56,338 - INFO - Override typesetting-method: (fl1.unary_formula,symbolic-representation)
+2024-02-09 22:03:56,338 - INFO - Override typesetting-method: (fl1.binary_formula,symbolic-representation)
+2024-02-09 22:03:56,338 - DEBUG - Module fl1_presentation: loaded.
+2024-02-09 22:03:56,339 - DEBUG - Module pl1: loaded.
+2024-02-09 22:03:56,341 - DEBUG - Module pl1_presentation: loaded.
+2024-02-09 22:03:56,342 - DEBUG - Module punctilious: loaded.
+2024-02-09 22:03:56,358 - DEBUG - FormalObject-2308590374288
+2024-02-09 22:03:56,363 - ERROR - connective is not a pl1 connective.
+2024-02-09 22:03:56,363 - ERROR - term is not a pl1 well-formed-formula.
+2024-02-09 22:03:56,366 - DEBUG - FormalObject '竅P' (python id: 2308589943056) is already present in this FormalLanguageClass as '竅P' (python id: 2308589929360). The existing object is reused and the new object is discarded.
+2024-02-09 22:03:56,371 - DEBUG - FormalObject '竅P' (python id: 2308590352848) is already present in this FormalLanguageClass as '竅P' (python id: 2308590958736). The existing object is reused and the new object is discarded.
+2024-02-09 22:03:56,372 - DEBUG - FormalObject 'P --> P' (python id: 2308589296016) is already present in this FormalLanguageClass as 'P --> P' (python id: 2308590352848). The existing object is reused and the new object is discarded.
+2024-02-09 22:03:56,372 - DEBUG - FormalObject 'P --> P' (python id: 2308589296016) is already present in this FormalLanguageClass as 'P --> P' (python id: 2308590352848). The existing object is reused and the new object is discarded.
+2024-02-09 22:03:56,372 - DEBUG - FormalObject 'P --> (Q --> Q)' (python id: 2308589296016) is already present in this FormalLanguageClass as 'P --> (Q --> Q)' (python id: 2308590426256). The existing object is reused and the new object is discarded.
+2024-02-09 22:03:56,372 - INFO - P --> (Q --> Q) == P --> (Q --> Q)

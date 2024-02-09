@@ -34,7 +34,7 @@ class Logger:
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
         # Create a file handler and set the formatter
-        file_handler = logging.FileHandler('punctilious.log', mode='w')
+        file_handler = logging.FileHandler('punctilious.log', mode='w', encoding="utf-8")
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(formatter)
 
