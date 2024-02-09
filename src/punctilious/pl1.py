@@ -159,10 +159,14 @@ class PropositionalVariableCollection(fl1.FormalLanguageCollection):
         super().__init__(formal_language=formal_language)
 
     def declare_proposition_variable(self) -> PropositionalVariable:
-        """Declare a new propositional-variable in PL1."""
+        """Declare a new propositional-variable."""
         p: PropositionalVariable = PropositionalVariable(formal_language_collection=self)
         super()._add_formal_object(x=p)
         return p
+
+    def declare_proposition_variables(self, n: int) -> tuple[PropositionalVariable, ...]:
+        """Declare n new propositional variables."""
+        return tuple(self.declare_proposition_variable() for _ in range(n))
 
 
 class ConnectiveCollection(fl1.ConnectiveCollection):
@@ -223,11 +227,11 @@ class PL1CompoundFormulaCollection(fl1.CompoundFormulaCollection):
         :return:
         """
         if connective not in self.pl1.connectives:
-            log.error("connective is not a pl1 connective.")
+            log.error("connective is not a pl1 connective.", pl1=self.pl1, connective=connective)
         if not self.pl1.is_well_formed_formula(phi=term_1):
-            log.error("term_1 is not a pl1 well-formed-formula.")
+            log.error("term_1 is not a pl1 well-formed-formula.", pl1=self.pl1, phi=term_1)
         if not self.pl1.is_well_formed_formula(phi=term_2):
-            log.error("term_2 is not a pl1 well-formed-formula.")
+            log.error("term_2 is not a pl1 well-formed-formula.", pl1=self.pl1, phi=term_2)
         tc: ts.TypesettingClass = typesetting_classes.pl1_binary_formula
         phi: fl1.BinaryFormula = super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2,
             tc=tc)
@@ -313,6 +317,9 @@ class PL1ML(fl1.FormalLanguage):
 
     def get_meta_variable_tuple(self, phi: fl1.Formula) -> tuple[MetaVariable]:
         return tuple(p for p in phi.iterate_leaf_formulas() if p in self.meta_variables)
+
+    def get_propositional_variable_tuple(self, phi: fl1.Formula) -> tuple[PropositionalVariable]:
+        return self.pl1.get_propositional_variable_tuple(phi=phi)
 
     def is_well_formed_formula(self, phi: fl1.Formula) -> bool:
         """Return True if phi is a well-formed-formula in PL1ML, False otherwise."""

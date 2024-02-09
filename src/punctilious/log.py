@@ -3,7 +3,7 @@
 import logging
 
 
-def force_kwargs_to_string(**kwargs) -> str:
+def force_kwargs_to_string(kwargs: dict) -> str:
     output = ''
     for k, v in kwargs.items():
         try:
@@ -47,18 +47,29 @@ class Logger:
         self._logger.addHandler(file_handler)
         self._logger.addHandler(console_handler)
 
-    def debug(self, msg: str, **kwargs):
-        self._logger.debug(msg=msg + '. ' + force_kwargs_to_string(kwargs=kwargs))
+    def _extend_msg_with_kwargs(self, msg: str, kwargs: dict):
+        kwargs_string: str = force_kwargs_to_string(kwargs=kwargs)
+        if kwargs_string != "":
+            kwargs_string = f": {kwargs_string}"
+        msg = f"{msg}{kwargs_string}"
+        return msg
 
-    def error(self, msg: str, **kwargs):
-        self._logger.error(msg=msg + '. ' + force_kwargs_to_string(kwargs=kwargs))
+    def debug(self, msg: str, kwargs: dict):
+        msg = self._extend_msg_with_kwargs(msg=msg, kwargs=kwargs)
+        self._logger.debug(msg=msg)
+
+    def error(self, msg: str, kwargs: dict):
+        msg = self._extend_msg_with_kwargs(msg=msg, kwargs=kwargs)
+        self._logger.error(msg=msg)
         raise Exception(msg)
 
-    def info(self, msg: str, **kwargs):
-        self._logger.info(msg=msg + '. ' + force_kwargs_to_string(kwargs=kwargs))
+    def info(self, msg: str, kwargs: dict):
+        msg = self._extend_msg_with_kwargs(msg=msg, kwargs=kwargs)
+        self._logger.info(msg=msg)
 
-    def warning(self, msg: str, **kwargs):
-        self._logger.warning(msg=msg + '. ' + force_kwargs_to_string(kwargs=kwargs))
+    def warning(self, msg: str, kwargs: dict):
+        msg = self._extend_msg_with_kwargs(msg=msg, kwargs=kwargs)
+        self._logger.warning(msg=msg)
         warning(msg=msg)
 
 
@@ -66,16 +77,16 @@ logger = Logger()
 
 
 def debug(msg: str, **kwargs):
-    logger.debug(msg=msg, **kwargs)
+    logger.debug(msg=msg, kwargs=kwargs)
 
 
 def error(msg: str, **kwargs):
-    logger.error(msg=msg, **kwargs)
+    logger.error(msg=msg, kwargs=kwargs)
 
 
 def info(msg: str, **kwargs):
-    logger.info(msg=msg, **kwargs)
+    logger.info(msg=msg, kwargs=kwargs)
 
 
 def warning(msg: str, **kwargs):
-    logger.warning(msg=msg, **kwargs)
+    logger.warning(msg=msg, kwargs=kwargs)

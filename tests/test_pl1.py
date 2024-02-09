@@ -70,6 +70,8 @@ class TestPL1:
         pass
 
     def test_propositional_variables(self):
+        pu.preferences.reset()
+
         l: pu.pl1.PL1 = pu.pl1.PL1()
 
         assert len(l.propositional_variables) == 0
@@ -78,6 +80,18 @@ class TestPL1:
         pb = l.propositional_variables.declare_proposition_variable()
         assert len(l.propositional_variables) == 2
         assert pa is not pb
+
+        pc, pd, pe = l.propositional_variables.declare_proposition_variables(n=3)
+
+        pu.preferences.typesetting.protocol.protocol = pu.ts.protocols.unicode_extended
+
+        phi1 = l.compound_formulas.declare_binary_formula(connective=l.connectives.conditional, term_1=pa, term_2=pb)
+        phi2 = l.compound_formulas.declare_binary_formula(connective=l.connectives.conditional, term_1=phi1, term_2=pc)
+        phi3 = l.compound_formulas.declare_binary_formula(connective=l.connectives.conditional, term_1=phi2, term_2=pd)
+        phi4 = l.compound_formulas.declare_binary_formula(connective=l.connectives.conditional, term_1=phi3, term_2=pe)
+
+        log.debug(msg=phi4)
+        pass
 
     def test_declare_unary_formula(self):
         l1: pu.pl1.PL1 = pu.pl1.PL1()

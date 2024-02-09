@@ -73,11 +73,17 @@ class Preferences:
         return cls._singleton
 
     def __init__(self):
+        self._internal_set: set[ts.Preference, ...] = set()
         super().__init__()
         # formulas
         self._binary_formula_notation = BinaryFormulaNotationPreference(name='binary formula notation',
             binary_formula_notation=binary_formula_notations.infix_notation)
+        self._register(preference=self._binary_formula_notation)
         self._connective_symbol = ts.SymbolPreference(name='connective symbol', symbol=ts.symbols.asterisk_operator)
+        self._register(preference=self._connective_symbol)
+
+    def _register(self, preference: ts.Preference) -> None:
+        self._internal_set.add(preference)
 
     @property
     def connective_symbol(self) -> ts.SymbolPreference:
@@ -88,6 +94,10 @@ class Preferences:
     def binary_formula_notation(self) -> BinaryFormulaNotationPreference:
         """binary formula notation preference"""
         return self._binary_formula_notation
+
+    def reset(self):
+        for preference in self._internal_set:
+            preference.reset()
 
 
 preferences: Preferences = Preferences()

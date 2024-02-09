@@ -372,7 +372,7 @@ class TypesettingMethods(dict):
         return cls._singleton
 
 
-typesetting_methods: typing.Dict[int, typing.Callable] = dict()
+typesetting_methods: typing.Dict[tuple[TypesettingClass, Representation], typing.Callable] = dict()
 
 
 def register_typesetting_method(python_function: typing.Callable, c: TypesettingClass,
@@ -382,7 +382,7 @@ def register_typesetting_method(python_function: typing.Callable, c: Typesetting
     the previously registered method with the new one."""
 
     global typesetting_methods
-    key: int = hash((c, representation,))
+    key: tuple[TypesettingClass, Representation] = (c, representation,)
     if key in typesetting_methods:
         log.info(msg=f'Override typesetting-method: ({c},{representation})')
     typesetting_methods[key] = python_function
@@ -407,7 +407,7 @@ def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None,
     typesetting_method: typing.Callable
     c: TypesettingClass = o.typesetting_class
     while True:
-        key: int = hash((c, representation,))
+        key: tuple[TypesettingClass, Representation] = (c, representation,)
         if key in typesetting_methods:
             typesetting_method = typesetting_methods[key]
             break
@@ -419,61 +419,6 @@ def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None,
             c = c.superclass
 
     yield from typesetting_method(o=o, protocol=protocol, representation=representation, **kwargs)
-
-
-def typeset_obsolete(o: Typesettable, protocol: typing.Optional[Protocol] = None,
-    representation: typing.Optional[Representation] = None, language: typing.Optional[Language] = None, **kwargs) -> \
-    typing.Generator[str, None, None]:
-    global typesetting_methods
-    global protocols
-    global representations
-    global preferences
-    global languages
-
-    if representation is None:
-        representation: Representation = o.default_representation
-        if representation is None:
-            # fallback to the fail-safe representation method.
-            representation: Representation = representations.technical_representation
-    if language is None:
-        language: Language = languages.default
-
-    # log.debug(msg=f"protocol: {protocol}")
-
-    keys: set[typing.FrozenSet[TypesettingClass, Representation]] = {frozenset([typesetting_class, representation]) for
-        typesetting_class in o.typesetting_typesetting_classes}
-    available_keys: set[typing.FrozenSet[TypesettingClass, Representation]] = keys.intersection(typesetting_methods)
-
-    # some typesetting methods were found, choose the best one.
-    best_generator = None
-    best_key: typing.Optional[typing.FrozenSet[TypesettingClass, Representation]] = None
-    best_solution: typing.Optional[typing.FrozenSet[TypesettingClass, Preference, Language]] = None
-    best_preference: Preference = None
-    best_score = 0
-    key: typing.FrozenSet[TypesettingClass, Representation]
-    solution: typing.FrozenSet[TypesettingClass, Preference, Language]
-    for key in available_keys:
-        for solution, generator in typesetting_methods[key].items():
-            # solution is of the form set[typesetting_class,flavour,language,].
-            preference: Preference = next(
-                iter(preference for preference in solution if isinstance(preference, Preference)))
-            score = next(iter(solution.intersection(o.typesetting_typesetting_classes))).weight
-            score = score + preference.weight
-            score = score + (1 if languages in solution else 0)
-            if score > best_score:
-                best_score = score
-                best_key = key
-                best_solution = solution
-                best_preference = preference
-                best_generator = generator  # log.debug(msg=f"New: {best_score} {best_key} {best_solution} {best_preference}")
-    if best_generator is None:
-        # no typesetting method found, use fallback typesetting instead.
-        kwargs['preference'] = best_preference
-        yield from fallback_typesetting_method(o=o, protocol=protocol, representation=representation, language=language,
-            **kwargs)
-    else:
-        kwargs['preference'] = best_preference
-        yield from best_generator(o=o, protocol=protocol, representation=representation, language=language, **kwargs)
 
 
 def to_string(o: Typesettable, protocol: typing.Optional[Protocol] = None,
@@ -624,11 +569,11 @@ class Symbols:
         self._q_uppercase_serif_italic = Symbol(latex_math='\\textit{Q}', unicode_extended='𝑄', unicode_limited='Q')
         self._r_uppercase_serif_italic = Symbol(latex_math='\\textit{R}', unicode_extended='𝑅', unicode_limited='R')
         self._p_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{P}}', unicode_extended='𝑷',
-            unicode_limited='PP')
+            unicode_limited='bold-P')
         self._q_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{Q}}', unicode_extended='𝑸',
-            unicode_limited='QQ')
+            unicode_limited='bold-Q')
         self._r_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{R}}', unicode_extended='𝑹',
-            unicode_limited='RR')
+            unicode_limited='bold-R')
         self._rightwards_arrow = Symbol(latex_math='\\rightarrow', unicode_extended='→', unicode_limited='-->')
         self._space = Symbol(latex_math=' ', unicode_extended=' ', unicode_limited=' ')
         self._tilde = Symbol(latex_math='\\sim', unicode_extended='~', unicode_limited='~')
