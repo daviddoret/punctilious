@@ -10,9 +10,9 @@ class TestPL1:
         l: pu.pl1.PL1 = pu.pl1.PL1()
 
         y = l.connectives.conditional
-        assert y.to_string(protocol=pu.ts.protocols.latex) == "\\rightarrow"
-        assert y.to_string(protocol=pu.ts.protocols.unicode_extended) == "→"
         assert y.to_string(protocol=pu.ts.protocols.unicode_limited) == "-->"
+        assert y.to_string(protocol=pu.ts.protocols.unicode_extended) == "→"
+        assert y.to_string(protocol=pu.ts.protocols.latex) == "\\rightarrow"
 
     def test_connectives_negation(self):
         l: pu.pl1.PL1 = pu.pl1.PL1()
@@ -20,36 +20,36 @@ class TestPL1:
 
         # reset preference
         pu.pl1_presentation.preferences.negation_symbol.reset()
-        assert x.to_string(protocol=pu.ts.protocols.latex) == "\\lnot"
+        assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "¬"
         assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "¬"
-        assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "not"
+        assert x.to_string(protocol=pu.ts.protocols.latex) == "\\lnot"
 
         # change preference
         pu.pl1_presentation.preferences.negation_symbol.symbol = pu.ts.symbols.tilde
-        assert x.to_string(protocol=pu.ts.protocols.latex) == "\\sim"
-        assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "~"
         assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "~"
+        assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "~"
+        assert x.to_string(protocol=pu.ts.protocols.latex) == "\\sim"
 
         # reset preference
         pu.pl1_presentation.preferences.negation_symbol.reset()
-        assert x.to_string(protocol=pu.ts.protocols.latex) == "\\lnot"
+        assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "¬"
         assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "¬"
-        assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "not"
+        assert x.to_string(protocol=pu.ts.protocols.latex) == "\\lnot"
 
     def test_formulas(self):
         l1: pu.pl1.PL1 = pu.pl1.PL1()
         pa = l1.propositional_variables.declare_proposition_variable()
         phi1 = l1.compound_formulas.declare_unary_formula(connective=l1.connectives.negation, term=pa)
         assert phi1 in l1.compound_formulas
+        assert phi1.to_string(protocol=pu.ts.protocols.unicode_limited) == '¬P'
         assert phi1.to_string(protocol=pu.ts.protocols.unicode_extended) == '¬𝑃'
-        assert phi1.to_string(protocol=pu.ts.protocols.unicode_limited) == 'notP'
         assert phi1.to_string(protocol=pu.ts.protocols.latex) == '\\lnot\\textit{P}'
 
         pb = l1.propositional_variables.declare_proposition_variable()
         phi2 = l1.compound_formulas.declare_binary_formula(connective=l1.connectives.conditional, term_1=pa, term_2=pb)
         assert phi2 in l1.compound_formulas
+        assert phi1.to_string(protocol=pu.ts.protocols.unicode_limited) == '¬P'
         assert phi1.to_string(protocol=pu.ts.protocols.unicode_extended) == '¬𝑃'
-        assert phi1.to_string(protocol=pu.ts.protocols.unicode_limited) == 'notP'
         assert phi1.to_string(protocol=pu.ts.protocols.latex) == '\\lnot\\textit{P}'
 
         l2: pu.pl1.PL1 = pu.pl1.PL1()
@@ -161,12 +161,16 @@ class TestPL1ML:
         map2 = {va: pa, vb: pb}
 
         phi = pa
+        assert phi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P"
         psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
         assert psi == pa
+        psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
 
         phi = va
+        assert phi.to_string(protocol=pu.ts.protocols.unicode_limited) == "bold-P"
         psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
         assert psi == pa
+        assert psi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P"
 
         phi = l1.compound_formulas.declare_unary_formula(connective=l1.connectives.negation, term=pa)
         psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)

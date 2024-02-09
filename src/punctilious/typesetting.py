@@ -563,7 +563,7 @@ class Symbols:
         self._asterisk_operator = Symbol(latex_math='\\ast', unicode_extended='∗', unicode_limited='*')
         self._close_parenthesis = Symbol(latex_math='\\right)', unicode_extended=')', unicode_limited=')')
         self._collection_separator = Symbol(latex_math=', ', unicode_extended=', ', unicode_limited=', ')
-        self._not_sign = Symbol(latex_math='\\lnot', unicode_extended='¬', unicode_limited='not')
+        self._not_sign = Symbol(latex_math='\\lnot', unicode_extended='¬', unicode_limited='¬')
         self._open_parenthesis = Symbol(latex_math='\\left(', unicode_extended='(', unicode_limited='(')
         self._p_uppercase_serif_italic = Symbol(latex_math='\\textit{P}', unicode_extended='𝑃', unicode_limited='P')
         self._q_uppercase_serif_italic = Symbol(latex_math='\\textit{Q}', unicode_extended='𝑄', unicode_limited='Q')
