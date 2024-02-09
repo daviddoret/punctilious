@@ -144,8 +144,8 @@ class TestPL1:
         ph = l1.compound_formulas.declare_binary_formula(connective=limplies, term_1=pa, term_2=pg)
         pi = l1.compound_formulas.declare_unary_formula(connective=lnot, term=ph)
 
-        assert len(str(pi)) > 0
-        log.debug(msg=str(pi))
+        assert pi.to_string(
+            protocol=pu.ts.protocols.unicode_limited) == "¬(P1 --> (((¬(¬P1)) --> P3) --> ((¬(¬P1)) --> P3)))"
 
 
 class TestPL1ML:
@@ -173,21 +173,25 @@ class TestPL1ML:
         assert psi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P"
 
         phi = l1.compound_formulas.declare_unary_formula(connective=l1.connectives.negation, term=pa)
+        assert phi.to_string(protocol=pu.ts.protocols.unicode_limited) == "¬P"
         psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
+        assert psi.to_string(protocol=pu.ts.protocols.unicode_limited) == "¬P"
         assert psi == phi
 
         phi = l1.meta_language.compound_formulas.declare_binary_formula(connective=l1.connectives.conditional,
             term_1=pa, term_2=va)
-        pu.log.info(f'{phi}')
+        assert phi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P --> bold-P"
         psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
         chi = l1.compound_formulas.declare_binary_formula(connective=l1.connectives.conditional, term_1=pa, term_2=pa)
-        pu.log.info(f'{psi} == {chi}')
         assert psi == chi
+        assert chi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P --> P"
 
         phi2 = l1.meta_language.compound_formulas.declare_binary_formula(connective=l1.connectives.conditional,
             term_1=vb, term_2=phi)
-        pu.log.info(f'{phi2}')
+        assert phi2.to_string(protocol=pu.ts.protocols.unicode_limited) == "bold-P --> (P --> bold-P)"
         psi = l1.meta_language.substitute_meta_variables(phi=phi2, m=map2)
+        assert psi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P --> (Q --> Q)"
         chi2 = l1.compound_formulas.declare_binary_formula(connective=l1.connectives.conditional, term_1=pb, term_2=chi)
         pu.log.info(f'{psi} == {chi2}')
         assert psi == chi2
+        assert chi2.to_string(protocol=pu.ts.protocols.unicode_limited) == "P --> (Q --> Q)"
