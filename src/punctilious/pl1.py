@@ -142,21 +142,6 @@ class MetaVariableCollection(fl1.FormalLanguageCollection):
         return mv
 
 
-class MetaLanguage(fl1.FormalLanguage):
-    """The meta-language of PL1."""
-
-    def __init__(self):
-        super().__init__()
-        self._variables: MetaVariableCollection = MetaVariableCollection(formal_language=self)
-        super()._add_class(x=self._variables)
-        self.lock()
-
-    @property
-    def variables(self) -> MetaVariableCollection:
-        """The class of meta-variables in the meta-language of PL1."""
-        return self._variables
-
-
 class PropositionalVariable(fl1.AtomicFormula):
 
     def __init__(self, formal_language_collection: fl1.FormalLanguageCollection,
@@ -266,13 +251,13 @@ class PL1CompoundFormulaCollection(fl1.CompoundFormulaCollection):
         return self._pl1
 
 
-class PL1MLCompoundFormulaCollection(fl1.CompoundFormulaCollection):
+class MetaLanguageCompoundFormulaCollection(fl1.CompoundFormulaCollection):
     """A specialized class for PL1 meta-language containing all PL1 meta-language free formulas, and that is initially
     not locked."""
 
-    def __init__(self, pl1ml: PL1ML):
-        self._pl1ml: PL1ML = pl1ml
-        super().__init__(formal_language=pl1ml)
+    def __init__(self, meta_language: MetaLanguage):
+        self._meta_language: MetaLanguage = meta_language
+        super().__init__(formal_language=meta_language)
 
     def declare_unary_formula(self, connective: fl1.UnaryConnective, term: fl1.Formula) -> fl1.UnaryFormula:
         """Declare a well-formed unary formula in PL1.
@@ -315,10 +300,23 @@ class PL1MLCompoundFormulaCollection(fl1.CompoundFormulaCollection):
 
     @property
     def pl1ml(self) -> PL1M1:
+        return self._meta_language
+
+
+class N0AxiomSchemaCollection(fl1.AxiomCollection):
+    # TODO: N0AxiomSchemaCollection complete implementation.
+    def __init__(self, pl1ml: MetaLanguage):
+        self._pl1ml = pl1ml
+        super().__init__(formal_language=pl1ml)
+        #  self._pl1ml.compound_
+        #  formulas.declare_binary_formula()
+        pass
+
+    def pl1ml(self) -> MetaLanguage:
         return self._pl1ml
 
 
-class PL1ML(fl1.FormalLanguage):
+class MetaLanguage(fl1.FormalLanguage):
     """Propositional Logic 1 Meta Language."""
 
     def __init__(self, pl1: PL1):
@@ -327,7 +325,8 @@ class PL1ML(fl1.FormalLanguage):
         # Language tuples
         self._meta_variables: MetaVariableCollection = MetaVariableCollection(formal_language=self)
         super()._add_class(x=self._meta_variables)
-        self._compound_formulas: PL1MLCompoundFormulaCollection = PL1MLCompoundFormulaCollection(pl1ml=self)
+        self._compound_formulas: MetaLanguageCompoundFormulaCollection = MetaLanguageCompoundFormulaCollection(
+            meta_language=self)
         super()._add_class(x=self._compound_formulas)
         # self._propositional_variables: PropositionalVariableCollection = PropositionalVariableCollection(
         #    formal_language=self)
@@ -335,7 +334,7 @@ class PL1ML(fl1.FormalLanguage):
         self.lock()
 
     @property
-    def compound_formulas(self) -> PL1MLCompoundFormulaCollection:
+    def compound_formulas(self) -> MetaLanguageCompoundFormulaCollection:
         """The collection of declared compound formulas in PL1."""
         return self._compound_formulas
 
@@ -346,15 +345,15 @@ class PL1ML(fl1.FormalLanguage):
         return self.pl1.get_propositional_variable_tuple(phi=phi)
 
     def is_well_formed_formula(self, phi: fl1.Formula) -> bool:
-        """Return True if phi is a well-formed-formula in PL1ML, False otherwise."""
+        """Return True if phi is a well-formed-formula in meta-language, False otherwise."""
         if phi in self.meta_variables:
-            # if phi is a PL1ML meta-variable, then it is a well-formed formula.
+            # if phi is a meta-language meta-variable, then it is a well-formed formula.
             return True
         elif self.pl1.is_well_formed_formula(phi=phi):
             # if phi is a well-formed formula in the PL1 sub-language, then it is a well-formed-formula,
             return True
         elif phi in self.compound_formulas:
-            # if phi is a well-formed formula in the PL1ML sub-language, then it is a well-formed-formula,
+            # if phi is a well-formed formula in the meta-language sub-language, then it is a well-formed-formula,
             return True
         else:
             # otherwise, return False, i.e.: phi is not a well-formed-formula.
@@ -416,7 +415,7 @@ class PL1(fl1.FormalLanguage):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.pl1)
         super().__init__(tc=tc)
         # Meta-language
-        self._meta_language: PL1ML = PL1ML(pl1=self)
+        self._meta_language: MetaLanguage = MetaLanguage(pl1=self)
         # Object classes
         self._connectives: ConnectiveCollection = ConnectiveCollection(formal_language=self)
         super()._add_class(x=self._connectives)
@@ -460,7 +459,7 @@ class PL1(fl1.FormalLanguage):
         return tuple(p for p in phi.iterate_leaf_formulas() if p in self.propositional_variables)
 
     @property
-    def meta_language(self) -> PL1ML:
+    def meta_language(self) -> MetaLanguage:
         """The meta-language of PL1."""
         return self._meta_language
 

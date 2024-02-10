@@ -70,9 +70,9 @@ def typeset_unary_formula_function_call(o: fl1.UnaryFormula,
     str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     l: fl1.FormalLanguage = o.formal_language
-    if pl1_propositional_variables is None and isinstance(l, pl1.PL1) or isinstance(l, pl1.PL1ML):
+    if pl1_propositional_variables is None and isinstance(l, pl1.PL1) or isinstance(l, pl1.MetaLanguage):
         pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
-    if pl1ml_meta_variables is None and isinstance(l, pl1.PL1ML):
+    if pl1ml_meta_variables is None and isinstance(l, pl1.MetaLanguage):
         pl1ml_meta_variables: tuple[pl1.MetaVariable] = l.get_meta_variable_tuple(phi=o)
     yield from fl1_presentation.typeset_unary_formula_function_call(o=o,
         pl1_propositional_variables=pl1_propositional_variables, pl1ml_meta_variables=pl1ml_meta_variables, **kwargs)
@@ -84,9 +84,9 @@ def typeset_unary_formula_prefix_without_parenthesis(o: fl1.UnaryFormula,
     str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     l: fl1.FormalLanguage = o.formal_language
-    if pl1_propositional_variables is None and isinstance(l, pl1.PL1) or isinstance(l, pl1.PL1ML):
+    if pl1_propositional_variables is None and isinstance(l, pl1.PL1) or isinstance(l, pl1.MetaLanguage):
         pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
-    if pl1ml_meta_variables is None and isinstance(l, pl1.PL1ML):
+    if pl1ml_meta_variables is None and isinstance(l, pl1.MetaLanguage):
         pl1ml_meta_variables: tuple[pl1.MetaVariable] = l.get_meta_variable_tuple(phi=o)
     yield from fl1_presentation.typeset_unary_formula_prefix_without_parenthesis(o=o,
         pl1_propositional_variables=pl1_propositional_variables, pl1ml_meta_variables=pl1ml_meta_variables, **kwargs)
@@ -98,9 +98,9 @@ def typeset_binary_formula_function_call(o: fl1.BinaryFormula,
     str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     l: fl1.FormalLanguage = o.formal_language
-    if pl1_propositional_variables is None and isinstance(l, pl1.PL1) or isinstance(l, pl1.PL1ML):
+    if pl1_propositional_variables is None and isinstance(l, pl1.PL1) or isinstance(l, pl1.MetaLanguage):
         pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
-    if pl1ml_meta_variables is None and isinstance(l, pl1.PL1ML):
+    if pl1ml_meta_variables is None and isinstance(l, pl1.MetaLanguage):
         pl1ml_meta_variables: tuple[pl1.MetaVariable] = l.get_meta_variable_tuple(phi=o)
     yield from fl1_presentation.typeset_binary_formula_function_call(o=o,
         pl1_propositional_variables=pl1_propositional_variables, pl1ml_meta_variables=pl1ml_meta_variables, **kwargs)
@@ -112,9 +112,9 @@ def typeset_binary_formula_infix(o: fl1.BinaryFormula,
     str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     l: fl1.FormalLanguage = o.formal_language
-    if pl1_propositional_variables is None and isinstance(l, pl1.PL1) or isinstance(l, pl1.PL1ML):
+    if pl1_propositional_variables is None and isinstance(l, pl1.PL1) or isinstance(l, pl1.MetaLanguage):
         pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
-    if pl1ml_meta_variables is None and isinstance(l, pl1.PL1ML):
+    if pl1ml_meta_variables is None and isinstance(l, pl1.MetaLanguage):
         pl1ml_meta_variables: tuple[pl1.MetaVariable] = l.get_meta_variable_tuple(phi=o)
     yield from fl1_presentation.typeset_binary_formula_infix(o=o,
         pl1_propositional_variables=pl1_propositional_variables, pl1ml_meta_variables=pl1ml_meta_variables, **kwargs)
