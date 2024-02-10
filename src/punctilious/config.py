@@ -1,32 +1,31 @@
-import typing
+import pathlib
+import tomli
 
 import log
 
 
-class Config:
-    _singleton = None
-
-    def __new__(cls):
-        if cls._singleton is None:
-            cls._singleton = super(Config, cls).__new__(cls)
-        return cls._singleton
-
-    def __init__(self):
-        self._internal_dictionary = dict()
-
-    def get(self, key: str, default: typing.Optional[object] = None) -> object:
-        if key not in self._internal_dictionary.keys():
-            log.warning(msg=f"Config: key '{key}' not found. Use default instead.")
-            return default
-        else:
-            return self._internal_dictionary[key]
-
-    def set(self, key: str, value: object) -> None:
-        self._internal_dictionary[key] = value
+def get_project_root_path():
+    project_root_path = pathlib.Path(__file__).resolve().parent
+    log.debug(msg=f"TOML configuration file path: {project_root_path}")
+    return project_root_path
 
 
-def get_config() -> Config:
-    return Config()
+def get_config_file_path():
+    return get_project_root_path() / "config" / "config.toml"
 
 
-config = get_config()
+with open(get_config_file_path(), mode="rb") as configuration_file:
+    settings = tomli.load(configuration_file)
+
+
+def get_str(section: str, item: str, attribute: str) -> str:
+    if section not in settings:
+        log.error(f"missing section {section} in TOML configuration file.")
+    section_dict = settings[section]
+    if item not in section_dict:
+        log.error(f"missing item {item} in section {section} of the TOML configuration file.")
+    item_dict = section_dict[item]
+    if attribute not in item_dict:
+        log.error(f"missing attribute {attribute} on item {item} in section {section} of the TOML configuration file.")
+    attribute = item_dict[attribute]
+    return attribute

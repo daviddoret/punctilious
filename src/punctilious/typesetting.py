@@ -483,7 +483,8 @@ class Typesettable(abc.ABC):
 class Symbol(Typesettable):
     """An atomic symbol."""
 
-    def __init__(self, latex_math: str, unicode_extended: str, unicode_limited: str):
+    def __init__(self, name: str, latex_math: str, unicode_extended: str, unicode_limited: str):
+        self._name = name
         self._latex_math = latex_math
         self._unicode_extended = unicode_extended
         self._unicode_limited = unicode_limited
@@ -492,6 +493,10 @@ class Symbol(Typesettable):
     @property
     def latex_math(self) -> str:
         return self._latex_math
+
+    @property
+    def name(self) -> str:
+        return self._name
 
     @property
     def unicode_extended(self) -> str:
@@ -560,34 +565,74 @@ class Symbols:
         return cls._singleton
 
     def __init__(self):
-        self._a_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{A}}', unicode_extended='𝑨',
-            unicode_limited='bold-A')
-        self._asterisk_operator = Symbol(latex_math='\\ast', unicode_extended='∗', unicode_limited='*')
-        self._b_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{B}}', unicode_extended='𝑩',
-            unicode_limited='bold-B')
-        self._c_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{C}}', unicode_extended='𝑪',
-            unicode_limited='bold-C')
-        self._close_parenthesis = Symbol(latex_math='\\right)', unicode_extended=')', unicode_limited=')')
-        self._collection_separator = Symbol(latex_math=', ', unicode_extended=', ', unicode_limited=', ')
-        self._d_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{D}}', unicode_extended='𝑫',
-            unicode_limited='bold-D')
-        self._material_conditional = Symbol(latex_math='\\supset', unicode_extended='⊃', unicode_limited='implies')
-        self._not_sign = Symbol(latex_math='\\lnot', unicode_extended='¬', unicode_limited='¬')
-        self._open_parenthesis = Symbol(latex_math='\\left(', unicode_extended='(', unicode_limited='(')
-        self._p_uppercase_serif_italic = Symbol(latex_math='\\textit{P}', unicode_extended='𝑃', unicode_limited='P')
-        self._q_uppercase_serif_italic = Symbol(latex_math='\\textit{Q}', unicode_extended='𝑄', unicode_limited='Q')
-        self._r_uppercase_serif_italic = Symbol(latex_math='\\textit{R}', unicode_extended='𝑅', unicode_limited='R')
-        self._p_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{P}}', unicode_extended='𝑷',
-            unicode_limited='bold-P')
-        self._q_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{Q}}', unicode_extended='𝑸',
-            unicode_limited='bold-Q')
-        self._r_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{R}}', unicode_extended='𝑹',
-            unicode_limited='bold-R')
-        self._rightwards_arrow = Symbol(latex_math='\\rightarrow', unicode_extended='→', unicode_limited='-->')
-        self._space = Symbol(latex_math=' ', unicode_extended=' ', unicode_limited=' ')
-        self._tilde = Symbol(latex_math='\\sim', unicode_extended='~', unicode_limited='~')
-        self._vee = Symbol(latex_math='\\lor', unicode_extended='∨', unicode_limited='or')
-        self._wedge = Symbol(latex_math='\\land', unicode_extended='∧', unicode_limited='and')
+        self._internal_dict: dict[str, Symbol] = dict()
+        self._a_uppercase_serif_italic_bold = Symbol(name="a_uppercase_serif_italic_bold",
+            latex_math='\\bm{\\textit{A}}', unicode_extended='𝑨', unicode_limited='bold-A')
+        self._register(symbol=self._a_uppercase_serif_italic_bold)
+        self._asterisk_operator = Symbol(name="asterisk_operator", latex_math='\\ast', unicode_extended='∗',
+            unicode_limited='*')
+        self._register(symbol=self._asterisk_operator)
+        self._b_uppercase_serif_italic_bold = Symbol(name="b_uppercase_serif_italic_bold",
+            latex_math='\\bm{\\textit{B}}', unicode_extended='𝑩', unicode_limited='bold-B')
+        self._register(symbol=self._b_uppercase_serif_italic_bold)
+        self._c_uppercase_serif_italic_bold = Symbol(name="c_uppercase_serif_italic_bold",
+            latex_math='\\bm{\\textit{C}}', unicode_extended='𝑪', unicode_limited='bold-C')
+        self._register(symbol=self._c_uppercase_serif_italic_bold)
+        self._close_parenthesis = Symbol(name="close_parenthesis", latex_math='\\right)', unicode_extended=')',
+            unicode_limited=')')
+        self._register(symbol=self._close_parenthesis)
+        self._collection_separator = Symbol(name="collection_separator", latex_math=', ', unicode_extended=', ',
+            unicode_limited=', ')
+        self._register(symbol=self._collection_separator)
+        self._d_uppercase_serif_italic_bold = Symbol(name="d_uppercase_serif_italic_bold",
+            latex_math='\\bm{\\textit{D}}', unicode_extended='𝑫', unicode_limited='bold-D')
+        self._register(symbol=self._d_uppercase_serif_italic_bold)
+        self._material_conditional = Symbol(name="material_conditional", latex_math='\\supset', unicode_extended='⊃',
+            unicode_limited='implies')
+        self._register(symbol=self._material_conditional)
+        self._not_sign = Symbol(name="not_sign", latex_math='\\lnot', unicode_extended='¬', unicode_limited='¬')
+        self._register(symbol=self._not_sign)
+        self._open_parenthesis = Symbol(name="open_parenthesis", latex_math='\\left(', unicode_extended='(',
+            unicode_limited='(')
+        self._register(symbol=self._open_parenthesis)
+        self._p_uppercase_serif_italic = Symbol(name="p_uppercase_serif_italic", latex_math='\\textit{P}',
+            unicode_extended='𝑃', unicode_limited='P')
+        self._register(symbol=self._p_uppercase_serif_italic)
+        self._q_uppercase_serif_italic = Symbol(name="q_uppercase_serif_italic", latex_math='\\textit{Q}',
+            unicode_extended='𝑄', unicode_limited='Q')
+        self._register(symbol=self._q_uppercase_serif_italic)
+        self._r_uppercase_serif_italic = Symbol(name="r_uppercase_serif_italic", latex_math='\\textit{R}',
+            unicode_extended='𝑅', unicode_limited='R')
+        self._register(symbol=self._r_uppercase_serif_italic)
+        self._p_uppercase_serif_italic_bold = Symbol(name="p_uppercase_serif_italic_bold",
+            latex_math='\\bm{\\textit{P}}', unicode_extended='𝑷', unicode_limited='bold-P')
+        self._register(symbol=self._p_uppercase_serif_italic_bold)
+        self._q_uppercase_serif_italic_bold = Symbol(name="q_uppercase_serif_italic_bold",
+            latex_math='\\bm{\\textit{Q}}', unicode_extended='𝑸', unicode_limited='bold-Q')
+        self._register(symbol=self._q_uppercase_serif_italic_bold)
+        self._r_uppercase_serif_italic_bold = Symbol(name="r_uppercase_serif_italic_bold",
+            latex_math='\\bm{\\textit{R}}', unicode_extended='𝑹', unicode_limited='bold-R')
+        self._register(symbol=self._r_uppercase_serif_italic_bold)
+        self._rightwards_arrow = Symbol(name="rightwards_arrow", latex_math='\\rightarrow', unicode_extended='→',
+            unicode_limited='-->')
+        self._register(symbol=self._rightwards_arrow)
+        self._space = Symbol(name="space", latex_math=' ', unicode_extended=' ', unicode_limited=' ')
+        self._register(symbol=self._space)
+        self._tilde = Symbol(name="tilde", latex_math='\\sim', unicode_extended='~', unicode_limited='~')
+        self._register(symbol=self._tilde)
+        self._vee = Symbol(name="vee", latex_math='\\lor', unicode_extended='∨', unicode_limited='or')
+        self._register(symbol=self._vee)
+        self._wedge = Symbol(name="wedge", latex_math='\\land', unicode_extended='∧', unicode_limited='and')
+        self._register(symbol=self._wedge)
+
+    def __contains__(self, item):
+        return item in self._internal_dict
+
+    def __getitem__(self, key):
+        return self._internal_dict[key]
+
+    def _register(self, symbol: Symbol):
+        self._internal_dict[symbol.name] = symbol
 
     @property
     def a_uppercase_serif_italic_bold(self) -> Symbol:

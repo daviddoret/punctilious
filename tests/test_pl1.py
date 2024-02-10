@@ -5,7 +5,7 @@ import punctilious as pu
 
 class TestPL1:
     def test_connectives_conditional(self):
-        l: pu.pl1.PL1 = pu.pl1.PL1()
+        l: pu.pl1.PropositionalLogic = pu.pl1.PropositionalLogic()
 
         y = l.connectives.material_implication
         assert y.to_string(protocol=pu.ts.protocols.unicode_limited) == "implies"
@@ -13,29 +13,29 @@ class TestPL1:
         assert y.to_string(protocol=pu.ts.protocols.latex) == "\\supset"
 
     def test_connectives_negation(self):
-        l: pu.pl1.PL1 = pu.pl1.PL1()
+        l: pu.pl1.PropositionalLogic = pu.pl1.PropositionalLogic()
         x = l.connectives.negation
 
         # reset preference
-        pu.pl1_presentation.preferences.negation_symbol.reset()
+        pu.pl1p1.preferences.negation_symbol.reset()
         assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "¬"
         assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "¬"
         assert x.to_string(protocol=pu.ts.protocols.latex) == "\\lnot"
 
         # change preference
-        pu.pl1_presentation.preferences.negation_symbol.symbol = pu.ts.symbols.tilde
+        pu.pl1p1.preferences.negation_symbol.symbol = pu.ts.symbols.tilde
         assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "~"
         assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "~"
         assert x.to_string(protocol=pu.ts.protocols.latex) == "\\sim"
 
         # reset preference
-        pu.pl1_presentation.preferences.negation_symbol.reset()
+        pu.pl1p1.preferences.negation_symbol.reset()
         assert x.to_string(protocol=pu.ts.protocols.unicode_limited) == "¬"
         assert x.to_string(protocol=pu.ts.protocols.unicode_extended) == "¬"
         assert x.to_string(protocol=pu.ts.protocols.latex) == "\\lnot"
 
     def test_formulas(self):
-        l1: pu.pl1.PL1 = pu.pl1.PL1()
+        l1: pu.pl1.PropositionalLogic = pu.pl1.PropositionalLogic()
         pa = l1.propositional_variables.declare_proposition_variable()
         phi1 = l1.compound_formulas.declare_unary_formula(connective=l1.connectives.negation, term=pa)
         assert phi1 in l1.compound_formulas
@@ -51,7 +51,7 @@ class TestPL1:
         assert phi1.to_string(protocol=pu.ts.protocols.unicode_extended) == '¬𝑃'
         assert phi1.to_string(protocol=pu.ts.protocols.latex) == '\\lnot\\textit{P}'
 
-        l2: pu.pl1.PL1 = pu.pl1.PL1()
+        l2: pu.pl1.PropositionalLogic = pu.pl1.PropositionalLogic()
         with pytest.raises(Exception) as e_info:
             # connective not in the language
             l1.compound_formulas.declare_unary_formula(connective=l2.connectives.negation, term=pa)
@@ -71,7 +71,7 @@ class TestPL1:
     def test_propositional_variables(self):
         pu.preferences.reset()
 
-        l: pu.pl1.PL1 = pu.pl1.PL1()
+        l: pu.pl1.PropositionalLogic = pu.pl1.PropositionalLogic()
 
         assert len(l.propositional_variables) == 0
         pa = l.propositional_variables.declare_proposition_variable()
@@ -99,7 +99,7 @@ class TestPL1:
             protocol=pu.ts.protocols.unicode_limited) == "(((P1 implies P2) implies P3) implies P4) implies P5"
 
     def test_declare_unary_formula(self):
-        l1: pu.pl1.PL1 = pu.pl1.PL1()
+        l1: pu.pl1.PropositionalLogic = pu.pl1.PropositionalLogic()
 
         lnot: fl1.UnaryConnective = l1.connectives.negation
         pa = l1.propositional_variables.declare_proposition_variable()
@@ -119,7 +119,7 @@ class TestPL1:
         assert id(pd) != id(pf)
 
     def test_declare_binary_formula(self):
-        l1 = pu.pl1.PL1()
+        l1 = pu.pl1.PropositionalLogic()
 
         conditional = l1.connectives.material_implication
         pa = l1.propositional_variables.declare_proposition_variable()
@@ -132,7 +132,7 @@ class TestPL1:
         assert pd.to_string(protocol=pu.ts.protocols.latex) == '\\textit{P} \\supset \\textit{Q}'
 
     def test_compounding_formulas_1(self):
-        l1 = pu.pl1.PL1()
+        l1 = pu.pl1.PropositionalLogic()
 
         lnot = l1.connectives.negation
         limplies = l1.connectives.material_implication
@@ -152,12 +152,12 @@ class TestPL1:
             protocol=pu.ts.protocols.unicode_limited) == "¬(P1 implies (((¬(¬P1)) implies P3) implies ((¬(¬P1)) implies P3)))"
 
     def test_axioms(self):
-        l1 = pu.pl1.PL1()
+        l1 = pu.pl1.PropositionalLogic()
 
 
 class TestPL1ML:
     def test_substitute_meta_variables(self):
-        l1 = pu.pl1.PL1()
+        l1 = pu.pl1.PropositionalLogic()
 
         va = l1.meta_language.meta_variables.declare_meta_variable()
         vb = l1.meta_language.meta_variables.declare_meta_variable()

@@ -1,0 +1,11 @@
+[typesetting]
+
+[formal_language_1]
+
+[formal_language_1_presentation_1]
+
+[propositional_logic_1]
+
+[propositional_logic_1_presentation_1]
+conjunction.symbol = "wedge"
+disjunction.symbol = "vee"

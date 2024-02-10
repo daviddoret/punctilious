@@ -585,4 +585,49 @@ class AxiomCollection(FormalLanguageCollection):
         return x
 
 
+class FormalLanguagePreference(ts.Preference):
+    def __init__(self, name: str, formal_language: FormalLanguage):
+        super().__init__(name=name)
+        self._formal_language: FormalLanguage = formal_language
+        self._reset_value: FormalLanguage = formal_language
+
+    @property
+    def formal_language(self) -> FormalLanguage:
+        return self._formal_language
+
+    @formal_language.setter
+    def formal_language(self, formal_language: FormalLanguage):
+        self._formal_language = formal_language
+
+    def reset(self) -> None:
+        self.formal_language = self._reset_value
+
+
+class Preferences:
+    _singleton = None
+
+    def __new__(cls):
+        if cls._singleton is None:
+            cls._singleton = super(Preferences, cls).__new__(cls)
+        return cls._singleton
+
+    def __init__(self):
+        self._internal_set: typing.Union[set[ts.Preference, ...], set[None]] = set()
+        super().__init__()
+        self._formal_language = FormalLanguagePreference(name='formal language', formal_language=None)
+        self._register(preference=self._formal_language)
+
+    def _register(self, preference: ts.Preference) -> None:
+        self._internal_set.add(preference)
+
+    @property
+    def formal_language(self) -> FormalLanguagePreference:
+        """binary formula notation preference"""
+        return self._formal_language
+
+    def reset(self):
+        for preference in self._internal_set:
+            preference.reset()
+
+
 log.debug(f"Module {__name__}: loaded.")

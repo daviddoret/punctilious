@@ -1,6 +1,6 @@
 import punctilious as pu
 
-l = pu.pl1.PL1()
+l = pu.pl1.PropositionalLogic()
 
 pa = l.propositional_variables.declare_proposition_variable()
 

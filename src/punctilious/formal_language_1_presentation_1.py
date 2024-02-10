@@ -1,7 +1,7 @@
 import typing
 import log
 import typesetting as ts
-import fl1
+import formal_language_1 as fl1
 
 
 class BinaryFormulaNotation:

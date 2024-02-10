@@ -1,10 +1,11 @@
 import typing
 
-import fl1_presentation
+import config
 import log
 import typesetting as ts
-import fl1
-import pl1
+import formal_language_1 as fl1
+import formal_language_1_presentation_1 as fl1p1
+import propositional_logic_1 as lc1
 
 
 class Preferences:
@@ -18,9 +19,12 @@ class Preferences:
     def __init__(self):
         self._internal_set: typing.Union[set[None], set[ts.Preference, ...]] = set()
         super().__init__()
-        self._conjunction_symbol = ts.SymbolPreference(name='conjunction symbol', symbol=ts.symbols.wedge)
+        section: str = "propositional_logic_1_presentation_1"
+        self._conjunction_symbol = ts.SymbolPreference(name='conjunction symbol',
+            symbol=ts.symbols[config.get_str(section=section, item="conjunction", attribute="symbol")])
         self._register(preference=self._conjunction_symbol)
-        self._disjunction_symbol = ts.SymbolPreference(name='disjunction symbol', symbol=ts.symbols.vee)
+        self._disjunction_symbol = ts.SymbolPreference(name='disjunction symbol',
+            symbol=ts.symbols[config.get_str(section=section, item="conjunction", attribute="symbol")])
         self._register(preference=self._disjunction_symbol)
         self._material_implication_symbol = ts.SymbolPreference(name='material implication symbol',
             symbol=ts.symbols.material_conditional)
@@ -65,62 +69,62 @@ preferences: Preferences = Preferences()
 
 
 def typeset_unary_formula_function_call(o: fl1.UnaryFormula,
-    pl1_propositional_variables: typing.Optional[tuple[pl1.PropositionalVariable]] = None,
-    pl1ml_meta_variables: typing.Optional[tuple[pl1.MetaVariable]] = None, **kwargs) -> typing.Generator[
+    pl1_propositional_variables: typing.Optional[tuple[lc1.PropositionalVariable]] = None,
+    pl1ml_meta_variables: typing.Optional[tuple[lc1.MetaVariable]] = None, **kwargs) -> typing.Generator[
     str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     l: fl1.FormalLanguage = o.formal_language
-    if pl1_propositional_variables is None and isinstance(l, pl1.PL1) or isinstance(l, pl1.MetaLanguage):
-        pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
-    if pl1ml_meta_variables is None and isinstance(l, pl1.MetaLanguage):
-        pl1ml_meta_variables: tuple[pl1.MetaVariable] = l.get_meta_variable_tuple(phi=o)
-    yield from fl1_presentation.typeset_unary_formula_function_call(o=o,
-        pl1_propositional_variables=pl1_propositional_variables, pl1ml_meta_variables=pl1ml_meta_variables, **kwargs)
+    if pl1_propositional_variables is None and isinstance(l, lc1.PropositionalLogic) or isinstance(l, lc1.MetaLanguage):
+        pl1_propositional_variables: tuple[lc1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
+    if pl1ml_meta_variables is None and isinstance(l, lc1.MetaLanguage):
+        pl1ml_meta_variables: tuple[lc1.MetaVariable] = l.get_meta_variable_tuple(phi=o)
+    yield from fl1p1.typeset_unary_formula_function_call(o=o, pl1_propositional_variables=pl1_propositional_variables,
+        pl1ml_meta_variables=pl1ml_meta_variables, **kwargs)
 
 
 def typeset_unary_formula_prefix_without_parenthesis(o: fl1.UnaryFormula,
-    pl1_propositional_variables: typing.Optional[tuple[pl1.PropositionalVariable]] = None,
-    pl1ml_meta_variables: typing.Optional[tuple[pl1.MetaVariable]] = None, **kwargs) -> typing.Generator[
+    pl1_propositional_variables: typing.Optional[tuple[lc1.PropositionalVariable]] = None,
+    pl1ml_meta_variables: typing.Optional[tuple[lc1.MetaVariable]] = None, **kwargs) -> typing.Generator[
     str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     l: fl1.FormalLanguage = o.formal_language
-    if pl1_propositional_variables is None and isinstance(l, pl1.PL1) or isinstance(l, pl1.MetaLanguage):
-        pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
-    if pl1ml_meta_variables is None and isinstance(l, pl1.MetaLanguage):
-        pl1ml_meta_variables: tuple[pl1.MetaVariable] = l.get_meta_variable_tuple(phi=o)
-    yield from fl1_presentation.typeset_unary_formula_prefix_without_parenthesis(o=o,
+    if pl1_propositional_variables is None and isinstance(l, lc1.PropositionalLogic) or isinstance(l, lc1.MetaLanguage):
+        pl1_propositional_variables: tuple[lc1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
+    if pl1ml_meta_variables is None and isinstance(l, lc1.MetaLanguage):
+        pl1ml_meta_variables: tuple[lc1.MetaVariable] = l.get_meta_variable_tuple(phi=o)
+    yield from fl1p1.typeset_unary_formula_prefix_without_parenthesis(o=o,
         pl1_propositional_variables=pl1_propositional_variables, pl1ml_meta_variables=pl1ml_meta_variables, **kwargs)
 
 
 def typeset_binary_formula_function_call(o: fl1.BinaryFormula,
-    pl1_propositional_variables: typing.Optional[tuple[pl1.PropositionalVariable]] = None,
-    pl1ml_meta_variables: typing.Optional[tuple[pl1.MetaVariable]] = None, **kwargs) -> typing.Generator[
+    pl1_propositional_variables: typing.Optional[tuple[lc1.PropositionalVariable]] = None,
+    pl1ml_meta_variables: typing.Optional[tuple[lc1.MetaVariable]] = None, **kwargs) -> typing.Generator[
     str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     l: fl1.FormalLanguage = o.formal_language
-    if pl1_propositional_variables is None and isinstance(l, pl1.PL1) or isinstance(l, pl1.MetaLanguage):
-        pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
-    if pl1ml_meta_variables is None and isinstance(l, pl1.MetaLanguage):
-        pl1ml_meta_variables: tuple[pl1.MetaVariable] = l.get_meta_variable_tuple(phi=o)
-    yield from fl1_presentation.typeset_binary_formula_function_call(o=o,
-        pl1_propositional_variables=pl1_propositional_variables, pl1ml_meta_variables=pl1ml_meta_variables, **kwargs)
+    if pl1_propositional_variables is None and isinstance(l, lc1.PropositionalLogic) or isinstance(l, lc1.MetaLanguage):
+        pl1_propositional_variables: tuple[lc1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
+    if pl1ml_meta_variables is None and isinstance(l, lc1.MetaLanguage):
+        pl1ml_meta_variables: tuple[lc1.MetaVariable] = l.get_meta_variable_tuple(phi=o)
+    yield from fl1p1.typeset_binary_formula_function_call(o=o, pl1_propositional_variables=pl1_propositional_variables,
+        pl1ml_meta_variables=pl1ml_meta_variables, **kwargs)
 
 
 def typeset_binary_formula_infix(o: fl1.BinaryFormula,
-    pl1_propositional_variables: typing.Optional[tuple[pl1.PropositionalVariable, ...]] = None,
-    pl1ml_meta_variables: typing.Optional[tuple[pl1.MetaVariable, ...]] = None, **kwargs) -> typing.Generator[
+    pl1_propositional_variables: typing.Optional[tuple[lc1.PropositionalVariable, ...]] = None,
+    pl1ml_meta_variables: typing.Optional[tuple[lc1.MetaVariable, ...]] = None, **kwargs) -> typing.Generator[
     str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     l: fl1.FormalLanguage = o.formal_language
-    if pl1_propositional_variables is None and isinstance(l, pl1.PL1) or isinstance(l, pl1.MetaLanguage):
-        pl1_propositional_variables: tuple[pl1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
-    if pl1ml_meta_variables is None and isinstance(l, pl1.MetaLanguage):
-        pl1ml_meta_variables: tuple[pl1.MetaVariable] = l.get_meta_variable_tuple(phi=o)
-    yield from fl1_presentation.typeset_binary_formula_infix(o=o,
-        pl1_propositional_variables=pl1_propositional_variables, pl1ml_meta_variables=pl1ml_meta_variables, **kwargs)
+    if pl1_propositional_variables is None and isinstance(l, lc1.PropositionalLogic) or isinstance(l, lc1.MetaLanguage):
+        pl1_propositional_variables: tuple[lc1.PropositionalVariable] = l.get_propositional_variable_tuple(phi=o)
+    if pl1ml_meta_variables is None and isinstance(l, lc1.MetaLanguage):
+        pl1ml_meta_variables: tuple[lc1.MetaVariable] = l.get_meta_variable_tuple(phi=o)
+    yield from fl1p1.typeset_binary_formula_infix(o=o, pl1_propositional_variables=pl1_propositional_variables,
+        pl1ml_meta_variables=pl1ml_meta_variables, **kwargs)
 
 
-def typeset_meta_variable(o: pl1.MetaVariable, pl1ml_meta_variables: typing.Optional[tuple[pl1.MetaVariable]] = None,
+def typeset_meta_variable(o: lc1.MetaVariable, pl1ml_meta_variables: typing.Optional[tuple[lc1.MetaVariable]] = None,
     representation: typing.Optional[ts.Representation] = None, **kwargs) -> typing.Generator[str, None, None]:
     """A, B, C, D, else A1, A2, A3, A4, A5, ..."""
     if pl1ml_meta_variables is None:
@@ -140,9 +144,9 @@ def typeset_meta_variable(o: pl1.MetaVariable, pl1ml_meta_variables: typing.Opti
                 representation=representation, **kwargs)
 
 
-def typeset_propositional_variable(o: pl1.PropositionalVariable,
-    pl1_propositional_variables: typing.Optional[tuple[pl1.PropositionalVariable]] = None, **kwargs) -> \
-    typing.Generator[str, None, None]:
+def typeset_propositional_variable(o: lc1.PropositionalVariable,
+    pl1_propositional_variables: typing.Optional[tuple[lc1.PropositionalVariable]] = None, **kwargs) -> \
+typing.Generator[str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     if pl1_propositional_variables is None:
         # A single propositional variable.
@@ -168,28 +172,28 @@ def typeset_propositional_variable(o: pl1.PropositionalVariable,
 def load():
     # Representation: Symbolic Representation
     representation: ts.Representation = ts.representations.symbolic_representation
-    ts.register_symbol(c=pl1.typesetting_classes.conjunction, symbol_preference=preferences.conjunction_symbol,
+    ts.register_symbol(c=lc1.typesetting_classes.conjunction, symbol_preference=preferences.conjunction_symbol,
         representation=representation)
-    ts.register_symbol(c=pl1.typesetting_classes.disjunction, symbol_preference=preferences.disjunction_symbol,
+    ts.register_symbol(c=lc1.typesetting_classes.disjunction, symbol_preference=preferences.disjunction_symbol,
         representation=representation)
-    ts.register_symbol(c=pl1.typesetting_classes.material_implication,
+    ts.register_symbol(c=lc1.typesetting_classes.material_implication,
         symbol_preference=preferences.material_implication_symbol, representation=representation)
-    ts.register_symbol(c=pl1.typesetting_classes.negation, symbol_preference=preferences.negation_symbol,
+    ts.register_symbol(c=lc1.typesetting_classes.negation, symbol_preference=preferences.negation_symbol,
         representation=representation)
 
     # Formulas
     # ts.register_typesetting_method(python_function=typeset_binary_formula_function_call,
-    #    c=pl1.typesetting_classes.pl1_binary_formula, representation=representation)
+    #    c=lc1.typesetting_classes.pl1_binary_formula, representation=representation)
     # ts.register_typesetting_method(python_function=typeset_unary_formula_function_call,
-    #    c=pl1.typesetting_classes.pl1_unary_formula, representation=representation)
+    #    c=lc1.typesetting_classes.pl1_unary_formula, representation=representation)
 
-    ts.register_typesetting_method(c=pl1.typesetting_classes.pl1_unary_formula,
+    ts.register_typesetting_method(c=lc1.typesetting_classes.pl1_unary_formula,
         python_function=typeset_unary_formula_prefix_without_parenthesis, representation=representation)
-    ts.register_typesetting_method(c=pl1.typesetting_classes.pl1_binary_formula,
+    ts.register_typesetting_method(c=lc1.typesetting_classes.pl1_binary_formula,
         python_function=typeset_binary_formula_infix, representation=representation)
-    ts.register_typesetting_method(c=pl1.typesetting_classes.pl1_variable,
+    ts.register_typesetting_method(c=lc1.typesetting_classes.pl1_variable,
         python_function=typeset_propositional_variable, representation=representation)
-    ts.register_typesetting_method(c=pl1.typesetting_classes.meta_variable, python_function=typeset_meta_variable,
+    ts.register_typesetting_method(c=lc1.typesetting_classes.meta_variable, python_function=typeset_meta_variable,
         representation=representation)
 
 

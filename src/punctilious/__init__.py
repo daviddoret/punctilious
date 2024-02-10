@@ -1,11 +1,11 @@
 import log
 import typesetting as ts
 
-import fl1
-import fl1_presentation
+import formal_language_1 as fl1
+import formal_language_1_presentation_1 as fl1p1
 
-import pl1
-import pl1_presentation
+import propositional_logic_1 as pl1
+import propositional_logic_1_presentation_1 as pl1p1
 
 import preferences
 
