@@ -12,6 +12,16 @@ class TestPL1:
         assert y.to_string(protocol=pu.ts.protocols.unicode_extended) == "⊃"
         assert y.to_string(protocol=pu.ts.protocols.latex) == "\\supset"
 
+        y = l.connectives.conjunction
+        assert y.to_string(protocol=pu.ts.protocols.unicode_limited) == "and"
+        assert y.to_string(protocol=pu.ts.protocols.unicode_extended) == "∧"
+        assert y.to_string(protocol=pu.ts.protocols.latex) == "\\land"
+
+        y = l.connectives.disjunction
+        assert y.to_string(protocol=pu.ts.protocols.unicode_limited) == "or"
+        assert y.to_string(protocol=pu.ts.protocols.unicode_extended) == "∨"
+        assert y.to_string(protocol=pu.ts.protocols.latex) == "\\lor"
+
     def test_connectives_negation(self):
         l: pu.pl1.PropositionalLogic = pu.pl1.PropositionalLogic()
         x = l.connectives.negation

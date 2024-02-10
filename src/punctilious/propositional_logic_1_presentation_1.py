@@ -24,7 +24,7 @@ class Preferences:
             symbol=ts.symbols[config.get_str(section=section, item="conjunction", attribute="symbol")])
         self._register(preference=self._conjunction_symbol)
         self._disjunction_symbol = ts.SymbolPreference(name='disjunction symbol',
-            symbol=ts.symbols[config.get_str(section=section, item="conjunction", attribute="symbol")])
+            symbol=ts.symbols[config.get_str(section=section, item="disjunction", attribute="symbol")])
         self._register(preference=self._disjunction_symbol)
         self._material_implication_symbol = ts.SymbolPreference(name='material implication symbol',
             symbol=ts.symbols.material_conditional)
@@ -146,7 +146,7 @@ def typeset_meta_variable(o: lc1.MetaVariable, pl1ml_meta_variables: typing.Opti
 
 def typeset_propositional_variable(o: lc1.PropositionalVariable,
     pl1_propositional_variables: typing.Optional[tuple[lc1.PropositionalVariable]] = None, **kwargs) -> \
-typing.Generator[str, None, None]:
+    typing.Generator[str, None, None]:
     """PQR, else P1, P2, P3, ..."""
     if pl1_propositional_variables is None:
         # A single propositional variable.
