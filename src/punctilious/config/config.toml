@@ -1,5 +1,4 @@
 [typesetting]
-# TODO: Load all symbols from here?
 
 [formal_language_1]
 
@@ -13,3 +12,9 @@ conjunction.symbol = "wedge"
 disjunction.symbol = "vee"
 material_implication.symbol = "material_conditional"
 negation.symbol = "not_sign"
+
+[symbols]
+# TODO: RESUME MIGRATION TO TOML OF SYMBOL DB
+a_uppercase_serif_italic_bold.latex_math = "\\bm{\\textit{A}}"
+a_uppercase_serif_italic_bold.unicode_extended = "𝑨"
+a_uppercase_serif_italic_bold.unicode_limited = "bold-A"

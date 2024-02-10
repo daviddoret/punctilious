@@ -7,10 +7,6 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/config/config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/config/config.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formal_language_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language_1_presentation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formal_language_1_presentation_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_1_presentation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_1_presentation_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/typesetting.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/typesetting.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/punctilious.log" beforeDir="false" afterPath="$PROJECT_DIR$/tests/punctilious.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -162,7 +158,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_pl1.TestPL1.test_connectives_conditional">
+  <component name="RunManager" selected="Python tests.Python tests in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -479,14 +475,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00452" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1705700414765</created>
-      <option name="number" value="00452" />
-      <option name="presentableId" value="LOCAL-00452" />
-      <option name="project" value="LOCAL" />
-      <updated>1705700414765</updated>
     </task>
     <task id="LOCAL-00453" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -872,7 +860,15 @@
       <option name="project" value="LOCAL" />
       <updated>1707595205961</updated>
     </task>
-    <option name="localTasksCounter" value="501" />
+    <task id="LOCAL-00501" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1707596640692</created>
+      <option name="number" value="00501" />
+      <option name="presentableId" value="LOCAL-00501" />
+      <option name="project" value="LOCAL" />
+      <updated>1707596640692</updated>
+    </task>
+    <option name="localTasksCounter" value="502" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
