@@ -20,16 +20,14 @@ class Preferences:
         self._internal_set: typing.Union[set[None], set[ts.Preference, ...]] = set()
         super().__init__()
         section: str = "propositional_logic_1_presentation_1"
-        self._conjunction_symbol = ts.SymbolPreference(name='conjunction symbol',
-            symbol=ts.symbols[config.get_str(section=section, item="conjunction", attribute="symbol")])
+        self._conjunction_symbol = ts.SymbolPreference(section=section, item="conjunction", attribute="symbol")
         self._register(preference=self._conjunction_symbol)
-        self._disjunction_symbol = ts.SymbolPreference(name='disjunction symbol',
-            symbol=ts.symbols[config.get_str(section=section, item="disjunction", attribute="symbol")])
+        self._disjunction_symbol = ts.SymbolPreference(section=section, item="disjunction", attribute="symbol")
         self._register(preference=self._disjunction_symbol)
-        self._material_implication_symbol = ts.SymbolPreference(name='material implication symbol',
-            symbol=ts.symbols.material_conditional)
+        self._material_implication_symbol = ts.SymbolPreference(section=section, item="material_implication",
+            attribute="symbol")
         self._register(preference=self._material_implication_symbol)
-        self._negation_symbol = ts.SymbolPreference(name='negation symbol', symbol=ts.symbols.not_sign)
+        self._negation_symbol = ts.SymbolPreference(section=section, item="negation", attribute="symbol")
         self._register(preference=self._negation_symbol)
 
     def _register(self, preference: ts.Preference) -> None:

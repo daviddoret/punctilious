@@ -586,8 +586,8 @@ class AxiomCollection(FormalLanguageCollection):
 
 
 class FormalLanguagePreference(ts.Preference):
-    def __init__(self, name: str, formal_language: FormalLanguage):
-        super().__init__(name=name)
+    def __init__(self, item: str, formal_language: FormalLanguage):
+        super().__init__(item=item)
         self._formal_language: FormalLanguage = formal_language
         self._reset_value: FormalLanguage = formal_language
 
@@ -614,7 +614,7 @@ class Preferences:
     def __init__(self):
         self._internal_set: typing.Union[set[ts.Preference, ...], set[None]] = set()
         super().__init__()
-        self._formal_language = FormalLanguagePreference(name='formal language', formal_language=None)
+        self._formal_language = FormalLanguagePreference(item='formal language', formal_language=None)
         self._register(preference=self._formal_language)
 
     def _register(self, preference: ts.Preference) -> None:

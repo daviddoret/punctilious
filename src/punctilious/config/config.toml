@@ -4,9 +4,12 @@
 [formal_language_1]
 
 [formal_language_1_presentation_1]
+connective.symbol = "asterisk_operator"
 
 [propositional_logic_1]
 
 [propositional_logic_1_presentation_1]
 conjunction.symbol = "wedge"
 disjunction.symbol = "vee"
+material_implication.symbol = "material_conditional"
+negation.symbol = "not_sign"

@@ -47,8 +47,8 @@ binary_formula_notations = BinaryFormulaNotations()
 
 
 class BinaryFormulaNotationPreference(ts.Preference):
-    def __init__(self, name: str, binary_formula_notation: BinaryFormulaNotation):
-        super().__init__(name=name)
+    def __init__(self, item: str, binary_formula_notation: BinaryFormulaNotation):
+        super().__init__(item=item)
         self._binary_formula_notation: BinaryFormulaNotation = binary_formula_notation
         self._reset_value: BinaryFormulaNotation = binary_formula_notation
 
@@ -75,11 +75,11 @@ class Preferences:
     def __init__(self):
         self._internal_set: set[ts.Preference, ...] = set()
         super().__init__()
-        # formulas
-        self._binary_formula_notation = BinaryFormulaNotationPreference(name='binary formula notation',
+        section: str = "formal_language_1_presentation_1"
+        self._binary_formula_notation = BinaryFormulaNotationPreference(item='binary formula notation',
             binary_formula_notation=binary_formula_notations.infix_notation)
         self._register(preference=self._binary_formula_notation)
-        self._connective_symbol = ts.SymbolPreference(name='connective symbol', symbol=ts.symbols.asterisk_operator)
+        self._connective_symbol = ts.SymbolPreference(section=section, item="connective", attribute="symbol")
         self._register(preference=self._connective_symbol)
 
     def _register(self, preference: ts.Preference) -> None:

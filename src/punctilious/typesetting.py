@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import abc
 import typing
+
+# punctilious modules
+import config
 import log
 
 
@@ -14,8 +17,10 @@ class Preference(abc.ABC):
 
     """
 
-    def __init__(self, name: str):
-        self._name = name
+    def __init__(self, section: str = None, item: str = None, attribute: str = None):
+        self._section = section
+        self._item = item
+        self._attribute = attribute
 
     def __eq__(self, other):
         return self is other
@@ -24,18 +29,26 @@ class Preference(abc.ABC):
         return hash(id(self))
 
     def __repr__(self):
-        return self.name
+        return f"{self.section}.{self.item}"
 
     def __str__(self):
-        return self.name
+        return f"{self.section}.{self.item}"
 
     @property
-    def name(self) -> str:
-        return self._name
+    def attribute(self) -> str:
+        return self._attribute
+
+    @property
+    def item(self) -> str:
+        return self._item
 
     @abc.abstractmethod
     def reset(self) -> None:
         log.error(msg='calling an abstract method')
+
+    @property
+    def section(self) -> str:
+        return self._section
 
 
 class TypesettingClass:
@@ -145,8 +158,8 @@ class Protocol:
 
 
 class ProtocolPreference(Preference):
-    def __init__(self, name: str, protocol: Protocol):
-        super().__init__(name=name)
+    def __init__(self, item: str, protocol: Protocol):
+        super().__init__(item=item)
         self._protocol: Protocol = protocol
         self._reset_value: Protocol = protocol
 
@@ -288,7 +301,7 @@ class Preferences:
 
     def __init__(self):
         self._internal_set: set[Preference] = set()
-        self._protocol = ProtocolPreference(name='protocol', protocol=protocols.unicode_limited)
+        self._protocol = ProtocolPreference(item='protocol', protocol=protocols.unicode_limited)
         self._register(self._protocol)
 
     def _register(self, preference: Preference) -> None:
@@ -508,13 +521,19 @@ class Symbol(Typesettable):
 
 
 class SymbolPreference(Preference):
-    def __init__(self, name: str, symbol: Symbol):
-        super().__init__(name=name)
-        self._symbol: Symbol = symbol
-        self._reset_value: Symbol = symbol
+    def __init__(self, section: str = None, item: str = None, attribute: str = None):
+        super().__init__(section=section, item=item, attribute=attribute)
+        symbol_name = config.get_str(section=section, item=item, attribute=attribute)
+        if symbol_name not in symbols:
+            log.error(msg=f"missing symbol {symbol_name} in symbols.")
+        self._symbol: Symbol = symbols[symbol_name]
 
     def reset(self) -> None:
-        self.symbol = self._reset_value
+        """Reload default symbol from TOML configuration file."""
+        symbol_name = config.get_str(section=self.section, item=self.item, attribute=self.attribute)
+        if symbol_name not in symbols:
+            log.error(msg=f"missing symbol {symbol_name} in symbols.")
+        self._symbol: Symbol = symbols[symbol_name]
 
     @property
     def symbol(self) -> Symbol:
