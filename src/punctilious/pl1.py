@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import abc
 import typing
 
 import log
@@ -24,7 +23,11 @@ class TypesettingClasses:
 
     def __init__(self):
         super().__init__()
-        self._conditional = ts.typesetting_classes.register(name="pl1.connective.conditional",
+        self._conjunction = ts.typesetting_classes.register(name="pl1.connective.conjunction",
+            superclass=fl1.typesetting_classes.binary_connective)
+        self._disjunction = ts.typesetting_classes.register(name="pl1.connective.disjunction",
+            superclass=fl1.typesetting_classes.binary_connective)
+        self._material_implication = ts.typesetting_classes.register(name="pl1.connective.material_implication",
             superclass=fl1.typesetting_classes.binary_connective)
         self._connective_collection = ts.typesetting_classes.register(name="pl1.connective_collection",
             superclass=fl1.typesetting_classes.connective_collection)
@@ -52,8 +55,16 @@ class TypesettingClasses:
             superclass=fl1.typesetting_classes.atomic_formula)
 
     @property
-    def conditional(self) -> ts.TypesettingClass:
-        return self._conditional
+    def conjunction(self) -> ts.TypesettingClass:
+        return self._conjunction
+
+    @property
+    def disjunction(self) -> ts.TypesettingClass:
+        return self._disjunction
+
+    @property
+    def material_implication(self) -> ts.TypesettingClass:
+        return self._material_implication
 
     @property
     def connective_collection(self) -> ts.TypesettingClass:
@@ -176,14 +187,27 @@ class ConnectiveCollection(fl1.ConnectiveCollection):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.connective_collection)
         super().__init__(formal_language=formal_language, tc=tc)
         # exhaustive declaration of PL1 connectives.
-        self._conditional: fl1.BinaryConnective = self.declare_binary_connective(tc=typesetting_classes.conditional)
+        self._conjunction: fl1.BinaryConnective = self.declare_binary_connective(tc=typesetting_classes.conjunction)
+        self._disjunction: fl1.BinaryConnective = self.declare_binary_connective(tc=typesetting_classes.disjunction)
+        self._material_implication: fl1.BinaryConnective = self.declare_binary_connective(
+            tc=typesetting_classes.material_implication)
         self._negation: fl1.UnaryConnective = self.declare_unary_connective(tc=typesetting_classes.negation)
         self.lock()
 
     @property
-    def conditional(self) -> fl1.BinaryConnective:
-        """The conditional binary connective."""
-        return self._conditional
+    def conjunction(self) -> fl1.BinaryConnective:
+        """The conjunction binary connective."""
+        return self._conjunction
+
+    @property
+    def disjunction(self) -> fl1.BinaryConnective:
+        """The disjunction binary connective."""
+        return self._disjunction
+
+    @property
+    def material_implication(self) -> fl1.BinaryConnective:
+        """The material-implication binary connective."""
+        return self._material_implication
 
     @property
     def negation(self) -> fl1.UnaryConnective:
@@ -215,8 +239,8 @@ class PL1CompoundFormulaCollection(fl1.CompoundFormulaCollection):
         phi: fl1.UnaryFormula = super().declare_unary_formula(connective=connective, term=term, tc=tc)
         return phi
 
-    def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.FormalObject,
-        term_2: fl1.FormalObject) -> fl1.BinaryFormula:
+    def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.Formula,
+        term_2: fl1.Formula) -> fl1.BinaryFormula:
         """Declare a well-formed binary formula in PL1.
 
         IMPORTANT: This method assures that only well-formed binary formulas are declared in PL1.
@@ -315,10 +339,10 @@ class PL1ML(fl1.FormalLanguage):
         """The collection of declared compound formulas in PL1."""
         return self._compound_formulas
 
-    def get_meta_variable_tuple(self, phi: fl1.Formula) -> tuple[MetaVariable]:
+    def get_meta_variable_tuple(self, phi: fl1.Formula) -> tuple[MetaVariable, ...]:
         return tuple(p for p in phi.iterate_leaf_formulas() if p in self.meta_variables)
 
-    def get_propositional_variable_tuple(self, phi: fl1.Formula) -> tuple[PropositionalVariable]:
+    def get_propositional_variable_tuple(self, phi: fl1.Formula) -> tuple[PropositionalVariable, ...]:
         return self.pl1.get_propositional_variable_tuple(phi=phi)
 
     def is_well_formed_formula(self, phi: fl1.Formula) -> bool:
@@ -388,7 +412,7 @@ class PL1ML(fl1.FormalLanguage):
 class PL1(fl1.FormalLanguage):
     """Propositional Logic 1."""
 
-    def __init__(self, tc: typing.Optional[TypesettingClass] = None):
+    def __init__(self, tc: typing.Optional[ts.TypesettingClass] = None):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.pl1)
         super().__init__(tc=tc)
         # Meta-language
@@ -401,7 +425,13 @@ class PL1(fl1.FormalLanguage):
         self._propositional_variables: PropositionalVariableCollection = PropositionalVariableCollection(
             formal_language=self)
         super()._add_class(x=self._propositional_variables)
+        self._axioms: fl1.AxiomCollection = fl1.AxiomCollection(formal_language=self)
         self.lock()
+
+    @property
+    def axioms(self) -> fl1.AxiomCollection:
+        """The collection of axioms in PL1."""
+        return self._axioms
 
     @property
     def connectives(self) -> ConnectiveCollection:
@@ -426,7 +456,7 @@ class PL1(fl1.FormalLanguage):
             # otherwise, return False, i.e.: phi is not a well-formed-formula.
             return False
 
-    def get_propositional_variable_tuple(self, phi: fl1.Formula) -> tuple[PropositionalVariable]:
+    def get_propositional_variable_tuple(self, phi: fl1.Formula) -> tuple[PropositionalVariable, ...]:
         return tuple(p for p in phi.iterate_leaf_formulas() if p in self.propositional_variables)
 
     @property

@@ -16,7 +16,7 @@ class Preferences:
         return cls._singleton
 
     def __init__(self):
-        self._internal_set: set[ts.Preference, ...] = set()
+        self._internal_set: typing.Union[set[None], set[ts.Preference, ...]] = set()
         super().__init__()
         self._conditional_symbol = ts.SymbolPreference(name='conditional symbol', symbol=ts.symbols.rightwards_arrow)
         self._register(preference=self._conditional_symbol)
@@ -102,21 +102,21 @@ def typeset_binary_formula_infix(o: fl1.BinaryFormula,
 
 def typeset_meta_variable(o: pl1.MetaVariable, pl1ml_meta_variables: typing.Optional[tuple[pl1.MetaVariable]] = None,
     representation: typing.Optional[ts.Representation] = None, **kwargs) -> typing.Generator[str, None, None]:
-    """PQR, else P1, P2, P3, ..."""
+    """A, B, C, D, else A1, A2, A3, A4, A5, ..."""
     if pl1ml_meta_variables is None:
         representation = ts.representations.symbolic_representation
-        yield from ts.typeset(o=ts.symbols.p_uppercase_serif_italic_bold, representation=representation, **kwargs)
+        yield from ts.typeset(o=ts.symbols.a_uppercase_serif_italic_bold, representation=representation, **kwargs)
     else:
-        if len(pl1ml_meta_variables) < 4:
+        if len(pl1ml_meta_variables) < 5:
             index = pl1ml_meta_variables.index(o)
-            symbol: ts.Symbol = (ts.symbols.p_uppercase_serif_italic_bold, ts.symbols.q_uppercase_serif_italic_bold,
-            ts.symbols.r_uppercase_serif_italic_bold,)[index]
+            symbol: ts.Symbol = (ts.symbols.a_uppercase_serif_italic_bold, ts.symbols.b_uppercase_serif_italic_bold,
+            ts.symbols.c_uppercase_serif_italic_bold, ts.symbols.d_uppercase_serif_italic_bold,)[index]
             representation = ts.representations.symbolic_representation
             yield from ts.typeset(o=symbol, representation=representation, **kwargs)
         else:
             index = pl1ml_meta_variables.index(o) + 1
             representation = ts.representations.symbolic_representation
-            yield from ts.typeset(o=ts.IndexedSymbol(symbol=ts.symbols.p_uppercase_serif_italic_bold, index=index),
+            yield from ts.typeset(o=ts.IndexedSymbol(symbol=ts.symbols.a_uppercase_serif_italic_bold, index=index),
                 representation=representation, **kwargs)
 
 
@@ -148,7 +148,7 @@ def typeset_propositional_variable(o: pl1.PropositionalVariable,
 def load():
     # Representation: Symbolic Representation
     representation: ts.Representation = ts.representations.symbolic_representation
-    ts.register_symbol(c=pl1.typesetting_classes.conditional, symbol_preference=preferences.conditional_symbol,
+    ts.register_symbol(c=pl1.typesetting_classes.material_implication, symbol_preference=preferences.conditional_symbol,
         representation=representation)
     ts.register_symbol(c=pl1.typesetting_classes.negation, symbol_preference=preferences.negation_symbol,
         representation=representation)

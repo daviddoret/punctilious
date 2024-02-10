@@ -69,10 +69,15 @@ class TypesettingClasses:
             superclass=self.formal_object)
         self._meta_language = ts.typesetting_classes.register(name="fl1.meta_language", superclass=self.formal_language)
         self._ml1 = ts.typesetting_classes.register(name="fl1.ml1", superclass=self.formal_language)
+        self._axiom = ts.typesetting_classes.register(name="fl1.axiom", superclass=self.formula)
 
     @property
     def atomic_formula(self) -> ts.TypesettingClass:
         return self._atomic_formula
+
+    @property
+    def axiom(self) -> ts.TypesettingClass:
+        return self._axiom
 
     @property
     def binary_connective(self) -> ts.TypesettingClass:
@@ -467,7 +472,7 @@ class CompoundFormula(Formula):
         return hash(self) == hash(other)
 
     def __hash__(self):
-        return hash((self.connective, self.terms,))
+        return hash((self.formal_language, typesetting_classes.compound_formula, self.connective, self.terms,))
 
     @property
     def arity_as_int(self) -> int:
@@ -539,6 +544,45 @@ def generate_unique_values(generator):
         if value not in observed_values:
             observed_values.add(value)
             yield value
+
+
+class Axiom(Formula):
+    """An axiom is a formal-object that contains a formula assumed as valid in the parent formal-language."""
+
+    def __init__(self, formal_language_collection: FormalLanguageCollection, phi: Formula,
+        tc: typing.Optional[ts.TypesettingClass]):
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.axiom)
+        self._phi: Formula = phi
+        super().__init__(formal_language_collection=formal_language_collection, tc=tc)
+
+    def __eq__(self, other):
+        return hash(self) == hash(other)
+
+    def __hash__(self):
+        return hash((self.formal_language, typesetting_classes.axiom, self.phi,))
+
+    @property
+    def phi(self) -> Formula:
+        return self._phi
+
+
+class AxiomCollection(FormalLanguageCollection):
+
+    def __init__(self, formal_language: FormalLanguage, tc: typing.Optional[ts.TypesettingClass] = None,
+        default_rep: typing.Optional[ts.Representation] = None):
+        if tc is None:
+            tc = typesetting_classes.formal_object
+        elif not tc.is_subclass_of(c=typesetting_classes.formal_object):
+            log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
+        # if default_rep is None:
+        #     default_rep = ts.representations.symbolic_representation
+        super().__init__(formal_language=formal_language, tc=tc, default_rep=default_rep)
+
+    def declare_axiom(self, phi: Formula, tc: typing.Optional[ts.TypesettingClass] = None) -> Axiom:
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.axiom)
+        x: Axiom = Axiom(formal_language_collection=self, phi=phi, tc=tc)
+        x = self._add_formal_object(x=x)
+        return x
 
 
 log.debug(f"Module {__name__}: loaded.")

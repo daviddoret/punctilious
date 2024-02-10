@@ -560,9 +560,18 @@ class Symbols:
         return cls._singleton
 
     def __init__(self):
+        self._a_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{A}}', unicode_extended='𝑨',
+            unicode_limited='bold-A')
         self._asterisk_operator = Symbol(latex_math='\\ast', unicode_extended='∗', unicode_limited='*')
+        self._b_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{B}}', unicode_extended='𝑩',
+            unicode_limited='bold-B')
+        self._c_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{C}}', unicode_extended='𝑪',
+            unicode_limited='bold-C')
         self._close_parenthesis = Symbol(latex_math='\\right)', unicode_extended=')', unicode_limited=')')
         self._collection_separator = Symbol(latex_math=', ', unicode_extended=', ', unicode_limited=', ')
+        self._d_uppercase_serif_italic_bold = Symbol(latex_math='\\bm{\\textit{D}}', unicode_extended='𝑫',
+            unicode_limited='bold-D')
+        self._material_conditional = Symbol(latex_math='\\supset', unicode_extended='⊃', unicode_limited='implies')
         self._not_sign = Symbol(latex_math='\\lnot', unicode_extended='¬', unicode_limited='¬')
         self._open_parenthesis = Symbol(latex_math='\\left(', unicode_extended='(', unicode_limited='(')
         self._p_uppercase_serif_italic = Symbol(latex_math='\\textit{P}', unicode_extended='𝑃', unicode_limited='P')
@@ -577,10 +586,24 @@ class Symbols:
         self._rightwards_arrow = Symbol(latex_math='\\rightarrow', unicode_extended='→', unicode_limited='-->')
         self._space = Symbol(latex_math=' ', unicode_extended=' ', unicode_limited=' ')
         self._tilde = Symbol(latex_math='\\sim', unicode_extended='~', unicode_limited='~')
+        self._vee = Symbol(latex_math='\\lor', unicode_extended='∨', unicode_limited='or')
+        self._wedge = Symbol(latex_math='\\land', unicode_extended='∧', unicode_limited='and')
+
+    @property
+    def a_uppercase_serif_italic_bold(self) -> Symbol:
+        return self._a_uppercase_serif_italic_bold
 
     @property
     def asterisk_operator(self) -> Symbol:
         return self._asterisk_operator
+
+    @property
+    def b_uppercase_serif_italic_bold(self) -> Symbol:
+        return self._b_uppercase_serif_italic_bold
+
+    @property
+    def c_uppercase_serif_italic_bold(self) -> Symbol:
+        return self._c_uppercase_serif_italic_bold
 
     @property
     def close_parenthesis(self) -> Symbol:
@@ -589,6 +612,14 @@ class Symbols:
     @property
     def collection_separator(self) -> Symbol:
         return self._collection_separator
+
+    @property
+    def d_uppercase_serif_italic_bold(self) -> Symbol:
+        return self._d_uppercase_serif_italic_bold
+
+    @property
+    def material_conditional(self) -> Symbol:
+        return self._material_conditional
 
     @property
     def not_sign(self) -> Symbol:
@@ -633,6 +664,14 @@ class Symbols:
     @property
     def tilde(self) -> Symbol:
         return self._tilde
+
+    @property
+    def vee(self) -> Symbol:
+        return self._vee
+
+    @property
+    def wedge(self) -> Symbol:
+        return self._wedge
 
 
 symbols = Symbols()
