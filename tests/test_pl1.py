@@ -8,9 +8,9 @@ class TestPL1:
         l: pu.pl1.PL1 = pu.pl1.PL1()
 
         y = l.connectives.material_implication
-        assert y.to_string(protocol=pu.ts.protocols.unicode_limited) == "-->"
-        assert y.to_string(protocol=pu.ts.protocols.unicode_extended) == "→"
-        assert y.to_string(protocol=pu.ts.protocols.latex) == "\\rightarrow"
+        assert y.to_string(protocol=pu.ts.protocols.unicode_limited) == "implies"
+        assert y.to_string(protocol=pu.ts.protocols.unicode_extended) == "⊃"
+        assert y.to_string(protocol=pu.ts.protocols.latex) == "\\supset"
 
     def test_connectives_negation(self):
         l: pu.pl1.PL1 = pu.pl1.PL1()
@@ -86,16 +86,17 @@ class TestPL1:
 
         phi1 = l.compound_formulas.declare_binary_formula(connective=l.connectives.material_implication, term_1=pa,
             term_2=pb)
-        assert phi1.to_string(protocol=pu.ts.protocols.unicode_limited) == "P --> Q"
+        assert phi1.to_string(protocol=pu.ts.protocols.unicode_limited) == "P implies Q"
         phi2 = l.compound_formulas.declare_binary_formula(connective=l.connectives.material_implication, term_1=phi1,
             term_2=pc)
-        assert phi2.to_string(protocol=pu.ts.protocols.unicode_limited) == "(P --> Q) --> R"
+        assert phi2.to_string(protocol=pu.ts.protocols.unicode_limited) == "(P implies Q) implies R"
         phi3 = l.compound_formulas.declare_binary_formula(connective=l.connectives.material_implication, term_1=phi2,
             term_2=pd)
-        assert phi3.to_string(protocol=pu.ts.protocols.unicode_limited) == "((P1 --> P2) --> P3) --> P4"
+        assert phi3.to_string(protocol=pu.ts.protocols.unicode_limited) == "((P1 implies P2) implies P3) implies P4"
         phi4 = l.compound_formulas.declare_binary_formula(connective=l.connectives.material_implication, term_1=phi3,
             term_2=pe)
-        assert phi4.to_string(protocol=pu.ts.protocols.unicode_limited) == "(((P1 --> P2) --> P3) --> P4) --> P5"
+        assert phi4.to_string(
+            protocol=pu.ts.protocols.unicode_limited) == "(((P1 implies P2) implies P3) implies P4) implies P5"
 
     def test_declare_unary_formula(self):
         l1: pu.pl1.PL1 = pu.pl1.PL1()
@@ -126,9 +127,9 @@ class TestPL1:
 
         pd = l1.compound_formulas.declare_binary_formula(connective=conditional, term_1=pa, term_2=pb)
         # Check that only unique formulas are kept in the PL1 formula collection
-        assert pd.to_string(protocol=pu.ts.protocols.unicode_extended) == '𝑃 → 𝑄'
-        assert pd.to_string(protocol=pu.ts.protocols.unicode_limited) == 'P --> Q'
-        assert pd.to_string(protocol=pu.ts.protocols.latex) == '\\textit{P} \\rightarrow \\textit{Q}'
+        assert pd.to_string(protocol=pu.ts.protocols.unicode_extended) == '𝑃 ⊃ 𝑄'
+        assert pd.to_string(protocol=pu.ts.protocols.unicode_limited) == 'P implies Q'
+        assert pd.to_string(protocol=pu.ts.protocols.latex) == '\\textit{P} \\supset \\textit{Q}'
 
     def test_compounding_formulas_1(self):
         l1 = pu.pl1.PL1()
@@ -148,7 +149,7 @@ class TestPL1:
         pi = l1.compound_formulas.declare_unary_formula(connective=lnot, term=ph)
 
         assert pi.to_string(
-            protocol=pu.ts.protocols.unicode_limited) == "¬(P1 --> (((¬(¬P1)) --> P3) --> ((¬(¬P1)) --> P3)))"
+            protocol=pu.ts.protocols.unicode_limited) == "¬(P1 implies (((¬(¬P1)) implies P3) implies ((¬(¬P1)) implies P3)))"
 
     def test_axioms(self):
         l1 = pu.pl1.PL1()
@@ -186,20 +187,20 @@ class TestPL1ML:
 
         phi = l1.meta_language.compound_formulas.declare_binary_formula(connective=l1.connectives.material_implication,
             term_1=pa, term_2=va)
-        assert phi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P --> bold-A"
+        assert phi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P implies bold-A"
         psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
         chi = l1.compound_formulas.declare_binary_formula(connective=l1.connectives.material_implication, term_1=pa,
             term_2=pa)
         assert psi == chi
-        assert chi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P --> P"
+        assert chi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P implies P"
 
         phi2 = l1.meta_language.compound_formulas.declare_binary_formula(connective=l1.connectives.material_implication,
             term_1=vb, term_2=phi)
-        assert phi2.to_string(protocol=pu.ts.protocols.unicode_limited) == "bold-A --> (P --> bold-A)"
+        assert phi2.to_string(protocol=pu.ts.protocols.unicode_limited) == "bold-A implies (P implies bold-A)"
         psi = l1.meta_language.substitute_meta_variables(phi=phi2, m=map2)
-        assert psi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P --> (Q --> Q)"
+        assert psi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P implies (Q implies Q)"
         chi2 = l1.compound_formulas.declare_binary_formula(connective=l1.connectives.material_implication, term_1=pb,
             term_2=chi)
         pu.log.info(f'{psi} == {chi2}')
         assert psi == chi2
-        assert chi2.to_string(protocol=pu.ts.protocols.unicode_limited) == "P --> (Q --> Q)"
+        assert chi2.to_string(protocol=pu.ts.protocols.unicode_limited) == "P implies (Q implies Q)"

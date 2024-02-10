@@ -18,8 +18,13 @@ class Preferences:
     def __init__(self):
         self._internal_set: typing.Union[set[None], set[ts.Preference, ...]] = set()
         super().__init__()
-        self._conditional_symbol = ts.SymbolPreference(name='conditional symbol', symbol=ts.symbols.rightwards_arrow)
-        self._register(preference=self._conditional_symbol)
+        self._conjunction_symbol = ts.SymbolPreference(name='conjunction symbol', symbol=ts.symbols.wedge)
+        self._register(preference=self._conjunction_symbol)
+        self._disjunction_symbol = ts.SymbolPreference(name='disjunction symbol', symbol=ts.symbols.vee)
+        self._register(preference=self._disjunction_symbol)
+        self._material_implication_symbol = ts.SymbolPreference(name='material implication symbol',
+            symbol=ts.symbols.material_conditional)
+        self._register(preference=self._material_implication_symbol)
         self._negation_symbol = ts.SymbolPreference(name='negation symbol', symbol=ts.symbols.not_sign)
         self._register(preference=self._negation_symbol)
 
@@ -27,9 +32,24 @@ class Preferences:
         self._internal_set.add(preference)
 
     @property
-    def conditional_symbol(self) -> ts.SymbolPreference:
+    def conjunction_symbol(self) -> ts.SymbolPreference:
+        """The conjunction symbol preference setting."""
+        return self._conjunction_symbol
+
+    @property
+    def disjunction_symbol(self) -> ts.SymbolPreference:
+        """The disjunction symbol preference setting."""
+        return self._disjunction_symbol
+
+    @property
+    def negation_symbol(self) -> ts.SymbolPreference:
+        """The negation symbol preference setting."""
+        return self._negation_symbol
+
+    @property
+    def material_implication_symbol(self) -> ts.SymbolPreference:
         """The condition symbol preference setting."""
-        return self._conditional_symbol
+        return self._material_implication_symbol
 
     @property
     def negation_symbol(self) -> ts.SymbolPreference:
@@ -148,8 +168,12 @@ def typeset_propositional_variable(o: pl1.PropositionalVariable,
 def load():
     # Representation: Symbolic Representation
     representation: ts.Representation = ts.representations.symbolic_representation
-    ts.register_symbol(c=pl1.typesetting_classes.material_implication, symbol_preference=preferences.conditional_symbol,
+    ts.register_symbol(c=pl1.typesetting_classes.conjunction, symbol_preference=preferences.conjunction_symbol,
         representation=representation)
+    ts.register_symbol(c=pl1.typesetting_classes.disjunction, symbol_preference=preferences.disjunction_symbol,
+        representation=representation)
+    ts.register_symbol(c=pl1.typesetting_classes.material_implication,
+        symbol_preference=preferences.material_implication_symbol, representation=representation)
     ts.register_symbol(c=pl1.typesetting_classes.negation, symbol_preference=preferences.negation_symbol,
         representation=representation)
 
