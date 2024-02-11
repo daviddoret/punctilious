@@ -42,6 +42,10 @@ class Preference(abc.ABC):
     def item(self) -> str:
         return self._item
 
+    def _on_change(self, value_before: object, value_after: object) -> None:
+        """Called by the derived class whenever the preference value is changed, but not during initialization."""
+        log.info(msg=f"Preference '{self}' changed from '{value_before}' to '{value_after}'.")
+
     @abc.abstractmethod
     def reset(self) -> None:
         log.error(msg='calling an abstract method')

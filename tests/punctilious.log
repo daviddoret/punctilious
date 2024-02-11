@@ -1,19 +1,19 @@
-2024-02-11 08:15:00,126 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
-2024-02-11 08:15:00,128 - INFO - Override typesetting-method: (symbol,technical-representation)
-2024-02-11 08:15:00,128 - DEBUG - Module typesetting: loaded.
-2024-02-11 08:15:00,129 - DEBUG - Module formal_language_1: loaded.
-2024-02-11 08:15:00,129 - INFO - Override typesetting-method: (fl1.unary_formula,symbolic-representation)
-2024-02-11 08:15:00,129 - INFO - Override typesetting-method: (fl1.binary_formula,symbolic-representation)
-2024-02-11 08:15:00,129 - DEBUG - Module formal_language_1_presentation_1: loaded.
-2024-02-11 08:15:00,130 - DEBUG - Module propositional_logic_1: loaded.
-2024-02-11 08:15:00,130 - DEBUG - Module propositional_logic_1_presentation_1: loaded.
-2024-02-11 08:15:00,131 - DEBUG - Module punctilious: loaded.
-2024-02-11 08:15:00,137 - DEBUG - FormalObject-4318528384
-2024-02-11 08:15:00,140 - ERROR - connective is not a pl1 connective.
-2024-02-11 08:15:00,140 - ERROR - term is not a pl1 well-formed-formula.
-2024-02-11 08:15:00,142 - DEBUG - FormalObject '¬P' (python id: 4318534336) is already present in this FormalLanguageClass as '¬P' (python id: 4318534288). The existing object is reused and the new object is discarded.
-2024-02-11 08:15:00,146 - DEBUG - FormalObject '¬P' (python id: 4318538224) is already present in this FormalLanguageClass as '¬P' (python id: 4317228320). The existing object is reused and the new object is discarded.
-2024-02-11 08:15:00,146 - DEBUG - FormalObject 'P implies P' (python id: 4318538656) is already present in this FormalLanguageClass as 'P implies P' (python id: 4318538224). The existing object is reused and the new object is discarded.
-2024-02-11 08:15:00,147 - DEBUG - FormalObject 'P implies P' (python id: 4318538656) is already present in this FormalLanguageClass as 'P implies P' (python id: 4318538224). The existing object is reused and the new object is discarded.
-2024-02-11 08:15:00,147 - DEBUG - FormalObject 'P implies (Q implies Q)' (python id: 4318538896) is already present in this FormalLanguageClass as 'P implies (Q implies Q)' (python id: 4318538656). The existing object is reused and the new object is discarded.
-2024-02-11 08:15:00,147 - INFO - P implies (Q implies Q) == P implies (Q implies Q)
+2024-02-11 14:06:32,994 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
+2024-02-11 14:06:32,995 - INFO - Override typesetting-method: (symbol,technical-representation)
+2024-02-11 14:06:32,995 - DEBUG - Module typesetting: loaded.
+2024-02-11 14:06:32,999 - DEBUG - Module formal_language_1: loaded.
+2024-02-11 14:06:33,000 - INFO - Override typesetting-method: (fl1.unary_formula,symbolic-representation)
+2024-02-11 14:06:33,000 - INFO - Override typesetting-method: (fl1.binary_formula,symbolic-representation)
+2024-02-11 14:06:33,000 - DEBUG - Module formal_language_1_presentation_1: loaded.
+2024-02-11 14:06:33,001 - DEBUG - Module propositional_logic_1: loaded.
+2024-02-11 14:06:33,001 - DEBUG - Module propositional_logic_1_presentation_1: loaded.
+2024-02-11 14:06:33,001 - DEBUG - Module punctilious: loaded.
+2024-02-11 14:06:33,007 - DEBUG - FormalObject-4313634992
+2024-02-11 14:06:33,010 - ERROR - connective is not a pl1 connective.
+2024-02-11 14:06:33,010 - ERROR - term is not a pl1 well-formed-formula.
+2024-02-11 14:06:33,012 - DEBUG - FormalObject '¬P' (python id: 4313638688) is already present in this FormalLanguageClass as '¬P' (python id: 4313638640). The existing object is reused and the new object is discarded.
+2024-02-11 14:06:33,015 - DEBUG - FormalObject '¬P' (python id: 4313642720) is already present in this FormalLanguageClass as '¬P' (python id: 4313642672). The existing object is reused and the new object is discarded.
+2024-02-11 14:06:33,015 - DEBUG - FormalObject 'P implies P' (python id: 4313643152) is already present in this FormalLanguageClass as 'P implies P' (python id: 4313642720). The existing object is reused and the new object is discarded.
+2024-02-11 14:06:33,015 - DEBUG - FormalObject 'P implies P' (python id: 4313643152) is already present in this FormalLanguageClass as 'P implies P' (python id: 4313642720). The existing object is reused and the new object is discarded.
+2024-02-11 14:06:33,015 - DEBUG - FormalObject 'P implies (Q implies Q)' (python id: 4313643392) is already present in this FormalLanguageClass as 'P implies (Q implies Q)' (python id: 4313643152). The existing object is reused and the new object is discarded.
+2024-02-11 14:06:33,015 - INFO - P implies (Q implies Q) == P implies (Q implies Q)

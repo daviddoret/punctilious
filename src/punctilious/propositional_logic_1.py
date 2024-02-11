@@ -7,6 +7,7 @@ import typing
 import log
 import typesetting as ts
 import formal_language_1 as fl1
+from formal_language_1 import Connective, Formula, BinaryFormula
 
 
 # TODO: See Lawler, John. “Notation, Logical (See: Notation, Mathematical),” n.d. https://websites.umich.edu/~jlawler/IELL-LogicalNotation.pdf.
@@ -24,35 +25,35 @@ class TypesettingClasses:
     def __init__(self):
         super().__init__()
         self._conjunction = ts.typesetting_classes.register(name="pl1.connective.conjunction",
-            superclass=fl1.typesetting_classes.binary_connective)
+                                                            superclass=fl1.typesetting_classes.binary_connective)
         self._disjunction = ts.typesetting_classes.register(name="pl1.connective.disjunction",
-            superclass=fl1.typesetting_classes.binary_connective)
+                                                            superclass=fl1.typesetting_classes.binary_connective)
         self._material_implication = ts.typesetting_classes.register(name="pl1.connective.material_implication",
-            superclass=fl1.typesetting_classes.binary_connective)
+                                                                     superclass=fl1.typesetting_classes.binary_connective)
         self._connective_collection = ts.typesetting_classes.register(name="pl1.connective_collection",
-            superclass=fl1.typesetting_classes.connective_collection)
+                                                                      superclass=fl1.typesetting_classes.connective_collection)
         self._meta_variable = ts.typesetting_classes.register(name="meta_language.meta_variable",
-            superclass=fl1.typesetting_classes.atomic_formula)
+                                                              superclass=fl1.typesetting_classes.atomic_formula)
         self._negation = ts.typesetting_classes.register(name="pl1.connective.negation",
-            superclass=fl1.typesetting_classes.unary_connective)
+                                                         superclass=fl1.typesetting_classes.unary_connective)
         self._pl1ml = ts.typesetting_classes.register(name="pl1ml", superclass=fl1.typesetting_classes.formal_language)
         self._pl1 = ts.typesetting_classes.register(name="pl1", superclass=fl1.typesetting_classes.formal_language)
         # pl1ml is an extension of pl1, all formulas in pl1 are valid in pl1ml + metavariables.
         self._pl1ml_formula = ts.typesetting_classes.register(name="meta_language.formula",
-            superclass=fl1.typesetting_classes.formula)
+                                                              superclass=fl1.typesetting_classes.formula)
         self._pl1ml_unary_formula = ts.typesetting_classes.register(name="meta_language.unary_formula",
-            superclass=fl1.typesetting_classes.unary_formula)
+                                                                    superclass=fl1.typesetting_classes.unary_formula)
         self._pl1ml_binary_formula = ts.typesetting_classes.register(name="meta_language.binary_formula",
-            superclass=fl1.typesetting_classes.binary_formula)
+                                                                     superclass=fl1.typesetting_classes.binary_formula)
         # pl1 is a more specialized class.
         self._pl1_formula = ts.typesetting_classes.register(name="pl1.propositional_formula",
-            superclass=self._pl1ml_formula)
+                                                            superclass=self._pl1ml_formula)
         self._pl1_unary_formula = ts.typesetting_classes.register(name="pl1.propositional_unary_formula",
-            superclass=self._pl1ml_unary_formula)
+                                                                  superclass=self._pl1ml_unary_formula)
         self._pl1_binary_formula = ts.typesetting_classes.register(name="pl1.propositional_binary_formula",
-            superclass=self._pl1ml_binary_formula)
+                                                                   superclass=self._pl1ml_binary_formula)
         self._pl1_variable = ts.typesetting_classes.register(name="pl1.propositional_variable",
-            superclass=fl1.typesetting_classes.atomic_formula)
+                                                             superclass=fl1.typesetting_classes.atomic_formula)
 
     @property
     def conjunction(self) -> ts.TypesettingClass:
@@ -121,7 +122,7 @@ typesetting_classes = TypesettingClasses()
 class MetaVariable(fl1.AtomicFormula):
 
     def __init__(self, formal_language_collection: fl1.FormalLanguageCollection,
-        tc: typing.Optional[ts.TypesettingClass] = None):
+                 tc: typing.Optional[ts.TypesettingClass] = None):
         if tc is None:
             tc = typesetting_classes.meta_variable
         elif not tc.is_subclass_of(c=typesetting_classes.meta_variable):
@@ -145,7 +146,7 @@ class MetaVariableCollection(fl1.FormalLanguageCollection):
 class PropositionalVariable(fl1.AtomicFormula):
 
     def __init__(self, formal_language_collection: fl1.FormalLanguageCollection,
-        tc: typing.Optional[ts.TypesettingClass] = None):
+                 tc: typing.Optional[ts.TypesettingClass] = None):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.pl1_variable)
         super().__init__(formal_language_collection=formal_language_collection, tc=tc)
 
@@ -225,7 +226,7 @@ class PropositionalLogicCompoundFormulaCollection(fl1.CompoundFormulaCollection)
         return phi
 
     def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.Formula,
-        term_2: fl1.Formula) -> fl1.BinaryFormula:
+                               term_2: fl1.Formula) -> fl1.BinaryFormula:
         """Declare a well-formed binary formula in PL1.
 
         IMPORTANT: This method assures that only well-formed binary formulas are declared in PL1.
@@ -243,7 +244,7 @@ class PropositionalLogicCompoundFormulaCollection(fl1.CompoundFormulaCollection)
             log.error("term_2 is not a pl1 well-formed-formula.", pl1=self.pl1, phi=term_2)
         tc: ts.TypesettingClass = typesetting_classes.pl1_binary_formula
         phi: fl1.BinaryFormula = super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2,
-            tc=tc)
+                                                                tc=tc)
         return phi
 
     @property
@@ -277,7 +278,7 @@ class MetaLanguageCompoundFormulaCollection(fl1.CompoundFormulaCollection):
         return phi
 
     def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.FormalObject,
-        term_2: fl1.FormalObject) -> fl1.BinaryFormula:
+                               term_2: fl1.FormalObject) -> fl1.BinaryFormula:
         """Declare a well-formed binary formula in PL1.
 
         IMPORTANT: This method assures that only well-formed binary formulas are declared in PL1.
@@ -295,7 +296,7 @@ class MetaLanguageCompoundFormulaCollection(fl1.CompoundFormulaCollection):
             log.error("term_2 is not a pl1 meta-language well-formed-formula.")
         tc: ts.TypesettingClass = typesetting_classes.pl1ml_binary_formula
         phi: fl1.BinaryFormula = super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2,
-            tc=tc)
+                                                                tc=tc)
         return phi
 
     @property
@@ -345,6 +346,10 @@ class MetaLanguage(fl1.FormalLanguage):
     def compound_formulas(self) -> MetaLanguageCompoundFormulaCollection:
         """The collection of declared compound formulas in PL1."""
         return self._compound_formulas
+
+    def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: Formula,
+                               term_2: Formula) -> BinaryFormula:
+        return self.compound_formulas.declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
 
     def get_meta_variable_tuple(self, phi: fl1.Formula) -> tuple[MetaVariable, ...]:
         return tuple(p for p in phi.iterate_leaf_formulas() if p in self.meta_variables)
@@ -411,7 +416,7 @@ class MetaLanguage(fl1.FormalLanguage):
             term_1: fl1.Formula = self.substitute_meta_variables(phi=phi.term_1, m=m)
             term_2: fl1.Formula = self.substitute_meta_variables(phi=phi.term_2, m=m)
             psi = self.propositional_logic.compound_formulas.declare_binary_formula(connective=connective,
-                term_1=term_1, term_2=term_2)
+                                                                                    term_1=term_1, term_2=term_2)
             return psi
         else:
             log.error(msg='unsupported class.')
@@ -451,6 +456,10 @@ class PropositionalLogic(fl1.FormalLanguage):
     def compound_formulas(self) -> PropositionalLogicCompoundFormulaCollection:
         """The collection of declared compound formulas in PL1."""
         return self._compound_formulas
+
+    def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: Formula,
+                               term_2: Formula) -> BinaryFormula:
+        return self.compound_formulas.declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
 
     def is_well_formed_formula(self, phi: fl1.Formula) -> bool:
         """Return True if phi is a well-formed-formula on PL1, False otherwise."""
