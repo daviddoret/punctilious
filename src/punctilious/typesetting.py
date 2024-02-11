@@ -268,7 +268,7 @@ class Representations:
     def __init__(self):
         self._technical_representation = Representation(name='technical-representation', predecessor=None)
         self._symbolic_representation = Representation(name='symbolic-representation',
-            predecessor=self.technical_representation)
+                                                       predecessor=self.technical_representation)
         self._common_language = Representation(name='common-language', predecessor=self.technical_representation)
 
     @property
@@ -389,7 +389,7 @@ typesetting_methods: typing.Dict[tuple[TypesettingClass, Representation], typing
 
 
 def register_typesetting_method(python_function: typing.Callable, c: TypesettingClass,
-    representation: Representation) -> None:
+                                representation: Representation) -> None:
     """Register a typesetting method for the given representation, and hierarchical-class.
     If a typesetting method was already registered for the given protocol, representation, and language, substitute
     the previously registered method with the new one."""
@@ -402,7 +402,7 @@ def register_typesetting_method(python_function: typing.Callable, c: Typesetting
 
 
 def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None,
-    representation: typing.Optional[Representation] = None, **kwargs) -> typing.Generator[str, None, None]:
+            representation: typing.Optional[Representation] = None, **kwargs) -> typing.Generator[str, None, None]:
     global typesetting_methods
     global representations
 
@@ -435,7 +435,8 @@ def typeset(o: Typesettable, protocol: typing.Optional[Protocol] = None,
 
 
 def to_string(o: Typesettable, protocol: typing.Optional[Protocol] = None,
-    representation: typing.Optional[Representation] = None, language: typing.Optional[Language] = None) -> str:
+              representation: typing.Optional[Representation] = None,
+              language: typing.Optional[Language] = None) -> str:
     return ''.join(typeset(o=o, protocol=protocol, representation=representation, language=language))
 
 
@@ -444,7 +445,7 @@ class Typesettable(abc.ABC):
     that may be typeset by registering typesetting methods for the desired representations and languages."""
 
     def __init__(self, tc: typing.Optional[TypesettingClass] = None,
-        default_rep: typing.Optional[Representation] = None):
+                 default_rep: typing.Optional[Representation] = None):
         if tc is None:
             tc = typesetting_classes.typesettable
         elif not tc.is_subclass_of(c=typesetting_classes.typesettable):
@@ -485,7 +486,8 @@ class Typesettable(abc.ABC):
                     current_class = current_class.superclass
 
     def to_string(self, protocol: typing.Optional[Protocol] = None,
-        representation: typing.Optional[Representation] = None, language: typing.Optional[Language] = None) -> str:
+                  representation: typing.Optional[Representation] = None,
+                  language: typing.Optional[Language] = None) -> str:
         return to_string(o=self, protocol=protocol, representation=representation, language=language)
 
     def typeset(self, **kwargs) -> typing.Generator[str, None, None]:
@@ -585,64 +587,73 @@ class Symbols:
 
     def __init__(self):
         self._internal_dict: dict[str, Symbol] = dict()
-        self._a_uppercase_serif_italic_bold = Symbol(name="a_uppercase_serif_italic_bold",
-            latex_math='\\bm{\\textit{A}}', unicode_extended='𝑨', unicode_limited='bold-A')
-        self._register(symbol=self._a_uppercase_serif_italic_bold)
-        self._asterisk_operator = Symbol(name="asterisk_operator", latex_math='\\ast', unicode_extended='∗',
-            unicode_limited='*')
-        self._register(symbol=self._asterisk_operator)
-        self._b_uppercase_serif_italic_bold = Symbol(name="b_uppercase_serif_italic_bold",
-            latex_math='\\bm{\\textit{B}}', unicode_extended='𝑩', unicode_limited='bold-B')
-        self._register(symbol=self._b_uppercase_serif_italic_bold)
-        self._c_uppercase_serif_italic_bold = Symbol(name="c_uppercase_serif_italic_bold",
-            latex_math='\\bm{\\textit{C}}', unicode_extended='𝑪', unicode_limited='bold-C')
-        self._register(symbol=self._c_uppercase_serif_italic_bold)
-        self._close_parenthesis = Symbol(name="close_parenthesis", latex_math='\\right)', unicode_extended=')',
-            unicode_limited=')')
-        self._register(symbol=self._close_parenthesis)
-        self._collection_separator = Symbol(name="collection_separator", latex_math=', ', unicode_extended=', ',
-            unicode_limited=', ')
-        self._register(symbol=self._collection_separator)
-        self._d_uppercase_serif_italic_bold = Symbol(name="d_uppercase_serif_italic_bold",
-            latex_math='\\bm{\\textit{D}}', unicode_extended='𝑫', unicode_limited='bold-D')
-        self._register(symbol=self._d_uppercase_serif_italic_bold)
-        self._material_conditional = Symbol(name="material_conditional", latex_math='\\supset', unicode_extended='⊃',
-            unicode_limited='implies')
-        self._register(symbol=self._material_conditional)
-        self._not_sign = Symbol(name="not_sign", latex_math='\\lnot', unicode_extended='¬', unicode_limited='¬')
-        self._register(symbol=self._not_sign)
-        self._open_parenthesis = Symbol(name="open_parenthesis", latex_math='\\left(', unicode_extended='(',
-            unicode_limited='(')
-        self._register(symbol=self._open_parenthesis)
-        self._p_uppercase_serif_italic = Symbol(name="p_uppercase_serif_italic", latex_math='\\textit{P}',
-            unicode_extended='𝑃', unicode_limited='P')
-        self._register(symbol=self._p_uppercase_serif_italic)
-        self._q_uppercase_serif_italic = Symbol(name="q_uppercase_serif_italic", latex_math='\\textit{Q}',
-            unicode_extended='𝑄', unicode_limited='Q')
-        self._register(symbol=self._q_uppercase_serif_italic)
-        self._r_uppercase_serif_italic = Symbol(name="r_uppercase_serif_italic", latex_math='\\textit{R}',
-            unicode_extended='𝑅', unicode_limited='R')
-        self._register(symbol=self._r_uppercase_serif_italic)
-        self._p_uppercase_serif_italic_bold = Symbol(name="p_uppercase_serif_italic_bold",
-            latex_math='\\bm{\\textit{P}}', unicode_extended='𝑷', unicode_limited='bold-P')
-        self._register(symbol=self._p_uppercase_serif_italic_bold)
-        self._q_uppercase_serif_italic_bold = Symbol(name="q_uppercase_serif_italic_bold",
-            latex_math='\\bm{\\textit{Q}}', unicode_extended='𝑸', unicode_limited='bold-Q')
-        self._register(symbol=self._q_uppercase_serif_italic_bold)
-        self._r_uppercase_serif_italic_bold = Symbol(name="r_uppercase_serif_italic_bold",
-            latex_math='\\bm{\\textit{R}}', unicode_extended='𝑹', unicode_limited='bold-R')
-        self._register(symbol=self._r_uppercase_serif_italic_bold)
-        self._rightwards_arrow = Symbol(name="rightwards_arrow", latex_math='\\rightarrow', unicode_extended='→',
-            unicode_limited='-->')
-        self._register(symbol=self._rightwards_arrow)
-        self._space = Symbol(name="space", latex_math=' ', unicode_extended=' ', unicode_limited=' ')
-        self._register(symbol=self._space)
-        self._tilde = Symbol(name="tilde", latex_math='\\sim', unicode_extended='~', unicode_limited='~')
-        self._register(symbol=self._tilde)
-        self._vee = Symbol(name="vee", latex_math='\\lor', unicode_extended='∨', unicode_limited='or')
-        self._register(symbol=self._vee)
-        self._wedge = Symbol(name="wedge", latex_math='\\land', unicode_extended='∧', unicode_limited='and')
-        self._register(symbol=self._wedge)
+        # alphabets
+        # uppercase serif italic
+        self._a_uppercase_serif_italic = self._load(symbol_name="a_uppercase_serif_italic")
+        self._b_uppercase_serif_italic = self._load(symbol_name="b_uppercase_serif_italic")
+        self._c_uppercase_serif_italic = self._load(symbol_name="c_uppercase_serif_italic")
+        self._d_uppercase_serif_italic = self._load(symbol_name="d_uppercase_serif_italic")
+        self._e_uppercase_serif_italic = self._load(symbol_name="e_uppercase_serif_italic")
+        self._f_uppercase_serif_italic = self._load(symbol_name="f_uppercase_serif_italic")
+        self._g_uppercase_serif_italic = self._load(symbol_name="g_uppercase_serif_italic")
+        self._h_uppercase_serif_italic = self._load(symbol_name="h_uppercase_serif_italic")
+        self._i_uppercase_serif_italic = self._load(symbol_name="i_uppercase_serif_italic")
+        self._j_uppercase_serif_italic = self._load(symbol_name="j_uppercase_serif_italic")
+        self._k_uppercase_serif_italic = self._load(symbol_name="k_uppercase_serif_italic")
+        self._l_uppercase_serif_italic = self._load(symbol_name="l_uppercase_serif_italic")
+        self._m_uppercase_serif_italic = self._load(symbol_name="m_uppercase_serif_italic")
+        self._n_uppercase_serif_italic = self._load(symbol_name="n_uppercase_serif_italic")
+        self._o_uppercase_serif_italic = self._load(symbol_name="o_uppercase_serif_italic")
+        self._p_uppercase_serif_italic = self._load(symbol_name="p_uppercase_serif_italic")
+        self._q_uppercase_serif_italic = self._load(symbol_name="q_uppercase_serif_italic")
+        self._r_uppercase_serif_italic = self._load(symbol_name="r_uppercase_serif_italic")
+        self._s_uppercase_serif_italic = self._load(symbol_name="s_uppercase_serif_italic")
+        self._t_uppercase_serif_italic = self._load(symbol_name="t_uppercase_serif_italic")
+        self._u_uppercase_serif_italic = self._load(symbol_name="u_uppercase_serif_italic")
+        self._v_uppercase_serif_italic = self._load(symbol_name="v_uppercase_serif_italic")
+        self._w_uppercase_serif_italic = self._load(symbol_name="w_uppercase_serif_italic")
+        self._x_uppercase_serif_italic = self._load(symbol_name="x_uppercase_serif_italic")
+        self._y_uppercase_serif_italic = self._load(symbol_name="y_uppercase_serif_italic")
+        self._z_uppercase_serif_italic = self._load(symbol_name="z_uppercase_serif_italic")
+        # uppercase serif italic bold
+        self._a_uppercase_serif_italic_bold = self._load(symbol_name="a_uppercase_serif_italic_bold")
+        self._b_uppercase_serif_italic_bold = self._load(symbol_name="b_uppercase_serif_italic_bold")
+        self._c_uppercase_serif_italic_bold = self._load(symbol_name="c_uppercase_serif_italic_bold")
+        self._d_uppercase_serif_italic_bold = self._load(symbol_name="d_uppercase_serif_italic_bold")
+        self._e_uppercase_serif_italic_bold = self._load(symbol_name="e_uppercase_serif_italic_bold")
+        self._f_uppercase_serif_italic_bold = self._load(symbol_name="f_uppercase_serif_italic_bold")
+        self._g_uppercase_serif_italic_bold = self._load(symbol_name="g_uppercase_serif_italic_bold")
+        self._h_uppercase_serif_italic_bold = self._load(symbol_name="h_uppercase_serif_italic_bold")
+        self._i_uppercase_serif_italic_bold = self._load(symbol_name="i_uppercase_serif_italic_bold")
+        self._j_uppercase_serif_italic_bold = self._load(symbol_name="j_uppercase_serif_italic_bold")
+        self._k_uppercase_serif_italic_bold = self._load(symbol_name="k_uppercase_serif_italic_bold")
+        self._l_uppercase_serif_italic_bold = self._load(symbol_name="l_uppercase_serif_italic_bold")
+        self._m_uppercase_serif_italic_bold = self._load(symbol_name="m_uppercase_serif_italic_bold")
+        self._n_uppercase_serif_italic_bold = self._load(symbol_name="n_uppercase_serif_italic_bold")
+        self._o_uppercase_serif_italic_bold = self._load(symbol_name="o_uppercase_serif_italic_bold")
+        self._p_uppercase_serif_italic_bold = self._load(symbol_name="p_uppercase_serif_italic_bold")
+        self._q_uppercase_serif_italic_bold = self._load(symbol_name="q_uppercase_serif_italic_bold")
+        self._r_uppercase_serif_italic_bold = self._load(symbol_name="r_uppercase_serif_italic_bold")
+        self._s_uppercase_serif_italic_bold = self._load(symbol_name="s_uppercase_serif_italic_bold")
+        self._t_uppercase_serif_italic_bold = self._load(symbol_name="t_uppercase_serif_italic_bold")
+        self._u_uppercase_serif_italic_bold = self._load(symbol_name="u_uppercase_serif_italic_bold")
+        self._v_uppercase_serif_italic_bold = self._load(symbol_name="v_uppercase_serif_italic_bold")
+        self._w_uppercase_serif_italic_bold = self._load(symbol_name="w_uppercase_serif_italic_bold")
+        self._x_uppercase_serif_italic_bold = self._load(symbol_name="x_uppercase_serif_italic_bold")
+        self._y_uppercase_serif_italic_bold = self._load(symbol_name="y_uppercase_serif_italic_bold")
+        self._z_uppercase_serif_italic_bold = self._load(symbol_name="z_uppercase_serif_italic_bold")
+        # other symbols
+        self._asterisk_operator = self._load(symbol_name="asterisk_operator")
+        self._close_parenthesis = self._load(symbol_name="close_parenthesis")
+        self._collection_separator = self._load(symbol_name="collection_separator")
+        self._material_conditional = self._load(symbol_name="material_conditional")
+        self._not_sign = self._load(symbol_name="not_sign")
+        self._open_parenthesis = self._load(symbol_name="open_parenthesis")
+        self._rightwards_arrow = self._load(symbol_name="rightwards_arrow")
+        self._space = self._load(symbol_name="space")
+        self._tilde = self._load(symbol_name="tilde")
+        self._vee = self._load(symbol_name="vee")
+        self._wedge = self._load(symbol_name="wedge")
 
     def __contains__(self, item):
         return item in self._internal_dict
@@ -650,8 +661,14 @@ class Symbols:
     def __getitem__(self, key):
         return self._internal_dict[key]
 
-    def _register(self, symbol: Symbol):
-        self._internal_dict[symbol.name] = symbol
+    def _load(self, symbol_name: str):
+        latex_math: str = config.get_str(section="symbols", item=symbol_name, attribute="latex_math")
+        unicode_extended: str = config.get_str(section="symbols", item=symbol_name, attribute="unicode_extended")
+        unicode_limited: str = config.get_str(section="symbols", item=symbol_name, attribute="unicode_limited")
+        symbol: Symbol = Symbol(name=symbol_name, latex_math=latex_math, unicode_extended=unicode_extended,
+                                unicode_limited=unicode_limited)
+        self._internal_dict[symbol_name] = symbol
+        return symbol
 
     @property
     def a_uppercase_serif_italic_bold(self) -> Symbol:
@@ -742,7 +759,7 @@ symbols = Symbols()
 
 
 def validate_tc(tc: typing.Optional[TypesettingClass] = None,
-    superclass: typing.Optional[TypesettingClass] = None) -> TypesettingClass:
+                superclass: typing.Optional[TypesettingClass] = None) -> TypesettingClass:
     """A helper function to facilitate the validation of the tc argument."""
     if tc is None:
         return superclass
@@ -912,26 +929,26 @@ text_styles = TextStyles()
 
 class StyledText(Typesettable):
     unicode_styled_characters = {'a': 'a𝐚𝑎𝒂𝖺𝗮𝘢𝙖𝒶𝓪𝔞𝖆𝚊𝕒', 'b': 'b𝐛𝑏𝒃𝖻𝗯𝘣𝙗𝒷𝓫𝔟𝖇𝚋𝕓', 'c': 'c𝐜𝑐𝒄𝖼𝗰𝘤𝙘𝒸𝓬𝔠𝖈𝚌𝕔',
-        'd':                          'd𝐝𝑑𝒅𝖽𝗱𝘥𝙙𝒹𝓭𝔡𝖉𝚍𝕕', 'e': 'e𝐞𝑒𝒆𝖾𝗲𝘦𝙚ℯ𝓮𝔢𝖊𝚎𝕖', 'f': 'f𝐟𝑓𝒇𝖿𝗳𝘧𝙛𝒻𝓯𝔣𝖋𝚏𝕗',
-        'g':                          'g𝐠𝑔𝒈𝗀𝗴𝘨𝙜ℊ𝓰𝔤𝖌𝚐𝕘', 'h': 'h𝐡ℎ𝒉𝗁𝗵𝘩𝙝𝒽𝓱𝔥𝖍𝚑𝕙', 'i': 'i𝐢𝑖𝒊𝗂𝗶𝘪𝙞𝒾𝓲𝔦𝖎𝚒𝕚',
-        'j':                          'j𝐣𝑗𝒋𝗃𝗷𝘫𝙟𝒿𝓳𝔧𝖏𝚓𝕛', 'k': 'k𝐤𝑘𝒌𝗄𝗸𝘬𝙠𝓀𝓴𝔨𝖐𝚔𝕜', 'l': 'l𝐥𝑙𝒍𝗅𝗹𝘭𝙡𝓁𝓵𝔩𝖑𝚕𝕝',
-        'm':                          'm𝐦𝑚𝒎𝗆𝗺𝘮𝙢𝓂𝓶𝔪𝖒𝚖𝕞', 'n': 'n𝐧𝑛𝒏𝗇𝗻𝘯𝙣𝓃𝓷𝔫𝖓𝚗𝕟', 'o': 'o𝐨𝑜𝒐𝗈𝗼𝘰𝙤ℴ𝓸𝔬𝖔𝚘𝕠',
-        'p':                          'p𝐩𝑝𝒑𝗉𝗽𝘱𝙥𝓅𝓹𝔭𝖕𝚙𝕡', 'q': 'q𝐪𝑞𝒒𝗊𝗾𝘲𝙦𝓆𝓺𝔮𝖖𝚚𝕢', 'r': 'r𝐫𝑟𝒓𝗋𝗿𝘳𝙧𝓇𝓻𝔯𝖗𝚛𝕣',
-        's':                          's𝐬𝑠𝒔𝗌𝘀𝘴𝙨𝓈𝓼𝔰𝖘𝚜𝕤', 't': 't𝐭𝑡𝒕𝗍𝘁𝘵𝙩𝓉𝓽𝔱𝖙𝚝𝕥', 'u': 'u𝐮𝑢𝒖𝗎𝘂𝘶𝙪𝓊𝓾𝔲𝖚𝚞𝕦',
-        'v':                          'v𝐯𝑣𝒗𝗏𝘃𝘷𝙫𝓋𝓿𝔳𝖛𝚟𝕧', 'w': 'w𝐰𝑤𝒘𝗐𝘄𝘸𝙬𝓌𝔀𝔴𝖜𝚠𝕨', 'x': 'x𝐱𝑥𝒙𝗑𝘅𝘹𝙭𝓍𝔁𝔵𝖝𝚡𝕩',
-        'y':                          'y𝐲𝑦𝒚𝗒𝘆𝘺𝙮𝓎𝔂𝔶𝖞𝚢𝕪', 'z': 'z𝐳𝑧𝒛𝗓𝘇𝘻𝙯𝓏𝔃𝔷𝖟𝚣𝕫', 'A': 'A𝐀𝐴𝑨𝖠𝗔𝘈𝘼𝒜𝓐𝔄𝕬𝙰𝔸',
-        'B':                          'B𝐁𝐵𝑩𝖡𝗕𝘉𝘽ℬ𝓑𝔅𝕭𝙱𝔹', 'C': 'C𝐂𝐶𝑪𝖢𝗖𝘊𝘾𝒞𝓒ℭ𝕮𝙲ℂ', 'D': 'D𝐃𝐷𝑫𝖣𝗗𝘋𝘿𝒟𝓓𝔇𝕯𝙳𝔻',
-        'E':                          'E𝐄𝐸𝑬𝖤𝗘𝘌𝙀ℰ𝓔𝔈𝕰𝙴𝔼', 'F': 'F𝐅𝐹𝑭𝖥𝗙𝘍𝙁ℱ𝓕𝔉𝕱𝙵𝔽', 'G': 'G𝐆𝐺𝑮𝖦𝗚𝘎𝙂𝒢𝓖𝔊𝕲𝙶𝔾',
-        'H':                          'H𝐇𝐻𝑯𝖧𝗛𝘏𝙃ℋ𝓗ℌ𝕳𝙷ℍ', 'I': 'I𝐈𝐼𝑰𝖨𝗜𝘐𝙄ℐ𝓘ℑ𝕴𝙸𝕀', 'J': 'J𝐉𝐽𝑱𝖩𝗝𝘑𝙅𝒥𝓙𝔍𝕵𝙹𝕁',
-        'K':                          'K𝐊𝐾𝑲𝖪𝗞𝘒𝙆𝒦𝓚𝔎𝕶𝙺𝕂', 'L': 'L𝐋𝐿𝑳𝖫𝗟𝘓𝙇ℒ𝓛𝔏𝕷𝙻𝕃', 'M': 'M𝐌𝑀𝑴𝖬𝗠𝘔𝙈ℳ𝓜𝔐𝕸𝙼𝕄',
-        'N':                          'N𝐍𝑁𝑵𝖭𝗡𝘕𝙉𝒩𝓝𝔑𝕹𝙽ℕ', 'O': 'O𝐎𝑂𝑶𝖮𝗢𝘖𝙊𝒪𝓞𝔒𝕺𝙾𝕆', 'P': 'P𝐏𝑃𝑷𝖯𝗣𝘗𝙋𝒫𝓟𝔓𝕻𝙿ℙ',
-        'Q':                          'Q𝐐𝑄𝑸𝖰𝗤𝘘𝙌𝒬𝓠𝔔𝕼𝚀ℚ', 'R': 'R𝐑𝑅𝑹𝖱𝗥𝘙𝙍ℛ𝓡ℜ𝕽𝚁ℝ', 'S': 'S𝐒𝑆𝑺𝖲𝗦𝘚𝙎𝒮𝓢𝔖𝕾𝚂𝕊',
-        'T':                          'T𝐓𝑇𝑻𝖳𝗧𝘛𝙏𝒯𝓣𝔗𝕿𝚃𝕋', 'U': 'U𝐔𝑈𝑼𝖴𝗨𝘜𝙐𝒰𝓤𝔘𝖀𝚄𝕌', 'V': 'V𝐕𝑉𝑽𝖵𝗩𝘝𝙑𝒱𝓥𝔙𝖁𝚅𝕍',
-        'W':                          'W𝐖𝑊𝑾𝖶𝗪𝘞𝙒𝒲𝓦𝔚𝖂𝚆𝕎', 'X': 'X𝐗𝑋𝑿𝖷𝗫𝘟𝙓𝒳𝓧𝔛𝖃𝚇𝕏', 'Y': 'Y𝐘𝑌𝒀𝖸𝗬𝘠𝙔𝒴𝓨𝔜𝖄𝚈𝕐',
-        'Z':                          'Z𝐙𝑍𝒁𝖹𝗭𝘡𝙕𝒵𝓩ℨ𝖅𝚉ℤ', '0': '0𝟎0𝟎𝟢𝟬𝟢𝟬𝟢𝟬𝟢𝟬𝟶𝟘', '1': '1𝟏1𝟏𝟣𝟭𝟣𝟭𝟣𝟭𝟣𝟭𝟷𝟙',
-        '2':                          '2𝟐2𝟐𝟤𝟮𝟤𝟮𝟤𝟮𝟤𝟮𝟸𝟚', '3': '3𝟑3𝟑𝟥𝟯𝟥𝟯𝟥𝟯𝟥𝟯𝟹𝟛', '4': '4𝟒4𝟒𝟦𝟰𝟦𝟰𝟦𝟰𝟦𝟰𝟺𝟜',
-        '5':                          '5𝟓5𝟓𝟧𝟱𝟧𝟱𝟧𝟱𝟧𝟱𝟻𝟝', '6': '6𝟔6𝟔𝟨𝟲𝟨𝟲𝟨𝟲𝟨𝟲𝟼𝟞', '7': '7𝟕7𝟕𝟩𝟳𝟩𝟳𝟩𝟳𝟩𝟳𝟽𝟟',
-        '8':                          '8𝟖8𝟖𝟪𝟴𝟪𝟴𝟪𝟴𝟪𝟴𝟾𝟠', '9': '9𝟗9𝟗𝟫𝟵𝟫𝟵𝟫𝟵𝟫𝟵𝟿𝟡'}
+                                 'd': 'd𝐝𝑑𝒅𝖽𝗱𝘥𝙙𝒹𝓭𝔡𝖉𝚍𝕕', 'e': 'e𝐞𝑒𝒆𝖾𝗲𝘦𝙚ℯ𝓮𝔢𝖊𝚎𝕖', 'f': 'f𝐟𝑓𝒇𝖿𝗳𝘧𝙛𝒻𝓯𝔣𝖋𝚏𝕗',
+                                 'g': 'g𝐠𝑔𝒈𝗀𝗴𝘨𝙜ℊ𝓰𝔤𝖌𝚐𝕘', 'h': 'h𝐡ℎ𝒉𝗁𝗵𝘩𝙝𝒽𝓱𝔥𝖍𝚑𝕙', 'i': 'i𝐢𝑖𝒊𝗂𝗶𝘪𝙞𝒾𝓲𝔦𝖎𝚒𝕚',
+                                 'j': 'j𝐣𝑗𝒋𝗃𝗷𝘫𝙟𝒿𝓳𝔧𝖏𝚓𝕛', 'k': 'k𝐤𝑘𝒌𝗄𝗸𝘬𝙠𝓀𝓴𝔨𝖐𝚔𝕜', 'l': 'l𝐥𝑙𝒍𝗅𝗹𝘭𝙡𝓁𝓵𝔩𝖑𝚕𝕝',
+                                 'm': 'm𝐦𝑚𝒎𝗆𝗺𝘮𝙢𝓂𝓶𝔪𝖒𝚖𝕞', 'n': 'n𝐧𝑛𝒏𝗇𝗻𝘯𝙣𝓃𝓷𝔫𝖓𝚗𝕟', 'o': 'o𝐨𝑜𝒐𝗈𝗼𝘰𝙤ℴ𝓸𝔬𝖔𝚘𝕠',
+                                 'p': 'p𝐩𝑝𝒑𝗉𝗽𝘱𝙥𝓅𝓹𝔭𝖕𝚙𝕡', 'q': 'q𝐪𝑞𝒒𝗊𝗾𝘲𝙦𝓆𝓺𝔮𝖖𝚚𝕢', 'r': 'r𝐫𝑟𝒓𝗋𝗿𝘳𝙧𝓇𝓻𝔯𝖗𝚛𝕣',
+                                 's': 's𝐬𝑠𝒔𝗌𝘀𝘴𝙨𝓈𝓼𝔰𝖘𝚜𝕤', 't': 't𝐭𝑡𝒕𝗍𝘁𝘵𝙩𝓉𝓽𝔱𝖙𝚝𝕥', 'u': 'u𝐮𝑢𝒖𝗎𝘂𝘶𝙪𝓊𝓾𝔲𝖚𝚞𝕦',
+                                 'v': 'v𝐯𝑣𝒗𝗏𝘃𝘷𝙫𝓋𝓿𝔳𝖛𝚟𝕧', 'w': 'w𝐰𝑤𝒘𝗐𝘄𝘸𝙬𝓌𝔀𝔴𝖜𝚠𝕨', 'x': 'x𝐱𝑥𝒙𝗑𝘅𝘹𝙭𝓍𝔁𝔵𝖝𝚡𝕩',
+                                 'y': 'y𝐲𝑦𝒚𝗒𝘆𝘺𝙮𝓎𝔂𝔶𝖞𝚢𝕪', 'z': 'z𝐳𝑧𝒛𝗓𝘇𝘻𝙯𝓏𝔃𝔷𝖟𝚣𝕫', 'A': 'A𝐀𝐴𝑨𝖠𝗔𝘈𝘼𝒜𝓐𝔄𝕬𝙰𝔸',
+                                 'B': 'B𝐁𝐵𝑩𝖡𝗕𝘉𝘽ℬ𝓑𝔅𝕭𝙱𝔹', 'C': 'C𝐂𝐶𝑪𝖢𝗖𝘊𝘾𝒞𝓒ℭ𝕮𝙲ℂ', 'D': 'D𝐃𝐷𝑫𝖣𝗗𝘋𝘿𝒟𝓓𝔇𝕯𝙳𝔻',
+                                 'E': 'E𝐄𝐸𝑬𝖤𝗘𝘌𝙀ℰ𝓔𝔈𝕰𝙴𝔼', 'F': 'F𝐅𝐹𝑭𝖥𝗙𝘍𝙁ℱ𝓕𝔉𝕱𝙵𝔽', 'G': 'G𝐆𝐺𝑮𝖦𝗚𝘎𝙂𝒢𝓖𝔊𝕲𝙶𝔾',
+                                 'H': 'H𝐇𝐻𝑯𝖧𝗛𝘏𝙃ℋ𝓗ℌ𝕳𝙷ℍ', 'I': 'I𝐈𝐼𝑰𝖨𝗜𝘐𝙄ℐ𝓘ℑ𝕴𝙸𝕀', 'J': 'J𝐉𝐽𝑱𝖩𝗝𝘑𝙅𝒥𝓙𝔍𝕵𝙹𝕁',
+                                 'K': 'K𝐊𝐾𝑲𝖪𝗞𝘒𝙆𝒦𝓚𝔎𝕶𝙺𝕂', 'L': 'L𝐋𝐿𝑳𝖫𝗟𝘓𝙇ℒ𝓛𝔏𝕷𝙻𝕃', 'M': 'M𝐌𝑀𝑴𝖬𝗠𝘔𝙈ℳ𝓜𝔐𝕸𝙼𝕄',
+                                 'N': 'N𝐍𝑁𝑵𝖭𝗡𝘕𝙉𝒩𝓝𝔑𝕹𝙽ℕ', 'O': 'O𝐎𝑂𝑶𝖮𝗢𝘖𝙊𝒪𝓞𝔒𝕺𝙾𝕆', 'P': 'P𝐏𝑃𝑷𝖯𝗣𝘗𝙋𝒫𝓟𝔓𝕻𝙿ℙ',
+                                 'Q': 'Q𝐐𝑄𝑸𝖰𝗤𝘘𝙌𝒬𝓠𝔔𝕼𝚀ℚ', 'R': 'R𝐑𝑅𝑹𝖱𝗥𝘙𝙍ℛ𝓡ℜ𝕽𝚁ℝ', 'S': 'S𝐒𝑆𝑺𝖲𝗦𝘚𝙎𝒮𝓢𝔖𝕾𝚂𝕊',
+                                 'T': 'T𝐓𝑇𝑻𝖳𝗧𝘛𝙏𝒯𝓣𝔗𝕿𝚃𝕋', 'U': 'U𝐔𝑈𝑼𝖴𝗨𝘜𝙐𝒰𝓤𝔘𝖀𝚄𝕌', 'V': 'V𝐕𝑉𝑽𝖵𝗩𝘝𝙑𝒱𝓥𝔙𝖁𝚅𝕍',
+                                 'W': 'W𝐖𝑊𝑾𝖶𝗪𝘞𝙒𝒲𝓦𝔚𝖂𝚆𝕎', 'X': 'X𝐗𝑋𝑿𝖷𝗫𝘟𝙓𝒳𝓧𝔛𝖃𝚇𝕏', 'Y': 'Y𝐘𝑌𝒀𝖸𝗬𝘠𝙔𝒴𝓨𝔜𝖄𝚈𝕐',
+                                 'Z': 'Z𝐙𝑍𝒁𝖹𝗭𝘡𝙕𝒵𝓩ℨ𝖅𝚉ℤ', '0': '0𝟎0𝟎𝟢𝟬𝟢𝟬𝟢𝟬𝟢𝟬𝟶𝟘', '1': '1𝟏1𝟏𝟣𝟭𝟣𝟭𝟣𝟭𝟣𝟭𝟷𝟙',
+                                 '2': '2𝟐2𝟐𝟤𝟮𝟤𝟮𝟤𝟮𝟤𝟮𝟸𝟚', '3': '3𝟑3𝟑𝟥𝟯𝟥𝟯𝟥𝟯𝟥𝟯𝟹𝟛', '4': '4𝟒4𝟒𝟦𝟰𝟦𝟰𝟦𝟰𝟦𝟰𝟺𝟜',
+                                 '5': '5𝟓5𝟓𝟧𝟱𝟧𝟱𝟧𝟱𝟧𝟱𝟻𝟝', '6': '6𝟔6𝟔𝟨𝟲𝟨𝟲𝟨𝟲𝟨𝟲𝟼𝟞', '7': '7𝟕7𝟕𝟩𝟳𝟩𝟳𝟩𝟳𝟩𝟳𝟽𝟟',
+                                 '8': '8𝟖8𝟖𝟪𝟴𝟪𝟴𝟪𝟴𝟪𝟴𝟾𝟠', '9': '9𝟗9𝟗𝟫𝟵𝟫𝟵𝟫𝟵𝟫𝟵𝟿𝟡'}
 
     def __init__(self, neutral_text: str):
         self._neutral_text = neutral_text
@@ -944,19 +961,19 @@ class StyledText(Typesettable):
 
 
 unicode_subscript_dictionary = {'0': u'₀', '1': u'₁', '2': u'₂', '3': u'₃', '4': u'₄', '5': u'₅', '6': u'₆', '7': u'₇',
-    '8':                             u'₈', '9': u'₉', 'a': u'ₐ', 'e': u'ₑ', 'o': u'ₒ', 'x': u'ₓ',  # '???': u'ₔ',
-    'h':                             u'ₕ', 'k': u'ₖ', 'l': u'ₗ', 'm': u'ₘ', 'n': u'ₙ', 'p': u'ₚ', 's': u'ₛ', 't': u'ₜ',
-    '+':                             u'₊', '-': u'₋', '=': u'₌', '(': u'₍', ')': u'₎', 'j': u'ⱼ', 'i': u'ᵢ',
-    # Alternative from the Unicode Phonetic Extensions block: ᵢ
-    'r':                             u'ᵣ',  # Source: Unicode Phonetic Extensions block.
-    'u':                             u'ᵤ',  # Source: Unicode Phonetic Extensions block.
-    'v':                             u'ᵥ',  # Source: Unicode Phonetic Extensions block.
-    'β':                             u'ᵦ',  # Source: Unicode Phonetic Extensions block.
-    'γ':                             u'ᵧ',  # Source: Unicode Phonetic Extensions block.
-    # '???': u'ᵨ', # Source: Unicode Phonetic Extensions block.
-    'φ':                             u'ᵩ',  # Source: Unicode Phonetic Extensions block.
-    'χ':                             u'ᵪ'  # Source: Unicode Phonetic Extensions block.
-}
+                                '8': u'₈', '9': u'₉', 'a': u'ₐ', 'e': u'ₑ', 'o': u'ₒ', 'x': u'ₓ',  # '???': u'ₔ',
+                                'h': u'ₕ', 'k': u'ₖ', 'l': u'ₗ', 'm': u'ₘ', 'n': u'ₙ', 'p': u'ₚ', 's': u'ₛ', 't': u'ₜ',
+                                '+': u'₊', '-': u'₋', '=': u'₌', '(': u'₍', ')': u'₎', 'j': u'ⱼ', 'i': u'ᵢ',
+                                # Alternative from the Unicode Phonetic Extensions block: ᵢ
+                                'r': u'ᵣ',  # Source: Unicode Phonetic Extensions block.
+                                'u': u'ᵤ',  # Source: Unicode Phonetic Extensions block.
+                                'v': u'ᵥ',  # Source: Unicode Phonetic Extensions block.
+                                'β': u'ᵦ',  # Source: Unicode Phonetic Extensions block.
+                                'γ': u'ᵧ',  # Source: Unicode Phonetic Extensions block.
+                                # '???': u'ᵨ', # Source: Unicode Phonetic Extensions block.
+                                'φ': u'ᵩ',  # Source: Unicode Phonetic Extensions block.
+                                'χ': u'ᵪ'  # Source: Unicode Phonetic Extensions block.
+                                }
 
 
 def unicode_subscriptify(s: str = ''):
@@ -996,14 +1013,14 @@ def fallback_typesetting_method(o: Typesettable, **kwargs):
 
 
 register_typesetting_method(python_function=typeset_styled_text, c=typesetting_classes.symbol,
-    representation=representations.technical_representation)
+                            representation=representations.technical_representation)
 register_typesetting_method(python_function=typeset_symbol, c=typesetting_classes.symbol,
-    representation=representations.technical_representation)
+                            representation=representations.technical_representation)
 register_typesetting_method(python_function=typeset_symbol, c=typesetting_classes.symbol,
-    representation=representations.symbolic_representation)
+                            representation=representations.symbolic_representation)
 register_typesetting_method(python_function=typeset_indexed_symbol, c=typesetting_classes.indexed_symbol,
-    representation=representations.technical_representation)
+                            representation=representations.technical_representation)
 register_typesetting_method(python_function=typeset_indexed_symbol, c=typesetting_classes.indexed_symbol,
-    representation=representations.symbolic_representation)
+                            representation=representations.symbolic_representation)
 
 log.debug(f"Module {__name__}: loaded.")

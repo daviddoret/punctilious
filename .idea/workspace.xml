@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
-      <change beforePath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/config/config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/config/config.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/typesetting.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/typesetting.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/punctilious.log" beforeDir="false" afterPath="$PROJECT_DIR$/tests/punctilious.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -485,14 +484,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00454" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1705751571460</created>
-      <option name="number" value="00454" />
-      <option name="presentableId" value="LOCAL-00454" />
-      <option name="project" value="LOCAL" />
-      <updated>1705751571460</updated>
-    </task>
     <task id="LOCAL-00455" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1705753663917</created>
@@ -877,7 +868,15 @@
       <option name="project" value="LOCAL" />
       <updated>1707597194363</updated>
     </task>
-    <option name="localTasksCounter" value="503" />
+    <task id="LOCAL-00503" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1707628978921</created>
+      <option name="number" value="00503" />
+      <option name="presentableId" value="LOCAL-00503" />
+      <option name="project" value="LOCAL" />
+      <updated>1707628978922</updated>
+    </task>
+    <option name="localTasksCounter" value="504" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
