@@ -466,6 +466,20 @@ class Formula(FormalObject):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.formula)
         super().__init__(tc=tc)
 
+    def __or__(self, other=object):
+        """Hack to provide support for pseudo-infix notation, as in: p | implies | q.
+        This is accomplished by re-purposing the | operator,
+        overloading the __or__() method that is called when | is used,
+        and gluing all this together with the InfixPartialFormula class.
+        """
+        if not isinstance(other, InfixPartialFormula):
+            # This is a partial infix formula.
+            return InfixPartialFormula(term_1=self, partial_connective=other)
+        else:
+            # other was already converted to InfixPartialFormula.
+            return self.formal_language.declare_binary_formula(connective=other.connective, term_1=self,
+                                                               term_2=other.partial_term)
+
     @property
     def formal_language(self) -> FormalLanguage:
         return self.formal_language_collection.formal_language
@@ -659,9 +673,9 @@ class InfixPartialFormula:
     and glueing all this together with the InfixPartialFormula class.
     """
 
-    def __init__(self, term_1: Formula, connective):
-        self.term_1 = term_1
-        self.connective = connective
+    def __init__(self, term_1: Formula, partial_connective):
+        self.partial_term = term_1
+        self.partial_connective = partial_connective
 
     def __or__(self, term_2: Formula = None):
         """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
@@ -669,12 +683,12 @@ class InfixPartialFormula:
         overloading the __or__() method that is called when | is used,
         and glueing all this together with the InfixPartialFormula class.
         """
-        connective = self.connective
-        first_term = self.term_1
-        return self.term_1.formal_language.declare_binary_formula(connective, first_term, term_2)
+        partial_connective = self.partial_connective
+        partial_term = self.partial_term
+        return self.partial_term.formal_language.declare_binary_formula(partial_connective, partial_term, term_2)
 
     def __str__(self):
-        return f'InfixPartialFormula(term_1 = {self.term_1}, connective = {self.connective})'
+        return f'InfixPartialFormula(partial_term = {self.partial_term}, partial_connective = {self.partial_connective})'
 
 
 class Preferences:

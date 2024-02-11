@@ -1,4 +1,5 @@
 import log
+import config
 import typesetting as ts
 
 import formal_language_1 as fl1

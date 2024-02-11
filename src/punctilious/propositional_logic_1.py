@@ -425,9 +425,9 @@ class MetaLanguage(fl1.FormalLanguage):
 class PropositionalLogic(fl1.FormalLanguage):
     """Propositional Logic 1."""
 
-    def __init__(self, tc: typing.Optional[ts.TypesettingClass] = None):
+    def __init__(self, set_as_default: bool = False, tc: typing.Optional[ts.TypesettingClass] = None):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.logical_calculi)
-        super().__init__(tc=tc)
+        super().__init__(set_as_default=set_as_default, tc=tc)
         # Meta-language
         self._meta_language: MetaLanguage = MetaLanguage(propositional_logic=self)
         # Object classes

@@ -235,4 +235,4 @@ vee.unicode_extended = "∨"
 vee.unicode_limited = "or"
 wedge.latex_math = "\\land"
 wedge.unicode_extended = "∧"
-wedge.unicode_limited = "and"
+wedge.unicode_limited = "and" # an alternative could be to use the "^" accent, but the symmetry with disjunction would be broken.
