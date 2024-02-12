@@ -454,11 +454,11 @@ class Typesettable(abc.ABC):
             tc = typesetting_classes.typesettable
         elif not tc.is_subclass_of(c=typesetting_classes.typesettable):
             log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
+        self._typesetting_class: TypesettingClass = tc
         if default_rep is None:
             default_rep = representations.technical_representation
-        super().__init__()
         self._default_representation: Representation = default_rep
-        self._typesetting_class = tc
+        super().__init__()
 
     def __repr__(self):
         return self.to_string(protocol=protocols.unicode_limited)

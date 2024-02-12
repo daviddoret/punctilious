@@ -111,19 +111,19 @@ class TestPL1:
     def test_declare_unary_formula(self):
         l1: pu.pl1.PropositionalLogic = pu.pl1.PropositionalLogic()
 
-        lnot: fl1.UnaryConnective = l1.connectives.negation
+        lnot: pu.fl1.UnaryConnective = l1.connectives.negation
         pa = l1.propositional_variables.declare_proposition_variable()
         pb = l1.propositional_variables.declare_proposition_variable()
         pc = l1.propositional_variables.declare_proposition_variable()
 
-        pd: fl1.UnaryFormula = l1.compound_formulas.declare_unary_formula(connective=lnot, term=pa)
-        pe: fl1.UnaryFormula = l1.compound_formulas.declare_unary_formula(connective=lnot, term=pa)
+        pd: pu.fl1.UnaryFormula = l1.compound_formulas.declare_unary_formula(connective=lnot, term=pa)
+        pe: pu.fl1.UnaryFormula = l1.compound_formulas.declare_unary_formula(connective=lnot, term=pa)
         # Check that only unique formulas are kept in the PL1 formula collection
         assert pd is pe
         assert pd == pe
         assert id(pd) == id(pe)
         # Check that non-unique formulas are kept
-        pf: fl1.UnaryFormula = l1.compound_formulas.declare_unary_formula(connective=lnot, term=pb)
+        pf: pu.fl1.UnaryFormula = l1.compound_formulas.declare_unary_formula(connective=lnot, term=pb)
         assert pd is not pf
         assert pd != pf
         assert id(pd) != id(pf)

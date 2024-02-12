@@ -209,13 +209,13 @@ class FormalObject(ts.Typesettable):
     def __init__(self, c: typing.Optional[FormalLanguageCollection] = None,
                  tc: typing.Optional[ts.TypesettingClass] = None,
                  default_rep: typing.Optional[ts.Representation] = None):
-        self._formal_language_collection = c
-        if c is not None:
-            c.add_element(x=self)
         tc: ts.TypesettingClass = ts.validate_tc(tc=tc, superclass=typesetting_classes.formal_object)
         if default_rep is None:
             default_rep = ts.representations.symbolic_representation
         super().__init__(tc=tc, default_rep=default_rep)
+        self._formal_language_collection = c
+        if c is not None:
+            c.add_element(x=self)
 
     def __repr__(self):
         return super().to_string(protocol=ts.protocols.unicode_limited,
@@ -572,7 +572,7 @@ class CompoundFormula(Formula):
     """A compound-formula is a formal-object and a tree-structure of atomic-formulas and compound-formulas."""
 
     def __init__(self, c: FormalLanguageCollection, connective: Connective,
-                 terms: typing.Tuple[Formula], tc: typing.Optional[ts.TypesettingClass]):
+                 terms: typing.Tuple[Formula, ...], tc: typing.Optional[ts.TypesettingClass]):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.compound_formula)
         if isinstance(connective, FixedArityConnective):
             if connective.arity_as_int != len(terms):
@@ -582,7 +582,7 @@ class CompoundFormula(Formula):
         else:
             log.error(msg='Unsupported connective python class.')
         self._connective: Connective = connective
-        self._terms: typing.Tuple[Formula] = terms
+        self._terms: typing.Tuple[Formula, ...] = terms
         super().__init__(c=c, tc=tc)
 
     def __eq__(self, other):
@@ -601,7 +601,7 @@ class CompoundFormula(Formula):
         return self._connective
 
     @property
-    def terms(self) -> typing.Tuple[Formula]:
+    def terms(self) -> typing.Tuple[Formula, ...]:
         return self._terms
 
 

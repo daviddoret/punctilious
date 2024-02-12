@@ -208,7 +208,7 @@ class PropositionalLogicCompoundFormulaCollection(fl1.CompoundFormulaCollection)
         self._propositional_logic: PropositionalLogic = formal_language
         super().__init__(formal_language=formal_language)
 
-    def declare_unary_formula(self, connective: fl1.UnaryConnective, term: fl1.FormalObject) -> fl1.UnaryFormula:
+    def declare_unary_formula(self, connective: fl1.UnaryConnective, term: fl1.Formula) -> fl1.UnaryFormula:
         """Declare a well-formed unary formula in PL1.
 
         IMPORTANT: This method assures that only well-formed unary formulas are declared in PL1.
@@ -217,6 +217,7 @@ class PropositionalLogicCompoundFormulaCollection(fl1.CompoundFormulaCollection)
         :param term:
         :return:
         """
+        # TODO: push this logic to the generic fl1 super class.
         if connective not in self.propositional_logic.connectives:
             log.error("connective is not a pl1 connective.")
         if not self.propositional_logic.is_well_formed_formula(phi=term):

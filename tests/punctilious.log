@@ -1,14 +1,11 @@
-2024-02-12 04:45:19,803 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
-2024-02-12 04:45:19,806 - INFO - Override typesetting-method: (symbol,technical-representation)
-2024-02-12 04:45:19,806 - DEBUG - Module typesetting: loaded.
-2024-02-12 04:45:19,811 - DEBUG - Module formal_language_1: loaded.
-2024-02-12 04:45:19,811 - INFO - Override typesetting-method: (fl1.unary_formula,symbolic-representation)
-2024-02-12 04:45:19,812 - INFO - Override typesetting-method: (fl1.binary_formula,symbolic-representation)
-2024-02-12 04:45:19,812 - DEBUG - Module formal_language_1_presentation_1: loaded.
-2024-02-12 04:45:19,812 - DEBUG - Module propositional_logic_1: loaded.
-2024-02-12 04:45:19,813 - DEBUG - Module propositional_logic_1_presentation_1: loaded.
-2024-02-12 04:45:19,813 - DEBUG - Module punctilious: loaded.
-2024-02-12 04:45:19,819 - DEBUG - FormalObject-4389923888
-2024-02-12 04:45:19,821 - ERROR - connective is not a pl1 connective.
-2024-02-12 04:45:19,821 - ERROR - term is not a pl1 well-formed-formula.
-2024-02-12 04:45:19,890 - INFO - Preference 'None.formal_language' changed from 'None' to 'hello world'.
+2024-02-12 13:51:41,671 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
+2024-02-12 13:51:41,674 - INFO - Override typesetting-method: (symbol,technical-representation)
+2024-02-12 13:51:41,674 - DEBUG - Module typesetting: loaded.
+2024-02-12 13:51:41,675 - DEBUG - Module formal_language_1: loaded.
+2024-02-12 13:51:41,676 - INFO - Override typesetting-method: (fl1.unary_formula,symbolic-representation)
+2024-02-12 13:51:41,676 - INFO - Override typesetting-method: (fl1.binary_formula,symbolic-representation)
+2024-02-12 13:51:41,676 - DEBUG - Module formal_language_1_presentation_1: loaded.
+2024-02-12 13:51:41,676 - DEBUG - Module propositional_logic_1: loaded.
+2024-02-12 13:51:41,677 - DEBUG - Module propositional_logic_1_presentation_1: loaded.
+2024-02-12 13:51:41,677 - DEBUG - Module punctilious: loaded.
+2024-02-12 13:51:41,679 - DEBUG - FormalObject '¬P' (python id: 4385798528) is already present in this FormalLanguageClass as '¬P' (python id: 4387465184). The existing object is reused and the new object is discarded.
