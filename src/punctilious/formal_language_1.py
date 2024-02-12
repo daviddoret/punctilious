@@ -96,6 +96,7 @@ class TypesettingClasses:
         self._atomic_formula = ts.typesetting_classes.register(name="fl1.atomic_formula", superclass=self._formula)
         self._compound_formula = ts.typesetting_classes.register(name="fl1.compound_formula", superclass=self._formula)
         self._connective = ts.typesetting_classes.register(name="fl1.connective", superclass=self.formal_object)
+        self._inference_rule = ts.typesetting_classes.register(name="fl1.inference_rule", superclass=self.formal_object)
         self._variable_arity_connective = ts.typesetting_classes.register(name="fl1.variable_arity_connective",
                                                                           superclass=self._connective)
         self._fixed_arity_connective = ts.typesetting_classes.register(name="fl1.fixed_arity_connective",
@@ -112,10 +113,14 @@ class TypesettingClasses:
                                                               superclass=self._fixed_arity_formula)
         self._formal_language_collection = ts.typesetting_classes.register(name="fl1.formal_language_collection",
                                                                            superclass=self._formal_object)
+        self._inference_rule_collection = ts.typesetting_classes.register(name="fl1.inference_rule_collection",
+                                                                          superclass=self.formal_language_collection)
         self._compound_formula_collection = ts.typesetting_classes.register(name="fl1.compound_formula_collection",
                                                                             superclass=self._formal_language_collection)
         self._connective_collection = ts.typesetting_classes.register(name="fl1.connective_collection",
                                                                       superclass=self._formal_language_collection)
+        self._inference_rule_collection = ts.typesetting_classes.register(name="fl1.inference_rule_collection",
+                                                                          superclass=self._formal_language_collection)
         self._formal_language = ts.typesetting_classes.register(name="fl1.formal_language",
                                                                 superclass=self.formal_object)
         self._meta_language = ts.typesetting_classes.register(name="fl1.meta_language", superclass=self.formal_language)
@@ -177,6 +182,14 @@ class TypesettingClasses:
     @property
     def formula(self) -> ts.TypesettingClass:
         return self._formula
+
+    @property
+    def inference_rule(self) -> ts.TypesettingClass:
+        return self._inference_rule
+
+    @property
+    def inference_rule_collection(self) -> ts.TypesettingClass:
+        return self._inference_rule_collection
 
     @property
     def meta_language(self) -> ts.TypesettingClass:
@@ -386,7 +399,13 @@ class Connective(FormalObject):
         super().__init__(c=c, tc=tc)
 
 
-# _connective_class: FormalPythonClass = FormalPythonClass(python_class=Connective)
+class InferenceRule(FormalObject):
+    """An inference-rule is a formal-object that allows to infer / derive new statements in a formal-language."""
+
+    def __init__(self, c: typing.Optional[FormalLanguageCollection] = None,
+                 tc: typing.Optional[ts.TypesettingClass] = None):
+        tc: ts.TypesettingClass = ts.validate_tc(tc=tc, superclass=typesetting_classes.inference_rule)
+        super().__init__(c=c, tc=tc)
 
 
 class VariableArityConnective(Connective):
@@ -450,6 +469,16 @@ class ConnectiveCollection(FormalLanguageCollection):
 
     def declare_binary_connective(self, tc: typing.Optional[ts.TypesettingClass]) -> BinaryConnective:
         x: BinaryConnective = BinaryConnective(c=self, tc=tc)
+        return x
+
+
+class InferenceRuleCollection(FormalLanguageCollection):
+    def __init__(self, formal_language: FormalLanguage, tc: typing.Optional[ts.TypesettingClass] = None):
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.inference_rule_collection)
+        super().__init__(formal_language=formal_language, tc=tc)
+
+    def declare_inference_rule(self, tc: typing.Optional[ts.TypesettingClass]) -> InferenceRule:
+        x: InferenceRule = InferenceRule(c=self, tc=tc)
         return x
 
 

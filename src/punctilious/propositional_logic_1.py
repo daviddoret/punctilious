@@ -28,6 +28,8 @@ class TypesettingClasses:
                                                             superclass=fl1.typesetting_classes.binary_connective)
         self._disjunction = ts.typesetting_classes.register(name="pl1.connective.disjunction",
                                                             superclass=fl1.typesetting_classes.binary_connective)
+        self._inference_rule = ts.typesetting_classes.register(name="pl1.inference_rule",
+                                                               superclass=fl1.typesetting_classes.inference_rule)
         self._material_implication = ts.typesetting_classes.register(name="pl1.connective.material_implication",
                                                                      superclass=fl1.typesetting_classes.binary_connective)
         self._connective_collection = ts.typesetting_classes.register(name="pl1.connective_collection",
@@ -98,6 +100,10 @@ class TypesettingClasses:
     @property
     def pl1_binary_formula(self) -> ts.TypesettingClass:
         return self._pl1_binary_formula
+
+    @property
+    def pl1_inference_rule(self) -> ts.TypesettingClass:
+        return self._pl1_inference_rule
 
     @property
     def pl1_variable(self) -> ts.TypesettingClass:
@@ -251,6 +257,19 @@ class PropositionalLogicCompoundFormulaCollection(fl1.CompoundFormulaCollection)
     @property
     def propositional_logic(self) -> PropositionalLogic:
         return self._propositional_logic
+
+
+class PropositionalLogicInferenceRuleCollection(fl1.InferenceRuleCollection):
+    """A specialized class for PL1 containing inference-rules, and that is initially locked."""
+
+    def __init__(self, propositional_logic: PropositionalLogic):
+        self._propositional_logic: PropositionalLogic = propositional_logic
+        super().__init__(formal_language=propositional_logic)
+
+    def declare_inference_rule(self) -> fl1.InferenceRule:
+        tc: ts.TypesettingClass = typesetting_classes.pl1_inference_rule
+        phi: fl1.InferenceRule = super().declare_inference_rule(tc=tc)
+        return phi
 
 
 class MetaLanguageCompoundFormulaCollection(fl1.CompoundFormulaCollection):
@@ -438,6 +457,9 @@ class PropositionalLogic(fl1.FormalLanguage):
         # Object classes
         self._connectives: ConnectiveCollection = ConnectiveCollection(formal_language=self)
         super()._add_class(x=self._connectives)
+        self._inference_rules: PropositionalLogicInferenceRuleCollection = PropositionalLogicInferenceRuleCollection(
+            propositional_logic=self)
+        super()._add_class(x=self._inference_rules)
         self._compound_formulas: PropositionalLogicCompoundFormulaCollection = PropositionalLogicCompoundFormulaCollection(
             formal_language=self)
         super()._add_class(x=self._compound_formulas)
@@ -468,6 +490,11 @@ class PropositionalLogic(fl1.FormalLanguage):
 
     def declare_unary_formula(self, connective: fl1.UnaryConnective, term: Formula) -> fl1.UnaryFormula:
         return self.compound_formulas.declare_unary_formula(connective=connective, term=term)
+
+    @property
+    def inference_rules(self) -> PropositionalLogicInferenceRuleCollection:
+        """The collection of inference-rules in PL1."""
+        return self._inference_rules
 
     def is_well_formed_formula(self, phi: fl1.Formula) -> bool:
         """Return True if phi is a well-formed-formula on PL1, False otherwise."""
