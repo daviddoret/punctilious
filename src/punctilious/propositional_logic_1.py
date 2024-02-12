@@ -28,8 +28,8 @@ class TypesettingClasses:
                                                             superclass=fl1.typesetting_classes.binary_connective)
         self._disjunction = ts.typesetting_classes.register(name="pl1.connective.disjunction",
                                                             superclass=fl1.typesetting_classes.binary_connective)
-        self._inference_rule = ts.typesetting_classes.register(name="pl1.inference_rule",
-                                                               superclass=fl1.typesetting_classes.inference_rule)
+        self._modus_ponens = ts.typesetting_classes.register(name="pl1.inference_rule.modus_ponens",
+                                                             superclass=fl1.typesetting_classes.inference_rule)
         self._material_implication = ts.typesetting_classes.register(name="pl1.connective.material_implication",
                                                                      superclass=fl1.typesetting_classes.binary_connective)
         self._connective_collection = ts.typesetting_classes.register(name="pl1.connective_collection",
@@ -86,6 +86,10 @@ class TypesettingClasses:
         return self._pl1
 
     @property
+    def modus_ponens(self) -> ts.TypesettingClass:
+        return self._modus_ponens
+
+    @property
     def pl1ml(self) -> ts.TypesettingClass:
         return self._pl1ml
 
@@ -100,10 +104,6 @@ class TypesettingClasses:
     @property
     def pl1_binary_formula(self) -> ts.TypesettingClass:
         return self._pl1_binary_formula
-
-    @property
-    def pl1_inference_rule(self) -> ts.TypesettingClass:
-        return self._pl1_inference_rule
 
     @property
     def pl1_variable(self) -> ts.TypesettingClass:
@@ -129,10 +129,7 @@ class MetaVariable(fl1.AtomicFormula):
 
     def __init__(self, c: fl1.FormalLanguageCollection,
                  tc: typing.Optional[ts.TypesettingClass] = None):
-        if tc is None:
-            tc = typesetting_classes.meta_variable
-        elif not tc.is_subclass_of(c=typesetting_classes.meta_variable):
-            log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.meta_variable)
         super().__init__(c=c, tc=tc)
 
 
@@ -259,15 +256,29 @@ class PropositionalLogicCompoundFormulaCollection(fl1.CompoundFormulaCollection)
         return self._propositional_logic
 
 
+class ModusPonens(fl1.InferenceRule):
+    def __init__(self, c: fl1.FormalLanguageCollection,
+                 tc: typing.Optional[ts.TypesettingClass] = None):
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.meta_variable)
+        super().__init__(c=c, tc=tc)
+
+    def derive_formula(self):
+        pass
+
+    def derive_statement(self):
+        pass
+
+
 class PropositionalLogicInferenceRuleCollection(fl1.InferenceRuleCollection):
     """A specialized class for PL1 containing inference-rules, and that is initially locked."""
 
     def __init__(self, propositional_logic: PropositionalLogic):
         self._propositional_logic: PropositionalLogic = propositional_logic
         super().__init__(formal_language=propositional_logic)
+        self._modus_ponens = self.declare_inference_rule()
 
     def declare_inference_rule(self) -> fl1.InferenceRule:
-        tc: ts.TypesettingClass = typesetting_classes.pl1_inference_rule
+        tc: ts.TypesettingClass = fl1.typesetting_classes.inference_rule
         phi: fl1.InferenceRule = super().declare_inference_rule(tc=tc)
         return phi
 
