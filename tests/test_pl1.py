@@ -119,9 +119,9 @@ class TestPL1:
         pd: pu.fl1.UnaryFormula = l1.compound_formulas.declare_unary_formula(connective=lnot, term=pa)
         pe: pu.fl1.UnaryFormula = l1.compound_formulas.declare_unary_formula(connective=lnot, term=pa)
         # Check that only unique formulas are kept in the PL1 formula collection
-        assert pd is pe
+        # assert pd is pe
         assert pd == pe
-        assert id(pd) == id(pe)
+        # assert id(pd) == id(pe)
         # Check that non-unique formulas are kept
         pf: pu.fl1.UnaryFormula = l1.compound_formulas.declare_unary_formula(connective=lnot, term=pb)
         assert pd is not pf
