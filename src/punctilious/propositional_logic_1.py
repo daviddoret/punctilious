@@ -121,13 +121,13 @@ typesetting_classes = TypesettingClasses()
 
 class MetaVariable(fl1.AtomicFormula):
 
-    def __init__(self, formal_language_collection: fl1.FormalLanguageCollection,
+    def __init__(self, c: fl1.FormalLanguageCollection,
                  tc: typing.Optional[ts.TypesettingClass] = None):
         if tc is None:
             tc = typesetting_classes.meta_variable
         elif not tc.is_subclass_of(c=typesetting_classes.meta_variable):
             log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
-        super().__init__(formal_language_collection=formal_language_collection, tc=tc)
+        super().__init__(c=c, tc=tc)
 
 
 class MetaVariableCollection(fl1.FormalLanguageCollection):
@@ -138,17 +138,17 @@ class MetaVariableCollection(fl1.FormalLanguageCollection):
 
     def declare_meta_variable(self) -> MetaVariable:
         """Declare a new meta-variable in PL1ML."""
-        mv: MetaVariable = MetaVariable(formal_language_collection=self)
-        super()._add_formal_object(x=mv)
+        mv: MetaVariable = MetaVariable(c=self)
+        super().add_element(x=mv)
         return mv
 
 
 class PropositionalVariable(fl1.AtomicFormula):
 
-    def __init__(self, formal_language_collection: fl1.FormalLanguageCollection,
+    def __init__(self, c: fl1.FormalLanguageCollection,
                  tc: typing.Optional[ts.TypesettingClass] = None):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.pl1_variable)
-        super().__init__(formal_language_collection=formal_language_collection, tc=tc)
+        super().__init__(c=c, tc=tc)
 
 
 class PropositionalVariableCollection(fl1.FormalLanguageCollection):
@@ -157,8 +157,8 @@ class PropositionalVariableCollection(fl1.FormalLanguageCollection):
 
     def declare_proposition_variable(self) -> PropositionalVariable:
         """Declare a new propositional-variable."""
-        p: PropositionalVariable = PropositionalVariable(formal_language_collection=self)
-        super()._add_formal_object(x=p)
+        p: PropositionalVariable = PropositionalVariable(c=self)
+        super().add_element(x=p)
         return p
 
     def declare_proposition_variables(self, n: int) -> tuple[PropositionalVariable, ...]:
@@ -309,11 +309,12 @@ class N0AxiomSchemaCollection(fl1.AxiomCollection):
     def __init__(self, meta_language: MetaLanguage):
         self._meta_language = meta_language
         super().__init__(formal_language=meta_language)
-        # TODO: Resume here once python-math is implemented.
-        #  self._pl1ml.compound_
-        #  formulas.declare_binary_formula()
-        pl1_formula = self.meta_language.compound_formulas.declare_binary_formula()
-        self._pl1 = fl1.Axiom()
+        implies: fl1.BinaryConnective = self.meta_language.propositional_logic.connectives.material_implication
+        land: fl1.BinaryConnective = self.meta_language.propositional_logic.connectives.conjunction
+        a = self.meta_language.meta_variables.declare_meta_variable()
+        b = self.meta_language.meta_variables.declare_meta_variable()
+        c = self.meta_language.meta_variables.declare_meta_variable()
+        self._pl1 = fl1.Axiom(formal_language_collection=self, phi=a | implies | (a | land | a))
         super().declare_axiom(phi=pl1)
 
     @property
@@ -350,6 +351,9 @@ class MetaLanguage(fl1.FormalLanguage):
     def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: Formula,
                                term_2: Formula) -> BinaryFormula:
         return self.compound_formulas.declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
+
+    def declare_unary_formula(self, connective: fl1.BinaryConnective, term: Formula) -> BinaryFormula:
+        return self.compound_formulas.declare_binary_formula(connective=connective, term=term)
 
     def get_meta_variable_tuple(self, phi: fl1.Formula) -> tuple[MetaVariable, ...]:
         return tuple(p for p in phi.iterate_leaf_formulas() if p in self.meta_variables)
@@ -458,8 +462,11 @@ class PropositionalLogic(fl1.FormalLanguage):
         return self._compound_formulas
 
     def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: Formula,
-                               term_2: Formula) -> BinaryFormula:
+                               term_2: Formula) -> fl1.BinaryFormula:
         return self.compound_formulas.declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
+
+    def declare_unary_formula(self, connective: fl1.UnaryConnective, term: Formula) -> fl1.UnaryFormula:
+        return self.compound_formulas.declare_unary_formula(connective=connective, term=term)
 
     def is_well_formed_formula(self, phi: fl1.Formula) -> bool:
         """Return True if phi is a well-formed-formula on PL1, False otherwise."""

@@ -172,15 +172,21 @@ class TestPL1ML:
         a = l1.propositional_variables.declare_proposition_variable()
         b = l1.propositional_variables.declare_proposition_variable()
         c = l1.propositional_variables.declare_proposition_variable()
-        phi = a | l1.connectives.conjunction | b
+        land = l1.connectives.conjunction
+        lor = l1.connectives.disjunction
+        implies = l1.connectives.material_implication
+        lnot = l1.connectives.negation
+        phi = a | land | b
         assert phi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P and Q"
         assert phi.term_1 is a
         assert phi.term_2 is b
-        phi = b | l1.connectives.material_implication | (a | l1.connectives.disjunction | c)
+        phi = b | implies | (a | lor | c)
         assert phi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P implies (Q or R)"
         assert phi.term_1 is b
         assert phi.term_2.term_1 is a
         assert phi.term_2.term_2 is c
+        phi = lnot | ((lnot | b) | lor | c)
+        pass
 
     def test_substitute_meta_variables(self):
         l1 = pu.pl1.PropositionalLogic()

@@ -206,12 +206,13 @@ class FormalObject(ts.Typesettable):
     """A formal-object is an object that is manipulated as part of a formal-system.
     """
 
-    def __init__(self, tc: typing.Optional[ts.TypesettingClass] = None,
+    def __init__(self, c: typing.Optional[FormalLanguageCollection] = None,
+                 tc: typing.Optional[ts.TypesettingClass] = None,
                  default_rep: typing.Optional[ts.Representation] = None):
-        if tc is None:
-            tc = typesetting_classes.formal_object
-        elif not tc.is_subclass_of(c=typesetting_classes.formal_object):
-            log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
+        self._formal_language_collection = c
+        if c is not None:
+            c.add_element(x=self)
+        tc: ts.TypesettingClass = ts.validate_tc(tc=tc, superclass=typesetting_classes.formal_object)
         if default_rep is None:
             default_rep = ts.representations.symbolic_representation
         super().__init__(tc=tc, default_rep=default_rep)
@@ -223,6 +224,26 @@ class FormalObject(ts.Typesettable):
     def __str__(self):
         return super().to_string(protocol=ts.protocols.unicode_limited,
                                  representation=ts.representations.symbolic_representation)
+
+    @property
+    def formal_language(self) -> typing.Optional[FormalLanguage]:
+        """If the formal-object is an element of a formal-language, return the formal-language. None otherwise."""
+        if self.formal_language_collection is None:
+            return None
+        else:
+            return self.formal_language_collection.formal_language
+
+    @property
+    def formal_language_collection(self) -> typing.Optional[FormalLanguageCollection]:
+        """If the formal-object is an element of a formal-language, return the formal-language primary collection of which it is an element. None otherwise.
+
+        Discussion:
+        By definition, a formal-language is a tuple T := (C1, C2, ..., Cn) where Ci denote exclusive collections. This property return Ci such
+        that the formal-object is an element of Ci in T.
+
+        Question: Must C1, C2, ..., Cn be exclusive collections for all future formal-languages?
+        """
+        return self._formal_language_collection
 
 
 class FormalLanguageCollection(FormalObject, abc.ABC):
@@ -252,10 +273,14 @@ class FormalLanguageCollection(FormalObject, abc.ABC):
     def __len__(self):
         return len(self._protected_set)
 
-    def _add_formal_object(self, x: FormalObject) -> FormalObject:
-        """This is a protected method, it is only intended to be called from inherited classes."""
+    def add_element(self, x: FormalObject) -> FormalObject:
+        """Add an element to this collection."""
         if self.is_locked:
-            log.error(msg='This class is locked.')
+            log.error(msg='This collection is locked.', slf=self, x=x)
+        elif x.formal_language_collection is not self:
+            log.error(
+                msg='The primary formal-language-collection property of the element is not consistent with this formal-language collection. As a result, the formal-object cannot be added to the collection.',
+                slf=self, x=x)
         else:
             if x in self._protected_set:
                 x_prime: FormalObject = next(
@@ -323,6 +348,11 @@ class FormalLanguage(FormalObject, abc.ABC):
         """Abstract method that declare a well-formed binary formula in the formal-language."""
         log.error(msg="calling an abstract method.")
 
+    @abc.abstractmethod
+    def declare_unary_formula(self, connective: Connective, term: Formula) -> UnaryFormula:
+        """Abstract method that declare a well-formed unary formula in the formal-language."""
+        log.error(msg="calling an abstract method.")
+
     @property
     def is_locked(self) -> bool:
         return self._is_locked
@@ -350,12 +380,10 @@ class Connective(FormalObject):
     """A connective is a formal-object that may be used as a connective to build compound-formulas in a
     formal-language."""
 
-    def __init__(self, tc: typing.Optional[ts.TypesettingClass] = None):
-        if tc is None:
-            tc = typesetting_classes.connective
-        elif not tc.is_subclass_of(c=typesetting_classes.connective):
-            log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
-        super().__init__(tc=tc)
+    def __init__(self, c: typing.Optional[FormalLanguageCollection] = None,
+                 tc: typing.Optional[ts.TypesettingClass] = None):
+        tc: ts.TypesettingClass = ts.validate_tc(tc=tc, superclass=typesetting_classes.connective)
+        super().__init__(c=c, tc=tc)
 
 
 # _connective_class: FormalPythonClass = FormalPythonClass(python_class=Connective)
@@ -365,26 +393,21 @@ class VariableArityConnective(Connective):
     """A variable-arity connective, aka n-ary connective, is a connective whose arity is not predefined / fixed
     when the connective is declared, but determined when compound-formulas based on that connective are declared."""
 
-    def __init__(self, arity_as_int: int):
-        self._arity_as_int = arity_as_int
-        super().__init__(tc=typesetting_classes.variable_arity_connective)
-
-    @property
-    def arity_as_int(self) -> int:
-        return self._arity_as_int
+    def __init__(self, c: typing.Optional[FormalLanguageCollection] = None,
+                 tc: typing.Optional[ts.TypesettingClass] = None):
+        tc: ts.TypesettingClass = ts.validate_tc(tc=tc, superclass=typesetting_classes.variable_arity_connective)
+        super().__init__(c=c, tc=tc)
 
 
 class FixedArityConnective(Connective):
     """A fixed-arity connective is a connective whose arity is fixed and determined during the declaration of the
     connective itself."""
 
-    def __init__(self, arity_as_int: int, tc: typing.Optional[ts.TypesettingClass] = None):
+    def __init__(self, arity_as_int: int, c: typing.Optional[FormalLanguageCollection] = None,
+                 tc: typing.Optional[ts.TypesettingClass] = None):
         self._arity_as_int = arity_as_int
-        if tc is None:
-            tc = typesetting_classes.fixed_arity_connective
-        elif not tc.is_subclass_of(c=typesetting_classes.fixed_arity_connective):
-            log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
-        super().__init__(tc=tc)
+        tc: ts.TypesettingClass = ts.validate_tc(tc=tc, superclass=typesetting_classes.fixed_arity_connective)
+        super().__init__(c=c, tc=tc)
 
     @property
     def arity_as_int(self) -> int:
@@ -394,23 +417,26 @@ class FixedArityConnective(Connective):
 class UnaryConnective(FixedArityConnective):
     """A unary connective is a connective whose arity is fixed and equal to 1."""
 
-    def __init__(self, tc: typing.Optional[ts.TypesettingClass] = None):
-        if tc is None:
-            tc = typesetting_classes.unary_connective
-        elif not tc.is_subclass_of(c=typesetting_classes.unary_connective):
-            log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
-        super().__init__(arity_as_int=1, tc=tc)
+    def __init__(self, c: typing.Optional[FormalLanguageCollection] = None,
+                 tc: typing.Optional[ts.TypesettingClass] = None):
+        tc: ts.TypesettingClass = ts.validate_tc(tc=tc, superclass=typesetting_classes.unary_connective)
+        super().__init__(arity_as_int=1, c=c, tc=tc)
+
+    def __or__(self, other):
+        """Support for prefix formula (* x)."""
+        if isinstance(other, Formula):
+            return other.formal_language.declare_unary_formula(connective=self, term=other)
+        else:
+            log.error(msg="No interpretation found for python-pseudo-math entry.", slf=self, other=other)
 
 
 class BinaryConnective(FixedArityConnective):
     """A binary connective is a connective whose arity is fixed and equal to 2."""
 
-    def __init__(self, tc: typing.Optional[ts.TypesettingClass] = None):
-        if tc is None:
-            tc = typesetting_classes.binary_connective
-        elif not tc.is_subclass_of(c=typesetting_classes.binary_connective):
-            log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
-        super().__init__(arity_as_int=2, tc=tc)
+    def __init__(self, c: typing.Optional[FormalLanguageCollection] = None,
+                 tc: typing.Optional[ts.TypesettingClass] = None):
+        tc: ts.TypesettingClass = ts.validate_tc(tc=tc, superclass=typesetting_classes.binary_connective)
+        super().__init__(arity_as_int=2, c=c, tc=tc)
 
 
 class ConnectiveCollection(FormalLanguageCollection):
@@ -419,13 +445,11 @@ class ConnectiveCollection(FormalLanguageCollection):
         super().__init__(formal_language=formal_language, tc=tc)
 
     def declare_unary_connective(self, tc: typing.Optional[ts.TypesettingClass]) -> UnaryConnective:
-        x: UnaryConnective = UnaryConnective(tc=tc)
-        self._add_formal_object(x=x)
+        x: UnaryConnective = UnaryConnective(c=self, tc=tc)
         return x
 
     def declare_binary_connective(self, tc: typing.Optional[ts.TypesettingClass]) -> BinaryConnective:
-        x: BinaryConnective = BinaryConnective(tc=tc)
-        self._add_formal_object(x=x)
+        x: BinaryConnective = BinaryConnective(c=self, tc=tc)
         return x
 
 
@@ -441,30 +465,24 @@ class CompoundFormulaCollection(FormalLanguageCollection):
         #     default_rep = ts.representations.symbolic_representation
         super().__init__(formal_language=formal_language, tc=tc, default_rep=default_rep)
 
-    def declare_unary_formula(self, connective: UnaryConnective, term: FormalObject,
+    def declare_unary_formula(self, connective: UnaryConnective, term: Formula,
                               tc: typing.Optional[ts.TypesettingClass] = None) -> UnaryFormula:
-        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.unary_formula)
-        x: UnaryFormula = UnaryFormula(formal_language_collection=self, connective=connective, term=term, tc=tc)
-        x = self._add_formal_object(x=x)
+        x: UnaryFormula = UnaryFormula(c=self, connective=connective, term=term, tc=tc)
         return x
 
-    def declare_binary_formula(self, connective: BinaryConnective, term_1: FormalObject, term_2: FormalObject,
+    def declare_binary_formula(self, connective: BinaryConnective, term_1: Formula, term_2: Formula,
                                tc: typing.Optional[ts.TypesettingClass] = None) -> BinaryFormula:
-        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.binary_formula)
-        x: BinaryFormula = BinaryFormula(formal_language_collection=self, connective=connective, term_1=term_1,
-                                         term_2=term_2, tc=tc)
-        x = self._add_formal_object(x=x)
+        x: BinaryFormula = BinaryFormula(c=self, connective=connective, term_1=term_1, term_2=term_2, tc=tc)
         return x
 
 
 class Formula(FormalObject):
-    """In FL1, a formula is necessarily linked to a formal-language via a collection."""
+    """A formula is a formal-object that may be used as an atomic-formula, or a composite-formula term, in some formal-language."""
 
-    def __init__(self, formal_language_collection: FormalLanguageCollection,
+    def __init__(self, c: FormalLanguageCollection,
                  tc: typing.Optional[ts.TypesettingClass] = None):
-        self._formal_language_collection = formal_language_collection
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.formula)
-        super().__init__(tc=tc)
+        super().__init__(c=c, tc=tc)
 
     def __or__(self, other=object):
         """Hack to provide support for pseudo-infix notation, as in: p | implies | q.
@@ -473,8 +491,20 @@ class Formula(FormalObject):
         and gluing all this together with the InfixPartialFormula class.
         """
         if not isinstance(other, InfixPartialFormula):
-            # This is a partial infix formula.
-            return InfixPartialFormula(term_1=self, partial_connective=other)
+            if isinstance(self, UnaryConnective) and isinstance(other, Formula):
+                # for the time being, connectives are not formula,
+                # making this particular condition impossible.
+                # but this will need to change in the future,
+                # in order to support rich meta-languages where
+                # connectives are atomic formulas.
+                return self.formal_language.declare_unary_formula(connective=self, term=other)
+            elif isinstance(self, Formula) and isinstance(other, UnaryConnective):
+                return self.formal_language.declare_unary_formula(connective=self, term=other)
+            elif isinstance(self, Formula) and isinstance(other, BinaryConnective):
+                # This is a partial infix formula.
+                return InfixPartialFormula(term_1=self, partial_connective=other)
+            else:
+                log.error(msg="No interpretation found for python-pseudo-math", slf=self, other=other)
         else:
             # other was already converted to InfixPartialFormula.
             return self.formal_language.declare_binary_formula(connective=other.connective, term_1=self,
@@ -482,11 +512,17 @@ class Formula(FormalObject):
 
     @property
     def formal_language(self) -> FormalLanguage:
-        return self.formal_language_collection.formal_language
+        """The formal-language of which this formula is an element.
+
+        Note: return type is more specific than FormalObject.formal_language, where the property is optional."""
+        return super().formal_language
 
     @property
     def formal_language_collection(self) -> FormalLanguageCollection:
-        return self._formal_language_collection
+        """The primary formal-language collection of which this formula is an element.
+
+        Note: return type is more specific than FormalObject.formal_language_collection, where the property is optional."""
+        return super().formal_language_collection
 
     def iterate_leaf_formulas(self) -> typing.Generator[AtomicFormula, None, None]:
         """Iterate through the formula-tree and return its ordered leaf elements (i.e.: its atomic-formulas). The order is reproducible: formula terms are read from left to right, depth-first."""
@@ -527,15 +563,15 @@ class Formula(FormalObject):
 
 
 class AtomicFormula(Formula):
-    def __init__(self, formal_language_collection: FormalLanguageCollection, tc: typing.Optional[ts.TypesettingClass]):
+    def __init__(self, c: FormalLanguageCollection, tc: typing.Optional[ts.TypesettingClass]):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.atomic_formula)
-        super().__init__(formal_language_collection=formal_language_collection, tc=tc)
+        super().__init__(c=c, tc=tc)
 
 
 class CompoundFormula(Formula):
     """A compound-formula is a formal-object and a tree-structure of atomic-formulas and compound-formulas."""
 
-    def __init__(self, formal_language_collection: FormalLanguageCollection, connective: Connective,
+    def __init__(self, c: FormalLanguageCollection, connective: Connective,
                  terms: typing.Tuple[Formula], tc: typing.Optional[ts.TypesettingClass]):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.compound_formula)
         if isinstance(connective, FixedArityConnective):
@@ -547,7 +583,7 @@ class CompoundFormula(Formula):
             log.error(msg='Unsupported connective python class.')
         self._connective: Connective = connective
         self._terms: typing.Tuple[Formula] = terms
-        super().__init__(formal_language_collection=formal_language_collection, tc=tc)
+        super().__init__(c=c, tc=tc)
 
     def __eq__(self, other):
         return hash(self) == hash(other)
@@ -572,20 +608,20 @@ class CompoundFormula(Formula):
 class FixedArityFormula(CompoundFormula):
     """A fixed-arity-formula is a formula with a fixed-arity connective."""
 
-    def __init__(self, formal_language_collection: FormalLanguageCollection, connective: FixedArityConnective,
+    def __init__(self, c: FormalLanguageCollection, connective: FixedArityConnective,
                  terms: typing.Tuple[Formula, ...], tc: typing.Optional[ts.TypesettingClass] = None):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.fixed_arity_formula)
-        super().__init__(formal_language_collection=formal_language_collection, connective=connective, terms=terms,
+        super().__init__(c=c, connective=connective, terms=terms,
                          tc=tc)
 
 
 class UnaryFormula(FixedArityFormula):
     """A unary-formula is a formula with a fixed unary connective."""
 
-    def __init__(self, formal_language_collection: FormalLanguageCollection, connective: UnaryConnective, term: Formula,
+    def __init__(self, c: FormalLanguageCollection, connective: UnaryConnective, term: Formula,
                  tc: typing.Optional[ts.TypesettingClass]):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.unary_formula)
-        super().__init__(formal_language_collection=formal_language_collection, connective=connective, terms=(term,),
+        super().__init__(c=c, connective=connective, terms=(term,),
                          tc=tc)
 
     @property
@@ -596,10 +632,10 @@ class UnaryFormula(FixedArityFormula):
 class BinaryFormula(FixedArityFormula):
     """A binary-formula is a formula with a fixed binary connective."""
 
-    def __init__(self, formal_language_collection: FormalLanguageCollection, connective: BinaryConnective,
+    def __init__(self, c: FormalLanguageCollection, connective: BinaryConnective,
                  term_1: Formula, term_2: Formula, tc: typing.Optional[ts.TypesettingClass] = None):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.binary_formula)
-        super().__init__(formal_language_collection=formal_language_collection, connective=connective,
+        super().__init__(c=c, connective=connective,
                          terms=(term_1, term_2,), tc=tc)
 
     @property
@@ -630,11 +666,11 @@ def generate_unique_values(generator):
 class Axiom(Formula):
     """An axiom is a formal-object that contains a formula assumed as valid in the parent formal-language."""
 
-    def __init__(self, formal_language_collection: FormalLanguageCollection, phi: Formula,
+    def __init__(self, c: AxiomCollection, phi: Formula,
                  tc: typing.Optional[ts.TypesettingClass]):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.axiom)
         self._phi: Formula = phi
-        super().__init__(formal_language_collection=formal_language_collection, tc=tc)
+        super().__init__(c=c, tc=tc)
 
     def __eq__(self, other):
         return hash(self) == hash(other)
@@ -658,12 +694,6 @@ class AxiomCollection(FormalLanguageCollection):
         # if default_rep is None:
         #     default_rep = ts.representations.symbolic_representation
         super().__init__(formal_language=formal_language, tc=tc, default_rep=default_rep)
-
-    def declare_axiom(self, phi: Formula, tc: typing.Optional[ts.TypesettingClass] = None) -> Axiom:
-        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.axiom)
-        x: Axiom = Axiom(formal_language_collection=self, phi=phi, tc=tc)
-        x = self._add_formal_object(x=x)
-        return x
 
 
 class InfixPartialFormula:
