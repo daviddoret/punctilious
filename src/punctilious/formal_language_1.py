@@ -239,6 +239,27 @@ class FormalObject(ts.Typesettable):
                                  representation=ts.representations.symbolic_representation)
 
     @property
+    def bound_to_formal_language(self):
+        """A formal-object is bound to a formal-language l if and only if
+         it is an element of one of the primary collections c1, c2, ..., cn
+         that constitute the formal-language l := (c1, c2, ..., cn).
+
+         Return True if this formal-object is bound (i.e. an element of) a formal-language, False otherwise."""
+        return self._formal_language_collection is not None
+
+    def bind_to_formal_language(self, c: FormalLanguageCollection):
+        """If the formal-object is not bound to a formal-language, binds it to that formal-language,
+        by making it an element of the formal-language collection c."""
+        if self.bound_to_formal_language:
+            log.error(
+                msg="Attempt to bind to a formal-language a formal-object that is already bound to a formal-language.",
+                slf=self, c=c)
+        else:
+            # implement the cross reference.
+            self._formal_language_collection = c
+            c.add_element(x=self)
+
+    @property
     def formal_language(self) -> typing.Optional[FormalLanguage]:
         """If the formal-object is an element of a formal-language, return the formal-language. None otherwise."""
         if self.formal_language_collection is None:
@@ -323,7 +344,8 @@ class FormalLanguageCollection(FormalObject, abc.ABC):
 class FormalLanguage(FormalObject, abc.ABC):
     """A formal language is defined as an accretor-tuple of accretor-tuples."""
 
-    def __init__(self, set_as_default: bool = False, tc: typing.Optional[ts.TypesettingClass] = None):
+    def __init__(self, axioms: typing.Optional[AxiomCollection] = None, set_as_default: bool = False,
+                 tc: typing.Optional[ts.TypesettingClass] = None):
         """
 
         :param set_as_default: if True, the formal-language is set as the current default formal-language
@@ -335,6 +357,13 @@ class FormalLanguage(FormalObject, abc.ABC):
         elif not tc.is_subclass_of(c=typesetting_classes.formal_language):
             log.error(msg='inconsistent typesetting class', slf=self, tc=tc)
         super().__init__(tc=tc, default_rep=ts.representations.symbolic_representation)
+        if axioms is None:
+            axioms: AxiomCollection = AxiomCollection(formal_language=self)
+        elif axioms.formal_language is not self:
+            log.error(
+                msg="The formal-language property of the axioms collection passed as an argument to FormalLanguage.__init__() is not the formal-language being initialized.",
+                slf=self, axioms=axioms, axioms_formal_language=axioms.formal_language)
+        self._axioms = axioms
         self._is_locked: bool = False
         self._container: set = set()
         if set_as_default:
@@ -723,6 +752,13 @@ class AxiomCollection(FormalLanguageCollection):
         # if default_rep is None:
         #     default_rep = ts.representations.symbolic_representation
         super().__init__(formal_language=formal_language, tc=tc, default_rep=default_rep)
+
+    def postulate_axiom(self, axiom: Axiom):
+        if axiom.formal_language_collection is None:
+            axiom.set_formal_language_collection(l=self)
+        elif axiom.formal_language_collection is not self:
+            log.error(msg="Trying to postulate an axiom in a collection ", slf=self, axiom=axiom)
+        self.add_element(x=axiom)
 
 
 class InfixPartialFormula:

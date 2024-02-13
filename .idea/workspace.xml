@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formal_language_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/punctilious.log" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/punctilious.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/punctilious.log" beforeDir="false" afterPath="$PROJECT_DIR$/tests/punctilious.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -124,7 +126,7 @@
     "Python.fl1_typesetting.executor": "Run",
     "Python.pl1.executor": "Run",
     "Python.pl1_presentation.executor": "Run",
-    "Python.propositional_logic_1.executor": "Debug",
+    "Python.propositional_logic_1.executor": "Run",
     "Python.sandbox.executor": "Debug",
     "Python.test_fl1.executor": "Run",
     "Python.typesetting.executor": "Run",
@@ -182,7 +184,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in tests">
+  <component name="RunManager" selected="Python.propositional_logic_1">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -487,8 +489,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_declare_unary_formula" />
         <item itemvalue="Python.propositional_logic_1" />
+        <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_declare_unary_formula" />
         <item itemvalue="Python tests.pytest for test_pl1.TestPL1ML.test_infix_formula" />
         <item itemvalue="Python.test_fl1" />
         <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_connectives_conditional" />
@@ -510,14 +512,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00463" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1706044645114</created>
-      <option name="number" value="00463" />
-      <option name="presentableId" value="LOCAL-00463" />
-      <option name="project" value="LOCAL" />
-      <updated>1706044645114</updated>
     </task>
     <task id="LOCAL-00464" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -903,7 +897,15 @@
       <option name="project" value="LOCAL" />
       <updated>1707773010914</updated>
     </task>
-    <option name="localTasksCounter" value="512" />
+    <task id="LOCAL-00512" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1707773687943</created>
+      <option name="number" value="00512" />
+      <option name="presentableId" value="LOCAL-00512" />
+      <option name="project" value="LOCAL" />
+      <updated>1707773687943</updated>
+    </task>
+    <option name="localTasksCounter" value="513" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

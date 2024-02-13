@@ -1,5 +1,5 @@
-2024-02-12 13:34:10,797 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
-2024-02-12 13:34:10,805 - INFO - Override typesetting-method: (symbol,technical-representation)
-2024-02-12 13:34:10,805 - DEBUG - Module typesetting: loaded.
-2024-02-12 13:34:10,806 - DEBUG - Module formal_language_1: loaded.
-2024-02-12 13:34:10,807 - DEBUG - Module __main__: loaded.
+2024-02-13 13:37:21,463 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
+2024-02-13 13:37:21,465 - INFO - Override typesetting-method: (symbol,technical-representation)
+2024-02-13 13:37:21,465 - DEBUG - Module typesetting: loaded.
+2024-02-13 13:37:21,466 - DEBUG - Module formal_language_1: loaded.
+2024-02-13 13:37:21,466 - DEBUG - Module __main__: loaded.
