@@ -7,7 +7,6 @@ import typing
 import log
 import typesetting as ts
 import formal_language_1 as fl1
-from formal_language_1 import Connective, Formula, BinaryFormula
 
 
 # TODO: See Lawler, John. “Notation, Logical (See: Notation, Mathematical),” n.d. https://websites.umich.edu/~jlawler/IELL-LogicalNotation.pdf.
@@ -372,11 +371,11 @@ class MetaLanguage(fl1.FormalLanguage):
         """The collection of declared compound formulas in PL1."""
         return self._compound_formulas
 
-    def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: Formula,
-                               term_2: Formula) -> BinaryFormula:
+    def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.Formula,
+                               term_2: fl1.Formula) -> fl1.BinaryFormula:
         return self.compound_formulas.declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
 
-    def declare_unary_formula(self, connective: fl1.BinaryConnective, term: Formula) -> BinaryFormula:
+    def declare_unary_formula(self, connective: fl1.BinaryConnective, term: fl1.Formula) -> fl1.BinaryFormula:
         return self.compound_formulas.declare_binary_formula(connective=connective, term=term)
 
     def get_meta_variable_tuple(self, phi: fl1.Formula) -> tuple[MetaVariable, ...]:
@@ -489,11 +488,11 @@ class PropositionalLogic(fl1.FormalLanguage):
         """The collection of declared compound formulas in PL1."""
         return self._compound_formulas
 
-    def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: Formula,
-                               term_2: Formula) -> fl1.BinaryFormula:
+    def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.Formula,
+                               term_2: fl1.Formula) -> fl1.BinaryFormula:
         return self.compound_formulas.declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
 
-    def declare_unary_formula(self, connective: fl1.UnaryConnective, term: Formula) -> fl1.UnaryFormula:
+    def declare_unary_formula(self, connective: fl1.UnaryConnective, term: fl1.Formula) -> fl1.UnaryFormula:
         return self.compound_formulas.declare_unary_formula(connective=connective, term=term)
 
     @property

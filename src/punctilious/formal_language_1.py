@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import abc
 import typing
+import threading
 
 import log
 import typesetting as ts
@@ -222,6 +223,7 @@ class FormalObject(ts.Typesettable):
     def __init__(self, c: typing.Optional[FormalLanguageCollection] = None,
                  tc: typing.Optional[ts.TypesettingClass] = None,
                  default_rep: typing.Optional[ts.Representation] = None):
+        self._formal_language_lock = threading.Lock()
         tc: ts.TypesettingClass = ts.validate_tc(tc=tc, superclass=typesetting_classes.formal_object)
         if default_rep is None:
             default_rep = ts.representations.symbolic_representation
@@ -248,16 +250,19 @@ class FormalObject(ts.Typesettable):
         return self._formal_language_collection is not None
 
     def bind_to_formal_language(self, c: FormalLanguageCollection):
-        """If the formal-object is not bound to a formal-language, binds it to that formal-language,
-        by making it an element of the formal-language collection c."""
+        """If the formal-object is not yet bound to a formal-language,
+        binds it to the formal-language that is the parent of formal-language collection.
+        As a result, the .formal_language property of the formal-object is set,
+        and the formal-object is made an element of the formal-language collection c."""
         if self.bound_to_formal_language:
             log.error(
                 msg="Attempt to bind to a formal-language a formal-object that is already bound to a formal-language.",
                 slf=self, c=c)
         else:
-            # implement the cross reference.
-            self._formal_language_collection = c
-            c.add_element(x=self)
+            with self._formal_language_lock:
+                # implement the cross reference.
+                self._formal_language_collection = c  # set the property
+                c.add_element(x=self)  # add the element
 
     @property
     def formal_language(self) -> typing.Optional[FormalLanguage]:
