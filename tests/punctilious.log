@@ -1,20 +1,11 @@
-2024-02-13 13:36:03,979 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
-2024-02-13 13:36:03,982 - INFO - Override typesetting-method: (symbol,technical-representation)
-2024-02-13 13:36:03,982 - DEBUG - Module typesetting: loaded.
-2024-02-13 13:36:03,984 - DEBUG - Module formal_language_1: loaded.
-2024-02-13 13:36:03,985 - INFO - Override typesetting-method: (fl1.unary_formula,symbolic-representation)
-2024-02-13 13:36:03,985 - INFO - Override typesetting-method: (fl1.binary_formula,symbolic-representation)
-2024-02-13 13:36:03,985 - DEBUG - Module formal_language_1_presentation_1: loaded.
-2024-02-13 13:36:03,988 - DEBUG - Module propositional_logic_1: loaded.
-2024-02-13 13:36:03,989 - DEBUG - Module propositional_logic_1_presentation_1: loaded.
-2024-02-13 13:36:03,989 - DEBUG - Module punctilious: loaded.
-2024-02-13 13:36:03,999 - DEBUG - FormalObject-4392395952
-2024-02-13 13:36:04,004 - ERROR - connective is not a pl1 connective.
-2024-02-13 13:36:04,004 - ERROR - term is not a pl1 well-formed-formula.
-2024-02-13 13:36:04,006 - DEBUG - FormalObject '¬P' (python id: 4392569120) is already present in this FormalLanguageClass as '¬P' (python id: 4392569072). The existing object is reused and the new object is discarded.
-2024-02-13 13:36:04,009 - INFO - Preference 'None.formal_language' changed from 'None' to 'hello world'.
-2024-02-13 13:36:04,010 - DEBUG - FormalObject '¬P' (python id: 4392401376) is already present in this FormalLanguageClass as '¬P' (python id: 4392401232). The existing object is reused and the new object is discarded.
-2024-02-13 13:36:04,010 - DEBUG - FormalObject 'P implies P' (python id: 4392401376) is already present in this FormalLanguageClass as 'P implies P' (python id: 4392401136). The existing object is reused and the new object is discarded.
-2024-02-13 13:36:04,010 - DEBUG - FormalObject 'P implies P' (python id: 4392402336) is already present in this FormalLanguageClass as 'P implies P' (python id: 4392401136). The existing object is reused and the new object is discarded.
-2024-02-13 13:36:04,010 - DEBUG - FormalObject 'P implies (Q implies Q)' (python id: 4392401904) is already present in this FormalLanguageClass as 'P implies (Q implies Q)' (python id: 4392401952). The existing object is reused and the new object is discarded.
-2024-02-13 13:36:04,011 - INFO - P implies (Q implies Q) == P implies (Q implies Q)
+2024-02-15 22:11:30,972 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
+2024-02-15 22:11:30,974 - INFO - Override typesetting-method: (symbol,technical-representation)
+2024-02-15 22:11:30,974 - DEBUG - Module typesetting: loaded.
+2024-02-15 22:11:30,975 - DEBUG - Module formal_language_1: loaded.
+2024-02-15 22:11:30,976 - INFO - Override typesetting-method: (fl1.unary_formula,symbolic-representation)
+2024-02-15 22:11:30,976 - INFO - Override typesetting-method: (fl1.binary_formula,symbolic-representation)
+2024-02-15 22:11:30,976 - DEBUG - Module formal_language_1_presentation_1: loaded.
+2024-02-15 22:11:30,979 - DEBUG - Module propositional_logic_1: loaded.
+2024-02-15 22:11:30,980 - DEBUG - Module propositional_logic_1_presentation_1: loaded.
+2024-02-15 22:11:30,980 - DEBUG - Module punctilious: loaded.
+2024-02-15 22:11:30,982 - INFO - Preference 'None.formal_language' changed from 'None' to 'MinimalistPropositionalLogic-4313745936'.

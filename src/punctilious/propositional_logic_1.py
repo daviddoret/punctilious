@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import abc
 import typing
 
 import log
@@ -58,6 +59,18 @@ class TypesettingClasses:
         self._axiom = ts.typesetting_classes.register(name="axiom", superclass=fl1.typesetting_classes.axiom)
         self._axiom_pl1 = ts.typesetting_classes.register(name="axiom.pl1", superclass=self._axiom)
         self._axiom_pl2 = ts.typesetting_classes.register(name="axiom.pl2", superclass=self._axiom)
+        self._propositional_logic = ts.typesetting_classes.register(name="propositional_logic",
+                                                                    superclass=fl1.typesetting_classes.formal_language)
+        self._minimalist_propositional_logic = ts.typesetting_classes.register(name="minimalist_propositional_logic",
+                                                                               superclass=self._propositional_logic)
+
+    @property
+    def propositional_logic(self) -> ts.TypesettingClass:
+        return self._propositional_logic
+
+    @property
+    def minimalist_propositional_logic(self) -> ts.TypesettingClass:
+        return self._minimalist_propositional_logic
 
     @property
     def axiom(self) -> ts.TypesettingClass:
@@ -452,15 +465,11 @@ class MetaLanguage(fl1.FormalLanguage):
 class PropositionalLogic(fl1.FormalLanguage):
     """Propositional Logic 1."""
 
-    def __init__(self, axioms: typing.Optional[fl1.AxiomCollection] = None, set_as_default: bool = False,
+    def __init__(self, set_as_default: bool = False,
                  tc: typing.Optional[ts.TypesettingClass] = None):
-        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.logical_calculi)
-        super().__init__(axioms=axioms, set_as_default=set_as_default, tc=tc)
-        # Meta-language
+        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.propositional_logic)
         self._meta_language: MetaLanguage = MetaLanguage(propositional_logic=self)
-        # Object classes
-        self._connectives: ConnectiveCollection = ConnectiveCollection(formal_language=self)
-        super()._add_class(x=self._connectives)
+        super().__init__(set_as_default=set_as_default, tc=tc)
         self._inference_rules: PropositionalLogicInferenceRuleCollection = PropositionalLogicInferenceRuleCollection(
             propositional_logic=self)
         super()._add_class(x=self._inference_rules)
@@ -470,20 +479,22 @@ class PropositionalLogic(fl1.FormalLanguage):
         self._propositional_variables: PropositionalVariableCollection = PropositionalVariableCollection(
             formal_language=self)
         super()._add_class(x=self._propositional_variables)
-        self._axioms: fl1.AxiomCollection = fl1.AxiomCollection(formal_language=self)
         self.lock()
 
     @property
+    @abc.abstractmethod
     def axioms(self) -> fl1.AxiomCollection:
         """The collection of axioms in PL1."""
-        return self._axioms
+        log.error(msg='abstract method')
 
     @property
+    @abc.abstractmethod
     def connectives(self) -> ConnectiveCollection:
         """The collection of connectives in PL1."""
-        return self._connectives
+        log.error(msg='abstract method')
 
     @property
+    @abc.abstractmethod
     def compound_formulas(self) -> PropositionalLogicCompoundFormulaCollection:
         """The collection of declared compound formulas in PL1."""
         return self._compound_formulas
@@ -527,37 +538,54 @@ class PropositionalLogic(fl1.FormalLanguage):
         return self._propositional_variables
 
 
-class MinimalistLogicAxioms(fl1.AxiomCollection):
-    def __init__(self, meta_language: MetaLanguage):
-        self._meta_language = meta_language
-        super().__init__(formal_language=meta_language)
-        implies: fl1.BinaryConnective = self.meta_language.propositional_logic.connectives.material_implication
-        land: fl1.BinaryConnective = self.meta_language.propositional_logic.connectives.conjunction
-        a = self.meta_language.meta_variables.declare_meta_variable()
-        b = self.meta_language.meta_variables.declare_meta_variable()
-        c = self.meta_language.meta_variables.declare_meta_variable()
+class MinimalistPropositionalLogicAxioms(fl1.AxiomCollection):
+    def __init__(self, propositional_logic: PropositionalLogic):
+        if isinstance(propositional_logic, PropositionalLogic):
+            self._propositional_logic: PropositionalLogic = propositional_logic
+        super().__init__(formal_language=propositional_logic)
+        implies: fl1.BinaryConnective = self.propositional_logic.connectives.material_implication
+        land: fl1.BinaryConnective = self.propositional_logic.connectives.conjunction
+        a = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
+        b = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
+        c = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
         self._pl1 = fl1.Axiom(c=self, phi=a | implies | (a | land | a), tc=typesetting_classes.axiom_pl1)
-        super().declare_axiom(phi=self._pl1)
+        super().postulate_axiom(axiom=self._pl1)
         self._pl2 = fl1.Axiom(c=self, phi=(a | land | b) | implies | (b | land | a), tc=typesetting_classes.axiom_pl2)
-        super().declare_axiom(phi=self._pl1)
+        super().postulate_axiom(axiom=self._pl1)
 
     @property
-    def meta_language(self) -> MetaLanguage:
-        return self._meta_language
+    def propositional_logic(self) -> PropositionalLogic:
+        return self._propositional_logic
 
     @property
-    def pl1(self):
+    def pl1(self) -> fl1.Axiom:
         return self._pl1
 
     @property
-    def pl2(self):
+    def pl2(self) -> fl1.Axiom:
         return self._pl2
 
 
 class MinimalistPropositionalLogic(PropositionalLogic):
-    def __init__(self):
-        axioms: MinimalistLogicAxioms = MinimalistLogicAxioms(meta_language=self)
-        super.__init__(axioms=axioms)
+
+    def __init__(self, set_as_default: bool = True):
+        super().__init__(set_as_default=set_as_default,
+                         tc=typesetting_classes.minimalist_propositional_logic)
+        self._connectives = ConnectiveCollection(formal_language=self)
+        self._compound_formulas = PropositionalLogicCompoundFormulaCollection(formal_language=self)
+        self._axioms: MinimalistPropositionalLogicAxioms = MinimalistPropositionalLogicAxioms(propositional_logic=self)
+
+    @property
+    def axioms(self) -> fl1.AxiomCollection:
+        return self._axioms
+
+    @property
+    def connectives(self) -> ConnectiveCollection:
+        return self._connectives
+
+    @property
+    def compound_formulas(self) -> PropositionalLogicCompoundFormulaCollection:
+        return self._compound_formulas
 
 
 log.debug(f"Module {__name__}: loaded.")

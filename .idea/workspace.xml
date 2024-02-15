@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formal_language_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/punctilious.log" beforeDir="false" afterPath="$PROJECT_DIR$/tests/punctilious.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_pl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pl1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,6 +93,7 @@
     "PowerShell.release_patch.ps1.executor": "Run",
     "Python tests.Python tests in tests.executor": "Run",
     "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
+    "Python tests.pytest for test_pl1.TestMinimalPropositionalLogic.test_init.executor": "Run",
     "Python tests.pytest for test_pl1.TestPL1.test_compounding_formulas_1.executor": "Debug",
     "Python tests.pytest for test_pl1.TestPL1.test_connectives_1.executor": "Debug",
     "Python tests.pytest for test_pl1.TestPL1.test_connectives_2.executor": "Run",
@@ -182,7 +184,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.propositional_logic_1">
+  <component name="RunManager" selected="Python tests.pytest for test_pl1.TestMinimalPropositionalLogic.test_init">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -417,6 +419,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_pl1.TestMinimalPropositionalLogic.test_init" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_pl1.TestMinimalPropositionalLogic.test_init&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for test_pl1.TestPL1ML.test_infix_formula" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -431,23 +450,6 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_pl1.TestPL1ML.test_infix_formula&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_pl1.TestPL1.test_connectives_conditional" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_pl1.TestPL1.test_connectives_conditional&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -478,20 +480,20 @@
       <item itemvalue="Python.test_fl1" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
+      <item itemvalue="Python tests.pytest for test_pl1.TestMinimalPropositionalLogic.test_init" />
       <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_declare_unary_formula" />
       <item itemvalue="Python tests.pytest for test_pl1.TestPL1ML.test_infix_formula" />
-      <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_connectives_conditional" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_pl1.TestMinimalPropositionalLogic.test_init" />
         <item itemvalue="Python.propositional_logic_1" />
         <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_declare_unary_formula" />
         <item itemvalue="Python tests.pytest for test_pl1.TestPL1ML.test_infix_formula" />
         <item itemvalue="Python.test_fl1" />
-        <item itemvalue="Python tests.pytest for test_pl1.TestPL1.test_connectives_conditional" />
       </list>
     </recent_temporary>
   </component>
@@ -510,14 +512,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00465" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1706164909208</created>
-      <option name="number" value="00465" />
-      <option name="presentableId" value="LOCAL-00465" />
-      <option name="project" value="LOCAL" />
-      <updated>1706164909208</updated>
     </task>
     <task id="LOCAL-00466" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -903,7 +897,15 @@
       <option name="project" value="LOCAL" />
       <updated>1707828823274</updated>
     </task>
-    <option name="localTasksCounter" value="514" />
+    <task id="LOCAL-00514" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1707914529667</created>
+      <option name="number" value="00514" />
+      <option name="presentableId" value="LOCAL-00514" />
+      <option name="project" value="LOCAL" />
+      <updated>1707914529667</updated>
+    </task>
+    <option name="localTasksCounter" value="515" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1012,18 +1014,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_pl1.py</url>
-          <line>188</line>
+          <line>193</line>
           <option name="timeStamp" value="126" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_pl1.py</url>
-          <line>187</line>
+          <line>192</line>
           <option name="timeStamp" value="127" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_pl1.py</url>
-          <line>119</line>
-          <option name="timeStamp" value="130" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

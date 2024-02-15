@@ -3,6 +3,11 @@ import pytest
 import punctilious as pu
 
 
+class TestMinimalPropositionalLogic:
+    def test_init(self):
+        m0 = pu.pl1.MinimalistPropositionalLogic()
+
+
 class TestPL1:
     def test_connectives_conditional(self):
         l: pu.pl1.PropositionalLogic = pu.pl1.PropositionalLogic()
