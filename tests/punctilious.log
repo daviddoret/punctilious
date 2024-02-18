@@ -1,11 +1,1 @@
-2024-02-15 22:11:30,972 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
-2024-02-15 22:11:30,974 - INFO - Override typesetting-method: (symbol,technical-representation)
-2024-02-15 22:11:30,974 - DEBUG - Module typesetting: loaded.
-2024-02-15 22:11:30,975 - DEBUG - Module formal_language_1: loaded.
-2024-02-15 22:11:30,976 - INFO - Override typesetting-method: (fl1.unary_formula,symbolic-representation)
-2024-02-15 22:11:30,976 - INFO - Override typesetting-method: (fl1.binary_formula,symbolic-representation)
-2024-02-15 22:11:30,976 - DEBUG - Module formal_language_1_presentation_1: loaded.
-2024-02-15 22:11:30,979 - DEBUG - Module propositional_logic_1: loaded.
-2024-02-15 22:11:30,980 - DEBUG - Module propositional_logic_1_presentation_1: loaded.
-2024-02-15 22:11:30,980 - DEBUG - Module punctilious: loaded.
-2024-02-15 22:11:30,982 - INFO - Preference 'None.formal_language' changed from 'None' to 'MinimalistPropositionalLogic-4313745936'.
+2024-02-18 12:42:18,326 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious

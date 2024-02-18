@@ -77,7 +77,7 @@ class Preferences:
         super().__init__()
         section: str = "formal_language_1_presentation_1"
         self._binary_formula_notation = BinaryFormulaNotationPreference(item='binary formula notation',
-            binary_formula_notation=binary_formula_notations.infix_notation)
+                                                                        binary_formula_notation=binary_formula_notations.infix_notation)
         self._register(preference=self._binary_formula_notation)
         self._connective_symbol = ts.SymbolPreference(section=section, item="connective", attribute="symbol")
         self._register(preference=self._connective_symbol)
@@ -160,20 +160,20 @@ def load():
     representation: ts.Representation = ts.representations.symbolic_representation
 
     # symbols
-    ts.register_symbol(c=fl1.typesetting_classes.connective, symbol_preference=preferences.connective_symbol,
-        representation=representation)
+    ts.register_symbol(c=fl1.TypesettingClasses.CONNECTIVE, symbol_preference=preferences.connective_symbol,
+                       representation=representation)
 
     # formulas
     ts.register_typesetting_method(python_function=typeset_binary_formula_function_call,
-        c=fl1.typesetting_classes.binary_formula, representation=representation)
+                                   c=fl1.TypesettingClasses.BINARY_FORMULA, representation=representation)
     ts.register_typesetting_method(python_function=typeset_unary_formula_function_call,
-        c=fl1.typesetting_classes.unary_formula, representation=representation)
+                                   c=fl1.TypesettingClasses.UNARY_FORMULA, representation=representation)
 
     ts.register_typesetting_method(python_function=typeset_unary_formula_prefix_without_parenthesis,
-        c=fl1.typesetting_classes.unary_formula, representation=representation)
+                                   c=fl1.TypesettingClasses.UNARY_FORMULA, representation=representation)
 
     ts.register_typesetting_method(python_function=typeset_binary_formula_infix,
-        c=fl1.typesetting_classes.binary_formula, representation=representation)
+                                   c=fl1.TypesettingClasses.BINARY_FORMULA, representation=representation)
 
 
 load()

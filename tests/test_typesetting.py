@@ -33,11 +33,11 @@ class TestIndexSymbol:
 
 class TestTypesettingClass:
     def test_is_subclass_of(self):
-        c = pu.ts.TypesettingClass("c")
-        d = pu.ts.TypesettingClass("d", superclass=c)
-        e = pu.ts.TypesettingClass("e", superclass=d)
-        f = pu.ts.TypesettingClass("f", superclass=c)
-        g = pu.ts.TypesettingClass("g", superclass=f)
+        c = pu.ts.TypesettingClassValue("c")
+        d = pu.ts.TypesettingClassValue("d", superclass=c)
+        e = pu.ts.TypesettingClassValue("e", superclass=d)
+        f = pu.ts.TypesettingClassValue("f", superclass=c)
+        g = pu.ts.TypesettingClassValue("g", superclass=f)
         assert c.is_subclass_of(c=c)
         assert d.is_subclass_of(c=c)
         assert e.is_subclass_of(c=c)

@@ -25,28 +25,28 @@ class TypesettingClasses:
     def __init__(self):
         super().__init__()
         self._conjunction = ts.typesetting_classes.register(name="pl1.connective.conjunction",
-                                                            superclass=fl1.typesetting_classes.binary_connective)
+                                                            superclass=fl1.TypesettingClasses.BINARY_CONNECTIVE)
         self._disjunction = ts.typesetting_classes.register(name="pl1.connective.disjunction",
-                                                            superclass=fl1.typesetting_classes.binary_connective)
+                                                            superclass=fl1.TypesettingClasses.BINARY_CONNECTIVE)
         self._modus_ponens = ts.typesetting_classes.register(name="pl1.inference_rule.modus_ponens",
-                                                             superclass=fl1.typesetting_classes.inference_rule)
+                                                             superclass=fl1.TypesettingClasses.FORMAL_OBJECT)
         self._material_implication = ts.typesetting_classes.register(name="pl1.connective.material_implication",
-                                                                     superclass=fl1.typesetting_classes.binary_connective)
+                                                                     superclass=fl1.TypesettingClasses.BINARY_CONNECTIVE)
         self._connective_collection = ts.typesetting_classes.register(name="pl1.connective_collection",
-                                                                      superclass=fl1.typesetting_classes.connective_collection)
+                                                                      superclass=fl1.TypesettingClasses.CONNECTIVE_COLLECTION)
         self._meta_variable = ts.typesetting_classes.register(name="meta_language.meta_variable",
-                                                              superclass=fl1.typesetting_classes.atomic_formula)
+                                                              superclass=fl1.TypesettingClasses.ATOMIC_FORMULA)
         self._negation = ts.typesetting_classes.register(name="pl1.connective.negation",
-                                                         superclass=fl1.typesetting_classes.unary_connective)
-        self._pl1ml = ts.typesetting_classes.register(name="pl1ml", superclass=fl1.typesetting_classes.formal_language)
-        self._pl1 = ts.typesetting_classes.register(name="pl1", superclass=fl1.typesetting_classes.formal_language)
+                                                         superclass=fl1.TypesettingClasses.UNARY_CONNECTIVE)
+        self._pl1ml = ts.typesetting_classes.register(name="pl1ml", superclass=fl1.TypesettingClasses.FORMAL_LANGUAGE)
+        self._pl1 = ts.typesetting_classes.register(name="pl1", superclass=fl1.TypesettingClasses.FORMAL_LANGUAGE)
         # pl1ml is an extension of pl1, all formulas in pl1 are valid in pl1ml + metavariables.
         self._pl1ml_formula = ts.typesetting_classes.register(name="meta_language.formula",
-                                                              superclass=fl1.typesetting_classes.formula)
+                                                              superclass=fl1.TypesettingClasses.FORMULA)
         self._pl1ml_unary_formula = ts.typesetting_classes.register(name="meta_language.unary_formula",
-                                                                    superclass=fl1.typesetting_classes.unary_formula)
+                                                                    superclass=fl1.TypesettingClasses.UNARY_FORMULA)
         self._pl1ml_binary_formula = ts.typesetting_classes.register(name="meta_language.binary_formula",
-                                                                     superclass=fl1.typesetting_classes.binary_formula)
+                                                                     superclass=fl1.TypesettingClasses.BINARY_FORMULA)
         # pl1 is a more specialized class.
         self._pl1_formula = ts.typesetting_classes.register(name="pl1.propositional_formula",
                                                             superclass=self._pl1ml_formula)
@@ -55,97 +55,97 @@ class TypesettingClasses:
         self._pl1_binary_formula = ts.typesetting_classes.register(name="pl1.propositional_binary_formula",
                                                                    superclass=self._pl1ml_binary_formula)
         self._pl1_variable = ts.typesetting_classes.register(name="pl1.propositional_variable",
-                                                             superclass=fl1.typesetting_classes.atomic_formula)
-        self._axiom = ts.typesetting_classes.register(name="axiom", superclass=fl1.typesetting_classes.axiom)
+                                                             superclass=fl1.TypesettingClasses.ATOMIC_FORMULA)
+        self._axiom = ts.typesetting_classes.register(name="axiom", superclass=fl1.TypesettingClasses.AXIOM)
         self._axiom_pl1 = ts.typesetting_classes.register(name="axiom.pl1", superclass=self._axiom)
         self._axiom_pl2 = ts.typesetting_classes.register(name="axiom.pl2", superclass=self._axiom)
         self._propositional_logic = ts.typesetting_classes.register(name="propositional_logic",
-                                                                    superclass=fl1.typesetting_classes.formal_language)
+                                                                    superclass=fl1.TypesettingClasses.FORMAL_LANGUAGE)
         self._minimalist_propositional_logic = ts.typesetting_classes.register(name="minimalist_propositional_logic",
                                                                                superclass=self._propositional_logic)
 
     @property
-    def propositional_logic(self) -> ts.TypesettingClass:
+    def propositional_logic(self) -> ts.TypesettingClassValue:
         return self._propositional_logic
 
     @property
-    def minimalist_propositional_logic(self) -> ts.TypesettingClass:
+    def minimalist_propositional_logic(self) -> ts.TypesettingClassValue:
         return self._minimalist_propositional_logic
 
     @property
-    def axiom(self) -> ts.TypesettingClass:
+    def axiom(self) -> ts.TypesettingClassValue:
         return self._axiom
 
     @property
-    def axiom_pl1(self) -> ts.TypesettingClass:
+    def axiom_pl1(self) -> ts.TypesettingClassValue:
         return self._axiom_pl1
 
     @property
-    def axiom_pl2(self) -> ts.TypesettingClass:
+    def axiom_pl2(self) -> ts.TypesettingClassValue:
         return self._axiom_pl2
 
     @property
-    def conjunction(self) -> ts.TypesettingClass:
+    def conjunction(self) -> ts.TypesettingClassValue:
         return self._conjunction
 
     @property
-    def disjunction(self) -> ts.TypesettingClass:
+    def disjunction(self) -> ts.TypesettingClassValue:
         return self._disjunction
 
     @property
-    def material_implication(self) -> ts.TypesettingClass:
+    def material_implication(self) -> ts.TypesettingClassValue:
         return self._material_implication
 
     @property
-    def connective_collection(self) -> ts.TypesettingClass:
+    def connective_collection(self) -> ts.TypesettingClassValue:
         return self._connective_collection
 
     @property
-    def meta_variable(self) -> ts.TypesettingClass:
+    def meta_variable(self) -> ts.TypesettingClassValue:
         return self._meta_variable
 
     @property
-    def negation(self) -> ts.TypesettingClass:
+    def negation(self) -> ts.TypesettingClassValue:
         return self._negation
 
     @property
-    def logical_calculi(self) -> ts.TypesettingClass:
+    def logical_calculi(self) -> ts.TypesettingClassValue:
         return self._pl1
 
     @property
-    def modus_ponens(self) -> ts.TypesettingClass:
+    def modus_ponens(self) -> ts.TypesettingClassValue:
         return self._modus_ponens
 
     @property
-    def pl1ml(self) -> ts.TypesettingClass:
+    def pl1ml(self) -> ts.TypesettingClassValue:
         return self._pl1ml
 
     @property
-    def pl1_formula(self) -> ts.TypesettingClass:
+    def pl1_formula(self) -> ts.TypesettingClassValue:
         return self._pl1_formula
 
     @property
-    def pl1_unary_formula(self) -> ts.TypesettingClass:
+    def pl1_unary_formula(self) -> ts.TypesettingClassValue:
         return self._pl1_unary_formula
 
     @property
-    def pl1_binary_formula(self) -> ts.TypesettingClass:
+    def pl1_binary_formula(self) -> ts.TypesettingClassValue:
         return self._pl1_binary_formula
 
     @property
-    def pl1_variable(self) -> ts.TypesettingClass:
+    def pl1_variable(self) -> ts.TypesettingClassValue:
         return self._pl1_variable
 
     @property
-    def pl1ml_formula(self) -> ts.TypesettingClass:
+    def pl1ml_formula(self) -> ts.TypesettingClassValue:
         return self._pl1ml_formula
 
     @property
-    def pl1ml_unary_formula(self) -> ts.TypesettingClass:
+    def pl1ml_unary_formula(self) -> ts.TypesettingClassValue:
         return self._pl1ml_unary_formula
 
     @property
-    def pl1ml_binary_formula(self) -> ts.TypesettingClass:
+    def pl1ml_binary_formula(self) -> ts.TypesettingClassValue:
         return self._pl1ml_binary_formula
 
 
@@ -155,7 +155,7 @@ typesetting_classes = TypesettingClasses()
 class MetaVariable(fl1.AtomicFormula):
 
     def __init__(self, c: fl1.FormalLanguageCollection,
-                 tc: typing.Optional[ts.TypesettingClass] = None):
+                 tc: typing.Optional[ts.TypesettingClassValue] = None):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.meta_variable)
         super().__init__(c=c, tc=tc)
 
@@ -176,7 +176,7 @@ class MetaVariableCollection(fl1.FormalLanguageCollection):
 class PropositionalVariable(fl1.AtomicFormula):
 
     def __init__(self, c: fl1.FormalLanguageCollection,
-                 tc: typing.Optional[ts.TypesettingClass] = None):
+                 tc: typing.Optional[ts.TypesettingClassValue] = None):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.pl1_variable)
         super().__init__(c=c, tc=tc)
 
@@ -199,7 +199,7 @@ class PropositionalVariableCollection(fl1.FormalLanguageCollection):
 class ConnectiveCollection(fl1.ConnectiveCollection):
     """A specialized ConnectiveCollection for PL1 containing all PL1 connectors, and that is locked."""
 
-    def __init__(self, formal_language: PropositionalLogic, tc: typing.Optional[ts.TypesettingClass] = None):
+    def __init__(self, formal_language: PropositionalLogic, tc: typing.Optional[ts.TypesettingClassValue] = None):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.connective_collection)
         super().__init__(formal_language=formal_language, tc=tc)
         # exhaustive declaration of PL1 connectives.
@@ -252,7 +252,7 @@ class PropositionalLogicCompoundFormulaCollection(fl1.CompoundFormulaCollection)
             log.error("connective is not a pl1 connective.")
         if not self.propositional_logic.is_well_formed_formula(phi=term):
             log.error("term is not a pl1 well-formed-formula.")
-        tc: ts.TypesettingClass = typesetting_classes.pl1_unary_formula
+        tc: ts.TypesettingClassValue = typesetting_classes.pl1_unary_formula
         phi: fl1.UnaryFormula = super().declare_unary_formula(connective=connective, term=term, tc=tc)
         return phi
 
@@ -273,7 +273,7 @@ class PropositionalLogicCompoundFormulaCollection(fl1.CompoundFormulaCollection)
             log.error("term_1 is not a pl1 well-formed-formula.", pl1=self.pl1, phi=term_1)
         if not self.propositional_logic.is_well_formed_formula(phi=term_2):
             log.error("term_2 is not a pl1 well-formed-formula.", pl1=self.pl1, phi=term_2)
-        tc: ts.TypesettingClass = typesetting_classes.pl1_binary_formula
+        tc: ts.TypesettingClassValue = typesetting_classes.pl1_binary_formula
         phi: fl1.BinaryFormula = super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2,
                                                                 tc=tc)
         return phi
@@ -285,7 +285,7 @@ class PropositionalLogicCompoundFormulaCollection(fl1.CompoundFormulaCollection)
 
 class ModusPonens(fl1.InferenceRule):
     def __init__(self, c: fl1.FormalLanguageCollection,
-                 tc: typing.Optional[ts.TypesettingClass] = None):
+                 tc: typing.Optional[ts.TypesettingClassValue] = None):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.meta_variable)
         super().__init__(c=c, tc=tc)
 
@@ -305,7 +305,7 @@ class PropositionalLogicInferenceRuleCollection(fl1.InferenceRuleCollection):
         self._modus_ponens = self.declare_inference_rule()
 
     def declare_inference_rule(self) -> fl1.InferenceRule:
-        tc: ts.TypesettingClass = fl1.typesetting_classes.inference_rule
+        tc: ts.TypesettingClassValue = fl1.typesetting_classes.inference_rule
         phi: fl1.InferenceRule = super().declare_inference_rule(tc=tc)
         return phi
 
@@ -331,7 +331,7 @@ class MetaLanguageCompoundFormulaCollection(fl1.CompoundFormulaCollection):
             log.error("connective is not a pl1 meta-language connective.")
         if not self.meta_language.is_well_formed_formula(phi=term):
             log.error("term is not a pl1 meta-language well-formed-formula.")
-        tc: ts.TypesettingClass = typesetting_classes.pl1ml_unary_formula
+        tc: ts.TypesettingClassValue = typesetting_classes.pl1ml_unary_formula
         phi: fl1.UnaryFormula = super().declare_unary_formula(connective=connective, term=term, tc=tc)
         return phi
 
@@ -352,7 +352,7 @@ class MetaLanguageCompoundFormulaCollection(fl1.CompoundFormulaCollection):
             log.error("term_1 is not a pl1 meta-language well-formed-formula.")
         if not self.meta_language.is_well_formed_formula(phi=term_2):
             log.error("term_2 is not a pl1 meta-language well-formed-formula.")
-        tc: ts.TypesettingClass = typesetting_classes.pl1ml_binary_formula
+        tc: ts.TypesettingClassValue = typesetting_classes.pl1ml_binary_formula
         phi: fl1.BinaryFormula = super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2,
                                                                 tc=tc)
         return phi
@@ -466,7 +466,7 @@ class PropositionalLogic(fl1.FormalLanguage):
     """Propositional Logic 1."""
 
     def __init__(self, set_as_default: bool = False,
-                 tc: typing.Optional[ts.TypesettingClass] = None):
+                 tc: typing.Optional[ts.TypesettingClassValue] = None):
         tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.propositional_logic)
         self._meta_language: MetaLanguage = MetaLanguage(propositional_logic=self)
         super().__init__(set_as_default=set_as_default, tc=tc)
