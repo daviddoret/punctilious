@@ -160,20 +160,20 @@ def load():
     representation: ts.Representation = ts.representations.symbolic_representation
 
     # symbols
-    ts.register_symbol(c=fl1.TypesettingClasses.CONNECTIVE, symbol_preference=preferences.connective_symbol,
+    ts.register_symbol(c=fl1.TypesettingClass.FL1_CONNECTIVE, symbol_preference=preferences.connective_symbol,
                        representation=representation)
 
     # formulas
     ts.register_typesetting_method(python_function=typeset_binary_formula_function_call,
-                                   c=fl1.TypesettingClasses.BINARY_FORMULA, representation=representation)
+                                   tc=fl1.TypesettingClass.FL1_BINARY_FORMULA, representation=representation)
     ts.register_typesetting_method(python_function=typeset_unary_formula_function_call,
-                                   c=fl1.TypesettingClasses.UNARY_FORMULA, representation=representation)
+                                   tc=fl1.TypesettingClass.FL1_UNARY_FORMULA, representation=representation)
 
-    ts.register_typesetting_method(python_function=typeset_unary_formula_prefix_without_parenthesis,
-                                   c=fl1.TypesettingClasses.UNARY_FORMULA, representation=representation)
+    # ts.register_typesetting_method(python_function=typeset_unary_formula_prefix_without_parenthesis,
+    #                               tc=fl1.TypesettingClass.FL1_UNARY_FORMULA, representation=representation)
 
-    ts.register_typesetting_method(python_function=typeset_binary_formula_infix,
-                                   c=fl1.TypesettingClasses.BINARY_FORMULA, representation=representation)
+    # ts.register_typesetting_method(python_function=typeset_binary_formula_infix,
+    #                               tc=fl1.TypesettingClass.FL1_BINARY_FORMULA, representation=representation)
 
 
 load()

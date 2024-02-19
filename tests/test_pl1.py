@@ -10,7 +10,7 @@ class TestMinimalPropositionalLogic:
 
 class TestPL1:
     def test_connectives_conditional(self):
-        l: pu.pl1.PropositionalLogic = pu.pl1.PropositionalLogic()
+        l = pu.pl1.MinimalistPropositionalLogic()
 
         y = l.connectives.material_implication
         assert y.to_string(protocol=pu.ts.protocols.unicode_limited) == "implies"
@@ -28,7 +28,7 @@ class TestPL1:
         assert y.to_string(protocol=pu.ts.protocols.latex) == "\\lor"
 
     def test_connectives_negation(self):
-        l: pu.pl1.PropositionalLogic = pu.pl1.PropositionalLogic()
+        l = pu.pl1.MinimalistPropositionalLogic()
         x = l.connectives.negation
 
         # reset preference
@@ -50,7 +50,7 @@ class TestPL1:
         assert x.to_string(protocol=pu.ts.protocols.latex) == "\\lnot"
 
     def test_formulas(self):
-        l1: pu.pl1.PropositionalLogic = pu.pl1.PropositionalLogic()
+        l1 = pu.pl1.MinimalistPropositionalLogic()
         pa = l1.propositional_variables.declare_proposition_variable()
         phi1 = l1.compound_formulas.declare_unary_formula(connective=l1.connectives.negation, term=pa)
         assert phi1 in l1.compound_formulas
@@ -86,7 +86,7 @@ class TestPL1:
     def test_propositional_variables(self):
         pu.preferences.reset()
 
-        l: pu.pl1.PropositionalLogic = pu.pl1.PropositionalLogic()
+        l = pu.pl1.MinimalistPropositionalLogic()
 
         assert len(l.propositional_variables) == 0
         pa = l.propositional_variables.declare_proposition_variable()
@@ -114,7 +114,7 @@ class TestPL1:
             protocol=pu.ts.protocols.unicode_limited) == "(((P1 implies P2) implies P3) implies P4) implies P5"
 
     def test_declare_unary_formula(self):
-        l1: pu.pl1.PropositionalLogic = pu.pl1.PropositionalLogic()
+        l1 = pu.pl1.MinimalistPropositionalLogic()
 
         lnot: pu.fl1.UnaryConnective = l1.connectives.negation
         pa = l1.propositional_variables.declare_proposition_variable()
@@ -134,7 +134,7 @@ class TestPL1:
         assert id(pd) != id(pf)
 
     def test_declare_binary_formula(self):
-        l1 = pu.pl1.PropositionalLogic()
+        l1 = pu.pl1.MinimalistPropositionalLogic()
 
         conditional = l1.connectives.material_implication
         pa = l1.propositional_variables.declare_proposition_variable()
@@ -147,7 +147,7 @@ class TestPL1:
         assert pd.to_string(protocol=pu.ts.protocols.latex) == '\\textit{P} \\supset \\textit{Q}'
 
     def test_compounding_formulas_1(self):
-        l1 = pu.pl1.PropositionalLogic()
+        l1 = pu.pl1.MinimalistPropositionalLogic()
 
         lnot = l1.connectives.negation
         limplies = l1.connectives.material_implication
@@ -173,7 +173,7 @@ class TestPL1:
 class TestPL1ML:
 
     def test_infix_formula(self):
-        l1 = pu.pl1.PropositionalLogic(set_as_default=True)
+        l1 = pu.pl1.MinimalistPropositionalLogic(set_as_default=True)
         a = l1.propositional_variables.declare_proposition_variable()
         b = l1.propositional_variables.declare_proposition_variable()
         c = l1.propositional_variables.declare_proposition_variable()
@@ -194,7 +194,7 @@ class TestPL1ML:
         pass
 
     def test_substitute_meta_variables(self):
-        l1 = pu.pl1.PropositionalLogic()
+        l1 = pu.pl1.MinimalistPropositionalLogic()
 
         va = l1.meta_language.meta_variables.declare_meta_variable()
         vb = l1.meta_language.meta_variables.declare_meta_variable()
