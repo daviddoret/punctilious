@@ -68,7 +68,7 @@ class PropositionalVariable(fl1.AtomicFormula):
 
     def __init__(self, c: fl1.FormalLanguageCollection,
                  tc: typing.Optional[ts.TC] = None):
-        tc = ts.validate_tc(tc=tc, superclass=typesetting_classes.pl1_variable)
+        tc = ts.validate_tc(tc=tc, superclass=TypesettingClass.PL1_PROPOSITIONAL_VARIABLE)
         super().__init__(c=c, tc=tc)
 
 
@@ -342,7 +342,7 @@ class MetaLanguage(fl1.FormalLanguage):
             term: fl1.Formula = self.substitute_meta_variables(phi=phi.term, m=m)
             psi = self.propositional_logic.compound_formulas.declare_unary_formula(connective=connective, term=term)
             return psi
-        elif phi.is_an_element_of_typesetting_class(tc=fl1.TypesettingClass.binary_formula):
+        elif phi.is_an_element_of_typesetting_class(tc=fl1.TypesettingClass.FL1_BINARY_FORMULA):
             phi: fl1.BinaryFormula
             connective: fl1.Connective = phi.connective
             connective: fl1.BinaryConnective

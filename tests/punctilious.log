@@ -1,29 +1,25 @@
-2024-02-19 22:28:05,127 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
-2024-02-19 22:28:05,129 - INFO - Override typesetting-method: (TS_SYMBOL.TS_TYPESETTABLE,technical-representation)
-2024-02-19 22:28:05,129 - DEBUG - Module typesetting: loaded.
-2024-02-19 22:28:05,130 - DEBUG - Module formal_language_1: loaded.
-2024-02-19 22:28:05,131 - DEBUG - Module formal_language_1_presentation_1: loaded.
-2024-02-19 22:28:05,134 - DEBUG - Module propositional_logic_1: loaded.
-2024-02-19 22:28:05,134 - DEBUG - Module propositional_logic_1_presentation_1: loaded.
-2024-02-19 22:28:05,135 - DEBUG - Module punctilious: loaded.
-2024-02-19 22:28:05,141 - DEBUG - FormalObject-4362971824
-2024-02-19 22:28:05,141 - INFO - Preference 'None.formal_language' changed from 'None' to 'hello world'.
-2024-02-19 22:28:05,141 - ERROR - inconsistent typesetting class: , tc: PL1_AXIOM_PL1.PL1_AXIOM.FL1_AXIOM.FL1_FORMAL_OBJECT.TS_TYPESETTABLEsuperclass: FL1_FORMULA.FL1_FORMAL_OBJECT.TS_TYPESETTABLE
-2024-02-19 22:28:05,176 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-19 22:28:05,176 - ERROR - inconsistent typesetting class: , tc: PL1_AXIOM_PL1.PL1_AXIOM.FL1_AXIOM.FL1_FORMAL_OBJECT.TS_TYPESETTABLEsuperclass: FL1_FORMULA.FL1_FORMAL_OBJECT.TS_TYPESETTABLE
-2024-02-19 22:28:05,204 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-19 22:28:05,204 - ERROR - inconsistent typesetting class: , tc: PL1_AXIOM_PL1.PL1_AXIOM.FL1_AXIOM.FL1_FORMAL_OBJECT.TS_TYPESETTABLEsuperclass: FL1_FORMULA.FL1_FORMAL_OBJECT.TS_TYPESETTABLE
-2024-02-19 22:28:05,229 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-19 22:28:05,229 - ERROR - inconsistent typesetting class: , tc: PL1_AXIOM_PL1.PL1_AXIOM.FL1_AXIOM.FL1_FORMAL_OBJECT.TS_TYPESETTABLEsuperclass: FL1_FORMULA.FL1_FORMAL_OBJECT.TS_TYPESETTABLE
-2024-02-19 22:28:05,257 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-19 22:28:05,257 - ERROR - inconsistent typesetting class: , tc: PL1_AXIOM_PL1.PL1_AXIOM.FL1_AXIOM.FL1_FORMAL_OBJECT.TS_TYPESETTABLEsuperclass: FL1_FORMULA.FL1_FORMAL_OBJECT.TS_TYPESETTABLE
-2024-02-19 22:28:05,283 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-19 22:28:05,283 - ERROR - inconsistent typesetting class: , tc: PL1_AXIOM_PL1.PL1_AXIOM.FL1_AXIOM.FL1_FORMAL_OBJECT.TS_TYPESETTABLEsuperclass: FL1_FORMULA.FL1_FORMAL_OBJECT.TS_TYPESETTABLE
-2024-02-19 22:28:05,307 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-19 22:28:05,307 - ERROR - inconsistent typesetting class: , tc: PL1_AXIOM_PL1.PL1_AXIOM.FL1_AXIOM.FL1_FORMAL_OBJECT.TS_TYPESETTABLEsuperclass: FL1_FORMULA.FL1_FORMAL_OBJECT.TS_TYPESETTABLE
-2024-02-19 22:28:05,332 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-19 22:28:05,332 - ERROR - inconsistent typesetting class: , tc: PL1_AXIOM_PL1.PL1_AXIOM.FL1_AXIOM.FL1_FORMAL_OBJECT.TS_TYPESETTABLEsuperclass: FL1_FORMULA.FL1_FORMAL_OBJECT.TS_TYPESETTABLE
-2024-02-19 22:28:05,360 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-19 22:28:05,361 - ERROR - inconsistent typesetting class: , tc: PL1_AXIOM_PL1.PL1_AXIOM.FL1_AXIOM.FL1_FORMAL_OBJECT.TS_TYPESETTABLEsuperclass: FL1_FORMULA.FL1_FORMAL_OBJECT.TS_TYPESETTABLE
-2024-02-19 22:28:05,388 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-19 22:28:05,388 - ERROR - inconsistent typesetting class: , tc: PL1_AXIOM_PL1.PL1_AXIOM.FL1_AXIOM.FL1_FORMAL_OBJECT.TS_TYPESETTABLEsuperclass: FL1_FORMULA.FL1_FORMAL_OBJECT.TS_TYPESETTABLE
+2024-02-20 22:40:48,191 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
+2024-02-20 22:40:48,199 - INFO - Override typesetting-method: (TS_SYMBOL.TS_TYPESETTABLE,technical-representation)
+2024-02-20 22:40:48,199 - DEBUG - Module typesetting: loaded.
+2024-02-20 22:40:48,201 - DEBUG - Module formal_language_1: loaded.
+2024-02-20 22:40:48,202 - DEBUG - Module formal_language_1_presentation_1: loaded.
+2024-02-20 22:40:48,203 - DEBUG - Module propositional_logic_1: loaded.
+2024-02-20 22:40:48,204 - DEBUG - Module propositional_logic_1_presentation_1: loaded.
+2024-02-20 22:40:48,204 - DEBUG - Module punctilious: loaded.
+2024-02-20 22:40:48,224 - DEBUG - FormalObject-4416574656
+2024-02-20 22:40:48,227 - INFO - Preference 'None.formal_language' changed from 'None' to 'hello world'.
+2024-02-20 22:40:48,231 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
+2024-02-20 22:40:48,235 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
+2024-02-20 22:40:48,238 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
+2024-02-20 22:40:48,241 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
+2024-02-20 22:40:48,242 - ERROR - connective is not a pl1 connective.
+2024-02-20 22:40:48,242 - ERROR - term is not a pl1 well-formed-formula.
+2024-02-20 22:40:48,245 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
+2024-02-20 22:40:48,250 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
+2024-02-20 22:40:48,252 - DEBUG - FormalObject '¬P' (python id: 4416581952) is already present in this FormalLanguageClass as '¬P' (python id: 4416581856). The existing object is reused and the new object is discarded.
+2024-02-20 22:40:48,255 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
+2024-02-20 22:40:48,259 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
+2024-02-20 22:40:48,265 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
+2024-02-20 22:40:48,268 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
+2024-02-20 22:40:48,273 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
+2024-02-20 22:40:48,275 - DEBUG - FormalObject '¬P' (python id: 4416848384) is already present in this FormalLanguageClass as '¬P' (python id: 4416848336). The existing object is reused and the new object is discarded.

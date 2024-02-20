@@ -207,6 +207,11 @@ def load():
                                    python_function=typeset_binary_formula_infix, representation=representation)
     ts.register_typesetting_method(tc=pl1.TypesettingClass.PL1_PROPOSITIONAL_VARIABLE,
                                    python_function=typeset_propositional_variable, representation=representation)
+    ts.register_typesetting_method(tc=pl1.TypesettingClass.PL1_ML_UNARY_FORMULA,
+                                   python_function=typeset_unary_formula_prefix_without_parenthesis,
+                                   representation=representation)
+    ts.register_typesetting_method(tc=pl1.TypesettingClass.PL1_ML_BINARY_FORMULA,
+                                   python_function=typeset_binary_formula_infix, representation=representation)
     ts.register_typesetting_method(tc=pl1.TypesettingClass.PL1_ML_META_VARIABLE, python_function=typeset_meta_variable,
                                    representation=representation)
 
