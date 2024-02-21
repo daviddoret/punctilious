@@ -161,11 +161,11 @@ class PropositionalLogicCompoundFormulaCollection(fl1.CompoundFormulaCollection)
         :return:
         """
         if connective not in self.propositional_logic.connectives:
-            log.error("connective is not a pl1 connective.", pl1=self.pl1, connective=connective)
+            log.error("connective is not a pl1 connective.", pl1=self.formal_language, connective=connective)
         if not self.propositional_logic.is_well_formed_formula(phi=term_1):
-            log.error("term_1 is not a pl1 well-formed-formula.", pl1=self.pl1, phi=term_1)
+            log.error("term_1 is not a pl1 well-formed-formula.", pl1=self.formal_language, phi=term_1)
         if not self.propositional_logic.is_well_formed_formula(phi=term_2):
-            log.error("term_2 is not a pl1 well-formed-formula.", pl1=self.pl1, phi=term_2)
+            log.error("term_2 is not a pl1 well-formed-formula.", pl1=self.formal_language, phi=term_2)
         tc: ts.TC = TypesettingClass.PL1_BINARY_FORMULA
         phi: fl1.BinaryFormula = super().declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2,
                                                                 tc=tc)
@@ -441,10 +441,13 @@ class MinimalistPropositionalLogicAxioms(fl1.AxiomCollection):
         a = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
         b = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
         c = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
+        previous_default_formal_language = fl1.preferences.formal_language.value
+        fl1.preferences.formal_language.value = self.propositional_logic.meta_language
         self._pl1 = fl1.Axiom(c=self, phi=a | implies | (a | land | a), tc=TypesettingClass.PL1_AXIOM_PL1)
         super().postulate_axiom(axiom=self._pl1)
         self._pl2 = fl1.Axiom(c=self, phi=(a | land | b) | implies | (b | land | a), tc=TypesettingClass.PL1_AXIOM_PL2)
         super().postulate_axiom(axiom=self._pl1)
+        fl1.preferences.formal_language.value = previous_default_formal_language
 
     @property
     def propositional_logic(self) -> PropositionalLogic:

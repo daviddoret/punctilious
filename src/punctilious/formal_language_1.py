@@ -666,6 +666,7 @@ class InfixPartialFormula:
     """
 
     def __init__(self, term_1: Formula, partial_connective):
+        self.formal_language = preferences.formal_language.value  # formulas in python-math are interpreted in the default formal-language.
         self.partial_term = term_1
         self.partial_connective = partial_connective
 
@@ -677,7 +678,7 @@ class InfixPartialFormula:
         """
         partial_connective = self.partial_connective
         partial_term = self.partial_term
-        return self.partial_term.formal_language.declare_binary_formula(partial_connective, partial_term, term_2)
+        return self.formal_language.declare_binary_formula(partial_connective, partial_term, term_2)
 
     def __str__(self):
         return f'InfixPartialFormula(partial_term = {self.partial_term}, partial_connective = {self.partial_connective})'

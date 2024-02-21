@@ -1,25 +1,54 @@
-2024-02-20 22:40:48,191 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
-2024-02-20 22:40:48,199 - INFO - Override typesetting-method: (TS_SYMBOL.TS_TYPESETTABLE,technical-representation)
-2024-02-20 22:40:48,199 - DEBUG - Module typesetting: loaded.
-2024-02-20 22:40:48,201 - DEBUG - Module formal_language_1: loaded.
-2024-02-20 22:40:48,202 - DEBUG - Module formal_language_1_presentation_1: loaded.
-2024-02-20 22:40:48,203 - DEBUG - Module propositional_logic_1: loaded.
-2024-02-20 22:40:48,204 - DEBUG - Module propositional_logic_1_presentation_1: loaded.
-2024-02-20 22:40:48,204 - DEBUG - Module punctilious: loaded.
-2024-02-20 22:40:48,224 - DEBUG - FormalObject-4416574656
-2024-02-20 22:40:48,227 - INFO - Preference 'None.formal_language' changed from 'None' to 'hello world'.
-2024-02-20 22:40:48,231 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-20 22:40:48,235 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-20 22:40:48,238 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-20 22:40:48,241 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-20 22:40:48,242 - ERROR - connective is not a pl1 connective.
-2024-02-20 22:40:48,242 - ERROR - term is not a pl1 well-formed-formula.
-2024-02-20 22:40:48,245 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-20 22:40:48,250 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-20 22:40:48,252 - DEBUG - FormalObject '¬P' (python id: 4416581952) is already present in this FormalLanguageClass as '¬P' (python id: 4416581856). The existing object is reused and the new object is discarded.
-2024-02-20 22:40:48,255 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-20 22:40:48,259 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-20 22:40:48,265 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-20 22:40:48,268 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-20 22:40:48,273 - INFO - Preference 'None.formal_language' changed from 'hello world' to 'hello world'.
-2024-02-20 22:40:48,275 - DEBUG - FormalObject '¬P' (python id: 4416848384) is already present in this FormalLanguageClass as '¬P' (python id: 4416848336). The existing object is reused and the new object is discarded.
+2024-02-21 23:51:12,833 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
+2024-02-21 23:51:12,836 - INFO - Override typesetting-method: (TS_SYMBOL.TS_TYPESETTABLE,technical-representation)
+2024-02-21 23:51:12,836 - DEBUG - Module typesetting: loaded.
+2024-02-21 23:51:12,837 - DEBUG - Module formal_language_1: loaded.
+2024-02-21 23:51:12,837 - DEBUG - Module formal_language_1_presentation_1: loaded.
+2024-02-21 23:51:12,838 - DEBUG - Module propositional_logic_1: loaded.
+2024-02-21 23:51:12,838 - DEBUG - Module propositional_logic_1_presentation_1: loaded.
+2024-02-21 23:51:12,839 - DEBUG - Module punctilious: loaded.
+2024-02-21 23:51:12,845 - DEBUG - FormalObject-4391638400
+2024-02-21 23:51:12,846 - INFO - Preference 'None.formal_language' changed from 'None' to 'MinimalistPropositionalLogic-4391638592'.
+2024-02-21 23:51:12,846 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391638592' to 'MetaLanguage-4391638640'.
+2024-02-21 23:51:12,846 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4391638640' to 'MinimalistPropositionalLogic-4391638592'.
+2024-02-21 23:51:12,847 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391638592' to 'MinimalistPropositionalLogic-4391638256'.
+2024-02-21 23:51:12,847 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391638256' to 'MetaLanguage-4391639984'.
+2024-02-21 23:51:12,847 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4391639984' to 'MinimalistPropositionalLogic-4391638256'.
+2024-02-21 23:51:12,848 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391638256' to 'MinimalistPropositionalLogic-4391641136'.
+2024-02-21 23:51:12,848 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391641136' to 'MetaLanguage-4391638544'.
+2024-02-21 23:51:12,848 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4391638544' to 'MinimalistPropositionalLogic-4391641136'.
+2024-02-21 23:51:12,848 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391641136' to 'MinimalistPropositionalLogic-4391642480'.
+2024-02-21 23:51:12,848 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391642480' to 'MetaLanguage-4391633312'.
+2024-02-21 23:51:12,849 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4391633312' to 'MinimalistPropositionalLogic-4391642480'.
+2024-02-21 23:51:12,849 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391642480' to 'MinimalistPropositionalLogic-4391642288'.
+2024-02-21 23:51:12,849 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391642288' to 'MetaLanguage-4391641760'.
+2024-02-21 23:51:12,849 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4391641760' to 'MinimalistPropositionalLogic-4391642288'.
+2024-02-21 23:51:12,849 - ERROR - connective is not a pl1 connective.
+2024-02-21 23:51:12,849 - ERROR - term is not a pl1 well-formed-formula.
+2024-02-21 23:51:12,850 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391642288' to 'MinimalistPropositionalLogic-4391639312'.
+2024-02-21 23:51:12,850 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391639312' to 'MetaLanguage-4391641616'.
+2024-02-21 23:51:12,850 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4391641616' to 'MinimalistPropositionalLogic-4391639312'.
+2024-02-21 23:51:12,851 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391639312' to 'MinimalistPropositionalLogic-4391639408'.
+2024-02-21 23:51:12,852 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391639408' to 'MetaLanguage-4391643344'.
+2024-02-21 23:51:12,852 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4391643344' to 'MinimalistPropositionalLogic-4391639408'.
+2024-02-21 23:51:12,852 - DEBUG - FormalObject '¬P' (python id: 4391644784) is already present in this FormalLanguageClass as '¬P' (python id: 4391644736). The existing object is reused and the new object is discarded.
+2024-02-21 23:51:12,853 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391639408' to 'MinimalistPropositionalLogic-4391645120'.
+2024-02-21 23:51:12,853 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391645120' to 'MetaLanguage-4391644592'.
+2024-02-21 23:51:12,853 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4391644592' to 'MinimalistPropositionalLogic-4391645120'.
+2024-02-21 23:51:12,854 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391645120' to 'MinimalistPropositionalLogic-4391646176'.
+2024-02-21 23:51:12,854 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391646176' to 'MetaLanguage-4391644400'.
+2024-02-21 23:51:12,854 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4391644400' to 'MinimalistPropositionalLogic-4391646176'.
+2024-02-21 23:51:12,855 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391646176' to 'MinimalistPropositionalLogic-4391647712'.
+2024-02-21 23:51:12,855 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391647712' to 'MetaLanguage-4391648384'.
+2024-02-21 23:51:12,855 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4391648384' to 'MinimalistPropositionalLogic-4391647712'.
+2024-02-21 23:51:12,856 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391647712' to 'MinimalistPropositionalLogic-4391645216'.
+2024-02-21 23:51:12,856 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391645216' to 'MetaLanguage-4391635040'.
+2024-02-21 23:51:12,856 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4391635040' to 'MinimalistPropositionalLogic-4391645216'.
+2024-02-21 23:51:12,857 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391645216' to 'MinimalistPropositionalLogic-4391644064'.
+2024-02-21 23:51:12,857 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391644064' to 'MetaLanguage-4391647040'.
+2024-02-21 23:51:12,857 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4391647040' to 'MinimalistPropositionalLogic-4391644064'.
+2024-02-21 23:51:12,857 - DEBUG - FormalObject '¬P' (python id: 4391644160) is already present in this FormalLanguageClass as '¬P' (python id: 4391643632). The existing object is reused and the new object is discarded.
+2024-02-21 23:51:12,857 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4391644064' to 'MetaLanguage-4391647040'.
+2024-02-21 23:51:12,857 - DEBUG - FormalObject 'P implies P' (python id: 4391644160) is already present in this FormalLanguageClass as 'P implies P' (python id: 4391642624). The existing object is reused and the new object is discarded.
+2024-02-21 23:51:12,857 - DEBUG - FormalObject 'P implies P' (python id: 4391643296) is already present in this FormalLanguageClass as 'P implies P' (python id: 4391642624). The existing object is reused and the new object is discarded.
+2024-02-21 23:51:12,858 - DEBUG - FormalObject 'P implies (Q implies Q)' (python id: 4391638928) is already present in this FormalLanguageClass as 'P implies (Q implies Q)' (python id: 4391639744). The existing object is reused and the new object is discarded.
+2024-02-21 23:51:12,858 - INFO - P implies (Q implies Q) == P implies (Q implies Q)

@@ -8,11 +8,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formal_language_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_1_presentation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_1_presentation_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/punctilious.log" beforeDir="false" afterPath="$PROJECT_DIR$/tests/punctilious.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_fl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_fl1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_pl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pl1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_typesetting.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_typesetting.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +93,7 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "PowerShell.increment_package_version_patch.ps1.executor": "Run",
     "PowerShell.release_patch.ps1.executor": "Run",
-    "Python tests.Python tests in tests.executor": "Debug",
+    "Python tests.Python tests in tests.executor": "Run",
     "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
     "Python tests.pytest for test_pl1.TestMinimalPropositionalLogic.test_init.executor": "Run",
     "Python tests.pytest for test_pl1.TestPL1.test_compounding_formulas_1.executor": "Debug",
@@ -525,14 +523,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00469" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1706437389333</created>
-      <option name="number" value="00469" />
-      <option name="presentableId" value="LOCAL-00469" />
-      <option name="project" value="LOCAL" />
-      <updated>1706437389333</updated>
-    </task>
     <task id="LOCAL-00470" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1706438158824</created>
@@ -917,7 +907,15 @@
       <option name="project" value="LOCAL" />
       <updated>1708453393172</updated>
     </task>
-    <option name="localTasksCounter" value="518" />
+    <task id="LOCAL-00518" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1708465367557</created>
+      <option name="number" value="00518" />
+      <option name="presentableId" value="LOCAL-00518" />
+      <option name="project" value="LOCAL" />
+      <updated>1708465367557</updated>
+    </task>
+    <option name="localTasksCounter" value="519" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1026,13 +1024,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_pl1.py</url>
-          <line>239</line>
-          <option name="timeStamp" value="172" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_pl1.py</url>
-          <line>223</line>
-          <option name="timeStamp" value="173" />
+          <line>230</line>
+          <option name="timeStamp" value="174" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

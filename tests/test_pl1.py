@@ -227,6 +227,7 @@ class TestPL1ML:
         assert psi.to_string(protocol=pu.ts.protocols.unicode_limited) == "¬P"
         assert psi == phi
 
+        pu.fl1.preferences.formal_language.value = l1.meta_language
         phi = p1 | implies | bold_a
         assert phi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P implies bold-A"
         psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
