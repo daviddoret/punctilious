@@ -3,11 +3,9 @@
 from __future__ import annotations
 
 import abc
-import enum
 import typing
 import threading
 
-import utils
 import log
 import typesetting as ts
 
