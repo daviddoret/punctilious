@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +71,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -174,6 +174,10 @@
         <option name="myModuleName" value="2023_05_02_PyCharmProject_Maths" />
       </console-settings>
     </option>
+  </component>
+  <component name="QodanaCIConfigService">
+    <option name="ciType" value="GITHUB" />
+    <option name="path" value="$PROJECT_DIR$/.github/workflows/code_quality.yml" />
   </component>
   <component name="QodanaCloudProjectLink">
     <option name="lastReportId" value="JjJBx" />
@@ -536,14 +540,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00472" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1706467932823</created>
-      <option name="number" value="00472" />
-      <option name="presentableId" value="LOCAL-00472" />
-      <option name="project" value="LOCAL" />
-      <updated>1706467932823</updated>
     </task>
     <task id="LOCAL-00473" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -929,7 +925,15 @@
       <option name="project" value="LOCAL" />
       <updated>1708556840138</updated>
     </task>
-    <option name="localTasksCounter" value="521" />
+    <task id="LOCAL-00521" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1708556932710</created>
+      <option name="number" value="00521" />
+      <option name="presentableId" value="LOCAL-00521" />
+      <option name="project" value="LOCAL" />
+      <updated>1708556932711</updated>
+    </task>
+    <option name="localTasksCounter" value="522" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
