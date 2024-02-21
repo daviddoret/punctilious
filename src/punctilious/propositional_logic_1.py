@@ -277,12 +277,12 @@ class MetaLanguage(fl1.FormalLanguage):
         """The collection of declared compound formulas in PL1."""
         return self._compound_formulas
 
-    def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.Formula,
+    def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.BinaryFormula,
                                term_2: fl1.Formula) -> fl1.BinaryFormula:
         return self.compound_formulas.declare_binary_formula(connective=connective, term_1=term_1, term_2=term_2)
 
-    def declare_unary_formula(self, connective: fl1.BinaryConnective, term: fl1.Formula) -> fl1.BinaryFormula:
-        return self.compound_formulas.declare_binary_formula(connective=connective, term=term)
+    def declare_unary_formula(self, connective: fl1.UnaryConnective, term: fl1.Formula) -> fl1.UnaryFormula:
+        return self.compound_formulas.declare_unary_formula(connective=connective, term=term)
 
     def get_meta_variable_tuple(self, phi: fl1.Formula) -> tuple[MetaVariable, ...]:
         return tuple(p for p in phi.iterate_leaf_formulas() if p in self.meta_variables)
@@ -440,7 +440,6 @@ class MinimalistPropositionalLogicAxioms(fl1.AxiomCollection):
         land: fl1.BinaryConnective = self.propositional_logic.connectives.conjunction
         a = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
         b = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
-        c = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
         previous_default_formal_language = fl1.preferences.formal_language.value
         fl1.preferences.formal_language.value = self.propositional_logic.meta_language
         self._pl1 = fl1.Axiom(c=self, phi=a | implies | (a | land | a), tc=TypesettingClass.PL1_AXIOM_PL1)
