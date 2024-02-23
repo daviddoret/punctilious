@@ -284,11 +284,15 @@ class MetaLanguage(fl1.FormalLanguage):
     def declare_unary_formula(self, connective: fl1.UnaryConnective, term: fl1.Formula) -> fl1.UnaryFormula:
         return self.compound_formulas.declare_unary_formula(connective=connective, term=term)
 
-    def get_meta_variable_tuple(self, phi: fl1.Formula) -> tuple[MetaVariable, ...]:
-        return tuple(p for p in phi.iterate_leaf_formulas() if p in self.meta_variables)
+    def get_unique_meta_variable_tuple(self, phi: fl1.Formula) -> tuple[MetaVariable, ...]:
+        non_unique = tuple(p for p in phi.iterate_leaf_formulas() if p in self.meta_variables)
+        unique = unique_values = tuple(x for i, x in enumerate(non_unique) if non_unique.index(x) == i)
+        return unique
 
-    def get_propositional_variable_tuple(self, phi: fl1.Formula) -> tuple[PropositionalVariable, ...]:
-        return self.propositional_logic.get_propositional_variable_tuple(phi=phi)
+    def get_unique_propositional_variable_tuple(self, phi: fl1.Formula) -> tuple[PropositionalVariable, ...]:
+        non_unique = self.propositional_logic.get_unique_propositional_variable_tuple(phi=phi)
+        unique = unique_values = tuple(x for i, x in enumerate(non_unique) if non_unique.index(x) == i)
+        return unique
 
     def is_well_formed_formula(self, phi: fl1.Formula) -> bool:
         """Return True if phi is a well-formed-formula in meta-language, False otherwise."""
@@ -417,8 +421,10 @@ class PropositionalLogic(fl1.FormalLanguage):
             # otherwise, return False, i.e.: phi is not a well-formed-formula.
             return False
 
-    def get_propositional_variable_tuple(self, phi: fl1.Formula) -> tuple[PropositionalVariable, ...]:
-        return tuple(p for p in phi.iterate_leaf_formulas() if p in self.propositional_variables)
+    def get_unique_propositional_variable_tuple(self, phi: fl1.Formula) -> tuple[PropositionalVariable, ...]:
+        non_unique = tuple(p for p in phi.iterate_leaf_formulas() if p in self.propositional_variables)
+        unique = tuple(x for i, x in enumerate(non_unique) if non_unique.index(x) == i)
+        return unique
 
     @property
     def meta_language(self) -> MetaLanguage:
@@ -440,12 +446,23 @@ class MinimalistPropositionalLogicAxioms(fl1.AxiomCollection):
         land: fl1.BinaryConnective = self.propositional_logic.connectives.conjunction
         a = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
         b = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
+        c = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
         previous_default_formal_language = fl1.preferences.formal_language.value
         fl1.preferences.formal_language.value = self.propositional_logic.meta_language
         self._pl1 = fl1.Axiom(c=self, phi=a | implies | (a | land | a), tc=TypesettingClass.PL1_AXIOM_PL1)
         super().postulate_axiom(axiom=self._pl1)
         self._pl2 = fl1.Axiom(c=self, phi=(a | land | b) | implies | (b | land | a), tc=TypesettingClass.PL1_AXIOM_PL2)
         super().postulate_axiom(axiom=self._pl1)
+        self._pl3 = fl1.Axiom(c=self,
+                              phi=(a | implies | b) | implies | ((a | implies | c) | implies | (b | implies | c)),
+                              tc=TypesettingClass.PL1_AXIOM_PL2)
+        super().postulate_axiom(axiom=self._pl3)
+        self._pl4 = fl1.Axiom(c=self, phi=((a | implies | b) | land | (b | implies | c)) | implies | (a | implies | c),
+                              tc=TypesettingClass.PL1_AXIOM_PL2)
+        super().postulate_axiom(axiom=self._pl4)
+        self._pl5 = fl1.Axiom(c=self, phi=b | implies | (a | implies | b), tc=TypesettingClass.PL1_AXIOM_PL2)
+        super().postulate_axiom(axiom=self._pl5)
+        self.lock()
         fl1.preferences.formal_language.value = previous_default_formal_language
 
     @property
@@ -459,6 +476,18 @@ class MinimalistPropositionalLogicAxioms(fl1.AxiomCollection):
     @property
     def pl2(self) -> fl1.Axiom:
         return self._pl2
+
+    @property
+    def pl3(self) -> fl1.Axiom:
+        return self._pl3
+
+    @property
+    def pl4(self) -> fl1.Axiom:
+        return self._pl4
+
+    @property
+    def pl5(self) -> fl1.Axiom:
+        return self._pl5
 
 
 class MinimalistPropositionalLogic(PropositionalLogic):

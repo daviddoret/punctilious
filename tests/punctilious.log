@@ -1,54 +1,102 @@
-2024-02-22 00:08:41,447 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
-2024-02-22 00:08:41,450 - INFO - Override typesetting-method: (TS_SYMBOL.TS_TYPESETTABLE,technical-representation)
-2024-02-22 00:08:41,450 - DEBUG - Module typesetting: loaded.
-2024-02-22 00:08:41,455 - DEBUG - Module formal_language_1: loaded.
-2024-02-22 00:08:41,456 - DEBUG - Module formal_language_1_presentation_1: loaded.
-2024-02-22 00:08:41,459 - DEBUG - Module propositional_logic_1: loaded.
-2024-02-22 00:08:41,460 - DEBUG - Module propositional_logic_1_presentation_1: loaded.
-2024-02-22 00:08:41,460 - DEBUG - Module punctilious: loaded.
-2024-02-22 00:08:41,467 - DEBUG - FormalObject-4316995056
-2024-02-22 00:08:41,468 - INFO - Preference 'None.formal_language' changed from 'None' to 'MinimalistPropositionalLogic-4316999712'.
-2024-02-22 00:08:41,468 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4316999712' to 'MetaLanguage-4316995344'.
-2024-02-22 00:08:41,469 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4316995344' to 'MinimalistPropositionalLogic-4316999712'.
-2024-02-22 00:08:41,469 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4316999712' to 'MinimalistPropositionalLogic-4317003168'.
-2024-02-22 00:08:41,469 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317003168' to 'MetaLanguage-4316995488'.
-2024-02-22 00:08:41,469 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4316995488' to 'MinimalistPropositionalLogic-4317003168'.
-2024-02-22 00:08:41,470 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317003168' to 'MinimalistPropositionalLogic-4317186288'.
-2024-02-22 00:08:41,470 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317186288' to 'MetaLanguage-4317186768'.
-2024-02-22 00:08:41,470 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4317186768' to 'MinimalistPropositionalLogic-4317186288'.
-2024-02-22 00:08:41,471 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317186288' to 'MinimalistPropositionalLogic-4317187584'.
-2024-02-22 00:08:41,471 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317187584' to 'MetaLanguage-4317188016'.
-2024-02-22 00:08:41,471 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4317188016' to 'MinimalistPropositionalLogic-4317187584'.
-2024-02-22 00:08:41,471 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317187584' to 'MinimalistPropositionalLogic-4317189456'.
-2024-02-22 00:08:41,471 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317189456' to 'MetaLanguage-4317189648'.
-2024-02-22 00:08:41,472 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4317189648' to 'MinimalistPropositionalLogic-4317189456'.
-2024-02-22 00:08:41,472 - ERROR - connective is not a pl1 connective.
-2024-02-22 00:08:41,472 - ERROR - term is not a pl1 well-formed-formula.
-2024-02-22 00:08:41,473 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317189456' to 'MinimalistPropositionalLogic-4317189264'.
-2024-02-22 00:08:41,473 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317189264' to 'MetaLanguage-4317189984'.
-2024-02-22 00:08:41,473 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4317189984' to 'MinimalistPropositionalLogic-4317189264'.
-2024-02-22 00:08:41,474 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317189264' to 'MinimalistPropositionalLogic-4316995344'.
-2024-02-22 00:08:41,474 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4316995344' to 'MetaLanguage-4317003696'.
-2024-02-22 00:08:41,474 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4317003696' to 'MinimalistPropositionalLogic-4316995344'.
-2024-02-22 00:08:41,474 - DEBUG - FormalObject '¬P' (python id: 4317190944) is already present in this FormalLanguageClass as '¬P' (python id: 4317190512). The existing object is reused and the new object is discarded.
-2024-02-22 00:08:41,475 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4316995344' to 'MinimalistPropositionalLogic-4317188352'.
-2024-02-22 00:08:41,475 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317188352' to 'MetaLanguage-4317192672'.
-2024-02-22 00:08:41,475 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4317192672' to 'MinimalistPropositionalLogic-4317188352'.
-2024-02-22 00:08:41,476 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317188352' to 'MinimalistPropositionalLogic-4317184704'.
-2024-02-22 00:08:41,476 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317184704' to 'MetaLanguage-4317189168'.
-2024-02-22 00:08:41,476 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4317189168' to 'MinimalistPropositionalLogic-4317184704'.
-2024-02-22 00:08:41,477 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317184704' to 'MinimalistPropositionalLogic-4317186240'.
-2024-02-22 00:08:41,477 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317186240' to 'MetaLanguage-4317187200'.
-2024-02-22 00:08:41,477 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4317187200' to 'MinimalistPropositionalLogic-4317186240'.
-2024-02-22 00:08:41,478 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317186240' to 'MinimalistPropositionalLogic-4317185424'.
-2024-02-22 00:08:41,478 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317185424' to 'MetaLanguage-4317184944'.
-2024-02-22 00:08:41,478 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4317184944' to 'MinimalistPropositionalLogic-4317185424'.
-2024-02-22 00:08:41,479 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317185424' to 'MinimalistPropositionalLogic-4317193680'.
-2024-02-22 00:08:41,479 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317193680' to 'MetaLanguage-4317193152'.
-2024-02-22 00:08:41,480 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4317193152' to 'MinimalistPropositionalLogic-4317193680'.
-2024-02-22 00:08:41,480 - DEBUG - FormalObject '¬P' (python id: 4315949120) is already present in this FormalLanguageClass as '¬P' (python id: 4315886272). The existing object is reused and the new object is discarded.
-2024-02-22 00:08:41,480 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4317193680' to 'MetaLanguage-4317193152'.
-2024-02-22 00:08:41,480 - DEBUG - FormalObject 'P implies P' (python id: 4315949120) is already present in this FormalLanguageClass as 'P implies P' (python id: 4315885984). The existing object is reused and the new object is discarded.
-2024-02-22 00:08:41,480 - DEBUG - FormalObject 'P implies P' (python id: 4317196224) is already present in this FormalLanguageClass as 'P implies P' (python id: 4315885984). The existing object is reused and the new object is discarded.
-2024-02-22 00:08:41,480 - DEBUG - FormalObject 'P implies (Q implies Q)' (python id: 4317196944) is already present in this FormalLanguageClass as 'P implies (Q implies Q)' (python id: 4317196896). The existing object is reused and the new object is discarded.
-2024-02-22 00:08:41,480 - INFO - P implies (Q implies Q) == P implies (Q implies Q)
+2024-02-23 22:20:50,482 - DEBUG - TOML configuration file path: /Users/daviddoret/PycharmProjects/punctilious/src/punctilious
+2024-02-23 22:20:50,485 - INFO - Override typesetting-method: (TS_SYMBOL.TS_TYPESETTABLE,technical-representation)
+2024-02-23 22:20:50,485 - DEBUG - Module typesetting: loaded.
+2024-02-23 22:20:50,485 - DEBUG - Module formal_language_1: loaded.
+2024-02-23 22:20:50,486 - DEBUG - Module formal_language_1_presentation_1: loaded.
+2024-02-23 22:20:50,487 - DEBUG - Module propositional_logic_1: loaded.
+2024-02-23 22:20:50,487 - DEBUG - Module propositional_logic_1_presentation_1: loaded.
+2024-02-23 22:20:50,487 - DEBUG - Module punctilious: loaded.
+2024-02-23 22:20:50,523 - DEBUG - FormalObject-4323867680
+2024-02-23 22:20:50,523 - INFO - Preference 'None.formal_language' changed from 'None' to 'MinimalistPropositionalLogic-4325156352'.
+2024-02-23 22:20:50,524 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325156352' to 'MetaLanguage-4325157744'.
+2024-02-23 22:20:50,524 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325158992) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325158704). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,524 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325159184) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325158800). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,524 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325159568) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325158896). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,524 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325159856) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325158704). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,524 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4325157744' to 'MinimalistPropositionalLogic-4325156352'.
+2024-02-23 22:20:50,525 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325156352' to 'MinimalistPropositionalLogic-4325157120'.
+2024-02-23 22:20:50,526 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325157120' to 'MetaLanguage-4325157168'.
+2024-02-23 22:20:50,526 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325155056) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325154768). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,526 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325155440) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325154240). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,526 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325155536) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325155008). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,526 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325155776) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325154768). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,526 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4325157168' to 'MinimalistPropositionalLogic-4325157120'.
+2024-02-23 22:20:50,528 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325157120' to 'MinimalistPropositionalLogic-4325154288'.
+2024-02-23 22:20:50,528 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325154288' to 'MetaLanguage-4325155248'.
+2024-02-23 22:20:50,528 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325153232) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325156736). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,528 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325153712) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325153280). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,528 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325151456) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325153136). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,528 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325152032) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325156736). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,528 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4325155248' to 'MinimalistPropositionalLogic-4325154288'.
+2024-02-23 22:20:50,529 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325154288' to 'MinimalistPropositionalLogic-4325155824'.
+2024-02-23 22:20:50,529 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325155824' to 'MetaLanguage-4325153520'.
+2024-02-23 22:20:50,530 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325155056) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325153856). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,530 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325154240) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325155536). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,530 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325154336) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325155440). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,530 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325154000) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325153856). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,530 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4325153520' to 'MinimalistPropositionalLogic-4325155824'.
+2024-02-23 22:20:50,530 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325155824' to 'MinimalistPropositionalLogic-4325157984'.
+2024-02-23 22:20:50,530 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325157984' to 'MetaLanguage-4325160000'.
+2024-02-23 22:20:50,531 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325152080) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325152128). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,531 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325152896) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325152368). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,531 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325151312) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325152416). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,531 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325148624) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325152128). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,531 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4325160000' to 'MinimalistPropositionalLogic-4325157984'.
+2024-02-23 22:20:50,531 - ERROR - connective is not a pl1 connective.
+2024-02-23 22:20:50,531 - ERROR - term is not a pl1 well-formed-formula.
+2024-02-23 22:20:50,532 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325157984' to 'MinimalistPropositionalLogic-4325154768'.
+2024-02-23 22:20:50,532 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325154768' to 'MetaLanguage-4325154576'.
+2024-02-23 22:20:50,532 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325149584) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325152320). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,532 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325150208) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325149968). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,533 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325149824) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325149392). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,533 - DEBUG - FormalObject 'bold-A implies bold-B' (python id: 4325150688) is already present in this FormalLanguageClass as 'bold-A implies bold-B' (python id: 4325152320). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,533 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4325154576' to 'MinimalistPropositionalLogic-4325154768'.
+2024-02-23 22:20:50,534 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325154768' to 'MinimalistPropositionalLogic-4325150064'.
+2024-02-23 22:20:50,534 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325150064' to 'MetaLanguage-4325155584'.
+2024-02-23 22:20:50,534 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325147760) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325147472). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,534 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325148336) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325148144). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,535 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325148720) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325147856). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,535 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325148672) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325147472). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,535 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4325155584' to 'MinimalistPropositionalLogic-4325150064'.
+2024-02-23 22:20:50,535 - DEBUG - FormalObject '¬𝑃' (python id: 4325213200) is already present in this FormalLanguageClass as '¬𝑃' (python id: 4325212912). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,536 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325150064' to 'MinimalistPropositionalLogic-4325148528'.
+2024-02-23 22:20:50,536 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325148528' to 'MetaLanguage-4325147952'.
+2024-02-23 22:20:50,536 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325149296) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325149584). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,536 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325151072) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325149632). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,536 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325149344) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325157504). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,536 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325157120) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325149584). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,536 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4325147952' to 'MinimalistPropositionalLogic-4325148528'.
+2024-02-23 22:20:50,537 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325148528' to 'MinimalistPropositionalLogic-4325149392'.
+2024-02-23 22:20:50,537 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325149392' to 'MetaLanguage-4325151360'.
+2024-02-23 22:20:50,537 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325151600) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325159616). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,537 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325152080) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325148624). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,537 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325160528) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325158992). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,538 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325157744) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325159616). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,538 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4325151360' to 'MinimalistPropositionalLogic-4325149392'.
+2024-02-23 22:20:50,538 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325149392' to 'MinimalistPropositionalLogic-4325162448'.
+2024-02-23 22:20:50,539 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325162448' to 'MetaLanguage-4325156352'.
+2024-02-23 22:20:50,539 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325155440) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325151888). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,539 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325155488) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325155536). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,539 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325151792) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325153856). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,539 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325155200) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325151888). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,539 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4325156352' to 'MinimalistPropositionalLogic-4325162448'.
+2024-02-23 22:20:50,540 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325162448' to 'MinimalistPropositionalLogic-4325156928'.
+2024-02-23 22:20:50,540 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325156928' to 'MetaLanguage-4325156304'.
+2024-02-23 22:20:50,540 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325156160) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325156400). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,541 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325155296) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325155152). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,541 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325148432) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325156448). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,541 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325213392) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325156400). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,541 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4325156304' to 'MinimalistPropositionalLogic-4325156928'.
+2024-02-23 22:20:50,542 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325156928' to 'MinimalistPropositionalLogic-4325155968'.
+2024-02-23 22:20:50,542 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325155968' to 'MetaLanguage-4325155920'.
+2024-02-23 22:20:50,542 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325215168) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325214688). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,542 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325215744) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325215552). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,542 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325215888) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325215264). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,542 - DEBUG - FormalObject '𝑨 ⊃ 𝑩' (python id: 4325216368) is already present in this FormalLanguageClass as '𝑨 ⊃ 𝑩' (python id: 4325214688). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,543 - INFO - Preference 'None.formal_language' changed from 'MetaLanguage-4325155920' to 'MinimalistPropositionalLogic-4325155968'.
+2024-02-23 22:20:50,543 - DEBUG - FormalObject '¬𝑃' (python id: 4325216704) is already present in this FormalLanguageClass as '¬𝑃' (python id: 4325216464). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,543 - INFO - Preference 'None.formal_language' changed from 'MinimalistPropositionalLogic-4325155968' to 'MetaLanguage-4325155920'.
+2024-02-23 22:20:50,543 - DEBUG - FormalObject '𝑃 ⊃ 𝑃' (python id: 4325216704) is already present in this FormalLanguageClass as '𝑃 ⊃ 𝑃' (python id: 4325212672). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,543 - DEBUG - FormalObject '𝑃 ⊃ 𝑃' (python id: 4325223136) is already present in this FormalLanguageClass as '𝑃 ⊃ 𝑃' (python id: 4325212672). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,543 - DEBUG - FormalObject '𝑃 ⊃ (𝑄 ⊃ 𝑄)' (python id: 4325154288) is already present in this FormalLanguageClass as '𝑃 ⊃ (𝑄 ⊃ 𝑄)' (python id: 4325227888). The existing object is reused and the new object is discarded.
+2024-02-23 22:20:50,543 - INFO - 𝑃 ⊃ (𝑄 ⊃ 𝑄) == 𝑃 ⊃ (𝑄 ⊃ 𝑄)

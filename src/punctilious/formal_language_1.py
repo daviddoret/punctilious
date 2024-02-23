@@ -123,12 +123,10 @@ class FormalObject(ts.Typesettable):
             c.add_element(x=self)
 
     def __repr__(self):
-        return super().to_string(protocol=ts.protocols.unicode_limited,
-                                 representation=ts.representations.symbolic_representation)
+        return super().to_string(representation=ts.representations.symbolic_representation)
 
     def __str__(self):
-        return super().to_string(protocol=ts.protocols.unicode_limited,
-                                 representation=ts.representations.symbolic_representation)
+        return super().to_string(representation=ts.representations.symbolic_representation)
 
     @property
     def bound_to_formal_language(self):
@@ -484,6 +482,9 @@ class Formula(FormalObject):
         elif isinstance(self, CompoundFormula):
             for term in self.terms:
                 yield from term.iterate_leaf_formulas()
+        elif isinstance(self, Axiom):
+            # unpack the axiom formula
+            yield from self.phi.iterate_formulas()
         else:
             log.error(msg='Unsupported formula type.')
 
@@ -649,10 +650,6 @@ class AxiomCollection(FormalLanguageCollection):
         super().__init__(formal_language=formal_language, tc=tc, default_rep=default_rep)
 
     def postulate_axiom(self, axiom: Axiom):
-        if axiom.formal_language_collection is None:
-            axiom.set_formal_language_collection(l=self)
-        elif axiom.formal_language_collection is not self:
-            log.error(msg="Trying to postulate an axiom in a collection ", slf=self, axiom=axiom)
         self.add_element(x=axiom)
 
 

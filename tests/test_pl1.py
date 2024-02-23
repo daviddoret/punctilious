@@ -164,7 +164,7 @@ class TestPL1:
         pi = l1.compound_formulas.declare_unary_formula(connective=lnot, term=ph)
 
         assert pi.to_string(
-            protocol=pu.ts.protocols.unicode_limited) == "¬(P1 implies (((¬(¬P1)) implies P3) implies ((¬(¬P1)) implies P3)))"
+            protocol=pu.ts.protocols.unicode_limited) == "¬(P implies (((¬(¬P)) implies Q) implies ((¬(¬P)) implies Q)))"
 
     def test_axioms(self):
         l1 = pu.pl1.MinimalistPropositionalLogic()

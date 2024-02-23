@@ -1,14 +1,10 @@
 import punctilious as pu
 
-l = pu.pl1.PropositionalLogic()
-
-pa = l.propositional_variables.declare_proposition_variable()
-
-s = pu.ts.to_string(o=pa, protocol=pu.ts.protocols.unicode_limited)
-
-pb = l.propositional_variables.declare_proposition_variable()
-phi = l.compound_formulas.declare_binary_formula(connective=l.connectives.material_implication, term_1=pa, term_2=pb)
-
-s = pu.ts.to_string(o=phi, protocol=pu.ts.protocols.unicode_limited)
-
+l = pu.pl1.MinimalistPropositionalLogic()
+pu.preferences.typesetting.protocol.protocol = pu.ts.protocols.unicode_extended
+print(l.axioms.pl1)
+print(l.axioms.pl2)
+print(l.axioms.pl3)
+print(l.axioms.pl4)
+print(l.axioms.pl5)
 pass
