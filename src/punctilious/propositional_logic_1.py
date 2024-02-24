@@ -36,6 +36,14 @@ class TypesettingClass(ts.TC):
     PL1_AXIOM = ts.TC(fl1.TypesettingClass.FL1_AXIOM)
     PL1_AXIOM_PL1 = ts.TC(PL1_AXIOM)
     PL1_AXIOM_PL2 = ts.TC(PL1_AXIOM)
+    PL1_AXIOM_PL3 = ts.TC(PL1_AXIOM)
+    PL1_AXIOM_PL4 = ts.TC(PL1_AXIOM)
+    PL1_AXIOM_PL5 = ts.TC(PL1_AXIOM)
+    PL1_AXIOM_PL6 = ts.TC(PL1_AXIOM)
+    PL1_AXIOM_PL7 = ts.TC(PL1_AXIOM)
+    PL1_AXIOM_PL8 = ts.TC(PL1_AXIOM)
+    PL1_AXIOM_PL9 = ts.TC(PL1_AXIOM)
+    PL1_AXIOM_PL10 = ts.TC(PL1_AXIOM)
     PL1_PROPOSITIONAL_LOGIC_LANGUAGE = ts.TC(fl1.TypesettingClass.FL1_FORMAL_LANGUAGE)
     PL1_MINIMAL_PROPOSITIONAL_LOGIC_LANGUAGE = ts.TC(PL1_PROPOSITIONAL_LOGIC_LANGUAGE)
 
@@ -442,8 +450,10 @@ class MinimalistPropositionalLogicAxioms(fl1.AxiomCollection):
         if isinstance(propositional_logic, PropositionalLogic):
             self._propositional_logic: PropositionalLogic = propositional_logic
         super().__init__(formal_language=propositional_logic)
+        lnot: fl1.UnaryConnective = self.propositional_logic.connectives.negation
         implies: fl1.BinaryConnective = self.propositional_logic.connectives.material_implication
         land: fl1.BinaryConnective = self.propositional_logic.connectives.conjunction
+        lor: fl1.BinaryConnective = self.propositional_logic.connectives.disjunction
         a = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
         b = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
         c = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
@@ -455,13 +465,27 @@ class MinimalistPropositionalLogicAxioms(fl1.AxiomCollection):
         super().postulate_axiom(axiom=self._pl1)
         self._pl3 = fl1.Axiom(c=self,
                               phi=(a | implies | b) | implies | ((a | implies | c) | implies | (b | implies | c)),
-                              tc=TypesettingClass.PL1_AXIOM_PL2)
+                              tc=TypesettingClass.PL1_AXIOM_PL3)
         super().postulate_axiom(axiom=self._pl3)
         self._pl4 = fl1.Axiom(c=self, phi=((a | implies | b) | land | (b | implies | c)) | implies | (a | implies | c),
-                              tc=TypesettingClass.PL1_AXIOM_PL2)
+                              tc=TypesettingClass.PL1_AXIOM_PL4)
         super().postulate_axiom(axiom=self._pl4)
-        self._pl5 = fl1.Axiom(c=self, phi=b | implies | (a | implies | b), tc=TypesettingClass.PL1_AXIOM_PL2)
+        self._pl5 = fl1.Axiom(c=self, phi=b | implies | (a | implies | b), tc=TypesettingClass.PL1_AXIOM_PL5)
         super().postulate_axiom(axiom=self._pl5)
+        self._pl6 = fl1.Axiom(c=self, phi=(a | land | (a | implies | b)) | implies | b,
+                              tc=TypesettingClass.PL1_AXIOM_PL6)
+        super().postulate_axiom(axiom=self._pl6)
+        self._pl7 = fl1.Axiom(c=self, phi=a | implies | (a | lor | b), tc=TypesettingClass.PL1_AXIOM_PL7)
+        super().postulate_axiom(axiom=self._pl7)
+        self._pl8 = fl1.Axiom(c=self, phi=(a | lor | b) | implies | (b | lor | a), tc=TypesettingClass.PL1_AXIOM_PL8)
+        super().postulate_axiom(axiom=self._pl8)
+        self._pl9 = fl1.Axiom(c=self, phi=((a | implies | b) | land | (b | implies | c)) | implies | (
+                (a | lor | b) | implies | c),
+                              tc=TypesettingClass.PL1_AXIOM_PL9)
+        super().postulate_axiom(axiom=self._pl9)
+        self._pl10 = fl1.Axiom(c=self, phi=((a | implies | b) | land | (a | implies | lnot(b))) | implies | lnot(a),
+                               tc=TypesettingClass.PL1_AXIOM_PL10)
+        super().postulate_axiom(axiom=self._pl10)
         self.lock()
         fl1.preferences.formal_language.value = previous_default_formal_language
 

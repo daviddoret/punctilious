@@ -363,12 +363,15 @@ class UnaryConnective(FixedArityConnective):
         tc: ts.TC = ts.validate_tc(tc=tc, superclass=TypesettingClass.FL1_UNARY_CONNECTIVE)
         super().__init__(arity_as_int=1, c=c, tc=tc)
 
-    def __or__(self, other):
-        """Support for prefix formula (* x)."""
-        if isinstance(other, Formula):
-            return other.formal_language.declare_unary_formula(connective=self, term=other)
-        else:
-            log.error(msg="No interpretation found for python-pseudo-math entry.", slf=self, other=other)
+    def __call__(self, term: Formula):
+        return self.formal_language.declare_unary_formula(connective=self, term=term)
+
+    # def __or__(self, other):
+    #    """Support for prefix formula (* x)."""
+    #    if isinstance(other, Formula):
+    #        return other.formal_language.declare_unary_formula(connective=self, term=other)
+    #    else:
+    #       log.error(msg="No interpretation found for python-pseudo-math entry.", slf=self, other=other)
 
 
 class BinaryConnective(FixedArityConnective):
@@ -378,6 +381,9 @@ class BinaryConnective(FixedArityConnective):
                  tc: typing.Optional[ts.TC] = None):
         tc: ts.TC = ts.validate_tc(tc=tc, superclass=TypesettingClass.FL1_BINARY_CONNECTIVE)
         super().__init__(arity_as_int=2, c=c, tc=tc)
+
+    def __call__(self, term_1: Formula, term_2: Formula):
+        return self.formal_language.declare_binary_formula(connective=self, term_1=term_1, term_2=term_2)
 
 
 class ConnectiveCollection(FormalLanguageCollection):
@@ -442,16 +448,16 @@ class Formula(FormalObject):
         and gluing all this together with the InfixPartialFormula class.
         """
         if not isinstance(other, InfixPartialFormula):
-            if isinstance(self, UnaryConnective) and isinstance(other, Formula):
-                # for the time being, connectives are not formula,
-                # making this particular condition impossible.
-                # but this will need to change in the future,
-                # in order to support rich meta-languages where
-                # connectives are atomic formulas.
-                return self.formal_language.declare_unary_formula(connective=self, term=other)
-            elif isinstance(self, Formula) and isinstance(other, UnaryConnective):
-                return self.formal_language.declare_unary_formula(connective=self, term=other)
-            elif isinstance(self, Formula) and isinstance(other, BinaryConnective):
+            # if isinstance(self, UnaryConnective) and isinstance(other, Formula):
+            #    # for the time being, connectives are not formula,
+            #    # making this particular condition impossible.
+            #    # but this will need to change in the future,
+            #    # in order to support rich meta-languages where
+            #    # connectives are atomic formulas.
+            #    return self.formal_language.declare_unary_formula(connective=self, term=other)
+            # elif isinstance(self, Formula) and isinstance(other, UnaryConnective):
+            #    return self.formal_language.declare_unary_formula(connective=self, term=other)
+            if isinstance(self, Formula) and isinstance(other, BinaryConnective):
                 # This is a partial infix formula.
                 return InfixPartialFormula(term_1=self, partial_connective=other)
             else:
