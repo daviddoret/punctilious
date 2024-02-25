@@ -5,7 +5,7 @@ authors = [{ name = "David Doret", email = "david.doret@icloud.com" }]
 keywords = ["math", "mathematics", "proof", "proof assistant", "math proof assistant", "formal system", ]
 description = "A human-friendly and developer-friendly math proof assistant"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -35,7 +35,7 @@ build-backend = "setuptools.build_meta"
 "Repository" = "https://github.com/daviddoret/punctilious"
 
 [tool.pytest.ini_options]
-pythonpath = "src"
+pythonpath = "src/punctilious"
 addopts = [
     "--import-mode=importlib",
 ]
