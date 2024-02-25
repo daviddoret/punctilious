@@ -366,12 +366,12 @@ class UnaryConnective(FixedArityConnective):
     def __call__(self, term: Formula):
         return self.formal_language.declare_unary_formula(connective=self, term=term)
 
-    # def __or__(self, other):
-    #    """Support for prefix formula (* x)."""
+    # def __xor__(self, other):
+    #    """Support for prefix formula (* ^ x)."""
     #    if isinstance(other, Formula):
     #        return other.formal_language.declare_unary_formula(connective=self, term=other)
     #    else:
-    #       log.error(msg="No interpretation found for python-pseudo-math entry.", slf=self, other=other)
+    #        log.error(msg="No interpretation found for python-pseudo-math entry.", slf=self, other=other)
 
 
 class BinaryConnective(FixedArityConnective):
@@ -445,7 +445,7 @@ class Formula(FormalObject):
         """Hack to provide support for pseudo-infix notation, as in: p | implies | q.
         This is accomplished by re-purposing the | operator,
         overloading the __or__() method that is called when | is used,
-        and gluing all this together with the InfixPartialFormula class.
+        and glueing all this together with the InfixPartialFormula class.
         """
         if not isinstance(other, InfixPartialFormula):
             # if isinstance(self, UnaryConnective) and isinstance(other, Formula):

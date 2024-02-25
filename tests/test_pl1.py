@@ -190,58 +190,65 @@ class TestPL1ML:
         assert phi.term_1 is b
         assert phi.term_2.term_1 is a
         assert phi.term_2.term_2 is c
-        phi = lnot | ((lnot | b) | lor | c)
+        phi = lnot((lnot(b)) | lor | c)
         pass
 
     def test_substitute_meta_variables(self):
         l1 = pu.pl1.MinimalistPropositionalLogic()
 
-        land = l1.connectives.conjunction
-        lor = l1.connectives.disjunction
-        implies = l1.connectives.material_implication
-        lnot = l1.connectives.negation
+        ml_land = l1.meta_language.connectives.conjunction
+        ml_lor = l1.meta_language.connectives.disjunction
+        ml_implies = l1.meta_language.connectives.material_implication
+        ml_lnot = l1.meta_language.connectives.negation
 
-        bold_a = l1.meta_language.meta_variables.declare_meta_variable()
-        bold_b = l1.meta_language.meta_variables.declare_meta_variable()
-        p1 = l1.propositional_variables.declare_proposition_variable()
-        p2 = l1.propositional_variables.declare_proposition_variable()
-        p3 = l1.propositional_variables.declare_proposition_variable()
-        map1 = {bold_a: p1}
-        map2 = {bold_a: p1, bold_b: p2}
+        ml_a = l1.meta_language.meta_variables.declare_meta_variable()
+        ml_b = l1.meta_language.meta_variables.declare_meta_variable()
 
-        phi = p1
+        pl_land = l1.connectives.conjunction
+        pl_lor = l1.connectives.disjunction
+        pl_implies = l1.connectives.material_implication
+        pl_lnot = l1.connectives.negation
+
+        pl_p1 = l1.propositional_variables.declare_proposition_variable()
+        pl_p2 = l1.propositional_variables.declare_proposition_variable()
+        pl_p3 = l1.propositional_variables.declare_proposition_variable()
+
+        map1 = {ml_a: pl_p1}
+        map2 = {ml_a: pl_p1, ml_b: pl_p2}
+
+        phi = pl_p1
         assert phi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P"
         psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
-        assert psi == p1
+        assert psi == pl_p1
         psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
 
-        phi = bold_a
+        phi = ml_a
         assert phi.to_string(protocol=pu.ts.protocols.unicode_limited) == "bold-A"
         psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
-        assert psi == p1
+        assert psi == pl_p1
         assert psi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P"
 
-        phi = lnot | p1
-        assert phi.to_string(protocol=pu.ts.protocols.unicode_limited) == "¬P"
+        phi = ml_lnot(ml_a)
+        assert phi.to_string(protocol=pu.ts.protocols.unicode_limited) == "¬bold-A"
         psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
         assert psi.to_string(protocol=pu.ts.protocols.unicode_limited) == "¬P"
-        assert psi == phi
+        assert psi == pl_lnot(pl_p1)
 
         pu.fl1.preferences.formal_language.value = l1.meta_language
-        phi = p1 | implies | bold_a
+        phi = pl_p1 | ml_implies | ml_a
         assert phi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P implies bold-A"
         psi = l1.meta_language.substitute_meta_variables(phi=phi, m=map1)
-        chi = l1.compound_formulas.declare_binary_formula(connective=l1.connectives.material_implication, term_1=p1,
-                                                          term_2=p1)
+        chi = l1.compound_formulas.declare_binary_formula(connective=l1.connectives.material_implication, term_1=pl_p1,
+                                                          term_2=pl_p1)
         assert psi == chi
         assert chi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P implies P"
 
         phi2 = l1.meta_language.compound_formulas.declare_binary_formula(connective=l1.connectives.material_implication,
-                                                                         term_1=bold_b, term_2=phi)
+                                                                         term_1=ml_b, term_2=phi)
         assert phi2.to_string(protocol=pu.ts.protocols.unicode_limited) == "bold-A implies (P implies bold-B)"
         psi = l1.meta_language.substitute_meta_variables(phi=phi2, m=map2)
         assert psi.to_string(protocol=pu.ts.protocols.unicode_limited) == "P implies (Q implies Q)"
-        chi2 = l1.compound_formulas.declare_binary_formula(connective=l1.connectives.material_implication, term_1=p2,
+        chi2 = l1.compound_formulas.declare_binary_formula(connective=l1.connectives.material_implication, term_1=pl_p2,
                                                            term_2=chi)
         pu.log.info(f'{psi} == {chi2}')
         assert psi == chi2

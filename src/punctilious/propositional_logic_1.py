@@ -98,7 +98,7 @@ class PropositionalVariableCollection(fl1.FormalLanguageCollection):
 class ConnectiveCollection(fl1.ConnectiveCollection):
     """A specialized ConnectiveCollection for PL1 containing all PL1 connectors, and that is locked."""
 
-    def __init__(self, formal_language: PropositionalLogic, tc: typing.Optional[ts.TC] = None):
+    def __init__(self, formal_language: fl1.FormalLanguage, tc: typing.Optional[ts.TC] = None):
         tc = ts.validate_tc(tc=tc, superclass=TypesettingClass.PL1_CONNECTIVE_COLLECTION)
         super().__init__(formal_language=formal_language, tc=tc)
         # exhaustive declaration of PL1 connectives.
@@ -215,9 +215,9 @@ class MetaLanguageCompoundFormulaCollection(fl1.CompoundFormulaCollection):
     """A specialized class for PL1 meta-language containing all PL1 meta-language free formulas, and that is initially
     not locked."""
 
-    def __init__(self, meta_language: MetaLanguage):
-        self._meta_language: MetaLanguage = meta_language
-        super().__init__(formal_language=meta_language)
+    def __init__(self, formal_language: MetaLanguage):
+        super().__init__(formal_language=formal_language)
+        self._meta_language = formal_language
 
     def declare_unary_formula(self, connective: fl1.UnaryConnective, term: fl1.Formula) -> fl1.UnaryFormula:
         """Declare a well-formed unary formula in PL1.
@@ -228,7 +228,7 @@ class MetaLanguageCompoundFormulaCollection(fl1.CompoundFormulaCollection):
         :param term:
         :return:
         """
-        if connective not in self.meta_language.logical_calculi:
+        if connective not in self.meta_language.connectives:
             log.error("connective is not a pl1 meta-language connective.")
         if not self.meta_language.is_well_formed_formula(phi=term):
             log.error("term is not a pl1 meta-language well-formed-formula.")
@@ -247,7 +247,7 @@ class MetaLanguageCompoundFormulaCollection(fl1.CompoundFormulaCollection):
         :param term_2:
         :return:
         """
-        if connective not in self.meta_language.propositional_logic.connectives:
+        if connective not in self.meta_language.connectives:
             log.error("connective is not a pl1 meta-language connective.")
         if not self.meta_language.is_well_formed_formula(phi=term_1):
             log.error("term_1 is not a pl1 meta-language well-formed-formula.")
@@ -267,13 +267,14 @@ class MetaLanguage(fl1.FormalLanguage):
     """Propositional Logic 1 Meta Language."""
 
     def __init__(self, propositional_logic: PropositionalLogic):
-        super().__init__()
+        super().__init__(set_as_default=False,
+                         tc=TypesettingClass.PL1_MINIMAL_PROPOSITIONAL_LOGIC_LANGUAGE)
+        self._connectives: ConnectiveCollection = ConnectiveCollection(formal_language=self)
         self._propositional_logic: PropositionalLogic = propositional_logic
-        # Language tuples
         self._meta_variables: MetaVariableCollection = MetaVariableCollection(formal_language=self)
         super()._add_class(x=self._meta_variables)
         self._compound_formulas: MetaLanguageCompoundFormulaCollection = MetaLanguageCompoundFormulaCollection(
-            meta_language=self)
+            formal_language=self)
         super()._add_class(x=self._compound_formulas)
         # self._propositional_variables: PropositionalVariableCollection = PropositionalVariableCollection(
         #    formal_language=self)
@@ -282,8 +283,13 @@ class MetaLanguage(fl1.FormalLanguage):
 
     @property
     def compound_formulas(self) -> MetaLanguageCompoundFormulaCollection:
-        """The collection of declared compound formulas in PL1."""
+        """The collection of declared compound formulas in PL1 meta-language."""
         return self._compound_formulas
+
+    @property
+    def connectives(self) -> ConnectiveCollection:
+        """The collection of connectives in PL1 meta-language."""
+        return self._connectives
 
     def declare_binary_formula(self, connective: fl1.BinaryConnective, term_1: fl1.BinaryFormula,
                                term_2: fl1.Formula) -> fl1.BinaryFormula:
@@ -291,6 +297,24 @@ class MetaLanguage(fl1.FormalLanguage):
 
     def declare_unary_formula(self, connective: fl1.UnaryConnective, term: fl1.Formula) -> fl1.UnaryFormula:
         return self.compound_formulas.declare_unary_formula(connective=connective, term=term)
+
+    def get_pl1_equivalent_binary_connective(self, c: fl1.BinaryConnective) -> fl1.BinaryConnective:
+        """Maps meta-language connectives to propositional-logic connectives."""
+        if c is self.connectives.conjunction:
+            return self.propositional_logic.connectives.conjunction
+        elif c is self.connectives.disjunction:
+            return self.propositional_logic.connectives.disjunction
+        elif c is self.connectives.material_implication:
+            return self.propositional_logic.connectives.material_implication
+        else:
+            log.error(msg='unary-connective c is not supported.', c=c, slf=self)
+
+    def get_pl1_equivalent_unary_connective(self, c: fl1.UnaryConnective) -> fl1.UnaryConnective:
+        """Maps meta-language connectives to propositional-logic connectives."""
+        if c is self.connectives.negation:
+            return self.propositional_logic.connectives.negation
+        else:
+            log.error(msg='unary-connective c is not supported.', c=c, slf=self)
 
     def get_unique_meta_variable_tuple(self, phi: fl1.Formula) -> tuple[MetaVariable, ...]:
         non_unique = tuple(p for p in phi.iterate_leaf_formulas() if p in self.meta_variables)
@@ -349,15 +373,13 @@ class MetaLanguage(fl1.FormalLanguage):
             return phi
         elif phi.is_an_element_of_typesetting_class(tc=fl1.TypesettingClass.FL1_UNARY_FORMULA):
             phi: fl1.UnaryFormula
-            connective: fl1.Connective = phi.connective
-            connective: fl1.UnaryConnective
+            connective: fl1.UnaryConnective = self.get_pl1_equivalent_unary_connective(c=phi.connective)
             term: fl1.Formula = self.substitute_meta_variables(phi=phi.term, m=m)
             psi = self.propositional_logic.compound_formulas.declare_unary_formula(connective=connective, term=term)
             return psi
         elif phi.is_an_element_of_typesetting_class(tc=fl1.TypesettingClass.FL1_BINARY_FORMULA):
             phi: fl1.BinaryFormula
-            connective: fl1.Connective = phi.connective
-            connective: fl1.BinaryConnective
+            connective: fl1.BinaryConnective = self.get_pl1_equivalent_binary_connective(c=phi.connective)
             term_1: fl1.Formula = self.substitute_meta_variables(phi=phi.term_1, m=m)
             term_2: fl1.Formula = self.substitute_meta_variables(phi=phi.term_2, m=m)
             psi = self.propositional_logic.compound_formulas.declare_binary_formula(connective=connective,
@@ -450,10 +472,10 @@ class MinimalistPropositionalLogicAxioms(fl1.AxiomCollection):
         if isinstance(propositional_logic, PropositionalLogic):
             self._propositional_logic: PropositionalLogic = propositional_logic
         super().__init__(formal_language=propositional_logic)
-        lnot: fl1.UnaryConnective = self.propositional_logic.connectives.negation
-        implies: fl1.BinaryConnective = self.propositional_logic.connectives.material_implication
-        land: fl1.BinaryConnective = self.propositional_logic.connectives.conjunction
-        lor: fl1.BinaryConnective = self.propositional_logic.connectives.disjunction
+        lnot: fl1.UnaryConnective = self.propositional_logic.meta_language.connectives.negation
+        implies: fl1.BinaryConnective = self.propositional_logic.meta_language.connectives.material_implication
+        land: fl1.BinaryConnective = self.propositional_logic.meta_language.connectives.conjunction
+        lor: fl1.BinaryConnective = self.propositional_logic.meta_language.connectives.disjunction
         a = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
         b = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
         c = self.propositional_logic.meta_language.meta_variables.declare_meta_variable()
@@ -519,8 +541,9 @@ class MinimalistPropositionalLogic(PropositionalLogic):
     def __init__(self, set_as_default: bool = True):
         super().__init__(set_as_default=set_as_default,
                          tc=TypesettingClass.PL1_MINIMAL_PROPOSITIONAL_LOGIC_LANGUAGE)
-        self._connectives = ConnectiveCollection(formal_language=self)
-        self._compound_formulas = PropositionalLogicCompoundFormulaCollection(formal_language=self)
+        self._connectives: ConnectiveCollection = ConnectiveCollection(formal_language=self)
+        self._compound_formulas: PropositionalLogicCompoundFormulaCollection = PropositionalLogicCompoundFormulaCollection(
+            formal_language=self)
         self._axioms: MinimalistPropositionalLogicAxioms = MinimalistPropositionalLogicAxioms(propositional_logic=self)
 
     @property
