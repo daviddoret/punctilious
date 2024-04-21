@@ -5,93 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
-      <change afterPath="$PROJECT_DIR$/sandbox/test.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sandbox/zeta_2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/natural_numbers_1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/sequences_1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_old/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_old/propositional_logic_1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/proof-by-refutation.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trashcan/tests_old/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.ipynb_checkpoints/colored-trees-checkpoint.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/colored-trees.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/_TODO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/bibliography.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/bibliography.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/biconditional_introduction.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/biconditional_introduction.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/class.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/class.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/conjunction_introduction.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/conjunction_introduction.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/consistency.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/consistency.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/contentual.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/contentual.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/creation.rst" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/creation.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/data_model.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/data_model.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/declaration.rst" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/declaration.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/definition.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/definition.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/definitional-equality.rst" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/definitional-equality.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/derivable-of-formulae.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/derivable-of-formulae.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/derivation_rule.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/derivation_rule.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/direct_axiom_inference.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/direct_axiom_inference.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/disjunction_introduction.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/disjunction_introduction.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/equal_terms_substitution_inference_rule.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/equal_terms_substitution_inference_rule.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/equality_commutativity_inference_rule.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/equality_commutativity_inference_rule.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/formula-syntactic-equivalence.rst" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/formula-syntactic-equivalence.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/formula.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/formula.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/foundation_system.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/foundation_system.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/homography.rst" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/homography.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/hypothesis.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/hypothesis.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/mermaid_class_diagram_template.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/mermaid_class_diagram_template.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/modus_ponens.rst" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/modus_ponens.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/negation_introduction.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/negation_introduction.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/proof-by-contradiction.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/proof-by-contradiction.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/proof-by-refutation.md" beforeDir="false" afterPath="$PROJECT_DIR$/sandbox/binary_tree_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/proof.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/proof.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/proposition.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/proposition.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/refutation-b-ontradition.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/refutation-b-ontradition.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/relation.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/relation.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/stabilized_of_theories.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/stabilized_of_theories.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/statement.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/statement.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/theoretical_morphism.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/theoretical_morphism.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/theory.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/theory.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/universe-of-discourse.rst" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/universe-of-discourse.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/docs_to_integrate/variable_substitution.md" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/variable_substitution.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/echo/echo_tao_2006_2_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/echo/echo_tao_2006_2_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/formula_enumeration.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/formula_enumeration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/formula_enumeration.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/formula_enumeration.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/n_enumeration.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/n_enumeration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/sandbox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/sandbox2.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/sandbox2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/snippets/chars.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/project/snippets/chars.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/config.old" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_old/config.old" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_old/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/config/config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_old/config/config.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_old/formal_language_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language_1_presentation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_old/formal_language_1_presentation_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/log.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_old/log.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pl2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_old/pl2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/preferences.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_old/preferences.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_1_presentation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_old/propositional_logic_1_presentation_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/punctilious.log" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_old/punctilious.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/typesetting.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_old/typesetting.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_old/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/sandbox/zeta.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/punctilious.log" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/tests_old/punctilious.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_fl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/tests_old/test_fl1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_pl1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/tests_old/test_pl1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_typesetting.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/tests_old/test_typesetting.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/tests_old/test_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/theory/build/lib/bindings/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/theory/build/lib/bindings/utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/theory/build/lib/tom-select/tom-select.complete.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/theory/build/lib/tom-select/tom-select.complete.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/theory/build/lib/tom-select/tom-select.css" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/theory/build/lib/tom-select/tom-select.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/theory/build/lib/vis-9.1.2/vis-network.css" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/theory/build/lib/vis-9.1.2/vis-network.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/theory/build/lib/vis-9.1.2/vis-network.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/theory/build/lib/vis-9.1.2/vis-network.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/theory/build/punctilious_2023_metatheory_report_noproof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/theory/build/punctilious_2023_metatheory_report_noproof_enus_unicode.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/theory/build/punctilious_2023_metatheory_report_proof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/theory/build/punctilious_2023_metatheory_report_proof_enus_unicode.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/theory/build/tao_2006_2_1_the_peano_axioms_interactive_graph_plaintext.html" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/theory/build/tao_2006_2_1_the_peano_axioms_interactive_graph_plaintext.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/theory/build/tao_2006_2_1_the_peano_axioms_interactive_graph_unicode.html" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/theory/build/tao_2006_2_1_the_peano_axioms_interactive_graph_unicode.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,6 +94,7 @@
     "PowerShell.release_patch.ps1.executor": "Run",
     "Python tests.Python tests in tests.executor": "Run",
     "Python tests.pytest for test_axiomatic_system.test_connective.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence.test_is_connective_equivalent.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestFormula.test_formula.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestFormula.test_term.executor": "Run",
@@ -186,6 +105,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilder.test_term_1.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilder.test_to_formula.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilderNode.test_formula_builder_node.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalence.test_is_formula_equivalent.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTerms.test_terms.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTermsBuilder.test_terms_builder.executor": "Run",
     "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
@@ -303,7 +223,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence.test_is_connective_equivalent">
+  <component name="RunManager" selected="Python tests.pytest in test_axiomatic_system_1.py">
     <configuration name="axiomatic_system_1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -362,28 +282,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/build_samples.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="natural_numbers_1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/natural_numbers_1.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -451,28 +349,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/prebuild_generate_theory_reports.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="sequences_1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/sequences_1.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -559,6 +435,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_axiomatic_system_1.TestConnectiveEquivalence" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestConnectiveEquivalence&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for test_axiomatic_system_1.TestConnectiveEquivalence.test_is_connective_equivalent" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -573,6 +466,23 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_axiomatic_system_1.TestConnectiveEquivalence.test_is_connective_equivalent&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_axiomatic_system_1.TestFormula.test_to_formula_builder" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestFormula.test_to_formula_builder&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -617,11 +527,11 @@
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.axiomatic_system_1" />
-      <item itemvalue="Python.sequences_1" />
-      <item itemvalue="Python.natural_numbers_1" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.Python tests in tests" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormula.test_to_formula_builder" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence.test_is_connective_equivalent" />
       <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -630,11 +540,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence.test_is_connective_equivalent" />
-        <item itemvalue="Python.axiomatic_system_1" />
-        <item itemvalue="Python.sequences_1" />
-        <item itemvalue="Python.natural_numbers_1" />
         <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormula.test_to_formula_builder" />
+        <item itemvalue="Python.axiomatic_system_1" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence.test_is_connective_equivalent" />
       </list>
     </recent_temporary>
   </component>
@@ -653,14 +563,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00477" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1706563292194</created>
-      <option name="number" value="00477" />
-      <option name="presentableId" value="LOCAL-00477" />
-      <option name="project" value="LOCAL" />
-      <updated>1706563292194</updated>
     </task>
     <task id="LOCAL-00478" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1046,7 +948,15 @@
       <option name="project" value="LOCAL" />
       <updated>1708898491480</updated>
     </task>
-    <option name="localTasksCounter" value="526" />
+    <task id="LOCAL-00526" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1713587990666</created>
+      <option name="number" value="00526" />
+      <option name="presentableId" value="LOCAL-00526" />
+      <option name="project" value="LOCAL" />
+      <updated>1713587990667</updated>
+    </task>
+    <option name="localTasksCounter" value="527" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1162,11 +1072,6 @@
           <url>file://$PROJECT_DIR$/src/punctilious_old/propositional_logic_1_presentation_1.py</url>
           <line>167</line>
           <option name="timeStamp" value="180" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>192</line>
-          <option name="timeStamp" value="188" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
