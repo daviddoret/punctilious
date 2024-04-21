@@ -214,3 +214,11 @@ class TestFormulaEquivalence:
         assert not as1.is_formula_equivalent(phi=phi2, psi=phi3)
         assert not as1.is_formula_equivalent(phi=phi3, psi=phi4)
         assert not as1.is_formula_equivalent(phi=phi4, psi=phi5)
+
+
+class TestCollection:
+    def test_collection(self, phi1, phi2, phi3):
+        cb1 = as1.CollectionBuilder((phi1, phi2, phi3,))
+        c1 = cb1.to_collection()
+        c2 = as1.Collection((phi1, phi2, phi3,))
+        assert as1.is_formula_equivalent(c1, c2)

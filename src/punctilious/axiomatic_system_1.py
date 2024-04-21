@@ -207,7 +207,6 @@ def coerce_formula(phi: FlexibleFormula):
 
 
 FlexibleFormula = typing.Optional[typing.Union[Connective, Formula, FormulaBuilder]]
-FlexibleElements = typing.Optional[typing.Union[typing.Iterable, Formula, FormulaBuilder]]
 
 
 class FreeArityConnective(Connective):
@@ -382,28 +381,43 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
 class CollectionBuilder(FormulaBuilder):
     """A utility class to help build collections. It is mutable and thus allows edition."""
 
-    def __init__(self, elements: typing.Optional[typing.Iterable[FlexibleFormula, ...]]):
-        elements: FormulaBuilder = FormulaBuilder(elements=elements)
-        super().__init__(c=connectives.collection, terms=elements)
+    def __init__(self, terms: typing.Optional[typing.Iterable[FlexibleFormula, ...]]):
+        super().__init__(c=connectives.collection, terms=terms)
+
+    def to_collection(self) -> Collection:
+        elements: tuple[Formula, ...] = tuple(coerce_formula(phi=element) for element in self)
+        phi: Collection = Collection(elements=elements)
+        return phi
+
+    def to_formula(self) -> Formula:
+        """Return a Collection."""
+        return self.to_collection()
 
 
 class Collection(Formula):
-    """A collection, or collection-formula, is a formula c(t0, t1, ..., tn) where:
+    """A collection is a formula c(t0, t1, ..., tn) where:
      - c is a node with the collection connective.
      - ti is a formula.
 
      The empty-collection is the collection c()."""
 
-    def __init__(self, elements: typing.Optional[Formula] = None):
-        if elements is None:
-            elements = Formula()
+    def __new__(cls, elements: FlexibleCollection = None):
+        # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
+        # because tuple is immutable.
+        o: tuple = super().__new__(cls, c=connectives.collection, terms=elements)
+        return o
+
+    def __init__(self, elements: FlexibleCollection = None):
         super().__init__(c=connectives.collection, terms=elements)
+
+
+FlexibleCollection = typing.Optional[typing.Union[Collection, typing.Iterable[FlexibleFormula]]]
 
 
 class TransformationBuilder(FormulaBuilder):
 
-    def __init__(self, premises: typing.Optional[typing.Iterable[FlexibleFormula, ...]], conclusion: FlexibleFormula,
-                 variables: typing.Optional[typing.Iterable[FlexibleFormula, ...]]):
+    def __init__(self, premises: typing.Optional[typing.Iterable[FlexibleFormula]], conclusion: FlexibleFormula,
+                 variables: typing.Optional[typing.Iterable[FlexibleFormula]]):
         premises: FormulaBuilder = FormulaBuilder(c=connectives.collection, terms=premises)
         variables: FormulaBuilder = FormulaBuilder(c=connectives.collection, terms=variables)
         super().__init__(c=connectives.inference_rule, terms=[premises, conclusion, variables])
