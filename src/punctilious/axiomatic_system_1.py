@@ -128,7 +128,7 @@ class FormulaBuilder(list):
 class Formula(tuple):
     """An immutable formula modeled as an edge-ordered, node-colored tree."""
 
-    def __new__(cls, c: Connective, terms: FlexibleElements = None):
+    def __new__(cls, c: Connective, terms: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         o: tuple
@@ -141,8 +141,16 @@ class Formula(tuple):
             raise ValueError()
         return o
 
-    def __init__(self, c: Connective, terms: FlexibleElements = None):
+    def __init__(self, c: Connective, terms: FlexibleTupl = None):
         self._c = c
+
+    def __eq__(self, other):
+        """python-equality of formulas is not formula-equivalence."""
+        return self is other
+
+    def __hash__(self):
+        """python-equality of formulas is not formula-equivalence."""
+        return hash(id(self))
 
     def __repr__(self):
         return self.rep()
@@ -206,6 +214,18 @@ def coerce_formula(phi: FlexibleFormula):
         raise TypeError()
 
 
+def coerce_collection(c: FlexibleTupl):
+    if isinstance(c, Tupl):
+        return c
+    elif isinstance(c, TuplBuilder):
+        return c.to_tupl()
+    elif isinstance(c, collections.abc.Iterable):
+        """This may be ambiguous when we pass a single formula (that is natively iterable)."""
+        return Tupl(elements=c)
+    else:
+        raise TypeError()
+
+
 FlexibleFormula = typing.Optional[typing.Union[Connective, Formula, FormulaBuilder]]
 
 
@@ -264,7 +284,7 @@ class InfixPartialFormula:
         overloading the __or__() method that is called when | is used,
         and glueing all this together with the InfixPartialFormula class.
         """
-        return FormulaBuilder(c=self._c, terms=[self.term_1, term_2])
+        return Formula(c=self._c, terms=[self.term_1, term_2])
 
     def __repr__(self):
         return self.rep()
@@ -302,7 +322,7 @@ class TernaryConnective(FixedArityConnective):
 
 
 def let_x_be_a_variable(rep: str):
-    return NullaryConnective(rep=rep)
+    return Formula(c=NullaryConnective(rep=rep))
 
 
 def let_x_be_a_simple_object(rep: str):
@@ -326,7 +346,8 @@ def let_x_be_a_free_arity_connective(rep: str):
 
 
 class Connectives(typing.NamedTuple):
-    collection: FreeArityConnective
+    enumeration: FreeArityConnective
+    tupl: FreeArityConnective
     implies: BinaryConnective
     inference_rule: TernaryConnective
     is_a: BinaryConnective
@@ -334,8 +355,9 @@ class Connectives(typing.NamedTuple):
 
 
 connectives = Connectives(
+    enumeration=let_x_be_a_free_arity_connective(rep='enumeration'),
     transformation=let_x_be_a_ternary_connective(rep='transformation'),
-    collection=let_x_be_a_free_arity_connective(rep='collection'),
+    tupl=let_x_be_a_free_arity_connective(rep='tuple'),
     implies=let_x_be_a_binary_connective(rep='implies'),
     inference_rule=let_x_be_a_ternary_connective(rep='inference-rule'),
     is_a=let_x_be_a_binary_connective(rep='is-a')
@@ -378,69 +400,200 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
         return False
 
 
-class CollectionBuilder(FormulaBuilder):
-    """A utility class to help build collections. It is mutable and thus allows edition."""
+def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula, variables: FlexibleEnumeration,
+                                         _values: dict[Formula, Formula] = None):
+    """Two formulas phi and psi are formula-equivalent-with-variables with regards to variables V if and only if:
+     - All formulas in V are not sub-formula of phi,
+     - We declare a new formula psi' where every sub-formula that is an element of V,
+       is substituted by the formula that is at the exact same position in the tree.
+     - And the phi and psi' are formula-equivalent.
 
-    def __init__(self, terms: typing.Optional[typing.Iterable[FlexibleFormula, ...]]):
-        super().__init__(c=connectives.collection, terms=terms)
+     Note: is-formula-equivalent-with-variables is not commutative.
 
-    def to_collection(self) -> Collection:
+    :param phi:
+    :param psi:
+    :param variables:
+    :param _values:
+    :return:
+    """
+    if _values is None:
+        _values: dict[Formula, Formula] = dict()
+    phi: Formula = coerce_formula(phi=phi)
+    psi: Formula = coerce_formula(phi=psi)
+    psi_value: Formula
+    variables: Tupl = coerce_collection(c=variables)
+    if phi in variables:
+        # Sub-formulas in phi cannot be elements of variables.
+        return False
+    if psi in variables:
+        # psi is a variable
+        if psi in _values.items():
+            # psi's value is already mapped
+            if is_formula_equivalent(psi, _values[psi]):
+                # psi is consistent with its mapped value
+                # substitute the variable with its value
+                # print(f'variable {psi}')
+                psi_value: Formula = _values[psi]
+                # print(f'    substituted with {psi}.')
+            else:
+                # psi is not consistent with its mapped value
+                return False
+        else:
+            # print(f'variable {psi}')
+            # substitute the variable with its value
+            # set the variable value
+            psi_value = phi
+            _values[psi] = psi_value
+            # print(f'    set to {phi}.')
+    else:
+        psi_value = psi
+    if (is_connective_equivalent(c=phi.c, d=psi_value.c)) and (phi.arity == 0) and (psi_value.arity == 0):
+        # Base case
+        return True
+    elif (is_connective_equivalent(c=phi.c, d=psi_value.c)) and (phi.arity == psi_value.arity) and all(
+            is_formula_equivalent_with_variables(phi=phi_prime, psi=psi_prime, variables=variables, _values=_values) for
+            phi_prime, psi_prime in zip(phi, psi_value)):
+        # Inductive step
+        return True
+    else:
+        # Extreme case
+        return False
+
+
+class TuplBuilder(FormulaBuilder):
+    """A utility class to help build tuples. It is mutable and thus allows edition."""
+
+    def __init__(self, elements: FlexibleTupl):
+        super().__init__(c=connectives.tupl, terms=elements)
+
+    def to_tupl(self) -> Tupl:
         elements: tuple[Formula, ...] = tuple(coerce_formula(phi=element) for element in self)
-        phi: Collection = Collection(elements=elements)
+        phi: Tupl = Tupl(elements=elements)
         return phi
 
     def to_formula(self) -> Formula:
         """Return a Collection."""
-        return self.to_collection()
+        return self.to_tupl()
 
 
-class Collection(Formula):
-    """A collection is a formula c(t0, t1, ..., tn) where:
+class Tupl(Formula):
+    """A tuple is a formula c(t0, t1, ..., tn) where:
      - c is a node with the collection connective.
      - ti is a formula.
 
-     The empty-collection is the collection c()."""
+     The empty-tuple is the tuple c().
 
-    def __new__(cls, elements: FlexibleCollection = None):
+     Python implementation: in python, the word 'tuple' is reserved. For this reason, the word 'tupl' is used instead
+     to implement this object."""
+
+    def __new__(cls, elements: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        o: tuple = super().__new__(cls, c=connectives.collection, terms=elements)
+        o: tuple = super().__new__(cls, c=connectives.tupl, terms=elements)
         return o
 
-    def __init__(self, elements: FlexibleCollection = None):
-        super().__init__(c=connectives.collection, terms=elements)
+    def __init__(self, elements: FlexibleTupl = None):
+        super().__init__(c=connectives.tupl, terms=elements)
+
+    def to_tupl_builder(self) -> TuplBuilder:
+        return TuplBuilder(elements=self)
+
+    def to_formula_builder(self) -> FormulaBuilder:
+        return self.to_tupl_builder()
 
 
-FlexibleCollection = typing.Optional[typing.Union[Collection, typing.Iterable[FlexibleFormula]]]
+FlexibleTupl = typing.Optional[typing.Union[Tupl, TuplBuilder, typing.Iterable[FlexibleFormula]]]
+"""FlexibleTupl is a flexible python type that may be safely coerced into a Tupl or a TupleBuilder."""
+
+
+class EnumerationBuilder(FormulaBuilder):
+    """A utility class to help build enumeration. It is mutable and thus allows edition."""
+
+    def __init__(self, elements: FlexibleEnumeration):
+        super().__init__(c=connectives.enumeration, terms=elements)
+
+    def to_enumeration(self) -> Enumeration:
+        elements: tuple[Formula, ...] = tuple(coerce_formula(phi=element) for element in self)
+        phi: Enumeration = Enumeration(elements=elements)
+        return phi
+
+    def to_formula(self) -> Formula:
+        """Return a Collection."""
+        return self.to_enumeration()
+
+
+class Enumeration(Formula):
+    """In axiomatic-system-1, an enumeration is a formula c(t0, t1, ..., tn) where:
+     - c is a node with the 'enumeration' connective.
+     - ti is a formula.
+
+    Distinctive objects:
+     - The empty-enumeration is the formula c().
+
+    By definition, the sub-formulas of a formula phi are ordered and can repeat themselves. The justification for
+    enumeration is the intention of considering the sub-formulas without their ordering, and without repetitions.
+    Enumerations are equivalent to computable sets.
+
+    """
+
+    def __new__(cls, elements: FlexibleEnumeration = None):
+        # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
+        # because tuple is immutable.
+        o: tuple = super().__new__(cls, c=connectives.enumeration, terms=elements)
+        return o
+
+    def __init__(self, elements: FlexibleEnumeration = None):
+        super().__init__(c=connectives.enumeration, terms=elements)
+
+    def to_enumeration_builder(self) -> EnumerationBuilder:
+        return EnumerationBuilder(elements=self)
+
+    def to_formula_builder(self) -> FormulaBuilder:
+        return self.to_enumeration_builder()
+
+
+FlexibleEnumeration = typing.Optional[typing.Union[Enumeration, EnumerationBuilder, typing.Iterable[FlexibleFormula]]]
+"""FlexibleEnumeration is a flexible python type that may be safely coerced into an Enumeration or a EnumerationBuilder."""
 
 
 class TransformationBuilder(FormulaBuilder):
 
-    def __init__(self, premises: typing.Optional[typing.Iterable[FlexibleFormula]], conclusion: FlexibleFormula,
-                 variables: typing.Optional[typing.Iterable[FlexibleFormula]]):
-        premises: FormulaBuilder = FormulaBuilder(c=connectives.collection, terms=premises)
-        variables: FormulaBuilder = FormulaBuilder(c=connectives.collection, terms=variables)
-        super().__init__(c=connectives.inference_rule, terms=[premises, conclusion, variables])
+    def __init__(self, premises: FlexibleTupl, conclusion: FlexibleFormula,
+                 variables: FlexibleTupl):
+        premises: EnumerationBuilder = EnumerationBuilder(elements=premises)
+        variables: EnumerationBuilder = EnumerationBuilder(elements=variables)
+        super().__init__(c=connectives.inference_rule, terms=(premises, conclusion, variables,))
 
     @property
     def conclusion(self) -> FormulaBuilder:
-        return self.terms[1]
+        return self[1]
 
     @property
-    def premises(self) -> FormulaBuilder:
-        return self.terms[0]
+    def premises(self) -> EnumerationBuilder:
+        return self[0]
+
+    def to_transformation(self) -> Transformation:
+        premises = self.premises.to_enumeration()
+        conclusion: Formula = self.conclusion.to_formula()
+        variables = self.variables.to_enumeration()
+        t: Transformation = Transformation(premises=premises, conclusion=conclusion, variables=variables)
+        return t
+
+    def to_formula(self) -> Formula:
+        """Return a Transformation."""
+        return self.to_transformation()
 
     @property
-    def variables(self) -> FormulaBuilder:
-        return self.terms[2]
+    def variables(self) -> EnumerationBuilder:
+        return self[2]
 
 
-class Transformation:
+class Transformation(Formula):
     """A transformation is a formula t(P, c, V) where:
      - t has the transformation connective,
-     - P is a collection-formula whose children are called premises,
+     - P is an enumeration whose children are called premises,
      - c is a formula called conclusion,
-     - V is a collection-formula whose children are variables.
+     - V is a enumeration whose children are variables.
     From a transformation, the following algorithm is derived:
     Phi --> psi
     t(Phi) --> psi
@@ -451,8 +604,45 @@ class Transformation:
     return the conclusion by substituting variables with formulas
     # TODO: Transformation: rewrite the above clearly
     """
-    pass
 
+    def __new__(cls, premises: FlexibleEnumeration, conclusion: FlexibleFormula,
+                variables: FlexibleEnumeration):
+        # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
+        # because tuple is immutable.
+        premises: EnumerationBuilder = EnumerationBuilder(elements=premises)
+        variables: EnumerationBuilder = EnumerationBuilder(elements=variables)
+        o: tuple = super().__new__(cls, c=connectives.tupl,
+                                   terms=(premises, conclusion, variables,))
+        return o
+
+    def __init__(self, premises: FlexibleEnumeration, conclusion: FlexibleFormula,
+                 variables: FlexibleEnumeration):
+        super().__init__(c=connectives.inference_rule, terms=(premises, conclusion, variables,))
+
+    def __call__(self, arguments: FlexibleTupl):
+        pass
+        # TODO: Pursue implementation here.
+
+    @property
+    def conclusion(self) -> Formula:
+        return self[1]
+
+    @property
+    def premises(self) -> Enumeration:
+        return self[0]
+
+    def to_transformation_builder(self) -> TransformationBuilder:
+        premises: EnumerationBuilder = self.premises.to_enumeration_builder()
+        conclusion: FormulaBuilder = self.conclusion.to_formula_builder()
+        variables: EnumerationBuilder = self.variables.to_enumeration_builder()
+        return TransformationBuilder(premises=premises, conclusion=conclusion, variables=variables)
+
+    def to_formula_builder(self) -> FormulaBuilder:
+        return self.to_transformation_builder()
+
+    @property
+    def variables(self) -> Enumeration:
+        return self[2]
 # x = let_x_be_a_variable(rep='x')
 # x | connectives.is_a | y
 # ir = InferenceRuleBuilder()

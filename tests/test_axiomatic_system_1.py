@@ -218,7 +218,56 @@ class TestFormulaEquivalence:
 
 class TestCollection:
     def test_collection(self, phi1, phi2, phi3):
-        cb1 = as1.CollectionBuilder((phi1, phi2, phi3,))
-        c1 = cb1.to_collection()
-        c2 = as1.Collection((phi1, phi2, phi3,))
+        cb1 = as1.TuplBuilder((phi1, phi2, phi3,))
+        c1 = cb1.to_tupl()
+        c2 = as1.Tupl((phi1, phi2, phi3,))
         assert as1.is_formula_equivalent(c1, c2)
+
+    def test_in(self):
+        x = as1.let_x_be_a_variable(rep='x')
+        y = as1.let_x_be_a_variable(rep='y')
+        c = as1.Tupl(elements=(x,))
+        assert x in c
+        assert y not in c
+
+
+class TestFormulaEquivalenceWithVariables:
+    def test_is_formula_equivalent_with_variables(self):
+        x = as1.let_x_be_a_variable(rep='x')
+        y = as1.let_x_be_a_variable(rep='y')
+        is_a = as1.let_x_be_a_binary_connective(rep='is-a')
+        human = as1.let_x_be_a_simple_object(rep='human')
+        platypus = as1.let_x_be_a_simple_object(rep='platypus')
+        mortal = as1.let_x_be_a_simple_object(rep='mortal')
+        aristotle = as1.let_x_be_a_simple_object(rep='aristotle')
+        assert as1.is_formula_equivalent_with_variables(
+            phi=aristotle | is_a | human,
+            psi=aristotle | is_a | human,
+            variables=())
+        # the following is ill-formed because the variable is an element of phi, and not of psi.
+        # reminder: formula-equivalence-with-variables is non-commutative.
+        assert not as1.is_formula_equivalent_with_variables(
+            phi=aristotle | is_a | x,
+            psi=aristotle | is_a | human,
+            variables=(x,))
+        assert as1.is_formula_equivalent_with_variables(
+            phi=aristotle | is_a | human,
+            psi=aristotle | is_a | x,
+            variables=(x,))
+        assert not as1.is_formula_equivalent_with_variables(
+            phi=aristotle | is_a | human,
+            psi=aristotle | is_a | platypus,
+            variables=())
+        assert not as1.is_formula_equivalent_with_variables(
+            phi=aristotle | is_a | x,
+            psi=aristotle | is_a | human,
+            variables=(y,))
+        assert not as1.is_formula_equivalent_with_variables(
+            phi=aristotle | is_a | x,
+            psi=platypus | is_a | human,
+            variables=(x,))
+
+
+class TestTransformation:
+    def test_transformation(self):
+        pass
