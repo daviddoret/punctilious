@@ -4,6 +4,7 @@ import abc
 import collections
 import dataclasses
 import typing
+import warnings
 
 
 class Connective:
@@ -168,9 +169,12 @@ class Formula(tuple):
         return self._c
 
     def rep(self, **kwargs) -> str:
-        kwargs['parenthesis'] = True
-        terms: str = ', '.join(term.rep(**kwargs) for term in self)
-        return f'{self.c.rep(**kwargs)}({terms})'
+        if isinstance(self.c, NullaryConnective):
+            return f'{self.c.rep}'
+        else:
+            kwargs['parenthesis'] = True
+            terms: str = ', '.join(term.rep(**kwargs) for term in self)
+            return f'{self.c.rep(**kwargs)}({terms})'
 
     @property
     def term_0(self) -> Formula:
@@ -210,6 +214,18 @@ def coerce_formula(phi: FlexibleFormula):
         return phi.to_formula()
     elif isinstance(phi, FormulaBuilder):
         return phi.to_formula()
+    else:
+        raise TypeError()
+
+
+def coerce_enumeration(phi: FlexibleEnumeration):
+    if isinstance(phi, Enumeration):
+        return phi
+    elif isinstance(phi, EnumerationBuilder):
+        return phi.to_enumeration()
+    elif isinstance(phi, typing.Iterable):
+        """This may be ambiguous when we pass a single formula (that is natively iterable)."""
+        return Enumeration(elements=phi)
     else:
         raise TypeError()
 
@@ -460,6 +476,24 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
         return False
 
 
+def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> bool:
+    """Two enumerations phi and psi are enumeration-equivalent if and only if:
+     - for every sub-formula phi' in phi, there is a formula-equivalent sub-formula psi' in psi.
+     - for every sub-formula psi' in psi, there is a formula-equivalent sub-formula phi' in phi.
+
+    :param phi:
+    :param psi:
+    :return:
+    """
+    phi: Formula = coerce_enumeration(phi=phi)
+    psi: Formula = coerce_enumeration(phi=psi)
+
+    test_1 = all(any(is_formula_equivalent(phi=phi_prime, psi=psi_prime) for psi_prime in psi) for phi_prime in phi)
+    test_2 = all(any(is_formula_equivalent(phi=psi_prime, psi=phi_prime) for phi_prime in phi) for psi_prime in psi)
+
+    return test_1 and test_2
+
+
 class TuplBuilder(FormulaBuilder):
     """A utility class to help build tuples. It is mutable and thus allows edition."""
 
@@ -510,7 +544,10 @@ class EnumerationBuilder(FormulaBuilder):
     """A utility class to help build enumeration. It is mutable and thus allows edition."""
 
     def __init__(self, elements: FlexibleEnumeration):
-        super().__init__(c=connectives.enumeration, terms=elements)
+        unique_elements: set = set(elements)
+        if len(unique_elements) != len(elements):
+            warnings.warn('Element repetitions are removed from enumerations.')
+        super().__init__(c=connectives.enumeration, terms=unique_elements)
 
     def to_enumeration(self) -> Enumeration:
         elements: tuple[Formula, ...] = tuple(coerce_formula(phi=element) for element in self)
@@ -539,11 +576,17 @@ class Enumeration(Formula):
     def __new__(cls, elements: FlexibleEnumeration = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        o: tuple = super().__new__(cls, c=connectives.enumeration, terms=elements)
+        unique_elements: set = set(elements)
+        if len(unique_elements) != len(elements):
+            warnings.warn('Element repetitions are removed from enumerations.')
+        o: tuple = super().__new__(cls, c=connectives.enumeration, terms=unique_elements)
         return o
 
     def __init__(self, elements: FlexibleEnumeration = None):
-        super().__init__(c=connectives.enumeration, terms=elements)
+        unique_elements: set = set(elements)
+        if len(unique_elements) != len(elements):
+            warnings.warn('Element repetitions are removed from enumerations.')
+        super().__init__(c=connectives.enumeration, terms=unique_elements)
 
     def to_enumeration_builder(self) -> EnumerationBuilder:
         return EnumerationBuilder(elements=self)

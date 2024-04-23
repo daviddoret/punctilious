@@ -216,12 +216,16 @@ class TestFormulaEquivalence:
         assert not as1.is_formula_equivalent(phi=phi4, psi=phi5)
 
 
-class TestCollection:
-    def test_collection(self, phi1, phi2, phi3):
+class TestTupl:
+    def test_tupl(self, phi1, phi2, phi3):
         cb1 = as1.TuplBuilder((phi1, phi2, phi3,))
         c1 = cb1.to_tupl()
         c2 = as1.Tupl((phi1, phi2, phi3,))
         assert as1.is_formula_equivalent(c1, c2)
+        assert len(c1) == 3
+        assert len(c2) == 3
+        c3 = as1.Tupl()
+        assert len(c3) == 0
 
     def test_in(self):
         x = as1.let_x_be_a_variable(rep='x')
@@ -229,6 +233,33 @@ class TestCollection:
         c = as1.Tupl(elements=(x,))
         assert x in c
         assert y not in c
+        assert len(c) == 1
+
+
+class TestEnumeration:
+    def test_tupl(self, phi1, phi2, phi3):
+        cb1 = as1.EnumerationBuilder((phi1, phi2, phi3, phi1, phi3))
+        e1 = cb1.to_enumeration()
+        e2 = as1.Enumeration((phi1, phi2, phi3,))
+        e3 = as1.Enumeration((phi3, phi1, phi2,))
+        assert len(e1) == 3
+        assert len(e2) == 3
+        assert len(e3) == 3
+        assert as1.is_enumeration_equivalent(e1, e2)
+        assert as1.is_enumeration_equivalent(e1, e3)
+        assert as1.is_enumeration_equivalent(e2, e3)
+        e4 = as1.Enumeration((phi2, phi1,))
+        assert not as1.is_enumeration_equivalent(e4, e1)
+        assert not as1.is_enumeration_equivalent(e4, e2)
+        assert not as1.is_enumeration_equivalent(e4, e3)
+
+    def test_in(self):
+        x = as1.let_x_be_a_variable(rep='x')
+        y = as1.let_x_be_a_variable(rep='y')
+        e1 = as1.Enumeration(elements=(x,))
+        assert x in e1
+        assert y not in e1
+        assert len(e1) == 1
 
 
 class TestFormulaEquivalenceWithVariables:
