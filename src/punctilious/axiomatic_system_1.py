@@ -218,26 +218,26 @@ def coerce_formula(phi: FlexibleFormula):
         raise TypeError()
 
 
-def coerce_enumeration(phi: FlexibleEnumeration):
-    if isinstance(phi, Enumeration):
-        return phi
-    elif isinstance(phi, EnumerationBuilder):
-        return phi.to_enumeration()
-    elif isinstance(phi, typing.Iterable):
+def coerce_enumeration(elements: FlexibleEnumeration):
+    if isinstance(elements, Enumeration):
+        return elements
+    elif isinstance(elements, EnumerationBuilder):
+        return elements.to_enumeration()
+    elif isinstance(elements, typing.Iterable):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
-        return Enumeration(elements=phi)
+        return Enumeration(elements=elements)
     else:
         raise TypeError()
 
 
-def coerce_collection(c: FlexibleTupl):
-    if isinstance(c, Tupl):
-        return c
-    elif isinstance(c, TuplBuilder):
-        return c.to_tupl()
-    elif isinstance(c, collections.abc.Iterable):
+def coerce_tupl(elements: FlexibleTupl):
+    if isinstance(elements, Tupl):
+        return elements
+    elif isinstance(elements, TuplBuilder):
+        return elements.to_tupl()
+    elif isinstance(elements, collections.abc.Iterable):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
-        return Tupl(elements=c)
+        return Tupl(elements=elements)
     else:
         raise TypeError()
 
@@ -437,7 +437,7 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
     psi_value: Formula
-    variables: Tupl = coerce_collection(c=variables)
+    variables: Tupl = coerce_tupl(elements=variables)
     if phi in variables:
         # Sub-formulas in phi cannot be elements of variables.
         return False
@@ -485,8 +485,8 @@ def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration
     :param psi:
     :return:
     """
-    phi: Formula = coerce_enumeration(phi=phi)
-    psi: Formula = coerce_enumeration(phi=psi)
+    phi: Formula = coerce_enumeration(elements=phi)
+    psi: Formula = coerce_enumeration(elements=psi)
 
     test_1 = all(any(is_formula_equivalent(phi=phi_prime, psi=psi_prime) for psi_prime in psi) for phi_prime in phi)
     test_2 = all(any(is_formula_equivalent(phi=psi_prime, psi=phi_prime) for phi_prime in phi) for psi_prime in psi)
@@ -571,6 +571,10 @@ class Enumeration(Formula):
     enumeration is the intention of considering the sub-formulas without their ordering, and without repetitions.
     Enumerations are equivalent to computable sets.
 
+    TODO: Enumeration: Because sub-formulas are natively ordered, it is disturbing that formula-equivalence
+        becomes somehow unpredictable when used on enumerations. In effect, we cannot commit on a particular
+        ordering of sub-formulas and the python set() function used during initialization is unpredictable.
+        Future improvement: find an elegant algorithm that canonically orders formulas.
     """
 
     def __new__(cls, elements: FlexibleEnumeration = None):
@@ -648,21 +652,29 @@ class Transformation(Formula):
     # TODO: Transformation: rewrite the above clearly
     """
 
-    def __new__(cls, premises: FlexibleEnumeration, conclusion: FlexibleFormula,
+    def __new__(cls, premises: FlexibleTupl, conclusion: FlexibleFormula,
                 variables: FlexibleEnumeration):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        premises: EnumerationBuilder = EnumerationBuilder(elements=premises)
-        variables: EnumerationBuilder = EnumerationBuilder(elements=variables)
+        premises: Tupl = coerce_tupl(elements=premises)
+        conclusion: Formula = coerce_formula(phi=conclusion)
+        variables: Enumeration = coerce_enumeration(elements=variables)
         o: tuple = super().__new__(cls, c=connectives.tupl,
                                    terms=(premises, conclusion, variables,))
         return o
 
-    def __init__(self, premises: FlexibleEnumeration, conclusion: FlexibleFormula,
+    def __init__(self, premises: FlexibleTupl, conclusion: FlexibleFormula,
                  variables: FlexibleEnumeration):
+        premises: Tupl = coerce_tupl(elements=premises)
+        conclusion: Formula = coerce_formula(phi=conclusion)
+        variables: Enumeration = coerce_enumeration(elements=variables)
         super().__init__(c=connectives.inference_rule, terms=(premises, conclusion, variables,))
 
-    def __call__(self, arguments: FlexibleTupl):
+    def __call__(self, arguments: FlexibleTupl) -> Formula:
+        """A shortcut for self.apply_transformation()"""
+        return self.apply_transformation(arguments=arguments)
+
+    def apply_transformation(self, arguments: FlexibleTupl) -> Formula:
         pass
         # TODO: Pursue implementation here.
 
@@ -671,11 +683,11 @@ class Transformation(Formula):
         return self[1]
 
     @property
-    def premises(self) -> Enumeration:
+    def premises(self) -> Tupl:
         return self[0]
 
     def to_transformation_builder(self) -> TransformationBuilder:
-        premises: EnumerationBuilder = self.premises.to_enumeration_builder()
+        premises: TuplBuilder = self.premises.to_tupl_builder()
         conclusion: FormulaBuilder = self.conclusion.to_formula_builder()
         variables: EnumerationBuilder = self.variables.to_enumeration_builder()
         return TransformationBuilder(premises=premises, conclusion=conclusion, variables=variables)

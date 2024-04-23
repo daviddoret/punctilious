@@ -301,4 +301,19 @@ class TestFormulaEquivalenceWithVariables:
 
 class TestTransformation:
     def test_transformation(self):
+        x = as1.let_x_be_a_variable(rep='x')
+        y = as1.let_x_be_a_variable(rep='y')
+        is_a = as1.let_x_be_a_binary_connective(rep='is-a')
+        human = as1.let_x_be_a_simple_object(rep='human')
+        platypus = as1.let_x_be_a_simple_object(rep='platypus')
+        mortal = as1.let_x_be_a_simple_object(rep='mortal')
+        aristotle = as1.let_x_be_a_simple_object(rep='aristotle')
+        p1 = x | is_a | human
+        p2 = aristotle | is_a | human
+        premises = as1.Enumeration(elements=(p1,))
+        conclusion = x | is_a | mortal
+        variables = as1.Enumeration(elements=(x,))
+        t = as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
+        arguments = as1.Tupl(elements=(p2,))
+        output = t(arguments=arguments)
         pass
