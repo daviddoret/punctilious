@@ -7,6 +7,24 @@ import typing
 import warnings
 
 
+class CustomException(Exception):
+    """A punctilious generic exception."""
+
+    def __init__(self, message: str, **kwargs):
+        self.message = message
+        self.kwargs = kwargs
+        super().__init__()
+
+    def __str__(self) -> str:
+        return self.rep()
+
+    def __repr__(self) -> str:
+        return self.rep()
+
+    def rep(self) -> str:
+        return ', '.join(f'{key}: {value}' for key, value in self.kwargs.items())
+
+
 class Connective:
     """A node color in a formula tree."""
 
@@ -76,15 +94,19 @@ class FormulaBuilder(list):
         for t in self:
             yield from t.iterate_canonical()
 
-    def rep(self, **kwargs):
+    def rep(self, **kwargs) -> str:
         parenthesis = kwargs.get('parenthesis', False)
         kwargs['parenthesis'] = True
-        if len(self.terms) == 0:
-            return self.c.rep(**kwargs)
-        if len(self.terms) == 2:
-            return f'{"(" if parenthesis else ""}{self.term_0.rep(**kwargs)} {self.c.rep(**kwargs)} {self.term_1.rep(**kwargs)}{")" if parenthesis else ""}'
+        if isinstance(self.c, NullaryConnective):
+            return f'{self.c.rep()}'
+        elif isinstance(self.c, BinaryConnective):
+            term_0: str = self.term_0.rep(**kwargs) if self.term_0 is not None else '?'
+            term_1: str = self.term_1.rep(**kwargs) if self.term_1 is not None else '?'
+            return f'{'(' if parenthesis else ''}{term_0} {self.c.rep()} {term_1}{')' if parenthesis else ''}'
         else:
-            return f'{"(" if parenthesis else ""}{self.c.rep(**kwargs)}({self.terms.rep(**kwargs)}){")" if parenthesis else ""}'
+            c: str = self.c.rep(**kwargs) if self.c is not None else '?'
+            terms: str = ', '.join(term.rep(**kwargs) if term is not None else '?' for term in self)
+            return f'{'(' if parenthesis else ''}{c}({terms}){')' if parenthesis else ''}'
 
     @property
     def term_0(self) -> FormulaBuilder:
@@ -169,12 +191,15 @@ class Formula(tuple):
         return self._c
 
     def rep(self, **kwargs) -> str:
+        parenthesis = kwargs.get('parenthesis', False)
+        kwargs['parenthesis'] = True
         if isinstance(self.c, NullaryConnective):
-            return f'{self.c.rep}'
+            return f'{self.c.rep()}'
+        elif isinstance(self.c, BinaryConnective):
+            return f'{'(' if parenthesis else ''}{self.term_0.rep(**kwargs)} {self.c.rep()} {self.term_1.rep(**kwargs)}{')' if parenthesis else ''}'
         else:
-            kwargs['parenthesis'] = True
             terms: str = ', '.join(term.rep(**kwargs) for term in self)
-            return f'{self.c.rep(**kwargs)}({terms})'
+            return f'{'(' if parenthesis else ''}{self.c.rep(**kwargs)}({terms}){')' if parenthesis else ''}'
 
     @property
     def term_0(self) -> Formula:
@@ -227,7 +252,20 @@ def coerce_enumeration(elements: FlexibleEnumeration):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
         return Enumeration(elements=elements)
     else:
-        raise TypeError()
+        raise TypeError(f'elements cannot be coerced to enumeration')
+
+
+def coerce_map(m: FlexibleMap):
+    if isinstance(m, Map):
+        return m
+    elif isinstance(m, MapBuilder):
+        return m.to_map()
+    elif isinstance(m, dict):
+        domain: Enumeration = coerce_enumeration(elements=m.keys())
+        codomain: Tupl = coerce_tupl(elements=m.values())
+        return Map(domain=domain, codomain=codomain)
+    else:
+        raise TypeError('m could not be safely coerced to map.')
 
 
 def coerce_tupl(elements: FlexibleTupl):
@@ -239,7 +277,7 @@ def coerce_tupl(elements: FlexibleTupl):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
         return Tupl(elements=elements)
     else:
-        raise TypeError()
+        raise TypeError('elements could not be safely coerced to tuple.')
 
 
 FlexibleFormula = typing.Optional[typing.Union[Connective, Formula, FormulaBuilder]]
@@ -363,20 +401,22 @@ def let_x_be_a_free_arity_connective(rep: str):
 
 class Connectives(typing.NamedTuple):
     enumeration: FreeArityConnective
-    tupl: FreeArityConnective
     implies: BinaryConnective
     inference_rule: TernaryConnective
     is_a: BinaryConnective
+    map: BinaryConnective
     transformation: TernaryConnective
+    tupl: FreeArityConnective
 
 
 connectives = Connectives(
     enumeration=let_x_be_a_free_arity_connective(rep='enumeration'),
-    transformation=let_x_be_a_ternary_connective(rep='transformation'),
-    tupl=let_x_be_a_free_arity_connective(rep='tuple'),
     implies=let_x_be_a_binary_connective(rep='implies'),
     inference_rule=let_x_be_a_ternary_connective(rep='inference-rule'),
-    is_a=let_x_be_a_binary_connective(rep='is-a')
+    is_a=let_x_be_a_binary_connective(rep='is-a'),
+    map=let_x_be_a_binary_connective(rep='map'),
+    transformation=let_x_be_a_ternary_connective(rep='transformation'),
+    tupl=let_x_be_a_free_arity_connective(rep='tuple')
 )
 
 
@@ -416,8 +456,8 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
         return False
 
 
-def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula, variables: FlexibleEnumeration,
-                                         _values: dict[Formula, Formula] = None):
+def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula, v: FlexibleEnumeration,
+                                         variables_map: dict[Formula, Formula] = None):
     """Two formulas phi and psi are formula-equivalent-with-variables with regards to variables V if and only if:
      - All formulas in V are not sub-formula of phi,
      - We declare a new formula psi' where every sub-formula that is an element of V,
@@ -428,28 +468,28 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
 
     :param phi:
     :param psi:
-    :param variables:
-    :param _values:
+    :param v:
+    :param variables_map: (conditional) a mapping between variables and their assigned values.
     :return:
     """
-    if _values is None:
-        _values: dict[Formula, Formula] = dict()
+    if variables_map is None:
+        variables_map: dict[Formula, Formula] = dict()
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
     psi_value: Formula
-    variables: Tupl = coerce_tupl(elements=variables)
-    if phi in variables:
+    v: Tupl = coerce_tupl(elements=v)
+    if phi in v:
         # Sub-formulas in phi cannot be elements of variables.
         return False
-    if psi in variables:
+    if psi in v:
         # psi is a variable
-        if psi in _values.items():
+        if psi in variables_map.items():
             # psi's value is already mapped
-            if is_formula_equivalent(psi, _values[psi]):
+            if is_formula_equivalent(psi, variables_map[psi]):
                 # psi is consistent with its mapped value
                 # substitute the variable with its value
                 # print(f'variable {psi}')
-                psi_value: Formula = _values[psi]
+                psi_value: Formula = variables_map[psi]
                 # print(f'    substituted with {psi}.')
             else:
                 # psi is not consistent with its mapped value
@@ -459,7 +499,7 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
             # substitute the variable with its value
             # set the variable value
             psi_value = phi
-            _values[psi] = psi_value
+            variables_map[psi] = psi_value
             # print(f'    set to {phi}.')
     else:
         psi_value = psi
@@ -467,13 +507,22 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
         # Base case
         return True
     elif (is_connective_equivalent(c=phi.c, d=psi_value.c)) and (phi.arity == psi_value.arity) and all(
-            is_formula_equivalent_with_variables(phi=phi_prime, psi=psi_prime, variables=variables, _values=_values) for
+            is_formula_equivalent_with_variables(phi=phi_prime, psi=psi_prime, v=v, variables_map=variables_map) for
             phi_prime, psi_prime in zip(phi, psi_value)):
         # Inductive step
         return True
     else:
         # Extreme case
         return False
+
+
+def assert_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula,
+                                             v: FlexibleEnumeration, variables_map: dict[Formula, Formula] = None):
+    output: bool = is_formula_equivalent_with_variables(phi=phi, psi=psi, v=v, variables_map=variables_map)
+    if not output:
+        raise CustomException(
+            message='Formulas phi and psi are not formula-equivalent-with-variables with regards to variables v.',
+            phi=phi, psi=psi, v=v)
 
 
 def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> bool:
@@ -492,6 +541,25 @@ def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration
     test_2 = all(any(is_formula_equivalent(phi=psi_prime, psi=phi_prime) for phi_prime in phi) for psi_prime in psi)
 
     return test_1 and test_2
+
+
+def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
+    """Performs a top-down, left-to-right replacement of formulas in formula phi."""
+    phi: Formula = coerce_formula(phi=phi)
+    m: Map = coerce_map(m=m)
+    if m.is_defined_in(phi=phi):
+        # phi must be replaced at its root.
+        # the replacement algorithm stops right there (i.e.: no more recursion).
+        assigned_value: Formula = m.get_assigned_value(phi=phi)
+        return assigned_value
+    else:
+        # build the replaced formula.
+        fb: FormulaBuilder = FormulaBuilder(c=phi.c)
+        # recursively apply the replacement algorithm on phi terms.
+        for term in phi:
+            term_substitute = replace_formulas(phi=term, m=m)
+            fb.append(term=term_substitute)
+        return fb.to_formula()
 
 
 class TuplBuilder(FormulaBuilder):
@@ -529,6 +597,10 @@ class Tupl(Formula):
     def __init__(self, elements: FlexibleTupl = None):
         super().__init__(c=connectives.tupl, terms=elements)
 
+    def has_element(self, phi: Formula) -> bool:
+        """Return True if the tuple has phi as one of its elements."""
+        return any(is_formula_equivalent(phi=phi, psi=term) for term in self)
+
     def to_tupl_builder(self) -> TuplBuilder:
         return TuplBuilder(elements=self)
 
@@ -538,6 +610,81 @@ class Tupl(Formula):
 
 FlexibleTupl = typing.Optional[typing.Union[Tupl, TuplBuilder, typing.Iterable[FlexibleFormula]]]
 """FlexibleTupl is a flexible python type that may be safely coerced into a Tupl or a TupleBuilder."""
+
+
+class MapBuilder(FormulaBuilder):
+    """A utility class to help build maps. It is mutable and thus allows edition."""
+
+    def __init__(self, keys: FlexibleTupl = None, values: FlexibleTupl = None):
+        keys: TuplBuilder = coerce_tupl_builder(elements=keys)
+        values: Tupl = coerce_tupl_builder(elements=values)
+        super().__init__(c=connectives.map, terms=(keys, values,))
+
+    def to_map(self) -> Map:
+        keys: Tupl = coerce_tupl(elements=self.term_0)
+        values: Tupl = coerce_tupl(elements=self.term_0)
+        phi: Map = Map(domain=keys, codomain=values)
+        return phi
+
+    def to_formula(self) -> Formula:
+        """Return a formula."""
+        return self.to_map()
+
+
+class Map(Formula):
+    """A map is a formula m(t0(k0, k1, ..., kn), t1(l0, l1, ..., ln)) where:
+     - m is a node with the map connective.
+     - t0 is an enumaration named the keys enumaration.
+     - t1 is a tuple named the values tuple.
+     - the cardinality of t0 is equal to the cardinality of 1.
+
+     The empty-map is the map m(t0(), t1()).
+
+    """
+
+    def __new__(cls, domain: FlexibleEnumeration = None, codomain: FlexibleTupl = None):
+        # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
+        # because tuple is immutable.
+        domain: Enumeration = coerce_enumeration(elements=domain)
+        codomain: Tupl = coerce_tupl(elements=codomain)
+        if len(domain) != len(codomain):
+            raise ValueError('Map: |keys| != |values|')
+        o: tuple = super().__new__(cls, c=connectives.map, terms=(domain, codomain,))
+        return o
+
+    def __init__(self, domain: FlexibleEnumeration = None, codomain: FlexibleTupl = None):
+        domain: Enumeration = coerce_enumeration(elements=domain)
+        codomain: Tupl = coerce_tupl(elements=codomain)
+        super().__init__(c=connectives.map, terms=(domain, codomain,))
+
+    @property
+    def codomain(self) -> Tupl:
+        return coerce_tupl(elements=self.term_1)
+
+    @property
+    def domain(self) -> Enumeration:
+        return coerce_enumeration(elements=self.term_0)
+
+    def get_assigned_value(self, phi: Formula) -> Formula:
+        """Given phi an element of the map domain, returns the corresponding element psi of the codomain."""
+        if self.is_defined_in(phi=phi):
+            index_position: int = self.domain.get_element_index(phi=phi)
+            return self.codomain[index_position]
+        else:
+            raise IndexError('Map domain does not contain this element')
+
+    def is_defined_in(self, phi: Formula) -> bool:
+        return self.domain.has_element(phi=phi)
+
+    def to_map_builder(self) -> MapBuilder:
+        return MapBuilder(keys=self.term_0, values=self.term_1)
+
+    def to_formula_builder(self) -> FormulaBuilder:
+        return self.to_map_builder()
+
+
+FlexibleMap = typing.Optional[typing.Union[Map, MapBuilder, typing.Dict[Formula, Formula]]]
+"""FlexibleMap is a flexible python type that may be safely coerced into a Map or a MapBuilder."""
 
 
 class EnumerationBuilder(FormulaBuilder):
@@ -591,6 +738,22 @@ class Enumeration(Formula):
         if len(unique_elements) != len(elements):
             warnings.warn('Element repetitions are removed from enumerations.')
         super().__init__(c=connectives.enumeration, terms=unique_elements)
+
+    def get_element_index(self, phi: Formula) -> typing.Optional[int]:
+        """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise."""
+        if self.has_element(phi=phi):
+            # two formulas that are formula-equivalent may not be equal.
+            # for this reason we must first find the first formula-equivalent element in the enumeration.
+            inside_element: Formula = next(term for term in self if is_formula_equivalent(phi=phi, psi=term))
+            # and then we can retrieve its index position.
+            index_position: int = self.index(inside_element)
+            return index_position
+        else:
+            return None
+
+    def has_element(self, phi: Formula) -> bool:
+        """Return True if the enumeration has an element that is formula-equivalent with phi."""
+        return any(is_formula_equivalent(phi=phi, psi=term) for term in self)
 
     def to_enumeration_builder(self) -> EnumerationBuilder:
         return EnumerationBuilder(elements=self)
@@ -675,6 +838,19 @@ class Transformation(Formula):
         return self.apply_transformation(arguments=arguments)
 
     def apply_transformation(self, arguments: FlexibleTupl) -> Formula:
+        """
+
+        :param arguments: A tuple of arguments, whose order matches the order of the transformation premises.
+        :return:
+        """
+        # step 1: confirm every argument is compatible with its premise and retrieve variable values
+        variables_map: dict[Formula, Formula] = dict()
+        assert_formula_equivalent_with_variables(phi=arguments, psi=self.premises, v=self.variables,
+                                                 variables_map=variables_map)
+
+        # step 2:
+        print(variables_map)
+
         pass
         # TODO: Pursue implementation here.
 

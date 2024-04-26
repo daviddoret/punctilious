@@ -99,6 +99,32 @@ def phi5(fb5):
     return phi
 
 
+@pytest.fixture
+def apple():
+    return as1.let_x_be_a_simple_object(rep='apple')
+
+
+@pytest.fixture
+def ananas():
+    return as1.let_x_be_a_simple_object(rep='ananas')
+
+
+@pytest.fixture
+def strawberry():
+    return as1.let_x_be_a_simple_object(rep='strawberry')
+
+
+@pytest.fixture
+def blueberry():
+    return as1.let_x_be_a_simple_object(rep='blueberry')
+
+
+@pytest.fixture
+def fruits(apple, ananas, blueberry, strawberry):
+    fruits = as1.Enumeration(elements=(apple, ananas, blueberry, strawberry))
+    return fruits
+
+
 class TestConnective:
     def test_connective(self, c1, c2):
         assert c1 is not c2
@@ -254,12 +280,30 @@ class TestEnumeration:
         assert not as1.is_enumeration_equivalent(e4, e3)
 
     def test_in(self):
+        # warning: this tests python equality, not formula-equivalence!
         x = as1.let_x_be_a_variable(rep='x')
         y = as1.let_x_be_a_variable(rep='y')
         e1 = as1.Enumeration(elements=(x,))
         assert x in e1
         assert y not in e1
         assert len(e1) == 1
+
+    def test_has_element(self):
+        c1 = as1.let_x_be_a_binary_connective(rep='c1')
+        c2 = as1.let_x_be_a_binary_connective(rep='c2')
+        x = as1.let_x_be_a_simple_object(rep='x')
+        y = as1.let_x_be_a_simple_object(rep='y')
+        phi1 = x | c1 | y
+        phi2 = x | c2 | y
+        phi3 = y | c1 | x
+        e1 = as1.Enumeration(elements=(phi1, phi2, phi3,))
+        assert e1.has_element(phi=phi1)
+        assert not e1.has_element(phi=x | c1 | x)
+        phi1_other_instance = x | c1 | y
+        assert e1.has_element(phi=phi1_other_instance)
+        assert e1.get_element_index(phi=phi1) == 0
+        assert e1.get_element_index(phi=phi2) == 1
+        assert e1.get_element_index(phi=phi3) == 2
 
 
 class TestFormulaEquivalenceWithVariables:
@@ -274,29 +318,29 @@ class TestFormulaEquivalenceWithVariables:
         assert as1.is_formula_equivalent_with_variables(
             phi=aristotle | is_a | human,
             psi=aristotle | is_a | human,
-            variables=())
+            v=())
         # the following is ill-formed because the variable is an element of phi, and not of psi.
         # reminder: formula-equivalence-with-variables is non-commutative.
         assert not as1.is_formula_equivalent_with_variables(
             phi=aristotle | is_a | x,
             psi=aristotle | is_a | human,
-            variables=(x,))
+            v=(x,))
         assert as1.is_formula_equivalent_with_variables(
             phi=aristotle | is_a | human,
             psi=aristotle | is_a | x,
-            variables=(x,))
+            v=(x,))
         assert not as1.is_formula_equivalent_with_variables(
             phi=aristotle | is_a | human,
             psi=aristotle | is_a | platypus,
-            variables=())
+            v=())
         assert not as1.is_formula_equivalent_with_variables(
             phi=aristotle | is_a | x,
             psi=aristotle | is_a | human,
-            variables=(y,))
+            v=(y,))
         assert not as1.is_formula_equivalent_with_variables(
             phi=aristotle | is_a | x,
             psi=platypus | is_a | human,
-            variables=(x,))
+            v=(x,))
 
 
 class TestTransformation:
@@ -317,3 +361,52 @@ class TestTransformation:
         arguments = as1.Tupl(elements=(p2,))
         output = t(arguments=arguments)
         pass
+
+
+class TestReplaceFormulas:
+    def test_replace_formulas(self):
+        land = as1.let_x_be_a_binary_connective(rep='land')
+        x = as1.let_x_be_a_variable(rep='x')
+        y = as1.let_x_be_a_variable(rep='y')
+        is_a = as1.let_x_be_a_binary_connective(rep='is-a')
+        human = as1.let_x_be_a_simple_object(rep='human')
+        animal = as1.let_x_be_a_simple_object(rep='animal')
+        platypus = as1.let_x_be_a_simple_object(rep='platypus')
+        mortal = as1.let_x_be_a_simple_object(rep='mortal')
+        aristotle = as1.let_x_be_a_simple_object(rep='aristotle')
+        assert as1.is_formula_equivalent(
+            phi=as1.replace_formulas(phi=x | is_a | human, m={x: aristotle}),
+            psi=aristotle | is_a | human)
+        assert not as1.is_formula_equivalent(
+            phi=as1.replace_formulas(phi=x | is_a | human, m={x: platypus}),
+            psi=aristotle | is_a | human)
+        phi = aristotle | is_a | human
+        phi = as1.replace_formulas(phi=phi, m={human: aristotle})
+        psi = aristotle | is_a | aristotle
+        assert as1.is_formula_equivalent(
+            phi=phi,
+            psi=psi)
+        omega1 = (aristotle | is_a | human) | land | (platypus | is_a | animal)
+        omega2 = as1.replace_formulas(phi=omega1,
+                                      m={human: aristotle})
+        assert as1.is_formula_equivalent(
+            phi=omega2,
+            psi=(aristotle | is_a | aristotle) | land | (platypus | is_a | animal))
+
+
+class TestMap:
+    def test_map(self, fruits):
+        red = as1.let_x_be_a_simple_object(rep='red')
+        yellow = as1.let_x_be_a_simple_object(rep='yellow')
+        blue = as1.let_x_be_a_simple_object(rep='blue')
+        codomain = as1.Tupl(elements=(red, yellow, blue, red))
+        m1 = as1.Map(domain=fruits, codomain=codomain)
+        assert len(m1) == 2
+        assert m1.is_defined_in(phi=fruits[0])
+        assert m1.is_defined_in(phi=fruits[1])
+        assert m1.is_defined_in(phi=fruits[2])
+        assert m1.is_defined_in(phi=fruits[3])
+        assert as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[0]), red)
+        assert as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[1]), yellow)
+        assert as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[2]), blue)
+        assert as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[3]), red)
