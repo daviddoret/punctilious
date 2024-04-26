@@ -55,7 +55,7 @@ class FormulaBuilder(list):
     """A mutable object to edit and elaborate formulas.
     Note: formula-builder may be syntactically inconsistent."""
 
-    def __init__(self, c: typing.Optional[Connective] = None, terms: FlexibleElements = None):
+    def __init__(self, c: typing.Optional[Connective] = None, terms: FlexibleTupl = None):
         """
         :param FlexibleTerms terms: A collection of terms."""
         self.c: typing.Optional[Connective] = c
@@ -244,13 +244,31 @@ def coerce_formula(phi: FlexibleFormula):
 
 
 def coerce_enumeration(elements: FlexibleEnumeration):
+    """Coerce elements to an enumeration.
+    If elements is None, coerce it to an empty enumeration."""
     if isinstance(elements, Enumeration):
         return elements
     elif isinstance(elements, EnumerationBuilder):
         return elements.to_enumeration()
+    elif elements is None:
+        return Enumeration(elements=None)
     elif isinstance(elements, typing.Iterable):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
         return Enumeration(elements=elements)
+    else:
+        raise TypeError(f'elements cannot be coerced to enumeration')
+
+
+def coerce_enumeration_builder(elements: FlexibleEnumeration):
+    if isinstance(elements, EnumerationBuilder):
+        return elements
+    elif isinstance(elements, Enumeration):
+        return elements.to_enumeration_builder()
+    elif elements is None:
+        return EnumerationBuilder(elements=None)
+    elif isinstance(elements, typing.Iterable):
+        """This may be ambiguous when we pass a single formula (that is natively iterable)."""
+        return EnumerationBuilder(elements=elements)
     else:
         raise TypeError(f'elements cannot be coerced to enumeration')
 
@@ -273,9 +291,25 @@ def coerce_tupl(elements: FlexibleTupl):
         return elements
     elif isinstance(elements, TuplBuilder):
         return elements.to_tupl()
+    elif elements is None:
+        return Tupl(elements=None)
     elif isinstance(elements, collections.abc.Iterable):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
         return Tupl(elements=elements)
+    else:
+        raise TypeError('elements could not be safely coerced to tuple.')
+
+
+def coerce_tupl_builder(elements: FlexibleTupl):
+    if isinstance(elements, TuplBuilder):
+        return elements
+    elif isinstance(elements, Tupl):
+        return elements.to_tupl_builder()
+    elif elements is None:
+        return TuplBuilder(elements=None)
+    elif isinstance(elements, collections.abc.Iterable):
+        """This may be ambiguous when we pass a single formula (that is natively iterable)."""
+        return TuplBuilder(elements=elements)
     else:
         raise TypeError('elements could not be safely coerced to tuple.')
 
@@ -615,10 +649,29 @@ FlexibleTupl = typing.Optional[typing.Union[Tupl, TuplBuilder, typing.Iterable[F
 class MapBuilder(FormulaBuilder):
     """A utility class to help build maps. It is mutable and thus allows edition."""
 
-    def __init__(self, keys: FlexibleTupl = None, values: FlexibleTupl = None):
-        keys: TuplBuilder = coerce_tupl_builder(elements=keys)
-        values: Tupl = coerce_tupl_builder(elements=values)
-        super().__init__(c=connectives.map, terms=(keys, values,))
+    def __init__(self, domain: FlexibleEnumeration = None, codomain: FlexibleTupl = None):
+        domain: EnumerationBuilder = coerce_enumeration_builder(elements=domain)
+        codomain: TuplBuilder = coerce_tupl_builder(elements=codomain)
+        super().__init__(c=connectives.map, terms=(domain, codomain,))
+
+    @property
+    def codomain(self) -> TuplBuilder:
+        return coerce_tupl_builder(elements=self.term_1)
+
+    @property
+    def domain(self) -> EnumerationBuilder:
+        return coerce_enumeration_builder(elements=self.term_0)
+
+    def get_assigned_value(self, phi: FlexibleFormula) -> FlexibleFormula:
+        """Given phi an element of the map domain, returns the corresponding element psi of the codomain."""
+        if self.is_defined_in(phi=phi):
+            index_position: int = self.domain.get_element_index(phi=phi)
+            return self.codomain[index_position]
+        else:
+            raise IndexError('Map domain does not contain this element')
+
+    def is_defined_in(self, phi: FlexibleFormula) -> bool:
+        return self.domain.has_element(phi=phi)
 
     def to_map(self) -> Map:
         keys: Tupl = coerce_tupl(elements=self.term_0)
@@ -677,7 +730,7 @@ class Map(Formula):
         return self.domain.has_element(phi=phi)
 
     def to_map_builder(self) -> MapBuilder:
-        return MapBuilder(keys=self.term_0, values=self.term_1)
+        return MapBuilder(domain=self.term_0, codomain=self.term_1)
 
     def to_formula_builder(self) -> FormulaBuilder:
         return self.to_map_builder()
@@ -691,10 +744,28 @@ class EnumerationBuilder(FormulaBuilder):
     """A utility class to help build enumeration. It is mutable and thus allows edition."""
 
     def __init__(self, elements: FlexibleEnumeration):
+        if elements is None:
+            elements: FlexibleEnumeration = set()
         unique_elements: set = set(elements)
         if len(unique_elements) != len(elements):
             warnings.warn('Element repetitions are removed from enumerations.')
         super().__init__(c=connectives.enumeration, terms=unique_elements)
+
+    def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
+        """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise."""
+        if self.has_element(phi=phi):
+            # two formulas that are formula-equivalent may not be equal.
+            # for this reason we must first find the first formula-equivalent element in the enumeration.
+            inside_element: Formula = next(term for term in self if is_formula_equivalent(phi=phi, psi=term))
+            # and then we can retrieve its index position.
+            index_position: int = self.index(inside_element)
+            return index_position
+        else:
+            return None
+
+    def has_element(self, phi: FlexibleFormula) -> bool:
+        """Return True if the enumeration has an element that is formula-equivalent with phi."""
+        return any(is_formula_equivalent(phi=phi, psi=term) for term in self)
 
     def to_enumeration(self) -> Enumeration:
         elements: tuple[Formula, ...] = tuple(coerce_formula(phi=element) for element in self)
@@ -844,7 +915,7 @@ class Transformation(Formula):
         :return:
         """
         # step 1: confirm every argument is compatible with its premise and retrieve variable values
-        variables_map: dict[Formula, Formula] = dict()
+        variables_map: MapBuilder = MapBuilder()
         assert_formula_equivalent_with_variables(phi=arguments, psi=self.premises, v=self.variables,
                                                  variables_map=variables_map)
 
