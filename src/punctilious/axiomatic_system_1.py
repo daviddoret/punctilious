@@ -491,7 +491,7 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
 
 
 def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula, v: FlexibleEnumeration,
-                                         variables_map: dict[Formula, Formula] = None):
+                                         variables_map: typing.Optional[MapBuilder] = None):
     """Two formulas phi and psi are formula-equivalent-with-variables with regards to variables V if and only if:
      - All formulas in V are not sub-formula of phi,
      - We declare a new formula psi' where every sub-formula that is an element of V,
@@ -500,41 +500,41 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
 
      Note: is-formula-equivalent-with-variables is not commutative.
 
-    :param phi:
-    :param psi:
-    :param v:
+    :param phi: a formula that does not contain any element of variables.
+    :param psi: a formula that may contain some elements of variables.
+    :param v: an enumeration of formulas called variables.
     :param variables_map: (conditional) a mapping between variables and their assigned values.
     :return:
     """
     if variables_map is None:
-        variables_map: dict[Formula, Formula] = dict()
+        variables_map: MapBuilder = MapBuilder(domain=None, codomain=None)
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
     psi_value: Formula
     v: Tupl = coerce_tupl(elements=v)
-    if phi in v:
-        # Sub-formulas in phi cannot be elements of variables.
+    if v.has_element(phi=phi):
+        # The sub-formulas of left-hand formula phi can't be elements of the variables enumeration.
+        warnings.warn(message='a sub-formula of phi is an elements of the variables enumerations.')
         return False
-    if psi in v:
-        # psi is a variable
-        if psi in variables_map.items():
-            # psi's value is already mapped
-            if is_formula_equivalent(psi, variables_map[psi]):
-                # psi is consistent with its mapped value
-                # substitute the variable with its value
-                # print(f'variable {psi}')
-                psi_value: Formula = variables_map[psi]
+    if v.has_element(phi=psi):
+        # psi is a variable.
+        if variables_map.is_defined_in(phi=psi):
+            # psi's value is already mapped.
+            already_mapped_value: Formula = variables_map.get_assigned_value(phi=psi)
+            if is_formula_equivalent(phi=psi, psi=already_mapped_value):
+                # psi is consistent with the already mapped value.
+                # we can safely substitute the variable with its value.
+                psi_value: Formula = already_mapped_value
                 # print(f'    substituted with {psi}.')
             else:
-                # psi is not consistent with its mapped value
+                # psi is not consistent with its already mapped value.
+                # it follows that phi and psi are not formula-equivalent-with-variables.
                 return False
         else:
-            # print(f'variable {psi}')
-            # substitute the variable with its value
-            # set the variable value
+            # psi's value has not been mapped yet.
+            # substitute the variable with its newly mapped value.
             psi_value = phi
-            variables_map[psi] = psi_value
-            # print(f'    set to {phi}.')
+            variables_map.set_pair(phi=psi, psi=psi_value)
     else:
         psi_value = psi
     if (is_connective_equivalent(c=phi.c, d=psi_value.c)) and (phi.arity == 0) and (psi_value.arity == 0):
@@ -653,6 +653,24 @@ class MapBuilder(FormulaBuilder):
         domain: EnumerationBuilder = coerce_enumeration_builder(elements=domain)
         codomain: TuplBuilder = coerce_tupl_builder(elements=codomain)
         super().__init__(c=connectives.map, terms=(domain, codomain,))
+
+    def set_pair(self, phi: FlexibleFormula, psi: FlexibleFormula) -> None:
+        """Set the pair (phi, psi) to the map-builder.
+
+        :param phi: a formula that will become an element of the domain.
+        :param psi: a formula that will become an element of the codomain mapped with phi.
+        :return: None.
+        """
+        if self.is_defined_in(phi=phi):
+            # phi is already defined in the map, we consequently overwrite it.
+            index_position: int = self.domain.get_element_index(phi=phi)
+            self.codomain[index_position] = psi
+        else:
+            # phi is not already defined in the map, we can append it.
+            if len(self.domain) != len(self.codomain):
+                raise ValueError('map is inconsistent!')
+            self.domain.append(term=phi)
+            self.codomain.append(term=psi)
 
     @property
     def codomain(self) -> TuplBuilder:
