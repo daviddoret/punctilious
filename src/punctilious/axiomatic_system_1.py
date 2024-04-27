@@ -507,6 +507,25 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
         return False
 
 
+def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration):
+    """Two enumerations phi and psi are enumeration-equivalent if and only if:
+     - all elements of phi are elements of psi,
+     - and all elements of psi are elements of phi.
+
+    Note that:
+        phi is-formula-equivalent - psi ==> phi is-enumeration-equivalent psi
+    But the reverse is not necessarily true, because of elements order.
+
+    :param phi:
+    :param psi:
+    :return:
+    """
+    phi: Enumeration = coerce_enumeration(elements=phi)
+    psi: Enumeration = coerce_enumeration(elements=psi)
+    return all(psi.has_element(phi=phi_element) for phi_element in phi) and all(
+        phi.has_element(phi=psi_element) for psi_element in psi)
+
+
 def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula, v: FlexibleEnumeration,
                                          variables_map: FlexibleMap = None):
     """Two formulas phi and psi are formula-equivalent-with-variables with regards to variables V if and only if:
@@ -709,7 +728,7 @@ class MapBuilder(FormulaBuilder):
 
     def to_map(self) -> Map:
         keys: Tupl = coerce_tupl(elements=self.term_0)
-        values: Tupl = coerce_tupl(elements=self.term_0)
+        values: Tupl = coerce_tupl(elements=self.term_1)
         phi: Map = Map(domain=keys, codomain=values)
         return phi
 
@@ -837,10 +856,8 @@ class Enumeration(Formula):
     enumeration is the intention of considering the sub-formulas without their ordering, and without repetitions.
     Enumerations are equivalent to computable sets.
 
-    TODO: Enumeration: Because sub-formulas are natively ordered, it is disturbing that formula-equivalence
-        becomes somehow unpredictable when used on enumerations. In effect, we cannot commit on a particular
-        ordering of sub-formulas and the python set() function used during initialization is unpredictable.
-        Future improvement: find an elegant algorithm that canonically orders formulas.
+    Attention point: distinguish the notions of formula-equivalence and enumeration-equivalence.
+
     """
 
     def __new__(cls, elements: FlexibleEnumeration = None):
@@ -960,16 +977,16 @@ class Transformation(Formula):
         :param arguments: A tuple of arguments, whose order matches the order of the transformation premises.
         :return:
         """
-        # step 1: confirm every argument is compatible with its premise and retrieve variable values
+        # step 1: confirm every argument is compatible with its premises,
+        # and seize the opportunity to retrieve variable values.
         variables_map: MapBuilder = MapBuilder()
         assert_formula_equivalent_with_variables(phi=arguments, psi=self.premises, v=self.variables,
                                                  variables_map=variables_map)
 
         # step 2:
-        print(variables_map)
+        outcome: Formula = replace_formulas(phi=self.conclusion, m=variables_map)
 
-        pass
-        # TODO: Pursue implementation here.
+        return outcome
 
     @property
     def conclusion(self) -> Formula:

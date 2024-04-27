@@ -350,8 +350,8 @@ class TestTransformation:
         variables = as1.Enumeration(elements=(x,))
         t = as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
         arguments = as1.Tupl(elements=(p2,))
-        output = t(arguments=arguments)
-        pass
+        output = t.apply_transformation(arguments=arguments)
+        as1.is_formula_equivalent(phi=aristotle | is_a | mortal, psi=output)
 
 
 class TestReplaceFormulas:
@@ -401,3 +401,14 @@ class TestMap:
         assert as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[1]), yellow)
         assert as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[2]), blue)
         assert as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[3]), red)
+
+
+class TestEnumerationEquivalence:
+    def test_enumeration_equivalence(self):
+        red = as1.let_x_be_a_simple_object(rep='red')
+        yellow = as1.let_x_be_a_simple_object(rep='yellow')
+        blue = as1.let_x_be_a_simple_object(rep='blue')
+        e1 = as1.Enumeration(elements=(red, yellow, blue,))
+        e2 = as1.Enumeration(elements=(yellow, red, blue,))
+        assert as1.is_enumeration_equivalent(phi=e1, psi=e2)
+        assert not as1.is_formula_equivalent(phi=e1, psi=e2)
