@@ -709,10 +709,12 @@ class MapBuilder(FormulaBuilder):
 
     @property
     def codomain(self) -> TuplBuilder:
+        """The co-domain of the map is its second formula term."""
         return coerce_tupl_builder(elements=self.term_1)
 
     @property
     def domain(self) -> EnumerationBuilder:
+        """The domain of the map is its first formula term."""
         return coerce_enumeration_builder(elements=self.term_0)
 
     def get_assigned_value(self, phi: FlexibleFormula) -> FlexibleFormula:
@@ -724,9 +726,11 @@ class MapBuilder(FormulaBuilder):
             raise IndexError('Map domain does not contain this element')
 
     def is_defined_in(self, phi: FlexibleFormula) -> bool:
+        """Return True if phi is formula-equivalent to an element of the map domain."""
         return self.domain.has_element(phi=phi)
 
     def to_map(self) -> Map:
+        """Convert this map-builder to a map."""
         keys: Tupl = coerce_tupl(elements=self.term_0)
         values: Tupl = coerce_tupl(elements=self.term_1)
         phi: Map = Map(domain=keys, codomain=values)
@@ -780,6 +784,7 @@ class Map(Formula):
             raise IndexError('Map domain does not contain this element')
 
     def is_defined_in(self, phi: Formula) -> bool:
+        """Return True if phi is formula-equivalent to an element of the map domain."""
         return self.domain.has_element(phi=phi)
 
     def to_map_builder(self) -> MapBuilder:
