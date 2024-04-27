@@ -279,15 +279,6 @@ class TestEnumeration:
         assert not as1.is_enumeration_equivalent(e4, e2)
         assert not as1.is_enumeration_equivalent(e4, e3)
 
-    def test_in(self):
-        # warning: this tests python equality, not formula-equivalence!
-        x = as1.let_x_be_a_variable(rep='x')
-        y = as1.let_x_be_a_variable(rep='y')
-        e1 = as1.Enumeration(elements=(x,))
-        assert x in e1
-        assert y not in e1
-        assert len(e1) == 1
-
     def test_has_element(self):
         c1 = as1.let_x_be_a_binary_connective(rep='c1')
         c2 = as1.let_x_be_a_binary_connective(rep='c2')

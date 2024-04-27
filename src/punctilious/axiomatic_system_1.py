@@ -762,12 +762,10 @@ class EnumerationBuilder(FormulaBuilder):
     """A utility class to help build enumeration. It is mutable and thus allows edition."""
 
     def __init__(self, elements: FlexibleEnumeration):
-        if elements is None:
-            elements: FlexibleEnumeration = set()
-        unique_elements: set = set(elements)
-        if len(unique_elements) != len(elements):
-            warnings.warn('Element repetitions are removed from enumerations.')
-        super().__init__(c=connectives.enumeration, terms=unique_elements)
+        super().__init__(c=connectives.enumeration, terms=None)
+        if isinstance(elements, typing.Iterable):
+            for element in elements:
+                self.append(term=element)
 
     def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
         """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise."""
@@ -780,6 +778,22 @@ class EnumerationBuilder(FormulaBuilder):
             return index_position
         else:
             return None
+
+    def append(self, term: FlexibleFormula) -> FormulaBuilder:
+        """
+
+        Override the append method to assure the unicity of newly added elements.
+
+        :param term:
+        :return:
+        """
+        term = coerce_formula_builder(phi=term)
+        if any(is_formula_equivalent(phi=term, psi=element) for element in self):
+            warnings.warn(
+                message='a formula-equivalent element is already present in the enumeration, in consequence it is not added.')
+        else:
+            super().append(term=term)
+        return term
 
     def has_element(self, phi: FlexibleFormula) -> bool:
         """Return True if the enumeration has an element that is formula-equivalent with phi."""
@@ -816,17 +830,15 @@ class Enumeration(Formula):
     def __new__(cls, elements: FlexibleEnumeration = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        unique_elements: set = set(elements)
-        if len(unique_elements) != len(elements):
-            warnings.warn('Element repetitions are removed from enumerations.')
-        o: tuple = super().__new__(cls, c=connectives.enumeration, terms=unique_elements)
+        # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
+        eb: EnumerationBuilder = EnumerationBuilder(elements=elements)
+        o: tuple = super().__new__(cls, c=connectives.enumeration, terms=eb)
         return o
 
     def __init__(self, elements: FlexibleEnumeration = None):
-        unique_elements: set = set(elements)
-        if len(unique_elements) != len(elements):
-            warnings.warn('Element repetitions are removed from enumerations.')
-        super().__init__(c=connectives.enumeration, terms=unique_elements)
+        # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
+        eb: EnumerationBuilder = EnumerationBuilder(elements=elements)
+        super().__init__(c=connectives.enumeration, terms=eb)
 
     def get_element_index(self, phi: Formula) -> typing.Optional[int]:
         """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise."""
