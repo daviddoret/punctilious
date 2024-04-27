@@ -278,10 +278,27 @@ def coerce_map(m: FlexibleMap):
         return m
     elif isinstance(m, MapBuilder):
         return m.to_map()
+    elif m is None:
+        return Map(domain=None, codomain=None)
     elif isinstance(m, dict):
         domain: Enumeration = coerce_enumeration(elements=m.keys())
         codomain: Tupl = coerce_tupl(elements=m.values())
         return Map(domain=domain, codomain=codomain)
+    else:
+        raise TypeError('m could not be safely coerced to map.')
+
+
+def coerce_map_builder(m: FlexibleMap):
+    if isinstance(m, MapBuilder):
+        return m
+    elif isinstance(m, Map):
+        return m.to_map_builder()
+    elif m is None:
+        return MapBuilder(domain=None, codomain=None)
+    elif isinstance(m, dict):
+        domain: EnumerationBuilder = coerce_enumeration_builder(elements=m.keys())
+        codomain: TuplBuilder = coerce_tupl_builder(elements=m.values())
+        return MapBuilder(domain=domain, codomain=codomain)
     else:
         raise TypeError('m could not be safely coerced to map.')
 
@@ -491,7 +508,7 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
 
 
 def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula, v: FlexibleEnumeration,
-                                         variables_map: typing.Optional[MapBuilder] = None):
+                                         variables_map: FlexibleMap = None):
     """Two formulas phi and psi are formula-equivalent-with-variables with regards to variables V if and only if:
      - All formulas in V are not sub-formula of phi,
      - We declare a new formula psi' where every sub-formula that is an element of V,
@@ -503,11 +520,10 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
     :param phi: a formula that does not contain any element of variables.
     :param psi: a formula that may contain some elements of variables.
     :param v: an enumeration of formulas called variables.
-    :param variables_map: (conditional) a mapping between variables and their assigned values.
+    :param variables_map: (conditional) a mapping between variables and their assigned values. used internally for recursive calls. leave it to None.
     :return:
     """
-    if variables_map is None:
-        variables_map: MapBuilder = MapBuilder(domain=None, codomain=None)
+    variables_map: MapBuilder = coerce_map_builder(m=variables_map)
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
     psi_value: Formula
@@ -551,7 +567,7 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
 
 
 def assert_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula,
-                                             v: FlexibleEnumeration, variables_map: dict[Formula, Formula] = None):
+                                             v: FlexibleEnumeration, variables_map: FlexibleMap = None):
     output: bool = is_formula_equivalent_with_variables(phi=phi, psi=psi, v=v, variables_map=variables_map)
     if not output:
         raise CustomException(
