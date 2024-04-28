@@ -187,9 +187,9 @@ class TestFormula:
         assert phi4[1].c is c2
         assert phi4[2].c is c3
 
-    def test_term_1(self, c1, c2, c3):
-        fb = as1.FormulaBuilder()
-        fb.term_0 = c1
+    def test_term_1(self, c1, c2):
+        fb = as1.FormulaBuilder(c=c2)
+        fb.term_0.c = c1
         phi = fb.to_formula()
         assert phi.term_0.c is c1
         assert phi[0].c is c1

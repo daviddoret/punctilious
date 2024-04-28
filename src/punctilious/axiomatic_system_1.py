@@ -234,7 +234,7 @@ class FormulaBuilder(list):
 
     def to_formula(self) -> Formula:
         if self.c is None:
-            raise_event(event_code=event_codes.e113, self=self)
+            raise_event(event_code=event_codes.e113, formula_builder=self, c=self.c)
         terms: tuple[Formula, ...] = tuple(coerce_formula(phi=term) for term in self)
         phi: Formula = Formula(c=self.c, terms=terms)
         return phi
@@ -264,6 +264,7 @@ class Formula(tuple):
 
     def __init__(self, c: Connective, terms: FlexibleTupl = None):
         self._c = c
+        # super().__init__()
 
     def __eq__(self, other):
         """python-equality of formulas is not formula-equivalence."""
@@ -928,7 +929,7 @@ FlexibleMap = typing.Optional[typing.Union[Map, MapBuilder, typing.Dict[Formula,
 
 
 class EnumerationBuilder(FormulaBuilder):
-    """A utility class to help build enumeration. It is mutable and thus allows edition."""
+    """A utility class to help build enumerations. It is mutable and thus allows edition."""
 
     def __init__(self, elements: FlexibleEnumeration):
         super().__init__(c=connectives.enumeration, terms=None)
@@ -964,7 +965,9 @@ class EnumerationBuilder(FormulaBuilder):
         return term
 
     def has_element(self, phi: FlexibleFormula) -> bool:
-        """Return True if the enumeration has an element that is formula-equivalent with phi."""
+        """Return True if and only if there exists a formula psi that is an element of the enumeration, and such that
+        phi ∼formula psi. False otherwise."""
+        phi: Formula = coerce_formula(phi=phi)
         return any(is_formula_equivalent(phi=phi, psi=term) for term in self)
 
     def to_enumeration(self) -> Enumeration:
@@ -1019,7 +1022,9 @@ class Enumeration(Formula):
             return None
 
     def has_element(self, phi: Formula) -> bool:
-        """Return True if the enumeration has an element that is formula-equivalent with phi."""
+        """Return True if and only if there exists a formula psi that is an element of the enumeration, and such that
+        phi ∼formula psi. False otherwise."""
+        phi = coerce_formula(phi=phi)
         return any(is_formula_equivalent(phi=phi, psi=term) for term in self)
 
     def to_enumeration_builder(self) -> EnumerationBuilder:
