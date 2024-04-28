@@ -226,9 +226,18 @@ class TestFormula:
 
 
 class TestConnectiveEquivalence:
-    def test_is_connective_equivalent(self, c1, c2, c3):
-        assert as1.is_connective_equivalent(c=c1, d=c1)
-        assert not as1.is_connective_equivalent(c=c1, d=c2)
+    def test_is_connective_equivalent(self):
+        a = as1.let_x_be_a_simple_object(rep='a')
+        b = as1.let_x_be_a_simple_object(rep='b')
+        c = as1.let_x_be_a_simple_object(rep='c')
+        c1 = as1.BinaryConnective(rep='c1')
+        c2 = as1.BinaryConnective(rep='c2')
+        phi = a | c1 | b
+        assert as1.is_connective_equivalent(phi=phi, psi=phi)
+        psi = b | c1 | c
+        assert as1.is_connective_equivalent(phi=phi, psi=psi)
+        omega = a | c2 | b
+        assert not as1.is_connective_equivalent(phi=phi, psi=omega)
 
 
 class TestFormulaEquivalence:

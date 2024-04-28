@@ -148,7 +148,7 @@
     "Python tests.pytest for tests.test_typesetting.TestProtocolPreference.test_protocol.executor": "Debug",
     "Python tests.pytest in punctilious.executor": "Run",
     "Python tests.pytest in test_axiomatic_system.py.executor": "Run",
-    "Python tests.pytest in test_axiomatic_system_1.py.executor": "Debug",
+    "Python tests.pytest in test_axiomatic_system_1.py.executor": "Run",
     "Python tests.pytest in test_fl1.py.executor": "Run",
     "Python tests.pytest in test_pl1.py.executor": "Run",
     "Python tests.pytest in test_typesetting.py.executor": "Run",
@@ -235,7 +235,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_warning">
+  <component name="RunManager" selected="Python tests.pytest in test_axiomatic_system_1.py">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -547,9 +547,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_warning" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_transformation" />
-        <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumerationEquivalence.test_enumeration_equivalence" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_has_element" />
       </list>
@@ -570,14 +570,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00490" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1707511284222</created>
-      <option name="number" value="00490" />
-      <option name="presentableId" value="LOCAL-00490" />
-      <option name="project" value="LOCAL" />
-      <updated>1707511284222</updated>
     </task>
     <task id="LOCAL-00491" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -963,7 +955,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714247944155</updated>
     </task>
-    <option name="localTasksCounter" value="539" />
+    <task id="LOCAL-00539" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1714270580060</created>
+      <option name="number" value="00539" />
+      <option name="presentableId" value="LOCAL-00539" />
+      <option name="project" value="LOCAL" />
+      <updated>1714270580060</updated>
+    </task>
+    <option name="localTasksCounter" value="540" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

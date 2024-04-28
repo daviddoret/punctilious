@@ -535,9 +535,51 @@ connectives = Connectives(
 )
 
 
-def is_connective_equivalent(c: Connective, d: Connective) -> bool:
-    """Two connectives are connective-equivalent if and only if they are the same object."""
-    return c is d
+def is_symbol_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
+    """Two formulas phi and psi are symbol-equivalent, noted phi ~symbol psi, if and only if they are the same symbol.
+
+    By "the same symbol", we mean that the symbol's reference is the same.
+
+    Formally, is-symbol-equivalence is an equivalence class, that is, if phi, psi, and omega are formulas:
+     - It is reflexive: phi ~symbol phi.
+     - It is symmetric: phi ~symbol psi ⇒ psi ~symbol phi.
+     - It is transitive: phi ~symbol psi ∧ psi ~symbol omega ⇒ phi ~symbol omega.
+
+    Note: two formulas phi and psi may have the same textual representations (e.g.: "x"),
+    and may not be symbol-equivalent. This happens when two distinct objects have been declared
+    in the language with identical textual representations.
+
+    :param phi: A formula.
+    :param psi: A formula.
+    :return: True if phi ~symbol psi. False otherwise.
+    """
+    phi = coerce_formula(phi=phi)
+    psi = coerce_formula(phi=psi)
+    return id(phi) == id(psi)
+
+
+def is_connective_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
+    """Two formulas phi and psi are connective-equivalent, noted phi ~connective psi, if and only if they have the
+    same root connective.
+
+    By "the same connective", we mean that the connective's reference is the same.
+
+    Formally, ~connective is an equivalence class, that is, if phi, psi, and omega are formulas:
+     - It is reflexive: phi ~connective phi.
+     - It is symmetric: phi ~connective psi ⇒ psi ~connective phi.
+     - It is transitive: phi ~connective psi ∧ psi ~connective omega ⇒ phi ~connective omega.
+
+    Note: two formulas phi and psi may have connectives with the same textual representations (e.g.: "+"),
+    and may not be connective-equivalent. This happens when two distinct connectives
+    in the language have identical textual representations.
+
+    :param phi: A formula.
+    :param psi: A formula.
+    :return: True if phi ~connective psi. False otherwise.
+    """
+    phi = coerce_formula(phi=phi)
+    psi = coerce_formula(phi=psi)
+    return phi.c is psi.c
 
 
 def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
@@ -559,10 +601,10 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
     """
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
-    if (is_connective_equivalent(c=phi.c, d=psi.c)) and (phi.arity == 0) and (psi.arity == 0):
+    if (is_connective_equivalent(phi=phi, psi=psi)) and (phi.arity == 0) and (psi.arity == 0):
         # Base case
         return True
-    elif (is_connective_equivalent(c=phi.c, d=psi.c)) and (phi.arity == psi.arity) and all(
+    elif (is_connective_equivalent(phi=phi, psi=psi)) and (phi.arity == psi.arity) and all(
             is_formula_equivalent(phi=phi_prime, psi=psi_prime) for phi_prime, psi_prime in zip(phi, psi)):
         # Inductive step
         return True
@@ -636,10 +678,10 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
             variables_map.set_pair(phi=psi, psi=psi_value)
     else:
         psi_value = psi
-    if (is_connective_equivalent(c=phi.c, d=psi_value.c)) and (phi.arity == 0) and (psi_value.arity == 0):
+    if (is_connective_equivalent(phi=phi, psi=psi_value)) and (phi.arity == 0) and (psi_value.arity == 0):
         # Base case
         return True
-    elif (is_connective_equivalent(c=phi.c, d=psi_value.c)) and (phi.arity == psi_value.arity) and all(
+    elif (is_connective_equivalent(phi=phi, psi=psi_value)) and (phi.arity == psi_value.arity) and all(
             is_formula_equivalent_with_variables(phi=phi_prime, psi=psi_prime, v=v, variables_map=variables_map) for
             phi_prime, psi_prime in zip(phi, psi_value)):
         # Inductive step
