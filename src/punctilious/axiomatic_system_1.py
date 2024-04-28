@@ -3,15 +3,66 @@ from __future__ import annotations
 import abc
 import collections
 import dataclasses
+import logging
 import typing
 import warnings
+
+
+class ErrorType(str):
+    pass
+
+
+class ErrorTypes(typing.NamedTuple):
+    error: ErrorType
+    warning: ErrorType
+    info: ErrorType
+    debug: ErrorType
+
+
+error_types = ErrorTypes(
+    error=ErrorType('error'),
+    warning=ErrorType('warning'),
+    info=ErrorType('info'),
+    debug=ErrorType('debug')
+)
+
+
+class ErrorCode(typing.NamedTuple):
+    error_type: ErrorType
+    code: str
+    message: str
+
+
+class ErrorCodes(typing.NamedTuple):
+    e100: ErrorCode
+    e101: ErrorCode
+    e102: ErrorCode
+    e103: ErrorCode
+    e104: ErrorCode
+
+
+error_codes = ErrorCodes(
+    e100=ErrorCode(error_type=error_types.error, code='e100',
+                   message='FormulaBuilder.__init__: Unsupported type for the terms argument.'),
+    e101=ErrorCode(error_type=error_types.error, code='e101',
+                   message='Formula.__new__: Unsupported type for the terms argument.'),
+    e102=ErrorCode(error_type=error_types.error, code='e102',
+                   message='Formula.term_0: Attempt to access property term_0 but formula does not contain a term at '
+                           'index 0.'),
+    e103=ErrorCode(error_type=error_types.error, code='e103',
+                   message='Formula.term_1: Attempt to access property term_1 but formula does not contain a term at '
+                           'index 0.'),
+    e104=ErrorCode(error_type=error_types.warning, code='e104',
+                   message='EnumerationBuilder.__init__: Attempt to add duplicate formula-equivalent formulas as '
+                           'elements of the enumeration. The new element / term is ignored.')
+)
 
 
 class CustomException(Exception):
     """A punctilious generic exception."""
 
-    def __init__(self, message: str, **kwargs):
-        self.message = message
+    def __init__(self, error_code: ErrorCode, **kwargs):
+        self.error_code = error_code
         self.kwargs = kwargs
         super().__init__()
 
@@ -22,7 +73,18 @@ class CustomException(Exception):
         return self.rep()
 
     def rep(self) -> str:
-        return ', '.join(f'{key}: {value}' for key, value in self.kwargs.items())
+        kwargs: str = ', '.join(f'{key}: {value}' for key, value in self.kwargs.items())
+        return f'Error {self.error_code.code}: {self.error_code.message}. {kwargs}'
+
+
+def raise_exception(error_code: ErrorCode, **kwargs):
+    error: CustomException = CustomException(error_code=error_code, **kwargs)
+    if error_code.error_type == error_types.error:
+        logging.exception(msg=error.rep())
+        raise error
+    elif error_code.error_type == error_types.warning:
+        logging.warn(msg=error.rep())
+        warnings.warn(message=error.rep())
 
 
 class Connective:
@@ -68,7 +130,7 @@ class FormulaBuilder(list):
             for term in coerced_tuple:
                 self.append(term=term)
         elif terms is not None:
-            raise ValueError()
+            raise_exception(error_code=error_codes.e100, c=c, terms_type=type(terms), terms=terms)
 
     def __repr__(self):
         return self.rep()
@@ -161,7 +223,7 @@ class Formula(tuple):
         elif terms is None:
             o = super().__new__(cls)
         else:
-            raise ValueError()
+            raise_exception(error_code=error_codes.e101, c=c, terms_type=type(terms), terms=terms)
         return o
 
     def __init__(self, c: Connective, terms: FlexibleTupl = None):
@@ -203,12 +265,14 @@ class Formula(tuple):
 
     @property
     def term_0(self) -> Formula:
-        # TODO: Terms.term_0: raise custom error if there is no term_0
+        if len(self) < 1:
+            raise_exception(error_code=error_codes.e103, c=self.c)
         return self[0]
 
     @property
     def term_1(self) -> Formula:
-        # TODO: Terms.term_1: raise custom error if there is no term_1
+        if len(self) < 2:
+            raise_exception(error_code=error_codes.e104, c=self.c)
         return self[1]
 
     def to_formula_builder(self) -> FormulaBuilder:
@@ -829,8 +893,7 @@ class EnumerationBuilder(FormulaBuilder):
         """
         term = coerce_formula_builder(phi=term)
         if any(is_formula_equivalent(phi=term, psi=element) for element in self):
-            warnings.warn(
-                message='a formula-equivalent element is already present in the enumeration, in consequence it is not added.')
+            raise_exception(error_code=error_codes.e104, enumeration=self, term=term)
         else:
             super().append(term=term)
         return term

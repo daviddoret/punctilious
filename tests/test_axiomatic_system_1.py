@@ -296,6 +296,16 @@ class TestEnumeration:
         assert e1.get_element_index(phi=phi2) == 1
         assert e1.get_element_index(phi=phi3) == 2
 
+    def test_warning(self):
+        a = as1.let_x_be_a_simple_object(rep='a')
+        b = as1.let_x_be_a_simple_object(rep='b')
+        c = as1.let_x_be_a_simple_object(rep='c')
+        with pytest.warns(Warning) as record:
+            # duplicate formula-equivalent formulas are ignored and raise a warning.
+            e1 = as1.Enumeration(elements=(a, b, c, b,))
+            if not record:
+                pytest.fail(f'Warning {as1.ErrorCodes.e104} not issued.')
+
 
 class TestFormulaEquivalenceWithVariables:
     def test_is_formula_equivalent_with_variables(self):
