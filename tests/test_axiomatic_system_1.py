@@ -313,7 +313,7 @@ class TestEnumeration:
             # duplicate formula-equivalent formulas are ignored and raise a warning.
             e1 = as1.Enumeration(elements=(a, b, c, b,))
             if not record:
-                pytest.fail(f'Warning {as1.ErrorCodes.e104} not issued.')
+                pytest.fail(f'Warning {as1.EventCodes.e104} not issued.')
 
 
 class TestFormulaEquivalenceWithVariables:

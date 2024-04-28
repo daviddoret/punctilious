@@ -8,60 +8,84 @@ import typing
 import warnings
 
 
-class ErrorType(str):
+class EventType(str):
     pass
 
 
-class ErrorTypes(typing.NamedTuple):
-    error: ErrorType
-    warning: ErrorType
-    info: ErrorType
-    debug: ErrorType
+class EventTypes(typing.NamedTuple):
+    error: EventType
+    warning: EventType
+    info: EventType
+    debug: EventType
 
 
-error_types = ErrorTypes(
-    error=ErrorType('error'),
-    warning=ErrorType('warning'),
-    info=ErrorType('info'),
-    debug=ErrorType('debug')
+event_types = EventTypes(
+    error=EventType('error'),
+    warning=EventType('warning'),
+    info=EventType('info'),
+    debug=EventType('debug')
 )
 
 
-class ErrorCode(typing.NamedTuple):
-    error_type: ErrorType
+class EventCode(typing.NamedTuple):
+    event_type: EventType
     code: str
     message: str
 
 
-class ErrorCodes(typing.NamedTuple):
-    e100: ErrorCode
-    e101: ErrorCode
-    e102: ErrorCode
-    e103: ErrorCode
-    e104: ErrorCode
+class EventCodes(typing.NamedTuple):
+    e100: EventCode
+    e101: EventCode
+    e102: EventCode
+    e103: EventCode
+    e104: EventCode
+    e105: EventCode
+    e106: EventCode
+    e107: EventCode
+    e108: EventCode
+    e109: EventCode
+    e110: EventCode
+    e111: EventCode
+    e112: EventCode
 
 
-error_codes = ErrorCodes(
-    e100=ErrorCode(error_type=error_types.error, code='e100',
+event_codes = EventCodes(
+    e100=EventCode(event_type=event_types.error, code='e100',
                    message='FormulaBuilder.__init__: Unsupported type for the terms argument.'),
-    e101=ErrorCode(error_type=error_types.error, code='e101',
+    e101=EventCode(event_type=event_types.error, code='e101',
                    message='Formula.__new__: Unsupported type for the terms argument.'),
-    e102=ErrorCode(error_type=error_types.error, code='e102',
+    e102=EventCode(event_type=event_types.error, code='e102',
                    message='Formula.term_0: Attempt to access property term_0 but formula does not contain a term at '
                            'index 0.'),
-    e103=ErrorCode(error_type=error_types.error, code='e103',
+    e103=EventCode(event_type=event_types.error, code='e103',
                    message='Formula.term_1: Attempt to access property term_1 but formula does not contain a term at '
                            'index 0.'),
-    e104=ErrorCode(error_type=error_types.warning, code='e104',
+    e104=EventCode(event_type=event_types.warning, code='e104',
                    message='EnumerationBuilder.__init__: Attempt to add duplicate formula-equivalent formulas as '
-                           'elements of the enumeration. The new element / term is ignored.')
+                           'elements of the enumeration. The new element / term is ignored.'),
+    e105=EventCode(event_type=event_types.error, code='e105',
+                   message='coerce_formula: The argument could not be coerced to a formula.'),
+    e106=EventCode(event_type=event_types.error, code='e106',
+                   message='coerce_tupl: The argument could not be coerced to a tuple.'),
+    e107=EventCode(event_type=event_types.error, code='e107',
+                   message='coerce_enumeration: The argument could not be coerced to a enumeration.'),
+    e108=EventCode(event_type=event_types.error, code='e108',
+                   message='coerce_map: The argument could not be coerced to a map.'),
+    e109=EventCode(event_type=event_types.error, code='e109',
+                   message='coerce_formula_builder: The argument could not be coerced to a formula-builder.'),
+    e110=EventCode(event_type=event_types.error, code='e110',
+                   message='coerce_tupl_builder: The argument could not be coerced to a tuple-builder.'),
+    e111=EventCode(event_type=event_types.error, code='e111',
+                   message='coerce_enumeration_builder: The argument could not be coerced to a enumeration-builder.'),
+    e112=EventCode(event_type=event_types.error, code='e112',
+                   message='coerce_map_builder: The argument could not be coerced to a map-builder.')
 )
 
 
 class CustomException(Exception):
-    """A punctilious generic exception."""
+    """A generic exception type for application custom exceptionss."""
 
-    def __init__(self, error_code: ErrorCode, **kwargs):
+    def __init__(self, error_code: EventCode, **kwargs):
         self.error_code = error_code
         self.kwargs = kwargs
         super().__init__()
@@ -74,17 +98,23 @@ class CustomException(Exception):
 
     def rep(self) -> str:
         kwargs: str = ', '.join(f'{key}: {value}' for key, value in self.kwargs.items())
-        return f'Error {self.error_code.code}: {self.error_code.message}. {kwargs}'
+        return f'{self.error_code.event_type} {self.error_code.code}: {self.error_code.message}. {kwargs}'
 
 
-def raise_exception(error_code: ErrorCode, **kwargs):
-    error: CustomException = CustomException(error_code=error_code, **kwargs)
-    if error_code.error_type == error_types.error:
-        logging.exception(msg=error.rep())
-        raise error
-    elif error_code.error_type == error_types.warning:
-        logging.warn(msg=error.rep())
-        warnings.warn(message=error.rep())
+def raise_event(event_code: EventCode, **kwargs):
+    """Raise a technical event.
+
+    :param event_code:
+    :param kwargs:
+    :return:
+    """
+    exception: CustomException = CustomException(error_code=event_code, **kwargs)
+    if event_code.event_type == event_types.error:
+        logging.exception(msg=exception.rep())
+        raise exception
+    elif event_code.event_type == event_types.warning:
+        logging.warn(msg=exception.rep())
+        warnings.warn(message=exception.rep())
 
 
 class Connective:
@@ -130,7 +160,7 @@ class FormulaBuilder(list):
             for term in coerced_tuple:
                 self.append(term=term)
         elif terms is not None:
-            raise_exception(error_code=error_codes.e100, c=c, terms_type=type(terms), terms=terms)
+            raise_event(event_code=event_codes.e100, c=c, terms_type=type(terms), terms=terms)
 
     def __repr__(self):
         return self.rep()
@@ -223,7 +253,7 @@ class Formula(tuple):
         elif terms is None:
             o = super().__new__(cls)
         else:
-            raise_exception(error_code=error_codes.e101, c=c, terms_type=type(terms), terms=terms)
+            raise_event(event_code=event_codes.e101, c=c, terms_type=type(terms), terms=terms)
         return o
 
     def __init__(self, c: Connective, terms: FlexibleTupl = None):
@@ -266,13 +296,13 @@ class Formula(tuple):
     @property
     def term_0(self) -> Formula:
         if len(self) < 1:
-            raise_exception(error_code=error_codes.e103, c=self.c)
+            raise_event(event_code=event_codes.e103, c=self.c)
         return self[0]
 
     @property
     def term_1(self) -> Formula:
         if len(self) < 2:
-            raise_exception(error_code=error_codes.e104, c=self.c)
+            raise_event(event_code=event_codes.e104, c=self.c)
         return self[1]
 
     def to_formula_builder(self) -> FormulaBuilder:
@@ -291,9 +321,9 @@ def coerce_formula_builder(phi: FlexibleFormula = None):
     elif isinstance(phi, Formula):
         return phi.to_formula_builder()
     elif phi is None:
-        return FormulaBuilder()
+        return FormulaBuilder(c=None, terms=None)
     else:
-        raise TypeError()
+        raise_event(event_code=event_codes.e108, phi_type=type(phi), phi=phi)
 
 
 def coerce_formula(phi: FlexibleFormula):
@@ -304,7 +334,7 @@ def coerce_formula(phi: FlexibleFormula):
     elif isinstance(phi, FormulaBuilder):
         return phi.to_formula()
     else:
-        raise TypeError()
+        raise_event(event_code=event_codes.e105, phi_type=type(phi), phi=phi)
 
 
 def coerce_enumeration(elements: FlexibleEnumeration):
@@ -320,7 +350,7 @@ def coerce_enumeration(elements: FlexibleEnumeration):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
         return Enumeration(elements=elements)
     else:
-        raise TypeError(f'elements cannot be coerced to enumeration')
+        raise_event(event_code=event_codes.e107, phi_type=type(elements), phi=elements)
 
 
 def coerce_enumeration_builder(elements: FlexibleEnumeration):
@@ -334,7 +364,7 @@ def coerce_enumeration_builder(elements: FlexibleEnumeration):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
         return EnumerationBuilder(elements=elements)
     else:
-        raise TypeError(f'elements cannot be coerced to enumeration')
+        raise_event(event_code=event_codes.e110, phi_type=type(elements), phi=elements)
 
 
 def coerce_map(m: FlexibleMap):
@@ -349,7 +379,7 @@ def coerce_map(m: FlexibleMap):
         codomain: Tupl = coerce_tupl(elements=m.values())
         return Map(domain=domain, codomain=codomain)
     else:
-        raise TypeError('m could not be safely coerced to map.')
+        raise_event(event_code=event_codes.e108, phi_type=type(m), phi=m)
 
 
 def coerce_map_builder(m: FlexibleMap):
@@ -364,7 +394,7 @@ def coerce_map_builder(m: FlexibleMap):
         codomain: TuplBuilder = coerce_tupl_builder(elements=m.values())
         return MapBuilder(domain=domain, codomain=codomain)
     else:
-        raise TypeError('m could not be safely coerced to map.')
+        raise_event(event_code=event_codes.e109, phi_type=type(m), phi=m)
 
 
 def coerce_tupl(elements: FlexibleTupl):
@@ -378,7 +408,7 @@ def coerce_tupl(elements: FlexibleTupl):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
         return Tupl(elements=elements)
     else:
-        raise TypeError('elements could not be safely coerced to tuple.')
+        raise_event(event_code=event_codes.e106, phi_type=type(elements), phi=elements)
 
 
 def coerce_tupl_builder(elements: FlexibleTupl):
@@ -392,7 +422,7 @@ def coerce_tupl_builder(elements: FlexibleTupl):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
         return TuplBuilder(elements=elements)
     else:
-        raise TypeError('elements could not be safely coerced to tuple.')
+        raise_event(event_code=event_codes.e109, phi_type=type(elements), phi=elements)
 
 
 FlexibleFormula = typing.Optional[typing.Union[Connective, Formula, FormulaBuilder]]
@@ -583,21 +613,27 @@ def is_connective_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool
 
 
 def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
-    """Two formulas phi and psi are formula-equivalent if and only if:
+    """Two formulas phi and psi are formula-equivalent, noted phi ~formula psi, if and only if:
     Base case:
-     - phi connective = psi connective
+     - phi ~connective psi
      - phi arity = 0
      - psi arity = 0
      Inductive step:
-     - phi connective = psi connective
+     - phi ~connective psi
      - phi arity = psi arity
-     - following order, for all child formula phi' in phi, the child formula psi' in psi is formula-equivalent
+     - following canonical order, for all pairs of children formulas phi' in phi psi' in psi,
+       phi ~formula psi
      Extreme case:
-     - otherwise phi and psi are not formula-equivalent.
+     - all other pairs for formulas are not formula-equivalent.
 
-    :param phi:
-    :param psi:
-    :return:
+    Formally, ~formula is an equivalence class, that is, if phi, psi, and omega are formulas:
+     - It is reflexive: phi ~formula phi.
+     - It is symmetric: phi ~formula psi ⇒ psi ~formula phi.
+     - It is transitive: phi ~formula psi ∧ psi ~formula omega ⇒ phi ~formula omega.
+
+    :param phi: A formula.
+    :param psi: A formula.
+    :return: True if phi ~formula psi. False otherwise.
     """
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
@@ -935,7 +971,7 @@ class EnumerationBuilder(FormulaBuilder):
         """
         term = coerce_formula_builder(phi=term)
         if any(is_formula_equivalent(phi=term, psi=element) for element in self):
-            raise_exception(error_code=error_codes.e104, enumeration=self, term=term)
+            raise_event(event_code=event_codes.e104, enumeration=self, term=term)
         else:
             super().append(term=term)
         return term
