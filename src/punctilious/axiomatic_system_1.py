@@ -531,8 +531,23 @@ def let_x_be_a_variable(rep: str):
     return Formula(c=NullaryConnective(rep=rep))
 
 
-def let_x_be_a_simple_object(rep: str):
-    return SimpleObject(rep=rep)
+FlexibleRepresentation = typing.Optional[typing.Union[str, typing.Iterable[str]]]
+"""FlexibleRepresentation is a flexible python type that may be safely coerced into an Enumeration or a EnumerationBuilder."""
+
+
+def let_x_be_a_simple_object(rep: FlexibleRepresentation) -> typing.Union[
+    SimpleObject, typing.Generator[SimpleObject, typing.Any, None]]:
+    """A helper function to declare one or multiple simple-objects.
+
+    :param rep: A string (or an iterable of strings) default representation for the simple-object(s).
+    :return: A simple-object (if rep is a string), or a python-tuple of simple-objects (if rep is an iterable).
+    """
+    if isinstance(rep, str):
+        return SimpleObject(rep=rep)
+    elif isinstance(rep, typing.Iterable):
+        return (SimpleObject(rep=r) for r in rep)
+    else:
+        raise TypeError  # TODO: Implement event code.
 
 
 def let_x_be_a_binary_connective(rep: str):
@@ -557,6 +572,7 @@ class Connectives(typing.NamedTuple):
     inference_rule: TernaryConnective
     is_a: BinaryConnective
     map: BinaryConnective
+    pair: BinaryConnective
     transformation: TernaryConnective
     tupl: FreeArityConnective
 
@@ -567,10 +583,16 @@ connectives = Connectives(
     inference_rule=let_x_be_a_ternary_connective(rep='inference-rule'),
     is_a=let_x_be_a_binary_connective(rep='is-a'),
     map=let_x_be_a_binary_connective(rep='map'),
+    pair=let_x_be_a_binary_connective(rep='pair'),  # TODO: Implement pair
     transformation=let_x_be_a_ternary_connective(rep='transformation'),
     tupl=let_x_be_a_free_arity_connective(rep='tuple')
 )
 
+
+# TODO: Rename Enumeration to HorizontalEnumeration, then implement VerticalEnumeration and parent class Enumeration.
+# TODO: Implement EnumerationAccretor.
+# TODO: Implement Axiom.
+# TODO: Implement Theory and Theorem.
 
 def is_symbol_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
     """Two formulas phi and psi are symbol-equivalent, noted phi ~symbol psi, if and only if they are the same symbol.

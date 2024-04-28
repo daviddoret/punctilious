@@ -227,9 +227,7 @@ class TestFormula:
 
 class TestConnectiveEquivalence:
     def test_is_connective_equivalent(self):
-        a = as1.let_x_be_a_simple_object(rep='a')
-        b = as1.let_x_be_a_simple_object(rep='b')
-        c = as1.let_x_be_a_simple_object(rep='c')
+        a, b, c = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c',))
         c1 = as1.BinaryConnective(rep='c1')
         c2 = as1.BinaryConnective(rep='c2')
         phi = a | c1 | b
@@ -424,9 +422,7 @@ class TestMap:
 
 class TestEnumerationEquivalence:
     def test_enumeration_equivalence(self):
-        red = as1.let_x_be_a_simple_object(rep='red')
-        yellow = as1.let_x_be_a_simple_object(rep='yellow')
-        blue = as1.let_x_be_a_simple_object(rep='blue')
+        red, yellow, blue = as1.let_x_be_a_simple_object(rep=('red', 'yellow', 'blue',))
         e1 = as1.Enumeration(elements=(red, yellow, blue,))
         e2 = as1.Enumeration(elements=(yellow, red, blue,))
         assert as1.is_enumeration_equivalent(phi=e1, psi=e2)
