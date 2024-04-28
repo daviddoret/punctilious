@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import abc
 import collections
-import dataclasses
 import logging
 import typing
 import warnings
@@ -47,6 +45,8 @@ class EventCodes(typing.NamedTuple):
     e110: EventCode
     e111: EventCode
     e112: EventCode
+    e113: EventCode
+    e114: EventCode
 
 
 event_codes = EventCodes(
@@ -78,7 +78,11 @@ event_codes = EventCodes(
     e111=EventCode(event_type=event_types.error, code='e111',
                    message='coerce_enumeration_builder: The argument could not be coerced to a enumeration-builder.'),
     e112=EventCode(event_type=event_types.error, code='e112',
-                   message='coerce_map_builder: The argument could not be coerced to a map-builder.')
+                   message='coerce_map_builder: The argument could not be coerced to a map-builder.'),
+    e113=EventCode(event_type=event_types.error, code='e113',
+                   message='FormulaBuilder.to_formula: The connective property is None but it is mandatory to elaborate formulas.'),
+    e114=EventCode(event_type=event_types.error, code='e114',
+                   message='NOT USED')
 )
 
 
@@ -113,7 +117,7 @@ def raise_event(event_code: EventCode, **kwargs):
         logging.exception(msg=exception.rep())
         raise exception
     elif event_code.event_type == event_types.warning:
-        logging.warn(msg=exception.rep())
+        logging.warning(msg=exception.rep())
         warnings.warn(message=exception.rep())
 
 
@@ -229,6 +233,8 @@ class FormulaBuilder(list):
             self[1] = term
 
     def to_formula(self) -> Formula:
+        if self.c is None:
+            raise_event(event_code=event_codes.e113, self=self)
         terms: tuple[Formula, ...] = tuple(coerce_formula(phi=term) for term in self)
         phi: Formula = Formula(c=self.c, terms=terms)
         return phi
@@ -649,25 +655,6 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
         return False
 
 
-def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration):
-    """Two enumerations phi and psi are enumeration-equivalent if and only if:
-     - all elements of phi are elements of psi,
-     - and all elements of psi are elements of phi.
-
-    Note that:
-        phi is-formula-equivalent - psi ==> phi is-enumeration-equivalent psi
-    But the reverse is not necessarily true, because of elements order.
-
-    :param phi:
-    :param psi:
-    :return:
-    """
-    phi: Enumeration = coerce_enumeration(elements=phi)
-    psi: Enumeration = coerce_enumeration(elements=psi)
-    return all(psi.has_element(phi=phi_element) for phi_element in phi) and all(
-        phi.has_element(phi=psi_element) for psi_element in psi)
-
-
 def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula, v: FlexibleEnumeration,
                                          variables_map: FlexibleMap = None):
     """Two formulas phi and psi are formula-equivalent-with-variables with regards to variables V if and only if:
@@ -737,13 +724,13 @@ def assert_formula_equivalent_with_variables(phi: FlexibleFormula, psi: Flexible
 
 
 def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> bool:
-    """Two enumerations phi and psi are enumeration-equivalent if and only if:
-     - for every sub-formula phi' in phi, there is a formula-equivalent sub-formula psi' in psi.
-     - for every sub-formula psi' in psi, there is a formula-equivalent sub-formula phi' in phi.
+    """Two enumerations phi and psi are enumeration-equivalent, denoted phi ~enumeration psi, if and only if:
+     - for all sub-formula phi' in phi, there exists a sub-formula psi' in psi such that phi' ~formula psi'.
+     - for all sub-formula psi' in psi, there exists a sub-formula phi' in phi such that psi' ~formula phi'.
 
-    :param phi:
-    :param psi:
-    :return:
+    :param phi: An enumeration.
+    :param psi: An enumeration.
+    :return: True if phi ~enumeration psi, False otherwise.
     """
     phi: Formula = coerce_enumeration(elements=phi)
     psi: Formula = coerce_enumeration(elements=psi)
