@@ -460,3 +460,25 @@ class TestEnumerationAccretor:
             a.remove(y)
         with pytest.raises(as1.CustomException, match='e114'):
             a.pop(1)
+        with pytest.raises(as1.CustomException, match='e114'):
+            a.remove_formula(z)
+
+    def insert_element(self):
+        a = as1.EnumerationAccretor(elements=None)
+        x, y, z = as1.let_x_be_a_simple_object(rep=('x', 'y', 'z',))
+        a.append(element=x)
+        a.append(element=z)
+        assert a.has_element(phi=x)
+        assert a.has_element(phi=z)
+        with pytest.raises(as1.CustomException, match='e115'):
+            a.insert(1, y)
+
+    def set_element(self):
+        a = as1.EnumerationAccretor(elements=None)
+        x, y, z = as1.let_x_be_a_simple_object(rep=('x', 'y', 'z',))
+        a.append(element=x)
+        a.append(element=z)
+        assert a.has_element(phi=x)
+        assert a.has_element(phi=z)
+        with pytest.raises(as1.CustomException, match='e116'):
+            a[1] = y
