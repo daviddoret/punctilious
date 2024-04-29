@@ -427,3 +427,20 @@ class TestEnumerationEquivalence:
         e2 = as1.Enumeration(elements=(yellow, red, blue,))
         assert as1.is_enumeration_equivalent(phi=e1, psi=e2)
         assert not as1.is_formula_equivalent(phi=e1, psi=e2)
+
+
+class TestUnionEnumeration:
+    def test_union_enumeration(self):
+        a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e'))
+        abc = as1.Enumeration(elements=(a, b, c,))
+        cd = as1.Enumeration(elements=(c, d,))
+        abcd1 = as1.union_enumeration(phi=abc, psi=cd)
+        abcd2 = as1.Enumeration(elements=(a, b, c, d,))
+        assert as1.is_enumeration_equivalent(phi=abcd1, psi=abcd2)
+        abcde1 = as1.Enumeration(elements=(a, b, c, d, e,))
+        abcde2 = as1.Enumeration(elements=(a, b, c, e, d,))
+        assert as1.is_enumeration_equivalent(phi=abcde1, psi=abcde2)
+        assert not as1.is_formula_equivalent(phi=abcde1, psi=abcde2)  # because of order
+        abcde3 = as1.union_enumeration(phi=abcde1, psi=abcde1)
+        assert as1.is_enumeration_equivalent(phi=abcde3, psi=abcde1)
+        assert as1.is_formula_equivalent(phi=abcde3, psi=abcde1)

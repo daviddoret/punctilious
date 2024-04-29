@@ -360,6 +360,36 @@ def coerce_enumeration(elements: FlexibleEnumeration):
         raise_event(event_code=event_codes.e107, phi_type=type(elements), phi=elements)
 
 
+def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enumeration:
+    """Given two enumerations phi, and psi, the union-enumeration operator, noted phi ∪-enumeration psi,
+    returns a new enumeration omega such that:
+    - all elements of phi are elements of omega,
+    - all elements of psi are elements of omega,
+    - no other elements are elements of omega.
+    Order is preserved, that is:
+    - the elements from phi keep their original order in omega
+    - the elements from psi keep their original order in omega providing they are not already present in phi,
+        in which case they are skipped
+
+    Under enumeration-equivalence, the union-enumeration operator is:
+     - Idempotent: (phi ∪-enumeration phi) ~enumeration phi.
+     - Symmetric: (phi ∪-enumeration psi) ~enumeration (psi ∪-enumeration phi).
+
+    Under formula-equivalence, the union-enumeration operator is:
+     - Idempotent: (phi ∪-formula phi) ~formula phi.
+     - Not necessarily symmetric: because of order.
+    """
+    phi: Enumeration = coerce_enumeration(elements=phi)
+    psi: Enumeration = coerce_enumeration(elements=psi)
+    eb: EnumerationBuilder = EnumerationBuilder(elements=None)
+    for phi_prime in phi:
+        eb.append(term=phi_prime)
+    for psi_prime in psi:
+        eb.append(term=psi_prime)
+    e: Enumeration = eb.to_enumeration()
+    return e
+
+
 def coerce_enumeration_builder(elements: FlexibleEnumeration):
     if isinstance(elements, EnumerationBuilder):
         return elements
