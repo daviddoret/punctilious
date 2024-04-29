@@ -444,3 +444,19 @@ class TestUnionEnumeration:
         abcde3 = as1.union_enumeration(phi=abcde1, psi=abcde1)
         assert as1.is_enumeration_equivalent(phi=abcde3, psi=abcde1)
         assert as1.is_formula_equivalent(phi=abcde3, psi=abcde1)
+
+
+class TestEnumerationAccretor:
+    def test_del_element(self):
+        a = as1.EnumerationAccretor(elements=None)
+        x, y, z = as1.let_x_be_a_simple_object(rep=('x', 'y', 'z',))
+        a.append(element=x)
+        a.append(element=y)
+        a.append(element=z)
+        assert a.has_element(phi=x)
+        assert a.has_element(phi=y)
+        assert a.has_element(phi=z)
+        with pytest.raises(as1.CustomException, match='e114'):
+            a.remove(y)
+        with pytest.raises(as1.CustomException, match='e114'):
+            a.pop(1)

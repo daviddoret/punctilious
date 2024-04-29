@@ -47,6 +47,8 @@ class EventCodes(typing.NamedTuple):
     e112: EventCode
     e113: EventCode
     e114: EventCode
+    e115: EventCode
+    e116: EventCode
 
 
 event_codes = EventCodes(
@@ -80,9 +82,17 @@ event_codes = EventCodes(
     e112=EventCode(event_type=event_types.error, code='e112',
                    message='coerce_map_builder: The argument could not be coerced to a map-builder.'),
     e113=EventCode(event_type=event_types.error, code='e113',
-                   message='FormulaBuilder.to_formula: The connective property is None but it is mandatory to elaborate formulas.'),
+                   message='FormulaBuilder.to_formula: The connective property is None but it is mandatory to '
+                           'elaborate formulas.'),
     e114=EventCode(event_type=event_types.error, code='e114',
-                   message='NOT USED')
+                   message='EnumerationAccretor.__del_item__,pop,remove,remove_formula: The remove-formula operation is forbidden on '
+                           'enumeration-accretors.'),
+    e115=EventCode(event_type=event_types.error, code='e115',
+                   message='EnumerationAccretor.__set_item__: The set-element operation is forbidden on '
+                           'enumeration-accretors.'),
+    e116=EventCode(event_type=event_types.error, code='e116',
+                   message='EnumerationAccretor.insert: The insert-element operation is forbidden on '
+                           'enumeration-accretors.')
 )
 
 
@@ -166,6 +176,27 @@ class FormulaBuilder(list):
         elif terms is not None:
             raise_event(event_code=event_codes.e100, c=c, terms_type=type(terms), terms=terms)
 
+    def __contains__(self, phi: FlexibleFormula):
+        """Return True is there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
+          otherwise.
+
+        :param phi: A formula.
+        :return: True if there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
+          otherwise.
+        """
+        return self.contain_formula(phi=phi)
+
+    def __delitem__(self, phi):
+        """Remove every sub-formula psi' from the formula psi, if and only psi' ~formula phi.
+
+        Attention point: the native python list.remove() method removes only the first element from the list,
+        which is a completely different behavior.
+
+        :param phi: A formula
+        :return: None
+        """
+        self.remove_formula(phi=phi)
+
     def __repr__(self):
         return self.rep()
 
@@ -184,11 +215,46 @@ class FormulaBuilder(list):
         while len(self) <= i:
             self.append(FormulaBuilder())
 
+    def contain_formula(self, phi: FlexibleFormula) -> bool:
+        """Return True is there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
+          otherwise.
+
+        :param phi: A formula.
+        :return: True if there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
+          otherwise.
+        """
+        return any(is_formula_equivalent(phi=phi, psi=psi_prime) for psi_prime in self)
+
     def iterate_canonical(self):
         """A top-down, left-to-right iteration."""
         yield self
         for t in self:
             yield from t.iterate_canonical()
+
+    def remove(self, phi: FlexibleFormula) -> None:
+        """Remove every sub-formula psi' from the formula psi, if and only psi' ~formula phi.
+
+        Attention point: the native python list.remove() method removes only the first element from the list,
+        which is a completely different behavior.
+
+        :param phi: A formula
+        :return: None
+        """
+        self.remove_formula(phi=phi)
+
+    def remove_formula(self, phi: FlexibleFormula) -> None:
+        """Remove every sub-formula psi' from the formula psi, if and only psi' ~formula phi.
+
+        Attention point: the native python list.remove() method removes only the first element from the list,
+        which is a completely different behavior.
+
+        :param phi: A formula
+        :return: None
+        """
+        phi = coerce_formula(phi=phi)
+        for psi_prime in self:
+            if is_formula_equivalent(phi=phi, psi=psi_prime):
+                super().remove(psi_prime)
 
     def rep(self, **kwargs) -> str:
         parenthesis = kwargs.get('parenthesis', False)
@@ -266,6 +332,16 @@ class Formula(tuple):
         self._c = c
         # super().__init__()
 
+    def __contains__(self, phi: FlexibleFormula):
+        """Return True is there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
+          otherwise.
+
+        :param phi: A formula.
+        :return: True if there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
+          otherwise.
+        """
+        return self.contain_formula(phi=phi)
+
     def __eq__(self, other):
         """python-equality of formulas is not formula-equivalence."""
         return self is other
@@ -288,6 +364,16 @@ class Formula(tuple):
     @property
     def c(self) -> Connective:
         return self._c
+
+    def contain_formula(self, phi: FlexibleFormula) -> bool:
+        """Return True is there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
+          otherwise.
+
+        :param phi: A formula.
+        :return: True if there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
+          otherwise.
+        """
+        return any(is_formula_equivalent(phi=phi, psi=psi_prime) for psi_prime in self)
 
     def rep(self, **kwargs) -> str:
         parenthesis = kwargs.get('parenthesis', False)
@@ -377,7 +463,7 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
 
     Under formula-equivalence, the union-enumeration operator is:
      - Idempotent: (phi ∪-formula phi) ~formula phi.
-     - Not necessarily symmetric: because of order.
+     - Not symmetric if some element of psi are elements of phi: because of order.
     """
     phi: Enumeration = coerce_enumeration(elements=phi)
     psi: Enumeration = coerce_enumeration(elements=psi)
@@ -1038,13 +1124,15 @@ class Enumeration(Formula):
      - ti is a formula.
 
     Distinctive objects:
-     - The empty-enumeration is the formula c().
+     - The empty-enumeration is the formula c(). See EmptyEnumeration for a specialized class.
 
     By definition, the sub-formulas of a formula phi are ordered and can repeat themselves. The justification for
     enumeration is the intention of considering the sub-formulas without their ordering, and without repetitions.
     Enumerations are equivalent to computable sets.
 
-    Attention point: distinguish the notions of formula-equivalence and enumeration-equivalence.
+    Attention point: operators may have distinct properties when applied to enumerations,
+    depending on the equivalence-class considered, such as formula-equivalence and enumeration-equivalence.
+    See union_enumeration() for a practical example.
 
     """
 
@@ -1088,6 +1176,90 @@ class Enumeration(Formula):
 
 FlexibleEnumeration = typing.Optional[typing.Union[Enumeration, EnumerationBuilder, typing.Iterable[FlexibleFormula]]]
 """FlexibleEnumeration is a flexible python type that may be safely coerced into an Enumeration or a EnumerationBuilder."""
+
+
+class EmptyEnumeration(Enumeration):
+    """An empty-enumeration is an enumeration that has no element.
+    """
+
+    def __new__(cls):
+        # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
+        # because tuple is immutable.
+        return super().__new__(cls=cls, elements=None)
+
+    def __init__(self):
+        # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
+        super().__init__(elements=None)
+
+
+class SingletonEnumeration(Enumeration):
+    """A singleton-enumeration is an enumeration that has exactly one element.
+    """
+
+    def __new__(cls, element: FlexibleFormula):
+        # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
+        # because tuple is immutable.
+        element: Formula = coerce_formula(phi=element)
+        return super().__new__(cls=cls, elements=(element,))
+
+    def __init__(self, element: FlexibleFormula):
+        # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
+        element: Formula = coerce_formula(phi=element)
+        super().__init__(elements=element)
+
+
+class EnumerationAccretor(EnumerationBuilder):
+    """An enumeration-accretor is an enumeration-builder with additional constraints:
+    it only allows appending new elements via the append-element and extend-with-elements operations,
+    and it forbids the delete-element, insert-element, and set-element operations.
+
+
+    """
+
+    def __delitem__(self, phi: FlexibleFormula):
+        """By definition, the delete-element operation is forbidden on enumeration-accretors.
+        Calling this method raises exception e114."""
+        raise_event(event_code=event_codes.e114, enumeration_accretor=self, phi=phi)
+
+    def __setitem__(self, index, element):
+        """By definition, the set-element operation is forbidden on enumeration-accretors.
+        Calling this method raises exception e115."""
+        raise_event(event_code=event_codes.e115, enumeration_accretor=self, index=index, element=element)
+
+    def insert(self, index, element):
+        """By definition, the insert-element operation is forbidden on enumeration-accretors.
+        Calling this method raises exception e116."""
+        raise_event(event_code=event_codes.e116, enumeration_accretor=self, index=index, element=element)
+
+    def append(self, element: FlexibleFormula):
+        """The append-element is the only operation allowed on enumeration-accretors that has the capability to
+        modify its elements.
+
+        This method is overridden for readability purposes."""
+        super().append(term=element)
+
+    def extend(self, elements: typing.Iterable[FlexibleFormula]):
+        """The extend-with-elements operation is allowed on enumeration-accretors as a sequence of append-element
+        operations.
+
+        This method is overridden for readability purposes."""
+        for element in elements:
+            self.append(element=element)
+
+    def pop(self, __index=-1):
+        """By definition, the delete-element operation is forbidden on enumeration-accretors.
+        Calling this method raises exception e114."""
+        raise_event(event_code=event_codes.e114, enumeration_accretor=self, __index=__index)
+
+    def remove(self, phi: FlexibleFormula) -> None:
+        """By definition, the delete-element operation is forbidden on enumeration-accretors.
+        Calling this method raises exception e114."""
+        raise_event(event_code=event_codes.e114, enumeration_accretor=self, phi=phi)
+
+    def remove_formula(self, phi: FlexibleFormula) -> None:
+        """By definition, the delete-element operation is forbidden on enumeration-accretors.
+        Calling this method raises exception e114."""
+        raise_event(event_code=event_codes.e114, enumeration_accretor=self, phi=phi)
 
 
 class TransformationBuilder(FormulaBuilder):

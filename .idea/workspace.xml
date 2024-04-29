@@ -100,6 +100,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_in.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_tupl.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_warning.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumerationAccretor.test_del_element.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestEnumerationEquivalence.test_enumeration_equivalence.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestFormula.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestFormula.test_formula.executor": "Run",
@@ -121,6 +122,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestTermsBuilder.test_terms_builder.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_transformation.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTupl.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestUnionEnumeration.test_union_enumeration.executor": "Run",
     "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
     "Python tests.pytest for test_pl1.TestMinimalPropositionalLogic.test_init.executor": "Run",
     "Python tests.pytest for test_pl1.TestPL1.test_compounding_formulas_1.executor": "Debug",
@@ -426,7 +428,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestConnectiveEquivalence.test_is_connective_equivalent" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_axiomatic_system_1.TestEnumerationAccretor.test_del_element" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -439,7 +441,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestConnectiveEquivalence.test_is_connective_equivalent&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestEnumerationAccretor.test_del_element&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -477,7 +479,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestFormula" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_axiomatic_system_1.TestUnionEnumeration.test_union_enumeration" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -490,7 +492,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestFormula&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestUnionEnumeration.test_union_enumeration&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -537,10 +539,10 @@
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence.test_is_connective_equivalent" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_has_element" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumerationAccretor.test_del_element" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumerationEquivalence.test_enumeration_equivalence" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormula" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestUnionEnumeration.test_union_enumeration" />
       <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -549,10 +551,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumerationAccretor.test_del_element" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestUnionEnumeration.test_union_enumeration" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_has_element" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumerationEquivalence.test_enumeration_equivalence" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence.test_is_connective_equivalent" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormula" />
       </list>
     </recent_temporary>
   </component>
@@ -571,14 +573,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00496" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1707533003558</created>
-      <option name="number" value="00496" />
-      <option name="presentableId" value="LOCAL-00496" />
-      <option name="project" value="LOCAL" />
-      <updated>1707533003559</updated>
     </task>
     <task id="LOCAL-00497" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -964,7 +958,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714338165789</updated>
     </task>
-    <option name="localTasksCounter" value="545" />
+    <task id="LOCAL-00545" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1714387124087</created>
+      <option name="number" value="00545" />
+      <option name="presentableId" value="LOCAL-00545" />
+      <option name="project" value="LOCAL" />
+      <updated>1714387124087</updated>
+    </task>
+    <option name="localTasksCounter" value="546" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1080,6 +1082,11 @@
           <url>file://$PROJECT_DIR$/src/punctilious_old/propositional_logic_1_presentation_1.py</url>
           <line>167</line>
           <option name="timeStamp" value="180" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
+          <line>1221</line>
+          <option name="timeStamp" value="218" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
