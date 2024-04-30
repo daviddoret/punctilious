@@ -142,6 +142,16 @@ class TestFormulaBuilder:
         assert fb4[1].c is c2
         assert fb4[2].c is c3
 
+    def test_set_term(self):
+        x, y, z = as1.let_x_be_a_simple_object(rep=('x', 'y', 'z',))
+        fb = as1.FormulaBuilder(c=None)
+        fb.set_term(i=5, phi=y)
+        assert fb.arity == 6
+        fb.set_term(i=4, phi=z)
+        assert fb.arity == 6
+        fb.set_term(i=9, phi=x)
+        assert fb.arity == 10
+
     def test_term_0(self, c1, c2, c3):
         fb = as1.FormulaBuilder(c=c1)
         fb.term_0 = c2
@@ -482,3 +492,20 @@ class TestEnumerationAccretor:
         assert a.has_element(phi=z)
         with pytest.raises(as1.CustomException, match='e116'):
             a[1] = y
+
+
+class TestEmptyEnumeration:
+    def test_empty_enumeration(self):
+        a = as1.EmptyEnumeration()
+        x, y, z = as1.let_x_be_a_simple_object(rep=('x', 'y', 'z',))
+        assert not a.has_element(phi=x)
+        assert a.arity == 0
+
+
+class TestSingletonEnumeration:
+    def test_singleton_enumeration(self):
+        x, y, z = as1.let_x_be_a_simple_object(rep=('x', 'y', 'z',))
+        a = as1.SingletonEnumeration(element=y)
+        assert a.has_element(phi=y)
+        assert not a.has_element(phi=x)
+        assert a.arity == 1

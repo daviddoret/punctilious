@@ -200,6 +200,9 @@ class FormulaBuilder(list):
     def __repr__(self):
         return self.rep()
 
+    def __setitem__(self, i: int, phi: FlexibleFormula) -> None:
+        self.set_term(i=i, phi=phi)
+
     def __str__(self):
         return self.rep()
 
@@ -208,6 +211,10 @@ class FormulaBuilder(list):
         term = coerce_formula_builder(phi=term)
         super().append(term)
         return term
+
+    @property
+    def arity(self) -> int:
+        return len(self)
 
     def assure_term(self, i: int) -> None:
         """Assure the presence of an i-th term (i being the 0-based index).
@@ -269,6 +276,21 @@ class FormulaBuilder(list):
             c: str = self.c.rep(**kwargs) if self.c is not None else '?'
             terms: str = ', '.join(term.rep(**kwargs) if term is not None else '?' for term in self)
             return f'{'(' if parenthesis else ''}{c}({terms}){')' if parenthesis else ''}'
+
+    def set_term(self, i: int, phi: FlexibleFormula) -> None:
+        """Set term / sub-formula at index position i to be formula phi.
+
+        If the sub-formulas of the current formula do not extend to position i, populate the intermediary sub-formulas
+        with None.
+
+        :param i: A zero-based index position.
+        :param phi: The term / sub-formula.
+        :return: None.
+        """
+        """"""
+        phi = coerce_formula(phi=phi)
+        self.assure_term(i=i)
+        super().__setitem__(i, phi)
 
     @property
     def term_0(self) -> FormulaBuilder:
@@ -1221,10 +1243,10 @@ class EnumerationAccretor(EnumerationBuilder):
         Calling this method raises exception e114."""
         raise_event(event_code=event_codes.e114, enumeration_accretor=self, phi=phi)
 
-    def __setitem__(self, index, element):
+    def __setitem__(self, i, element):
         """By definition, the set-element operation is forbidden on enumeration-accretors.
         Calling this method raises exception e115."""
-        raise_event(event_code=event_codes.e115, enumeration_accretor=self, index=index, element=element)
+        raise_event(event_code=event_codes.e115, enumeration_accretor=self, index=i, element=element)
 
     def insert(self, index, element):
         """By definition, the insert-element operation is forbidden on enumeration-accretors.
