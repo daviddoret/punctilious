@@ -323,6 +323,39 @@ class TestEnumeration:
             if not record:
                 pytest.fail(f'Warning {as1.EventCodes.e104} not issued.')
 
+    def test_enumeration(self):
+        a, b, c, x, y, z = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'x', 'y', 'z',))
+        bbaccczx = as1.Enumeration(elements=(b, b, a, c, c, c, z, x))
+        assert as1.is_formula_equivalent(phi=bbaccczx, psi=bbaccczx)
+        assert as1.is_enumeration_equivalent(phi=bbaccczx, psi=bbaccczx)
+        assert bbaccczx.has_element(phi=a)
+        assert bbaccczx.has_element(phi=b)
+        assert bbaccczx.has_element(phi=c)
+        assert bbaccczx.has_element(phi=x)
+        assert bbaccczx.has_element(phi=z)
+        assert bbaccczx.get_element_index(phi=b) == 0
+        assert bbaccczx.get_element_index(phi=a) == 1
+        assert bbaccczx.get_element_index(phi=c) == 2
+        assert bbaccczx.get_element_index(phi=z) == 3
+        assert bbaccczx.get_element_index(phi=x) == 4
+        assert not bbaccczx.has_element(phi=y)
+        baczx = as1.Enumeration(elements=(b, a, c, z, x))
+        assert as1.is_formula_equivalent(phi=baczx, psi=baczx)
+        assert as1.is_enumeration_equivalent(phi=baczx, psi=baczx)
+        assert baczx.has_element(phi=a)
+        assert baczx.has_element(phi=b)
+        assert baczx.has_element(phi=c)
+        assert baczx.has_element(phi=x)
+        assert baczx.has_element(phi=z)
+        assert baczx.get_element_index(phi=b) == 0
+        assert baczx.get_element_index(phi=a) == 1
+        assert baczx.get_element_index(phi=c) == 2
+        assert baczx.get_element_index(phi=z) == 3
+        assert baczx.get_element_index(phi=x) == 4
+        assert not baczx.has_element(phi=y)
+        assert as1.is_enumeration_equivalent(phi=baczx, psi=bbaccczx)
+        assert as1.is_formula_equivalent(phi=baczx, psi=bbaccczx)
+
 
 class TestFormulaEquivalenceWithVariables:
     def test_is_formula_equivalent_with_variables(self):
@@ -359,6 +392,20 @@ class TestFormulaEquivalenceWithVariables:
             phi=aristotle | is_a | x,
             psi=platypus | is_a | human,
             v=(x,))
+
+    def test_is_formula_equivalent_with_variables_2(self):
+        a, b, c, d = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd',))
+        ab = as1.Enumeration(elements=(a, b,))
+        cd = as1.Enumeration(elements=(c, d,))
+        assert not as1.is_formula_equivalent(phi=ab, psi=cd)
+        m = as1.MapBuilder()
+        assert as1.is_formula_equivalent_with_variables(phi=ab, psi=cd, v=cd, variables_map=m)
+        assert as1.is_formula_equivalent(phi=m.get_assigned_value(phi=c), psi=a)
+        assert as1.is_formula_equivalent(phi=m.get_assigned_value(phi=d), psi=b)
+        ababbba = as1.Enumeration(elements=(a, b, a, b, b, a,))
+        acaccca = as1.Enumeration(elements=(a, c, a, c, c, a,))
+        assert as1.is_formula_equivalent_with_variables(phi=ababbba, psi=acaccca, v=(c,), variables_map=m)
+        assert as1.is_formula_equivalent(phi=m.get_assigned_value(phi=c), psi=b)
 
 
 class TestTransformation:
@@ -513,10 +560,6 @@ class TestEmptyEnumeration:
         assert a.arity == 0
 
 
-class TestSingletonEnumeration:
-    def test_singleton_enumeration(self):
-        x, y, z = as1.let_x_be_a_simple_object(rep=('x', 'y', 'z',))
-        a = as1.SingletonEnumeration(element=y)
-        assert a.has_element(phi=y)
-        assert not a.has_element(phi=x)
-        assert a.arity == 1
+class TestEnumerationBuilder:
+    def test_get_element_index(self):
+        assert False

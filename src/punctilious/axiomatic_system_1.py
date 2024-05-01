@@ -50,6 +50,7 @@ class EventCodes(typing.NamedTuple):
     e115: EventCode
     e116: EventCode
     e117: EventCode
+    e118: EventCode
 
 
 event_codes = EventCodes(
@@ -95,9 +96,11 @@ event_codes = EventCodes(
                    message='EnumerationAccretor.insert: The insert-element operation is forbidden on '
                            'enumeration-accretors.'),
     e117=EventCode(event_type=event_types.error, code='e117',
-                   message='Transformation.apply_transformation: The arguments are not formula-equivalent-with-variables '
-                           ' with the premises, with regards to the variables.'),
-
+                   message='Transformation.apply_transformation: The arguments are not '
+                           'formula-equivalent-with-variables with the premises, with regards to the variables.'),
+    e118=EventCode(event_type=event_types.error, code='e118',
+                   message='is_formula_equivalent_with_variables: There exists a phi''sub-formula of phi that is an '
+                           'element of variables.'),
 )
 
 
@@ -850,8 +853,7 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
     v: Tupl = coerce_tupl(elements=v)
     if v.has_element(phi=phi):
         # The sub-formulas of left-hand formula phi can't be elements of the variables enumeration.
-        warnings.warn(message='a sub-formula of phi is an elements of the variables enumerations.')
-        return False
+        raise_event(event_code=event_codes.e118, phi=phi, psi=psi, v=v)
     if v.has_element(phi=psi):
         # psi is a variable.
         if variables_map.is_defined_in(phi=psi):
@@ -1178,10 +1180,11 @@ class Enumeration(Formula):
         if self.has_element(phi=phi):
             # two formulas that are formula-equivalent may not be equal.
             # for this reason we must first find the first formula-equivalent element in the enumeration.
-            inside_element: Formula = next(term for term in self if is_formula_equivalent(phi=phi, psi=term))
-            # and then we can retrieve its index position.
-            index_position: int = self.index(inside_element)
-            return index_position
+            n: int = 0
+            for phi_prime in self:
+                if is_formula_equivalent(phi=phi, psi=phi_prime):
+                    return n
+                n = n + 1
         else:
             return None
 

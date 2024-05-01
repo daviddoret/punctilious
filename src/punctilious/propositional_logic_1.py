@@ -26,12 +26,12 @@ land = connectives.land
 
 p = as1.let_x_be_a_variable(rep='p')
 q = as1.let_x_be_a_variable(rep='q')
-phi1 = p | is_a | proposition
-phi2 = q | is_a | proposition
-phi3 = p | equivalence | truth
-phi4 = q | equivalence | truth
-phi5 = p | land | q
-t = as1.Transformation(premises=(phi1, phi2, phi3, phi4,), conclusion=phi5, variables=(p, q,))
+premises = (p | is_a | proposition,
+            q | is_a | proposition,
+            p | equivalence | truth,
+            q | equivalence | truth)
+conclusion = p | land | q
+t = as1.Transformation(premises=premises, conclusion=conclusion, variables=(p, q,))
 
 r = as1.let_x_be_a_variable(rep='r')
 s = as1.let_x_be_a_variable(rep='s')
