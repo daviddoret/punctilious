@@ -49,6 +49,7 @@ class EventCodes(typing.NamedTuple):
     e114: EventCode
     e115: EventCode
     e116: EventCode
+    e117: EventCode
 
 
 event_codes = EventCodes(
@@ -92,7 +93,11 @@ event_codes = EventCodes(
                            'enumeration-accretors.'),
     e116=EventCode(event_type=event_types.error, code='e116',
                    message='EnumerationAccretor.insert: The insert-element operation is forbidden on '
-                           'enumeration-accretors.')
+                           'enumeration-accretors.'),
+    e117=EventCode(event_type=event_types.error, code='e117',
+                   message='Transformation.apply_transformation: The arguments are not formula-equivalent-with-variables '
+                           ' with the premises, with regards to the variables.'),
+
 )
 
 
@@ -137,7 +142,7 @@ class Connective:
     def __init__(self, rep: str):
         """
 
-        :param rep: A default text representation of the connective.
+        :param rep: A default text representation.
         """
         self._rep = rep
 
@@ -705,23 +710,29 @@ def let_x_be_a_free_arity_connective(rep: str):
 
 
 class Connectives(typing.NamedTuple):
+    axiom: NullaryConnective  # ?????
     enumeration: FreeArityConnective
     implies: BinaryConnective
     inference_rule: TernaryConnective
     is_a: BinaryConnective
     map: BinaryConnective
     pair: BinaryConnective
+    theorem: FreeArityConnective  # ?????
+    theory: NullaryConnective  # ?????
     transformation: TernaryConnective
     tupl: FreeArityConnective
 
 
-connectives = Connectives(
+connectives: Connectives = Connectives(
+    axiom=let_x_be_a_free_arity_connective(rep='axiom'),
     enumeration=let_x_be_a_free_arity_connective(rep='enumeration'),
     implies=let_x_be_a_binary_connective(rep='implies'),
     inference_rule=let_x_be_a_ternary_connective(rep='inference-rule'),
     is_a=let_x_be_a_binary_connective(rep='is-a'),
     map=let_x_be_a_binary_connective(rep='map'),
     pair=let_x_be_a_binary_connective(rep='pair'),  # TODO: Implement pair
+    theorem=let_x_be_a_ternary_connective(rep='theorem'),
+    theory=let_x_be_a_ternary_connective(rep='theory'),
     transformation=let_x_be_a_ternary_connective(rep='transformation'),
     tupl=let_x_be_a_free_arity_connective(rep='tuple')
 )
@@ -873,15 +884,6 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
     else:
         # Extreme case
         return False
-
-
-def assert_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula,
-                                             v: FlexibleEnumeration, variables_map: FlexibleMap = None):
-    output: bool = is_formula_equivalent_with_variables(phi=phi, psi=psi, v=v, variables_map=variables_map)
-    if not output:
-        raise CustomException(
-            message='Formulas phi and psi are not formula-equivalent-with-variables with regards to variables v.',
-            phi=phi, psi=psi, v=v)
 
 
 def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> bool:
@@ -1361,11 +1363,14 @@ class Transformation(Formula):
         :param arguments: A tuple of arguments, whose order matches the order of the transformation premises.
         :return:
         """
+        arguments = coerce_tupl(elements=arguments)
         # step 1: confirm every argument is compatible with its premises,
-        # and seize the opportunity to retrieve variable values.
+        # and seize the opportunity to retrieve the mapped variable values.
         variables_map: MapBuilder = MapBuilder()
-        assert_formula_equivalent_with_variables(phi=arguments, psi=self.premises, v=self.variables,
-                                                 variables_map=variables_map)
+        if not is_formula_equivalent_with_variables(phi=arguments, psi=self.premises, v=self.variables,
+                                                    variables_map=variables_map):
+            raise_event(event_code=event_codes.e117, arguments=arguments, premises=self.premises,
+                        variables=self.variables)
 
         # step 2:
         outcome: Formula = replace_formulas(phi=self.conclusion, m=variables_map)
@@ -1392,6 +1397,25 @@ class Transformation(Formula):
     @property
     def variables(self) -> Enumeration:
         return self[2]
+
+
 # x = let_x_be_a_variable(rep='x')
 # x | connectives.is_a | y
 # ir = InferenceRuleBuilder()
+
+class Axiom:
+    pass
+
+
+class Theorem(Formula):
+    def __new__(cls, statement: FlexibleFormula):
+        statement = coerce_formula(phi=statement)
+        super().__new__(cls=cls, c=connectives.theorem, terms=(statement,))
+
+
+class Theory:
+    pass
+
+
+class TheoryAccretor:
+    pass
