@@ -411,6 +411,17 @@ class TestReplaceFormulas:
             phi=omega2,
             psi=(aristotle | is_a | aristotle) | land | (platypus | is_a | animal))
 
+    def test_replace_formulas_two_variables(self):
+        a, b, c, d = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd'))
+        c1 = as1.let_x_be_a_unary_connective(rep='c1')
+        c2 = as1.let_x_be_a_binary_connective(rep='c2')
+        phi = a | c2 | b
+        psi = as1.replace_formulas(phi=phi, m={a: c, b: d})
+        assert as1.is_formula_equivalent(phi=c | c2 | d, psi=psi)
+        phi = (b | c2 | a) | c2 | ((a | c2 | b) | c2 | (a | c2 | a))
+        psi = as1.replace_formulas(phi=phi, m={a: c, b: d})
+        assert as1.is_formula_equivalent(phi=(d | c2 | c) | c2 | ((c | c2 | d) | c2 | (c | c2 | c)), psi=psi)
+
 
 class TestMap:
     def test_map(self, fruits):

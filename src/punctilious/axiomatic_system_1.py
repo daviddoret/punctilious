@@ -116,8 +116,8 @@ class CustomException(Exception):
         return self.rep()
 
     def rep(self) -> str:
-        kwargs: str = ', '.join(f'{key}: {value}' for key, value in self.kwargs.items())
-        return f'{self.error_code.event_type} {self.error_code.code}: {self.error_code.message}. {kwargs}'
+        kwargs: str = '\n\t'.join(f'{key}: {value}' for key, value in self.kwargs.items())
+        return f'{self.error_code.event_type} {self.error_code.code}\n\t{self.error_code.message}\n\t{kwargs}'
 
 
 def raise_event(event_code: EventCode, **kwargs):
