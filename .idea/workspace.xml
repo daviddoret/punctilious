@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -119,7 +118,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalence.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalence.test_is_formula_equivalent.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables.executor": "Run",
-    "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_sandbox.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestMap.test_map.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestReplaceFormulas.test_replace_formulas.executor": "Run",
@@ -245,7 +244,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2">
+  <component name="RunManager" selected="Python tests.pytest in test_axiomatic_system_1.py">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -562,8 +561,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2" />
         <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_enumeration" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestSingletonEnumeration.test_singleton_enumeration" />
         <item itemvalue="Python.propositional_logic_1" />
@@ -585,14 +584,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00504" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1707634941463</created>
-      <option name="number" value="00504" />
-      <option name="presentableId" value="LOCAL-00504" />
-      <option name="project" value="LOCAL" />
-      <updated>1707634941463</updated>
     </task>
     <task id="LOCAL-00505" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -978,7 +969,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714648455789</updated>
     </task>
-    <option name="localTasksCounter" value="553" />
+    <task id="LOCAL-00553" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1714648962962</created>
+      <option name="number" value="00553" />
+      <option name="presentableId" value="LOCAL-00553" />
+      <option name="project" value="LOCAL" />
+      <updated>1714648962962</updated>
+    </task>
+    <option name="localTasksCounter" value="554" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1099,11 +1098,6 @@
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
           <line>1383</line>
           <option name="timeStamp" value="224" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>423</line>
-          <option name="timeStamp" value="237" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

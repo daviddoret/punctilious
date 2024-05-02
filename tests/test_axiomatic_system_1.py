@@ -370,12 +370,13 @@ class TestFormulaEquivalenceWithVariables:
             phi=aristotle | is_a | human,
             psi=aristotle | is_a | human,
             v=())
-        # the following is ill-formed because the variable is an element of phi, and not of psi.
-        # reminder: formula-equivalence-with-variables is non-commutative.
-        assert not as1.is_formula_equivalent_with_variables(
-            phi=aristotle | is_a | x,
-            psi=aristotle | is_a | human,
-            v=(x,))
+        with pytest.raises(as1.CustomException, match='e118'):
+            # the following is ill-formed because the variable is an element of phi, and not of psi.
+            # reminder: formula-equivalence-with-variables is non-commutative.
+            as1.is_formula_equivalent_with_variables(
+                phi=aristotle | is_a | x,
+                psi=aristotle | is_a | human,
+                v=(x,))
         assert as1.is_formula_equivalent_with_variables(
             phi=aristotle | is_a | human,
             psi=aristotle | is_a | x,
