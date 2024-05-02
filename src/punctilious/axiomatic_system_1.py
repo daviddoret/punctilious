@@ -852,7 +852,7 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
     psi: Formula = coerce_formula(phi=psi)
     psi_value: Formula = psi
     v: Tupl = coerce_tupl(elements=v)
-    print(f'phi:{phi}, psi:{psi}, v:{v}, m:{m}')
+    # print(f'phi:{phi}, psi:{psi}, v:{v}, m:{m}')
     if v.has_element(phi=phi):
         # The sub-formulas of left-hand formula phi can't be elements of the variables enumeration.
         raise_event(event_code=event_codes.e118, phi=phi, psi=psi, v=v)
@@ -875,7 +875,7 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
             # substitute the variable with its newly mapped value.
             psi_value = phi
             m.set_pair(phi=psi, psi=psi_value)
-    print(f'    psi_value:{psi_value}')
+    # print(f'    psi_value:{psi_value}')
     # at this point, variable substitution has been completed at the formula-root level.
     if (is_connective_equivalent(phi=phi, psi=psi_value)) and (phi.arity == 0) and (psi_value.arity == 0):
         # Base case

@@ -394,7 +394,7 @@ class TestFormulaEquivalenceWithVariables:
             v=(x,))
 
     def test_is_formula_equivalent_with_variables_2(self):
-        a, b, c, d = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd',))
+        a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
         ab = as1.Tupl(elements=(a, b,))
         cd = as1.Tupl(elements=(c, d,))
         assert not as1.is_formula_equivalent(phi=ab, psi=cd)
@@ -414,6 +414,15 @@ class TestFormulaEquivalenceWithVariables:
         m = as1.MapBuilder()
         assert as1.is_formula_equivalent_with_variables(phi=ababbba, psi=acaccca, v=(c,), m=m)
         assert as1.is_formula_equivalent(phi=m.get_assigned_value(phi=c), psi=b)
+        multilevel1 = as1.Tupl(elements=(a, b, a, b, b, c, c,))
+        multilevel2 = as1.Tupl(elements=(a, multilevel1, a, multilevel1, c,))
+        multilevel3 = as1.Tupl(elements=(c, multilevel2, a, multilevel1,))
+        print(multilevel3)
+        test = as1.replace_formulas(phi=multilevel3, m={a: e, b: d})
+        m = as1.MapBuilder()
+        assert as1.is_formula_equivalent_with_variables(phi=multilevel3, psi=test, v=(d, e,), m=m)
+        assert as1.is_formula_equivalent(phi=m.get_assigned_value(phi=d), psi=b)
+        assert as1.is_formula_equivalent(phi=m.get_assigned_value(phi=e), psi=a)
 
 
 class TestTransformation:
