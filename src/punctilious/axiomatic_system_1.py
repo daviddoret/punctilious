@@ -831,7 +831,7 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
 
 
 def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula, v: FlexibleEnumeration,
-                                         variables_map: FlexibleMap = None):
+                                         m: FlexibleMap = None) -> bool:
     """Two formulas phi and psi are formula-equivalent-with-variables with regards to variables V if and only if:
      - All formulas in V are not sub-formula of phi,
      - We declare a new formula psi' where every sub-formula that is an element of V,
@@ -843,24 +843,26 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
     :param phi: a formula that does not contain any element of variables.
     :param psi: a formula that may contain some elements of variables.
     :param v: an enumeration of formulas called variables.
-    :param variables_map: (conditional) a mapping between variables and their assigned values. used internally for recursive calls. leave it to None.
+    :param m: (conditional) a mapping between variables and their assigned values. used internally for recursive calls.
+      leave it to None.
     :return:
     """
-    variables_map: MapBuilder = coerce_map_builder(m=variables_map)
+    m: MapBuilder = coerce_map_builder(m=m)
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
-    psi_value: Formula
+    psi_value: Formula = psi
     v: Tupl = coerce_tupl(elements=v)
+    print(f'phi:{phi}, psi:{psi}, v:{v}, m:{m}')
     if v.has_element(phi=phi):
         # The sub-formulas of left-hand formula phi can't be elements of the variables enumeration.
         raise_event(event_code=event_codes.e118, phi=phi, psi=psi, v=v)
     if v.has_element(phi=psi):
         # psi is a variable.
-        if variables_map.is_defined_in(phi=psi):
+        if m.is_defined_in(phi=psi):
             # psi's value is already mapped.
-            already_mapped_value: Formula = variables_map.get_assigned_value(phi=psi)
-            if is_formula_equivalent(phi=psi, psi=already_mapped_value):
-                # psi is consistent with the already mapped value.
+            already_mapped_value: Formula = m.get_assigned_value(phi=psi)
+            if is_formula_equivalent(phi=phi, psi=already_mapped_value):
+                # phi is consistent with the already mapped value.
                 # we can safely substitute the variable with its value.
                 psi_value: Formula = already_mapped_value
                 # print(f'    substituted with {psi}.')
@@ -872,14 +874,14 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
             # psi's value has not been mapped yet.
             # substitute the variable with its newly mapped value.
             psi_value = phi
-            variables_map.set_pair(phi=psi, psi=psi_value)
-    else:
-        psi_value = psi
+            m.set_pair(phi=psi, psi=psi_value)
+    print(f'    psi_value:{psi_value}')
+    # at this point, variable substitution has been completed at the formula-root level.
     if (is_connective_equivalent(phi=phi, psi=psi_value)) and (phi.arity == 0) and (psi_value.arity == 0):
         # Base case
         return True
     elif (is_connective_equivalent(phi=phi, psi=psi_value)) and (phi.arity == psi_value.arity) and all(
-            is_formula_equivalent_with_variables(phi=phi_prime, psi=psi_prime, v=v, variables_map=variables_map) for
+            is_formula_equivalent_with_variables(phi=phi_prime, psi=psi_prime, v=v, m=m) for
             phi_prime, psi_prime in zip(phi, psi_value)):
         # Inductive step
         return True
@@ -1101,18 +1103,6 @@ class EnumerationBuilder(FormulaBuilder):
             for element in elements:
                 self.append(term=element)
 
-    def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
-        """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise."""
-        if self.has_element(phi=phi):
-            # two formulas that are formula-equivalent may not be equal.
-            # for this reason we must first find the first formula-equivalent element in the enumeration.
-            inside_element: Formula = next(term for term in self if is_formula_equivalent(phi=phi, psi=term))
-            # and then we can retrieve its index position.
-            index_position: int = self.index(inside_element)
-            return index_position
-        else:
-            return None
-
     def append(self, term: FlexibleFormula) -> FormulaBuilder:
         """
 
@@ -1127,6 +1117,23 @@ class EnumerationBuilder(FormulaBuilder):
         else:
             super().append(term=term)
         return term
+
+    def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
+        """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
+
+        This method is not available on formulas because duplicate elements are possible on formulas,
+        but are not possible on enumerations."""
+        phi = coerce_formula(phi=phi)
+        if self.has_element(phi=phi):
+            # two formulas that are formula-equivalent may not be equal.
+            # for this reason we must first find the first formula-equivalent element in the enumeration.
+            n: int = 0
+            for phi_prime in self:
+                if is_formula_equivalent(phi=phi, psi=phi_prime):
+                    return n
+                n = n + 1
+        else:
+            return None
 
     def has_element(self, phi: FlexibleFormula) -> bool:
         """Return True if and only if there exists a formula psi that is an element of the enumeration, and such that
@@ -1175,8 +1182,12 @@ class Enumeration(Formula):
         eb: EnumerationBuilder = EnumerationBuilder(elements=elements)
         super().__init__(c=connectives.enumeration, terms=eb)
 
-    def get_element_index(self, phi: Formula) -> typing.Optional[int]:
-        """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise."""
+    def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
+        """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
+
+        This method is not available on formulas because duplicate elements are possible on formulas,
+        but are not possible on enumerations."""
+        phi = coerce_formula(phi=phi)
         if self.has_element(phi=phi):
             # two formulas that are formula-equivalent may not be equal.
             # for this reason we must first find the first formula-equivalent element in the enumeration.
@@ -1371,7 +1382,7 @@ class Transformation(Formula):
         # and seize the opportunity to retrieve the mapped variable values.
         variables_map: MapBuilder = MapBuilder()
         if not is_formula_equivalent_with_variables(phi=arguments, psi=self.premises, v=self.variables,
-                                                    variables_map=variables_map):
+                                                    m=variables_map):
             raise_event(event_code=event_codes.e117, arguments=arguments, premises=self.premises,
                         variables=self.variables)
 
