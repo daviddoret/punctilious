@@ -360,6 +360,7 @@ class Formula(tuple):
 
     def __init__(self, c: Connective, terms: FlexibleTupl = None):
         self._c = c
+        # TODO: Question: should __init__ be called in classes that implement __new__?
         # super().__init__()
 
     def __contains__(self, phi: FlexibleFormula):
@@ -713,29 +714,27 @@ def let_x_be_a_free_arity_connective(rep: str):
 
 
 class Connectives(typing.NamedTuple):
-    axiom: NullaryConnective  # ?????
+    axiom: UnaryConnective
     enumeration: FreeArityConnective
     implies: BinaryConnective
-    inference_rule: TernaryConnective
+    inference: BinaryConnective
     is_a: BinaryConnective
+    is_justified_by: BinaryConnective
     map: BinaryConnective
     pair: BinaryConnective
-    theorem: FreeArityConnective  # ?????
-    theory: NullaryConnective  # ?????
     transformation: TernaryConnective
     tupl: FreeArityConnective
 
 
 connectives: Connectives = Connectives(
-    axiom=let_x_be_a_free_arity_connective(rep='axiom'),
+    axiom=let_x_be_a_unary_connective(rep='axiom'),
     enumeration=let_x_be_a_free_arity_connective(rep='enumeration'),
     implies=let_x_be_a_binary_connective(rep='implies'),
-    inference_rule=let_x_be_a_ternary_connective(rep='inference-rule'),
+    inference=let_x_be_a_binary_connective(rep='inference-rule'),
     is_a=let_x_be_a_binary_connective(rep='is-a'),
+    is_justified_by=let_x_be_a_binary_connective(rep='is_justified-by'),
     map=let_x_be_a_binary_connective(rep='map'),
     pair=let_x_be_a_binary_connective(rep='pair'),  # TODO: Implement pair
-    theorem=let_x_be_a_ternary_connective(rep='theorem'),
-    theory=let_x_be_a_ternary_connective(rep='theory'),
     transformation=let_x_be_a_ternary_connective(rep='transformation'),
     tupl=let_x_be_a_free_arity_connective(rep='tuple')
 )
@@ -1306,7 +1305,7 @@ class TransformationBuilder(FormulaBuilder):
                  variables: FlexibleTupl):
         premises: EnumerationBuilder = EnumerationBuilder(elements=premises)
         variables: EnumerationBuilder = EnumerationBuilder(elements=variables)
-        super().__init__(c=connectives.inference_rule, terms=(premises, conclusion, variables,))
+        super().__init__(c=connectives.inference, terms=(premises, conclusion, variables,))
 
     @property
     def conclusion(self) -> FormulaBuilder:
@@ -1365,7 +1364,7 @@ class Transformation(Formula):
         premises: Tupl = coerce_tupl(elements=premises)
         conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(elements=variables)
-        super().__init__(c=connectives.inference_rule, terms=(premises, conclusion, variables,))
+        super().__init__(c=connectives.inference, terms=(premises, conclusion, variables,))
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -1417,19 +1416,105 @@ class Transformation(Formula):
 # x | connectives.is_a | y
 # ir = InferenceRuleBuilder()
 
-class Axiom:
+
+class TheoryState(Enumeration):
+    """A theory-state is an enumeration of formulas."""
+
+    def __new__(cls, elements: FlexibleEnumeration = None):
+        # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
+        # because tuple is immutable.
+        o: tuple = super().__new__(cls, elements=elements)
+        return o
+
+    def __init__(self, elements: FlexibleEnumeration = None):
+        super().__init__(elements=elements)
+
+
+class Justification(Formula):
+    """A theorem-justification, or justification, is a formula that is an explanation for the existence
+    of a theorem in a well-formed theory. There are two types of justification:
+     - Axiom
+     - Inference"""
+
+    def __new__(cls, c: Connective, terms: FlexibleTupl = None):
+        o: tuple = super().__new__(cls, c=c, terms=terms)
+        return o
+
+    def __init__(self, c: Connective, terms: FlexibleTupl = None):
+        super().__init__(c=c, terms=terms)
+
+
+class AxiomJustification(Formula):
+    """An axiom-justification is a statement that a formula phi is an axiom. It is a formula of the form:
+    phi is-justified-by axiom, where phi is a formula."""
+
+    def __new__(cls, phi: FlexibleFormula = None):
+        phi: Formula = coerce_formula(phi=phi)
+        o: Formula = super().__new__(cls, c=connectives.is_justified_by, terms=(phi, connectives.axiom,))
+        return o
+
+    def __init__(self, phi: FlexibleFormula):
+        phi: Formula = coerce_formula(phi=phi)
+        super().__init__(c=connectives.is_justified_by, terms=(phi, connectives.axiom,))
+
+
+class InferenceJustification(Formula):
+    """An inference-justification is a formula of the form:
+    phi is-justified-by inference(premises, transformation)"""
+
+    def __new__(cls, transformation: Transformation, premises: FlexibleEnumeration, theorem: FlexibleFormula = None):
+        transformation: Transformation = coerce_transformation(phi=transformation)
+        premises: FlexibleTupl = coerce_tupl(elements=premises)
+        theorem: Formula = coerce_formula(phi=theorem)
+        o: Formula = super().__new__(cls, c=connectives.inference, terms=(transformation, premises, theorem,))
+        return o
+
+    def __init__(self, transformation: Transformation, premises: FlexibleEnumeration, theorem: FlexibleFormula):
+        transformation: Transformation = coerce_transformation(phi=transformation)
+        premises: FlexibleTupl = coerce_tupl(elements=premises)
+        theorem: Formula = coerce_formula(phi=theorem)
+        super().__init__(c=connectives.inference, terms=(transformation, premises, theorem,))
+
+
+class WellFormedTheoryState(TheoryState):
+    """A well-formed theory if a theory with the following properties:
+    - It is an empty-theory (cf. empty-theory)
+    Or:
+    - It is an enumeration of formulas.
+    - Its first n theorems are axioms, n being a natural number.
+    - All its subsequent theorems after n are derived from predecessor theorems."""
+
+    def __new__(cls, theorems: FlexibleEnumeration = None, justifications=None):
+        o: tuple = super().__new__(cls, elements=theorems)
+        return o
+
+    def __init__(self, theorems: FlexibleEnumeration = None, justifications=None):
+        self._justifications: Enumeration = Enumeration(elements=justifications)
+        super().__init__(elements=theorems)
+
+    @property
+    def axioms(self) -> Enumeration:
+        return self._axioms
+
+
+class EmptyTheory(WellFormedTheoryState):
+    """An empty-theory is a well-formed theory that contains no element."""
+
+    def __new__(cls):
+        o: tuple = super().__new__(cls, theorems=None)
+        return o
+
+    def __init__(self):
+        super().__init__(theorems=None)
+
+
+def postulate_axion(t: WellFormedTheoryState, phi: FlexibleFormula):
     pass
 
 
-class Theorem(Formula):
-    def __new__(cls, statement: FlexibleFormula):
-        statement = coerce_formula(phi=statement)
-        super().__new__(cls=cls, c=connectives.theorem, terms=(statement,))
-
-
-class Theory:
+def derive_theory(t: WellFormedTheoryState) -> WellFormedTheoryState:
     pass
 
 
-class TheoryAccretor:
+class TheoryAccretor(EnumerationAccretor):
     pass

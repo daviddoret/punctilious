@@ -582,3 +582,9 @@ class TestEnumerationBuilder:
     def test_get_element_index(self):
         # assert False
         pass
+
+
+class TestEmptyTheory:
+    def test_empty_theory(self):
+        t = as1.EmptyTheory()
+        assert len(t) == 0
