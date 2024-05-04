@@ -624,3 +624,19 @@ class TestInference:
         i = as1.Inference(phi=theorem, p=p, t=t)
         as1.is_formula_equivalent(phi=i,
                                   psi=theorem | as1.connectives.is_justified_by | as1.connectives.inference(p, t))
+
+
+class TestFormulaToEnumeration:
+    def test_formula_to_enumeration(self):
+        a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
+        f = as1.let_x_be_a_unary_connective(rep='f')
+        g = as1.let_x_be_a_binary_connective(rep='g')
+        h = as1.let_x_be_a_ternary_connective(rep='h')
+        phi1 = h(e, b, d)
+        e1_result = as1.formula_to_enumeration(phi=phi1)
+        e1_expected = as1.e(elements=(e, b, d,))
+        assert as1.is_formula_equivalent(phi=e1_result, psi=e1_expected)
+        phi2 = h(phi1, b, g(a, f(b)))
+        e2_result = as1.formula_to_enumeration(phi=phi2)
+        e2_expected = as1.e(elements=(phi1, b, g(a, f(b)),))
+        assert as1.is_formula_equivalent(phi=e2_result, psi=e2_expected)

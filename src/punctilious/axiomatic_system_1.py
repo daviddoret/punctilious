@@ -720,6 +720,25 @@ def let_x_be_a_simple_object(rep: FlexibleRepresentation) -> typing.Union[
         raise TypeError  # TODO: Implement event code.
 
 
+def formula_to_enumeration(phi: FlexibleFormula) -> Enumeration:
+    """A canonical transformation of formulas to the enumeration of the formula terms.
+
+    t:  Phi --> E
+        phi |-> e(t0, t1, ..., tn)
+    Where:
+     - Phi is the class of formulas,
+     - E is the class of enumerations,
+     - phi is a formula,
+     - e is the enumeration connective,
+     - ti is the i-th term of phi.
+
+    :param phi: A formula.
+    :return: The enumeration of the formula terms.
+    """
+    phi = coerce_formula(phi=phi)
+    return Enumeration(elements=phi)
+
+
 def let_x_be_a_binary_connective(rep: str):
     return BinaryConnective(rep=rep)
 
@@ -738,7 +757,10 @@ def let_x_be_a_free_arity_connective(rep: str):
 
 class Connectives(typing.NamedTuple):
     postulation: UnaryConnective
-    enumeration: FreeArityConnective
+    e: FreeArityConnective
+    """The enumeration connective, cf. the Enumeration class.
+    """
+
     implies: BinaryConnective
     inference: BinaryConnective
     is_a: BinaryConnective
@@ -751,7 +773,7 @@ class Connectives(typing.NamedTuple):
 
 connectives: Connectives = Connectives(
     postulation=let_x_be_a_unary_connective(rep='postulation'),
-    enumeration=let_x_be_a_free_arity_connective(rep='enumeration'),
+    e=let_x_be_a_free_arity_connective(rep='e'),  # enumeration
     implies=let_x_be_a_binary_connective(rep='implies'),
     inference=let_x_be_a_binary_connective(rep='inference-rule'),
     is_a=let_x_be_a_binary_connective(rep='is-a'),
@@ -1120,7 +1142,7 @@ class EnumerationBuilder(FormulaBuilder):
     """A utility class to help build enumerations. It is mutable and thus allows edition."""
 
     def __init__(self, elements: FlexibleEnumeration):
-        super().__init__(c=connectives.enumeration, terms=None)
+        super().__init__(c=connectives.e, terms=None)
         if isinstance(elements, typing.Iterable):
             for element in elements:
                 self.append(term=element)
@@ -1196,13 +1218,13 @@ class Enumeration(Formula):
         # because tuple is immutable.
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
         eb: EnumerationBuilder = EnumerationBuilder(elements=elements)
-        o: tuple = super().__new__(cls, c=connectives.enumeration, terms=eb)
+        o: tuple = super().__new__(cls, c=connectives.e, terms=eb)
         return o
 
     def __init__(self, elements: FlexibleEnumeration = None):
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
         eb: EnumerationBuilder = EnumerationBuilder(elements=elements)
-        super().__init__(c=connectives.enumeration, terms=eb)
+        super().__init__(c=connectives.e, terms=eb)
 
     def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
         """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
@@ -1234,8 +1256,12 @@ class Enumeration(Formula):
         return self.to_enumeration_builder()
 
 
+e = Enumeration
+"""A shortcut for Enumeration."""
+
 FlexibleEnumeration = typing.Optional[typing.Union[Enumeration, EnumerationBuilder, typing.Iterable[FlexibleFormula]]]
-"""FlexibleEnumeration is a flexible python type that may be safely coerced into an Enumeration or a EnumerationBuilder."""
+"""FlexibleEnumeration is a flexible python type that may be safely coerced into an Enumeration or a 
+EnumerationBuilder."""
 
 
 class EmptyEnumeration(Enumeration):
