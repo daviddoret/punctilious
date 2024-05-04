@@ -720,10 +720,10 @@ def let_x_be_a_simple_object(rep: FlexibleRepresentation) -> typing.Union[
         raise TypeError  # TODO: Implement event code.
 
 
-def formula_to_enumeration(phi: FlexibleFormula) -> Enumeration:
-    """A canonical transformation of formulas to the enumeration of the formula terms.
+def formula_to_tuple(phi: FlexibleFormula) -> Enumeration:
+    """A canonical transformation of formulas to the tuple of the formula terms.
 
-    t:  Phi --> E
+    f:  Phi --> E
         phi |-> e(t0, t1, ..., tn)
     Where:
      - Phi is the class of formulas,
@@ -767,7 +767,10 @@ class Connectives(typing.NamedTuple):
     is_justified_by: BinaryConnective
     map: BinaryConnective
     pair: BinaryConnective
-    transformation: TernaryConnective
+    f: TernaryConnective
+    """The transformation connective, cf. the Transformation class.
+    """
+
     tupl: FreeArityConnective
 
 
@@ -780,7 +783,7 @@ connectives: Connectives = Connectives(
     is_justified_by=let_x_be_a_binary_connective(rep='is_justified-by'),
     map=let_x_be_a_binary_connective(rep='map'),
     pair=let_x_be_a_binary_connective(rep='pair'),  # TODO: Implement pair
-    transformation=let_x_be_a_ternary_connective(rep='transformation'),
+    f=let_x_be_a_ternary_connective(rep='f'),  # Transformation
     tupl=let_x_be_a_free_arity_connective(rep='tuple')
 )
 
@@ -1203,7 +1206,9 @@ class Enumeration(Formula):
     Distinctive objects:
      - The empty-enumeration is the formula c(). See EmptyEnumeration for a specialized class.
 
-    By definition, the sub-formulas of a formula phi are ordered and can repeat themselves. The justification for
+    Shortcut: e
+
+    Note: by definition, the sub-formulas of a formula phi are ordered and can repeat themselves. The justification for
     enumeration is the intention of considering the sub-formulas without their ordering, and without repetitions.
     Enumerations are equivalent to computable sets.
 
@@ -1381,11 +1386,22 @@ class TransformationBuilder(FormulaBuilder):
 
 
 class Transformation(Formula):
-    """A transformation is a formula t(P, c, V) where:
-     - t has the transformation connective,
+    """A formula-transformation, or transformation, is a map from the class of formulas to itself.
+
+    f:  Phi --> Phi
+        phi |-> psi
+    Where:
+     - Phi is the class of formulas,
+     - phi is a formula,
+     - psi is a formula.
+
+    Syntactically, a transformation is a formula f(P, c, V) where:
+     - f is the transformation connective,
      - P is an enumeration whose children are called premises,
-     - c is a formula called conclusion,
-     - V is a enumeration whose children are variables.
+     - c is a formula called the conclusion,
+     - V is a enumeration whose children are the variables.
+
+    Algorithm:
     From a transformation, the following algorithm is derived:
     Phi --> psi
     t(Phi) --> psi
@@ -1531,32 +1547,32 @@ class Postulation(Formula):
 
 class Inference(Formula):
     """Syntactically, an inference is a formula of the form:
-    phi is-justified-by inference(P, t)
+    phi is-justified-by inference(P, f)
     Where:
      - phi is a well-formed formula,
      - is-justified-by is the is-justified-by connective,
      - inference is the inference connective,
      - P is a tuple of well-formed formulas called the premises,
-     - t is a transformation-rule.
+     - f is a transformation.
 
     Semantically, an inference is a statement that justifies the validity of phi by providing the premises and
     the transformation-rule that yield phi, i.e.:
     t(P) ~formula phi
     """
 
-    def __new__(cls, phi: FlexibleFormula, p: FlexibleEnumeration, t: FlexibleTransformation):
+    def __new__(cls, phi: FlexibleFormula, p: FlexibleEnumeration, f: FlexibleTransformation):
         phi: Formula = coerce_formula(phi=phi)
-        t: Transformation = coerce_transformation(t=t)
+        f: Transformation = coerce_transformation(t=f)
         p: FlexibleTupl = coerce_tupl(elements=p)
-        i: Formula = Formula(c=connectives.inference, terms=(p, t,))
+        i: Formula = Formula(c=connectives.inference, terms=(p, f,))
         o: Formula = super().__new__(cls, c=connectives.inference, terms=(phi, i,))
         return o
 
-    def __init__(self, phi: FlexibleFormula, p: FlexibleEnumeration, t: FlexibleTransformation):
+    def __init__(self, phi: FlexibleFormula, p: FlexibleEnumeration, f: FlexibleTransformation):
         phi: Formula = coerce_formula(phi=phi)
-        t: Transformation = coerce_transformation(t=t)
+        f: Transformation = coerce_transformation(t=f)
         p: FlexibleTupl = coerce_tupl(elements=p)
-        i: Formula = Formula(c=connectives.inference, terms=(p, t,))
+        i: Formula = Formula(c=connectives.inference, terms=(p, f,))
         super().__init__(c=connectives.inference, terms=(phi, i,))
 
 

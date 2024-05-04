@@ -450,9 +450,9 @@ class TestTransformation:
         premises = as1.Enumeration(elements=(p1,))
         conclusion = x | is_a | mortal
         variables = as1.Enumeration(elements=(x,))
-        t = as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
+        f = as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
         arguments = as1.Tupl(elements=(p2,))
-        output = t.apply_transformation(arguments=arguments)
+        output = f.apply_transformation(arguments=arguments)
         as1.is_formula_equivalent(phi=aristotle | is_a | mortal, psi=output)
 
 
@@ -621,7 +621,7 @@ class TestInference:
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
         as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
-        i = as1.Inference(phi=theorem, p=p, t=t)
+        i = as1.Inference(phi=theorem, p=p, f=t)
         as1.is_formula_equivalent(phi=i,
                                   psi=theorem | as1.connectives.is_justified_by | as1.connectives.inference(p, t))
 
@@ -633,10 +633,10 @@ class TestFormulaToEnumeration:
         g = as1.let_x_be_a_binary_connective(rep='g')
         h = as1.let_x_be_a_ternary_connective(rep='h')
         phi1 = h(e, b, d)
-        e1_result = as1.formula_to_enumeration(phi=phi1)
+        e1_result = as1.formula_to_tuple(phi=phi1)
         e1_expected = as1.e(elements=(e, b, d,))
         assert as1.is_formula_equivalent(phi=e1_result, psi=e1_expected)
         phi2 = h(phi1, b, g(a, f(b)))
-        e2_result = as1.formula_to_enumeration(phi=phi2)
+        e2_result = as1.formula_to_tuple(phi=phi2)
         e2_expected = as1.e(elements=(phi1, b, g(a, f(b)),))
         assert as1.is_formula_equivalent(phi=e2_result, psi=e2_expected)
