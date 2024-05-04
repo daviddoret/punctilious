@@ -607,7 +607,7 @@ class TestPostulation:
         phi = a | f | b
         a = as1.Postulation(phi=phi)
         assert as1.is_formula_equivalent(
-            phi=phi,
+            phi=a,
             psi=phi | as1.connectives.is_justified_by | as1.connectives.postulation)
 
 
