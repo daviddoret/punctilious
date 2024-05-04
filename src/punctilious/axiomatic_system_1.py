@@ -51,6 +51,8 @@ class EventCodes(typing.NamedTuple):
     e116: EventCode
     e117: EventCode
     e118: EventCode
+    e119: EventCode
+    e120: EventCode
 
 
 event_codes = EventCodes(
@@ -87,7 +89,8 @@ event_codes = EventCodes(
                    message='FormulaBuilder.to_formula: The connective property is None but it is mandatory to '
                            'elaborate formulas.'),
     e114=EventCode(event_type=event_types.error, code='e114',
-                   message='EnumerationAccretor.__del_item__,pop,remove,remove_formula: The remove-formula operation is forbidden on '
+                   message='EnumerationAccretor.__del_item__,pop,remove,remove_formula: The remove-formula operation '
+                           'is forbidden on'
                            'enumeration-accretors.'),
     e115=EventCode(event_type=event_types.error, code='e115',
                    message='EnumerationAccretor.__set_item__: The set-element operation is forbidden on '
@@ -101,6 +104,12 @@ event_codes = EventCodes(
     e118=EventCode(event_type=event_types.error, code='e118',
                    message='is_formula_equivalent_with_variables: There exists a phi''sub-formula of phi that is an '
                            'element of variables.'),
+    e119=EventCode(event_type=event_types.error, code='e119',
+                   message='coerce_transformation: The argument could not be coerced to a transformation.'),
+    e120=EventCode(event_type=event_types.error, code='e120',
+                   message='coerce_transformation_builder: The argument could not be coerced to a '
+                           'transformation-builder.'),
+
 )
 
 
@@ -148,6 +157,10 @@ class Connective:
         :param rep: A default text representation.
         """
         self._rep = rep
+
+    def __call__(self, *args):
+        """Allows pseudo formal language in python."""
+        return Formula(c=self, terms=args)
 
     def __repr__(self):
         return self.rep()
@@ -674,8 +687,14 @@ class TernaryConnective(FixedArityConnective):
         super().__init__(rep=rep, fixed_arity_constraint=3)
 
 
-def let_x_be_a_variable(rep: str):
-    return Formula(c=NullaryConnective(rep=rep))
+def let_x_be_a_variable(rep: FlexibleRepresentation) -> typing.Union[
+    NullaryConnective, typing.Generator[NullaryConnective, typing.Any, None]]:
+    if isinstance(rep, str):
+        return NullaryConnective(rep=rep)
+    elif isinstance(rep, typing.Iterable):
+        return (NullaryConnective(rep=r) for r in rep)
+    else:
+        raise TypeError  # TODO: Implement event code.
 
 
 FlexibleRepresentation = typing.Optional[typing.Union[str, typing.Iterable[str]]]
@@ -714,7 +733,7 @@ def let_x_be_a_free_arity_connective(rep: str):
 
 
 class Connectives(typing.NamedTuple):
-    axiom: UnaryConnective
+    postulation: UnaryConnective
     enumeration: FreeArityConnective
     implies: BinaryConnective
     inference: BinaryConnective
@@ -727,7 +746,7 @@ class Connectives(typing.NamedTuple):
 
 
 connectives: Connectives = Connectives(
-    axiom=let_x_be_a_unary_connective(rep='axiom'),
+    postulation=let_x_be_a_unary_connective(rep='postulation'),
     enumeration=let_x_be_a_free_arity_connective(rep='enumeration'),
     implies=let_x_be_a_binary_connective(rep='implies'),
     inference=let_x_be_a_binary_connective(rep='inference-rule'),
@@ -1366,9 +1385,9 @@ class Transformation(Formula):
         variables: Enumeration = coerce_enumeration(elements=variables)
         super().__init__(c=connectives.inference, terms=(premises, conclusion, variables,))
 
-    def __call__(self, arguments: FlexibleTupl) -> Formula:
-        """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(arguments=arguments)
+    # def __call__(self, arguments: FlexibleTupl) -> Formula:
+    #    """A shortcut for self.apply_transformation()"""
+    #    return self.apply_transformation(arguments=arguments)
 
     def apply_transformation(self, arguments: FlexibleTupl) -> Formula:
         """
@@ -1412,9 +1431,25 @@ class Transformation(Formula):
         return self[2]
 
 
-# x = let_x_be_a_variable(rep='x')
-# x | connectives.is_a | y
-# ir = InferenceRuleBuilder()
+FlexibleTransformation = typing.Optional[typing.Union[Transformation, TransformationBuilder]]
+
+
+def coerce_transformation(t: FlexibleTransformation):
+    if isinstance(t, Transformation):
+        return t
+    elif isinstance(t, TransformationBuilder):
+        return t.to_transformation()
+    else:
+        raise_event(event_code=event_codes.e119, phi_type=type(t), phi=t)
+
+
+def coerce_transformation_builder(t: FlexibleTransformation):
+    if isinstance(t, TransformationBuilder):
+        return t
+    elif isinstance(t, Transformation):
+        return t.to_transformation_builder()
+    else:
+        raise_event(event_code=event_codes.e120, phi_type=type(t), phi=t)
 
 
 class TheoryState(Enumeration):
@@ -1432,9 +1467,9 @@ class TheoryState(Enumeration):
 
 class Justification(Formula):
     """A theorem-justification, or justification, is a formula that is an explanation for the existence
-    of a theorem in a well-formed theory. There are two types of justification:
-     - Axiom
-     - Inference"""
+    of a theorem in a well-formed theory. There are two types of justifications:
+     - Axiom justification.
+     - Inference justification."""
 
     def __new__(cls, c: Connective, terms: FlexibleTupl = None):
         o: tuple = super().__new__(cls, c=c, terms=terms)
@@ -1444,36 +1479,55 @@ class Justification(Formula):
         super().__init__(c=c, terms=terms)
 
 
-class AxiomJustification(Formula):
-    """An axiom-justification is a statement that a formula phi is an axiom. It is a formula of the form:
-    phi is-justified-by axiom, where phi is a formula."""
+class Postulation(Formula):
+    """Syntactically, a postulation is a formula of the form:
+    phi is-justified-by postulation
+    Where:
+     - phi is a well-formed formula,
+     - is-justified-by is the is-justified-by connective,
+     - postulation is the postulation constant.
+
+    Semantically, a postulation is a statement that justifies the validity of phi by assuming that phi is true."""
 
     def __new__(cls, phi: FlexibleFormula = None):
         phi: Formula = coerce_formula(phi=phi)
-        o: Formula = super().__new__(cls, c=connectives.is_justified_by, terms=(phi, connectives.axiom,))
+        o: Formula = super().__new__(cls, c=connectives.is_justified_by, terms=(phi, connectives.postulation,))
         return o
 
     def __init__(self, phi: FlexibleFormula):
         phi: Formula = coerce_formula(phi=phi)
-        super().__init__(c=connectives.is_justified_by, terms=(phi, connectives.axiom,))
+        super().__init__(c=connectives.is_justified_by, terms=(phi, connectives.postulation,))
 
 
-class InferenceJustification(Formula):
-    """An inference-justification is a formula of the form:
-    phi is-justified-by inference(premises, transformation)"""
+class Inference(Formula):
+    """Syntactically, an inference is a formula of the form:
+    phi is-justified-by inference(P, t)
+    Where:
+     - phi is a well-formed formula,
+     - is-justified-by is the is-justified-by connective,
+     - inference is the inference connective,
+     - P is a tuple of well-formed formulas called the premises,
+     - t is a transformation-rule.
 
-    def __new__(cls, transformation: Transformation, premises: FlexibleEnumeration, theorem: FlexibleFormula = None):
-        transformation: Transformation = coerce_transformation(phi=transformation)
-        premises: FlexibleTupl = coerce_tupl(elements=premises)
-        theorem: Formula = coerce_formula(phi=theorem)
-        o: Formula = super().__new__(cls, c=connectives.inference, terms=(transformation, premises, theorem,))
+    Semantically, an inference is a statement that justifies the validity of phi by providing the premises and
+    the transformation-rule that yield phi, i.e.:
+    t(P) ~formula phi
+    """
+
+    def __new__(cls, phi: FlexibleFormula, p: FlexibleEnumeration, t: FlexibleTransformation):
+        phi: Formula = coerce_formula(phi=phi)
+        t: Transformation = coerce_transformation(t=t)
+        p: FlexibleTupl = coerce_tupl(elements=p)
+        i: Formula = Formula(c=connectives.inference, terms=(p, t,))
+        o: Formula = super().__new__(cls, c=connectives.inference, terms=(phi, i,))
         return o
 
-    def __init__(self, transformation: Transformation, premises: FlexibleEnumeration, theorem: FlexibleFormula):
-        transformation: Transformation = coerce_transformation(phi=transformation)
-        premises: FlexibleTupl = coerce_tupl(elements=premises)
-        theorem: Formula = coerce_formula(phi=theorem)
-        super().__init__(c=connectives.inference, terms=(transformation, premises, theorem,))
+    def __init__(self, phi: FlexibleFormula, p: FlexibleEnumeration, t: FlexibleTransformation):
+        phi: Formula = coerce_formula(phi=phi)
+        t: Transformation = coerce_transformation(t=t)
+        p: FlexibleTupl = coerce_tupl(elements=p)
+        i: Formula = Formula(c=connectives.inference, terms=(p, t,))
+        super().__init__(c=connectives.inference, terms=(phi, i,))
 
 
 class WellFormedTheoryState(TheoryState):

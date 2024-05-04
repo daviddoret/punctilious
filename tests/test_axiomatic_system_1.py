@@ -129,6 +129,16 @@ class TestConnective:
     def test_connective(self, c1, c2):
         assert c1 is not c2
 
+    def test_call(self):
+        x, y, z = as1.let_x_be_a_variable(rep=('x', 'y', 'z',))
+        a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
+        f = as1.let_x_be_a_unary_connective(rep='f')
+        g = as1.let_x_be_a_binary_connective(rep='g')
+        h = as1.let_x_be_a_ternary_connective(rep='h')
+        assert as1.is_formula_equivalent(phi=f(), psi=as1.Formula(c=f, terms=None))
+        assert as1.is_formula_equivalent(phi=g(x), psi=as1.Formula(c=g, terms=(x,)))
+        assert as1.is_formula_equivalent(phi=h(x, y), psi=as1.Formula(c=h, terms=(x, y,)))
+
 
 class TestFormulaBuilder:
     def test_assure_term(self):
@@ -588,3 +598,29 @@ class TestEmptyTheory:
     def test_empty_theory(self):
         t = as1.EmptyTheory()
         assert len(t) == 0
+
+
+class TestPostulation:
+    def test_postulation(self):
+        a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
+        f = as1.let_x_be_a_binary_connective(rep='f')
+        phi = a | f | b
+        a = as1.Postulation(phi=phi)
+        assert as1.is_formula_equivalent(
+            phi=phi,
+            psi=phi | as1.connectives.is_justified_by | as1.connectives.postulation)
+
+
+class TestInference:
+    def test_inference(self):
+        x, y, z = as1.let_x_be_a_variable(rep=('x', 'y', 'z',))
+        a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
+        f = as1.let_x_be_a_binary_connective(rep='f')
+        land = as1.let_x_be_a_binary_connective(rep='land')
+        t = as1.Transformation(premises=(x | f | y) | land | (y | f | z), conclusion=x | f | z, variables=(x, y, z,))
+        p = (a | f | b) | land | (b | f | c)
+        theorem = a | f | c
+        as1.is_formula_equivalent(phi=theorem, psi=t.apply_transformation(arguments=p))
+        i = as1.Inference(phi=theorem, p=p, t=t)
+        as1.is_formula_equivalent(phi=i,
+                                  psi=theorem | as1.connectives.is_justified_by | as1.connectives.inference(p, t))
