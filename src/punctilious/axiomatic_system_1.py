@@ -1385,9 +1385,9 @@ class Transformation(Formula):
         variables: Enumeration = coerce_enumeration(elements=variables)
         super().__init__(c=connectives.inference, terms=(premises, conclusion, variables,))
 
-    # def __call__(self, arguments: FlexibleTupl) -> Formula:
-    #    """A shortcut for self.apply_transformation()"""
-    #    return self.apply_transformation(arguments=arguments)
+    def __call__(self, arguments: FlexibleTupl) -> Formula:
+        """A shortcut for self.apply_transformation()"""
+        return self.apply_transformation(arguments=arguments)
 
     def apply_transformation(self, arguments: FlexibleTupl) -> Formula:
         """

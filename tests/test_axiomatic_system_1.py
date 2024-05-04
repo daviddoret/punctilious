@@ -620,7 +620,7 @@ class TestInference:
         t = as1.Transformation(premises=(x | f | y) | land | (y | f | z), conclusion=x | f | z, variables=(x, y, z,))
         p = (a | f | b) | land | (b | f | c)
         theorem = a | f | c
-        as1.is_formula_equivalent(phi=theorem, psi=t.apply_transformation(arguments=p))
+        as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
         i = as1.Inference(phi=theorem, p=p, t=t)
         as1.is_formula_equivalent(phi=i,
                                   psi=theorem | as1.connectives.is_justified_by | as1.connectives.inference(p, t))
