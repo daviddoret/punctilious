@@ -616,9 +616,9 @@ class TestInference:
         x, y, z = as1.let_x_be_a_variable(rep=('x', 'y', 'z',))
         a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
         f = as1.let_x_be_a_binary_connective(rep='f')
-        land = as1.let_x_be_a_binary_connective(rep='land')
-        t = as1.Transformation(premises=(x | f | y) | land | (y | f | z), conclusion=x | f | z, variables=(x, y, z,))
-        p = (a | f | b) | land | (b | f | c)
+        # land = as1.let_x_be_a_binary_connective(rep='land')
+        t = as1.Transformation(premises=(x | f | y, y | f | z,), conclusion=x | f | z, variables=(x, y, z,))
+        p = (a | f | b, b | f | c,)
         theorem = a | f | c
         as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
         i = as1.Inference(phi=theorem, p=p, t=t)

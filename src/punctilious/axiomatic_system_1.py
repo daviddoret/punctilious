@@ -470,6 +470,10 @@ def coerce_formula(phi: FlexibleFormula):
         return phi.to_formula()
     elif isinstance(phi, FormulaBuilder):
         return phi.to_formula()
+    elif isinstance(phi, tuple):
+        # This is a shortcut. Python tuples are automatically coerced to Tupl formulas.
+        # This allows the usage of the natural python syntax (a,b,c,) which coerces to Tuple(elements=(a,b,c,)).
+        return Tupl(elements=phi)
     else:
         raise_event(event_code=event_codes.e105, phi_type=type(phi), phi=phi)
 
